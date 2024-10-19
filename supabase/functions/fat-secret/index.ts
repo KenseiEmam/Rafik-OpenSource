@@ -1,125 +1,176 @@
-// Follow this setup guide to integrate the Deno language server with your editor:
-// https://deno.land/manual/getting_started/setup_your_environment
-// This enables autocomplete, go to definition, etc.
-
-// Setup type definitions for built-in Supabase Runtime APIs
+// Supabase setup
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "jsr:@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/corsHeaders.ts";
 
-console.log("Hello from Functions!");
-
-interface ClientResponse {
-  data: Array<{
-    id: number;
-    token: string;
-    created_at: string;
-    expires_in: number;
-  }>;
-  error: Error | null;
+// Generate a unique nonce (random string) for each request
+function generateNonce(length: number): string {
+  const possibleChars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += possibleChars.charAt(
+      Math.floor(Math.random() * possibleChars.length),
+    );
+  }
+  return result;
 }
 
-// Fetch or generate a new token
-async function fetchOrGenerateToken() {
-  const supabaseClient = createClient(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-    {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-        detectSessionInUrl: false,
-      },
-    },
+// Function to percent-encode according to RFC 3986
+function percentEncode(str: string): string {
+  return encodeURIComponent(str)
+    .replace(/[!'()*]/g, function (c) {
+      return "%" + c.charCodeAt(0).toString(16).toUpperCase();
+    });
+}
+
+// Function to convert ArrayBuffer to Base64
+function arrayBufferToBase64(buffer: ArrayBuffer): string {
+  let binary = "";
+  const bytes = new Uint8Array(buffer);
+  for (let i = 0; i < bytes.byteLength; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+
+// Generate the HMAC-SHA1 signature using the built-in Deno crypto API
+async function generateHMACSHA1Signature(
+  key: string,
+  data: string,
+): Promise<string> {
+  const encoder = new TextEncoder();
+  const keyData = encoder.encode(key);
+  const dataToSign = encoder.encode(data);
+
+  const cryptoKey = await crypto.subtle.importKey(
+    "raw",
+    keyData,
+    { name: "HMAC", hash: "SHA-1" },
+    false,
+    ["sign"],
   );
 
-  const { data, error } = (await supabaseClient
-    .from("secret_tokens")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .limit(1)) as ClientResponse;
+  const signature = await crypto.subtle.sign(
+    "HMAC",
+    cryptoKey,
+    dataToSign,
+  );
 
-  if (error) {
-    throw error;
-  }
+  // Correctly convert the signature to a base64 string
+  const base64Signature = arrayBufferToBase64(signature);
 
-  const now = Math.floor(Date.now() / 1000); // Current time in seconds
-
-  if (
-    data.length === 0 || // No token found
-    (now - new Date(data[0].created_at).getTime() / 1000) >
-      (data[0].expires_in - 20) // Token expired or will expire in less than 20 seconds
-  ) {
-    // No valid token or about to expire
-    console.log(
-      "No valid token found or token expiring soon. Generating new one...",
-    );
-
-    // Call the OAuth 2 API to generate a new token
-    const newToken = await generateOAuthToken();
-    const expiresIn = newToken.expires_in; // Duration in seconds until token expires
-    const token = newToken.token; // The actual token
-
-    // Insert the new token into the database
-    const { error: insertError } = await supabaseClient
-      .from("secret_tokens")
-      .insert([{ token, expires_in: expiresIn }]);
-
-    if (insertError) {
-      console.error("Error inserting new token:", insertError);
-      throw insertError;
-    }
-
-    return token; // Return the new token
-  } else {
-    // Token is still valid
-    console.log("Valid token found:", data[0].token);
-    return data[0].token; // Return the existing token
-  }
+  return base64Signature;
 }
 
-// Generate a new OAuth 2.0 token using FatSecret API
-async function generateOAuthToken() {
-  const url = "https://oauth.fatsecret.com/connect/token";
-  const clientID = Deno.env.get("FAT_SOURCE_ID") ?? "";
-  const clientSecret = Deno.env.get("FAT_SOURCE_SECRET") ?? "";
+// OAuth 1.0 request function for FatSecret API
+async function sendOAuthRequest(
+  method: string,
+  path: string,
+  params: Record<string, string>,
+) {
+  const baseUrl = "https://platform.fatsecret.com/rest/server.api";
+  const consumerKey = Deno.env.get("FAT_SOURCE_CONSUMER_KEY") ?? "";
+  const consumerSecret = Deno.env.get("FAT_SOURCE_SECRET") ?? "";
+  const timestamp = Math.floor(Date.now() / 1000);
+  const nonce = generateNonce(16);
 
-  const body = new URLSearchParams({
-    "grant_type": "client_credentials",
-    "scope": "basic",
-  });
+  // OAuth parameters
+  const oauthParams = {
+    oauth_consumer_key: consumerKey,
+    oauth_nonce: nonce,
+    oauth_signature_method: "HMAC-SHA1",
+    oauth_timestamp: timestamp.toString(),
+    oauth_version: "1.0",
+  };
 
-  const response = await fetch(url, {
-    method: "POST",
+  // Include 'method' in API parameters
+  params["method"] = path;
+
+  // Combine all parameters (OAuth and API-specific)
+  const allParams = { ...oauthParams, ...params };
+
+  // Remove 'oauth_signature' if it exists
+  delete allParams["oauth_signature"];
+
+  // Sort and encode all parameters
+  const sortedParams = Object.keys(allParams).sort();
+  const encodedParams = sortedParams
+    .map((key) => `${percentEncode(key)}=${percentEncode(allParams[key])}`)
+    .join("&");
+
+  // Create the signature base string
+  const signatureBaseString = [
+    method.toUpperCase(),
+    percentEncode(baseUrl),
+    percentEncode(encodedParams),
+  ].join("&");
+
+  // Construct the signing key without percent-encoding the consumerSecret
+  const signingKey = `${consumerSecret}&`;
+
+  // Generate the OAuth signature
+  const signature = await generateHMACSHA1Signature(
+    signingKey,
+    signatureBaseString,
+  );
+
+  // Log for debugging
+  console.log("Signature Base String:", signatureBaseString);
+  console.log("Signing Key:", signingKey);
+  console.log("Generated Signature:", signature);
+
+  // Add the signature to the OAuth parameters without percent-encoding
+  oauthParams["oauth_signature"] = signature;
+
+  // Combine all parameters for the request
+  const requestParams = { ...oauthParams, ...params };
+
+  // Prepare the URL and body for the request
+  let url = baseUrl;
+  let body = null;
+
+  // Use the same encoding for request parameters
+  const encodedRequestParams = Object.keys(requestParams)
+    .sort()
+    .map((key) => `${percentEncode(key)}=${percentEncode(requestParams[key])}`)
+    .join("&");
+
+  if (method.toUpperCase() === "GET") {
+    url += `?${encodedRequestParams}`;
+  } else {
+    body = encodedRequestParams;
+  }
+
+  // Send the request to FatSecret
+  const apiResponse = await fetch(url, {
+    method: method.toUpperCase(),
     headers: {
-      "Authorization": `Basic ${btoa(`${clientID}:${clientSecret}`)}`, // Base64-encoded credentials
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: body.toString(),
+    body: body,
   });
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch token: ${response.statusText}`);
+  // Handle errors in the response
+  if (!apiResponse.ok) {
+    const error = await apiResponse.text();
+    throw new Error(`Error fetching FatSecret API: ${error}`);
   }
 
-  const data = await response.json();
-  return {
-    token: data.access_token,
-    expires_in: data.expires_in,
-  };
+  // Return the parsed response
+  return await apiResponse.json();
 }
 
+// Handler function for the API call
 Deno.serve(async (req) => {
   const body = await req.json();
-  const { path, method, Authorization: _, ...headers } = Object.fromEntries(
-    req.headers.entries(),
-  );
+  const { path, method = "GET", ...params } = body;
 
-  if (!path || typeof path !== "string" || !path.startsWith("/")) {
+  // Validate the 'path' parameter
+  if (!path || typeof path !== "string") {
     return new Response(
       JSON.stringify({
         error:
-          "Please make sure to provide a valid 'path' parameter in the headers to the FatSecret API including the leading slash. Example: /food/get",
+          "Please make sure to provide a valid 'path' parameter. Example: 'food_brands.get.v2'",
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -129,41 +180,10 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const token = await fetchOrGenerateToken();
-    // Relay the incoming request to the target API using the valid token;
-    let apiResponse: Response;
-    const content = req.body ? JSON.stringify(body) : null;
+    // Send the OAuth 1.0 request to FatSecret API
+    const response = await sendOAuthRequest(method, path, params);
 
-    if (method && method !== "GET") {
-      const params = "?" + new URLSearchParams(content || {}).toString();
-      apiResponse = await fetch(
-        `https://platform.fatsecret.com${path || ""}${params}`,
-        {
-          method: method,
-          headers: {
-            ...headers, // Forward all incoming headers
-            "Authorization": `Bearer ${token}`, // Use the token in the request
-            "Content-Type": "application/json", // Assuming you're forwarding JSON data
-          },
-          body: content, // Forward request body if it exists
-        },
-      );
-    } else {
-      apiResponse = await fetch(
-        `https://platform.fatsecret.com${path || ""}`,
-        {
-          headers: {
-            ...headers, // Forward all incoming headers
-            "Authorization": `Bearer ${token}`, // Use the token in the request
-            "Content-Type": "application/json", // Assuming you're forwarding JSON data
-          },
-        },
-      );
-    }
-
-    const apiData = await apiResponse.json();
-
-    return new Response(JSON.stringify(apiData), {
+    return new Response(JSON.stringify(response), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error: any) {
@@ -173,15 +193,3 @@ Deno.serve(async (req) => {
     });
   }
 });
-
-/* To invoke locally:
-
-  1. Run `supabase start` (see: https://supabase.com/docs/reference/cli/supabase-start)
-  2. Make an HTTP request:
-
-  curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/fat-secret' \
-    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0' \
-    --header 'Content-Type: application/json' \
-    --data '{"name":"Functions"}'
-
-*/
