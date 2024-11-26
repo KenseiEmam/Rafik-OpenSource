@@ -1,20 +1,17 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/rafik.png" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
+  <header class="wrapper w-full">
+    <nav class="flex gap-3 w-full mb-16">
+      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/about">About</RouterLink>
+      <RouterLink to="/team">Team</RouterLink>
+      <RouterLink to="/team">Contact Us</RouterLink>
+      <RouterLink to="/team" class="ml-auto">Login</RouterLink>
+      <RouterLink to="/team">Register</RouterLink>
+    </nav>
   </header>
 
   <RouterView />
@@ -39,7 +36,7 @@ nav {
 }
 
 nav a.router-link-exact-active {
-  color: var(--color-text);
+  color: var(--vt-c-text-dark-1);
 }
 
 nav a.router-link-exact-active:hover {
@@ -60,7 +57,7 @@ nav a:first-of-type {
   header {
     display: flex;
     place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+    padding-right: calc(32rem / 2);
   }
 
   .logo {
