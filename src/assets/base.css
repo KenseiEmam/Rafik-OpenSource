@@ -30,7 +30,10 @@
   --color-border: var(--vt-c-divider-dark-2);
   --color-border-hover: var(--vt-c-divider-dark-1);
 
+  --color-title: #d7bd21;
   --color-heading: var(--vt-c-text-dark-1);
+  --color-label: #cb901c;
+  --color-link: #b02def;
   --color-text: var(--vt-c-text-dark-2);
   --section-gap: 160px;
 }

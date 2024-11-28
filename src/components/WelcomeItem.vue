@@ -4,10 +4,10 @@
       <slot name="icon"></slot>
     </i>
     <div class="details">
-      <h3>
+      <h3 class="header-small mb-6">
         <slot name="heading"></slot>
       </h3>
-      <slot></slot>
+      <slot class="text-body"></slot>
     </div>
   </div>
 </template>
@@ -34,12 +34,12 @@ i {
   color: var(--color-text);
 }
 
-h3 {
+/* h3 {
   font-size: 1.2rem;
   font-weight: 500;
   margin-bottom: 0.4rem;
   color: var(--color-heading);
-}
+} */
 
 @media (min-width: 1024px) {
   .item {
@@ -51,7 +51,7 @@ h3 {
     top: calc(50% - 25px);
     left: -26px;
     position: absolute;
-    border: 1px solid var(--color-border);
+    border: 1px solid #d7bd21;
     background: var(--color-background);
     border-radius: 8px;
     width: 50px;
@@ -60,7 +60,7 @@ h3 {
 
   .item:before {
     content: ' ';
-    border-left: 1px solid var(--color-border);
+    border-left: 1px solid #d7bd21;
     position: absolute;
     left: 0;
     bottom: calc(50% + 25px);
@@ -69,7 +69,7 @@ h3 {
 
   .item:after {
     content: ' ';
-    border-left: 1px solid var(--color-border);
+    border-left: 1px solid #d7bd21;
     position: absolute;
     left: 0;
     top: calc(50% + 25px);

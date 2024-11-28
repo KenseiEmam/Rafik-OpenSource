@@ -6,22 +6,65 @@
   padding: 2rem;
   font-weight: normal;
 }
-
-a,
-.green {
+svg {
+  color: #d7bd21;
+}
+a {
   text-decoration: none;
-  color: var(--vt-c-text-dark-2);
+  color: #b02def;
   transition: 0.4s;
   padding: 3px;
 }
 
-.green {
-  color: #d7bd21;
+nav a {
+  color: var(--vt-c-text-dark-2);
 }
 
+@layer components {
+  .title-large {
+    @apply font-black text-6xl text-rafik uppercase tracking-widest leading-10;
+  }
+  .title-medium {
+    @apply font-black text-4xl text-rafik uppercase tracking-widest leading-7;
+  }
+  .title-small {
+    @apply font-black text-2xl text-rafik uppercase tracking-widest leading-4;
+  }
+  .header-large {
+    @apply font-bold text-4xl text-rafik-pritext uppercase tracking-widest leading-7;
+  }
+  .header-medium {
+    @apply font-bold text-2xl text-rafik-pritext uppercase tracking-widest leading-4;
+  }
+  .header-small {
+    @apply font-bold text-lg text-rafik-pritext uppercase tracking-widest leading-3;
+  }
+  .contentH-large {
+    @apply font-bold text-4xl text-rafik-secondary uppercase tracking-widest leading-7;
+  }
+  .contentH-medium {
+    @apply font-bold text-2xl text-rafik-secondary uppercase tracking-widest leading-4;
+  }
+  .contentH-small {
+    @apply font-bold text-lg text-rafik-secondary uppercase tracking-widest leading-3;
+  }
+  .subheader-large {
+    @apply font-semibold text-4xl text-rafik-sectext;
+  }
+  .subheader-medium {
+    @apply font-semibold text-2xl text-rafik-sectext;
+  }
+  .subheader-small {
+    @apply font-semibold text-lg text-rafik-sectext;
+  }
+
+  .text-body {
+    @apply font-medium text-base text-rafik-sectext tracking-widest leading-loose;
+  }
+}
 @media (hover: hover) {
   a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+    background-color: hsla(51, 100%, 37%, 0.2);
   }
 }
 
