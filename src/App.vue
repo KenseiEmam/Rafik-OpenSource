@@ -4,13 +4,14 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <header class="wrapper w-full">
-    <nav class="flex gap-3 w-full mb-16">
-      <RouterLink to="/">Home</RouterLink>
+    <nav class="flex gap-8 w-full mb-16">
+      <RouterLink to="/">Access</RouterLink>
       <RouterLink to="/about">About</RouterLink>
       <RouterLink to="/team">Team</RouterLink>
-      <RouterLink to="/team">Contact Us</RouterLink>
-      <RouterLink to="/team" class="ml-auto">Login</RouterLink>
-      <RouterLink to="/team">Register</RouterLink>
+      <RouterLink to="/application">Download App</RouterLink>
+      <RouterLink to="/contact">Contact Us</RouterLink>
+      <RouterLink to="/login" class="ml-auto text-rafik">Login</RouterLink>
+      <RouterLink to="/register" class="text-rafik-secondary">Register</RouterLink>
     </nav>
   </header>
 

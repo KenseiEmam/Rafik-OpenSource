@@ -5,6 +5,16 @@
   margin: 0 auto;
   padding: 2rem;
   font-weight: normal;
+  min-height: 100vh;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 svg {
   color: #d7bd21;
@@ -22,55 +32,63 @@ nav a {
 
 @layer components {
   .title-large {
-    @apply font-black text-6xl text-rafik uppercase tracking-widest leading-10;
+    @apply font-black 2xl:text-8xl text-6xl text-rafik uppercase tracking-widest leading-none;
   }
   .title-medium {
-    @apply font-black text-4xl text-rafik uppercase tracking-widest leading-7;
+    @apply font-black 2xl:text-6xl text-4xl text-rafik uppercase tracking-widest leading-none;
   }
   .title-small {
-    @apply font-black text-2xl text-rafik uppercase tracking-widest leading-4;
+    @apply font-black 2xl:text-4xl text-2xl text-rafik uppercase tracking-widest leading-none;
   }
   .header-large {
-    @apply font-bold text-4xl text-rafik-pritext uppercase tracking-widest leading-7;
+    @apply 2xl:text-5xl text-3xl text-rafik-pritext uppercase tracking-widest leading-none;
   }
   .header-medium {
-    @apply font-bold text-2xl text-rafik-pritext uppercase tracking-widest leading-4;
+    @apply 2xl:text-3xl text-xl text-rafik-pritext uppercase tracking-widest leading-none;
   }
   .header-small {
-    @apply font-bold text-lg text-rafik-pritext uppercase tracking-widest leading-3;
+    @apply 2xl:text-xl text-lg text-rafik-pritext uppercase tracking-widest leading-none;
   }
   .contentH-large {
-    @apply font-bold text-4xl text-rafik-secondary uppercase tracking-widest leading-7;
+    @apply font-bold text-4xl text-rafik-secondary uppercase tracking-widest leading-none;
   }
   .contentH-medium {
-    @apply font-bold text-2xl text-rafik-secondary uppercase tracking-widest leading-4;
+    @apply font-bold text-2xl text-rafik-secondary uppercase tracking-widest leading-none;
   }
   .contentH-small {
-    @apply font-bold text-lg text-rafik-secondary uppercase tracking-widest leading-3;
+    @apply font-bold text-lg text-rafik-secondary uppercase tracking-widest leading-none;
   }
   .subheader-large {
-    @apply font-semibold text-4xl text-rafik-sectext;
+    @apply font-semibold text-4xl text-rafik-sectext leading-snug;
   }
   .subheader-medium {
-    @apply font-semibold text-2xl text-rafik-sectext;
+    @apply font-semibold text-2xl text-rafik-sectext leading-snug;
   }
   .subheader-small {
-    @apply font-semibold text-lg text-rafik-sectext;
+    @apply font-semibold text-lg text-rafik-sectext leading-snug;
   }
 
   .text-body {
     @apply font-medium text-base text-rafik-sectext tracking-widest leading-loose;
   }
+  .btn-lg {
+    @apply p-4 min-w-44 2xl:min-w-48 bg-rafik border-2 hover:opacity-80 border-rafik hover:bg-rafik  rounded-lg 2xl:text-xl text-rafik-pritext capitalize text-center;
+  }
+  .btn-lg-outline {
+    @apply p-4 min-w-44 2xl:min-w-48 border-rafik hover:opacity-80 hover:bg-rafik hover:text-rafik-pritext border-2 border-rafik font-bold rounded-lg 2xl:text-xl text-rafik capitalize text-center;
+  }
 }
 @media (hover: hover) {
   a:hover {
     background-color: hsla(51, 100%, 37%, 0.2);
+    cursor: pointer;
   }
 }
 
 @media (min-width: 1024px) {
   #app {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     padding: 0 2rem;
   }
