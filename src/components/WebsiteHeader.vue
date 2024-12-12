@@ -1,15 +1,17 @@
 <script setup lang="ts"></script>
 <template>
-  <header class="wrapper w-full">
-    <nav class="flex gap-8 w-full mb-16">
-      <RouterLink to="/">Access</RouterLink>
+  <header class="w-full flex items-center align-center my-10">
+    <nav class="flex mt-0 gap-8 w-full">
+      <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/about">About</RouterLink>
       <RouterLink to="/team">Team</RouterLink>
       <RouterLink to="/application">Download App</RouterLink>
       <RouterLink to="/contact">Contact Us</RouterLink>
-      <RouterLink to="/login" class="ml-auto text-rafik">Login</RouterLink>
-      <RouterLink to="/register" class="text-rafik-secondary">Register</RouterLink>
     </nav>
+    <div class="flex gap-8 items-right ml-auto">
+      <RouterLink to="/login" class="btn-sm">Login</RouterLink>
+      <RouterLink to="register" class="btn-sm-outline">Register</RouterLink>
+    </div>
   </header>
 </template>
 
@@ -28,7 +30,6 @@ nav {
   width: 100%;
   font-size: 12px;
   text-align: center;
-  margin-top: 2rem;
 }
 
 nav a.router-link-exact-active {
@@ -66,7 +67,6 @@ nav a {
     font-size: 1rem;
 
     padding: 1rem 0;
-    margin-top: 1rem;
   }
 }
 </style>
