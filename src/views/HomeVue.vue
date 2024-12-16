@@ -1,13 +1,19 @@
 <script setup lang="ts">
 import TheWelcome from '../components/TheWelcome.vue'
 import WebsiteHeader from '../components/WebsiteHeader.vue'
+import ProgramCreation from '../components/ProgramCreation.vue'
+import ContactVue from '../components/ContactVue.vue'
 </script>
 
 <template>
   <main class="flex-1 website-body flex-col flex">
     <WebsiteHeader />
     <Transition name="slide-fade" appear>
-      <TheWelcome />
+      <div class="relative flex flex-col">
+        <TheWelcome />
+        <ProgramCreation />
+        <ContactVue />
+      </div>
     </Transition>
   </main>
 </template>

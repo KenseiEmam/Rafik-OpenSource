@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import WebsiteHeader from '../components/WebsiteHeader.vue'
 import LoginForm from '../components/LoginForm.vue'
-import { ref } from 'vue'
 </script>
 
 <template>

@@ -3,8 +3,8 @@ const emit = defineEmits(['changeComp'])
 </script>
 
 <template>
-  <div class="grid md:grid-cols-5 items-center min-h-64 flex-1 mb-16 relative">
-    <div class="flex absolute bottom-5 justify-center left-0 right-0">
+  <div class="grid md:grid-cols-5 items-center min-h-screen flex-1 relative 2xl:-mt-32">
+    <div class="flex fixed z-40 bottom-5 justify-center left-0 right-0">
       <div class="card rounded-full px-12">
         <h3 class="text-body text-center">
           Are you a trainee looking for trainers?
@@ -21,10 +21,16 @@ const emit = defineEmits(['changeComp'])
         >
       </div>
     </div>
-    <div class="col-span-2">
+    <div class="col-span-2 relative">
+      <div
+        class="w-80 h-80 rounded-full bottom-16 opacity-80 absolute right-0 bg-rafik content"
+      ></div>
+      <div
+        class="w-80 h-80 rounded-full bottom-24 opacity-80 absolute right-24 bg-rafik-sectext content"
+      ></div>
       <img
-        class="max-h-128 ml-auto"
-        src="https://i.pinimg.com/originals/3a/9d/7d/3a9d7d1b48f60297e3daddd686b87c38.png"
+        class="max-h-128 w-full object-cover ml-auto relative grayscale"
+        src="/src/assets/running_man.png"
         alt=""
       />
     </div>

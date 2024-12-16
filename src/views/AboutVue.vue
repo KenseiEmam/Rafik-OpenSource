@@ -25,7 +25,7 @@ import SocialIcons from '../components/SocialIcons.vue'
         <div class="flex-col gap-6 flex md:col-span-2 border-l border-rafik-sectext pl-8">
           <img
             class="md:h-64 w-full 2xl:h-96 object-cover object-top ml-auto mb-auto"
-            src="https://i.pinimg.com/originals/3a/9d/7d/3a9d7d1b48f60297e3daddd686b87c38.png"
+            src="/src/assets/rafik.png"
             alt=""
           />
           <div>

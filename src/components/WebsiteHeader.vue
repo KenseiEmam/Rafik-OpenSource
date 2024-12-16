@@ -1,15 +1,15 @@
 <script setup lang="ts"></script>
 <template>
-  <header class="w-full flex items-center align-center my-10">
+  <header class="w-full flex items-center relative z-50 align-center my-10">
     <nav class="flex mt-0 gap-8 w-full">
       <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
-      <RouterLink to="/team">Team</RouterLink>
+      <RouterLink to="about">About</RouterLink>
+      <RouterLink to="team">Team</RouterLink>
       <RouterLink to="/application">Download App</RouterLink>
-      <RouterLink to="/contact">Contact Us</RouterLink>
     </nav>
-    <div class="flex gap-8 items-right ml-auto">
-      <RouterLink to="/login" class="btn-sm">Login</RouterLink>
+    <div class="flex gap-8 items-center ml-auto min-w-max">
+      <a href="/#contact">Contact Us</a>
+      <RouterLink to="login" class="btn-sm">Login</RouterLink>
       <RouterLink to="register" class="btn-sm-outline">Register</RouterLink>
     </div>
   </header>
