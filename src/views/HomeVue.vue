@@ -2,6 +2,7 @@
 import TheWelcome from '../components/TheWelcome.vue'
 import WebsiteHeader from '../components/WebsiteHeader.vue'
 import ProgramCreation from '../components/ProgramCreation.vue'
+import ClientManagemet from '../components/ClientManagemet.vue'
 import ContactVue from '../components/ContactVue.vue'
 </script>
 
@@ -12,6 +13,7 @@ import ContactVue from '../components/ContactVue.vue'
       <div class="relative flex flex-col">
         <TheWelcome />
         <ProgramCreation />
+        <ClientManagemet />
         <ContactVue />
       </div>
     </Transition>
