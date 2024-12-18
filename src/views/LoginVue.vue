@@ -17,10 +17,14 @@ import LoginForm from '../components/LoginForm.vue'
             <RouterLink to="register"> Sign Up Now</RouterLink>
           </h3>
         </div>
-        <div>
+        <div class="relative">
+          <div
+            class="w-96 h-96 rounded-full bottom-0 opacity-80 absolute -right-16 bg-rafik content"
+          ></div>
+
           <img
-            class="max-h-128 ml-auto"
-            src="https://i.pinimg.com/originals/3a/9d/7d/3a9d7d1b48f60297e3daddd686b87c38.png"
+            class="w-128 object-cover ml-auto relative grayscale"
+            src="https://www.registerok.in/assets/images/company-man.png"
             alt=""
           />
         </div>
