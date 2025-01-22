@@ -1,10 +1,11 @@
 <template>
   <div>
-    <form class="my-8 space-y-4">
+    <form class="my-8 space-y-4" @submit.prevent="handleLogin">
       <div class="form-control">
         <label for="email">Email Address</label>
         <input
           name="email"
+          v-model="email"
           class="rafik-text-input"
           type="email"
           placeholder="rafik@example.com"
@@ -14,6 +15,7 @@
       <div class="form-control">
         <label for="password">Password</label>
         <input
+        v-model="password"
           name="password"
           class="rafik-text-input"
           type="password"
@@ -21,12 +23,62 @@
           required
         />
       </div>
-
-      <button type="submit" class="btn-lg">ACCESS DASHBOARD</button>
+      <input type="submit" class="btn-lg" :value="loading ? 'Loading' : 'Access Dashboard'"
+      :disabled="loading"/>
     </form>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue'
+import { supabase } from '../lib/supabaseClient'
+import router from '@/router'
+import { useUserStore } from '@/stores/user'
+const loading = ref<boolean>(false)
+const email = ref<string>('')
+const password = ref<string>('')
+const userStore = useUserStore()
+
+if(localStorage.getItem('LoggedInUser') !== null)
+{
+  router.push('dashboard');
+
+}
+
+const handleLogin = async (): Promise<void> => {
+  try {
+    loading.value = true
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email.value,
+      password: password.value,
+    })
+
+    if (error) throw error
+    else{
+
+      const returnedData= {
+      id:data.user?.id,
+      email:data.user?.email,
+    }
+    const returnedSession= {
+      access_token:data.session?.access_token,
+      refresh_token:data.session?.refresh_token,
+      expires_in: data.session?.expires_in,
+      expires_at: data.session?.expires_at,
+    }
+    userStore.LogIn(returnedData, returnedSession)
+    }
+    router.push('dashboard');
+  } catch (error) {
+    if (error instanceof Error) {
+      alert(error.message)
+    }
+  } finally {
+    loading.value = false
+
+  }
+}
+
+</script>
 
 <style scoped></style>

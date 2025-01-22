@@ -1,4 +1,4 @@
-<script setup lang="ts"></script>
+
 <template>
   <header class="w-full flex items-center relative z-50 align-center my-10">
     <nav class="flex mt-0 gap-8 w-full">
@@ -7,14 +7,21 @@
       <RouterLink to="team">Team</RouterLink>
       <RouterLink to="/application">Download App</RouterLink>
     </nav>
-    <div class="flex gap-8 items-center ml-auto min-w-max">
+    <div v-if="!checkLogin()" class="flex gap-8 items-center ml-auto min-w-max">
       <a href="/#contact">Contact Us</a>
       <RouterLink to="login" class="btn-sm">Login</RouterLink>
       <RouterLink to="register" class="btn-sm-outline">Register</RouterLink>
     </div>
   </header>
 </template>
-
+<script setup lang="ts">
+  function checkLogin(){
+    if(localStorage.getItem('LoggedInUser'))
+    return true
+  else
+  return false
+  }
+</script>
 <style scoped>
 header {
   line-height: 1.5;
