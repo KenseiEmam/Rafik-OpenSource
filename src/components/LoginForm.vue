@@ -52,7 +52,6 @@ const handleLogin = async (): Promise<void> => {
       email: email.value,
       password: password.value,
     })
-
     if (error) throw error
     else{
 

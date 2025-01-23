@@ -41,6 +41,12 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/LoginVue.vue'),
     },
+    {
+      path: '/dashboard',
+      component: () => import('../views/DashboardVues/ParentVue.vue'),
+      // notice how only the child route has a name
+      children: [{ path: '', name: 'dashboard-home', component: () => import('../views/DashboardVues/HomeVue.vue') }],
+    },
   ],
 })
 
