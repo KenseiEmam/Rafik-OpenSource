@@ -48,11 +48,13 @@ const router = createRouter({
       children: [{ path: '', name: 'dashboard-home', component: () => import('../views/DashboardVues/HomeVue.vue') }],
       meta: { requiresAuth: true }
     },
-
+    {
+      path: '/register-as-a-trainer',
+      component: () => import('../views/TrainerSignUp.vue'),
+    },
     {
       path: '/setup-user-profile',
       component: () => import('../views/ProfileSetUp.vue'),
-
     },
   ],
 })

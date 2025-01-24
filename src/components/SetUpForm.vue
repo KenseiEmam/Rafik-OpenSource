@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { supabase } from "@/lib/supabaseClient"; // Ensure this is correctly set up
+import { supabase } from "@/lib/supabaseClient"; // Ensure Supabase is correctly set up
 
 const fileInput = ref<HTMLInputElement | null>(null);
-const uploadedImage = ref<string | null>(null);
+const uploadedImage = ref<string | null>(null); // Preview image
+const selectedFile = ref<File | null>(null); // File to upload
 
 const formData = ref({
   firstName: "",
@@ -21,18 +22,11 @@ const triggerFileInput = () => {
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
   const file = target.files?.[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      uploadedImage.value = e.target?.result as string;
-    };
-    reader.readAsDataURL(file);
-  }
-};
 
-const handleDrop = (event: DragEvent) => {
-  const file = event.dataTransfer?.files[0];
   if (file) {
+    selectedFile.value = file;
+
+    // Preview the image
     const reader = new FileReader();
     reader.onload = (e) => {
       uploadedImage.value = e.target?.result as string;
@@ -43,6 +37,7 @@ const handleDrop = (event: DragEvent) => {
 
 const removeImage = () => {
   uploadedImage.value = null;
+  selectedFile.value = null;
   if (fileInput.value) fileInput.value.value = "";
 };
 
@@ -56,7 +51,7 @@ const validateAndSubmit = async () => {
 
   const { firstName, lastName, sex, age, nationality, phone } = formData.value;
 
-  if (!uploadedImage) {
+  if (!selectedFile.value) {
     alert("Please upload a profile picture.");
     return;
   }
@@ -72,6 +67,26 @@ const validateAndSubmit = async () => {
   }
 
   try {
+    // Upload the file to Supabase storage
+    const { data: storageData, error: storageError } = await supabase.storage
+      .from("avatars") // Replace with your bucket name
+      .upload(`avatars/${selectedFile.value.name}`, selectedFile.value, {
+        cacheControl: "3600",
+        upsert: true,
+      });
+
+    if (storageError) throw storageError;
+
+    // Generate the public URL
+    const { data: urlData } = supabase.storage
+      .from("avatars")
+      .getPublicUrl(`avatars/${selectedFile.value.name}`);
+
+    if (!urlData?.publicUrl) {
+      throw new Error("Failed to generate public URL for the image.");
+    }
+
+    // Save the data to the `users` table
     const { data, error } = await supabase.from("users").upsert({
       email,
       first_name: firstName,
@@ -80,7 +95,7 @@ const validateAndSubmit = async () => {
       age,
       nationality,
       phone,
-      avatar: uploadedImage, // Assuming you store the image as a Base64 string or upload it to storage.
+      profile_picture: urlData.publicUrl,
     });
 
     if (error) {
@@ -105,10 +120,7 @@ const validateAndSubmit = async () => {
     >
       <h1 class="header-large">Almost There!</h1>
       <h2 class="text-body text-rafik-sectext">
-        Set up your profile to tell your clients more about yourself, get
-        verified, and begin making your own workouts and programs. We look
-        forward to adding you to our roster of professionals and seeing you
-        grow with us!
+        Set up your profile to tell your clients more about yourself...
       </h2>
       <div class="flex gap-6 items-center">
         <div>
@@ -135,8 +147,6 @@ const validateAndSubmit = async () => {
           <div
             v-else
             class="w-64 h-64 border-2 border-dashed border-rafik-sectext rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg focus:ring-2 focus:ring-offset-2 focus:ring-background-rafik-pribg"
-            @dragover.prevent
-            @drop.prevent="handleDrop"
             @click="triggerFileInput"
           >
             <span class="text-center text-rafik-sectext">
@@ -174,8 +184,7 @@ const validateAndSubmit = async () => {
             />
           </div>
           <p class="label text-rafik-sectext">
-            Upload a nice photo of your face, try to include your entire face
-            with your hair and collar showing...
+            Upload a nice photo of your face...
           </p>
         </div>
       </div>
