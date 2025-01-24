@@ -7,7 +7,7 @@ import SocialIcons from '../components/SocialIcons.vue'
     <WebsiteHeader />
     <Transition name="slide-fade" appear>
       <div
-        class="grid md:grid-cols-5 gap-16 items-end min-h-64 mb-16 relative card my-auto px-24 py-12"
+        class="grid md:grid-cols-5 gap-16 items-end min-h-64 relative card my-auto px-24 py-12"
       >
         <div class="md:col-span-3">
           <h1 class="title-medium">ABOUT RAFIK</h1>
