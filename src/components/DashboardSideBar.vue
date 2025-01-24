@@ -20,11 +20,30 @@
     <nav class="flex flex-col  gap-2 xl:gap-4 2xl:gap-8 text-xs xl:text-sm">
 
 <RouterLink to="/" class="text-xs xl:text-sm 2xl:text-base">My Profile</RouterLink>
-<RouterLink to="team" class="text-xs xl:text-sm 2xl:text-base text-rafik-alternate" >Help</RouterLink>
-<RouterLink to="about" class="text-xs xl:text-sm 2xl:text-base text-red-600">Logout</RouterLink>
+<!-- <RouterLink to="team" class="text-xs xl:text-sm 2xl:text-base text-rafik-alternate" >Help</RouterLink> -->
+<button @click="handleLogOut" class="text-left text-xs xl:text-sm 2xl:text-base text-red-600 pl-4">Logout</button>
 </nav>
     </div>
 </template>
+<script setup lang="ts">
+
+import router from '@/router'
+import { useUserStore } from '@/stores/user'
+
+const userStore = useUserStore()
+
+
+
+const handleLogOut = async (): Promise<void> => {
+
+    userStore.LogOut()
+
+    router.push({ name: 'home' })
+
+}
+
+</script>
+
 <style scoped>
 header {
   line-height: 1.5;

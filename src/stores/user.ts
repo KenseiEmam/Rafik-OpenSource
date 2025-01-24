@@ -25,8 +25,8 @@ export const useUserStore = defineStore('User', () => {
       expires_in: sesh.expires_in,
       expires_at: sesh.expires_at,
     }
-    if(User.value.id)
-      localStorage.setItem('LoggedInUser', User.value.id)
+    if(User.value.email)
+      localStorage.setItem('LoggedInUser', User.value.email)
     if(session.value.access_token)
       localStorage.setItem('AccessToken', session.value.access_token)
   }

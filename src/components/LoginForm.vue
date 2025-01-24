@@ -67,7 +67,7 @@ const handleLogin = async (): Promise<void> => {
     }
     userStore.LogIn(returnedData, returnedSession)
     }
-    router.push('dashboard');
+    router.push({ name: 'dashboard-home' })
   } catch (error) {
     if (error instanceof Error) {
       alert(error.message)
