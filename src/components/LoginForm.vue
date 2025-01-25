@@ -39,12 +39,15 @@ const email = ref<string>('')
 const password = ref<string>('')
 const userStore = useUserStore()
 
-if(localStorage.getItem('LoggedInUser') !== null)
+if(localStorage.getItem('LoggedInUser') && localStorage.getItem('UserID') )
 {
   router.push('dashboard');
 
 }
-
+else if(localStorage.getItem('LoggedInUser') && !localStorage.getItem('UserID'))
+{
+  router.push('setup-user-profile');
+}
 const handleLogin = async (): Promise<void> => {
   try {
     loading.value = true
@@ -67,7 +70,7 @@ const handleLogin = async (): Promise<void> => {
     }
     userStore.LogIn(returnedData, returnedSession)
     }
-    router.push({ name: 'dashboard-home' })
+
   } catch (error) {
     if (error instanceof Error) {
       alert(error.message)

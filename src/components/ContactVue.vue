@@ -24,8 +24,8 @@
               </svg>
             </div>
             <div class="w-full">
-              <h3 class="header-small">Find Us At:</h3>
-              <p class="text-body">Enter address here...</p>
+              <h3 class="header-small">Give us a call:</h3>
+              <p class="text-body">mob: +971 56 866 3114</p>
             </div>
           </div>
           <div class="flex items-center w-full gap-4 py-4 pr-4">
@@ -42,8 +42,8 @@
               </svg>
             </div>
             <div class="w-full">
-              <h3 class="header-small">Find Us At:</h3>
-              <p class="text-body">Enter address here...</p>
+              <h3 class="header-small">Mail us:</h3>
+              <p class="text-body">admin@rafik.ae</p>
             </div>
           </div>
           <div class="flex items-center w-full gap-4 py-4 pr-4">
@@ -64,6 +64,7 @@
               <p class="text-body">Enter address here...</p>
             </div>
           </div>
+          <SocialIcons class="w-3/4 mx-auto mt-6" :in="'hi'" :fb="'hi'" :yt="'hi'" :tw="'hi'" />
         </div>
       </div>
       <div
@@ -103,3 +104,6 @@
     </div>
   </section>
 </template>
+<script setup lang="ts">
+  import SocialIcons from './SocialIcons.vue';
+</script>

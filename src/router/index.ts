@@ -48,6 +48,14 @@ const router = createRouter({
       children: [{ path: '', name: 'dashboard-home', component: () => import('../views/DashboardVues/HomeVue.vue') }],
       meta: { requiresAuth: true }
     },
+    {
+      path: '/register-as-a-trainer',
+      component: () => import('../views/TrainerSignUp.vue'),
+    },
+    {
+      path: '/setup-user-profile',
+      component: () => import('../views/ProfileSetUp.vue'),
+    },
   ],
 })
 router.beforeEach((to) => {
@@ -59,6 +67,20 @@ router.beforeEach((to) => {
     return {
       path: '/login',
       // save the location we were at to come back later
+      query: { redirect: to.fullPath },
+    }
+  }
+  else if (to.meta.requiresAuth && localStorage.getItem('LoggedInUser') && !localStorage.getItem('UserID')) {
+
+    return {
+      path: '/setup-user-profile',
+      query: { redirect: to.fullPath },
+    }
+  }
+  else if (to.meta.requiresAuth && localStorage.getItem('LoggedInUser') && localStorage.getItem('UserID') && localStorage.getItem('LoggedInTrainer') == 'false') {
+
+    return {
+      path: '/register-as-a-trainer',
       query: { redirect: to.fullPath },
     }
   }
