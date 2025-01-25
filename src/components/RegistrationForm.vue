@@ -1,85 +1,103 @@
 <template>
   <div>
-    <form class="my-8 space-y-4" @submit.prevent="signUpNewUser">
+    <form class="my-8 space-y-6" @submit.prevent="signUpNewUser">
+      <!-- Email Field -->
       <div class="form-control">
-        <label for="email">Email Address</label>
+        <label for="email" class="block text-sm font-medium">Email Address</label>
         <input
-          name="email"
+          id="email"
+          v-model="email"
           class="rafik-text-input"
           type="email"
-          :value="email"
           placeholder="rafik@example.com"
           required
         />
       </div>
+
+      <!-- Password Field -->
       <div class="form-control">
-        <label for="password">Password</label>
+        <label for="password" class="block text-sm font-medium">Password</label>
         <input
-          name="password"
-          :value="password"
+          id="password"
+          v-model="password"
           class="rafik-text-input"
           type="password"
-          @input="handleValid"
           placeholder="*******"
           required
+          @input="validatePassword"
         />
-        <ul class="list-disc text-xs mt-1 ml-6">
-          <li>Must be atleast 8 characters long.</li>
-          <li>Must contain one number and one special letter.</li>
-          <li>Must not be too simillar to email address.</li>
+        <ul
+          class="list-disc text-xs mt-2 ml-6 text-gray-600"
+          :class="{'text-red-500': !isPasswordValid}"
+        >
+          <li>Must be at least 8 characters long.</li>
+          <li>Must contain at least one number and one special character.</li>
+          <li>Must not be too similar to the email address.</li>
         </ul>
       </div>
+
+      <!-- Confirm Password Field -->
       <div class="form-control">
-        <label for="confirm">Confirm Password</label>
+        <label for="confirm-password" class="block text-sm font-medium">Confirm Password</label>
         <input
-          name="confirm"
-          :value="confirm_password "
+          id="confirm-password"
+          v-model="confirmPassword"
           class="rafik-text-input"
           type="password"
           placeholder="*******"
           required
         />
       </div>
-      <button type="submit" class="btn-lg">JOIN NOW</button>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn-lg w-full" :disabled="!canSubmit">
+        JOIN NOW
+      </button>
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
-import { supabase } from '../lib/supabaseClient'
-const email = ref<string>('');
-const password = ref<string>('');
-const confirm_password = ref<string>('');
-const valid = ref<boolean>(false);
+import { ref, computed } from "vue";
+import { supabase } from "@/lib/supabaseClient";
+
+const email = ref<string>("");
+const password = ref<string>("");
+const confirmPassword = ref<string>("");
+
+// Reactive validation states
+const isPasswordValid = ref<boolean>(false);
+const doPasswordsMatch = computed(() => password.value === confirmPassword.value);
+const canSubmit = computed(() => isPasswordValid.value && doPasswordsMatch.value);
+
+function validatePassword() {
+  const hasNumber = /\d/.test(password.value);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password.value);
+  const isLongEnough = password.value.length >= 8;
+  const notSimilarToEmail = !email.value || !email.value.includes(password.value);
+
+  isPasswordValid.value = hasNumber && hasSpecialChar && isLongEnough && notSimilarToEmail;
+}
 
 async function signUpNewUser() {
-  if((confirm_password.value === password.value) && valid){
-
+  if (canSubmit.value) {
     try {
-    const { error } = await supabase.auth.signUp({
-      email: email.value,
-      password: password.value,
-      options: {
-        emailRedirectTo: 'https://example.com/welcome',
-      },
-    })
-    if (error) throw error
+      const { error } = await supabase.auth.signUp({
+        email: email.value,
+        password: password.value,
+
+      });
+
+      if (error) throw error;
+
+      alert("Registration successful! Check your email to confirm your account.");
     } catch (error) {
       if (error instanceof Error) {
-        alert(error.message)
+        alert(`Error: ${error.message}`);
       }
     }
+  } else {
+    alert("Please ensure the form meets all requirements before submitting.");
   }
-  else {
-    alert("please revise the password policy!")
-  }
-
-}
-function handleValid(){
-  if (password.value.length > 8 )
-  valid.value = true
 }
 </script>
-
-<style scoped></style>
