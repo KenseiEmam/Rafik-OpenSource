@@ -46,7 +46,7 @@ if(localStorage.getItem('LoggedInUser') && localStorage.getItem('UserID') )
 }
 else if(localStorage.getItem('LoggedInUser') && !localStorage.getItem('UserID'))
 {
-  router.push('setupprofile');
+  router.push('setup-user-profile');
 }
 const handleLogin = async (): Promise<void> => {
   try {

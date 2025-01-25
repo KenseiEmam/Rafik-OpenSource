@@ -1,10 +1,22 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { supabase } from "@/lib/supabaseClient"; // Ensure Supabase is correctly set up
+import router from "@/router";
+import { useUserStore } from "@/stores/user";
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const uploadedImage = ref<string | null>(null); // Preview image
 const selectedFile = ref<File | null>(null); // File to upload
+const userStore =useUserStore();
+if (!localStorage.getItem('LoggedInUser') ){
+  router.push('login')
+}
+if (localStorage.getItem('LoggedInUser') && localStorage.getItem('UserID')  && localStorage.getItem('LoggedInTrainer') == 'false' ){
+  router.push('register-as-a-trainer')
+}
+else if (localStorage.getItem('LoggedInUser') && localStorage.getItem('UserID') && localStorage.getItem('LoggedInTrainer') == 'true'){
+  router.push({name:'dashboard-home'})
+}
 
 const formData = ref({
   firstName: "",
@@ -69,7 +81,7 @@ const validateAndSubmit = async () => {
   try {
     // Upload the file to Supabase storage
     const { data: storageData, error: storageError } = await supabase.storage
-      .from("avatars") // Replace with your bucket name
+      .from("storage") // Replace with your bucket name
       .upload(`avatars/${selectedFile.value.name}`, selectedFile.value, {
         cacheControl: "3600",
         upsert: true,
@@ -79,7 +91,7 @@ const validateAndSubmit = async () => {
 
     // Generate the public URL
     const { data: urlData } = supabase.storage
-      .from("avatars")
+      .from("storage")
       .getPublicUrl(`avatars/${selectedFile.value.name}`);
 
     if (!urlData?.publicUrl) {
@@ -95,7 +107,7 @@ const validateAndSubmit = async () => {
       age,
       nationality,
       phone,
-      profile_picture: urlData.publicUrl,
+      avatar: urlData.publicUrl,
     });
 
     if (error) {
@@ -105,6 +117,7 @@ const validateAndSubmit = async () => {
     }
 
     alert("Profile successfully updated!");
+    userStore.getUserProfile()
   } catch (err) {
     console.error(err);
     alert("An error occurred. Please try again.");
