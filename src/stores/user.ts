@@ -48,6 +48,7 @@ export const useUserStore = defineStore('User', () => {
   function LogOut() {
     User.value={
     }
+    userProfile.value =  null;
     session.value = {}
     localStorage.removeItem('LoggedInUser')
     localStorage.removeItem('UserID')
@@ -86,5 +87,34 @@ export const useUserStore = defineStore('User', () => {
       alert(`Failed to load user profile: ${error.message || 'Unknown error'}`);
     }
   }
-  return { User, userProfile, LogIn, LogOut, getUserProfile }
+   // Fetch User Profile Function with no RR
+   async function getUserProfileNO() {
+    const loggedInUser = localStorage.getItem('LoggedInUser');
+
+      if (!loggedInUser) {
+        throw new Error('No logged-in user found in localStorage.');
+      }
+
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select()
+        .eq('email', loggedInUser);
+
+      if (error) {
+        throw new Error(`Error fetching user profile: ${error.message}`);
+      }
+      localStorage.setItem('UserID', data[0].id)
+      localStorage.setItem('LoggedInTrainer',data[0].is_trainer)
+      userProfile.value = data[0]
+      return userProfile.value ;
+
+    } catch (error: any) {
+      console.error(error);
+      localStorage.removeItem('UserID')
+      // Display a user-friendly error message in the UI instead of an alert.
+      alert(`Failed to load user profile: ${error.message || 'Unknown error'}`);
+    }
+  }
+  return { User, userProfile, LogIn, LogOut, getUserProfile, getUserProfileNO }
 })

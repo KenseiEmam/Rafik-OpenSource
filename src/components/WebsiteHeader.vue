@@ -7,17 +7,35 @@
       <RouterLink to="team">Team</RouterLink>
       <RouterLink to="/application">Download App</RouterLink>
     </nav>
-    <div v-if="!checkLogin()" class="flex gap-8 items-center ml-auto min-w-max">
+    <div v-if="!checkLogin" class="flex gap-8 items-center ml-auto min-w-max">
       <a href="/#contact">Contact Us</a>
       <RouterLink to="login" class="btn-sm">Login</RouterLink>
       <RouterLink to="register" class="btn-sm-outline">Register</RouterLink>
     </div>
+    <div v-else-if="userStore.userProfile" class="flex gap-4 items-center ml-auto min-w-max ">
+      <img :src="userStore.userProfile.avatar" class="w-20 h-20 border border-rafik-pribg ring-2 ring-rafik rounded-full object-cover" alt="">
+      <div class="text-body text-rafik-sectext uppercase pl-3 border-l border-rafik-sectext py-2">
+        <p> HELLO {{userStore.userProfile.first_name}}!</p>
+        <div class="flex gap-4">
+          <RouterLink :to="{name:'dashboard-home'}" class="label text-rafik hover:text-rafik-secondary uppercase">Access Dashboard</RouterLink>
+          <button @click="userStore.LogOut()" class="label text-red-500 hover:text-red-300 uppercase">Logout</button>
+        </div>
+      </div>
+    </div>
   </header>
 </template>
 <script setup lang="ts">
+import { useUserStore } from '@/stores/user'
+import { onMounted } from 'vue'
+const userStore = useUserStore()
+  onMounted(()=>{
+    if(localStorage.getItem('LoggedInUser')){
+      userStore.getUserProfileNO()
+  }})
   function checkLogin(){
-    if(localStorage.getItem('LoggedInUser'))
-    return true
+    if(localStorage.getItem('LoggedInUser')){
+      return true
+    }
   else
   return false
   }
