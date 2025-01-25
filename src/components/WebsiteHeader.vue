@@ -7,7 +7,7 @@
       <RouterLink to="team">Team</RouterLink>
       <RouterLink to="/application">Download App</RouterLink>
     </nav>
-    <div v-if="!checkLogin" class="flex gap-8 items-center ml-auto min-w-max">
+    <div v-if="!checkLogin()" class="flex gap-8 items-center ml-auto min-w-max">
       <a href="/#contact">Contact Us</a>
       <RouterLink to="login" class="btn-sm">Login</RouterLink>
       <RouterLink to="register" class="btn-sm-outline">Register</RouterLink>

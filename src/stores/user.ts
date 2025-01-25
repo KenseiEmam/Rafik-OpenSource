@@ -51,6 +51,7 @@ export const useUserStore = defineStore('User', () => {
     userProfile.value =  null;
     session.value = {}
     localStorage.removeItem('LoggedInUser')
+    localStorage.removeItem('LoggedInTrainer')
     localStorage.removeItem('UserID')
     localStorage.removeItem('AccessToken')
   }
