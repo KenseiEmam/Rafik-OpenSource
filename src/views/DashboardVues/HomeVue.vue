@@ -12,9 +12,9 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="px-8 py-12 flex-1 w-full 2xl:px-12 2xl:py-24">
+  <div class="px-8 py-12 flex-1 flex flex-col w-full h-full 2xl:px-12 2xl:py-24">
     <div
-      class="card w-full p-8 xl:py-16 flex gap-6 xl:gap-10 border-rafik-alternate border items-center"
+      class="card w-full  p-8 xl:py-16 flex gap-6 xl:gap-10 border-rafik-alternate border items-center"
       style="background-image: linear-gradient(135deg, #081411 36%, #295f42);"
     >
       <!-- User Avatar -->
@@ -42,6 +42,15 @@ const props = defineProps<{
         <button class="text-left opacity-50 hover:text-red-500 text-lg">Check Charts</button>
         <button class="text-left opacity-50 hover:text-red-500 text-lg">Settings</button>
       </div>
+    </div>
+    <div class="space-y-8 flex-1 flex flex-col  h-full w-full items-center justify-center over-flow-auto w-64">
+      <svg xmlns="http://www.w3.org/2000/svg"
+        fill="currentColor"
+        stroke="currentColor"
+        class="w-12 text-rafik-sectext"
+        viewBox="0 0 448 512">
+        <path d="M176 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l16 0 0 34.4C92.3 113.8 16 200 16 304c0 114.9 93.1 208 208 208s208-93.1 208-208c0-41.8-12.3-80.7-33.5-113.2l24.1-24.1c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L355.7 143c-28.1-23-62.2-38.8-99.7-44.6L256 64l16 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L224 0 176 0zm72 192l0 128c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-128c0-13.3 10.7-24 24-24s24 10.7 24 24z"/></svg>
+      <p class="text-center">Statistics Dashboard <br> Coming Soon</p>
     </div>
   </div>
 </template>

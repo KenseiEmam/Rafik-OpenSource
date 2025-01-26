@@ -45,7 +45,10 @@ const router = createRouter({
       path: '/dashboard',
       component: () => import('../views/DashboardVues/ParentVue.vue'),
       // notice how only the child route has a name
-      children: [{ path: '', name: 'dashboard-home', component: () => import('../views/DashboardVues/HomeVue.vue') }],
+      children: [
+        { path: '', name: 'dashboard-home', component: () => import('../views/DashboardVues/HomeVue.vue') },
+        { path: '/programs', name: 'programs', component: () => import('../views/DashboardVues/Programs/ListingVue.vue') }
+      ],
       meta: { requiresAuth: true }
     },
     {

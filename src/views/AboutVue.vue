@@ -5,7 +5,6 @@ import SocialIcons from '../components/SocialIcons.vue'
 <template>
   <main class="website-body">
     <WebsiteHeader />
-    <Transition name="slide-fade" appear>
       <div
         class="grid md:grid-cols-5 gap-16 items-end min-h-64 relative card my-auto px-24 py-12"
       >
@@ -44,7 +43,7 @@ import SocialIcons from '../components/SocialIcons.vue'
           </div>
         </div>
       </div>
-    </Transition>
+
   </main>
 </template>
 

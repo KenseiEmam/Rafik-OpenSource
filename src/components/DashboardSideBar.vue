@@ -1,6 +1,6 @@
 
 <template>
-    <div class=" min-h-screen border-rafik-sectext border-r bg-rafik-pribg items-between justify-between flex flex-col p-8  2xl:p-16 ">
+    <div class=" h-screen border-rafik-sectext border-r bg-rafik-pribg items-between justify-between flex flex-col p-8  2xl:p-16 ">
       <div class="relative w-24 xl:w-44 2xl:w-64">
 
         <img
@@ -11,17 +11,17 @@
       </div>
     <nav class="flex flex-col  gap-2 xl:gap-6 2xl:gap-10 text-xs xl:text-sm">
 
-      <RouterLink to="/dashboard" class="text-xs xl:text-sm 2xl:text-base">My <br>Dashboard</RouterLink>
-      <RouterLink to="about" class="text-xs xl:text-sm 2xl:text-base">Workout &<br>Programs</RouterLink>
-      <RouterLink to="team" class="text-xs xl:text-sm 2xl:text-base">My <br>Clients</RouterLink>
-      <RouterLink to="/application" class="text-xs xl:text-sm 2xl:text-base">Program <br>Entitlements</RouterLink>
-      <RouterLink to="/application" class="text-xs xl:text-sm 2xl:text-base">Settings &<br>Preferences</RouterLink>
+      <RouterLink to="/dashboard" class="nav-btn 2xl:text-base">My <br>Dashboard</RouterLink>
+      <RouterLink :to="{name:'programs'}" class="nav-btn 2xl:text-base">Workout &<br>Programs</RouterLink>
+      <RouterLink to="team" class="nav-btn 2xl:text-base">My <br>Clients</RouterLink>
+      <RouterLink to="/application" class="nav-btn 2xl:text-base">Program <br>Entitlements</RouterLink>
+      <RouterLink to="/application" class="nav-btn 2xl:text-base">Settings &<br>Preferences</RouterLink>
     </nav>
     <nav class="flex flex-col  gap-2 xl:gap-4 2xl:gap-8 text-xs xl:text-sm">
 
-<RouterLink to="/" class="text-xs xl:text-sm 2xl:text-base">My Profile</RouterLink>
-<!-- <RouterLink to="team" class="text-xs xl:text-sm 2xl:text-base text-rafik-alternate" >Help</RouterLink> -->
-<button @click="handleLogOut" class="text-left text-xs xl:text-sm 2xl:text-base text-red-600 pl-4">Logout</button>
+<RouterLink to="/" class="nav-btn 2xl:text-base">My Profile</RouterLink>
+<!-- <RouterLink to="team" class="text-rafik-alternate" >Help</RouterLink> -->
+<button @click="handleLogOut" class="text-left nav-btn 2xl:text-base text-red-600 pl-4">Logout</button>
 </nav>
     </div>
 </template>
