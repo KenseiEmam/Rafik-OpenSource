@@ -12,7 +12,7 @@
       <RouterLink to="login" class="btn-sm">Login</RouterLink>
       <RouterLink to="register" class="btn-sm-outline">Register</RouterLink>
     </div>
-    <div v-else-if="userStore.userProfile && checkLogin()" class="flex gap-4 items-center ml-auto min-w-max ">
+    <div v-else-if="userStore.userProfile && checkUser()" class="flex gap-4 items-center ml-auto min-w-max ">
       <img :src="userStore.userProfile.avatar" class="w-16 h-16 2xl:w-20 2xl:h-20 border border-rafik-pribg ring-2 ring-rafik rounded-full object-cover" alt="">
       <div class="text-body text-rafik-sectext uppercase pl-3 border-l border-rafik-sectext py-2">
         <p> HELLO {{userStore.userProfile.first_name}}!</p>

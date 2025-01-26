@@ -17,17 +17,21 @@
   opacity: 0;
 }
 .slide-fade-enter-active {
-  transition: all 0.3s ease-out;
+  transition: all 0.2s ease-out;
+  
 }
 
 .slide-fade-leave-active {
   transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+  
+ 
 }
 
 .slide-fade-enter-from,
 .slide-fade-leave-to {
-  transform: translateX(20px);
+  transform: translateY(50px);
   opacity: 0;
+  height: 0;
 }
 #app {
   height: 100vh;
@@ -59,40 +63,40 @@ nav a {
     @apply w-full placeholder:text-rafik-sectext bg-rafik-secbg text-lg p-3 outline-none border-rafik-sectext border rounded-md text-rafik-pritext;
   }
   .title-large {
-    @apply font-black 2xl:text-8xl text-6xl text-rafik uppercase tracking-widest leading-none;
+    @apply font-black 2xl:text-8xl/8 text-6xl text-rafik uppercase tracking-widest ;
   }
   .title-medium {
-    @apply font-black 2xl:text-6xl text-4xl text-rafik uppercase tracking-widest leading-none;
+    @apply font-black 2xl:text-6xl/8 text-4xl text-rafik uppercase tracking-widest ;
   }
   .title-small {
-    @apply font-black 2xl:text-4xl text-2xl text-rafik uppercase tracking-widest leading-none;
+    @apply font-black 2xl:text-4xl/8 text-2xl text-rafik uppercase tracking-widest ;
   }
   .header-large {
-    @apply 2xl:text-5xl text-3xl text-rafik-pritext uppercase tracking-widest leading-none;
+    @apply 2xl:text-5xl text-3xl/8 text-rafik-pritext uppercase tracking-widest ;
   }
   .header-medium {
-    @apply 2xl:text-3xl text-xl text-rafik-pritext uppercase tracking-widest leading-none;
+    @apply 2xl:text-3xl text-xl/8 text-rafik-pritext uppercase tracking-widest ;
   }
   .header-small {
-    @apply 2xl:text-xl text-lg text-rafik-pritext uppercase tracking-widest leading-none;
+    @apply 2xl:text-xl text-lg/8 text-rafik-pritext uppercase tracking-widest ;
   }
   .contentH-large {
-    @apply font-bold text-4xl text-rafik-secondary uppercase tracking-widest leading-none;
+    @apply font-bold text-4xl/8 text-rafik-secondary uppercase tracking-widest ;
   }
   .contentH-medium {
-    @apply font-bold text-2xl text-rafik-secondary uppercase tracking-widest leading-none;
+    @apply font-bold text-2xl/8 text-rafik-secondary uppercase tracking-widest ;
   }
   .contentH-small {
-    @apply font-bold text-lg text-rafik-secondary uppercase tracking-widest leading-none;
+    @apply font-bold text-lg/8 text-rafik-secondary uppercase tracking-widest ;
   }
   .subheader-large {
-    @apply font-semibold text-4xl text-rafik-sectext leading-snug;
+    @apply font-semibold text-4xl/9 text-rafik-sectext leading-snug;
   }
   .subheader-medium {
-    @apply font-semibold text-2xl text-rafik-sectext leading-snug;
+    @apply font-semibold text-2xl/9 text-rafik-sectext leading-snug;
   }
   .subheader-small {
-    @apply font-semibold text-lg text-rafik-sectext leading-snug;
+    @apply font-semibold text-lg/9 text-rafik-sectext leading-snug;
   }
 
   .text-body {
@@ -118,6 +122,9 @@ nav a {
   }
   .btn-sm-outline {
     @apply py-1.5 px-3 font-bold min-w-20 2xl:min-w-24 border-rafik hover:bg-rafik hover:text-white border-2 border-rafik font-bold rounded-lg 2xl:text-sm text-rafik capitalize text-center hover:shadow-lg shadow-sm hover:scale-105 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
+  }
+  .nav-btn{
+    @apply text-xs/5 xl:text-sm/5  2xl:text-xl/5 uppercase  text-left ;
   }
 }
 @media (hover: hover) {
