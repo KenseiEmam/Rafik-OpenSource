@@ -6,7 +6,7 @@ import SetUpForm from '../components/SetUpForm.vue'
 <template>
   <main class="flex-1 website-body flex-col flex">
     <WebsiteHeader />
-    <Transition name="fade" appear>
+    <Transition name="slide-fade" appear>
 
           <SetUpForm />
 
