@@ -6,7 +6,7 @@ import RegistrationForm from '../components/RegistrationForm.vue'
 <template>
   <main class="flex-1 website-body flex-col flex">
     <WebsiteHeader />
-    <Transition name="fade" appear>
+    <Transition name="slide-fade" appear>
       <div class="grid md:grid-cols-2 items-center min-h-64 flex-1 mb-16">
         <div>
           <h1 class="header-large mb-3">REGISTER NOW TO BECOME AN AFFILIATE</h1>
