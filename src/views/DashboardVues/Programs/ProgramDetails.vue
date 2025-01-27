@@ -1,0 +1,259 @@
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { useProgramStore } from "@/stores/programstores";
+import DetailsTabProgram from "@/components/DetailsTabProgram.vue";
+
+const activeTab = ref("Details");
+
+// Access the route object
+const route = useRoute();
+const programStore = useProgramStore();
+
+// States for editing
+const isEditingTitle = ref(false);
+const isEditingDescription = ref(false);
+const editableTitle = ref("");
+const editableDescription = ref("");
+
+// Edit handlers
+function editTitle() {
+  isEditingTitle.value = true;
+  editableTitle.value = programStore.Program?.program_name || "";
+}
+
+// Change active tab handler
+function setActiveTab(tab: string) {
+  activeTab.value = tab;
+}
+
+function editDescription() {
+  isEditingDescription.value = true;
+  editableDescription.value = programStore.Program?.program_description || "";
+}
+
+// Save handlers
+async function saveTitle() {
+  isEditingTitle.value = false;
+  if (editableTitle.value !== programStore.Program?.program_name) {
+    try {
+      await programStore.updateProgram({
+        id: programStore.Program.id,
+        program_name: editableTitle.value,
+      });
+    } catch (error) {
+      console.error("Error updating title:", error);
+    }
+  }
+}
+
+async function saveDescription() {
+  isEditingDescription.value = false;
+  if (editableDescription.value !== programStore.Program?.program_description) {
+    try {
+      await programStore.updateProgram({
+        id: programStore.Program.id,
+        program_description: editableDescription.value,
+      });
+    } catch (error) {
+      console.error("Error updating description:", error);
+    }
+  }
+}
+
+// Function to handle tag updates
+async function updateTags(updatedTags: string[]) {
+  if (programStore.Program) {
+    try {
+      await programStore.updateProgram({
+        id: programStore.Program.id,
+        tags: updatedTags,
+      });
+      programStore.Program.tags = updatedTags; // Update the local store state
+    } catch (error) {
+      console.error("Error updating tags:", error);
+    }
+  }
+}
+
+// Function to handle tag updates
+async function updateFocus(updatedprogram_focus: string[]) {
+  if (programStore.Program) {
+    try {
+      await programStore.updateProgram({
+        id: programStore.Program.id,
+        program_focus: updatedprogram_focus,
+      });
+      programStore.Program.program_focus = updatedprogram_focus; // Update the local store state
+    } catch (error) {
+      console.error("Error updating focus:", error);
+    }
+  }
+}
+
+// Fetch the program when the component mounts
+onMounted(() => {
+  const programId = route.params.id as string; // Get the ID from route params
+  if (programId) programStore.fetchProgram(programId); // Fetch program details
+});
+</script>
+
+<template>
+  <div class="flex h-screen overflow-auto">
+    <div v-if="programStore.Program" class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-8 xl:space-y-6">
+      <div class="border group flex flex-col relative border-rafik-alternate rounded-lg overflow-hidden">
+        <img
+          :src="programStore.Program.program_photo"
+          class="w-full h-full object-cover absolute"
+          alt=""
+        />
+        <div class="w-full opacity-70 h-full bg-rafik-pribg absolute"></div>
+        <div class="p-8 xl:p-12 2xl:p-16 2xl:py-24 space-y-4 relative grid items-stretch lg:grid-cols-3 2xl:grid-cols-4 divide-x divide-rafik-sectext divide-x-solid">
+          <div class="pr-6 space-y-4 2xl:col-span-3 lg:col-span-2">
+            <div class="flex items-center justify-between">
+              <!-- Editable Title -->
+              <input
+                v-if="isEditingTitle"
+                v-model="editableTitle"
+                @blur="saveTitle"
+                @keyup.enter="saveTitle"
+                class="title-small w-1/3 bg-transparent border-b border-rafik-sectext focus:outline-none"
+                type="text"
+                :placeholder="programStore.Program?.program_name || 'Loading...'"
+              />
+              <h1
+                v-else
+                class="title-small w-1/3 hover:opacity-70 cursor-text"
+                @click="editTitle"
+              >
+                {{ programStore.Program?.program_name || "Loading..." }}
+              </h1>
+              <h2 class="header-medium">{{ programStore.Program?.status || "Loading..." }}</h2>
+            </div>
+
+            <!-- Editable Description -->
+            <textarea
+              v-if="isEditingDescription"
+              v-model="editableDescription"
+              @blur="saveDescription"
+              @keyup.enter="saveDescription"
+              cols="3"
+              class="text-body 2xl:w-5/6 bg-transparent border-b border-rafik-sectext focus:outline-none"
+              :placeholder="programStore.Program?.program_description || 'Loading...'"
+            ></textarea>
+            <p
+              v-else
+              class="text-body text-justify hover:opacity-70 2xl:w-5/6 cursor-text"
+              @click="editDescription"
+            >
+              {{ programStore.Program?.program_description || "Loading..." }}
+            </p>
+            <div class="flex gap-8 justify-between">
+              <h3 class=" uppercase flex gap-2 items-center ">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  stroke="currentColor"
+                  class="w-6 text-rafik-sectext"
+                  viewBox="0 0 448 512">
+                  <path d="M160 80c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 352c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-352zM0 272c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 160c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48L0 272zM368 96l32 0c26.5 0 48 21.5 48 48l0 288c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-288c0-26.5 21.5-48 48-48z"/></svg>
+                {{ programStore.Program.difficulty_level }}</h3>
+              <h3 class=" uppercase flex gap-2 items-center ">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  stroke="currentColor"
+                  class="w-6 text-rafik-sectext"
+                  viewBox="0 0 448 512">
+                  <path d="M176 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l16 0 0 34.4C92.3 113.8 16 200 16 304c0 114.9 93.1 208 208 208s208-93.1 208-208c0-41.8-12.3-80.7-33.5-113.2l24.1-24.1c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L355.7 143c-28.1-23-62.2-38.8-99.7-44.6L256 64l16 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L224 0 176 0zm72 192l0 128c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-128c0-13.3 10.7-24 24-24s24 10.7 24 24z"/></svg>
+                {{ programStore.Program.avg_session_time }} mins/session</h3>
+              <h3 class=" uppercase flex gap-2 items-center ">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  stroke="currentColor"
+                  class="w-6 text-rafik-sectext"
+                  viewBox="0 0 448 512">
+                  <path d="M96 32l0 32L48 64C21.5 64 0 85.5 0 112l0 48 448 0 0-48c0-26.5-21.5-48-48-48l-48 0 0-32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 32L160 64l0-32c0-17.7-14.3-32-32-32S96 14.3 96 32zM448 192L0 192 0 464c0 26.5 21.5 48 48 48l352 0c26.5 0 48-21.5 48-48l0-272z"/></svg>
+                {{ programStore.Program.avg_days_per_week}} days/week</h3>
+            </div>
+          </div>
+          <div class="pl-6 flex-1 min-w-max">
+            <div class="flex flex-col flex-1 gap-4 border-rafik-sectext text-left">
+              <button class="text-body uppercase text-left hover:text-rafik-pritext">View Language</button>
+              <button
+                class="text-body uppercase text-left hover:text-rafik-pritext"
+                v-if="programStore.Program.status == 'Active'"
+              >
+                Change to Draft
+              </button>
+              <button
+                class="text-body uppercase text-left hover:text-rafik-pritext"
+                v-if="programStore.Program.status == 'Draft'"
+              >
+                Publish
+              </button>
+              <p class="text-body uppercase opacity-50" v-if="programStore.Program.status == 'Review'">Under Review</p>
+              <button class="text-body uppercase text-red-500 hover:text-red-400 text-left">Delete Program</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex xl:w-3/4 gap-8 justify-between items-center">
+        <button
+          :class="activeTab === 'Details' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          class="nav-btn max-w-16"
+          @click="setActiveTab('Details')"
+        >
+          Details
+        </button>
+        <button
+          :class="activeTab === 'Workouts' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          class="nav-btn uppercase max-w-16"
+          @click="setActiveTab('Workouts')"
+        >
+          Workouts
+        </button>
+        <button
+          :class="activeTab === 'Clients' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          class="nav-btn uppercase max-w-16"
+          @click="setActiveTab('Clients')"
+        >
+          Clients
+        </button>
+        <button
+          :class="activeTab === 'Pricing' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          class="nav-btn uppercase max-w-16"
+          @click="setActiveTab('Pricing')"
+        >
+          Pricing
+        </button>
+        <button
+          :class="activeTab === 'Documents' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          class="nav-btn uppercase max-w-16"
+          @click="setActiveTab('Documents')"
+        >
+          Documents
+        </button>
+        <button
+          :class="activeTab === 'Reviews' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          class="nav-btn uppercase max-w-16"
+          @click="setActiveTab('Reviews')"
+        >
+          Reviews
+        </button>
+      </div>
+
+      <!-- Render Box -->
+      <div>
+        <transition name="slide-fade">
+          <DetailsTabProgram
+            @update-tags="updateTags"
+            @update-focus="updateFocus"
+            :program="programStore.Program"
+            v-if="activeTab === 'Details'"
+          />
+        </transition>
+      </div>
+    </div>
+  </div>
+</template>

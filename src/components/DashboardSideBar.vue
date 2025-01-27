@@ -12,7 +12,7 @@
     <nav class="flex flex-col  gap-2 xl:gap-6 2xl:gap-10 text-xs xl:text-sm">
 
       <RouterLink to="/dashboard" class="nav-btn 2xl:text-base">My <br>Dashboard</RouterLink>
-      <RouterLink :to="{name:'programs'}" class="nav-btn 2xl:text-base">Workout &<br>Programs</RouterLink>
+      <RouterLink :to="{name:'programs-list'}" class="nav-btn 2xl:text-base">Workout &<br>Programs</RouterLink>
       <RouterLink to="team" class="nav-btn 2xl:text-base">My <br>Clients</RouterLink>
       <RouterLink to="/application" class="nav-btn 2xl:text-base">Program <br>Entitlements</RouterLink>
       <RouterLink to="/application" class="nav-btn 2xl:text-base">Settings &<br>Preferences</RouterLink>
