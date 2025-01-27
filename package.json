@@ -23,6 +23,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@supabase/supabase-js": "^2.48.0",
     "pinia": "^2.2.6",
+    "primevue": "^4.2.5",
     "tw-elements": "^2.0.0",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5"
