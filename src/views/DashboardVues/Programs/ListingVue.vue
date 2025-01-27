@@ -47,6 +47,7 @@
           <div
             v-for="program in programStore.ActivePrograms"
             :key="program.id"
+            @click="detailsRoute(program.id)"
             class="border-2 group flex flex-col relative border-rafik-sectext hover:border-rafik-secondary hover:cursor-pointer rounded-lg overflow-hidden"
           >
             <img
@@ -109,6 +110,7 @@
               <div
                 v-for="program in programStore.DraftedPrograms"
                 :key="program.id"
+                @click="detailsRoute(program.id)"
                 class="border-2 group flex flex-col relative border-rafik-sectext hover:border-rafik-secondary hover:cursor-pointer rounded-lg overflow-hidden"
               >
                 <img
@@ -161,6 +163,7 @@
 import PageTitle from "@/components/PageTitle.vue";
 import { computed, onMounted, ref } from "vue";
 import { useProgramStore } from "@/stores/programstores";
+import router from "@/router";
 
 const activeTab = ref("Active Program");
 const programStore = useProgramStore();
@@ -179,7 +182,10 @@ const additionalDrafs = computed(() => {
 function setActiveTab(tab: string) {
   activeTab.value = tab;
 }
-
+// Route to details
+function detailsRoute(id: number){
+  router.push({name:'program-details', params:{id:id}})
+}
 // Fetch programs on component mount
 onMounted(() => {
   programStore.getAllPrograms();
