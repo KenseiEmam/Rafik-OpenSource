@@ -64,7 +64,7 @@
                 </svg>
                 {{ program.overall_rating }}
               </h2>
-              <div class="scale-x-0 group-hover:scale-x-100 origin-right duration-150 ease-in-out">
+              <div class="scale-x-0 group-hover:scale-x-100 origin-right duration-150 ease-in-out" v-if="program.price_one">
                 <p class="text-body">0 Active Trainees</p>
                 <p class="text-body">{{ 0 * program.price_one }} AED in Revenue</p>
               </div>
@@ -79,7 +79,7 @@
                 </p>
                 <div class="grid grid-cols-2">
                   <!-- Limit to 4 Tags -->
-                  <p class="text-body" v-for="(tag, index) in program.tags.slice(0, 4)" :key="index">
+                  <p class="text-body" v-for="(tag, index) in program.tags?.slice(0, 4)" :key="index">
                     {{ tag }}
                   </p>
                 </div>
@@ -135,7 +135,7 @@
                 </p>
                 <div class="grid grid-cols-2">
                   <!-- Limit to 4 Tags -->
-                  <p class="text-body" v-for="(tag, index) in program.tags.slice(0, 4)" :key="index">
+                  <p class="text-body" v-for="(tag, index) in program.tags?.slice(0, 4)" :key="index">
                     {{ tag }}
                   </p>
                 </div>
@@ -183,7 +183,7 @@ function setActiveTab(tab: string) {
   activeTab.value = tab;
 }
 // Route to details
-function detailsRoute(id: number){
+function detailsRoute(id: string){
   router.push({name:'program-details', params:{id:id}})
 }
 // Fetch programs on component mount
