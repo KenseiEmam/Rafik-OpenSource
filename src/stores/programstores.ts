@@ -2,11 +2,26 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { supabase } from '../lib/supabaseClient';
 
+// Define the Program type with the new program_focus property
+type Program = {
+  id: string;
+  program_name?: string;
+  program_description?: string;
+  program_focus?: string[]; // Add program_focus here (assumed to be an array of strings)
+  status?: string;
+  difficulty_level?: string;
+  avg_session_time?: number;
+  avg_days_per_week?: number;
+  tags?:string[];
+  program_photo?: string;
+  // Add any other properties your program might have
+};
+
 export const useProgramStore = defineStore('Program', () => {
-  const AllPrograms = ref<any[] | null>(null);
-  const ActivePrograms = ref<any[] | null>(null);
-  const DraftedPrograms = ref<any[] | null>(null);
-  const Program = ref<any | null>(null); // Adjust type based on your `programs` table structure.
+  const AllPrograms = ref<Program[] | null>(null);
+  const ActivePrograms = ref<Program[] | null>(null);
+  const DraftedPrograms = ref<Program[] | null>(null);
+  const Program = ref<Program | null>(null);
 
   // Fetch all programs
   async function getAllPrograms() {
@@ -46,7 +61,8 @@ export const useProgramStore = defineStore('Program', () => {
       (program) => program.status !== 'Active'
     );
   }
-// fetch singular Program
+
+  // Fetch singular Program
   async function fetchProgram(id: string) {
     try {
       const { data, error } = await supabase
@@ -62,6 +78,7 @@ export const useProgramStore = defineStore('Program', () => {
       console.error("Error fetching program:", error);
     }
   }
+
   // Fetch only active programs
   async function getActivePrograms() {
     if (!AllPrograms.value) {
@@ -79,7 +96,7 @@ export const useProgramStore = defineStore('Program', () => {
   }
 
   // Update Program
-  async function updateProgram(updateData: { id: string; program_name?: string; program_description?: string }) {
+  async function updateProgram(updateData: Program) {
     try {
       const { error } = await supabase
         .from("programs")
@@ -96,7 +113,6 @@ export const useProgramStore = defineStore('Program', () => {
       console.error("Error updating program:", error);
     }
   }
-
 
   return {
     AllPrograms,
