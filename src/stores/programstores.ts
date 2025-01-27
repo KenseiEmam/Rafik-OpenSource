@@ -1,6 +1,8 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { supabase } from '../lib/supabaseClient';
+import router from '@/router';
+import { Select } from 'primevue';
 
 // Define the Program type with the new program_focus property
 type Program = {
@@ -9,6 +11,7 @@ type Program = {
   program_description?: string;
   program_focus?: string[]; // Add program_focus here (assumed to be an array of strings)
   status?: string;
+  trainer_id?: number,
   difficulty_level?: string;
   avg_session_time?: number;
   avg_days_per_week?: number;
@@ -26,7 +29,8 @@ export const useProgramStore = defineStore('Program', () => {
   const AllPrograms = ref<Program[] | null>(null);
   const ActivePrograms = ref<Program[] | null>(null);
   const DraftedPrograms = ref<Program[] | null>(null);
-  const Program = ref<Program | null>(null);
+
+  const Program = ref<Program>();
 
   // Fetch all programs
   async function getAllPrograms() {
@@ -118,6 +122,27 @@ export const useProgramStore = defineStore('Program', () => {
       console.error("Error updating program:", error);
     }
   }
+  // Add Program
+  async function createProgram(newProgram: Program) {
+    try {
+      const { data, error } = await supabase
+        .from("programs")
+        .insert(newProgram)
+        .select()
+
+      if (error) throw new Error(error.message);
+
+      if (data!==null)
+      {
+        AllPrograms.value?.push(data[0]);
+        splitProgramsByStatus();
+        router.push({name:'program-details', params:{id:data[0].id}})
+      } // Add to local state
+
+    } catch (error) {
+      console.error("Error updating program:", error);
+    }
+  }
 
   return {
     AllPrograms,
@@ -128,6 +153,7 @@ export const useProgramStore = defineStore('Program', () => {
     getActivePrograms,
     getDraftedPrograms,
     updateProgram,
-    fetchProgram
+    fetchProgram,
+    createProgram
   };
 });

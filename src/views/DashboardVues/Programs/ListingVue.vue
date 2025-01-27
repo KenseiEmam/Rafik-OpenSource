@@ -94,7 +94,8 @@
           <div
             v-for="index in additionalSlots"
             :key="'placeholder-' + index"
-            class="border-2 border-dashed flex flex-col items-center justify-center border-rafik-sectext bg-rafik-pribg rounded-lg overflow-hidden"
+             @click="showAddProgramModal = true"
+            class="border-2 border-dashed flex hover:cursor-pointer hover:opacity-70 flex-col items-center justify-center border-rafik-sectext bg-rafik-pribg rounded-lg overflow-hidden"
           >
             <p class="text-center header-small uppercase w-1/3">+<br> ADD ANOTHER</p>
             <p class="text-center label text-rafik-sectext w-1/2">Expand your arsenal and revenue potential by adding another program. The review process may take 3 days to a week.</p>
@@ -147,7 +148,8 @@
               <div
                 v-for="index in additionalDrafs"
                 :key="'placeholder-' + index"
-                class="border-2 border-dashed flex flex-col items-center justify-center border-rafik-sectext bg-rafik-pribg rounded-lg overflow-hidden"
+                 @click="showAddProgramModal = true"
+                class="border-2 border-dashed flex hover:cursor-pointer hover:opacity-70 flex-col items-center justify-center border-rafik-sectext bg-rafik-pribg rounded-lg overflow-hidden"
               >
                 <p class="text-center header-small uppercase w-1/3">+<br> ADD ANOTHER</p>
                 <p class="text-center label text-rafik-sectext w-1/2">Expand your arsenal and revenue potential by adding another program. The review process may take 3 days to a week.</p>
@@ -156,6 +158,14 @@
 
           </transition>
     </div>
+
+
+    <!-- Add Program Modal -->
+    <AddProgramModal
+      :visible="showAddProgramModal"
+      @close="showAddProgramModal = false"
+      @submit="addProgram"
+    />
   </div>
 </template>
 
@@ -164,9 +174,11 @@ import PageTitle from "@/components/PageTitle.vue";
 import { computed, onMounted, ref } from "vue";
 import { useProgramStore } from "@/stores/programstores";
 import router from "@/router";
+import AddProgramModal from "@/components/AddProgramModal.vue";
 
 const activeTab = ref("Active Program");
 const programStore = useProgramStore();
+const showAddProgramModal = ref(false);
 
 // Compute additional slots to fill up the grid
 const additionalSlots = computed(() => {
@@ -182,6 +194,13 @@ const additionalDrafs = computed(() => {
 function setActiveTab(tab: string) {
   activeTab.value = tab;
 }
+
+// Add program
+function addProgram(program:any) {
+  programStore.createProgram(program);
+  showAddProgramModal.value = false;
+}
+
 // Route to details
 function detailsRoute(id: string){
   router.push({name:'program-details', params:{id:id}})
