@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useProgramStore } from "@/stores/programstores";
-import DetailsTabProgram from "@/components/DetailsTabProgram.vue";
+import DetailsTabProgram from "@/components/DetailsTabPRogram.vue";
 
 const activeTab = ref("Details");
 
@@ -26,6 +26,7 @@ function editTitle() {
 function setActiveTab(tab: string) {
   activeTab.value = tab;
 }
+
 
 function editDescription() {
   isEditingDescription.value = true;
