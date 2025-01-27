@@ -36,7 +36,7 @@ function editDescription() {
 // Save handlers
 async function saveTitle() {
   isEditingTitle.value = false;
-  if (editableTitle.value !== programStore.Program?.program_name) {
+  if (editableTitle.value !== programStore.Program?.program_name && programStore.Program) {
     try {
       await programStore.updateProgram({
         id: programStore.Program.id,
@@ -50,7 +50,7 @@ async function saveTitle() {
 
 async function saveDescription() {
   isEditingDescription.value = false;
-  if (editableDescription.value !== programStore.Program?.program_description) {
+  if (editableDescription.value !== programStore.Program?.program_description && programStore.Program) {
     try {
       await programStore.updateProgram({
         id: programStore.Program.id,
