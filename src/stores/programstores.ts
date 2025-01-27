@@ -46,7 +46,22 @@ export const useProgramStore = defineStore('Program', () => {
       (program) => program.status !== 'Active'
     );
   }
+// fetch singular Program
+  async function fetchProgram(id: string) {
+    try {
+      const { data, error } = await supabase
+        .from("programs")
+        .select()
+        .eq("id", id)
+        .single(); // Expect a single record
 
+      if (error) throw new Error(error.message);
+
+      Program.value = data;
+    } catch (error) {
+      console.error("Error fetching program:", error);
+    }
+  }
   // Fetch only active programs
   async function getActivePrograms() {
     if (!AllPrograms.value) {
@@ -63,6 +78,26 @@ export const useProgramStore = defineStore('Program', () => {
     return DraftedPrograms.value;
   }
 
+  // Update Program
+  async function updateProgram(updateData: { id: string; program_name?: string; program_description?: string }) {
+    try {
+      const { error } = await supabase
+        .from("programs")
+        .update(updateData)
+        .eq("id", updateData.id);
+
+      if (error) throw new Error(error.message);
+
+      // Update local state
+      if (Program.value?.id === updateData.id) {
+        Object.assign(Program.value, updateData);
+      }
+    } catch (error) {
+      console.error("Error updating program:", error);
+    }
+  }
+
+
   return {
     AllPrograms,
     ActivePrograms,
@@ -71,5 +106,7 @@ export const useProgramStore = defineStore('Program', () => {
     getAllPrograms,
     getActivePrograms,
     getDraftedPrograms,
+    updateProgram,
+    fetchProgram
   };
 });

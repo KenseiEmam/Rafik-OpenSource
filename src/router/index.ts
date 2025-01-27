@@ -44,12 +44,30 @@ const router = createRouter({
     {
       path: '/dashboard',
       component: () => import('../views/DashboardVues/ParentVue.vue'),
-      // notice how only the child route has a name
+      meta: { requiresAuth: true }, // Ensure all children inherit this meta
       children: [
-        { path: '', name: 'dashboard-home', component: () => import('../views/DashboardVues/HomeVue.vue') },
-        { path: '/programs', name: 'programs', component: () => import('../views/DashboardVues/Programs/ListingVue.vue') }
+        {
+          path: '', // Default child route for /dashboard
+          name: 'dashboard-home',
+          component: () => import('../views/DashboardVues/HomeVue.vue'),
+        },
+        {
+          path: 'programs', // Child route for /dashboard/programs
+
+          children: [
+            {
+              path: '', // Default child route for /dashboard/programs
+              name: 'programs-list',
+              component: () => import('../views/DashboardVues/Programs/ListingVue.vue'),
+            },
+            {
+              path: ':id', // Dynamic route for program details
+              name: 'program-details',
+              component: () => import('../views/DashboardVues/Programs/ProgramDetails.vue'),
+            },
+          ],
+        },
       ],
-      meta: { requiresAuth: true }
     },
     {
       path: '/register-as-a-trainer',
