@@ -12,6 +12,11 @@ type Program = {
   difficulty_level?: string;
   avg_session_time?: number;
   avg_days_per_week?: number;
+  overall_rating?: number;
+  price_one?: number;
+  price_three?: number;
+  price_six?: number;
+  price_years?: number;
   tags?:string[];
   program_photo?: string;
   // Add any other properties your program might have
