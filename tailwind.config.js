@@ -1,10 +1,11 @@
-
+import flowbite from 'flowbite/plugin';
 
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
+    "./node_modules/flowbite/**/*.js"
   ],
   theme: {
     screens: {
@@ -43,11 +44,12 @@ export default {
           sectext: '#9FB9B2',
           pribg: '#081411',
           secbg: '#000503',
-          streak: '',
-          error: '',
-          success: '',
+          streak: '#FF5733', // Example placeholder
+          error: '#FF0000', // Example placeholder
+          success: '#00FF00', // Example placeholder
         },
       },
     },
   },
+  plugins: [flowbite],
 };

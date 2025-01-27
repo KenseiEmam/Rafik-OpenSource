@@ -22,6 +22,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.1",
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@supabase/supabase-js": "^2.48.0",
+    "flowbite": "^3.0.0",
     "pinia": "^2.2.6",
     "primevue": "^4.2.5",
     "tw-elements": "^2.0.0",
