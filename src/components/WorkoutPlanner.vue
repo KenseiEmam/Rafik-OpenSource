@@ -49,10 +49,10 @@
             <input
               v-if="isEditing"
               v-model="workout.workout_name"
-              class="rafik-text-input text-sm contentH-medium mb-2"
+              class="rafik-text-input text-sm text-rafik contentH-medium mb-2"
               placeholder="Workout Name"
             />
-            <h3 v-else class="contentH-medium">{{ workout.workout_name }}</h3>
+            <h3 v-else class="text-rafik contentH-medium">{{ workout.workout_name }}</h3>
 
             <textarea
               v-if="isEditing"
@@ -79,7 +79,7 @@
 
 
           <!-- Editable Exercises -->
-          <h4 class="subheader-small flex gap-2 mt-4 mb-3 text-rafik-pritext">
+          <h4 class="contentH-small flex gap-2 mt-4 mb-3 ">
             List of Exercises:
           </h4>
           <div class="border-l border-rafik-sectext pl-2 flex flex-col gap-4">
@@ -154,7 +154,7 @@
             />
             <p>Rest Day</p>
           </div>
-          <p v-if="!isEditing" class="contentH-medium text-center">Rest</p>
+          <p v-if="!isEditing" class="text-rafik contentH-medium text-center uppercase">Rest and recover</p>
         </div>
       </div>
     </div>
