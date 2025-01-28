@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useProgramStore } from "@/stores/programstores";
 import DetailsTabProgram from "@/components/DetailsTabPRogram.vue";
+import WorkoutPlanner from "@/components/WorkoutPlanner.vue";
 
 const activeTab = ref("Details");
 
@@ -246,12 +247,16 @@ onMounted(() => {
 
       <!-- Render Box -->
       <div>
-        <transition name="slide-fade">
+        <transition name="fade">
           <DetailsTabProgram
             @update-tags="updateTags"
             @update-focus="updateFocus"
             :program="programStore.Program"
             v-if="activeTab === 'Details'"
+          />
+          <WorkoutPlanner
+            :program="programStore.Program"
+            v-else-if="activeTab === 'Workouts'"
           />
         </transition>
       </div>
