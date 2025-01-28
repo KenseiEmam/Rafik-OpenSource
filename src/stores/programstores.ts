@@ -2,7 +2,7 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { supabase } from '../lib/supabaseClient';
 import router from '@/router';
-import { Select } from 'primevue';
+
 
 // Define the Program type with the new program_focus property
 type Program = {
@@ -21,10 +21,27 @@ type Program = {
   price_six?: number;
   price_years?: number;
   tags?:string[];
+  workouts?:Workout[];
   program_photo?: string;
+  weekly_cycle?:number;
   // Add any other properties your program might have
 };
-
+type Exercise = {
+  id: string;
+  exercise_name?: string;
+  type?: string;
+  intensity?: string;
+  sets?: number;
+  reps?: number;
+};
+type Workout = {
+  workout_name: string;
+  workout_summary?: string;
+  time_to_complete?: string;
+  sets_per_session?: number;
+  rest_day?: boolean;
+  exercises: Exercise[];
+};
 export const useProgramStore = defineStore('Program', () => {
   const AllPrograms = ref<Program[] | null>(null);
   const ActivePrograms = ref<Program[] | null>(null);
