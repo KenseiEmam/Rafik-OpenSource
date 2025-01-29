@@ -114,7 +114,23 @@ export const useExerciseStore = defineStore('Exercise', () => {
       console.error("Error updating exercise:", error);
     }
   }
+//Search Function
+  async function fetchRelevantExercises(searchQuery: string) {
+    try {
+      const { data, error } = await supabase
+        .from("exercises")
+        .select()
+        .ilike("exercise_name", `%${searchQuery}%`); // Case-insensitive search
 
+      if (error) throw new Error(error.message);
+
+      AllExercises.value = data;
+    } catch (error) {
+      console.error("Error fetching relevant exercises:", error);
+    }
+  }
+
+  // Add fetchRelevantExercises to return statement:
   return {
     AllExercises,
     ActiveExercises,
@@ -123,6 +139,7 @@ export const useExerciseStore = defineStore('Exercise', () => {
     getAllExercises,
     updateExercise,
     fetchExercise,
-    createExercise
+    createExercise,
+    fetchRelevantExercises, // ✅ Add this
   };
 });

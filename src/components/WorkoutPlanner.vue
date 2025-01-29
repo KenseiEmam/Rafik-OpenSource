@@ -1,5 +1,6 @@
 <template>
   <div class="flex-1 space-y-6 pt-6">
+    <!-- Toolbar -->
     <div class="flex justify-between items-center gap-4">
       <p class="text-body min-w-max">{{ program.weekly_cycle }} DAY CYCLE</p>
       <hr class="border w-full border-rafik-sectext" />
@@ -27,6 +28,7 @@
         </div>
       </div>
     </div>
+    <!-- Workout Grid -->
     <div class="grid grid-cols-4 gap-4">
       <div
         class="card p-8 flex flex-col"
@@ -143,6 +145,8 @@
                 </div>
               </div>
             </div>
+                <!-- Offcanvas -->
+     <ExerciseOffcanvas @addExercises="handleAdd(workoutIndex,$event)" v-if="isEditing"/>
           </div>
         </div>
         <div v-else class="my-auto">
@@ -158,13 +162,14 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
 import { useProgramStore } from "@/stores/programstores";
-
+import ExerciseOffcanvas from "./ExerciseOffcanvas.vue";
 // Define types
 type Exercise = {
   id: string;
@@ -220,6 +225,20 @@ const cancelEdit = () => {
   isEditing.value = false;
   Object.assign(editedWorkouts, JSON.parse(JSON.stringify(props.program.workouts)));
 };
+
+function handleAdd(workoutIndex: number, list: any[]) {
+  console.log("Received exercises:", list); // Check if this logs the expected data
+
+  const newExercises = list.map(e => ({
+    ...e,
+    sets: 0,
+    reps: 0,
+    intensity: 0,
+  }));
+
+  editedWorkouts[workoutIndex].exercises.push(...newExercises);
+}
+
 
 const submitChanges = () => {
   isEditing.value = false;
