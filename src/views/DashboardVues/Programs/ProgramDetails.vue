@@ -4,7 +4,7 @@ import { useRoute } from "vue-router";
 import { useProgramStore } from "@/stores/programstores";
 import DetailsTabProgram from "@/components/DetailsTabPRogram.vue";
 import WorkoutPlanner from "@/components/WorkoutPlanner.vue";
-
+import ClientTable from "@/components/ClientTable.vue"
 const activeTab = ref("Details");
 
 // Access the route object
@@ -257,6 +257,9 @@ onMounted(() => {
           <WorkoutPlanner
             :program="programStore.Program"
             v-else-if="activeTab === 'Workouts'"
+          />
+          <ClientTable
+            v-else-if="activeTab == 'Clients'"
           />
         </transition>
       </div>

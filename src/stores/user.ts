@@ -7,6 +7,15 @@ interface UserInterface  {
   email?:string,
   full_name?:string
 }
+interface ClientInterface  {
+  id?:string,
+  email?:string,
+  joined_on?:Date,
+  months_package?:number,
+  expires_on?:Date,
+  status?:string,
+
+}
 interface Session {
   access_token?:string,
   refresh_token?:string,
@@ -16,6 +25,8 @@ interface Session {
 export const useUserStore = defineStore('User', () => {
   const User= ref<UserInterface>({
   })
+  const AllClients = ref <ClientInterface>([])
+  const Client = ref <ClientInterface>({})
   const session = ref<Session>({})
   const userProfile = ref<any | null>(null); // Adjust type based on your `users` table structure.
 
@@ -88,6 +99,33 @@ export const useUserStore = defineStore('User', () => {
       alert(`Failed to load user profile: ${error.message || 'Unknown error'}`);
     }
   }
+
+  // Fetch User Profiles Related to Program
+  async function getClients() {
+    const UserID = localStorage.getItem('UserID');
+
+      if (!UserID) {
+        throw new Error('No ID user found in localStorage.');
+      }
+
+    try {
+      const { data, error } = await supabase
+        .from('user_programs')
+        .select()
+        .eq('trainer_id', UserID);
+
+      if (error) {
+        throw new Error(`Error fetching programs: ${error.message}`);
+      }
+      AllClients.value = data
+      return AllClients.value ;
+
+    } catch (error: any) {
+      console.error(error);
+      // Display a user-friendly error message in the UI instead of an alert.
+      alert(`Failed to load user programs: ${error.message || 'Unknown error'}`);
+    }
+  }
    // Fetch User Profile Function with no RR
    async function getUserProfileNO() {
     const loggedInUser = localStorage.getItem('LoggedInUser');
@@ -117,5 +155,5 @@ export const useUserStore = defineStore('User', () => {
       alert(`Failed to load user profile: ${error.message || 'Unknown error'}`);
     }
   }
-  return { User, userProfile, LogIn, LogOut, getUserProfile, getUserProfileNO }
+  return { User, userProfile, AllClients, LogIn, LogOut, getUserProfile, getUserProfileNO, getClients }
 })
