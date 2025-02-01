@@ -7,15 +7,36 @@ interface UserInterface  {
   email?:string,
   full_name?:string
 }
-interface ClientInterface  {
-  id?:string,
-  email?:string,
-  joined_on?:Date,
-  months_package?:number,
-  expires_on?:Date,
-  status?:string,
-
+interface ClientInterface {
+  id?: string;
+  avatar?:string;
+  email?: string;
+  first_name?: string;
+  last_name?:string;
+  program_details?: any;
 }
+
+type Program = {
+  id: string;
+  program_name?: string;
+  program_description?: string;
+  program_focus?: string[]; // Add program_focus here (assumed to be an array of strings)
+  status?: string;
+  trainer_id?: number,
+  difficulty_level?: string;
+  avg_session_time?: number;
+  avg_days_per_week?: number;
+  overall_rating?: number;
+  price_one?: number;
+  price_three?: number;
+  price_six?: number;
+  price_years?: number;
+  tags?:string[];
+  workouts?:Workout[];
+  program_photo?: string;
+  weekly_cycle?:number;
+  // Add any other properties your program might have
+};
 interface Session {
   access_token?:string,
   refresh_token?:string,
@@ -100,30 +121,57 @@ export const useUserStore = defineStore('User', () => {
     }
   }
 
-  // Fetch User Profiles Related to Program
-  async function getClients() {
-    const UserID = localStorage.getItem('UserID');
-
-      if (!UserID) {
-        throw new Error('No ID user found in localStorage.');
-      }
-
+  async function getClients(id: number) {
     try {
-      const { data, error } = await supabase
+      // Fetch user_programs where program_id matches the given id
+      const { data: programs, error: programError } = await supabase
         .from('user_programs')
-        .select()
-        .eq('trainer_id', UserID);
+        .select('*')
+        .eq('program_id', id);
 
-      if (error) {
-        throw new Error(`Error fetching programs: ${error.message}`);
+      if (programError) {
+        throw new Error(`Error fetching user programs: ${programError.message}`);
       }
-      AllClients.value = data
-      return AllClients.value ;
 
+      if (!programs || programs.length === 0) {
+        AllClients.value = [];
+        return;
+      }
+
+      // Extract client IDs from user_profiles
+      const clientProfileIds = programs.map((p) => p.client_id);
+
+      // Fetch user_ids from user_profiles
+      const { data: userProfiles, error: profileError } = await supabase
+        .from('profiles')
+        .select('id, user_id')
+        .in('id', clientProfileIds);
+
+      if (profileError) {
+        throw new Error(`Error fetching user profiles: ${profileError.message}`);
+      }
+
+      const userIds = userProfiles.map(profile => profile.user_id);
+
+      // Fetch user details from users table
+      const { data: users, error: userError } = await supabase
+        .from('users')
+        .select('id,avatar, email, first_name, last_name')
+        .in('id', userIds);
+
+      if (userError) {
+        throw new Error(`Error fetching user details: ${userError.message}`);
+      }
+
+      // Merge client details with their respective program details
+      AllClients.value = userProfiles.map(profile => {
+        const user = users.find(u => u.id === profile.user_id);
+        const programDetails = programs.filter(program => program.client_id === profile.id);
+        return user ? { id: user.id, avatar:user.avatar, email: user.email, first_name: user.first_name, last_name: user.last_name, program_details: programDetails } : null;
+      }).filter(client => client !== null);
     } catch (error: any) {
       console.error(error);
-      // Display a user-friendly error message in the UI instead of an alert.
-      alert(`Failed to load user programs: ${error.message || 'Unknown error'}`);
+      alert(`Failed to load clients: ${error.message || 'Unknown error'}`);
     }
   }
    // Fetch User Profile Function with no RR
