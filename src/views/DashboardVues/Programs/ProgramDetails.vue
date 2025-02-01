@@ -259,6 +259,7 @@ onMounted(() => {
             v-else-if="activeTab === 'Workouts'"
           />
           <ClientTable
+          :program="programStore.Program"
             v-else-if="activeTab == 'Clients'"
           />
         </transition>
