@@ -5,8 +5,13 @@ import { useProgramStore } from "@/stores/programstores";
 import DetailsTabProgram from "@/components/DetailsTabPRogram.vue";
 import WorkoutPlanner from "@/components/WorkoutPlanner.vue";
 import ClientTable from "@/components/ClientTable.vue"
+import PricingModel from "@/components/PricingModel.vue"
 const activeTab = ref("Details");
 
+type PromoCode={
+  code:string,
+  value:number,
+}
 // Access the route object
 const route = useRoute();
 const programStore = useProgramStore();
@@ -78,6 +83,20 @@ async function updateTags(updatedTags: string[]) {
   }
 }
 
+// Function to handle promo updates
+async function updatePromo(updatedPromos: PromoCode[]) {
+  if (programStore.Program) {
+    try {
+      await programStore.updateProgram({
+        id: programStore.Program.id,
+        promos: updatedPromos,
+      });
+      programStore.Program.promos = updatedPromos; // Update the local store state
+    } catch (error) {
+      console.error("Error updating Promos:", error);
+    }
+  }
+}
 // Function to handle tag updates
 async function updateFocus(updatedprogram_focus: string[]) {
   if (programStore.Program) {
@@ -261,6 +280,11 @@ onMounted(() => {
           <ClientTable
           :program="programStore.Program"
             v-else-if="activeTab == 'Clients'"
+          />
+          <PricingModel
+          :program="programStore.Program"
+          @update-promo="updatePromo"
+            v-else-if="activeTab == 'Pricing'"
           />
         </transition>
       </div>
