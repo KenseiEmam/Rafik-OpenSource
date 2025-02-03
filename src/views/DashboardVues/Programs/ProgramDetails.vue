@@ -97,6 +97,29 @@ async function updatePromo(updatedPromos: PromoCode[]) {
     }
   }
 }
+async function updatePrices(updatedPrices: any) {
+  if (!programStore.Program) return;
+
+  try {
+    // Update the program in the store (API call)
+    await programStore.updateProgram({
+      id: programStore.Program.id,
+      price_one: updatedPrices.price_one,
+      price_three: updatedPrices.price_three,
+      price_six: updatedPrices.price_six,
+      price_year: updatedPrices.price_year,
+    });
+
+    // Ensure all local states are updated properly
+    programStore.Program.price_one = updatedPrices.price_one;
+    programStore.Program.price_three = updatedPrices.price_three;
+    programStore.Program.price_six = updatedPrices.price_six;
+    programStore.Program.price_year = updatedPrices.price_year;
+  } catch (error) {
+    console.error("Error updating Prices:", error);
+  }
+}
+
 // Function to handle tag updates
 async function updateFocus(updatedprogram_focus: string[]) {
   if (programStore.Program) {
@@ -284,6 +307,7 @@ onMounted(() => {
           <PricingModel
           :program="programStore.Program"
           @update-promo="updatePromo"
+          @update-prices="updatePrices"
             v-else-if="activeTab == 'Pricing'"
           />
         </transition>
