@@ -5,8 +5,13 @@ import { useProgramStore } from "@/stores/programstores";
 import DetailsTabProgram from "@/components/DetailsTabPRogram.vue";
 import WorkoutPlanner from "@/components/WorkoutPlanner.vue";
 import ClientTable from "@/components/ClientTable.vue"
+import PricingModel from "@/components/PricingModel.vue"
 const activeTab = ref("Details");
 
+type PromoCode={
+  code:string,
+  value:number,
+}
 // Access the route object
 const route = useRoute();
 const programStore = useProgramStore();
@@ -75,6 +80,43 @@ async function updateTags(updatedTags: string[]) {
     } catch (error) {
       console.error("Error updating tags:", error);
     }
+  }
+}
+
+// Function to handle promo updates
+async function updatePromo(updatedPromos: PromoCode[]) {
+  if (programStore.Program) {
+    try {
+      await programStore.updateProgram({
+        id: programStore.Program.id,
+        promos: updatedPromos,
+      });
+      programStore.Program.promos = updatedPromos; // Update the local store state
+    } catch (error) {
+      console.error("Error updating Promos:", error);
+    }
+  }
+}
+async function updatePrices(updatedPrices: any) {
+  if (!programStore.Program) return;
+
+  try {
+    // Update the program in the store (API call)
+    await programStore.updateProgram({
+      id: programStore.Program.id,
+      price_one: updatedPrices.price_one,
+      price_three: updatedPrices.price_three,
+      price_six: updatedPrices.price_six,
+      price_year: updatedPrices.price_year,
+    });
+
+    // Ensure all local states are updated properly
+    programStore.Program.price_one = updatedPrices.price_one;
+    programStore.Program.price_three = updatedPrices.price_three;
+    programStore.Program.price_six = updatedPrices.price_six;
+    programStore.Program.price_year = updatedPrices.price_year;
+  } catch (error) {
+    console.error("Error updating Prices:", error);
   }
 }
 
@@ -261,6 +303,12 @@ onMounted(() => {
           <ClientTable
           :program="programStore.Program"
             v-else-if="activeTab == 'Clients'"
+          />
+          <PricingModel
+          :program="programStore.Program"
+          @update-promo="updatePromo"
+          @update-prices="updatePrices"
+            v-else-if="activeTab == 'Pricing'"
           />
         </transition>
       </div>

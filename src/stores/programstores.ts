@@ -19,12 +19,18 @@ type Program = {
   price_one?: number;
   price_three?: number;
   price_six?: number;
-  price_years?: number;
+  price_year?: number;
   tags?:string[];
   workouts?:Workout[];
   program_photo?: string;
   weekly_cycle?:number;
+  promos?:PromoCode[];
   // Add any other properties your program might have
+};
+// Promo Codes
+type PromoCode = {
+  code: string;
+  value: number;
 };
 type Exercise = {
   id: string;
