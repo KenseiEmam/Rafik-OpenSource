@@ -95,77 +95,100 @@ export const useProgramStore = defineStore('Program', () => {
   }
 
   // Fetch singular Program
-  async function fetchProgram(id: string) {
-    try {
-      const { data, error } = await supabase
-        .from("programs")
-        .select()
-        .eq("id", id)
-        .single(); // Expect a single record
+ // Fetch all programs
+async function getAllPrograms() {
+  const UserID = localStorage.getItem('UserID');
 
-      if (error) throw new Error(error.message);
-
-      Program.value = data;
-    } catch (error) {
-      console.error("Error fetching program:", error);
-    }
+  if (!UserID) {
+    alert('No user ID found in localStorage.');
+    return;
   }
 
-  // Fetch only active programs
-  async function getActivePrograms() {
-    if (!AllPrograms.value) {
-      await getAllPrograms(); // Ensure all programs are fetched first
+  try {
+    const { data, error } = await supabase
+      .from('programs')
+      .select()
+      .eq('trainer_id', UserID);
+
+    if (error) {
+      throw new Error(`Error fetching programs: ${error.message}`);
     }
-    return ActivePrograms.value;
-  }
 
-  // Fetch only drafted programs
-  async function getDraftedPrograms() {
-    if (!AllPrograms.value) {
-      await getAllPrograms(); // Ensure all programs are fetched first
+    AllPrograms.value = data || [];
+    splitProgramsByStatus();
+    return AllPrograms.value;
+  } catch (error: any) {
+    alert(`Failed to load programs: ${error.message || 'Unknown error'}`);
+  }
+}
+
+// Fetch single program
+async function fetchProgram(id: string) {
+  try {
+    const { data, error } = await supabase
+      .from("programs")
+      .select()
+      .eq("id", id)
+      .single(); // Expect a single record
+
+    if (error) throw new Error(error.message);
+
+    Program.value = data;
+  } catch (error: any) {
+    alert(`Error fetching program: ${error.message || "Unknown error"}`);
+  }
+}
+
+// Update program
+async function updateProgram(updateData: Program) {
+  try {
+    const { error } = await supabase
+      .from("programs")
+      .update(updateData)
+      .eq("id", updateData.id);
+
+    if (error) throw new Error(error.message);
+
+    // Update local state
+    if (Program.value?.id === updateData.id) {
+      Object.assign(Program.value, updateData);
     }
-    return DraftedPrograms.value;
+  } catch (error: any) {
+    alert(`Error updating program: ${error.message || "Unknown error"}`);
   }
+}
 
-  // Update Program
-  async function updateProgram(updateData: Program) {
-    try {
-      const { error } = await supabase
-        .from("programs")
-        .update(updateData)
-        .eq("id", updateData.id);
+// Add Program
+async function createProgram(newProgram: Program) {
+  try {
+    // Initialize with 7 empty workouts
+    newProgram.workouts = Array.from({ length: 7 }, () => ({
+      workout_name: "",
+      workout_summary: "",
+      time_to_complete: "",
+      sets_per_session: 0,
+      rest_day: false,
+      exercises: [],
+    }));
 
-      if (error) throw new Error(error.message);
+    const { data, error } = await supabase
+      .from("programs")
+      .insert(newProgram)
+      .select();
 
-      // Update local state
-      if (Program.value?.id === updateData.id) {
-        Object.assign(Program.value, updateData);
-      }
-    } catch (error) {
-      console.error("Error updating program:", error);
-    }
+    if (error) throw new Error(error.message);
+
+    if (data !== null) {
+      AllPrograms.value?.push(data[0]);
+      splitProgramsByStatus();
+      router.push({ name: "program-details", params: { id: data[0].id } });
+    } // Add to local state
+
+  } catch (error) {
+    alert(`Error updating program: ${error.message || "Unknown error"}`);
   }
-  // Add Program
-  async function createProgram(newProgram: Program) {
-    try {
-      const { data, error } = await supabase
-        .from("programs")
-        .insert(newProgram)
-        .select()
+}
 
-      if (error) throw new Error(error.message);
-
-      if (data!==null)
-      {
-        AllPrograms.value?.push(data[0]);
-        splitProgramsByStatus();
-        router.push({name:'program-details', params:{id:data[0].id}})
-      } // Add to local state
-
-    } catch (error) {
-      console.error("Error updating program:", error);
-    }
-  }
 
   return {
     AllPrograms,

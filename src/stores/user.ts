@@ -115,7 +115,7 @@ export const useUserStore = defineStore('User', () => {
     } catch (error: any) {
       console.error(error);
       localStorage.removeItem('UserID')
-      router.push({ name: 'setupprofile' })
+      router.push('/setup-user-profile')
       // Display a user-friendly error message in the UI instead of an alert.
       alert(`Failed to load user profile: ${error.message || 'Unknown error'}`);
     }
