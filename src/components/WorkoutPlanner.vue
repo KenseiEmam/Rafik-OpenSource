@@ -116,12 +116,6 @@
                 />
                 <div class="flex justify-between">
                   <button
-                    class="text-rafik hover:text-rafik-secondary"
-                    @click="changeExercise(workoutIndex, exerciseIndex)"
-                  >
-                    Change Exercise
-                  </button>
-                  <button
                     class="hover:text-red-400 text-red-500"
                     @click="removeExercise(workoutIndex, exerciseIndex)"
                   >
