@@ -238,6 +238,7 @@ const submitForm = async () => {
     trainer_id: localStorage.getItem("UserID"),
     status: "Draft",
     difficulty_level: "",
+    tags:[],
     program_focus: [0, 0, 0, 0], // Reset program focus array
   };
   removeImage();
