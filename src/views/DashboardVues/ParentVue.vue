@@ -13,7 +13,7 @@
     <div v-else class="flex flex-col flex-1 h-full items-center justify-center">
       <h2 class="subheader-medium">Loading...</h2>
     </div>
-    <PostOffice/>
+    <PostOffice class="hidden xl:block"/>
 
   </div>
 </template>
