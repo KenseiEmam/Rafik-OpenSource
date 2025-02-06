@@ -81,7 +81,7 @@ const props = defineProps(['program']);
 const searchQuery = ref('');
 const currentPage = ref(1);
 const itemsPerPage = 10;
-const show_action = ref(null);
+const show_action = ref();
 
 onMounted(() => {
   userStore.getClients(props.program.id);
@@ -96,9 +96,9 @@ function handleLeave(){
 const filteredClients = computed(() => {
   const lowerSearchQuery = searchQuery.value.toLowerCase();
   const filtered = userStore.AllClients.filter(client =>
-    client.first_name.toLowerCase().includes(lowerSearchQuery) ||
-    client.last_name.toLowerCase().includes(lowerSearchQuery) ||
-    client.email.toLowerCase().includes(lowerSearchQuery)
+    client.first_name?.toLowerCase().includes(lowerSearchQuery) ||
+    client.last_name?.toLowerCase().includes(lowerSearchQuery) ||
+    client.email?.toLowerCase().includes(lowerSearchQuery)
   );
 
   // Pagination: slice the array based on current page
@@ -111,9 +111,9 @@ const filteredClients = computed(() => {
 // Computed property for total pages
 const totalPages = computed(() => {
   const filtered = userStore.AllClients.filter(client =>
-    client.first_name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    client.last_name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    client.email.toLowerCase().includes(searchQuery.value.toLowerCase())
+    client.first_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    client.last_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    client.email?.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
   return Math.ceil(filtered.length / itemsPerPage);
 });

@@ -78,7 +78,7 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
-import debounce from 'lodash/debounce';
+import debounce from 'lodash';
 import { useExerciseStore } from '@/stores/exercisestores';
 
 const ModalOn = ref<boolean>(false);

@@ -12,6 +12,9 @@
     }
   ],
   "compilerOptions": {
-    "module": "NodeNext"
+    "module": "NodeNext",
+    "noImplicitAny": false, // Allow 'any' type implicitly
+
+
   }
 }

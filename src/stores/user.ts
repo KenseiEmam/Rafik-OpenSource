@@ -15,7 +15,22 @@ interface ClientInterface {
   last_name?:string;
   program_details?: any;
 }
-
+type Exercise = {
+  id: string;
+  exercise_name?: string;
+  type?: string;
+  intensity?: string;
+  sets?: number;
+  reps?: number;
+};
+type Workout = {
+  workout_name: string;
+  workout_summary?: string;
+  time_to_complete?: string;
+  sets_per_session?: number;
+  rest_day?: boolean;
+  exercises: Exercise[];
+};
 type Program = {
   id: string;
   program_name?: string;
@@ -46,10 +61,12 @@ interface Session {
 export const useUserStore = defineStore('User', () => {
   const User= ref<UserInterface>({
   })
-  const AllClients = ref <ClientInterface>([])
-  const Client = ref <ClientInterface>({})
-  const session = ref<Session>({})
-  const userProfile = ref<any | null>(null); // Adjust type based on your `users` table structure.
+  const AllClients = ref<ClientInterface[]>([]); // Ensure it's typed as an array
+  const Client = ref<ClientInterface | null>(null); // Ensure Client can be null
+
+  const session = ref<Session>({});
+  const userProfile = ref<any | null>(null);
+
 
   //Login Handler
   function LogIn(data:UserInterface, sesh:Session) {
