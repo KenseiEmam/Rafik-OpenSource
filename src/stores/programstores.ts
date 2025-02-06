@@ -25,8 +25,16 @@ type Program = {
   program_photo?: string;
   weekly_cycle?:number;
   promos?:PromoCode[];
+  induction?:Question[];
+  follow?:Question[];
+  referral?:string;
   // Add any other properties your program might have
 };
+interface Question  {
+  type:string;
+  question?:string;
+  answer?:any;
+}
 // Promo Codes
 type PromoCode = {
   code: string;
@@ -95,69 +103,57 @@ export const useProgramStore = defineStore('Program', () => {
   }
 
   // Fetch singular Program
- // Fetch all programs
-async function getAllPrograms() {
-  const UserID = localStorage.getItem('UserID');
+  async function fetchProgram(id: string) {
+    try {
+      const { data, error } = await supabase
+        .from("programs")
+        .select()
+        .eq("id", id)
+        .single(); // Expect a single record
 
-  if (!UserID) {
-    alert('No user ID found in localStorage.');
-    return;
-  }
+      if (error) throw new Error(error.message);
 
-  try {
-    const { data, error } = await supabase
-      .from('programs')
-      .select()
-      .eq('trainer_id', UserID);
-
-    if (error) {
-      throw new Error(`Error fetching programs: ${error.message}`);
+      Program.value = data;
+    } catch (error) {
+      console.error("Error fetching program:", error);
     }
-
-    AllPrograms.value = data || [];
-    splitProgramsByStatus();
-    return AllPrograms.value;
-  } catch (error: any) {
-    alert(`Failed to load programs: ${error.message || 'Unknown error'}`);
   }
-}
 
-// Fetch single program
-async function fetchProgram(id: string) {
-  try {
-    const { data, error } = await supabase
-      .from("programs")
-      .select()
-      .eq("id", id)
-      .single(); // Expect a single record
-
-    if (error) throw new Error(error.message);
-
-    Program.value = data;
-  } catch (error: any) {
-    alert(`Error fetching program: ${error.message || "Unknown error"}`);
-  }
-}
-
-// Update program
-async function updateProgram(updateData: Program) {
-  try {
-    const { error } = await supabase
-      .from("programs")
-      .update(updateData)
-      .eq("id", updateData.id);
-
-    if (error) throw new Error(error.message);
-
-    // Update local state
-    if (Program.value?.id === updateData.id) {
-      Object.assign(Program.value, updateData);
+  // Fetch only active programs
+  async function getActivePrograms() {
+    if (!AllPrograms.value) {
+      await getAllPrograms(); // Ensure all programs are fetched first
     }
-  } catch (error: any) {
-    alert(`Error updating program: ${error.message || "Unknown error"}`);
+    return ActivePrograms.value;
   }
-}
 
+  // Fetch only drafted programs
+  async function getDraftedPrograms() {
+    if (!AllPrograms.value) {
+      await getAllPrograms(); // Ensure all programs are fetched first
+    }
+    return DraftedPrograms.value;
+  }
+
+  // Update Program
+  async function updateProgram(updateData: Program) {
+    try {
+      const { error } = await supabase
+        .from("programs")
+        .update(updateData)
+        .eq("id", updateData.id);
+
+      if (error) throw new Error(error.message);
+
+      // Update local state
+      if (Program.value?.id === updateData.id) {
+        Object.assign(Program.value, updateData);
+      }
+    } catch (error) {
+      console.error("Error updating program:", error);
+    }
+  }
+  // Add Program
 // Add Program
 async function createProgram(newProgram: Program) {
   try {
@@ -185,7 +181,7 @@ async function createProgram(newProgram: Program) {
     } // Add to local state
 
   } catch (error) {
-    alert(`Error updating program: ${error.message || "Unknown error"}`);
+    alert("Error creating program:"+error);
   }
 }
 
