@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, defineEmits } from "vue";
-import { debounce } from "lodash";
+import debounce  from "lodash/debounce";
 import { supabase } from "@/lib/supabaseClient";
 // Props to receive the program object
 const props = defineProps({
