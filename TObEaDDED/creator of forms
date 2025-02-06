@@ -1,0 +1,856 @@
+
+
+<template>
+  <div class="mt-4 px-8 md:pl-32 md:pr-16 2xl:pr-32">
+    <div v-if="!access">
+      <div  class="md:h-80 2xl:h-144 w-full flex flex-auto gap-6 desaturate items-center justify-center">
+          <img src="..\assets\no_drawerfound.svg" alt="" class="w-32">
+          <div class="text-left space-y-2  font-semibold">
+            <h1 class="text-xl text-t3 dark:text-white">No Drawer</h1>
+            <p class="  text-t3-mutedText2 dark:text-t3-mutedNight">It appears this drawer does not exist or you may not have access to it. <br>Please check again at another time.</p>
+           </div>
+        </div>
+     </div>
+     <div v-if="access">
+      <div v-if="submittig" class="my-6 m-auto text-center  text-t3-mutedText2 dark:text-t3-mutedNight">
+        <clip-loader :loading="loading" color="#00ADEE" size="32px" class="my-2"></clip-loader>
+      <p class="animate-pulse" > Submitting your request ...</p>
+      </div>
+      <div v-if="!submittig" class="mb-6 flex justify-between items-center">
+            <h1 class="text-2xl text-center md:text-left font-bold text-t3 dark:text-white  dark:text-white">
+                     Add Type for {{title}}
+                    </h1>
+                    <div class="flex gap-2">
+                      <button type="button"
+                        class="mr-2  text-white dark:text-white hover:bg-t3-light dark:hover:bg-t3-light dark:bg-t3-nightCard bg-t3 px-4 py-2 rounded-md rounded-md px-2 py-1"
+                        data-bs-toggle="modal" data-bs-target="#tempModal">
+                        Load Template
+                        </button>            
+                        <button class=" dark:hover:text-red-300 hover:text-red-300 text-red-500 dark:text-red-400 px-4 py-2 rounded-xl" @click="cancel()">Cancel</button>
+        <button class="text-white dark:text-white hover:bg-t3-light dark:hover:bg-t3-light dark:bg-t3-nightCard bg-t3 px-4 py-2 rounded-md" @click="addType()">Add Type</button>
+      </div>
+          </div>
+      <div v-if="!submittig" class="w-5/6 rounded-md mb-32 md:mb-0">
+        
+        
+        <div >
+          <div class="form-floating mb-1 ">
+                              <input v-model="type.name" type="text" class="form-control w-full m-0 px-3 py-1 text-xl font-normal text-gray-700 dark:text-white dark:bg-t3-night  bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out focus:outline-none"
+                              placeholder="First Name"  id="floatingInput1" />
+                              <label for="floatingInput1" class="text-t3-mutedText2 dark:text-t3-mutedNight" >Type Name<span class="text-red-600">*</span></label>
+                          </div>
+                          <div class="text-left w-full py-3 block   text-t3 dark:text-white font-bold   text-lg ">
+              <div class="flex gap-2 items-center">
+                Read and Sign
+              </div>  
+                <div class=" mt-1 text-sm  text-t3-mutedText2 dark:text-t3-mutedNight pr-2 font-light ">
+                  <p> By enabling this feature, documents of this type will send notifications to all drawer viewers once it is verified, so that they may read it and sign their acceptance.</p>
+                </div>
+                <div class="form-check flex items-center pl-0 gap-2 mt-3 form-switch">
+                        <input v-model="type.requires_acceptance" class="form-check-input  appearance-none w-8 rounded-full float-left h-5 align-top bg-no-repeat bg-contain bg-t3-mutedText2 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" id="rns" >
+                        <label class=" form-check-label inline-block  text-t3-mutedText2 dark:text-t3-mutedNight text-sm" for="rns">{{type.requires_acceptance?'Disable Read and Sign' :'Enable Read and Sign'  }}</label>
+                      </div>
+            </div>
+              
+             
+              <div class="grid grid-cols-4 h-144 overflow-y-auto mt-10">
+  
+                <div class=" w-full border-r border-t3-mutedText2 space-y-4">
+            <button @click="toggleClass('fields')" :class="active === 'fields'? 'border-r-2 text-t3 dark:text-white font-bold': 'text-t3-mutedNight'" class="text-left w-full py-3 block border-t3-secondary hover:text-t3-secondary dark:hover:text-t3-secondary  pl-2 text-lg ">
+              <div class="flex gap-2 items-center">
+                <svg class="w-6" viewBox="0 0 32 19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.357 13.245v2.898a2 2 0 0 0 2 2H28a3 3 0 0 0 3-3V4c0-1.657-1.339-3-2.996-3H8.356a1.999 1.999 0 0 0-1.999 2v2.408M1 9.035h11.786m0 0-2.143-3.75m2.143 3.75-2.143 3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                Fields
+              </div>  
+                <div v-if="active === 'fields'" class=" mt-2 text-sm  text-t3-mutedText2 dark:text-t3-mutedNight pr-2 font-light ">
+                 Fields added here will be specific to this file type and will appear on the document addition form when the type is selected.
+                </div>
+            </button>
+            <button @click="toggleClass('review')" :class="active === 'review'? 'border-r-2 text-t3 dark:text-white font-bold': 'text-t3-mutedNight'" class="text-left w-full py-3 block border-t3-secondary hover:text-t3-secondary dark:hover:text-t3-secondary  pl-2 text-lg ">
+              <div class="flex gap-2 items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+                </svg>
+  
+                Review Process
+              </div>  
+                <div v-if="active === 'review'" class=" mt-2 text-sm  text-t3-mutedText2 dark:text-t3-mutedNight pr-2 font-light ">
+                  The review process entails the steps of approval the document must go through before being validated.
+                </div>
+            </button>
+            <button @click="toggleClass('notifications')" :class="active === 'notifications'? 'border-r-2 text-t3 dark:text-white font-bold': 'text-t3-mutedNight'" class="text-left w-full py-3 block border-t3-secondary hover:text-t3-secondary dark:hover:text-t3-secondary  pl-2 text-lg ">
+              <div class="flex gap-2 items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0M3.124 7.5A8.969 8.969 0 015.292 3m13.416 0a8.969 8.969 0 012.168 4.5" />
+                </svg>
+  
+                Notifications
+              </div>
+              <div v-if="active === 'notifications'" class=" mt-2 text-sm  text-t3-mutedText2 dark:text-t3-mutedNight pr-2 font-light ">
+                  Notification settings specify which users get notified when the document is edited or moved up the approval ladder.
+                </div>
+            </button>
+            <button  @click="toggleClass('tags')" :class="active === 'tags'? 'border-r-2 text-t3 dark:text-white font-bold': 'text-t3-mutedNight'" class="text-left w-full py-3 block border-t3-secondary hover:text-t3-secondary dark:hover:text-t3-secondary  pl-2 text-lg ">
+             <div class="flex gap-2 items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+              </svg>
+  
+               Tags
+             </div>
+              <div v-if="active === 'tags'" class=" mt-2 text-sm  text-t3-mutedText2 dark:text-t3-mutedNight pr-2 font-light ">
+                  Tags help with document search and filtering. Add the default tags below that will apply to all files of this type.
+                </div>
+            </button>
+            <button  @click="toggleClass('alerts')" :class="active === 'alerts'? 'border-r-2 text-t3 dark:text-white font-bold': 'text-t3-mutedNight'" class="text-left w-full py-3 block border-t3-secondary hover:text-t3-secondary dark:hover:text-t3-secondary  pl-2 text-lg ">
+             <div class="flex gap-2 items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+               Alert Time
+             </div>
+              <div v-if="active === 'alerts'" class=" mt-2 text-sm  text-t3-mutedText2 dark:text-t3-mutedNight pr-2 font-light ">
+                  Choose what time alerts are sent to users before the document expires. If this is not configured then the documents will send alerts based on the configured setting defaults.
+                </div>
+            </button>
+          </div>
+          <div class="col-span-3 p-6 2xl:pl-16">
+  
+            <!-- Review Process -->
+            <div v-if="active === 'review'">
+            <div class="flex flex-col">
+                <div class="flex gap-2">
+                <button class=" text-t3 dark:text-white mx-auto text-md px-3 py-1 rounded-full hover:text-t3-secondary dark:hover:text-t3-secondary " value="header" @click="createReview()">New Step +</button>
+                  
+              </div>
+              <div class=" text-sm  text-center  text-t3-mutedText2 dark:text-t3-mutedNight ">
+                  <p>Press the add step button to add an approval level to the review process.<br> Furthermore, steps can be sorted by dragging the cards up and down the list. With the first steps being at the top </p>
+                </div>
+              </div>
+              <svg v-if="type.review_process.length=== 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-6 mt-6 mx-auto  text-t3-mutedText2 dark:text-t3-mutedNight">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5" />
+                </svg>
+           
+            <draggable class="min-h-64 w-full p-3 rounded-md  justify-content-center  my-3 space-y-3"
+              :list="type.review_process" 
+              @start="drag=true" 
+              @end="drag=false"   
+              item-key="id"
+              handle=".handle"
+              >
+              <template #item="{element,index}">
+                <div>
+                <div class="flex flex-col rounded-md mb-5 border-t3-mutedText2 border p-4 relative" >
+                  <div >
+                    <div class="flex p-2  items-center">
+                      <svg class="mr-4 w-4 handle cursor-grab text-t3 dark:text-white"  viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 2.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Zm0 6a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Zm0 6a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Zm-5-12a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Zm0 6a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Zm0 6a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      <div class="ml-3 text-center">
+                        <input class=" w-full bg-transparent capitalize focus:outline-none text-xl text-t3 dark:text-white font-bold" v-model="element.status" type="text" placeholder="Name of Step">
+                      </div>
+                      <button class="mr-2 ml-auto text-t3-cancel dark:text-red-400" @click="deleteReview( index)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-t3-cencel">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        </button>
+                    </div>
+                    <div class="p-4 ml-10 flex gap-2 items-center">
+                      <h2 class=" font-bold  text-t3-mutedText2 dark:text-t3-mutedNight">Assigned to:</h2>
+                      <select v-model="element.approver" class="form-select form-select-lg 
+                appearance-none
+                block
+                md:w-5/6
+                w-full
+                mx-auto
+                px-4
+                py-2
+                text-xs
+                md:text-sm
+                font-normal
+                text-gray-700
+              dark:text-white
+                dark:bg-t3-night  bg-clip-padding bg-no-repeat
+                border border-solid border-t3-mutedText2
+                rounded
+                transition
+                ease-in-out
+                m-0
+                focus:text-gray-700 focus:bg-white dark:focus:bg-t3-nightfocus:border-blue-600 focus:outline-none" aria-label=".form-select-lg example">
+                  <option :value="null" selected>Select Assignee</option>
+                  <option v-for="user in staffOnly" :key="user.id" :value="user.id">{{ user.full_name }}</option>
+                  
+              </select>
+                      
+                    </div>
+                  </div>
+                </div>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-6 mx-auto  text-t3-mutedText2 dark:text-t3-mutedNight">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5" />
+                </svg>
+                </div>
+  
+               </template>
+            </draggable>
+          </div>
+          <div v-if="active === 'fields'" >
+            <draggable class="flex flex-col  m-auto rounded-md"
+              :list="type.fields" 
+              @start="drag=true" 
+              @end="drag=false"   
+              item-key="id"
+              handle=".handle"
+              >
+              <template #item="{element,index}">
+                <div class="flex flex-col rounded-md mb-5 border-t3-mutedText2 border p-4 relative" >
+                  <div class="flex items-center">
+  
+                      <svg class="mr-4 w-4 handle cursor-grab text-t3 dark:text-white"  viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 2.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Zm0 6a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Zm0 6a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Zm-5-12a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Zm0 6a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Zm0 6a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <div>
+                      <input class=" w-full bg-transparent capitalize focus:outline-none text-xl text-t3 dark:text-white font-bold"  v-model="element.name" type="text" placeholder="Field Name">
+                      <div v-if="element.type === 'options' || element.type === 'multiselect'" >
+                            <button @click="createOP(element)" class="text-sm mb-3 text-t3-secondary">+ Add option</button>
+                          <div v-for="(option,index) in element.options" :key="index">
+                            <span @click="deleteOption(element, option.opIndex)" class="ml-4 dark:text-white cursor-pointer text-red-500"> - </span><input class="p-1 ml-4 mb-4 dark:text-white bg-transparent focus:outline-none"  v-model="option.name" type="text" placeholder="Add option here">
+                          </div>
+                        </div>
+                    </div>
+                    <div class="ml-auto px-4 border-l h-full w-44 border-t3-mutedText2 relative space-y-2  text-t3-mutedText2 dark:text-t3-mutedNight">
+                    <div v-if="element.type === 'text' || element.type === 'longtext' " >
+                      <div class="flex  rounded-t-xl">
+                        <div >
+                          
+                          <h1 class="text-base"><span v-if="element.type === 'longtext'">Long</span> Text Field</h1>
+                          <span v-if="element.type === 'text'" class="cursor-pointer text-sm text-blue-300" @click="element.type ='longtext'">switch to long</span>
+                          <span v-if="element.type === 'longtext'" class="cursor-pointer text-sm text-blue-300" @click="element.type ='text'">switch to short</span>
+                        </div>
+                        
+                        
+                      </div>
+                      
+                    </div>
+                    <div v-if="element.type === 'number' || element.type === 'date' || element.type === 'country' || element.type === 'mobile' " >
+                      <div class="flex   rounded-t-xl">
+                        <div >
+                          <h1 class="text-base ml-auto capitalize"> {{element.type}} Field</h1>
+                          
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="element.type === 'options' || element.type === 'multiselect'" >
+                      <div class="flex rounded-t-xl">
+                      <div >
+                          <h1 class="text-base"><span v-if="element.type === 'options'" >Single answer </span>
+                          <span v-if="element.type === 'multiselect'" > Multiselect </span> MCQ</h1>
+                          <span v-if="element.type === 'options'" class="cursor-pointer text-sm text-blue-300" @click="()=>{element.type ='multiselect'; element.value=[]}">switch to multiselect</span>
+                          <span v-if="element.type === 'multiselect'" class="cursor-pointer text-sm text-blue-300" @click="()=>{element.type ='options'; element.value=null}">switch to single answer</span>
+                      </div>
+                        
+                      </div>
+                      
+                    </div>
+                    <div class="form-check flex items-center pl-0 gap-2 form-switch">
+                        <input v-model="element.required" class="form-check-input  appearance-none w-8 rounded-full float-left h-5 align-top bg-no-repeat bg-contain bg-t3-mutedText2 focus:outline-none cursor-pointer shadow-sm" type="checkbox" role="switch" :id="'require'+index" checked>
+                        <label class=" form-check-label inline-block  text-t3-mutedText2 dark:text-t3-mutedNight text-sm" :for="'require'+index">Required</label>
+                      </div>
+                    </div>
+                    <button class=" absolute top-2 right-2  text-t3-cancel  dark:text-red-400m-0" @click="deletefield( index)"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+   </button>
+                  </div>
+                  
+                  
+                  <div> 
+                    
+                 
+                  </div>
+                </div>
+               </template>
+            </draggable>
+            <div class="flex flex-col ">
+                <div class="text-center md:flex gap-3 justify-center">
+                <button class=" text-t3 dark:text-white text-md px-3 py-1 rounded-lg hover:text-t3-secondary dark:hover:text-t3-secondary" value="text" @click="createform($event)">Text</button>
+                <button class=" text-t3 dark:text-white text-md px-3 py-1 rounded-lg hover:text-t3-secondary dark:hover:text-t3-secondary" value="number" @click="createform($event)">Number</button>
+                <button class=" text-t3 dark:text-white text-md px-3 py-1 rounded-lg hover:text-t3-secondary dark:hover:text-t3-secondary" value="options" @click="createform($event)">Options</button>
+                <button class=" text-t3 dark:text-white text-md px-3 py-1 rounded-lg hover:text-t3-secondary dark:hover:text-t3-secondary" value="date" @click="createform($event)">Date</button>
+                <button class=" text-t3 dark:text-white text-md px-3 py-1 rounded-lg hover:text-t3-secondary dark:hover:text-t3-secondary" value="country" @click="createform($event)">Country</button>
+                <button class=" text-t3 dark:text-white text-md px-3 py-1 rounded-lg hover:text-t3-secondary dark:hover:text-t3-secondary" value="mobile" @click="createform($event)">Mobile</button>
+              </div>
+              <div class=" text-sm  text-center  text-t3-mutedText2 dark:text-t3-mutedNight ">
+                  <p>Press one of the field types to add a field to the list.<br> Furthermore, fields can be sorted by dragging the cards up and down the list. </p>
+                </div>
+              </div>
+              </div>
+              <div v-if="active === 'notifications'" >
+                <div  class="relative text-gray-600 dark:text-t3-mutedNight focus-within:text-t3-mutedNight">
+                      <input id="search"  :class="{ 'searcher': customers.length >0 }" v-model="search" @input="debCheck" @blur="searchIndex = 0" aria-placeholder="Search" placeholder="Search for users to be notified..."
+                          class="py-2 h-12 pl-10 text-sm block w-full border-solid outline-none border border-t3-mutedText2 rounded-md dark:focus:text-white dark:focus:bg-t3-nightCard dark:bg-t3-nightCard dark:text-white  focus:text-gray-700"
+                          type="search" name="search" required autocomplete="search"   @keyup.down="searchIndexIncrement" @keyup.up="searchIndexDecrement" @keyup.enter='suggestcustomer( customers[searchIndex]) '/>
+                     
+                      <div id="list"  :class="{ 'lister': customers.length === 0 }" class="absolute z-10 m-0 flex flex-col items-center hidden justify-center bg-white dark:bg-t3-night  rounded-md rounded-t-none w-full border-t3-mutedText2 border-t-0 border">
+                      <button v-for="(customer,index) in customerRange" :class="index === searchIndex ? 'bg-t3-mutedText2 text-white ':'text-t3 dark:text-white'" class=" hover:bg-t3-mutedText2  w-full"  @click="suggestcustomer( customer)" :key="customer.id">
+                        {{customer.full_name}}
+                      </button>
+                      </div>
+                  </div>
+                  <div class="mt-4 text-xs 2xl:text-base   text-right  text-t3-mutedText2 dark:text-t3-mutedNight ">
+                  <p>Search for users and press their name on the dropdown to add them to the notifications list.<br> Alternatively, press <span class="font-bold p-1 border border-t3-mutedText2 border-b-4 border-l-2 rounded-tr">Enter ⏎</span> to add the selected user. </p>
+                </div>
+             
+           
+            <div  class="min-h-64 grid items-start 2xl:grid-cols-2  rounded-md  my-3 gap-2">
+                  <div v-for="(customer,index) in customerList"
+  :key="customer.id" class="p-3 py-6 text-sm rounded-md shadow-t3 bg-t3-body2 dark:bg-t3-nightCard  border-t3-mutedText2 flex justify-between items-center ">
+                    <div class="flex gap-2  items-center">
+                      <img class="w-14 h-14 rounded-full" :src="customer.profile_img" alt="">
+                      <div>
+                        <p class="text-lg font-bold text-t3 dark:text-white">
+                          {{customer.full_name}}
+                        </p>
+                        <p class="text-t3-mutedText2 dark:text-t3-mutedNight">
+                          {{ customer.email }}
+                        </p>
+                      </div>
+                    </div>
+                    <button class="mr-2 ml-auto text-t3-cancel dark:text-red-400" @click="deleteCustomer( index)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-t3-cencel">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        </button>
+                  </div>
+                </div>
+              </div>
+              <div v-if="active === 'tags'">
+                <div  class="relative text-gray-600 dark:text-t3-mutedNight focus-within:text-t3-mutedNight">
+                      <input id="searchest"  :class="{ 'searcher': tags.length >0 }" v-model="searcher" @input="tagCheck" @blur="searchTagIndex = 0" aria-placeholder="Search" placeholder="Search for document tags..."
+                          class="py-2 h-12 pl-10 text-sm block w-full border-solid outline-none border border-t3-mutedText2 rounded-md dark:focus:text-white dark:focus:bg-t3-nightCard dark:bg-t3-nightCard dark:text-white  focus:text-gray-700"
+                          type="search" name="search" required autocomplete="search"   @keyup.down="searchTagIncrement" @keyup.up="searchTagDecrement" @keyup.enter='suggestTag( tags[searchTagIndex]) '/>
+                     
+                      <div id="list"  :class="{ 'lister': tags.length === 0 }" class="absolute z-10 m-0 flex flex-col items-center hidden justify-center bg-white dark:bg-t3-night  rounded-md rounded-t-none w-full border-t3-mutedText2 border-t-0 border">
+                      <button v-for="(tag,index) in tagRange" :class="index === searchTagIndex ? 'bg-t3-mutedText2 text-white ':'text-t3 dark:text-white'" class=" hover:bg-t3-mutedText2  w-full"  @click="suggestTag( tag)" :key="tag.id">
+                        {{tag.name}}
+                      </button>
+                      </div>
+                  </div>
+                  <div class="mt-4 text-xs 2xl:text-base   text-right  text-t3-mutedText2 dark:text-t3-mutedNight ">
+                  <p>Search for tags and press their name on the dropdown to add them to the tags list.<br> Alternatively, press <span class="font-bold p-1 border border-t3-mutedText2 border-b-4 border-l-2 rounded-tr">Enter ⏎</span> to add the selected tag. </p>
+                </div>
+             
+           
+            <div  class="min-h-64 flex flex-col rounded-md  my-3 gap-2"
+             
+              >
+                  <div v-for="(tag,index) in tagList"
+  :key="tag.id" class="p-3 text-sm border-b border-t3-mutedText2 dark:border-t3-nightCard2 flex justify-between items-center dark:text-white text-gray-600  ">
+                    <p>
+                      {{tag.name}}
+                    </p>
+                    <button class="mr-2 ml-auto text-t3-cancel dark:text-red-400" @click="deleteTag( index)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-t3-cencel">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        </button>
+                  </div>
+                </div>
+                </div>
+                <div v-if="active === 'alerts'">
+                  <div v-for="notification in type.days_before_expiry" class="border-t3-mutedText2 dark:border-t3-nightCard2 border-b flex justify-between w-full items-center py-6 ">
+              <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-8 h-8 text-t3 dark:text-white">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0M3.124 7.5A8.969 8.969 0 015.292 3m13.416 0a8.969 8.969 0 012.168 4.5" />
+              </svg>
+                <p class="text-t3 dark:text-white">Alert sends <b>{{ alertString(notification) }}</b> before expiry.</p>
+              </div>
+              <button class="mr-2 text-t3-cancel dark:text-red-400" @click="deleteNotif(notification)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-t3-cencel">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg></button>
+            </div>
+            <div  class="border-b border-t3-mutedText2 dark:border-t3-nightCard2 flex justify-between w-full items-center py-3">
+              <!-- <p class="text-t3 dark:text-white ">New alert to send </p> -->              <div class="form-floating ">
+                <input type="number" v-model="notifDays" class="form-control
+                block
+                w-36
+                px-3
+                text-sm
+                font-normal
+                text-t3
+            dark:text-white
+                dark:bg-t3-night  bg-clip-padding
+                border border-solid border-t3-mutedText2
+                rounded
+                transition
+                ease-in-out
+                m-0
+                focus:text-gray-700 focus:bg-white dark:focus:bg-t3-nightfocus:border-blue-600 focus:outline-none" >
+                <label for="floatingInput"  class="text-t3-mutedText2 dark:text-t3-mutedNight text-sm">Number of {{notifType}} <span class="text-orange-400">*</span></label>
+              </div>
+              <div class="2xl:flex items-center gap-6 space-y-6 2xl:space-y-0">
+                <div class="form-radio mb-3 flex items-center gap-3">
+                    <input  value="days" v-model="notifType "  class="form-radio-input my-auto  h-4 w-4 border border-t3-mutedText2  dark:bg-t3-night  checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2  cursor-pointer" type="radio" id="flexCheckDefault">
+                    <label class="form-check-label inline-block text-t3 dark:text-white text-sm" for="flexCheckDefault">
+                    Days
+                    <p class="text-t3-mutedText2 dark:text-t3-mutedNight">a singular day</p>
+                    </label>
+                </div>
+                <div class="form-radio mb-3 flex items-center gap-3">
+                    <input  value="weeks" v-model="notifType " @change="logCheck" class="form-radio-input my-auto h-4 w-4 border border-t3-mutedText2  dark:bg-t3-night  checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2  cursor-pointer" type="radio" id="flexCheckDefault">
+                    <label class="form-check-label inline-block text-t3 dark:text-white text-sm" for="flexCheckDefault">
+                    Weeks
+                    <p class="text-t3-mutedText2 dark:text-t3-mutedNight">exactly 7 days </p>
+                    </label>
+                </div>
+                <div class="form-radio mb-3 flex items-center gap-3">
+                    <input  value="months" v-model="notifType " @change="logCheck" class="form-radio-input my-auto h-4 w-4 border border-t3-mutedText2  dark:bg-t3-night  checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2  cursor-pointer" type="radio" id="flexCheckDefault">
+                    <label class="form-check-label inline-block text-t3 dark:text-white text-sm" for="flexCheckDefault">
+                    Months
+                    <p class="text-t3-mutedText2 dark:text-t3-mutedNight">exactly 30 days </p>
+                    </label>
+                </div>
+              </div>
+              <div class="space-y-6 2xl:space-y-0 2xl:flex gap-6 ">
+          
+          <button  @click="addNotification" class="text-t3-mutedText2 dark:text-t3-mutedNight block hover:text-t3-secondary dark:hover:text-t3-secondary">Submit</button>
+            </div>
+            </div>
+                </div>
+                
+          </div>
+              </div>
+        </div>
+        
+     
+        
+      </div>
+    </div>
+    <!-- Shelf Modal -->
+    <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto" id="tempModal" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-modal="true" role="dialog">
+            <div class="modal-dialog modal-dialog-centered relative w-auto pointer-events-none">
+                <div class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto dark:bg-t3-night bg-white  bg-clip-padding rounded-md outline-none text-current">
+                <div class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-t3-mutedText2 rounded-t-md">
+                    <h5 class="text-2xl leading-normal text-t3 dark:text-white font " id="exampleModalScrollableLabel">
+                    Choose Template to Load
+                    </h5>
+                    <button type="button" id="closeValib"
+                    class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                    data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body relative p-4">
+                  
+                  <div class="w-full  flex flex-col items-center h-80 overflow-y-auto mx-auto">
+                          <div class="w-full">
+                              <div class="flex flex-col relative gap-6">
+                                <div v-if="templates.length>0" class=" w-full ">
+                                    <button @click="loadTemplate(template)" v-for="template in templates" :key="template.id" class="border-2 w-full p-4 border-sky-100 hover:bg-t3-body dark:bg-t3-night dark:hover:bg-t3-nightCard2  rounded-md flex hover:shadow-t3 items-center" :to="{name:'editTemplate', params:{id:template.id}}">
+                                      <img src="../assets/Template-icon.svg" alt="" class="w-20">
+                                      <div class="ml-4">
+                                        <h1 class="font-bold text-t3 dark:text-white font-light text-left   mb-3 whitespace-nowrap">
+                                          {{template.name}}
+                                        </h1>
+                                        <div class="text-base  text-t3-mutedText2 dark:text-t3-mutedNight text-left  font-light whitespace-nowrap">
+                                          {{template.fields.length}} Fields
+                                        </div>
+                                      </div>
+                                  </button>
+                                    
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+                </div>
+                </div>
+            </div>
+            </div>
+  </div>
+</template>
+<style scoped>
+#search:focus+#list{
+    display: flex;
+}
+#search:not(focus)+.lister{
+    border:none;
+}
+#searchest:focus+#list{
+    display: flex;
+}
+#searchest:not(focus)+.lister{
+    border:none;
+}
+.searcher:focus{
+    border-bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+#list:hover{
+    display: flex;
+}
+</style>
+  <script>
+
+import draggable from 'vuedraggable'
+  import sortableServices from '../services/sortableServices';
+  import FileInput from '../components/FileInput.vue';
+  import Swal from 'sweetalert2';
+  import _ from 'lodash';
+  import { mapState, mapActions,mapGetters } from "vuex";
+  import DocumentServices from "../services/DocumentServices";
+  import UsersServices from "../services/UsersServices";
+  import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
+import SettingsServices from '../services/SettingsServices';
+    export default{
+      components: {
+              draggable,
+              FileInput,
+              ClipLoader
+          },
+        data(){
+          return {
+            submittig:false,
+            reArr:true,
+            notifDays:null,
+            notifType:"days",
+            title:'',
+            access:true,
+            template:{},
+          levels:[1,2,3,4,5],
+          drag:false,
+          search:'',
+          searcher:'',
+          type:{
+            status:'',
+            confidentiality:null,
+            fields:[],
+            review_process:[],
+            notifications:[
+            ],
+            days_before_expiry:[],
+            tags:[],
+            requires_acceptance:false,
+          },
+          templates:[],
+          count:0,
+          searchIndex:0,
+          counter:0,
+          countest:0,
+          countR:0,
+          categories:[],
+          customerList:[
+          ],
+          active:'fields',
+          customerOnly:[],
+          searchTagIndex:0,
+          tags:[],
+          tagList:[],
+          
+        }
+      },
+      props:{
+        id:String
+      },
+      methods:{
+        callback (data) {
+      console.debug(data)
+    },
+    addNotification(){
+        let sendDays =  this.notifDays
+        if(sendDays > 0){
+
+          if(this.notifType === 'months'){
+            sendDays = sendDays * 30
+          }
+          else if(this.notifType === 'weeks'){
+            sendDays = sendDays * 7
+          }
+          this.type.days_before_expiry.push(sendDays)
+          this.resetFields()
+        }
+
+      },
+      resetFields(){
+        this.notifType = 'days'
+        this.notifDays = 0
+      },
+      deleteNotif(id){
+      this.type.days_before_expiry.splice(this.type.days_before_expiry.indexOf(id),1) 
+      },
+      alertString(value){
+          let reply= ''
+          let days = 0
+          let months = 0 
+          let weeks = 0
+          if(Math.floor(value / 30) > 0){
+            months = Math.floor(value/30)
+            if(months === 1){
+              reply += months+' month '
+            }
+            else{
+
+              reply += months+' months '
+            }
+          }
+          if(Math.floor((value - (months*30))/7) > 0){
+            weeks = Math.floor((value - (months*30))/7)
+            if(weeks === 1){
+              reply += weeks+' week '
+            }
+            else{
+
+              reply += weeks+' weeks '
+            }
+          }
+          if(months > 0 || weeks> 0 ){
+            reply += 'and '
+          }
+          days = value -(months*30) - (weeks*7)
+          if(days === 1){
+            reply += days+' day'
+            }
+            else{
+
+              reply += days+' days'
+            }
+            
+          return reply
+        },
+    debCheck: _.debounce(function(){
+        if(this.search === ""|| this.search === null)
+        {
+            this.searchcustomers({input:null, number:15})
+        }
+        else{
+            
+            this.searchcustomers({input:this.search, number:100})
+        }
+        }, 700),
+    toggleClass(string){
+        
+        this.active=string
+    },
+    searchIndexIncrement(){
+      if(this.searchIndex< this.customers.length){
+        this.searchIndex ++
+      }
+      else{
+        this.searchIndex = 0
+      }
+    },
+    loadTemplate(template){
+      document.getElementById('closeValib').click()
+      if ('is_template' in template){
+        delete template.is_template
+      }
+      this.type = template
+      this.tagList = template.tags_details
+      this.customerList = template.notifications_details
+      this.type.fields.filter(f=>(f.type==='options' || f.type==='multiselect')).forEach(f => {
+          
+          console.log(f.options.map(o => {return {name:o}}))
+          f.options = f.options.map(o => {return {name:o}})
+        })
+    },
+    searchIndexDecrement(){
+      if(this.searchIndex> 0 ){
+        this.searchIndex --
+      }
+      else{
+        this.searchIndex = this.customers.length
+      }
+    },
+    suggestcustomer(customer){
+      if (!this.type.notifications.includes(customer.id)){
+
+        this.customerList.push(customer)
+        this.type.notifications.push(customer.id)
+      }
+      document.getElementById('search').blur()
+    },
+    suggestTag(tag){
+      if (!this.type.tags.includes(tag.id)){
+
+        this.tagList.push(tag)
+        this.type.tags.push(tag.id)
+      }
+      document.getElementById('searchest').blur()
+    },
+    searchTagIncrement(){
+      if(this.searchTagIndex< this.tags.length){
+        this.searchTagIndex ++
+      }
+      else{
+        this.searchTagIndex = 0
+      }
+    },
+    searchTagDecrement(){
+      if(this.searchTagIndex> 0 ){
+        this.searchTagIndex --
+      }
+      else{
+        this.searchTagIndex = this.tags.length
+      }
+    },
+    tagCheck: _.debounce(function(){
+        if(this.searcher === ""|| this.searcher === null)
+        {
+            this.tags = []
+        }
+        else{
+            
+            DocumentServices.searchTags(this.searcher).then((response)=>{
+              this.tags = response.data
+            })
+        }
+        }, 700),
+    addTag(){
+      let list = this.tagList.split(',')
+      list.forEach(p=>{
+        if(!this.type.tags.includes(p))
+          {this.type.tags.push(p)}
+      })
+      this.tagList = null
+    },
+    removeTag(id){
+      this.type.tags.splice(id,1)
+    },
+    
+        poster(event){
+          console.log(event.item.__draggable_context.element)
+          sortableServices.postComments({title:event.item.__draggable_context.element.name})
+        },
+        createReview(){
+          this.countR++
+          
+          this.type.review_process.push({ status:"",approver:null})
+          
+        },
+        createform(event , id){
+          this.count++
+      
+          this.type.fields.push({ type:event.target.value, name:"", options:[], value:null,  required:false})
+          
+        },
+        createOP(field){
+          this.counter++
+          field.options.push({opIndex:this.counter, name:"", checked:false})
+          
+        },
+       addType(){
+        this.submittig = true
+        this.type.fields.filter(f=>(f.type==='options' || f.type==='multiselect')).forEach(f => {
+          f.options = f.options.map(o => o.name)
+        })
+        DocumentServices.postType(this.id,this.type).then(()=>{
+        Swal.fire({
+              icon: "success",
+              title: "Success!",
+              text: "The document type has been added! ",
+              toast: true,
+              position: 'top',
+              showConfirmButton: false,
+              timerProgressBar: true,
+              timer: 3000,
+            })
+          this.$router.push({name:'manageTypes', params:{id:this.id}})
+      }).catch((error)=>{
+        let message = Object.keys(error.response.data).at(0) + " : " + error.response.data[Object.keys(error.response.data).at(0)].at(0)
+        Swal.fire({
+                      icon: "error",
+                      title: "Error!",
+                      text: message,
+                      toast: true,
+                      position: 'top',
+                      showConfirmButton: false,
+                      timerProgressBar: true,
+                      timer: 3000,
+                    })
+        this.submittig = false
+      })
+       },
+       deletefield(id){
+            this.type.fields.splice(id,1)
+          },
+          deleteReview(id){
+            this.type.review_process.splice(id,1)
+          },
+        deleteCustomer(id){
+          this.customerList.splice(id,1)
+          this.type.notifications.splice(id,1)
+        },
+        deleteTag(id){
+          this.tagList.splice(id,1)
+          this.type.tags.splice(id,1)
+        },
+        sort_by_name() {
+				return function (elem1, elem2) {
+				if (elem1.name < elem2.name) {
+					return -1;
+				} else if (elem1.name > elem2.name) {
+					return 1;
+				} else {
+					return 0;
+				}
+				}},
+        deleteOption(field,id){
+          let sect = field.options.find(o => o.opIndex === id)
+          field.options.splice( field.options.indexOf(sect),1)
+        },
+        cancel(){
+          Swal.fire({
+							icon: "warning",
+							title: "Hold",
+							text: "Discard changes and cancel addition?",
+							showConfirmButton: true,
+                            showDenyButton: true,
+                            confirmButtonColor: '#0E2D5B',
+                            denyButtonColor: '#990c53',
+						}).then((result)=>{
+              if(result.value){
+                this.$router.push({name:'manageTypes', params:{id:this.id}})
+              }
+            })
+        },
+        ...mapActions({
+			getcustomers: 'Users/getAllCustomers',
+            getstaff: 'Users/getStaff',
+            getcustomer: 'Users/getCustomer',
+            searchcustomers: 'Users/searchCustomers',
+            
+        }),
+      },
+      computed:{
+        ...mapState({
+            customers: state => state.Users.customers,
+            customer: state=> state.Users.customer,
+        }),
+        ...mapGetters('Users', [
+        'customerOnly',
+        'staffOnly',
+        "ELE",
+        "OPE"
+      ]),
+        customerRange(){
+        if(this.customers)
+        {return this.customers.slice(0,7)}
+        else{
+            return []
+        }
+      },
+      tagRange(){
+        if(this.tags)
+        {return this.tags}
+        else{
+            return []
+        }
+      }
+      },
+      created(){
+        this.getstaff()
+        
+    DocumentServices.getShelf(this.id).then((response)=>{
+      this.title = response.data.section.name
+    }).catch((error)=>{
+      this.access =  false
+    }),
+    SettingsServices.getTemplates().then((response)=>{
+      this.templates =  response.data 
+    })
+    UsersServices.getUsers().then((response) => {
+        this.users = response.data;
+      });
+      }
+    }
+    </script>

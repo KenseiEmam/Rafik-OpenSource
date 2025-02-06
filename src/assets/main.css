@@ -121,7 +121,7 @@ nav a {
   }
 
   .text-body {
-    @apply font-medium text-sm 2xl:text-base text-rafik-sectext tracking-widest leading-6 2xl:leading-8;
+    @apply font-medium text-xs xl:text-sm 2xl:text-base text-rafik-sectext tracking-widest leading-6 2xl:leading-8;
   }
   .label {
     @apply font-medium text-xs  text-rafik-teritiary;
@@ -130,7 +130,7 @@ nav a {
     @apply py-4 px-8 font-bold min-w-44 2xl:min-w-48 bg-rafik border-2 border-rafik hover:bg-rafik rounded-lg 2xl:text-xl text-white capitalize text-center hover:shadow-lg shadow-sm hover:scale-105 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
   }
   .btn-lg-outline {
-    @apply py-4 px-8 font-bold min-w-44 2xl:min-w-48 border-rafik hover:bg-rafik hover:text-rafik-white border-2 border-rafik font-bold rounded-lg 2xl:text-xl text-rafik capitalize text-center hover:shadow-lg shadow-sm hover:scale-105 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
+    @apply py-4 px-8 font-bold min-w-44 2xl:min-w-48 border-rafik hover:bg-rafik hover:text-white border-2 border-rafik font-bold rounded-lg 2xl:text-xl text-rafik capitalize text-center hover:shadow-lg shadow-sm hover:scale-105 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
   }
   .btn-md {
     @apply py-3 px-6 font-bold min-w-32 2xl:min-w-36 bg-rafik border-2 border-rafik hover:bg-rafik rounded-lg 2xl:text-base text-white capitalize text-center hover:shadow-lg shadow-sm hover:scale-105 hover:opacity-90 hover:ring-white ring-1 ease-in-out;

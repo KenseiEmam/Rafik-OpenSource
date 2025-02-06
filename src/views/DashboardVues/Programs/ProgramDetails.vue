@@ -6,8 +6,14 @@ import DetailsTabProgram from "@/components/DetailsTabPRogram.vue";
 import WorkoutPlanner from "@/components/WorkoutPlanner.vue";
 import ClientTable from "@/components/ClientTable.vue"
 import PricingModel from "@/components/PricingModel.vue"
+import DocumentsForms from "@/components/DocumentsForms.vue";
 const activeTab = ref("Details");
 
+interface Question  {
+  type:string;
+  question?:string;
+  answer?:any;
+}
 type PromoCode={
   code:string,
   value:number,
@@ -68,35 +74,23 @@ async function saveDescription() {
   }
 }
 
-// Function to handle tag updates
-async function updateTags(updatedTags: string[]) {
-  if (programStore.Program) {
-    try {
-      await programStore.updateProgram({
-        id: programStore.Program.id,
-        tags: updatedTags,
-      });
-      programStore.Program.tags = updatedTags; // Update the local store state
-    } catch (error) {
-      console.error("Error updating tags:", error);
-    }
+async function updateProgramField(field: string, value: any) {
+  if (!programStore.Program) return;
+
+  try {
+    await programStore.updateProgram({
+      id: programStore.Program.id,
+      [field]: value,
+    });
+
+    // Refetch updated data from the store
+    await programStore.fetchProgram(programStore.Program.id);
+  } catch (error) {
+    console.error(`Error updating ${field}:`, error);
   }
 }
 
-// Function to handle promo updates
-async function updatePromo(updatedPromos: PromoCode[]) {
-  if (programStore.Program) {
-    try {
-      await programStore.updateProgram({
-        id: programStore.Program.id,
-        promos: updatedPromos,
-      });
-      programStore.Program.promos = updatedPromos; // Update the local store state
-    } catch (error) {
-      console.error("Error updating Promos:", error);
-    }
-  }
-}
+
 async function updatePrices(updatedPrices: any) {
   if (!programStore.Program) return;
 
@@ -119,22 +113,6 @@ async function updatePrices(updatedPrices: any) {
     console.error("Error updating Prices:", error);
   }
 }
-
-// Function to handle tag updates
-async function updateFocus(updatedprogram_focus: string[]) {
-  if (programStore.Program) {
-    try {
-      await programStore.updateProgram({
-        id: programStore.Program.id,
-        program_focus: updatedprogram_focus,
-      });
-      programStore.Program.program_focus = updatedprogram_focus; // Update the local store state
-    } catch (error) {
-      console.error("Error updating focus:", error);
-    }
-  }
-}
-
 // Fetch the program when the component mounts
 onMounted(() => {
   const programId = route.params.id as string; // Get the ID from route params
@@ -288,11 +266,11 @@ onMounted(() => {
       </div>
 
       <!-- Render Box -->
-      <div>
+      <div style="min-height: 50vh;" class=" over-flow-y-auto flex-1">
         <transition name="fade">
           <DetailsTabProgram
-            @update-tags="updateTags"
-            @update-focus="updateFocus"
+            @update-tags="updateProgramField('tags', $event)"
+            @update-focus="updateProgramField('program_focus', $event)"
             :program="programStore.Program"
             v-if="activeTab === 'Details'"
           />
@@ -301,16 +279,22 @@ onMounted(() => {
             v-else-if="activeTab === 'Workouts'"
           />
           <ClientTable
-          :program="programStore.Program"
-            v-else-if="activeTab == 'Clients'"
+            :program="programStore.Program"
+            v-else-if="activeTab === 'Clients'"
           />
           <PricingModel
-          :program="programStore.Program"
-          @update-promo="updatePromo"
-          @update-prices="updatePrices"
-            v-else-if="activeTab == 'Pricing'"
+            :program="programStore.Program"
+            @update-promo="updateProgramField('promos', $event)"
+            @update-prices="updatePrices"
+            v-else-if="activeTab === 'Pricing'"
+          />
+          <DocumentsForms
+            v-else-if="activeTab === 'Documents'"
+            @updateProgramField="updateProgramField"
+            :program="programStore.Program"
           />
         </transition>
+
       </div>
     </div>
   </div>
