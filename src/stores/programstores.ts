@@ -2,8 +2,7 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { supabase } from '../lib/supabaseClient';
 import router from '@/router';
-
-
+import Swal from 'sweetalert2'
 // Define the Program type with the new program_focus property
 type Program = {
   id: string;
@@ -75,7 +74,8 @@ export const useProgramStore = defineStore('Program', () => {
       const { data, error } = await supabase
         .from('programs')
         .select()
-        .eq('trainer_id', UserID);
+        .eq('trainer_id', UserID)
+        .neq('status', 'deleted');
 
       if (error) {
         throw new Error(`Error fetching programs: ${error.message}`);
@@ -109,12 +109,20 @@ export const useProgramStore = defineStore('Program', () => {
         .from("programs")
         .select()
         .eq("id", id)
+        .neq('status', 'deleted')
         .single(); // Expect a single record
 
       if (error) throw new Error(error.message);
 
       Program.value = data;
     } catch (error) {
+      Swal.fire({
+        title: "Whoops",
+        text: "No program found",
+        icon: "error"
+      }).then(()=>{
+        router.push({name:'programs-list'})
+      });
       console.error("Error fetching program:", error);
     }
   }
