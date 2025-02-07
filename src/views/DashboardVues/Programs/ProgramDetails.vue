@@ -7,6 +7,9 @@ import WorkoutPlanner from "@/components/WorkoutPlanner.vue";
 import ClientTable from "@/components/ClientTable.vue"
 import PricingModel from "@/components/PricingModel.vue"
 import DocumentsForms from "@/components/DocumentsForms.vue";
+import Swal from 'sweetalert2'
+import router from "@/router";
+
 const activeTab = ref("Details");
 
 interface Question  {
@@ -18,6 +21,7 @@ type PromoCode={
   code:string,
   value:number,
 }
+
 // Access the route object
 const route = useRoute();
 const programStore = useProgramStore();
@@ -27,6 +31,7 @@ const isEditingTitle = ref(false);
 const isEditingDescription = ref(false);
 const editableTitle = ref("");
 const editableDescription = ref("");
+
 
 // Edit handlers
 function editTitle() {
@@ -74,8 +79,40 @@ async function saveDescription() {
   }
 }
 
+// Function to refresh the route/component
+function refreshComponent() {
+  router.go(0); // This reloads the current route
+}
+
+// Function to show success alerts
+function showSuccess(message: string) {
+  Swal.fire({
+    title: "Success!",
+    text: message,
+    icon: "success",
+    confirmButtonColor: "#CB901C",
+      cancelButtonColor: "#d33",
+      background:"#081411",
+      color:"#E8F3ED",
+  }) // Refresh after success
+}
+
+// Function to show error alerts
+function showError(message: string) {
+  Swal.fire({
+    title: "Error!",
+    text: message,
+    icon: "error",
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#d33",
+      background:"#081411",
+      color:"#E8F3ED",
+  });
+}
+
+// ✅ Generic function to update any program field
 async function updateProgramField(field: string, value: any) {
-  if (!programStore.Program) return;
+  if (!programStore.Program) return showError("Program not found!");
 
   try {
     await programStore.updateProgram({
@@ -83,19 +120,19 @@ async function updateProgramField(field: string, value: any) {
       [field]: value,
     });
 
-    // Refetch updated data from the store
     await programStore.fetchProgram(programStore.Program.id);
+    showSuccess(`${field} updated successfully!`);
   } catch (error) {
+    showError(`Failed to update ${field}. Please try again.`);
     console.error(`Error updating ${field}:`, error);
   }
 }
 
-
+// ✅ Function to update Prices with alert handling
 async function updatePrices(updatedPrices: any) {
-  if (!programStore.Program) return;
+  if (!programStore.Program) return showError("Program not found!");
 
   try {
-    // Update the program in the store (API call)
     await programStore.updateProgram({
       id: programStore.Program.id,
       price_one: updatedPrices.price_one,
@@ -104,20 +141,98 @@ async function updatePrices(updatedPrices: any) {
       price_year: updatedPrices.price_year,
     });
 
-    // Ensure all local states are updated properly
     programStore.Program.price_one = updatedPrices.price_one;
     programStore.Program.price_three = updatedPrices.price_three;
     programStore.Program.price_six = updatedPrices.price_six;
     programStore.Program.price_year = updatedPrices.price_year;
+
+    showSuccess("Prices updated successfully!");
   } catch (error) {
+    showError("Failed to update prices. Please try again.");
     console.error("Error updating Prices:", error);
   }
 }
+
+// ✅ Function to delete the program with confirmation
+function DeleteProgram() {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "This will create a delete request for this program...",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+    confirmButtonColor: "#CB901C",
+    cancelButtonColor: "#d33",
+      background:"#081411",
+      color:"#E8F3ED",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      updateProgramField("status", "deleted").then(() => {
+        showSuccess("The program has been deleted.")
+        refreshComponent()
+
+
+      });
+    }
+  });
+}
+
+// ✅ Function to draft the program with confirmation
+function DraftProgram() {
+  Swal.fire({
+    title: "Hold On?",
+    text: "The program will be removed off the market...",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Set to draft",
+    confirmButtonColor: "#CB901C",
+    cancelButtonColor: "#d33",
+      background:"#081411",
+      color:"#E8F3ED",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      updateProgramField("status", "Drafted").then(() => {
+        showSuccess("The program has been set to draft.")
+          refreshComponent()
+
+      });
+    }
+  });
+}
+
+// ✅ Function to activate the program with confirmation
+function ActiveProgram() {
+  Swal.fire({
+    title: "Activate?",
+    text: "The program be set to review, once reviewed, people on the market will see it",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Activate",
+    confirmButtonColor: "#CB901C",
+    cancelButtonColor: "#d33",
+      background:"#081411",
+      color:"#E8F3ED",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      updateProgramField("status", "Review").then(() => {
+        showSuccess("The program is being reviewed!")
+          refreshComponent()
+
+      });
+    }
+  });
+}
+
 // Fetch the program when the component mounts
 onMounted(() => {
-  const programId = route.params.id as string; // Get the ID from route params
-  if (programId) programStore.fetchProgram(programId); // Fetch program details
+  const programId = route.params.id as string;
+  if (programId) {
+    programStore.fetchProgram(programId).catch(() => {
+      showError("Failed to load program details.");
+    });
+  }
 });
+
 </script>
 
 <template>
@@ -201,19 +316,21 @@ onMounted(() => {
             <div class="flex flex-col flex-1 gap-4 border-rafik-sectext text-left">
               <button class="text-body uppercase text-left hover:text-rafik-pritext">View Language</button>
               <button
+              @click="DraftProgram"
                 class="text-body uppercase text-left hover:text-rafik-pritext"
                 v-if="programStore.Program.status == 'Active'"
               >
                 Change to Draft
               </button>
               <button
+              @click="ActiveProgram"
                 class="text-body uppercase text-left hover:text-rafik-pritext"
-                v-if="programStore.Program.status == 'Draft'"
+                v-if="programStore.Program.status == 'Drafted'"
               >
-                Publish
+                Publish to Active
               </button>
               <p class="text-body uppercase opacity-50" v-if="programStore.Program.status == 'Review'">Under Review</p>
-              <button class="text-body uppercase text-red-500 hover:text-red-400 text-left">Delete Program</button>
+              <button @click="DeleteProgram" class="text-body uppercase text-red-500 hover:text-red-400 text-left">Delete Program</button>
             </div>
           </div>
         </div>
