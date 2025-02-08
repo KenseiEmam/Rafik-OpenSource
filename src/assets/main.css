@@ -145,7 +145,7 @@ nav a {
     @apply py-1.5 px-3 font-bold min-w-20 2xl:min-w-24 border-rafik hover:bg-rafik hover:text-white border-2 border-rafik font-bold rounded-lg 2xl:text-sm text-rafik capitalize text-center hover:shadow-lg shadow-sm hover:scale-105 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
   }
   .nav-btn{
-    @apply text-xs/5 xl:text-sm/5  2xl:text-xl/5 uppercase  text-left ;
+    @apply text-xs/5 xl:text-sm/5  2xl:text-base/5 uppercase  text-left ;
   }
 }
 @media (hover: hover) {
