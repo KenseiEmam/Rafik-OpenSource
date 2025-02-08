@@ -67,6 +67,22 @@ const router = createRouter({
             },
           ],
         },
+        {
+          path: 'exercises', // Child route for /dashboard/programs
+
+          children: [
+            {
+              path: 'public/:id', // Default child route for /dashboard/programs
+              name: 'public-details',
+              component: () => import('../views/DashboardVues/Exercises/PublicDetail.vue'),
+            },
+            {
+              path: 'personal/:id', // Dynamic route for program details
+              name: 'personal-details',
+              component: () => import('../views/DashboardVues/Exercises/PersonalDetail.vue'),
+            },
+          ],
+        },
       ],
     },
     {
