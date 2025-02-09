@@ -2,48 +2,40 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useExerciseStore } from "@/stores/exercisestores";
-import ViewExercise from "@/components/ViewExercise.vue";
-import Swal from 'sweetalert2'
+import ViewExercise from "@/components/ExerciseTabs/ExcerciseMovers.vue";
+import Swal from 'sweetalert2';
 import router from "@/router";
+import ExcerciseMovers from "@/components/ExerciseTabs/ExcerciseMovers.vue";
 
 const activeTab = ref("Muscles");
-// Change active tab handler
 function setActiveTab(tab: string) {
   activeTab.value = tab;
 }
 
-
-// Access the route object
 const route = useRoute();
 const exerciseStore = useExerciseStore();
-
-// States for editing
-const isEditing = ref(false);
-// States for editing
 const isEditingTitle = ref(false);
+
 const isEditingDescription = ref(false);
-const types = ref(['isolation','stretch', 'bodyweight', 'compound', 'cardio', 'plyometric'])
+const types = ref(['isolation', 'stretch', 'bodyweight', 'compound', 'cardio', 'plyometric']);
 const editableTitle = ref("");
 const editableDescription = ref("");
 
-
-// Function to refresh the route/component
 function refreshComponent() {
-  router.go(0); // This reloads the current route
+  router.go(0);
 }
-// Edit handlers
+
+
 function editTitle() {
   isEditingTitle.value = true;
   editableTitle.value = exerciseStore.Exercise?.exercise_name || "";
 }
-
 
 function editDescription() {
   isEditingDescription.value = true;
   editableDescription.value = exerciseStore.Exercise?.exercise_detail || "";
 }
 
-// Save handlers
 async function saveTitle() {
   isEditingTitle.value = false;
   if (editableTitle.value !== exerciseStore.Exercise?.exercise_name && exerciseStore.Exercise) {
@@ -52,8 +44,9 @@ async function saveTitle() {
         id: exerciseStore.Exercise.id,
         exercise_name: editableTitle.value,
       });
+      showSuccess("Exercise title updated successfully!");
     } catch (error) {
-      console.error("Error updating title:", error);
+      showError("Error updating title.");
     }
   }
 }
@@ -66,38 +59,69 @@ async function saveDescription() {
         id: exerciseStore.Exercise.id,
         exercise_detail: editableDescription.value,
       });
+      showSuccess("Exercise description updated successfully!");
     } catch (error) {
-      console.error("Error updating description:", error);
+      showError("Error updating description.");
     }
   }
 }
-// Function to show success alerts
+
+// Function to update the exercise type
+async function selectType(selectedType: string) {
+  if (exerciseStore.Exercise && exerciseStore.Exercise.type !== selectedType) {
+    try {
+      await exerciseStore.updateExercise({
+        id: exerciseStore.Exercise.id,
+        type: selectedType,
+      });
+
+      showSuccess(`Exercise type updated to ${selectedType}!`);
+    } catch (error) {
+      showError("Failed to update exercise type.");
+    }
+  }
+}
+
+// Success and Error Alerts
 function showSuccess(message: string) {
   Swal.fire({
     title: "Success!",
     text: message,
     icon: "success",
     confirmButtonColor: "#CB901C",
-      cancelButtonColor: "#d33",
-      background:"#081411",
-      color:"#E8F3ED",
-  }) // Refresh after success
+    background: "#081411",
+    color: "#E8F3ED",
+  });
 }
 
-// Function to show error alerts
 function showError(message: string) {
   Swal.fire({
     title: "Error!",
     text: message,
     icon: "error",
     confirmButtonColor: "#d33",
-    cancelButtonColor: "#d33",
-      background:"#081411",
-      color:"#E8F3ED",
+    background: "#081411",
+    color: "#E8F3ED",
   });
 }
 
-// Fetch the program when the component mounts
+// ✅ Generic function to update any exercise field
+async function updateExerciseField(field: string, value: any) {
+  if (!exerciseStore.Exercise) return showError("Exercise not found!");
+
+  try {
+    await exerciseStore.updateExercise({
+      id: exerciseStore.Exercise.id,
+      [field]: value,
+    });
+
+    await exerciseStore.fetchExercise(exerciseStore.Exercise.id);
+    showSuccess(`${field} updated successfully!`);
+  } catch (error) {
+    showError(`Failed to update ${field}. Please try again.`);
+    console.error(`Error updating ${field}:`, error);
+  }
+}
 onMounted(() => {
   const exerciseId = route.params.id as string;
   if (exerciseId) {
@@ -106,7 +130,6 @@ onMounted(() => {
     });
   }
 });
-
 </script>
 
 <template>
@@ -152,11 +175,19 @@ onMounted(() => {
             >
               {{ exerciseStore.Exercise?.exercise_detail || "Loading..." }}
             </p>
-            <div class=" grid grid-cols-3 2xl:grid-cols-6 gap-4">
-              <div v-for="type,index in types" :key="index">
-                <button :class="exerciseStore.Exercise.type?.toLocaleLowerCase() === type ?'border-rafik-pritext text-rafik-pritext border-2':' border border-rafik-sectext opacity-80 hover:opacity-100'" class="w-32 h-32 text-xs rounded-xl font-bold flex items-center justify-center   bg-rafik-pribg uppercase">{{ type }}</button>
-              </div>
+             <div class="grid grid-cols-3 2xl:grid-cols-6 gap-4">
+            <div v-for="(type, index) in types" :key="index">
+              <button
+                @click="selectType(type)"
+                :class="exerciseStore.Exercise.type?.toLowerCase() === type
+                  ? 'border-rafik-pritext text-rafik-pritext border-2'
+                  : 'border border-rafik-sectext opacity-80 hover:opacity-100'"
+                class="w-32 h-32 text-xs rounded-xl font-bold flex items-center justify-center bg-rafik-pribg uppercase"
+              >
+                {{ type }}
+              </button>
             </div>
+          </div>
         </div>
         <div class="pl-6 flex-1 min-w-max border-l  border-rafik-sectext">
             <div class="flex flex-col flex-1 h-96 justify-center gap-4 border-rafik-sectext text-left">
@@ -208,6 +239,19 @@ onMounted(() => {
         >
           Programs Featured
         </button>
+      </div>
+      <div style="min-height: 50vh;" class=" over-flow-y-auto flex-1">
+        <transition name="fade">
+          <ExcerciseMovers
+            :personal="true"
+            :exercise="exerciseStore.Exercise"
+            @update-prime="updateExerciseField('prime',$event)"
+            @update-synergist="updateExerciseField('synergist',$event)"
+            @update-antagonist="updateExerciseField('antagonist',$event)"
+            v-if="activeTab === 'Muscles'"
+          />
+        </transition>
+
       </div>
     </div>
   </div>
