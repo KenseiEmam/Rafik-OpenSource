@@ -2,11 +2,11 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useProgramStore } from "@/stores/programstores";
-import DetailsTabProgram from "@/components/DetailsTabPRogram.vue";
-import WorkoutPlanner from "@/components/WorkoutPlanner.vue";
-import ClientTable from "@/components/ClientTable.vue"
-import PricingModel from "@/components/PricingModel.vue"
-import DocumentsForms from "@/components/DocumentsForms.vue";
+import DetailsTabProgram from "@/components/ProgramTabs/DetailsTabPRogram.vue";
+import WorkoutPlanner from "@/components/ProgramTabs/WorkoutPlanner.vue";
+import ClientTable from "@/components/ProgramTabs/ClientTable.vue"
+import PricingModel from "@/components/ProgramTabs/PricingModel.vue"
+import DocumentsForms from "@/components/ProgramTabs/DocumentsForms.vue";
 import Swal from 'sweetalert2'
 import router from "@/router";
 

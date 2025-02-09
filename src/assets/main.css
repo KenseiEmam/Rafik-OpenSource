@@ -1,11 +1,10 @@
 @import './base.css';
 
 .website-body {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+  width: 100%;
+
   min-height: 100vh;
+  overflow-x: hidden;
 }
 .fade-enter-active,
 .fade-leave-active {
@@ -159,7 +158,5 @@ nav a {
   .website-body {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    padding: 0 2rem;
   }
 }
