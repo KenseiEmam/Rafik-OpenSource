@@ -163,7 +163,7 @@
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
 import { useProgramStore } from "@/stores/programstores";
-import ExerciseOffcanvas from "./ExerciseOffcanvas.vue";
+import ExerciseOffcanvas from "../ExerciseOffcanvas.vue";
 // Define types
 type Exercise = {
   id: string;
