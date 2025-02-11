@@ -246,7 +246,7 @@ onMounted(() => {
             v-if="activeTab === 'Muscles'"
           />
           <TechTips
-            :personal="false"
+            :personal="true"
             :exercise="exerciseStore.Exercise"
             @update-safety="updateExerciseField('safety',$event)"
             @update-steps="updateExerciseField('steps',$event)"
