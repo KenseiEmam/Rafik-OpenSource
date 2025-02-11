@@ -174,7 +174,7 @@ import PageTitle from "@/components/PageTitle.vue";
 import { computed, onMounted, ref } from "vue";
 import { useProgramStore } from "@/stores/programstores";
 import router from "@/router";
-import AddProgramModal from "@/components/AddProgramModal.vue";
+import AddProgramModal from "@/components/ProgramTabs/AddProgramModal.vue";
 
 const activeTab = ref("Active Program");
 const programStore = useProgramStore();

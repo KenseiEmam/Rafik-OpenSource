@@ -4,7 +4,7 @@ import TrainerForm from '../components/TrainerForm.vue'
 </script>
 
 <template>
-  <main class="flex-1 website-body flex-col flex">
+  <main class="flex-1 mebsite-body flex-col flex">
     <WebsiteHeader />
     <Transition name="slide-fade" appear>
 
