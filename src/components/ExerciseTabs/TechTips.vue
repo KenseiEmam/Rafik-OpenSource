@@ -89,8 +89,11 @@ const emit = defineEmits(["update-safety", "update-steps", "update-cues"]);
 const isEditingSafety = ref(false);
 const editableSafety = ref(props.exercise.safety || "");
 const editSafety = () => {
-  isEditingSafety.value = true;
-  editableSafety.value = props.exercise.safety || "";
+  if(props.personal){
+
+    isEditingSafety.value = true;
+    editableSafety.value = props.exercise.safety || "";
+  }
 };
 const saveSafety = () => {
   isEditingSafety.value = false;

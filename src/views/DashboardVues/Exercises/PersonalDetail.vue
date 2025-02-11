@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import router from "@/router";
 import ExcerciseMovers from "@/components/ExerciseTabs/ExcerciseMovers.vue";
 import TechTips from "@/components/ExerciseTabs/TechTips.vue";
+import EquipReq from "@/components/ExerciseTabs/EquipReq.vue";
 
 const activeTab = ref("Muscles");
 function setActiveTab(tab: string) {
@@ -233,13 +234,6 @@ onMounted(() => {
         >
           Alternatives
         </button>
-        <button
-          :class="activeTab === 'Programs Featured' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
-          class="nav-btn uppercase "
-          @click="setActiveTab('Programs Featured')"
-        >
-          Programs Featured
-        </button>
       </div>
       <div style="min-height: 50vh;" class=" over-flow-y-auto flex-1">
         <transition name="fade">
@@ -252,13 +246,18 @@ onMounted(() => {
             v-if="activeTab === 'Muscles'"
           />
           <TechTips
-            :personal="true"
+            :personal="false"
             :exercise="exerciseStore.Exercise"
             @update-safety="updateExerciseField('safety',$event)"
             @update-steps="updateExerciseField('steps',$event)"
             @update-cues="updateExerciseField('cues',$event)"
             v-else-if="activeTab === 'Tips and Technique'"
           />
+          <EquipReq
+          :personal="true"
+            :exercise="exerciseStore.Exercise"
+            @update-equipment="updateExerciseField('equipment',$event)"
+            v-else-if="activeTab === 'Equipment'"/>
         </transition>
 
       </div>
