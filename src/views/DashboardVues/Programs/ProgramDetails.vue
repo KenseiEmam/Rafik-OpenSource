@@ -2,11 +2,11 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useProgramStore } from "@/stores/programstores";
-import DetailsTabProgram from "@/components/DetailsTabPRogram.vue";
-import WorkoutPlanner from "@/components/WorkoutPlanner.vue";
-import ClientTable from "@/components/ClientTable.vue"
-import PricingModel from "@/components/PricingModel.vue"
-import DocumentsForms from "@/components/DocumentsForms.vue";
+import DetailsTabProgram from "@/components/ProgramTabs/DetailsTabPRogram.vue";
+import WorkoutPlanner from "@/components/ProgramTabs/WorkoutPlanner.vue";
+import ClientTable from "@/components/ProgramTabs/ClientTable.vue"
+import PricingModel from "@/components/ProgramTabs/PricingModel.vue"
+import DocumentsForms from "@/components/ProgramTabs/DocumentsForms.vue";
 import Swal from 'sweetalert2'
 import router from "@/router";
 
@@ -337,45 +337,45 @@ onMounted(() => {
       </div>
 
       <!-- Tabs -->
-      <div class="flex xl:w-3/4 gap-8 justify-between items-center">
+      <div class="flex  gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext">
         <button
           :class="activeTab === 'Details' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
-          class="nav-btn max-w-16"
+          class="nav-btn "
           @click="setActiveTab('Details')"
         >
           Details
         </button>
         <button
           :class="activeTab === 'Workouts' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
-          class="nav-btn uppercase max-w-16"
+          class="nav-btn uppercase "
           @click="setActiveTab('Workouts')"
         >
           Workouts
         </button>
         <button
           :class="activeTab === 'Clients' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
-          class="nav-btn uppercase max-w-16"
+          class="nav-btn uppercase "
           @click="setActiveTab('Clients')"
         >
           Clients
         </button>
         <button
           :class="activeTab === 'Pricing' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
-          class="nav-btn uppercase max-w-16"
+          class="nav-btn uppercase "
           @click="setActiveTab('Pricing')"
         >
           Pricing
         </button>
         <button
           :class="activeTab === 'Documents' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
-          class="nav-btn uppercase max-w-16"
+          class="nav-btn uppercase "
           @click="setActiveTab('Documents')"
         >
           Documents
         </button>
         <button
           :class="activeTab === 'Reviews' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
-          class="nav-btn uppercase max-w-16"
+          class="nav-btn uppercase "
           @click="setActiveTab('Reviews')"
         >
           Reviews

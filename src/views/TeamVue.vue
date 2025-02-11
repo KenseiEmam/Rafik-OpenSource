@@ -3,7 +3,7 @@ import SocialIcons from '@/components/SocialIcons.vue'
 import WebsiteHeader from '../components/WebsiteHeader.vue'
 </script>
 <template>
-  <main class="website-body">
+  <main class="mebsite-body">
     <WebsiteHeader />
     <Transition name="slide-fade" appear>
       <div class="relative flex-1 flex flex-col h-full">
