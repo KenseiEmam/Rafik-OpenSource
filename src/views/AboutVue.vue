@@ -3,7 +3,7 @@ import WebsiteHeader from '../components/WebsiteHeader.vue'
 import SocialIcons from '../components/SocialIcons.vue'
 </script>
 <template>
-  <main class="website-body">
+  <main class="mebsite-body">
     <WebsiteHeader />
       <div
         class="grid md:grid-cols-5 gap-16 items-end min-h-64 relative card my-auto px-24 py-12"

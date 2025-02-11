@@ -19,6 +19,7 @@ type Exercise= {
   equipment?:string[];
   media?: string;
   embeds?:number[];
+  cues?:string[];
   // Add any other properties your exercise might have
 };
 

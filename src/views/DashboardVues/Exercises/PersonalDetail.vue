@@ -6,6 +6,7 @@ import ViewExercise from "@/components/ExerciseTabs/ExcerciseMovers.vue";
 import Swal from 'sweetalert2';
 import router from "@/router";
 import ExcerciseMovers from "@/components/ExerciseTabs/ExcerciseMovers.vue";
+import TechTips from "@/components/ExerciseTabs/TechTips.vue";
 
 const activeTab = ref("Muscles");
 function setActiveTab(tab: string) {
@@ -249,6 +250,14 @@ onMounted(() => {
             @update-synergist="updateExerciseField('synergist',$event)"
             @update-antagonist="updateExerciseField('antagonist',$event)"
             v-if="activeTab === 'Muscles'"
+          />
+          <TechTips
+            :personal="true"
+            :exercise="exerciseStore.Exercise"
+            @update-safety="updateExerciseField('safety',$event)"
+            @update-steps="updateExerciseField('steps',$event)"
+            @update-cues="updateExerciseField('cues',$event)"
+            v-else-if="activeTab === 'Tips and Technique'"
           />
         </transition>
 
