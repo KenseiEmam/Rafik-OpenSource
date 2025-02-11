@@ -2,9 +2,18 @@
 
 .website-body {
   width: 100%;
-
+  margin: 0 auto;
+  font-weight: normal;
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow: hidden;
+}
+.mebsite-body {
+  max-width: 100vh;
+  margin: 0 auto;
+  padding: 2rem;
+  font-weight: normal;
+  min-height: 100vh;
+  overflow: hidden;
 }
 .fade-enter-active,
 .fade-leave-active {
@@ -155,8 +164,10 @@ nav a {
 }
 
 @media (min-width: 1024px) {
-  .website-body {
+  .mebsite-body {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    padding: 0 2rem;
   }
 }
