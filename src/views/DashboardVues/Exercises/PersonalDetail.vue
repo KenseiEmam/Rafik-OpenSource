@@ -2,12 +2,13 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useExerciseStore } from "@/stores/exercisestores";
-import ViewExercise from "@/components/ExerciseTabs/ExcerciseMovers.vue";
+
 import Swal from 'sweetalert2';
 import router from "@/router";
 import ExcerciseMovers from "@/components/ExerciseTabs/ExcerciseMovers.vue";
 import TechTips from "@/components/ExerciseTabs/TechTips.vue";
-import EquipReq from "@/components/ExerciseTabs/EquipReq.vue";
+import EquipReq from "@/components/EquipReq.vue";
+import ExerciseAlt from "@/components/ExerciseTabs/ExerciseAlt.vue";
 
 const activeTab = ref("Muscles");
 function setActiveTab(tab: string) {
@@ -112,22 +113,27 @@ async function updateExerciseField(field: string, value: any) {
   if (!exerciseStore.Exercise) return showError("Exercise not found!");
 
   try {
-    await exerciseStore.updateExercise({
-      id: exerciseStore.Exercise.id,
-      [field]: value,
-    });
+    await exerciseStore.updateExercise({ id: exerciseStore.Exercise.id, [field]: value });
 
-    await exerciseStore.fetchExercise(exerciseStore.Exercise.id);
+    if (field === 'alternatives') {
+      await exerciseStore.fetchExercisesByIds(value); // Refetch updated alternatives
+    } else {
+      await exerciseStore.fetchExercise(exerciseStore.Exercise.id);
+    }
     showSuccess(`${field} updated successfully!`);
   } catch (error) {
     showError(`Failed to update ${field}. Please try again.`);
-    console.error(`Error updating ${field}:`, error);
   }
 }
 onMounted(() => {
   const exerciseId = route.params.id as string;
   if (exerciseId) {
-    exerciseStore.fetchExercise(exerciseId).catch(() => {
+    exerciseStore.fetchExercise(exerciseId).then(()=>{
+      if(exerciseStore.Exercise?.alternatives && exerciseStore.Exercise?.alternatives.length > 0){
+
+        exerciseStore.fetchExercisesByIds(exerciseStore.Exercise?.alternatives)
+      }
+    }).catch(() => {
       showError("Failed to load exercise details.");
     });
   }
@@ -136,7 +142,7 @@ onMounted(() => {
 
 <template>
   <div class="flex h-screen overflow-auto">
-    <div v-if="exerciseStore.Exercise" class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-8 xl:space-y-10">
+    <div v-if="exerciseStore.Exercise && exerciseStore.AlternateExercises" class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-8 xl:space-y-10">
       <div class="flex gap-6 items-end wrap ">
         <div class="min-h-96 w-128 card content "></div>
         <div class="pr-6 space-y-4 w-1/2 flex flex-col items-start justify-end">
@@ -258,6 +264,11 @@ onMounted(() => {
             :exercise="exerciseStore.Exercise"
             @update-equipment="updateExerciseField('equipment',$event)"
             v-else-if="activeTab === 'Equipment'"/>
+          <ExerciseAlt
+          :exercise="exerciseStore.Exercise"
+          :alternatives="exerciseStore.AlternateExercises"
+          @update-alternatives="updateExerciseField('alternatives',$event)"
+          v-else-if="activeTab === 'Alternatives'"/>
         </transition>
 
       </div>
