@@ -59,7 +59,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
@@ -95,8 +95,8 @@ const accessories = [
   "Straps"
 ];
 
-const toggleEquipment = (item) => {
-  if (!props.props.personal) return;
+const toggleEquipment = (item:any) => {
+  if (!props.personal) return;
 
   if (equipment.value.includes(item)) {
     equipment.value = equipment.value.filter(e => e !== item);

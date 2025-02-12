@@ -2,12 +2,12 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useExerciseStore } from "@/stores/exercisestores";
-import ViewExercise from "@/components/ExerciseTabs/ExcerciseMovers.vue";
+
 import Swal from 'sweetalert2';
 import router from "@/router";
 import ExcerciseMovers from "@/components/ExerciseTabs/ExcerciseMovers.vue";
 import TechTips from "@/components/ExerciseTabs/TechTips.vue";
-import EquipReq from "@/components/ExerciseTabs/EquipReq.vue";
+import EquipReq from "@/components/EquipReq.vue";
 import ExerciseAlt from "@/components/ExerciseTabs/ExerciseAlt.vue";
 
 const activeTab = ref("Muscles");
@@ -142,7 +142,7 @@ onMounted(() => {
 
 <template>
   <div class="flex h-screen overflow-auto">
-    <div v-if="exerciseStore.Exercise" class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-8 xl:space-y-10">
+    <div v-if="exerciseStore.Exercise && exerciseStore.AlternateExercises" class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-8 xl:space-y-10">
       <div class="flex gap-6 items-end wrap ">
         <div class="min-h-96 w-128 card content "></div>
         <div class="pr-6 space-y-4 w-1/2 flex flex-col items-start justify-end">
