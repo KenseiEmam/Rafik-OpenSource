@@ -8,6 +8,7 @@ import router from "@/router";
 import ExcerciseMovers from "@/components/ExerciseTabs/ExcerciseMovers.vue";
 import TechTips from "@/components/ExerciseTabs/TechTips.vue";
 import EquipReq from "@/components/ExerciseTabs/EquipReq.vue";
+import ExerciseAlt from "@/components/ExerciseTabs/ExerciseAlt.vue";
 
 const activeTab = ref("Muscles");
 function setActiveTab(tab: string) {
@@ -112,22 +113,27 @@ async function updateExerciseField(field: string, value: any) {
   if (!exerciseStore.Exercise) return showError("Exercise not found!");
 
   try {
-    await exerciseStore.updateExercise({
-      id: exerciseStore.Exercise.id,
-      [field]: value,
-    });
+    await exerciseStore.updateExercise({ id: exerciseStore.Exercise.id, [field]: value });
 
-    await exerciseStore.fetchExercise(exerciseStore.Exercise.id);
+    if (field === 'alternatives') {
+      await exerciseStore.fetchExercisesByIds(value); // Refetch updated alternatives
+    } else {
+      await exerciseStore.fetchExercise(exerciseStore.Exercise.id);
+    }
     showSuccess(`${field} updated successfully!`);
   } catch (error) {
     showError(`Failed to update ${field}. Please try again.`);
-    console.error(`Error updating ${field}:`, error);
   }
 }
 onMounted(() => {
   const exerciseId = route.params.id as string;
   if (exerciseId) {
-    exerciseStore.fetchExercise(exerciseId).catch(() => {
+    exerciseStore.fetchExercise(exerciseId).then(()=>{
+      if(exerciseStore.Exercise?.alternatives && exerciseStore.Exercise?.alternatives.length > 0){
+
+        exerciseStore.fetchExercisesByIds(exerciseStore.Exercise?.alternatives)
+      }
+    }).catch(() => {
       showError("Failed to load exercise details.");
     });
   }
@@ -258,6 +264,11 @@ onMounted(() => {
             :exercise="exerciseStore.Exercise"
             @update-equipment="updateExerciseField('equipment',$event)"
             v-else-if="activeTab === 'Equipment'"/>
+          <ExerciseAlt
+          :exercise="exerciseStore.Exercise"
+          :alternatives="exerciseStore.AlternateExercises"
+          @update-alternatives="updateExerciseField('alternatives',$event)"
+          v-else-if="activeTab === 'Alternatives'"/>
         </transition>
 
       </div>
