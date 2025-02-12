@@ -1,7 +1,7 @@
 <template>
   <!-- Drawer toggle button -->
   <div class="text-center">
-    <button @click="ModalOn = true" class="header-small card">
+    <button @click="openModal" class="header-small card">
       Add Exercise +
     </button>
   </div>
@@ -48,7 +48,7 @@
                 @click="toggleSelection(exercise)"
                 :class="{'bg-rafik': isSelected(exercise), 'bg-gray-500': !isSelected(exercise)}"
                 class="px-4 py-2 text-white rounded-lg"
-                :disabled="!isSelected(exercise) && selectedExercises.length >= 5">
+                :disabled="maxSelectable !== null && !isSelected(exercise) && selectedExercises.length >= maxSelectable">
                 {{ isSelected(exercise) ? 'Selected' : 'Select' }}
               </button>
             </div>
@@ -59,7 +59,7 @@
 
       <!-- Selected Exercises Section -->
       <div class="fixed bottom-0 p-6 border-l border-rafik-sctext bg-rafik-secbg flex flex-col w-128 right-0 gap-4">
-        <h4 class="contentH-small uppercase">Selected ({{ selectedExercises.length }}/5)</h4>
+        <h4 class="contentH-small uppercase">Selected ({{ selectedExercises.length }}{{ maxSelectable !== null ? '/' + maxSelectable : '' }})</h4>
 
         <div class="flex flex-wrap gap-2">
           <div v-for="exercise in selectedExercises" :key="exercise.id" class="px-3 py-1 card text-white rounded-full flex items-center gap-2">
@@ -69,8 +69,8 @@
         </div>
 
         <button @click="handleSubmit" class="btn-lg mt-2" :disabled="selectedExercises.length === 0">
-  ADD EXERCISES
-</button>
+          ADD EXERCISES
+        </button>
       </div>
     </div>
   </div>
@@ -85,8 +85,15 @@ const ModalOn = ref<boolean>(false);
 const exerciseStore = useExerciseStore();
 const selectedExercises = ref<any[]>([]);
 
+const props = defineProps({
+  maxSelectable: {
+    type: Number,
+    default: null // Allows infinite selection if not provided
+  }
+});
 
 const emits = defineEmits(['addExercises']);
+
 // Debounced function to fetch relevant exercises
 const debouncedFetchExercises = debounce((query: string) => {
   if (query) {
@@ -97,12 +104,19 @@ const debouncedFetchExercises = debounce((query: string) => {
 watch(ModalOn, (newVal) => {
   if (!newVal) selectedExercises.value = [];
 });
+
+function openModal() {
+  ModalOn.value = true;
+  exerciseStore.getAllExercises(); // Fetch all exercises when modal opens
+}
+
 function handleSubmit() {
   if (confirm(`Confirm adding ${selectedExercises.value.length} exercises?`)) {
     emits('addExercises', selectedExercises.value);
     ModalOn.value = false;
   }
 }
+
 // Handle input change
 function handleSearch(event: Event) {
   const target = event.target as HTMLInputElement;
@@ -113,7 +127,7 @@ function handleSearch(event: Event) {
 function toggleSelection(exercise: any) {
   const index = selectedExercises.value.findIndex(e => e.id === exercise.id);
   if (index === -1) {
-    if (selectedExercises.value.length < 5) {
+    if (props.maxSelectable === null || selectedExercises.value.length < props.maxSelectable) {
       selectedExercises.value.push(exercise);
     }
   } else {
