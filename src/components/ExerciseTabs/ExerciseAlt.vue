@@ -50,8 +50,15 @@
       :max-selectable="remainingSlots"
     />
     </ul>
+<div v-else class="space-y-6 flex flex-col  items-center py-12">
 
-    <p v-else class="text-rafik-pritext">No alternatives found.</p>
+  <p  class="text-rafik-pritext">No alternatives found. Click the button below to add some.</p>
+  <ExerciseOffcanvas
+
+      @addExercises="addAlternative"
+      :max-selectable="remainingSlots"
+    />
+</div>
 
     <!-- Add Alternative Button & Exercise Offcanvas Drawer -->
 

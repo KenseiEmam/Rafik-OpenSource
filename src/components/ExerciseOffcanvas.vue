@@ -28,7 +28,12 @@
           <input type="search" @input="handleSearch" class="block w-full p-4 text-sm text-rafik-sectext border rounded-lg bg-rafik-pribg" placeholder="Type to Search Exercises..." required />
         </div>
       </form>
-
+      <div
+        @click="showAddExerciseModal = true"
+        class="border-2 border-dashed flex p-3 hover:cursor-pointer hover:opacity-70 W-FULL items-center justify-center border-rafik-sectext bg-rafik-pribg rounded-lg overflow-hidden"
+      >
+        <p class="text-center header-small uppercase ">+<br> ADD CUSTOM EXERCISE</p>
+      </div>
       <!-- Exercise list -->
       <div class="h-5/6 pb-96 overflow-y-auto" v-if="exerciseStore.AllExercises && exerciseStore.AllExercises.length">
         <ul class="overflow-auto space-y-4">
@@ -74,16 +79,29 @@
       </div>
     </div>
   </div>
+   <!-- Add Exercise Modal -->
+   <AddExerciseModal
+      :visible="showAddExerciseModal"
+      @close="showAddExerciseModal = false"
+      @submit="addExercise"
+    />
 </template>
 
 <script lang="ts" setup>
+
 import { ref, watch } from 'vue';
 import debounce from 'lodash/debounce';
 import { useExerciseStore } from '@/stores/exercisestores';
-
+import AddExerciseModal from './ExerciseTabs/AddExerciseModal.vue';
 const ModalOn = ref<boolean>(false);
 const exerciseStore = useExerciseStore();
 const selectedExercises = ref<any[]>([]);
+  const showAddExerciseModal = ref(false);
+// Add exercise
+function addExercise(exercise:any) {
+  exerciseStore.createExercise(exercise);
+  showAddExerciseModal.value = false;
+}
 
 const props = defineProps({
   maxSelectable: {

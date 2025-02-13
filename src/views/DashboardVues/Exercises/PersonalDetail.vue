@@ -90,6 +90,8 @@ function showSuccess(message: string) {
   Swal.fire({
     title: "Success!",
     text: message,
+    toast:true,
+    position:'top-right',
     icon: "success",
     confirmButtonColor: "#CB901C",
     background: "#081411",
@@ -129,7 +131,7 @@ onMounted(() => {
   const exerciseId = route.params.id as string;
   if (exerciseId) {
     exerciseStore.fetchExercise(exerciseId).then(()=>{
-      if(exerciseStore.Exercise?.alternatives && exerciseStore.Exercise?.alternatives.length > 0){
+      if(exerciseStore.Exercise?.alternatives){
 
         exerciseStore.fetchExercisesByIds(exerciseStore.Exercise?.alternatives)
       }
