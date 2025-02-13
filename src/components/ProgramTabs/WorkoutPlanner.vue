@@ -51,7 +51,7 @@
               <input
                 v-if="isEditing"
                 v-model="editedWorkouts[activeTab].workout_name"
-                class="rafik-text-input  text-rafik contentH-medium mb-2"
+                class="rafik-text-input border-0 focus:ring-0 pb-1 bg-transparent border-b focus:border-rafik-alternate rounded-none text-3xl  text-rafik contentH-medium mb-2"
                 placeholder="Workout Name"
               />
               <h3 v-else class="text-rafik contentH-medium">{{ editedWorkouts[activeTab].workout_name }}</h3>
@@ -59,7 +59,7 @@
               <textarea
                 v-if="isEditing"
                 v-model="editedWorkouts[activeTab].workout_summary"
-                class="rafik-text-input  mb-4"
+                class="rafik-text-input border-0 focus:ring-0 pb-1 bg-transparent border-b focus:border-rafik-alternate rounded-none   mb-4"
                 placeholder="Workout Summary"
               ></textarea>
               <p v-else class="text-body mb-4">{{ editedWorkouts[activeTab].workout_summary }}</p>
@@ -71,7 +71,7 @@
               <input
                 v-if="isEditing"
                 v-model="editedWorkouts[activeTab].time_to_complete"
-                class="rafik-text-input "
+                class="rafik-text-input border-0 focus:ring-0 pb-1 bg-transparent border-b focus:border-rafik-alternate rounded-none  "
                 placeholder="Completion Time"
               />
             </div>
@@ -86,34 +86,34 @@
 
 
         <!-- Editable Exercises -->
-        <h4 class="contentH-small flex gap-2 mt-4 mb-3">List of Exercises:</h4>
-        <div class="border-l border-rafik-sectext  flex flex-col gap-4 mb-5">
+        <h4 class="subheader-medium flex gap-2 mt-4 mb-3">List of Exercises:</h4>
+        <div class=" flex flex-col gap-4 mb-5">
           <div
-            class="border-b border-rafik-sectext p-4"
+            class=" bg-rafik-secbg rounded-xl shadow-xl p-6"
             v-for="(exercise, exerciseIndex) in editedWorkouts[activeTab].exercises"
             :key="exercise.id"
           >
-            <h2 class="text-rafik-pritext">{{ exercise.exercise_name }}</h2>
+            <h2 class="contentH-small">{{ exercise.exercise_name }}</h2>
             <div v-if="isEditing" class=" flex gap-6">
               <div class="space-y-2">
                 <label class="text-rafik-sectext">Intensity</label>
-                <input v-model="exercise.intensity" class="rafik-text-input " placeholder="Intensity" />
+                <input v-model="exercise.intensity" class="rafik-text-input border-0 focus:ring-0 pb-1 bg-transparent border-b focus:border-rafik-alternate rounded-none  " placeholder="Intensity" />
               </div>
               <div class="space-y-2">
                 <label class="text-rafik-sectext">Sets</label>
-                <input type="number" v-model.number="exercise.sets" class="rafik-text-input " placeholder="Sets" />
+                <input type="number" v-model.number="exercise.sets" class="rafik-text-input border-0 focus:ring-0 pb-1 bg-transparent border-b focus:border-rafik-alternate rounded-none  " placeholder="Sets" />
               </div>
               <div class="space-y-2">
 
                 <label class="text-rafik-sectext">Repetitions</label>
-                <input type="number" v-model.number="exercise.reps" class="rafik-text-input " placeholder="Repetitions" />
+                <input type="number" v-model.number="exercise.reps" class="rafik-text-input border-0 focus:ring-0 pb-1 bg-transparent border-b focus:border-rafik-alternate rounded-none  " placeholder="Repetitions" />
               </div>
               <div class="flex justify-between ml-auto">
                 <button class="hover:text-red-400 text-red-500" @click="removeExercise(activeTab, exerciseIndex)">Remove Exercise</button>
               </div>
             </div>
             <div v-else>
-              <p class="text-rafik-secondary capitalize mb-4">{{ exercise.type }}</p>
+              <p class="text-rafik-pritext capitalize mb-4">{{ exercise.type }} Exercise</p>
               <div class="flex justify-between w-full text-rafik-sectext ">
                 <p>Intensity</p>
                 <p class="text-rafik-pritext">{{ exercise.intensity }}</p>
