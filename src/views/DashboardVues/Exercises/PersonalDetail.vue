@@ -2,9 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useExerciseStore } from "@/stores/exercisestores";
-
 import Swal from 'sweetalert2';
-import router from "@/router";
 import ExcerciseMovers from "@/components/ExerciseTabs/ExcerciseMovers.vue";
 import TechTips from "@/components/ExerciseTabs/TechTips.vue";
 import EquipReq from "@/components/EquipReq.vue";
@@ -23,10 +21,6 @@ const isEditingDescription = ref(false);
 const types = ref(['isolation', 'stretch', 'bodyweight', 'compound', 'cardio', 'plyometric']);
 const editableTitle = ref("");
 const editableDescription = ref("");
-
-function refreshComponent() {
-  router.go(0);
-}
 
 
 function editTitle() {
@@ -120,7 +114,7 @@ async function updateExerciseField(field: string, value: any) {
     if (field === 'alternatives') {
       await exerciseStore.fetchExercisesByIds(value); // Refetch updated alternatives
     } else {
-      await exerciseStore.fetchExercise(exerciseStore.Exercise.id);
+      await exerciseStore.fetchPersonalExercise(exerciseStore.Exercise.id);
     }
     showSuccess(`${field} updated successfully!`);
   } catch (error) {
@@ -130,7 +124,7 @@ async function updateExerciseField(field: string, value: any) {
 onMounted(() => {
   const exerciseId = route.params.id as string;
   if (exerciseId) {
-    exerciseStore.fetchExercise(exerciseId).then(()=>{
+    exerciseStore.fetchPersonalExercise(exerciseId).then(()=>{
       if(exerciseStore.Exercise?.alternatives){
 
         exerciseStore.fetchExercisesByIds(exerciseStore.Exercise?.alternatives)

@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import { supabase } from "../lib/supabaseClient";
 import Swal from "sweetalert2";
+import router from "@/router";
 
 // Define the Exercise type
 type Exercise = {
@@ -80,23 +81,57 @@ export const useExerciseStore = defineStore("Exercise", () => {
     }
   }
 
-  // Fetch a single exercise by ID
-  async function fetchExercise(id: string) {
+  // Fetch a single personal exercise by ID
+  async function fetchPersonalExercise(id: string) {
+    const UserID = getUserID();
+    if (!UserID) {
+      showError("No user ID found in localStorage.");
+      return;
+    }
     try {
+
       const { data, error } = await supabase
         .from("exercises")
         .select()
         .eq("id", id)
+        .eq("trainer_id",UserID)
         .single();
 
       if (error) throw error;
 
       Exercise.value = data;
-    } catch (error) {
-      showError("Error fetching exercise.");
+    } catch (error:any) {
+      Swal.fire({
+        title: "Whoops",
+        text: "No exercise found",
+        icon: "error",
+        confirmButtonColor: "#d33",
+        background: "#081411",
+        color: "#E8F3ED",
+      }).then(()=>{
+        router.push({name:'programs-list'})
+      });
     }
   }
 
+// Fetch a single public exercise by ID
+async function fetchPublicExercise(id: string) {
+  try {
+
+    const { data, error } = await supabase
+      .from("exercises")
+      .select()
+      .eq("id", id)
+      .is("trainer_id",null)
+      .single();
+
+    if (error) throw error;
+
+    Exercise.value = data;
+  } catch (error) {
+    showError("Error fetching exercise.");
+  }
+}
   // Update an exercise (only if it's personal)
   async function updateExercise(updateData: Exercise) {
     const UserID = getUserID();
@@ -217,7 +252,8 @@ export const useExerciseStore = defineStore("Exercise", () => {
     fetchExercisesByIds,
     getAllExercises,
     updateExercise,
-    fetchExercise,
+    fetchPersonalExercise,
+    fetchPublicExercise,
     createExercise,
     fetchRelevantExercises,
   };
