@@ -30,6 +30,7 @@ export const useExerciseStore = defineStore("Exercise", () => {
   const PublicExercises = ref<Exercise[] | null>(null);
   const AlternateExercises = ref<Exercise[] | null>(null);
   const Exercise = ref<Exercise>();
+  const Count = ref<number | null>()
 
   const getUserID = () => localStorage.getItem("UserID");
 
@@ -69,6 +70,7 @@ export const useExerciseStore = defineStore("Exercise", () => {
       const { data, error } = await supabase
         .from("exercises")
         .select()
+        .limit(9)
         .or(`trainer_id.eq.${UserID},trainer_id.is.null`);
 
       if (error) throw error;
@@ -80,6 +82,37 @@ export const useExerciseStore = defineStore("Exercise", () => {
       showError("Failed to load exercises: " + error.message);
     }
   }
+  // Fetch exercises by page and separate them into Personal and Public
+async function getPageExercises(page: number) {
+  const UserID = getUserID();
+  if (!UserID) {
+    showError("No user ID found in localStorage.");
+    return;
+  }
+
+  const start = (page - 1) * 9;
+  const end = (page * 9) - 1;
+
+  try {
+    const { data, count, error } = await supabase
+      .from("exercises")
+      .select("*", { count: "exact" }) // Include exact row count
+      .range(start, end)
+      .or(`trainer_id.eq.${UserID},trainer_id.is.null`);
+
+    if (error) throw error;
+
+    AllExercises.value = data || [];
+    PersonalExercises.value = data.filter((ex) => ex.trainer_id === UserID);
+    PublicExercises.value = data.filter((ex) => ex.trainer_id === null);
+    Count.value = count || 0; // Ensure count is assigned properly
+
+    return { exercises: data, count }; // Return data and count
+  } catch (error: any) {
+    showError("Failed to load exercises: " + error.message);
+    return { exercises: [], count: 0 }; // Return an empty array and count 0 in case of error
+  }
+}
 
   // Fetch a single personal exercise by ID
   async function fetchPersonalExercise(id: string) {
@@ -249,8 +282,10 @@ async function fetchPublicExercise(id: string) {
     PersonalExercises,
     PublicExercises,
     Exercise,
+    Count,
     fetchExercisesByIds,
     getAllExercises,
+    getPageExercises,
     updateExercise,
     fetchPersonalExercise,
     fetchPublicExercise,
