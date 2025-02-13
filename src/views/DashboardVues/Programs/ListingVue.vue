@@ -176,7 +176,7 @@ import { useProgramStore } from "@/stores/programstores";
 import { useExerciseStore } from "@/stores/exercisestores";
 import router from "@/router";
 import AddProgramModal from "@/components/ProgramTabs/AddProgramModal.vue";
-import ExerciseList from "@/components/exerciseList.vue";
+import ExerciseList from "@/components/ExerciseList.vue";
 
 const activeTab = ref("Active Program");
 const programStore = useProgramStore();
