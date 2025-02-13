@@ -1,7 +1,7 @@
 <template>
   <!-- Drawer toggle button -->
   <div class="text-center">
-    <button @click="openModal" class="header-small card">
+    <button @click="openModal" class="header-small p-4 border border-rafik-pritext rounded hover:opacity-70">
       Add Exercise +
     </button>
   </div>
