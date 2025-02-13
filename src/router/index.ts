@@ -68,18 +68,23 @@ const router = createRouter({
           ],
         },
         {
-          path: 'exercises', // Child route for /dashboard/programs
+          path: 'exercises', // Child route for /dashboard/exercise
 
           children: [
             {
-              path: 'public/:id', // Default child route for /dashboard/programs
+              path: 'public/:id', // Default child route for /dashboard/exercise
               name: 'public-details',
               component: () => import('../views/DashboardVues/Exercises/PublicDetail.vue'),
             },
             {
-              path: 'personal/:id', // Dynamic route for program details
+              path: 'personal/:id', // Dynamic route for exercise details
               name: 'personal-details',
               component: () => import('../views/DashboardVues/Exercises/PersonalDetail.vue'),
+            },
+            {
+              path: 'public/:id', // Dynamic route for exercise details
+              name: 'public-details',
+              component: () => import('../views/DashboardVues/Exercises/PublicDetail.vue'),
             },
           ],
         },
