@@ -263,6 +263,7 @@ onMounted(() => {
           <ExerciseAlt
           :exercise="exerciseStore.Exercise"
           :alternatives="exerciseStore.AlternateExercises"
+          :personal="true"
           @update-alternatives="updateExerciseField('alternatives',$event)"
           v-else-if="activeTab === 'Alternatives'"/>
         </transition>

@@ -3,9 +3,9 @@
     <div class="flex items-center justify-between gap-4">
       <div>
         <h3 class="contentH-small">Exercise Alternatives</h3>
-        <p class="text-body">Below is a list of alternatives. You can add up to 3 alternatives of your liking.</p>
+        <p class="text-body">Below is a list of alternatives. <span v-if="props.personal">You can add up to 3 alternatives of your liking.</span></p>
       </div>
-      <h3 class="contentH-small ">You have selected {{editedAlts.length }}/3</h3>
+      <h3 v-if="props.personal" class="contentH-small ">You have selected {{editedAlts.length }}/3</h3>
     </div>
 
     <ul v-if="editedAlts.length > 0" class="grid grid-cols-3 gap-6 items-center">
@@ -41,11 +41,11 @@
           </div>
 
           <!-- Remove Alternative Button -->
-          <button @click="removeAlternative(index)" class="px-4 py-2 bg-red-500 text-white rounded-lg">Remove</button>
+          <button v-if="props.personal" @click="removeAlternative(index)" class="px-4 py-2 bg-red-500 text-white rounded-lg">Remove</button>
         </div>
       </li>
       <ExerciseOffcanvas
-      v-if="remainingSlots > 0"
+      v-if="remainingSlots > 0 && props.personal"
       @addExercises="addAlternative"
       :max-selectable="remainingSlots"
     />
@@ -54,7 +54,7 @@
 
   <p  class="text-rafik-pritext">No alternatives found. Click the button below to add some.</p>
   <ExerciseOffcanvas
-
+      v-if="props.personal"
       @addExercises="addAlternative"
       :max-selectable="remainingSlots"
     />
@@ -93,6 +93,7 @@ type Exercise = {
 const props = defineProps<{
   exercise: Exercise;
   alternatives: Exercise[];
+  personal:boolean;
 }>();
 
 // Reactive state for alternatives
