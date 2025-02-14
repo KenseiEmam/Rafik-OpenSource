@@ -737,6 +737,9 @@ import SettingsServices from '../services/SettingsServices';
         Swal.fire({
               icon: "success",
               title: "Success!",
+showConfirmButton:false,
+timerProgressBar:true,
+timer:1500,
               text: "The document type has been added! ",
               toast: true,
               position: 'top',
