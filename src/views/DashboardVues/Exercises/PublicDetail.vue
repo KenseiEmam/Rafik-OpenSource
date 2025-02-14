@@ -46,7 +46,24 @@ function showError(message: string) {
     color: "#E8F3ED",
   });
 }
-
+// ✅ Function to activate the program with confirmation
+function DupeExercise() {
+  Swal.fire({
+    title: "Duplicate Exercise?",
+    text: "A duplicate of this exercise will be created and added to your list of custom exercises.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Duplicate this Exercise",
+    confirmButtonColor: "#CB901C",
+    cancelButtonColor: "#d33",
+      background:"#081411",
+      color:"#E8F3ED",
+  }).then((result) => {
+    if (result.isConfirmed && exerciseStore.Exercise) {
+      exerciseStore.createDupe(exerciseStore.Exercise)
+    }
+  });
+}
 
 onMounted(() => {
   const exerciseId = route.params.id as string;
@@ -87,9 +104,8 @@ onMounted(() => {
             <div class="flex flex-col flex-1 h-96 justify-center gap-4 border-rafik-sectext text-left">
               <button class="text-body uppercase text-left hover:text-rafik-pritext">View Language</button>
               <button
-
+                @click="DupeExercise"
                 class="text-body uppercase text-left hover:text-rafik-pritext"
-
               >
                 Duplicate Exercise
               </button>
