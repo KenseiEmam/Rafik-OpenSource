@@ -7,6 +7,7 @@ import ExcerciseMovers from "@/components/ExerciseTabs/ExcerciseMovers.vue";
 import TechTips from "@/components/ExerciseTabs/TechTips.vue";
 import EquipReq from "@/components/EquipReq.vue";
 import ExerciseAlt from "@/components/ExerciseTabs/ExerciseAlt.vue";
+import ImportOffcanvas from "@/components/ImportOffcanvas.vue";
 
 const activeTab = ref("Muscles");
 function setActiveTab(tab: string) {
@@ -124,6 +125,23 @@ function DeleteExercise(id:string) {
     }
   });
 }
+
+// ✅ Function to overwrite exercise fields
+async function importExercise(value: any) {
+  if (!exerciseStore.Exercise) return showError("Exercise not found!");
+  const { id,exercise_name,exercise_detail,trainer_id, ...exerciseWithoutId } = value;
+  try {
+    await exerciseStore.updateExercise({ id: exerciseStore.Exercise.id, ...exerciseWithoutId });
+      if(exerciseStore.Exercise?.alternatives){
+
+        exerciseStore.fetchExercisesByIds(exerciseStore.Exercise?.alternatives)
+      }
+
+    showSuccess(`Import successful!`);
+  } catch (error) {
+    showError(`Failed to import. Please try again.`);
+  }
+}
 // ✅ Generic function to update any exercise field
 async function updateExerciseField(field: string, value: any) {
   if (!exerciseStore.Exercise) return showError("Exercise not found!");
@@ -216,13 +234,7 @@ onMounted(() => {
         <div class="pl-6 flex-1 min-w-max border-l  border-rafik-sectext">
             <div class="flex flex-col flex-1 h-96 justify-center gap-4 border-rafik-sectext text-left">
               <button class="text-body uppercase text-left hover:text-rafik-pritext">View Language</button>
-              <button
-
-                class="text-body uppercase text-left hover:text-rafik-pritext"
-
-              >
-                Import Template
-              </button>
+              <ImportOffcanvas @import-exercise="importExercise"/>
               <button @click="DeleteExercise(exerciseStore.Exercise.id)" class="text-body uppercase text-red-500 hover:text-red-400 text-left">Delete Exercise</button>
             </div>
         </div>
