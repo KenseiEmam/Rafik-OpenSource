@@ -38,6 +38,9 @@ export const useExerciseStore = defineStore("Exercise", () => {
   function showSuccess(message: string) {
     Swal.fire({
       title: "Success!",
+      showConfirmButton:false,
+      timerProgressBar:true,
+timer:1500,
       text: message,
       toast: true,
       position: "top-right",
@@ -230,6 +233,32 @@ async function fetchPublicExercise(id: string) {
     }
   }
 
+  // Delete a Personal Exercise
+  async function deleteExercise(id: String) {
+    const UserID = getUserID();
+    if (!UserID) {
+      showError("No user ID found. Cannot create exercise.");
+      return;
+    }
+
+    try {
+      const {error } = await supabase
+        .from("exercises")
+        .delete()
+        .eq('id',id)
+        .eq('trainer_id', UserID);
+
+      if (error) throw error;
+        showSuccess("Exercise deleted successfully!");
+          // Delay opening the URL slightly for better UX
+          setTimeout(() => {
+            router.push({name:'programs-list'})
+          }, 500);
+    } catch (error) {
+      showError("Error deleting exercise.");
+    }
+  }
+
   // Fetch exercises by IDs
   async function fetchExercisesByIds(ids: string[]) {
     if (!ids || ids.length === 0) {
@@ -284,6 +313,7 @@ async function fetchPublicExercise(id: string) {
     Exercise,
     Count,
     fetchExercisesByIds,
+    deleteExercise,
     getAllExercises,
     getPageExercises,
     updateExercise,

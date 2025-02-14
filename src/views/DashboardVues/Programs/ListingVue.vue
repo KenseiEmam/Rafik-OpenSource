@@ -2,37 +2,30 @@
   <div class="flex h-screen overflow-auto">
     <div
       v-if="programStore.AllPrograms"
-      class="flex-1 px-8 py-12 flex flex-col w-full 2xl:px-12 2xl:py-24 space-y-8"
+      class="flex-1 px-8 py-12 flex flex-col w-full 2xl:px-12 2xl:py-24 space-y-6"
     >
       <!-- Page Title -->
       <PageTitle subheader="workouts &" header="programs" />
 
       <!-- Tabs -->
-      <div class="flex xl:w-3/4 gap-8 justify-between items-center">
+      <div class="flex  gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext">
         <button
           :class="activeTab === 'Active Program' ? 'text-rafik-pritext' : ''"
-          class="nav-btn max-w-16"
+          class="nav-btn "
           @click="setActiveTab('Active Program')"
         >
           Active Programs
         </button>
         <button
           :class="activeTab === 'Drafted Programs' ? 'text-rafik-pritext' : ''"
-          class="nav-btn uppercase max-w-16"
+          class="nav-btn uppercase "
           @click="setActiveTab('Drafted Programs')"
         >
           Drafted Programs
         </button>
         <button
-          :class="activeTab === 'My Workouts' ? 'text-rafik-pritext' : ''"
-          class="nav-btn uppercase max-w-16"
-          @click="setActiveTab('My Workouts')"
-        >
-          My Workouts
-        </button>
-        <button
           :class="activeTab === 'Custom Exercises' ? 'text-rafik-pritext' : ''"
-          class="nav-btn uppercase max-w-16"
+          class="nav-btn uppercase "
           @click="setActiveTab('Custom Exercises')"
         >
           Custom Exercises

@@ -88,9 +88,13 @@ function refreshComponent() {
 function showSuccess(message: string) {
   Swal.fire({
     title: "Success!",
+showConfirmButton:false,
+timerProgressBar:true,
+timer:1500,
     text: message,
+    toast:true,
+    position:'top-right',
     icon: "success",
-    confirmButtonColor: "#CB901C",
       cancelButtonColor: "#d33",
       background:"#081411",
       color:"#E8F3ED",

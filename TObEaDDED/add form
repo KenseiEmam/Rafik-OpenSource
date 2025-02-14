@@ -619,6 +619,9 @@ import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
                             Swal.fire({
                                   icon: "success",
                                   title: "Success!",
+showConfirmButton:false,
+timerProgressBar:true,
+timer:1500,
                                   text: "The document has been added and shared! ",
                                   toast: true,
                                   position: 'top',
@@ -643,6 +646,9 @@ import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
                           Swal.fire({
                                   icon: "success",
                                   title: "Success!",
+showConfirmButton:false,
+timerProgressBar:true,
+timer:1500,
                                   text: "The document has been added! ",
                                   toast: true,
                                   position: 'top',
