@@ -83,6 +83,9 @@ async function selectType(selectedType: string) {
 function showSuccess(message: string) {
   Swal.fire({
     title: "Success!",
+showConfirmButton:false,
+timerProgressBar:true,
+timer:1500,
     text: message,
     toast:true,
     position:'top-right',
@@ -103,7 +106,24 @@ function showError(message: string) {
     color: "#E8F3ED",
   });
 }
-
+// ✅ Function to delete the program with confirmation
+function DeleteExercise(id:string) {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "This will create a delete exercise permanently from exercise lists...",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+    confirmButtonColor: "#CB901C",
+    cancelButtonColor: "#d33",
+      background:"#081411",
+      color:"#E8F3ED",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      exerciseStore.deleteExercise(id)
+    }
+  });
+}
 // ✅ Generic function to update any exercise field
 async function updateExerciseField(field: string, value: any) {
   if (!exerciseStore.Exercise) return showError("Exercise not found!");
@@ -203,7 +223,7 @@ onMounted(() => {
               >
                 Import Template
               </button>
-              <button class="text-body uppercase text-red-500 hover:text-red-400 text-left">Delete Exercise</button>
+              <button @click="DeleteExercise(exerciseStore.Exercise.id)" class="text-body uppercase text-red-500 hover:text-red-400 text-left">Delete Exercise</button>
             </div>
         </div>
       </div>

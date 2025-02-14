@@ -695,6 +695,9 @@
         Swal.fire({
               icon: "success",
               title: "Success!",
+showConfirmButton:false,
+timerProgressBar:true,
+timer:1500,
               text: "The document type has been updated! ",
               toast: true,
               position: 'top',
@@ -722,6 +725,9 @@
         Swal.fire({
               icon: "success",
               title: "Success!",
+showConfirmButton:false,
+timerProgressBar:true,
+timer:1500,
               text: "The document type has been deleted! ",
               toast: true,
               position: 'top',
@@ -757,6 +763,9 @@
                     Swal.fire({
               icon: "success",
               title: "Success!",
+showConfirmButton:false,
+timerProgressBar:true,
+timer:1500,
               text: "This checklist has been registered. ",
               toast: true,
               position: 'top',
