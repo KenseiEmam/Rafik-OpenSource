@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import { supabase } from "../lib/supabaseClient";
 import Swal from "sweetalert2";
 import router from "@/router";
-
+import { useUserStore } from "./user";
 // Define the Exercise type
 type Exercise = {
   id: string;
@@ -23,7 +23,7 @@ type Exercise = {
   alternatives?: string[];
   trainer_id?: string | null; // Used to differentiate Personal and Public exercises
 };
-
+const userStore = useUserStore()
 export const useExerciseStore = defineStore("Exercise", () => {
   const PersonalExercises = ref<Exercise[] | null>(null);
   const AllExercises = ref<Exercise[] | null>(null);
@@ -40,7 +40,7 @@ export const useExerciseStore = defineStore("Exercise", () => {
       title: "Success!",
       showConfirmButton:false,
       timerProgressBar:true,
-timer:1500,
+      timer:1500,
       text: message,
       toast: true,
       position: "top-right",
@@ -64,7 +64,7 @@ timer:1500,
   // Fetch all exercises and separate them into Personal and Public
   async function getAllExercises() {
     const UserID = getUserID();
-    if (!UserID) {
+    if (!UserID ) {
       showError("No user ID found in localStorage.");
       return;
     }
@@ -232,6 +232,52 @@ async function fetchPublicExercise(id: string) {
       showError("Error creating exercise.");
     }
   }
+  async function createDupe(newExercise: Exercise) {
+    const UserID = getUserID();
+
+    if (!UserID || !userStore.userProfile.first_name) {
+      showError("User information missing.");
+      return;
+    }
+
+    try {
+      // Remove the `id` field if it exists
+      const { id, ...exerciseWithoutId } = newExercise;
+
+      const { data, error } = await supabase
+        .from("exercises")
+        .insert({
+          ...exerciseWithoutId,
+          exercise_name: `${userStore.userProfile.first_name}'s Copy of ${newExercise.exercise_name}`,
+          trainer_id: UserID,
+        })
+        .select();
+
+      if (error) throw error;
+
+      console.log(data);
+
+      if (data && data.length > 0) {
+        PersonalExercises.value?.push(data[0]);
+        AllExercises.value?.push(data[0]);
+
+        showSuccess("Exercise duplicated successfully!");
+
+        // Delay opening the URL slightly for better UX
+        setTimeout(() => {
+          window.open(
+            `http://localhost:5173/dashboard/exercises/personal/${data[0].id}`,
+            "_blank"
+          );
+        }, 500);
+      } else {
+        showError("No data received!");
+      }
+    } catch (error) {
+      showError("Error duplicating exercise.");
+    }
+  }
+
 
   // Delete a Personal Exercise
   async function deleteExercise(id: String) {
@@ -320,6 +366,7 @@ async function fetchPublicExercise(id: string) {
     fetchPersonalExercise,
     fetchPublicExercise,
     createExercise,
+    createDupe,
     fetchRelevantExercises,
   };
 });
