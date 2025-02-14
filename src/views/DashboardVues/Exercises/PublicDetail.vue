@@ -23,6 +23,9 @@ const exerciseStore = useExerciseStore();
 function showSuccess(message: string) {
   Swal.fire({
     title: "Success!",
+showConfirmButton:false,
+timerProgressBar:true,
+timer:1500,
     text: message,
     toast:true,
     position:'top-right',

@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div class="flex justify-between items-center gap-4 mb-6 ">
-      <hr class="border w-full border-rafik-sectext" />
+    <div class="flex justify-between items-center gap-4 mb-3 ">
       <button
         @click="showAddExerciseModal = true"
         class=" min-w-max btn-sm-outline"
@@ -16,6 +15,7 @@
           <div>
             <h2 class="title-small text-xl">{{ exercise.exercise_name }}</h2>
             <h2 class="header-small text-lg uppercase">{{ exercise.type }}</h2>
+            <p class="label text-sm" v-if="exercise.trainer_id">Custom Exercise</p>
             <p class="text-sm my-4 "> {{ exercise.exercise_detail}}</p>
             <!-- Prime Movers -->
             <p class="label text-rafik-pritext">Prime Movers:</p>
@@ -54,6 +54,12 @@
 <div class="flex justify-between items-center gap-4 my-6">
       <!-- Tabs Navigation -->
       <p class="header-small min-w-max"> Page {{ page }}</p>
+      <hr class="border w-full border-rafik-sectext" />
+      <div class="flex text-rafik-sectext gap-4 px-4 ">
+        <button  @click="updatePage(p)"  v-for="p in Math.ceil(props.count / 9) " class="hover:text-rafik-pritext" :class="{'text-rafik-pritext':p===page}">
+          {{p}}
+        </button>
+      </div>
       <hr class="border w-full border-rafik-sectext" />
       <button
         @click="updatePage(pageEdit - 1)"
