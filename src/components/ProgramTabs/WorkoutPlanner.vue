@@ -146,22 +146,96 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref, reactive, defineProps } from "vue";
+<script lang="ts" setup>
+import { ref, reactive, watch, defineProps } from "vue";
 import { useProgramStore } from "@/stores/programstores";
 import ExerciseOffcanvas from "../ExerciseOffcanvas.vue";
+type Program = {
+  id: string;
+  program_name?: string;
+  program_description?: string;
+  program_focus?: string[]; // Add program_focus here (assumed to be an array of strings)
+  status?: string;
+  trainer_id?: number,
+  difficulty_level?: string;
+  avg_session_time?: number;
+  avg_days_per_week?: number;
+  overall_rating?: number;
+  price_one?: number;
+  price_three?: number;
+  price_six?: number;
+  price_year?: number;
+  tags?:string[];
+  workouts?:Workout[];
+  program_photo?: string;
+  weekly_cycle?:number;
+  promos?:PromoCode[];
+  induction?:Question[];
+  follow?:Question[];
+  referral?:string;
+  // Add any other properties your program might have
+};
 
-const props = defineProps({ program: Object });
+interface Question  {
+  type:string;
+  question?:string;
+  answer?:any;
+}
+// Promo Codes
+type PromoCode = {
+  code: string;
+  value: number;
+};
+type Exercise = {
+  id: string;
+  exercise_name?: string;
+  type?: string;
+  intensity?: string;
+  sets?: number;
+  reps?: number;
+};
+type Workout = {
+  workout_name: string;
+  workout_summary?: string;
+  time_to_complete?: string;
+  sets_per_session?: number;
+  rest_day?: boolean;
+  exercises: Exercise[];
+};
+const props = defineProps<{ program: Program}>();
 const programStore = useProgramStore();
 const isEditing = ref(false);
 const activeTab = ref(0);
-const editedWorkouts = reactive([...props.program.workouts]);
+
+// Deep copy workouts to avoid mutating props directly
+const editedWorkouts = ref(props.program.workouts ? JSON.parse(JSON.stringify(props.program.workouts)) : []);
+
+// Watch for changes in `props.program` and update `editedWorkouts`
+watch(() => props.program.workouts, (newWorkouts) => {
+  editedWorkouts.value = newWorkouts ? JSON.parse(JSON.stringify(newWorkouts)) : [];
+}, { deep: true });
 
 const enableEditMode = () => { isEditing.value = true; };
-const cancelEdit = () => { isEditing.value = false; Object.assign(editedWorkouts, [...props.program.workouts]); };
-const submitChanges = () => { isEditing.value = false; programStore.updateProgram({ ...props.program, workouts: editedWorkouts }); };
-const calculateTotalSets = (exercises) => exercises.reduce((total, ex) => total + (ex.sets || 0), 0);
-const removeExercise = (workoutIndex, exerciseIndex) => { editedWorkouts[workoutIndex].exercises.splice(exerciseIndex, 1); };
-const handleAdd = (workoutIndex, list) => { editedWorkouts[workoutIndex].exercises.push(...list.map(e => ({ ...e, sets: 0, reps: 0, intensity: 0 }))); };
+
+const cancelEdit = () => {
+  isEditing.value = false;
+  editedWorkouts.value = props.program?.workouts ? JSON.parse(JSON.stringify(props.program.workouts)) : [];
+};
+
+const submitChanges = () => {
+  isEditing.value = false;
+  programStore.updateProgram({ ...props.program, workouts: editedWorkouts.value });
+};
+
+const calculateTotalSets = (exercises: any[]) => exercises.reduce((total, ex) => total + (ex.sets || 0), 0);
+
+const removeExercise = (workoutIndex: number, exerciseIndex: number) => {
+  editedWorkouts.value[workoutIndex].exercises.splice(exerciseIndex, 1);
+};
+
+const handleAdd = (workoutIndex: number, list: any[]) => {
+  editedWorkouts.value[workoutIndex].exercises.push(
+    ...list.map(e => ({ ...e, sets: 0, reps: 0, intensity: 0 }))
+  );
+};
 </script>
