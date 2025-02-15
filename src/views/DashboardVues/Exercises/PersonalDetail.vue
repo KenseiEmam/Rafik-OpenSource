@@ -8,21 +8,112 @@ import TechTips from "@/components/ExerciseTabs/TechTips.vue";
 import EquipReq from "@/components/EquipReq.vue";
 import ExerciseAlt from "@/components/ExerciseTabs/ExerciseAlt.vue";
 import ImportOffcanvas from "@/components/ImportOffcanvas.vue";
+import { supabase } from "@/lib/supabaseClient";
 
 const activeTab = ref("Muscles");
 function setActiveTab(tab: string) {
   activeTab.value = tab;
 }
-
+const loadingMedia = ref(false);
 const route = useRoute();
 const exerciseStore = useExerciseStore();
 const isEditingTitle = ref(false);
-
 const isEditingDescription = ref(false);
 const types = ref(['isolation', 'stretch', 'bodyweight', 'compound', 'cardio', 'plyometric']);
 const editableTitle = ref("");
 const editableDescription = ref("");
 
+const fileInput = ref<HTMLInputElement | null>(null);
+const uploadedVideo = ref<string | null>(null);
+const selectedFile = ref<File | null>(null);
+
+const triggerFileInput = () => {
+  fileInput.value?.click();
+};
+
+const handleFileChange = (event: Event) => {
+  loadingMedia.value = true;
+  const target = event.target as HTMLInputElement;
+  const file = target.files?.[0];
+
+  if (file) {
+    selectedFile.value = file;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      uploadedVideo.value = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+    submitForm().then(() => {
+      loadingMedia.value = false;
+    });
+  }
+};
+
+const removeVideo = async () => {
+  if (!exerciseStore.Exercise?.media) return;
+  loadingMedia.value = true;
+  const filePath = exerciseStore.Exercise.media.split("/storage/")[1];
+  if (!filePath) return;
+
+  try {
+    const { error } = await supabase.storage.from("storage").remove([filePath]);
+    if (error) {
+      showError("Failed to delete the video from storage.");
+      return;
+    }
+    await exerciseStore.updateExercise({
+      id: exerciseStore.Exercise.id,
+      media: ""
+    });
+    uploadedVideo.value = null;
+    selectedFile.value = null;
+    if (fileInput.value) fileInput.value.value = "";
+    showSuccess("Exercise video removed successfully!");
+    loadingMedia.value=false
+  } catch (err) {
+    console.error("Error removing video:", err);
+    showError("An error occurred while removing the video.");
+  }
+};
+
+const uploadFileToBucket = async (): Promise<string | null> => {
+  if (!selectedFile.value) {
+    alert("Please upload an exercise video.");
+    return null;
+  }
+
+  try {
+    const { data, error } = await supabase.storage
+      .from("storage")
+      .upload(`media/${Date.now()}_${selectedFile.value.name}`, selectedFile.value, {
+        cacheControl: "3600",
+        upsert: true,
+      });
+
+    if (error) {
+      console.error("Error uploading file:", error.message);
+      alert("Failed to upload the exercise video. Please try again.");
+      return null;
+    }
+
+    const { data: urlData } = supabase.storage.from("storage").getPublicUrl(data.path);
+    if (!urlData?.publicUrl) {
+      alert("Failed to retrieve the URL for the exercise video.");
+      return null;
+    }
+
+    return urlData.publicUrl;
+  } catch (err) {
+    console.error("Error during file upload:", err);
+    alert("An error occurred while uploading the exercise video.");
+    return null;
+  }
+};
+const submitForm = async () => {
+  const videoUrl = await uploadFileToBucket();
+  if (!videoUrl) return;
+  updateExerciseField("media", videoUrl);
+};
 
 function editTitle() {
   isEditingTitle.value = true;
@@ -178,7 +269,43 @@ onMounted(() => {
   <div class="flex h-screen overflow-auto">
     <div v-if="exerciseStore.Exercise && exerciseStore.AlternateExercises" class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-8 xl:space-y-10">
       <div class="flex gap-6 items-end wrap ">
-        <div class="min-h-96 w-128 card content "></div>
+        <div v-if="!loadingMedia">
+          <div v-if="exerciseStore.Exercise.media" class="min-h-96 w-128 group relative mx-auto">
+            <video
+              :src="exerciseStore.Exercise.media"
+              alt="Uploaded Preview"
+              class="min-h-96 w-128 border-rafik-sectext border-2 object-cover rounded-lg mx-auto"
+              controls
+            ></video>
+            <button
+              @click.prevent="removeVideo"
+              class="absolute  min-w-max top-5 right-5 opacity-0 group-hover:opacity-100 p-2 text-sm text-white rounded-xl bg-red-500 hover:cursor-pointer flex items-center justify-center  focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              Remove Video
+            </button>
+          </div>
+          <div
+            v-else
+            class="min-h-96 w-128 border-2 border-dashed border-gray-400 mx-auto rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            @click="triggerFileInput"
+          >
+            <span class="text-center text-gray-500">
+              Drag and drop an video here, or click to upload
+            </span>
+          </div>
+          <input
+            type="file"
+            accept="video/*"
+            class="hidden"
+            ref="fileInput"
+            @change="handleFileChange"
+            required
+          />
+        </div>
+        <div v-else class="min-h-96 w-128 card flex items-center flex-col gap-6 justify-center">
+          <h3 class="header-large">Hold</h3>
+          <p>Processing your request...</p>
+        </div>
         <div class="pr-6 space-y-4 w-1/2 flex flex-col items-start justify-end">
             <div class="flex items-center justify-between">
               <!-- Editable Title -->

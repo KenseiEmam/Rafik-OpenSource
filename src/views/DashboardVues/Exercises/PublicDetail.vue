@@ -84,7 +84,17 @@ onMounted(() => {
   <div class="flex h-screen overflow-auto">
     <div v-if="exerciseStore.Exercise && exerciseStore.AlternateExercises" class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-8 xl:space-y-10">
       <div class="flex gap-6 items-end wrap ">
-        <div class="min-h-96 w-128 card content "></div>
+        <video v-if="exerciseStore.Exercise.media"
+              :src="exerciseStore.Exercise.media"
+              alt="Uploaded Preview"
+              class="min-h-96 w-128 border-rafik-sectext border-2 object-cover rounded-lg mx-auto"
+              controls
+            ></video>
+        <div v-else class="min-h-96 w-128 card flex items-center flex-col gap-6 justify-center">
+          <h3 class="header-large">:/</h3>
+          <p>No Video Available</p>
+        </div>
+
         <div class="pr-6 space-y-4 w-1/2 flex flex-col items-start justify-end">
             <div class="flex items-center justify-between">
               <h1
