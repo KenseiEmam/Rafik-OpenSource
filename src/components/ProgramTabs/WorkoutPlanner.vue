@@ -93,7 +93,25 @@
             v-for="(exercise, exerciseIndex) in editedWorkouts[activeTab].exercises"
             :key="exercise.id"
           >
-            <h2 class="contentH-small">{{ exercise.exercise_name }}</h2>
+          <div class="flex gap-3 items-center mb-4">
+            <video
+              v-if="exercise.media.endsWith('.mp4') || exercise.media.includes('video')"
+              class="w-24 h-24 card border p-0 object-cover rounded-lg"
+              :src="exercise.media"
+              ref="videoRef"
+              muted
+              loop
+            ></video>
+            <div v-else class="w-24 h-24 card border flex items-center justify-center">
+              <p class="text-xs"> No Media</p>
+            </div>
+
+            <div>
+              <h2 class="contentH-small">{{ exercise.exercise_name }}</h2>
+            <p class="text-rafik-pritext capitalize ">{{ exercise.type }} Exercise</p>
+            </div>
+          </div>
+
             <div v-if="isEditing" class=" flex gap-6">
               <div class="space-y-2">
                 <label class="text-rafik-sectext">Intensity</label>
@@ -113,7 +131,7 @@
               </div>
             </div>
             <div v-else>
-              <p class="text-rafik-pritext capitalize mb-4">{{ exercise.type }} Exercise</p>
+
               <div class="flex justify-between w-full text-rafik-sectext ">
                 <p>Intensity</p>
                 <p class="text-rafik-pritext">{{ exercise.intensity }}</p>
