@@ -143,12 +143,13 @@
             </div>
           </div>
           <ExerciseList
-          v-else-if="activeTab == 'Custom Exercises' && exerciseStore.AllExercises && exerciseStore.Count"
+          v-else-if="activeTab == 'Custom Exercises' && exerciseStore.AllExercises"
           @updatePage="updatePage  "
           @update-page-search="updatePageSearch"
           :exercises="exerciseStore.AllExercises"
           :page = "page"
-          :count = "exerciseStore.Count"
+          :filter="filter"
+          :count = "exerciseStore.Count ? exerciseStore.Count: 0"
           />
         </transition>
     </div>
@@ -172,6 +173,7 @@ import router from "@/router";
 import AddProgramModal from "@/components/ProgramTabs/AddProgramModal.vue";
 import ExerciseList from "@/components/ExerciseList.vue";
 
+const filter = ref('All')
 const activeTab = ref("Active Program");
 const programStore = useProgramStore();
 const exerciseStore = useExerciseStore();
@@ -193,14 +195,16 @@ function setActiveTab(tab: string) {
   activeTab.value = tab;
 }
 //Update Exercise page
-function updatePage(value:number){
+function updatePage(value:number, sfilter:string){
   page.value = value
-  exerciseStore.getPageExercises(page.value);
+  filter.value =sfilter
+  exerciseStore.getPageExercises(page.value, filter.value);
 }
 //Update Exercise page with search
-function updatePageSearch(value:number, query:string){
+function updatePageSearch(value:number, query:string, sfilter:string){
   page.value = value
-  exerciseStore.fetchRelevantExercisesPage(query, page.value);
+  filter.value = sfilter
+  exerciseStore.fetchRelevantExercisesPage(query, page.value, filter.value);
 }
 // Add program
 function addProgram(program:any) {
@@ -215,6 +219,6 @@ function detailsRoute(id: string){
 // Fetch programs on component mount
 onMounted(() => {
   programStore.getAllPrograms();
-  exerciseStore.getPageExercises(page.value);
+  exerciseStore.getPageExercises(page.value, filter.value);
 });
 </script>
