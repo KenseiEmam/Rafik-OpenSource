@@ -351,6 +351,35 @@ async function fetchPublicExercise(id: string) {
     }
   }
 
+  // Search exercises across both Personal and Public with Pagination
+  async function fetchRelevantExercisesPage(searchQuery: string, page: number) {
+    const UserID = getUserID();
+    if (!UserID) {
+      showError("No user ID found in localStorage.");
+      return;
+    }
+    const start = (page - 1) * 9;
+    const end = (page * 9) - 1;
+
+    try {
+      const { data, count, error } = await supabase
+        .from("exercises")
+        .select("*", { count: "exact" }) // Include exact row count
+        .range(start, end)
+        .or(`trainer_id.eq.${UserID},trainer_id.is.null`)
+        .ilike("exercise_name", `%${searchQuery}%`);
+
+      if (error) throw error;
+
+
+    AllExercises.value = data || [];
+    PersonalExercises.value = data.filter((ex) => ex.trainer_id === UserID);
+    PublicExercises.value = data.filter((ex) => ex.trainer_id === null);
+    Count.value = count || 0; // Ensure count is assigned properly
+    } catch (error) {
+      showError("Error fetching relevant exercises.");
+    }
+  }
   return {
     AllExercises,
     AlternateExercises,
@@ -368,5 +397,6 @@ async function fetchPublicExercise(id: string) {
     createExercise,
     createDupe,
     fetchRelevantExercises,
+    fetchRelevantExercisesPage
   };
 });

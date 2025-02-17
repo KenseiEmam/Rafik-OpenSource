@@ -145,6 +145,7 @@
           <ExerciseList
           v-else-if="activeTab == 'Custom Exercises' && exerciseStore.AllExercises && exerciseStore.Count"
           @updatePage="updatePage  "
+          @update-page-search="updatePageSearch"
           :exercises="exerciseStore.AllExercises"
           :page = "page"
           :count = "exerciseStore.Count"
@@ -195,6 +196,11 @@ function setActiveTab(tab: string) {
 function updatePage(value:number){
   page.value = value
   exerciseStore.getPageExercises(page.value);
+}
+//Update Exercise page with search
+function updatePageSearch(value:number, query:string){
+  page.value = value
+  exerciseStore.fetchRelevantExercisesPage(query, page.value);
 }
 // Add program
 function addProgram(program:any) {
