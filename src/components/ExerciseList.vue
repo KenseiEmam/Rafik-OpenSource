@@ -2,11 +2,14 @@
   <div>
     <div class="flex justify-between items-center gap-4 mb-3 ">
       <!-- Search bar -->
-      <form class="w-128">
-        <div class="relative">
+        <div class="relative w-128">
           <input type="search" @input="handleSearch" class="block w-full p-4 text-sm text-rafik-sectext border rounded-lg bg-rafik-pribg" placeholder="Type to Search Exercises..." required />
         </div>
-      </form>
+        <div class="mr-auto flex gap-4">
+          <button @click="updateFilter('All')" class="card uppercase" :class="filter ==='All'?'border-rafik gradient-bg text-rafik':'border'">All Ex.</button>
+          <button @click="updateFilter('private')" class="card uppercase" :class="filter ==='private'?'border-rafik gradient-bg text-rafik':'border'">Personal Ex.</button>
+          <button @click="updateFilter('public')" class="card uppercase" :class="filter ==='public'?'border-rafik gradient-bg text-rafik':'border'">Public Ex.</button>
+        </div>
       <button
         @click="showAddExerciseModal = true"
         class=" min-w-max btn-sm-outline"
@@ -57,7 +60,7 @@
   <p  class="text-rafik-pritext">No Exercises found for your query.</p>
 
 </div>
-<div class="flex justify-between items-center gap-4 my-6">
+<div  v-if="props.exercises?.length > 0" class="flex justify-between items-center gap-4 my-6">
       <!-- Tabs Navigation -->
       <p class="header-small min-w-max"> Page {{ page }}</p>
       <hr class="border w-full border-rafik-sectext" />
@@ -120,6 +123,7 @@ const props = defineProps<{
   exercises:Exercise[],
   page:number,
   count:number,
+  filter:string,
 }>()
 
 // Add exercise
@@ -135,32 +139,49 @@ function handleSearch(event: Event) {
   debouncedFetchExercises(target.value);
 }
 
-// Debounced function to fetch relevant exercises
-const debouncedFetchExercises = debounce((query: string) => {
-  holdQuery.value = query
-  if (query) {
-    emits('updatePageSearch',pageEdit.value, query)
-  }
-}, 500);
+
+
+
 
 const pageEdit =  ref(props.page)
+const filterEdit =  ref(props.filter)
 const showAddExerciseModal = ref(false);
 const holdQuery = ref('')
 
 watch(() => props.page, (newPage) => {
   pageEdit.value = newPage;
 });
+
+watch(() => props.filter, (newfilter) => {
+  filterEdit.value = newfilter;
+});
 const emits = defineEmits(['updatePage','updatePageSearch']);
+// Debounced function to fetch relevant exercises
+const debouncedFetchExercises = debounce((query: string) => {
+  holdQuery.value = query
+  if (query) {
+    emits('updatePageSearch',pageEdit.value, query, filterEdit.value)
+  }
+}, 500);
+function updateFilter(value: string) {
+  if (holdQuery.value){
+    emits('updatePageSearch', 1, holdQuery.value, value);
+  }
+  else{
+
+    emits('updatePage', 1, value);
+  }
+}
 function updatePage(page: number) {
   const maxPage = Math.ceil(props.count / 9);
   if (page < 1 || page > maxPage) {return;}
 
   else if (holdQuery.value){
-    emits('updatePageSearch', page, holdQuery.value);
+    emits('updatePageSearch', page, holdQuery.value, filterEdit.value);
   }
   else{
 
-    emits('updatePage', page);
+    emits('updatePage', page, filterEdit.value);
   }
 }
 </script>
