@@ -1,10 +1,10 @@
 
 <template>
-    <div class=" h-screen border-rafik-sectext border-r bg-rafik-pribg items-between justify-between flex flex-col p-8  2xl:p-16 ">
+    <div class=" h-screen border-rafik-sectext border-r bg-rafik-pribg items-between justify-between flex flex-col p-8 gap-8 xl:p-16 ">
       <div class="relative w-24 xl:w-44 2xl:w-64">
 
         <img
-              class="w-24 xl:w-44 2xl:w-64 h-24 xl:h-44 2xl:h-64  absolute -left-6 xl:-left-10 2xl:-left-16"
+              class="w-24 xl:w-44  h-24 xl:h-44   absolute -left-6 2xl:-left-10"
               src="/src/assets/rafik.png"
               alt=""
             />

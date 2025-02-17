@@ -1,6 +1,15 @@
 <template>
   <div>
     <div class="flex justify-between items-center gap-4 mb-3 ">
+      <!-- Search bar -->
+        <div class="relative w-128">
+          <input type="search" @input="handleSearch" class="block w-full p-4 text-sm text-rafik-sectext border rounded-lg bg-rafik-pribg" placeholder="Type to Search Exercises..." required />
+        </div>
+        <div class="mr-auto flex gap-4">
+          <button @click="updateFilter('All')" class="card uppercase" :class="filter ==='All'?'border-rafik gradient-bg text-rafik':'border'">All Ex.</button>
+          <button @click="updateFilter('private')" class="card uppercase" :class="filter ==='private'?'border-rafik gradient-bg text-rafik':'border'">Personal Ex.</button>
+          <button @click="updateFilter('public')" class="card uppercase" :class="filter ==='public'?'border-rafik gradient-bg text-rafik':'border'">Public Ex.</button>
+        </div>
       <button
         @click="showAddExerciseModal = true"
         class=" min-w-max btn-sm-outline"
@@ -9,7 +18,7 @@
       </button>
     </div>
 
-    <ul v-if="props.exercises?.length > 0" class="grid grid-cols-3 gap-6 items-center">
+    <ul v-if="props.exercises?.length > 0" class="grid grid-cols-3 grid-rows-3 gap-6 items-center">
       <router-link :to="{name:exercise.trainer_id?'personal-details':'public-details', params:{id:exercise.id}  }" v-for="(exercise, index) in props.exercises" :key="exercise.id" class="h-full text-rafik-sectext">
         <div class="card p-6 min-w-96 hover:border-rafik flex justify-between h-full items-center">
           <div>
@@ -51,7 +60,7 @@
   <p  class="text-rafik-pritext">No Exercises found for your query.</p>
 
 </div>
-<div class="flex justify-between items-center gap-4 my-6">
+<div  v-if="props.exercises?.length > 0" class="flex justify-between items-center gap-4 my-6">
       <!-- Tabs Navigation -->
       <p class="header-small min-w-max"> Page {{ page }}</p>
       <hr class="border w-full border-rafik-sectext" />
@@ -87,6 +96,7 @@
 <script lang="ts" setup>
 import router from '@/router';
 import { ref, watch  } from 'vue';
+import debounce from 'lodash/debounce';
 import { useExerciseStore } from '@/stores/exercisestores';
 import AddExerciseModal from './ExerciseTabs/AddExerciseModal.vue';
 const exerciseStore = useExerciseStore();
@@ -113,6 +123,7 @@ const props = defineProps<{
   exercises:Exercise[],
   page:number,
   count:number,
+  filter:string,
 }>()
 
 // Add exercise
@@ -120,18 +131,58 @@ function addExercise(exercise:any) {
   exerciseStore.createExercise(exercise);
   showAddExerciseModal.value = false;
 }
-const pageEdit =  ref(props.page)
-const showAddExerciseModal = ref(false);
 
+
+// Handle input change
+function handleSearch(event: Event) {
+  const target = event.target as HTMLInputElement;
+  debouncedFetchExercises(target.value);
+}
+
+
+
+
+
+const pageEdit =  ref(props.page)
+const filterEdit =  ref(props.filter)
+const showAddExerciseModal = ref(false);
+const holdQuery = ref('')
 
 watch(() => props.page, (newPage) => {
   pageEdit.value = newPage;
 });
-const emits = defineEmits(['updatePage']);
+
+watch(() => props.filter, (newfilter) => {
+  filterEdit.value = newfilter;
+});
+const emits = defineEmits(['updatePage','updatePageSearch']);
+// Debounced function to fetch relevant exercises
+const debouncedFetchExercises = debounce((query: string) => {
+  holdQuery.value = query
+  if (query) {
+    emits('updatePageSearch',pageEdit.value, query, filterEdit.value)
+  }
+}, 500);
+function updateFilter(value: string) {
+  if (holdQuery.value){
+    emits('updatePageSearch', 1, holdQuery.value, value);
+  }
+  else{
+
+    emits('updatePage', 1, value);
+  }
+}
 function updatePage(page: number) {
   const maxPage = Math.ceil(props.count / 9);
-  if (page < 1 || page > maxPage) return;
-  emits('updatePage', page);
+  if (page < 1 || page > maxPage) {return;}
+
+  else if (holdQuery.value){
+    emits('updatePageSearch', page, holdQuery.value, filterEdit.value);
+  }
+  else{
+
+    emits('updatePage', page, filterEdit.value);
+  }
 }
 </script>
 

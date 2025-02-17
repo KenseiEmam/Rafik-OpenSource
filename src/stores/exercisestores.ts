@@ -25,9 +25,7 @@ type Exercise = {
 };
 const userStore = useUserStore()
 export const useExerciseStore = defineStore("Exercise", () => {
-  const PersonalExercises = ref<Exercise[] | null>(null);
   const AllExercises = ref<Exercise[] | null>(null);
-  const PublicExercises = ref<Exercise[] | null>(null);
   const AlternateExercises = ref<Exercise[] | null>(null);
   const Exercise = ref<Exercise>();
   const Count = ref<number | null>()
@@ -79,14 +77,12 @@ export const useExerciseStore = defineStore("Exercise", () => {
       if (error) throw error;
 
       AllExercises.value = data || [];
-      PersonalExercises.value = data.filter((ex) => ex.trainer_id === UserID);
-      PublicExercises.value = data.filter((ex) => ex.trainer_id === null);
     } catch (error: any) {
       showError("Failed to load exercises: " + error.message);
     }
   }
   // Fetch exercises by page and separate them into Personal and Public
-async function getPageExercises(page: number) {
+async function getPageExercises(page: number, filter:string) {
   const UserID = getUserID();
   if (!UserID) {
     showError("No user ID found in localStorage.");
@@ -95,25 +91,61 @@ async function getPageExercises(page: number) {
 
   const start = (page - 1) * 9;
   const end = (page * 9) - 1;
+  switch (filter){
+    case 'public':
+      try {
+        const { data, count, error } = await supabase
+          .from("exercises")
+          .select("*", { count: "exact" }) // Include exact row count
+          .range(start, end)
+          .is('trainer_id', null)
 
-  try {
-    const { data, count, error } = await supabase
-      .from("exercises")
-      .select("*", { count: "exact" }) // Include exact row count
-      .range(start, end)
-      .or(`trainer_id.eq.${UserID},trainer_id.is.null`);
+        if (error) throw error;
 
-    if (error) throw error;
 
-    AllExercises.value = data || [];
-    PersonalExercises.value = data.filter((ex) => ex.trainer_id === UserID);
-    PublicExercises.value = data.filter((ex) => ex.trainer_id === null);
-    Count.value = count || 0; // Ensure count is assigned properly
+      AllExercises.value = data || [];
 
-    return { exercises: data, count }; // Return data and count
-  } catch (error: any) {
-    showError("Failed to load exercises: " + error.message);
-    return { exercises: [], count: 0 }; // Return an empty array and count 0 in case of error
+      Count.value = count || 0; // Ensure count is assigned properly
+      } catch (error) {
+        showError("Error fetching relevant public exercises.");
+      }
+      break;
+    case 'private':
+      try {
+        const { data, count, error } = await supabase
+          .from("exercises")
+          .select("*", { count: "exact" }) // Include exact row count
+          .range(start, end)
+          .eq('trainer_id', UserID)
+
+        if (error) throw error;
+
+
+      AllExercises.value = data || [];
+
+      Count.value = count || 0; // Ensure count is assigned properly
+      } catch (error) {
+        showError("Error fetching relevant private exercises.");
+      }
+      break;
+    default:
+      try {
+        const { data, count, error } = await supabase
+          .from("exercises")
+          .select("*", { count: "exact" }) // Include exact row count
+          .range(start, end)
+          .or(`trainer_id.eq.${UserID},trainer_id.is.null`)
+
+        if (error) throw error;
+
+
+      AllExercises.value = data || [];
+
+      Count.value = count || 0; // Ensure count is assigned properly
+      } catch (error) {
+        showError("Error fetching all relevant exercises.");
+      }
+      break;
   }
 }
 
@@ -212,7 +244,6 @@ async function fetchPublicExercise(id: string) {
       if (error) throw error;
       console.log(data)
       if (data !== null) {
-        PersonalExercises.value?.push(data[0]);
         AllExercises.value?.push(data[0]);
 
         showSuccess("Exercise created successfully!");
@@ -258,7 +289,6 @@ async function fetchPublicExercise(id: string) {
       console.log(data);
 
       if (data && data.length > 0) {
-        PersonalExercises.value?.push(data[0]);
         AllExercises.value?.push(data[0]);
 
         showSuccess("Exercise duplicated successfully!");
@@ -344,18 +374,83 @@ async function fetchPublicExercise(id: string) {
       if (error) throw error;
 
       AllExercises.value = data || [];
-      PersonalExercises.value = data.filter((ex) => ex.trainer_id === UserID);
-      PublicExercises.value = data.filter((ex) => ex.trainer_id === null);
     } catch (error) {
       showError("Error fetching relevant exercises.");
     }
   }
 
+  // Search exercises across both Personal and Public with Pagination
+  async function fetchRelevantExercisesPage(searchQuery: string, page: number, filter:string) {
+    const UserID = getUserID();
+    if (!UserID) {
+      showError("No user ID found in localStorage.");
+      return;
+    }
+    const start = (page - 1) * 9;
+    const end = (page * 9) - 1;
+    switch (filter){
+      case 'public':
+        try {
+          const { data, count, error } = await supabase
+            .from("exercises")
+            .select("*", { count: "exact" }) // Include exact row count
+            .range(start, end)
+            .is('trainer_id', null)
+            .ilike("exercise_name", `%${searchQuery}%`);
+
+          if (error) throw error;
+
+
+        AllExercises.value = data || [];
+
+        Count.value = count || 0; // Ensure count is assigned properly
+        } catch (error) {
+          showError("Error fetching relevant public exercises.");
+        }
+        break;
+      case 'private':
+        try {
+          const { data, count, error } = await supabase
+            .from("exercises")
+            .select("*", { count: "exact" }) // Include exact row count
+            .range(start, end)
+            .eq('trainer_id', UserID)
+            .ilike("exercise_name", `%${searchQuery}%`);
+
+          if (error) throw error;
+
+
+        AllExercises.value = data || [];
+
+        Count.value = count || 0; // Ensure count is assigned properly
+        } catch (error) {
+          showError("Error fetching relevant private exercises.");
+        }
+        break;
+      default:
+        try {
+          const { data, count, error } = await supabase
+            .from("exercises")
+            .select("*", { count: "exact" }) // Include exact row count
+            .range(start, end)
+            .or(`trainer_id.eq.${UserID},trainer_id.is.null`)
+            .ilike("exercise_name", `%${searchQuery}%`);
+
+          if (error) throw error;
+
+
+        AllExercises.value = data || [];
+
+        Count.value = count || 0; // Ensure count is assigned properly
+        } catch (error) {
+          showError("Error fetching all relevant exercises.");
+        }
+        break;
+    }
+  }
   return {
     AllExercises,
     AlternateExercises,
-    PersonalExercises,
-    PublicExercises,
     Exercise,
     Count,
     fetchExercisesByIds,
@@ -368,5 +463,6 @@ async function fetchPublicExercise(id: string) {
     createExercise,
     createDupe,
     fetchRelevantExercises,
+    fetchRelevantExercisesPage
   };
 });
