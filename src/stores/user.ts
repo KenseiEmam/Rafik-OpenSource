@@ -11,9 +11,15 @@ interface ClientInterface {
   id?: string;
   avatar?:string;
   email?: string;
+  age?:number;
+  gender?:string;
+  nationality?:string;
+  phone?:string;
   first_name?: string;
   last_name?:string;
   program_details?: any;
+  last_active?: Date;
+  profile?:any;
 }
 type Exercise = {
   id: string;
@@ -191,6 +197,75 @@ export const useUserStore = defineStore('User', () => {
       alert(`Failed to load clients: ${error.message || 'Unknown error'}`);
     }
   }
+  async function getClient(id: number) {
+    try {
+      // Fetch the user profile based on the provided user ID (id)
+      const { data: userProfiles, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', id) // Match user_id, as we have the user id here
+        .single(); // Since we're looking for a single profile
+
+      if (profileError) {
+        throw new Error(`Error fetching user profile: ${profileError.message}`);
+      }
+
+      if (!userProfiles) {
+        return null; // If no profile found for the given user ID, return null
+      }
+
+      // Fetch the single program associated with the client
+      const { data: programs, error: programError } = await supabase
+        .from('user_programs')
+        .select('*')
+        .eq('client_id', userProfiles.id)
+        .single(); // We expect a single program here
+
+      if (programError) {
+        throw new Error(`Error fetching user program: ${programError.message}`);
+      }
+
+      if (!programs) {
+        return null; // If no program found for the client, return null
+      }
+
+      // Fetch user details from the users table based on the provided user_id
+      const { data: users, error: userError } = await supabase
+        .from('users')
+        .select('id, avatar, email, first_name, last_name, age,sex, nationality, phone, last_active')
+        .eq('id', id)
+        .single(); // We expect a single user here
+
+      if (userError) {
+        throw new Error(`Error fetching user details: ${userError.message}`);
+      }
+
+      // Assign the client object with the user details and associated program
+      Client.value = {
+        id: users.id,
+        avatar: users.avatar,
+        email: users.email,
+        gender:users.sex,
+        nationality:users.nationality,
+        phone:users.phone,
+        first_name: users.first_name,
+        last_name: users.last_name,
+        age:users.age,
+        profile:userProfiles,
+        program_details: programs,
+        last_active:users.last_active // This includes the single program the client is associated with
+      };
+
+      return Client.value;
+
+    } catch (error: any) {
+      console.error(error);
+      alert(`Failed to load client: ${error.message || 'Unknown error'}`);
+      return null;
+    }
+  }
+
+
    // Fetch User Profile Function with no RR
    async function getUserProfileNO() {
     const loggedInUser = localStorage.getItem('LoggedInUser');
@@ -220,5 +295,5 @@ export const useUserStore = defineStore('User', () => {
       alert(`Failed to load user profile: ${error.message || 'Unknown error'}`);
     }
   }
-  return { User, userProfile, AllClients, LogIn, LogOut, getUserProfile, getUserProfileNO, getClients }
+  return { User, userProfile, AllClients, Client, LogIn, LogOut, getUserProfile, getUserProfileNO, getClients, getClient }
 })
