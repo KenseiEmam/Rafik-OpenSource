@@ -68,6 +68,17 @@ const router = createRouter({
           ],
         },
         {
+          path: 'clients', // Child route for /dashboard/clients
+
+          children: [
+            {
+              path: ':id', // Dynamic route for client details
+              name: 'client-details',
+              component: () => import('../views/DashboardVues/Clients/ClientDetails.vue'),
+            },
+          ],
+        },
+        {
           path: 'exercises', // Child route for /dashboard/exercise
 
           children: [
