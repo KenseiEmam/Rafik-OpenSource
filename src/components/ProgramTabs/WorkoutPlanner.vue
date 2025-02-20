@@ -168,6 +168,7 @@
 import { ref, reactive, watch, defineProps } from "vue";
 import { useProgramStore } from "@/stores/programstores";
 import ExerciseOffcanvas from "../ExerciseOffcanvas.vue";
+import { useUserStore } from "@/stores/user";
 type Program = {
   id: string;
   program_name?: string;
@@ -220,8 +221,9 @@ type Workout = {
   rest_day?: boolean;
   exercises: Exercise[];
 };
-const props = defineProps<{ program: Program}>();
+const props = defineProps<{ program: Program, user?:string}>();
 const programStore = useProgramStore();
+const clientStore =  useUserStore();
 const isEditing = ref(false);
 const activeTab = ref(0);
 
@@ -242,9 +244,31 @@ const cancelEdit = () => {
 
 const submitChanges = () => {
   isEditing.value = false;
+  if(!props.user)
   programStore.updateProgram({ ...props.program, workouts: editedWorkouts.value });
-};
+  else
+  {
+    updateClientProgram(props.user)
+  }
 
+};
+// Function to update client workout plan
+async function updateClientProgram(user:string) {
+  if (!props.program.id) return ;
+
+  try {
+    await clientStore.updateClientProgram({
+      id: props.program.id,
+      workouts: editedWorkouts.value,
+    });
+
+    await clientStore.getClient(user.toString());
+
+  } catch (error) {
+
+    console.error(`Error updating Client program:`, error);
+  }
+}
 const calculateTotalSets = (exercises: any[]) => exercises.reduce((total, ex) => total + (ex.sets || 0), 0);
 
 const removeExercise = (workoutIndex: number, exerciseIndex: number) => {
