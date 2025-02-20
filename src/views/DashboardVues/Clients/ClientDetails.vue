@@ -11,6 +11,7 @@ const activeTab = ref("Details");
 
 
  const compareDate = computed(()=>{
+  if(!clientStore.Client?.last_active)return("N/A")
   const lastActive = new Date(clientStore.Client?.last_active);
   const now = new Date();
 
@@ -82,18 +83,17 @@ function showError(message: string) {
       color:"#E8F3ED",
   });
 }
-
-// ✅ Generic function to update any client field
-async function updateClientField(field: string, value: any) {
-  if (!clientStore.Client) return showError("Client not found!");
+// Function to update client workout plan
+async function updateClientProgram(field: string, value: any) {
+  if (!clientStore.Client?.id) return showError("Client not found!");
 
   try {
-    await clientStore.updateClient({
-      id: clientStore.Client.id,
-      [field]: value,
+    await clientStore.updateClientProgram({
+      id: clientStore.Client.program_details.id,
+      workouts: value.workouts,
     });
 
-    await clientStore.fetchClient(clientStore.Client.id);
+    await clientStore.getClient(clientStore.Client?.id);
     showSuccess(`${field} updated successfully!`);
   } catch (error) {
     showError(`Failed to update ${field}. Please try again.`);
@@ -227,6 +227,7 @@ onMounted(() => {
           </DetailsTab>
           <WorkoutPlanner
             :program="clientStore.Client.program_details"
+            :user="clientStore.Client?.id"
             v-else-if="activeTab === 'Workout-Plan'"
           />
 
