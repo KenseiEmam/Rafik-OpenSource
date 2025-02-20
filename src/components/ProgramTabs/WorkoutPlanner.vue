@@ -221,7 +221,7 @@ type Workout = {
   rest_day?: boolean;
   exercises: Exercise[];
 };
-const props = defineProps<{ program: Program, user?:number}>();
+const props = defineProps<{ program: Program, user?:string}>();
 const programStore = useProgramStore();
 const clientStore =  useUserStore();
 const isEditing = ref(false);
@@ -253,7 +253,7 @@ const submitChanges = () => {
 
 };
 // Function to update client workout plan
-async function updateClientProgram(user:number) {
+async function updateClientProgram(user:string) {
   if (!props.program.id) return ;
 
   try {
