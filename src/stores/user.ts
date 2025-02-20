@@ -2,13 +2,43 @@ import { ref} from 'vue'
 import { defineStore } from 'pinia'
 import { supabase } from '../lib/supabaseClient'
 import router from '@/router'
+import Swal from "sweetalert2"
+// Success and Error Alerts
+  function showSuccess(message: string) {
+    Swal.fire({
+      title: "Success!",
+      showConfirmButton:false,
+      timerProgressBar:true,
+      timer:1500,
+      text: message,
+      toast: true,
+      position: "top-right",
+      icon: "success",
+      background: "#081411",
+      color: "#E8F3ED",
+    });
+  }
+
+  // Function to show error alerts
+function showError(message: string) {
+  Swal.fire({
+    title: "Error!",
+    text: message,
+    icon: "error",
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#d33",
+      background:"#081411",
+      color:"#E8F3ED",
+  });
+}
+
 interface UserInterface  {
   id?:string,
   email?:string,
   full_name?:string
 }
 interface ClientInterface {
-  id?: string;
+  id: string;
   avatar?:string;
   email?: string;
   age?:number;
@@ -197,7 +227,29 @@ export const useUserStore = defineStore('User', () => {
       alert(`Failed to load clients: ${error.message || 'Unknown error'}`);
     }
   }
-  async function getClient(id: number) {
+
+  // Update Client Program
+    async function updateClientProgram(updateData: Program) {
+      try {
+        const { error } = await supabase
+          .from("user_programs")
+          .update(updateData)
+          .eq("id", updateData.id);
+
+        if (error) throw new Error(error.message);
+
+        // Update local state
+        if (Client.value?.program_details?.id === updateData.id) {
+          Object.assign(Client.value?.program_details, updateData);
+          showSuccess("Successfully updated client workout plan!")
+        }
+      } catch (error) {
+        showError("Error updating program:"+ error)
+      }
+    }
+
+
+  async function getClient(id: string) {
     try {
       // Fetch the user profile based on the provided user ID (id)
       const { data: userProfiles, error: profileError } = await supabase
@@ -295,5 +347,5 @@ export const useUserStore = defineStore('User', () => {
       alert(`Failed to load user profile: ${error.message || 'Unknown error'}`);
     }
   }
-  return { User, userProfile, AllClients, Client, LogIn, LogOut, getUserProfile, getUserProfileNO, getClients, getClient }
+  return { User, userProfile, AllClients, Client, LogIn, LogOut, getUserProfile, getUserProfileNO, getClients, getClient, updateClientProgram }
 })
