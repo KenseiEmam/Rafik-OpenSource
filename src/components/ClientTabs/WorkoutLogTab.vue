@@ -19,45 +19,34 @@
     <table class="w-full text-center">
       <thead class="contentH-small">
         <tr>
-          <th></th>
-          <th>Date Joined</th>
-          <th>Expires On</th>
-          <th>Plan (Months)</th>
-          <th>Status</th>
+          <th>Completed</th>
+          <th>Name</th>
+          <th>Created</th>
+          <th>Performance</th>
+          <th>Feel</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="workout in filteredWorkouts" :key="workout.id" class="border-b border-rafik-sectext">
+          <td>
+            {{ workout.date_completed ? new Date(workout.date_completed).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" }) : '-' }}
+          </td>
           <td class="flex gap-2 text-left items-center py-4">
-            <img :src="workout.avatar || '/default-avatar.png'" class="w-12 rounded-full border border-rafik-sectext h-12" alt="Avatar">
-            <div>
-              <p class="header-small">{{ workout.first_name }} {{ workout.last_name }}</p>
-              <p>{{ workout.email }}</p>
-            </div>
-          </td>
-
-          <td>
-            {{ workout.program_details.length ? new Date(workout.program_details[0].created_at).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" }) : '-' }}
+            {{ workout.workout_name }}
           </td>
           <td>
-            {{ workout.program_details.length ? new Date(workout.program_details[0].expires_on).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" }) : '-' }}
+            {{ workout.created_at ? new Date(workout.created_at).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" }) : '-' }}
           </td>
           <td>
-            {{ workout.program_details.length ? workout.program_details[0].months_package + ' month' : '-' }}
+            {{ workout.average_intensity && workout.predicted_intensity ? Math.ceil((workout.average_intensity/workout.predicted_intensity)*100) : 'N/A' }}
           </td>
           <td>
-            {{ workout.program_details.length ? workout.program_details[0].status : '-' }}
+            {{ workout.feel ? feels[workout.feel-1] : 'N/A' }}
           </td>
           <td class="px-3 relative" >
-            <svg @click="show_action = workout.id" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="text-rafik-sectext h-7 mx-7 hover:text-rafik-pritext cursor-pointer" viewBox="0 0 128 512">
-              <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/>
-            </svg>
-            <div v-if="show_action == workout.id" @mouseleave="handleLeave()" class="absolute min-w-16 px-2 top-5 flex flex-col items-center text-sm rounded bg-rafik-secbg  shadow-lg  divide-y divide-y-rafik-sectext">
-              <Router-link :to="{name:'workout-details', params:{id:workout.id}}" class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded">View Program</Router-link>
-              <button class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded">Message workout</button>
-              <button class="px-3 py-5 text-red-500 hover:bg-rafik-pribg hover:text-red-300 rounded">Remove workout</button>
-            </div>
+              <Router-link to="" class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded text-xs">More Details</Router-link>
+
           </td>
         </tr>
       </tbody>
@@ -82,7 +71,7 @@ const searchQuery = ref('');
 const currentPage = ref(1);
 const itemsPerPage = 10;
 const show_action = ref();
-
+const feels = ref(["Terrible", "Poor", "Average", "Good", "Excellent"]);
 onMounted(() => {
   workoutStore.getAllWorkouts(props.program.id);
 });

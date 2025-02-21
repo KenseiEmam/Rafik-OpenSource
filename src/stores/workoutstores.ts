@@ -41,6 +41,7 @@ type Exercise = {
   reps?: number;
 };
 type Workout = {
+  id:number;
   workout_name: string;
   workout_summary?: string;
   time_to_complete?: string;
@@ -52,14 +53,14 @@ type Workout = {
   exercises: Exercise[];
   week_of_program?:number;
   iteration?: number;
-  date_created?:Date;
+  created_at?:Date;
   date_started?:Date;
   date_completed?:Date;
   feel?:number;
   client_id?:number;
-  user_program?:number;
   done?:boolean;
   program_name?:string;
+  user_program_id?:number;
 };
 export const useWorkoutStore = defineStore('Workout', () => {
 
@@ -81,7 +82,7 @@ export const useWorkoutStore = defineStore('Workout', () => {
       const { data: uprogram, error: programError } = await supabase
         .from('user_programs')
         .select('*')
-        .eq('id', workout_data.user_program)
+        .eq('id', workout_data.user_program_id)
         .single();
 
       if (programError) {
@@ -115,7 +116,7 @@ export const useWorkoutStore = defineStore('Workout', () => {
       const { data:workout_data, error } = await supabase
         .from('workout_sheets')
         .select('*')
-        .eq('user_program', id)
+        .eq('user_program_id', id)
       if (error) throw error
 
 
