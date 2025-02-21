@@ -1,0 +1,136 @@
+<template>
+  <div class="mt-12">
+    <!-- Search Section -->
+    <div class="flex items-center justify-between mb-4 gap-6">
+      <div class="flex gap-3">
+        <!-- Search Bar -->
+        <input
+          v-model="searchQuery"
+          type="text"
+          placeholder="Search by name or email..."
+          class="rafik-text-input border rounded-lg w-64"
+        />
+      </div>
+      <hr class="w-full border-rafik-sectext border-b">
+      <span class="text-sm">Showing {{ filteredWorkouts.length }} row(s)</span>
+    </div>
+
+    <!-- workout Table -->
+    <table class="w-full text-center">
+      <thead class="contentH-small">
+        <tr>
+          <th></th>
+          <th>Date Joined</th>
+          <th>Expires On</th>
+          <th>Plan (Months)</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="workout in filteredWorkouts" :key="workout.id" class="border-b border-rafik-sectext">
+          <td class="flex gap-2 text-left items-center py-4">
+            <img :src="workout.avatar || '/default-avatar.png'" class="w-12 rounded-full border border-rafik-sectext h-12" alt="Avatar">
+            <div>
+              <p class="header-small">{{ workout.first_name }} {{ workout.last_name }}</p>
+              <p>{{ workout.email }}</p>
+            </div>
+          </td>
+
+          <td>
+            {{ workout.program_details.length ? new Date(workout.program_details[0].created_at).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" }) : '-' }}
+          </td>
+          <td>
+            {{ workout.program_details.length ? new Date(workout.program_details[0].expires_on).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" }) : '-' }}
+          </td>
+          <td>
+            {{ workout.program_details.length ? workout.program_details[0].months_package + ' month' : '-' }}
+          </td>
+          <td>
+            {{ workout.program_details.length ? workout.program_details[0].status : '-' }}
+          </td>
+          <td class="px-3 relative" >
+            <svg @click="show_action = workout.id" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="text-rafik-sectext h-7 mx-7 hover:text-rafik-pritext cursor-pointer" viewBox="0 0 128 512">
+              <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/>
+            </svg>
+            <div v-if="show_action == workout.id" @mouseleave="handleLeave()" class="absolute min-w-16 px-2 top-5 flex flex-col items-center text-sm rounded bg-rafik-secbg  shadow-lg  divide-y divide-y-rafik-sectext">
+              <Router-link :to="{name:'workout-details', params:{id:workout.id}}" class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded">View Program</Router-link>
+              <button class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded">Message workout</button>
+              <button class="px-3 py-5 text-red-500 hover:bg-rafik-pribg hover:text-red-300 rounded">Remove workout</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div v-if="totalPages>1" class="flex justify-between items-center mt-4">
+      <button @click="prevPage" :disabled="currentPage === 1" class="px-4 py-2 border rounded-lg">Prev</button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="currentPage === totalPages" class="px-4 py-2 border rounded-lg">Next</button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useWorkoutStore } from '@/stores/workoutstores';
+import { onMounted, ref, computed } from 'vue';
+
+const workoutStore = useWorkoutStore();
+const props = defineProps(['program']);
+const searchQuery = ref('');
+const currentPage = ref(1);
+const itemsPerPage = 10;
+const show_action = ref();
+
+onMounted(() => {
+  workoutStore.getAllWorkouts(props.program.id);
+});
+
+function handleLeave(){
+  setTimeout(() => {
+  show_action.value=null
+}, 500)
+}
+// Computed property for filtered Workouts based on search query
+const filteredWorkouts = computed(() => {
+  const lowerSearchQuery = searchQuery.value.toLowerCase();
+  const filtered = workoutStore.AllWorkouts.filter(wrkout =>
+    wrkout.workout_name?.toLowerCase().includes(lowerSearchQuery)
+  );
+
+  // Pagination: slice the array based on current page
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  return filtered.slice(startIndex, endIndex);
+});
+
+// Computed property for total pages
+const totalPages = computed(() => {
+  const filtered = workoutStore.AllWorkouts.filter(workout =>
+    workout.workout_name?.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+  return Math.ceil(filtered.length / itemsPerPage);
+});
+
+// Methods for pagination
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+</script>
+
+<style scoped>
+/* Optional: Style for the search and filter section */
+.input, .search-bar {
+  width: 100%;
+}
+</style>
