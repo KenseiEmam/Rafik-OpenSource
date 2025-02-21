@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import DetailsTab from "@/components/ClientTabs/DetailsTab.vue";
 import WorkoutPlanner from "@/components/ProgramTabs/WorkoutPlanner.vue";
+import WorkoutLogTab from "@/components/ClientTabs/WorkoutLogTab.vue";
 import Swal from 'sweetalert2'
 import router from "@/router";
 
@@ -230,7 +231,10 @@ onMounted(() => {
             :user="clientStore.Client?.id"
             v-else-if="activeTab === 'Workout-Plan'"
           />
-
+          <WorkoutLogTab
+            :program="clientStore.Client.program_details"
+            v-else-if="activeTab === 'Workout-Log'"
+          />
 
         </transition>
 
