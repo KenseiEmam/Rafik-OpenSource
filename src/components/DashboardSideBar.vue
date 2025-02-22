@@ -4,7 +4,7 @@
       <div class="relative w-24 xl:w-44 2xl:w-64">
 
         <img
-              class="w-24 xl:w-44  h-24 xl:h-44   absolute -left-6 2xl:-left-10"
+              class="w-32 2xl:w-44  h-16 2xl:h-24 object-cover   absolute -left-6 2xl:-left-10"
               src="/src/assets/rafik.png"
               alt=""
             />

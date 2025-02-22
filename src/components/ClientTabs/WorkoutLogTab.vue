@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-12">
+  <div class="my-12">
     <!-- Search Section -->
     <div class="flex items-center justify-between mb-4 gap-6">
       <div class="flex gap-3">
@@ -7,7 +7,7 @@
         <input
           v-model="searchQuery"
           type="text"
-          placeholder="Search by name or email..."
+          placeholder="Search by name... "
           class="rafik-text-input border rounded-lg w-64"
         />
       </div>
@@ -16,7 +16,7 @@
     </div>
 
     <!-- workout Table -->
-    <table class="w-full text-center">
+    <table class="w-full text-center ">
       <thead class="contentH-small">
         <tr>
           <th>Completed</th>
@@ -28,11 +28,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="workout in filteredWorkouts" :key="workout.id" class="border-b border-rafik-sectext">
+        <tr v-for="workout in filteredWorkouts" :key="workout.id" class="border-b border-rafik-sectext h-12">
           <td>
             {{ workout.date_completed ? new Date(workout.date_completed).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" }) : '-' }}
           </td>
-          <td class="flex gap-2 text-left items-center py-4">
+          <td >
             {{ workout.workout_name }}
           </td>
           <td>
@@ -53,10 +53,10 @@
     </table>
 
     <!-- Pagination -->
-    <div v-if="totalPages>1" class="flex justify-between items-center mt-4">
-      <button @click="prevPage" :disabled="currentPage === 1" class="px-4 py-2 border rounded-lg">Prev</button>
+    <div v-if="totalPages>1" class="flex justify-between items-center mt-4 pb-12">
+      <button @click="prevPage" :disabled="currentPage === 1" class="px-4 py-2 border rounded-lg hover:border-rafik hover:text-rafik">Prev</button>
       <span>Page {{ currentPage }} of {{ totalPages }}</span>
-      <button @click="nextPage" :disabled="currentPage === totalPages" class="px-4 py-2 border rounded-lg">Next</button>
+      <button @click="nextPage" :disabled="currentPage === totalPages" class="px-4 py-2 border rounded-lg hover:border-rafik hover:text-rafik">Next</button>
     </div>
   </div>
 </template>
