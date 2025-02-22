@@ -1,7 +1,7 @@
 
 <template>
-    <div class=" h-screen border-rafik-sectext border-r bg-rafik-pribg items-between justify-between flex flex-col p-8 gap-8 xl:p-16 ">
-      <div class="relative w-24 xl:w-44 2xl:w-64">
+    <div class=" h-screen border-rafik-sectext border-r bg-rafik-pribg   flex flex-col p-8 gap-8 2xl:p-16 ">
+      <div class="relative w-44 2xl:w-64">
 
         <img
               class="w-32 2xl:w-44  h-16 2xl:h-24 object-cover   absolute -left-6 2xl:-left-10"
@@ -9,20 +9,18 @@
               alt=""
             />
       </div>
-    <nav class="flex flex-col  gap-2 xl:gap-6 2xl:gap-10 text-xs xl:text-sm">
+    <nav class="flex flex-col my-16  gap-4 2xl:gap-10 ">
 
-      <RouterLink to="/dashboard" class="nav-btn 2xl:text-base">My <br>Dashboard</RouterLink>
-      <RouterLink :to="{name:'programs-list'}" class="nav-btn 2xl:text-base">Workout &<br>Programs</RouterLink>
-      <RouterLink to="" class="nav-btn 2xl:text-base">My <br>Clients</RouterLink>
-      <RouterLink to="" class="nav-btn 2xl:text-base">Program <br>Entitlements</RouterLink>
-      <RouterLink to="" class="nav-btn 2xl:text-base">Settings &<br>Preferences</RouterLink>
+      <RouterLink to="/dashboard" class="nav-btn">My <br>Dashboard</RouterLink>
+      <RouterLink :to="{name:'programs-list'}" class="nav-btn">Workout &<br>Programs</RouterLink>
+      <RouterLink to="" class="nav-btn">My <br>Clients</RouterLink>
+      <RouterLink to="" class="nav-btn">Program <br>Entitlements</RouterLink>
+      <RouterLink to="" class="nav-btn">Settings &<br>Preferences</RouterLink>
     </nav>
-    <nav class="flex flex-col  gap-2 xl:gap-4 2xl:gap-8 text-xs xl:text-sm">
-
-<RouterLink to="/" class="nav-btn 2xl:text-base">My Profile</RouterLink>
-<!-- <RouterLink to="team" class="text-rafik-alternate" >Help</RouterLink> -->
-<button @click="handleLogOut" class="text-left nav-btn 2xl:text-base text-red-600 pl-4">Logout</button>
-</nav>
+    <nav class="flex flex-col gap-4 mt-auto 2xl:gap-8 text-xs">
+      <RouterLink to="/" class="nav-btn 2xl:text-base">My Profile</RouterLink>
+      <button @click="handleLogOut" class="text-left nav-btn 2xl:text-base text-red-600 pl-4">Logout</button>
+    </nav>
     </div>
 </template>
 <script setup lang="ts">

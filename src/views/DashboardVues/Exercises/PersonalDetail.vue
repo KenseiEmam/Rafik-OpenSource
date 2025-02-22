@@ -267,7 +267,7 @@ onMounted(() => {
 
 <template>
   <div class="flex h-screen overflow-auto">
-    <div v-if="exerciseStore.Exercise && exerciseStore.AlternateExercises" class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-8 xl:space-y-10">
+    <div v-if="exerciseStore.Exercise && exerciseStore.AlternateExercises" class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-8 2xl:space-y-10">
       <div class="flex gap-6 items-end wrap ">
         <div v-if="!loadingMedia">
           <div v-if="exerciseStore.Exercise.media" class="min-h-96 w-128 group relative mx-auto">

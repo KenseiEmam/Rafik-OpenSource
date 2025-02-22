@@ -241,7 +241,7 @@ onMounted(() => {
 
 <template>
   <div class="flex h-screen overflow-auto">
-    <div v-if="programStore.Program" class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-8 xl:space-y-6">
+    <div v-if="programStore.Program" class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-3 2xl:space-y-6">
       <div class="border group flex flex-col relative border-rafik-alternate rounded-lg overflow-hidden">
         <img
           :src="programStore.Program.program_photo"
@@ -249,8 +249,8 @@ onMounted(() => {
           alt=""
         />
         <div class="w-full opacity-70 h-full bg-rafik-pribg absolute"></div>
-        <div class="p-8 xl:p-12 2xl:p-16 2xl:py-24 space-y-4 relative grid items-stretch lg:grid-cols-3 2xl:grid-cols-4 divide-x divide-rafik-sectext divide-x-solid">
-          <div class="pr-6 space-y-4 2xl:col-span-3 lg:col-span-2">
+        <div class="p-8 2xl:p-16 2xl:py-24 space-y-4 relative grid items-stretch  grid-cols-4 divide-x divide-rafik-sectext divide-x-solid">
+          <div class="pr-6 space-y-4 col-span-3 ">
             <div class="flex items-center justify-between">
               <!-- Editable Title -->
               <input

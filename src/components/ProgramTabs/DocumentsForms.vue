@@ -140,7 +140,7 @@ watch(
 </script>
 
 <template>
-  <div class="grid md:grid-cols-2 xl:grid-cols-3 items-start h-full relative flex-1 gap-4">
+  <div class="grid md:grid-cols-2 2xl:grid-cols-3 items-start h-full relative flex-1 gap-4">
     <!-- Induction Form -->
     <div style="height: 60vh;" class="card p-8 h-full overflow-y-auto space-y-4">
       <h3 class="contentH-medium">Client Induction Form</h3>
@@ -200,7 +200,7 @@ watch(
     </div>
 
     <!-- Referral Document -->
-    <div class="card p-8 overflow-y-auto space-y-4">
+    <div class="card p-8 overflow-y-auto space-y-4 col-span-2 2xl:col-span-1">
       <h3 class="contentH-medium">AI Referral Document</h3>
       <p class="text-label text-rafik-sectext">
         The AI referral document is used to respond to clients on a daily basis. Clients will have the option to refer to the trainer AI chat for quick questions, and the trainer can review the AI's response. Direct trainer messages will occur in a different inbox.
