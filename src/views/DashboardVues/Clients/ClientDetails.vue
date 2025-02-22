@@ -7,6 +7,7 @@ import WorkoutPlanner from "@/components/ProgramTabs/WorkoutPlanner.vue";
 import WorkoutLogTab from "@/components/ClientTabs/WorkoutLogTab.vue";
 import Swal from 'sweetalert2'
 import router from "@/router";
+import DietLogTab from "@/components/ClientTabs/DietLogTab.vue";
 
 const activeTab = ref("Details");
 
@@ -211,13 +212,13 @@ onMounted(() => {
         >
           Diet-Log
         </button>
-        <button
+        <!-- <button
           :class="activeTab === 'Statistics' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
           class="nav-btn uppercase "
           @click="setActiveTab('Statistics')"
         >
           Statistics
-        </button>
+        </button> -->
       </div>
 
       <!-- Render Box -->
@@ -234,6 +235,10 @@ onMounted(() => {
           <WorkoutLogTab
             :program="clientStore.Client.program_details"
             v-else-if="activeTab === 'Workout-Log'"
+          />
+          <DietLogTab
+            :profile="clientStore.Client.profile"
+            v-else-if="activeTab === 'Diet-Log'"
           />
 
         </transition>

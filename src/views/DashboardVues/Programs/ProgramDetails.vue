@@ -377,13 +377,13 @@ onMounted(() => {
         >
           Documents
         </button>
-        <button
+        <!-- <button
           :class="activeTab === 'Reviews' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
           class="nav-btn uppercase "
           @click="setActiveTab('Reviews')"
         >
           Reviews
-        </button>
+        </button> -->
       </div>
 
       <!-- Render Box -->
