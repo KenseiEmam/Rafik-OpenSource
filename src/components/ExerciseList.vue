@@ -6,9 +6,9 @@
           <input type="search" @input="handleSearch" class="block w-full p-4 text-sm text-rafik-sectext border rounded-lg bg-rafik-pribg" placeholder="Type to Search Exercises..." required />
         </div>
         <div class="mr-auto flex gap-4">
-          <button @click="updateFilter('All')" class="card uppercase" :class="filter ==='All'?'border-rafik gradient-bg text-rafik':'border'">All Ex.</button>
-          <button @click="updateFilter('private')" class="card uppercase" :class="filter ==='private'?'border-rafik gradient-bg text-rafik':'border'">Personal Ex.</button>
-          <button @click="updateFilter('public')" class="card uppercase" :class="filter ==='public'?'border-rafik gradient-bg text-rafik':'border'">Public Ex.</button>
+          <button @click="updateFilter('All')" class="card 2xl:text-base text-xs min-w-max uppercase" :class="filter ==='All'?'border-rafik gradient-bg text-rafik':'border'">All Ex.</button>
+          <button @click="updateFilter('private')" class="card 2xl:text-base text-xs min-w-max uppercase" :class="filter ==='private'?'border-rafik gradient-bg text-rafik':'border'">Personal Ex.</button>
+          <button @click="updateFilter('public')" class="card 2xl:text-base text-xs min-w-max uppercase" :class="filter ==='public'?'border-rafik gradient-bg text-rafik':'border'">Public Ex.</button>
         </div>
       <button
         @click="showAddExerciseModal = true"
@@ -20,12 +20,12 @@
 
     <ul v-if="props.exercises?.length > 0" class="grid grid-cols-3 grid-rows-3 gap-6 items-center">
       <router-link :to="{name:exercise.trainer_id?'personal-details':'public-details', params:{id:exercise.id}  }" v-for="(exercise, index) in props.exercises" :key="exercise.id" class="h-full text-rafik-sectext">
-        <div class="card p-6 min-w-96 hover:border-rafik flex justify-between h-full items-center">
+        <div class="card p-6 w-full hover:border-rafik flex justify-between h-full items-center">
           <div>
-            <h2 class="title-small text-xl">{{ exercise.exercise_name }}</h2>
-            <h2 class="header-small text-lg uppercase">{{ exercise.type }}</h2>
-            <p class="label text-sm" v-if="exercise.trainer_id">Custom Exercise</p>
-            <p class="text-sm my-4 "> {{ exercise.exercise_detail}}</p>
+            <h2 class="title-small text-base 2xl:text-xl">{{ exercise.exercise_name }}</h2>
+            <h2 class="header-small text-sm 2xl:text-lg uppercase">{{ exercise.type }}</h2>
+            <p class="label 2xl:text-sm" v-if="exercise.trainer_id">Custom Exercise</p>
+            <p class="text-body my-2 2xl:my-4 line-clamp-3"> {{ exercise.exercise_detail}}</p>
             <!-- Prime Movers -->
             <p class="label text-rafik-pritext">Prime Movers:</p>
             <div class="flex gap-2 flex-wrap mb-2">
@@ -65,7 +65,7 @@
       <p class="header-small min-w-max"> Page {{ page }}</p>
       <hr class="border w-full border-rafik-sectext" />
       <div class="flex text-rafik-sectext gap-4 px-4 ">
-        <button  @click="updatePage(p)"  v-for="p in Math.ceil(props.count / 9) " class="hover:text-rafik-pritext" :class="{'text-rafik-pritext':p===page}">
+        <button  @click="updatePage(p)"  v-for="p in Math.ceil(props.count / 9) " :key="p" class="hover:text-rafik-pritext" :class="{'text-rafik-pritext':p===page}">
           {{p}}
         </button>
       </div>

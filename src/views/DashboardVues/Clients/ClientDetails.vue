@@ -120,9 +120,9 @@ onMounted(() => {
 
 <template>
   <div class="flex h-screen overflow-auto">
-    <div v-if="clientStore.Client" class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-8 xl:space-y-6">
+    <div v-if="clientStore.Client" class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-8 2xl:space-y-6">
       <div class="border group flex flex-col relative gradient-bg border-rafik-alternate rounded-lg overflow-hidden">
-        <div class="p-8 xl:p-12 2xl:p-16 2xl:py-24 space-y-4 relative  items-stretch grid grid-cols-4  ">
+        <div class="p-8 2xl:p-16 2xl:py-24 space-y-4 relative  items-stretch grid grid-cols-4  ">
           <div class="pr-6 space-y-4 col-span-2">
             <div class="flex items-center gap-6">
               <img :src="clientStore.Client?.avatar" alt="" class="w-32 h-32 object-cover rounded-full border-2 border-rafik ">

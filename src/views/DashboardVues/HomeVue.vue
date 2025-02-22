@@ -14,13 +14,13 @@ const props = defineProps<{
 <template>
   <div class="px-8 py-12 flex-1 flex flex-col w-full h-full 2xl:px-12 2xl:py-24">
     <div
-      class="card w-full  p-8 xl:py-16 flex gap-6 xl:gap-10 border-rafik-alternate border items-center"
+      class="card w-full  p-8 2xl:py-16 flex gap-6 2xl:gap-10 border-rafik-alternate border items-center"
       style="background-image: linear-gradient(135deg, #081411 36%, #295f42);"
     >
       <!-- User Avatar -->
       <img
         :src="props.user.avatar"
-        class="w-32 h-32 xl:w-52 xl:h-52 ring-rafik ring-1 rounded-full self-center"
+        class="w-32 h-32 2xl:w-52 2xl:h-52 ring-rafik ring-1 rounded-full self-center"
         alt="User Avatar"
       >
 
@@ -36,11 +36,11 @@ const props = defineProps<{
 
       <!-- Button Section -->
       <div
-        class="border-l border-rafik-sectext text-left px-8 flex flex-col gap-4 ml-auto py-4 h-full xl:h-44 justify-between"
+        class="border-l border-rafik-sectext text-left px-8 flex flex-col gap-4 ml-auto py-4 h-full 2xl:h-44 justify-between"
       >
-        <button class="text-left opacity-50 hover:text-red-500 text-lg">View Profile</button>
-        <button class="text-left opacity-50 hover:text-red-500 text-lg">Check Charts</button>
-        <button class="text-left opacity-50 hover:text-red-500 text-lg">Settings</button>
+        <button class="text-left opacity-50 hover:text-red-500 2xl:text-lg">View Profile</button>
+        <button class="text-left opacity-50 hover:text-red-500 2xl:text-lg">Check Charts</button>
+        <button class="text-left opacity-50 hover:text-red-500 2xl:text-lg">Settings</button>
       </div>
     </div>
     <div class="space-y-8 flex-1 flex flex-col  h-full w-full items-center justify-center over-flow-auto w-64">
