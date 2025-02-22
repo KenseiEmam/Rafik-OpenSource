@@ -114,7 +114,7 @@ const removePromo = (promoToRemove: PromoCode) => {
               type="number"
               v-model="prices[key]"
               :disabled="!isEnabled[key]"
-              class="rafik-text-input w-12 2xl:w-32"
+              class="rafik-text-input text-right w-24 2xl:w-32"
               :class="{'bg-rafik-sectext cursor-not-allowed': !isEnabled[key]}"
             />
           </div>
@@ -139,22 +139,22 @@ const removePromo = (promoToRemove: PromoCode) => {
           />
 
           <!-- Display promo codes -->
-          <div class="flex flex-col gap-6 divide-y divide-rafik-sectext">
+          <div class="flex flex-col divide-y divide-rafik-sectext">
             <div
               v-for="(promo, index) in props.program.promos"
               :key="index"
-              class="flex w-full p-6 items-center 2xl:p-8 justify-between gap-4"
+              class="flex w-full items-center p-4 2xl:p-8 gap-4"
             >
               <p class="uppercase subheader-small">{{ promo.code }}</p>
-              <div class="flex gap-3 2xl:gap-6 items-center">
+              <div class="flex items-center ml-auto">
                 <div class="form-control max-w-min text-center">
                   <label class="text-body">% DISCOUNT</label>
-                  <input v-model="promo.value" type="number" class="rafik-text-input w-12 2xl:w-32 text-sm">
+                  <input v-model="promo.value" type="number" class="rafik-text-input w-24 2xl:w-32 text-sm">
                 </div>
-                <button @click="removePromo(promo)" class="text-red-500 hover:text-red-700 text-xl">
-                  ✕
-                </button>
               </div>
+              <button @click="removePromo(promo)" class="text-red-500 hover:text-red-700 text-xl">
+                ✕
+              </button>
             </div>
           </div>
         </div>
