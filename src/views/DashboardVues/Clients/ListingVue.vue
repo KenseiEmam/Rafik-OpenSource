@@ -105,7 +105,7 @@
                 <div
                   v-if="show_action == client.id"
                   @mouseleave="handleLeave()"
-                  class="absolute min-w-16 px-2 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg shadow-lg divide-y divide-y-rafik-sectext"
+                  class="absolute min-w-16 px-2 z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg shadow-lg divide-y divide-y-rafik-sectext"
                 >
                   <Router-link :to="{name: 'client-details', params: {id: client.id}}" class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded">
                     View Program
@@ -140,7 +140,7 @@ const filter = ref('All');
 const activeTab = ref("Active Program");
 const userStore = useUserStore();
 const page = ref(1);
-const numbers = ref(1);
+const numbers = ref(10);
 const showAddProgramModal = ref(false);
 const loading = ref(false);
 const show_action = ref();
