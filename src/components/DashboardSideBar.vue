@@ -1,6 +1,6 @@
 
 <template>
-    <div class=" h-screen border-rafik-sectext border-r bg-rafik-pribg   flex flex-col p-8 gap-8 2xl:p-16 ">
+    <div class=" h-screen border-rafik-sectext border-r bg-rafik-pribg   flex flex-col p-8 gap-8 2xl:items-between 2xl:p-16 ">
       <div class="relative w-44 2xl:w-64">
 
         <img
@@ -9,11 +9,11 @@
               alt=""
             />
       </div>
-    <nav class="flex flex-col my-16  gap-4 2xl:gap-10 ">
+    <nav class="flex flex-col my-16 2xl:my-44  gap-4 2xl:gap-10 ">
 
       <RouterLink to="/dashboard" class="nav-btn">My <br>Dashboard</RouterLink>
       <RouterLink :to="{name:'programs-list'}" class="nav-btn">Workout &<br>Programs</RouterLink>
-      <RouterLink to="" class="nav-btn">My <br>Clients</RouterLink>
+      <RouterLink :to="{name:'client-list'}" class="nav-btn">My <br>Clients</RouterLink>
       <RouterLink to="" class="nav-btn">Program <br>Entitlements</RouterLink>
       <RouterLink to="" class="nav-btn">Settings &<br>Preferences</RouterLink>
     </nav>
