@@ -18,7 +18,7 @@
           <thead class="contentH-small mb-24">
             <tr>
               <th>
-                <div  v-if=" userStore.client_count " class="flex items-center gap-4 my-6">
+                <div  v-if=" userStore.client_count " class="flex items-center gap-4 my-6 text-xs 2xl:text-sm">
                 <!-- Tabs Navigation -->
                 <button
                 @click="updatePage(page- 1)"
