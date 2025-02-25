@@ -99,7 +99,7 @@ export const useUserStore = defineStore('User', () => {
   })
   const AllClients = ref<ClientInterface[]>([]); // Ensure it's typed as an array
   const Client = ref<ClientInterface | null>(null); // Ensure Client can be null
-
+  const client_count = ref<number|null>(0);
   const session = ref<Session>({});
   const userProfile = ref<any | null>(null);
 
@@ -173,7 +173,7 @@ export const useUserStore = defineStore('User', () => {
       alert(`Failed to load user profile: ${error.message || 'Unknown error'}`);
     }
   }
-
+  // Fetches clients related to a program
   async function getClients(id: number) {
     try {
       // Fetch user_programs where program_id matches the given id
@@ -225,6 +225,106 @@ export const useUserStore = defineStore('User', () => {
     } catch (error: any) {
       console.error(error);
       alert(`Failed to load clients: ${error.message || 'Unknown error'}`);
+    }
+  }
+
+
+  async function getActiveClientsForTrainer(page:number , pageSize:number ) {
+    try {
+      const trainerId = localStorage.getItem('UserID');
+      if (!trainerId) {
+        showError("Trainer ID not found in local storage.");
+        AllClients.value = [];
+        client_count.value = 0;
+        return;
+      }
+
+      // Fetch total count for pagination
+      const { count, error: countError } = await supabase
+        .from('user_programs')
+        .select('client_id', { count: 'exact', head: true })
+        .eq('trainer_id', trainerId)
+
+
+      if (countError) {
+        showError(`Error fetching total count: ${countError.message}`);
+        AllClients.value = [];
+        client_count.value = 0;
+        return;
+      }
+
+      const { data: activePrograms, error: programError } = await supabase
+        .from('user_programs')
+        .select('*')
+        .eq('trainer_id', trainerId)
+        .range((page - 1) * pageSize, page * pageSize - 1);
+
+      if (programError) {
+        showError(`Error fetching user programs: ${programError.message}`);
+        AllClients.value = [];
+        client_count.value = 0;
+        return;
+      }
+
+      if (!activePrograms || activePrograms.length === 0) {
+        AllClients.value = [];
+        client_count.value = count;
+        return;
+      }
+
+      const clientProfileIds = [...new Set(activePrograms.map(program => program.client_id))];
+
+      const { data: userProfiles, error: profileError } = await supabase
+        .from('profiles')
+        .select('id, user_id')
+        .in('id', clientProfileIds);
+
+      if (profileError) {
+        showError(`Error fetching user profiles: ${profileError.message}`);
+        AllClients.value = [];
+        client_count.value = count;
+        return;
+      }
+
+      const userIds = userProfiles.map(profile => profile.user_id);
+
+      const { data: users, error: userError } = await supabase
+        .from('users')
+        .select('id, avatar, email, first_name, last_name, age, sex, nationality, phone, last_active')
+        .in('id', userIds);
+
+      if (userError) {
+        showError(`Error fetching user details: ${userError.message}`);
+        AllClients.value = [];
+        client_count.value = count;
+        return;
+      }
+
+      AllClients.value = userProfiles.map(profile => {
+        const user = users.find(u => u.id === profile.user_id);
+        const programDetails = activePrograms.filter(program => program.client_id === profile.id);
+
+        return user ? {
+          id: user.id,
+          avatar: user.avatar,
+          email: user.email,
+          gender: user.sex,
+          nationality: user.nationality,
+          phone: user.phone,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          age: user.age,
+          profile: profile,
+          program_details: programDetails,
+          last_active: user.last_active,
+        } : null;
+      }).filter(client => client !== null);
+
+      client_count.value = count;
+    } catch (error:any) {
+      showError(`Unexpected error: ${error.message || 'Unknown error'}`);
+      AllClients.value = [];
+      client_count.value = 0;
     }
   }
 
@@ -347,5 +447,5 @@ export const useUserStore = defineStore('User', () => {
       alert(`Failed to load user profile: ${error.message || 'Unknown error'}`);
     }
   }
-  return { User, userProfile, AllClients, Client, LogIn, LogOut, getUserProfile, getUserProfileNO, getClients, getClient, updateClientProgram }
+  return { User, userProfile, AllClients, Client, client_count, getActiveClientsForTrainer, LogIn, LogOut, getUserProfile, getUserProfileNO, getClients, getClient, updateClientProgram }
 })
