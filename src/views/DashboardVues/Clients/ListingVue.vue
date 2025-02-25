@@ -20,26 +20,26 @@
               <th>
                 <div  v-if=" userStore.client_count " class="flex items-center gap-4 my-6">
                 <!-- Tabs Navigation -->
-                <p class="min-w-max text-rafik-sectext capitalize"> Page: </p>
-                <div class="flex text-rafik-sectext gap-4 pr-4 " v-if="userStore.client_count" >
-                  <button  @click="updatePage(p)"  v-for="p in Math.ceil(userStore.client_count / numbers) " :key="p" class="hover:text-rafik-pritext" :class="{'text-rafik-pritext':p===page}">
-                    {{p}}
-                  </button>
-                </div>
                 <button
-                  @click="updatePage(page- 1)"
-                  v-if="page > 1"
-                  class="px-4 py-2 text-rafik-sectext min-w-max hover:text-rafik-pritext"
+                @click="updatePage(page- 1)"
+                v-if="page > 1"
+                class="px-4 py-2 text-rafik-sectext min-w-max hover:text-rafik-pritext"
                 >
-                  Previous Page
+                <<
+              </button>
+              <p class="min-w-max text-rafik-sectext capitalize"> Page: </p>
+              <div class="flex text-rafik-sectext gap-4 pr-4 " v-if="userStore.client_count" >
+                <button  @click="updatePage(p)"  v-for="p in Math.ceil(userStore.client_count / numbers) " :key="p" class="hover:text-rafik-pritext" :class="{'text-rafik-pritext':p===page}">
+                  {{p}}
                 </button>
+              </div>
 
                 <button
                   class="px-4 py-2 text-rafik-sectext min-w-max hover:text-rafik-pritext"
                   @click="updatePage(page + 1)"
                   v-if="page < Math.ceil(userStore.client_count / numbers)"
                 >
-                  Next Page
+                  >>
                 </button>
               </div>
               </th>
@@ -49,13 +49,14 @@
               <th>Status</th>
               <th>
                 <div class="flex justify-end px-3 items-center  gap-3 ">
-                  <p class="text-body min-w-max text-xs 2xl:text-base">Showing {{ userStore.client_count }} of </p>
+                  <p class="text-body min-w-max text-xs 2xl:text-base">Page size  </p>
                   <select v-model="numbers" @change="updatePage(page)" name="records" class="rafik-text-input w-32 text-sm p-2">
                     <option value="5">5</option>
                     <option value="10" selected>10</option>
                     <option value="15">15</option>
                   </select>
                 </div>
+                <p class="text-xs mt-3 text-body min-w-max text-xs text-right"> {{ userStore.client_count }} total clients</p>
               </th>
             </tr>
           </thead>
@@ -139,7 +140,7 @@ const filter = ref('All');
 const activeTab = ref("Active Program");
 const userStore = useUserStore();
 const page = ref(1);
-const numbers = ref(10);
+const numbers = ref(1);
 const showAddProgramModal = ref(false);
 const loading = ref(false);
 const show_action = ref();
