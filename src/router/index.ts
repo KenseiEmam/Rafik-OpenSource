@@ -72,6 +72,11 @@ const router = createRouter({
 
           children: [
             {
+              path: '', // Dynamic route for client listing
+              name: 'client-list',
+              component: () => import('../views/DashboardVues/Clients/ListingVue.vue'),
+            },
+            {
               path: ':id', // Dynamic route for client details
               name: 'client-details',
               component: () => import('../views/DashboardVues/Clients/ClientDetails.vue'),
