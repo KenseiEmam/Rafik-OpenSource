@@ -62,7 +62,7 @@
           </thead>
           <tbody>
             <tr v-for="client in userStore.AllClients" :key="client.id" class=" rounded-xl p-4 w-full ">
-              <td class="flex gap-6 rounded-l-xl text-left items-center py-4 pl-3 bg-rafik-secbg">
+              <td class="flex gap-6 border-l border-y border-rafik-sectext rounded-l-xl text-left items-center py-4 pl-3 bg-rafik-secbg">
                 <img
                   :src="client.avatar || '/default-avatar.png'"
                   class="w-12 2xl:w-24 rounded-full border-2 border-rafik h-12 2xl:h-24"
@@ -74,25 +74,25 @@
                 </div>
               </td>
 
-              <td class="bg-rafik-secbg">
+              <td class="bg-rafik-secbg border-y border-rafik-sectext">
                 {{ client.program_details.length
                   ? new Date(client.program_details[0].created_at).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" })
                   : '-' }}
               </td>
-              <td class="bg-rafik-secbg">
+              <td class="bg-rafik-secbg border-y border-rafik-sectext">
                 {{ client.program_details.length
                   ? new Date(client.program_details[0].expires_on).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" })
                   : '-' }}
               </td>
-              <td class="bg-rafik-secbg">
+              <td class="bg-rafik-secbg border-y border-rafik-sectext">
                 {{ client.program_details.length
                   ? client.program_details[0].months_package + ' month'
                   : '-' }}
               </td>
-              <td class="uppercase  bg-rafik-secbg text-rafik">
+              <td class="uppercase  bg-rafik-secbg text-rafik border-y border-rafik-sectext">
                 {{ client.program_details.length ? client.program_details[0].status : '-' }}
               </td>
-              <td class="px-3  bg-rafik-secbg relative text-right rounded-r-xl">
+              <td class="px-3  bg-rafik-secbg relative text-right rounded-r-xl border-r border-y border-rafik-sectext">
                 <svg
                   @click="show_action = client.id"
                   xmlns="http://www.w3.org/2000/svg"

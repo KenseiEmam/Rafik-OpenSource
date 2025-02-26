@@ -8,7 +8,7 @@ import WorkoutLogTab from "@/components/ClientTabs/WorkoutLogTab.vue";
 import Swal from 'sweetalert2'
 import router from "@/router";
 import DietLogTab from "@/components/ClientTabs/DietLogTab.vue";
-
+import ChangeProgramModal from "@/components/ClientTabs/ChangeProgramModal.vue";
 const activeTab = ref("Details");
 
 
@@ -48,6 +48,25 @@ function setActiveTab(tab: string) {
   activeTab.value = tab;
 }
 
+// ✅ Function to overwrite program fields
+async function importProgram(value: any) {
+  if (!clientStore.Client) return showError("Client not found!");
+  try {
+    await clientStore.updateClientProgram({id:clientStore.Client.program_details.id, ...value}).then(()=>{
+      const clientId = route.params.id as string;
+      if (clientId) {
+        clientStore.getClient(clientId).catch(() => {
+          showError("Failed to load client details.");
+        });
+      }
+    });
+    showSuccess(`Change successful!`);
+  } catch (error) {
+    showError(`Failed to Change. Please try again.`);
+  }
+  showAddProgramModal.value=false
+}
+
 
 
 
@@ -55,7 +74,7 @@ function setActiveTab(tab: string) {
 function refreshComponent() {
   router.go(0); // This reloads the current route
 }
-
+const showAddProgramModal = ref(false);
 // Function to show success alerts
 function showSuccess(message: string) {
   Swal.fire({
@@ -170,7 +189,7 @@ onMounted(() => {
                 Message Client
               </button>
               <button
-
+                @click="showAddProgramModal = true"
                 class="text-body uppercase text-left hover:text-rafik-pritext"
 
               >
@@ -181,7 +200,7 @@ onMounted(() => {
           </div>
         </div>
       </div>
-
+      <ChangeProgramModal :visible="showAddProgramModal" @close="showAddProgramModal = false" @submit="importProgram" />
       <!-- Tabs -->
       <div class="flex  gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext">
         <button
