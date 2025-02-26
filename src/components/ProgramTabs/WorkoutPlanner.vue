@@ -9,13 +9,13 @@
         v-for="(workout, index) in editedWorkouts"
         :key="index"
         @click="activeTab = index"
-        :class="{'border-b-2 border-rafik-primary text-rafik-primary': activeTab === index}"
-        class="px-4 py-2 text-rafik-sectext min-w-max"
+        :class=" activeTab === index? ' border-rafik text-rafik-pritext':'text-rafik-sectext border-transparent'"
+        class="px-4 py-2  min-w-max border-b-2"
       >
-        Day {{ index + 1 }}
+        {{ workout.workout_name ? workout.workout_name : (workout.rest_day? 'Rest Day':'Workout ' + (index + 1)) }}
       </button>
-      <hr class="border w-full border-rafik-sectext" />
-      <div>
+
+      <div class="ml-auto">
         <button
           v-if="!isEditing"
           class="btn-sm-outline min-w-max"
