@@ -180,7 +180,8 @@ export const useUserStore = defineStore('User', () => {
       const { data: programs, error: programError } = await supabase
         .from('user_programs')
         .select('*')
-        .eq('program_id', id);
+        .eq('program_id', id)
+        .neq('status', 'cancelled');
 
       if (programError) {
         throw new Error(`Error fetching user programs: ${programError.message}`);
@@ -244,6 +245,7 @@ export const useUserStore = defineStore('User', () => {
         .from('user_programs')
         .select('client_id', { count: 'exact', head: true })
         .eq('trainer_id', trainerId)
+        .neq('status', 'cancelled');
 
 
       if (countError) {
@@ -257,6 +259,7 @@ export const useUserStore = defineStore('User', () => {
         .from('user_programs')
         .select('*')
         .eq('trainer_id', trainerId)
+        .neq('status', 'cancelled')
         .range((page - 1) * pageSize, page * pageSize - 1);
 
       if (programError) {
