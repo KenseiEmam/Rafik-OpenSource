@@ -1,7 +1,7 @@
 <template>
-  <div class="flex-1 space-y-6 pb-6">
-    <div class="grid grid-cols-3 gap-6">
-      <div class="flex flex-col gap-3 2xl:gap-6">
+  <div class="flex-1 2xl:space-y-16 space-y-6 pb-6 h-full">
+    <div class="grid grid-cols-3 gap-6 divide-x divide-rafik-sectext ">
+      <div class="flex flex-col gap-3 pl-3 2xl:gap-5">
         <h3 class="contentH-small text-sm 2xl:text-xl mb-6 2xl:mb-8">Client Profile</h3>
         <div class="flex justify-between uppercase text-xs 2xl:text-base">
           <p class="text-rafik-pritext">Age</p>
@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <div class="flex flex-col gap-3">
+      <div class="flex flex-col gap-3 pl-3 2xl:gap-5">
         <h3 class="contentH-small text-sm 2xl:text-xl mb-6">Client Metrics</h3>
         <div class="flex justify-between uppercase text-xs 2xl:text-base">
           <p class="text-rafik-pritext">Height</p>
@@ -42,7 +42,7 @@
         </div>
       </div>
 
-      <div class="flex flex-col gap-3">
+      <div class="flex flex-col gap-3 pl-3 2xl:gap-5">
         <h3 class="contentH-small text-sm 2xl:text-xl mb-6">Client Fitness</h3>
         <div class="flex justify-between uppercase text-xs 2xl:text-base">
           <p class="text-rafik-pritext">Experience</p>
@@ -65,7 +65,7 @@
         </div>
       </div>
     </div>
-    <div class="card p-8 grid gap-6 grid-cols-3 items-center " v-if="program">
+    <div class="card p-8 grid gap-6 grid-cols-3 items-center 2xl:min-h-96 " v-if="program">
       <div class="col-span-2 space-y-4">
         <h3 class="text-sm contentH-small 2xl:text-base">Client Program</h3>
         <h2 class="header-medium font-black">{{program.program_name||"Loading..."}}</h2>

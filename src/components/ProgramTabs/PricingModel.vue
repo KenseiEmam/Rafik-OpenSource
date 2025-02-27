@@ -102,14 +102,14 @@ const removePromo = (promoToRemove: PromoCode) => {
           <label v-if="label !== '1 Month'" class="flex items-center ml-auto mr-4 space-x-2 cursor-pointer">
             <input type="checkbox" v-model="isEnabled[key]" class="hidden">
             <div
-              class="w-16 h-8 flex items-center border-rafik-pritext border-2 bg-rafik-secbg rounded-full transition-all"
-              :class="{ 'bg-amber-400': isEnabled[key] }">
+              class="w-16 h-8 flex items-center border-rafik-pritext border-2  rounded-full transition-all"
+              :class="{ 'bg-rafik': isEnabled[key] }">
               <div class="w-8 h-8 bg-rafik-pritext rounded-full shadow-md transform transition-transform"
                    :class="{ 'translate-x-8': isEnabled[key] }"></div>
             </div>
           </label>
           <div>
-            <h2 class="subheader-small">PRICE (AED)</h2>
+            <h2 class="subheader-small">PRICE (AED) </h2>
             <input
               type="number"
               v-model="prices[key]"
