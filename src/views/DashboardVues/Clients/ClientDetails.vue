@@ -8,7 +8,9 @@ import WorkoutLogTab from "@/components/ClientTabs/WorkoutLogTab.vue";
 import Swal from 'sweetalert2'
 import router from "@/router";
 import DietLogTab from "@/components/ClientTabs/DietLogTab.vue";
-
+import ChangeProgramModal from "@/components/ClientTabs/ChangeProgramModal.vue";
+import CancelProgramModal from "@/components/ClientTabs/CancelProgramModal.vue";
+import { supabase } from '@/lib/supabaseClient'
 const activeTab = ref("Details");
 
 
@@ -48,14 +50,93 @@ function setActiveTab(tab: string) {
   activeTab.value = tab;
 }
 
+// ✅ Function to overwrite program fields
+async function importProgram(value: any) {
+  if (!clientStore.Client) return showError("Client not found!");
+  try {
+    await clientStore.updateClientProgram({id:clientStore.Client.program_details.id, ...value}).then(()=>{
+      const clientId = route.params.id as string;
+      if (clientId) {
+        clientStore.getClient(clientId).catch(() => {
+          showError("Failed to load client details.");
+        });
+      }
+    });
+    showSuccess(`Change successful!`);
+  } catch (error) {
+    showError(`Failed to Change. Please try again.`);
+  }
+  showAddProgramModal.value=false
+}
 
+// Non async function for confirmation
+function confirmCancel(value: string){
+  Swal.fire({
+    title: "Hold!",
+    text: "Please be sure that once cancelled, the program subscription cannot be uncancelled and the client will be lost.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Proceed!",
+    confirmButtonColor: "#CB901C",
+    cancelButtonColor: "#d33",
+      background:"#081411",
+      color:"#E8F3ED",
+  }).then((result) => {
+    if (result.isConfirmed) {
+     cancelProgram(value)
+    }
+  });
+
+}
+// ✅ Function to cancel subscription
+async function cancelProgram(value: string) {
+
+  if (!clientStore.Client) return showError("Client not found!");
+  try {
+    const UserID = localStorage.getItem("UserID")
+    if (!UserID) return showError("No UserID found");
+    if (!clientStore.Client.program_details.id) return showError("No userprogram found in sotre");
+    const newRequest={
+      reasoning:value,
+      raised_by: UserID,
+      user_program_id:clientStore.Client.program_details.id,
+      status:"raised"
+    }
+
+    const { data, error } = await supabase
+      .from("cancel_request")
+      .insert(newRequest)
+      .select();
+
+
+      if (error) {
+        throw new Error(`Error creating cancelatiion : ${error.message}`);
+      }
+
+      await clientStore.updateClientProgram({id:clientStore.Client.program_details.id, status:"review"}).then(()=>{
+      const clientId = route.params.id as string;
+      if (clientId) {
+        clientStore.getClient(clientId).catch(() => {
+          showError("Failed to load client details.");
+        });
+      }
+    });
+
+    showSuccess(`Cancellation is now in review!`);
+  } catch (error) {
+    showError("Error cancelling program:"+error);
+  }
+  showCancelModal.value=false
+  router.push({name:'clients-list'})
+}
 
 
 // Function to refresh the route/component
 function refreshComponent() {
   router.go(0); // This reloads the current route
 }
-
+const showAddProgramModal = ref(false);
+const showCancelModal = ref(false);
 // Function to show success alerts
 function showSuccess(message: string) {
   Swal.fire({
@@ -169,19 +250,22 @@ onMounted(() => {
               >
                 Message Client
               </button>
-              <button
-
+              <button v-if="clientStore.Client.program_details.status === 'active'"
+                @click="showAddProgramModal = true"
                 class="text-body uppercase text-left hover:text-rafik-pritext"
 
               >
                 Change Program
               </button>
-              <button class="text-body uppercase text-red-500 hover:text-red-400 text-left">Cancel Subcription</button>
+              <button @click="showCancelModal = true" class="text-body uppercase text-red-500 hover:text-red-400 text-left" v-if="clientStore.Client.program_details.status === 'active'">Cancel Subcription</button>
+              <button class="text-body uppercase text-rafik-secondary text-left cursor-default" v-else-if="clientStore.Client.program_details.status === 'review'">Cancellation Pending</button>
+              <button class="text-body uppercase text-red-500 text-left cursor-default" v-else-if="clientStore.Client.program_details.status === 'cancelled'"> X Subscription Cancelled</button>
             </div>
           </div>
         </div>
       </div>
-
+      <ChangeProgramModal :visible="showAddProgramModal" @close="showAddProgramModal = false" @submit="importProgram" />
+      <CancelProgramModal :visible="showCancelModal" @close="showCancelModal = false" @submit="confirmCancel" />
       <!-- Tabs -->
       <div class="flex  gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext">
         <button
