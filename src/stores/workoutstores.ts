@@ -39,6 +39,7 @@ type Exercise = {
   intensity?: string;
   sets?: number;
   reps?: number;
+  true_sets?:any[];
 };
 type Workout = {
   id:number;
