@@ -94,6 +94,17 @@ const router = createRouter({
           ],
         },
         {
+          path: 'entitlements', // Child route for /dashboard/entitlements
+
+          children: [
+            {
+              path: '', // Dynamic route for client listing
+              name: 'entitlement-list',
+              component: () => import('../views/DashboardVues/Entitlements/ListingView.vue'),
+            },
+          ],
+        },
+        {
           path: 'exercises', // Child route for /dashboard/exercise
 
           children: [
@@ -137,16 +148,21 @@ router.beforeEach((to) => {
       // save the location we were at to come back later
       query: { redirect: to.fullPath },
     }
-  }
-  else if (to.meta.requiresAuth && localStorage.getItem('LoggedInUser') && !localStorage.getItem('UserID')) {
-
+  } else if (
+    to.meta.requiresAuth &&
+    localStorage.getItem('LoggedInUser') &&
+    !localStorage.getItem('UserID')
+  ) {
     return {
       path: '/setup-user-profile',
       query: { redirect: to.fullPath },
     }
-  }
-  else if (to.meta.requiresAuth && localStorage.getItem('LoggedInUser') && localStorage.getItem('UserID') && localStorage.getItem('LoggedInTrainer') == 'false') {
-
+  } else if (
+    to.meta.requiresAuth &&
+    localStorage.getItem('LoggedInUser') &&
+    localStorage.getItem('UserID') &&
+    localStorage.getItem('LoggedInTrainer') == 'false'
+  ) {
     return {
       path: '/register-as-a-trainer',
       query: { redirect: to.fullPath },
