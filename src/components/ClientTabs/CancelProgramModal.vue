@@ -10,9 +10,9 @@
       </p>
       <form @submit.prevent="submitForm">
 
-        <!-- Cancelation Reason Field -->
+        <!-- Cancellation Reason Field -->
         <div class="mb-4">
-          <label for="reason" class="block text-sm font-medium">Cancelation Reason</label>
+          <label for="reason" class="block text-sm font-medium">Cancellation Reason</label>
           <textarea
             id="reason"
             v-model="reason"
