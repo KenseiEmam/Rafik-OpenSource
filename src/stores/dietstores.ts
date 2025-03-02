@@ -43,6 +43,8 @@ type Exercise = {
 type Diet = {
   id:number;
   profile_id:number;
+  client_id:number;
+  workout_id?:Date;
   date_logged?:Date;
   breakfast?:any[];
   lunch?:any[];
@@ -54,26 +56,52 @@ type Diet = {
   supper_macros?:number[];
   overall_macros?:number[];
   goal_macros?:number[];
-
+  workout_details?: any | null; // Store the workout details here
 };
 export const useDietStore = defineStore('Diet', () => {
 
   const AllDiets = ref<Diet[]>([]); // Ensure it's typed as an array
   const Diet = ref<Diet | null>(null); // Ensure Diet can be null
 
-
   async function getDiet(id: string) {
     try {
-      // Fetch the diet based on the provided  ID (id)
-      const { data:diet_data, error } = await supabase
+      // Fetch the diet sheet based on the provided ID
+      const { data: diet_data, error } = await supabase
         .from('nutritional_sheets')
         .select('*')
-        .eq('profile_id', id)
+        .eq('id', id)
         .single();
-      if (error) throw error
 
-      Diet.value = diet_data
+      if (error) throw error;
 
+      // Fetch the user ID from the profiles table
+      const { data: client, error: errorProfile } = await supabase
+        .from('profiles')
+        .select('user_id')
+        .eq('id', diet_data.profile_id)
+        .single();
+
+      if (errorProfile) throw errorProfile;
+
+      // Initialize Diet object with the client ID
+      let dietRecord: Diet = { client_id: client?.user_id, ...diet_data };
+
+      // Check for a matching workout based on the date_logged field
+      if (diet_data.date_logged) {
+        const { data: workout_data, error: workoutError } = await supabase
+          .from('workout_sheets')
+          .select('*')
+          .eq('created_for_date', diet_data.date_logged)
+          .single();
+
+        if (workoutError && workoutError.code !== 'PGRST116') throw workoutError; // Ignore "No rows found" error
+
+        if (workout_data) {
+          dietRecord.workout_details = workout_data;
+        }
+      }
+
+      Diet.value = dietRecord;
       return Diet.value;
 
     } catch (error: any) {

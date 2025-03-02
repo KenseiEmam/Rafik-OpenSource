@@ -86,6 +86,11 @@ const router = createRouter({
               name: 'workout-sheet',
               component: () => import('../views/DashboardVues/WorkoutSheet.vue'),
             },
+            {
+              path: '/diet/:id', // Dynamic route for diet-sheets
+              name: 'diet-sheet',
+              component: () => import('../views/DashboardVues/DietSheet.vue'),
+            },
           ],
         },
         {
