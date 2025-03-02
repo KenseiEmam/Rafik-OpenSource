@@ -33,7 +33,7 @@
           </td>
 
           <td class="px-3 relative" >
-              <Router-link to="" class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded text-xs">More Details</Router-link>
+              <Router-link :to="{name:'diet-sheet', params:{id:diet.id}}" class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded text-xs">More Details</Router-link>
 
           </td>
         </tr>
