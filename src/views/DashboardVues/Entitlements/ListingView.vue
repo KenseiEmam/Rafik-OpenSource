@@ -11,8 +11,8 @@
       <div class="flex gap-6 mb-8">
         <!-- Assign Entitlement Button -->
         <button
-          @click="showComingSoonAlert"
-          class="uppercase w-1/2 btn-lg-outline transition-all"
+          @click="handleAssignEntitlement"
+          class="uppercase w-1/2 border-2 border-rafik text-rafik py-3 rounded-lg hover:bg-rafik-secondary hover:text-white transition-all"
         >
           Assign Entitlement
         </button>
@@ -136,9 +136,18 @@
                     View Details
                   </button>
                   <button
+                    v-if="entitlement.client_id"
+                    @click="unassignEntitlement(entitlement.id)"
                     class="px-3 py-5 text-red-500 hover:bg-rafik-pribg hover:text-red-300 rounded"
                   >
-                    Remove Entitlement
+                    Unassign Entitlement
+                  </button>
+                  <button
+                    v-else="!entitlement.client_id"
+                    @click="handleAssignEntitlement()"
+                    class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded"
+                  >
+                    Assign Entitlement
                   </button>
                 </div>
               </td>
@@ -148,59 +157,192 @@
       </div>
     </div>
   </div>
+  <AssignEntitlementsModal
+    :visible="showAssignEntitlementModal"
+    :availableCount="entitlementStore.unusedEntitlementCount"
+    :programs="programStore.AllPrograms || []"
+    @close="(showAssignEntitlementModal = false)"
+    @submit="onAssignModalSubmit"
+  />
 </template>
 
 <script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
 import PageTitle from '@/components/PageTitle.vue'
-import { computed, onMounted, ref } from 'vue'
-import { useEntitlementStore } from '@/stores/entitlementstores' // Import entitlement store
-import { useUserStore } from '@/stores/user'
-import router from '@/router'
+import { useEntitlementStore } from '@/stores/entitlementstores'
+import { useProgramStore } from '@/stores/programstores'
 import Swal from 'sweetalert2'
+import { supabase } from '@/lib/supabaseClient'
+import AssignEntitlementsModal from './AssignEntitlementsModal.vue' // New modal component
 
-const entitlementStore = useEntitlementStore() // Use entitlement store
+// Store references
+const entitlementStore = useEntitlementStore()
+const programStore = useProgramStore()
+
+// Local reactive states
 const loading = ref(false)
 const page = ref(1)
 const numbers = ref(10)
 const show_action = ref()
+const showAssignEntitlementModal = ref(false) // Controls the modal visibility
 
-// Handle mouse leave to close actions menu
+// Load entitlements and programs on mount
+onMounted(() => {
+  loading.value = true
+  entitlementStore
+    .getEntitlements()
+    .then(programStore.getAllPrograms)
+    .then(() => {
+      loading.value = false
+    })
+})
+
+// Computed property for table data
+const tableData = computed(() => {
+  return entitlementStore.entitlements
+})
+
+// Close actions menu after a short delay
 function handleLeave() {
   setTimeout(() => {
     show_action.value = null
   }, 500)
 }
 
-// Update the page number
+// Pagination update
 function updatePage(value: number) {
   page.value = value
   loading.value = true
-  entitlementStore.getEntitlements().then(() => {
-    loading.value = false
-  })
+  entitlementStore
+    .getEntitlements()
+    .then(programStore.getAllPrograms)
+    .then(() => {
+      loading.value = false
+    })
 }
 
-// Fetch entitlements on component mount
-onMounted(() => {
-  loading.value = true
-  console.log('Fetching entitlements...')
-  entitlementStore.getEntitlements().then(() => {
-    loading.value = false
-  })
-})
-
-// Convert entitlement data into a format suitable for display
-const tableData = computed(() => {
-  return entitlementStore.entitlements
-})
-
-// Show Coming Soon alert for both buttons
+// "Coming Soon" alert for Purchase Entitlement button
 function showComingSoonAlert() {
   Swal.fire({
     title: 'Coming Soon',
     text: 'This feature is coming soon. Stay tuned!',
     icon: 'info',
     confirmButtonText: 'Got it!',
+  })
+}
+
+// Handler for the "Assign Entitlement" button
+function handleAssignEntitlement() {
+  if (entitlementStore.unusedEntitlementCount <= 0) {
+    Swal.fire({
+      title: 'No Available Entitlements',
+      text: 'You have no available entitlements. Please purchase more or unassign existing ones.',
+      icon: 'warning',
+      confirmButtonText: 'OK',
+    })
+    return
+  }
+
+  if (!programStore.AllPrograms || programStore.AllPrograms.length === 0) {
+    Swal.fire({
+      title: 'No Active Programs Found',
+      text: 'You must have at least one active program before assigning entitlements.',
+      icon: 'warning',
+      confirmButtonText: 'OK',
+    })
+    return
+  }
+
+  // Open the custom Vue modal
+  showAssignEntitlementModal.value = true
+}
+
+// Called when the AssignEntitlementsModal emits a "submit" event
+async function onAssignModalSubmit(payload: { programId: string; emails: string[] }) {
+  const { programId, emails } = payload
+  await assignEntitlementsToUsers(programId, emails)
+  showAssignEntitlementModal.value = false
+}
+
+// Function to assign entitlements (same logic as before)
+async function assignEntitlementsToUsers(programId: string, emails: string[]) {
+  const availableEntitlements = entitlementStore.entitlements.filter((e) => e.client_id === null)
+  if (emails.length > availableEntitlements.length) {
+    Swal.fire({
+      title: 'Error',
+      text: `You can only assign up to ${availableEntitlements.length} entitlements.`,
+      icon: 'error',
+    })
+    return
+  }
+
+  const assignedUserIds: string[] = []
+  // Validate each email against the "users" table
+  for (const email of emails) {
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('id')
+      .eq('email', email.trim())
+      .single()
+
+    if (error || !user) {
+      Swal.fire({
+        title: 'Error',
+        text: `User with email ${email} is not registered.`,
+        icon: 'error',
+      })
+      return
+    }
+    // NEW: Check if the user is already assigned to an entitlement
+    const userAlreadyAssigned = entitlementStore.entitlements.find(
+      (entitlement) => entitlement.client_id === user.id,
+    )
+    if (userAlreadyAssigned) {
+      Swal.fire({
+        title: 'Error',
+        text: `User with email ${email} is already assigned to a program.`,
+        icon: 'error',
+      })
+      return
+    }
+
+    assignedUserIds.push(user.id)
+  }
+
+  // Update entitlements for each email/user
+  const updatePromises = emails.map((_, index) => {
+    const entitlement = availableEntitlements[index]
+    const updatedData = {
+      client_id: assignedUserIds[index],
+      program_id: programId,
+      status: 'active',
+    }
+    return entitlementStore.updateEntitlement(entitlement.id, updatedData)
+  })
+
+  await Promise.all(updatePromises)
+  Swal.fire({
+    title: 'Success',
+    text: 'Entitlements assigned successfully.',
+    icon: 'success',
+  })
+  // Refresh entitlements to reflect changes
+  entitlementStore.getEntitlements()
+}
+
+// Unassign entitlement function (unchanged)
+function unassignEntitlement(id: string) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'The client will lose access to the program.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, unassign it!',
+    cancelButtonText: 'Cancel',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      entitlementStore.updateEntitlement(id, { client_id: null, program_id: null })
+    }
   })
 }
 </script>

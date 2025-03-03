@@ -49,11 +49,10 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
 
   // Count unused entitlements (those with null client_id)
   function updateUnusedEntitlementCount() {
-    const UserID = localStorage.getItem('UserID')
     if (!entitlements.value) return
 
     unusedEntitlementCount.value = entitlements.value.filter(
-      (entitlement) => entitlement.client_id === null && entitlement.trainer_id === UserID,
+      (entitlement) => entitlement.client_id === null,
     ).length
   }
 
@@ -65,6 +64,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
       if (error) throw new Error(error.message)
 
       entitlements.value.push(data[0]) // Add the new entitlement to the local state
+      updateUnusedEntitlementCount()
     } catch (error) {
       console.error('Error creating entitlement:', error)
       Swal.fire({
@@ -90,6 +90,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
       const index = entitlements.value.findIndex((entitlement) => entitlement.id === id)
       if (index !== -1) {
         Object.assign(entitlements.value[index], data[0])
+        updateUnusedEntitlementCount()
       }
     } catch (error) {
       console.error('Error updating entitlement:', error)
