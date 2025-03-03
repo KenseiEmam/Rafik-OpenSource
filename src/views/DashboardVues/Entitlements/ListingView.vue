@@ -18,12 +18,11 @@
         </button>
 
         <!-- Purchase Entitlement Button -->
-        <button
-          @click="showComingSoonAlert"
-          class="uppercase w-1/2 bg-rafik text-white py-3 rounded-lg hover:bg-rafik hover:text-white transition-all"
+        <router-link :to="{name:'purchase-entitlements'}"
+          class="uppercase w-1/2 btn-lg transition-all"
         >
           Purchase Entitlement
-        </button>
+        </router-link>
       </div>
 
       <!-- Loading State -->
@@ -360,12 +359,5 @@ tbody > tr {
   outline: 1px solid rgba(0, 0, 0, 0.175);
 }
 
-button {
-  font-size: 1.2rem;
-  font-weight: bold;
-}
 
-button:hover {
-  background-color: #f1c40f;
-}
 </style>
