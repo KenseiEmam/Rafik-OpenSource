@@ -294,6 +294,19 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
       })
       return
     }
+    // NEW: Check if the user is already assigned to an entitlement
+    const userAlreadyAssigned = entitlementStore.entitlements.find(
+      (entitlement) => entitlement.client_id === user.id,
+    )
+    if (userAlreadyAssigned) {
+      Swal.fire({
+        title: 'Error',
+        text: `User with email ${email} is already assigned to a program.`,
+        icon: 'error',
+      })
+      return
+    }
+
     assignedUserIds.push(user.id)
   }
 
