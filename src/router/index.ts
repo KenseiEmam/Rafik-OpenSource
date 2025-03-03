@@ -98,9 +98,14 @@ const router = createRouter({
 
           children: [
             {
-              path: '', // Dynamic route for client listing
+              path: '', // Dynamic route for entitlement listing
               name: 'entitlement-list',
               component: () => import('../views/DashboardVues/Entitlements/ListingView.vue'),
+            },
+            {
+              path: '/buy', // Dynamic route for entitlement purchase
+              name: 'purchase-entitlements',
+              component: () => import('../views/DashboardVues/Entitlements/PurchaseVue.vue'),
             },
           ],
         },
