@@ -98,6 +98,7 @@ export const useUserStore = defineStore('User', () => {
   const User= ref<UserInterface>({
   })
   const AllClients = ref<ClientInterface[]>([]); // Ensure it's typed as an array
+  const Entitled = ref<ClientInterface[]>([]); // Ensure it's typed as an array
   const Client = ref<ClientInterface | null>(null); // Ensure Client can be null
   const client_count = ref<number|null>(0);
   const session = ref<Session>({});
@@ -228,7 +229,60 @@ export const useUserStore = defineStore('User', () => {
       alert(`Failed to load clients: ${error.message || 'Unknown error'}`);
     }
   }
+// Fetches Entitled related to anEntitlement
+async function getEntitled() {
+  try {
+    // Fetch user_programs where entitlement_id matches the given id
+    const { data: programs, error: programError } = await supabase
+    .from("user_programs")
+    .select("client_id, entitlement_id, program_id")
+    .not("entitlement_id", "is", null); // ✅ Correct way to filter out NULLs
 
+    if (programError) {
+      throw new Error(`Error fetching user programs: ${programError.message}`);
+    }
+
+    if (!programs || programs.length === 0) {
+      Entitled.value = [];
+      return;
+    }
+
+    // Extract client IDs from user_profiles
+    const clientProfileIds = programs.map((p) => p.client_id);
+
+    // Fetch user_ids from user_profiles
+    const { data: userProfiles, error: profileError } = await supabase
+      .from('profiles')
+      .select('id, user_id')
+      .in('id', clientProfileIds);
+
+    if (profileError) {
+      throw new Error(`Error fetching user profiles: ${profileError.message}`);
+    }
+
+    const userIds = userProfiles.map(profile => profile.user_id);
+
+    // Fetch user details from users table
+    const { data: users, error: userError } = await supabase
+      .from('users')
+      .select('id,avatar, email, first_name, last_name')
+      .in('id', userIds);
+
+    if (userError) {
+      throw new Error(`Error fetching user details: ${userError.message}`);
+    }
+
+    // Merge client details with their respective program details
+    Entitled.value = userProfiles.map(profile => {
+      const user = users.find(u => u.id === profile.user_id);
+      const programDetails = programs.filter(program => program.client_id === profile.id);
+      return user ? { id: user.id, avatar:user.avatar, email: user.email, first_name: user.first_name, last_name: user.last_name, program_details: programDetails } : null;
+    }).filter(client => client !== null);
+  } catch (error: any) {
+    console.error(error);
+    alert(`Failed to load clients: ${error.message || 'Unknown error'}`);
+  }
+}
 
   async function getActiveClientsForTrainer(page:number , pageSize:number ) {
     try {
@@ -450,5 +504,5 @@ export const useUserStore = defineStore('User', () => {
       alert(`Failed to load user profile: ${error.message || 'Unknown error'}`);
     }
   }
-  return { User, userProfile, AllClients, Client, client_count, getActiveClientsForTrainer, LogIn, LogOut, getUserProfile, getUserProfileNO, getClients, getClient, updateClientProgram }
+  return { User, userProfile, AllClients, Entitled, Client, client_count, getActiveClientsForTrainer, LogIn, LogOut, getUserProfile, getUserProfileNO, getClients, getEntitled,getClient, updateClientProgram }
 })
