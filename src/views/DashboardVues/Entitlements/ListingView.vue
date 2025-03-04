@@ -6,7 +6,6 @@
     >
       <!-- Page Title -->
       <PageTitle subheader="Client" header="Entitlements" />
-
       <!-- Loading State -->
       <div v-if="loading" class="text-center 2xl:my-auto subheader-small uppercase animate-pulse">
         Loading Entitlement Data Please Hold...
@@ -235,38 +234,25 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
 
   // Update entitlements for each email/user
   const updatePromises = emails.map((_, index) => {
-    const entitlement = availableEntitlements[index];
-    const updatedData = {
-      client_id: assignedUserIds[index],
-      program_id: programId,
-      status: "active",
-    };
-    return entitlementStore.updateEntitlement(entitlement.id, updatedData);
-  });
-
-  await Promise.all(updatePromises);
-  showSuccess("Entitlements assigned successfully.");
+    const entitlement = availableEntitlements[index]
+    const program = programStore.ActivePrograms?.find((p) => p.id === programId)
+    if (!program) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Program not found.',
+        icon: 'error',
+        confirmButtonColor: '#d33',
+        background: '#081411',
+        color: '#E8F3ED',
+      })
+      return
+    }
+    return entitlementStore.assignEntitlement(entitlement.id, assignedUserIds[index], program)
+  })
 
   // Refresh entitlements to reflect changes
   entitlementStore.getEntitlements();
   userStore.getEntitled();
-}
-
-// Unassign entitlement function
-function unassignEntitlement(id: string) {
-  Swal.fire({
-    title: "Are you sure?",
-    text: "The client will lose access to the program.",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Yes, unassign it!",
-    cancelButtonText: "Cancel",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      entitlementStore.updateEntitlement(id, { client_id: null, program_id: null });
-      showSuccess("Entitlement successfully unassigned.");
-    }
-  });
 }
 </script>
 
