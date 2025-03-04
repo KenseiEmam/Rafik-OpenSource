@@ -18,7 +18,8 @@
         </button>
 
         <!-- Purchase Entitlement Button -->
-        <router-link :to="{name:'purchase-entitlements'}"
+        <router-link
+          :to="{ name: 'purchase-entitlements' }"
           class="uppercase w-1/2 btn-lg transition-all"
         >
           Purchase Entitlement
@@ -136,14 +137,7 @@
                     View Details
                   </button>
                   <button
-                    v-if="entitlement.client_id"
-                    @click="unassignEntitlement(entitlement.id)"
-                    class="px-3 py-5 text-red-500 hover:bg-rafik-pribg hover:text-red-300 rounded"
-                  >
-                    Unassign Entitlement
-                  </button>
-                  <button
-                    v-else="!entitlement.client_id"
+                    v-if="!entitlement.client_id"
                     @click="handleAssignEntitlement()"
                     class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded"
                   >
@@ -160,7 +154,7 @@
   <AssignEntitlementsModal
     :visible="showAssignEntitlementModal"
     :availableCount="entitlementStore.unusedEntitlementCount"
-    :programs="programStore.AllPrograms || []"
+    :programs="programStore.ActivePrograms || []"
     @close="(showAssignEntitlementModal = false)"
     @submit="onAssignModalSubmit"
   />
@@ -243,7 +237,7 @@ function handleAssignEntitlement() {
     return
   }
 
-  if (!programStore.AllPrograms || programStore.AllPrograms.length === 0) {
+  if (!programStore.ActivePrograms || programStore.ActivePrograms.length === 0) {
     Swal.fire({
       title: 'No Active Programs Found',
       text: 'You must have at least one active program before assigning entitlements.',
@@ -312,12 +306,19 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
   // Update entitlements for each email/user
   const updatePromises = emails.map((_, index) => {
     const entitlement = availableEntitlements[index]
-    const updatedData = {
-      client_id: assignedUserIds[index],
-      program_id: programId,
-      status: 'active',
+    const program = programStore.ActivePrograms?.find((p) => p.id === programId)
+    if (!program) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Program not found.',
+        icon: 'error',
+        confirmButtonColor: '#d33',
+        background: '#081411',
+        color: '#E8F3ED',
+      })
+      return
     }
-    return entitlementStore.updateEntitlement(entitlement.id, updatedData)
+    return entitlementStore.assignEntitlement(entitlement.id, assignedUserIds[index], program)
   })
 
   await Promise.all(updatePromises)
@@ -328,22 +329,6 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
   })
   // Refresh entitlements to reflect changes
   entitlementStore.getEntitlements()
-}
-
-// Unassign entitlement function (unchanged)
-function unassignEntitlement(id: string) {
-  Swal.fire({
-    title: 'Are you sure?',
-    text: 'The client will lose access to the program.',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Yes, unassign it!',
-    cancelButtonText: 'Cancel',
-  }).then((result) => {
-    if (result.isConfirmed) {
-      entitlementStore.updateEntitlement(id, { client_id: null, program_id: null })
-    }
-  })
 }
 </script>
 
@@ -358,6 +343,4 @@ tbody > tr {
   border-radius: 0.375rem;
   outline: 1px solid rgba(0, 0, 0, 0.175);
 }
-
-
 </style>
