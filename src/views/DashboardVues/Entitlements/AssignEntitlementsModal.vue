@@ -1,54 +1,52 @@
 <template>
+  <!-- Modal Content -->
+  <div class="text-left">
+    <h2 class="header-small mb-6">ASSIGN ENTITLEMENTS</h2>
 
-    <!-- Modal Content -->
-    <div class="text-left ">
-      <h2 class="header-small mb-6">ASSIGN ENTITLEMENTS</h2>
-
-
-      <!-- Form -->
-      <form @submit.prevent="submitForm">
-        <!-- Program Selection -->
-        <div class="mb-4">
-          <label for="program" class="block text-sm font-medium mb-3">Program to Assign</label>
-          <select
-            id="program"
-            v-model="selectedProgram"
-            class="rafik-text-input"
-            required
-            :class="{ 'border-red-500': errors.selectedProgram }"
-          >
+    <!-- Form -->
+    <form @submit.prevent="submitForm">
+      <!-- Program Selection -->
+      <div class="mb-4">
+        <label for="program" class="block text-sm font-medium mb-3">Program to Assign</label>
+        <select
+          id="program"
+          v-model="selectedProgram"
+          class="rafik-text-input"
+          required
+          :class="{ 'border-red-500': errors.selectedProgram }"
+        >
           <option selected value="">Choose program for List</option>
-            <option v-for="program in programs" :key="program.id" :value="program.id">
-              {{ program.program_name }}
-            </option>
-          </select>
-          <span v-if="errors.selectedProgram" class="text-red-500 text-sm">
-            {{ errors.selectedProgram }}
-          </span>
-        </div>
+          <option v-for="program in programs" :key="program.id" :value="program.id">
+            {{ program.program_name }}
+          </option>
+        </select>
+        <span v-if="errors.selectedProgram" class="text-red-500 text-sm">
+          {{ errors.selectedProgram }}
+        </span>
+      </div>
 
-        <!-- Emails Textarea -->
-        <div class="mb-4">
-          <label for="emails" class="block text-sm font-medium mb-3">Assignee Emails:</label>
-          <textarea
-            id="emails"
-            v-model="emailsText"
-            class="rafik-text-input"
-            rows="4"
-            placeholder="Separate multiple emails with commas"
-            :class="{ 'border-red-500': errors.emailsText }"
-          ></textarea>
-          <span v-if="errors.emailsText" class="text-red-500 text-sm">
-            {{ errors.emailsText }}
-          </span>
-        </div>
+      <!-- Emails Textarea -->
+      <div class="mb-4">
+        <label for="emails" class="block text-sm font-medium mb-3">Assignee Emails:</label>
+        <textarea
+          id="emails"
+          v-model="emailsText"
+          class="rafik-text-input"
+          rows="4"
+          placeholder="Separate multiple emails with commas"
+          :class="{ 'border-red-500': errors.emailsText }"
+        ></textarea>
+        <span v-if="errors.emailsText" class="text-red-500 text-sm">
+          {{ errors.emailsText }}
+        </span>
+      </div>
 
-        <!-- Action Buttons -->
-        <div class="flex justify-end w-full">
-          <button type="submit" class="btn-lg w-full">Assign</button>
-        </div>
-      </form>
-    </div>
+      <!-- Action Buttons -->
+      <div class="flex justify-end w-full">
+        <button type="submit" class="btn-lg w-full">Assign</button>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script setup lang="ts">

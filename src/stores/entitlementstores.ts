@@ -7,7 +7,8 @@ import type { Program } from './programstores'
 interface Entitlement {
   id: string // Unique identifier for the entitlement record
   trainer_id: string // Foreign key linked to public.users.id (trainer)
-  client_id: string | null // Foreign key linked to public.profiles.id (client), null if unassigned
+  user_program_id: string | null
+  client_id: string | null // Foreign key linked to public.profiles.id (client)
   program_id: string // Foreign key linked to public.programs.id (program)
   status: 'active' | 'inactive' // Status of entitlement, can be 'active' or 'inactive'
   start_date: string // Timestamp of when the entitlement starts
@@ -49,9 +50,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
       if (!UserID) throw 'Trainer ID is required'
       const { data, error } = await supabase
         .from('entitlements')
-        .select(
-          '*'
-        )
+        .select('*')
         .eq('trainer_id', UserID)
 
       if (error) throw new Error(error.message)
@@ -74,7 +73,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
     if (!entitlements.value) return
 
     unusedEntitlementCount.value = entitlements.value.filter(
-      (entitlement) => entitlement.client_id === null,
+      (entitlement) => entitlement.user_program_id === null,
     ).length
   }
 
@@ -100,40 +99,49 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
   // Update an entitlement (e.g., assign a client to an entitlement)
   async function assignEntitlement(trainer_id: string, client_id: string, updatedData: Program) {
     try {
-      const entitlementData = {
-        client_id,
-        status: 'active',
-        updated_at: new Date().toISOString(),
-      }
-      const { data, error } = await supabase
-        .from('entitlements')
-        .update(entitlementData)
-        .eq('id', trainer_id)
-        .select()
-
-      if (error) throw new Error(error.message)
-
       const { data: userProgramData, error: userProgramError } = await supabase
         .from('user_programs')
         .insert({
           trainer_id,
-          client_id: client_id,
+          client_id,
           program_id: updatedData.id,
           status: 'active',
-          entitlement_id: data[0].id,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
           expires_on: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
           price_package: updatedData.price_one,
           workouts: updatedData.workouts,
           weekly_cycle: updatedData.weekly_cycle,
         })
         .select()
+        .single()
 
       if (userProgramError) throw new Error(userProgramError.message)
+      const entitlementData = {
+        status: 'active',
+        client_id,
+        user_program_id: userProgramData.id,
+      }
+      const { data, error } = await supabase
+        .from('entitlements')
+        .update(entitlementData)
+        .eq('id', trainer_id)
+        .select()
+        .single()
+
+      if (error) throw new Error(error.message)
+
+      const { data: updateData, error: updateError } = await supabase
+        .from('user_programs')
+        .update({
+          entitlement_id: data.id,
+        })
+        .eq('id', userProgramData.id)
+        .select()
+        .single()
+
+      if (updateError) throw new Error(updateError.message)
 
       // Update local state after the update
-      const index = entitlements.value.findIndex((entitlement) => entitlement.id === data[0].id)
+      const index = entitlements.value.findIndex((entitlement) => entitlement.id === data.id)
       if (index !== -1) {
         Object.assign(entitlements.value[index], data[0])
         updateUnusedEntitlementCount()
@@ -148,12 +156,11 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
     }
   }
 
-
   return {
     entitlements,
     unusedEntitlementCount,
     getEntitlements,
     createEntitlement,
-    updateEntitlement,
+    assignEntitlement,
   }
 })
