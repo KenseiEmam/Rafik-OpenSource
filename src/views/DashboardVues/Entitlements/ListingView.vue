@@ -16,22 +16,28 @@
         <div>
           <h2 class="header-medium mb-6">What Are Entitlements?</h2>
           <p class="text-body">
-            Entitlements are trainer-purchased subscriptions that can be assigned to trainees, allowing trainers to
-            charge their own rates for their services. Each entitlement lasts for one month, after which a new one must
-            be assigned for continued training access. To streamline the process, trainers can add clients to the
-            auto-update queue below. This ensures that when a trainee’s subscription expires, a new entitlement is
-            automatically assigned, preventing any interruptions in their training.
+            Entitlements are trainer-purchased subscriptions that can be assigned to trainees,
+            allowing trainers to charge their own rates for their services. Each entitlement lasts
+            for one month, after which a new one must be assigned for continued training access. To
+            streamline the process, trainers can add clients to the auto-update queue below. This
+            ensures that when a trainee’s subscription expires, a new entitlement is automatically
+            assigned, preventing any interruptions in their training.
           </p>
           <div class="flex items-center my-6">
             <h2 class="header-small">You currently have:</h2>
             <p class="contentH-large 2xl:text-7xl ml-auto">
-              {{ entitlementStore.entitlements.length }}
+              {{ entitlementStore.entitlements.filter((e) => !e.client_id).length }}
             </p>
-            <h2 class="header-small text-rafik-secondary uppercase font-semibold">Avl. Entitlements</h2>
+            <h2 class="header-small text-rafik-secondary uppercase font-semibold">
+              Avl. Entitlements
+            </h2>
           </div>
           <div class="w-full flex">
             <!-- Purchase Entitlement Button -->
-            <router-link :to="{ name: 'purchase-entitlements' }" class="w-full btn-lg-outline transition-all">
+            <router-link
+              :to="{ name: 'purchase-entitlements' }"
+              class="w-full btn-lg-outline transition-all"
+            >
               Purchase More
             </router-link>
           </div>
@@ -39,14 +45,14 @@
         <div>
           <AssignEntitlementsModal
             :availableCount="entitlementStore.unusedEntitlementCount"
-            :programs="programStore.AllPrograms || []"
+            :programs="programStore.ActivePrograms || []"
             @submit="onAssignModalSubmit"
           />
         </div>
       </div>
       <!-- User Programs -->
-        <div class="flex-1 flex flex-col h-full" v-if="!loading && userStore.Entitled">
-        <table v-if="userStore.Entitled.length>0" class="w-full text-center">
+      <div class="flex-1 flex flex-col h-full" v-if="!loading && userStore.Entitled">
+        <table v-if="userStore.Entitled.length > 0" class="w-full text-center">
           <thead class="contentH-small mb-24">
             <tr>
               <th></th>
@@ -57,11 +63,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="client in userStore.Entitled"
-              :key="client.id"
-              class="rounded-xl p-4 w-full"
-            >
+            <tr v-for="client in userStore.Entitled" :key="client.id" class="rounded-xl p-4 w-full">
               <td
                 class="flex gap-6 border-l border-y border-rafik-sectext rounded-l-xl text-left items-center py-4 pl-3 bg-rafik-secbg"
               >
@@ -108,134 +110,134 @@
               <td class="uppercase bg-rafik-secbg text-rafik border-y border-rafik-sectext">
                 {{ client.program_details.length ? client.program_details[0].status : '-' }}
               </td>
-
             </tr>
           </tbody>
         </table>
-        <p class=" text-center my-auto">:/ <br> No Entitled Users Found. Assign some to see down here!</p>
-    </div>
+        <p class="text-center my-auto">
+          :/ <br />
+          No Entitled Users Found. Assign some to see down here!
+        </p>
       </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
-import PageTitle from "@/components/PageTitle.vue";
-import { useEntitlementStore } from "@/stores/entitlementstores";
-import { useProgramStore } from "@/stores/programstores";
-import { useUserStore } from "@/stores/user";
-import Swal from "sweetalert2";
-import { supabase } from "@/lib/supabaseClient";
-import AssignEntitlementsModal from "./AssignEntitlementsModal.vue"; // New modal component
+import { ref, computed, onMounted } from 'vue'
+import PageTitle from '@/components/PageTitle.vue'
+import { useEntitlementStore } from '@/stores/entitlementstores'
+import { useProgramStore } from '@/stores/programstores'
+import { useUserStore } from '@/stores/user'
+import Swal from 'sweetalert2'
+import { supabase } from '@/lib/supabaseClient'
+import AssignEntitlementsModal from './AssignEntitlementsModal.vue' // New modal component
 
 // Store references
-const entitlementStore = useEntitlementStore();
-const programStore = useProgramStore();
-const userStore  = useUserStore();
+const entitlementStore = useEntitlementStore()
+const programStore = useProgramStore()
+const userStore = useUserStore()
 // Local reactive states
-const loading = ref(false);
-const showAssignEntitlementModal = ref(false); // Controls modal visibility
+const loading = ref(false)
+const showAssignEntitlementModal = ref(false) // Controls modal visibility
 
 // Success and Error Alerts
 function showSuccess(message: string) {
   Swal.fire({
-    title: "Success!",
+    title: 'Success!',
     showConfirmButton: false,
     timerProgressBar: true,
     timer: 1500,
     text: message,
     toast: true,
-    position: "top-right",
-    icon: "success",
-    background: "#081411",
-    color: "#E8F3ED",
-  });
+    position: 'top-right',
+    icon: 'success',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
 }
 
 function showError(message: string) {
   Swal.fire({
-    title: "Error!",
+    title: 'Error!',
     text: message,
-    icon: "error",
-    confirmButtonColor: "#d33",
-    background: "#081411",
-    color: "#E8F3ED",
-  });
+    icon: 'error',
+    confirmButtonColor: '#d33',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
 }
 
 // Load entitlements and programs on mount
 onMounted(() => {
-  loading.value = true;
+  loading.value = true
   entitlementStore
     .getEntitlements()
     .then(programStore.getAllPrograms)
     .then(userStore.getEntitled)
     .then(() => {
-      loading.value = false;
-    });
-});
-
-// "Coming Soon" alert for Purchase Entitlement button
-function showComingSoonAlert() {
-  showError("This feature is coming soon. Stay tuned!");
-}
-
-// Handler for the "Assign Entitlement" button
-function handleAssignEntitlement() {
-  if (entitlementStore.unusedEntitlementCount <= 0) {
-    showError("You have no available entitlements. Please purchase more or unassign existing ones.");
-    return;
-  }
-
-  if (!programStore.AllPrograms || programStore.AllPrograms.length === 0) {
-    showError("You must have at least one active program before assigning entitlements.");
-    return;
-  }
-
-  // Open the custom Vue modal
-  showAssignEntitlementModal.value = true;
-}
+      loading.value = false
+    })
+})
 
 // Called when the AssignEntitlementsModal emits a "submit" event
 async function onAssignModalSubmit(payload: { programId: string; emails: string[] }) {
-  const { programId, emails } = payload;
-  await assignEntitlementsToUsers(programId, emails);
-  showAssignEntitlementModal.value = false;
+  const { programId, emails } = payload
+  await assignEntitlementsToUsers(programId, emails)
+  showAssignEntitlementModal.value = false
 }
 
 // Function to assign entitlements
 async function assignEntitlementsToUsers(programId: string, emails: string[]) {
-  const availableEntitlements = entitlementStore.entitlements.filter((e) => e.client_id === null);
+  const availableEntitlements = entitlementStore.entitlements.filter((e) => e.client_id === null)
   if (emails.length > availableEntitlements.length) {
-    showError(`You can only assign up to ${availableEntitlements.length} entitlements.`);
-    return;
+    showError(`You can only assign up to ${availableEntitlements.length} entitlements.`)
+    return
   }
 
-  const assignedUserIds: string[] = [];
+  const assignedUserIds: string[] = []
 
   // Validate each email against the "users" table
   for (const email of emails) {
-    const { data: user, error } = await supabase.from("users").select("id").eq("email", email.trim()).single();
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('id')
+      .eq('email', email.trim())
+      .single()
 
     if (error || !user) {
-      showError(`User with email ${email} is not registered.`);
-      return;
+      showError(`User with email ${email} is not registered.`)
+      return
+    }
+
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('user_id', user.id)
+      .single()
+
+    if (profileError || !profile) {
+      showError(`User with email ${email} does not have a profile. Please ask them to create one.`)
+      return
     }
 
     // Check if the user is already assigned to an entitlement
-    const userAlreadyAssigned = entitlementStore.entitlements.find((entitlement) => entitlement.client_id === user.id);
+    const userAlreadyAssigned = entitlementStore.entitlements.find(
+      (entitlement) => entitlement.client_id === profile.id,
+    )
     if (userAlreadyAssigned) {
-      showError(`User with email ${email} is already assigned to a program.`);
-      return;
+      showError(`User with email ${email} is already assigned to a program.`)
+      return
     }
 
-    assignedUserIds.push(user.id);
+    assignedUserIds.push(profile.id)
   }
 
   // Update entitlements for each email/user
-  const updatePromises = emails.map((_, index) => {
+  emails.forEach((_, index) => {
     const entitlement = availableEntitlements[index]
     const program = programStore.ActivePrograms?.find((p) => p.id === programId)
+    console.log('Program ID:', programId)
+    console.log('ACTIVE', programStore.ActivePrograms)
     if (!program) {
       Swal.fire({
         title: 'Error!',
@@ -251,8 +253,8 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
   })
 
   // Refresh entitlements to reflect changes
-  entitlementStore.getEntitlements();
-  userStore.getEntitled();
+  entitlementStore.getEntitlements()
+  userStore.getEntitled()
 }
 </script>
 
