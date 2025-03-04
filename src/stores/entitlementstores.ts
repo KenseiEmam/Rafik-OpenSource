@@ -50,7 +50,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
       const { data, error } = await supabase
         .from('entitlements')
         .select(
-          'id, client_id, status, start_date, end_date, created_at, updated_at, cancellation_reason, trainer_id, program_id',
+          '*'
         )
         .eq('trainer_id', UserID)
 
@@ -148,24 +148,12 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
     }
   }
 
-  // Get entitlements for a trainer in a specific format for the table
-  function getTableData() {
-    return entitlements.value.map((entitlement: any) => {
-      return {
-        client: entitlement.client_id ? entitlement.client_id : 'Unassigned',
-        joinedOn: entitlement.created_at,
-        expiredOn: entitlement.end_date,
-        status: entitlement.status,
-      }
-    })
-  }
 
   return {
     entitlements,
     unusedEntitlementCount,
     getEntitlements,
     createEntitlement,
-    assignEntitlement,
-    getTableData,
+    updateEntitlement,
   }
 })
