@@ -1,19 +1,15 @@
 <template>
-  <!-- Modal Wrapper -->
-  <div
-    v-if="visible"
-    class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center z-50"
-  >
+
     <!-- Modal Content -->
-    <div class="card rounded-lg shadow p-6 w-128">
-      <h2 class="contentH-small">ASSIGN ENTITLEMENTS</h2>
-      <p class="text-body mb-4">Available: {{ availableCount }}</p>
+    <div class="text-left ">
+      <h2 class="header-small mb-6">ASSIGN ENTITLEMENTS</h2>
+
 
       <!-- Form -->
       <form @submit.prevent="submitForm">
         <!-- Program Selection -->
         <div class="mb-4">
-          <label for="program" class="block text-sm font-medium">Select Program</label>
+          <label for="program" class="block text-sm font-medium mb-3">Program to Assign</label>
           <select
             id="program"
             v-model="selectedProgram"
@@ -21,6 +17,7 @@
             required
             :class="{ 'border-red-500': errors.selectedProgram }"
           >
+          <option selected value="">Choose program for List</option>
             <option v-for="program in programs" :key="program.id" :value="program.id">
               {{ program.program_name }}
             </option>
@@ -32,7 +29,7 @@
 
         <!-- Emails Textarea -->
         <div class="mb-4">
-          <label for="emails" class="block text-sm font-medium">Add Assignee Emails:</label>
+          <label for="emails" class="block text-sm font-medium mb-3">Assignee Emails:</label>
           <textarea
             id="emails"
             v-model="emailsText"
@@ -47,19 +44,11 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="flex justify-end">
-          <button
-            type="button"
-            @click="$emit('close')"
-            class="btn-md bg-red-500 border-red-500 hover:bg-red-400 rounded mr-2"
-          >
-            Cancel
-          </button>
-          <button type="submit" class="btn-md rounded">Assign</button>
+        <div class="flex justify-end w-full">
+          <button type="submit" class="btn-lg w-full">Assign</button>
         </div>
       </form>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
