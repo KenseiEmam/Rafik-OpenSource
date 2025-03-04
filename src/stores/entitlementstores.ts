@@ -49,9 +49,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
       if (!UserID) throw 'Trainer ID is required'
       const { data, error } = await supabase
         .from('entitlements')
-        .select(
-          '*'
-        )
+        .select('*')
         .eq('trainer_id', UserID)
 
       if (error) throw new Error(error.message)
@@ -100,19 +98,6 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
   // Update an entitlement (e.g., assign a client to an entitlement)
   async function assignEntitlement(trainer_id: string, client_id: string, updatedData: Program) {
     try {
-      const entitlementData = {
-        client_id,
-        status: 'active',
-        updated_at: new Date().toISOString(),
-      }
-      const { data, error } = await supabase
-        .from('entitlements')
-        .update(entitlementData)
-        .eq('id', trainer_id)
-        .select()
-
-      if (error) throw new Error(error.message)
-
       const { data: userProgramData, error: userProgramError } = await supabase
         .from('user_programs')
         .insert({
@@ -120,7 +105,6 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
           client_id: client_id,
           program_id: updatedData.id,
           status: 'active',
-          entitlement_id: data[0].id,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
           expires_on: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
@@ -129,11 +113,36 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
           weekly_cycle: updatedData.weekly_cycle,
         })
         .select()
+        .single()
 
       if (userProgramError) throw new Error(userProgramError.message)
+      const entitlementData = {
+        status: 'active',
+        user_program_id: userProgramData.id,
+        updated_at: new Date().toISOString(),
+      }
+      const { data, error } = await supabase
+        .from('entitlements')
+        .update(entitlementData)
+        .eq('id', trainer_id)
+        .select()
+        .single()
+
+      if (error) throw new Error(error.message)
+
+      const { data: updateData, error: updateError } = await supabase
+        .from('user_programs')
+        .update({
+          entitlement_id: data.id,
+        })
+        .eq('id', userProgramData.id)
+        .select()
+        .single()
+
+      if (updateError) throw new Error(updateError.message)
 
       // Update local state after the update
-      const index = entitlements.value.findIndex((entitlement) => entitlement.id === data[0].id)
+      const index = entitlements.value.findIndex((entitlement) => entitlement.id === data.id)
       if (index !== -1) {
         Object.assign(entitlements.value[index], data[0])
         updateUnusedEntitlementCount()
@@ -148,12 +157,11 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
     }
   }
 
-
   return {
     entitlements,
     unusedEntitlementCount,
     getEntitlements,
     createEntitlement,
-    updateEntitlement,
+    assignEntitlement,
   }
 })
