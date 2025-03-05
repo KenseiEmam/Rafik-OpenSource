@@ -72,7 +72,7 @@
 import { ref, watch } from 'vue';
 import debounce from 'lodash/debounce';
 import { useExerciseStore } from '@/stores/exercisestores';
-import AddExerciseModal from './ExerciseTabs/AddExerciseModal.vue';
+import AddExerciseModal from '@/components/ExerciseTabs/AddExerciseModal.vue';
 import Swal from 'sweetalert2';
 
 const ModalOn = ref<boolean>(false);
