@@ -94,6 +94,12 @@ const router = createRouter({
           ],
         },
         {
+          path: 'trainer-profile', // Child route for /dashboard/clients
+
+          name: 'trainer-profile',
+          component: () => import('../views/DashboardVues/Profile/ListingVue.vue'),
+        },
+        {
           path: 'entitlements', // Child route for /dashboard/entitlements
 
           children: [

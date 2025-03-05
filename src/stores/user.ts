@@ -1,141 +1,162 @@
-import { ref} from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { supabase } from '../lib/supabaseClient'
 import router from '@/router'
-import Swal from "sweetalert2"
+import Swal from 'sweetalert2'
 // Success and Error Alerts
-  function showSuccess(message: string) {
-    Swal.fire({
-      title: "Success!",
-      showConfirmButton:false,
-      timerProgressBar:true,
-      timer:1500,
-      text: message,
-      toast: true,
-      position: "top-right",
-      icon: "success",
-      background: "#081411",
-      color: "#E8F3ED",
-    });
-  }
+function showSuccess(message: string) {
+  Swal.fire({
+    title: 'Success!',
+    showConfirmButton: false,
+    timerProgressBar: true,
+    timer: 1500,
+    text: message,
+    toast: true,
+    position: 'top-right',
+    icon: 'success',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
+}
 
-  // Function to show error alerts
+// Function to show error alerts
 function showError(message: string) {
   Swal.fire({
-    title: "Error!",
+    title: 'Error!',
     text: message,
-    icon: "error",
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#d33",
-      background:"#081411",
-      color:"#E8F3ED",
-  });
+    icon: 'error',
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#d33',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
 }
 
-interface UserInterface  {
-  id?:string,
-  email?:string,
-  full_name?:string
+interface UserInterface {
+  id?: string
+  email?: string
+  full_name?: string
 }
 interface ClientInterface {
-  id: string;
-  avatar?:string;
-  email?: string;
-  age?:number;
-  gender?:string;
-  nationality?:string;
-  phone?:string;
-  first_name?: string;
-  last_name?:string;
-  program_details?: any;
-  last_active?: Date;
-  profile?:any;
+  id: string
+  avatar?: string
+  email?: string
+  age?: number
+  gender?: string
+  nationality?: string
+  phone?: string
+  first_name?: string
+  last_name?: string
+  program_details?: any
+  last_active?: Date
+  profile?: any
 }
+
+interface TrainerInterface {
+  id: number
+  trainer_profile_id: string
+  avatar: string
+  email: string
+  gender: string // Mapped from users.sex
+  nationality: string
+  phone: string
+  first_name: string
+  last_name: string
+  age: number
+  last_active: Date | string // Adjust type based on your actual value (Date or ISO string)
+  // Additional properties from userProfiles can be included as needed:
+
+  title: string
+  years_of_experience: number
+  certifications: number[]
+  programs: number[]
+  clients: number[]
+  rating: number | null
+  bio: string | null
+  seats_available: number | null
+  preferred_clients: string[] | null
+  certifications_links: string[] | null
+  created_at: Date | null
+}
+
 type Exercise = {
-  id: string;
-  exercise_name?: string;
-  type?: string;
-  intensity?: string;
-  sets?: number;
-  reps?: number;
-};
+  id: string
+  exercise_name?: string
+  type?: string
+  intensity?: string
+  sets?: number
+  reps?: number
+}
 type Workout = {
-  workout_name: string;
-  workout_summary?: string;
-  time_to_complete?: string;
-  sets_per_session?: number;
-  rest_day?: boolean;
-  exercises: Exercise[];
-};
+  workout_name: string
+  workout_summary?: string
+  time_to_complete?: string
+  sets_per_session?: number
+  rest_day?: boolean
+  exercises: Exercise[]
+}
 type Program = {
-  id: string;
-  program_name?: string;
-  program_description?: string;
-  program_focus?: string[]; // Add program_focus here (assumed to be an array of strings)
-  status?: string;
-  trainer_id?: number,
-  difficulty_level?: string;
-  avg_session_time?: number;
-  avg_days_per_week?: number;
-  overall_rating?: number;
-  price_one?: number;
-  price_three?: number;
-  price_six?: number;
-  price_years?: number;
-  tags?:string[];
-  workouts?:Workout[];
-  program_photo?: string;
-  weekly_cycle?:number;
+  id: string
+  program_name?: string
+  program_description?: string
+  program_focus?: string[] // Add program_focus here (assumed to be an array of strings)
+  status?: string
+  trainer_id?: number
+  difficulty_level?: string
+  avg_session_time?: number
+  avg_days_per_week?: number
+  overall_rating?: number
+  price_one?: number
+  price_three?: number
+  price_six?: number
+  price_years?: number
+  tags?: string[]
+  workouts?: Workout[]
+  program_photo?: string
+  weekly_cycle?: number
   // Add any other properties your program might have
-};
+}
 interface Session {
-  access_token?:string,
-  refresh_token?:string,
-  expires_in?: number,
-  expires_at?: number,
+  access_token?: string
+  refresh_token?: string
+  expires_in?: number
+  expires_at?: number
 }
 export const useUserStore = defineStore('User', () => {
-  const User= ref<UserInterface>({
-  })
-  const AllClients = ref<ClientInterface[]>([]); // Ensure it's typed as an array
-  const ChatClients = ref<ClientInterface[]>([]); // Ensure it's typed as an array
-  const Entitled = ref<ClientInterface[]>([]); // Ensure it's typed as an array
-  const Client = ref<ClientInterface | null>(null); // Ensure Client can be null
-  const client_count = ref<number|null>(0);
-  const session = ref<Session>({});
-  const userProfile = ref<any | null>(null);
-
+  const User = ref<UserInterface>({})
+  const AllClients = ref<ClientInterface[]>([]) // Ensure it's typed as an array
+  const ChatClients = ref<ClientInterface[]>([]) // Ensure it's typed as an array
+  const Entitled = ref<ClientInterface[]>([]) // Ensure it's typed as an array
+  const Client = ref<ClientInterface | null>(null) // Ensure Client can be null
+  const Trainer = ref<TrainerInterface | null>(null)
+  const client_count = ref<number | null>(0)
+  const session = ref<Session>({})
+  const userProfile = ref<any | null>(null)
 
   //Login Handler
-  function LogIn(data:UserInterface, sesh:Session) {
-    User.value.id =data.id
-    User.value.email= data.email
+  function LogIn(data: UserInterface, sesh: Session) {
+    User.value.id = data.id
+    User.value.email = data.email
     session.value = {
-      access_token:sesh.access_token,
-      refresh_token:sesh.refresh_token,
+      access_token: sesh.access_token,
+      refresh_token: sesh.refresh_token,
       expires_in: sesh.expires_in,
       expires_at: sesh.expires_at,
     }
 
-
-    if(User.value.email){
+    if (User.value.email) {
       localStorage.setItem('LoggedInUser', User.value.email)
       // Trainer Check
       getUserProfile()
     }
 
-
-
-    if(session.value.access_token)
-      localStorage.setItem('AccessToken', session.value.access_token)
+    if (session.value.access_token) localStorage.setItem('AccessToken', session.value.access_token)
   }
-
 
   // Logout Handler
   function LogOut() {
-    User.value={
-    }
-    userProfile.value =  null;
+    User.value = {}
+    userProfile.value = null
     session.value = {}
     localStorage.removeItem('LoggedInUser')
     localStorage.removeItem('LoggedInTrainer')
@@ -143,36 +164,31 @@ export const useUserStore = defineStore('User', () => {
     localStorage.removeItem('AccessToken')
   }
 
-
   // Fetch User Profile Function
   async function getUserProfile() {
-    const loggedInUser = localStorage.getItem('LoggedInUser');
+    const loggedInUser = localStorage.getItem('LoggedInUser')
 
-      if (!loggedInUser) {
-        throw new Error('No logged-in user found in localStorage.');
-      }
+    if (!loggedInUser) {
+      throw new Error('No logged-in user found in localStorage.')
+    }
 
     try {
-      const { data, error } = await supabase
-        .from('users')
-        .select()
-        .eq('email', loggedInUser);
+      const { data, error } = await supabase.from('users').select().eq('email', loggedInUser)
 
       if (error) {
-        throw new Error(`Error fetching user profile: ${error.message}`);
+        throw new Error(`Error fetching user profile: ${error.message}`)
       }
       localStorage.setItem('UserID', data[0].id)
-      localStorage.setItem('LoggedInTrainer',data[0].is_trainer)
+      localStorage.setItem('LoggedInTrainer', data[0].is_trainer)
       userProfile.value = data[0]
       router.push({ name: 'dashboard-home' })
-      return userProfile.value ;
-
+      return userProfile.value
     } catch (error: any) {
-      console.error(error);
+      console.error(error)
       localStorage.removeItem('UserID')
       router.push('/setup-user-profile')
       // Display a user-friendly error message in the UI instead of an alert.
-      alert(`Failed to load user profile: ${error.message || 'Unknown error'}`);
+      alert(`Failed to load user profile: ${error.message || 'Unknown error'}`)
     }
   }
   // Fetches clients related to a program
@@ -183,116 +199,138 @@ export const useUserStore = defineStore('User', () => {
         .from('user_programs')
         .select('*')
         .eq('program_id', id)
-        .neq('status', 'cancelled');
+        .neq('status', 'cancelled')
 
       if (programError) {
-        throw new Error(`Error fetching user programs: ${programError.message}`);
+        throw new Error(`Error fetching user programs: ${programError.message}`)
       }
 
       if (!programs || programs.length === 0) {
-        AllClients.value = [];
-        return;
+        AllClients.value = []
+        return
       }
 
       // Extract client IDs from user_profiles
-      const clientProfileIds = programs.map((p) => p.client_id);
+      const clientProfileIds = programs.map((p) => p.client_id)
 
       // Fetch user_ids from user_profiles
       const { data: userProfiles, error: profileError } = await supabase
         .from('profiles')
         .select('id, user_id')
-        .in('id', clientProfileIds);
+        .in('id', clientProfileIds)
 
       if (profileError) {
-        throw new Error(`Error fetching user profiles: ${profileError.message}`);
+        throw new Error(`Error fetching user profiles: ${profileError.message}`)
       }
 
-      const userIds = userProfiles.map(profile => profile.user_id);
+      const userIds = userProfiles.map((profile) => profile.user_id)
 
       // Fetch user details from users table
       const { data: users, error: userError } = await supabase
         .from('users')
         .select('id,avatar, email, first_name, last_name')
-        .in('id', userIds);
+        .in('id', userIds)
 
       if (userError) {
-        throw new Error(`Error fetching user details: ${userError.message}`);
+        throw new Error(`Error fetching user details: ${userError.message}`)
       }
 
       // Merge client details with their respective program details
-      AllClients.value = userProfiles.map(profile => {
-        const user = users.find(u => u.id === profile.user_id);
-        const programDetails = programs.filter(program => program.client_id === profile.id);
-        return user ? { id: user.id, avatar:user.avatar, email: user.email, first_name: user.first_name, last_name: user.last_name, program_details: programDetails } : null;
-      }).filter(client => client !== null);
+      AllClients.value = userProfiles
+        .map((profile) => {
+          const user = users.find((u) => u.id === profile.user_id)
+          const programDetails = programs.filter((program) => program.client_id === profile.id)
+          return user
+            ? {
+                id: user.id,
+                avatar: user.avatar,
+                email: user.email,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                program_details: programDetails,
+              }
+            : null
+        })
+        .filter((client) => client !== null)
     } catch (error: any) {
-      console.error(error);
-      alert(`Failed to load clients: ${error.message || 'Unknown error'}`);
+      console.error(error)
+      alert(`Failed to load clients: ${error.message || 'Unknown error'}`)
     }
   }
-// Fetches Entitled related to anEntitlement
-async function getEntitled() {
-  try {
-    // Fetch user_programs where entitlement_id matches the given id
-    const { data: programs, error: programError } = await supabase
-    .from("user_programs")
-    .select("client_id, entitlement_id, program_id")
-    .not("entitlement_id", "is", null); // ✅ Correct way to filter out NULLs
-
-    if (programError) {
-      throw new Error(`Error fetching user programs: ${programError.message}`);
-    }
-
-    if (!programs || programs.length === 0) {
-      Entitled.value = [];
-      return;
-    }
-
-    // Extract client IDs from user_profiles
-    const clientProfileIds = programs.map((p) => p.client_id);
-
-    // Fetch user_ids from user_profiles
-    const { data: userProfiles, error: profileError } = await supabase
-      .from('profiles')
-      .select('id, user_id')
-      .in('id', clientProfileIds);
-
-    if (profileError) {
-      throw new Error(`Error fetching user profiles: ${profileError.message}`);
-    }
-
-    const userIds = userProfiles.map(profile => profile.user_id);
-
-    // Fetch user details from users table
-    const { data: users, error: userError } = await supabase
-      .from('users')
-      .select('id,avatar, email, first_name, last_name')
-      .in('id', userIds);
-
-    if (userError) {
-      throw new Error(`Error fetching user details: ${userError.message}`);
-    }
-
-    // Merge client details with their respective program details
-    Entitled.value = userProfiles.map(profile => {
-      const user = users.find(u => u.id === profile.user_id);
-      const programDetails = programs.filter(program => program.client_id === profile.id);
-      return user ? { id: user.id, avatar:user.avatar, email: user.email, first_name: user.first_name, last_name: user.last_name, program_details: programDetails } : null;
-    }).filter(client => client !== null);
-  } catch (error: any) {
-    console.error(error);
-    alert(`Failed to load clients: ${error.message || 'Unknown error'}`);
-  }
-}
-
-  async function getActiveClientsForTrainer(page:number , pageSize:number ) {
+  // Fetches Entitled related to anEntitlement
+  async function getEntitled() {
     try {
-      const trainerId = localStorage.getItem('UserID');
+      // Fetch user_programs where entitlement_id matches the given id
+      const { data: programs, error: programError } = await supabase
+        .from('user_programs')
+        .select('client_id, entitlement_id, program_id')
+        .not('entitlement_id', 'is', null) // ✅ Correct way to filter out NULLs
+
+      if (programError) {
+        throw new Error(`Error fetching user programs: ${programError.message}`)
+      }
+
+      if (!programs || programs.length === 0) {
+        Entitled.value = []
+        return
+      }
+
+      // Extract client IDs from user_profiles
+      const clientProfileIds = programs.map((p) => p.client_id)
+
+      // Fetch user_ids from user_profiles
+      const { data: userProfiles, error: profileError } = await supabase
+        .from('profiles')
+        .select('id, user_id')
+        .in('id', clientProfileIds)
+
+      if (profileError) {
+        throw new Error(`Error fetching user profiles: ${profileError.message}`)
+      }
+
+      const userIds = userProfiles.map((profile) => profile.user_id)
+
+      // Fetch user details from users table
+      const { data: users, error: userError } = await supabase
+        .from('users')
+        .select('id,avatar, email, first_name, last_name')
+        .in('id', userIds)
+
+      if (userError) {
+        throw new Error(`Error fetching user details: ${userError.message}`)
+      }
+
+      // Merge client details with their respective program details
+      Entitled.value = userProfiles
+        .map((profile) => {
+          const user = users.find((u) => u.id === profile.user_id)
+          const programDetails = programs.filter((program) => program.client_id === profile.id)
+          return user
+            ? {
+                id: user.id,
+                avatar: user.avatar,
+                email: user.email,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                program_details: programDetails,
+              }
+            : null
+        })
+        .filter((client) => client !== null)
+    } catch (error: any) {
+      console.error(error)
+      alert(`Failed to load clients: ${error.message || 'Unknown error'}`)
+    }
+  }
+
+  async function getActiveClientsForTrainer(page: number, pageSize: number) {
+    try {
+      const trainerId = localStorage.getItem('UserID')
       if (!trainerId) {
-        showError("Trainer ID not found in local storage.");
-        AllClients.value = [];
-        client_count.value = 0;
-        return;
+        showError('Trainer ID not found in local storage.')
+        AllClients.value = []
+        client_count.value = 0
+        return
       }
 
       // Fetch total count for pagination
@@ -300,14 +338,13 @@ async function getEntitled() {
         .from('user_programs')
         .select('client_id', { count: 'exact', head: true })
         .eq('trainer_id', trainerId)
-        .neq('status', 'cancelled');
-
+        .neq('status', 'cancelled')
 
       if (countError) {
-        showError(`Error fetching total count: ${countError.message}`);
-        AllClients.value = [];
-        client_count.value = 0;
-        return;
+        showError(`Error fetching total count: ${countError.message}`)
+        AllClients.value = []
+        client_count.value = 0
+        return
       }
 
       const { data: activePrograms, error: programError } = await supabase
@@ -315,84 +352,92 @@ async function getEntitled() {
         .select('*')
         .eq('trainer_id', trainerId)
         .neq('status', 'cancelled')
-        .range((page - 1) * pageSize, page * pageSize - 1);
+        .range((page - 1) * pageSize, page * pageSize - 1)
 
       if (programError) {
-        showError(`Error fetching user programs: ${programError.message}`);
-        AllClients.value = [];
-        client_count.value = 0;
-        return;
+        showError(`Error fetching user programs: ${programError.message}`)
+        AllClients.value = []
+        client_count.value = 0
+        return
       }
 
       if (!activePrograms || activePrograms.length === 0) {
-        AllClients.value = [];
-        client_count.value = count;
-        return;
+        AllClients.value = []
+        client_count.value = count
+        return
       }
 
-      const clientProfileIds = [...new Set(activePrograms.map(program => program.client_id))];
+      const clientProfileIds = [...new Set(activePrograms.map((program) => program.client_id))]
 
       const { data: userProfiles, error: profileError } = await supabase
         .from('profiles')
         .select('id, user_id')
-        .in('id', clientProfileIds);
+        .in('id', clientProfileIds)
 
       if (profileError) {
-        showError(`Error fetching user profiles: ${profileError.message}`);
-        AllClients.value = [];
-        client_count.value = count;
-        return;
+        showError(`Error fetching user profiles: ${profileError.message}`)
+        AllClients.value = []
+        client_count.value = count
+        return
       }
 
-      const userIds = userProfiles.map(profile => profile.user_id);
+      const userIds = userProfiles.map((profile) => profile.user_id)
 
       const { data: users, error: userError } = await supabase
         .from('users')
-        .select('id, avatar, email, first_name, last_name, age, sex, nationality, phone, last_active')
-        .in('id', userIds);
+        .select(
+          'id, avatar, email, first_name, last_name, age, sex, nationality, phone, last_active',
+        )
+        .in('id', userIds)
 
       if (userError) {
-        showError(`Error fetching user details: ${userError.message}`);
-        AllClients.value = [];
-        client_count.value = count;
-        return;
+        showError(`Error fetching user details: ${userError.message}`)
+        AllClients.value = []
+        client_count.value = count
+        return
       }
 
-      AllClients.value = userProfiles.map(profile => {
-        const user = users.find(u => u.id === profile.user_id);
-        const programDetails = activePrograms.filter(program => program.client_id === profile.id);
+      AllClients.value = userProfiles
+        .map((profile) => {
+          const user = users.find((u) => u.id === profile.user_id)
+          const programDetails = activePrograms.filter(
+            (program) => program.client_id === profile.id,
+          )
 
-        return user ? {
-          id: user.id,
-          avatar: user.avatar,
-          email: user.email,
-          gender: user.sex,
-          nationality: user.nationality,
-          phone: user.phone,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          age: user.age,
-          profile: profile,
-          program_details: programDetails,
-          last_active: user.last_active,
-        } : null;
-      }).filter(client => client !== null);
+          return user
+            ? {
+                id: user.id,
+                avatar: user.avatar,
+                email: user.email,
+                gender: user.sex,
+                nationality: user.nationality,
+                phone: user.phone,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                age: user.age,
+                profile: profile,
+                program_details: programDetails,
+                last_active: user.last_active,
+              }
+            : null
+        })
+        .filter((client) => client !== null)
 
-      client_count.value = count;
-    } catch (error:any) {
-      showError(`Unexpected error: ${error.message || 'Unknown error'}`);
-      AllClients.value = [];
-      client_count.value = 0;
+      client_count.value = count
+    } catch (error: any) {
+      showError(`Unexpected error: ${error.message || 'Unknown error'}`)
+      AllClients.value = []
+      client_count.value = 0
     }
   }
-  async function getChatClients( ) {
+  async function getChatClients() {
     try {
-      const trainerId = localStorage.getItem('UserID');
+      const trainerId = localStorage.getItem('UserID')
       if (!trainerId) {
-        showError("Trainer ID not found in local storage.");
-        ChatClients.value = [];
-        client_count.value = 0;
-        return;
+        showError('Trainer ID not found in local storage.')
+        ChatClients.value = []
+        client_count.value = 0
+        return
       }
 
       // Fetch total count for pagination
@@ -400,14 +445,13 @@ async function getEntitled() {
         .from('user_programs')
         .select('client_id', { count: 'exact', head: true })
         .eq('trainer_id', trainerId)
-        .neq('status', 'cancelled');
-
+        .neq('status', 'cancelled')
 
       if (countError) {
-        showError(`Error fetching total count: ${countError.message}`);
-        ChatClients.value = [];
-        client_count.value = 0;
-        return;
+        showError(`Error fetching total count: ${countError.message}`)
+        ChatClients.value = []
+        client_count.value = 0
+        return
       }
 
       const { data: activePrograms, error: programError } = await supabase
@@ -417,88 +461,95 @@ async function getEntitled() {
         .neq('status', 'cancelled')
 
       if (programError) {
-        showError(`Error fetching user programs: ${programError.message}`);
-        ChatClients.value = [];
-        client_count.value = 0;
-        return;
+        showError(`Error fetching user programs: ${programError.message}`)
+        ChatClients.value = []
+        client_count.value = 0
+        return
       }
 
       if (!activePrograms || activePrograms.length === 0) {
-        ChatClients.value = [];
-        client_count.value = count;
-        return;
+        ChatClients.value = []
+        client_count.value = count
+        return
       }
 
-      const clientProfileIds = [...new Set(activePrograms.map(program => program.client_id))];
+      const clientProfileIds = [...new Set(activePrograms.map((program) => program.client_id))]
 
       const { data: userProfiles, error: profileError } = await supabase
         .from('profiles')
         .select('id, user_id')
-        .in('id', clientProfileIds);
+        .in('id', clientProfileIds)
 
       if (profileError) {
-        showError(`Error fetching user profiles: ${profileError.message}`);
-        ChatClients.value = [];
-        client_count.value = count;
-        return;
+        showError(`Error fetching user profiles: ${profileError.message}`)
+        ChatClients.value = []
+        client_count.value = count
+        return
       }
 
-      const userIds = userProfiles.map(profile => profile.user_id);
+      const userIds = userProfiles.map((profile) => profile.user_id)
 
       const { data: users, error: userError } = await supabase
         .from('users')
-        .select('id, avatar, email, first_name, last_name, age, sex, nationality, phone, last_active')
-        .in('id', userIds);
+        .select(
+          'id, avatar, email, first_name, last_name, age, sex, nationality, phone, last_active',
+        )
+        .in('id', userIds)
 
       if (userError) {
-        showError(`Error fetching user details: ${userError.message}`);
-        ChatClients.value = [];
-        client_count.value = count;
-        return;
+        showError(`Error fetching user details: ${userError.message}`)
+        ChatClients.value = []
+        client_count.value = count
+        return
       }
 
-      ChatClients.value = userProfiles.map(profile => {
-        const user = users.find(u => u.id === profile.user_id);
-        const programDetails = activePrograms.filter(program => program.client_id === profile.id);
+      ChatClients.value = userProfiles
+        .map((profile) => {
+          const user = users.find((u) => u.id === profile.user_id)
+          const programDetails = activePrograms.filter(
+            (program) => program.client_id === profile.id,
+          )
 
-        return user ? {
-          id: user.id,
-          avatar: user.avatar,
-          email: user.email,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          program_details: programDetails[0],
-          last_active: user.last_active,
-        } : null;
-      }).filter(client => client !== null);
+          return user
+            ? {
+                id: user.id,
+                avatar: user.avatar,
+                email: user.email,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                program_details: programDetails[0],
+                last_active: user.last_active,
+              }
+            : null
+        })
+        .filter((client) => client !== null)
 
-      client_count.value = count;
-    } catch (error:any) {
-      showError(`Unexpected error: ${error.message || 'Unknown error'}`);
-      AllClients.value = [];
-      client_count.value = 0;
+      client_count.value = count
+    } catch (error: any) {
+      showError(`Unexpected error: ${error.message || 'Unknown error'}`)
+      AllClients.value = []
+      client_count.value = 0
     }
   }
   // Update Client Program
-    async function updateClientProgram(updateData: Program) {
-      try {
-        const { error } = await supabase
-          .from("user_programs")
-          .update(updateData)
-          .eq("id", updateData.id);
+  async function updateClientProgram(updateData: Program) {
+    try {
+      const { error } = await supabase
+        .from('user_programs')
+        .update(updateData)
+        .eq('id', updateData.id)
 
-        if (error) throw new Error(error.message);
+      if (error) throw new Error(error.message)
 
-        // Update local state
-        if (Client.value?.program_details?.id === updateData.id) {
-          Object.assign(Client.value?.program_details, updateData);
-          showSuccess("Successfully updated client workout plan!")
-        }
-      } catch (error) {
-        showError("Error updating program:"+ error)
+      // Update local state
+      if (Client.value?.program_details?.id === updateData.id) {
+        Object.assign(Client.value?.program_details, updateData)
+        showSuccess('Successfully updated client workout plan!')
       }
+    } catch (error) {
+      showError('Error updating program:' + error)
     }
-
+  }
 
   async function getClient(id: string) {
     try {
@@ -507,14 +558,14 @@ async function getEntitled() {
         .from('profiles')
         .select('*')
         .eq('user_id', id) // Match user_id, as we have the user id here
-        .single(); // Since we're looking for a single profile
+        .single() // Since we're looking for a single profile
 
       if (profileError) {
-        throw new Error(`Error fetching user profile: ${profileError.message}`);
+        throw new Error(`Error fetching user profile: ${profileError.message}`)
       }
 
       if (!userProfiles) {
-        return null; // If no profile found for the given user ID, return null
+        return null // If no profile found for the given user ID, return null
       }
 
       // Fetch the single program associated with the client
@@ -523,25 +574,27 @@ async function getEntitled() {
         .select('*')
         .eq('client_id', userProfiles.id)
         .neq('status', 'cancelled')
-        .single(); // We expect a single program here
+        .single() // We expect a single program here
 
       if (programError) {
-        throw new Error(`Error fetching user program: ${programError.message}`);
+        throw new Error(`Error fetching user program: ${programError.message}`)
       }
 
       if (!programs) {
-        return null; // If no program found for the client, return null
+        return null // If no program found for the client, return null
       }
 
       // Fetch user details from the users table based on the provided user_id
       const { data: users, error: userError } = await supabase
         .from('users')
-        .select('id, avatar, email, first_name, last_name, age,sex, nationality, phone, last_active')
+        .select(
+          'id, avatar, email, first_name, last_name, age,sex, nationality, phone, last_active',
+        )
         .eq('id', id)
-        .single(); // We expect a single user here
+        .single() // We expect a single user here
 
       if (userError) {
-        throw new Error(`Error fetching user details: ${userError.message}`);
+        throw new Error(`Error fetching user details: ${userError.message}`)
       }
 
       // Assign the client object with the user details and associated program
@@ -549,55 +602,127 @@ async function getEntitled() {
         id: users.id,
         avatar: users.avatar,
         email: users.email,
-        gender:users.sex,
-        nationality:users.nationality,
-        phone:users.phone,
+        gender: users.sex,
+        nationality: users.nationality,
+        phone: users.phone,
         first_name: users.first_name,
         last_name: users.last_name,
-        age:users.age,
-        profile:userProfiles,
+        age: users.age,
+        profile: userProfiles,
         program_details: programs,
-        last_active:users.last_active // This includes the single program the client is associated with
-      };
+        last_active: users.last_active, // This includes the single program the client is associated with
+      }
 
-      return Client.value;
-
+      return Client.value
     } catch (error: any) {
-      console.error(error);
-      alert(`Failed to load client: ${error.message || 'Unknown error'}`);
-      return null;
+      console.error(error)
+      alert(`Failed to load client: ${error.message || 'Unknown error'}`)
+      return null
     }
   }
 
-
-   // Fetch User Profile Function with no RR
-   async function getUserProfileNO() {
-    const loggedInUser = localStorage.getItem('LoggedInUser');
-
-      if (!loggedInUser) {
-        throw new Error('No logged-in user found in localStorage.');
+  async function getTrainer() {
+    try {
+      const id = localStorage.getItem('UserID')
+      if (!id) {
+        throw new Error('No user ID found in the store.')
       }
+      // Fetch the user profile based on the provided user ID (id)
+      const { data: userProfiles, error: profileError } = await supabase
+        .from('trainer_profile')
+        .select('*')
+        .eq('user_id', id) // Match user_id, as we have the user id here
+        .single() // Since we're looking for a single profile
+
+      if (profileError) {
+        throw new Error(`Error fetching user profile: ${profileError.message}`)
+      }
+
+      if (!userProfiles) {
+        return null // If no profile found for the given user ID, return null
+      }
+
+      // Fetch user details from the users table based on the provided user_id
+      const { data: users, error: userError } = await supabase
+        .from('users')
+        .select(
+          'id, avatar, email, first_name, last_name, age,sex, nationality, phone, last_active',
+        )
+        .eq('id', id)
+        .single() // We expect a single user here
+
+      if (userError) {
+        throw new Error(`Error fetching user details: ${userError.message}`)
+      }
+
+      // Assign the client object with the user details and associated program
+      Trainer.value = {
+        id: users.id,
+        avatar: users.avatar,
+        email: users.email,
+        gender: users.sex,
+        nationality: users.nationality,
+        phone: users.phone,
+        first_name: users.first_name,
+        last_name: users.last_name,
+        age: users.age,
+        last_active: users.last_active, // This includes the single program the client is associated with
+        ...userProfiles,
+      }
+
+      return Trainer.value
+    } catch (error: any) {
+      console.error(error)
+      alert(`Failed to load client: ${error.message || 'Unknown error'}`)
+      return null
+    }
+  }
+
+  // Fetch User Profile Function with no RR
+  async function getUserProfileNO() {
+    const loggedInUser = localStorage.getItem('LoggedInUser')
+
+    if (!loggedInUser) {
+      throw new Error('No logged-in user found in localStorage.')
+    }
 
     try {
-      const { data, error } = await supabase
-        .from('users')
-        .select()
-        .eq('email', loggedInUser);
+      const { data, error } = await supabase.from('users').select().eq('email', loggedInUser)
 
       if (error) {
-        throw new Error(`Error fetching user profile: ${error.message}`);
+        throw new Error(`Error fetching user profile: ${error.message}`)
       }
       localStorage.setItem('UserID', data[0].id)
-      localStorage.setItem('LoggedInTrainer',data[0].is_trainer)
+      localStorage.setItem('LoggedInTrainer', data[0].is_trainer)
       userProfile.value = data[0]
-      return userProfile.value ;
-
+      return userProfile.value
     } catch (error: any) {
-      console.error(error);
+      console.error(error)
       localStorage.removeItem('UserID')
       // Display a user-friendly error message in the UI instead of an alert.
-      alert(`Failed to load user profile: ${error.message || 'Unknown error'}`);
+      alert(`Failed to load user profile: ${error.message || 'Unknown error'}`)
     }
   }
-  return { User, userProfile, AllClients,ChatClients, Entitled, Client, client_count,getChatClients, getActiveClientsForTrainer, LogIn, LogOut, getUserProfile, getUserProfileNO, getClients, getEntitled,getClient, updateClientProgram }
+
+  return {
+    User,
+    userProfile,
+    AllClients,
+    ChatClients,
+    Entitled,
+    Client,
+    Trainer,
+    client_count,
+    getChatClients,
+    getActiveClientsForTrainer,
+    LogIn,
+    LogOut,
+    getUserProfile,
+    getUserProfileNO,
+    getClients,
+    getTrainer,
+    getEntitled,
+    getClient,
+    updateClientProgram,
+  }
 })
