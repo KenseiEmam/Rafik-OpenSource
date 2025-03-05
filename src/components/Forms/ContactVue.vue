@@ -105,5 +105,5 @@
   </section>
 </template>
 <script setup lang="ts">
-  import SocialIcons from './SocialIcons.vue';
+  import SocialIcons from '@/components/SocialIcons.vue';
 </script>
