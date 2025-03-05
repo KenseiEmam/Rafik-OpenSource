@@ -113,7 +113,7 @@
             </tr>
           </tbody>
         </table>
-        <p class="text-center my-auto">
+        <p v-if="userStore.Entitled.length===0" class="text-center my-auto">
           :/ <br />
           No Entitled Users Found. Assign some to see down here!
         </p>
