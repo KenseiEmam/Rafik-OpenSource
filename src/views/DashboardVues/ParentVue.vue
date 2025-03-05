@@ -25,6 +25,6 @@ import { useUserStore } from '@/stores/user'
   onMounted(() => {
     userStore.getUserProfileNO()
   })
-import DashboardSideBar from '../../components/DashboardSideBar.vue'
-import PostOffice from '../../components/PostOffice.vue'
+import DashboardSideBar from '../../components/Navigation/DashboardSideBar.vue'
+import PostOffice from '../../components/Offcanvas/PostOffice.vue'
 </script>

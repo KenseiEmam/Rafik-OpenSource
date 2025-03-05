@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { supabase } from '../lib/supabaseClient'
+import { supabase } from '@/lib/supabaseClient'
 import router from '@/router'
 import { useUserStore } from '@/stores/user'
 const loading = ref<boolean>(false)

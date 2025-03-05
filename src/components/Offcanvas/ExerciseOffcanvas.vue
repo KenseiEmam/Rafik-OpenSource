@@ -92,7 +92,7 @@
 import { ref, watch } from 'vue';
 import debounce from 'lodash/debounce';
 import { useExerciseStore } from '@/stores/exercisestores';
-import AddExerciseModal from './ExerciseTabs/AddExerciseModal.vue';
+import AddExerciseModal from '@/components/ExerciseTabs/AddExerciseModal.vue';
 const ModalOn = ref<boolean>(false);
 const exerciseStore = useExerciseStore();
 const selectedExercises = ref<any[]>([]);
