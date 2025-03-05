@@ -174,7 +174,7 @@
 </template>
 
 <script setup lang="ts">
-import PageTitle from '@/components/PageTitle.vue'
+import PageTitle from '@/components/Navigation/PageTitle.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useExerciseStore } from '@/stores/exercisestores'

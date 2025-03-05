@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import WebsiteHeader from '../components/WebsiteHeader.vue'
-import SetUpForm from '../components/SetUpForm.vue'
+import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
+import SetUpForm from '../components/Forms/SetUpForm.vue'
 </script>
 
 <template>

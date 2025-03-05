@@ -171,7 +171,7 @@
 </template>
 
 <script lang="ts" setup>
-import PageTitle from "@/components/PageTitle.vue";
+import PageTitle from "@/components/Navigation/PageTitle.vue";
 import { ref, watch } from "vue";
 
 // Store package amounts

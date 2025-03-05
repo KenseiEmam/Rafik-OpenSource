@@ -5,9 +5,9 @@ import { useExerciseStore } from "@/stores/exercisestores";
 import Swal from 'sweetalert2';
 import ExcerciseMovers from "@/components/ExerciseTabs/ExcerciseMovers.vue";
 import TechTips from "@/components/ExerciseTabs/TechTips.vue";
-import EquipReq from "@/components/EquipReq.vue";
+import EquipReq from "@/components/ExerciseTabs/EquipReq.vue";
 import ExerciseAlt from "@/components/ExerciseTabs/ExerciseAlt.vue";
-import ImportOffcanvas from "@/components/ImportOffcanvas.vue";
+import ImportOffcanvas from "@/components/Offcanvas/ImportOffcanvas.vue";
 import { supabase } from "@/lib/supabaseClient";
 
 const activeTab = ref("Muscles");

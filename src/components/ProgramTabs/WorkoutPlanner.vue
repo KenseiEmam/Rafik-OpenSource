@@ -167,7 +167,7 @@
 <script lang="ts" setup>
 import { ref, reactive, watch, defineProps } from "vue";
 import { useProgramStore } from "@/stores/programstores";
-import ExerciseOffcanvas from "../ExerciseOffcanvas.vue";
+import ExerciseOffcanvas from "../Offcanvas/ExerciseOffcanvas.vue";
 import { useUserStore } from "@/stores/user";
 type Program = {
   id: string;

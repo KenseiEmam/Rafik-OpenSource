@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SocialIcons from '@/components/SocialIcons.vue'
-import WebsiteHeader from '../components/WebsiteHeader.vue'
+import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
 </script>
 <template>
   <main class="mebsite-body">

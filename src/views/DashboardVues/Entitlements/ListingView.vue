@@ -124,7 +124,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import PageTitle from '@/components/PageTitle.vue'
+import PageTitle from '@/components/Navigation/PageTitle.vue'
 import { useEntitlementStore } from '@/stores/entitlementstores'
 import { useProgramStore } from '@/stores/programstores'
 import { useUserStore } from '@/stores/user'

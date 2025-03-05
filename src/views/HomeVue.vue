@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import TheWelcome from '../components/TheWelcome.vue'
-import WebsiteHeader from '../components/WebsiteHeader.vue'
+import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
 import ProgramCreation from '../components/ProgramCreation.vue'
 import ClientManagemet from '../components/ClientManagemet.vue'
-import ContactVue from '../components/ContactVue.vue'
+import ContactVue from '../components/Forms/ContactVue.vue'
 </script>
 
 <template>

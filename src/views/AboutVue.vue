@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import WebsiteHeader from '../components/WebsiteHeader.vue'
+import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
 import SocialIcons from '../components/SocialIcons.vue'
 </script>
 <template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import WebsiteHeader from '../components/WebsiteHeader.vue'
-import LoginForm from '../components/LoginForm.vue'
+import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
+import LoginForm from '../components/Forms/LoginForm.vue'
 </script>
 
 <template>

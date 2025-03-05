@@ -67,7 +67,7 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
-import ExerciseOffcanvas from '@/components/ExerciseOffcanvas.vue';
+import ExerciseOffcanvas from '@/components/Offcanvas/ExerciseOffcanvas.vue';
 
 // Define the Exercise type
 type Exercise = {
