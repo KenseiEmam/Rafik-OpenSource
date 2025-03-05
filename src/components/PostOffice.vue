@@ -16,7 +16,7 @@
         </svg>
       </div>
       <div class="space-y-8 flex-1 flex flex-col divide-y divide-rafik-sectext overflow-auto w-full">
-        <div v-for="client in sortedChatClients" :key="client.id" :class="{' border-rafik-pritext': !client.seen_at && client.sent_by == client.id}" class="p-6 border hover:border-rafik-secondary card cursor-pointer rounded-xl bg-rafik-secbg flex gap-6 w-full items-center">
+        <div @click="activateChat(client)" v-for="client in sortedChatClients" :key="client.id" :class="{' border-rafik-pritext': !client.seen_at && client.sent_by == client.id}" class="p-6 border hover:border-rafik-secondary card cursor-pointer rounded-xl bg-rafik-secbg flex gap-6 w-full items-center">
           <img :src="client.avatar" alt="" class="rounded-full border-2 2xl:h-24 2xl:w-24 border-rafik-secondary object-cover w-16 h-16">
           <div class="flex-1">
             <h2 class="header-small text-rafik-secondary">{{ client.first_name }} {{ client.last_name }}</h2>
@@ -46,6 +46,7 @@
         </div>
       </div>
     </div>
+    <ChatWindow :visible="chatActive" :Client="chatClient" @close="chatActive = false"/>
   </div>
 </template>
 
@@ -54,13 +55,15 @@ import { onMounted, onUnmounted, ref, computed } from "vue";
 import { useUserStore } from "@/stores/user";
 import { supabase } from "@/lib/supabaseClient";
 import { formatDistanceToNow, parseISO } from 'date-fns';
-
+import ChatWindow from "@/components/ChatWindow.vue";
 // Function to humanize the date
 function humanizeDate(date: string): string {
   return formatDistanceToNow(parseISO(date), { addSuffix: true });
 }
+const chatActive =ref(false);
 const open = ref(false);
 const clientStore = useUserStore();
+const chatClient = ref()
 const latestMessages = ref<Record<string, { content: string; created_at: string, seen_at: string | null , sent_by: string}>>({});
 
 onMounted(async () => {
@@ -69,6 +72,10 @@ onMounted(async () => {
   subscribeToChatMessages(); // Start listening to updates
 });
 
+function activateChat(client:any){
+  chatClient.value = client;
+  chatActive.value= true;
+}
 // Fetch latest messages for all user programs
 async function fetchLatestMessages() {
   try {
