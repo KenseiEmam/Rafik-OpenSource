@@ -98,6 +98,7 @@ export const useUserStore = defineStore('User', () => {
   const User= ref<UserInterface>({
   })
   const AllClients = ref<ClientInterface[]>([]); // Ensure it's typed as an array
+  const ChatClients = ref<ClientInterface[]>([]); // Ensure it's typed as an array
   const Entitled = ref<ClientInterface[]>([]); // Ensure it's typed as an array
   const Client = ref<ClientInterface | null>(null); // Ensure Client can be null
   const client_count = ref<number|null>(0);
@@ -384,7 +385,100 @@ async function getEntitled() {
       client_count.value = 0;
     }
   }
+  async function getChatClients( ) {
+    try {
+      const trainerId = localStorage.getItem('UserID');
+      if (!trainerId) {
+        showError("Trainer ID not found in local storage.");
+        ChatClients.value = [];
+        client_count.value = 0;
+        return;
+      }
 
+      // Fetch total count for pagination
+      const { count, error: countError } = await supabase
+        .from('user_programs')
+        .select('client_id', { count: 'exact', head: true })
+        .eq('trainer_id', trainerId)
+        .neq('status', 'cancelled');
+
+
+      if (countError) {
+        showError(`Error fetching total count: ${countError.message}`);
+        ChatClients.value = [];
+        client_count.value = 0;
+        return;
+      }
+
+      const { data: activePrograms, error: programError } = await supabase
+        .from('user_programs')
+        .select('*')
+        .eq('trainer_id', trainerId)
+        .neq('status', 'cancelled')
+
+      if (programError) {
+        showError(`Error fetching user programs: ${programError.message}`);
+        ChatClients.value = [];
+        client_count.value = 0;
+        return;
+      }
+
+      if (!activePrograms || activePrograms.length === 0) {
+        ChatClients.value = [];
+        client_count.value = count;
+        return;
+      }
+
+      const clientProfileIds = [...new Set(activePrograms.map(program => program.client_id))];
+
+      const { data: userProfiles, error: profileError } = await supabase
+        .from('profiles')
+        .select('id, user_id')
+        .in('id', clientProfileIds);
+
+      if (profileError) {
+        showError(`Error fetching user profiles: ${profileError.message}`);
+        ChatClients.value = [];
+        client_count.value = count;
+        return;
+      }
+
+      const userIds = userProfiles.map(profile => profile.user_id);
+
+      const { data: users, error: userError } = await supabase
+        .from('users')
+        .select('id, avatar, email, first_name, last_name, age, sex, nationality, phone, last_active')
+        .in('id', userIds);
+
+      if (userError) {
+        showError(`Error fetching user details: ${userError.message}`);
+        ChatClients.value = [];
+        client_count.value = count;
+        return;
+      }
+
+      ChatClients.value = userProfiles.map(profile => {
+        const user = users.find(u => u.id === profile.user_id);
+        const programDetails = activePrograms.filter(program => program.client_id === profile.id);
+        console.log(programDetails[0])
+        return user ? {
+          id: user.id,
+          avatar: user.avatar,
+          email: user.email,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          program_details: programDetails[0],
+          last_active: user.last_active,
+        } : null;
+      }).filter(client => client !== null);
+
+      client_count.value = count;
+    } catch (error:any) {
+      showError(`Unexpected error: ${error.message || 'Unknown error'}`);
+      AllClients.value = [];
+      client_count.value = 0;
+    }
+  }
   // Update Client Program
     async function updateClientProgram(updateData: Program) {
       try {
@@ -504,5 +598,5 @@ async function getEntitled() {
       alert(`Failed to load user profile: ${error.message || 'Unknown error'}`);
     }
   }
-  return { User, userProfile, AllClients, Entitled, Client, client_count, getActiveClientsForTrainer, LogIn, LogOut, getUserProfile, getUserProfileNO, getClients, getEntitled,getClient, updateClientProgram }
+  return { User, userProfile, AllClients,ChatClients, Entitled, Client, client_count,getChatClients, getActiveClientsForTrainer, LogIn, LogOut, getUserProfile, getUserProfileNO, getClients, getEntitled,getClient, updateClientProgram }
 })
