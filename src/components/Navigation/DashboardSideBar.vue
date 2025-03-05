@@ -19,7 +19,7 @@
         >Program <br />Entitlements</RouterLink
       >
       <!-- <RouterLink to="" class="nav-btn">Settings &<br>Preferences</RouterLink> -->
-      <RouterLink to="/my-profile" class="nav-btn">My<br />Profile</RouterLink>
+      <RouterLink :to="{ name: 'trainer-profile' }" class="nav-btn">My<br />Profile</RouterLink>
     </nav>
     <nav class="flex flex-col gap-4 mt-auto 2xl:gap-8 text-xs">
       <RouterLink to="/" class="nav-btn 2xl:text-base">My Profile</RouterLink>
