@@ -522,6 +522,7 @@ async function getEntitled() {
         .from('user_programs')
         .select('*')
         .eq('client_id', userProfiles.id)
+        .neq('status', 'cancelled')
         .single(); // We expect a single program here
 
       if (programError) {
