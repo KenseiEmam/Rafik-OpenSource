@@ -460,7 +460,7 @@ async function getEntitled() {
       ChatClients.value = userProfiles.map(profile => {
         const user = users.find(u => u.id === profile.user_id);
         const programDetails = activePrograms.filter(program => program.client_id === profile.id);
-        console.log(programDetails[0])
+
         return user ? {
           id: user.id,
           avatar: user.avatar,
