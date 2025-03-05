@@ -6,7 +6,7 @@
     <div class="card border shadow p-0 overflow-hidden rounded-lg shadow min-w-128 w-1/3">
       <!-- Header -->
       <div class="p-6 gradient-bg border-b border-rafik-sectext w-full flex justify-between items-center">
-        <div class="flex items-center gap-6" v-if="Client">
+        <div class="flex items-center gap-4" v-if="Client">
           <img :src="Client.avatar" alt="" class="rounded-full border-2 border-rafik-secondary object-cover w-16 h-16">
           <div>
             <h3 class="header-small text-base">{{ Client.first_name }} {{ Client.last_name }}</h3>
@@ -22,7 +22,8 @@
       </div>
 
       <!-- Messages -->
-      <ul v-if="Client" class="h-44 2xl:h-96 p-6 overflow-y-auto space-y-5 bg-rafik-secbg" ref="chatContainer">
+      <ul v-if="Client" class="h-64 2xl:h-96 p-6 overflow-y-auto space-y-5 bg-rafik-secbg" ref="chatContainer">
+        <p v-if="loading" class="animate-pulse h-full flex items-center justify-center"> Loading Messages...</p>
         <div class="flex flex-col" v-for="message in messages" :key="message.id">
           <div class="flex items-start gap-2"
                :class="message.sent_by === Client.id ? 'justify-start' : 'justify-end'">
@@ -78,6 +79,7 @@ type Message = {
 };
 
 const props = defineProps<{ visible: boolean; Client: any }>();
+const loading = ref(true)
 const emits = defineEmits(["close"]);
 
   // Success and Error Alerts
@@ -163,6 +165,7 @@ async function fetchMessages() {
 
   if (error) console.error("Error fetching messages:", error);
   else {
+    loading.value = false
     messages.value = data;
     scrollToBottom();
   }
