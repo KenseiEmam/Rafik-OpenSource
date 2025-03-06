@@ -63,14 +63,14 @@
 
         <!-- Profile Information Tab -->
         <div v-else-if="activeTab === 'profile'">
-          <form class="grid grid-cols-1 md:grid-cols-2 gap-4" @submit.prevent="updateProfileInfo">
+          <form class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center align-center" @submit.prevent="updateProfileInfo">
                          <!-- Avatar & Upload Photo -->
         <div class="flex flex-col items-center space-y-4">
           <img
             v-if="userStore.Trainer.avatar"
             :src="userStore.Trainer.avatar"
             alt="Trainer Avatar"
-            class="w-24 h-24 2xl:h-44 2xl:w-44 rounded-full"
+            class="w-36 h-36 2xl:h-44 2xl:w-44 rounded-full"
           />
           <input type="file" @change="uploadPhoto" accept="image/*" class="hidden" id="upload-photo" />
           <label for="upload-photo" class="btn-md-outline w-full md:w-auto cursor-pointer">
@@ -316,7 +316,8 @@ async function changePassword() {
 }
 
 async function updateProfileInfo() {
-  if (!userStore.Trainer) {
+   const UserId =localStorage.getItem("UserID")
+  if (!UserId || !userStore.Trainer) {
     showError('Trainer data not found.')
     return
   }
@@ -331,7 +332,7 @@ async function updateProfileInfo() {
         age: userStore.Trainer.age,
         nationality: userStore.Trainer.nationality,
       })
-      .eq('id', userStore.Trainer.id)
+      .eq('id', UserId)
     if (userUpdateError) throw userUpdateError
 
     const { error: profileUpdateError } = await supabase
@@ -354,7 +355,8 @@ async function updateProfileInfo() {
 }
 
 async function updateCertifications() {
-  if (!userStore.Trainer) {
+   const UserId =localStorage.getItem("UserID")
+  if (!UserId || !userStore.Trainer) {
     showError('Trainer data not found.')
     return
   }
@@ -382,7 +384,8 @@ async function updateCertifications() {
 }
 
 const uploadPhoto = async (event: Event) => {
-  if (!userStore.Trainer) {
+  const UserId =localStorage.getItem("UserID")
+  if (!UserId || !userStore.Trainer) {
     showError('Trainer data not found.')
     return
   }
@@ -397,7 +400,7 @@ const uploadPhoto = async (event: Event) => {
         const { error } = await supabase
           .from('users')
           .update({ avatar: uploadedUrl })
-          .eq('id', userStore.Trainer.id)
+          .eq('id', UserId)
         if (error) throw error
 
         userStore.Trainer.avatar = uploadedUrl
