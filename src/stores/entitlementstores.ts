@@ -95,6 +95,24 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
       })
     }
   }
+  // Create Multiple Entitlements
+
+  async function createMultipleEntitlements(trainerId: string, count: number) {
+    try {
+      const entitlements = Array.from({ length: count }, () => ({
+        trainer_id: trainerId,
+        status: "available", // Adjust based on your logic
+        created_at: new Date().toISOString(),
+      }));
+
+      const { error } = await supabase.from("entitlements").insert(entitlements);
+      if (error) throw error;
+
+      console.log(`${count} entitlements created successfully.`);
+    } catch (err) {
+      console.error("Error creating entitlements:", err);
+    }
+  }
 
   // Update an entitlement (e.g., assign a client to an entitlement)
   async function assignEntitlement(trainer_id: string, client_id: string, updatedData: Program) {
@@ -160,6 +178,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
     entitlements,
     unusedEntitlementCount,
     getEntitlements,
+    createMultipleEntitlements,
     createEntitlement,
     assignEntitlement,
   }
