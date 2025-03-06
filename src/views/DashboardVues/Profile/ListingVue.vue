@@ -421,7 +421,7 @@ const uploadFileToBucket = async (): Promise<string | null> => {
   try {
     const { data, error } = await supabase.storage
       .from('storage')
-      .upload(`media/${Date.now()}_${selectedFile.value.name}`, selectedFile.value, {
+      .upload(`avatars/${Date.now()}_${selectedFile.value.name}`, selectedFile.value, {
         cacheControl: '3600',
         upsert: true,
       })
