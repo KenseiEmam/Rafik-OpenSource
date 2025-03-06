@@ -37,7 +37,7 @@
       <template v-else>
         <!-- Account Management Tab -->
         <div v-if="activeTab === 'account'">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="grid 2xl:w-2/3 grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-4">
               <div class="form-control">
                 <label class="block text-sm font-medium" for="newPassword">New Password</label>
@@ -56,79 +56,87 @@
           <li :class="{'text-red-500': !isPasswordValid}">Must contain at least one number and one special character.</li>
           <li :class="{'text-red-500': !isPasswordValid}">Must not be too similar to the email address.</li>
         </ul>
-              <button class="btn-lg w-full" @click="changePassword">Change Password</button>
+              <button class="btn-lg " @click="changePassword">Change Password</button>
             </div>
           </div>
         </div>
 
         <!-- Profile Information Tab -->
         <div v-else-if="activeTab === 'profile'">
-          <form class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center align-center" @submit.prevent="updateProfileInfo">
-                         <!-- Avatar & Upload Photo -->
-        <div class="flex flex-col items-center space-y-4">
+          <form class="grid grid-cols-1 md:grid-cols-2 gap-4 2xl:w-2/3 items-center align-center" @submit.prevent="updateProfileInfo">
+          <div class="grid grid-cols-3 col-span-2 gap-6">
+            <div class="flex flex-col items-center space-y-4">
           <img
             v-if="userStore.Trainer.avatar"
             :src="userStore.Trainer.avatar"
             alt="Trainer Avatar"
-            class="w-36 h-36 2xl:h-44 2xl:w-44 rounded-full"
+            class="w-44 h-44 2xl:h-64 2xl:w-64 rounded-xl"
           />
           <input type="file" @change="uploadPhoto" accept="image/*" class="hidden" id="upload-photo" />
-          <label for="upload-photo" class="btn-md-outline w-full md:w-auto cursor-pointer">
+          <label for="upload-photo" class="btn-md-outline w-full w-44 2xl:w-64 cursor-pointer">
             Upload Photo
           </label>
-        </div>
-        <div class="space-y-3">
-             <!-- First Name -->
-             <div class="form-control">
-            <label class="block text-sm font-medium" for="first_name">First Name</label>
+            </div>
+            <div class="space-y-3">
+                <!-- First Name -->
+                <div class="form-control">
+                <label class="block text-sm font-medium" for="first_name">First Name</label>
+                <input
+                  id="first_name"
+                  v-model="userStore.Trainer.first_name"
+                  class="rafik-text-input w-full"
+                  type="text"
+                  required
+                />
+                </div>
+              <!-- Last Name -->
+              <div class="form-control">
+                <label class="block text-sm font-medium" for="last_name">Last Name</label>
+                <input
+                  id="last_name"
+                  v-model="userStore.Trainer.last_name"
+                  class="rafik-text-input w-full"
+                  type="text"
+                  required
+                />
+              </div>
+              <!-- Email (Read-only) -->
+              <div class="form-control">
+                <label class="block text-sm font-medium" for="email">Email Address</label>
+                <input
+                  id="email"
+                  v-model="userStore.Trainer.email"
+                  class="rafik-text-input w-full"
+                  type="email"
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="space-y-3">
+                    <!-- Title -->
+          <div class="form-control">
+            <label class="block text-sm font-medium" for="title">Title</label>
             <input
-              id="first_name"
-              v-model="userStore.Trainer.first_name"
+              id="title"
+              v-model="userStore.Trainer.title"
               class="rafik-text-input w-full"
               type="text"
               required
             />
-             </div>
-          <!-- Last Name -->
-          <div class="form-control">
-            <label class="block text-sm font-medium" for="last_name">Last Name</label>
-            <input
-              id="last_name"
-              v-model="userStore.Trainer.last_name"
-              class="rafik-text-input w-full"
-              type="text"
-              required
-            />
-          </div>
-          <!-- Email (Read-only) -->
-          <div class="form-control">
-            <label class="block text-sm font-medium" for="email">Email Address</label>
-            <input
-              id="email"
-              v-model="userStore.Trainer.email"
-              class="rafik-text-input w-full"
-              type="email"
-              readonly
-            />
-          </div>
-        </div>
-
-
-          <!-- Phone -->
-          <div class="form-control">
-            <label class="block text-sm font-medium" for="phone">Phone</label>
-            <input
-              id="phone"
-              v-model="userStore.Trainer.phone"
-              class="rafik-text-input w-full"
-              type="tel"
-              required
-            />
           </div>
 
-
-
-          <!-- Age -->
+               <!-- Phone -->
+              <div class="form-control">
+                <label class="block text-sm font-medium" for="phone">Phone</label>
+                <input
+                  id="phone"
+                  v-model="userStore.Trainer.phone"
+                  class="rafik-text-input w-full"
+                  type="tel"
+                  required
+                />
+              </div>
+                 <!-- Age -->
           <div class="form-control">
             <label class="block text-sm font-medium" for="age">Age</label>
             <input
@@ -140,8 +148,10 @@
               required
             />
           </div>
-
-          <!-- Nationality -->
+            </div>
+          </div>
+          <div class="space-y-3">
+            <!-- Nationality -->
           <div class="form-control">
             <label class="block text-sm font-medium" for="nationality">Nationality</label>
             <input
@@ -165,17 +175,6 @@
             />
           </div>
 
-          <!-- Title -->
-          <div class="form-control">
-            <label class="block text-sm font-medium" for="title">Title</label>
-            <input
-              id="title"
-              v-model="userStore.Trainer.title"
-              class="rafik-text-input w-full"
-              type="text"
-              required
-            />
-          </div>
 
           <!-- Years of Experience -->
           <div class="form-control">
@@ -192,14 +191,16 @@
             />
           </div>
 
+          </div>
+
+
           <!-- Bio (Full width) -->
-          <div class="form-control md:col-span-2">
+          <div class="form-control h-full">
             <label class="block text-sm font-medium" for="bio">Bio</label>
             <textarea
               id="bio"
               v-model="userStore.Trainer.bio"
-              class="rafik-text-input w-full"
-              rows="4"
+              class="rafik-text-input w-full h-full"
               placeholder="Tell us about yourself..."
             ></textarea>
           </div>
@@ -212,7 +213,7 @@
         </div>
 
         <!-- Certifications Tab -->
-        <div v-else-if="activeTab === 'certifications' && userStore.Trainer.certifications_links">
+        <div v-else-if="activeTab === 'certifications' && userStore.Trainer.certifications_links" class="grid 2xl:w-2/3 grid-cols-1 md:grid-cols-2 gap-6">
           <Cetifications :certifications="userStore.Trainer.certifications_links"/>
         </div>
       </template>
