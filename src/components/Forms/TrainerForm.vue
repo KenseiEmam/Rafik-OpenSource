@@ -115,7 +115,9 @@ import { useUserStore } from "@/stores/user";
 import { useEntitlementStore } from "@/stores/entitlementstores";
 import { supabase } from "@/lib/supabaseClient";
 import Swal from "sweetalert2";
-Swal.fire({
+// Success and Error Alerts
+function showSuccess(message: string) {
+  Swal.fire({
     title: 'Success!',
     showConfirmButton: false,
     timerProgressBar: true,
