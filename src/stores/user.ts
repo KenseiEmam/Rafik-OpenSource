@@ -657,7 +657,7 @@ export const useUserStore = defineStore('User', () => {
 
       // Assign the client object with the user details and associated program
       Trainer.value = {
-        id: users.id,
+        id: id,
         avatar: users.avatar,
         email: users.email,
         gender: users.sex,
