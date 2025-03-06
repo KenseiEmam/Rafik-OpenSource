@@ -1,6 +1,6 @@
 <template>
   <p v-if="loading" class="text-body animate-pulse">Loading Data...</p>
-  <form v-else class="space-y-6 w-2/3">
+  <form v-else class="space-y-6 ">
     <p v-if="FetchedCerts.length === 0" class="text-body my-auto">No Certifications uploaded</p>
     <ul v-else class="flex flex-col gap-3 w-full">
       <li v-for="cert in FetchedCerts" :key="cert.name" class="card flex justify-between items-center p-4 border rounded-lg">
@@ -11,9 +11,9 @@
         </div>
       </li>
     </ul>
-    <div class="flex w-full">
+    <div class="flex ">
       <input type="file" multiple @change="uploadCertification" accept="image/*, application/pdf" class="hidden w-full" id="upload-photo" />
-      <label for="upload-photo" class="btn-md-outline w-full md:w-auto flex-1 cursor-pointer">
+      <label for="upload-photo" class="btn-md-outline  cursor-pointer">
         Upload More
       </label>
     </div>
