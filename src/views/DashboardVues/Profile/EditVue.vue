@@ -31,7 +31,7 @@
 
       <!-- Loading Spinner -->
       <div v-if="loading" class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-rafik-pritext"></div>
+        <div class="animate-pulse"> Loading Data...</div>
       </div>
 
       <template v-else>
@@ -212,14 +212,8 @@
         </div>
 
         <!-- Certifications Tab -->
-        <div v-else-if="activeTab === 'certifications'">
-          <form @submit.prevent="updateCertifications" class="space-y-4">
-            <div class="form-control">
-              <label class="block text-sm font-medium" for="certifications">Certifications (comma-separated)</label>
-              <input id="certifications" v-model="certificationsInput" class="rafik-text-input w-full" type="text" placeholder="e.g. 101, 102, 103" />
-            </div>
-            <button type="submit" class="btn-lg w-full md:w-auto">Update Certifications</button>
-          </form>
+        <div v-else-if="activeTab === 'certifications' && userStore.Trainer.certifications_links">
+          <Cetifications :certifications="userStore.Trainer.certifications_links"/>
         </div>
       </template>
     </div>
@@ -232,6 +226,7 @@ import { ref, onMounted, computed } from 'vue'
 import { supabase } from '@/lib/supabaseClient'
 import { useUserStore } from '@/stores/user'
 import PageTitle from '@/components/Navigation/PageTitle.vue'
+import Cetifications from '@/components/ProfileTabs/Cetifications.vue'
 import Swal from 'sweetalert2'
 
 const userStore = useUserStore()
