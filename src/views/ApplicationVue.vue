@@ -1,0 +1,62 @@
+<script setup lang="ts">
+import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
+</script>
+
+<template>
+  <!-- Main container following the same structure as TeamVue -->
+  <main class="mebsite-body">
+    <!-- Same WebsiteHeader as in TeamVue -->
+    <WebsiteHeader />
+
+    <!-- Use Transition for the slide-fade effect -->
+    <Transition name="slide-fade" appear>
+      <!--
+        Flex container with a vertical gradient background
+        going from dark green to near-black, text in white.
+      -->
+      <!--
+          Use a responsive flex layout:
+          - Stack content in a column on smaller screens
+          - Place them side by side on medium+ screens
+        -->
+      <div class="flex flex-col md:flex-row items-center justify-between flex-1">
+        <!-- Left Column: Heading, Description, Buttons -->
+        <div class="max-w-lg">
+          <h1 class="header-large">INSTALL OUR</h1>
+          <h1 class="title-large leading-none mb-4">RAFIK SQUIRE APP</h1>
+          <p class="text-gray-200 mb-4">
+            Optimize your training, diet, sports performance and more, with nifty pricing, certified
+            trainers, and communication to keep your programs customized to your needs.
+          </p>
+          <div class="flex flex-col gap-2 max-w-[235px]">
+            <!-- Play Store Button -->
+            <button
+              class="border-solid border-2 border-yellow-300 text-yellow-300 px-6 py-3 font-semibold rounded-lg hover:bg-yellow-400 hover:border-yellow-400 hover:text-white transition-colors"
+            >
+              PLAY STORE
+            </button>
+            <!-- APP Store Button -->
+            <button
+              class="bg-yellow-300 border-2 border-yellow-300 text-white px-6 py-3 font-semibold rounded-lg hover:bg-yellow-400 hover:border-yellow-400 transition-colors"
+            >
+              APP STORE
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Column: Phone Image center horizontally and vertically -->
+        <div class="top-0 right-0 bottom-0 left-0 flex items-center justify-center">
+          <!-- Use your local phones.png image -->
+          <img src="@/assets/phones.png" alt="Phones" class="max-h-43" />
+        </div>
+      </div>
+    </Transition>
+  </main>
+</template>
+
+<style scoped>
+/*
+  Additional style overrides can go here if needed.
+  Tailwind classes handle most of the styling.
+*/
+</style>
