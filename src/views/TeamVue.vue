@@ -14,7 +14,7 @@ import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
             class="border-2 flex flex-col relative align-bottom flex-1 border-rafik-secondary rounded-lg overflow-hidden"
           >
             <img
-              src="https://plus.unsplash.com/premium_photo-1664298503962-9e633a8fd13f?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              src="https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/team/IMG_6536.jpeg"
               class="w-full h-full object-cover absolute grayscale"
               alt=""
             />
@@ -38,7 +38,7 @@ import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
             class="border-2 flex flex-col relative align-bottom flex-1 border-rafik-secondary rounded-lg overflow-hidden"
           >
             <img
-              src="https://media.istockphoto.com/id/1371934584/photo/portrait-of-a-confident-mature-businesswoman-working-in-a-modern-office.jpg?s=612x612&w=0&k=20&c=NF_IO6IEXY3HifRIhRqP0KDFJFdlFwaMwo3zfOOvKnQ="
+              src="https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/team/IMG_7421.jpeg"
               class="w-full h-full object-cover absolute grayscale"
               alt=""
             />
@@ -62,7 +62,7 @@ import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
             class="border-2 flex flex-col relative align-bottom flex-1 border-rafik-secondary rounded-lg overflow-hidden"
           >
             <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKuq-N45aHV7TOJRNRFqXGiLJ2II8GkfvGzA&s"
+              src="https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/team/Sami%20Azzam%20Profile.JPG"
               class="w-full h-full object-cover absolute grayscale"
               alt=""
             />
