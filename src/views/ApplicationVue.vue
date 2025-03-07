@@ -24,7 +24,7 @@ import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
         <div class="max-w-lg">
           <h1 class="header-large">INSTALL OUR</h1>
           <h1 class="title-large leading-none mb-4">RAFIK SQUIRE APP</h1>
-          <p class="text-gray-200 mb-4">
+          <p class="text-body mb-4">
             Optimize your training, diet, sports performance and more, with nifty pricing, certified
             trainers, and communication to keep your programs customized to your needs.
           </p>
