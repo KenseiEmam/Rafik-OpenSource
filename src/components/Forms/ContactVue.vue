@@ -1,4 +1,70 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue'
+import SocialIcons from '@/components/SocialIcons.vue'
+import Swal from 'sweetalert2'
+
+// SweetAlert2 helper functions
+function showSuccess(message: string) {
+  Swal.fire({
+    title: 'Success!',
+    text: message,
+    icon: 'success',
+    toast: true,
+    position: 'top-right',
+    showConfirmButton: false,
+    timer: 1500,
+    timerProgressBar: true,
+    background: '#081411',
+    color: '#E8F3ED',
+  })
+}
+
+function showError(message: string) {
+  Swal.fire({
+    title: 'Error!',
+    text: message,
+    icon: 'error',
+    confirmButtonColor: '#d33',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
+}
+
+// Reactive form data
+const formData = ref({
+  name: '',
+  email: '',
+  message: '',
+})
+const sending = ref(false)
+
+// Function to send email using Supabase Edge Function
+async function sendEmail() {
+  sending.value = true
+  try {
+    // Replace the URL below with your actual Supabase function endpoint.
+    const response = await fetch('https://pexviywnztvqomfosvho.supabase.co/functions/v1/smtp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData.value),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.error || 'Failed to send email')
+    }
+    const result = await response.json()
+    showSuccess(result.message)
+    // Reset form fields on success
+    formData.value = { name: '', email: '', message: '' }
+  } catch (error: any) {
+    console.error(error)
+    showError('Error sending email: ' + error.message)
+  } finally {
+    sending.value = false
+  }
+}
+</script>
 
 <template>
   <section id="contact" class="flex-1 card mb-16 p-12">
@@ -68,42 +134,51 @@
         </div>
       </div>
       <div
-        class="border-l pl-8 space-y-4 border-rafik-sectext flex w-full items-center justify-center flex-col w-full"
+        class="border-l pl-8 space-y-4 border-rafik-sectext flex w-full items-center justify-center flex-col"
       >
         <h3 class="header-small">Send us A Message</h3>
-        <form class="space-y-4 w-full">
+        <!-- Form submission handled by sendEmail() -->
+        <form class="space-y-4 w-full" @submit.prevent="sendEmail">
           <div class="form-control">
             <label for="Name">Full Name</label>
-            <input name="Name" class="rafik-text-input" type="text" placeholder="rafik" required />
+            <input
+              v-model="formData.name"
+              name="Name"
+              class="rafik-text-input"
+              type="text"
+              placeholder="Your Name"
+              required
+            />
           </div>
           <div class="form-control">
             <label for="email">Email Address</label>
             <input
+              v-model="formData.email"
               name="email"
               class="rafik-text-input"
               type="email"
-              placeholder="rafik@example.com"
+              placeholder="you@example.com"
               required
             />
           </div>
           <div class="form-control">
             <label for="message">Message</label>
             <textarea
+              v-model="formData.message"
               name="message"
               class="rafik-text-input"
               rows="6"
-              placeholder="Write us a message here..."
+              placeholder="Write your message here..."
               required
             ></textarea>
           </div>
           <div class="flex w-full">
-            <button type="submit" class="btn-lg mx-auto">SEND</button>
+            <button type="submit" class="btn-lg mx-auto" :disabled="sending">
+              {{ sending ? 'Sending...' : 'SEND' }}
+            </button>
           </div>
         </form>
       </div>
     </div>
   </section>
 </template>
-<script setup lang="ts">
-  import SocialIcons from '@/components/SocialIcons.vue';
-</script>
