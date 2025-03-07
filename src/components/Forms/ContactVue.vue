@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { createClient } from '@supabase/supabase-js'
 import SocialIcons from '@/components/SocialIcons.vue'
 import Swal from 'sweetalert2'
+
+// Create the Supabase client using Vite env variables
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY,
+)
 
 // SweetAlert2 helper functions
 function showSuccess(message: string) {
@@ -38,28 +45,24 @@ const formData = ref({
 })
 const sending = ref(false)
 
-// Function to send email using Supabase Edge Function
+// Function to send email via Supabase Edge Function ("smtp")
 async function sendEmail() {
   sending.value = true
   try {
-    // Replace the URL below with your actual Supabase function endpoint.
-    const response = await fetch('https://pexviywnztvqomfosvho.supabase.co/functions/v1/smtp', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData.value),
+    const { data, error } = await supabase.functions.invoke('smtp', {
+      body: { ...formData.value },
     })
 
-    if (!response.ok) {
-      const errorData = await response.json()
-      throw new Error(errorData.error || 'Failed to send email')
+    if (error) {
+      throw error
     }
-    const result = await response.json()
-    showSuccess(result.message)
-    // Reset form fields on success
+
+    // Assuming the function returns an object with a "message" property
+    showSuccess(data?.message || 'Email sent successfully!')
     formData.value = { name: '', email: '', message: '' }
-  } catch (error: any) {
-    console.error(error)
-    showError('Error sending email: ' + error.message)
+  } catch (err: any) {
+    console.error(err)
+    showError('Error sending email: ' + err.message)
   } finally {
     sending.value = false
   }
@@ -130,52 +133,41 @@ async function sendEmail() {
               <p class="text-body">Enter address here...</p>
             </div>
           </div>
+          <!-- Contact details section -->
           <SocialIcons class="w-3/4 mx-auto mt-6" :in="'hi'" :fb="'hi'" :yt="'hi'" :tw="'hi'" />
         </div>
       </div>
       <div
-        class="border-l pl-8 space-y-4 border-rafik-sectext flex w-full items-center justify-center flex-col"
+        class="border-l pl-8 space-y-4 border-rafik-sectext flex w-full items-center justify-center flex-col w-full"
       >
         <h3 class="header-small">Send us A Message</h3>
-        <!-- Form submission handled by sendEmail() -->
         <form class="space-y-4 w-full" @submit.prevent="sendEmail">
           <div class="form-control">
             <label for="Name">Full Name</label>
-            <input
-              v-model="formData.name"
-              name="Name"
-              class="rafik-text-input"
-              type="text"
-              placeholder="Your Name"
-              required
-            />
+            <input name="Name" class="rafik-text-input" type="text" placeholder="rafik" required />
           </div>
           <div class="form-control">
             <label for="email">Email Address</label>
             <input
-              v-model="formData.email"
               name="email"
               class="rafik-text-input"
               type="email"
-              placeholder="you@example.com"
+              placeholder="rafik@example.com"
               required
             />
           </div>
           <div class="form-control">
             <label for="message">Message</label>
             <textarea
-              v-model="formData.message"
               name="message"
               class="rafik-text-input"
               rows="6"
-              placeholder="Write your message here..."
+              placeholder="Write us a message here..."
               required
             ></textarea>
           </div>
           <div class="flex w-full">
-            <button type="submit" class="btn-lg mx-auto" :disabled="sending">
-              {{ sending ? 'Sending...' : 'SEND' }}
-            </button>
+            <button type="submit" class="btn-lg mx-auto">SEND</button>
           </div>
         </form>
       </div>
