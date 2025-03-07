@@ -9,8 +9,8 @@ const props = defineProps({
     required: true,
   },
 });
-
 const isProcessing = ref(false); // New state for tracking processing
+
 const handleFileUpload = async (event: any) => {
   const file = event.target.files[0];
   if (file) {
@@ -52,6 +52,8 @@ const handleFileUpload = async (event: any) => {
     console.warn('No file selected');
   }
 };
+
+const fileInput = ref<HTMLInputElement | null>(null);
 
 const deleteDocument = async () => {
   if (props.program.referral) {
@@ -102,6 +104,12 @@ function addInduction(type: string) {
   });
   emitUpdate();
 }
+// Using 'fileInput' to trigger file selection
+const triggerFileInput = () => {
+  if (fileInput.value) {
+    fileInput.value.click();
+  }
+};
 
 function removeInduction(index: number) {
   inductions.value.splice(index, 1);
@@ -210,22 +218,21 @@ watch(
         <a :href="program.referral" target="_blank" v-if="program.referral" class="btn-lg-outline">
           VIEW DOCUMENT
         </a>
-
-        <!-- File input and buttons -->
-        <input
-          type="file"
-          @change="handleFileUpload"
-          class="hidden"
-          ref="fileInput"
-        />
-        <button
-          v-if="!isProcessing"
-          @click="$refs.fileInput.click()"
-          class="btn-lg"
-          :disabled="isProcessing"
-        >
-          {{ program.referral ? 'CHANGE DOCUMENT' : 'UPLOAD DOCUMENT' }}
-        </button>
+    <!-- File input and buttons -->
+    <input
+      type="file"
+      @change="handleFileUpload"
+      class="hidden"
+      ref="fileInput"
+    />
+    <button
+      v-if="!isProcessing"
+      @click="triggerFileInput"
+      class="btn-lg"
+      :disabled="isProcessing"
+    >
+      {{ program.referral ? 'CHANGE DOCUMENT' : 'UPLOAD DOCUMENT' }}
+    </button>
 
         <!-- Delete Document button -->
         <button
