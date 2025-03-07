@@ -19,3 +19,4 @@ import ContactVue from '../components/Forms/ContactVue.vue'
     </Transition>
   </main>
 </template>
+<!-- Sami sucks -->
