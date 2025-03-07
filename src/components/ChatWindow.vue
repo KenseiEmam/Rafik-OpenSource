@@ -5,42 +5,78 @@
   >
     <div class="card border shadow p-0 overflow-hidden rounded-lg shadow min-w-128 w-1/3">
       <!-- Header -->
-      <div class="p-6 gradient-bg border-b border-rafik-sectext w-full flex justify-between items-center">
+      <div
+        class="p-6 gradient-bg border-b border-rafik-sectext w-full flex justify-between items-center"
+      >
         <div class="flex items-center gap-4" v-if="Client">
-          <img :src="Client.avatar" alt="" class="rounded-full border-2 border-rafik-secondary object-cover w-16 h-16">
+          <img
+            :src="Client.avatar"
+            alt=""
+            class="rounded-full border-2 border-rafik-secondary object-cover w-16 h-16"
+          />
           <div>
             <h3 class="header-small text-base">{{ Client.first_name }} {{ Client.last_name }}</h3>
             <h3 class="subheader-small text-xs">{{ Client.email }}</h3>
           </div>
-
         </div>
-        <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" fill="currentColor"
-             class="w-6 h-6 text-rafik-pritext hover:text-rafik cursor-pointer"
-             viewBox="0 0 384 512" @click="$emit('close')">
-          <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          stroke="currentColor"
+          fill="currentColor"
+          class="w-6 h-6 text-rafik-pritext hover:text-rafik cursor-pointer"
+          viewBox="0 0 384 512"
+          @click="$emit('close')"
+        >
+          <path
+            d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+          />
         </svg>
       </div>
 
       <!-- Messages -->
-      <ul v-if="Client" class="h-64 2xl:h-96 p-6 overflow-y-auto space-y-5 bg-rafik-secbg" ref="chatContainer">
-        <p v-if="loading" class="animate-pulse h-full flex items-center justify-center"> Loading Messages...</p>
+      <ul
+        v-if="Client"
+        class="h-64 2xl:h-96 p-6 overflow-y-auto space-y-5 bg-rafik-secbg"
+        ref="chatContainer"
+      >
+        <p v-if="loading" class="animate-pulse h-full flex items-center justify-center">
+          Loading Messages...
+        </p>
         <div class="flex flex-col" v-for="message in messages" :key="message.id">
-          <div class="flex items-start gap-2"
-               :class="message.sent_by === Client.id ? 'justify-start' : 'justify-end'">
-
+          <div
+            class="flex items-start gap-2"
+            :class="message.sent_by === Client.id ? 'justify-start' : 'justify-end'"
+          >
             <!-- Avatar for received messages -->
-            <img v-if="message.sent_by === Client.id" :src="Client.avatar"
-                 class="w-8 h-8 rounded-full border border-rafik-sectext">
+            <img
+              v-if="message.sent_by === Client.id"
+              :src="Client.avatar"
+              class="w-8 h-8 rounded-full border border-rafik-sectext"
+            />
 
             <!-- Message Bubble -->
-            <div class="p-3 rounded-lg max-w-[75%]"
-                 :class="message.sent_by === Client.id ? 'bg-rafik-pribg text-left ' : 'bg-rafik-pribg text-right'">
+            <div
+              class="p-3 rounded-lg max-w-[75%]"
+              :class="
+                message.sent_by === Client.id
+                  ? 'bg-rafik-pribg text-left '
+                  : 'bg-rafik-pribg text-right'
+              "
+            >
               <p :class="!message.seen_at ? 'text-rafik-pritext' : ''">{{ message.content }}</p>
               <span class="text-xs block mt-1 text-gray-300">
                 {{ formatDate(message.created_at) }}
                 <span v-if="message.sent_by !== Client.id">
-                  <svg v-if="message.seen_at" class="inline w-4 h-4 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
-                    <path d="M504.5 75.5c9.9-10.5 9.4-27-1.2-36.8s-27-9.4-36.8 1.2l-304 320c-3.6 3.8-9.7 3.9-13.5.3L45.1 214.5c-10-9.6-25.7-9.3-35.3.7s-9.3 25.7.7 35.3l103.1 98.5c19.5 18.7 50.2 18.3 69.1-.8L504.5 75.5z"/>
+                  <svg
+                    v-if="message.seen_at"
+                    class="inline w-4 h-4 text-green-500"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M504.5 75.5c9.9-10.5 9.4-27-1.2-36.8s-27-9.4-36.8 1.2l-304 320c-3.6 3.8-9.7 3.9-13.5.3L45.1 214.5c-10-9.6-25.7-9.3-35.3.7s-9.3 25.7.7 35.3l103.1 98.5c19.5 18.7 50.2 18.3 69.1-.8L504.5 75.5z"
+                    />
                   </svg>
                 </span>
               </span>
@@ -50,183 +86,206 @@
       </ul>
 
       <!-- Text Response -->
-       <form @submit.prevent=" submitMessage" action="" class="p-2 flex border-t garadient-bg  w-full relative items-center">
-        <input v-model="sending" placeholder="Type your message here ..." type="text" class="w-full  border-0 ring-0 outline-none focus:outline-none focus:ring-0 rafik-text-input bg-transparent">
+      <form
+        @submit.prevent="submitMessage"
+        action=""
+        class="p-2 flex border-t garadient-bg w-full relative items-center"
+      >
+        <input
+          v-model="sending"
+          placeholder="Type your message here ..."
+          type="text"
+          class="w-full border-0 ring-0 outline-none focus:outline-none focus:ring-0 rafik-text-input bg-transparent"
+        />
         <button type="submit" :disabled="!sending.trim()">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" stroke="currentColor" fill="currentColor"
-      class="w-6 h-6 text-rafik-pritext hover:text-rafik cursor-pointer mr-8"
-      :class="{ 'opacity-50 cursor-not-allowed': !sending.trim() }">
-      <path d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480l0-83.6c0-4 1.5-7.8 4.2-10.8L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z"/>
-    </svg>
-  </button>
-       </form>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+            stroke="currentColor"
+            fill="currentColor"
+            class="w-6 h-6 text-rafik-pritext hover:text-rafik cursor-pointer mr-8"
+            :class="{ 'opacity-50 cursor-not-allowed': !sending.trim() }"
+          >
+            <path
+              d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480l0-83.6c0-4 1.5-7.8 4.2-10.8L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z"
+            />
+          </svg>
+        </button>
+      </form>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick, onUnmounted } from "vue";
-import { supabase } from "@/lib/supabaseClient";
- import Swal from "sweetalert2"
+import { ref, watch, nextTick, onUnmounted } from 'vue'
+import { supabase } from '@/lib/supabaseClient'
+import Swal from 'sweetalert2'
 type Message = {
-  id: number;
-  content: string;
-  media?: string;
-  seen_at?: Date | null;
-  sent_by: number;
-  user_program: number;
-  created_at: string;
-};
+  id: number
+  content: string
+  media?: string
+  seen_at?: Date | null
+  sent_by: number
+  user_program: number
+  created_at: string
+}
 
-const props = defineProps<{ visible: boolean; Client: any }>();
+const props = defineProps<{ visible: boolean; Client: any }>()
 const loading = ref(true)
-const emits = defineEmits(["close"]);
+const emits = defineEmits(['close'])
 
-  // Success and Error Alerts
-  function showSuccess(message: string) {
-    Swal.fire({
-      title: "Success!",
-      showConfirmButton:false,
-      timerProgressBar:true,
-      timer:1500,
-      text: message,
-      toast: true,
-      position: "top-right",
-      icon: "success",
-      background: "#081411",
-      color: "#E8F3ED",
-    });
-  }
+// Success and Error Alerts
+function showSuccess(message: string) {
+  Swal.fire({
+    title: 'Success!',
+    showConfirmButton: false,
+    timerProgressBar: true,
+    timer: 1500,
+    text: message,
+    toast: true,
+    position: 'top-right',
+    icon: 'success',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
+}
 
-  function showError(message: string) {
-    Swal.fire({
-      title: "Error!",
-      text: message,
-      icon: "error",
-      confirmButtonColor: "#d33",
-      background: "#081411",
-      color: "#E8F3ED",
-    });
-  }
-const messages = ref<Message[]>([]);
-const chatContainer = ref<HTMLElement | null>(null);
-const chatSubscription = ref<any | null>(null);
-  const sending = ref("");
+function showError(message: string) {
+  Swal.fire({
+    title: 'Error!',
+    text: message,
+    icon: 'error',
+    confirmButtonColor: '#d33',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
+}
+const messages = ref<Message[]>([])
+const chatContainer = ref<HTMLElement | null>(null)
+const chatSubscription = ref<any | null>(null)
+const sending = ref('')
 
 const submitMessage = async () => {
-  if (!sending.value.trim()) return; // Prevent empty messages
+  if (!sending.value.trim()) return // Prevent empty messages
 
   if (!props.Client?.program_details?.id) {
-    showError("Client program ID is missing.");
-    return;
+    showError('Client program ID is missing.')
+    return
   }
-  const UserID = localStorage.getItem("UserID")
+  const UserID = localStorage.getItem('UserID')
   // Create the message object
   const newMessage = {
     content: sending.value,
     sent_by: UserID, // Replace with the actual user ID
     user_program: props.Client.program_details.id,
     created_at: new Date().toISOString(),
-  };
+  }
 
   // Insert the message into the database
-  const { data, error } = await supabase.from("chat_messages").insert([newMessage]).select();
+  const { data, error } = await supabase.from('chat_messages').insert([newMessage]).select()
 
   if (error) {
-    showError("Failed to send message.");
-    console.error("Supabase error:", error);
-    return;
+    showError('Failed to send message.')
+    console.error('Supabase error:', error)
+    return
   }
 
   // Clear input and push the new message to the UI
-  sending.value = "";
-
+  sending.value = ''
 
   // Scroll to the latest message
-  scrollToBottom();
-};
+  scrollToBottom()
+}
 // Fetch messages when Client is set
-watch(() => props.Client, async (newClient) => {
-  if (newClient) {
-    await fetchMessages();
-    subscribeToChat();
-    markMessagesAsSeen();
-  }
-}, { immediate: true });
+watch(
+  () => props.Client,
+  async (newClient) => {
+    if (newClient) {
+      await fetchMessages()
+      subscribeToChat()
+      markMessagesAsSeen()
+    }
+  },
+  { immediate: true },
+)
 
 async function fetchMessages() {
-  if (!props.Client?.program_details?.id) return;
+  if (!props.Client?.program_details?.id) return
 
   const { data, error } = await supabase
-    .from("chat_messages")
-    .select("*")
-    .eq("user_program", props.Client.program_details.id)
-    .order("created_at", { ascending: true });
+    .from('chat_messages')
+    .select('*')
+    .eq('user_program', props.Client.program_details.id)
+    .order('created_at', { ascending: true })
 
-  if (error) console.error("Error fetching messages:", error);
+  if (error) console.error('Error fetching messages:', error)
   else {
     loading.value = false
-    messages.value = data;
-    scrollToBottom();
+    messages.value = data
+    scrollToBottom()
   }
 }
 
 // Subscribe to real-time chat updates
 function subscribeToChat() {
-  if (!props.Client?.program_details?.id) return;
+  if (!props.Client?.program_details?.id) return
 
   if (chatSubscription.value) {
-    chatSubscription.value.unsubscribe();
+    chatSubscription.value.unsubscribe()
   }
 
   chatSubscription.value = supabase
     .channel(`chat_program_${props.Client.program_details.id}`)
-    .on("postgres_changes", { event: "INSERT", schema: "public", table: "chat_messages" }, payload => {
-      const newMessage = payload.new as Message;
-      messages.value.push(newMessage);
-      scrollToBottom();
-    })
-    .subscribe();
+    .on(
+      'postgres_changes',
+      { event: 'INSERT', schema: 'public', table: 'chat_messages' },
+      (payload) => {
+        const newMessage = payload.new as Message
+        messages.value.push(newMessage)
+        scrollToBottom()
+      },
+    )
+    .subscribe()
 }
 
 // Mark messages as seen when opened
 async function markMessagesAsSeen() {
-  if (!props.Client?.program_details?.id) return;
+  if (!props.Client?.program_details?.id) return
 
-  const unseenMessages = messages.value.filter(m => !m.seen_at && m.sent_by === props.Client.id);
-  if (unseenMessages.length === 0) return;
+  const unseenMessages = messages.value.filter((m) => !m.seen_at && m.sent_by === props.Client.id)
+  if (unseenMessages.length === 0) return
 
-  const ids = unseenMessages.map(m => m.id);
-  await supabase.from("chat_messages").update({ seen_at: new Date().toISOString() }).in("id", ids);
+  const ids = unseenMessages.map((m) => m.id)
+  await supabase.from('chat_messages').update({ seen_at: new Date().toISOString() }).in('id', ids)
 }
 
 // Format timestamps into humanized dates
 function formatDate(timestamp: string) {
-  const date = new Date(timestamp);
-  const now = new Date();
-  const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+  const date = new Date(timestamp)
+  const now = new Date()
+  const diff = Math.floor((now.getTime() - date.getTime()) / 1000)
 
-  if (diff < 60) return "Just now";
-  if (diff < 3600) return `${Math.floor(diff / 60)} min ago`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)} hrs ago`;
-  return date.toLocaleDateString();
+  if (diff < 60) return 'Just now'
+  if (diff < 3600) return `${Math.floor(diff / 60)} min ago`
+  if (diff < 86400) return `${Math.floor(diff / 3600)} hrs ago`
+  return date.toLocaleDateString()
 }
 
 // Auto-scroll to the latest message
 function scrollToBottom() {
   nextTick(() => {
     if (chatContainer.value) {
-      chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
+      chatContainer.value.scrollTop = chatContainer.value.scrollHeight
     }
-  });
+  })
 }
 
 // Cleanup subscription on unmount
 onUnmounted(() => {
   if (chatSubscription.value) {
-    chatSubscription.value.unsubscribe();
+    chatSubscription.value.unsubscribe()
   }
-});
+})
 </script>
 
 <style scoped>
