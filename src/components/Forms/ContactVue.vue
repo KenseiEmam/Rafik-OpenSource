@@ -1,14 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { createClient } from '@supabase/supabase-js'
 import SocialIcons from '@/components/SocialIcons.vue'
 import Swal from 'sweetalert2'
-
-// Create the Supabase client using Vite env variables
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY,
-)
+import { supabase } from '@/lib/supabaseClient'
 
 // SweetAlert2 helper functions
 function showSuccess(message: string) {
