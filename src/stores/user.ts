@@ -173,14 +173,14 @@ export const useUserStore = defineStore('User', () => {
     }
 
     try {
-      const { data, error } = await supabase.from('users').select().eq('email', loggedInUser)
+      const { data, error } = await supabase.from('users').select('*').eq('email', loggedInUser).single()
 
       if (error) {
         throw new Error(`Error fetching user profile: ${error.message}`)
       }
-      localStorage.setItem('UserID', data[0].id)
-      localStorage.setItem('LoggedInTrainer', data[0].is_trainer)
-      userProfile.value = data[0]
+      localStorage.setItem('UserID', data.id)
+      localStorage.setItem('LoggedInTrainer', data.is_trainer)
+      userProfile.value = data
       router.push({ name: 'dashboard-home' })
       return userProfile.value
     } catch (error: any) {
