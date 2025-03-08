@@ -54,6 +54,7 @@ type PromoCode = {
 
 const newPromo = ref("");
 
+// Watch for changes in the promos array
 watch(
   () => props.program.promos,
   (newPromos, oldPromos) => {
@@ -65,6 +66,7 @@ watch(
   },
   { deep: true }
 );
+
 // Function to add a new promo code
 const addPromo = () => {
   const promo = newPromo.value.trim();
@@ -80,7 +82,6 @@ const addPromo = () => {
   newPromo.value = ""; // Clear input field
 };
 
-
 // Function to remove a promo code
 const removePromo = (promoToRemove: PromoCode) => {
   emit(
@@ -88,6 +89,16 @@ const removePromo = (promoToRemove: PromoCode) => {
     props.program.promos.filter((promo: PromoCode) => promo.code !== promoToRemove.code)
   );
 };
+
+// Function to update promo value when changed
+const updatePromoValue = (promo: PromoCode, newValue: number) => {
+  const updatedPromos = props.program.promos.map((existingPromo: PromoCode) =>
+    existingPromo.code === promo.code ? { ...existingPromo, value: newValue } : existingPromo
+  );
+
+  emit("update-promo", updatedPromos); // Emit updated promo array with new values
+};
+
 </script>
 
 <template>
@@ -158,7 +169,7 @@ const removePromo = (promoToRemove: PromoCode) => {
               <div class="flex items-center ml-auto">
                 <div class="form-control max-w-min text-center">
                   <label class="text-body">% DISCOUNT</label>
-                  <input v-model="promo.value" type="number" class="rafik-text-input w-24 2xl:w-32 text-sm">
+                  <input v-model="promo.value" @input="updatePromoValue(promo, promo.value)" type="number" :placeholder="'Value for ' + promo.code" class="rafik-text-input w-24 2xl:w-32 text-sm">
                 </div>
               </div>
               <button @click="removePromo(promo)" class="text-red-500 hover:text-red-700 text-xl">
