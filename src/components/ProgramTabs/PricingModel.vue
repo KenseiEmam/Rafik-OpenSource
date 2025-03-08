@@ -130,7 +130,7 @@ const removePromo = (promoToRemove: PromoCode) => {
         </div>
       </div>
     </div>
-    <div class="h-126 py-8 flex-col gap-3 ">
+    <div class="h-128 py-8 flex-col gap-3 ">
       <!-- Promo Codes -->
       <h3 class="contentH-medium">Promo Codes</h3>
       <p class="text-body">
