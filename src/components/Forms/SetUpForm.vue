@@ -32,19 +32,19 @@ function showError(message: string) {
     color: '#E8F3ED',
   })
 }
+const isLoading= ref(false)
 const fileInput = ref<HTMLInputElement | null>(null);
 const uploadedImage = ref<string | null>(null); // Preview image
 const selectedFile = ref<File | null>(null); // File to upload
-const userStore = useUserStore();
-const isLoading = ref(false); // Loading state
-
-if (!localStorage.getItem('LoggedInUser')) {
-  router.push('login');
+const userStore =useUserStore();
+if (!localStorage.getItem('LoggedInUser') ){
+  router.push('login')
 }
-if (localStorage.getItem('LoggedInUser') && localStorage.getItem('UserID') && localStorage.getItem('LoggedInTrainer') == 'false') {
-  router.push('register-as-a-trainer');
-} else if (localStorage.getItem('LoggedInUser') && localStorage.getItem('UserID') && localStorage.getItem('LoggedInTrainer') == 'true') {
-  router.push({ name: 'dashboard-home' });
+if (localStorage.getItem('LoggedInUser') && localStorage.getItem('UserID')  && localStorage.getItem('LoggedInTrainer') == 'false' ){
+  router.push('register-as-a-trainer')
+}
+else if (localStorage.getItem('LoggedInUser') && localStorage.getItem('UserID') && localStorage.getItem('LoggedInTrainer') == 'true'){
+  router.push({name:'dashboard-home'})
 }
 
 const formData = ref({
@@ -108,8 +108,6 @@ const validateAndSubmit = async () => {
   }
 
   try {
-    isLoading.value = true; // Start loading
-
     // Upload the file to Supabase storage
     const { data: storageData, error: storageError } = await supabase.storage
       .from("storage") // Replace with your bucket name
@@ -128,7 +126,7 @@ const validateAndSubmit = async () => {
     if (!urlData?.publicUrl) {
       throw new Error("Failed to generate public URL for the image.");
     }
-
+    isLoading.value = true
     // Save the data to the `users` table
     const { data, error } = await supabase.from("users").upsert({
       email,
@@ -143,17 +141,18 @@ const validateAndSubmit = async () => {
 
     if (error) {
       console.error(error);
-      showError("Error saving profile. Please try again.");
+      alert("Error saving profile. Please try again.");
       return;
     }
 
-    showSuccess("Profile successfully updated!");
-    userStore.getUserProfile();
+    alert("Profile successfully updated!");
+    userStore.getUserProfile()
   } catch (err) {
     console.error(err);
-    showError("An error occurred. Please try again.");
-  } finally {
-    isLoading.value = false; // Stop loading
+    alert("An error occurred. Please try again.");
+  }
+  finally{
+    isLoading.value =false
   }
 };
 </script>
@@ -167,46 +166,115 @@ const validateAndSubmit = async () => {
       <h1 class="header-large">Almost There!</h1>
       <h2 class="text-body text-rafik-sectext">
         Set up your profile to tell your clients more about yourself...
-      </h2>
-      <div v-if="isLoading" class="text-center text-lg font-bold text-rafik-sectext">
+      </h2><div v-if="isLoading" class="text-center text-lg font-bold text-rafik-sectext">
         Loading...
       </div>
       <div v-else>
-        <div class="flex gap-6 items-center">
-          <div>
-            <label for="profile-picture" class="block text-sm font-medium text-rafik-sectext mb-2">
-              Profile Picture
-            </label>
-            <div v-if="uploadedImage" class="w-64 h-64 relative">
-              <img :src="uploadedImage" alt="Uploaded Preview" class="w-full h-full object-cover rounded-lg" />
-              <button
-                @click="removeImage"
-                class="absolute w-64 h-64 opacity-0 hover:opacity-50 text-white bg-red-500 hover:cursor-pointer top-0 flex items-center justify-center hover:bg-red-600 focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-              >
-                Remove Image
-              </button>
-            </div>
-            <div
-              v-else
-              class="w-64 h-64 border-2 border-dashed border-rafik-sectext rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg focus:ring-2 focus:ring-offset-2 focus:ring-background-rafik-pribg"
-              @click="triggerFileInput"
+        <div>
+          <!-- Profile Picture -->
+          <label
+            for="profile-picture"
+            class="block text-sm font-medium text-rafik-sectext mb-2"
+          >
+            Profile Picture
+          </label>
+          <div v-if="uploadedImage" class="w-64 h-64 relative">
+            <img
+              :src="uploadedImage"
+              alt="Uploaded Preview"
+              class="w-full h-full object-cover rounded-lg"
+            />
+            <button
+              @click="removeImage"
+              class="absolute w-64 h-64 opacity-0 hover:opacity-50 text-white bg-red-500 hover:cursor-pointer top-0 flex items-center justify-center hover:bg-red-600 focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
-              <span class="text-center text-rafik-sectext">
-                Drag and drop an image here, or click to upload
-              </span>
-            </div>
+              Remove Image
+            </button>
+          </div>
+          <div
+            v-else
+            class="w-64 h-64 border-2 border-dashed border-rafik-sectext rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg focus:ring-2 focus:ring-offset-2 focus:ring-background-rafik-pribg"
+            @click="triggerFileInput"
+          >
+            <span class="text-center text-rafik-sectext">
+              Drag and drop an image here, or click to upload
+            </span>
+          </div>
+          <input
+            type="file"
+            id="profile-picture"
+            accept="image/*"
+            class="hidden"
+            ref="fileInput"
+            @change="handleFileChange"
+          />
+        </div>
+        <div class="space-y-6 w-full">
+          <div>
+            <label for="first-name" class="text-body uppercase">First Name</label>
             <input
-              type="file"
-              id="profile-picture"
-              accept="image/*"
-              class="hidden"
-              ref="fileInput"
-              @change="handleFileChange"
+              v-model="formData.firstName"
+              type="text"
+              id="first-name"
+              class="rafik-text-input"
+              placeholder="Enter your first name"
             />
           </div>
+          <div>
+            <label for="last-name" class="text-body uppercase">Last Name</label>
+            <input
+              v-model="formData.lastName"
+              type="text"
+              id="last-name"
+              class="rafik-text-input"
+              placeholder="Enter your last name"
+            />
+          </div>
+          <p class="label text-rafik-sectext">
+            Upload a nice photo of your face...
+          </p>
         </div>
-        <input type="submit" class="btn-lg" :disabled="isLoading" value="Submit" />
       </div>
+      <div>
+        <label for="sex" class="text-body uppercase">Sex</label>
+        <select v-model="formData.sex" id="sex" class="rafik-text-input">
+          <option value="" disabled selected>Select your sex</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div>
+        <label for="age" class="text-body uppercase">Age</label>
+        <input
+          v-model="formData.age"
+          type="number"
+          id="age"
+          class="rafik-text-input"
+          placeholder="Enter your age"
+        />
+      </div>
+      <div>
+        <label for="nationality" class="text-body uppercase">Nationality</label>
+        <input
+          v-model="formData.nationality"
+          type="text"
+          id="nationality"
+          class="rafik-text-input"
+          placeholder="Enter your nationality"
+        />
+      </div>
+      <div>
+        <label for="phone" class="text-body uppercase">Phone Number</label>
+        <input
+          v-model="formData.phone"
+          type="tel"
+          id="phone"
+          class="rafik-text-input"
+          placeholder="Enter your phone number"
+        />
+      </div>
+      <input type="submit" class="btn-lg" value="Submit" />
     </form>
   </div>
 </template>
