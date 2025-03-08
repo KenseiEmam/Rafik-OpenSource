@@ -54,7 +54,7 @@
                 class="rafik-text-input border-0 focus:ring-0 pb-1 bg-transparent border-b focus:border-rafik-alternate rounded-none text-3xl  text-rafik contentH-medium mb-2"
                 placeholder="Workout Name"
               />
-              <h3 v-else class="text-rafik contentH-medium">{{ editedWorkouts[activeTab].workout_name }}</h3>
+              <h3 v-else class="text-rafik contentH-medium">{{ editedWorkouts[activeTab].workout_name || "Edit to add name..."}}</h3>
 
               <textarea
                 v-if="isEditing"
@@ -62,12 +62,12 @@
                 class="rafik-text-input border-0 focus:ring-0 pb-1 bg-transparent border-b focus:border-rafik-alternate rounded-none   mb-4"
                 placeholder="Workout Summary"
               ></textarea>
-              <p v-else class="text-body mb-4">{{ editedWorkouts[activeTab].workout_summary }}</p>
+              <p v-else class="text-body mb-4">{{ editedWorkouts[activeTab].workout_summary || "Edit to add workout summary..."}}</p>
             </div>
             <div class="space-y-6 ">
               <div class="flex justify-between text-rafik-pritexttext w-full gap-12 ">
-              <p>Completion Time</p>
-              <p class="text-rafik-secondary" v-if="!isEditing">{{ editedWorkouts[activeTab].time_to_complete }}</p>
+              <p>Completion Time (mins)</p>
+              <p class="text-rafik-secondary" v-if="!isEditing">{{ editedWorkouts[activeTab].time_to_complete + "mins" || "00 mins"}}</p>
               <input
                 v-if="isEditing"
                 v-model="editedWorkouts[activeTab].time_to_complete"
