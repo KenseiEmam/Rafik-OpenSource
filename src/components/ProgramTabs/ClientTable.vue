@@ -16,7 +16,7 @@
     </div>
 
     <!-- Client Table -->
-    <table class="w-full text-center">
+    <table  v-if="totalPages>=1" class="w-full text-center">
       <thead class="contentH-small">
         <tr>
           <th></th>
@@ -62,7 +62,7 @@
         </tr>
       </tbody>
     </table>
-
+    <p v-else class="my-16 w-full text-center text-sm text-body"> No clients just yet!</p>
     <!-- Pagination -->
     <div v-if="totalPages>1" class="flex justify-between items-center mt-4">
       <button @click="prevPage" :disabled="currentPage === 1" class="px-4 py-2 border rounded-lg">Prev</button>
