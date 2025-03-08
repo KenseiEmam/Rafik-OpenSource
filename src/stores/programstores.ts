@@ -155,7 +155,6 @@ export const useProgramStore = defineStore('Program', () => {
     }
   }
   // Add Program
-  // Add Program
   async function createProgram(newProgram: Program) {
     try {
       // Initialize with 7 empty workouts
@@ -168,19 +167,42 @@ export const useProgramStore = defineStore('Program', () => {
         exercises: [],
       }))
 
-      const { data, error } = await supabase.from('programs').insert(newProgram).select()
+      // Insert the new program and return the inserted row
+      const { data, error } = await supabase
+        .from('programs')
+        .insert(newProgram)
+        .select()
+        .single() // Ensures a single row is returned
 
       if (error) throw new Error(error.message)
+      if (!data) throw new Error('Program creation failed')
 
-      if (data !== null) {
-        AllPrograms.value?.push(data[0])
-        splitProgramsByStatus()
-        router.push({ name: 'program-details', params: { id: data[0].id } })
-      } // Add to local state
+      const programId = data.id
+      const trainerId = newProgram.trainer_id // Assuming `trainer_id` is passed in `newProgram`
+
+      // Update trainer_profile with the new program_id
+      const { data: updatedTrainer, error: updateError } = await supabase
+        .from('trainer_profile')
+        .update({ program_ids: programId })
+        .eq('user_id', trainerId)
+        .select()
+        .single() // Return the updated trainer profile
+
+      if (updateError) throw new Error(updateError.message)
+      if (!updatedTrainer) throw new Error('Trainer profile update failed')
+
+      // Add to local state
+      AllPrograms.value?.push(data)
+      splitProgramsByStatus()
+      router.push({ name: 'program-details', params: { id: programId } })
+
+      return { program: data, trainerProfile: updatedTrainer } // Return both program & trainer profile
     } catch (error) {
-      alert('Error creating program:' + error)
+      alert('Error creating program: ' + error)
+      return null
     }
   }
+
 
   return {
     AllPrograms,
