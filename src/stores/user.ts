@@ -54,7 +54,7 @@ interface ClientInterface {
 
 interface TrainerInterface {
   id: number
-  trainer_profile_id: string
+  trainer_profile: string
   avatar: string
   email: string
   gender: string // Mapped from users.sex

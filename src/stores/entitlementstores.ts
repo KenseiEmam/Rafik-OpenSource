@@ -163,8 +163,8 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
         .update({
           user_program_id: data.id,
         })
-        .eq('id', client_id)
-        .select()
+        .eq('user_id', client_id)
+        .select('*')
         .single()
 
       if (userError) throw new Error(userError.message)
