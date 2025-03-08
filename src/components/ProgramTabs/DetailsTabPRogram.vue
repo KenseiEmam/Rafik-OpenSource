@@ -71,27 +71,27 @@ const removeTag = (tagToRemove: string) => {
       <div class="flex flex-col divide-y divide-rafik-sectext gap-3 mt-4">
         <div class="flex justify-between gap-4 py-2">
           <p class="xl:text-lg text-rafik-pritext font-semibold">Total Clients:</p>
-          <p class="xl:text-lg text-rafik-sectext">N/A</p>
+          <p class="xl:text-lg text-rafik-sectext">Coming Soon...</p>
         </div>
         <div class="flex justify-between gap-4 py-2">
           <p class="xl:text-lg text-rafik-pritext font-semibold">Revenue this Month:</p>
-          <p class="xl:text-lg text-rafik-sectext">N/A</p>
+          <p class="xl:text-lg text-rafik-sectext">Coming Soon...</p>
         </div>
         <div class="flex justify-between gap-4 py-2">
           <p class="xl:text-lg text-rafik-pritext font-semibold">Total Revenue:</p>
-          <p class="xl:text-lg text-rafik-sectext">N/A</p>
+          <p class="xl:text-lg text-rafik-sectext">Coming Soon...</p>
         </div>
         <div class="flex justify-between gap-4 py-2">
           <p class="xl:text-lg text-rafik-pritext font-semibold">Best Month:</p>
-          <p class="xl:text-lg text-rafik-sectext">N/A</p>
+          <p class="xl:text-lg text-rafik-sectext">Coming Soon...</p>
         </div>
         <div class="flex justify-between gap-4 py-2">
           <p class="xl:text-lg text-rafik-pritext font-semibold">Client Retention:</p>
-          <p class="xl:text-lg text-rafik-sectext">N/A</p>
+          <p class="xl:text-lg text-rafik-sectext">Coming Soon...</p>
         </div>
         <div class="flex justify-between gap-4 py-2">
           <p class="xl:text-lg text-rafik-pritext font-semibold">Growth Rate:</p>
-          <p class="xl:text-lg text-rafik-sectext">N/A</p>
+          <p class="xl:text-lg text-rafik-sectext">Coming Soon...</p>
         </div>
       </div>
     </div>
