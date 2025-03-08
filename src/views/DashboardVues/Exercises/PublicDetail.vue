@@ -112,7 +112,7 @@ onMounted(() => {
         </div>
         <div class="pl-6 flex-1 min-w-max border-l  border-rafik-sectext">
             <div class="flex flex-col flex-1 h-96 justify-center gap-4 border-rafik-sectext text-left">
-              <button class="text-body uppercase text-left hover:text-rafik-pritext">View Language</button>
+              <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext">View Language</button> -->
               <button
                 @click="DupeExercise"
                 class="text-body uppercase text-left hover:text-rafik-pritext"

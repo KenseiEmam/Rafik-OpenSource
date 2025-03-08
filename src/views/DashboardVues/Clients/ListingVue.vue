@@ -153,9 +153,9 @@
                   >
                     View Program
                   </Router-link>
-                  <button class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded">
+                  <!-- <button class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded">
                     Message Client
-                  </button>
+                  </button> -->
                   <button
                     class="px-3 py-5 text-red-500 hover:bg-rafik-pribg hover:text-red-300 rounded"
                   >
