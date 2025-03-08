@@ -124,13 +124,13 @@ const removePromo = (promoToRemove: PromoCode) => {
               v-model="prices[key]"
               :disabled="!isEnabled[key]"
               class="rafik-text-input text-right w-24 2xl:w-32"
-              :class="{'bg-rafik-sectext cursor-not-allowed': !isEnabled[key]}"
+              :class="{'bg-red-500 cursor-not-allowed': !isEnabled[key]}"
             />
           </div>
         </div>
       </div>
     </div>
-    <div class="h-full py-8 flex-col gap-3 ">
+    <div class="h-126 py-8 flex-col gap-3 ">
       <!-- Promo Codes -->
       <h3 class="contentH-medium">Promo Codes</h3>
       <p class="text-body">
