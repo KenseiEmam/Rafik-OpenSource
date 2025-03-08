@@ -91,7 +91,7 @@ const removePromo = (promoToRemove: PromoCode) => {
 </script>
 
 <template>
-  <div class="grid md:grid-cols-2 items-center relative flex-1 gap-4">
+  <div class="grid md:grid-cols-2 items-start relative flex-1 gap-4">
     <!-- Subscription Pricing -->
     <div class="py-8 h-full">
       <h3 class="contentH-medium">Subscription Models</h3>
