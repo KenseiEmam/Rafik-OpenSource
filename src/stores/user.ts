@@ -164,33 +164,49 @@ export const useUserStore = defineStore('User', () => {
     localStorage.removeItem('AccessToken')
   }
 
-  // Fetch User Profile Function
-  async function getUserProfile() {
-    const loggedInUser = localStorage.getItem('LoggedInUser')
+ // Fetch User Profile Function
+async function getUserProfile() {
+  const loggedInUser = localStorage.getItem("LoggedInUser");
 
-    if (!loggedInUser) {
-      throw new Error('No logged-in user found in localStorage.')
-    }
-
-    try {
-      const { data, error } = await supabase.from('users').select('*').eq('email', loggedInUser).single()
-
-      if (error) {
-        throw new Error(`Error fetching user profile: ${error.message}`)
-      }
-      localStorage.setItem('UserID', data.id)
-      localStorage.setItem('LoggedInTrainer', data.is_trainer)
-      userProfile.value = data
-      router.push({ name: 'dashboard-home' })
-      return userProfile.value
-    } catch (error: any) {
-      console.error(error)
-      localStorage.removeItem('UserID')
-      router.push('/setup-user-profile')
-      // Display a user-friendly error message in the UI instead of an alert.
-      alert(`Failed to load user profile: ${error.message || 'Unknown error'}`)
-    }
+  if (!loggedInUser) {
+    console.error("No logged-in user found in localStorage.");
+    return;
   }
+
+  try {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*") // Select only required fields
+      .eq("email", loggedInUser)
+      .single();
+
+    if (error || !data) {
+      throw new Error(`Error fetching user profile: ${error?.message || "User not found"}`);
+    }
+
+    // Store user information in localStorage
+    localStorage.setItem("UserID", data.id);
+    localStorage.setItem("LoggedInTrainer", data.is_trainer ? "true" : "false");
+
+    userProfile.value = data;
+
+    // Redirect based on trainer status
+    router.push({ name: "dashboard-home" });
+
+    return userProfile.value;
+  } catch (error:any) {
+    console.error("Failed to load user profile:", error.message);
+    localStorage.removeItem("UserID");
+    localStorage.removeItem("LoggedInTrainer");
+
+    // Redirect only if user profile is not found
+    router.push("/setup-user-profile");
+
+    // Ideally, replace `alert` with a user-friendly UI message
+    showError(`Failed to load user profile: ${error.message || "Unknown error"}`);
+  }
+}
+
   // Fetches clients related to a program
   async function getClients(id: number) {
     try {
