@@ -103,18 +103,24 @@
         </div>
       </div>
 
+      <!-- Loading Indicator -->
+      <div v-if="loading" class="text-center 2xl:my-auto subheader-small uppercase animate-pulse">
+        Loading Entitlement and Profile Data Please Hold...
+      </div>
+
       <!-- Submit Button -->
-      <input type="submit" class="btn-lg" value="Submit" />
+      <input type="submit" class="btn-lg" :disabled="loading" value="Submit" />
     </form>
   </div>
 </template>
+
 <script setup lang="ts">
-import router from "@/router";
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useEntitlementStore } from "@/stores/entitlementstores";
 import { supabase } from "@/lib/supabaseClient";
 import Swal from "sweetalert2";
+
 // Success and Error Alerts
 function showSuccess(message: string) {
   Swal.fire({
@@ -131,7 +137,6 @@ function showSuccess(message: string) {
   })
 }
 
-// Function to show error alerts
 function showError(message: string) {
   Swal.fire({
     title: 'Error!',
@@ -146,6 +151,8 @@ function showError(message: string) {
 
 const userStore = useUserStore();
 const entitlementStore = useEntitlementStore();
+const loading = ref(false);
+
 const formData = ref({
   preferredTitle: "",
   professionalSummary: "",
@@ -182,6 +189,8 @@ const handleFileRemove = (index: number) => {
 };
 
 const handleSubmit = async () => {
+  if (loading.value) return;
+
   const userId = localStorage.getItem("UserID");
   if (!userId) {
     showError("No logged-in user found. Please log in.");
@@ -196,7 +205,8 @@ const handleSubmit = async () => {
   }
 
   try {
-    // Upload multiple certification files to Supabase bucket and collect their URLs
+    loading.value = true;
+
     const uploadedFileUrls = [];
     for (const file of uploadedFiles.value) {
       const { data, error } = await supabase.storage
@@ -210,7 +220,6 @@ const handleSubmit = async () => {
       );
     }
 
-    // Insert data into `trainer_profile` table
     const { data: trainerProfile, error: trainerError } = await supabase
       .from("trainer_profile")
       .insert({
@@ -229,15 +238,6 @@ const handleSubmit = async () => {
 
     if (trainerError) throw trainerError;
 
-    // Update the user's trainer_profile ID
-    const { error: userError } = await supabase
-      .from("users")
-      .update({ trainer_profile: trainerProfile.id, is_trainer: true })
-      .eq("id", userId);
-
-    if (userError) throw userError;
-
-    // Create multiple entitlements
     await entitlementStore.createMultipleEntitlements(userId, 20);
 
     showSuccess("Profile successfully updated!");
@@ -245,8 +245,8 @@ const handleSubmit = async () => {
   } catch (err) {
     console.error(err);
     showError("An error occurred. Please try again.");
+  } finally {
+    loading.value = false;
   }
 };
-
 </script>
-
