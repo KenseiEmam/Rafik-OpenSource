@@ -118,7 +118,7 @@ async function signUpNewUser() {
       });
 
       if (error) throw error;
-      router.push('login');
+      router.push({name:'login'});
       showSuccess("Registration successful! Check your email to confirm your account.");
     } catch (error) {
       if (error instanceof Error) {
