@@ -338,7 +338,7 @@ async function updateProfileInfo() {
         years_of_experience: userStore.Trainer.years_of_experience,
         bio: userStore.Trainer.bio,
       })
-      .eq('id', userStore.Trainer.trainer_profile_id)
+      .eq('id', userStore.Trainer.id)
     if (profileUpdateError) throw profileUpdateError
     showSuccess('Profile information updated successfully!')
   } catch (err: any) {
@@ -366,7 +366,7 @@ async function updateCertifications() {
     const { error } = await supabase
       .from('trainer_profile')
       .update({ certifications: userStore.Trainer.certifications })
-      .eq('id', userStore.Trainer.trainer_profile_id)
+      .eq('id', userStore.Trainer.id)
     if (error) throw error
 
     showSuccess('Certifications updated successfully!')
