@@ -191,75 +191,87 @@ async function onAssignModalSubmit(payload: { programId: string; emails: string[
 
 // Function to assign entitlements
 async function assignEntitlementsToUsers(programId: string, emails: string[]) {
-  const availableEntitlements = entitlementStore.entitlements.filter((e) => e.client_id === null)
+  const availableEntitlements = entitlementStore.entitlements.filter((e) => e.client_id === null);
+
   if (emails.length > availableEntitlements.length) {
-    showError(`You can only assign up to ${availableEntitlements.length} entitlements.`)
-    return
+    showError(`You can only assign up to ${availableEntitlements.length} entitlements.`);
+    return;
   }
 
-  const assignedUserIds: string[] = []
+  // Fetch user IDs and profiles in a batch request
+  const { data: users, error: usersError } = await supabase
+    .from('users')
+    .select('id, email')
+    .in('email', emails.map(email => email.trim()));
 
-  // Validate each email against the "users" table
+  if (usersError || !users || users.length !== emails.length) {
+    showError('Some users are not registered. Please check the emails and try again.');
+    return;
+  }
+
+  const userIds = users.map(user => user.id);
+
+  // Fetch profiles for these users in one request
+  const { data: profiles, error: profilesError } = await supabase
+    .from('profiles')
+    .select('id, user_id')
+    .in('user_id', userIds);
+
+  if (profilesError || !profiles || profiles.length !== emails.length) {
+    showError('Some users do not have profiles. Please ask them to create one.');
+    return;
+  }
+
+  // Map user IDs to profile IDs
+  const profileMap = new Map(profiles.map(profile => [profile.user_id, profile.id]));
+
+  // Check if any users are already assigned an entitlement
   for (const email of emails) {
-    const { data: user, error } = await supabase
-      .from('users')
-      .select('id')
-      .eq('email', email.trim())
-      .single()
+    const user = users.find(u => u.email === email.trim());
+    const profileId = profileMap.get(user?.id);
 
-    if (error || !user) {
-      showError(`User with email ${email} is not registered.`)
-      return
+    if (!profileId) {
+      showError(`User with email ${email} does not have a profile.`);
+      return;
     }
 
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('user_id', user.id)
-      .single()
-
-    if (profileError || !profile) {
-      showError(`User with email ${email} does not have a profile. Please ask them to create one.`)
-      return
-    }
-
-    // Check if the user is already assigned to an entitlement
     const userAlreadyAssigned = entitlementStore.entitlements.find(
-      (entitlement) => entitlement.client_id === profile.id,
-    )
-    if (userAlreadyAssigned) {
-      showError(`User with email ${email} is already assigned to a program.`)
-      return
-    }
+      entitlement => entitlement.client_id === profileId
+    );
 
-    assignedUserIds.push(profile.id)
+    if (userAlreadyAssigned) {
+      showError(`User with email ${email} is already assigned to a program.`);
+      return;
+    }
   }
 
-  // Update entitlements for each email/user
-  emails.forEach((_, index) => {
-    const entitlement = availableEntitlements[index]
-    const program = programStore.ActivePrograms?.find((p) => p.id === programId)
-    console.log('Program ID:', programId)
-    console.log('ACTIVE', programStore.ActivePrograms)
-    if (!program) {
-      Swal.fire({
-        title: 'Error!',
-        text: 'Program not found.',
-        icon: 'error',
-        confirmButtonColor: '#d33',
-        background: '#081411',
-        color: '#E8F3ED',
-      })
-      return
-    }
-    return entitlementStore.assignEntitlement(entitlement.id, assignedUserIds[index], program)
-  })
+  // Get the active program
+  const program = programStore.ActivePrograms?.find(p => p.id === programId);
+  if (!program) {
+    showError("Program not found!")
+    return;
+  }
 
-  // Refresh entitlements to reflect changes
-  entitlementStore.getEntitlements()
-  userStore.getEntitled()
-  refreshComponent()
+  // Assign entitlements
+  await Promise.all(
+    emails.map(async (_, index) => {
+      const entitlement = availableEntitlements[index];
+      const profileId = profileMap.get(users[index].id);
+      if (entitlement && profileId) {
+        await entitlementStore.assignEntitlement(entitlement.id, profileId, program);
+      }
+    })
+  );
+
+  // Refresh entitlements and user data
+  await Promise.all([
+    entitlementStore.getEntitlements(),
+    userStore.getEntitled()
+  ]);
+
+  refreshComponent();
 }
+
 </script>
 
 <style scoped>
