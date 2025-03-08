@@ -141,15 +141,15 @@ const validateAndSubmit = async () => {
 
     if (error) {
       console.error(error);
-      alert("Error saving profile. Please try again.");
+      showError("Error saving profile. Please try again.");
       return;
     }
 
-    alert("Profile successfully updated!");
+    showSuccess("Profile successfully updated!");
     userStore.getUserProfile()
   } catch (err) {
     console.error(err);
-    alert("An error occurred. Please try again.");
+    showError("An error occurred. Please try again.");
   }
   finally{
     isLoading.value =false
