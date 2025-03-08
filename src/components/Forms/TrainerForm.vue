@@ -196,7 +196,50 @@ const handleSubmit = async () => {
   }
 
   try {
+    // Upload multiple certification files to Supabase bucket and collect their URLs
+    const uploadedFileUrls = [];
+    for (const file of uploadedFiles.value) {
+      const { data, error } = await supabase.storage
+        .from("storage")
+        .upload(`certifications/${userId}/${file.name}`, file, { upsert: true });
+
+      if (error) throw error;
+
+      uploadedFileUrls.push(
+        `https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/${data.path}`
+      );
+    }
+
+    // Insert data into `trainer_profile` table
+    const { data: trainerProfile, error: trainerError } = await supabase
+      .from("trainer_profile")
+      .insert({
+        user_id: userId,
+        title: preferredTitle,
+        bio: professionalSummary,
+        programs: [],
+        clients: [],
+        certifications: [],
+        years_of_experience: yearsExperience,
+        preferred_clients: preferredClients,
+        certifications_links: uploadedFileUrls,
+      })
+      .select()
+      .single();
+
+    if (trainerError) throw trainerError;
+
+    // Update the user's trainer_profile ID
+    const { error: userError } = await supabase
+      .from("users")
+      .update({ trainer_profile: trainerProfile.id, is_trainer: true })
+      .eq("id", userId);
+
+    if (userError) throw userError;
+
+    // Create multiple entitlements
     await entitlementStore.createMultipleEntitlements(userId, 20);
+
     showSuccess("Profile successfully updated!");
     userStore.getUserProfile();
   } catch (err) {
@@ -204,5 +247,6 @@ const handleSubmit = async () => {
     showError("An error occurred. Please try again.");
   }
 };
+
 </script>
 
