@@ -318,7 +318,7 @@ onMounted(() => {
           </div>
           <div class="pl-6 flex-1 min-w-max">
             <div class="flex flex-col flex-1 gap-4 border-rafik-sectext text-left">
-              <button class="text-body uppercase text-left hover:text-rafik-pritext">View Language</button>
+              <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext">View Language</button> -->
               <button
               @click="DraftProgram"
                 class="text-body uppercase text-left hover:text-rafik-pritext"
