@@ -195,15 +195,12 @@ async function getUserProfile() {
 
     return userProfile.value;
   } catch (error:any) {
-    console.error("Failed to load user profile:", error.message);
     localStorage.removeItem("UserID");
     localStorage.removeItem("LoggedInTrainer");
 
     // Redirect only if user profile is not found
     router.push("/setup-user-profile");
 
-    // Ideally, replace `alert` with a user-friendly UI message
-    showError(`Failed to load user profile: ${error.message || "Unknown error"}`);
   }
 }
 
