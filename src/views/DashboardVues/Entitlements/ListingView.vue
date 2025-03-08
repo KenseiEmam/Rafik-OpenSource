@@ -131,6 +131,7 @@ import { useUserStore } from '@/stores/user'
 import Swal from 'sweetalert2'
 import { supabase } from '@/lib/supabaseClient'
 import AssignEntitlementsModal from './AssignEntitlementsModal.vue' // New modal component
+import router from '@/router'
 
 // Store references
 const entitlementStore = useEntitlementStore()
@@ -139,7 +140,9 @@ const userStore = useUserStore()
 // Local reactive states
 const loading = ref(false)
 const showAssignEntitlementModal = ref(false) // Controls modal visibility
-
+function refreshComponent() {
+  router.go(0); // This reloads the current route
+}
 // Success and Error Alerts
 function showSuccess(message: string) {
   Swal.fire({
@@ -255,6 +258,7 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
   // Refresh entitlements to reflect changes
   entitlementStore.getEntitlements()
   userStore.getEntitled()
+  refreshComponent()
 }
 </script>
 
