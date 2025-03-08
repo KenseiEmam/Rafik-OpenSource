@@ -218,7 +218,7 @@ function ActiveProgram() {
       color:"#E8F3ED",
   }).then((result) => {
     if (result.isConfirmed) {
-      updateProgramField("status", "Review").then(() => {
+      updateProgramField("status", "Active").then(() => {
         showSuccess("The program is being reviewed!")
           refreshComponent()
 
