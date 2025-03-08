@@ -13,7 +13,7 @@ const emit = defineEmits(['changeComp'])
       </div>
     </div>
     <div class="col-span-3">
-      <h1 class="header-large font-black">READY TO OPTIMIZE YOUR ONLINE TRAINING</h1>
+      <h1 class="header-large font-black">READY TO OPTIMIZE YOUR ONLINE TRAINING?</h1>
       <h1 class="title-medium mb-16 text-5xl">JOIN NOW OUR AFFILIATE PROGRAM</h1>
       <div class="flex gap-4 my-5">
         <RouterLink to="login" @click="emit('changeComp')" class="btn-lg"
