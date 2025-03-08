@@ -66,11 +66,18 @@ watch(
 // Function to add a new promo code
 const addPromo = () => {
   const promo = newPromo.value.trim();
-  if (promo && !props.program.promos.some((p: PromoCode) => p.code === promo)) {
-    emit("update-promo", [...props.program.promos, { code: promo, value: 0 }]);
+
+  if (!promo) return; // Prevent adding empty promo codes
+
+  const existingPromos = props.program?.promos ?? []; // Ensure it's an array
+
+  if (!existingPromos.some((p: PromoCode) => p.code === promo)) {
+    emit("update-promo", [...existingPromos, { code: promo, value: 0 }]);
   }
+
   newPromo.value = ""; // Clear input field
 };
+
 
 // Function to remove a promo code
 const removePromo = (promoToRemove: PromoCode) => {

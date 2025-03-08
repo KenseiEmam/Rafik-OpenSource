@@ -280,6 +280,8 @@ async function getUserProfile() {
       const { data: programs, error: programError } = await supabase
         .from('user_programs')
         .select('client_id, entitlement_id, program_id')
+        .eq('trainer_id', localStorage.getItem("UserID"))
+        .neq('status', 'cancelled')
         .not('entitlement_id', 'is', null) // ✅ Correct way to filter out NULLs
 
       if (programError) {
