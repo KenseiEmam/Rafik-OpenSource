@@ -130,13 +130,13 @@ const removePromo = (promoToRemove: PromoCode) => {
         </div>
       </div>
     </div>
-    <div class="h-128 py-8 flex-col gap-3 ">
+    <div style="height:50vh;" class=" py-8 flex-col gap-3 ">
       <!-- Promo Codes -->
       <h3 class="contentH-medium">Promo Codes</h3>
       <p class="text-body">
         Type your promo code in the input below and press enter to add it. You can remove promo codes and adjust their values.
       </p>
-      <div class="card px-8 h-full">
+      <div class="card px-8 h-full overflow-y-auto">
         <div class="flex flex-col gap-4 mt-6">
           <!-- Input for new promo code -->
           <input
