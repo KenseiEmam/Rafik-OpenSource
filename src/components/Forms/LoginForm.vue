@@ -41,7 +41,7 @@ const userStore = useUserStore()
 
 if(localStorage.getItem('LoggedInUser') && localStorage.getItem('UserID') )
 {
-  router.push('dashboard');
+  router.push({name:"dashboard-home"});
 
 }
 else if(localStorage.getItem('LoggedInUser') && !localStorage.getItem('UserID'))

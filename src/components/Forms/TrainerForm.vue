@@ -220,6 +220,7 @@ const handleSubmit = async () => {
       );
     }
 
+    // Insert trainer profile
     const { data: trainerProfile, error: trainerError } = await supabase
       .from("trainer_profile")
       .insert({
@@ -238,6 +239,17 @@ const handleSubmit = async () => {
 
     if (trainerError) throw trainerError;
 
+    // Update user row with new trainer profile ID and is_trainer set to true
+    const { error: userUpdateError } = await supabase
+      .from("users")
+      .update({
+        trainer_profile: trainerProfile.id, // Update the user row with the trainer profile ID
+        is_trainer: true, // Set is_trainer to true
+      })
+      .eq("id", userId);
+
+    if (userUpdateError) throw userUpdateError;
+
     await entitlementStore.createMultipleEntitlements(userId, 20);
 
     showSuccess("Profile successfully updated!");
@@ -249,4 +261,5 @@ const handleSubmit = async () => {
     loading.value = false;
   }
 };
+
 </script>

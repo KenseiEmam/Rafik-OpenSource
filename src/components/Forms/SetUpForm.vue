@@ -86,24 +86,24 @@ const validateAndSubmit = async () => {
   const email = localStorage.getItem("LoggedInUser");
 
   if (!email) {
-    alert("No logged-in user found. Please log in.");
+    showError("No logged-in user found. Please log in.");
     return;
   }
 
   const { firstName, lastName, sex, age, nationality, phone } = formData.value;
 
   if (!selectedFile.value) {
-    alert("Please upload a profile picture.");
+    showError("Please upload a profile picture.");
     return;
   }
 
   if (!firstName || !lastName || !sex || !age || !nationality || !phone) {
-    alert("All fields are required.");
+    showError("All fields are required.");
     return;
   }
 
   if (age <= 0) {
-    alert("Please enter a valid age.");
+    showError("Please enter a valid age.");
     return;
   }
 
@@ -143,15 +143,15 @@ const validateAndSubmit = async () => {
 
     if (error) {
       console.error(error);
-      alert("Error saving profile. Please try again.");
+      showError("Error saving profile. Please try again.");
       return;
     }
 
-    alert("Profile successfully updated!");
+    showSuccess("Profile successfully updated!");
     userStore.getUserProfile();
   } catch (err) {
     console.error(err);
-    alert("An error occurred. Please try again.");
+    showError("An error occurred. Please try again.");
   } finally {
     isLoading.value = false; // Stop loading
   }
