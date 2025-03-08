@@ -129,7 +129,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
           workouts: updatedData.workouts,
           weekly_cycle: updatedData.weekly_cycle,
         })
-        .select()
+        .select('*')
         .single()
 
       if (userProgramError) throw new Error(userProgramError.message)
@@ -142,7 +142,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
         .from('entitlements')
         .update(entitlementData)
         .eq('id', trainer_id)
-        .select()
+        .select('id')
         .single()
 
       if (error) throw new Error(error.message)
@@ -153,15 +153,26 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
           entitlement_id: data.id,
         })
         .eq('id', userProgramData.id)
-        .select()
+        .select('id')
         .single()
 
       if (updateError) throw new Error(updateError.message)
 
+        const { data: userData, error: userError } = await supabase
+        .from('user_profiles')
+        .update({
+          user_program_id: data.id,
+        })
+        .eq('id', client_id)
+        .select()
+        .single()
+
+      if (userError) throw new Error(userError.message)
+
       // Update local state after the update
       const index = entitlements.value.findIndex((entitlement) => entitlement.id === data.id)
       if (index !== -1) {
-        Object.assign(entitlements.value[index], data[0])
+        Object.assign(entitlements.value[index], data)
         updateUnusedEntitlementCount()
       }
     } catch (error) {
