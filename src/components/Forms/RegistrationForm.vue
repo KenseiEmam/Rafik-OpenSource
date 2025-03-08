@@ -60,7 +60,36 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { supabase } from "@/lib/supabaseClient";
+import router from '@/router'
+import Swal from 'sweetalert2'
+// Success and Error Alerts
+function showSuccess(message: string) {
+  Swal.fire({
+    title: 'Success!',
+    showConfirmButton: false,
+    timerProgressBar: true,
+    timer: 1500,
+    text: message,
+    toast: true,
+    position: 'top-right',
+    icon: 'success',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
+}
 
+// Function to show error alerts
+function showError(message: string) {
+  Swal.fire({
+    title: 'Error!',
+    text: message,
+    icon: 'error',
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#d33',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
+}
 const email = ref<string>("");
 const password = ref<string>("");
 const confirmPassword = ref<string>("");
@@ -89,15 +118,15 @@ async function signUpNewUser() {
       });
 
       if (error) throw error;
-
-      alert("Registration successful! Check your email to confirm your account.");
+      router.push('setup-user-profile');
+      showSuccess("Registration successful! Check your email to confirm your account.");
     } catch (error) {
       if (error instanceof Error) {
-        alert(`Error: ${error.message}`);
+       showError(`Error: ${error.message}`);
       }
     }
   } else {
-    alert("Please ensure the form meets all requirements before submitting.");
+   showError("Please ensure the form meets all requirements before submitting.");
   }
 }
 </script>
