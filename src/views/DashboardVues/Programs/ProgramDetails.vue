@@ -195,7 +195,7 @@ function DraftProgram() {
       color:"#E8F3ED",
   }).then((result) => {
     if (result.isConfirmed) {
-      updateProgramField("status", "Drafted").then(() => {
+      updateProgramField("status", "Draft").then(() => {
         showSuccess("The program has been set to draft.")
           refreshComponent()
 
@@ -329,7 +329,7 @@ onMounted(() => {
               <button
               @click="ActiveProgram"
                 class="text-body uppercase text-left hover:text-rafik-pritext"
-                v-if="programStore.Program.status == 'Drafted'"
+                v-if="programStore.Program.status == 'Draft'"
               >
                 Publish to Active
               </button>
