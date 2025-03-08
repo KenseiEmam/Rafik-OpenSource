@@ -84,7 +84,7 @@ const removeImage = () => {
 
 const validateAndSubmit = async () => {
   const email = localStorage.getItem("LoggedInUser");
-
+  isLoading.value = true
   if (!email) {
     showError("No logged-in user found. Please log in.");
     return;
@@ -126,7 +126,7 @@ const validateAndSubmit = async () => {
     if (!urlData?.publicUrl) {
       throw new Error("Failed to generate public URL for the image.");
     }
-    isLoading.value = true
+
     // Save the data to the `users` table
     const { data, error } = await supabase.from("users").upsert({
       email,
@@ -166,7 +166,8 @@ const validateAndSubmit = async () => {
       <h1 class="header-large">Almost There!</h1>
       <h2 class="text-body text-rafik-sectext">
         Set up your profile to tell your clients more about yourself...
-      </h2><div v-if="isLoading" class="text-center text-lg font-bold text-rafik-sectext">
+      </h2>
+      <div v-if="isLoading" class="text-center text-lg font-bold text-rafik-sectext">
         Loading...
       </div>
       <div v-else>
@@ -178,6 +179,9 @@ const validateAndSubmit = async () => {
           >
             Profile Picture
           </label>
+          <p class="label text-rafik-sectext">
+            Upload a nice photo of your face...
+          </p>
           <div v-if="uploadedImage" class="w-64 h-64 relative">
             <img
               :src="uploadedImage"
@@ -191,6 +195,7 @@ const validateAndSubmit = async () => {
               Remove Image
             </button>
           </div>
+
           <div
             v-else
             class="w-64 h-64 border-2 border-dashed border-rafik-sectext rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg focus:ring-2 focus:ring-offset-2 focus:ring-background-rafik-pribg"
@@ -200,6 +205,7 @@ const validateAndSubmit = async () => {
               Drag and drop an image here, or click to upload
             </span>
           </div>
+
           <input
             type="file"
             id="profile-picture"
@@ -230,9 +236,7 @@ const validateAndSubmit = async () => {
               placeholder="Enter your last name"
             />
           </div>
-          <p class="label text-rafik-sectext">
-            Upload a nice photo of your face...
-          </p>
+
         </div>
       </div>
       <div>
@@ -274,7 +278,7 @@ const validateAndSubmit = async () => {
           placeholder="Enter your phone number"
         />
       </div>
-      <input type="submit" class="btn-lg" value="Submit" />
+      <input :disabled="isLoading" type="submit" class="btn-lg" value="Submit" />
     </form>
   </div>
 </template>
