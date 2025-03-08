@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-
+import { ref, watch, nextTick } from "vue";
+import isEqual from "lodash/isEqual";
 // Props to receive the program object
 const props = defineProps({
   program: {
@@ -54,15 +54,17 @@ type PromoCode = {
 
 const newPromo = ref("");
 
-// Watch for changes in promo discount values
 watch(
   () => props.program.promos,
-  (newPromos) => {
-    emit("update-promo", newPromos);
+  (newPromos, oldPromos) => {
+    if (!isEqual(newPromos, oldPromos)) {
+      nextTick(() => {
+        emit("update-promo", newPromos);
+      });
+    }
   },
   { deep: true }
 );
-
 // Function to add a new promo code
 const addPromo = () => {
   const promo = newPromo.value.trim();
