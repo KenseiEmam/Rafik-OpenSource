@@ -1,5 +1,34 @@
 <script setup lang="ts">
 import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
+import Swal from 'sweetalert2'
+// Success and Error Alerts
+function showSuccess(message: string) {
+  Swal.fire({
+    title: 'Success!',
+    showConfirmButton: false,
+    timerProgressBar: true,
+    timer: 1500,
+    text: message,
+    toast: true,
+    position: 'top-right',
+    icon: 'success',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
+}
+
+// Function to show error alerts
+function showError(message: string) {
+  Swal.fire({
+    title: 'Not There Yet!',
+    text: message,
+    icon: 'error',
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#d33',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
+}
 </script>
 
 <template>
@@ -22,6 +51,7 @@ import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
       <div class="flex flex-col md:flex-row items-center justify-between flex-1">
         <!-- Left Column: Heading, Description, Buttons -->
         <div class="max-w-lg">
+          <h1 class="subheader-medium">Looking for your perfect trainer?</h1>
           <h1 class="header-large">INSTALL OUR</h1>
           <h1 class="title-large leading-none mb-4">RAFIK SQUIRE APP</h1>
           <p class="text-body mb-4">
@@ -31,12 +61,14 @@ import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
           <div class="flex flex-col gap-2 max-w-[235px]">
             <!-- Play Store Button -->
             <button
+            @click="showError("Trainee Application Coming Soon to Android.")"
               class="border-solid border-2 border-yellow-300 text-yellow-300 px-6 py-3 font-semibold rounded-lg hover:bg-yellow-400 hover:border-yellow-400 hover:text-white transition-colors"
             >
               PLAY STORE
             </button>
             <!-- APP Store Button -->
             <button
+            @click="showError("Trainee Application Coming Soon to Apple.")"
               class="bg-yellow-300 border-2 border-yellow-300 text-white px-6 py-3 font-semibold rounded-lg hover:bg-yellow-400 hover:border-yellow-400 transition-colors"
             >
               APP STORE
