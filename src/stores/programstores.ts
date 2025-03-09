@@ -180,10 +180,25 @@ export const useProgramStore = defineStore('Program', () => {
       const programId = data.id
       const trainerId = newProgram.trainer_id // Assuming `trainer_id` is passed in `newProgram`
 
-      // Update trainer_profile with the new program_id
+      // Retrieve the current programs array from trainer_profile
+      const { data: trainerProfile, error: fetchError } = await supabase
+        .from('trainer_profile')
+        .select('programs') // Ensure this column exists in your table
+        .eq('user_id', trainerId)
+        .single()
+
+      if (fetchError) throw new Error(fetchError.message)
+      if (!trainerProfile) throw new Error('Trainer profile not found')
+
+      // Ensure programs is an array, then append the new program_id
+      const updatedProgramIds = Array.isArray(trainerProfile.programs)
+        ? [...trainerProfile.programs, programId]
+        : [programId] // Initialize if null
+
+      // Update trainer_profile with the new programs array
       const { data: updatedTrainer, error: updateError } = await supabase
         .from('trainer_profile')
-        .update({ program_ids: programId })
+        .update({ programs: updatedProgramIds })
         .eq('user_id', trainerId)
         .select()
         .single() // Return the updated trainer profile
@@ -202,6 +217,7 @@ export const useProgramStore = defineStore('Program', () => {
       return null
     }
   }
+
 
 
   return {
