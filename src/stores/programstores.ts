@@ -3,7 +3,34 @@ import { defineStore } from 'pinia'
 import { supabase } from '../lib/supabaseClient'
 import router from '@/router'
 import Swal from 'sweetalert2'
-// Define the Program type with the new program_focus property
+// Success and Error Alerts
+function showSuccess(message: string) {
+  Swal.fire({
+    title: 'Success!',
+    showConfirmButton: false,
+    timerProgressBar: true,
+    timer: 1500,
+    text: message,
+    toast: true,
+    position: 'top-right',
+    icon: 'success',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
+}
+
+// Function to show error alerts
+function showError(message: string) {
+  Swal.fire({
+    title: 'Error!',
+    text: message,
+    icon: 'error',
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#d33',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
+}
 export type Program = {
   id: string
   program_name?: string
@@ -150,8 +177,9 @@ export const useProgramStore = defineStore('Program', () => {
       if (Program.value?.id === updateData.id) {
         Object.assign(Program.value, updateData)
       }
+
     } catch (error) {
-      console.error('Error updating program:', error)
+      showError('Error updating program:'+ error)
     }
   }
   // Add Program

@@ -175,6 +175,35 @@ import { ref, reactive, watch, defineProps } from "vue";
 import { useProgramStore } from "@/stores/programstores";
 import ExerciseOffcanvas from "../Offcanvas/ExerciseOffcanvas.vue";
 import { useUserStore } from "@/stores/user";
+import Swal from "sweetalert2"
+// Success and Error Alerts
+function showSuccess(message: string) {
+  Swal.fire({
+    title: 'Success!',
+    showConfirmButton: false,
+    timerProgressBar: true,
+    timer: 1500,
+    text: message,
+    toast: true,
+    position: 'top-right',
+    icon: 'success',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
+}
+
+// Function to show error alerts
+function showError(message: string) {
+  Swal.fire({
+    title: 'Error!',
+    text: message,
+    icon: 'error',
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#d33',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
+}
 type Program = {
   id: string;
   program_name?: string;
@@ -257,8 +286,17 @@ const cancelEdit = () => {
 
 const submitChanges = () => {
   isEditing.value = false;
+  const workoutDays = editedWorkouts.value.filter((workout:any )=> !workout.rest_day).length;
+      // Update avg_session_time
+      const completedSessions = editedWorkouts.value
+        .filter((workout:any )=> workout.time_to_complete)
+        .map((workout:any )=> parseInt(workout.time_to_complete, 10) || 0);
+        let totalTime = 0
+      if (completedSessions.length > 0) {
+       totalTime = completedSessions.reduce((sum:any, time:any) => sum + time, 0);
+      }
   if(!props.user)
-  programStore.updateProgram({ ...props.program, workouts: editedWorkouts.value });
+  programStore.updateProgram({ ...props.program, workouts: editedWorkouts.value, avg_days_per_week: workoutDays, avg_session_time: totalTime/workoutDays }).then(()=>{showSuccess("Workout Plan Updated Successfully")});
   else
   {
     updateClientProgram(props.user)
@@ -279,7 +317,7 @@ async function updateClientProgram(user:string) {
 
   } catch (error) {
 
-    console.error(`Error updating Client program:`, error);
+    showError(`Error updating Client program:`+ error);
   }
 }
 const calculateTotalSets = (exercises: any[]) => exercises.reduce((total, ex) => total + (ex.sets || 0), 0);
