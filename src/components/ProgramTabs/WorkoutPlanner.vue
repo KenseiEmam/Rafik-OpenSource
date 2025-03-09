@@ -33,25 +33,28 @@
 
 
     <!-- Active Workout Content -->
-    <div class="card p-8 flex flex-col" v-if="editedWorkouts.length">
-      <div v-if="!editedWorkouts[activeTab].rest_day">
+    <div class="card p-0  flex flex-col" v-if="editedWorkouts.length">
+      <label v-if="isEditing" class="flex items-center w-full mr-4 space-x-2 cursor-pointer border-b border-rafik-sectext bg-rafik-secbg p-8 rounded-t-xl">
+                  <input type="checkbox" v-model="editedWorkouts[activeTab].rest_day" class="hidden">
+                  <div
+                    class="w-12 h-6 flex items-center border-rafik-pritext border-2  rounded-full transition-all"
+                    :class="{ 'bg-rafik': editedWorkouts[activeTab].rest_day }">
+                    <div class="w-6 h-6 bg-rafik-pritext rounded-full shadow-md transform transition-transform"
+                        :class="{ 'translate-x-6': editedWorkouts[activeTab].rest_day }"></div>
+                  </div>
+                  <p class="header-small text-sm">Rest Day</p>
+        </label>
+      <div class="p-8" v-if="!editedWorkouts[activeTab].rest_day">
+
         <!-- Editable Workout Fields -->
          <div class="flex justify-between items-center gap-6">
-            <div class="w-2/3">
-              <div v-if="isEditing" class="flex items-center mt-2 mb-8 uppercase">
-                <input
-                  type="checkbox"
-                  v-model="editedWorkouts[activeTab].rest_day"
-                  class="mr-2"
-                  :class="{'accent-rafik': editedWorkouts[activeTab].rest_day}"
-                  style="transform: scale(1.5);"
-                />
-                <p>Rest Day</p>
-              </div>
+
+            <div class="w-2/3 space-y-3">
+
               <input
                 v-if="isEditing"
                 v-model="editedWorkouts[activeTab].workout_name"
-                class="rafik-text-input border-0 focus:ring-0 pb-1 bg-transparent border-b focus:border-rafik-alternate rounded-none text-3xl  text-rafik contentH-medium mb-2"
+                class="rafik-text-input border-0 bg-transparent text-rafik-sectext focus:ring-0 pb-1 border-b focus:border-rafik-alternate rounded-none text-3xl  text-rafik contentH-medium mb-2"
                 placeholder="Workout Name"
               />
               <h3 v-else class="text-rafik contentH-medium">{{ editedWorkouts[activeTab].workout_name || "Edit to add name..."}}</h3>
@@ -59,19 +62,19 @@
               <textarea
                 v-if="isEditing"
                 v-model="editedWorkouts[activeTab].workout_summary"
-                class="rafik-text-input border-0 focus:ring-0 pb-1 bg-transparent border-b focus:border-rafik-alternate rounded-none   mb-4"
+                class="rafik-text-input border-0 bg-transparent text-rafik-sectext focus:ring-0 pb-1 border-b focus:border-rafik-alternate rounded-none   mb-4"
                 placeholder="Workout Summary"
               ></textarea>
               <p v-else class="text-body mb-4">{{ editedWorkouts[activeTab].workout_summary || "Edit to add workout summary..."}}</p>
             </div>
-            <div class="space-y-6 ">
+            <div class="space-y-6 mb-auto ">
               <div class="flex justify-between text-rafik-pritexttext w-full gap-12 ">
               <p>Completion Time (mins)</p>
               <p class="text-rafik-secondary" v-if="!isEditing">{{ editedWorkouts[activeTab].time_to_complete + "mins" || "00 mins"}}</p>
               <input
                 v-if="isEditing"
                 v-model="editedWorkouts[activeTab].time_to_complete"
-                class="rafik-text-input border-0 focus:ring-0 pb-1 bg-transparent border-b focus:border-rafik-alternate rounded-none  "
+                class="rafik-text-input border-0 bg-transparent text-rafik-sectext mb-auto focus:ring-0 pb-1 border-b focus:border-rafik-alternate rounded-none  "
                 placeholder="Completion Time"
               />
             </div>
@@ -86,80 +89,83 @@
 
 
         <!-- Editable Exercises -->
-        <h4 class="subheader-medium flex gap-2 mt-4 mb-3">List of Exercises:</h4>
-        <div class=" flex flex-col gap-4 mb-5">
-          <div
-            class=" bg-rafik-secbg rounded-xl shadow-xl p-6"
-            v-for="(exercise, exerciseIndex) in editedWorkouts[activeTab].exercises"
-            :key="exercise.id"
-          >
-          <div class="flex gap-3 items-center mb-4">
-            <video
-              v-if="exercise.media.endsWith('.mp4') || exercise.media.includes('video')"
-              class="w-24 h-24 card border p-0 object-cover rounded-lg"
-              :src="exercise.media"
-              ref="videoRef"
-              muted
-              loop
-            ></video>
-            <div v-else class="w-24 h-24 card border flex items-center justify-center">
-              <p class="text-xs"> No Media</p>
-            </div>
+         <div class=" mt-4 mb-3 p-6 bg-rafik-secbg ">
+           <h4  class="header-small  w-2/3 mx-auto text-center">Exercises</h4>
+           <h4  class="header-small mb-3 w-2/3 mx-auto text-center">••••••</h4>
+           <h4 v-if="editedWorkouts[activeTab].exercises.length===0 && !isEditing" class="text-body text-center gap-2 mt-6 text-sm">No exercises added yet! Edit to add!</h4>
+           <div class=" flex flex-col gap-4 mb-5">
+             <div
+               class=" gradient-bg border border-rafik-sectext rounded-xl shadow-xl p-6"
+               v-for="(exercise, exerciseIndex) in editedWorkouts[activeTab].exercises"
+               :key="exercise.id"
+             >
+             <div class="flex gap-3 items-center mb-4">
+               <video
+                 v-if="exercise.media.endsWith('.mp4') || exercise.media.includes('video')"
+                 class="w-24 h-24 card border p-0 object-cover rounded-lg"
+                 :src="exercise.media"
+                 ref="videoRef"
+                 muted
+                 loop
+               ></video>
+               <div v-else class="w-24 h-24 card border flex items-center justify-center">
+                 <p class="text-xs"> No Media</p>
+               </div>
 
-            <div>
-              <h2 class="contentH-small">{{ exercise.exercise_name }}</h2>
-            <p class="text-rafik-pritext capitalize ">{{ exercise.type }} Exercise</p>
+               <div>
+                 <h2 class="contentH-small">{{ exercise.exercise_name }}</h2>
+               <p class="text-rafik-pritext capitalize ">{{ exercise.type }} Exercise</p>
+               </div>
+
+
+               <div class="ml-auto space-y-3" >
+                <div v-if="isEditing" class="flex gap-4 justify-between items-end " >
+                   <label class="text-body">Total Sets:</label>
+                   <input type="number" v-model.number="exercise.sets" class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext border-b focus:border-rafik-alternate rounded-none  " placeholder="Sets" />
+                 </div>
+                <div v-else class="flex justify-between gap-4 w-full text-rafik-sectext ">
+                 <p>Total Sets:</p>
+                 <p class="text-rafik-pritext">{{ exercise.sets }}</p>
+               </div>
+               <div class="flex justify-between gap-4 w-full text-rafik-sectext text-body ">
+                 <p>Average Intensity:</p>
+                 <p class="text-rafik-pritext">{{ exercise.intensity }} kg</p>
+               </div>
+
+               <div class="flex justify-between gap-4 w-full text-rafik-sectext text-body ">
+                 <p>Average Repetitions:</p>
+                 <p class="text-rafik-pritext">{{ exercise.reps }}</p>
+               </div>
+               </div>
+             </div>
+
+               <div  class=" flex gap-6">
+
+                 <div class="space-y-2 w-full" >
+                   <div class="flex w-full justify-between w-full items-end py-2 border-b border-rafik-sectext" v-for="set,index in exercise.true_sets" :key="index">
+                    <h2 class="header-small text-sm">Set {{ index +1 }}</h2>
+                    <div class="space-y-2">
+                      <p class="text-rafik-pritext">Weight (KG)</p>
+                      <input :disabled="!isEditing"  type="number" v-model.number="set.intensity" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate rounded-none  " placeholder="Sets" />
+                    </div>
+                    <div class="space-y-2">
+                      <p class="text-rafik-pritext">Reps</p>
+                      <input :disabled="!isEditing" type="number" v-model.number="set.reps" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate rounded-none  " placeholder="Sets" />
+                    </div>
+                   </div>
+                 </div>
+
+                 <div v-if="isEditing" class="flex justify-between ml-auto min-w-max mt-auto ">
+                   <button class="hover:text-red-400 text-red-500" @click="removeExercise(activeTab, exerciseIndex)">Remove Exercise</button>
+                 </div>
+                </div>
             </div>
           </div>
-
-            <div v-if="isEditing" class=" flex gap-6">
-              <div class="space-y-2">
-                <label class="text-rafik-sectext">Intensity</label>
-                <input v-model="exercise.intensity" class="rafik-text-input border-0 focus:ring-0 pb-1 bg-transparent border-b focus:border-rafik-alternate rounded-none  " placeholder="Intensity" />
-              </div>
-              <div class="space-y-2">
-                <label class="text-rafik-sectext">Sets</label>
-                <input type="number" v-model.number="exercise.sets" class="rafik-text-input border-0 focus:ring-0 pb-1 bg-transparent border-b focus:border-rafik-alternate rounded-none  " placeholder="Sets" />
-              </div>
-              <div class="space-y-2">
-
-                <label class="text-rafik-sectext">Repetitions</label>
-                <input type="number" v-model.number="exercise.reps" class="rafik-text-input border-0 focus:ring-0 pb-1 bg-transparent border-b focus:border-rafik-alternate rounded-none  " placeholder="Repetitions" />
-              </div>
-              <div class="flex justify-between ml-auto">
-                <button class="hover:text-red-400 text-red-500" @click="removeExercise(activeTab, exerciseIndex)">Remove Exercise</button>
-              </div>
-            </div>
-            <div v-else>
-
-              <div class="flex justify-between w-full text-rafik-sectext ">
-                <p>Intensity</p>
-                <p class="text-rafik-pritext">{{ exercise.intensity }}</p>
-              </div>
-              <div class="flex justify-between w-full text-rafik-sectext ">
-                <p>Sets</p>
-                <p class="text-rafik-pritext">{{ exercise.sets }}</p>
-              </div>
-              <div class="flex justify-between w-full text-rafik-sectext ">
-                <p>Repetitions</p>
-                <p class="text-rafik-pritext">{{ exercise.reps }}</p>
-              </div>
-            </div>
-          </div>
+          <ExerciseOffcanvas @addExercises="handleAdd(activeTab, $event)" v-if="isEditing" />
         </div>
-        <ExerciseOffcanvas @addExercises="handleAdd(activeTab, $event)" v-if="isEditing" />
+
       </div>
-      <div v-else class="my-auto text-center text-rafik contentH-medium uppercase">
-        <div v-if="isEditing" class="flex items-center mt-2 mb-8 uppercase">
-            <input
-              type="checkbox"
-              v-model="editedWorkouts[activeTab].rest_day"
-              class="mr-2"
-              :class="{'accent-rafik': editedWorkouts[activeTab].rest_day}"
-              style="transform: scale(1.5);"
-            />
-            <p>Rest Day</p>
-          </div>
+      <div v-else class="my-auto text-center text-rafik contentH-medium uppercase p-8">
           Rest and Recover</div>
     </div>
   </div>
@@ -205,6 +211,9 @@ type PromoCode = {
   code: string;
   value: number;
 };
+type true_set = {
+
+}
 type Exercise = {
   id: string;
   exercise_name?: string;
@@ -212,6 +221,7 @@ type Exercise = {
   intensity?: string;
   sets?: number;
   reps?: number;
+  true_sets?: any[];
 };
 type Workout = {
   workout_name: string;
@@ -277,7 +287,37 @@ const removeExercise = (workoutIndex: number, exerciseIndex: number) => {
 
 const handleAdd = (workoutIndex: number, list: any[]) => {
   editedWorkouts.value[workoutIndex].exercises.push(
-    ...list.map(e => ({ ...e, sets: 0, reps: 0, intensity: 0 }))
+    ...list.map(e => ({ ...e, sets: 3, reps: 0, intensity: 0, true_sets:[{reps:0, intensity:0}, {reps:0, intensity:0}, {reps:0, intensity:0}] }))
   );
 };
+watch(
+  () => editedWorkouts.value,
+  (newWorkouts) => {
+    newWorkouts.forEach((workout:Workout) => {
+      workout.exercises.forEach((exercise: any) => {
+        const setCount = exercise.sets || 0;
+
+        // Preserve existing `true_sets` values if possible, otherwise initialize new ones
+        if (exercise.true_sets.length !== setCount) {
+          exercise.true_sets = Array.from({ length: setCount }, (_, i) =>
+            exercise.true_sets[i] ?? { reps: 0, intensity: 0 }
+          );
+        }
+
+         // Calculate average intensity and reps from `true_sets`
+         if (exercise.true_sets.length > 0) {
+          const totalReps = exercise.true_sets.reduce((sum:any, set:any) => sum + set.reps, 0);
+          const totalIntensity = exercise.true_sets.reduce((sum:any, set:any) => sum + set.intensity, 0);
+
+          exercise.reps = Math.round(totalReps / exercise.true_sets.length);
+          exercise.intensity = Math.round(totalIntensity / exercise.true_sets.length);
+        } else {
+          exercise.reps = 0;
+          exercise.intensity = 0;
+        }
+      });
+    });
+  },
+  { deep: true }
+);
 </script>
