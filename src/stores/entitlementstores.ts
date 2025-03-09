@@ -153,6 +153,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
           status: 'active',
           expires_on: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
           price_package: updatedData.price_one,
+          months_package:1,
           workouts: updatedData.workouts,
           weekly_cycle: updatedData.weekly_cycle,
         })
@@ -186,7 +187,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
       if (updateError) throw new Error(updateError.message)
 
         const { data: userData, error: userError } = await supabase
-        .from('user_profiles')
+        .from('profiles')
         .update({
           user_program_id: data.id,
         })
