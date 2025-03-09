@@ -212,7 +212,10 @@ type PromoCode = {
   value: number;
 };
 type true_set = {
-
+  intensity:number,
+  sets:number,
+  weight_done:number,
+  reps_done:number,
 }
 type Exercise = {
   id: string;
@@ -287,7 +290,7 @@ const removeExercise = (workoutIndex: number, exerciseIndex: number) => {
 
 const handleAdd = (workoutIndex: number, list: any[]) => {
   editedWorkouts.value[workoutIndex].exercises.push(
-    ...list.map(e => ({ ...e, sets: 3, reps: 0, intensity: 0, true_sets:[{reps:0, intensity:0}, {reps:0, intensity:0}, {reps:0, intensity:0}] }))
+    ...list.map(e => ({ ...e, sets: 3, reps: 0, intensity: 0, true_sets:[{reps:0, intensity:0,weight_done:0, reps_done:0 }, {reps:0, intensity:0,weight_done:0, reps_done:0 }, {reps:0, intensity:0,weight_done:0, reps_done:0 }] }))
   );
 };
 watch(
@@ -300,7 +303,7 @@ watch(
         // Preserve existing `true_sets` values if possible, otherwise initialize new ones
         if (exercise.true_sets.length !== setCount) {
           exercise.true_sets = Array.from({ length: setCount }, (_, i) =>
-            exercise.true_sets[i] ?? { reps: 0, intensity: 0 }
+            exercise.true_sets[i] ?? { reps: 0, intensity: 0, weight_done:0, reps_done:0 }
           );
         }
 
