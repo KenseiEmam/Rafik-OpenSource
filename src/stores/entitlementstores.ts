@@ -191,7 +191,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
         .update({
           user_program_id: data.id,
         })
-        .eq('user_id', client_id)
+        .eq('id', client_id)
         .select('*')
         .single()
 
