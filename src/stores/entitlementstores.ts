@@ -189,11 +189,10 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
         const { data: userData, error: userError } = await supabase
         .from('profiles')
         .update({
-          user_program_id: data.id,
+          user_program_id: updateData.id,
         })
         .eq('id', client_id)
-        .select('*')
-        .single()
+        .select()
 
       if (userError) throw new Error(userError.message)
 
