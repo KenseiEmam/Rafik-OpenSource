@@ -24,11 +24,11 @@
           Drafted Programs
         </button>
         <button
-          :class="activeTab === 'Custom Exercises' ? 'text-rafik-pritext' : ''"
+          :class="activeTab === 'Exercise Library' ? 'text-rafik-pritext' : ''"
           class="nav-btn uppercase "
-          @click="setActiveTab('Custom Exercises')"
+          @click="setActiveTab('Exercise Library')"
         >
-          Custom Exercises
+          Exercise Library
         </button>
       </div>
 
@@ -143,7 +143,7 @@
             </div>
           </div>
           <ExerciseList
-          v-else-if="activeTab == 'Custom Exercises' && exerciseStore.AllExercises"
+          v-else-if="activeTab == 'Exercise Library' && exerciseStore.AllExercises"
           @updatePage="updatePage  "
           @update-page-search="updatePageSearch"
           :exercises="exerciseStore.AllExercises"
