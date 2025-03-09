@@ -276,7 +276,7 @@ async function getUserProfile() {
       // Fetch user_programs where entitlement_id matches the given id
       const { data: programs, error: programError } = await supabase
         .from('user_programs')
-        .select('client_id, entitlement_id, program_id')
+        .select('*')
         .eq('trainer_id', localStorage.getItem("UserID"))
         .neq('status', 'cancelled')
         .not('entitlement_id', 'is', null) // ✅ Correct way to filter out NULLs
@@ -308,7 +308,7 @@ async function getUserProfile() {
       // Fetch user details from users table
       const { data: users, error: userError } = await supabase
         .from('users')
-        .select('id,avatar, email, first_name, last_name')
+        .select('*')
         .in('id', userIds)
 
       if (userError) {
@@ -317,21 +317,30 @@ async function getUserProfile() {
 
       // Merge client details with their respective program details
       Entitled.value = userProfiles
-        .map((profile) => {
-          const user = users.find((u) => u.id === profile.user_id)
-          const programDetails = programs.filter((program) => program.client_id === profile.id)
-          return user
-            ? {
-                id: user.id,
-                avatar: user.avatar,
-                email: user.email,
-                first_name: user.first_name,
-                last_name: user.last_name,
-                program_details: programDetails,
-              }
-            : null
-        })
-        .filter((client) => client !== null)
+      .map((profile) => {
+        const user = users.find((u) => u.id === profile.user_id)
+        const programDetails = programs.find(
+          (program) => program.client_id === profile.id,
+        )
+
+        return user
+          ? {
+              id: user.id,
+              avatar: user.avatar,
+              email: user.email,
+              gender: user.sex,
+              nationality: user.nationality,
+              phone: user.phone,
+              first_name: user.first_name,
+              last_name: user.last_name,
+              age: user.age,
+              profile: profile,
+              program_details: programDetails,
+              last_active: user.last_active,
+            }
+          : null
+      })
+      .filter((client) => client !== null)
     } catch (error: any) {
       console.error(error)
       alert(`Failed to load clients: ${error.message || 'Unknown error'}`)
@@ -415,7 +424,7 @@ async function getUserProfile() {
       AllClients.value = userProfiles
         .map((profile) => {
           const user = users.find((u) => u.id === profile.user_id)
-          const programDetails = activePrograms.filter(
+          const programDetails = activePrograms.find(
             (program) => program.client_id === profile.id,
           )
 
