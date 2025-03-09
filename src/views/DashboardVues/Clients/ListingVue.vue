@@ -97,36 +97,30 @@
               </td>
 
               <td class="bg-rafik-secbg border-y border-rafik-sectext">
-                {{
-                  client.program_details.length
-                    ? new Date(client.program_details[0].created_at).toLocaleDateString('en-GB', {
+                {{ new Date(client.program_details.created_at).toLocaleDateString('en-GB', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
                       })
-                    : '-'
+                    || '-'
                 }}
               </td>
               <td class="bg-rafik-secbg border-y border-rafik-sectext">
-                {{
-                  client.program_details.length
-                    ? new Date(client.program_details[0].expires_on).toLocaleDateString('en-GB', {
+                {{ new Date(client.program_details.expires_on).toLocaleDateString('en-GB', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
                       })
-                    : '-'
+                    || '-'
                 }}
               </td>
               <td class="bg-rafik-secbg border-y border-rafik-sectext">
-                {{
-                  client.program_details.length
-                    ? client.program_details[0].months_package + ' month'
-                    : '-'
-                }}
+                {{ client.program_details.months_package
+                    || '-'
+                }} months
               </td>
               <td class="uppercase bg-rafik-secbg text-rafik border-y border-rafik-sectext">
-                {{ client.program_details.length ? client.program_details[0].status : '-' }}
+                {{ client.program_details.status || '-' }}
               </td>
               <td
                 class="px-3 bg-rafik-secbg relative text-right rounded-r-xl border-r border-y border-rafik-sectext"
