@@ -61,14 +61,14 @@ function showError(message: string) {
           <div class="flex flex-col gap-2 max-w-[235px]">
             <!-- Play Store Button -->
             <button
-            @click="showError("Trainee Application Coming Soon to Android.")"
+            @click="showError('Trainee Application Coming Soon to Android.')"
               class="border-solid border-2 border-yellow-300 text-yellow-300 px-6 py-3 font-semibold rounded-lg hover:bg-yellow-400 hover:border-yellow-400 hover:text-white transition-colors"
             >
               PLAY STORE
             </button>
             <!-- APP Store Button -->
             <button
-            @click="showError("Trainee Application Coming Soon to Apple.")"
+            @click="showError('Trainee Application Coming Soon to Apple.')"
               class="bg-yellow-300 border-2 border-yellow-300 text-white px-6 py-3 font-semibold rounded-lg hover:bg-yellow-400 hover:border-yellow-400 transition-colors"
             >
               APP STORE
