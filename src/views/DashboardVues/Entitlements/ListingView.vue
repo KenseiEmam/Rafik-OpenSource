@@ -269,7 +269,7 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
     userStore.getEntitled()
   ]);
 
-  refreshComponent();
+  showSuccess("Assigned entitlement successfully!")
 }
 
 </script>
