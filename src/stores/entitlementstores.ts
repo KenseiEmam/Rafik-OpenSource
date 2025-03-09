@@ -3,7 +3,34 @@ import { defineStore } from 'pinia'
 import { supabase } from '../lib/supabaseClient' // Make sure the supabase client is initialized properly
 import Swal from 'sweetalert2' // For error handling
 import type { Program } from './programstores'
+// Success and Error Alerts
+function showSuccess(message: string) {
+  Swal.fire({
+    title: 'Success!',
+    showConfirmButton: false,
+    timerProgressBar: true,
+    timer: 1500,
+    text: message,
+    toast: true,
+    position: 'top-right',
+    icon: 'success',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
+}
 
+// Function to show error alerts
+function showError(message: string) {
+  Swal.fire({
+    title: 'Error!',
+    text: message,
+    icon: 'error',
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#d33',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
+}
 interface Entitlement {
   id: string // Unique identifier for the entitlement record
   trainer_id: string // Foreign key linked to public.users.id (trainer)
@@ -176,12 +203,8 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
         updateUnusedEntitlementCount()
       }
     } catch (error) {
-      console.error('Error updating entitlement:', error)
-      Swal.fire({
-        title: 'Error',
-        text: 'Failed to update entitlement.',
-        icon: 'error',
-      })
+      showError('Error updating entitlement:' + error)
+
     }
   }
 
