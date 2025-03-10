@@ -4,12 +4,12 @@
   >
     <div class="relative">
       <img
-        class="w-32 2xl:w-44  object-cover  "
+        class="w-24 2xl:h-auto 2xl:w-44  object-cover  "
         src="/src/assets/rafik.png"
         alt=""
       />
     </div>
-    <nav class="flex flex-col my-16 2xl:my-44 gap-4 2xl:gap-10">
+    <nav class="flex flex-col  gap-4 2xl:gap-10 my-auto">
       <RouterLink to="/dashboard" class="nav-btn">My <br />Dashboard</RouterLink>
       <RouterLink :to="{ name: 'programs-list' }" class="nav-btn"
         >Workout &<br />Programs</RouterLink
