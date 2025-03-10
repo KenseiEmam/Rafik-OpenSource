@@ -3,12 +3,12 @@
 </script>
 
 <template>
-  <div class="text-body flex-1 relative 2xl:-mt-32">
-    <template>
-  <div class="container mx-auto px-4 py-8">
+  <div class="text-body flex-1 relative ">
+
+  <div class="container mx-auto px-4 py-16">
     <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
       <h1 class="text-3xl font-bold text-gray-800 mb-4">Privacy Policy for Rafik Fitness Squire</h1>
-      <p class="text-gray-600">Effective Date: [Insert Date]</p>
+
 
       <section class="mt-6">
         <h2 class="text-2xl font-semibold text-gray-700">1. Introduction</h2>
@@ -78,12 +78,11 @@
       </section>
     </div>
   </div>
-</template>
 
-<style>
-body {
-  background-color: #f9fafb;
-}
-</style>
+
+
   </div>
 </template>
+<style>
+
+</style>

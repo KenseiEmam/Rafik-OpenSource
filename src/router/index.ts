@@ -50,7 +50,7 @@ const router = createRouter({
       component: () => import('../views/LoginVue.vue'),
     },
     {
-      path: '/privacy-policy',
+      path: '/privacy_policy',
       name: 'privacy',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
