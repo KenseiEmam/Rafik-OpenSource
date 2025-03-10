@@ -202,7 +202,7 @@ onMounted(() => {
           <div class="pr-6 space-y-4 col-span-2">
             <div class="flex items-center gap-6">
               <img
-                :src="clientStore.Client?.avatar"
+                :src="clientStore.Client?.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
                 alt=""
                 class="w-32 h-32 object-cover rounded-full border-2 border-rafik"
               />

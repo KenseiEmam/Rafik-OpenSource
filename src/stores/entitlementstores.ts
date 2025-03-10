@@ -202,6 +202,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
         Object.assign(entitlements.value[index], data)
         updateUnusedEntitlementCount()
       }
+
     } catch (error) {
       showError('Error updating entitlement:' + error)
 

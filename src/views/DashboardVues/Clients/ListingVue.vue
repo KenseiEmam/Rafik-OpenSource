@@ -86,7 +86,7 @@
                 class="flex gap-6 border-l border-y border-rafik-sectext rounded-l-xl text-left items-center py-4 pl-3 bg-rafik-secbg"
               >
                 <img
-                  :src="client.avatar || '/default-avatar.png'"
+                  :src="client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
                   class="w-12 2xl:w-24 rounded-full border-2 border-rafik h-12 2xl:h-24"
                   alt="Avatar"
                 />
