@@ -57,6 +57,12 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('@/views/PrivacyPolicy.vue'),
     },
+
+    {
+      path: '/delete-acount',
+      name: 'delete',
+      component: () => import('@/views/DataDeletion.vue'),
+    },
     {
       path: '/dashboard',
       component: () => import('../views/DashboardVues/ParentVue.vue'),
