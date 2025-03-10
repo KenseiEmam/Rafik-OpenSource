@@ -30,7 +30,7 @@
   </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import Swal from 'sweetalert2';
 import { supabase } from '@/lib/supabaseClient';
@@ -43,7 +43,7 @@ const formData = ref({
 });
 const sending = ref(false);
 
-function showSuccess(message) {
+function showSuccess(message:any) {
   Swal.fire({
     title: 'Success!',
     text: message,
@@ -58,7 +58,7 @@ function showSuccess(message) {
   });
 }
 
-function showError(message) {
+function showError(message:any) {
   Swal.fire({
     title: 'Error!',
     text: message,
@@ -80,8 +80,8 @@ async function submitRequest() {
     if (error) throw error;
 
     showSuccess(data?.message || 'Your request has been submitted. We will process it shortly.');
-    formData.value = { email: '', fullname: '', confirmed: false,  };
-  } catch (err) {
+    formData.value = { email: '', fullname: '', confirmed: false, type:'delete account request' };
+  } catch (err:any) {
     console.error(err);
     showError('Error submitting request: ' + err.message);
   } finally {
