@@ -2,9 +2,9 @@
   <div
     class="h-screen border-rafik-sectext border-r bg-rafik-pribg flex flex-col p-8 gap-8 2xl:items-between 2xl:p-16"
   >
-    <div class="relative w-44 2xl:w-64">
+    <div class="relative">
       <img
-        class="w-32 2xl:w-44 h-16 2xl:h-24 object-cover absolute -left-6 2xl:-left-10"
+        class="2xl:w-44  object-cover  "
         src="/src/assets/rafik.png"
         alt=""
       />
