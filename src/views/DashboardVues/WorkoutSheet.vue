@@ -153,11 +153,11 @@ onMounted(() => {
                   </div>
                 </div>
                 <div class="grid-cols-2 grid gap-3">
-                  <div class="flex-col flex gap-2 items-center">
+                  <div class="flex-col flex gap-2 items-center min-w-max">
                     <h4 class="text-rafik-pritext text-body">Weight</h4>
                     <div v-for="set, index in exercise.true_sets" :key="set" class="text-rafik-secondary">{{ set.weight_done }} KG </div>
                   </div>
-                  <div class="flex-col flex gap-2 items-center">
+                  <div class="flex-col flex gap-2 items-center min-w-max">
                     <h4 class="text-rafik-pritext text-body">Reps</h4>
                     <div v-for="set, index in exercise.true_sets" :key="set" class="text-rafik-secondary">{{ set.reps_done }} </div>
                   </div>
