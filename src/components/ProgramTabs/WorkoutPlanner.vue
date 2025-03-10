@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1 space-y-6 py-6">
     <!-- Toolbar -->
-    <div class="flex justify-between items-center gap-4">
+    <div class="flex justify-between items-center gap-4 flex-wrap">
       <p class="text-body min-w-max">{{ program.weekly_cycle }} DAY CYCLE:</p>
       <!-- Tabs Navigation -->
 
