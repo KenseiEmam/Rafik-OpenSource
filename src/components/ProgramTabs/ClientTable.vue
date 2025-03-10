@@ -30,7 +30,7 @@
       <tbody>
         <tr v-for="client in filteredClients" :key="client.id" class="border-b border-rafik-sectext">
           <td class="flex gap-2 text-left items-center py-4">
-            <img :src="client.avatar || '/default-avatar.png'" class="w-12 rounded-full border border-rafik-sectext h-12" alt="Avatar">
+            <img :src="client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" class="w-12 rounded-full border border-rafik-sectext h-12" alt="Avatar">
             <div>
               <p class="header-small">{{ client.first_name }} {{ client.last_name }}</p>
               <p>{{ client.email }}</p>

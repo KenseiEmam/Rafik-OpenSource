@@ -10,7 +10,7 @@
       >
         <div class="flex items-center gap-4" v-if="Client">
           <img
-            :src="Client.avatar"
+            :src="Client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
             alt=""
             class="rounded-full border-2 border-rafik-secondary object-cover w-16 h-16"
           />
@@ -50,7 +50,7 @@
             <!-- Avatar for received messages -->
             <img
               v-if="message.sent_by === Client.id"
-              :src="Client.avatar"
+              :src="Client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
               class="w-8 h-8 rounded-full border border-rafik-sectext"
             />
 

@@ -17,7 +17,7 @@
       </div>
       <div class="space-y-8 flex-1 flex flex-col divide-y divide-rafik-sectext overflow-auto w-full">
         <div @click="activateChat(client)" v-for="client in sortedChatClients" :key="client.id" :class="{' border-rafik-pritext': !client.seen_at && client.sent_by == client.id}" class="p-6 border hover:border-rafik-secondary card cursor-pointer rounded-xl bg-rafik-secbg flex gap-6 w-full items-center">
-          <img :src="client.avatar" alt="" class="rounded-full border-2 2xl:h-24 2xl:w-24 border-rafik-secondary object-cover w-16 h-16">
+          <img :src="client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" alt="" class="rounded-full border-2 2xl:h-24 2xl:w-24 border-rafik-secondary object-cover w-16 h-16">
           <div class="flex-1">
             <h2 class="header-small text-rafik-secondary">{{ client.first_name }} {{ client.last_name }}</h2>
             <p :class="{'text-rafik-pritext': !client.seen_at && client.sent_by == client.id}" class="text-body line-clamp-1 text-sm mb-2">

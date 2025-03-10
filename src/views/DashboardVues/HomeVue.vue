@@ -19,7 +19,7 @@ const props = defineProps<{
     >
       <!-- User Avatar -->
       <img
-        :src="props.user.avatar"
+        :src="props.user.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
         class="w-32 h-32 2xl:w-52 2xl:h-52 ring-rafik ring-1 rounded-full self-center"
         alt="User Avatar"
       >
