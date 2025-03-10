@@ -9,7 +9,6 @@
     <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
       <h1 class="text-3xl font-bold text-gray-800 mb-4">Privacy Policy for Rafik Fitness Squire</h1>
 
-
       <section class="mt-6">
         <h2 class="text-2xl font-semibold text-gray-700">1. Introduction</h2>
         <p class="text-gray-600 mt-2">Welcome to Rafik Fitness Squire! Your privacy is important to us, and we are committed to protecting your personal data. This Privacy Policy outlines how we collect, use, and safeguard your information when you use our app.</p>
@@ -76,11 +75,13 @@
         <h2 class="text-2xl font-semibold text-gray-700">10. Contact Us</h2>
         <p class="text-gray-600 mt-2">If you have any questions, contact us at [Insert Contact Email].</p>
       </section>
+
+      <section class="mt-6">
+        <h2 class="text-2xl font-semibold text-gray-700">11. Request Account & Data Deletion</h2>
+        <p class="text-gray-600 mt-2">If you wish to delete your account and associated data, please visit <a href="https://rafikapp.ae/delete-account" class="text-blue-500 hover:underline">rafikapp.ae/delete-account</a>. Once your request is submitted, your data will be permanently removed, except where retention is legally required.</p>
+      </section>
     </div>
   </div>
-
-
-
   </div>
 </template>
 <style>
