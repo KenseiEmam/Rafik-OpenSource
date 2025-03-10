@@ -59,9 +59,9 @@ const router = createRouter({
     },
 
     {
-      path: '/delete-acount',
+      path: '/delete-account',
       name: 'delete',
-      component: () => import('@/views/DataDeletion.vue'),
+      component: () => import('../views/DataDeletion.vue'),
     },
     {
       path: '/dashboard',
