@@ -14,9 +14,9 @@ const emit = defineEmits(["update-tags", "update-focus"]);
 
 // Slider states initialized with program_focus values
 const strength = ref(props.program.program_focus[0] ?? 25);
-const cardio = ref(props.program.program_focus[1] ?? 25);
-const hypertrophy = ref(props.program.program_focus[2] ?? 25);
-const agility = ref(props.program.program_focus[3] ?? 25);
+const cardio = ref(props.program.program_focus[3] ?? 25);
+const hypertrophy = ref(props.program.program_focus[1] ?? 25);
+const agility = ref(props.program.program_focus[2] ?? 25);
 
 // Computed total value
 const total = ref(100);
