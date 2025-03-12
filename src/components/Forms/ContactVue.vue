@@ -64,10 +64,10 @@ async function sendEmail() {
 </script>
 
 <template>
-  <section id="contact" class="flex-1 card mb-16 p-12">
-    <div class="grid md:grid-cols-3 my-auto w-full gap-8">
+  <section id="contact" class="flex-1 card mb-16 card items-center w-full min-h-128 flex-1 mb-16 px-3 py-6 md:py-12 md:px-12 ">
+    <div class="flex flex-col md:grid md:grid-cols-3 my-auto w-full gap-8">
       <div class="col-span-2 gap-4 relative flex flex-col">
-        <h1 class="title-small">Would Love to Hear From You</h1>
+        <h1 class="font-black uppercase text-rafik md:title-small text-xl md:text-3xl">Would Love to Hear From You</h1>
         <p class="mb-4 text-body">
           Have a question about our training? Our Models? Our Services? Reach us through the methods
           down below!
@@ -87,7 +87,7 @@ async function sendEmail() {
               </svg>
             </div>
             <div class="w-full">
-              <h3 class="header-small">Give us a call:</h3>
+              <h3 class="uppercase text-rafik-pritext md:header-small">Give us a call:</h3>
               <p class="text-body">mob: +971 56 866 3114</p>
             </div>
           </div>
@@ -105,7 +105,7 @@ async function sendEmail() {
               </svg>
             </div>
             <div class="w-full">
-              <h3 class="header-small">Mail us:</h3>
+              <h3 class="uppercase text-rafik-pritext md:header-small">Mail us:</h3>
               <p class="text-body">admin@rafik.ae</p>
             </div>
           </div>
@@ -123,7 +123,7 @@ async function sendEmail() {
               </svg>
             </div>
             <div class="w-full">
-              <h3 class="header-small">Find Us At:</h3>
+              <h3 class="uppercase text-rafik-pritext md:header-small">Find Us At:</h3>
               <p class="text-body">Enter address here...</p>
             </div>
           </div>
@@ -132,11 +132,11 @@ async function sendEmail() {
         </div>
       </div>
       <div
-        class="border-l pl-8 space-y-4 border-rafik-sectext flex w-full items-center justify-center flex-col w-full"
+        class="md:border-l md:pl-8 space-y-4 border-rafik-sectext flex w-full items-center justify-center flex-col w-full"
       >
-        <h3 class="header-small">Send us A Message</h3>
+        <h3 class="uppercase text-rafik-pritext md:header-small">Send us A Message</h3>
         <form class="space-y-4 w-full" @submit.prevent="sendEmail">
-          <div class="form-control">
+          <div class="form-control ">
             <label for="Name">Full Name</label>
             <input
               name="Name"

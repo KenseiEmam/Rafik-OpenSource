@@ -1,18 +1,19 @@
 
 <template>
-  <header class="w-full flex items-center relative z-50 align-center my-10">
-    <nav class="flex mt-0 gap-8 w-full">
+  <header class="md:w-full flex items-center relative z-50 align-center gap-8 my-10">
+    <nav class="flex mt-0 gap-6 md:gap-8 w-full ">
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="about">About</RouterLink>
       <RouterLink to="team">Team</RouterLink>
-      <RouterLink to="/application">Download App</RouterLink>
+      <RouterLink to="/application" class="min-w-max">Get App</RouterLink>
+      <a href="/#contact" class=" ">Contact Us</a>
     </nav>
-    <div v-if="!checkLogin()" class="flex gap-8 items-center ml-auto min-w-max">
-      <a href="/#contact">Contact Us</a>
-      <RouterLink to="login" class="btn-sm">Login</RouterLink>
-      <RouterLink to="register" class="btn-sm-outline">Register</RouterLink>
+    <div v-if="!checkLogin()" class="md:flex gap-8 hidden items-center ml-auto  min-w-max ">
+
+      <RouterLink to="login" class="btn-sm ">Login</RouterLink>
+      <RouterLink to="register" class="btn-sm-outline ">Register</RouterLink>
     </div>
-    <div v-else-if="userStore.userProfile && checkUser()" class="flex gap-4 items-center ml-auto min-w-max ">
+    <div v-else-if="userStore.userProfile && checkUser()" class="md:flex hidden gap-4 items-center ml-auto min-w-max ">
       <img :src="userStore.userProfile.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" class="w-16 h-16 2xl:w-20 2xl:h-20 border border-rafik-pribg ring-2 ring-rafik rounded-full object-cover" alt="">
       <div class="text-body text-rafik-sectext uppercase pl-3 border-l border-rafik-sectext py-2">
         <p> HELLO {{userStore.userProfile.first_name}}!</p>
@@ -74,7 +75,6 @@ nav a.router-link-exact-active:hover {
 
 nav a {
   display: inline-block;
-  padding: 0 1rem;
 }
 
 @media (min-width: 1024px) {
@@ -96,8 +96,7 @@ nav a {
   nav {
     text-align: left;
     margin-left: -1rem;
-    font-size: 1rem;
-
+    font-size:1rem;
     padding: 1rem 0;
   }
 }
