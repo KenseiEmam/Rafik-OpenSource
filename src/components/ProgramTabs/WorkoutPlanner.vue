@@ -314,6 +314,7 @@ async function updateClientProgram(user:string) {
     await clientStore.updateClientProgram({
       id: props.program.id,
       workouts: editedWorkouts.value,
+      weekly_cycle: props.program.weekly_cycle
     });
 
     await clientStore.getClient(user.toString());
