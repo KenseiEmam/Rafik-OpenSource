@@ -34,7 +34,7 @@
         </div>
         <div class="flex justify-between uppercase text-xs 2xl:text-base">
           <p class="text-rafik-pritext">Goal Weight</p>
-          <p class="text-rafik-secondary">{{ props.client.profile.weight_goal + 'kg' || 'N/A' }}</p>
+          <p class="text-rafik-secondary">{{ props.client.profile.weight_goal  || 'N/A' }} kg</p>
         </div>
         <div class="flex justify-between uppercase text-xs 2xl:text-base">
           <p class="text-rafik-pritext">Body Fat Percent</p>
