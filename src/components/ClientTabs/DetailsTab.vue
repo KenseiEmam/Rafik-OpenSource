@@ -50,7 +50,7 @@
         </div>
         <div class="flex justify-between uppercase text-xs 2xl:text-base">
           <p class="text-rafik-pritext">Fitness Goal</p>
-          <p class="text-rafik-secondary" v-for="goal,index in props.client.profile.fitness_goal" :key="goal">{{ goals[goal]}} <span v-if="index+1 !== props.client.profile.fitness_goal.length">,</span></p>
+          <p class="text-rafik-secondary" v-for="goal,index in props.client.profile.fitness_goal" :key="goal">{{ goals[goal-1]}} <span v-if="index+1 !== props.client.profile.fitness_goal.length">,</span></p>
           <p class="text-rafik-secondary" v-if="!props.client.profile.fitness_goal">N/A</p>
         </div>
         <div class="flex justify-between uppercase text-xs 2xl:text-base">
@@ -133,7 +133,7 @@ const props = defineProps({
 // Reactive reference to store the weight
 const weight = ref<string | null>(null);
 const program= ref<any>(null);
-const goals = ["Get fitter","Build Physique",  "Increase Strength", "Recovery", "Sport Specific"]
+const goals = ["Get fitter","Build Physique","Increase Strength", "Recovery", "Sport Specific"]
 // Computed property to fetch weight from Supabase
 const fetchWeight = async (weightId: number) => {
   try {
