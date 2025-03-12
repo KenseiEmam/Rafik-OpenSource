@@ -225,7 +225,7 @@ type Program = {
   tags?:string[];
   workouts?:Workout[];
   program_photo?: string;
-  weekly_cycle?:number;
+  weekly_cycle:number;
   promos?:PromoCode[];
   induction?:Question[];
   follow?:Question[];
@@ -289,7 +289,7 @@ const cancelEdit = () => {
 
 const submitChanges = () => {
   isEditing.value = false;
-  const workoutDays = editedWorkouts.value.filter((workout:any )=> !workout.rest_day).length;
+  const workoutDays = (editedWorkouts.value.filter((workout:any )=> !workout.rest_day).length);
       // Update avg_session_time
       const completedSessions = editedWorkouts.value
         .filter((workout:any )=> workout.time_to_complete)
@@ -299,7 +299,7 @@ const submitChanges = () => {
        totalTime = completedSessions.reduce((sum:any, time:any) => sum + time, 0);
       }
   if(!props.user)
-  programStore.updateProgram({ ...props.program, workouts: editedWorkouts.value, avg_days_per_week: workoutDays, avg_session_time: totalTime/workoutDays }).then(()=>{showSuccess("Workout Plan Updated Successfully")});
+  programStore.updateProgram({ ...props.program, workouts: editedWorkouts.value, avg_days_per_week: Math.ceil((workoutDays / props.program.weekly_cycle)*7   ), avg_session_time: totalTime/workoutDays }).then(()=>{showSuccess("Workout Plan Updated Successfully")});
   else
   {
     updateClientProgram(props.user)
