@@ -117,6 +117,7 @@ export const useWorkoutStore = defineStore('Workout', () => {
       const { data:workout_data, error } = await supabase
         .from('workout_sheets')
         .select('*')
+        .is('done',true)
         .eq('user_program_id', id)
       if (error) throw error
 
