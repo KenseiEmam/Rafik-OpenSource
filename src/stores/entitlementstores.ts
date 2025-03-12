@@ -190,6 +190,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
         .from('profiles')
         .update({
           user_program_id: updateData.id,
+          workout_iteration: 0
         })
         .eq('id', client_id)
         .select()
