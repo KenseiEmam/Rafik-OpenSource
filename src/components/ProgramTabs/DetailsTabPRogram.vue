@@ -28,16 +28,16 @@ const newTag = ref("");
 watch([strength, cardio, hypertrophy, agility], () => {
   total.value =
     Number(strength.value) +
-    Number(cardio.value) +
     Number(hypertrophy.value) +
+    Number(cardio.value) +
     Number(agility.value);
 
   if (total.value === 100) {
     const updatedFocus = [
       Number(strength.value),
-      Number(cardio.value),
       Number(hypertrophy.value),
       Number(agility.value),
+      Number(cardio.value),
     ];
     if (JSON.stringify(props.program.program_focus) !== JSON.stringify(updatedFocus)) {
       emit('update-focus', updatedFocus);
@@ -111,23 +111,7 @@ const removeTag = (tagToRemove: string) => {
           <input
             v-model="strength"
             type="range"
-            class="h-[4px] w-full cursor-pointer appearance-none bg-rafik"
-            min="0"
-            max="100"
-            step="5"
-          />
-        </div>
-
-        <!-- Cardio Slider -->
-        <div>
-          <div class="flex justify-between">
-            <label class="inline-block text-rafik-pritext">Cardio</label>
-            <span class="text-rafik-pritext">{{ cardio }}%</span>
-          </div>
-          <input
-            v-model="cardio"
-            type="range"
-            class="h-[4px] w-full cursor-pointer appearance-none bg-rafik-secondary"
+            class="h-[4px] w-full cursor-pointer appearance-none bg-rafik-alternate"
             min="0"
             max="100"
             step="5"
@@ -149,7 +133,6 @@ const removeTag = (tagToRemove: string) => {
             step="5"
           />
         </div>
-
         <!-- Agility Slider -->
         <div>
           <div class="flex justify-between">
@@ -159,12 +142,30 @@ const removeTag = (tagToRemove: string) => {
           <input
             v-model="agility"
             type="range"
-            class="h-[4px] w-full cursor-pointer appearance-none bg-rafik-alternate"
+            class="h-[4px] w-full cursor-pointer appearance-none bg-rafik-secondary"
             min="0"
             max="100"
             step="5"
           />
         </div>
+        <!-- Cardio Slider -->
+        <div>
+          <div class="flex justify-between">
+            <label class="inline-block text-rafik-pritext">Cardio</label>
+            <span class="text-rafik-pritext">{{ cardio }}%</span>
+          </div>
+          <input
+            v-model="cardio"
+            type="range"
+            class="h-[4px] w-full cursor-pointer appearance-none bg-rafik"
+            min="0"
+            max="100"
+            step="5"
+          />
+        </div>
+
+
+
 
         <!-- Warning Message -->
         <p v-if="total !== 100" class="text-red-500 text-sm">

@@ -133,7 +133,7 @@ const props = defineProps({
 // Reactive reference to store the weight
 const weight = ref<string | null>(null);
 const program= ref<any>(null);
-const goals = ["Lose Weight","Tone",  "Add Muscle", "Increase Strength", "Increase Fitness", "Improve Speed", "Improve Agility", "Sport Specific"]
+const goals = ["Get fitter","Build Physique",  "Increase Strength", "Recovery", "Sport Specific"]
 // Computed property to fetch weight from Supabase
 const fetchWeight = async (weightId: number) => {
   try {
