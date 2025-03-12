@@ -3,20 +3,20 @@
     v-if="props.visible"
     class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center z-50"
   >
-    <div class="card rounded-lg shadow p-6 w-128">
+    <div class="card rounded-lg shadow p-6">
       <h2 class="contentH-small">Add Program</h2>
       <p class="text-body mb-4">
         New programs will be set to the status of draft. You may have up to 3 active programs at a time and 3 drafts.
       </p>
-      <form @submit.prevent="submitForm">
+      <form @submit.prevent="submitForm" class="grid grid-cols-2 gap-6">
         <!-- Program Photo Field -->
-        <div class="mb-4">
+        <div class="flex items-center justify-center flex-col">
           <label class="block text-sm font-medium mb-2">Program Photo</label>
-          <div v-if="uploadedImage" class="w-64 h-64 relative mx-auto">
+          <div v-if="uploadedImage" class="w-64 h-64 relative ">
             <img
               :src="uploadedImage"
               alt="Uploaded Preview"
-              class="w-full h-full object-cover rounded-lg mx-auto"
+              class="w-full h-full object-cover rounded-lg "
             />
             <button
               @click.prevent="removeImage"
@@ -27,7 +27,7 @@
           </div>
           <div
             v-else
-            class="w-64 h-64 border-2 border-dashed border-gray-400 mx-auto rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            class="w-64 h-64 border-2 border-dashed border-gray-400  rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             @click="triggerFileInput"
           >
             <span class="text-center text-gray-500">
@@ -43,56 +43,58 @@
             required
           />
         </div>
+        <div>
 
-        <!-- Program Name Field -->
-        <div class="mb-4">
-          <label for="program_name" class="block text-sm font-medium">Program Name</label>
-          <input
-            type="text"
-            id="program_name"
-            v-model="program.program_name"
-            class="rafik-text-input"
-            required
-            :class="{'border-red-500': errors.program_name}"
-          />
-          <span v-if="errors.program_name" class="text-red-500 text-sm">{{ errors.program_name }}</span>
-        </div>
+          <!-- Program Name Field -->
+          <div class="mb-4">
+            <label for="program_name" class="block text-sm font-medium">Program Name</label>
+            <input
+              type="text"
+              id="program_name"
+              v-model="program.program_name"
+              class="rafik-text-input"
+              required
+              :class="{'border-red-500': errors.program_name}"
+            />
+            <span v-if="errors.program_name" class="text-red-500 text-sm">{{ errors.program_name }}</span>
+          </div>
 
-        <!-- Program Description Field -->
-        <div class="mb-4">
-          <label for="program_description" class="block text-sm font-medium">Program Description</label>
-          <textarea
-            id="program_description"
-            v-model="program.program_description"
-            class="rafik-text-input"
-            rows="4"
-            required
-            :class="{'border-red-500': errors.program_description}"
-          ></textarea>
-          <span v-if="errors.program_description" class="text-red-500 text-sm">{{ errors.program_description }}</span>
-        </div>
+          <!-- Program Description Field -->
+          <div class="mb-4">
+            <label for="program_description" class="block text-sm font-medium">Program Description</label>
+            <textarea
+              id="program_description"
+              v-model="program.program_description"
+              class="rafik-text-input"
+              rows="4"
+              required
+              :class="{'border-red-500': errors.program_description}"
+            ></textarea>
+            <span v-if="errors.program_description" class="text-red-500 text-sm">{{ errors.program_description }}</span>
+          </div>
 
-        <!-- Difficulty Level Field -->
-        <div class="mb-4">
-          <label for="difficulty_level" class="block text-sm font-medium">Difficulty Level</label>
-          <select
-            id="difficulty_level"
-            v-model="program.difficulty_level"
-            class="rafik-text-input"
-            required
-            :class="{'border-red-500': errors.difficulty_level}"
-          >
-            <option value="" disabled>Select Difficulty Level</option>
-            <option value="Foundational">Foundational</option>
-            <option value="Beginner">Beginner</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Advanced">Advanced</option>
-          </select>
-          <span v-if="errors.difficulty_level" class="text-red-500 text-sm">{{ errors.difficulty_level }}</span>
+          <!-- Difficulty Level Field -->
+          <div class="mb-4">
+            <label for="difficulty_level" class="block text-sm font-medium">Difficulty Level</label>
+            <select
+              id="difficulty_level"
+              v-model="program.difficulty_level"
+              class="rafik-text-input"
+              required
+              :class="{'border-red-500': errors.difficulty_level}"
+            >
+              <option value="" disabled>Select Difficulty Level</option>
+              <option value="Foundational">Foundational</option>
+              <option value="Beginner">Beginner</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Advanced">Advanced</option>
+            </select>
+            <span v-if="errors.difficulty_level" class="text-red-500 text-sm">{{ errors.difficulty_level }}</span>
+          </div>
         </div>
 
         <!-- Action Buttons -->
-        <div class="flex justify-end">
+        <div class=" col-span-2 flex justify-end">
           <button
             type="button"
             @click="$emit('close')"
