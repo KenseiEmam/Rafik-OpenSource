@@ -138,12 +138,20 @@ async function sendEmail() {
         <form class="space-y-4 w-full" @submit.prevent="sendEmail">
           <div class="form-control">
             <label for="Name">Full Name</label>
-            <input name="Name" class="rafik-text-input" type="text" placeholder="rafik" required />
+            <input
+              name="Name"
+              v-model="formData.name"
+              class="rafik-text-input"
+              type="text"
+              placeholder="rafik"
+              required
+            />
           </div>
           <div class="form-control">
             <label for="email">Email Address</label>
             <input
               name="email"
+              v-model="formData.email"
               class="rafik-text-input"
               type="email"
               placeholder="rafik@example.com"
@@ -154,6 +162,7 @@ async function sendEmail() {
             <label for="message">Message</label>
             <textarea
               name="message"
+              v-model="formData.message"
               class="rafik-text-input"
               rows="6"
               placeholder="Write us a message here..."
