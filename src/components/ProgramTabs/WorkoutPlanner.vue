@@ -413,7 +413,11 @@ watch(
           icon: 'warning',
           showCancelButton: true,
           confirmButtonText: 'Yes, proceed',
-          cancelButtonText: 'Cancel'
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: '#CB901C',
+          cancelButtonColor: '#d33',
+          background: '#081411',
+          color: '#E8F3ED',
         });
         if (result.isConfirmed) {
           editedWorkouts.value = editedWorkouts.value.slice(0, newVal);
