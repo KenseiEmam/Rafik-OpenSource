@@ -3,14 +3,14 @@ import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
 import SocialIcons from '../components/SocialIcons.vue'
 </script>
 <template>
-  <main class="mebsite-body">
+  <main class="flex-1 mebsite-body flex-col flex">
     <WebsiteHeader />
       <div
-        class="grid md:grid-cols-5 gap-16 items-end min-h-64 relative card my-auto px-24 py-12"
+        class="flex flex-col md:grid grid-cols-5 gap-16  relative card  flex-1  items-center w-full min-h-128  mb-16 px-3 py-6 md:py-12 md:px-24"
       >
         <div class="md:col-span-3">
-          <h1 class="title-medium">ABOUT RAFIK</h1>
-          <h1 class="header-medium mb-4">THE FITNESS SQUIRE FOR ALL TYPES OF WARRIORS</h1>
+          <h1 class="uppercase font-black text-rafik text-xl md:text-5xl 2xl:text-7xl md:title-medium">ABOUT RAFIK</h1>
+          <h1 class="uppercase text-rafik-pritext md:header-medium mb-4">THE FITNESS SQUIRE FOR ALL TYPES OF WARRIORS</h1>
           <p class="text-body mb-8">
             Vestibulum condimentum, sapien sit amet ornare sodales, elit sem dapibus lectus, a
             ullamcorper mi mi et dui. Vestibulum nulla libero, porta auctor faucibus at, sagittis in
@@ -21,7 +21,7 @@ import SocialIcons from '../components/SocialIcons.vue'
           </p>
           <SocialIcons class="w-3/4" :in="'hi'" :fb="'hi'" :yt="'hi'" :tw="'hi'" />
         </div>
-        <div class="flex-col gap-6 flex md:col-span-2 border-l border-rafik-sectext pl-8">
+        <div class="flex-col gap-6 flex md:col-span-2 md:border-l border-rafik-sectext md:pl-8">
           <img
             class="md:h-64 w-full 2xl:h-96 object-cover object-top ml-auto mb-auto"
             src="/src/assets/rafik.png"

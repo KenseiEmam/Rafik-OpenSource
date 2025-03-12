@@ -171,16 +171,18 @@ const router = createRouter({
   ],
 })
 router.beforeEach((to) => {
-  // instead of having to check every route record with
-  // to.matched.some(record => record.meta.requiresAuth)
-  if (to.meta.requiresAuth && !localStorage.getItem('LoggedInUser')) {
-    // this route requires auth, check if logged in
-    // if not, redirect to login page.
+  const isMobile = window.innerWidth <= 768; // Adjust as needed
+
+  if (to.meta.requiresAuth && isMobile) {
+    return {
+      path: '/application',
+      query: { redirect: to.fullPath },
+    };
+  } else if (to.meta.requiresAuth && !localStorage.getItem('LoggedInUser')) {
     return {
       path: '/login',
-      // save the location we were at to come back later
       query: { redirect: to.fullPath },
-    }
+    };
   } else if (
     to.meta.requiresAuth &&
     localStorage.getItem('LoggedInUser') &&
@@ -189,17 +191,17 @@ router.beforeEach((to) => {
     return {
       path: '/setup-user-profile',
       query: { redirect: to.fullPath },
-    }
+    };
   } else if (
     to.meta.requiresAuth &&
     localStorage.getItem('LoggedInUser') &&
     localStorage.getItem('UserID') &&
-    localStorage.getItem('LoggedInTrainer') == 'false'
+    localStorage.getItem('LoggedInTrainer') === 'false'
   ) {
     return {
       path: '/register-as-a-trainer',
       query: { redirect: to.fullPath },
-    }
+    };
   }
-})
+});
 export default router
