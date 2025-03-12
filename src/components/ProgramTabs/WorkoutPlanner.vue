@@ -2,7 +2,10 @@
   <div class="flex-1 space-y-6 py-6">
     <!-- Toolbar -->
     <div class="flex justify-between items-center gap-4 flex-wrap">
-      <p class="text-body min-w-max">{{ program.weekly_cycle }} DAY CYCLE:</p>
+      <div  class="flex text-rafik-pritexttext min-w-max gap-3 items-center">
+        <input type="number" v-model.number="program.weekly_cycle " class="rafik-text-input w-16  text-right " placeholder="7" />
+        <p> DAY CYCLE:</p>
+      </div>
       <!-- Tabs Navigation -->
 
       <button
@@ -361,4 +364,77 @@ watch(
   },
   { deep: true }
 );
+
+
+
+// Microcycle swap function
+// --- Weekly Cycle Change Handler (DO NOT MODIFY ORIGINAL CODE ABOVE) ---
+
+// Debounce timer reference
+let weeklyCycleDebounceTimer: ReturnType<typeof setTimeout>;
+
+// Store the previous weekly cycle value
+let previousWeeklyCycle = props.program.weekly_cycle;
+
+// Watch for changes to weekly_cycle with a debounce
+watch(
+  () => props.program.weekly_cycle,
+  (newVal, oldVal) => {
+    if (weeklyCycleDebounceTimer) clearTimeout(weeklyCycleDebounceTimer);
+    weeklyCycleDebounceTimer = setTimeout(async () => {
+      // If the new value is 0, null, or empty, revert to the previous value and exit
+      if (!newVal || newVal === 0 ) {
+        props.program.weekly_cycle = previousWeeklyCycle;
+        return;
+      }
+
+      const currentWorkoutCount = editedWorkouts.value.length;
+
+      // If increasing the cycle, add default workouts until the count matches newVal
+      if (newVal > currentWorkoutCount) {
+        const countToAdd = newVal - currentWorkoutCount;
+        for (let i = 0; i < countToAdd; i++) {
+          editedWorkouts.value.push({
+            workout_name: '',
+            workout_summary: '',
+            time_to_complete: '',
+            rest_day: false,
+            exercises: []
+          });
+        }
+        previousWeeklyCycle = newVal;
+        submitChanges();
+      }
+      // If decreasing the cycle, confirm before removing extra workouts
+      else if (newVal < currentWorkoutCount) {
+        const result = await Swal.fire({
+          title: 'Warning!',
+          text: 'The new cycle is smaller and workouts that are deleted will be permanently lost. Do you want to continue?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, proceed',
+          cancelButtonText: 'Cancel',
+          confirmButtonColor: '#CB901C',
+          cancelButtonColor: '#d33',
+          background: '#081411',
+          color: '#E8F3ED',
+        });
+        if (result.isConfirmed) {
+          editedWorkouts.value = editedWorkouts.value.slice(0, newVal);
+          previousWeeklyCycle = newVal;
+          submitChanges();
+        } else {
+          // If cancelled, revert weekly_cycle to the previous value
+          props.program.weekly_cycle = previousWeeklyCycle;
+        }
+      }
+      // If the cycle number remains the same as the workout count
+      else {
+        previousWeeklyCycle = newVal;
+        submitChanges();
+      }
+    }, 300); // 300ms debounce delay
+  }
+);
+
 </script>
