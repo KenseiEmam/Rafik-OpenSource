@@ -25,7 +25,7 @@
         <h3 class="contentH-small text-sm 2xl:text-xl mb-6">Client Metrics</h3>
         <div class="flex justify-between uppercase text-xs 2xl:text-base">
           <p class="text-rafik-pritext">Height</p>
-          <p class="text-rafik-secondary">{{ props.client.profile.height || 'N/A' }}</p>
+          <p class="text-rafik-secondary">{{ props.client.profile.height || 'N/A' }} cm</p>
         </div>
         <div class="flex justify-between uppercase text-xs 2xl:text-base">
           <p class="text-rafik-pritext">Weight</p>
