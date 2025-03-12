@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch} from "vue";
+import { onMounted, ref, watch} from "vue";
 
 // Props to receive the program object
 const props = defineProps({
@@ -11,12 +11,25 @@ const props = defineProps({
 
 // Emit event to the parent
 const emit = defineEmits(["update-tags", "update-focus"]);
+// Reactive slider values
+const strength = ref(25);
+const cardio = ref(25);
+const hypertrophy = ref(25);
+const agility = ref(25);
+const refresh = ref(false);
 
-// Slider states initialized with program_focus values
-const strength = ref(props.program.program_focus[0] ?? 25);
-const cardio = ref(props.program.program_focus[3] ?? 25);
-const hypertrophy = ref(props.program.program_focus[1] ?? 25);
-const agility = ref(props.program.program_focus[2] ?? 25);
+// Function to refresh slider values
+const refreshSliders = () => {
+  refresh.value = true; // Hide UI temporarily (optional)
+  strength.value = props.program.program_focus[0] ?? 25;
+  hypertrophy.value = props.program.program_focus[1] ?? 25;
+  agility.value = props.program.program_focus[2] ?? 25;
+  cardio.value = props.program.program_focus[3] ?? 25;
+  setTimeout(() => (refresh.value = false), 0); // Allow UI to re-render
+};
+
+// Watch for changes in `program` and update slider values
+watch(() => props.program, refreshSliders, { deep: true, immediate: true });
 
 // Computed total value
 const total = ref(100);
@@ -101,7 +114,7 @@ const removeTag = (tagToRemove: string) => {
       <h3 class="contentH-medium">Exercise Focus</h3>
       <p class="text-body">Use the sliders to modify the exercise focus percentages. They must add up to 100%.</p>
 
-      <div class="flex flex-col gap-6 mt-6">
+      <div v-if="!refresh" class="flex flex-col gap-6 mt-6">
         <!-- Strength Slider -->
         <div>
           <div class="flex justify-between">
