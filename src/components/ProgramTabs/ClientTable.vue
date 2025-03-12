@@ -53,7 +53,7 @@
             <svg @click="show_action = client.id" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="text-rafik-sectext h-7 mx-7 hover:text-rafik-pritext cursor-pointer" viewBox="0 0 128 512">
               <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/>
             </svg>
-            <div v-if="show_action == client.id" @mouseleave="handleLeave()" class="absolute min-w-16 px-2 top-5 flex flex-col items-center text-sm rounded bg-rafik-secbg  shadow-lg  divide-y divide-y-rafik-sectext">
+            <div v-if="show_action == client.id" @mouseleave="handleLeave()" class="absolute min-w-16 px-2 top-5 flex flex-col items-center text-sm rounded bg-rafik-secbg  shadow-lg z-40  divide-y divide-y-rafik-sectext">
               <Router-link :to="{name:'client-details', params:{id:client.id}}" class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded">View Program</Router-link>
               <!-- <button class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded">Message Client</button> -->
               <button class="px-3 py-5 text-red-500 hover:bg-rafik-pribg hover:text-red-300 rounded">Remove Client</button>
