@@ -96,74 +96,87 @@
            <h4  class="header-small  w-2/3 mx-auto text-center">Exercises</h4>
            <h4  class="header-small mb-3 w-2/3 mx-auto text-center">••••••</h4>
            <h4 v-if="editedWorkouts[activeTab].exercises.length===0 && !isEditing" class="text-body text-center gap-2 mt-6 text-sm">No exercises added yet! Edit to add!</h4>
-           <div class=" flex flex-col gap-4 mb-5">
-             <div
-               class=" gradient-bg border border-rafik-sectext rounded-xl shadow-xl p-6"
-               v-for="(exercise, exerciseIndex) in editedWorkouts[activeTab].exercises"
-               :key="exercise.id"
+            <draggable
+             class=" flex flex-col gap-4 mb-5"
+            v-model="editedWorkouts[activeTab].exercises"
+            handle=".handle"
+            @start="drag=true"
+            @end="drag=false"
+            item-key="id">
+            <template #item="{element, index}">
+              <div
+               class=" gradient-bg border border-rafik-sectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
              >
-             <div class="flex gap-3 items-center mb-4">
-               <video
-                 v-if="exercise.media.endsWith('.mp4') || exercise.media.includes('video')"
-                 class="w-24 h-24 card border p-0 object-cover rounded-lg"
-                 :src="exercise.media"
-                 ref="videoRef"
-                 muted
-                 loop
-               ></video>
-               <div v-else class="w-24 h-24 card border flex items-center justify-center">
-                 <p class="text-xs"> No Media</p>
-               </div>
-
-               <div>
-                 <h2 class="contentH-small">{{ exercise.exercise_name }}</h2>
-               <p class="text-rafik-pritext capitalize ">{{ exercise.type }} Exercise</p>
-               </div>
-
-
-               <div class="ml-auto space-y-3" >
-                <div v-if="isEditing" class="flex gap-4 justify-between items-end " >
-                   <label class="text-body">Total Sets:</label>
-                   <input type="number" v-model.number="exercise.sets" class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext border-b focus:border-rafik-alternate rounded-none  " placeholder="Sets" />
+             <svg v-if="isEditing" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="h-12 handle text-rafik-sectext hover:cursor-move">
+               <path d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 160c-22.1 0-40-17.9-40-40L0 72C0 49.9 17.9 32 40 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40z"/>
+             </svg>
+             <div class="flex-1">
+               <div class="flex gap-3 items-center mb-4">
+                 <video
+                   v-if="element.media.endsWith('.mp4') || element.media.includes('video')"
+                   class="w-24 h-24 card border p-0 object-cover rounded-lg"
+                   :src="element.media"
+                   ref="videoRef"
+                   muted
+                   loop
+                 ></video>
+                 <div v-else class="w-24 h-24 card border flex items-center justify-center">
+                   <p class="text-xs"> No Media</p>
                  </div>
-                <div v-else class="flex justify-between gap-4 w-full text-rafik-sectext ">
-                 <p>Total Sets:</p>
-                 <p class="text-rafik-pritext">{{ exercise.sets }}</p>
-               </div>
-               <div class="flex justify-between gap-4 w-full text-rafik-sectext text-body ">
-                 <p>Average Intensity:</p>
-                 <p class="text-rafik-pritext">{{ exercise.intensity }} kg</p>
-               </div>
 
-               <div class="flex justify-between gap-4 w-full text-rafik-sectext text-body ">
-                 <p>Average Repetitions:</p>
-                 <p class="text-rafik-pritext">{{ exercise.reps }}</p>
-               </div>
-               </div>
-             </div>
+                 <div>
+                   <h2 class="contentH-small">{{ element.exercise_name }}</h2>
+                 <p class="text-rafik-pritext capitalize ">{{ element.type }} exercise</p>
+                 </div>
 
-               <div  class=" flex gap-6">
 
-                 <div class="space-y-2 w-full" >
-                   <div class="flex w-full justify-between w-full items-end py-2 border-b border-rafik-sectext" v-for="set,index in exercise.true_sets" :key="index">
-                    <h2 class="header-small text-sm">Set {{ index +1 }}</h2>
-                    <div class="space-y-2">
-                      <p class="text-rafik-pritext">Weight (KG)</p>
-                      <input :disabled="!isEditing"  type="number" v-model.number="set.intensity" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate rounded-none  " placeholder="Sets" />
-                    </div>
-                    <div class="space-y-2">
-                      <p class="text-rafik-pritext">Reps</p>
-                      <input :disabled="!isEditing" type="number" v-model.number="set.reps" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate rounded-none  " placeholder="Sets" />
-                    </div>
+                 <div class="ml-auto space-y-3" >
+                  <div v-if="isEditing" class="flex gap-4 justify-between items-end " >
+                     <label class="text-body">Total Sets:</label>
+                     <input type="number" v-model.number="element.sets" class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext border-b focus:border-rafik-alternate rounded-none  " placeholder="Sets" />
                    </div>
+                  <div v-else class="flex justify-between gap-4 w-full text-rafik-sectext ">
+                   <p>Total Sets:</p>
+                   <p class="text-rafik-pritext">{{ element.sets }}</p>
+                 </div>
+                 <div class="flex justify-between gap-4 w-full text-rafik-sectext text-body ">
+                   <p>Average Intensity:</p>
+                   <p class="text-rafik-pritext">{{ element.intensity }} kg</p>
                  </div>
 
-                 <div v-if="isEditing" class="flex justify-between ml-auto min-w-max mt-auto ">
-                   <button class="hover:text-red-400 text-red-500" @click="removeExercise(activeTab, exerciseIndex)">Remove Exercise</button>
+                 <div class="flex justify-between gap-4 w-full text-rafik-sectext text-body ">
+                   <p>Average Repetitions:</p>
+                   <p class="text-rafik-pritext">{{ element.reps }}</p>
                  </div>
-                </div>
+                 </div>
+               </div>
+
+                 <div  class=" flex gap-6">
+
+                   <div class="space-y-2 w-full" >
+                     <div class="flex w-full justify-between w-full items-end py-2 border-b border-rafik-sectext" v-for="set,index in element.true_sets" :key="index">
+                      <h2 class="header-small text-sm">Set {{ index +1 }}</h2>
+                      <div class="space-y-2">
+                        <p class="text-rafik-pritext">Weight (KG)</p>
+                        <input :disabled="!isEditing"  type="number" v-model.number="set.intensity" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate rounded-none  " placeholder="Sets" />
+                      </div>
+                      <div class="space-y-2">
+                        <p class="text-rafik-pritext">Reps</p>
+                        <input :disabled="!isEditing" type="number" v-model.number="set.reps" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate rounded-none  " placeholder="Sets" />
+                      </div>
+                     </div>
+                   </div>
+
+                   <div v-if="isEditing" class="flex justify-between ml-auto min-w-max mt-auto ">
+                     <button class="hover:text-red-400 text-red-500" @click="removeExercise(activeTab, index)">Remove Exercise</button>
+                   </div>
+                  </div>
+             </div>
             </div>
-          </div>
+            </template>
+          </draggable>
+
+
           <ExerciseOffcanvas @addExercises="handleAdd(activeTab, $event)" v-if="isEditing" />
         </div>
 
@@ -178,6 +191,7 @@ import { ref, reactive, watch, defineProps } from "vue";
 import { useProgramStore } from "@/stores/programstores";
 import ExerciseOffcanvas from "../Offcanvas/ExerciseOffcanvas.vue";
 import { useUserStore } from "@/stores/user";
+  import draggable from 'vuedraggable'
 import Swal from "sweetalert2"
 // Success and Error Alerts
 function showSuccess(message: string) {
@@ -271,7 +285,7 @@ const programStore = useProgramStore();
 const clientStore =  useUserStore();
 const isEditing = ref(false);
 const activeTab = ref(0);
-
+const drag = ref(true)
 // Deep copy workouts to avoid mutating props directly
 const editedWorkouts = ref(props.program.workouts ? JSON.parse(JSON.stringify(props.program.workouts)) : []);
 
