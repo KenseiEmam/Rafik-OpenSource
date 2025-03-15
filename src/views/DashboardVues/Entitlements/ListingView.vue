@@ -42,12 +42,17 @@
             </router-link>
           </div>
         </div>
-        <div>
+        <div v-if="!processing">
           <AssignEntitlementsModal
             :availableCount="entitlementStore.unusedEntitlementCount"
             :programs="programStore.AllPrograms || []"
             @submit="onAssignModalSubmit"
           />
+        </div>
+        <div v-else>
+          <p class="animate-pulse text-body w-full h-full flex items-center text-center justify-center">
+            Processing Request Please Wait
+          </p>
         </div>
       </div>
       <!-- User Programs -->
@@ -135,6 +140,8 @@ const userStore = useUserStore()
 // Local reAll states
 const loading = ref(false)
 const showAssignEntitlementModal = ref(false) // Controls modal visibility
+
+const processing = ref(false)
 function refreshComponent() {
   router.go(0); // This reloads the current route
 }
@@ -186,49 +193,17 @@ async function onAssignModalSubmit(payload: { programId: string; emails: string[
 
 // Function to assign entitlements
 async function assignEntitlementsToUsers(programId: string, emails: string[]) {
+  processing.value=true
   const availableEntitlements = entitlementStore.entitlements.filter((e) => e.client_email === null);
 
   if (emails.length > availableEntitlements.length) {
     showError(`You can only assign up to ${availableEntitlements.length} entitlements.`);
+    processing.value=false
     return;
   }
-
-  // Fetch user IDs and profiles in a batch request
-  const { data: users, error: usersError } = await supabase
-    .from('users')
-    .select('id, email')
-    .in('email', emails.map(email => email.trim()));
-
-  if (usersError || !users || users.length !== emails.length) {
-    showError('Some users are not registered. Please check the emails and try again.');
-    return;
-  }
-
-  const userIds = users.map(user => user.id);
-
-  // Fetch profiles for these users in one request
-  const { data: profiles, error: profilesError } = await supabase
-    .from('profiles')
-    .select('id, user_id')
-    .in('user_id', userIds);
-
-  if (profilesError || !profiles || profiles.length !== emails.length) {
-    showError('Some users do not have profiles. Please ask them to create one.');
-    return;
-  }
-
-  // Map user IDs to profile IDs
-  const profileMap = new Map(profiles.map(profile => [profile.user_id, profile.id]));
 
   // Check if any users are already assigned an entitlement
   for (const email of emails) {
-    const user = users.find(u => u.email === email.trim());
-    const profileId = profileMap.get(user?.id);
-
-    if (!profileId) {
-      showError(`User with email ${email} does not have a profile.`);
-      return;
-    }
 
     const userAlreadyAssigned = entitlementStore.entitlements.find(
       entitlement => entitlement.client_email === email
@@ -236,6 +211,7 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
 
     if (userAlreadyAssigned) {
       showError(`User with email ${email} is already assigned to a program.`);
+      processing.value=false
       return;
     }
   }
@@ -244,6 +220,7 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
   const program = programStore.AllPrograms?.find(p => p.id === programId);
   if (!program) {
     showError("Program not found!")
+    processing.value=false
     return;
   }
 
@@ -251,12 +228,14 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
   await Promise.all(
     emails.map(async (_, index) => {
       const entitlement = availableEntitlements[index];
-      const profileId = profileMap.get(users[index].id);
-      if (entitlement && profileId) {
-        await entitlementStore.assignEntitlement(entitlement.id, profileId, _,  program);
+      if (entitlement ) {
+        await entitlementStore.assignEntitlement(entitlement.id, _,  program);
       }
     })
-  );
+  ).then(()=>{
+    processing.value=false
+    showSuccess("Emails sent successfully!")
+  });
 
   // Refresh entitlements and user data
   await Promise.all([
@@ -264,7 +243,7 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
     userStore.getEntitled()
   ]);
 
-  showSuccess("Assigned entitlement successfully!")
+
 }
 
 </script>
