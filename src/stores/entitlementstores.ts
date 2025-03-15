@@ -36,13 +36,13 @@ interface Entitlement {
   trainer_id: string // Foreign key linked to public.users.id (trainer)
   user_program_id: string | null
   client_email: string | null // Foreign key linked to public.profiles.id (client)
-  program_id: string // Foreign key linked to public.programs.id (program)
   status: 'active' | 'inactive' // Status of entitlement, can be 'active' or 'inactive'
   start_date: string // Timestamp of when the entitlement starts
   end_date: string // Timestamp of when the entitlement expires
   created_at: string // Timestamp when the entitlement record was created
   updated_at: string // Timestamp when the entitlement record was last updated
   cancellation_reason: string | null // Reason for cancellation (null if not cancelled)
+  program_id: string | null // ID for associated program
 }
 
 interface UserProgram {
@@ -100,7 +100,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
     if (!entitlements.value) return
 
     unusedEntitlementCount.value = entitlements.value.filter(
-      (entitlement) => entitlement.user_program_id === null,
+      (entitlement) => entitlement.status !== 'active',
     ).length
   }
 
@@ -141,30 +141,34 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
     }
   }
 
-  // Update an entitlement (e.g., assign a client to an entitlement)
-  async function assignEntitlement(trainer_id: string, client_id: string, client_email: string, updatedData: Program) {
-    try {
-      const { data: userProgramData, error: userProgramError } = await supabase
-        .from('user_programs')
-        .insert({
-          trainer_id,
-          client_id,
-          program_id: updatedData.id,
-          status: 'active',
-          expires_on: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
-          price_package: updatedData.price_one,
-          months_package:1,
-          workouts: updatedData.workouts,
-          weekly_cycle: updatedData.weekly_cycle,
-        })
-        .select('*')
-        .single()
 
-      if (userProgramError) throw new Error(userProgramError.message)
+  // Update an entitlement (e.g., assign a client to an entitlement)
+  async function assignEntitlement(trainer_id: string, client_email: string, updatedData: Program ,client_id?: string ) {
+    try {
+      // const { data: userProgramData, error: userProgramError } = await supabase
+      //   .from('user_programs')
+      //   .insert({
+      //     trainer_id,
+      //     client_id,
+      //     program_id: updatedData.id,
+      //     status: 'active',
+      //     expires_on: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
+      //     price_package: updatedData.price_one,
+      //     months_package:1,
+      //     workouts: updatedData.workouts,
+      //     weekly_cycle: updatedData.weekly_cycle,
+      //   })
+      //   .select('*')
+      //   .single()
+
+
+      //  Create a reviewable request for the user and update the updated at date
+      // if (userProgramError) throw new Error(userProgramError.message)
       const entitlementData = {
-        status: 'active',
+        status: 'review',
         client_email,
-        user_program_id: userProgramData.id,
+        program_id:updatedData.id,
+        updated_at:new Date().toISOString(),
       }
       const { data, error } = await supabase
         .from('entitlements')
@@ -175,27 +179,52 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
 
       if (error) throw new Error(error.message)
 
-      const { data: updateData, error: updateError } = await supabase
-        .from('user_programs')
-        .update({
-          entitlement_id: data.id,
-        })
-        .eq('id', userProgramData.id)
-        .select('id')
-        .single()
+      // find Trainer Associated with program's name
+      const { data: trainerData, error: trainerError } = await supabase
+      .from('users')
+      .select('first_name, last_name')
+      .eq('id', updatedData.trainer_id)
+      .single()
 
-      if (updateError) throw new Error(updateError.message)
+      if (trainerError) throw new Error(trainerError.message)
 
-        const { data: userData, error: userError } = await supabase
-        .from('profiles')
-        .update({
-          user_program_id: updateData.id,
-          workout_iteration: 0
-        })
-        .eq('id', client_id)
-        .select()
 
-      if (userError) throw new Error(userError.message)
+        const payload = {
+          userName: 'Trainee!',
+          programName: updatedData.program_name,
+          trainerName: trainerData.first_name + ' ' +trainerData.last_name,
+          userEmail: client_email
+        };
+
+        // Since your edge function name is "smtp" and the endpoint is "join-request",
+        // we use the "path" option to specify "join-request".
+        const { data:data2, error:error2 } = await supabase.functions.invoke('smtp/join-request', {
+          method: 'POST',
+          body: payload,
+        });
+
+        if (error2) throw new Error(error2.message)
+      // const { data: updateData, error: updateError } = await supabase
+      //   .from('user_programs')
+      //   .update({
+      //     entitlement_id: data.id,
+      //   })
+      //   .eq('id', userProgramData.id)
+      //   .select('id')
+      //   .single()
+
+      // if (updateError) throw new Error(updateError.message)
+
+      //   const { data: userData, error: userError } = await supabase
+      //   .from('profiles')
+      //   .update({
+      //     user_program_id: updateData.id,
+      //     workout_iteration: 0
+      //   })
+      //   .eq('id', client_id)
+      //   .select()
+
+      // if (userError) throw new Error(userError.message)
 
       // Update local state after the update
       const index = entitlements.value.findIndex((entitlement) => entitlement.id === data.id)
