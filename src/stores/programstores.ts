@@ -102,7 +102,7 @@ export const useProgramStore = defineStore('Program', () => {
         .from('programs')
         .select()
         .eq('trainer_id', UserID)
-        .neq('status', 'deleted')
+        .neq('status', 'Deleted')
 
       if (error) {
         throw new Error(`Error fetching programs: ${error.message}`)
@@ -132,7 +132,7 @@ export const useProgramStore = defineStore('Program', () => {
         .from('programs')
         .select()
         .eq('id', id)
-        .neq('status', 'deleted')
+        .neq('status', 'Deleted')
         .single() // Expect a single record
 
       if (error) throw new Error(error.message)
