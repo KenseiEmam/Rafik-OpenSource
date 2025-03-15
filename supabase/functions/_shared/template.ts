@@ -7,18 +7,19 @@ export const template = (
 <head>
     <style>
         body {
-            background-image: linear-gradient(135deg, #081411 36%, #295f42);
+            background-color: #081411;
             text-align: center;
             font-family: Arial, sans-serif;
             padding: 2rem 6rem;
-            object-fit: cover;
         
         }   
         .container {
-            
+            background-color: #081411;
+            width: 100%;
+        }
+        .inner {
             max-width: 600px;
             margin: 0 auto;
-            
         }
         .logo {
             width: 250px;
@@ -32,7 +33,8 @@ export const template = (
             font-size: 16px;
         }
         .button-container {
-            margin-top: 20px;
+            padding-top: 22px;
+            padding-bottom: 60px;
         }
         strong{
             color:#d7bd21
@@ -47,26 +49,29 @@ export const template = (
         }
         .btn-filled {
             background-color: #d7bd21;
-            color: white;
+            color: white !important;
             border: none;
         }
         .btn-outline {
             border: 2px solid #d7bd21;
-            color: #d7bd21;
+            color: #d7bd21 !important;
             background: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/app_assets/Small%20Icon.png" alt="rafik-logo" class="logo">
-        <h1>Hey ${userName}</h1>
-
-        <p><strong>${trainerName}</strong> is inviting you to join their <strong>${programName}</strong> training program! This is your chance to take your fitness journey to the next level.</p>
-        <p>Get started today by accessing our app on your preferred platform:</p>
-        <div class="button-container">
-            <a href="your-appstore-link" class="btn btn-filled">Download on App Store</a>
-            <a href="your-googleplay-link" class="btn btn-outline">Get it on Google Play</a>
+        <div class="inner">
+            <img src="https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/app_assets/Small%20Icon.png" alt="rafik-logo" class="logo">
+            <h1>Hey ${userName}</h1>
+            <div>
+                <p><strong>${trainerName}</strong> is inviting you to join their <strong>${programName}</strong> training program! This is your chance to take your fitness journey to the next level.</p>
+                <p>Get started today by accessing our app on your preferred platform:</p>
+                <div class="button-container">
+                    <a href="your-appstore-link" class="btn btn-filled">Download on App Store</a>
+                    <a href="your-googleplay-link" class="btn btn-outline">Get it on Google Play</a>
+                </div>
+            </div>
         </div>
     </div>
 </body>
