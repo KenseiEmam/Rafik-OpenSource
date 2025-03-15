@@ -171,7 +171,7 @@ function DeleteProgram() {
       color:"#E8F3ED",
   }).then((result) => {
     if (result.isConfirmed) {
-      updateProgramField("status", "deleted").then(() => {
+      updateProgramField("status", "Deleted").then(() => {
         showSuccess("The program has been deleted.")
         refreshComponent()
 
