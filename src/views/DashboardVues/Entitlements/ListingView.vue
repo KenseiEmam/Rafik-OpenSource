@@ -26,7 +26,7 @@
           <div class="flex items-center my-6">
             <h2 class="header-small">You currently have:</h2>
             <p class="contentH-large 2xl:text-7xl ml-auto">
-              {{ entitlementStore.entitlements.filter((e) => !e.client_id).length }}
+              {{ entitlementStore.entitlements.filter((e) => !e.client_email).length }}
             </p>
             <h2 class="header-small text-rafik-secondary uppercase font-semibold">
               Avl. Entitlements
@@ -45,7 +45,7 @@
         <div>
           <AssignEntitlementsModal
             :availableCount="entitlementStore.unusedEntitlementCount"
-            :programs="programStore.ActivePrograms || []"
+            :programs="programStore.AllPrograms || []"
             @submit="onAssignModalSubmit"
           />
         </div>
@@ -132,7 +132,7 @@ import router from '@/router'
 const entitlementStore = useEntitlementStore()
 const programStore = useProgramStore()
 const userStore = useUserStore()
-// Local reactive states
+// Local reAll states
 const loading = ref(false)
 const showAssignEntitlementModal = ref(false) // Controls modal visibility
 function refreshComponent() {
@@ -186,7 +186,7 @@ async function onAssignModalSubmit(payload: { programId: string; emails: string[
 
 // Function to assign entitlements
 async function assignEntitlementsToUsers(programId: string, emails: string[]) {
-  const availableEntitlements = entitlementStore.entitlements.filter((e) => e.client_id === null);
+  const availableEntitlements = entitlementStore.entitlements.filter((e) => e.client_email === null);
 
   if (emails.length > availableEntitlements.length) {
     showError(`You can only assign up to ${availableEntitlements.length} entitlements.`);
@@ -231,7 +231,7 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
     }
 
     const userAlreadyAssigned = entitlementStore.entitlements.find(
-      entitlement => entitlement.client_id === profileId
+      entitlement => entitlement.client_email === email
     );
 
     if (userAlreadyAssigned) {
@@ -240,8 +240,8 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
     }
   }
 
-  // Get the active program
-  const program = programStore.ActivePrograms?.find(p => p.id === programId);
+  // Get the All program
+  const program = programStore.AllPrograms?.find(p => p.id === programId);
   if (!program) {
     showError("Program not found!")
     return;
@@ -253,7 +253,7 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
       const entitlement = availableEntitlements[index];
       const profileId = profileMap.get(users[index].id);
       if (entitlement && profileId) {
-        await entitlementStore.assignEntitlement(entitlement.id, profileId, program);
+        await entitlementStore.assignEntitlement(entitlement.id, profileId, _,  program);
       }
     })
   );
