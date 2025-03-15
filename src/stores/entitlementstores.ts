@@ -35,7 +35,7 @@ interface Entitlement {
   id: string // Unique identifier for the entitlement record
   trainer_id: string // Foreign key linked to public.users.id (trainer)
   user_program_id: string | null
-  client_id: string | null // Foreign key linked to public.profiles.id (client)
+  client_email: string | null // Foreign key linked to public.profiles.id (client)
   program_id: string // Foreign key linked to public.programs.id (program)
   status: 'active' | 'inactive' // Status of entitlement, can be 'active' or 'inactive'
   start_date: string // Timestamp of when the entitlement starts
@@ -142,7 +142,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
   }
 
   // Update an entitlement (e.g., assign a client to an entitlement)
-  async function assignEntitlement(trainer_id: string, client_id: string, updatedData: Program) {
+  async function assignEntitlement(trainer_id: string, client_id: string, client_email: string, updatedData: Program) {
     try {
       const { data: userProgramData, error: userProgramError } = await supabase
         .from('user_programs')
@@ -163,7 +163,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
       if (userProgramError) throw new Error(userProgramError.message)
       const entitlementData = {
         status: 'active',
-        client_id,
+        client_email,
         user_program_id: userProgramData.id,
       }
       const { data, error } = await supabase
