@@ -17,6 +17,14 @@ function setJsonCors(ctx: any) {
 
 const router = new Router();
 
+// Handle OPTIONS requests for all routes.
+router.options("/(.*)", (ctx) => {
+  ctx.response.status = 204; // No content
+  Object.entries(corsHeaders).forEach(([key, value]) => {
+    ctx.response.headers.set(key, value);
+  });
+});
+
 router
   .get("/smtp", (ctx) => {
     // Simple POST route to test the function.
