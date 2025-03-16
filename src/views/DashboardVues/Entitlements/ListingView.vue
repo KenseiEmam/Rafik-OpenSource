@@ -7,8 +7,11 @@
       <!-- Page Title -->
       <PageTitle subheader="Client" header="Entitlements" />
       <!-- Loading State -->
-      <div v-if="loading" class="text-center 2xl:my-auto subheader-small uppercase animate-pulse">
-        Loading Entitlement Data Please Hold...
+      <div v-if="loading" class=" h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body">
+          <img src="@/assets/Large Icon.png"  class="w-24 h-24 animate-bounce" alt="">
+          <p class="text-lg animate-pulse">
+          Loading...
+        </p>
       </div>
 
       <!-- Entitlement Table -->

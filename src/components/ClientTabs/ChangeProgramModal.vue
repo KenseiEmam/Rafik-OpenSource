@@ -8,7 +8,12 @@
       <p class="text-body mb-4">
         Click on one of the programs below to add it to have it overwrite the clients workouts and program details, please understand this will not change the status or price of the client subscription.
       </p>
-      <div v-if="loading" class="text-body my-16 text-center animate-pulse">Loading...</div>
+      <div v-if="loading" class=" h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body">
+          <img src="@/assets/Large Icon.png"  class="w-24 h-24 animate-bounce" alt="">
+          <p class="text-lg animate-pulse">
+          Loading...
+        </p>
+        </div>
       <div v-else-if="!programStore.AllPrograms?.length " class="flex flex-col gap-3 items-center">
         <p  class="mt-16 text-center text-red-400"> Seems you have no other programs just yet, get ahead and add one to your arsenal at our </p>
       <RouterLink :to="{name:'programs-list'}" class="mb-16 mx-auto text-center w-full"> Program Listing Page </RouterLink>
