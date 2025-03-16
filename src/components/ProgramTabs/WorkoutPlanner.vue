@@ -117,7 +117,7 @@
                    class="w-24 h-24 card border p-0 object-cover rounded-lg"
                    :src="element.media"
                    ref="videoRef"
-                   muted
+                   mutedgi
                    loop
                  ></video>
                  <div v-else class="w-24 h-24 card border flex items-center justify-center">
@@ -154,15 +154,26 @@
                  <div  class=" flex gap-6">
 
                    <div class="space-y-2 w-full" >
-                     <div class="flex w-full justify-between w-full items-end py-2 border-b border-rafik-sectext" v-for="set,index in element.true_sets" :key="index">
-                      <h2 class="header-small text-sm">Set {{ index +1 }}</h2>
+                     <div v-if="isEditing" class="flex w-full justify-between w-full items-end py-2 border-b-2 border-rafik-pritext" >
+                      <h2 class="header-small text-sm w-12">Change All </h2>
                       <div class="space-y-2">
-                        <p class="text-rafik-pritext">Weight (KG)</p>
-                        <input :disabled="!isEditing"  type="number" v-model.number="set.intensity" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate rounded-none  " placeholder="Sets" />
+                        <p class="text-rafik-pritext">Weight</p>
+                        <input :disabled="!isEditing"  type="number" @input="changeAll($event,element.true_sets)" name="all-intensities" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate   " placeholder="Kgs" />
                       </div>
                       <div class="space-y-2">
                         <p class="text-rafik-pritext">Reps</p>
-                        <input :disabled="!isEditing" type="number" v-model.number="set.reps" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate rounded-none  " placeholder="Sets" />
+                        <input :disabled="!isEditing" type="number" @input="changeAll($event,element.true_sets)"  name="all-reps" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate   " placeholder="Reps" />
+                      </div>
+                      </div>
+                     <div class="flex w-full justify-between w-full items-end py-2 border-b border-rafik-sectext" v-for="set,index in element.true_sets" :key="index">
+                      <h2 class="header-small text-sm w-12 text-rafik-sectext">Set {{ index +1 }}</h2>
+                      <div class="space-y-2">
+
+                        <input :disabled="!isEditing"  type="number" v-model.number="set.intensity" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate   " placeholder="Kgs" />
+                      </div>
+                      <div class="space-y-2">
+
+                        <input :disabled="!isEditing" type="number" v-model.number="set.reps" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate   " placeholder="Reps" />
                       </div>
                      </div>
                    </div>
@@ -259,7 +270,7 @@ type PromoCode = {
 };
 type true_set = {
   intensity:number,
-  sets:number,
+  reps:number,
   weight_done:number,
   reps_done:number,
 }
@@ -300,6 +311,16 @@ const cancelEdit = () => {
   isEditing.value = false;
   editedWorkouts.value = props.program?.workouts ? JSON.parse(JSON.stringify(props.program.workouts)) : [];
 };
+function changeAll(event:any, exercise:true_set[]){
+  if(event.target.name = "all-intensities")
+    {
+      exercise.forEach((set:true_set) => set.intensity = event.target.value)
+    }
+  else if(event.target.name = "all-reps"){
+    exercise.forEach((set:true_set) => set.reps = event.target.value)
+  }
+
+}
 
 const submitChanges = () => {
   isEditing.value = false;
