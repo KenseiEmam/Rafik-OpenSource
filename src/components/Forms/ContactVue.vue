@@ -64,7 +64,7 @@ async function sendEmail() {
 </script>
 
 <template>
-  <section id="contact" class="flex-1 card mb-16 card items-center w-full min-h-128 flex-1 mb-16 px-3 py-6 md:py-12 md:px-12 ">
+  <section id="contact" class="flex-1 card mb-16  items-center w-full min-h-128 flex-1 mb-16 px-3 py-6 md:py-12 md:px-12 ">
     <div class="flex flex-col md:grid md:grid-cols-3 my-auto w-full gap-8">
       <div class="col-span-2 gap-4 relative flex flex-col">
         <h1 class="font-black uppercase text-rafik md:title-small text-xl md:text-3xl">Would Love to Hear From You</h1>

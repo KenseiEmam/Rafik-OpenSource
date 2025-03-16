@@ -39,9 +39,13 @@
         class="h-64 2xl:h-96 p-6 overflow-y-auto space-y-5 bg-rafik-secbg"
         ref="chatContainer"
       >
-        <p v-if="loading" class="animate-pulse h-full flex items-center justify-center">
-          Loading Messages...
+      <div v-if="loading" class=" h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body">
+          <img src="@/assets/Large Icon.png"  class="w-24 h-24 animate-bounce" alt="">
+          <p class="text-lg animate-pulse">
+          Loading...
         </p>
+      </div>
+
         <div class="flex flex-col" v-for="message in messages" :key="message.id">
           <div
             class="flex items-start gap-2"
