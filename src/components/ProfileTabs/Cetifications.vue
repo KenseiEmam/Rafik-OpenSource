@@ -1,5 +1,10 @@
 <template>
-  <p v-if="loading" class="text-body animate-pulse">Loading Data...</p>
+  <div v-if="loading" class=" h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body">
+          <img src="@/assets/Large Icon.png"  class="w-24 h-24 animate-bounce" alt="">
+          <p class="text-lg animate-pulse">
+          Loading...
+        </p>
+      </div>
   <form v-else class="space-y-6 ">
     <p v-if="FetchedCerts.length === 0" class="text-body my-auto">No Certifications uploaded</p>
     <ul v-else class="flex flex-col gap-3 w-full">
