@@ -140,7 +140,7 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
       console.error("Error creating entitlements:", err);
     }
   }
-
+  
 
   // Update an entitlement (e.g., assign a client to an entitlement)
   async function assignEntitlement(trainer_id: string, client_email: string, updatedData: Program ,client_id?: string ) {
