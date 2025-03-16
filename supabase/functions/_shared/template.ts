@@ -66,10 +66,11 @@ export const template = (
             <h1>Hey ${userName}</h1>
             <div>
                 <p><strong>${trainerName}</strong> is inviting you to join their <strong>${programName}</strong> training program! This is your chance to take your fitness journey to the next level.</p>
+                <p>To activate your membership, simply open the app, go to your <strong>user settings</strong>, tap on <strong>Program Invites</strong>, and then select <strong>Accept Invitation</strong>.</p>
                 <p>Get started today by accessing our app on your preferred platform:</p>
                 <div class="button-container">
                     <a href="your-appstore-link" class="btn btn-filled">Download on App Store</a>
-                    <a href="your-googleplay-link" class="btn btn-outline">Get it on Google Play</a>
+                    <a href="https://play.google.com/store/apps/details?id=com.samtech.rafiksquire" target="_blank" class="btn btn-outline">Get it on Google Play</a>
                 </div>
             </div>
         </div>
