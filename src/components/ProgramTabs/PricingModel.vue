@@ -1,6 +1,26 @@
 <script setup lang="ts">
 import { ref, watch, nextTick } from "vue";
 import isEqual from "lodash/isEqual";
+import debounce from 'lodash/debounce';
+import Swal from 'sweetalert2'
+// Success and Error Alerts
+
+
+// Function to show error alerts
+function showError(message: string) {
+  Swal.fire({
+    title: 'Error!',
+    timer: 1500,
+    text: message,
+    toast: true,
+    position: 'top-right',
+    icon: 'error',
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#d33',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
+}
 // Props to receive the program object
 const props = defineProps({
   program: {
@@ -91,13 +111,20 @@ const removePromo = (promoToRemove: PromoCode) => {
 };
 
 // Function to update promo value when changed
-const updatePromoValue = (promo: PromoCode, newValue: number) => {
-  const updatedPromos = props.program.promos.map((existingPromo: PromoCode) =>
-    existingPromo.code === promo.code ? { ...existingPromo, value: newValue } : existingPromo
-  );
+const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
+  if(newValue < 100)
+    {
+      const updatedPromos = props.program.promos.map((existingPromo: PromoCode) =>
+        existingPromo.code === promo.code ? { ...existingPromo, value: newValue } : existingPromo
+      );
 
-  emit("update-promo", updatedPromos); // Emit updated promo array with new values
-};
+      emit("update-promo", updatedPromos); // Emit updated promo array with new values
+    }
+  else{
+    showError("Please enter a value under 100")
+    promo.value =  0
+  }
+},500);
 
 </script>
 
