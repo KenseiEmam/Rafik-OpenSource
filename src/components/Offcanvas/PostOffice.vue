@@ -1,6 +1,10 @@
 <template>
   <div :class="open ? 'right-0 h-screen' : '-right-128 h-0'" class="absolute flex items-start">
     <button @click="open = !open" class="rounded-l-full bg-rafik-pribg border border-r-0 border-rafik-sectext px-8 py-4 mt-64 relative left-1 z-20">
+      <span v-if="checkNew" class="absolute flex size-4 top-2 right-6 ">
+        <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-rafik opacity-75"></span>
+        <span class="relative inline-flex size-4 rounded-full bg-rafik"></span>
+      </span>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" class="text-rafik-sectext w-8">
         <path d="M224 32L64 32C46.3 32 32 46.3 32 64l0 64c0 17.7 14.3 32 32 32l377.4 0c4.2 0 8.3-1.7 11.3-4.7l48-48c6.2-6.2 6.2-16.4 0-22.6l-48-48c-3-3-7.1-4.7-11.3-4.7L288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32zM480 256c0-17.7-14.3-32-32-32l-160 0 0-32-64 0 0 32L70.6 224c-4.2 0-8.3 1.7-11.3 4.7l-48 48c-6.2 6.2-6.2 16.4 0 22.6l48 48c3 3 7.1 4.7 11.3 4.7L448 352c17.7 0 32-14.3 32-32l0-64zM288 480l0-96-64 0 0 96c0 17.7 14.3 32 32 32s32-14.3 32-32z"/>
       </svg>
@@ -15,7 +19,7 @@
           <path d="M224 0c-17.7 0-32 14.3-32 32l0 19.2C119 66 64 130.6 64 208l0 18.8c0 47-17.3 92.4-48.5 127.6l-7.4 8.3c-8.4 9.4-10.4 22.9-5.3 34.4S19.4 416 32 416l384 0c12.6 0 24-7.4 29.2-18.9s3.1-25-5.3-34.4l-7.4-8.3C401.3 319.2 384 273.9 384 226.8l0-18.8c0-77.4-55-142-128-156.8L256 32c0-17.7-14.3-32-32-32zm45.3 493.3c12-12 18.7-28.3 18.7-45.3l-64 0-64 0c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7z"/>
         </svg>
       </div>
-      <div class="space-y-8 flex-1 flex flex-col divide-y divide-rafik-sectext overflow-auto w-full">
+      <div class="space-y-4 flex-1 flex flex-col  overflow-auto w-full">
         <div @click="activateChat(client)" v-for="client in sortedChatClients" :key="client.id" :class="{' border-rafik-pritext': !client.seen_at && client.sent_by == client.id}" class="p-6 border hover:border-rafik-secondary card cursor-pointer rounded-xl bg-rafik-secbg flex gap-6 w-full items-center">
           <img :src="client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" alt="" class="rounded-full border-2 2xl:h-24 2xl:w-24 border-rafik-secondary object-cover w-16 h-16">
           <div class="flex-1">
@@ -36,7 +40,7 @@
               </svg>
               <span class="ml-2 text-xs">Sent</span>
             </p>
-            <p v-else-if="client.seen_at && client.sent_by !== client.id" class="text-xs opacity-70 flex text-body items-center">
+            <p v-else-if="client.seen_at && client.sent_by === client.id" class="text-xs opacity-70 flex text-body items-center">
               <span class="text-xs">Opened</span>
             </p>
             <p v-else class="text-xs opacity-70 flex text-body items-center">
@@ -64,14 +68,21 @@ const chatActive =ref(false);
 const open = ref(false);
 const clientStore = useUserStore();
 const chatClient = ref()
-const latestMessages = ref<Record<string, { content: string; created_at: string, seen_at: string | null , sent_by: string}>>({});
+const latestMessages = ref<Record<string, { content: string; created_at: string, seen_at: string | null , sent_by: number}>>({});
 
 onMounted(async () => {
   await clientStore.getChatClients();
   await fetchLatestMessages();
   subscribeToChatMessages(); // Start listening to updates
 });
+const checkNew = computed(() => {
+  const userId = localStorage.getItem("UserID");
+  const userIdInt = userId ? parseInt(userId, 10) : null; // Convert to int or null
 
+  return Object.values(latestMessages.value).some(
+    msg => !msg.seen_at && msg.sent_by !== userIdInt
+  );
+});
 function activateChat(client:any){
   chatClient.value = client;
   chatActive.value= true;
@@ -93,8 +104,11 @@ async function fetchLatestMessages() {
         seen_at: msg.seen_at, // Adding seen_at,
         sent_by:msg.sent_by
       };
+
       return acc;
     }, {});
+    console.log(localStorage.getItem('UserID'))
+    console.log( Object.values(latestMessages.value))
   } catch (error: any) {
     console.error(error);
   }

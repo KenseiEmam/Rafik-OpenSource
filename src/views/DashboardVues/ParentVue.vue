@@ -10,9 +10,12 @@
       </router-view>
 
     </div>
-    <div v-else class="flex flex-col flex-1 h-full items-center justify-center">
-      <h2 class="subheader-medium animate-pulse">Loading...</h2>
-    </div>
+    <div v-else class=" h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body">
+          <img src="@/assets/Large Icon.png"  class="w-24 h-24 animate-bounce" alt="">
+          <p >
+          Loading...
+        </p>
+        </div>
     <PostOffice />
 
   </div>
