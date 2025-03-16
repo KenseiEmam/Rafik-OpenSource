@@ -13,7 +13,7 @@
           <p class="text-lg animate-pulse">
           Loading...
         </p>
-        </div>
+      </div>
       <div v-else-if="!programStore.AllPrograms?.length " class="flex flex-col gap-3 items-center">
         <p  class="mt-16 text-center text-red-400"> Seems you have no other programs just yet, get ahead and add one to your arsenal at our </p>
       <RouterLink :to="{name:'programs-list'}" class="mb-16 mx-auto text-center w-full"> Program Listing Page </RouterLink>
