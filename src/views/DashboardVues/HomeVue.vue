@@ -14,8 +14,8 @@ const props = defineProps<{
 <template>
   <div class="px-8 py-12 flex-1 flex flex-col w-full h-full 2xl:px-12 2xl:py-24">
     <div
-      class="card w-full  p-8 2xl:py-16 flex gap-6 2xl:gap-10 border-rafik-alternate border items-center"
-      style="background-image: linear-gradient(135deg, #081411 36%, #295f42);"
+      class="card w-full bg-rafik-secbg p-8 2xl:py-16 flex gap-6 2xl:gap-10 border-0 items-center"
+
     >
       <!-- User Avatar -->
       <img

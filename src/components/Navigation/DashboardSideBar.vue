@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-screen border-rafik-sectext border-r bg-rafik-pribg flex flex-col p-8 gap-8 2xl:items-between 2xl:p-16"
+    class="h-screen border-rafik-sectext bg-rafik-secbg flex flex-col p-8 gap-8 2xl:items-between 2xl:p-16"
   >
     <div class="relative">
       <img

@@ -73,7 +73,7 @@
           <tbody>
             <tr v-for="client in userStore.Entitled" :key="client.id" class="rounded-xl p-4 ">
               <td
-                class="flex gap-6 border-l border-y border-rafik-sectext rounded-l-xl text-left items-center py-4 pl-3 bg-rafik-secbg"
+                class="flex gap-6 rounded-l-xl text-left items-center py-4 pl-3 bg-rafik-secbg"
               >
                 <img
                   :src="client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
@@ -86,7 +86,7 @@
                 </div>
               </td>
 
-              <td class="bg-rafik-secbg border-y border-rafik-sectext">
+              <td class="bg-rafik-secbg ">
                 {{ new Date(client.program_details.created_at).toLocaleDateString('en-GB', {
                         year: 'numeric',
                         month: 'long',
@@ -95,7 +95,7 @@
                     || '-'
                 }}
               </td>
-              <td class="bg-rafik-secbg border-y border-rafik-sectext">
+              <td class="bg-rafik-secbg ">
                 {{ new Date(client.program_details.expires_on).toLocaleDateString('en-GB', {
                         year: 'numeric',
                         month: 'long',
@@ -104,12 +104,12 @@
                     || '-'
                 }}
               </td>
-              <td class="bg-rafik-secbg border-y border-rafik-sectext">
+              <td class="bg-rafik-secbg ">
                 {{ client.program_details.months_package
                     || '-'
                 }} months
               </td>
-              <td class="uppercase bg-rafik-secbg text-rafik border-y border-r rounded-r-xl border-rafik-sectext b">
+              <td class="uppercase bg-rafik-secbg text-rafik rounded-r-xl border-rafik-sectext b">
                 {{ client.program_details.status || client}}
               </td>
 
