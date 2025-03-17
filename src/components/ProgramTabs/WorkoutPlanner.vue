@@ -92,7 +92,7 @@
 
 
         <!-- Editable Exercises -->
-         <div class=" mt-4 mb-3 p-6 bg-rafik-secbg ">
+         <div class=" mt-4 mb-3 p-6 bg-rafik-secbg rounded-xl ">
            <h4  class="header-small  w-2/3 mx-auto text-center">Exercises</h4>
            <h4  class="header-small mb-3 w-2/3 mx-auto text-center">••••••</h4>
            <h4 v-if="editedWorkouts[activeTab].exercises.length===0 && !isEditing" class="text-body text-center gap-2 mt-6 text-sm">No exercises added yet! Edit to add!</h4>
@@ -133,7 +133,7 @@
                <div class="space-y-6 card border-0 bg-rafik-secbg p-6 ">
                 <h3 class="text-body uppercase  text-center">Inner Exercises</h3>
                 <div v-for="embed,eindex in element.embeds"
-               class=" bg-rafik-pribg border border-rafik-sectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
+               class=" gradient-bg border border-rafik-sectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
              >
              <div class="flex-1">
                <div class="flex gap-3 items-center mb-4">
