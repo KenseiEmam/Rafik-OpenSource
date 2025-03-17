@@ -1,8 +1,9 @@
 <template>
   <!-- Drawer toggle button -->
   <div class="text-center">
-    <button @click="openModal" class="header-small p-4 border border-rafik-pritext rounded hover:opacity-70">
+    <button @click="openModal" class="header-small p-4 border border-rafik-pritext text-sm rounded hover:opacity-70">
       Add Exercise +
+      <br><span class="text-xs text-rafik-sectext">Straight Exercise </span>
     </button>
   </div>
 
