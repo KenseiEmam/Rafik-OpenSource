@@ -86,7 +86,7 @@
               class="rounded-xl p-4 w-full"
             >
               <td
-                class="flex gap-6 border-l border-y border-rafik-sectext rounded-l-xl text-left items-center py-4 pl-3 bg-rafik-secbg"
+                class="flex gap-6 rounded-l-xl text-left items-center py-4 pl-3 bg-rafik-secbg"
               >
                 <img
                   :src="client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
@@ -99,7 +99,7 @@
                 </div>
               </td>
 
-              <td class="bg-rafik-secbg border-y border-rafik-sectext">
+              <td class="bg-rafik-secbg ">
                 {{ new Date(client.program_details.created_at).toLocaleDateString('en-GB', {
                         year: 'numeric',
                         month: 'long',
@@ -108,7 +108,7 @@
                     || '-'
                 }}
               </td>
-              <td class="bg-rafik-secbg border-y border-rafik-sectext">
+              <td class="bg-rafik-secbg ">
                 {{ new Date(client.program_details.expires_on).toLocaleDateString('en-GB', {
                         year: 'numeric',
                         month: 'long',
@@ -117,16 +117,16 @@
                     || '-'
                 }}
               </td>
-              <td class="bg-rafik-secbg border-y border-rafik-sectext">
+              <td class="bg-rafik-secbg ">
                 {{ client.program_details.months_package
                     || '-'
                 }} months
               </td>
-              <td class="uppercase bg-rafik-secbg text-rafik border-y border-rafik-sectext">
+              <td class="uppercase bg-rafik-secbg text-rafik ">
                 {{ client.program_details.status || '-' }}
               </td>
               <td
-                class="px-3 bg-rafik-secbg relative text-right rounded-r-xl border-r border-y border-rafik-sectext"
+                class="px-3 bg-rafik-secbg relative text-right rounded-r-xl"
               >
                 <svg
                   @click="(show_action = client.id)"

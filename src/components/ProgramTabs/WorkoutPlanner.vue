@@ -92,7 +92,7 @@
 
 
         <!-- Editable Exercises -->
-         <div class=" mt-4 mb-3 p-6 bg-rafik-secbg ">
+         <div class=" mt-4 mb-3 p-6 bg-rafik-secbg rounded-xl ">
            <h4  class="header-small  w-2/3 mx-auto text-center">Exercises</h4>
            <h4  class="header-small mb-3 w-2/3 mx-auto text-center">••••••</h4>
            <h4 v-if="editedWorkouts[activeTab].exercises.length===0 && !isEditing" class="text-body text-center gap-2 mt-6 text-sm">No exercises added yet! Edit to add!</h4>
@@ -104,7 +104,112 @@
             @end="drag=false"
             item-key="id">
             <template #item="{element, index}">
-              <div
+              <div v-if="element.type ==='multi-set'"
+               class=" gradient-bg border border-rafik-sectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
+             >
+             <svg v-if="isEditing" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="h-12 handle text-rafik-sectext hover:cursor-move">
+               <path d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 160c-22.1 0-40-17.9-40-40L0 72C0 49.9 17.9 32 40 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40z"/>
+             </svg>
+             <div class="flex-1">
+               <div class="flex gap-3 items-center mb-4">
+
+                 <div>
+                   <h2 class="contentH-small">{{ element.exercise_name }}</h2>
+                 <p class="text-rafik-pritext capitalize ">Multiple Exercise Group</p>
+                 </div>
+
+
+                 <div class="ml-auto space-y-3" >
+                  <div v-if="isEditing" class="flex gap-4 justify-between items-end " >
+                     <label class="text-body">Total Sets:</label>
+                     <input type="number" v-model.number="element.sets" class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext border-b focus:border-rafik-alternate rounded-none  " placeholder="Sets" />
+                   </div>
+                  <div v-else class="flex justify-between gap-4 w-full text-rafik-sectext ">
+                   <p>Total Sets:</p>
+                   <p class="text-rafik-pritext">{{ element.sets }}</p>
+                 </div>
+                 </div>
+               </div>
+               <div class="space-y-6 card border-0 bg-rafik-secbg p-6 ">
+                <h3 class="text-body uppercase  text-center">Inner Exercises</h3>
+                <div v-for="embed,eindex in element.embeds"
+               class=" gradient-bg border border-rafik-sectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
+             >
+             <div class="flex-1">
+               <div class="flex gap-3 items-center mb-4">
+                 <video
+                   v-if="embed.media.endsWith('.mp4') || embed.media.includes('video')"
+                   class="w-24 h-24 card border p-0 object-cover rounded-lg"
+                   :src="embed.media"
+                   ref="videoRef"
+                   mutedgi
+                   loop
+                 ></video>
+                 <div v-else class="w-24 h-24 card border flex items-center justify-center">
+                   <p class="text-xs"> No Media</p>
+                 </div>
+
+                 <div>
+                   <h2 class="contentH-small">{{ embed.exercise_name }}</h2>
+                 <p class="text-rafik-pritext capitalize ">{{ embed.type }} exercise</p>
+                 </div>
+
+
+                 <div class="ml-auto space-y-3" >
+
+                 <div class="flex justify-between gap-4 w-full text-rafik-sectext text-body ">
+                   <p>Average Intensity:</p>
+                   <p class="text-rafik-pritext">{{ embed.intensity }} kg</p>
+                 </div>
+
+                 <div class="flex justify-between gap-4 w-full text-rafik-sectext text-body ">
+                   <p>Average Repetitions:</p>
+                   <p class="text-rafik-pritext">{{ embed.reps }}</p>
+                 </div>
+                 </div>
+               </div>
+
+                 <div  class=" flex gap-6">
+
+                   <div class="space-y-2 w-full" >
+                     <div  class="flex w-full justify-between w-full items-end py-2 border-b border-rafik-pritext" >
+                      <h2 class="header-small text-sm w-12">{{isEditing ? 'Change All':'Sets'}} </h2>
+                      <div class="space-y-2">
+                        <p class="text-rafik-pritext md:w-44 2xl:w-64 ">{{embed.type ==='cardio' ? 'Speed':'Load (kg)'}}</p>
+                        <input v-if="isEditing" :disabled="!isEditing"  type="number" @input="changeAll($event,embed.true_sets)" name="all-intensities" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate md:w-44 2xl:w-64   " placeholder="-" />
+                      </div>
+                      <div class="space-y-2">
+                        <p class="text-rafik-pritext md:w-44 2xl:w-64 ">{{embed.type ==='cardio' || embed.type === 'isolation' ? 'Time':'Reps'}}</p>
+                        <input v-if="isEditing" :disabled="!isEditing" type="number" @input="changeAll($event,embed.true_sets)"  name="all-reps" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate  md:w-44 2xl:w-64  " placeholder="-" />
+                      </div>
+                      </div>
+                     <div class="flex w-full justify-between w-full items-end py-2 border-b border-rafik-sectext" v-for="set,sindex in embed.true_sets" :key="index">
+                      <h2 class="header-small text-sm w-12 text-rafik-sectext">Set {{ sindex +1 }}</h2>
+                      <div class="space-y-2">
+
+                        <input :disabled="!isEditing"  type="number" v-model.number="set.intensity" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate  md:w-44 2xl:w-64  " placeholder="0" />
+                      </div>
+                      <div class="space-y-2">
+
+                        <input :disabled="!isEditing" type="number" v-model.number="set.reps" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate  md:w-44 2xl:w-64  " placeholder="0" />
+                      </div>
+                     </div>
+                   </div>
+
+                   <div v-if="isEditing" class="flex justify-between ml-auto min-w-max mt-auto ">
+                     <button class="hover:text-red-400 text-red-500" @click="removeEmbed(element, eindex)">Remove Exercise</button>
+                   </div>
+                  </div>
+             </div>
+                </div>
+                <ExerciseOffcanvas @addExercises="handleAddEmbed(element, $event)" v-if="isEditing" />
+               </div>
+               <div v-if="isEditing" class="flex justify-end ml-auto min-w-max mt-auto ">
+                     <button class="hover:text-red-400 text-red-500" @click="removeExercise(activeTab, index)">Remove Exercise</button>
+                   </div>
+             </div>
+            </div>
+            <div v-else
                class=" gradient-bg border border-rafik-sectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
              >
              <svg v-if="isEditing" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="h-12 handle text-rafik-sectext hover:cursor-move">
@@ -154,26 +259,26 @@
                  <div  class=" flex gap-6">
 
                    <div class="space-y-2 w-full" >
-                     <div v-if="isEditing" class="flex w-full justify-between w-full items-end py-2 border-b-2 border-rafik-pritext" >
-                      <h2 class="header-small text-sm w-12">Change All </h2>
+                    <div  class="flex w-full justify-between w-full items-end py-2 border-b border-rafik-pritext" >
+                      <h2 class="header-small text-sm w-12">{{isEditing ? 'Change All':'Sets'}} </h2>
                       <div class="space-y-2">
-                        <p class="text-rafik-pritext">Weight</p>
-                        <input :disabled="!isEditing"  type="number" @input="changeAll($event,element.true_sets)" name="all-intensities" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate   " placeholder="Kgs" />
+                        <p class="text-rafik-pritext md:w-44 2xl:w-64">{{element.type ==='cardio' ? 'Speed':'Load (kg)'}}</p>
+                        <input v-if="isEditing" :disabled="!isEditing"  type="number" @input="changeAll($event,element.true_sets)" name="all-intensities" class="rafik-text-input border-0 focus:ring-0 pb-1  md:w-44 2xl:w-64 focus:border-rafik-alternate   " placeholder="-" />
                       </div>
                       <div class="space-y-2">
-                        <p class="text-rafik-pritext">Reps</p>
-                        <input :disabled="!isEditing" type="number" @input="changeAll($event,element.true_sets)"  name="all-reps" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate   " placeholder="Reps" />
+                        <p class="text-rafik-pritext md:w-44 2xl:w-64">{{element.type ==='cardio' || element.type === 'isolation' ? 'Time':'Reps'}}</p>
+                        <input v-if="isEditing" :disabled="!isEditing" type="number" @input="changeAll($event,element.true_sets)"  name="all-reps" class="rafik-text-input border-0 focus:ring-0 pb-1  md:w-44 2xl:w-64 focus:border-rafik-alternate   " placeholder="-" />
                       </div>
                       </div>
-                     <div class="flex w-full justify-between w-full items-end py-2 border-b border-rafik-sectext" v-for="set,index in element.true_sets" :key="index">
-                      <h2 class="header-small text-sm w-12 text-rafik-sectext">Set {{ index +1 }}</h2>
-                      <div class="space-y-2">
-
-                        <input :disabled="!isEditing"  type="number" v-model.number="set.intensity" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate   " placeholder="Kgs" />
-                      </div>
+                     <div class="flex w-full justify-between w-full items-end py-2 border-b border-rafik-sectext" v-for="set,sindex in element.true_sets" :key="index">
+                      <h2 class="header-small text-sm w-12 text-rafik-sectext">Set {{ sindex +1 }}</h2>
                       <div class="space-y-2">
 
-                        <input :disabled="!isEditing" type="number" v-model.number="set.reps" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate   " placeholder="Reps" />
+                        <input :disabled="!isEditing"  type="number" v-model.number="set.intensity" class="rafik-text-input md:w-44 2xl:w-64 border-0 focus:ring-0 pb-1  focus:border-rafik-alternate   " placeholder="Kgs" />
+                      </div>
+                      <div class="space-y-2">
+
+                        <input :disabled="!isEditing" type="number" v-model.number="set.reps" class="rafik-text-input md:w-44 2xl:w-64 border-0 focus:ring-0 pb-1  focus:border-rafik-alternate   " placeholder="Reps" />
                       </div>
                      </div>
                    </div>
@@ -188,7 +293,14 @@
           </draggable>
 
 
-          <ExerciseOffcanvas @addExercises="handleAdd(activeTab, $event)" v-if="isEditing" />
+
+                <div class="text-center flex gap-3 items-center justify-between">
+                  <ExerciseOffcanvas @addExercises="handleAdd(activeTab, $event)" v-if="isEditing" />
+                  <button  @click="handleAddMulti(activeTab)" v-if="isEditing"  class="header-small p-4 border border-rafik-pritext rounded hover:opacity-70 text-sm">
+                    Add Multi-Set +
+                    <br><span class="text-xs text-rafik-sectext">Supersets/Circuits </span>
+                  </button>
+                </div>
         </div>
 
       </div>
@@ -203,6 +315,7 @@ import { useProgramStore } from "@/stores/programstores";
 import ExerciseOffcanvas from "../Offcanvas/ExerciseOffcanvas.vue";
 import { useUserStore } from "@/stores/user";
   import draggable from 'vuedraggable'
+  import { debounce } from 'lodash';
 import Swal from "sweetalert2"
 // Success and Error Alerts
 function showSuccess(message: string) {
@@ -312,15 +425,81 @@ const cancelEdit = () => {
   editedWorkouts.value = props.program?.workouts ? JSON.parse(JSON.stringify(props.program.workouts)) : [];
 };
 function changeAll(event:any, exercise:true_set[]){
-  if(event.target.name = "all-intensities")
+  if(event.target.name === "all-intensities")
     {
       exercise.forEach((set:true_set) => set.intensity = event.target.value)
     }
-  else if(event.target.name = "all-reps"){
+  else if(event.target.name === "all-reps"){
     exercise.forEach((set:true_set) => set.reps = event.target.value)
   }
 
 }
+
+const recalc = debounce(()=>{editedWorkouts.value.forEach((workout: Workout) => {
+      workout.exercises.forEach((exercise: any) => {
+        const setCount = exercise.sets || 0;
+        if (exercise.type === 'multi-set') {
+          if (exercise.embeds && Array.isArray(exercise.embeds)) {
+            // Process each embedded exercise
+            exercise.embeds.forEach((embed: any) => {
+
+              if (!Array.isArray(embed.true_sets)) {
+                embed.true_sets = [];
+              }
+              // Ensure embed.true_sets array length matches the set count
+              if (embed.true_sets.length !== setCount) {
+                embed.true_sets = Array.from({ length: setCount }, (_, i) =>
+                  embed.true_sets[i] ?? { reps: 0, intensity: 0, weight_done: 0, reps_done: 0 }
+                );
+              }
+              // Calculate and store the average for this embed (for individual display, if needed)
+              if (embed.true_sets.length > 0) {
+                const totalReps = embed.true_sets.reduce(
+                (sum: number, set: any) => sum + (Number(set.reps) || 0),
+                0
+              );
+              const totalIntensity = embed.true_sets.reduce(
+                (sum: number, set: any) => sum + (Number(set.intensity) || 0),
+                0
+              );
+                embed.reps = Math.round(totalReps / embed.true_sets.length);
+                embed.intensity = Math.round(totalIntensity / embed.true_sets.length);
+              } else {
+                embed.reps = 0;
+                embed.intensity = 0;
+              }
+            });
+
+
+          }
+        } else {
+          // Standard exercise processin
+          if (!Array.isArray(exercise.true_sets)) {
+            exercise.true_sets = [];
+          }
+          if (exercise.true_sets.length !== setCount) {
+            exercise.true_sets = Array.from({ length: setCount }, (_, i) =>
+              exercise.true_sets[i] ?? { reps: 0, intensity: 0, weight_done: 0, reps_done: 0 }
+            );
+          }
+          if (exercise.true_sets.length > 0) {
+            const totalReps = exercise.true_sets.reduce(
+            (sum: number, set: any) => sum + (Number(set.reps) || 0),
+            0
+          );
+          const totalIntensity = exercise.true_sets.reduce(
+            (sum: number, set: any) => sum + (Number(set.intensity) || 0),
+            0
+          );
+            exercise.reps = Math.round(totalReps / exercise.true_sets.length);
+            exercise.intensity = Math.round(totalIntensity / exercise.true_sets.length);
+          } else {
+            exercise.reps = 0;
+            exercise.intensity = 0;
+          }
+        }
+      });
+    });}, 500)
 
 const submitChanges = () => {
   isEditing.value = false;
@@ -364,42 +543,33 @@ const calculateTotalSets = (exercises: any[]) => exercises.reduce((total, ex) =>
 const removeExercise = (workoutIndex: number, exerciseIndex: number) => {
   editedWorkouts.value[workoutIndex].exercises.splice(exerciseIndex, 1);
 };
+const removeEmbed = (exercise:any, exerciseIndex: number) => {
+  exercise.embeds.splice(exerciseIndex, 1);
+};
 
 const handleAdd = (workoutIndex: number, list: any[]) => {
   editedWorkouts.value[workoutIndex].exercises.push(
     ...list.map(e => ({ ...e, sets: 3, reps: 0, intensity: 0, true_sets:[{reps:0, intensity:0,weight_done:0, reps_done:0 }, {reps:0, intensity:0,weight_done:0, reps_done:0 }, {reps:0, intensity:0,weight_done:0, reps_done:0 }] }))
   );
 };
+const handleAddEmbed = (exercise:any, list: any[]) => {
+  exercise.embeds.push(
+    ...list.map(e => ({ ...e, sets: exercise.sets, reps: 0, intensity: 0, true_sets:[{reps:0, intensity:0,weight_done:0, reps_done:0 }, {reps:0, intensity:0,weight_done:0, reps_done:0 }, {reps:0, intensity:0,weight_done:0, reps_done:0 }] }))
+  );
+};
+const handleAddMulti = (workoutIndex: number,) => {
+  editedWorkouts.value[workoutIndex].exercises.push(
+{ exercise_name:"Multi-Set", type:"multi-set", sets: 3, embeds:[] })
+
+};
 watch(
   () => editedWorkouts.value,
-  (newWorkouts) => {
-    newWorkouts.forEach((workout:Workout) => {
-      workout.exercises.forEach((exercise: any) => {
-        const setCount = exercise.sets || 0;
-
-        // Preserve existing `true_sets` values if possible, otherwise initialize new ones
-        if (exercise.true_sets.length !== setCount) {
-          exercise.true_sets = Array.from({ length: setCount }, (_, i) =>
-            exercise.true_sets[i] ?? { reps: 0, intensity: 0, weight_done:0, reps_done:0 }
-          );
-        }
-
-         // Calculate average intensity and reps from `true_sets`
-         if (exercise.true_sets.length > 0) {
-          const totalReps = exercise.true_sets.reduce((sum:any, set:any) => sum + set.reps, 0);
-          const totalIntensity = exercise.true_sets.reduce((sum:any, set:any) => sum + set.intensity, 0);
-
-          exercise.reps = Math.round(totalReps / exercise.true_sets.length);
-          exercise.intensity = Math.round(totalIntensity / exercise.true_sets.length);
-        } else {
-          exercise.reps = 0;
-          exercise.intensity = 0;
-        }
-      });
-    });
+  () => {
+    recalc()
   },
   { deep: true }
 );
+
 
 
 

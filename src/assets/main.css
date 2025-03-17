@@ -86,7 +86,7 @@ nav a {
     @apply flex flex-col gap-1 w-full;
   }
   .card {
-    @apply border-2 border-rafik-sectext rounded-lg p-3 bg-rafik-pribg shadow;
+    @apply rounded-lg p-3 bg-rafik-secbg shadow;
   }
   .rafik-text-input {
     @apply w-full placeholder:text-rafik-sectext bg-rafik-secbg 2xl:text-lg p-3 outline-none border-rafik-sectext border rounded-md text-rafik-pritext;
