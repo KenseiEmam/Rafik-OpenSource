@@ -19,7 +19,7 @@
       <RouterLink :to="{name:'programs-list'}" class="mb-16 mx-auto text-center w-full"> Program Listing Page </RouterLink>
       </div>
       <ul class="flex flex-col gap-4 w-full mb-16">
-        <li v-for="program in programStore.AllPrograms" :key="program.id" @click="importExercise(program)" class="card p-4 flex items-center gap-3 group hover:border-rafik cursor-pointer">
+        <li v-for="program in programStore.AllPrograms" :key="program.id" @click="importExercise(program)" class="card border p-4 flex items-center gap-3 group hover:border-rafik cursor-pointer">
           <div>
             <h2 class="subheader-small text-rafik-pritext group-hover:text-rafik">{{ program.program_name }}</h2>
             <p class="text-xs text-body  group-hover:text-rafik-pritext">{{ program.program_description }}</p>
