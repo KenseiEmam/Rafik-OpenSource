@@ -248,7 +248,7 @@ onMounted(() => {
           class="w-full h-full object-cover absolute"
           alt=""
         />
-        <div class="w-full opacity-70 h-full bg-rafik-pribg absolute"></div>
+        <div class="w-full opacity-70 h-full bg-rafik-pribg dark:bg-rafik-darkpribg absolute"></div>
         <div class="p-8 2xl:p-16 2xl:py-24 space-y-4 relative grid items-stretch  grid-cols-4 divide-x divide-rafik-sectext divide-x-solid">
           <div class="pr-6 space-y-4 col-span-3 ">
             <div class="flex items-center justify-between">
@@ -258,7 +258,7 @@ onMounted(() => {
                 v-model="editableTitle"
                 @blur="saveTitle"
                 @keyup.enter="saveTitle"
-                class="title-small w-1/3 bg-transparent border-b border-rafik-sectext focus:outline-none"
+                class="title-small w-1/3 bg-transparent border-b border-rafik-sectext dark:border-rafik-darksectext focus:outline-none"
                 type="text"
                 :placeholder="programStore.Program?.program_name || 'Loading...'"
               />
@@ -279,7 +279,7 @@ onMounted(() => {
               @blur="saveDescription"
               @keyup.enter="saveDescription"
               cols="3"
-              class="text-body 2xl:w-5/6 bg-transparent border-b border-rafik-sectext focus:outline-none"
+              class="text-body 2xl:w-5/6 bg-transparent border-b border-rafik-sectext dark:border-rafik-darksectext focus:outline-none"
               :placeholder="programStore.Program?.program_description || 'Loading...'"
             ></textarea>
             <p
@@ -294,7 +294,7 @@ onMounted(() => {
                 <svg xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   stroke="currentColor"
-                  class="w-6 text-rafik-sectext"
+                  class="w-6 text-rafik-sectext dark:text-rafik-darksectext"
                   viewBox="0 0 448 512">
                   <path d="M160 80c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 352c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-352zM0 272c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 160c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48L0 272zM368 96l32 0c26.5 0 48 21.5 48 48l0 288c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-288c0-26.5 21.5-48 48-48z"/></svg>
                 {{ programStore.Program.difficulty_level }}</h3>
@@ -302,7 +302,7 @@ onMounted(() => {
                 <svg xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   stroke="currentColor"
-                  class="w-6 text-rafik-sectext"
+                  class="w-6 text-rafik-sectext dark:text-rafik-darksectext"
                   viewBox="0 0 448 512">
                   <path d="M176 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l16 0 0 34.4C92.3 113.8 16 200 16 304c0 114.9 93.1 208 208 208s208-93.1 208-208c0-41.8-12.3-80.7-33.5-113.2l24.1-24.1c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L355.7 143c-28.1-23-62.2-38.8-99.7-44.6L256 64l16 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L224 0 176 0zm72 192l0 128c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-128c0-13.3 10.7-24 24-24s24 10.7 24 24z"/></svg>
                 {{ programStore.Program.avg_session_time }} mins/session</h3>
@@ -310,25 +310,25 @@ onMounted(() => {
                 <svg xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   stroke="currentColor"
-                  class="w-6 text-rafik-sectext"
+                  class="w-6 text-rafik-sectext dark:text-rafik-darksectext"
                   viewBox="0 0 448 512">
                   <path d="M96 32l0 32L48 64C21.5 64 0 85.5 0 112l0 48 448 0 0-48c0-26.5-21.5-48-48-48l-48 0 0-32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 32L160 64l0-32c0-17.7-14.3-32-32-32S96 14.3 96 32zM448 192L0 192 0 464c0 26.5 21.5 48 48 48l352 0c26.5 0 48-21.5 48-48l0-272z"/></svg>
                 {{ programStore.Program.avg_days_per_week}} days/week</h3>
             </div>
           </div>
           <div class="pl-6 flex-1 min-w-max">
-            <div class="flex flex-col flex-1 gap-4 border-rafik-sectext text-left">
-              <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext">View Language</button> -->
+            <div class="flex flex-col flex-1 gap-4 border-rafik-sectext dark:border-rafik-darksectext text-left">
+              <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext dark:text-rafik-darkpritext">View Language</button> -->
               <button
               @click="DraftProgram"
-                class="text-body uppercase text-left hover:text-rafik-pritext"
+                class="text-body uppercase text-left hover:text-rafik-pritext dark:text-rafik-darkpritext"
                 v-if="programStore.Program.status == 'Active'"
               >
                 Change to Draft
               </button>
               <button
               @click="ActiveProgram"
-                class="text-body uppercase text-left hover:text-rafik-pritext"
+                class="text-body uppercase text-left hover:text-rafik-pritext dark:text-rafik-darkpritext"
                 v-if="programStore.Program.status == 'Draft'"
               >
                 Publish to Active
@@ -341,44 +341,44 @@ onMounted(() => {
       </div>
 
       <!-- Tabs -->
-      <div class="flex  gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext">
+      <div class="flex  gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext">
         <button
-          :class="activeTab === 'Details' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          :class="activeTab === 'Details' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
           class="nav-btn "
           @click="setActiveTab('Details')"
         >
           Details
         </button>
         <button
-          :class="activeTab === 'Workouts' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          :class="activeTab === 'Workouts' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
           class="nav-btn uppercase "
           @click="setActiveTab('Workouts')"
         >
           Workouts
         </button>
         <button
-          :class="activeTab === 'Clients' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          :class="activeTab === 'Clients' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
           class="nav-btn uppercase "
           @click="setActiveTab('Clients')"
         >
           Clients
         </button>
         <button
-          :class="activeTab === 'Pricing' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          :class="activeTab === 'Pricing' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
           class="nav-btn uppercase "
           @click="setActiveTab('Pricing')"
         >
           Pricing
         </button>
         <!-- <button
-          :class="activeTab === 'Documents' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          :class="activeTab === 'Documents' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
           class="nav-btn uppercase "
           @click="setActiveTab('Documents')"
         >
           Documents
         </button> -->
         <!-- <button
-          :class="activeTab === 'Reviews' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          :class="activeTab === 'Reviews' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
           class="nav-btn uppercase "
           @click="setActiveTab('Reviews')"
         >

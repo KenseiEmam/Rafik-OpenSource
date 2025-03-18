@@ -5,7 +5,7 @@
       class="card border-rafik p-8 rounded-lg shadow-md w-full space-y-6"
     >
       <h1 class="header-large">Professional Details</h1>
-      <h2 class="text-body text-rafik-sectext">
+      <h2 class="text-body text-rafik-sectext dark:text-rafik-darksectext">
         Let’s set up your professional profile to showcase your skills and attract the right clients.
       </h2>
 
@@ -52,17 +52,17 @@
           <div
             v-for="client in clientOptions"
             :key="client"
-            class="px-4 py-2 border rounded-lg text-sm cursor-pointer hover:bg-rafik-secbg"
+            class="px-4 py-2 border rounded-lg text-sm cursor-pointer hover:bg-rafik-secbg dark:bg-rafik-darksecbg"
             :class="{
-              'bg-rafik-secondary text-rafik-pritext': formData.preferredClients.includes(client),
-              'text-rafik-sectext': !formData.preferredClients.includes(client),
+              'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext': formData.preferredClients.includes(client),
+              'text-rafik-sectext dark:text-rafik-darksectext': !formData.preferredClients.includes(client),
             }"
             @click="toggleClientSelection(client)"
           >
             {{ client }}
           </div>
         </div>
-        <p class="label text-rafik-sectext mt-2">
+        <p class="label text-rafik-sectext dark:text-rafik-darksectext mt-2">
           You can select up to 5 preferred client types.
         </p>
       </div>
@@ -70,15 +70,15 @@
       <!-- Certifications -->
       <div>
         <label class="text-body uppercase">Relevant Certifications</label>
-        <p class="text-rafik-sectext label my-2">
+        <p class="text-rafik-sectext dark:text-rafik-darksectext label my-2">
           Please make sure you upload your training license relevant to your country of operation, as well as one training certification. Other certifications such as diplomas or specialization certificates are not necessary to access the dashboard, however, they may play an important role when accepting program submissions.
         </p>
         <div class="w-full flex flex-col gap-4">
           <div
-            class="border-2 border-dashed border-rafik-sectext rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg focus:ring-2 focus:ring-offset-2 focus:ring-background-rafik-pribg p-4"
+            class="border-2 border-dashed border-rafik-sectext dark:border-rafik-darksectext rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg dark:bg-rafik-darksecbg focus:ring-2 focus:ring-offset-2 focus:ring-background-rafik-pribg p-4"
             @click="triggerFileInput"
           >
-            <span class="text-rafik-sectext">
+            <span class="text-rafik-sectext dark:text-rafik-darksectext">
               Drag and drop files here, or click to upload
             </span>
           </div>
@@ -94,7 +94,7 @@
             <li
               v-for="(file, index) in uploadedFiles"
               :key="file.name"
-              class="text-rafik-sectext flex justify-between py-2 border-b border-rafik-sectext"
+              class="text-rafik-sectext dark:text-rafik-darksectext flex justify-between py-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
             >
               <p>{{ file.name }}</p>
               <button @click="handleFileRemove(index)" class="text-red-500 hover:text-red-300">Remove</button>

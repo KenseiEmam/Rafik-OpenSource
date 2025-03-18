@@ -274,7 +274,7 @@ onMounted(() => {
             <video
               :src="exerciseStore.Exercise.media"
               alt="Uploaded Preview"
-              class="h-96 w-128 border-rafik-sectext border-2 object-cover rounded-lg mx-auto"
+              class="h-96 w-128 border-rafik-sectext dark:border-rafik-darksectext border-2 object-cover rounded-lg mx-auto"
               controls
             ></video>
             <button
@@ -286,7 +286,7 @@ onMounted(() => {
           </div>
           <div
             v-else
-            class="h-96 w-128 border-2 border-dashed border-gray-400 mx-auto rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            class="h-96 w-128 border-2 border-dashed border-gray-400 mx-auto rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg dark:bg-rafik-darksecbg focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             @click="triggerFileInput"
           >
             <span class="text-center text-gray-500">
@@ -314,7 +314,7 @@ onMounted(() => {
                 v-model="editableTitle"
                 @blur="saveTitle"
                 @keyup.enter="saveTitle"
-                class="title-small bg-transparent border-b border-rafik-sectext focus:outline-none"
+                class="title-small bg-transparent border-b border-rafik-sectext dark:border-rafik-darksectext focus:outline-none"
                 type="text"
                 :placeholder="exerciseStore.Exercise?.exercise_name || 'Loading...'"
               />
@@ -334,7 +334,7 @@ onMounted(() => {
               @blur="saveDescription"
               @keyup.enter="saveDescription"
               cols="3"
-              class="text-body 2xl:w-5/6 bg-transparent border-b border-rafik-sectext focus:outline-none"
+              class="text-body 2xl:w-5/6 bg-transparent border-b border-rafik-sectext dark:border-rafik-darksectext focus:outline-none"
               :placeholder="exerciseStore.Exercise?.exercise_detail || 'Loading...'"
             ></textarea>
             <p
@@ -349,47 +349,47 @@ onMounted(() => {
               <button
                 @click="selectType(type)"
                 :class="exerciseStore.Exercise.type?.toLowerCase() === type
-                  ? 'border-rafik-pritext text-rafik-pritext border-2'
-                  : 'border border-rafik-sectext opacity-80 hover:opacity-100'"
-                class="w-32 h-32 text-xs rounded-xl font-bold flex items-center justify-center bg-rafik-pribg uppercase"
+                  ? 'border-rafik-pritext dark:border-rafik-darkpritext text-rafik-pritext dark:text-rafik-darkpritext border-2'
+                  : 'border border-rafik-sectext dark:border-rafik-darksectext opacity-80 hover:opacity-100'"
+                class="w-32 h-32 text-xs rounded-xl font-bold flex items-center justify-center bg-rafik-pribg dark:bg-rafik-darkpribg uppercase"
               >
                 {{ type }}
               </button>
             </div>
           </div>
         </div>
-        <div class="pl-6 flex-1 min-w-max border-l  border-rafik-sectext">
-            <div class="flex flex-col flex-1 h-96 justify-center gap-4 border-rafik-sectext text-left">
-              <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext">View Language</button> -->
+        <div class="pl-6 flex-1 min-w-max border-l  border-rafik-sectext dark:border-rafik-darksectext">
+            <div class="flex flex-col flex-1 h-96 justify-center gap-4 border-rafik-sectext dark:border-rafik-darksectext text-left">
+              <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext dark:text-rafik-darkpritext">View Language</button> -->
               <ImportOffcanvas @import-exercise="importExercise"/>
               <button @click="DeleteExercise(exerciseStore.Exercise.id)" class="text-body uppercase text-red-500 hover:text-red-400 text-left">Delete Exercise</button>
             </div>
         </div>
       </div>
-      <div class="flex  gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext">
+      <div class="flex  gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext">
         <button
-          :class="activeTab === 'Muscles' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          :class="activeTab === 'Muscles' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
           class="nav-btn "
           @click="setActiveTab('Muscles')"
         >
           Muscles Worked
         </button>
         <button
-          :class="activeTab === 'Tips and Technique' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          :class="activeTab === 'Tips and Technique' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
           class="nav-btn uppercase "
           @click="setActiveTab('Tips and Technique')"
         >
           Tips and Technique
         </button>
         <button
-          :class="activeTab === 'Equipment' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          :class="activeTab === 'Equipment' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
           class="nav-btn uppercase "
           @click="setActiveTab('Equipment')"
         >
           Equipment Required
         </button>
         <button
-          :class="activeTab === 'Alternatives' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          :class="activeTab === 'Alternatives' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
           class="nav-btn uppercase "
           @click="setActiveTab('Alternatives')"
         >

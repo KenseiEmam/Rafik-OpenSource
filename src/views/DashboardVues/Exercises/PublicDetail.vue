@@ -87,7 +87,7 @@ onMounted(() => {
         <video v-if="exerciseStore.Exercise.media"
               :src="exerciseStore.Exercise.media"
               alt="Uploaded Preview"
-              class="h-96 w-128 border-rafik-sectext border-2 object-cover rounded-lg mx-auto"
+              class="h-96 w-128 border-rafik-sectext dark:border-rafik-darksectext border-2 object-cover rounded-lg mx-auto"
               controls
             ></video>
         <div v-else class="h-96 w-128 card flex items-center flex-col gap-6 justify-center">
@@ -110,42 +110,42 @@ onMounted(() => {
               {{ exerciseStore.Exercise?.exercise_detail || "Loading..." }}
             </p>
         </div>
-        <div class="pl-6 flex-1 min-w-max border-l  border-rafik-sectext">
-            <div class="flex flex-col flex-1 h-96 justify-center gap-4 border-rafik-sectext text-left">
-              <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext">View Language</button> -->
+        <div class="pl-6 flex-1 min-w-max border-l  border-rafik-sectext dark:border-rafik-darksectext">
+            <div class="flex flex-col flex-1 h-96 justify-center gap-4 border-rafik-sectext dark:border-rafik-darksectext text-left">
+              <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext dark:text-rafik-darkpritext">View Language</button> -->
               <button
                 @click="DupeExercise"
-                class="text-body uppercase text-left hover:text-rafik-pritext"
+                class="text-body uppercase text-left hover:text-rafik-pritext dark:text-rafik-darkpritext"
               >
                 Duplicate Exercise
               </button>
             </div>
         </div>
       </div>
-      <div class="flex  gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext">
+      <div class="flex  gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext">
         <button
-          :class="activeTab === 'Muscles' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          :class="activeTab === 'Muscles' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
           class="nav-btn "
           @click="setActiveTab('Muscles')"
         >
           Muscles Worked
         </button>
         <button
-          :class="activeTab === 'Tips and Technique' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          :class="activeTab === 'Tips and Technique' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
           class="nav-btn uppercase "
           @click="setActiveTab('Tips and Technique')"
         >
           Tips and Technique
         </button>
         <button
-          :class="activeTab === 'Equipment' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          :class="activeTab === 'Equipment' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
           class="nav-btn uppercase "
           @click="setActiveTab('Equipment')"
         >
           Equipment Required
         </button>
         <button
-          :class="activeTab === 'Alternatives' ? 'text-rafik-pritext cursor-default' : ' hover:opacity-70'"
+          :class="activeTab === 'Alternatives' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
           class="nav-btn uppercase "
           @click="setActiveTab('Alternatives')"
         >

@@ -2,7 +2,7 @@
   <!-- Drawer toggle button -->
   <button
   @click="openModal"
-  class="text-body uppercase text-left hover:text-rafik-pritext"
+  class="text-body uppercase text-left hover:text-rafik-pritext dark:text-rafik-darkpritext"
   >
     Import Template
   </button>
@@ -10,7 +10,7 @@
   <!-- Drawer component -->
   <div v-if="ModalOn" class="fixed top-0 right-0 z-40 w-full h-screen flex justify-end" style="background-color: #000000AA;">
     <div class="flex-1 w-full h-full content" @click="ModalOn = false"></div>
-    <div class="p-8 py-12 border-l border-rafik-sectext  bg-rafik-pribg w-128 h-full space-y-8 relative">
+    <div class="p-8 py-12 border-l border-rafik-sectext dark:border-rafik-darksectext  bg-rafik-pribg dark:bg-rafik-darkpribg w-128 h-full space-y-8 relative">
       <div>
         <h2 class="subheader-medium uppercase">Exercise</h2>
         <h2 class="header-large font-black">LIBRARY</h2>
@@ -26,7 +26,7 @@
       <!-- Search bar -->
       <form class="max-w-md mx-auto">
         <div class="relative">
-          <input type="search" @input="handleSearch" class="block w-full p-4 text-sm text-rafik-sectext border rounded-lg bg-rafik-pribg" placeholder="Type to Search Exercises..." required />
+          <input type="search" @input="handleSearch" class="block w-full p-4 text-sm text-rafik-sectext dark:text-rafik-darksectext border rounded-lg bg-rafik-pribg dark:bg-rafik-darkpribg" placeholder="Type to Search Exercises..." required />
         </div>
       </form>
       <!-- Exercise list -->

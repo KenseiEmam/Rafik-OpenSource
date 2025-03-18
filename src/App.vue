@@ -10,7 +10,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="w-full min-h-screen min-w-screen">
+  <div class="w-full min-h-screen min-w-screen .gradient-bg">
     <RouterView />
   </div>
 </template>

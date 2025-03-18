@@ -33,7 +33,7 @@ function showError(message: string) {
 
 <template>
   <!-- Main container following the same structure as TeamVue -->
-  <main class="mebsite-body">
+  <main class="mebsite-body dark">
     <!-- Same WebsiteHeader as in TeamVue -->
     <WebsiteHeader />
 
@@ -50,7 +50,7 @@ function showError(message: string) {
         -->
       <div class="flex flex-col md:flex-row items-center justify-center flex-1 ">
          <!-- Right Column: Phone Image center horizontally and vertically -->
-         <div class="top-0 right-0 bottom-0 left-0 flex md:hidden items-center bg-rafik-secbg rounded-full overflow-hidden justify-center">
+         <div class="top-0 right-0 bottom-0 left-0 flex md:hidden items-center bg-rafik-secbg dark:bg-rafik-darksecbg rounded-full overflow-hidden justify-center">
           <!-- Use your local phones.png image -->
           <img src="@/assets/phones.png" alt="Phones" class="max-h-43" />
         </div>

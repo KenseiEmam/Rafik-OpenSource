@@ -7,6 +7,7 @@ export default {
     "./src/**/*.{vue,js,ts,jsx,tsx}",
     "./node_modules/flowbite/**/*.js"
   ],
+  darkMode: 'class', // Enables dark mode using a class
   theme: {
     screens: {
       xs: '480px',
@@ -40,13 +41,17 @@ export default {
           teritiary: '#B02DEF',
           alternate: '#2EBE71',
           darkeralt: '#295F42',
-          pritext: '#E8F3ED',
-          sectext: '#9FB9B2',
-          pribg: '#081411',
-          secbg: '#000503',
-          streak: '#FF5733', // Example placeholder
-          error: '#FF0000', // Example placeholder
-          success: '#00FF00', // Example placeholder
+          pritext: '#190a03',
+          sectext: '#301b0e',
+          pribg: '#f3eeeb',
+          secbg: '#E2D8D1',
+          streak: '#FF5733',
+          error: '#FF0000',
+          success: '#00FF00',
+            darkpritext: '#E8F3ED',
+            darksectext: '#9FB9B2',
+            darkpribg: '#081411',
+            darksecbg: '#000503',
         },
       },
     },

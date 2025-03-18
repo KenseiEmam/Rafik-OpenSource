@@ -2,7 +2,7 @@
   <div class="my-12">
     <!-- Search Section -->
     <div class="flex items-center justify-between mb-4 gap-6">
-      <hr class="w-full border-rafik-sectext border-b">
+      <hr class="w-full border-rafik-sectext dark:border-rafik-darksectext border-b">
       <span class="text-sm">Showing {{ filteredDiets.length }} row(s)</span>
     </div>
 
@@ -18,7 +18,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="diet in filteredDiets" :key="diet.id" class="border-b border-rafik-sectext h-12">
+        <tr v-for="diet in filteredDiets" :key="diet.id" class="border-b border-rafik-sectext dark:border-rafik-darksectext h-12">
           <td>
             {{ diet.date_logged ? new Date(diet.date_logged).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" }) : '-' }}
           </td>
@@ -33,7 +33,7 @@
           </td>
 
           <td class="px-3 relative" >
-              <Router-link :to="{name:'diet-sheet', params:{id:diet.id}}" class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded text-xs">More Details</Router-link>
+              <Router-link :to="{name:'diet-sheet', params:{id:diet.id}}" class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:text-rafik-darkpritext rounded text-xs">More Details</Router-link>
 
           </td>
         </tr>
