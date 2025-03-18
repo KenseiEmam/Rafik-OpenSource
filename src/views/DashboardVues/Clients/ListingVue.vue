@@ -29,7 +29,7 @@
                   <button
                     @click="updatePage(page - 1)"
                     v-if="page > 1"
-                    class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:text-rafik-darkpritext"
+                    class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
                   >
                     <<
                   </button>
@@ -39,7 +39,7 @@
                       @click="updatePage(p)"
                       v-for="p in Math.ceil(userStore.client_count / numbers)"
                       :key="p"
-                      class="hover:text-rafik-pritext dark:text-rafik-darkpritext"
+                      class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
                       :class="{ 'text-rafik-pritext dark:text-rafik-darkpritext': p === page }"
                     >
                       {{ p }}
@@ -47,7 +47,7 @@
                   </div>
 
                   <button
-                    class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:text-rafik-darkpritext"
+                    class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
                     @click="updatePage(page + 1)"
                     v-if="page < Math.ceil(userStore.client_count / numbers)"
                   >
@@ -132,7 +132,7 @@
                   @click="(show_action = client.id)"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
-                  class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:text-rafik-darkpritext cursor-pointer ml-auto"
+                  class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext cursor-pointer ml-auto"
                   viewBox="0 0 128 512"
                 >
                   <path
@@ -146,11 +146,11 @@
                 >
                   <Router-link
                     :to="{ name: 'client-details', params: { id: client.id } }"
-                    class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:text-rafik-darkpritext rounded"
+                    class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded"
                   >
                     View Program
                   </Router-link>
-                  <!-- <button class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:text-rafik-darkpritext rounded">
+                  <!-- <button class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded">
                     Message Client
                   </button> -->
                   <button

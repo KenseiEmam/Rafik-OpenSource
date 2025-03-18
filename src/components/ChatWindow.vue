@@ -67,7 +67,7 @@
                   : 'bg-rafik-pribg dark:bg-rafik-darkpribg text-right'
               "
             >
-              <p :class="!message.seen_at ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''">{{ message.content }}</p>
+              <p :class="!message.seen_at ? 'text-rafik-secondary dark:text-rafik-darkpritext' : ''">{{ message.content }}</p>
               <span class="text-xs block mt-1 text-gray-300">
                 {{ formatDate(message.created_at) }}
                 <span v-if="message.sent_by !== Client.id">

@@ -360,7 +360,7 @@ onMounted(() => {
         </div>
         <div class="pl-6 flex-1 min-w-max border-l  border-rafik-sectext dark:border-rafik-darksectext">
             <div class="flex flex-col flex-1 h-96 justify-center gap-4 border-rafik-sectext dark:border-rafik-darksectext text-left">
-              <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext dark:text-rafik-darkpritext">View Language</button> -->
+              <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">View Language</button> -->
               <ImportOffcanvas @import-exercise="importExercise"/>
               <button @click="DeleteExercise(exerciseStore.Exercise.id)" class="text-body uppercase text-red-500 hover:text-red-400 text-left">Delete Exercise</button>
             </div>

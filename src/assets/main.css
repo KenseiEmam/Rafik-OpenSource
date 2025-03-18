@@ -90,6 +90,9 @@ a {
 nav a {
   color: var(--vt-c-text-dark-2);
 }
+.dark nav a {
+  color: #9FB9B2;
+}
 
 @layer components {
   .form-control {

@@ -45,7 +45,7 @@
             {{ workout.feel ? feels[workout.feel-1] : 'N/A' }}
           </td>
           <td class="px-3 relative" >
-              <Router-link :to="{name:'workout-sheet', params:{id:workout.id}}" class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:text-rafik-darkpritext rounded text-xs">More Details</Router-link>
+              <Router-link :to="{name:'workout-sheet', params:{id:workout.id}}" class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded text-xs">More Details</Router-link>
 
           </td>
         </tr>

@@ -191,6 +191,6 @@ function updatePage(page: number) {
   background-image: linear-gradient(135deg, #081411 36%, #295f42);
 }
 .card:hover{
-  background-image: linear-gradient(135deg, #f3eeeb 36%, #dfdf9a)
+  background-image: linear-gradient(135deg, #f3eeeb 36%, #ffda68)
 }
 </style>

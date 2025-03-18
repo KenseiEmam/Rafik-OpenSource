@@ -18,7 +18,7 @@
   --vt-c-divider-dark-2: #9fb9b2;
 
   --vt-c-text-dark-1: #e8f3ed;
-  --vt-c-text-dark-2: #301b0e;
+  --vt-c-text-dark-2: #8C644C;
 }
 
 /* semantic color variables for this project */
@@ -73,6 +73,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-body .dark {
+body .dark{
   color:#9FB9B2;
 }

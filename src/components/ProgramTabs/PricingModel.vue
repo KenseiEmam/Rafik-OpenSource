@@ -186,7 +186,7 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
           />
 
           <!-- Display promo codes -->
-          <div class="flex flex-col divide-y divide-rafik-sectext">
+          <div class="flex flex-col divide-y divide-rafik-sectext dark:divide-rafik-darksectext">
             <div
               v-for="(promo, index) in props.program.promos"
               :key="index"
