@@ -256,13 +256,13 @@ onMounted(() => {
           </div>
           <div class="pl-6 flex-1 min-w-max h-full">
             <div class="flex flex-col flex-1 gap-4 border-l pl-2 border-rafik-sectext dark:border-rafik-darksectext text-left">
-              <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext dark:text-rafik-darkpritext">
+              <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">
                 Message Client
               </button> -->
               <button
                 v-if="clientStore.Client.program_details.status === 'active'"
                 @click="(showAddProgramModal = true)"
-                class="text-body uppercase text-left hover:text-rafik-pritext dark:text-rafik-darkpritext"
+                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
               >
                 Change Program
               </button>

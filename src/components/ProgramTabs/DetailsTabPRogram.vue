@@ -81,7 +81,7 @@ const removeTag = (tagToRemove: string) => {
       <p class="text-body">
         Below you can find a quick rundown of the program's current statistics. We are working on a much better dashboard.
       </p>
-      <div class="flex flex-col divide-y divide-rafik-sectext gap-3 mt-4">
+      <div class="flex flex-col divide-y divide-rafik-sectext dark:divide-rafik-darksectext gap-3 mt-4">
         <div class="flex justify-between gap-4 py-2">
           <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">Total Clients:</p>
           <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">Coming Soon...</p>

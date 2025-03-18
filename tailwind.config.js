@@ -42,7 +42,7 @@ export default {
           alternate: '#2EBE71',
           darkeralt: '#295F42',
           pritext: '#190a03',
-          sectext: '#301b0e',
+          sectext: '#8C644C',
           pribg: '#f3eeeb',
           secbg: '#E2D8D1',
           streak: '#FF5733',

@@ -249,7 +249,7 @@ onMounted(() => {
           alt=""
         />
         <div class="w-full opacity-70 h-full bg-rafik-pribg dark:bg-rafik-darkpribg absolute"></div>
-        <div class="p-8 2xl:p-16 2xl:py-24 space-y-4 relative grid items-stretch  grid-cols-4 divide-x divide-rafik-sectext divide-x-solid">
+        <div class="p-8 2xl:p-16 2xl:py-24 space-y-4 relative grid items-stretch  grid-cols-4 divide-x divide-rafik-sectext dark:divide-rafik-darksectext divide-x-solid">
           <div class="pr-6 space-y-4 col-span-3 ">
             <div class="flex items-center justify-between">
               <!-- Editable Title -->
@@ -318,17 +318,17 @@ onMounted(() => {
           </div>
           <div class="pl-6 flex-1 min-w-max">
             <div class="flex flex-col flex-1 gap-4 border-rafik-sectext dark:border-rafik-darksectext text-left">
-              <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext dark:text-rafik-darkpritext">View Language</button> -->
+              <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">View Language</button> -->
               <button
               @click="DraftProgram"
-                class="text-body uppercase text-left hover:text-rafik-pritext dark:text-rafik-darkpritext"
+                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
                 v-if="programStore.Program.status == 'Active'"
               >
                 Change to Draft
               </button>
               <button
               @click="ActiveProgram"
-                class="text-body uppercase text-left hover:text-rafik-pritext dark:text-rafik-darkpritext"
+                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
                 v-if="programStore.Program.status == 'Draft'"
               >
                 Publish to Active

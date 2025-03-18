@@ -5,12 +5,12 @@
     <div class="relative">
       <img
         class="w-24 2xl:h-auto 2xl:w-44  object-cover  "
-        src="/src/assets/rafik.png"
+        :src="mode === 'true'  ?'/src/assets/rafik.png':'/src/assets/rafik_light.png'"
         alt=""
       />
     </div>
     <nav class="flex flex-col  gap-4 2xl:gap-10 my-auto">
-      <RouterLink to="/dashboard" class="nav-btn">My <br />Dashboard</RouterLink>
+      <RouterLink :to="{ name: 'dashboard-home' }" class="nav-btn">My <br />Dashboard</RouterLink>
       <RouterLink :to="{ name: 'programs-list' }" class="nav-btn"
         >Workout &<br />Programs</RouterLink
       >
@@ -34,7 +34,7 @@ import router from '@/router'
 import { useUserStore } from '@/stores/user'
 
 const userStore = useUserStore()
-
+const mode = localStorage.getItem('dark_mode')
 const handleLogOut = async (): Promise<void> => {
   userStore.LogOut()
 
@@ -60,7 +60,10 @@ nav {
 }
 
 nav a.router-link-exact-active {
-  color: var(--vt-c-text-dark1);
+  color: #190a03
+}
+.dark nav a.router-link-exact-active {
+  color: #ffffff
 }
 
 nav a.router-link-exact-active:hover {

@@ -2,7 +2,7 @@
   <!-- Drawer toggle button -->
   <button
   @click="openModal"
-  class="text-body uppercase text-left hover:text-rafik-pritext dark:text-rafik-darkpritext"
+  class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
   >
     Import Template
   </button>

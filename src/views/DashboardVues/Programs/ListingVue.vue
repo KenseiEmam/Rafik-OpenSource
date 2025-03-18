@@ -10,21 +10,21 @@
       <!-- Tabs -->
       <div class="flex  gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext">
         <button
-          :class="activeTab === 'Active Program' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
+          :class="activeTab === 'Active Program' ? 'text-rafik-secondary dark:text-rafik-darkpritext' : ''"
           class="nav-btn "
           @click="setActiveTab('Active Program')"
         >
           Active Programs
         </button>
         <button
-          :class="activeTab === 'Drafted Programs' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
+          :class="activeTab === 'Drafted Programs' ? 'text-rafik-secondary dark:text-rafik-darkpritext' : ''"
           class="nav-btn uppercase "
           @click="setActiveTab('Drafted Programs')"
         >
           Drafted Programs
         </button>
         <button
-          :class="activeTab === 'Exercise Library' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
+          :class="activeTab === 'Exercise Library' ? 'text-rafik-secondary dark:text-rafik-darkpritext' : ''"
           class="nav-btn uppercase "
           @click="setActiveTab('Exercise Library')"
         >
@@ -48,9 +48,9 @@
                 alt=""
               />
               <div class="w-full opacity-70 h-full bg-rafik-pribg dark:bg-rafik-darkpribg absolute"></div>
-              <div class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-rafik-alternate to-50 absolute"></div>
+              <div class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-rafik-secondary dark:from-rafik-alternate to-50 absolute"></div>
               <div class="p-8 space-y-4 relative flex flex-col items-end">
-                <h2 class="subheader-medium flex gap-4 items-center group-hover:text-rafik-pritext dark:text-rafik-darkpritext">
+                <h2 class="subheader-medium flex gap-4 items-center group-hover:text-rafik-pritext dark:group-hover:text-rafik-darkpritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">
                   <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" fill="currentColor" viewBox="0 0 576 512" class="w-8 2xl:w-10 text-rafik-sectext dark:text-rafik-darksectext group-hover:text-rafik">
                     <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z" />
                   </svg>
@@ -66,7 +66,7 @@
                   {{ program.program_name }}
                 </h3>
                 <div class="h-0 group-hover:h-auto transition opacity-0 group-hover:opacity-100 ease-in space-y-4">
-                  <p class="text-body group-hover:text-rafik-pritext dark:text-rafik-darkpritext text-rafik-sectext dark:text-rafik-darksectext line-clamp-3">
+                  <p class="text-body group-hover:text-rafik-pritext dark:group-hover:text-rafik-darkpritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext text-rafik-sectext dark:text-rafik-darksectext line-clamp-3">
                     {{ program.program_description }}
                   </p>
                   <div class="grid grid-cols-2">
@@ -107,9 +107,9 @@
                 alt=""
               />
               <div class="w-full opacity-70 h-full bg-rafik-pribg dark:bg-rafik-darkpribg absolute"></div>
-              <div class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-rafik-alternate to-50 absolute"></div>
+              <div class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-rafik-secondary dark:from-rafik-alternate to-50 absolute"></div>
               <div class="p-8 space-y-4 relative flex flex-col items-end">
-            <h2 class="subheader-medium flex gap-4 items-center group-hover:text-rafik-pritext dark:text-rafik-darkpritext">
+            <h2 class="subheader-medium flex gap-4 items-center group-hover:text-rafik-pritext dark:group-hover:text-rafik-darkpritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">
               Status: {{ program.status}}
             </h2>
           </div>
@@ -118,7 +118,7 @@
                   {{ program.program_name }}
                 </h3>
                 <div class="h-0 group-hover:h-auto transition opacity-0 group-hover:opacity-100 ease-in space-y-4">
-              <p class="text-body group-hover:text-rafik-pritext dark:text-rafik-darkpritext text-rafik-sectext dark:text-rafik-darksectext line-clamp-3">
+              <p class="text-body group-hover:text-rafik-pritext dark:group-hover:text-rafik-darkpritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext text-rafik-sectext dark:text-rafik-darksectext line-clamp-3">
                 {{ program.program_description }}
               </p>
               <div class="grid grid-cols-2">

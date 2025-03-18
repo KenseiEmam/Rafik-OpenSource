@@ -1,6 +1,6 @@
 <template>
   <div class="flex-1 2xl:space-y-16 space-y-6 pb-6 h-full">
-    <div class="grid grid-cols-3 gap-6 divide-x divide-rafik-sectext ">
+    <div class="grid grid-cols-3 gap-6 divide-x divide-rafik-sectext dark:divide-rafik-darksectext ">
       <div class="flex flex-col gap-3 pl-3 2xl:gap-5">
         <h3 class="contentH-small text-sm 2xl:text-xl mb-6 2xl:mb-8">Client Profile</h3>
         <div class="flex justify-between uppercase text-xs 2xl:text-base">
