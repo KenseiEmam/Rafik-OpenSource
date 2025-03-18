@@ -68,6 +68,7 @@
               <th>Expires On</th>
               <th>Plan (Months)</th>
               <th>Status</th>
+              <th>Auto-Reroll</th>
             </tr>
           </thead>
           <tbody>
@@ -109,8 +110,23 @@
                     || '-'
                 }} months
               </td>
-              <td class="uppercase bg-rafik-secbg text-rafik rounded-r-xl border-rafik-sectext b">
+              <td class="uppercase bg-rafik-secbg text-rafik ">
                 {{ client.program_details.status || client}}
+              </td>
+              <td class="uppercase bg-rafik-secbg text-rafik rounded-r-xl">
+                <div class="flex justify-center">
+
+                  <label class="flex items-center space-x-2 cursor-pointer">
+                  <input type="checkbox" @change="changeReroll(client.program_details)" v-model="client.program_details.auto_reroll" class="hidden">
+                  <div
+                    class="w-16 h-8 flex items-center border-rafik-pritext border-2  rounded-full transition-all"
+                    :class="{ 'bg-rafik': client.program_details.auto_reroll }">
+                    <div class="w-8 h-8 bg-rafik-pritext rounded-full shadow-md transform transition-transform"
+                        :class="{ 'translate-x-8': client.program_details.auto_reroll }"></div>
+                  </div>
+                </label>
+                </div>
+
               </td>
 
             </tr>
@@ -148,6 +164,7 @@ const processing = ref(false)
 function refreshComponent() {
   router.go(0); // This reloads the current route
 }
+
 // Success and Error Alerts
 function showSuccess(message: string) {
   Swal.fire({
@@ -186,6 +203,27 @@ onMounted(() => {
       loading.value = false
     })
 })
+
+// Called when the AssignEntitlementsModal emits a "submit" event
+async function changeReroll(program:any) {
+
+  await userStore.updateClientProgram(program).then( ()=>{
+    if(program.auto_reroll)
+  showSuccess("Client will now be resubscribed automatically!")
+  else
+  showSuccess("Client removed from reroll list and will not be resubscribed!")
+  }
+
+  ).finally(()=>{
+
+    entitlementStore.getEntitlements(),
+    userStore.getEntitled()
+
+  })
+
+
+}
+
 
 // Called when the AssignEntitlementsModal emits a "submit" event
 async function onAssignModalSubmit(payload: { programId: string; emails: string[] }) {
