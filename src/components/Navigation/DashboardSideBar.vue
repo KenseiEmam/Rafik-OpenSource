@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-screen border-rafik-sectext bg-rafik-secbg flex flex-col p-8 gap-8 2xl:items-between 2xl:p-16"
+    class="h-screen border-rafik-sectext dark:border-rafik-darksectext bg-rafik-secbg dark:bg-rafik-darksecbg flex flex-col p-8 gap-8 2xl:items-between 2xl:p-16"
   >
     <div class="relative">
       <img
@@ -18,7 +18,7 @@
       <RouterLink :to="{ name: 'entitlement-list' }" class="nav-btn"
         >Program <br />Entitlements</RouterLink
       >
-      <!-- <RouterLink to="" class="nav-btn">Settings &<br>Preferences</RouterLink> -->
+      <RouterLink :to="{ name: 'settings' }" class="nav-btn">Settings &<br>Preferences</RouterLink>
 
     </nav>
     <nav class="flex flex-col gap-4 mt-auto 2xl:gap-8 text-xs">
@@ -60,7 +60,7 @@ nav {
 }
 
 nav a.router-link-exact-active {
-  color: var(--vt-c-text-dark-1);
+  color: var(--vt-c-text-dark1);
 }
 
 nav a.router-link-exact-active:hover {

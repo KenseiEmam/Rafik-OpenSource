@@ -29,25 +29,25 @@
                   <button
                     @click="updatePage(page - 1)"
                     v-if="page > 1"
-                    class="px-4 py-2 text-rafik-sectext min-w-max hover:text-rafik-pritext"
+                    class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:text-rafik-darkpritext"
                   >
                     <<
                   </button>
-                  <p class="min-w-max text-rafik-sectext capitalize">Page:</p>
-                  <div class="flex text-rafik-sectext gap-4 pr-4" v-if="userStore.client_count">
+                  <p class="min-w-max text-rafik-sectext dark:text-rafik-darksectext capitalize">Page:</p>
+                  <div class="flex text-rafik-sectext dark:text-rafik-darksectext gap-4 pr-4" v-if="userStore.client_count">
                     <button
                       @click="updatePage(p)"
                       v-for="p in Math.ceil(userStore.client_count / numbers)"
                       :key="p"
-                      class="hover:text-rafik-pritext"
-                      :class="{ 'text-rafik-pritext': p === page }"
+                      class="hover:text-rafik-pritext dark:text-rafik-darkpritext"
+                      :class="{ 'text-rafik-pritext dark:text-rafik-darkpritext': p === page }"
                     >
                       {{ p }}
                     </button>
                   </div>
 
                   <button
-                    class="px-4 py-2 text-rafik-sectext min-w-max hover:text-rafik-pritext"
+                    class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:text-rafik-darkpritext"
                     @click="updatePage(page + 1)"
                     v-if="page < Math.ceil(userStore.client_count / numbers)"
                   >
@@ -86,7 +86,7 @@
               class="rounded-xl p-4 w-full"
             >
               <td
-                class="flex gap-6 rounded-l-xl text-left items-center py-4 pl-3 bg-rafik-secbg"
+                class="flex gap-6 rounded-l-xl text-left items-center py-4 pl-3 bg-rafik-secbg dark:bg-rafik-darksecbg"
               >
                 <img
                   :src="client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
@@ -99,7 +99,7 @@
                 </div>
               </td>
 
-              <td class="bg-rafik-secbg ">
+              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg ">
                 {{ new Date(client.program_details.created_at).toLocaleDateString('en-GB', {
                         year: 'numeric',
                         month: 'long',
@@ -108,7 +108,7 @@
                     || '-'
                 }}
               </td>
-              <td class="bg-rafik-secbg ">
+              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg ">
                 {{ new Date(client.program_details.expires_on).toLocaleDateString('en-GB', {
                         year: 'numeric',
                         month: 'long',
@@ -117,22 +117,22 @@
                     || '-'
                 }}
               </td>
-              <td class="bg-rafik-secbg ">
+              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg ">
                 {{ client.program_details.months_package
                     || '-'
                 }} months
               </td>
-              <td class="uppercase bg-rafik-secbg text-rafik ">
+              <td class="uppercase bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik ">
                 {{ client.program_details.status || '-' }}
               </td>
               <td
-                class="px-3 bg-rafik-secbg relative text-right rounded-r-xl"
+                class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right rounded-r-xl"
               >
                 <svg
                   @click="(show_action = client.id)"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
-                  class="text-rafik-sectext h-7 mx-7 hover:text-rafik-pritext cursor-pointer ml-auto"
+                  class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:text-rafik-darkpritext cursor-pointer ml-auto"
                   viewBox="0 0 128 512"
                 >
                   <path
@@ -142,19 +142,19 @@
                 <div
                   v-if="show_action == client.id"
                   @mouseleave="handleLeave()"
-                  class="absolute min-w-16 px-2 z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg shadow-lg divide-y divide-y-rafik-sectext"
+                  class="absolute min-w-16 px-2 z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg shadow-lg divide-y divide-y-rafik-sectext"
                 >
                   <Router-link
                     :to="{ name: 'client-details', params: { id: client.id } }"
-                    class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded"
+                    class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:text-rafik-darkpritext rounded"
                   >
                     View Program
                   </Router-link>
-                  <!-- <button class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded">
+                  <!-- <button class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:text-rafik-darkpritext rounded">
                     Message Client
                   </button> -->
                   <button
-                    class="px-3 py-5 text-red-500 hover:bg-rafik-pribg hover:text-red-300 rounded"
+                    class="px-3 py-5 text-red-500 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-red-300 rounded"
                   >
                     Remove Client
                   </button>
@@ -235,6 +235,9 @@ tbody > tr {
 }
 
 .card:hover {
+  background-image:linear-gradient(135deg, #f3eeeb 36%, #ffda68)
+}
+.dark .card:hover {
   background-image: linear-gradient(135deg, #081411 36%, #295f42);
 }
 </style>

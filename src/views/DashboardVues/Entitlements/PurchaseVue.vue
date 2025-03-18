@@ -79,13 +79,13 @@
     <!-- Total Entitlements & Price -->
     <div class="flex w-full items-center my-6 gap-6">
       <h3 class="header-small">No. of Entitlements</h3>
-      <hr class="w-full border border-rafik-sectext">
+      <hr class="w-full border border-rafik-sectext dark:border-rafik-darksectext">
       <h3 class="header-small">{{ totalEntitlement }}</h3>
     </div>
 
     <div class="flex w-full items-center my-6 gap-6">
       <h3 class="header-small">Total Price</h3>
-      <hr class="w-full border border-rafik-sectext">
+      <hr class="w-full border border-rafik-sectext dark:border-rafik-darksectext">
       <h3 class="header-small">${{ totalPrice.toFixed(2) }}</h3>
     </div>
 

@@ -6,7 +6,7 @@
     <div class="card border shadow p-0 overflow-hidden rounded-lg shadow min-w-128 w-1/3">
       <!-- Header -->
       <div
-        class="p-6 gradient-bg border-b border-rafik-sectext w-full flex justify-between items-center"
+        class="p-6 gradient-bg border-b border-rafik-sectext dark:border-rafik-darksectext w-full flex justify-between items-center"
       >
         <div class="flex items-center gap-4" v-if="Client">
           <img
@@ -23,7 +23,7 @@
           xmlns="http://www.w3.org/2000/svg"
           stroke="currentColor"
           fill="currentColor"
-          class="w-6 h-6 text-rafik-pritext hover:text-rafik cursor-pointer"
+          class="w-6 h-6 text-rafik-pritext dark:text-rafik-darkpritext hover:text-rafik cursor-pointer"
           viewBox="0 0 384 512"
           @click="$emit('close')"
         >
@@ -36,7 +36,7 @@
       <!-- Messages -->
       <ul
         v-if="Client"
-        class="h-64 2xl:h-96 p-6 overflow-y-auto space-y-5 bg-rafik-secbg"
+        class="h-64 2xl:h-96 p-6 overflow-y-auto space-y-5 bg-rafik-secbg dark:bg-rafik-darksecbg"
         ref="chatContainer"
       >
       <div v-if="loading" class=" h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body">
@@ -55,7 +55,7 @@
             <img
               v-if="message.sent_by === Client.id"
               :src="Client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
-              class="w-8 h-8 rounded-full border border-rafik-sectext"
+              class="w-8 h-8 rounded-full border border-rafik-sectext dark:border-rafik-darksectext"
             />
 
             <!-- Message Bubble -->
@@ -63,11 +63,11 @@
               class="p-3 rounded-lg max-w-[75%]"
               :class="
                 message.sent_by === Client.id
-                  ? 'bg-rafik-pribg text-left '
-                  : 'bg-rafik-pribg text-right'
+                  ? 'bg-rafik-pribg dark:bg-rafik-darkpribg text-left '
+                  : 'bg-rafik-pribg dark:bg-rafik-darkpribg text-right'
               "
             >
-              <p :class="!message.seen_at ? 'text-rafik-pritext' : ''">{{ message.content }}</p>
+              <p :class="!message.seen_at ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''">{{ message.content }}</p>
               <span class="text-xs block mt-1 text-gray-300">
                 {{ formatDate(message.created_at) }}
                 <span v-if="message.sent_by !== Client.id">
@@ -107,7 +107,7 @@
             viewBox="0 0 512 512"
             stroke="currentColor"
             fill="currentColor"
-            class="w-6 h-6 text-rafik-pritext hover:text-rafik cursor-pointer mr-8"
+            class="w-6 h-6 text-rafik-pritext dark:text-rafik-darkpritext hover:text-rafik cursor-pointer mr-8"
             :class="{ 'opacity-50 cursor-not-allowed': !sending.trim() }"
           >
             <path
@@ -293,7 +293,12 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-li:hover {
+.dark li:hover {
   background-image: linear-gradient(135deg, #081411 36%, #295f42);
 }
+li:hover{
+  background-image:linear-gradient(135deg, #f3eeeb 36%, #ffda68)
+}
+
+
 </style>

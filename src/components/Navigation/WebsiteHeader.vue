@@ -15,7 +15,7 @@
     </div>
     <div v-else-if="userStore.userProfile && checkUser()" class="md:flex hidden gap-4 items-center ml-auto min-w-max ">
       <img :src="userStore.userProfile.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" class="w-16 h-16 2xl:w-20 2xl:h-20 border border-rafik-pribg ring-2 ring-rafik rounded-full object-cover" alt="">
-      <div class="text-body text-rafik-sectext uppercase pl-3 border-l border-rafik-sectext py-2">
+      <div class="text-body text-rafik-sectext dark:text-rafik-darksectext uppercase pl-3 border-l border-rafik-sectext dark:border-rafik-darksectext py-2">
         <p> HELLO {{userStore.userProfile.first_name}}!</p>
         <div class="flex gap-4">
           <RouterLink :to="{name:'dashboard-home'}" class="label text-rafik hover:text-rafik-secondary uppercase">Access Dashboard</RouterLink>
@@ -66,7 +66,7 @@ nav {
 }
 
 nav a.router-link-exact-active {
-  color: var(--vt-c-text-dark-1);
+  color: var(--vt-c-text-dark1);
 }
 
 nav a.router-link-exact-active:hover {

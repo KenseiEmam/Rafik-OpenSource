@@ -83,28 +83,28 @@ const removeTag = (tagToRemove: string) => {
       </p>
       <div class="flex flex-col divide-y divide-rafik-sectext gap-3 mt-4">
         <div class="flex justify-between gap-4 py-2">
-          <p class="xl:text-lg text-rafik-pritext font-semibold">Total Clients:</p>
-          <p class="xl:text-lg text-rafik-sectext">Coming Soon...</p>
+          <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">Total Clients:</p>
+          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">Coming Soon...</p>
         </div>
         <div class="flex justify-between gap-4 py-2">
-          <p class="xl:text-lg text-rafik-pritext font-semibold">Revenue this Month:</p>
-          <p class="xl:text-lg text-rafik-sectext">Coming Soon...</p>
+          <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">Revenue this Month:</p>
+          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">Coming Soon...</p>
         </div>
         <div class="flex justify-between gap-4 py-2">
-          <p class="xl:text-lg text-rafik-pritext font-semibold">Total Revenue:</p>
-          <p class="xl:text-lg text-rafik-sectext">Coming Soon...</p>
+          <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">Total Revenue:</p>
+          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">Coming Soon...</p>
         </div>
         <div class="flex justify-between gap-4 py-2">
-          <p class="xl:text-lg text-rafik-pritext font-semibold">Best Month:</p>
-          <p class="xl:text-lg text-rafik-sectext">Coming Soon...</p>
+          <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">Best Month:</p>
+          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">Coming Soon...</p>
         </div>
         <div class="flex justify-between gap-4 py-2">
-          <p class="xl:text-lg text-rafik-pritext font-semibold">Client Retention:</p>
-          <p class="xl:text-lg text-rafik-sectext">Coming Soon...</p>
+          <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">Client Retention:</p>
+          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">Coming Soon...</p>
         </div>
         <div class="flex justify-between gap-4 py-2">
-          <p class="xl:text-lg text-rafik-pritext font-semibold">Growth Rate:</p>
-          <p class="xl:text-lg text-rafik-sectext">Coming Soon...</p>
+          <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">Growth Rate:</p>
+          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">Coming Soon...</p>
         </div>
       </div>
     </div>
@@ -118,8 +118,8 @@ const removeTag = (tagToRemove: string) => {
         <!-- Strength Slider -->
         <div>
           <div class="flex justify-between">
-            <label class="inline-block text-rafik-pritext">Strength</label>
-            <span class="text-rafik-pritext">{{ strength }}%</span>
+            <label class="inline-block text-rafik-pritext dark:text-rafik-darkpritext">Strength</label>
+            <span class="text-rafik-pritext dark:text-rafik-darkpritext">{{ strength }}%</span>
           </div>
           <input
             v-model="strength"
@@ -134,8 +134,8 @@ const removeTag = (tagToRemove: string) => {
         <!-- Hypertrophy Slider -->
         <div>
           <div class="flex justify-between">
-            <label class="inline-block text-rafik-pritext">Hypertrophy</label>
-            <span class="text-rafik-pritext">{{ hypertrophy }}%</span>
+            <label class="inline-block text-rafik-pritext dark:text-rafik-darkpritext">Hypertrophy</label>
+            <span class="text-rafik-pritext dark:text-rafik-darkpritext">{{ hypertrophy }}%</span>
           </div>
           <input
             v-model="hypertrophy"
@@ -149,8 +149,8 @@ const removeTag = (tagToRemove: string) => {
         <!-- Agility Slider -->
         <div>
           <div class="flex justify-between">
-            <label class="inline-block text-rafik-pritext">Agility</label>
-            <span class="text-rafik-pritext">{{ agility }}%</span>
+            <label class="inline-block text-rafik-pritext dark:text-rafik-darkpritext">Agility</label>
+            <span class="text-rafik-pritext dark:text-rafik-darkpritext">{{ agility }}%</span>
           </div>
           <input
             v-model="agility"
@@ -164,8 +164,8 @@ const removeTag = (tagToRemove: string) => {
         <!-- Cardio Slider -->
         <div>
           <div class="flex justify-between">
-            <label class="inline-block text-rafik-pritext">Cardio</label>
-            <span class="text-rafik-pritext">{{ cardio }}%</span>
+            <label class="inline-block text-rafik-pritext dark:text-rafik-darkpritext">Cardio</label>
+            <span class="text-rafik-pritext dark:text-rafik-darkpritext">{{ cardio }}%</span>
           </div>
           <input
             v-model="cardio"
@@ -209,7 +209,7 @@ const removeTag = (tagToRemove: string) => {
           <div
             v-for="(tag, index) in props.program.tags"
             :key="index"
-            class="bg-rafik-secbg text-rafik-sectext px-3 py-1 rounded-full flex items-center gap-2"
+            class="bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext px-3 py-1 rounded-full flex items-center gap-2"
           >
             <span>{{ tag }}</span>
             <button @click="removeTag(tag)" class="text-red-500 hover:text-red-700">

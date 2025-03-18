@@ -4,7 +4,7 @@ import RegistrationForm from '../components/Forms/RegistrationForm.vue'
 </script>
 
 <template>
-  <main class="flex-1 mebsite-body flex-col flex">
+  <main class="dark flex-1 mebsite-body flex-col flex">
     <WebsiteHeader />
     <Transition name="slide-fade" appear>
       <div class="grid md:grid-cols-2 items-center min-h-64 flex-1 mb-16">
