@@ -114,7 +114,8 @@
                <div class="flex gap-3 items-center mb-4">
 
                  <div>
-                   <h2 class="contentH-small">{{ element.exercise_name }}</h2>
+                  <h2 v-if="!isEditing" class="contentH-small">{{ element.exercise_name }}</h2>
+                  <input v-else type="text" v-model="element.exercise_name" class="p-0 contentH-small text-rafik-sectext border-0 bg-transparent focus:outline-none focus:ring-0 focus:border-0 "/>
                  <p class="text-rafik-pritext capitalize ">Multiple Exercise Group</p>
                  </div>
 
