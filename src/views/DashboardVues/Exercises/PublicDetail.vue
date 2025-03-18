@@ -87,10 +87,10 @@ onMounted(() => {
         <video v-if="exerciseStore.Exercise.media"
               :src="exerciseStore.Exercise.media"
               alt="Uploaded Preview"
-              class="min-h-96 w-128 border-rafik-sectext border-2 object-cover rounded-lg mx-auto"
+              class="h-96 w-128 border-rafik-sectext border-2 object-cover rounded-lg mx-auto"
               controls
             ></video>
-        <div v-else class="min-h-96 w-128 card flex items-center flex-col gap-6 justify-center">
+        <div v-else class="h-96 w-128 card flex items-center flex-col gap-6 justify-center">
           <h3 class="header-large">:/</h3>
           <p>No Video Available</p>
         </div>

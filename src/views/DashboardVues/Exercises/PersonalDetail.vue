@@ -270,11 +270,11 @@ onMounted(() => {
     <div v-if="exerciseStore.Exercise && exerciseStore.AlternateExercises" class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-8 2xl:space-y-10">
       <div class="flex gap-6 items-end wrap ">
         <div v-if="!loadingMedia">
-          <div v-if="exerciseStore.Exercise.media" class="min-h-96 w-128 group relative mx-auto">
+          <div v-if="exerciseStore.Exercise.media" class="h-96 w-128 group relative mx-auto">
             <video
               :src="exerciseStore.Exercise.media"
               alt="Uploaded Preview"
-              class="min-h-96 w-128 border-rafik-sectext border-2 object-cover rounded-lg mx-auto"
+              class="h-96 w-128 border-rafik-sectext border-2 object-cover rounded-lg mx-auto"
               controls
             ></video>
             <button
@@ -286,7 +286,7 @@ onMounted(() => {
           </div>
           <div
             v-else
-            class="min-h-96 w-128 border-2 border-dashed border-gray-400 mx-auto rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            class="h-96 w-128 border-2 border-dashed border-gray-400 mx-auto rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             @click="triggerFileInput"
           >
             <span class="text-center text-gray-500">
@@ -302,7 +302,7 @@ onMounted(() => {
             required
           />
         </div>
-        <div v-else class="min-h-96 w-128 card flex items-center flex-col gap-6 justify-center">
+        <div v-else class="h-96 w-128 card flex items-center flex-col gap-6 justify-center">
           <h3 class="header-large">Hold</h3>
           <p>Processing your request...</p>
         </div>
