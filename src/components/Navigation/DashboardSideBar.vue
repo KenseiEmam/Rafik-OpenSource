@@ -3,13 +3,9 @@
     class="h-screen border-rafik-sectext border-r bg-rafik-pribg flex flex-col p-8 gap-8 2xl:items-between 2xl:p-16"
   >
     <div class="relative">
-      <img
-        class="w-24 2xl:h-auto 2xl:w-44  object-cover  "
-        src="/src/assets/rafik.png"
-        alt=""
-      />
+      <img class="w-24 2xl:h-auto 2xl:w-44 object-cover" src="/src/assets/rafik.png" alt="" />
     </div>
-    <nav class="flex flex-col  gap-4 2xl:gap-10 my-auto">
+    <nav class="flex flex-col gap-4 2xl:gap-10 my-auto">
       <RouterLink to="/dashboard" class="nav-btn">My <br />Dashboard</RouterLink>
       <RouterLink :to="{ name: 'programs-list' }" class="nav-btn"
         >Workout &<br />Programs</RouterLink
@@ -19,10 +15,12 @@
         >Program <br />Entitlements</RouterLink
       >
       <!-- <RouterLink to="" class="nav-btn">Settings &<br>Preferences</RouterLink> -->
-
     </nav>
     <nav class="flex flex-col gap-4 mt-auto 2xl:gap-8 text-xs">
-      <RouterLink :to="{ name: 'trainer-profile' }" class="nav-btn 2xl:text-base">My Profile</RouterLink>
+      <RouterLink :to="{ name: 'ticket-list' }" class="nav-btn 2xl:text-base">Support</RouterLink>
+      <RouterLink :to="{ name: 'trainer-profile' }" class="nav-btn 2xl:text-base"
+        >My Profile</RouterLink
+      >
       <button @click="handleLogOut" class="text-left nav-btn 2xl:text-base text-red-600 pl-4">
         Logout
       </button>
