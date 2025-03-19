@@ -24,6 +24,7 @@
       <div>
         <transition name="slide-fade">
           <GeneralSettings v-if="activeTab === 'General Setting'"/>
+          <TrainerSettings v-else-if="activeTab === 'Trainer Settings'"/>
         </transition>
       </div>
     </div>
@@ -37,6 +38,7 @@ import { supabase } from '@/lib/supabaseClient'
 import { useSettingsStore } from '@/stores/settingstores'
 import PageTitle from '@/components/Navigation/PageTitle.vue'
 import GeneralSettings from '@/components/SettingsTabs/GeneralSettings.vue'
+import TrainerSettings from '@/components/SettingsTabs/TrainerSettings.vue'
 import Swal from 'sweetalert2'
 
 const activeTab = ref("General Setting");

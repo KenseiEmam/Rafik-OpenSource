@@ -3,11 +3,18 @@
     class="h-screen border-rafik-sectext dark:border-rafik-darksectext bg-rafik-secbg dark:bg-rafik-darksecbg flex flex-col p-8 gap-8 2xl:items-between 2xl:p-16"
   >
     <div class="relative">
-      <img
-        class="w-24 2xl:h-auto 2xl:w-44  object-cover  "
-        :src="mode === 'true'  ?'/src/assets/rafik.png':'/src/assets/rafik_light.png'"
-        alt=""
-      />
+      <!-- Light mode image: visible by default, hidden in dark mode -->
+  <img
+    class="w-24 2xl:h-auto 2xl:w-44 object-cover block dark:hidden"
+    src="/src/assets/rafik_light.png"
+    alt="Light mode logo"
+  />
+  <!-- Dark mode image: hidden by default, visible in dark mode -->
+  <img
+    class="w-24 2xl:h-auto 2xl:w-44 object-cover hidden dark:block"
+    src="/src/assets/rafik.png"
+    alt="Dark mode logo"
+  />
     </div>
     <nav class="flex flex-col  gap-4 2xl:gap-10 my-auto">
       <RouterLink :to="{ name: 'dashboard-home' }" class="nav-btn">My <br />Dashboard</RouterLink>
@@ -34,7 +41,7 @@ import router from '@/router'
 import { useUserStore } from '@/stores/user'
 
 const userStore = useUserStore()
-const mode = localStorage.getItem('dark_mode')
+
 const handleLogOut = async (): Promise<void> => {
   userStore.LogOut()
 
