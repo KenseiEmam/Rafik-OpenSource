@@ -187,7 +187,7 @@ async function getUserProfile() {
 
     // Store user information in localStorage
     localStorage.setItem("UserID", data.id);
-    localStorage.setItem("LoggedInTrainer", data.is_trainer ? "true" : "false");
+    localStorage.setItem("LoggedInTrainer", data.is_staff ? "true" : "false");
 
     userProfile.value = data;
 
@@ -724,7 +724,7 @@ async function getUserProfile() {
 
 
       localStorage.setItem('UserID', data[0].id)
-      localStorage.setItem('LoggedInTrainer', data[0].is_trainer)
+      localStorage.setItem('LoggedInTrainer', data[0].is_staff)
       userProfile.value = data[0]
       return userProfile.value
     } catch (error: any) {
