@@ -9,7 +9,8 @@
         Click on one of the programs below to add it to have it overwrite the clients workouts and program details, please understand this will not change the status or price of the client subscription.
       </p>
       <div v-if="loading" class=" h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body">
-          <img src="@/assets/Large Icon.png"  class="w-24 h-24 animate-bounce" alt="">
+          <img src="@/assets/Large Icon.png"  class="w-24 h-24 animate-bounce hidden dark:inline-block" alt="">
+<img src="@/assets/Large Icon Light.png"  class="w-24 h-24 animate-bounce dark:hidden" alt="">
           <p class="text-lg animate-pulse">
           Loading...
         </p>
@@ -21,8 +22,8 @@
       <ul class="flex flex-col gap-4 w-full mb-16">
         <li v-for="program in programStore.AllPrograms" :key="program.id" @click="importExercise(program)" class="card border p-4 flex items-center gap-3 group hover:border-rafik cursor-pointer">
           <div>
-            <h2 class="subheader-small text-rafik-pritext group-hover:text-rafik">{{ program.program_name }}</h2>
-            <p class="text-xs text-body  group-hover:text-rafik-pritext">{{ program.program_description }}</p>
+            <h2 class="subheader-small text-rafik-pritext dark:text-rafik-darkpritext group-hover:text-rafik">{{ program.program_name }}</h2>
+            <p class="text-xs text-body  group-hover:text-rafik-pritext dark:group-hover:text-rafik-darkpritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">{{ program.program_description }}</p>
           </div>
         </li>
       </ul>
@@ -79,6 +80,9 @@ onMounted(()=>{
 </script>
 <style scoped>
 li:hover{
+  background-image:linear-gradient(135deg, #f3eeeb 36%, #ffda68)
+}
+.dark li:hover{
   background-image: linear-gradient(135deg, #081411 36%, #295f42);
 }
 </style>

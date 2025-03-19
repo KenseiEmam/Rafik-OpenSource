@@ -9,8 +9,8 @@
           @click="props.personal && toggleEquipment(item)"
           :disabled="!props.personal"
           :class="{
-            'bg-rafik-secondary text-rafik-pritext': equipment.includes(item),
-            'bg-rafik-secbg border border-rafik-sectext text-rafik-sectext': !equipment.includes(item),
+            'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext': equipment.includes(item),
+            'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext': !equipment.includes(item),
             'opacity-50 cursor-not-allowed': !props.personal
           }"
           class="px-3 py-1 rounded-full">
@@ -28,8 +28,8 @@
           @click="props.personal && toggleEquipment(item)"
           :disabled="!props.personal"
           :class="{
-            'bg-rafik-secondary text-rafik-pritext': equipment.includes(item),
-            'bg-rafik-secbg border border-rafik-sectext text-rafik-sectext': !equipment.includes(item),
+            'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext': equipment.includes(item),
+            'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext': !equipment.includes(item),
             'opacity-50 cursor-not-allowed': !props.personal
           }"
           class="px-3 py-1 rounded-full">
@@ -47,8 +47,8 @@
           @click="props.personal && toggleEquipment(item)"
           :disabled="!props.personal"
           :class="{
-            'bg-rafik-secondary text-rafik-pritext': equipment.includes(item),
-            'bg-rafik-secbg border border-rafik-sectext text-rafik-sectext': !equipment.includes(item),
+            'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext': equipment.includes(item),
+            'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext': !equipment.includes(item),
             'opacity-50 cursor-not-allowed': !props.personal
           }"
           class="px-3 py-1 rounded-full">

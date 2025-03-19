@@ -11,7 +11,7 @@
           class="rafik-text-input border rounded-lg w-64"
         />
       </div>
-      <hr class="w-full border-rafik-sectext border-b">
+      <hr class="w-full border-rafik-sectext dark:border-rafik-darksectext border-b">
       <span class="text-sm">Showing {{ filteredWorkouts.length }} row(s)</span>
     </div>
 
@@ -28,7 +28,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="workout in filteredWorkouts" :key="workout.id" class="border-b border-rafik-sectext h-12">
+        <tr v-for="workout in filteredWorkouts" :key="workout.id" class="border-b border-rafik-sectext dark:border-rafik-darksectext h-12">
           <td>
             {{ workout.date_completed ? new Date(workout.date_completed).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" }) : '-' }}
           </td>
@@ -45,7 +45,7 @@
             {{ workout.feel ? feels[workout.feel-1] : 'N/A' }}
           </td>
           <td class="px-3 relative" >
-              <Router-link :to="{name:'workout-sheet', params:{id:workout.id}}" class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded text-xs">More Details</Router-link>
+              <Router-link :to="{name:'workout-sheet', params:{id:workout.id}}" class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded text-xs">More Details</Router-link>
 
           </td>
         </tr>

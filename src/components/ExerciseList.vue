@@ -3,7 +3,7 @@
     <div class="flex justify-between items-center gap-4 mb-3 ">
       <!-- Search bar -->
         <div class="relative w-128">
-          <input type="search" @input="handleSearch" class="block w-full p-4 text-sm text-rafik-sectext border rounded-lg bg-rafik-pribg" placeholder="Type to Search Exercises..." required />
+          <input type="search" @input="handleSearch" class="block w-full p-4 text-sm text-rafik-sectext dark:text-rafik-darksectext border rounded-lg bg-rafik-pribg dark:bg-rafik-darkpribg" placeholder="Type to Search Exercises..." required />
         </div>
         <div class="mr-auto flex gap-4">
           <button @click="updateFilter('All')" class="card border 2xl:text-base text-xs min-w-max uppercase" :class="filter ==='All'?'border-rafik gradient-bg text-rafik':'border'">All Ex.</button>
@@ -19,7 +19,7 @@
     </div>
 
     <ul v-if="props.exercises?.length > 0" class="grid grid-cols-3 grid-rows-3 gap-6 items-center">
-      <router-link :to="{name:exercise.trainer_id?'personal-details':'public-details', params:{id:exercise.id}  }" v-for="(exercise, index) in props.exercises" :key="exercise.id" class="h-full text-rafik-sectext">
+      <router-link :to="{name:exercise.trainer_id?'personal-details':'public-details', params:{id:exercise.id}  }" v-for="(exercise, index) in props.exercises" :key="exercise.id" class="h-full text-rafik-sectext dark:text-rafik-darksectext">
         <div class="card p-6 w-full hover:border-rafik border border-transparent flex justify-between h-full items-center">
           <div>
             <h2 class="title-small text-base 2xl:text-xl">{{ exercise.exercise_name }}</h2>
@@ -27,7 +27,7 @@
             <p class="label 2xl:text-sm" v-if="exercise.trainer_id">Custom Exercise</p>
             <p class="text-body my-2 2xl:my-4 line-clamp-3"> {{ exercise.exercise_detail}}</p>
             <!-- Prime Movers -->
-            <p class="label text-rafik-pritext">Prime Movers:</p>
+            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">Prime Movers:</p>
             <div class="flex gap-2 flex-wrap mb-2">
               <p class="label text-rafik-secondary" v-for="(mover, i) in exercise.prime ?? []" :key="'prime-' + i">
                 {{ mover }}
@@ -35,7 +35,7 @@
             </div>
 
             <!-- Synergists -->
-            <p class="label text-rafik-pritext">Synergists:</p>
+            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">Synergists:</p>
             <div class="flex gap-2 flex-wrap mb-2">
               <p class="label text-rafik-secondary" v-for="(synergist, i) in exercise.synergist ?? []" :key="'synergist-' + i">
                 {{ synergist }}
@@ -43,7 +43,7 @@
             </div>
 
             <!-- Antagonists -->
-            <p class="label text-rafik-pritext">Antagonists:</p>
+            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">Antagonists:</p>
             <div class="flex gap-2 flex-wrap">
               <p class="label text-rafik-secondary" v-for="(antagonist, i) in exercise.antagonist ?? []" :key="'antagonist-' + i">
                 {{ antagonist }}
@@ -57,29 +57,29 @@
     </ul>
 <div v-else class="space-y-6 flex flex-col  items-center py-12">
 
-  <p  class="text-rafik-pritext">No Exercises found for your query.</p>
+  <p  class="text-rafik-pritext dark:text-rafik-darkpritext">No Exercises found for your query.</p>
 
 </div>
 <div  v-if="props.exercises?.length > 0" class="flex justify-between items-center gap-4 my-6">
       <!-- Tabs Navigation -->
       <p class="header-small min-w-max"> Page {{ page }}</p>
-      <hr class="border w-full border-rafik-sectext" />
-      <div class="flex text-rafik-sectext gap-4 px-4 ">
-        <button  @click="updatePage(p)"  v-for="p in Math.ceil(props.count / 9) " :key="p" class="hover:text-rafik-pritext" :class="{'text-rafik-pritext':p===page}">
+      <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
+      <div class="flex text-rafik-sectext dark:text-rafik-darksectext gap-4 px-4 ">
+        <button  @click="updatePage(p)"  v-for="p in Math.ceil(props.count / 9) " :key="p" class="hover:text-rafik-pritext dark:text-rafik-darkpritext" :class="{'text-rafik-pritext dark:text-rafik-darkpritext':p===page}">
           {{p}}
         </button>
       </div>
-      <hr class="border w-full border-rafik-sectext" />
+      <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
       <button
         @click="updatePage(pageEdit - 1)"
         v-if="props.page > 1"
-        class="px-4 py-2 text-rafik-sectext min-w-max hover:text-rafik-pritext"
+        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:text-rafik-darkpritext"
       >
         Previous Page
       </button>
 
       <button
-        class="px-4 py-2 text-rafik-sectext min-w-max hover:text-rafik-pritext"
+        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:text-rafik-darkpritext"
          @click="updatePage(pageEdit + 1)"
          v-if="props.page < Math.ceil(props.count / 9)"
       >
@@ -187,7 +187,10 @@ function updatePage(page: number) {
 </script>
 
 <style scoped>
-.card:hover{
+.dark .card:hover{
   background-image: linear-gradient(135deg, #081411 36%, #295f42);
+}
+.card:hover{
+  background-image: linear-gradient(135deg, #f3eeeb 36%, #ffda68)
 }
 </style>

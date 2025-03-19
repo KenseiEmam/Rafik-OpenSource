@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="text-body flex-1 relative ">
+  <div class="dark text-body flex-1 relative ">
 
   <div class="container mx-auto px-4 py-16">
     <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">

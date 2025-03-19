@@ -9,7 +9,7 @@
       class="w-full h-full object-cover absolute grayscale"
       alt=""
     />
-    <div class="w-full h-full bg-gradient-to-r from-40% from-rafik-secbg absolute"></div>
+    <div class="w-full h-full bg-gradient-to-r from-40% from-rafik-darksecbg absolute"></div>
     <div class="col-span-3 relative space-y-4">
       <h3 class="font-black text-rafik text-xl md:text-3xl md:title-small">CREATE PROGRAMS THAT SHOW OFF THE REAL YOU</h3>
       <p class="text-body">
@@ -19,7 +19,7 @@
         <br />
       </p>
       <h3 class="font-bold text-rafik-secondary uppercase md:contentH-small">Our tools include but are not limited to:</h3>
-      <ul class="list-disc ml-6 text-body space-y-4 text-rafik-pritext">
+      <ul class="list-disc ml-6 text-body space-y-4 text-rafik-pritext dark:text-rafik-darkpritext">
         <li>
           An extensive library of exercises that you can use or duplicate to create your own custom
           ones. Save these custom exercises for private use, or share them with other PTs.

@@ -8,7 +8,8 @@
       <PageTitle subheader="Client" header="Entitlements" />
       <!-- Loading State -->
       <div v-if="loading" class=" h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body">
-          <img src="@/assets/Large Icon.png"  class="w-24 h-24 animate-bounce" alt="">
+          <img src="@/assets/Large Icon.png"  class="w-24 h-24 animate-bounce hidden dark:inline-block" alt="">
+<img src="@/assets/Large Icon Light.png"  class="w-24 h-24 animate-bounce dark:hidden" alt="">
           <p class="text-lg animate-pulse">
           Loading...
         </p>
@@ -74,7 +75,7 @@
           <tbody>
             <tr v-for="client in userStore.Entitled" :key="client.id" class="rounded-xl p-4 ">
               <td
-                class="flex gap-6 rounded-l-xl text-left items-center py-4 pl-3 bg-rafik-secbg"
+                class="flex gap-6 rounded-l-xl text-left items-center py-4 pl-3 bg-rafik-secbg dark:bg-rafik-darksecbg"
               >
                 <img
                   :src="client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
@@ -87,7 +88,7 @@
                 </div>
               </td>
 
-              <td class="bg-rafik-secbg ">
+              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg ">
                 {{ new Date(client.program_details.created_at).toLocaleDateString('en-GB', {
                         year: 'numeric',
                         month: 'long',
@@ -96,7 +97,7 @@
                     || '-'
                 }}
               </td>
-              <td class="bg-rafik-secbg ">
+              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg ">
                 {{ new Date(client.program_details.expires_on).toLocaleDateString('en-GB', {
                         year: 'numeric',
                         month: 'long',
@@ -105,23 +106,23 @@
                     || '-'
                 }}
               </td>
-              <td class="bg-rafik-secbg ">
+              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg ">
                 {{ client.program_details.months_package
                     || '-'
                 }} months
               </td>
-              <td class="uppercase bg-rafik-secbg text-rafik ">
+              <td class="uppercase bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik ">
                 {{ client.program_details.status || client}}
               </td>
-              <td class="uppercase bg-rafik-secbg text-rafik rounded-r-xl">
+              <td class="uppercase bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik rounded-r-xl">
                 <div class="flex justify-center">
 
                   <label class="flex items-center space-x-2 cursor-pointer">
                   <input type="checkbox" @change="changeReroll(client.program_details)" v-model="client.program_details.auto_reroll" class="hidden">
                   <div
-                    class="w-16 h-8 flex items-center border-rafik-pritext border-2  rounded-full transition-all"
+                    class="w-16 h-8 flex items-center border-rafik-pritext dark:border-rafik-darkpritext border-2  rounded-full transition-all"
                     :class="{ 'bg-rafik': client.program_details.auto_reroll }">
-                    <div class="w-8 h-8 bg-rafik-pritext rounded-full shadow-md transform transition-transform"
+                    <div class="w-8 h-8 bg-rafik-pritext dark:bg-rafik-darkpritext rounded-full shadow-md transform transition-transform"
                         :class="{ 'translate-x-8': client.program_details.auto_reroll }"></div>
                   </div>
                 </label>
