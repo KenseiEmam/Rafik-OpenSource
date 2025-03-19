@@ -164,11 +164,12 @@ const validateAndSubmit = async () => {
       class="card border-rafik p-8 rounded-lg shadow-md w-full space-y-6"
     >
       <h1 class="header-large">Almost There!</h1>
-      <h2 class="text-body text-rafik-sectext">
+      <h2 class="text-body text-rafik-sectext dark:text-rafik-darksectext">
         Set up your profile to tell your clients more about yourself...
       </h2>
       <div v-if="isLoading" class=" h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body">
-          <img src="@/assets/Large Icon.png"  class="w-24 h-24 animate-bounce" alt="">
+          <img src="@/assets/Large Icon.png"  class="w-24 h-24 animate-bounce hidden dark:inline-block" alt="">
+<img src="@/assets/Large Icon Light.png"  class="w-24 h-24 animate-bounce dark:hidden" alt="">
           <p >
           Loading...
         </p>
@@ -178,11 +179,11 @@ const validateAndSubmit = async () => {
           <!-- Profile Picture -->
           <label
             for="profile-picture"
-            class="block text-sm font-medium text-rafik-sectext mb-2"
+            class="block text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext mb-2"
           >
             Profile Picture
           </label>
-          <p class="label text-rafik-sectext">
+          <p class="label text-rafik-sectext dark:text-rafik-darksectext">
             Upload a nice photo of your face...
           </p>
           <div v-if="uploadedImage" class="w-64 h-64 relative">
@@ -201,10 +202,10 @@ const validateAndSubmit = async () => {
 
           <div
             v-else
-            class="w-64 h-64 border-2 border-dashed border-rafik-sectext rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg focus:ring-2 focus:ring-offset-2 focus:ring-background-rafik-pribg"
+            class="w-64 h-64 border-2 border-dashed border-rafik-sectext dark:border-rafik-darksectext rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg dark:bg-rafik-darksecbg focus:ring-2 focus:ring-offset-2 focus:ring-background-rafik-pribg"
             @click="triggerFileInput"
           >
-            <span class="text-center text-rafik-sectext">
+            <span class="text-center text-rafik-sectext dark:text-rafik-darksectext">
               Drag and drop an image here, or click to upload
             </span>
           </div>

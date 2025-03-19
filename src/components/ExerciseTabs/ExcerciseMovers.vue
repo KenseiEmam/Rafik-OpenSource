@@ -17,7 +17,7 @@
           <div
             v-for="(mover, index) in props.exercise.prime"
             :key="index"
-            class="bg-rafik-secbg text-rafik-sectext px-3 py-1 rounded-full flex items-center gap-2"
+            class="bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext px-3 py-1 rounded-full flex items-center gap-2"
           >
             <span>{{ mover }}</span>
             <button v-if="personal" @click="removePrime(mover)" class="text-red-500 hover:text-red-700">✕</button>
@@ -42,7 +42,7 @@
           <div
             v-for="(mover, index) in props.exercise.antagonist"
             :key="index"
-            class="bg-rafik-secbg text-rafik-sectext px-3 py-1 rounded-full flex items-center gap-2"
+            class="bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext px-3 py-1 rounded-full flex items-center gap-2"
           >
             <span>{{ mover }}</span>
             <button v-if="personal" @click="removeAntagonist(mover)" class="text-red-500 hover:text-red-700">✕</button>
@@ -67,7 +67,7 @@
           <div
             v-for="(mover, index) in props.exercise.synergist"
             :key="index"
-            class="bg-rafik-secbg text-rafik-sectext px-3 py-1 rounded-full flex items-center gap-2"
+            class="bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext px-3 py-1 rounded-full flex items-center gap-2"
           >
             <span>{{ mover }}</span>
             <button v-if="personal" @click="removeSynergist(mover)" class="text-red-500 hover:text-red-700">✕</button>

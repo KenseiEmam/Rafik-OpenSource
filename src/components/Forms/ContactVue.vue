@@ -74,7 +74,7 @@ async function sendEmail() {
         </p>
         <div class="flex-1 flex flex-col gap-4">
           <div class="flex items-center w-full gap-4 py-4 pr-4">
-            <div class="card rounded-full bg-rafik-sectext p-4">
+            <div class="card rounded-full bg-rafik-sectext dark:bg-rafik-darksectext p-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -87,12 +87,12 @@ async function sendEmail() {
               </svg>
             </div>
             <div class="w-full">
-              <h3 class="uppercase text-rafik-pritext md:header-small">Give us a call:</h3>
+              <h3 class="uppercase text-rafik-pritext dark:text-rafik-darkpritext md:header-small">Give us a call:</h3>
               <p class="text-body">mob: +971 56 866 3114</p>
             </div>
           </div>
           <div class="flex items-center w-full gap-4 py-4 pr-4">
-            <div class="card rounded-full bg-rafik-sectext p-4">
+            <div class="card rounded-full bg-rafik-sectext dark:bg-rafik-darksectext p-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -105,12 +105,12 @@ async function sendEmail() {
               </svg>
             </div>
             <div class="w-full">
-              <h3 class="uppercase text-rafik-pritext md:header-small">Mail us:</h3>
+              <h3 class="uppercase text-rafik-pritext dark:text-rafik-darkpritext md:header-small">Mail us:</h3>
               <p class="text-body">admin@rafik.ae</p>
             </div>
           </div>
           <div class="flex items-center w-full gap-4 py-4 pr-4">
-            <div class="card rounded-full bg-rafik-sectext p-4">
+            <div class="card rounded-full bg-rafik-sectext dark:bg-rafik-darksectext p-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -123,7 +123,7 @@ async function sendEmail() {
               </svg>
             </div>
             <div class="w-full">
-              <h3 class="uppercase text-rafik-pritext md:header-small">Find Us At:</h3>
+              <h3 class="uppercase text-rafik-pritext dark:text-rafik-darkpritext md:header-small">Find Us At:</h3>
               <p class="text-body">Enter address here...</p>
             </div>
           </div>
@@ -132,9 +132,9 @@ async function sendEmail() {
         </div>
       </div>
       <div
-        class="md:border-l md:pl-8 space-y-4 border-rafik-sectext flex w-full items-center justify-center flex-col w-full"
+        class="md:border-l md:pl-8 space-y-4 border-rafik-sectext dark:border-rafik-darksectext flex w-full items-center justify-center flex-col w-full"
       >
-        <h3 class="uppercase text-rafik-pritext md:header-small">Send us A Message</h3>
+        <h3 class="uppercase text-rafik-pritext dark:text-rafik-darkpritext md:header-small">Send us A Message</h3>
         <form class="space-y-4 w-full" @submit.prevent="sendEmail">
           <div class="form-control ">
             <label for="Name">Full Name</label>

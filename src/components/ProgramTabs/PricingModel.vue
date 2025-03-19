@@ -149,9 +149,9 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
           <label v-if="label !== '1 Month'" class="flex items-center ml-auto mr-4 space-x-2 cursor-pointer">
             <input type="checkbox" v-model="isEnabled[key]" class="hidden">
             <div
-              class="w-16 h-8 flex items-center border-rafik-pritext border-2  rounded-full transition-all"
+              class="w-16 h-8 flex items-center border-rafik-pritext dark:border-rafik-darkpritext border-2  rounded-full transition-all"
               :class="{ 'bg-rafik': isEnabled[key] }">
-              <div class="w-8 h-8 bg-rafik-pritext rounded-full shadow-md transform transition-transform"
+              <div class="w-8 h-8 bg-rafik-pritext dark:bg-rafik-darkpritext rounded-full shadow-md transform transition-transform"
                    :class="{ 'translate-x-8': isEnabled[key] }"></div>
             </div>
           </label>
@@ -186,7 +186,7 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
           />
 
           <!-- Display promo codes -->
-          <div class="flex flex-col divide-y divide-rafik-sectext">
+          <div class="flex flex-col divide-y divide-rafik-sectext dark:divide-rafik-darksectext">
             <div
               v-for="(promo, index) in props.program.promos"
               :key="index"

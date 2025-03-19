@@ -11,7 +11,7 @@
           class="rafik-text-input border rounded-lg w-64"
         />
       </div>
-      <hr class="w-full border-rafik-sectext border-b">
+      <hr class="w-full border-rafik-sectext dark:border-rafik-darksectext border-b">
       <span class="text-sm">Showing {{ filteredClients.length }} row(s)</span>
     </div>
 
@@ -28,9 +28,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="client in filteredClients" :key="client.id" class="border-b border-rafik-sectext">
+        <tr v-for="client in filteredClients" :key="client.id" class="border-b border-rafik-sectext dark:border-rafik-darksectext">
           <td class="flex gap-2 text-left items-center py-4">
-            <img :src="client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" class="w-12 rounded-full border border-rafik-sectext h-12" alt="Avatar">
+            <img :src="client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" class="w-12 rounded-full border border-rafik-sectext dark:border-rafik-darksectext h-12" alt="Avatar">
             <div>
               <p class="header-small">{{ client.first_name }} {{ client.last_name }}</p>
               <p>{{ client.email }}</p>
@@ -50,13 +50,13 @@
             {{ client.program_details.length ? client.program_details[0].status : '-' }}
           </td>
           <td class="px-3 relative" >
-            <svg @click="show_action = client.id" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="text-rafik-sectext h-7 mx-7 hover:text-rafik-pritext cursor-pointer" viewBox="0 0 128 512">
+            <svg @click="show_action = client.id" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext cursor-pointer" viewBox="0 0 128 512">
               <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/>
             </svg>
-            <div v-if="show_action == client.id" @mouseleave="handleLeave()" class="absolute min-w-16 px-2 top-5 flex flex-col items-center text-sm rounded bg-rafik-secbg  shadow-lg z-40  divide-y divide-y-rafik-sectext">
-              <Router-link :to="{name:'client-details', params:{id:client.id}}" class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded">View Program</Router-link>
-              <!-- <button class="px-3 py-5 hover:bg-rafik-pribg hover:text-rafik-pritext rounded">Message Client</button> -->
-              <button class="px-3 py-5 text-red-500 hover:bg-rafik-pribg hover:text-red-300 rounded">Remove Client</button>
+            <div v-if="show_action == client.id" @mouseleave="handleLeave()" class="absolute min-w-16 px-2 top-5 flex flex-col items-center text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg  shadow-lg z-40  divide-y divide-y-rafik-sectext">
+              <Router-link :to="{name:'client-details', params:{id:client.id}}" class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded">View Program</Router-link>
+              <!-- <button class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded">Message Client</button> -->
+              <button class="px-3 py-5 text-red-500 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-red-300 rounded">Remove Client</button>
             </div>
           </td>
         </tr>

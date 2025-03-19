@@ -16,7 +16,7 @@
             <h2 class="header-small text-lg uppercase">{{ exercise.type }}</h2>
             <p class="text-sm my-4 "> {{ exercise.exercise_detail}}</p>
             <!-- Prime Movers -->
-            <p class="label text-rafik-pritext">Prime Movers:</p>
+            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">Prime Movers:</p>
             <div class="flex gap-2 flex-wrap mb-2">
               <p class="label text-rafik-secondary" v-for="(mover, i) in exercise.prime ?? []" :key="'prime-' + i">
                 {{ mover }}
@@ -24,7 +24,7 @@
             </div>
 
             <!-- Synergists -->
-            <p class="label text-rafik-pritext">Synergists:</p>
+            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">Synergists:</p>
             <div class="flex gap-2 flex-wrap mb-2">
               <p class="label text-rafik-secondary" v-for="(synergist, i) in exercise.synergist ?? []" :key="'synergist-' + i">
                 {{ synergist }}
@@ -32,7 +32,7 @@
             </div>
 
             <!-- Antagonists -->
-            <p class="label text-rafik-pritext">Antagonists:</p>
+            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">Antagonists:</p>
             <div class="flex gap-2 flex-wrap">
               <p class="label text-rafik-secondary" v-for="(antagonist, i) in exercise.antagonist ?? []" :key="'antagonist-' + i">
                 {{ antagonist }}
@@ -52,7 +52,7 @@
     </ul>
 <div v-else class="space-y-6 flex flex-col  items-center py-12">
 
-  <p  class="text-rafik-pritext">No alternatives found. Click the button below to add some.</p>
+  <p  class="text-rafik-pritext dark:text-rafik-darkpritext">No alternatives found. Click the button below to add some.</p>
   <ExerciseOffcanvas
       v-if="props.personal"
       @addExercises="addAlternative"

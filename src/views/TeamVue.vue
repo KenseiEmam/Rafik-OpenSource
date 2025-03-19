@@ -3,7 +3,7 @@ import SocialIcons from '@/components/SocialIcons.vue'
 import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
 </script>
 <template>
-  <main class="mebsite-body">
+  <main class="dark mebsite-body">
     <WebsiteHeader />
     <Transition name="slide-fade" appear>
       <div class="relative flex-1 flex flex-col h-full">
@@ -18,7 +18,7 @@ import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
               class="w-full h-full object-cover absolute grayscale"
               alt=""
             />
-            <div class="w-full h-full bg-gradient-to-t from-rafik-secbg from-20 absolute"></div>
+            <div class="w-full h-full bg-gradient-to-t from-rafik-darksecbg from-20 absolute"></div>
             <div class="p-8 space-y-1 relative mt-auto">
               <h3 class="title-small">
                 Mohamed Marei
@@ -42,7 +42,7 @@ import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
               class="w-full h-full object-cover absolute grayscale"
               alt=""
             />
-            <div class="w-full h-full bg-gradient-to-t from-rafik-secbg from-20 absolute"></div>
+            <div class="w-full h-full bg-gradient-to-t from-rafik-darksecbg from-20 absolute"></div>
             <div class="p-8 space-y-1 relative mt-auto">
               <h3 class="title-small">
                 AbdulMounem Shetta
@@ -66,7 +66,7 @@ import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
               class="w-full h-full object-cover absolute grayscale"
               alt=""
             />
-            <div class="w-full h-full bg-gradient-to-t from-rafik-secbg from-20 absolute"></div>
+            <div class="w-full h-full bg-gradient-to-t from-rafik-darksecbg from-20 absolute"></div>
             <div class="p-8 space-y-1 relative mt-auto">
               <h3 class="title-small">
                 Sami Walid Azzam

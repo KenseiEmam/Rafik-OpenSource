@@ -34,7 +34,7 @@
           <div
             v-for="(step, index) in props.exercise.steps"
             :key="index"
-            class="bg-rafik-secbg text-rafik-sectext p-3  w-full rounded-md flex items-center justify-between gap-2"
+            class="bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext p-3  w-full rounded-md flex items-center justify-between gap-2"
           >
             <span>{{ index + 1  }}. {{ step }}</span>
             <button v-if="personal" @click="removeStep(step)" class="text-red-500 hover:text-red-700">✕</button>
@@ -59,7 +59,7 @@
           <div
             v-for="(cue, index) in props.exercise.cues"
             :key="index"
-            class="bg-rafik-secbg text-rafik-sectext px-3 py-1 rounded-md flex items-center gap-2"
+            class="bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext px-3 py-1 rounded-md flex items-center gap-2"
           >
             <span>{{ cue }}</span>
             <button v-if="personal" @click="removeCue(cue)" class="text-red-500 hover:text-red-700">✕</button>

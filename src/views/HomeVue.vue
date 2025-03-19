@@ -7,7 +7,7 @@ import ContactVue from '../components/Forms/ContactVue.vue'
 </script>
 
 <template>
-  <main class="flex-1 mebsite-body flex-col flex">
+  <main class="dark flex-1 mebsite-body flex-col flex ">
     <WebsiteHeader />
     <Transition name="slide-fade" appear>
       <div class="relative flex flex-col">
