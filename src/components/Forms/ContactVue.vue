@@ -74,7 +74,7 @@ async function sendEmail() {
         </p>
         <div class="flex-1 flex flex-col gap-4">
           <div class="flex items-center w-full gap-4 py-4 pr-4">
-            <div class="card rounded-full bg-rafik-sectext p-4">
+            <div class="card rounded-full bg-rafik-sectext dark:bg-rafik-darksectext p-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -92,7 +92,7 @@ async function sendEmail() {
             </div>
           </div>
           <div class="flex items-center w-full gap-4 py-4 pr-4">
-            <div class="card rounded-full bg-rafik-sectext p-4">
+            <div class="card rounded-full bg-rafik-sectext dark:bg-rafik-darksectext p-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -110,7 +110,7 @@ async function sendEmail() {
             </div>
           </div>
           <div class="flex items-center w-full gap-4 py-4 pr-4">
-            <div class="card rounded-full bg-rafik-sectext p-4">
+            <div class="card rounded-full bg-rafik-sectext dark:bg-rafik-darksectext p-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"

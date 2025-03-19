@@ -168,7 +168,8 @@ const validateAndSubmit = async () => {
         Set up your profile to tell your clients more about yourself...
       </h2>
       <div v-if="isLoading" class=" h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body">
-          <img src="@/assets/Large Icon.png"  class="w-24 h-24 animate-bounce" alt="">
+          <img src="@/assets/Large Icon.png"  class="w-24 h-24 animate-bounce hidden dark:inline-block" alt="">
+<img src="@/assets/Large Icon Light.png"  class="w-24 h-24 animate-bounce dark:hidden" alt="">
           <p >
           Loading...
         </p>

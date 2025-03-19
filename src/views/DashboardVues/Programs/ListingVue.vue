@@ -48,7 +48,7 @@
                 alt=""
               />
               <div class="w-full opacity-70 h-full bg-rafik-pribg dark:bg-rafik-darkpribg absolute"></div>
-              <div class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-rafik-secondary dark:from-rafik-alternate to-50 absolute"></div>
+              <div class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-rafik-teritiary dark:from-rafik-alternate to-50 absolute"></div>
               <div class="p-8 space-y-4 relative flex flex-col items-end">
                 <h2 class="subheader-medium flex gap-4 items-center group-hover:text-rafik-pritext dark:group-hover:text-rafik-darkpritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">
                   <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" fill="currentColor" viewBox="0 0 576 512" class="w-8 2xl:w-10 text-rafik-sectext dark:text-rafik-darksectext group-hover:text-rafik">
@@ -107,7 +107,7 @@
                 alt=""
               />
               <div class="w-full opacity-70 h-full bg-rafik-pribg dark:bg-rafik-darkpribg absolute"></div>
-              <div class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-rafik-secondary dark:from-rafik-alternate to-50 absolute"></div>
+              <div class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-rafik-teritiary dark:from-rafik-alternate to-50 absolute"></div>
               <div class="p-8 space-y-4 relative flex flex-col items-end">
             <h2 class="subheader-medium flex gap-4 items-center group-hover:text-rafik-pritext dark:group-hover:text-rafik-darkpritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">
               Status: {{ program.status}}
