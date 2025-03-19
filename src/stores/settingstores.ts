@@ -69,6 +69,26 @@ export const useSettingsStore = defineStore('Settings', () => {
       showError('Failed to fetch trainer settings.');
     }
   }
+
+  // Insert settings by user_id
+  async function InsertSettings( user_id:number) {
+    try {
+
+      if(!settings.value) throw new Error("User settings not loaded yet , try again!")
+      const { data, error } = await supabase
+        .from('user_settings')
+        .insert({user_id})
+        .select()
+        .single();
+
+      if (error) throw new Error(error.message);
+      settings.value = data;
+
+    } catch (error) {
+      showError('Failed to create settings.');
+    }
+  }
+
   // Fetch trainer settings by user_id
   async function fetchTrainerSettings() {
 
@@ -137,6 +157,7 @@ export const useSettingsStore = defineStore('Settings', () => {
     trainer_settings,
     fetchSettings,
     fetchTrainerSettings,
+    InsertSettings,
     updateSettings,
     updateTrainerSettings
   };
