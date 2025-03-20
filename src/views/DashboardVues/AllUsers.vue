@@ -56,6 +56,7 @@
             <tr>
               <th class="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">ID</th>
               <th class="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">Details</th>
+              <th class="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">Roles</th>
               <th class="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">Gender</th>
               <th class="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">Age</th>
             </tr>
@@ -76,7 +77,16 @@
                   <p>{{ user.email }}</p>
                 </div>
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 ">{{ user.sex }}</td>
+              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize ">
+                <div class="flex flex-wrap text-xs items-center">
+                  <p v-for="role,index in user.roles">
+                  {{ role }}
+                  <span v-if="index !== user.roles.length-1">-</span>
+                  </p>
+                </div>
+
+              </td>
+              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize">{{ user.sex }}</td>
               <td class="rounded-r-xl bg-rafik-secbg dark:bg-rafik-darksecbg p-4 ">{{ user.age }}</td>
             </tr>
           </tbody>
@@ -98,13 +108,13 @@
       </div>
 
       <!-- Pagination Controls -->
-      <div v-if="users.length > 0 && !loading" class="flex justify-between items-center gap-4 my-6">
+      <div v-if=" !loading && userStore.All_count" class="flex justify-between items-center gap-4 my-6">
         <!-- Page Number Tabs -->
         <p class="header-small min-w-max">Page {{ page }}</p>
         <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
         <div class="flex text-rafik-sectext dark:text-rafik-darksectext gap-4 px-4">
           <button
-            v-for="p in totalPages"
+            v-for="p in  Math.ceil(userStore.All_count/ pageSize)"
             :key="p"
             @click="updatePage(p)"
             class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
@@ -123,7 +133,7 @@
           Previous Page
         </button>
         <button
-          v-if="page < totalPages"
+          v-if="page < Math.ceil(userStore.All_count/ pageSize)"
           @click="updatePage(page + 1)"
           class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
         >
@@ -147,6 +157,7 @@ interface User {
   last_name: string;
   sex: string;
   age: number;
+  roles:string[];
 }
 
 type Filter = {
@@ -163,8 +174,8 @@ const pageSize = ref(10);
 const holdQuery = ref('');
 const filters = ref<Filter>({ roles: [], name: '', active: true });
 
-const totalPages = computed(() => Math.ceil(totalCount.value / pageSize.value));
 
+const totalPages = computed(() => Math.ceil(totalCount.value / pageSize.value));
 // Function to load users
 async function loadUsers() {
   try {
@@ -202,7 +213,7 @@ function updateFilter(filterType: string) {
 
 function updatePage(newPage: number) {
   loading.value= true
-  if (newPage >= 1 && newPage <= totalPages.value) {
+  if (newPage >= 1 && newPage <= Math.ceil(userStore.All_count / pageSize.value)) {
     page.value = newPage;
     loadUsers();
   }
