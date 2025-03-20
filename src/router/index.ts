@@ -147,7 +147,7 @@ const router = createRouter({
               component: () => import('../views/DashboardVues/Support/ListingView.vue'),
             },
             {
-              path: '/view', // Dynamic route for viewing a ticket
+              path: ':id', // Dynamic route for viewing a ticket
               name: 'ticket-view',
               component: () => import('../views/DashboardVues/Support/TicketView.vue'),
             },

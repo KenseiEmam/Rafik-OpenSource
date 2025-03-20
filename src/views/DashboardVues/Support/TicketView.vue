@@ -124,9 +124,4 @@ async function submitResponse() {
 }
 </script>
 
-<style scoped>
-.card {
-  background-color: var(--rafik-secbg, #f8f9fa);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-</style>
+<style scoped></style>
