@@ -180,7 +180,7 @@
                         <input v-if="isEditing" :disabled="!isEditing"  type="number" @input="changeAll($event,embed.true_sets)" name="all-intensities" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate md:w-44 2xl:w-64   " placeholder="-" />
                       </div>
                       <div class="space-y-2">
-                        <p class="text-rafik-pritext dark:text-rafik-darkpritext md:w-44 2xl:w-64 ">{{embed.type ==='cardio' || embed.type === 'isolation' ? 'Time':'Reps'}}</p>
+                        <p class="text-rafik-pritext dark:text-rafik-darkpritext md:w-44 2xl:w-64 ">{{embed.type ==='cardio' || embed.type === 'isometric' ? 'Time':'Reps'}}</p>
                         <input v-if="isEditing" :disabled="!isEditing" type="number" @input="changeAll($event,embed.true_sets)"  name="all-reps" class="rafik-text-input border-0 focus:ring-0 pb-1  focus:border-rafik-alternate  md:w-44 2xl:w-64  " placeholder="-" />
                       </div>
                       </div>
@@ -267,7 +267,7 @@
                         <input v-if="isEditing" :disabled="!isEditing"  type="number" @input="changeAll($event,element.true_sets)" name="all-intensities" class="rafik-text-input border-0 focus:ring-0 pb-1  md:w-44 2xl:w-64 focus:border-rafik-alternate   " placeholder="-" />
                       </div>
                       <div class="space-y-2">
-                        <p class="text-rafik-pritext dark:text-rafik-darkpritext md:w-44 2xl:w-64">{{element.type ==='cardio' || element.type === 'isolation' ? 'Time':'Reps'}}</p>
+                        <p class="text-rafik-pritext dark:text-rafik-darkpritext md:w-44 2xl:w-64">{{element.type ==='cardio' || element.type === 'isome' ? 'Time':'Reps'}}</p>
                         <input v-if="isEditing" :disabled="!isEditing" type="number" @input="changeAll($event,element.true_sets)"  name="all-reps" class="rafik-text-input border-0 focus:ring-0 pb-1  md:w-44 2xl:w-64 focus:border-rafik-alternate   " placeholder="-" />
                       </div>
                       </div>
