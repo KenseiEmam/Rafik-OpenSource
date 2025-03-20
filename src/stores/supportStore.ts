@@ -53,11 +53,24 @@ export interface TicketMessage {
   created_at: string
 }
 
+interface TicketUser {
+  id: number
+  avatar: string
+  first_name: string
+  last_name: string
+  last_active: string
+}
+
+export interface TicketUsers {
+  [key: number]: TicketUser
+}
+
 export const useSupportStore = defineStore('Support', () => {
   // Store state
   const tickets = ref<Ticket[]>([])
   const selectedTicket = ref<Ticket | null>(null)
   const ticketMessages = ref<TicketMessage[]>([])
+  const ticketUsers = ref<TicketUsers>({})
 
   // Fetch all tickets created by the current user.
   async function getTickets(currentUserId: number) {
@@ -105,6 +118,8 @@ export const useSupportStore = defineStore('Support', () => {
       showError(`Failed to fetch ticket messages: ${error.message}`)
       return
     }
+
+    ticketUsers.value = await getTicketUsers(data.map((msg) => msg.sender_id))
     ticketMessages.value = data as TicketMessage[]
   }
 
@@ -176,10 +191,29 @@ export const useSupportStore = defineStore('Support', () => {
     return data
   }
 
+  async function getTicketUsers(userIds: number[]) {
+    const { data, error } = await supabase
+      .from('users')
+      .select('id, avatar, first_name, last_name, last_active')
+      .in('id', userIds)
+
+    if (error) {
+      showError(`Failed to fetch ticket users: ${error.message}`)
+      return {}
+    }
+    if (data.length === 0) {
+      console.warn('No users found for ticket messages:', userIds)
+    }
+    return data.reduce((acc: TicketUsers, user: TicketUser) => {
+      acc[user.id] = user
+      return acc
+    }, {})
+  }
   return {
     tickets,
     selectedTicket,
     ticketMessages,
+    ticketUsers,
     getTickets,
     getTicket,
     getTicketMessages,

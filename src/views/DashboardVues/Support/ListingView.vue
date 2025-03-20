@@ -57,7 +57,7 @@
                 <!-- Navigate to the ticket detail view -->
                 <router-link
                   :to="{ name: 'ticket-view', params: { id: ticket.id } }"
-                  class="btn-lg-outline transition-all"
+                  class="btn-md-outline transition-all"
                 >
                   View
                 </router-link>
