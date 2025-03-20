@@ -64,9 +64,7 @@ interface TrainerInterface {
   first_name: string
   last_name: string
   age: number
-  last_active: Date | string // Adjust type based on your actual value (Date or ISO string)
-  // Additional properties from userProfiles can be included as needed:
-
+  last_active: Date | string
   title: string
   years_of_experience: number
   certifications: number[]
@@ -163,6 +161,7 @@ export const useUserStore = defineStore('User', () => {
     localStorage.removeItem('LoggedInTrainer')
     localStorage.removeItem('UserID')
     localStorage.removeItem('AccessToken')
+    localStorage.removeItem("Roles");
   }
 
  // Fetch User Profile Function
@@ -188,6 +187,7 @@ async function getUserProfile() {
     // Store user information in localStorage
     localStorage.setItem("UserID", data.id);
     localStorage.setItem("LoggedInTrainer", data.is_staff ? "true" : "false");
+    localStorage.setItem("Roles", data.roles);
 
     userProfile.value = data;
 
@@ -198,6 +198,7 @@ async function getUserProfile() {
   } catch (error:any) {
     localStorage.removeItem("UserID");
     localStorage.removeItem("LoggedInTrainer");
+    localStorage.removeItem("Roles");
 
     // Redirect only if user profile is not found
     router.push("/setup-user-profile");
@@ -725,11 +726,13 @@ async function getUserProfile() {
 
       localStorage.setItem('UserID', data[0].id)
       localStorage.setItem('LoggedInTrainer', data[0].is_staff)
+      localStorage.setItem("Roles", data[0].roles);
       userProfile.value = data[0]
       return userProfile.value
     } catch (error: any) {
       console.error(error)
       localStorage.removeItem('UserID')
+      localStorage.removeItem("Roles");
       // Display a user-friendly error message in the UI instead of an alert.
       alert(`Failed to load user profile: ${error.message || 'Unknown error'}`)
     }
