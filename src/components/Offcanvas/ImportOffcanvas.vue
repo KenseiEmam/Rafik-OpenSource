@@ -33,7 +33,7 @@
       <div class=" pb-64 h-full overflow-y-auto" v-if="exerciseStore.AllExercises && exerciseStore.AllExercises.length">
         <ul class="overflow-auto space-y-4">
           <li v-for="exercise in exerciseStore.AllExercises" :key="exercise.id">
-            <div class="card p-6 border-rafik gradient-bg flex justify-between items-center">
+            <div class="card p-6 border-rafik gradient-bg flex justify-between items-center text-left border">
               <div>
                 <h2 class="header-small">{{ exercise.exercise_name }}</h2>
                 <h2 class="subheader-small uppercase mb-6">{{ exercise.type }}</h2>

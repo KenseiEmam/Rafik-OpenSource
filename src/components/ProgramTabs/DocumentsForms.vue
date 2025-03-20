@@ -162,7 +162,7 @@ watch(
         <button @click="addInduction('upload')" class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">+ Add Media Upload</button>
       </div>
       <div class="flex flex-col gap-3">
-        <div v-for="(question, index) in inductions" :key="index" class="card p-6 border-rafik gradient-bg flex justify-between items-center">
+        <div v-for="(question, index) in inductions" :key="index" class="card p-6 border-rafik gradient-bg flex justify-between items-center text-left border">
           <div class="space-y-2">
             <p class="uppercase text-xs 2xl:text-sm font-semibold">{{ question.type }} Question</p>
             <input
@@ -191,7 +191,7 @@ watch(
         <button @click="addFollow('upload')" class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">+ Add Media Upload</button>
       </div>
       <div class="flex flex-col gap-3">
-        <div v-for="(question, index) in follow" :key="index" class="card p-6 border-rafik gradient-bg flex justify-between items-center">
+        <div v-for="(question, index) in follow" :key="index" class="card p-6 border-rafik gradient-bg flex justify-between items-center text-left border">
           <div class="space-y-2">
             <p class="uppercase text-xs 2xl:text-sm font-semibold">{{ question.type }} Question</p>
             <input
