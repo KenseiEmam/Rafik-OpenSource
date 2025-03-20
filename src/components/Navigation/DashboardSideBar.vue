@@ -29,10 +29,12 @@
         >List of <br />Users</RouterLink
       >
       <RouterLink :to="{ name: 'settings' }" class="nav-btn">Settings &<br>Preferences</RouterLink>
-
     </nav>
     <nav class="flex flex-col gap-4 mt-auto 2xl:gap-8 text-xs">
-      <RouterLink :to="{ name: 'trainer-profile' }" class="nav-btn 2xl:text-base">My Profile</RouterLink>
+      <RouterLink :to="{ name: 'ticket-list' }" class="nav-btn 2xl:text-base">Support</RouterLink>
+      <RouterLink :to="{ name: 'trainer-profile' }" class="nav-btn 2xl:text-base"
+        >My Profile</RouterLink
+      >
       <button @click="handleLogOut" class="text-left nav-btn 2xl:text-base text-red-600 pl-4">
         Logout
       </button>

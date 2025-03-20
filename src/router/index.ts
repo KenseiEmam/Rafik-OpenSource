@@ -150,6 +150,22 @@ const router = createRouter({
           ],
         },
         {
+          path: 'support', // Child route for /dashboard/support
+          meta: { requiresTrainer: true }, // Ensure all children inherit this meta
+          children: [
+            {
+              path: '', // Dynamic route for listing tickets
+              name: 'ticket-list',
+              component: () => import('../views/DashboardVues/Support/ListingView.vue'),
+            },
+            {
+              path: ':id', // Dynamic route for viewing a ticket
+              name: 'ticket-view',
+              component: () => import('../views/DashboardVues/Support/TicketView.vue'),
+            },
+          ],
+        },
+        {
           path: 'exercises', // Child route for /dashboard/exercise
           meta: {requiresTrainer: true},
           children: [
@@ -183,18 +199,20 @@ const router = createRouter({
   ],
 })
 router.beforeEach((to) => {
+
   const isMobile = window.innerWidth <= 768; // Adjust as needed
   // Requires Auth Handles
+  
   if (to.meta.requiresAuth && isMobile) {
     return {
       path: '/application',
       query: { redirect: to.fullPath },
-    };
+    }
   } else if (to.meta.requiresAuth && !localStorage.getItem('LoggedInUser')) {
     return {
       path: '/login',
       query: { redirect: to.fullPath },
-    };
+    }
   } else if (
     to.meta.requiresAuth &&
     localStorage.getItem('LoggedInUser') &&
@@ -203,7 +221,7 @@ router.beforeEach((to) => {
     return {
       path: '/setup-user-profile',
       query: { redirect: to.fullPath },
-    };
+    }
   } else if (
     to.meta.requiresAuth &&
     localStorage.getItem('LoggedInUser') &&
@@ -213,7 +231,7 @@ router.beforeEach((to) => {
     return {
       path: '/register-as-a-trainer',
       query: { redirect: to.fullPath },
-    };
+    }
   }
 
   // Requires Trainer Handle
@@ -236,4 +254,5 @@ router.beforeEach((to) => {
   }
 
 });
+
 export default router
