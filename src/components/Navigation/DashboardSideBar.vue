@@ -18,12 +18,15 @@
     </div>
     <nav class="flex flex-col  gap-4 2xl:gap-10 my-auto">
       <RouterLink :to="{ name: 'dashboard-home' }" class="nav-btn">My <br />Dashboard</RouterLink>
-      <RouterLink :to="{ name: 'programs-list' }" class="nav-btn"
+      <RouterLink v-if="userStore.userProfile.roles.includes('Trainer')" :to="{ name: 'programs-list' }" class="nav-btn"
         >Workout &<br />Programs</RouterLink
       >
-      <RouterLink :to="{ name: 'client-list' }" class="nav-btn">My <br />Clients</RouterLink>
-      <RouterLink :to="{ name: 'entitlement-list' }" class="nav-btn"
+      <RouterLink v-if="userStore.userProfile.roles.includes('Trainer')" :to="{ name: 'client-list' }" class="nav-btn">My <br />Clients</RouterLink>
+      <RouterLink v-if="userStore.userProfile.roles.includes('Trainer')" :to="{ name: 'entitlement-list' }" class="nav-btn"
         >Program <br />Entitlements</RouterLink
+      >
+      <RouterLink v-if="userStore.userProfile.roles.includes('Admin')" :to="{ name: 'users-list' }" class="nav-btn"
+        >List of <br />Users</RouterLink
       >
       <RouterLink :to="{ name: 'settings' }" class="nav-btn">Settings &<br>Preferences</RouterLink>
     </nav>

@@ -254,12 +254,14 @@ const handleSubmit = async () => {
 
     if (settingsError) throw settingsError;
 
+
     // Update user row with new trainer profile ID and is_staff set to true
     const { error: userUpdateError } = await supabase
       .from("users")
       .update({
         trainer_profile: trainerProfile.id, // Update the user row with the trainer profile ID
         is_staff: true, // Set is_staff to true
+
       })
       .eq("id", userId);
 

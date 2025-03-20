@@ -74,13 +74,20 @@ const router = createRouter({
           component: () => import('../views/DashboardVues/HomeVue.vue'),
         },
         {
+          path: 'users', // Default child route for /dashboard
+          name: 'users-list',
+          component: () => import('../views/DashboardVues/AllUsers.vue'),
+          meta:{requiresAdmin:true}
+        },
+        {
           path: 'programs', // Child route for /dashboard/programs
-
+          meta: {requiresTrainer: true},
           children: [
             {
               path: '', // Default child route for /dashboard/programs
               name: 'programs-list',
               component: () => import('../views/DashboardVues/Programs/ListingVue.vue'),
+
             },
             {
               path: ':id', // Dynamic route for program details
@@ -91,7 +98,7 @@ const router = createRouter({
         },
         {
           path: 'clients', // Child route for /dashboard/clients
-
+          meta: {requiresTrainer: true},
           children: [
             {
               path: '', // Dynamic route for client listing
@@ -117,20 +124,18 @@ const router = createRouter({
         },
         {
           path: 'trainer-profile', // Child route for /dashboard/clients
-
+          meta: {requiresTrainer: true},
           name: 'trainer-profile',
           component: () => import('../views/DashboardVues/Profile/EditVue.vue'),
         },
-
         {
-          path: 'settings', // Child route for /dashboard/clients
-
+          path: 'settings',
           name: 'settings',
           component: () => import('../views/DashboardVues/SettingsVue.vue'),
         },
         {
           path: 'entitlements', // Child route for /dashboard/entitlements
-
+          meta: {requiresTrainer: true},
           children: [
             {
               path: '', // Dynamic route for entitlement listing
@@ -162,7 +167,7 @@ const router = createRouter({
         },
         {
           path: 'exercises', // Child route for /dashboard/exercise
-
+          meta: {requiresTrainer: true},
           children: [
             {
               path: 'public/:id', // Default child route for /dashboard/exercise
@@ -194,8 +199,10 @@ const router = createRouter({
   ],
 })
 router.beforeEach((to) => {
-  const isMobile = window.innerWidth <= 768 // Adjust as needed
 
+  const isMobile = window.innerWidth <= 768; // Adjust as needed
+  // Requires Auth Handles
+  
   if (to.meta.requiresAuth && isMobile) {
     return {
       path: '/application',
@@ -226,5 +233,26 @@ router.beforeEach((to) => {
       query: { redirect: to.fullPath },
     }
   }
-})
+
+  // Requires Trainer Handle
+  // Check userStore.userPRofile is fetched
+  if(to.meta.requiresTrainer && !localStorage.getItem('Roles')?.includes("Trainer"))
+  {
+    return {
+      path: '/login',
+      query: { redirect: to.fullPath },
+    };
+  }
+  // Requires Admin Handle
+  // Check userStore.userPRofile is fetched
+  if(to.meta.requiresAdmin && !localStorage.getItem('Roles')?.includes("Admin"))
+  {
+    return {
+      path: '/login',
+      query: { redirect: to.fullPath },
+    };
+  }
+
+});
+
 export default router
