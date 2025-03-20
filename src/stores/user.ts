@@ -86,6 +86,12 @@ type Exercise = {
   sets?: number
   reps?: number
 }
+
+type Filter = {
+  roles:string[],
+  name:string,
+  active:boolean,
+}
 type Workout = {
   workout_name: string
   workout_summary?: string
@@ -131,7 +137,8 @@ export const useUserStore = defineStore('User', () => {
   const client_count = ref<number | null>(0)
   const session = ref<Session>({})
   const userProfile = ref<any | null>(null)
-
+  const All_Users = ref<any|null>()
+  const All_count = ref<number>(0)
   //Login Handler
   function LogIn(data: UserInterface, sesh: Session) {
     User.value.id = data.id
@@ -205,6 +212,54 @@ async function getUserProfile() {
 
   }
 }
+type Filter = {
+  roles: string[];
+  name: string;
+};
+
+// Fetch Users Based On Filters with Pagination
+async function fetchUser(filters: Filter, page: number, pageSize: number) {
+  try {
+    // Start building the query; count: 'exact' returns the total count
+    let query = supabase
+      .from("users")
+      .select("*", { count: "exact" });
+
+    // Filter by roles if provided
+    if (filters.roles && filters.roles.length > 0) {
+      query = query.contains("roles", filters.roles);
+    }
+
+    // Filter by name (search in first_name or last_name, case-insensitive)
+    if (filters.name && filters.name.trim() !== "") {
+      query = query.or(
+        `first_name.ilike.%${filters.name}%,last_name.ilike.%${filters.name}%`
+      );
+    }
+
+
+    // Apply pagination: calculate the start and end indexes for the range
+    const start = (page - 1) * pageSize;
+    const end = page * pageSize - 1;
+    query = query.range(start, end);
+
+    const { data, error, count } = await query;
+
+    if (error || !data) {
+      throw new Error(`Error fetching users: ${error?.message || "Users not found"}`);
+    }
+
+    // Store data (and count if needed)
+    All_Users.value = data;
+    All_count.value = count || 0;
+    // Optionally, you can use count to display total records if required:
+    // totalCount.value = count;
+
+  } catch (error: any) {
+    showError(error);
+  }
+}
+
 
   // Fetches clients related to a program
   async function getClients(id: number) {
@@ -747,6 +802,8 @@ async function getUserProfile() {
     Client,
     Trainer,
     client_count,
+    All_Users,
+    All_count,
     getChatClients,
     getActiveClientsForTrainer,
     LogIn,
@@ -758,5 +815,6 @@ async function getUserProfile() {
     getEntitled,
     getClient,
     updateClientProgram,
+    fetchUser
   }
 })
