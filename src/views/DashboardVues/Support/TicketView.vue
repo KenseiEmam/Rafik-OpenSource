@@ -1,15 +1,14 @@
 <template>
   <div class="flex h-screen overflow-auto">
-    <div class="flex-1 px-8 py-12 flex flex-col w-full 2xl:px-12 2xl:py-24 gap-6">
+    <div class="flex-1 px-8 py-8 flex flex-col w-full 2xl:px-12 gap-6">
       <!-- Page Title -->
-      <PageTitle header="Ticket Details" subheader="Conversation" />
 
       <!-- Ticket Details Card -->
       <div v-if="ticket" class="card rounded-xl p-8 mb-6">
-        <h2 class="header-medium mb-2">{{ ticket.subject }}</h2>
-        <p class="subheader-small mb-2">
-          Status: <span class="uppercase">{{ ticket.status }}</span>
-        </p>
+        <PageTitle
+          :header="ticket?.subject"
+          :subheader="`Status: ${ticket?.status || 'Unspecified'}`"
+        />
         <p class="text-body mb-2">
           Created on:
           {{
@@ -26,11 +25,11 @@
       </div>
 
       <!-- Conversation Thread -->
-      <div v-if="ticketMessages.length" class="flex-1 overflow-auto">
+      <div v-if="ticketMessages.length" class="card border flex-1 overflow-auto">
         <div
           v-for="msg in ticketMessages"
           :key="msg.id"
-          class="card rounded-xl p-6 mb-4 flex gap-4 items-start"
+          class="card gradient-bg rounded-xl p-6 mb-4 flex gap-4 items-start"
         >
           <div
             class="w-12 h-12 rounded-full bg-gray-500 flex-shrink-0 flex items-center justify-center text-white"
@@ -68,7 +67,7 @@
             placeholder="Type your message..."
             required
           ></textarea>
-          <button type="submit" class="btn-lg w-full">Send Response</button>
+          <button type="submit" class="btn-sm w-full">Send Response</button>
         </form>
       </div>
     </div>
