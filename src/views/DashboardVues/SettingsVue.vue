@@ -12,7 +12,7 @@
         >
           General Settings
         </button>
-        <button
+        <button v-if="userStore.userProfile.roles.includes('Trainer')"
           :class="activeTab === 'Trainer Settings' ? 'text-rafik-secondary dark:text-rafik-darkpritext' : ''"
           class="nav-btn uppercase "
           @click="setActiveTab('Trainer Settings')"
@@ -24,7 +24,7 @@
       <div>
         <transition name="slide-fade">
           <GeneralSettings v-if="activeTab === 'General Setting'"/>
-          <TrainerSettings v-else-if="activeTab === 'Trainer Settings'"/>
+          <TrainerSettings v-else-if="activeTab === 'Trainer Settings' && userStore.userProfile.roles.includes('Trainer')"/>
         </transition>
       </div>
     </div>
@@ -35,12 +35,13 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { supabase } from '@/lib/supabaseClient'
-import { useSettingsStore } from '@/stores/settingstores'
+import { useUserStore } from '@/stores/user'
 import PageTitle from '@/components/Navigation/PageTitle.vue'
 import GeneralSettings from '@/components/SettingsTabs/GeneralSettings.vue'
 import TrainerSettings from '@/components/SettingsTabs/TrainerSettings.vue'
 import Swal from 'sweetalert2'
 
+const userStore = useUserStore()
 const activeTab = ref("General Setting");
 // Change active tab handler
 function setActiveTab(tab: string) {
