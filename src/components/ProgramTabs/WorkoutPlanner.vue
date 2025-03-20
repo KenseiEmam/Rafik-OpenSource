@@ -2,7 +2,7 @@
   <div class="flex-1 space-y-6 py-6">
     <!-- Toolbar -->
     <div class="flex justify-between items-center gap-4 flex-wrap">
-      <div  class="flex text-rafik-pritext dark:text-rafik-darkpritexttext min-w-max gap-3 items-center">
+      <div  class="flex text-rafik-pritext dark:text-rafik-darkpritext min-w-max gap-3 items-center">
         <input type="number" v-model.number="program.weekly_cycle " class="rafik-text-input w-16  text-right " placeholder="7" />
         <p> DAY CYCLE:</p>
       </div>
@@ -71,7 +71,7 @@
               <p v-else class="text-body mb-4">{{ editedWorkouts[activeTab].workout_summary || "Edit to add workout summary..."}}</p>
             </div>
             <div class="space-y-6 mb-auto ">
-              <div class="flex justify-between text-rafik-pritext dark:text-rafik-darkpritexttext w-full gap-12 ">
+              <div class="flex justify-between text-rafik-pritext dark:text-rafik-darkpritext w-full gap-12 ">
               <p>Completion Time (mins)</p>
               <p class="text-rafik-secondary" v-if="!isEditing">{{ editedWorkouts[activeTab].time_to_complete + "mins" || "00 mins"}}</p>
               <input
@@ -82,7 +82,7 @@
               />
             </div>
 
-            <div v-if="!isEditing" class="flex justify-between text-rafik-pritext dark:text-rafik-darkpritexttext w-full ">
+            <div v-if="!isEditing" class="flex justify-between text-rafik-pritext dark:text-rafik-darkpritext w-full ">
               <p>Total Sets</p>
               <p class="text-rafik-secondary">{{ calculateTotalSets(editedWorkouts[activeTab].exercises) }}</p>
             </div>
