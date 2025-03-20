@@ -74,6 +74,12 @@ const router = createRouter({
           component: () => import('../views/DashboardVues/HomeVue.vue'),
         },
         {
+          path: 'users', // Default child route for /dashboard
+          name: 'users-list',
+          component: () => import('../views/DashboardVues/AllUsers.vue'),
+          meta:{requiresAdmin:true}
+        },
+        {
           path: 'programs', // Child route for /dashboard/programs
           meta: {requiresTrainer: true},
           children: [
@@ -213,6 +219,15 @@ router.beforeEach((to) => {
   // Requires Trainer Handle
   // Check userStore.userPRofile is fetched
   if(to.meta.requiresTrainer && !localStorage.getItem('Roles')?.includes("Trainer"))
+  {
+    return {
+      path: '/login',
+      query: { redirect: to.fullPath },
+    };
+  }
+  // Requires Admin Handle
+  // Check userStore.userPRofile is fetched
+  if(to.meta.requiresAdmin && !localStorage.getItem('Roles')?.includes("Admin"))
   {
     return {
       path: '/login',
