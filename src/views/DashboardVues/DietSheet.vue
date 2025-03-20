@@ -155,27 +155,27 @@ onMounted(() => {
           <!-- First Group of Columns -->
             <div class="flex flex-col gap-4 items-center justify-between col-span-2">
               <circle-progress fill-color="#D7BD21" empty-color="#000503" :percent="Math.ceil(dietStore.Diet.overall_macros[3]/dietStore.Diet.goal_macros[3])" />
-              <p class="text-rafik-pritext flex uppercase">Total Calories: <span class="ml-12 text-rafik mr-3">{{ Math.ceil(dietStore.Diet.overall_macros[3]) }} </span> / {{ Math.ceil(dietStore.Diet.goal_macros[3]) }}</p>
+              <p class="text-rafik-pritext dark:text-rafik-darkpritext flex uppercase">Total Calories: <span class="ml-12 text-rafik mr-3">{{ Math.ceil(dietStore.Diet.overall_macros[3]) }} </span> / {{ Math.ceil(dietStore.Diet.goal_macros[3]) }}</p>
             </div>
           <!-- Second Group of Columns  -->
             <div class="flex flex-col gap-4 justify-between">
               <div class="uppercase flex flex-col w-full gap-3 text-xs 2xl:text-base">
-                <div class="h-6 w-full bg-rafik-secbg rounded-full overflow-auto">
+                <div class="h-6 w-full bg-rafik-secbg dark:bg-rafik-darksecbg rounded-full overflow-auto">
                   <div class=" bg-rafik-secondary h-6 rounded-full" :style="'width:'+ Math.ceil(dietStore.Diet.overall_macros[0]/dietStore.Diet.goal_macros[0]) + '%' "></div>
                 </div>
-                <p class="text-rafik-pritext flex w-full">Protein: <span class="ml-auto text-rafik-secondary mr-3">{{ Math.ceil(dietStore.Diet.overall_macros[0]) }} </span> / {{ Math.ceil(dietStore.Diet.goal_macros[0]) }}</p>
+                <p class="text-rafik-pritext dark:text-rafik-darkpritext flex w-full">Protein: <span class="ml-auto text-rafik-secondary mr-3">{{ Math.ceil(dietStore.Diet.overall_macros[0]) }} </span> / {{ Math.ceil(dietStore.Diet.goal_macros[0]) }}</p>
               </div>
               <div class="uppercase flex flex-col w-full gap-3 text-xs 2xl:text-base">
-                <div class="h-6 w-full bg-rafik-secbg rounded-full overflow-auto">
+                <div class="h-6 w-full bg-rafik-secbg dark:bg-rafik-darksecbg rounded-full overflow-auto">
                   <div class=" bg-rafik-teritiary h-6 rounded-full" :style="'width:'+ Math.ceil(dietStore.Diet.overall_macros[1]/dietStore.Diet.goal_macros[1])  + '%' "></div>
                 </div>
-                <p class="text-rafik-pritext flex w-full">Carbohydrates: <span class="ml-auto text-rafik-teritiary mr-3">{{ Math.ceil(dietStore.Diet.overall_macros[1]) }} </span>  / {{ Math.ceil(dietStore.Diet.goal_macros[1]) }}</p>
+                <p class="text-rafik-pritext dark:text-rafik-darkpritext flex w-full">Carbohydrates: <span class="ml-auto text-rafik-teritiary mr-3">{{ Math.ceil(dietStore.Diet.overall_macros[1]) }} </span>  / {{ Math.ceil(dietStore.Diet.goal_macros[1]) }}</p>
               </div>
               <div class="uppercase flex flex-col w-full gap-3 text-xs 2xl:text-base">
-                <div class="h-6 w-full bg-rafik-secbg rounded-full overflow-auto">
+                <div class="h-6 w-full bg-rafik-secbg dark:bg-rafik-darksecbg rounded-full overflow-auto">
                   <div class=" bg-rafik-alternate h-6 rounded-full" :style="'width:'+ Math.ceil(dietStore.Diet.overall_macros[2]/dietStore.Diet.goal_macros[2]) + '%'  "></div>
                 </div>
-                <p class="text-rafik-pritext flex w-full">Fats: <span class="ml-auto text-rafik-alternate mr-3">{{ Math.ceil(dietStore.Diet.overall_macros[2]) }} </span>  / {{ Math.ceil(dietStore.Diet.goal_macros[2]) }}</p>
+                <p class="text-rafik-pritext dark:text-rafik-darkpritext flex w-full">Fats: <span class="ml-auto text-rafik-alternate mr-3">{{ Math.ceil(dietStore.Diet.overall_macros[2]) }} </span>  / {{ Math.ceil(dietStore.Diet.goal_macros[2]) }}</p>
               </div>
             </div>
         </div>
@@ -192,17 +192,17 @@ onMounted(() => {
               <h3 class="subheader-small font-bold ">P: {{ meal.protein }}g , C: {{ meal.carbohydrates}}g , F: {{ meal.fats}}g , <span class="text-rafik-secondary font-bold">Energy: {{ meal.calories }}kCal</span></h3>
               <div v-if="meal.foods && meal.foods.length > 0" class="grid grid-cols-4">
                 <div class="col-span-3 flex-col flex gap-2">
-                  <h4 class="text-rafik-pritext text-body opacity-0">Filler</h4>
+                  <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body opacity-0">Filler</h4>
                   <div v-for="food, index in meal.foods" :key="food" class="flex gap-3 w-full items-center">
-                    <p class="text-rafik-pritext min-w-max">
+                    <p class="text-rafik-pritext dark:text-rafik-darkpritext min-w-max">
                     {{food.food_name}}
                     </p>
-                    <hr class="border border-rafik-sectext w-full">
+                    <hr class="border border-rafik-sectext dark:border-rafik-darksectext w-full">
                   </div>
                 </div>
                 <div >
                   <div class="flex-col flex gap-2 items-center">
-                    <h4 class="text-rafik-pritext text-body">Servings</h4>
+                    <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">Servings</h4>
                     <div v-for="food, index in meal.foods" :key="food" class="text-rafik-secondary"> {{ formatServing(food.serving_amount, food.serving_name) }}</div>
                   </div>
                 </div>

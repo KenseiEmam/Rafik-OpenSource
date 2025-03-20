@@ -17,7 +17,7 @@ const emit = defineEmits(['changeComp'])
         class="w-40 h-40 rounded-full bottom-16 opacity-80 absolute right-0 bg-rafik content"
       ></div>
       <div
-        class="w-40 h-40 rounded-full bottom-24 opacity-80 absolute right-24 bg-rafik-sectext content"
+        class="w-40 h-40 rounded-full bottom-24 opacity-80 absolute right-24 bg-rafik-sectext dark:bg-rafik-darksectext content"
       ></div>
       <img
         class="max-h-64 object-cover ml-auto relative grayscale"
@@ -44,7 +44,7 @@ const emit = defineEmits(['changeComp'])
         class="w-80 h-80 rounded-full bottom-16 opacity-80 absolute right-0 bg-rafik content"
       ></div>
       <div
-        class="w-80 h-80 rounded-full bottom-24 opacity-80 absolute right-24 bg-rafik-sectext content"
+        class="w-80 h-80 rounded-full bottom-24 opacity-80 absolute right-24 bg-rafik-sectext dark:bg-rafik-darksectext content"
       ></div>
       <img
         class="max-h-128 w-full object-cover ml-auto relative grayscale"
