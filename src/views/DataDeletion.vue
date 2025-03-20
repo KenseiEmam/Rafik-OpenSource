@@ -1,5 +1,5 @@
 <template>
-  <section id="data-deletion" class="flex-1 mb-16 p-12">
+  <section id="data-deletion" class="dark flex-1 mb-16 p-12">
     <div class="max-w-md mx-auto p-6 card  shadow-md rounded-lg">
       <h2 class="header-small">Request Account & Data Deletion</h2>
       <p class="text-body mb-4">Fill in your details below to request the deletion of your account and associated data.</p>

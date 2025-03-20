@@ -1,15 +1,16 @@
 <template>
   <!-- Drawer toggle button -->
   <div class="text-center">
-    <button @click="openModal" class="header-small p-4 border border-rafik-pritext rounded hover:opacity-70">
+    <button @click="openModal" class="header-small p-4 border border-rafik-pritext dark:border-rafik-darkpritext text-sm rounded hover:opacity-70">
       Add Exercise +
+      <br><span class="text-xs text-rafik-sectext dark:text-rafik-darksectext">Straight Exercise </span>
     </button>
   </div>
 
   <!-- Drawer component -->
   <div v-if="ModalOn" class="fixed top-0 right-0 z-40 w-full h-screen flex justify-end" style="background-color: #000000AA;">
     <div class="flex-1 w-full h-full content" @click="ModalOn = false"></div>
-    <div class="p-8 py-12 border-l border-rafik-sectext  bg-rafik-pribg w-128 h-full space-y-8 relative">
+    <div class="p-8 py-12 border-l border-rafik-sectext dark:border-rafik-darksectext  bg-rafik-pribg dark:bg-rafik-darkpribg w-128 h-full space-y-8 relative">
       <div>
         <h2 class="subheader-medium uppercase">Exercise</h2>
         <h2 class="header-large font-black">LIBRARY</h2>
@@ -25,12 +26,12 @@
       <!-- Search bar -->
       <form class="max-w-md mx-auto">
         <div class="relative">
-          <input type="search" @input="handleSearch" class="block w-full p-4 text-sm text-rafik-sectext border rounded-lg bg-rafik-pribg" placeholder="Type to Search Exercises..." required />
+          <input type="search" @input="handleSearch" class="block w-full p-4 text-sm text-rafik-sectext dark:text-rafik-darksectext border rounded-lg bg-rafik-pribg dark:bg-rafik-darkpribg" placeholder="Type to Search Exercises..." required />
         </div>
       </form>
       <div
         @click="showAddExerciseModal = true"
-        class="border-2 border-dashed flex p-3 hover:cursor-pointer hover:opacity-70 W-FULL items-center justify-center border-rafik-sectext bg-rafik-pribg rounded-lg overflow-hidden"
+        class="border-2 border-dashed flex p-3 hover:cursor-pointer hover:opacity-70 W-FULL items-center justify-center border-rafik-sectext dark:border-rafik-darksectext bg-rafik-pribg dark:bg-rafik-darkpribg rounded-lg overflow-hidden"
       >
         <p class="text-center header-small uppercase ">+<br> ADD CUSTOM EXERCISE</p>
       </div>
@@ -63,7 +64,7 @@
       <p v-else>No exercises found.</p>
 
       <!-- Selected Exercises Section -->
-      <div class="fixed bottom-0 p-6 border-l border-rafik-sctext bg-rafik-secbg flex flex-col w-128 right-0 gap-4">
+      <div class="fixed bottom-0 p-6 border-l border-rafik-sctext bg-rafik-secbg dark:bg-rafik-darksecbg flex flex-col w-128 right-0 gap-4">
         <h4 class="contentH-small uppercase">Selected ({{ selectedExercises.length }}{{ maxSelectable !== null ? '/' + maxSelectable : '' }})</h4>
 
         <div class="flex flex-wrap gap-2">

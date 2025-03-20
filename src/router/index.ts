@@ -121,6 +121,13 @@ const router = createRouter({
           name: 'trainer-profile',
           component: () => import('../views/DashboardVues/Profile/EditVue.vue'),
         },
+
+        {
+          path: 'settings', // Child route for /dashboard/clients
+
+          name: 'settings',
+          component: () => import('../views/DashboardVues/SettingsVue.vue'),
+        },
         {
           path: 'entitlements', // Child route for /dashboard/entitlements
 

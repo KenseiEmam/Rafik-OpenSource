@@ -3,7 +3,7 @@
 <template>
   <div class="min-h-72 flex-1 mb-16 relative w-full">
     <h1 class="title-small my-8 pb-4 border-b border-rafik">
-      <span class="text-rafik-pritext">UNPARALLELLED</span> <br />CLIENT MANAGEMENT
+      <span class="text-rafik-pritext dark:text-rafik-darkpritext">UNPARALLELLED</span> <br />CLIENT MANAGEMENT
     </h1>
     <div class="grid md:grid-cols-2 gap-4 items-center mt-8">
       <div class="pb-8 gap-8 flex flex-col">

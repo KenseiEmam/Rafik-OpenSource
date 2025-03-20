@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { supabase } from '../lib/supabaseClient'
+import { useSettingsStore } from './settingstores'
 import router from '@/router'
 import Swal from 'sweetalert2'
 // Success and Error Alerts
@@ -186,7 +187,7 @@ async function getUserProfile() {
 
     // Store user information in localStorage
     localStorage.setItem("UserID", data.id);
-    localStorage.setItem("LoggedInTrainer", data.is_trainer ? "true" : "false");
+    localStorage.setItem("LoggedInTrainer", data.is_staff ? "true" : "false");
 
     userProfile.value = data;
 
@@ -716,8 +717,14 @@ async function getUserProfile() {
       if (error) {
         throw new Error(`Error fetching user profile: ${error.message}`)
       }
+      // Fetch Settings for User
+      const useSettings = useSettingsStore()
+
+      useSettings.fetchSettings(data[0].id)
+
+
       localStorage.setItem('UserID', data[0].id)
-      localStorage.setItem('LoggedInTrainer', data[0].is_trainer)
+      localStorage.setItem('LoggedInTrainer', data[0].is_staff)
       userProfile.value = data[0]
       return userProfile.value
     } catch (error: any) {

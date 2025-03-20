@@ -1,6 +1,26 @@
 <script setup lang="ts">
 import { ref, watch, nextTick } from "vue";
 import isEqual from "lodash/isEqual";
+import debounce from 'lodash/debounce';
+import Swal from 'sweetalert2'
+// Success and Error Alerts
+
+
+// Function to show error alerts
+function showError(message: string) {
+  Swal.fire({
+    title: 'Error!',
+    timer: 1500,
+    text: message,
+    toast: true,
+    position: 'top-right',
+    icon: 'error',
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#d33',
+    background: '#081411',
+    color: '#E8F3ED',
+  })
+}
 // Props to receive the program object
 const props = defineProps({
   program: {
@@ -91,13 +111,20 @@ const removePromo = (promoToRemove: PromoCode) => {
 };
 
 // Function to update promo value when changed
-const updatePromoValue = (promo: PromoCode, newValue: number) => {
-  const updatedPromos = props.program.promos.map((existingPromo: PromoCode) =>
-    existingPromo.code === promo.code ? { ...existingPromo, value: newValue } : existingPromo
-  );
+const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
+  if(newValue < 100)
+    {
+      const updatedPromos = props.program.promos.map((existingPromo: PromoCode) =>
+        existingPromo.code === promo.code ? { ...existingPromo, value: newValue } : existingPromo
+      );
 
-  emit("update-promo", updatedPromos); // Emit updated promo array with new values
-};
+      emit("update-promo", updatedPromos); // Emit updated promo array with new values
+    }
+  else{
+    showError("Please enter a value under 100")
+    promo.value =  0
+  }
+},500);
 
 </script>
 
@@ -122,9 +149,9 @@ const updatePromoValue = (promo: PromoCode, newValue: number) => {
           <label v-if="label !== '1 Month'" class="flex items-center ml-auto mr-4 space-x-2 cursor-pointer">
             <input type="checkbox" v-model="isEnabled[key]" class="hidden">
             <div
-              class="w-16 h-8 flex items-center border-rafik-pritext border-2  rounded-full transition-all"
+              class="w-16 h-8 flex items-center border-rafik-pritext dark:border-rafik-darkpritext border-2  rounded-full transition-all"
               :class="{ 'bg-rafik': isEnabled[key] }">
-              <div class="w-8 h-8 bg-rafik-pritext rounded-full shadow-md transform transition-transform"
+              <div class="w-8 h-8 bg-rafik-pritext dark:bg-rafik-darkpritext rounded-full shadow-md transform transition-transform"
                    :class="{ 'translate-x-8': isEnabled[key] }"></div>
             </div>
           </label>
@@ -159,7 +186,7 @@ const updatePromoValue = (promo: PromoCode, newValue: number) => {
           />
 
           <!-- Display promo codes -->
-          <div class="flex flex-col divide-y divide-rafik-sectext">
+          <div class="flex flex-col divide-y divide-rafik-sectext dark:divide-rafik-darksectext">
             <div
               v-for="(promo, index) in props.program.promos"
               :key="index"
