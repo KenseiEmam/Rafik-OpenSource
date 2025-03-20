@@ -4,34 +4,55 @@
   >
     <div class="relative">
       <!-- Light mode image: visible by default, hidden in dark mode -->
-  <img
-    class="w-24 2xl:h-auto 2xl:w-44 object-cover block dark:hidden"
-    src="/src/assets/rafik_light.png"
-    alt="Light mode logo"
-  />
-  <!-- Dark mode image: hidden by default, visible in dark mode -->
-  <img
-    class="w-24 2xl:h-auto 2xl:w-44 object-cover hidden dark:block"
-    src="/src/assets/rafik.png"
-    alt="Dark mode logo"
-  />
+      <img
+        class="w-24 2xl:h-auto 2xl:w-44 object-cover block dark:hidden"
+        src="/src/assets/rafik_light.png"
+        alt="Light mode logo"
+      />
+      <!-- Dark mode image: hidden by default, visible in dark mode -->
+      <img
+        class="w-24 2xl:h-auto 2xl:w-44 object-cover hidden dark:block"
+        src="/src/assets/rafik.png"
+        alt="Dark mode logo"
+      />
     </div>
-    <nav class="flex flex-col  gap-4 2xl:gap-10 my-auto">
+    <nav class="flex flex-col gap-4 2xl:gap-10 my-auto">
       <RouterLink :to="{ name: 'dashboard-home' }" class="nav-btn">My <br />Dashboard</RouterLink>
-      <RouterLink v-if="userStore.userProfile.roles.includes('Trainer')" :to="{ name: 'programs-list' }" class="nav-btn"
+      <RouterLink
+        v-if="userStore.userProfile.roles.includes('Trainer')"
+        :to="{ name: 'programs-list' }"
+        class="nav-btn"
         >Workout &<br />Programs</RouterLink
       >
-      <RouterLink v-if="userStore.userProfile.roles.includes('Trainer')" :to="{ name: 'client-list' }" class="nav-btn">My <br />Clients</RouterLink>
-      <RouterLink v-if="userStore.userProfile.roles.includes('Trainer')" :to="{ name: 'entitlement-list' }" class="nav-btn"
+      <RouterLink
+        v-if="userStore.userProfile.roles.includes('Trainer')"
+        :to="{ name: 'client-list' }"
+        class="nav-btn"
+        >My <br />Clients</RouterLink
+      >
+      <RouterLink
+        v-if="userStore.userProfile.roles.includes('Trainer')"
+        :to="{ name: 'entitlement-list' }"
+        class="nav-btn"
         >Program <br />Entitlements</RouterLink
       >
-      <RouterLink v-if="userStore.userProfile.roles.includes('Admin')" :to="{ name: 'users-list' }" class="nav-btn"
+      <RouterLink
+        v-if="userStore.userProfile.roles.includes('Admin')"
+        :to="{ name: 'users-list' }"
+        class="nav-btn"
         >List of <br />Users</RouterLink
       >
-      <RouterLink :to="{ name: 'settings' }" class="nav-btn">Settings &<br>Preferences</RouterLink>
+      <RouterLink :to="{ name: 'settings' }" class="nav-btn"
+        >Settings &<br />Preferences</RouterLink
+      >
     </nav>
     <nav class="flex flex-col gap-4 mt-auto 2xl:gap-8 text-xs">
-      <RouterLink :to="{ name: 'ticket-list' }" class="nav-btn 2xl:text-base">Support</RouterLink>
+      <RouterLink
+        v-if="userStore.userProfile.roles.includes('Trainer')"
+        :to="{ name: 'ticket-list' }"
+        class="nav-btn 2xl:text-base"
+        >Support</RouterLink
+      >
       <RouterLink :to="{ name: 'trainer-profile' }" class="nav-btn 2xl:text-base"
         >My Profile</RouterLink
       >
@@ -72,10 +93,10 @@ nav {
 }
 
 nav a.router-link-exact-active {
-  color: #190a03
+  color: #190a03;
 }
 .dark nav a.router-link-exact-active {
-  color: #ffffff
+  color: #ffffff;
 }
 
 nav a.router-link-exact-active:hover {
