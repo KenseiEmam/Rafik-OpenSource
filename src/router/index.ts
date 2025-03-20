@@ -146,7 +146,7 @@ const router = createRouter({
         },
         {
           path: 'support', // Child route for /dashboard/support
-
+          meta: { requiresTrainer: true }, // Ensure all children inherit this meta
           children: [
             {
               path: '', // Dynamic route for listing tickets
