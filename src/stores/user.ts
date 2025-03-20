@@ -251,7 +251,8 @@ async function fetchUser(filters: Filter, page: number, pageSize: number) {
 
     // Store data (and count if needed)
     All_Users.value = data;
-    All_count.value = count || 0;
+    if(count)
+    All_count.value = count;
     // Optionally, you can use count to display total records if required:
     // totalCount.value = count;
 
