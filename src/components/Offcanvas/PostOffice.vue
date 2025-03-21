@@ -152,6 +152,6 @@ const sortedChatClients = computed(() => {
   background-image: linear-gradient(135deg, #081411 36%, #295f42);
 }
 .card:hover{
-  background-image:linear-gradient(135deg, #f3eeeb 36%, #ffda68)
+  background-image:linear-gradient(135deg, #f3eeeb 36%, #fff2cb)
 }
 </style>
