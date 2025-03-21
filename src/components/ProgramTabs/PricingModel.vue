@@ -156,7 +156,7 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
             </div>
           </label>
           <div>
-            <h2 class="subheader-small">PRICE (AED) </h2>
+            <h2 class="subheader-small">MONTHLY PRICE (AED) </h2>
             <input
               type="number"
               v-model="prices[key]"

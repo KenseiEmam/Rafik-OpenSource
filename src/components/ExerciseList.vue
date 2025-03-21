@@ -65,7 +65,7 @@
       <p class="header-small min-w-max"> Page {{ page }}</p>
       <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
       <div class="flex text-rafik-sectext dark:text-rafik-darksectext gap-4 px-4 ">
-        <button  @click="updatePage(p)"  v-for="p in Math.ceil(props.count / 9) " :key="p" class="hover:text-rafik-pritext dark:text-rafik-darkpritext" :class="{'text-rafik-pritext dark:text-rafik-darkpritext':p===page}">
+        <button  @click="updatePage(p)"  v-for="p in Math.ceil(props.count / 9) " :key="p" class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext" :class="{'text-rafik-pritext dark:text-rafik-darkpritext':p===page}">
           {{p}}
         </button>
       </div>
@@ -73,13 +73,13 @@
       <button
         @click="updatePage(pageEdit - 1)"
         v-if="props.page > 1"
-        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:text-rafik-darkpritext"
+        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
       >
         Previous Page
       </button>
 
       <button
-        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:text-rafik-darkpritext"
+        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
          @click="updatePage(pageEdit + 1)"
          v-if="props.page < Math.ceil(props.count / 9)"
       >
@@ -191,6 +191,6 @@ function updatePage(page: number) {
   background-image: linear-gradient(135deg, #081411 36%, #295f42);
 }
 .card:hover{
-  background-image: linear-gradient(135deg, #f3eeeb 36%, #ffda68)
+  background-image: linear-gradient(135deg, #f3eeeb 36%, #fff2cb)
 }
 </style>
