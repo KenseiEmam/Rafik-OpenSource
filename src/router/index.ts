@@ -76,7 +76,7 @@ const router = createRouter({
         {
           path: 'users', // Default child route for /dashboard
           name: 'users-list',
-          component: () => import('../views/DashboardVues/AllUsers.vue'),
+          component: () => import('../views/DashboardVues/All Users/AllUsers.vue'),
           meta:{requiresAdmin:true}
         },
         {
@@ -202,7 +202,7 @@ router.beforeEach((to) => {
 
   const isMobile = window.innerWidth <= 768; // Adjust as needed
   // Requires Auth Handles
-  
+
   if (to.meta.requiresAuth && isMobile) {
     return {
       path: '/application',

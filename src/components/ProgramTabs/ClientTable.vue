@@ -17,7 +17,7 @@
 
     <!-- Client Table -->
     <table  v-if="totalPages>=1" class="w-full text-center">
-      <thead class="contentH-small">
+      <thead class="font-bold">
         <tr>
           <th></th>
           <th>Date Joined</th>
