@@ -344,14 +344,14 @@ onMounted(() => {
             >
               {{ exerciseStore.Exercise?.exercise_detail || "Loading..." }}
             </p>
-             <div class="grid grid-cols-3 2xl:grid-cols-6 gap-4">
+             <div class="grid grid-cols-3 2xl:grid-cols-6 gap-2 2xl:gap-4">
             <div v-for="(type, index) in types" :key="index">
               <button
                 @click="selectType(type)"
                 :class="exerciseStore.Exercise.type?.toLowerCase() === type
                   ? 'border-rafik-pritext dark:border-rafik-darkpritext text-rafik-pritext dark:text-rafik-darkpritext border-2'
                   : 'border border-rafik-sectext dark:border-rafik-darksectext opacity-80 hover:opacity-100'"
-                class="w-32 h-32 text-xs rounded-xl font-bold flex items-center justify-center bg-rafik-pribg dark:bg-rafik-darkpribg uppercase"
+                class="truncate w-full h-24 2xl:w-32 2xl:h-32 text-xs text-wrap rounded-xl font-bold flex items-center justify-center bg-rafik-pribg dark:bg-rafik-darkpribg uppercase"
               >
                 {{ type }}
               </button>
