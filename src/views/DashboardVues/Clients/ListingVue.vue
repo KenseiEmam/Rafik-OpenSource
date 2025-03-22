@@ -19,7 +19,7 @@
       <!-- Client Table -->
       <div v-if="!loading">
         <table class="w-full text-center">
-          <thead class="contentH-small mb-24">
+          <thead class="font-bold">
             <tr>
               <th>
                 <div
@@ -91,7 +91,7 @@
               >
                 <img
                   :src="client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
-                  class="w-12 2xl:w-24 rounded-full border-2 border-rafik h-12 2xl:h-24"
+                  class="w-12  rounded-full border-2 border-rafik h-12 "
                   alt="Avatar"
                 />
                 <div>

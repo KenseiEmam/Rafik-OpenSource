@@ -8,7 +8,7 @@
 
     <!-- diet Table -->
     <table class="w-full text-center">
-      <thead class="contentH-small">
+      <thead class="font-bold">
         <tr>
           <th>Date Logged</th>
           <th>Calories</th>

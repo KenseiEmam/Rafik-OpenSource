@@ -17,7 +17,7 @@
 
     <!-- workout Table -->
     <table class="w-full text-center ">
-      <thead class="contentH-small">
+      <thead class="font-bold">
         <tr>
           <th>Completed</th>
           <th>Name</th>

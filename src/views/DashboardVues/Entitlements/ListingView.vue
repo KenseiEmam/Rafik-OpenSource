@@ -62,7 +62,7 @@
       <!-- User Programs -->
       <div class="flex-1 flex flex-col h-full" v-if="!loading && userStore.Entitled">
         <table v-if="userStore.Entitled.length > 0" class="w-full text-center">
-          <thead class="contentH-small mb-24">
+          <thead class="font-bold">
             <tr>
               <th></th>
               <th>Date Joined</th>
@@ -79,7 +79,7 @@
               >
                 <img
                   :src="client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
-                  class="w-12 2xl:w-24 rounded-full border-2 border-rafik h-12 2xl:h-24"
+                  class="w-12  rounded-full border-2 border-rafik h-12 "
                   alt="Avatar"
                 />
                 <div>

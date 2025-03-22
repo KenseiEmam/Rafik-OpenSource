@@ -2,7 +2,7 @@
   <div class="flex h-screen overflow-auto">
     <div
       v-if="programStore.AllPrograms"
-      class="flex-1 px-8 py-12 flex flex-col w-full 2xl:px-12 2xl:py-24 space-y-6"
+      class="flex-1 px-8 py-12 flex flex-col w-full 2xl:px-12 2xl:py-24 2xl:space-y-6 space-y-3"
     >
       <!-- Page Title -->
       <PageTitle subheader="workouts &" header="programs" />
@@ -48,7 +48,7 @@
                 alt=""
               />
               <div class="w-full opacity-70 h-full bg-rafik-pribg dark:bg-rafik-darkpribg absolute"></div>
-              <div class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-rafik-teritiary dark:from-rafik-alternate to-50 absolute"></div>
+              <div class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-white dark:from-rafik-alternate to-50 absolute"></div>
               <div class="p-8 space-y-4 relative flex flex-col items-end">
                 <h2 class="subheader-medium flex gap-4 items-center group-hover:text-rafik-pritext dark:group-hover:text-rafik-darkpritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">
                   <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" fill="currentColor" viewBox="0 0 576 512" class="w-8 2xl:w-10 text-rafik-sectext dark:text-rafik-darksectext group-hover:text-rafik">

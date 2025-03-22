@@ -1,6 +1,6 @@
 <template>
   <div class="flex h-screen overflow-auto">
-    <div v-if="userStore.Trainer" class="flex-1 px-8 py-12 flex flex-col w-full 2xl:px-12 2xl:py-24 space-y-6">
+    <div v-if="userStore.Trainer" class="flex-1 px-8 py-12 flex flex-col w-full 2xl:px-12 2xl:py-24 2xl:space-y-6 space-y-3">
       <!-- Page Title -->
       <PageTitle subheader="my" header="profile" />
 

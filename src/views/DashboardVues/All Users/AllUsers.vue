@@ -1,6 +1,6 @@
 <template>
   <div  class="flex h-screen overflow-auto">
-    <div class="flex-1 px-8 py-12 flex flex-col w-full 2xl:px-12 2xl:py-24 space-y-6">
+    <div class="flex-1 px-8 py-12 flex flex-col w-full 2xl:px-12 2xl:py-24 2xl:space-y-6 space-y-3">
 
       <!-- Page Title -->
       <PageTitle subheader="all" header="users" />
@@ -65,7 +65,7 @@
             <tr v-for="user in users" :key="user.id" class="p-4">
               <td class="rounded-l-xl bg-rafik-secbg dark:bg-rafik-darksecbg p-4 ">{{ user.id }}</td>
               <td
-                class="flex gap-6 rounded-l-xl text-left items-center py-4 pl-3 bg-rafik-secbg dark:bg-rafik-darksecbg"
+                class="flex gap-6 text-left items-center py-4 pl-3 bg-rafik-secbg dark:bg-rafik-darksecbg"
               >
                 <img
                   :src="user.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
