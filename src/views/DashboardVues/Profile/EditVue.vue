@@ -140,31 +140,26 @@
                   required
                 />
               </div>
-                 <!-- Age -->
+                 <!-- dob -->
           <div class="form-control">
-            <label class="block text-sm font-medium" for="age">Age</label>
-            <input
-              id="age"
-              v-model.number="userStore.Trainer.age"
-              class="rafik-text-input w-full"
-              type="number"
-              min="0"
-              required
-            />
+            <label class="block text-sm font-medium" for="dob">Date of Birth:</label>
+            <VueDatePicker :dark="darkness === 'true'" v-model="userStore.Trainer.dob" placeholder="Select Date" :enable-time-picker="false"  :max-date="new Date(new Date().setFullYear(new Date().getFullYear() - 16))"  />
           </div>
             </div>
           </div>
           <div class="space-y-3">
             <!-- Nationality -->
-          <div class="form-control">
+            <div class="form-control">
             <label class="block text-sm font-medium" for="nationality">Nationality</label>
-            <input
+            <select
               id="nationality"
               v-model="userStore.Trainer.nationality"
               class="rafik-text-input w-full"
-              type="text"
               required
-            />
+            >
+            <option value="" disabled selected>Select Nationality:</option>
+            <option v-for="Nat in nationalStore.Nationalities" :value="Nat.nationality">{{ Nat.nationality }}</option>
+            </select>
           </div>
 
           <!-- Gender (Read-only) -->
@@ -232,9 +227,11 @@ import { supabase } from '@/lib/supabaseClient'
 import { useUserStore } from '@/stores/user'
 import PageTitle from '@/components/Navigation/PageTitle.vue'
 import Cetifications from '@/components/ProfileTabs/Cetifications.vue'
+import { useNationalStore } from '@/stores/nationalities'
 import Swal from 'sweetalert2'
-
+const darkness = localStorage.getItem('dark_mode')
 const userStore = useUserStore()
+const nationalStore = useNationalStore()
 const loading = ref(true) // Added loading state
 // Reactive validation states
 const isPasswordValid = ref<boolean>(false);
@@ -295,6 +292,8 @@ onMounted(async () => {
   } finally {
     loading.value = false // Set loading to false once data is loaded
   }
+
+  nationalStore.getNationalities()
 })
 
 async function changePassword() {
@@ -329,7 +328,7 @@ async function updateProfileInfo() {
         first_name: userStore.Trainer.first_name,
         last_name: userStore.Trainer.last_name,
         phone: userStore.Trainer.phone,
-        age: userStore.Trainer.age,
+        dob: userStore.Trainer.dob,
         nationality: userStore.Trainer.nationality,
       })
       .eq('id', UserId)

@@ -168,7 +168,73 @@ nav a {
   .nav-btn{
     @apply text-xs/5  2xl:text-base/5 uppercase  text-left ;
   }
+  
 }
+
+.dp__input {
+  padding: .75rem 2rem !important;
+}
+.form-control .dp__theme_light{
+  --dp-background-color: #E2D8D1; /* rafik-secbg */
+  --dp-text-color: #190a03; /* rafik-pritext */
+  --dp-hover-color: #CB901C; /* rafik-secondary */
+  --dp-hover-text-color: #ffffff;
+  --dp-hover-icon-color: #8C644C; /* rafik-sectext */
+  --dp-primary-color: #B02DEF; /* rafik-tertiary */
+  --dp-primary-disabled-color: #CB901C; /* rafik-secondary */
+  --dp-primary-text-color: #ffffff;
+  --dp-secondary-color: #D7BD21; /* rafik-primary */
+  --dp-border-color: #8C644C; /* rafik-sectext */
+  --dp-menu-border-color: #8C644C;
+  --dp-border-color-hover: #CB901C;
+  --dp-border-color-focus: #B02DEF;
+  --dp-disabled-color: #A9A9A9;
+  --dp-disabled-color-text: #D0D0D0;
+  --dp-scroll-bar-background: #E2D8D1;
+  --dp-scroll-bar-color: #8C644C;
+  --dp-success-color: #295F42; /* rafik-darkeralt */
+  --dp-success-color-disabled: #2EBE71; /* rafik-alternate */
+  --dp-icon-color: #8C644C;
+  --dp-danger-color: #FF5733; /* rafik-streak */
+  --dp-marker-color: #FF5733;
+  --dp-tooltip-color: #CB901C;
+  --dp-highlight-color: rgba(208, 155, 0, 0.2);
+  --dp-range-between-dates-background-color: var(--dp-hover-color, #CB901C);
+  --dp-range-between-dates-text-color: var(--dp-hover-text-color, #fff);
+  --dp-range-between-border-color: var(--dp-hover-color, #fff);
+}
+
+
+.dark .dp__theme_dark {
+  --dp-background-color: #000503; /* rafik-darksecbg */
+  --dp-text-color: #E8F3ED; /* rafik-darkpritext */
+  --dp-hover-color: #9FB9B2; /* rafik-darksectext */
+  --dp-hover-text-color: #E8F3ED;
+  --dp-hover-icon-color: #D7BD21; /* rafik-primary */
+  --dp-primary-color: #B02DEF; /* rafik-tertiary */
+  --dp-primary-disabled-color: #9FB9B2; /* rafik-darksectext */
+  --dp-primary-text-color: #E8F3ED;
+  --dp-secondary-color: #D7BD21; /* rafik-primary */
+  --dp-border-color: #9FB9B2; /* rafik-darksectext */
+  --dp-menu-border-color: #9FB9B2;
+  --dp-border-color-hover: #B02DEF;
+  --dp-border-color-focus: #D7BD21;
+  --dp-disabled-color: #737373;
+  --dp-disabled-color-text: #D0D0D0;
+  --dp-scroll-bar-background: #081411; /* rafik-darkpribg */
+  --dp-scroll-bar-color: #9FB9B2;
+  --dp-success-color: #2EBE71; /* rafik-alternate */
+  --dp-success-color-disabled: #295F42; /* rafik-darkeralt */
+  --dp-icon-color: #D7BD21; /* rafik-primary */
+  --dp-danger-color: #FF5733; /* rafik-streak */
+  --dp-marker-color: #FF5733;
+  --dp-tooltip-color: #9FB9B2;
+  --dp-highlight-color: rgba(208, 155, 0, 0.2);
+  --dp-range-between-dates-background-color: var(--dp-hover-color, #9FB9B2);
+  --dp-range-between-dates-text-color: var(--dp-hover-text-color, #E8F3ED);
+  --dp-range-between-border-color: var(--dp-hover-color, #E8F3ED);
+}
+
 @media (hover: hover) {
   a:hover {
     background-color: hsla(51, 100%, 37%, 0.2);
