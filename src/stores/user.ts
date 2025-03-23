@@ -34,37 +34,26 @@ function showError(message: string) {
 }
 
 interface UserInterface {
-  id?: string
-  email?: string
-  full_name?: string
-}
-interface ClientInterface {
-  id: string
+  id?: number
+  trainer_profile?: string
   avatar?: string
   email?: string
-  age?: number
-  gender?: string
+  gender?: string // Mapped from users.sex
   nationality?: string
+  dob?: Date
   phone?: string
   first_name?: string
   last_name?: string
+  last_active?: Date | string
+}
+interface ClientInterface extends UserInterface{
   program_details?: any
   last_active?: Date
   profile?: any
 }
 
-interface TrainerInterface {
-  id: number
-  trainer_profile: string
-  avatar: string
-  email: string
-  gender: string // Mapped from users.sex
-  nationality: string
-  phone: string
-  first_name: string
-  last_name: string
-  age: number
-  last_active: Date | string
+interface TrainerInterface extends UserInterface {
+
   title: string
   years_of_experience: number
   certifications: number[]
@@ -391,7 +380,7 @@ async function fetchUser(filters: Filter, page: number, pageSize: number) {
               phone: user.phone,
               first_name: user.first_name,
               last_name: user.last_name,
-              age: user.age,
+              dob: user.dob,
               profile: profile,
               program_details: programDetails,
               last_active: user.last_active,
@@ -468,7 +457,7 @@ async function fetchUser(filters: Filter, page: number, pageSize: number) {
       const { data: users, error: userError } = await supabase
         .from('users')
         .select(
-          'id, avatar, email, first_name, last_name, age, sex, nationality, phone, last_active',
+          'id, avatar, email, first_name, last_name, dob, sex, nationality, phone, last_active',
         )
         .in('id', userIds)
 
@@ -496,7 +485,7 @@ async function fetchUser(filters: Filter, page: number, pageSize: number) {
                 phone: user.phone,
                 first_name: user.first_name,
                 last_name: user.last_name,
-                age: user.age,
+                dob: user.dob,
                 profile: profile,
                 program_details: programDetails,
                 last_active: user.last_active,
@@ -574,7 +563,7 @@ async function fetchUser(filters: Filter, page: number, pageSize: number) {
       const { data: users, error: userError } = await supabase
         .from('users')
         .select(
-          'id, avatar, email, first_name, last_name, age, sex, nationality, phone, last_active',
+          'id, avatar, email, first_name, last_name, dob, sex, nationality, phone, last_active',
         )
         .in('id', userIds)
 
@@ -633,7 +622,7 @@ async function fetchUser(filters: Filter, page: number, pageSize: number) {
     }
   }
 
-  async function getClient(id: string) {
+  async function getClient(id: number) {
     try {
       // Fetch the user profile based on the provided user ID (id)
       const { data: userProfiles, error: profileError } = await supabase
@@ -670,7 +659,7 @@ async function fetchUser(filters: Filter, page: number, pageSize: number) {
       const { data: users, error: userError } = await supabase
         .from('users')
         .select(
-          'id, avatar, email, first_name, last_name, age,sex, nationality, phone, last_active',
+          'id, avatar, email, first_name, last_name, dob,sex, nationality, phone, last_active',
         )
         .eq('id', id)
         .single() // We expect a single user here
@@ -689,7 +678,7 @@ async function fetchUser(filters: Filter, page: number, pageSize: number) {
         phone: users.phone,
         first_name: users.first_name,
         last_name: users.last_name,
-        age: users.age,
+        dob: users.dob,
         profile: userProfiles,
         program_details: programs,
         last_active: users.last_active, // This includes the single program the client is associated with
@@ -728,7 +717,7 @@ async function fetchUser(filters: Filter, page: number, pageSize: number) {
       const { data: users, error: userError } = await supabase
         .from('users')
         .select(
-          'id, avatar, email, first_name, last_name, age,sex, nationality, phone, last_active',
+          'id, avatar, email, first_name, last_name, dob,sex, nationality, phone, last_active',
         )
         .eq('id', id)
         .single() // We expect a single user here
@@ -747,7 +736,7 @@ async function fetchUser(filters: Filter, page: number, pageSize: number) {
         phone: users.phone,
         first_name: users.first_name,
         last_name: users.last_name,
-        age: users.age,
+        dob: users.dob,
         last_active: users.last_active, // This includes the single program the client is associated with
         ...userProfiles,
       }

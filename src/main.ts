@@ -2,7 +2,8 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 import App from './App.vue'
 import router from './router'
 /* import the fontawesome core */
@@ -25,4 +26,5 @@ app.use(createPinia())
 app.use(VueSweetalert2)
 app.use(router)
 app.component('font-awesome-icon', FontAwesomeIcon)
+app.component('VueDatePicker', VueDatePicker);
 app.mount('#app')

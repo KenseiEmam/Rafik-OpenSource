@@ -30,7 +30,7 @@ const compareDate = computed(() => {
   return isOnline
 })
 interface ClientInterface {
-  id?: string
+  id?: number
   avatar?: string
   email?: string
   first_name?: string
@@ -54,7 +54,7 @@ async function importProgram(value: any) {
     await clientStore
       .updateClientProgram({ id: clientStore.Client.program_details.id, ...value })
       .then(() => {
-        const clientId = route.params.id as string
+        const clientId = parseInt(route.params.id as string)
         if (clientId) {
           clientStore.getClient(clientId).catch(() => {
             showError('Failed to load client details.')
@@ -109,7 +109,7 @@ async function cancelProgram(value: string) {
     await clientStore
       .updateClientProgram({ id: clientStore.Client.program_details.id, status: 'review' })
       .then(() => {
-        const clientId = route.params.id as string
+        const clientId = parseInt(route.params.id as string)
         if (clientId) {
           clientStore.getClient(clientId).catch(() => {
             showError('Failed to load client details.')

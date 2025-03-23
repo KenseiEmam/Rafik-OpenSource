@@ -87,7 +87,7 @@
 
               </td>
               <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize">{{ user.sex }}</td>
-              <td class="rounded-r-xl bg-rafik-secbg dark:bg-rafik-darksecbg p-4 ">{{ user.age }}</td>
+              <td class="rounded-r-xl bg-rafik-secbg dark:bg-rafik-darksecbg p-4 ">{{ calculateAge(user.dob) || 'N/A' }} </td>
             </tr>
           </tbody>
         </table>
@@ -156,7 +156,7 @@ interface User {
   first_name: string;
   last_name: string;
   sex: string;
-  age: number;
+  dob:Date,
   roles:string[];
 }
 
@@ -210,7 +210,19 @@ function updateFilter(filterType: string) {
   page.value = 1;
   loadUsers();
 }
+function calculateAge(dob:Date) {
+      if (!dob) return null;
+      const birthDate = new Date(dob);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
 
+      // Adjust age if birthday hasn't happened yet this year
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    }
 function updatePage(newPage: number) {
   loading.value= true
   if (newPage >= 1 && newPage <= Math.ceil(userStore.All_count / pageSize.value)) {

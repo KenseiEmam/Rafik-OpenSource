@@ -5,7 +5,7 @@
         <h3 class="contentH-small text-sm 2xl:text-xl mb-6 2xl:mb-8">Client Profile</h3>
         <div class="flex justify-between uppercase text-xs 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Age</p>
-          <p class="text-rafik-secondary">{{ props.client.age || 'N/A' }}</p>
+          <p class="text-rafik-secondary">{{ calculateAge(props.client.dob) || 'N/A' }}</p>
         </div>
         <div class="flex justify-between uppercase text-xs 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Gender</p>
@@ -130,6 +130,19 @@ const props = defineProps({
   },
 });
 
+function calculateAge(dob:Date) {
+      if (!dob) return null;
+      const birthDate = new Date(dob);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+
+      // Adjust age if birthday hasn't happened yet this year
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    }
 // Reactive reference to store the weight
 const weight = ref<string | null>(null);
 const program= ref<any>(null);

@@ -22,6 +22,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.1",
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@supabase/supabase-js": "^2.48.0",
+    "@vuepic/vue-datepicker": "^11.0.2",
     "date-fns": "^4.1.0",
     "emailjs": "^4.0.3",
     "flowbite": "^3.0.0",
