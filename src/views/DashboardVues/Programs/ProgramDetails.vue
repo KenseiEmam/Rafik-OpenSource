@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useRoute } from "vue-router";
 import { useProgramStore } from "@/stores/programstores";
 import DetailsTabProgram from "@/components/ProgramTabs/DetailsTabPRogram.vue";
@@ -83,7 +83,10 @@ async function saveDescription() {
 function refreshComponent() {
   router.go(0); // This reloads the current route
 }
-
+// Wipe outs
+onBeforeUnmount(() => {
+  programStore.wipeOut();
+});
 // Function to show success alerts
 function showSuccess(message: string) {
   Swal.fire({
