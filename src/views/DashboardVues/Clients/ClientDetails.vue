@@ -180,7 +180,7 @@ async function updateClientProgram(field: string, value: any) {
 
 // Fetch the client when the component mounts
 onMounted(() => {
-  const clientId = route.params.id as string
+  const clientId = parseInt(route.params.id as string)
   if (clientId) {
     clientStore.getClient(clientId).catch(() => {
       showError('Failed to load client details.')
