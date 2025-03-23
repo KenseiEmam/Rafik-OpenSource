@@ -206,6 +206,7 @@ function DraftProgram() {
 
 // ✅ Function to activate the program with confirmation
 function ActiveProgram() {
+  if(programStore.ActivePrograms?.length && programStore.ActivePrograms.length < 3)
   Swal.fire({
     title: "Activate?",
     text: "The program be set to review, once reviewed, people on the market will see it",
@@ -225,6 +226,9 @@ function ActiveProgram() {
       });
     }
   });
+
+  else
+  showError("You cannot have more than 3 active programs! Set 1 to Draft to change this one to active!")
 }
 
 // Fetch the program when the component mounts

@@ -767,7 +767,11 @@ async function fetchUser(filters: Filter, page: number, pageSize: number) {
       const useSettings = useSettingsStore()
 
       useSettings.fetchSettings(data[0].id)
+      const { error:logerror } = await supabase.from('users').update({last_active: new Date()}).eq('email', loggedInUser)
 
+      if (logerror) {
+        throw new Error(`Error fetching updating last active: ${logerror.message}`)
+      }
 
       localStorage.setItem('UserID', data[0].id)
       localStorage.setItem('LoggedInTrainer', data[0].is_staff)
