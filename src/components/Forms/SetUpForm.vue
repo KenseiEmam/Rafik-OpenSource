@@ -262,7 +262,7 @@ const validateAndSubmit = async () => {
       <!-- dob -->
       <div class="form-control">
             <label class="block text-sm font-medium" for="dob">Date of Birth:</label>
-            <VueDatePicker :dark="darkness" v-model="formData.dob" placeholder="Select Date" :enable-time-picker="false"  :max-date="new Date(new Date().setFullYear(new Date().getFullYear() - 16))"  />
+            <VueDatePicker :dark="darkness === 'true'" v-model="formData.dob" placeholder="Select Date" :enable-time-picker="false"  :max-date="new Date(new Date().setFullYear(new Date().getFullYear() - 16))"  />
           </div>
        <!-- Nationality -->
        <div class="form-control">
