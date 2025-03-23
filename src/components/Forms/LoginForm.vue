@@ -59,7 +59,7 @@ const handleLogin = async (): Promise<void> => {
     else{
 
       const returnedData= {
-      id:data.user?.id,
+      id:parseInt(data.user?.id),
       email:data.user?.email,
     }
     const returnedSession= {
