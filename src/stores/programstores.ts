@@ -87,7 +87,8 @@ export const useProgramStore = defineStore('Program', () => {
   const ActivePrograms = ref<Program[] | null>(null)
   const DraftedPrograms = ref<Program[] | null>(null)
 
-  const Program = ref<Program>()
+  const Program = ref<Program | null>(null);
+
 
   // Fetch all programs
   async function getAllPrograms() {
@@ -247,12 +248,17 @@ export const useProgramStore = defineStore('Program', () => {
   }
 
 
+  // Wipe out old date
+  function wipeOut(){
+    Program.value = null;
+  }
 
   return {
     AllPrograms,
     ActivePrograms,
     DraftedPrograms,
     Program,
+    wipeOut,
     getAllPrograms,
     getActivePrograms,
     getDraftedPrograms,

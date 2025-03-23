@@ -282,7 +282,7 @@ const selectedFile = ref<File | null>(null)
 
 onMounted(async () => {
   try {
-    await userStore.getTrainer()
+    await userStore.getLoggedTrainer()
     if (userStore.Trainer?.certifications) {
       certificationsInput.value = userStore.Trainer.certifications.join(', ')
     }

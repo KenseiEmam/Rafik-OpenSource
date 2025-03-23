@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import DetailsTab from '@/components/ClientTabs/DetailsTab.vue'
@@ -187,6 +187,10 @@ onMounted(() => {
     })
   }
 })
+
+onBeforeUnmount(() => {
+  clientStore.wipeOut();
+});
 </script>
 
 <template>
