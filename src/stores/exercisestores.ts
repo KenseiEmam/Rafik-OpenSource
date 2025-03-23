@@ -266,7 +266,7 @@ async function fetchPublicExercise(id: string) {
   async function createDupe(newExercise: Exercise) {
     const UserID = getUserID();
 
-    if (!UserID || !userStore.userProfile.first_name) {
+    if (!UserID || !userStore.userProfile?.first_name) {
       showError("User information missing.");
       return;
     }
