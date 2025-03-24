@@ -186,7 +186,7 @@ function setActiveTab(tab: string) {
       <!-- Tab Content -->
       <div style="min-height: 50vh" class="over-flow-y-auto flex-1">
         <transition name="fade">
-          <DetailsTabProgram v-if="activeTab === 'Details'" :program="programStore.Program" />
+          <DetailsTabProgram admin v-if="activeTab === 'Details'" :program="programStore.Program" />
           <WorkoutPlanner v-else-if="activeTab === 'Workouts'" :program="programStore.Program" />
           <ClientTable v-else-if="activeTab === 'Clients'" :program="programStore.Program" />
           <PricingModel v-else-if="activeTab === 'Pricing'" :program="programStore.Program" />
