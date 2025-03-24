@@ -172,7 +172,7 @@ nav a {
     @apply py-1.5 px-3 font-bold min-w-20 2xl:min-w-24 border-rafik hover:bg-rafik hover:text-white border-2 border-rafik font-bold rounded-lg 2xl:text-sm text-rafik capitalize text-center hover:shadow-lg shadow-sm hover:opacity-80 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
   }
   .nav-btn{
-    @apply text-base/5  2xl:text-lg/5 uppercase tracking-wider text-left ;
+    @apply text-base/5  2xl:text-lg/5 uppercase tracking-wider text-left max-w-max;
   }
   
 }

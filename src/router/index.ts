@@ -75,8 +75,6 @@ const router = createRouter({
         },
         {
           path: 'users', // Default child route for /dashboard
-
-
           meta:{requiresAdmin:true},
 
           children: [
@@ -89,6 +87,24 @@ const router = createRouter({
             {
               path: ':id', // Dynamic route for program details
               name: 'single-user',
+              component: () => import('../views/DashboardVues/All Users/UserDetails.vue'),
+            },
+          ],
+        },
+        {
+          path: 'audit-programs', // Default child route for /dashboard
+          meta:{requiresAdmin:true},
+
+          children: [
+            {
+              path: '', // Default child route for /dashboard/programs
+              name: 'audit-list',
+              component: () => import('../views/DashboardVues/All Users/UserListing.vue'),
+
+            },
+            {
+              path: ':id', // Dynamic route for program details
+              name: 'audit-program',
               component: () => import('../views/DashboardVues/All Users/UserDetails.vue'),
             },
           ],
