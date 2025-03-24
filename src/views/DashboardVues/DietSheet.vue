@@ -159,19 +159,19 @@ onMounted(() => {
             </div>
           <!-- Second Group of Columns  -->
             <div class="flex flex-col gap-4 justify-between">
-              <div class="uppercase flex flex-col w-full gap-3 text-xs 2xl:text-base">
+              <div class="uppercase flex flex-col w-full gap-3 text-sm 2xl:text-base">
                 <div class="h-6 w-full bg-rafik-secbg dark:bg-rafik-darksecbg rounded-full overflow-auto">
                   <div class=" bg-rafik-secondary h-6 rounded-full" :style="'width:'+ Math.ceil(dietStore.Diet.overall_macros[0]/dietStore.Diet.goal_macros[0]) + '%' "></div>
                 </div>
                 <p class="text-rafik-pritext dark:text-rafik-darkpritext flex w-full">Protein: <span class="ml-auto text-rafik-secondary mr-3">{{ Math.ceil(dietStore.Diet.overall_macros[0]) }} </span> / {{ Math.ceil(dietStore.Diet.goal_macros[0]) }}</p>
               </div>
-              <div class="uppercase flex flex-col w-full gap-3 text-xs 2xl:text-base">
+              <div class="uppercase flex flex-col w-full gap-3 text-sm 2xl:text-base">
                 <div class="h-6 w-full bg-rafik-secbg dark:bg-rafik-darksecbg rounded-full overflow-auto">
                   <div class=" bg-rafik-teritiary h-6 rounded-full" :style="'width:'+ Math.ceil(dietStore.Diet.overall_macros[1]/dietStore.Diet.goal_macros[1])  + '%' "></div>
                 </div>
                 <p class="text-rafik-pritext dark:text-rafik-darkpritext flex w-full">Carbohydrates: <span class="ml-auto text-rafik-teritiary mr-3">{{ Math.ceil(dietStore.Diet.overall_macros[1]) }} </span>  / {{ Math.ceil(dietStore.Diet.goal_macros[1]) }}</p>
               </div>
-              <div class="uppercase flex flex-col w-full gap-3 text-xs 2xl:text-base">
+              <div class="uppercase flex flex-col w-full gap-3 text-sm 2xl:text-base">
                 <div class="h-6 w-full bg-rafik-secbg dark:bg-rafik-darksecbg rounded-full overflow-auto">
                   <div class=" bg-rafik-alternate h-6 rounded-full" :style="'width:'+ Math.ceil(dietStore.Diet.overall_macros[2]/dietStore.Diet.goal_macros[2]) + '%'  "></div>
                 </div>

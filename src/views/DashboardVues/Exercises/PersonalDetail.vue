@@ -351,7 +351,7 @@ onMounted(() => {
                 :class="exerciseStore.Exercise.type?.toLowerCase() === type
                   ? 'border-rafik-pritext dark:border-rafik-darkpritext text-rafik-pritext dark:text-rafik-darkpritext border-2'
                   : 'border border-rafik-sectext dark:border-rafik-darksectext opacity-80 hover:opacity-100'"
-                class="truncate w-full h-24 2xl:w-32 2xl:h-32 text-xs text-wrap rounded-xl font-bold flex items-center justify-center bg-rafik-pribg dark:bg-rafik-darkpribg uppercase"
+                class="truncate w-full h-24 2xl:w-32 2xl:h-32 text-sm text-wrap rounded-xl font-bold flex items-center justify-center bg-rafik-pribg dark:bg-rafik-darkpribg uppercase"
               >
                 {{ type }}
               </button>

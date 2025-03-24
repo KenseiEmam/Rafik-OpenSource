@@ -6,9 +6,9 @@
           <input type="search" @input="handleSearch" class="block w-full p-4 text-sm text-rafik-sectext dark:text-rafik-darksectext border rounded-lg bg-rafik-pribg dark:bg-rafik-darkpribg" placeholder="Type to Search Exercises..." required />
         </div>
         <div class="mr-auto flex gap-4">
-          <button @click="updateFilter('All')" class="card border 2xl:text-base text-xs min-w-max uppercase" :class="filter ==='All'?'border-rafik gradient-bg text-rafik':'border'">All Ex.</button>
-          <button @click="updateFilter('private')" class="card border 2xl:text-base text-xs min-w-max uppercase" :class="filter ==='private'?'border-rafik gradient-bg text-rafik':'border'">Personal Ex.</button>
-          <button @click="updateFilter('public')" class="card border 2xl:text-base text-xs min-w-max uppercase" :class="filter ==='public'?'border-rafik gradient-bg text-rafik':'border'">Public Ex.</button>
+          <button @click="updateFilter('All')" class="card border 2xl:text-base text-sm min-w-max uppercase" :class="filter ==='All'?'border-rafik gradient-bg text-rafik':'border'">All Ex.</button>
+          <button @click="updateFilter('private')" class="card border 2xl:text-base text-sm min-w-max uppercase" :class="filter ==='private'?'border-rafik gradient-bg text-rafik':'border'">Personal Ex.</button>
+          <button @click="updateFilter('public')" class="card border 2xl:text-base text-sm min-w-max uppercase" :class="filter ==='public'?'border-rafik gradient-bg text-rafik':'border'">Public Ex.</button>
         </div>
       <button
         @click="showAddExerciseModal = true"

@@ -102,30 +102,30 @@ onMounted(() => {
           </div>
           <!-- First Group of Columns -->
             <div class="flex flex-col gap-4 justify-between">
-              <div class="uppercase flex justify-between gap-3 text-xs 2xl:text-base">
+              <div class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
                 <p class="text-rafik-pritext dark:text-rafik-darkpritext">Program:</p>
                 <router-link :to="{name:'program-details',params:{id:clientStore.Client.program_details.program_id}}" class="text-rafik-secondary">{{workoutStore.Workout.program_name}}</router-link>
               </div>
-              <div class="uppercase flex justify-between gap-3 text-xs 2xl:text-base">
+              <div class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
                 <p class="text-rafik-pritext dark:text-rafik-darkpritext">Workout-Iteration</p>
                 <p class="text-rafik-secondary">{{workoutStore.Workout.iteration}}</p>
               </div>
-              <div class="uppercase flex justify-between gap-3 text-xs 2xl:text-base">
+              <div class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
                 <p class="text-rafik-pritext dark:text-rafik-darkpritext">Week:</p>
                 <p class="text-rafik-secondary">{{workoutStore.Workout.week_of_program}}</p>
               </div>
             </div>
           <!-- Second Group of Columns  -->
             <div class="flex flex-col gap-4 justify-between">
-              <div class="uppercase flex justify-between gap-3 text-xs 2xl:text-base">
+              <div class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
                 <p class="text-rafik-pritext dark:text-rafik-darkpritext">Sets Done:</p>
                 <p class="text-rafik-secondary">{{workoutStore.Workout.average_volume || "Not Recorded"}}</p>
               </div>
-              <div class="uppercase flex justify-between gap-3 text-xs 2xl:text-base">
+              <div class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
                 <p class="text-rafik-pritext dark:text-rafik-darkpritext">AVG Intensity</p>
                 <p class="text-rafik-secondary">{{workoutStore.Workout.average_intensity || "Not Recorded"}}</p>
               </div>
-              <div class="uppercase flex justify-between gap-3 text-xs 2xl:text-base">
+              <div class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
                 <p class="text-rafik-pritext dark:text-rafik-darkpritext">Feel:</p>
                 <p class="text-rafik-secondary">{{ workoutStore.Workout.feel ? feels[workoutStore.Workout.feel-1] : 'N/A' }}</p>
               </div>

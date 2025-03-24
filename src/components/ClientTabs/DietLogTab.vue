@@ -12,7 +12,7 @@
         <tr>
           <th>Date Logged</th>
           <th>Calories</th>
-          <th>Macro Splot <span class="text-xs text-center">P/C/F</span></th>
+          <th>Macro Splot <span class="text-sm text-center">P/C/F</span></th>
           <th>No. of Meals</th>
           <th></th>
         </tr>
@@ -33,7 +33,7 @@
           </td>
 
           <td class="px-3 relative" >
-              <Router-link :to="{name:'diet-sheet', params:{id:diet.id}}" class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded text-xs">More Details</Router-link>
+              <Router-link :to="{name:'diet-sheet', params:{id:diet.id}}" class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded text-sm">More Details</Router-link>
 
           </td>
         </tr>

@@ -53,7 +53,7 @@
                 <input id="confirmPassword" placeholder='*******' type="password" v-model="confirmPassword" class="rafik-text-input w-full" />
               </div>
               <ul
-          class="list-disc text-xs mt-2 ml-6 text-gray-600"
+          class="list-disc text-sm mt-2 ml-6 text-gray-600"
 
         >
           <li :class="{'text-red-500': !isPasswordValid}">Must be at least 8 characters long.</li>
