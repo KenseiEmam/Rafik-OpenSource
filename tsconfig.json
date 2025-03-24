@@ -14,7 +14,7 @@
   "compilerOptions": {
     "module": "NodeNext",
     "noImplicitAny": false, // Allow 'any' type implicitly
-
+    "moduleResolution": "node"
 
   }
 }
