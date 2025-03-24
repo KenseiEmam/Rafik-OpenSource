@@ -1,32 +1,39 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, onUnmounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, computed, onUnmounted, onBeforeUnmount, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import WorkoutPlanner from '@/components/ProgramTabs/WorkoutPlanner.vue'
 import Swal from 'sweetalert2'
 import router from '@/router'
-import { formatDistanceToNow, parseISO } from 'date-fns';
-function humanizeDate(date: any) {
-  if(!date){
-    return null
+import GeneralDetails from '@/components/UserTabs/GeneralDetails.vue'
+import { formatDistanceToNow, parseISO } from "date-fns";
+import { fromZonedTime } from "date-fns-tz";
+import TraineeDetails from '@/components/UserTabs/TraineeDetails.vue'
+import TrainerDetails from '@/components/UserTabs/TrainerDetails.vue'
+import Cetifications from '@/components/ProfileTabs/Cetifications.vue'
+
+function humanizeDate(date: any, timeZone: string = "UTC") {
+  if (!date) {
+    return null;
   }
-  return formatDistanceToNow(parseISO(date), { addSuffix: true });
+
+  // Convert date to UTC using the provided time zone
+  const utcDate = fromZonedTime(parseISO(date), timeZone);
+
+  return formatDistanceToNow(utcDate, { addSuffix: true });
 }
+
 const activeTab = ref('General Details')
 
 const compareDate = computed(() => {
-  if (!userStore.Client?.last_active) return 'N/A'
-  const lastActive = new Date(userStore.Client?.last_active)
+  if (!userStore.UserDetail?.last_active) return false
+  const lastActive =fromZonedTime(new Date(userStore.UserDetail.last_active),"UTC")
   const now = new Date()
 
   // Consider the user online if their last activity was within the last 5 minutes
   const isOnline = now.getTime() - lastActive.getTime() <= 5 * 60 * 1000
+  console.log( now.getTime() - lastActive.getTime())
 
-  if (isOnline) {
-    console.log('Client is online')
-  } else {
-    console.log('Client is offline')
-  }
 
   return isOnline
 })
@@ -94,10 +101,9 @@ function showError(message: string) {
     color: '#E8F3ED',
   })
 }
-
-
-// Fetch the user when the component mounts
-onMounted(() => {
+function fetchDetails(){
+  userStore.wipeOut();
+  setActiveTab('General Details')
   const userId = parseInt(route.params.id as string)
   if (userId) {
     userStore.fetchUser(userId).then(()=>{
@@ -119,6 +125,12 @@ onMounted(() => {
       showError('Failed to load user details.')
     })
   }
+}
+watch(() => route.params.id, fetchDetails);
+
+// Fetch the user when the component mounts
+onMounted(() => {
+  fetchDetails()
 })
 
 onBeforeUnmount(() => {
@@ -168,13 +180,13 @@ onBeforeUnmount(() => {
               <p class="text-rafik-secondary">{{ userStore.UserDetail.audit_status }}</p>
             </div>
             <div class="uppercase flex justify-between gap-3 text-xs">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">Date Joined</p>
+              <p class="text-rafik-pritext dark:text-rafik-darkpritext">Date Joined:</p>
               <p v-if="userStore.UserDetail.created_at" class="text-rafik-secondary">{{ new Date (userStore.UserDetail.created_at).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" }) }}</p>
             </div>
             <div class="uppercase flex justify-between gap-3 text-xs">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">Last Active</p>
+              <p class="text-rafik-pritext dark:text-rafik-darkpritext">Last Active:</p>
               <p class="text-rafik-secondary">
-                {{ humanizeDate(userStore.UserDetail.last_active)|| 'No Logs' }}
+                {{ humanizeDate(userStore.UserDetail.last_active)|| 'Never' }}
               </p>
             </div>
 
@@ -182,19 +194,19 @@ onBeforeUnmount(() => {
           <div class="pl-6 flex-1 min-w-max h-full">
             <div class="flex flex-col flex-1 gap-4 border-l pl-2 border-rafik-sectext dark:border-rafik-darksectext text-left">
               <button
-                v-if="userStore.UserDetail.audit_status !== 'Suspended'"
+                v-if="userStore.UserDetail.audit_status !== 'suspended'"
                 class="text-body uppercase text-left hover:text-rafik-secondary text-rafik"
               >
                 Suspend User
               </button>
               <button
-                v-if="userStore.UserDetail.audit_status !== 'Banned'"
+                v-if="userStore.UserDetail.audit_status !== 'banned'"
                 class="text-body uppercase text-left hover:text-red-300 text-red-500"
               >
                 Ban User
               </button>
               <button
-                v-if="userStore.UserDetail.audit_status !== 'Active'"
+                v-if="userStore.UserDetail.audit_status !== 'active'"
                 class="text-body uppercase text-left hover:text-green-300 text-rafik-alternate"
               >
                 Activate
@@ -267,12 +279,23 @@ onBeforeUnmount(() => {
       <!-- Render Box -->
       <div style="min-height: 50vh" class="over-flow-y-auto flex-1">
         <transition name="fade">
+
           <WorkoutPlanner
             :program="userStore.Client.program_details"
             admin
             :user="userStore.Client?.id"
             v-if="activeTab === 'Workout-Plan' && userStore.Client"
           />
+          <TrainerDetails
+          :trainer="userStore.O_Trainer"
+            v-else-if="activeTab === 'Trainer Details' && userStore.O_Trainer"/>
+          <TraineeDetails
+            :client="userStore.Client"
+            v-else-if="activeTab === 'Trainee Details' && userStore.Client"
+          />
+          <GeneralDetails :client="userStore.UserDetail" v-else-if="activeTab === 'General Details'"/>
+
+          <Cetifications admin  v-else-if="activeTab === 'Certifications' && userStore.O_Trainer?.certifications_links" :certifications="userStore.O_Trainer.certifications_links"/>
         </transition>
       </div>
     </div>

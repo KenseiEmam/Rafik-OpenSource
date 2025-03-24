@@ -13,11 +13,11 @@
         <span>{{ cert.name }}</span>
         <div class="flex gap-2">
           <a :href="cert.url" target="_blank" class="btn-md-outline">View</a>
-          <button @click.prevent="handleDelete(cert.name)" class="btn-md-outline border-red-500 hover:bg-red-500 text-red-500">Delete</button>
+          <button v-if="!admin" @click.prevent="handleDelete(cert.name)" class="btn-md-outline border-red-500 hover:bg-red-500 text-red-500">Delete</button>
         </div>
       </li>
     </ul>
-    <div class="flex ">
+    <div v-if="!admin" class="flex ">
       <input type="file" multiple @change="uploadCertification" accept="image/*, application/pdf" class="hidden w-full" id="upload-photo" />
       <label for="upload-photo" class="btn-md-outline  cursor-pointer">
         Upload More
@@ -31,7 +31,7 @@ import { ref, onMounted } from 'vue';
 import { supabase } from '@/lib/supabaseClient';
 import Swal from 'sweetalert2';
 
-const props = defineProps<{ certifications: string[] }>();
+const props = defineProps<{ certifications: string[] , admin?: boolean}>();
 
 const FetchedCerts = ref<{ name: string; url: string }[]>([]);
 const loading = ref(true);
@@ -109,7 +109,11 @@ const uploadCertification = async (event: Event) => {
     if (uploadedUrl) {
       FetchedCerts.value.push({ name: file.name, url: uploadedUrl });
       showSuccess(`Certificate '${file.name}' uploaded successfully!`);
+      // Update the trainer profile with the new certification link
+    await updateTrainerProfileCertification(uploadedUrl);
     }
+
+
   }
 
   loading.value = false;
@@ -154,16 +158,88 @@ function handleDelete(name:string) {
     }
   });
 }
+
+// Update trainer profile with new certification link
+const updateTrainerProfileCertification = async ( newCertificationUrl: string) => {
+  const userId = localStorage.getItem('UserID')
+  if (!userId) {
+    showError('User ID not found');
+    return;
+  }
+
+  try {
+    // Step 1: Fetch the current trainer profile
+    const { data: profile, error: fetchError } = await supabase
+      .from('trainer_profile')
+      .select('certifications_links')
+      .eq('user_id', userId)
+      .single();
+
+    if (fetchError) throw fetchError;
+
+    // Step 2: Modify the certifications_links array
+    const updatedCertifications = [...(profile?.certifications_links || []), newCertificationUrl];
+
+    // Step 3: Update the certifications_links array in the database
+    const { error: updateError } = await supabase
+      .from('trainer_profile')
+      .update({
+        certifications_links: updatedCertifications,
+      })
+      .eq('user_id', userId);
+
+    if (updateError) throw updateError;
+
+    showSuccess('Trainer profile updated with new certification link!');
+  } catch (err: any) {
+    console.error(err);
+    showError(`Failed to update trainer profile: ${err.message}`);
+  }
+};
 // Delete certification
 const deleteCertification = async (certName: string) => {
   const cert = FetchedCerts.value.find(cert => cert.name === certName);
   if (!cert) return;
-  loading.value = true
-  try {
-    const { error } = await supabase.storage.from('storage').remove([`certifications/${certName}`]);
-    if (error) throw error;
 
+  const UserId = localStorage.getItem("UserID");
+  if (!UserId) {
+    showError('User ID not found');
+    return;
+  }
+
+  loading.value = true;
+  try {
+    // Step 1: Remove the file from Supabase storage
+    const { error: deleteError } = await supabase.storage.from('storage').remove([`certifications/${certName}`]);
+    if (deleteError) throw deleteError;
+
+    // Step 2: Fetch the current trainer profile
+    const { data: profile, error: fetchError } = await supabase
+      .from('trainer_profile')
+      .select('certifications_links')
+      .eq('user_id', UserId)
+      .single();
+
+    if (fetchError) throw fetchError;
+
+    // Step 3: Modify the certifications_links array by removing the deleted certification
+    const updatedCertifications = profile?.certifications_links.filter((url: string) => {
+      return !url.includes(certName); // Remove the certification link by file name
+    });
+
+    // Step 4: Update the trainer profile with the modified certifications_links array
+    const { error: updateError } = await supabase
+      .from('trainer_profile')
+      .update({
+        certifications_links: updatedCertifications,
+      })
+      .eq('user_id', UserId);
+
+    if (updateError) throw updateError;
+
+    // Step 5: Remove the certification from the local state (frontend)
     FetchedCerts.value = FetchedCerts.value.filter(cert => cert.name !== certName);
+
     showSuccess(`Deleted '${certName}' successfully.`);
   } catch (err: any) {
     console.error(err);
@@ -172,6 +248,7 @@ const deleteCertification = async (certName: string) => {
     loading.value = false;
   }
 };
+
 
 // Fetch certifications on mount
 onMounted(async () => {

@@ -78,11 +78,11 @@
         </div>
         <div class="flex justify-between uppercase text-xs 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Expires On</p>
-          <p class="text-rafik-secondary">{{ new Date(props.client.program_details.expires_at).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" }) || 'N/A' }}</p>
+          <p class="text-rafik-secondary">{{ new Date(props.client.program_details.expires_on).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" }) || 'N/A' }}</p>
         </div>
         <div class="flex justify-between uppercase text-xs 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Price Package</p>
-          <p class="text-rafik-secondary" >{{ props.client.program_details.price_pavckage + ' AED' || 'N/A' }}</p>
+          <p class="text-rafik-secondary" >{{ props.client.program_details.price_pavckage? props.client.program_details.price_pavckage  + ' AED' : 'None Paying' }}</p>
         </div>
         <div class="flex justify-center uppercase ">
           <router-link :to="{name:'program-details', params:{id:program.id}}" class="font-semibold">Visit Program</router-link>

@@ -762,10 +762,9 @@ async function getLoggedTrainer() {
       if (programError) {
         console.error('Error fetching program:', programError);
       }
-
-      if (!programs) {
-        showError('No User Found!')
-        return null // If no program found for the client, return null
+      let promAssign = null
+      if (programs) {
+        promAssign = programs
       }
 
       // Fetch user details from the users table based on the provided user_id
@@ -793,7 +792,7 @@ async function getLoggedTrainer() {
         last_name: users.last_name,
         dob: users.dob,
         profile: userProfiles,
-        program_details: programs,
+        program_details: promAssign,
         last_active: users.last_active, // This includes the single program the client is associated with
       }
 
