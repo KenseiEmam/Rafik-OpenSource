@@ -230,8 +230,11 @@ const removeTag = (tagToRemove: string) => {
     <!-- Tags Section -->
     <div class="card p-8 col-span-2">
       <h3 class="contentH-medium">Tags</h3>
-      <p class="text-body">
+      <p v-if="!admin" class="text-body">
         Add tags by typing in the field below and pressing Enter. Click on a tag to remove it.
+      </p>
+      <p v-else class="text-body">
+        The tags associated with this program are displayed below. These values are read-only.
       </p>
 
       <div class="flex flex-col gap-4 mt-6">
@@ -242,7 +245,7 @@ const removeTag = (tagToRemove: string) => {
           class="rafik-text-input"
           placeholder="Add a new tag"
           @keyup.enter="addTag"
-          :disabled="admin"
+          v-if="!admin"
         />
 
         <!-- Display Tags -->
