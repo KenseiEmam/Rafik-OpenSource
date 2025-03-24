@@ -20,28 +20,28 @@
         <div class="mr-auto flex gap-4">
           <button
             @click="updateFilter('All')"
-            class="card border 2xl:text-base text-xs min-w-max uppercase"
+            class="card border 2xl:text-base text-sm min-w-max uppercase"
             :class="filters.roles.length === 0 ? 'border-rafik gradient-bg text-rafik' : 'border'"
           >
             All Users
           </button>
           <button
             @click="updateFilter('Trainer')"
-            class="card border 2xl:text-base text-xs min-w-max uppercase"
+            class="card border 2xl:text-base text-sm min-w-max uppercase"
             :class="filters.roles.includes('Trainer') ? 'border-rafik gradient-bg text-rafik' : 'border'"
           >
             Trainer
           </button>
           <button
             @click="updateFilter('Trainee')"
-            class="card border 2xl:text-base text-xs min-w-max uppercase"
+            class="card border 2xl:text-base text-sm min-w-max uppercase"
             :class="filters.roles.includes('Trainee') ? 'border-rafik gradient-bg text-rafik' : 'border'"
           >
             Trainee
           </button>
           <button
             @click="updateFilter('CustomerCare')"
-            class="card border 2xl:text-base text-xs min-w-max uppercase"
+            class="card border 2xl:text-base text-sm min-w-max uppercase"
             :class="filters.roles.includes('customer_care') ? 'border-rafik gradient-bg text-rafik' : 'border'"
           >
             Customer Care
@@ -54,11 +54,11 @@
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead>
             <tr>
-              <th class="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">ID</th>
-              <th class="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">Details</th>
-              <th class="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">Roles</th>
-              <th class="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">Gender</th>
-              <th class="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">Age</th>
+              <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">ID</th>
+              <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">Details</th>
+              <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">Roles</th>
+              <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">Gender</th>
+              <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">Age</th>
               <th></th>
             </tr>
           </thead>
@@ -79,7 +79,7 @@
                 </div>
               </td>
               <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize ">
-                <div class="flex flex-wrap text-xs items-center">
+                <div class="flex flex-wrap text-sm items-center">
                   <p v-for="role,index in user.roles">
                   {{ role }}
                   <span v-if="index !== user.roles.length-1">-</span>

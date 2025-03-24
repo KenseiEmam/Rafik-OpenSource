@@ -24,7 +24,7 @@
               <th>
                 <div
                   v-if="userStore.client_count"
-                  class="flex items-center gap-4 my-6 text-xs 2xl:text-sm"
+                  class="flex items-center gap-4 my-6 text-sm 2xl:text-sm"
                 >
                   <!-- Tabs Navigation -->
                   <button
@@ -62,7 +62,7 @@
               <th>Status</th>
               <th>
                 <div class="flex justify-end px-3 items-center gap-3">
-                  <p class="text-body min-w-max text-xs 2xl:text-base">Page size</p>
+                  <p class="text-body min-w-max text-sm 2xl:text-base">Page size</p>
                   <select
                     v-model="numbers"
                     @change="updatePage(page)"
@@ -74,7 +74,7 @@
                     <option value="15">15</option>
                   </select>
                 </div>
-                <p class="text-xs mt-3 text-body min-w-max text-xs text-right">
+                <p class="text-sm mt-3 text-body min-w-max text-sm text-right">
                   {{ userStore.client_count }} total clients
                 </p>
               </th>

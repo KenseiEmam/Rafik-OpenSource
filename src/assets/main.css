@@ -1,5 +1,10 @@
 @import './base.css';
-
+@import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&family=Poiret+One&family=Staatliches&display=swap');
+h1,h2,h3,h4,h5, .nav-btn{
+  font-family: "Staatliches", sans-serif !important;
+  /* font-weight: 400 !important; */
+  font-style: normal;
+}
 .website-body {
   width: 100%;
   margin: 0 auto;
@@ -85,6 +90,7 @@ a {
   color: #b02def;
   transition: 0.4s;
   padding: 3px;
+  font-family: "Staatliches", sans-serif !important;
 }
 
 nav a {
@@ -105,10 +111,10 @@ nav a {
     @apply w-full placeholder:text-rafik-sectext dark:placeholder:text-rafik-darksectext bg-rafik-secbg dark:bg-rafik-darksecbg 2xl:text-lg p-3 outline-none border-rafik-sectext dark:border-rafik-darksectext border rounded-md text-rafik-pritext dark:text-rafik-darkpritext;
   }
   .title-large {
-    @apply font-black 2xl:text-8xl leading-none text-6xl text-rafik uppercase tracking-widest ;
+    @apply font-black 2xl:text-8xl leading-none text-6xl text-rafik uppercase tracking-widest tracking-widest ;
   }
   .title-medium {
-    @apply font-black 2xl:text-6xl leading-none text-4xl text-rafik uppercase tracking-widest ;
+    @apply font-black 2xl:text-6xl leading-none text-4xl text-rafik uppercase tracking-widest tracking-widest ;
   }
   .title-small {
     @apply font-black 2xl:text-4xl leading-none text-2xl text-rafik uppercase tracking-widest ;
@@ -142,10 +148,10 @@ nav a {
   }
 
   .text-body {
-    @apply font-medium text-xs  2xl:text-base text-rafik-sectext dark:text-rafik-darksectext tracking-widest leading-6 2xl:leading-8;
+    @apply font-medium text-sm  2xl:text-base text-rafik-sectext dark:text-rafik-darksectext tracking-widest leading-6 2xl:leading-8;
   }
   .label {
-    @apply font-medium text-xs  text-rafik-teritiary;
+    @apply font-medium text-sm  text-rafik-teritiary;
   }
   .btn-lg {
     @apply py-4 px-8 font-bold min-w-44 2xl:min-w-48 bg-rafik border-2 border-rafik hover:bg-rafik rounded-lg 2xl:text-xl text-white capitalize text-center hover:shadow-lg shadow-sm hover:opacity-80 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
@@ -166,7 +172,7 @@ nav a {
     @apply py-1.5 px-3 font-bold min-w-20 2xl:min-w-24 border-rafik hover:bg-rafik hover:text-white border-2 border-rafik font-bold rounded-lg 2xl:text-sm text-rafik capitalize text-center hover:shadow-lg shadow-sm hover:opacity-80 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
   }
   .nav-btn{
-    @apply text-xs/5  2xl:text-base/5 uppercase  text-left ;
+    @apply text-base/5  2xl:text-lg/5 uppercase tracking-wider text-left ;
   }
   
 }

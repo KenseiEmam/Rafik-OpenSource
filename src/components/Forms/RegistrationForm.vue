@@ -27,7 +27,7 @@
           @input="validatePassword"
         />
         <ul
-          class="list-disc text-xs mt-2 ml-6 text-gray-600"
+          class="list-disc text-sm mt-2 ml-6 text-gray-600"
           :class="{'text-red-500': !isPasswordValid}"
         >
           <li>Must be at least 8 characters long.</li>

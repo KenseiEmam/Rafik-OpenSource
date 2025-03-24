@@ -218,6 +218,7 @@ function detailsRoute(id: string){
 }
 // Fetch programs on component mount
 onMounted(() => {
+  programStore.wipeOutAll()
   programStore.getAllPrograms();
   exerciseStore.getPageExercises(page.value, filter.value);
 });

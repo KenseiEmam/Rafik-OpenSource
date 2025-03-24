@@ -23,7 +23,7 @@
         <li v-for="program in programStore.AllPrograms" :key="program.id" @click="importExercise(program)" class="card border p-4 flex items-center gap-3 group hover:border-rafik cursor-pointer">
           <div>
             <h2 class="subheader-small text-rafik-pritext dark:text-rafik-darkpritext group-hover:text-rafik">{{ program.program_name }}</h2>
-            <p class="text-xs text-body  group-hover:text-rafik-pritext dark:group-hover:text-rafik-darkpritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">{{ program.program_description }}</p>
+            <p class="text-sm text-body  group-hover:text-rafik-pritext dark:group-hover:text-rafik-darkpritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">{{ program.program_description }}</p>
           </div>
         </li>
       </ul>
