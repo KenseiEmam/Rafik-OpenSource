@@ -1,10 +1,17 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { supabase } from "@/lib/supabaseClient"; // Ensure Supabase is correctly set up
 import router from "@/router";
 import { useUserStore } from "@/stores/user";
 import Swal from "sweetalert2";
+import { useNationalStore } from '@/stores/nationalities'
 
+
+const nationalStore = useNationalStore()
+const darkness = localStorage.getItem('dark_mode')
+onMounted(()=>{
+  nationalStore.getNationalities()
+})
 // Success and Error Alerts
 function showSuccess(message: string) {
   Swal.fire({
@@ -51,7 +58,7 @@ const formData = ref({
   firstName: "",
   lastName: "",
   sex: "",
-  age: null as number | null,
+  dob: new Date(new Date().setFullYear(new Date().getFullYear() - 16)),
   nationality: "",
   phone: "",
 });
@@ -90,20 +97,20 @@ const validateAndSubmit = async () => {
     return;
   }
 
-  const { firstName, lastName, sex, age, nationality, phone } = formData.value;
+  const { firstName, lastName, sex, dob, nationality, phone } = formData.value;
 
   if (!selectedFile.value) {
     showError("Please upload a profile picture.");
     return;
   }
 
-  if (!firstName || !lastName || !sex || !age || !nationality || !phone) {
+  if (!firstName || !lastName || !sex || !dob || !nationality || !phone) {
     showError("All fields are required.");
     return;
   }
 
-  if (age <= 0) {
-    showError("Please enter a valid age.");
+  if (dob != null) {
+    showError("Please enter a valid date of birth.");
     return;
   }
 
@@ -126,14 +133,14 @@ const validateAndSubmit = async () => {
     if (!urlData?.publicUrl) {
       throw new Error("Failed to generate public URL for the image.");
     }
-
+    const darkness = localStorage.getItem('dark_mode')
     // Save the data to the `users` table
     const { data, error } = await supabase.from("users").upsert({
       email,
       first_name: firstName,
       last_name: lastName,
       sex,
-      age,
+      dob,
       nationality,
       phone,
       avatar: urlData.publicUrl,
@@ -252,26 +259,24 @@ const validateAndSubmit = async () => {
           <option value="other">Other</option>
         </select>
       </div>
-      <div>
-        <label for="age" class="text-body uppercase">Age</label>
-        <input
-          v-model="formData.age"
-          type="number"
-          id="age"
-          class="rafik-text-input"
-          placeholder="Enter your age"
-        />
-      </div>
-      <div>
-        <label for="nationality" class="text-body uppercase">Nationality</label>
-        <input
-          v-model="formData.nationality"
-          type="text"
-          id="nationality"
-          class="rafik-text-input"
-          placeholder="Enter your nationality"
-        />
-      </div>
+      <!-- dob -->
+      <div class="form-control">
+            <label class="block text-sm font-medium" for="dob">Date of Birth:</label>
+            <VueDatePicker :dark="darkness === 'true'" v-model="formData.dob" placeholder="Select Date" :enable-time-picker="false"  :max-date="new Date(new Date().setFullYear(new Date().getFullYear() - 16))"  />
+          </div>
+       <!-- Nationality -->
+       <div class="form-control">
+            <label class="block text-sm font-medium" for="nationality">Nationality</label>
+            <select
+              id="nationality"
+              v-model="formData.nationality"
+              class="rafik-text-input w-full"
+              required
+            >
+            <option value="" disabled selected>Select Nationality:</option>
+            <option v-for="Nat in nationalStore.Nationalities" :value="Nat.nationality">{{ Nat.nationality }}</option>
+            </select>
+          </div>
       <div>
         <label for="phone" class="text-body uppercase">Phone Number</label>
         <input

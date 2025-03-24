@@ -59,6 +59,7 @@
               <th class="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">Roles</th>
               <th class="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">Gender</th>
               <th class="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">Age</th>
+              <th></th>
             </tr>
           </thead>
           <tbody class="space-y-6">
@@ -87,7 +88,42 @@
 
               </td>
               <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize">{{ user.sex }}</td>
-              <td class="rounded-r-xl bg-rafik-secbg dark:bg-rafik-darksecbg p-4 ">{{ user.age }}</td>
+              <td class=" bg-rafik-secbg dark:bg-rafik-darksecbg p-4 ">{{ calculateAge(user.dob) || 'N/A' }} </td>
+              <td
+                class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right rounded-r-xl"
+              >
+                <svg
+                  @click="(show_action = user.id)"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext cursor-pointer ml-auto"
+                  viewBox="0 0 128 512"
+                >
+                  <path
+                    d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"
+                  />
+                </svg>
+                <div
+                  v-if="show_action == user.id"
+                  @mouseleave="handleLeave()"
+                  class="absolute min-w-16 px-2 z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg shadow-lg divide-y divide-y-rafik-sectext"
+                >
+                  <Router-link
+                    :to="{ name: 'single-user', params: { id: user.id } }"
+                    class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded"
+                  >
+                    View Program
+                  </Router-link>
+                  <!-- <button class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded">
+                    Message Client
+                  </button> -->
+                  <button
+                    class="px-3 py-5 text-red-500 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-red-300 rounded"
+                  >
+                    Delete User
+                  </button>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -156,7 +192,7 @@ interface User {
   first_name: string;
   last_name: string;
   sex: string;
-  age: number;
+  dob:Date,
   roles:string[];
 }
 
@@ -174,12 +210,19 @@ const pageSize = ref(10);
 const holdQuery = ref('');
 const filters = ref<Filter>({ roles: [], name: '', active: true });
 
+const show_action = ref()
+
+function handleLeave() {
+  setTimeout(() => {
+    show_action.value = null
+  }, 500)
+}
 
 const totalPages = computed(() => Math.ceil(totalCount.value / pageSize.value));
 // Function to load users
 async function loadUsers() {
   try {
-    const res = await userStore.fetchUser(filters.value, page.value, pageSize.value);
+    const res = await userStore.fetchUsers(filters.value, page.value, pageSize.value);
     loading.value= false
   } catch (error) {
     console.error('Error fetching users:', error);
@@ -210,7 +253,19 @@ function updateFilter(filterType: string) {
   page.value = 1;
   loadUsers();
 }
+function calculateAge(dob:Date) {
+      if (!dob) return null;
+      const birthDate = new Date(dob);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
 
+      // Adjust age if birthday hasn't happened yet this year
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    }
 function updatePage(newPage: number) {
   loading.value= true
   if (newPage >= 1 && newPage <= Math.ceil(userStore.All_count / pageSize.value)) {

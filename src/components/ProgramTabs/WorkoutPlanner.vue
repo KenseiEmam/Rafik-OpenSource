@@ -3,7 +3,7 @@
     <!-- Toolbar -->
     <div class="flex justify-between items-center gap-4 flex-wrap">
       <div  class="flex text-rafik-pritext dark:text-rafik-darkpritext min-w-max gap-3 items-center">
-        <input type="number" v-model.number="program.weekly_cycle " class="rafik-text-input w-16  text-right " placeholder="7" />
+        <input :disabled="admin" type="number" v-model.number="program.weekly_cycle " class="rafik-text-input w-16  text-right " placeholder="7" />
         <p> DAY CYCLE:</p>
       </div>
       <!-- Tabs Navigation -->
@@ -18,7 +18,7 @@
         {{ workout.workout_name ? workout.workout_name : (workout.rest_day? 'Rest Day':'Workout ' + (index + 1)) }}
       </button>
 
-      <div class="ml-auto">
+      <div v-if="!admin" class="ml-auto">
         <button
           v-if="!isEditing"
           class="btn-sm-outline min-w-max"
@@ -405,7 +405,7 @@ type Workout = {
   rest_day?: boolean;
   exercises: Exercise[];
 };
-const props = defineProps<{ program: Program, user?:string}>();
+const props = defineProps<{ program: Program, user?:number, admin?:boolean}>();
 const programStore = useProgramStore();
 const clientStore =  useUserStore();
 const isEditing = ref(false);
@@ -522,7 +522,7 @@ const submitChanges = () => {
 
 };
 // Function to update client workout plan
-async function updateClientProgram(user:string) {
+async function updateClientProgram(user:number) {
   if (!props.program.id) return ;
 
   try {
@@ -532,7 +532,7 @@ async function updateClientProgram(user:string) {
       weekly_cycle: props.program.weekly_cycle
     });
 
-    await clientStore.getClient(user.toString());
+    await clientStore.getClient(user);
 
   } catch (error) {
 
@@ -570,8 +570,6 @@ watch(
   },
   { deep: true }
 );
-
-
 
 
 // Microcycle swap function

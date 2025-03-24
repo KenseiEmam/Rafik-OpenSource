@@ -16,28 +16,28 @@
         alt="Dark mode logo"
       />
     </div>
-    <nav class="flex flex-col gap-4 2xl:gap-10 my-auto">
+    <nav v-if="userStore.userProfile?.roles" class="flex flex-col gap-4 2xl:gap-10 my-auto">
       <RouterLink :to="{ name: 'dashboard-home' }" class="nav-btn">My <br />Dashboard</RouterLink>
       <RouterLink
-        v-if="userStore.userProfile.roles.includes('Trainer')"
+        v-if="userStore.userProfile?.roles.includes('Trainer')"
         :to="{ name: 'programs-list' }"
         class="nav-btn"
         >Workout &<br />Programs</RouterLink
       >
       <RouterLink
-        v-if="userStore.userProfile.roles.includes('Trainer')"
+        v-if="userStore.userProfile?.roles.includes('Trainer')"
         :to="{ name: 'client-list' }"
         class="nav-btn"
         >My <br />Clients</RouterLink
       >
       <RouterLink
-        v-if="userStore.userProfile.roles.includes('Trainer')"
+        v-if="userStore.userProfile?.roles.includes('Trainer')"
         :to="{ name: 'entitlement-list' }"
         class="nav-btn"
         >Program <br />Entitlements</RouterLink
       >
       <RouterLink
-        v-if="userStore.userProfile.roles.includes('Admin')"
+        v-if="userStore.userProfile?.roles.includes('Admin')"
         :to="{ name: 'users-list' }"
         class="nav-btn"
         >List of <br />Users</RouterLink
@@ -46,9 +46,9 @@
         >Settings &<br />Preferences</RouterLink
       >
     </nav>
-    <nav class="flex flex-col gap-4 mt-auto 2xl:gap-8 text-xs">
+    <nav v-if="userStore.userProfile?.roles" class="flex flex-col gap-4 mt-auto 2xl:gap-8 text-xs">
       <RouterLink
-        v-if="userStore.userProfile.roles.includes('Trainer')"
+        v-if="userStore.userProfile?.roles.includes('Trainer')"
         :to="{ name: 'ticket-list' }"
         class="nav-btn 2xl:text-base"
         >Support</RouterLink
