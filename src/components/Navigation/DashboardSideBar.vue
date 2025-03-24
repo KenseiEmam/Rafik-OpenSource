@@ -21,28 +21,31 @@
       <RouterLink
         v-if="userStore.userProfile?.roles.includes('Trainer')"
         :to="{ name: 'programs-list' }"
-        class="nav-btn 2xl:text-lg text-base"
+        class="nav-btn "
         >Workout &<br />Programs</RouterLink
       >
       <RouterLink
         v-if="userStore.userProfile?.roles.includes('Trainer')"
         :to="{ name: 'client-list' }"
-        class="nav-btn 2xl:text-lg text-base"
+        class="nav-btn "
         >My <br />Clients</RouterLink
       >
       <RouterLink
         v-if="userStore.userProfile?.roles.includes('Trainer')"
         :to="{ name: 'entitlement-list' }"
-        class="nav-btn 2xl:text-lg text-base"
+        class="nav-btn "
         >Program <br />Entitlements</RouterLink
       >
       <RouterLink
         v-if="userStore.userProfile?.roles.includes('Admin')"
         :to="{ name: 'users-list' }"
-        class="nav-btn 2xl:text-lg text-base"
+        class="nav-btn "
         >List of <br />Users</RouterLink
       >
-      <RouterLink :to="{ name: 'settings' }" class="nav-btn 2xl:text-lg text-base"
+      <RouterLink :to="{ name: 'audit-list' }" class="nav-btn "
+        >Audit<br />Programs</RouterLink
+      >
+      <RouterLink :to="{ name: 'settings' }" class="nav-btn "
         >Settings &<br />Preferences</RouterLink
       >
     </nav>
