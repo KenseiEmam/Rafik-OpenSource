@@ -75,6 +75,12 @@ type Exercise = {
   sets?: number
   reps?: number
 }
+
+type Filter = {
+  trainer:number|null,
+  name:string,
+  status:string[],
+}
 type Workout = {
   workout_name: string
   workout_summary?: string
@@ -87,7 +93,7 @@ export const useProgramStore = defineStore('Program', () => {
   const AllPrograms = ref<Program[] | null>(null)
   const ActivePrograms = ref<Program[] | null>(null)
   const DraftedPrograms = ref<Program[] | null>(null)
-
+  const AllCount = ref<number>(0);
   const Program = ref<Program | null>(null);
 
 
@@ -119,8 +125,56 @@ export const useProgramStore = defineStore('Program', () => {
     }
   }
 
-  // Fetch all programs
-  async function getOtherPrograms(UserID:number) {
+  // Fetch Users Based On Filters with Pagination
+  async function fetchAuditPrograms(filters: Filter, page: number, pageSize: number) {
+    try {
+      // Start building the query; count: 'exact' returns the total count
+      let query = supabase
+        .from("programs")
+        .select("*", { count: "exact" });
+
+      // Filter by status if provided (handling multiple statuses)
+    if (filters.status && filters.status.length > 0) {
+      query = query.in("status", filters.status);
+    }
+
+      // Filter by name (search in first_name or last_name, case-insensitive)
+      if (filters.name && filters.name.trim() !== "") {
+        query = query.or(
+          `program_name.ilike.%${filters.name}%,program_description.ilike.%${filters.name}%`
+        );
+      }
+
+      // Filter by trainer_id (if provided and is a valid number)
+    if (filters.trainer!== undefined && filters.trainer!== null) {
+      query = query.eq("trainer_id", filters.trainer);
+    }
+
+      // Apply pagination: calculate the start and end indexes for the range
+      const start = (page - 1) * pageSize;
+      const end = page * pageSize - 1;
+      query = query.range(start, end);
+
+      const { data, error, count } = await query;
+
+      if (error || !data) {
+        throw new Error(`Error fetching users: ${error?.message || "Users not found"}`);
+      }
+
+      // Store data (and count if needed)
+      AllPrograms.value = data;
+      if(count)
+      AllCount.value = count;
+      // Optionally, you can use count to display total records if required:
+      // totalCount.value = count;
+
+    } catch (error: any) {
+      showError(error);
+    }
+  }
+
+  // Fetch all programs related to a trainer
+  async function getTrainersPrograms(UserID:number) {
 
 
     if (!UserID) {
@@ -291,12 +345,14 @@ export const useProgramStore = defineStore('Program', () => {
 
   return {
     AllPrograms,
+    AllCount,
     ActivePrograms,
     DraftedPrograms,
     Program,
+    fetchAuditPrograms,
     wipeOut,
     wipeOutAll,
-    getOtherPrograms,
+    getTrainersPrograms,
     getAllPrograms,
     getActivePrograms,
     getDraftedPrograms,

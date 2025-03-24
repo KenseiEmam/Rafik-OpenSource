@@ -101,7 +101,7 @@ const props = defineProps({
 // Fetch the weight when the component mounts
 onMounted(async () => {
   programStore.wipeOutAll()
-  programStore.getOtherPrograms(props.trainer.user_id)
+  programStore.getTrainersPrograms(props.trainer.user_id)
 });
 </script>
 

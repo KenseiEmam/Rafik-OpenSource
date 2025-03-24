@@ -112,7 +112,7 @@ function fetchDetails(){
 
       if(userStore.UserDetail.profile_id){
 
-        userStore.getClient(userStore.UserDetail.id)
+        userStore.getUserClient(userStore.UserDetail.id)
       }
 
        if (userStore.UserDetail.trainer_profile)

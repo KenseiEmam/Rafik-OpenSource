@@ -741,7 +741,6 @@ async function getLoggedTrainer() {
 
       let programs, programError; // Declare variables outside
 
-      if (is_admin) {
         ({ data: programs, error: programError } = await supabase
           .from('user_programs')
           .select('*')
@@ -749,14 +748,7 @@ async function getLoggedTrainer() {
           .eq('trainer_id', user_id)
           .neq('status', 'cancelled')
           .single());
-      } else {
-        ({ data: programs, error: programError } = await supabase
-          .from('user_programs')
-          .select('*')
-          .eq('client_id', userProfiles.id)
-          .neq('status', 'cancelled')
-          .single());
-      }
+
 
       // Now, `programs` and `programError` are accessible here
       if (programError) {
@@ -803,7 +795,82 @@ async function getLoggedTrainer() {
       return null
     }
   }
+  async function getUserClient(id: number) {
+    try {
 
+      // Fetch the user profile based on the provided user ID (id)
+      const { data: userProfiles, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', id) // Match user_id, as we have the user id here
+        .single() // Since we're looking for a single profile
+
+      if (profileError) {
+        throw new Error(`Error fetching user profile: ${profileError.message}`)
+      }
+
+      if (!userProfiles) {
+        return null // If no profile found for the given user ID, return null
+      }
+      const is_admin = localStorage.getItem('Roles')?.includes('Admin');
+      const user_id = localStorage.getItem('UserID');
+
+      let programs, programError; // Declare variables outside
+
+
+        ({ data: programs, error: programError } = await supabase
+          .from('user_programs')
+          .select('*')
+          .eq('client_id', userProfiles.id)
+          .neq('status', 'cancelled')
+          .single());
+
+
+      // Now, `programs` and `programError` are accessible here
+      if (programError) {
+        console.error('Error fetching program:', programError);
+      }
+      let promAssign = null
+      if (programs) {
+        promAssign = programs
+      }
+
+      // Fetch user details from the users table based on the provided user_id
+      const { data: users, error: userError } = await supabase
+        .from('users')
+        .select(
+          'id, avatar, email, first_name, last_name, dob,sex, nationality, phone, last_active',
+        )
+        .eq('id', id)
+        .single() // We expect a single user here
+
+      if (userError) {
+        throw new Error(`Error fetching user details: ${userError.message}`)
+      }
+
+      // Assign the client object with the user details and associated program
+      Client.value = {
+        id: users.id,
+        avatar: users.avatar,
+        email: users.email,
+        gender: users.sex,
+        nationality: users.nationality,
+        phone: users.phone,
+        first_name: users.first_name,
+        last_name: users.last_name,
+        dob: users.dob,
+        profile: userProfiles,
+        program_details: promAssign,
+        last_active: users.last_active, // This includes the single program the client is associated with
+      }
+
+      return Client.value
+    } catch (error: any) {
+      console.error(error)
+      alert(`Failed to load client: ${error.message || 'Unknown error'}`)
+      return null
+    }
+  }
 
 
   async function getTrainer(id:number) {
@@ -922,6 +989,7 @@ async function getLoggedTrainer() {
     O_Trainer,
     getChatClients,
     getActiveClientsForTrainer,
+    getUserClient,
     LogIn,
     LogOut,
     wipeOut,
