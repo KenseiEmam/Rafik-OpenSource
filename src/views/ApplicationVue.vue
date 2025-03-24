@@ -60,7 +60,7 @@ function showError(message: string) {
                         </svg>
                     </div>
                     <div>
-                        <div class="text-xs">Download on the</div>
+                        <div class="text-sm">Download on the</div>
                         <div class="text-2xl font-semibold font-sans -mt-1">App Store</div>
                     </div>
                   </a>
@@ -77,7 +77,7 @@ function showError(message: string) {
                         </svg>
                     </div>
                     <div>
-                        <div class="text-xs">GET IT ON</div>
+                        <div class="text-sm">GET IT ON</div>
                         <div class="text-xl font-semibold font-sans -mt-1">Google Play</div>
                     </div>
                 </button>

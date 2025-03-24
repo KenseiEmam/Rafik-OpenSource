@@ -17,7 +17,7 @@
 
         <div class="flex items-center space-x-2">
           <input type="checkbox" v-model="formData.confirmed" class="w-4 h-4 text-red-500 border-gray-300 rounded focus:ring-red-500">
-          <label for="confirm" class="text-body text-xs min-w-max">I understand that this action is irreversible.</label>
+          <label for="confirm" class="text-body text-sm min-w-max">I understand that this action is irreversible.</label>
         </div>
 
         <div class="flex w-full">

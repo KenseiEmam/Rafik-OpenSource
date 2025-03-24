@@ -162,7 +162,7 @@
                 mx-auto
                 px-4
                 py-2
-                text-xs
+                text-sm
                 md:text-sm
                 font-normal
                 text-gray-700
@@ -291,7 +291,7 @@
                       </button>
                       </div>
                   </div>
-                  <div class="mt-4 text-xs 2xl:text-base   text-right  text-t3-mutedText2 dark:text-t3-mutedNight ">
+                  <div class="mt-4 text-sm 2xl:text-base   text-right  text-t3-mutedText2 dark:text-t3-mutedNight ">
                   <p>Search for users and press their name on the dropdown to add them to the notifications list.<br> Alternatively, press <span class="font-bold p-1 border border-t3-mutedText2 border-b-4 border-l-2 rounded-tr">Enter ⏎</span> to add the selected user. </p>
                 </div>
              
@@ -329,7 +329,7 @@
                       </button>
                       </div>
                   </div>
-                  <div class="mt-4 text-xs 2xl:text-base   text-right  text-t3-mutedText2 dark:text-t3-mutedNight ">
+                  <div class="mt-4 text-sm 2xl:text-base   text-right  text-t3-mutedText2 dark:text-t3-mutedNight ">
                   <p>Search for tags and press their name on the dropdown to add them to the tags list.<br> Alternatively, press <span class="font-bold p-1 border border-t3-mutedText2 border-b-4 border-l-2 rounded-tr">Enter ⏎</span> to add the selected tag. </p>
                 </div>
              

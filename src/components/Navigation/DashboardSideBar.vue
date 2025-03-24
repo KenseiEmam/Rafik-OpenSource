@@ -21,42 +21,42 @@
       <RouterLink
         v-if="userStore.userProfile?.roles.includes('Trainer')"
         :to="{ name: 'programs-list' }"
-        class="nav-btn"
+        class="nav-btn 2xl:text-lg text-base"
         >Workout &<br />Programs</RouterLink
       >
       <RouterLink
         v-if="userStore.userProfile?.roles.includes('Trainer')"
         :to="{ name: 'client-list' }"
-        class="nav-btn"
+        class="nav-btn 2xl:text-lg text-base"
         >My <br />Clients</RouterLink
       >
       <RouterLink
         v-if="userStore.userProfile?.roles.includes('Trainer')"
         :to="{ name: 'entitlement-list' }"
-        class="nav-btn"
+        class="nav-btn 2xl:text-lg text-base"
         >Program <br />Entitlements</RouterLink
       >
       <RouterLink
         v-if="userStore.userProfile?.roles.includes('Admin')"
         :to="{ name: 'users-list' }"
-        class="nav-btn"
+        class="nav-btn 2xl:text-lg text-base"
         >List of <br />Users</RouterLink
       >
-      <RouterLink :to="{ name: 'settings' }" class="nav-btn"
+      <RouterLink :to="{ name: 'settings' }" class="nav-btn 2xl:text-lg text-base"
         >Settings &<br />Preferences</RouterLink
       >
     </nav>
-    <nav v-if="userStore.userProfile?.roles" class="flex flex-col gap-4 mt-auto 2xl:gap-8 text-xs">
+    <nav v-if="userStore.userProfile?.roles" class="flex flex-col gap-4 mt-auto 2xl:gap-8 text-sm">
       <RouterLink
         v-if="userStore.userProfile?.roles.includes('Trainer')"
         :to="{ name: 'ticket-list' }"
-        class="nav-btn 2xl:text-base"
+        class="nav-btn 2xl:text-lg text-base "
         >Support</RouterLink
       >
-      <RouterLink :to="{ name: 'trainer-profile' }" class="nav-btn 2xl:text-base"
+      <RouterLink :to="{ name: 'trainer-profile' }" class="nav-btn 2xl:text-lg text-base "
         >My Profile</RouterLink
       >
-      <button @click="handleLogOut" class="text-left nav-btn 2xl:text-base text-red-600 pl-4">
+      <button @click="handleLogOut" class="text-left nav-btn 2xl:text-lg text-base  text-red-600 pl-4">
         Logout
       </button>
     </nav>

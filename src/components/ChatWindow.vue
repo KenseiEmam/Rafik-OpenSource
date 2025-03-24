@@ -16,7 +16,7 @@
           />
           <div>
             <h3 class="header-small text-base">{{ Client.first_name }} {{ Client.last_name }}</h3>
-            <h3 class="subheader-small text-xs">{{ Client.email }}</h3>
+            <p class="subheader-small text-sm">{{ Client.email }}</p>
           </div>
         </div>
         <svg

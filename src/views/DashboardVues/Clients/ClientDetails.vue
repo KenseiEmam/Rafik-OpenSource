@@ -221,7 +221,7 @@ onBeforeUnmount(() => {
                   {{ clientStore.Client?.email || 'Loading...' }}
                 </p>
                 <div
-                  class="py-1 px-4 3xl:px-5 2xl:py-2 2xl:text-sm text-xs rounded-3xl max-w-max text-rafik-pritext dark:text-rafik-darkpritext uppercase font-semibold"
+                  class="py-1 px-4 3xl:px-5 2xl:py-2 2xl:text-sm text-sm rounded-3xl max-w-max text-rafik-pritext dark:text-rafik-darkpritext uppercase font-semibold"
                   :class="compareDate ? 'bg-rafik-alternate' : 'bg-rafik-secondary'"
                 >
                   {{ compareDate ? 'Online' : 'Away' }}
@@ -230,21 +230,21 @@ onBeforeUnmount(() => {
             </div>
           </div>
           <div class="flex flex-col gap-4 justify-between">
-            <div class="uppercase flex justify-between gap-3 text-xs">
+            <div class="uppercase flex justify-between gap-3 text-sm">
               <p class="text-rafik-pritext dark:text-rafik-darkpritext">Status:</p>
               <p class="text-rafik-secondary">{{ clientStore.Client.program_details?.status }}</p>
             </div>
-            <div class="uppercase flex justify-between gap-3 text-xs">
+            <div class="uppercase flex justify-between gap-3 text-sm">
               <p class="text-rafik-pritext dark:text-rafik-darkpritext">Workout-Iteration</p>
               <p class="text-rafik-secondary">{{ clientStore.Client.profile.workout_iteration }}</p>
             </div>
-            <div class="uppercase flex justify-between gap-3 text-xs">
+            <div class="uppercase flex justify-between gap-3 text-sm">
               <p class="text-rafik-pritext dark:text-rafik-darkpritext">Diet Last Logged:</p>
               <p class="text-rafik-secondary">
                 {{ clientStore.Client.program_details?.diet_last_logged || 'No Logs' }}
               </p>
             </div>
-            <div class="uppercase flex justify-between gap-3 text-xs">
+            <div class="uppercase flex justify-between gap-3 text-sm">
               <p class="text-rafik-pritext dark:text-rafik-darkpritext">Progress:</p>
               <p class="text-rafik-secondary">
                 {{

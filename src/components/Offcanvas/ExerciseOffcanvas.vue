@@ -3,7 +3,7 @@
   <div class="text-center">
     <button @click="openModal" class="header-small p-4 border border-rafik-pritext dark:border-rafik-darkpritext text-sm rounded hover:opacity-70">
       Add Exercise +
-      <br><span class="text-xs text-rafik-sectext dark:text-rafik-darksectext">Straight Exercise </span>
+      <br><span class="text-sm text-rafik-sectext dark:text-rafik-darksectext">Straight Exercise </span>
     </button>
   </div>
 
@@ -70,7 +70,7 @@
         <div class="flex flex-wrap gap-2">
           <div v-for="exercise in selectedExercises" :key="exercise.id" class="px-3 py-1 card text-white rounded-full flex items-center gap-2">
             <span>{{ exercise.exercise_name }}</span>
-            <button @click="toggleSelection(exercise)" class="text-xs text-red-500 px-2 py-0.5 rounded-full">X</button>
+            <button @click="toggleSelection(exercise)" class="text-sm text-red-500 px-2 py-0.5 rounded-full">X</button>
           </div>
         </div>
 
