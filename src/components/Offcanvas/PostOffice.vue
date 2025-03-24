@@ -58,11 +58,19 @@
 import { onMounted, onUnmounted, ref, computed } from "vue";
 import { useUserStore } from "@/stores/user";
 import { supabase } from "@/lib/supabaseClient";
-import { formatDistanceToNow, parseISO } from 'date-fns';
 import ChatWindow from "@/components/ChatWindow.vue";
-// Function to humanize the date
-function humanizeDate(date: string): string {
-  return formatDistanceToNow(parseISO(date), { addSuffix: true });
+import { formatDistanceToNow,parseISO } from "date-fns";
+import { fromZonedTime } from "date-fns-tz";
+
+function humanizeDate(date: any, timeZone: string = "UTC") {
+  if (!date) {
+    return null;
+  }
+
+  // Convert date to UTC using the provided time zone
+  const utcDate = fromZonedTime(parseISO(date), timeZone);
+
+  return formatDistanceToNow(utcDate, { addSuffix: true });
 }
 const chatActive =ref(false);
 const open = ref(false);
@@ -107,8 +115,6 @@ async function fetchLatestMessages() {
 
       return acc;
     }, {});
-    console.log(localStorage.getItem('UserID'))
-    console.log( Object.values(latestMessages.value))
   } catch (error: any) {
     console.error(error);
   }

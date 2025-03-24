@@ -23,13 +23,13 @@ type Exercise = {
   alternatives?: string[];
   trainer_id?: string | null; // Used to differentiate Personal and Public exercises
 };
-const userStore = useUserStore()
+
 export const useExerciseStore = defineStore("Exercise", () => {
   const AllExercises = ref<Exercise[] | null>(null);
   const AlternateExercises = ref<Exercise[] | null>(null);
   const Exercise = ref<Exercise>();
   const Count = ref<number | null>()
-
+  const userStore = useUserStore()
   const getUserID = () => localStorage.getItem("UserID");
 
   // Success and Error Alerts
@@ -266,7 +266,7 @@ async function fetchPublicExercise(id: string) {
   async function createDupe(newExercise: Exercise) {
     const UserID = getUserID();
 
-    if (!UserID || !userStore.userProfile.first_name) {
+    if (!UserID || !userStore.userProfile?.first_name) {
       showError("User information missing.");
       return;
     }

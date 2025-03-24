@@ -115,7 +115,7 @@ onMounted(() => {
   if (dietId) {
     dietStore.getDiet(dietId).then(()=>{
       if (dietStore.Diet?.client_id)
-        clientStore.getClient(dietStore.Diet.client_id.toString())
+        clientStore.getClient(dietStore.Diet.client_id)
       if(dietStore.Diet?.breakfast_macros && dietStore.Diet?.lunch_macros && dietStore.Diet?.dinner_macros && dietStore.Diet?.supper_macros )
         populateMeal(dietStore.Diet?.breakfast_macros , dietStore.Diet?.lunch_macros , dietStore.Diet?.dinner_macros , dietStore.Diet?.supper_macros)
     }).catch(() => {

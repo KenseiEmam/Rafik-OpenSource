@@ -107,7 +107,7 @@
                 alt=""
               />
               <div class="w-full opacity-70 h-full bg-rafik-pribg dark:bg-rafik-darkpribg absolute"></div>
-              <div class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-rafik-teritiary dark:from-rafik-alternate to-50 absolute"></div>
+              <div class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-white dark:from-rafik-alternate to-50 absolute"></div>
               <div class="p-8 space-y-4 relative flex flex-col items-end">
             <h2 class="subheader-medium flex gap-4 items-center group-hover:text-rafik-pritext dark:group-hover:text-rafik-darkpritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">
               Status: {{ program.status}}

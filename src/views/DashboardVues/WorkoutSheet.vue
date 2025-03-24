@@ -59,7 +59,7 @@ onMounted(() => {
   if (workoutId) {
     workoutStore.getWorkout(workoutId).then(()=>{
       if (workoutStore.Workout?.client_id)
-        clientStore.getClient(workoutStore.Workout.client_id.toString())
+        clientStore.getClient(workoutStore.Workout.client_id)
 
     }).catch(() => {
       showError("Failed to load Workout details.");

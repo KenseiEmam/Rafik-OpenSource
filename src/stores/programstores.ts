@@ -33,6 +33,7 @@ function showError(message: string) {
 }
 export type Program = {
   id: string
+  created_at:Date
   program_name?: string
   program_description?: string
   program_focus?: string[] // Add program_focus here (assumed to be an array of strings)
@@ -87,11 +88,40 @@ export const useProgramStore = defineStore('Program', () => {
   const ActivePrograms = ref<Program[] | null>(null)
   const DraftedPrograms = ref<Program[] | null>(null)
 
-  const Program = ref<Program>()
+  const Program = ref<Program | null>(null);
+
 
   // Fetch all programs
   async function getAllPrograms() {
     const UserID = localStorage.getItem('UserID')
+
+    if (!UserID) {
+      throw new Error('No user ID found in localStorage.')
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('programs')
+        .select()
+        .eq('trainer_id', UserID)
+        .neq('status', 'Deleted')
+
+      if (error) {
+        throw new Error(`Error fetching programs: ${error.message}`)
+      }
+
+      AllPrograms.value = data || []
+      splitProgramsByStatus()
+      return AllPrograms.value
+    } catch (error: any) {
+      console.error(error)
+      alert(`Failed to load programs: ${error.message || 'Unknown error'}`)
+    }
+  }
+
+  // Fetch all programs
+  async function getOtherPrograms(UserID:number) {
+
 
     if (!UserID) {
       throw new Error('No user ID found in localStorage.')
@@ -247,12 +277,26 @@ export const useProgramStore = defineStore('Program', () => {
   }
 
 
+  // Wipe out old date
+  function wipeOut(){
+    Program.value = null;
+  }
+
+  // Wipe out old date
+  function wipeOutAll(){
+    AllPrograms.value = [];
+    ActivePrograms.value = [];
+    DraftedPrograms.value = [];
+  }
 
   return {
     AllPrograms,
     ActivePrograms,
     DraftedPrograms,
     Program,
+    wipeOut,
+    wipeOutAll,
+    getOtherPrograms,
     getAllPrograms,
     getActivePrograms,
     getDraftedPrograms,
