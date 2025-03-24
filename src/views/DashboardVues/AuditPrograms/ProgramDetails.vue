@@ -12,235 +12,41 @@ import router from '@/router'
 
 const activeTab = ref('Details')
 
-interface Question {
-  type: string
-  question?: string
-  answer?: any
-}
-type PromoCode = {
-  code: string
-  value: number
-}
-
-// Access the route object
+// Access the route object and store
 const route = useRoute()
 const programStore = useProgramStore()
 
-// States for editing
-const isEditingTitle = ref(false)
-const isEditingDescription = ref(false)
-const editableTitle = ref('')
-const editableDescription = ref('')
-
-// Edit handlers
-function editTitle() {
-  isEditingTitle.value = true
-  editableTitle.value = programStore.Program?.program_name || ''
-}
-
-// Change active tab handler
-function setActiveTab(tab: string) {
-  activeTab.value = tab
-}
-
-function editDescription() {
-  isEditingDescription.value = true
-  editableDescription.value = programStore.Program?.program_description || ''
-}
-
-// Save handlers
-async function saveTitle() {
-  isEditingTitle.value = false
-  if (editableTitle.value !== programStore.Program?.program_name && programStore.Program) {
-    try {
-      await programStore.updateProgram({
-        id: programStore.Program.id,
-        program_name: editableTitle.value,
-      })
-    } catch (error) {
-      console.error('Error updating title:', error)
-    }
-  }
-}
-
-async function saveDescription() {
-  isEditingDescription.value = false
-  if (
-    editableDescription.value !== programStore.Program?.program_description &&
-    programStore.Program
-  ) {
-    try {
-      await programStore.updateProgram({
-        id: programStore.Program.id,
-        program_description: editableDescription.value,
-      })
-    } catch (error) {
-      console.error('Error updating description:', error)
-    }
-  }
-}
-
-// Function to refresh the route/component
+// Function to refresh the current route (if needed)
 function refreshComponent() {
-  router.go(0) // This reloads the current route
+  router.go(0)
 }
-// Wipe outs
+// Clean up the store on component unmount
 onBeforeUnmount(() => {
   programStore.wipeOut()
 })
-// Function to show success alerts
-function showSuccess(message: string) {
-  Swal.fire({
-    title: 'Success!',
-    showConfirmButton: false,
-    timerProgressBar: true,
-    timer: 1500,
-    text: message,
-    toast: true,
-    position: 'top-right',
-    icon: 'success',
-    cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED',
-  }) // Refresh after success
-}
 
-// Function to show error alerts
-function showError(message: string) {
-  Swal.fire({
-    title: 'Error!',
-    text: message,
-    icon: 'error',
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED',
-  })
-}
-
-// ✅ Generic function to update any program field
-async function updateProgramField(field: string, value: any) {
-  if (!programStore.Program) return showError('Program not found!')
-
-  try {
-    await programStore.updateProgram({
-      id: programStore.Program.id,
-      [field]: value,
-    })
-
-    await programStore.fetchProgram(programStore.Program.id)
-    showSuccess(`${field} updated successfully!`)
-  } catch (error) {
-    showError(`Failed to update ${field}. Please try again.`)
-    console.error(`Error updating ${field}:`, error)
-  }
-}
-
-// ✅ Function to update Prices with alert handling
-async function updatePrices(updatedPrices: any) {
-  if (!programStore.Program) return showError('Program not found!')
-
-  try {
-    await programStore.updateProgram({
-      id: programStore.Program.id,
-      price_one: updatedPrices.price_one,
-      price_three: updatedPrices.price_three,
-      price_six: updatedPrices.price_six,
-      price_year: updatedPrices.price_year,
-    })
-
-    programStore.Program.price_one = updatedPrices.price_one
-    programStore.Program.price_three = updatedPrices.price_three
-    programStore.Program.price_six = updatedPrices.price_six
-    programStore.Program.price_year = updatedPrices.price_year
-
-    showSuccess('Prices updated successfully!')
-  } catch (error) {
-    showError('Failed to update prices. Please try again.')
-    console.error('Error updating Prices:', error)
-  }
-}
-
-// ✅ Function to delete the program with confirmation
-function DeleteProgram() {
-  Swal.fire({
-    title: 'Are you sure?',
-    text: 'This will create a delete request for this program...',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Yes, delete it!',
-    confirmButtonColor: '#CB901C',
-    cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED',
-  }).then((result) => {
-    if (result.isConfirmed) {
-      updateProgramField('status', 'Deleted').then(() => {
-        showSuccess('The program has been deleted.')
-        refreshComponent()
-      })
-    }
-  })
-}
-
-// ✅ Function to draft the program with confirmation
-function DraftProgram() {
-  Swal.fire({
-    title: 'Hold On?',
-    text: 'The program will be removed off the market...',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Set to draft',
-    confirmButtonColor: '#CB901C',
-    cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED',
-  }).then((result) => {
-    if (result.isConfirmed) {
-      updateProgramField('status', 'Draft').then(() => {
-        showSuccess('The program has been set to draft.')
-        refreshComponent()
-      })
-    }
-  })
-}
-
-// ✅ Function to activate the program with confirmation
-function ActiveProgram() {
-  if (programStore.ActivePrograms?.length && programStore.ActivePrograms.length < 3)
-    Swal.fire({
-      title: 'Activate?',
-      text: 'The program be set to review, once reviewed, people on the market will see it',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Activate',
-      confirmButtonColor: '#CB901C',
-      cancelButtonColor: '#d33',
-      background: '#081411',
-      color: '#E8F3ED',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        updateProgramField('status', 'Active').then(() => {
-          showSuccess('The program is being reviewed!')
-          refreshComponent()
-        })
-      }
-    })
-  else
-    showError(
-      'You cannot have more than 3 active programs! Set 1 to Draft to change this one to active!',
-    )
-}
-
-// Fetch the program when the component mounts
+// Fetch the program details when the component mounts
 onMounted(() => {
   const programId = route.params.id as string
   if (programId) {
     programStore.fetchProgram(programId).catch(() => {
-      showError('Failed to load program details.')
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to load program details.',
+        icon: 'error',
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#d33',
+        background: '#081411',
+        color: '#E8F3ED',
+      })
     })
   }
 })
+
+// Handler to change active tab
+function setActiveTab(tab: string) {
+  activeTab.value = tab
+}
 </script>
 
 <template>
@@ -255,7 +61,7 @@ onMounted(() => {
         <img
           :src="programStore.Program.program_photo"
           class="w-full h-full object-cover absolute"
-          alt=""
+          alt="Program Photo"
         />
         <div class="w-full opacity-70 h-full bg-rafik-pribg dark:bg-rafik-darkpribg absolute"></div>
         <div
@@ -263,39 +69,21 @@ onMounted(() => {
         >
           <div class="pr-6 space-y-4 col-span-3">
             <div class="flex items-center justify-between">
-              <!-- Editable Title -->
-              <input
-                v-if="isEditingTitle"
-                v-model="editableTitle"
-                @blur="saveTitle"
-                @keyup.enter="saveTitle"
-                class="title-small w-1/3 bg-transparent border-b border-rafik-sectext dark:border-rafik-darksectext focus:outline-none"
-                type="text"
-                :placeholder="programStore.Program?.program_name || 'Loading...'"
-              />
-              <h1 v-else class="title-small w-1/3 hover:opacity-70 cursor-text" @click="editTitle">
+              <!-- Non-editable Title -->
+              <h1 class="title-small w-1/3">
                 {{ programStore.Program?.program_name || 'Loading...' }}
               </h1>
-              <h2 class="header-medium">{{ programStore.Program?.status || 'Loading...' }}</h2>
+              <h2 class="header-medium">
+                {{ programStore.Program?.status || 'Loading...' }}
+              </h2>
             </div>
 
-            <!-- Editable Description -->
-            <textarea
-              v-if="isEditingDescription"
-              v-model="editableDescription"
-              @blur="saveDescription"
-              @keyup.enter="saveDescription"
-              cols="3"
-              class="text-body 2xl:w-5/6 bg-transparent border-b border-rafik-sectext dark:border-rafik-darksectext focus:outline-none"
-              :placeholder="programStore.Program?.program_description || 'Loading...'"
-            ></textarea>
-            <p
-              v-else
-              class="text-body text-justify hover:opacity-70 2xl:w-5/6 cursor-text"
-              @click="editDescription"
-            >
+            <!-- Non-editable Description -->
+            <p class="text-body text-justify 2xl:w-5/6">
               {{ programStore.Program?.program_description || 'Loading...' }}
             </p>
+
+            <!-- Additional Program Details -->
             <div class="flex gap-8 justify-between">
               <h3 class="uppercase flex gap-2 items-center">
                 <svg
@@ -341,43 +129,11 @@ onMounted(() => {
               </h3>
             </div>
           </div>
-          <div class="pl-6 flex-1 min-w-max">
-            <div
-              class="flex flex-col flex-1 gap-4 border-rafik-sectext dark:border-rafik-darksectext text-left"
-            >
-              <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">View Language</button> -->
-              <button
-                @click="DraftProgram"
-                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
-                v-if="programStore.Program.status == 'Active'"
-              >
-                Change to Draft
-              </button>
-              <button
-                @click="ActiveProgram"
-                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
-                v-if="programStore.Program.status == 'Draft'"
-              >
-                Publish to Active
-              </button>
-              <p
-                class="text-body uppercase opacity-50"
-                v-if="programStore.Program.status == 'Review'"
-              >
-                Under Review
-              </p>
-              <button
-                @click="DeleteProgram"
-                class="text-body uppercase text-red-500 hover:text-red-400 text-left"
-              >
-                Delete Program
-              </button>
-            </div>
-          </div>
+          <!-- Action buttons are intentionally removed for view-only mode -->
         </div>
       </div>
 
-      <!-- Tabs -->
+      <!-- Tabs Navigation -->
       <div
         class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
       >
@@ -385,7 +141,7 @@ onMounted(() => {
           :class="
             activeTab === 'Details'
               ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
-              : ' hover:opacity-70'
+              : 'hover:opacity-70'
           "
           class="nav-btn"
           @click="setActiveTab('Details')"
@@ -396,7 +152,7 @@ onMounted(() => {
           :class="
             activeTab === 'Workouts'
               ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
-              : ' hover:opacity-70'
+              : 'hover:opacity-70'
           "
           class="nav-btn uppercase"
           @click="setActiveTab('Workouts')"
@@ -407,7 +163,7 @@ onMounted(() => {
           :class="
             activeTab === 'Clients'
               ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
-              : ' hover:opacity-70'
+              : 'hover:opacity-70'
           "
           class="nav-btn uppercase"
           @click="setActiveTab('Clients')"
@@ -418,51 +174,23 @@ onMounted(() => {
           :class="
             activeTab === 'Pricing'
               ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
-              : ' hover:opacity-70'
+              : 'hover:opacity-70'
           "
           class="nav-btn uppercase"
           @click="setActiveTab('Pricing')"
         >
           Pricing
         </button>
-        <!-- <button
-          :class="activeTab === 'Documents' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
-          class="nav-btn uppercase "
-          @click="setActiveTab('Documents')"
-        >
-          Documents
-        </button> -->
-        <!-- <button
-          :class="activeTab === 'Reviews' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
-          class="nav-btn uppercase "
-          @click="setActiveTab('Reviews')"
-        >
-          Reviews
-        </button> -->
       </div>
 
-      <!-- Render Box -->
+      <!-- Tab Content -->
       <div style="min-height: 50vh" class="over-flow-y-auto flex-1">
         <transition name="fade">
-          <DetailsTabProgram
-            @update-tags="updateProgramField('tags', $event)"
-            @update-focus="updateProgramField('program_focus', $event)"
-            :program="programStore.Program"
-            v-if="activeTab === 'Details'"
-          />
-          <WorkoutPlanner :program="programStore.Program" v-else-if="activeTab === 'Workouts'" />
-          <ClientTable :program="programStore.Program" v-else-if="activeTab === 'Clients'" />
-          <PricingModel
-            :program="programStore.Program"
-            @update-promo="updateProgramField('promos', $event)"
-            @update-prices="updatePrices"
-            v-else-if="activeTab === 'Pricing'"
-          />
-          <DocumentsForms
-            v-else-if="activeTab === 'Documents'"
-            @updateProgramField="updateProgramField"
-            :program="programStore.Program"
-          />
+          <DetailsTabProgram v-if="activeTab === 'Details'" :program="programStore.Program" />
+          <WorkoutPlanner v-else-if="activeTab === 'Workouts'" :program="programStore.Program" />
+          <ClientTable v-else-if="activeTab === 'Clients'" :program="programStore.Program" />
+          <PricingModel v-else-if="activeTab === 'Pricing'" :program="programStore.Program" />
+          <DocumentsForms v-else-if="activeTab === 'Documents'" :program="programStore.Program" />
         </transition>
       </div>
     </div>
