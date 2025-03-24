@@ -1,33 +1,33 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { useRoute } from 'vue-router'
-import { useProgramStore } from '@/stores/programstores'
-import DetailsTabProgram from '@/components/ProgramTabs/DetailsTabPRogram.vue'
-import WorkoutPlanner from '@/components/ProgramTabs/WorkoutPlanner.vue'
-import ClientTable from '@/components/ProgramTabs/ClientTable.vue'
-import PricingModel from '@/components/ProgramTabs/PricingModel.vue'
-import DocumentsForms from '@/components/ProgramTabs/DocumentsForms.vue'
-import Swal from 'sweetalert2'
-import router from '@/router'
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { useRoute } from 'vue-router';
+import { useProgramStore } from '@/stores/programstores';
+import DetailsTabProgram from '@/components/ProgramTabs/DetailsTabPRogram.vue';
+import WorkoutPlanner from '@/components/ProgramTabs/WorkoutPlanner.vue';
+import ClientTable from '@/components/ProgramTabs/ClientTable.vue';
+import PricingModel from '@/components/ProgramTabs/PricingModel.vue';
+import DocumentsForms from '@/components/ProgramTabs/DocumentsForms.vue';
+import Swal from 'sweetalert2';
+import router from '@/router';
 
-const activeTab = ref('Details')
+const activeTab = ref('Details');
 
 // Access the route object and store
-const route = useRoute()
-const programStore = useProgramStore()
+const route = useRoute();
+const programStore = useProgramStore();
 
 // Function to refresh the current route (if needed)
 function refreshComponent() {
-  router.go(0)
+  router.go(0);
 }
 // Clean up the store on component unmount
 onBeforeUnmount(() => {
-  programStore.wipeOut()
-})
+  programStore.wipeOut();
+});
 
 // Fetch the program details when the component mounts
 onMounted(() => {
-  const programId = route.params.id as string
+  const programId = route.params.id as string;
   if (programId) {
     programStore.fetchProgram(programId).catch(() => {
       Swal.fire({
@@ -37,15 +37,15 @@ onMounted(() => {
         confirmButtonColor: '#d33',
         cancelButtonColor: '#d33',
         background: '#081411',
-        color: '#E8F3ED',
-      })
-    })
+        color: '#E8F3ED'
+      });
+    });
   }
-})
+});
 
 // Handler to change active tab
 function setActiveTab(tab: string) {
-  activeTab.value = tab
+  activeTab.value = tab;
 }
 </script>
 
@@ -187,8 +187,12 @@ function setActiveTab(tab: string) {
       <div style="min-height: 50vh" class="over-flow-y-auto flex-1">
         <transition name="fade">
           <DetailsTabProgram admin v-if="activeTab === 'Details'" :program="programStore.Program" />
-          <WorkoutPlanner v-else-if="activeTab === 'Workouts'" :program="programStore.Program" />
-          <ClientTable v-else-if="activeTab === 'Clients'" :program="programStore.Program" />
+          <WorkoutPlanner
+            admin
+            v-else-if="activeTab === 'Workouts'"
+            :program="programStore.Program"
+          />
+          <ClientTable admin v-else-if="activeTab === 'Clients'" :program="programStore.Program" />
           <PricingModel v-else-if="activeTab === 'Pricing'" :program="programStore.Program" />
           <DocumentsForms v-else-if="activeTab === 'Documents'" :program="programStore.Program" />
         </transition>
