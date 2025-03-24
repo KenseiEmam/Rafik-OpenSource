@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { ref, watch, onMounted } from 'vue';
 import { useUserStore } from '@/stores/user';
-import { ref, watch } from 'vue';
 
 const props = defineProps({
   program: {
@@ -10,10 +10,14 @@ const props = defineProps({
   admin: {
     type: Boolean,
     default: false
+  },
+  trainer_id: {
+    type: Number,
+    default: null
   }
 });
 
-// Emit events to the parent (only emitted when not in read-only mode)
+// Emit events to the parent (only emitted when not in read‑only mode)
 const emit = defineEmits(['update-tags', 'update-focus']);
 
 // Reactive slider values
@@ -34,6 +38,13 @@ const refreshSliders = () => {
 };
 
 const userStore = useUserStore();
+
+// If in admin mode and a trainer_id is provided, fetch the trainer details
+onMounted(async () => {
+  if (props.admin && props.trainer_id) {
+    await userStore.getTrainer(props.trainer_id);
+  }
+});
 
 // Watch for changes in the program prop and update slider values
 watch(() => props.program, refreshSliders, { deep: true, immediate: true });
@@ -67,7 +78,7 @@ watch([strength, cardio, hypertrophy, agility], () => {
 
 // Function to add a new tag (does nothing if admin is true)
 const addTag = () => {
-  if (props.admin) return; // Read-only: do not add a tag
+  if (props.admin) return; // Read‑only: do not add a tag
   const tag = newTag.value.trim();
   if (tag && !props.program.tags.includes(tag)) {
     emit('update-tags', [...props.program.tags, tag]);
@@ -77,7 +88,7 @@ const addTag = () => {
 
 // Function to remove a tag (does nothing if admin is true)
 const removeTag = (tagToRemove: string) => {
-  if (props.admin) return; // Read-only: do not remove tags
+  if (props.admin) return; // Read‑only: do not remove tags
   emit(
     'update-tags',
     props.program.tags.filter((tag: string) => tag !== tagToRemove)
@@ -87,7 +98,7 @@ const removeTag = (tagToRemove: string) => {
 
 <template>
   <div class="grid md:grid-cols-2 items-center relative flex-1 gap-4 items-stretch">
-    <!-- Quick Stats Section -->
+    <!-- Quick Stats / Trainer Details Section -->
     <div v-if="!admin" class="card p-8 h-full">
       <h3 class="contentH-medium">Quick Stats</h3>
       <p class="text-body">
@@ -133,6 +144,25 @@ const removeTag = (tagToRemove: string) => {
           </p>
           <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">Coming Soon...</p>
         </div>
+      </div>
+    </div>
+    <!-- Trainer Details (Admin Mode) -->
+    <div v-else class="card p-8 h-full">
+      <h3 class="contentH-medium">Trainer Details</h3>
+      <div v-if="userStore.O_Trainer">
+        <!-- Display trainer title (using 'name') and bio -->
+        <p class="text-body font-bold">{{ userStore.O_Trainer.title }}</p>
+        <p class="text-body">{{ userStore.O_Trainer.bio }}</p>
+        <!-- Button to navigate to the trainer's user page -->
+        <Router-link
+          :to="{ name: 'single-user', params: { id: userStore.O_Trainer.id } }"
+          class="mt-4 inline-block px-4 py-2 bg-rafik-pritext dark:bg-rafik-darkpritext text-white rounded"
+        >
+          View Trainer Profile
+        </Router-link>
+      </div>
+      <div v-else>
+        <p class="text-body">Loading trainer details...</p>
       </div>
     </div>
 
@@ -241,7 +271,7 @@ const removeTag = (tagToRemove: string) => {
       </p>
 
       <div class="flex flex-col gap-4 mt-6">
-        <!-- Input for new tag (disabled if admin is true) -->
+        <!-- Input for new tag (shown only if not in admin mode) -->
         <input
           v-model="newTag"
           type="text"
