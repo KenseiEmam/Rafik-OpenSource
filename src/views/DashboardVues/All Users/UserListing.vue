@@ -112,7 +112,7 @@
                     :to="{ name: 'single-user', params: { id: user.id } }"
                     class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded"
                   >
-                    View Program
+                    View User
                   </Router-link>
                   <!-- <button class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded">
                     Message Client
