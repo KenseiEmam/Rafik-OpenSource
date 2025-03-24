@@ -1,301 +1,200 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, onUnmounted, onBeforeUnmount, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { useUserStore } from '@/stores/user'
-import WorkoutPlanner from '@/components/ProgramTabs/WorkoutPlanner.vue'
-import Swal from 'sweetalert2'
-import router from '@/router'
-import GeneralDetails from '@/components/UserTabs/GeneralDetails.vue'
-import { formatDistanceToNow, parseISO } from "date-fns";
-import { fromZonedTime } from "date-fns-tz";
-import TraineeDetails from '@/components/UserTabs/TraineeDetails.vue'
-import TrainerDetails from '@/components/UserTabs/TrainerDetails.vue'
-import Cetifications from '@/components/ProfileTabs/Cetifications.vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { useRoute } from 'vue-router';
+import { useProgramStore } from '@/stores/programstores';
+import DetailsTabProgram from '@/components/ProgramTabs/DetailsTabPRogram.vue';
+import WorkoutPlanner from '@/components/ProgramTabs/WorkoutPlanner.vue';
+import ClientTable from '@/components/ProgramTabs/ClientTable.vue';
+import PricingModel from '@/components/ProgramTabs/PricingModel.vue';
+import DocumentsForms from '@/components/ProgramTabs/DocumentsForms.vue';
+import Swal from 'sweetalert2';
+import router from '@/router';
 
-function humanizeDate(date: any, timeZone: string = "UTC") {
-  if (!date) {
-    return null;
-  }
+const activeTab = ref('Details');
 
-  // Convert date to UTC using the provided time zone
-  const utcDate = fromZonedTime(parseISO(date), timeZone);
+// Access the route object and store
+const route = useRoute();
+const programStore = useProgramStore();
 
-  return formatDistanceToNow(utcDate, { addSuffix: true });
-}
-
-const activeTab = ref('General Details')
-
-const compareDate = computed(() => {
-  if (!userStore.UserDetail?.last_active) return false
-  const lastActive =fromZonedTime(new Date(userStore.UserDetail.last_active),"UTC")
-  const now = new Date()
-
-  // Consider the user online if their last activity was within the last 5 minutes
-  const isOnline = now.getTime() - lastActive.getTime() <= 5 * 60 * 1000
-  console.log( now.getTime() - lastActive.getTime())
-
-
-  return isOnline
-})
-interface UserInterface {
-  id?: number
-  trainer_profile?: string
-  avatar?: string
-  email?: string
-  gender?: string // Mapped from users.sex
-  nationality?: string
-  dob?: Date
-  phone?: string
-  first_name?: string
-  last_name?: string
-  last_active?: Date | string
-}
-interface ClientInterface extends UserInterface{
-  program_details?: any
-  last_active?: Date
-  profile?: any
-}
-
-// Access the route object
-const route = useRoute()
-const userStore = useUserStore()
-
-// Change active tab handler
-function setActiveTab(tab: string) {
-  activeTab.value = tab
-}
-
-
-// Function to refresh the route/component
+// Function to refresh the current route (if needed)
 function refreshComponent() {
-  router.go(0) // This reloads the current route
+  router.go(0);
 }
-const showAddProgramModal = ref(false)
-const showCancelModal = ref(false)
-// Function to show success alerts
-function showSuccess(message: string) {
-  Swal.fire({
-    title: 'Success!',
-    showConfirmButton: false,
-    timerProgressBar: true,
-    timer: 1500,
-    text: message,
-    toast: true,
-    position: 'top-right',
-    icon: 'success',
-    cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED',
-  }) // Refresh after success
-}
-
-// Function to show error alerts
-function showError(message: string) {
-  Swal.fire({
-    title: 'Error!',
-    text: message,
-    icon: 'error',
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED',
-  })
-}
-function fetchDetails(){
-  userStore.wipeOut();
-  setActiveTab('General Details')
-  const userId = parseInt(route.params.id as string)
-  if (userId) {
-    userStore.fetchUser(userId).then(()=>{
-      if(userStore.UserDetail.id)
-    {
-
-      if(userStore.UserDetail.profile_id){
-
-        userStore.getClient(userStore.UserDetail.id)
-      }
-
-       if (userStore.UserDetail.trainer_profile)
-       {
-         userStore.getTrainer(userStore.UserDetail.id)
-       }
-    }
-
-    }).catch(() => {
-      showError('Failed to load user details.')
-    })
-  }
-}
-watch(() => route.params.id, fetchDetails);
-
-// Fetch the user when the component mounts
-onMounted(() => {
-  fetchDetails()
-})
-
+// Clean up the store on component unmount
 onBeforeUnmount(() => {
-  userStore.wipeOut();
+  programStore.wipeOut();
 });
+
+// Fetch the program details when the component mounts
+onMounted(() => {
+  const programId = route.params.id as string;
+  if (programId) {
+    programStore.fetchProgram(programId).catch(() => {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to load program details.',
+        icon: 'error',
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#d33',
+        background: '#081411',
+        color: '#E8F3ED'
+      });
+    });
+  }
+});
+
+// Handler to change active tab
+function setActiveTab(tab: string) {
+  activeTab.value = tab;
+}
 </script>
 
 <template>
   <div class="flex h-screen overflow-auto">
     <div
-      v-if="userStore.UserDetail"
-      class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-8 2xl:space-y-6"
+      v-if="programStore.Program"
+      class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-3 2xl:space-y-6"
     >
       <div
-        class="border group flex flex-col relative gradient-bg border-rafik-alternate rounded-lg overflow-hidden"
+        class="border group flex flex-col relative border-rafik-alternate rounded-lg overflow-hidden"
       >
-        <div class="p-8 2xl:p-16 2xl:py-24 space-y-4 relative items-stretch grid grid-cols-4">
-          <div class="pr-6 space-y-4 col-span-2">
-            <div class="flex items-center gap-6">
-              <img
-                :src="userStore.UserDetail?.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
-                alt=""
-                class="w-32 h-32 object-cover rounded-full border-2 border-rafik"
-              />
-              <div class="space-y-2">
-                <h1 class="title-small w-1/3">
-                  {{
-                    userStore.UserDetail?.first_name + ' ' + userStore.UserDetail?.last_name ||
-                    'Loading...'
-                  }}
-                </h1>
-                <p class="text-body text-justify 2xl:w-5/6">
-                  {{ userStore.UserDetail?.email || 'Loading...' }}
-                </p>
-                <div
-                  class="py-1 px-4 3xl:px-5 2xl:py-2 2xl:text-sm text-sm rounded-3xl max-w-max text-rafik-pritext dark:text-rafik-darkpritext uppercase font-semibold"
-                  :class="compareDate ? 'bg-rafik-alternate' : 'bg-rafik-secondary'"
+        <img
+          :src="programStore.Program.program_photo"
+          class="w-full h-full object-cover absolute"
+          alt="Program Photo"
+        />
+        <div class="w-full opacity-70 h-full bg-rafik-pribg dark:bg-rafik-darkpribg absolute"></div>
+        <div
+          class="p-8 2xl:p-16 2xl:py-24 space-y-4 relative grid items-stretch grid-cols-4 divide-x divide-rafik-sectext dark:divide-rafik-darksectext divide-x-solid"
+        >
+          <div class="pr-6 space-y-4 col-span-3">
+            <div class="flex items-center justify-between">
+              <!-- Non-editable Title -->
+              <h1 class="title-small w-1/3">
+                {{ programStore.Program?.program_name || 'Loading...' }}
+              </h1>
+              <h2 class="header-medium">
+                {{ programStore.Program?.status || 'Loading...' }}
+              </h2>
+            </div>
+
+            <!-- Non-editable Description -->
+            <p class="text-body text-justify 2xl:w-5/6">
+              {{ programStore.Program?.program_description || 'Loading...' }}
+            </p>
+
+            <!-- Additional Program Details -->
+            <div class="flex gap-8 justify-between">
+              <h3 class="uppercase flex gap-2 items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  stroke="currentColor"
+                  class="w-6 text-rafik-sectext dark:text-rafik-darksectext"
+                  viewBox="0 0 448 512"
                 >
-                  {{ compareDate ? 'Online' : 'Away' }}
-                </div>
-              </div>
+                  <path
+                    d="M160 80c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 352c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-352zM0 272c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 160c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48L0 272zM368 96l32 0c26.5 0 48 21.5 48 48l0 288c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-288c0-26.5 21.5-48 48-48z"
+                  />
+                </svg>
+                {{ programStore.Program.difficulty_level }}
+              </h3>
+              <h3 class="uppercase flex gap-2 items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  stroke="currentColor"
+                  class="w-6 text-rafik-sectext dark:text-rafik-darksectext"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M176 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l16 0 0 34.4C92.3 113.8 16 200 16 304c0 114.9 93.1 208 208 208s208-93.1 208-208c0-41.8-12.3-80.7-33.5-113.2l24.1-24.1c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L355.7 143c-28.1-23-62.2-38.8-99.7-44.6L256 64l16 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L224 0 176 0zm72 192l0 128c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-128c0-13.3 10.7-24 24-24s24 10.7 24 24z"
+                  />
+                </svg>
+                {{ programStore.Program.avg_session_time }} mins/session
+              </h3>
+              <h3 class="uppercase flex gap-2 items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  stroke="currentColor"
+                  class="w-6 text-rafik-sectext dark:text-rafik-darksectext"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M96 32l0 32L48 64C21.5 64 0 85.5 0 112l0 48 448 0 0-48c0-26.5-21.5-48-48-48l-48 0 0-32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 32L160 64l0-32c0-17.7-14.3-32-32-32S96 14.3 96 32zM448 192L0 192 0 464c0 26.5 21.5 48 48 48l352 0c26.5 0 48-21.5 48-48l0-272z"
+                  />
+                </svg>
+                {{ programStore.Program.avg_days_per_week }} days/week
+              </h3>
             </div>
           </div>
-          <div class="flex flex-col gap-4 justify-between">
-            <div class="uppercase flex justify-between gap-3 text-sm">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">Status:</p>
-              <p class="text-rafik-secondary">{{ userStore.UserDetail.audit_status }}</p>
-            </div>
-            <div class="uppercase flex justify-between gap-3 text-sm">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">Date Joined:</p>
-              <p v-if="userStore.UserDetail.created_at" class="text-rafik-secondary">{{ new Date (userStore.UserDetail.created_at).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" }) }}</p>
-            </div>
-            <div class="uppercase flex justify-between gap-3 text-sm">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">Last Active:</p>
-              <p class="text-rafik-secondary">
-                {{ humanizeDate(userStore.UserDetail.last_active)|| 'Never' }}
-              </p>
-            </div>
-
-          </div>
-          <div class="pl-6 flex-1 min-w-max h-full">
-            <div class="flex flex-col flex-1 gap-4 border-l pl-2 border-rafik-sectext dark:border-rafik-darksectext text-left">
-              <button
-                v-if="userStore.UserDetail.audit_status !== 'suspended'"
-                class="text-body uppercase text-left hover:text-rafik-secondary text-rafik"
-              >
-                Suspend User
-              </button>
-              <button
-                v-if="userStore.UserDetail.audit_status !== 'banned'"
-                class="text-body uppercase text-left hover:text-red-300 text-red-500"
-              >
-                Ban User
-              </button>
-              <button
-                v-if="userStore.UserDetail.audit_status !== 'active'"
-                class="text-body uppercase text-left hover:text-green-300 text-rafik-alternate"
-              >
-                Activate
-              </button>
-              <button
-
-                class="text-body uppercase text-red-500 hover:text-red-400 text-left"
-
-              >
-                Delete User
-              </button>
-
-            </div>
-          </div>
+          <!-- Action buttons are intentionally removed for view-only mode -->
         </div>
       </div>
-      <!-- Tabs -->
-      <div class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext">
+
+      <!-- Tabs Navigation -->
+      <div
+        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
+      >
         <button
           :class="
-            activeTab === 'General Details' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'
+            activeTab === 'Details'
+              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              : 'hover:opacity-70'
           "
           class="nav-btn"
-          @click="setActiveTab('General Details')"
+          @click="setActiveTab('Details')"
         >
-          General Details
+          Details
         </button>
         <button
           :class="
-            activeTab === 'Trainer Details' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'
+            activeTab === 'Workouts'
+              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              : 'hover:opacity-70'
           "
-          v-if="userStore.O_Trainer"
           class="nav-btn uppercase"
-          @click="setActiveTab('Trainer Details')"
+          @click="setActiveTab('Workouts')"
         >
-          Trainer Details
+          Workouts
         </button>
         <button
           :class="
-            activeTab === 'Trainee Details' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'
+            activeTab === 'Clients'
+              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              : 'hover:opacity-70'
           "
-          v-if="userStore.Client"
           class="nav-btn uppercase"
-          @click="setActiveTab('Trainee Details')"
+          @click="setActiveTab('Clients')"
         >
-          Trainee Details
+          Clients
         </button>
         <button
           :class="
-            activeTab === 'Certifications' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'
+            activeTab === 'Pricing'
+              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              : 'hover:opacity-70'
           "
-          v-if="userStore.O_Trainer"
           class="nav-btn uppercase"
-          @click="setActiveTab('Certifications')"
+          @click="setActiveTab('Pricing')"
         >
-          Certifications
-        </button>
-        <button
-          :class="
-            activeTab === 'Workout-Plan' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'
-          "
-          v-if="userStore.Client?.program_details"
-          class="nav-btn uppercase"
-          @click="setActiveTab('Workout-Plan')"
-        >
-          Workout-Plan
+          Pricing
         </button>
       </div>
 
-      <!-- Render Box -->
+      <!-- Tab Content -->
       <div style="min-height: 50vh" class="over-flow-y-auto flex-1">
         <transition name="fade">
-
+          <DetailsTabProgram admin v-if="activeTab === 'Details'" :program="programStore.Program" />
           <WorkoutPlanner
-            :program="userStore.Client.program_details"
             admin
-            :user="userStore.Client?.id"
-            v-if="activeTab === 'Workout-Plan' && userStore.Client"
+            v-else-if="activeTab === 'Workouts'"
+            :program="programStore.Program"
           />
-          <TrainerDetails
-          :trainer="userStore.O_Trainer"
-            v-else-if="activeTab === 'Trainer Details' && userStore.O_Trainer"/>
-          <TraineeDetails
-            :client="userStore.Client"
-            v-else-if="activeTab === 'Trainee Details' && userStore.Client"
-          />
-          <GeneralDetails :client="userStore.UserDetail" v-else-if="activeTab === 'General Details'"/>
-
-          <Cetifications admin  v-else-if="activeTab === 'Certifications' && userStore.O_Trainer?.certifications_links" :certifications="userStore.O_Trainer.certifications_links"/>
+          <ClientTable admin v-else-if="activeTab === 'Clients'" :program="programStore.Program" />
+          <PricingModel admin v-else-if="activeTab === 'Pricing'" :program="programStore.Program" />
+          <!-- <DocumentsForms v-else-if="activeTab === 'Documents'" :program="programStore.Program" /> -->
         </transition>
       </div>
     </div>
