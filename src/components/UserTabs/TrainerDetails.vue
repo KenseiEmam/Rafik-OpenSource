@@ -44,7 +44,7 @@
           <div class="p-6  border-rafik border rounded-xl gradient-bg flex flex-col" v-for="program in programStore.AllPrograms">
             <h2 class="header-small">{{ program.program_name }}</h2>
             <p class="text-rafik-alternate">{{ program.status }}</p>
-            <p class="text-body">Created: {{ new Date (program.created_at).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" })  }} </p>
+            <p class="text-body" v-if="program.created_at">Created: {{ new Date (program.created_at).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" })  }} </p>
             <button class="text-rafik-teritiary text-center mt-auto mx-auto">View Program</button>
           </div>
         </div>

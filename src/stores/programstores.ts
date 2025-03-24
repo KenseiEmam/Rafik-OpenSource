@@ -33,7 +33,7 @@ function showError(message: string) {
 }
 export type Program = {
   id: string
-  created_at:Date
+  created_at?:Date
   program_name?: string
   program_description?: string
   program_focus?: string[] // Add program_focus here (assumed to be an array of strings)
