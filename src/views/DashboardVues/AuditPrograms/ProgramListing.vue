@@ -3,129 +3,147 @@
     <div class="flex-1 px-8 py-12 flex flex-col w-full 2xl:px-12 2xl:py-24 2xl:space-y-6 space-y-3">
 
       <!-- Page Title -->
-      <PageTitle subheader="all" header="users" />
+      <PageTitle subheader="all" header="program" />
       <!-- Search and Filter Controls -->
-      <div class="flex justify-between items-center gap-4 mb-3">
+      <div class="flex justify-between items-end gap-4 mb-3 relative">
         <!-- Search Bar -->
         <div class="relative w-128">
           <input
             type="search"
             @input="handleSearch"
             class="block w-full p-4 text-sm text-rafik-sectext dark:text-rafik-darksectext border rounded-lg bg-rafik-pribg dark:bg-rafik-darkpribg"
-            placeholder="Type to Search Users..."
+            placeholder="Search by name/description ..."
             required
           />
         </div>
+          <!-- Trainer Selection -->
+
+           <div class="w-64">
+    <label class="block text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext mb-1">
+      Select Trainer
+    </label>
+    <div class="relative">
+      <!-- Search Input -->
+      <input
+        type="search"
+        v-model="searchQuery"
+        @focus="dropdownVisible = true"
+        @input="fetchFilteredTrainers"
+        @blur="handleBlur"
+        class="w-full p-3 border rounded-xl bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext focus:outline-none"
+        placeholder="Search for trainer..."
+      />
+      <!-- Dropdown -->
+      <div
+        v-if="dropdownVisible && trainerOptions.length"
+        class="absolute z-10 mt-1 w-full bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext rounded-xl max-h-60 overflow-auto"
+      >
+        <div
+          v-for="trainer in trainerOptions"
+          :key="trainer.id"
+          @click="selectOption(trainer)"
+          class="p-3 hover:bg-rafik-secondary hover:text-rafik-pritext cursor-pointer"
+        >
+          {{ trainer.first_name }} {{ trainer.last_name }} <span class="text-xs opacity-50"> {{ trainer.email }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
         <!-- Filter Buttons -->
         <div class="mr-auto flex gap-4">
           <button
             @click="updateFilter('All')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
-            :class="filters.roles.length === 0 ? 'border-rafik gradient-bg text-rafik' : 'border'"
+            :class="filters.status.length === 0 ? 'border-rafik gradient-bg text-rafik' : 'border'"
           >
-            All Users
+            All Programs
           </button>
           <button
-            @click="updateFilter('Trainer')"
+            @click="updateFilter('Active')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
-            :class="filters.roles.includes('Trainer') ? 'border-rafik gradient-bg text-rafik' : 'border'"
+            :class="filters.status.includes('Active') ? 'border-rafik gradient-bg text-rafik' : 'border'"
           >
-            Trainer
+            Active
           </button>
           <button
-            @click="updateFilter('Trainee')"
+            @click="updateFilter('Draft')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
-            :class="filters.roles.includes('Trainee') ? 'border-rafik gradient-bg text-rafik' : 'border'"
+            :class="filters.status.includes('Draft') ? 'border-rafik gradient-bg text-rafik' : 'border'"
           >
-            Trainee
+            Draft
           </button>
           <button
-            @click="updateFilter('CustomerCare')"
+            @click="updateFilter('Review')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
-            :class="filters.roles.includes('customer_care') ? 'border-rafik gradient-bg text-rafik' : 'border'"
+            :class="filters.status.includes('Review') ? 'border-rafik gradient-bg text-rafik' : 'border'"
           >
-            Customer Care
+            Review
           </button>
         </div>
       </div>
 
       <!-- Data Table -->
-      <div v-if="users.length > 0 && !loading ">
+      <div v-if="programs && programs.length > 0 && !loading ">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead>
-            <tr>
-              <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">ID</th>
-              <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">Details</th>
-              <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">Roles</th>
-              <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">Gender</th>
-              <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">Age</th>
-              <th></th>
-            </tr>
+  <tr>
+    <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">Program Name</th>
+    <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">Difficulty</th>
+    <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">Status</th>
+    <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">Trainer</th>
+    <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">Price (AED/Month)</th>
+    <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">Workouts/Week</th>
+    <th></th>
+  </tr>
           </thead>
           <tbody class="space-y-6">
-            <tr v-for="user in users" :key="user.id" class="p-4">
-              <td class="rounded-l-xl bg-rafik-secbg dark:bg-rafik-darksecbg p-4 ">{{ user.id }}</td>
-              <td
-                class="flex gap-6 text-left items-center py-4 pl-3 bg-rafik-secbg dark:bg-rafik-darksecbg"
-              >
-                <img
-                  :src="user.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
-                  class="w-12 rounded-full border-2 border-rafik h-12"
-                  alt="Avatar"
-                />
-                <div>
-                  <p class="header-small">{{ user.first_name }} {{ user.last_name }}</p>
-                  <p>{{ user.email }}</p>
-                </div>
-              </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize ">
-                <div class="flex flex-wrap text-sm items-center">
-                  <p v-for="role,index in user.roles">
-                  {{ role }}
-                  <span v-if="index !== user.roles.length-1">-</span>
-                  </p>
-                </div>
+              <tr v-for="program in programs" :key="program.id" class="p-4">
+                <td class="rounded-l-xl bg-rafik-secbg dark:bg-rafik-darksecbg p-4">{{ program.program_name }}</td>
+                <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize">{{ program.difficulty_level }}</td>
+                <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize">{{ program.status }}</td>
+                <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+                  <router-link
+                    :to="{ name: 'single-user', params: { id: program.trainer_id } }"
+                    class="text-rafik-pritext hover:text-rafik-pribg dark:text-rafik-darkpritext dark:hover:text-rafik-darkpribg">
+                    {{ program.trainer_id }}
+                  </router-link>
+                </td>
+                <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">{{ program.price_one }}</td>
+                <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">{{ program.avg_days_per_week }}</td>
+                <td class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right rounded-r-xl">
+                  <svg
+                    @click="(show_action = program.id)"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext cursor-pointer ml-auto"
+                    viewBox="0 0 128 512"
+                  >
+                    <path
+                      d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"
+                    />
+                  </svg>
+                  <div
+                    v-if="show_action == program.id"
+                    @mouseleave="handleLeave()"
+                    class="absolute min-w-16 px-2 z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg shadow-lg divide-y divide-y-rafik-sectext"
+                  >
+                    <Router-link
+                      :to="{ name: 'single-user', params: { id: program.trainer_id } }"
+                      class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext rounded"
+                    >
+                      View Program
+                    </Router-link>
+                    <button
+                      class="px-3 py-5 text-red-500 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-red-300 rounded"
+                    >
+                      Delete Program
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
 
-              </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize">{{ user.sex }}</td>
-              <td class=" bg-rafik-secbg dark:bg-rafik-darksecbg p-4 ">{{ calculateAge(user.dob) || 'N/A' }} </td>
-              <td
-                class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right rounded-r-xl"
-              >
-                <svg
-                  @click="(show_action = user.id)"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext cursor-pointer ml-auto"
-                  viewBox="0 0 128 512"
-                >
-                  <path
-                    d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"
-                  />
-                </svg>
-                <div
-                  v-if="show_action == user.id"
-                  @mouseleave="handleLeave()"
-                  class="absolute min-w-16 px-2 z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg shadow-lg divide-y divide-y-rafik-sectext"
-                >
-                  <Router-link
-                    :to="{ name: 'single-user', params: { id: user.id } }"
-                    class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded"
-                  >
-                    View Program
-                  </Router-link>
-                  <!-- <button class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded">
-                    Message Client
-                  </button> -->
-                  <button
-                    class="px-3 py-5 text-red-500 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-red-300 rounded"
-                  >
-                    Delete User
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
         </table>
       </div>
        <!-- Loading State -->
@@ -144,13 +162,13 @@
       </div>
 
       <!-- Pagination Controls -->
-      <div v-if=" !loading && userStore.All_count" class="flex justify-between items-center gap-4 my-6">
+      <div v-if=" !loading && ProgramStore.AllCount" class="flex justify-between items-center gap-4 my-6">
         <!-- Page Number Tabs -->
         <p class="header-small min-w-max">Page {{ page }}</p>
         <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
         <div class="flex text-rafik-sectext dark:text-rafik-darksectext gap-4 px-4">
           <button
-            v-for="p in  Math.ceil(userStore.All_count/ pageSize)"
+            v-for="p in  Math.ceil(ProgramStore.AllCount/ pageSize)"
             :key="p"
             @click="updatePage(p)"
             class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
@@ -169,7 +187,7 @@
           Previous Page
         </button>
         <button
-          v-if="page < Math.ceil(userStore.All_count/ pageSize)"
+          v-if="page < Math.ceil(ProgramStore.AllCount/ pageSize)"
           @click="updatePage(page + 1)"
           class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
         >
@@ -183,32 +201,149 @@
 import PageTitle from '@/components/Navigation/PageTitle.vue';
 import { ref, computed, onMounted, watch } from 'vue';
 import debounce from 'lodash/debounce';
-import { useUserStore } from '@/stores/user';
+import { useProgramStore } from '@/stores/programstores';
+import { supabase } from '@/lib/supabaseClient';
+import { ModelSelect } from "vue-search-select";
+import vSelect from 'vue-select-next'
+// Search query and dropdown visibility
+const searchQuery = ref('');
+const dropdownVisible = ref(false);
 
-interface User {
-  id: string;
-  email: string;
-  avatar:string;
-  first_name: string;
-  last_name: string;
-  sex: string;
-  dob:Date,
-  roles:string[];
+
+// The selected trainer (if needed for your filters)
+const selectedTrainer = ref(null);
+
+// Filter options based on search query
+const filteredOptions = computed(() => {
+  if (!searchQuery.value) return trainerOptions.value;
+  return trainerOptions.value.filter((option) =>
+    option.label.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
+
+
+
+// Set the selected trainer and hide dropdown
+function selectOption(option:any) {
+  selectedTrainer.value = option;
+  searchQuery.value = `${option.first_name} ${option.last_name}`;
+  dropdownVisible.value = false;
+
+  filters.value.trainer = option.id;
+  console.log(filters.value.trainer, option, option.id)
+  loadUsers()
+}
+
+// Optional: Hide the dropdown if clicking outside
+document.addEventListener('click', (e:any) => {
+  const el = document.querySelector('.relative');
+  if (el && !el.contains(e.target)) {
+    dropdownVisible.value = false;
+  }
+});
+
+
+async function fetchFilteredTrainers() {
+  dropdownVisible.value = true
+  if (!searchQuery.value) {
+    trainerOptions.value = [];
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from('users')
+    .select('id, first_name, last_name, email')
+    .contains('roles', ['Trainer'])
+    .or(`first_name.ilike.%${searchQuery.value}%, last_name.ilike.%${searchQuery.value}%`);
+
+  if (error) {
+    console.error('Error fetching trainers:', error.message);
+    return;
+  }
+
+  trainerOptions.value = data;
+}
+// Reset filter when search input is cleared (native clear button)
+watch(searchQuery, (newValue) => {
+  if (!newValue) resetFilter();
+});
+function resetFilter() {
+  filters.value.trainer = null;
+  trainerOptions.value = [];
+  dropdownVisible.value = false;
+  loadUsers()
+}
+function handleBlur() {
+  setTimeout(() => {
+    dropdownVisible.value = false;
+  }, 200);
+}
+type Program = {
+  id: string
+  created_at?:Date
+  program_name?: string
+  program_description?: string
+  program_focus?: string[] // Add program_focus here (assumed to be an array of strings)
+  status?: string
+  trainer_id?: number
+  difficulty_level?: string
+  avg_session_time?: number
+  avg_days_per_week?: number
+  overall_rating?: number
+  price_one?: number
+  price_three?: number
+  price_six?: number
+  price_year?: number
+  tags?: string[]
+  workouts?: Workout[]
+  program_photo?: string
+  weekly_cycle?: number
+  promos?: PromoCode[]
+  induction?: Question[]
+  follow?: Question[]
+  referral?: string
+  // Add any other properties your program might have
+}
+interface Question {
+  type: string
+  question?: string
+  answer?: any
+}
+// Promo Codes
+type PromoCode = {
+  code: string
+  value: number
+}
+type Workout = {
+  workout_name: string
+  workout_summary?: string
+  time_to_complete?: string
+  sets_per_session?: number
+  rest_day?: boolean
+  exercises: Exercise[]
+}
+type Exercise = {
+  id: string
+  exercise_name?: string
+  type?: string
+  intensity?: string
+  sets?: number
+  reps?: number
 }
 
 type Filter = {
-  roles: string[];
-  name: string;
-  active: boolean;
-};
+  trainer:number|null,
+  name:string,
+  status:string[],
+}
 const loading = ref(true)
-const userStore = useUserStore();
-const users = ref<User[]>([]);
+const ProgramStore = useProgramStore();
+const programs = ref<Program[] | null>(null);
 const totalCount = ref(0);
 const page = ref(1);
 const pageSize = ref(10);
 const holdQuery = ref('');
-const filters = ref<Filter>({ roles: [], name: '', active: true });
+const filters = ref<Filter>({ status: [], name: '', trainer: null });
 
 const show_action = ref()
 
@@ -219,15 +354,20 @@ function handleLeave() {
 }
 
 const totalPages = computed(() => Math.ceil(totalCount.value / pageSize.value));
-// Function to load users
+// Function to load program
 async function loadUsers() {
   try {
-    const res = await userStore.fetchUsers(filters.value, page.value, pageSize.value);
+    const res = await ProgramStore.fetchAuditPrograms(filters.value, page.value, pageSize.value);
     loading.value= false
   } catch (error) {
-    console.error('Error fetching users:', error);
+    console.error('Error fetching program:', error);
   }
 }
+
+// Fetch Trainers
+
+const trainerOptions = ref<any[]>([]);
+
 
 // Debounced search function
 const debouncedFetchUsers = debounce((query: string) => {
@@ -246,9 +386,9 @@ function handleSearch(event: Event) {
 function updateFilter(filterType: string) {
   loading.value= true
   if (filterType === 'All') {
-    filters.value.roles = [];
+    filters.value.status = [];
   } else {
-    filters.value.roles = [filterType];
+    filters.value.status = [filterType];
   }
   page.value = 1;
   loadUsers();
@@ -268,25 +408,27 @@ function calculateAge(dob:Date) {
     }
 function updatePage(newPage: number) {
   loading.value= true
-  if (newPage >= 1 && newPage <= Math.ceil(userStore.All_count / pageSize.value)) {
+  if (newPage >= 1 && newPage <= Math.ceil(ProgramStore.AllCount / pageSize.value)) {
     page.value = newPage;
     loadUsers();
   }
 }
 
-// Load users on component mount
-onMounted(loadUsers);
+// Load program on component mount
+onMounted(()=>{
+  loadUsers()
+});
 
-// Watch for changes in the store's All_Users and update the list
+// Watch for changes in the store's AllPrograms and update the list
 watch(
-  () => userStore.All_Users,
+  () => ProgramStore.AllPrograms,
   (newUsers) => {
-    users.value = newUsers;
+    programs.value = newUsers;
 
   }
 );
 watch(
-  () => userStore.All_count,
+  () => ProgramStore.AllCount,
   (newUsers) => {
     totalCount.value = newUsers;
 
@@ -306,6 +448,16 @@ tbody > tr {
   border-radius: 0.375rem;
   outline: 1px solid rgba(0, 0, 0, 0.175);
 }
+/* Light Mode Styles */
+.custom-v-select .vs__dropdown-toggle,
+.custom-v-select .vs__selected,
+.custom-v-select input,
+.custom-v-select .vs__search {
+  background-color: #f3eeeb !important; /* rafik.pribg */
+  border: 1px solid #8C644C !important;   /* rafik.sectext */
+  color: #8C644C !important;              /* rafik.sectext */
+}
+
 
 .card:hover {
   background-image:linear-gradient(135deg, #f3eeeb 36%, #fff2cb)
