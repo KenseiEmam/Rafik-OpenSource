@@ -129,7 +129,7 @@
                     class="absolute min-w-16 px-2 z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg shadow-lg divide-y divide-y-rafik-sectext"
                   >
                     <Router-link
-                      :to="{ name: 'single-user', params: { id: program.trainer_id } }"
+                      :to="{ name: 'audit-program', params: { id: program.id } }"
                       class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext rounded"
                     >
                       View Program
