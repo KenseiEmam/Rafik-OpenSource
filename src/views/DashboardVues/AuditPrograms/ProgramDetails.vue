@@ -193,8 +193,8 @@ function setActiveTab(tab: string) {
             :program="programStore.Program"
           />
           <ClientTable admin v-else-if="activeTab === 'Clients'" :program="programStore.Program" />
-          <PricingModel v-else-if="activeTab === 'Pricing'" :program="programStore.Program" />
-          <DocumentsForms v-else-if="activeTab === 'Documents'" :program="programStore.Program" />
+          <PricingModel admin v-else-if="activeTab === 'Pricing'" :program="programStore.Program" />
+          <!-- <DocumentsForms v-else-if="activeTab === 'Documents'" :program="programStore.Program" /> -->
         </transition>
       </div>
     </div>
