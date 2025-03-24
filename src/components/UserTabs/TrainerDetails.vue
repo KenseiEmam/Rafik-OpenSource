@@ -10,23 +10,23 @@
 
       <div class="flex flex-col card col-span-2 p-6 gap-3 pl-3 2xl:gap-5">
         <h3 class="contentH-small text-sm 2xl:text-xl mb-6">Trainer Data:</h3>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Title</p>
           <p class="text-rafik-secondary">{{ props.trainer.title|| 'N/A' }}</p>
         </div>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Years of Experience</p>
           <p class="text-rafik-secondary" >{{ props.trainer.years_of_experience|| 'N/A' }} years</p>
         </div>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Maximum Clients:</p>
           <p class="text-rafik-secondary" >{{ props.trainer.seats_available|| 'N/A' }}</p>
         </div>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Available Hours:</p>
           <p class="text-rafik-secondary" >{{ props.trainer.available_hours|| 'N/A' }}</p>
         </div>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Works with</p>
           <div class="flex flex-wrap gap-3 ">
             <p class="text-rafik-secondary" v-for="diet,index in props.trainer.preferred_clients" :key="diet">{{ diet}}<span v-if="index+1 !== props.trainer.preferred_clients.length">, </span></p>

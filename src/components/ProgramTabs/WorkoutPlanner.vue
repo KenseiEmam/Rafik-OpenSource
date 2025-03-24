@@ -147,7 +147,7 @@
                    loop
                  ></video>
                  <div v-else class="w-24 h-24 card border flex items-center justify-center">
-                   <p class="text-xs"> No Media</p>
+                   <p class="text-sm"> No Media</p>
                  </div>
 
                  <div>
@@ -227,7 +227,7 @@
                    loop
                  ></video>
                  <div v-else class="w-24 h-24 card border flex items-center justify-center">
-                   <p class="text-xs"> No Media</p>
+                   <p class="text-sm"> No Media</p>
                  </div>
 
                  <div>
@@ -299,7 +299,7 @@
                   <ExerciseOffcanvas @addExercises="handleAdd(activeTab, $event)" v-if="isEditing" />
                   <button  @click="handleAddMulti(activeTab)" v-if="isEditing"  class="header-small p-4 border border-rafik-pritext dark:border-rafik-darkpritext rounded hover:opacity-70 text-sm">
                     Add Multi-Set +
-                    <br><span class="text-xs text-rafik-sectext dark:text-rafik-darksectext">Supersets/Circuits </span>
+                    <br><span class="text-sm text-rafik-sectext dark:text-rafik-darksectext">Supersets/Circuits </span>
                   </button>
                 </div>
         </div>

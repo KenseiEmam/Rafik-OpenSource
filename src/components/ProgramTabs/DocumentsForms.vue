@@ -155,7 +155,7 @@ watch(
       <p class="text-label text-rafik-sectext dark:text-rafik-darksectext">
         The client induction form is sent to all clients once they are subscribed to the program. It should usually include questions pertaining to client readiness and also about their goals for the specific program.
       </p>
-      <div class="text-xs 2xl:text-sm flex gap-4 flex-wrap divide-x divide-rafik-sectext dark:divide-rafik-darksectext">
+      <div class="text-sm 2xl:text-sm flex gap-4 flex-wrap divide-x divide-rafik-sectext dark:divide-rafik-darksectext">
         <button @click="addInduction('text')" class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">+ Add Text </button>
         <button @click="addInduction('number')" class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">+ Add Number </button>
         <button @click="addInduction('boolean')" class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">+ Add Boolean</button>
@@ -164,7 +164,7 @@ watch(
       <div class="flex flex-col gap-3">
         <div v-for="(question, index) in inductions" :key="index" class="card p-6 border-rafik gradient-bg flex justify-between items-center text-left border">
           <div class="space-y-2">
-            <p class="uppercase text-xs 2xl:text-sm font-semibold">{{ question.type }} Question</p>
+            <p class="uppercase text-sm 2xl:text-sm font-semibold">{{ question.type }} Question</p>
             <input
               v-model="question.question"
               class="bg-transparent text-rafik-pritext dark:text-rafik-darkpritext px-0 header-small text-base 2xl:text-lg focus:outline-none border-none focus:ring-0"
@@ -184,7 +184,7 @@ watch(
       <p class="text-label text-rafik-sectext dark:text-rafik-darksectext">
         The follow-up form is sent automatically to clients on a regular basis based on the interval set up in your settings. This form usually asks clients about their progress and urges them to update their weight setting.
       </p>
-      <div class="text-xs 2xl:text-sm flex gap-4 flex-wrap divide-x divide-rafik-sectext dark:divide-rafik-darksectext">
+      <div class="text-sm 2xl:text-sm flex gap-4 flex-wrap divide-x divide-rafik-sectext dark:divide-rafik-darksectext">
         <button @click="addFollow('text')" class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">+ Add Text </button>
         <button @click="addFollow('number')" class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">+ Add Number </button>
         <button @click="addFollow('boolean')" class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">+ Add Boolean</button>
@@ -193,7 +193,7 @@ watch(
       <div class="flex flex-col gap-3">
         <div v-for="(question, index) in follow" :key="index" class="card p-6 border-rafik gradient-bg flex justify-between items-center text-left border">
           <div class="space-y-2">
-            <p class="uppercase text-xs 2xl:text-sm font-semibold">{{ question.type }} Question</p>
+            <p class="uppercase text-sm 2xl:text-sm font-semibold">{{ question.type }} Question</p>
             <input
               v-model="question.question"
               class="bg-transparent text-rafik-pritext dark:text-rafik-darkpritext px-0 header-small text-base 2xl:text-lg focus:outline-none border-none focus:ring-0"

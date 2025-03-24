@@ -3,19 +3,19 @@
     <div class="grid grid-cols-3 gap-6 divide-x divide-rafik-sectext dark:divide-rafik-darksectext ">
       <div class="flex flex-col gap-3 pl-3 2xl:gap-5">
         <h3 class="contentH-small text-sm 2xl:text-xl mb-6 2xl:mb-8">Client Profile</h3>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Age</p>
           <p class="text-rafik-secondary">{{ calculateAge(props.client.dob) || 'N/A' }}</p>
         </div>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Gender</p>
           <p class="text-rafik-secondary">{{ props.client.gender || 'N/A' }}</p>
         </div>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Nationality</p>
           <p class="text-rafik-secondary">{{ props.client.nationality || 'N/A' }}</p>
         </div>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Phone</p>
           <p class="text-rafik-secondary">{{ props.client.phone || 'N/A' }}</p>
         </div>
@@ -23,20 +23,20 @@
 
       <div class="flex flex-col gap-3 pl-3 2xl:gap-5">
         <h3 class="contentH-small text-sm 2xl:text-xl mb-6">Client Metrics</h3>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Height</p>
           <p class="text-rafik-secondary">{{ props.client.profile.height || 'N/A' }} cm</p>
         </div>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Weight</p>
           <!-- Use the computed value for weight -->
           <p class="text-rafik-secondary">{{ weight || 'N/A' }} kg</p>
         </div>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Goal Weight</p>
           <p class="text-rafik-secondary">{{ props.client.profile.weight_goal  || 'N/A' }} kg</p>
         </div>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Body Fat Percent</p>
           <p class="text-rafik-secondary">{{ props.client.profile.body_fat + '%' || 'N/A' }}</p>
         </div>
@@ -44,21 +44,21 @@
 
       <div class="flex flex-col gap-3 pl-3 2xl:gap-5">
         <h3 class="contentH-small text-sm 2xl:text-xl mb-6">Client Fitness</h3>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Experience</p>
           <p class="text-rafik-secondary">{{ props.client.profile.experience || 'N/A' }}</p>
         </div>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Fitness Goal</p>
           <p class="text-rafik-secondary" v-for="goal,index in props.client.profile.fitness_goal" :key="goal">{{ goals[goal-1]}} <span v-if="index+1 !== props.client.profile.fitness_goal.length">,</span></p>
           <p class="text-rafik-secondary" v-if="!props.client.profile.fitness_goal">N/A</p>
         </div>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Sports Played</p>
           <p class="text-rafik-secondary" v-for="sport,index in props.client.profile.sports_played" :key="sport">{{ sport}} <span v-if="index+1 !== props.client.profile.sports_played.length">,</span></p>
           <p class="text-rafik-secondary" v-if="!props.client.profile.sports_played">N/A</p>
         </div>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Diet Preference</p>
           <p class="text-rafik-secondary" v-for="diet,index in props.client.profile.diet_preference" :key="diet">{{ diet}}<span v-if="index+1 !== props.client.profile.diet_preference.length">, </span></p>
           <p class="text-rafik-secondary" v-if="!props.client.profile.diet_preference">N/A</p>
@@ -72,15 +72,15 @@
         <p class=text-body>{{program.program_description||"Loading..."}}</p>
       </div>
       <div class="flex flex-col gap-3">
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Joined On</p>
           <p class="text-rafik-secondary">{{ new Date(props.client.program_details.created_at).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" }) || 'N/A' }}</p>
         </div>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Expires On</p>
           <p class="text-rafik-secondary">{{ new Date(props.client.program_details.expires_on).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" }) || 'N/A' }}</p>
         </div>
-        <div class="flex justify-between uppercase text-xs 2xl:text-base">
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">Price Package</p>
           <p class="text-rafik-secondary" >{{ props.client.program_details.price_pavckage? props.client.program_details.price_pavckage  + ' AED' : 'None Paying' }}</p>
         </div>
