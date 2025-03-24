@@ -99,13 +99,13 @@ const router = createRouter({
             {
               path: '', // Default child route for /dashboard/programs
               name: 'audit-list',
-              component: () => import('../views/DashboardVues/All Users/UserListing.vue'),
+              component: () => import('../views/DashboardVues/AuditPrograms/ProgramListing.vue'),
 
             },
             {
               path: ':id', // Dynamic route for program details
               name: 'audit-program',
-              component: () => import('../views/DashboardVues/All Users/UserDetails.vue'),
+              component: () => import('../views/DashboardVues/AuditPrograms/ProgramDetails.vue'),
             },
           ],
         },
