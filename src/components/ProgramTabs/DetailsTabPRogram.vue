@@ -10,10 +10,6 @@ const props = defineProps({
   admin: {
     type: Boolean,
     default: false
-  },
-  trainer_id: {
-    type: Number,
-    default: null
   }
 });
 
@@ -41,8 +37,8 @@ const userStore = useUserStore();
 
 // If in admin mode and a trainer_id is provided, fetch the trainer details
 onMounted(async () => {
-  if (props.admin && props.trainer_id) {
-    await userStore.getTrainer(props.trainer_id);
+  if (props.admin && props.program.trainer_id) {
+    await userStore.getTrainer(props.program.trainer_id);
   }
 });
 
@@ -149,17 +145,26 @@ const removeTag = (tagToRemove: string) => {
     <!-- Trainer Details (Admin Mode) -->
     <div v-else class="card p-8 h-full">
       <h3 class="contentH-medium">Trainer Details</h3>
-      <div v-if="userStore.O_Trainer">
+      <div class="flex flex-col justify-between h-full" v-if="userStore.O_Trainer">
         <!-- Display trainer title (using 'name') and bio -->
-        <p class="text-body font-bold">{{ userStore.O_Trainer.title }}</p>
-        <p class="text-body">{{ userStore.O_Trainer.bio }}</p>
+        <div class="mt-4">
+          <p class="subheader-small font-bold">
+            {{
+              `${userStore.O_Trainer.title} ${userStore.O_Trainer.first_name} ${userStore.O_Trainer.last_name}`
+            }}
+          </p>
+          <p class="text-body">{{ userStore.O_Trainer.bio }}</p>
+        </div>
+
         <!-- Button to navigate to the trainer's user page -->
-        <Router-link
-          :to="{ name: 'single-user', params: { id: userStore.O_Trainer.id } }"
-          class="mt-4 inline-block px-4 py-2 bg-rafik-pritext dark:bg-rafik-darkpritext text-white rounded"
-        >
-          View Trainer Profile
-        </Router-link>
+        <div class="mb-4">
+          <Router-link
+            :to="{ name: 'single-user', params: { id: userStore.O_Trainer.id } }"
+            class="mt-auto inline-block px-4 py-2 bg-rafik-pritext dark:bg-rafik-darkpritext text-white rounded"
+          >
+            View Trainer Profile
+          </Router-link>
+        </div>
       </div>
       <div v-else>
         <p class="text-body">Loading trainer details...</p>
@@ -192,7 +197,7 @@ const removeTag = (tagToRemove: string) => {
             min="0"
             max="100"
             step="5"
-            :disabled="admin"
+            :class="{ 'read-only-slider': admin }"
           />
         </div>
 
@@ -211,7 +216,7 @@ const removeTag = (tagToRemove: string) => {
             min="0"
             max="100"
             step="5"
-            :disabled="admin"
+            :class="{ 'read-only-slider': admin }"
           />
         </div>
 
@@ -230,7 +235,7 @@ const removeTag = (tagToRemove: string) => {
             min="0"
             max="100"
             step="5"
-            :disabled="admin"
+            :class="{ 'read-only-slider': admin }"
           />
         </div>
 
@@ -249,7 +254,7 @@ const removeTag = (tagToRemove: string) => {
             min="0"
             max="100"
             step="5"
-            :disabled="admin"
+            :class="{ 'read-only-slider': admin }"
           />
         </div>
 
@@ -318,5 +323,9 @@ input[type='range']::-moz-range-thumb {
   border-radius: 9999px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
   cursor: pointer;
+}
+
+.read-only-slider {
+  pointer-events: none; /* Disables interaction */
 }
 </style>
