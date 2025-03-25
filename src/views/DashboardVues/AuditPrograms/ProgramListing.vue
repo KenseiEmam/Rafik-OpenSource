@@ -254,7 +254,7 @@ async function fetchFilteredTrainers() {
     .from('users')
     .select('id, first_name, last_name, email')
     .contains('roles', ['Trainer'])
-    .or(`first_name.ilike.%${searchQuery.value}%, last_name.ilike.%${searchQuery.value}%`);
+    .or(`first_name.ilike.%${searchQuery.value}%, last_name.ilike.%${searchQuery.value}%, email.ilike.%${searchQuery.value}%`);
 
   if (error) {
     console.error('Error fetching trainers:', error.message);
