@@ -129,7 +129,29 @@ function setActiveTab(tab: string) {
               </h3>
             </div>
           </div>
-          <!-- Action buttons are intentionally removed for view-only mode -->
+          <div class="pl-6 flex-1 min-w-max">
+            <div class="flex flex-col flex-1 gap-4 border-rafik-sectext dark:border-rafik-darksectext text-left justify-center">
+              <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">View Language</button> -->
+              <button
+                class="uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+                v-if="programStore.Program.status == 'Review'"
+              >
+                Accept Publish Request
+              </button>
+              <button
+                class="uppercase text-left text-red-500 hover:text-red-400"
+                v-if="programStore.Program.status == 'Review'"
+              >
+                Deny Request
+              </button>
+              <button
+                class="uppercase text-left text-rafik-secondary hover:text-rafik"
+                v-if="programStore.Program.status == 'Active'"
+              >
+                Reset to Draft (Suspend)
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
