@@ -1,5 +1,6 @@
 {
   "general": {
+    "rafik": "Rafik",
     "loading": "Loading...",
     "error": "Error",
     "success": "Success",
@@ -31,6 +32,20 @@
     "visionDescription": "To empower individuals in the MENA to achieve their fitness goals with confidence and accountability, by providing personalized and reliable connections to expert trainers at affordable prices.",
     "missionTitle": "Our Mission",
     "missionDescription": "At Rafik, we connect people to fitness professionals who truly understand their needs, ensuring a tailored journey with measurable results. Through a platform built on trust, expertise, and accountability, we aim to foster a supportive community where everyone can reach their full potential, no matter their starting point."
+  },
+  "application": {
+    "alert": "Text Us!",
+    "lookingForTrainer": "Looking for your perfect trainer?",
+    "installOur": "INSTALL OUR",
+    "rafik": "RAFIK SQUIRE APP",
+    "description": "Optimize your training, diet, sports performance and more, with nifty pricing, certified trainers, and communication to keep your programs customized to your needs.",
+    "download": {
+      "downloadOnThe": "Download on the",
+      "appStore": "App Store",
+      "getItOn": "GET IT ON",
+      "googlePlay": "Google Play"
+    },
+    "errorMessage": "Contact us at admin@rafikapp.ae to get access!"
   },
   "dashboard": {
     "sidebar": {
