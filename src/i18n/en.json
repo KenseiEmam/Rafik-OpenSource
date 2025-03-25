@@ -250,6 +250,16 @@
       "support": "Support",
       "myProfile": "My Profile",
       "logout": "Logout"
+    },
+    "home": {
+      "welcomeBack": "Welcome Back",
+      "description": "We've kept an eye on your clients and programs while you were gone and made some charts. Please take your time to check them out below.",
+      "button": {
+        "viewProfile": "View Profile",
+        "checkCharts": "Check Charts",
+        "settings": "Settings"
+      },
+      "stats": "Statistics Dashboard <br> Coming Soon"
     }
   }
 }
