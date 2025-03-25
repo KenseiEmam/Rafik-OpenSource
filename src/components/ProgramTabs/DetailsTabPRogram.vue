@@ -159,8 +159,8 @@ const removeTag = (tagToRemove: string) => {
         <!-- Button to navigate to the trainer's user page -->
         <div class="mb-4">
           <Router-link
-            :to="{ name: 'single-user', params: { id: userStore.O_Trainer.id } }"
-            class="mt-auto inline-block px-4 py-2 bg-rafik-pritext dark:bg-rafik-darkpritext text-white rounded"
+            :to="{ name: 'single-user', params: { id: userStore.O_Trainer.user_id } }"
+            class="mt-auto inline-block px-4 py-2 bg-rafik-pribg hover:bg-rafik dark:hover:bg-rafik dark:bg-rafik-darkpribg  text-rafik-pritext dark:text-rafik-darkpritext hover:text-white rounded"
           >
             View Trainer Profile
           </Router-link>

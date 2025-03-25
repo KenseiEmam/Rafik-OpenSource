@@ -69,6 +69,7 @@ interface TrainerInterface extends UserInterface {
   seats_available: number | null
   preferred_clients: string[] | null
   certifications_links: string[] | null
+  user_id:number | null
 }
 
 type Exercise = {
@@ -327,7 +328,7 @@ async function getLoggedTrainer() {
 
     // Assign the client object with the user details and associated program
     Trainer.value = {
-      id: id,
+      user_id: id,
       avatar: users.avatar,
       email: users.email,
       gender: users.sex,
@@ -908,7 +909,7 @@ async function getLoggedTrainer() {
 
       // Assign the client object with the user details and associated program
       O_Trainer.value = {
-        id: id,
+        user_id: id,
         avatar: users.avatar,
         email: users.email,
         gender: users.sex,
