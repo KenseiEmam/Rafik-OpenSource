@@ -2,12 +2,21 @@
   <div>
     <div class="flex items-center mb-6">
       <h2 class="header-small" v-if="selectedUser">
-        Showing Roles for {{ selectedUser.first_name }} {{ selectedUser.last_name }}
+        {{
+          t('dashboard.tabs.settings.rolesAndPerms.showingRolesFor', {
+            firstName: selectedUser.first_name,
+            lastName: selectedUser.last_name
+          })
+        }}
       </h2>
-      <h2 class="header-small" v-else>No User Selected Yet!</h2>
+      <h2 class="header-small" v-else>
+        {{ t('dashboard.tabs.settings.rolesAndPerms.noUserSelected') }}
+      </h2>
       <div class="ml-auto w-64">
-        <label class="block text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext mb-1">
-          Select User to view their roles:
+        <label
+          class="block text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext mb-1"
+        >
+          {{ t('dashboard.tabs.settings.rolesAndPerms.selectUser') }}
         </label>
         <div class="relative">
           <!-- Search Input -->
@@ -18,7 +27,7 @@
             @input="fetchFilteredUsers"
             @blur="handleBlur"
             class="w-full p-3 border rounded-xl bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext focus:outline-none"
-            placeholder="Search for user..."
+            :placeholder="t('dashboard.tabs.settings.rolesAndPerms.searchPlaceholder')"
           />
           <!-- Dropdown -->
           <div
@@ -31,7 +40,8 @@
               @click="selectOption(user)"
               class="p-3 hover:bg-rafik-secondary hover:text-rafik-pritext cursor-pointer"
             >
-              {{ user.first_name }} {{ user.last_name }} <span class="text-xs opacity-50"> {{ user.email }}</span>
+              {{ user.first_name }} {{ user.last_name }}
+              <span class="text-xs opacity-50"> {{ user.email }}</span>
             </div>
           </div>
         </div>
@@ -39,7 +49,11 @@
     </div>
 
     <div class="flex flex-col gap-8">
-      <div v-for="role in settingsStore.roles" :key="role.id" class="card p-8 flex justify-between items-center">
+      <div
+        v-for="role in settingsStore.roles"
+        :key="role.id"
+        class="card p-8 flex justify-between items-center"
+      >
         <div>
           <h3 class="header-small">{{ role.role_name }}</h3>
           <p class="text-body">{{ role.role_description }}</p>
@@ -55,10 +69,14 @@
               />
               <div
                 class="w-16 h-8 flex items-center border-rafik-sectext dark:border-rafik-darksectext border-2 rounded-full transition-all"
-                :class="selectedUser.roles.includes(role.role_name) ? 'bg-rafik' : 'bg-rafik-secbg dark:bg-rafik-darsecbg'"
+                :class="
+                  selectedUser.roles.includes(role.role_name)
+                    ? 'bg-rafik'
+                    : 'bg-rafik-secbg dark:bg-rafik-darsecbg'
+                "
               >
                 <div
-                  class="w-8 h-8 bg-rafik-sectext dark:bg-rafik-darksectext flex items-center justify-center rounded-full shadow-md transform transition-transform"
+                  class="w-8 h-8 bg-rafik-sectext dark:bg-rafik-darksectext dark:bg-rafik-darksectext flex items-center justify-center rounded-full shadow-md transform transition-transform"
                   :class="{ 'translate-x-8': selectedUser.roles.includes(role.role_name) }"
                 ></div>
               </div>
@@ -74,7 +92,9 @@
 import { ref, watch, onMounted } from 'vue';
 import { useSettingsStore } from '@/stores/settingstores';
 import { supabase } from '@/lib/supabaseClient';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 // Search query and dropdown visibility
 const searchQuery = ref('');
 const dropdownVisible = ref(false);
@@ -83,7 +103,7 @@ const selectedUser = ref<any>(null);
 const settingsStore = useSettingsStore();
 function showSuccess(message: string) {
   Swal.fire({
-    title: 'Success!',
+    title: t('general.success'),
     showConfirmButton: false,
     timerProgressBar: true,
     timer: 1500,
@@ -92,21 +112,21 @@ function showSuccess(message: string) {
     position: 'top-right',
     icon: 'success',
     background: '#081411',
-    color: '#E8F3ED',
-  })
+    color: '#E8F3ED'
+  });
 }
 
 // Function to show error alerts
 function showError(message: string) {
   Swal.fire({
-    title: 'Error!',
+    title: t('general.error'),
     text: message,
     icon: 'error',
     confirmButtonColor: '#d33',
     cancelButtonColor: '#d33',
     background: '#081411',
-    color: '#E8F3ED',
-  })
+    color: '#E8F3ED'
+  });
 }
 // Fetch filtered users based on searchQuery
 async function fetchFilteredUsers() {
@@ -119,7 +139,9 @@ async function fetchFilteredUsers() {
   const { data, error } = await supabase
     .from('users')
     .select('id, first_name, last_name, email, roles')
-    .or(`first_name.ilike.%${searchQuery.value}%,last_name.ilike.%${searchQuery.value}%,email.ilike.%${searchQuery.value}%`)
+    .or(
+      `first_name.ilike.%${searchQuery.value}%,last_name.ilike.%${searchQuery.value}%,email.ilike.%${searchQuery.value}%`
+    )
     .limit(10);
 
   if (error) {
@@ -157,9 +179,7 @@ async function toggleRole(role: any) {
   if (!selectedUser.value) return;
 
   // Copy current roles (or initialize if null)
-  let updatedRoles = Array.isArray(selectedUser.value.roles)
-    ? [...selectedUser.value.roles]
-    : [];
+  let updatedRoles = Array.isArray(selectedUser.value.roles) ? [...selectedUser.value.roles] : [];
 
   // Check if the role already exists; add it if not, otherwise remove it.
   if (updatedRoles.includes(role.role_name)) {
@@ -175,13 +195,13 @@ async function toggleRole(role: any) {
     .eq('id', selectedUser.value.id);
 
   if (error) {
-    showError('Error updating roles:'+ error.message);
+    showError(t('dashboard.tabs.settings.rolesAndPerms.errorUpdatingRoles') + error.message);
     return;
   }
 
   // Immediately update the UI with the new roles array.
   selectedUser.value.roles = updatedRoles;
-  showSuccess("Roles updated successfuly")
+  showSuccess(t('dashboard.tabs.settings.rolesAndPerms.rolesUpdated'));
 }
 
 onMounted(() => {

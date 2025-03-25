@@ -438,6 +438,38 @@
           "unexpectedErrorFetchingProgram": "Unexpected error fetching program: ",
           "errorFetchingTrainerName": "Error fetching trainer name: "
         }
+      },
+      "settings": {
+        "general": {
+          "unitsAndMeasurements": "Units and Measurements",
+          "unitsExplanation": "The units displayed to you when viewing our dashboard do not affect the units viewed by clients!",
+          "languages": "Languages",
+          "languageExplanation": "Choose the display language for your user dashboard, this also does not affect your trainees!",
+          "english": "English",
+          "arabic": "Arabic",
+          "theme": "Theme",
+          "themeExplanation": "Choose your preference between a dark minty theme and a light creamy theme!",
+          "coolNight": "Cool Night",
+          "warmSunshine": "Warm Sunshine",
+          "deleteAccount": "Delete Account"
+        },
+        "rolesAndPerms": {
+          "showingRolesFor": "Showing Roles for {firstName} {lastName}",
+          "noUserSelected": "No User Selected Yet!",
+          "selectUser": "Select User to view their roles:",
+          "searchPlaceholder": "Search for user...",
+          "rolesUpdated": "Roles updated successfully",
+          "errorUpdatingRoles": "Error updating roles: "
+        },
+        "trainer": {
+          "seatsAvailable": "Seats Available",
+          "adjustSeats": "Adjust the number of seats available for training sessions.",
+          "followUpInterval": "Follow Up Interval",
+          "setFollowUp": "Set the number of days between client follow-up forms.",
+          "workingHours": "Working Hours",
+          "selectWorkingHours": "Select your available working hours for training sessions.",
+          "allDay": "All Day"
+        }
       }
     }
   }

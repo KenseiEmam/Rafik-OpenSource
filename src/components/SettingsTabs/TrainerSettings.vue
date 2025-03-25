@@ -3,8 +3,8 @@
     <!-- Seats Available -->
     <div class="card p-8 flex justify-between items-center">
       <div>
-        <h3 class="header-small">Seats Available</h3>
-        <p class="text-body">Adjust the number of seats available for training sessions.</p>
+        <h3 class="header-small">{{ t('dashboard.tabs.settings.trainer.seatsAvailable') }}</h3>
+        <p class="text-body">{{ t('dashboard.tabs.settings.trainer.adjustSeats') }}</p>
       </div>
       <div class="w-32 2xl:w-64">
         <input
@@ -19,8 +19,8 @@
     <!-- Follow Up Interval -->
     <div class="card p-8 flex justify-between items-center">
       <div>
-        <h3 class="header-small">Follow Up Interval</h3>
-        <p class="text-body">Set the number of days between client follow-up forms.</p>
+        <h3 class="header-small">{{ t('dashboard.tabs.settings.trainer.followUpInterval') }}</h3>
+        <p class="text-body">{{ t('dashboard.tabs.settings.trainer.setFollowUp') }}</p>
       </div>
       <div class="w-32 2xl:w-64">
         <input
@@ -35,8 +35,8 @@
     <!-- Working Hours -->
     <div class="card p-8 flex justify-between items-center">
       <div>
-        <h3 class="header-small">Working Hours</h3>
-        <p class="text-body">Select your available working hours for training sessions.</p>
+        <h3 class="header-small">{{ t('dashboard.tabs.settings.trainer.workingHours') }}</h3>
+        <p class="text-body">{{ t('dashboard.tabs.settings.trainer.selectWorkingHours') }}</p>
       </div>
       <div class="w-32 2xl:w-64">
         <select v-model="localTrainerSettings.available_hours" class="rafik-text-input">
@@ -53,6 +53,8 @@
 import { onMounted, ref, watch, nextTick, computed } from 'vue';
 import { useSettingsStore } from '@/stores/settingstores';
 import { debounce } from 'lodash';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
 interface TrainerSettings {
   seats_available: number;
@@ -61,17 +63,17 @@ interface TrainerSettings {
 }
 
 const workingHoursOptions = [
-  "8:00 AM - 4:00 PM",
-  "9:00 AM - 5:00 PM",
-  "10:00 AM - 6:00 PM",
-  "11:00 AM - 7:00 PM",
-  "All Day"
+  '8:00 AM - 4:00 PM',
+  '9:00 AM - 5:00 PM',
+  '10:00 AM - 6:00 PM',
+  '11:00 AM - 7:00 PM',
+  t('dashboard.tabs.settings.trainer.allDay') //TODO: SUPABASE ???
 ];
 
 const defaultTrainerSettings: TrainerSettings = {
   seats_available: 0,
   follow_up: 1,
-  available_hours: workingHoursOptions[0],
+  available_hours: workingHoursOptions[0]
 };
 
 const localTrainerSettings = ref<TrainerSettings>({ ...defaultTrainerSettings });
