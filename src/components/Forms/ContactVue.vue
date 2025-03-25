@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import SocialIcons from '@/components/SocialIcons.vue'
-import Swal from 'sweetalert2'
-import { supabase } from '@/lib/supabaseClient'
+import { ref } from 'vue';
+import SocialIcons from '@/components/SocialIcons.vue';
+import Swal from 'sweetalert2';
+import { supabase } from '@/lib/supabaseClient';
+import { useI18n } from 'vue-i18n';
 
-// SweetAlert2 helper functions
+const { t } = useI18n();
+
+// SweetAlert2 helper functions using translations
 function showSuccess(message: string) {
   Swal.fire({
-    title: 'Success!',
-    text: message,
+    title: t('general.success'),
+    text: message || t('contact.form.successMessage'),
     icon: 'success',
     toast: true,
     position: 'top-right',
@@ -16,63 +19,69 @@ function showSuccess(message: string) {
     timer: 1500,
     timerProgressBar: true,
     background: '#081411',
-    color: '#E8F3ED',
-  })
+    color: '#E8F3ED'
+  });
 }
 
 function showError(message: string) {
   Swal.fire({
-    title: 'Error!',
-    text: message,
+    title: t('general.error'),
+    text: t('contact.form.errorSending') + message,
     icon: 'error',
     confirmButtonColor: '#d33',
     background: '#081411',
-    color: '#E8F3ED',
-  })
+    color: '#E8F3ED'
+  });
 }
 
 // Reactive form data
 const formData = ref({
   name: '',
   email: '',
-  message: '',
-})
-const sending = ref(false)
+  message: ''
+});
+const sending = ref(false);
 
 // Function to send email via Supabase Edge Function ("smtp")
 async function sendEmail() {
-  sending.value = true
+  sending.value = true;
   try {
     const { data, error } = await supabase.functions.invoke('smtp', {
-      body: { ...formData.value },
-    })
+      body: { ...formData.value }
+    });
 
     if (error) {
-      throw error
+      throw error;
     }
 
     // Assuming the function returns an object with a "message" property
-    showSuccess(data?.message || 'Email sent successfully!')
-    formData.value = { name: '', email: '', message: '' }
+    showSuccess(data?.message || t('contact.form.successMessage'));
+    formData.value = { name: '', email: '', message: '' };
   } catch (err: any) {
-    console.error(err)
-    showError('Error sending email: ' + err.message)
+    console.error(err);
+    showError(err.message);
   } finally {
-    sending.value = false
+    sending.value = false;
   }
 }
 </script>
 
 <template>
-  <section id="contact" class="flex-1 card mb-16  items-center w-full min-h-128 flex-1 mb-16 px-3 py-6 md:py-12 md:px-12 ">
+  <section
+    id="contact"
+    class="flex-1 card mb-16 items-center w-full min-h-128 px-3 py-6 md:py-12 md:px-12"
+  >
     <div class="flex flex-col md:grid md:grid-cols-3 my-auto w-full gap-8">
+      <!-- Left Column: Contact Details -->
       <div class="col-span-2 gap-4 relative flex flex-col">
-        <h1 class="font-black uppercase text-rafik md:title-small text-xl md:text-3xl">Would Love to Hear From You</h1>
+        <h1 class="font-black uppercase text-rafik md:title-small text-xl md:text-3xl">
+          {{ t('contact.form.header') }}
+        </h1>
         <p class="mb-4 text-body">
-          Have a question about our training? Our Models? Our Services? Reach us through the methods
-          down below!
+          {{ t('contact.form.description') }}
         </p>
         <div class="flex-1 flex flex-col gap-4">
+          <!-- Call -->
           <div class="flex items-center w-full gap-4 py-4 pr-4">
             <div class="card rounded-full bg-rafik-sectext dark:bg-rafik-darksectext p-4">
               <svg
@@ -87,10 +96,13 @@ async function sendEmail() {
               </svg>
             </div>
             <div class="w-full">
-              <h3 class="uppercase text-rafik-pritext dark:text-rafik-darkpritext md:header-small">Give us a call:</h3>
-              <p class="text-body">mob: +971 56 866 3114</p>
+              <h3 class="uppercase text-rafik-pritext dark:text-rafik-darkpritext md:header-small">
+                {{ t('contact.form.call.label') }}
+              </h3>
+              <p class="text-body">{{ t('contact.form.call.number') }}</p>
             </div>
           </div>
+          <!-- Mail -->
           <div class="flex items-center w-full gap-4 py-4 pr-4">
             <div class="card rounded-full bg-rafik-sectext dark:bg-rafik-darksectext p-4">
               <svg
@@ -105,10 +117,13 @@ async function sendEmail() {
               </svg>
             </div>
             <div class="w-full">
-              <h3 class="uppercase text-rafik-pritext dark:text-rafik-darkpritext md:header-small">Mail us:</h3>
-              <p class="text-body">admin@rafik.ae</p>
+              <h3 class="uppercase text-rafik-pritext dark:text-rafik-darkpritext md:header-small">
+                {{ t('contact.form.mail.label') }}
+              </h3>
+              <p class="text-body">{{ t('contact.form.mail.address') }}</p>
             </div>
           </div>
+          <!-- Find Us -->
           <div class="flex items-center w-full gap-4 py-4 pr-4">
             <div class="card rounded-full bg-rafik-sectext dark:bg-rafik-darksectext p-4">
               <svg
@@ -123,54 +138,61 @@ async function sendEmail() {
               </svg>
             </div>
             <div class="w-full">
-              <h3 class="uppercase text-rafik-pritext dark:text-rafik-darkpritext md:header-small">Find Us At:</h3>
-              <p class="text-body">Enter address here...</p>
+              <h3 class="uppercase text-rafik-pritext dark:text-rafik-darkpritext md:header-small">
+                {{ t('contact.form.find.label') }}
+              </h3>
+              <p class="text-body">{{ t('contact.form.find.address') }}</p>
             </div>
           </div>
-          <!-- Contact details section -->
+          <!-- Social Icons -->
           <SocialIcons class="w-3/4 mx-auto mt-6" :in="'hi'" :fb="'hi'" :yt="'hi'" :tw="'hi'" />
         </div>
       </div>
+      <!-- Right Column: Contact Form -->
       <div
-        class="md:border-l md:pl-8 space-y-4 border-rafik-sectext dark:border-rafik-darksectext flex w-full items-center justify-center flex-col w-full"
+        class="md:border-l md:pl-8 space-y-4 border-rafik-sectext dark:border-rafik-darksectext flex w-full items-center justify-center flex-col"
       >
-        <h3 class="uppercase text-rafik-pritext dark:text-rafik-darkpritext md:header-small">Send us A Message</h3>
+        <h3 class="uppercase text-rafik-pritext dark:text-rafik-darkpritext md:header-small">
+          {{ t('contact.form.sendMessage') }}
+        </h3>
         <form class="space-y-4 w-full" @submit.prevent="sendEmail">
-          <div class="form-control ">
-            <label for="Name">Full Name</label>
+          <div class="form-control">
+            <label for="Name">{{ t('contact.form.formLabels.fullName') }}</label>
             <input
               name="Name"
               v-model="formData.name"
               class="rafik-text-input"
               type="text"
-              placeholder="rafik"
+              :placeholder="t('contact.form.formPlaceholders.fullName')"
               required
             />
           </div>
           <div class="form-control">
-            <label for="email">Email Address</label>
+            <label for="email">{{ t('contact.form.formLabels.email') }}</label>
             <input
               name="email"
               v-model="formData.email"
               class="rafik-text-input"
               type="email"
-              placeholder="rafik@example.com"
+              :placeholder="t('contact.form.formPlaceholders.email')"
               required
             />
           </div>
           <div class="form-control">
-            <label for="message">Message</label>
+            <label for="message">{{ t('contact.form.formLabels.message') }}</label>
             <textarea
               name="message"
               v-model="formData.message"
               class="rafik-text-input"
               rows="6"
-              placeholder="Write us a message here..."
+              :placeholder="t('contact.form.formPlaceholders.message')"
               required
             ></textarea>
           </div>
           <div class="flex w-full">
-            <button type="submit" class="btn-lg mx-auto">SEND</button>
+            <button type="submit" class="btn-lg mx-auto">
+              {{ t('contact.form.sendButton') }}
+            </button>
           </div>
         </form>
       </div>

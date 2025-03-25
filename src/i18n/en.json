@@ -2,8 +2,8 @@
   "general": {
     "rafik": "Rafik",
     "loading": "Loading...",
-    "error": "Error",
-    "success": "Success",
+    "success": "Success!",
+    "error": "Error!",
     "opened": "Opened",
     "seen": "Seen"
   },
@@ -96,6 +96,36 @@
       "zoomClientLogs": "Zoom in and take an even deeper look into your client's daily lives from their detailed workout and diet logs.",
       "entitlementSystem": "Sign up clients at your own rates and prices then add them to your programs using our entitlement system.",
       "clientInsights": "Get all your client insights and customize their individual workout plan."
+    },
+    "form": {
+      "header": "Would Love to Hear From You",
+      "description": "Have a question about our training? Our Models? Our Services? Reach us through the methods down below!",
+      "call": {
+        "label": "Give us a call:",
+        "number": "mob: +971 56 866 3114"
+      },
+      "mail": {
+        "label": "Mail us:",
+        "address": "admin@rafik.ae"
+      },
+      "find": {
+        "label": "Find Us At:",
+        "address": "Enter address here..."
+      },
+      "sendMessage": "Send us A Message",
+      "formLabels": {
+        "fullName": "Full Name",
+        "email": "Email Address",
+        "message": "Message"
+      },
+      "formPlaceholders": {
+        "fullName": "rafik",
+        "email": "rafik@example.com",
+        "message": "Write us a message here..."
+      },
+      "sendButton": "SEND",
+      "successMessage": "Email sent successfully!",
+      "errorSending": "Error sending email: "
     }
   },
   "dashboard": {
