@@ -45,7 +45,7 @@
             <h2 class="header-small">{{ program.program_name }}</h2>
             <p class="text-rafik-alternate">{{ program.status }}</p>
             <p class="text-body" v-if="program.created_at">Created: {{ new Date (program.created_at).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" })  }} </p>
-            <button class="text-rafik-teritiary text-center mt-auto mx-auto">View Program</button>
+            <router-link :to="{name:'audit-program', params:{id:program.id}}" class="text-rafik-teritiary text-center mt-auto mx-auto">View Program</router-link>
           </div>
         </div>
       </div>
