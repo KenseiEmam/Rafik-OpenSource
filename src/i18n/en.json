@@ -77,6 +77,17 @@
       "accessDashboard": "ACCESS THE DASHBOARD",
       "trainerAccess": "Trainer dashboard access only on PC",
       "traineeGetApp": "Trainee? Get Our App"
+    },
+    "programCreation": {
+      "headline": "CREATE PROGRAMS THAT SHOW OFF THE REAL YOU",
+      "description": "Our top of the line in-house tools are like nothing else on the market, allowing you complete flexibility and ease of use to create tailored programs for your clients in an efficient time frame.",
+      "toolsHeader": "Our tools include but are not limited to:",
+      "tools": {
+        "item1": "An extensive library of exercises that you can use or duplicate to create your own custom ones. Save these custom exercises for private use, or share them with other PTs.",
+        "item2": "A program creator that allows you to set metrics and create customized workout schedules unbound by conventional week cycles.",
+        "item3": "Add assisting text documents to reply to your clients outside your working hours using an AI interpreter.",
+        "item4": "Set up your own custom pricing model and create discount codes to share with your followers at a fingers touch."
+      }
     }
   },
   "dashboard": {
