@@ -16,17 +16,17 @@ const { t } = useI18n();
     <div class="w-full h-full bg-gradient-to-r from-40% from-rafik-darksecbg absolute"></div>
     <div class="col-span-3 relative space-y-4">
       <h3 class="font-black text-rafik text-xl md:text-3xl md:title-small">
-        {{ t('contact.programCreation.headline') }}
+        {{ t('home.programCreation.headline') }}
       </h3>
-      <p class="text-body">{{ t('contact.programCreation.description') }}<br /></p>
+      <p class="text-body">{{ t('home.programCreation.description') }}<br /></p>
       <h3 class="font-bold text-rafik-secondary uppercase md:contentH-small">
-        {{ t('contact.programCreation.toolsHeader') }}
+        {{ t('home.programCreation.toolsHeader') }}
       </h3>
       <ul class="list-disc ml-6 text-body space-y-4 text-rafik-pritext dark:text-rafik-darkpritext">
-        <li>{{ t('contact.programCreation.tools.item1') }}</li>
-        <li>{{ t('contact.programCreation.tools.item2') }}</li>
-        <li>{{ t('contact.programCreation.tools.item3') }}</li>
-        <li>{{ t('contact.programCreation.tools.item4') }}</li>
+        <li>{{ t('home.programCreation.tools.item1') }}</li>
+        <li>{{ t('home.programCreation.tools.item2') }}</li>
+        <li>{{ t('home.programCreation.tools.item3') }}</li>
+        <li>{{ t('home.programCreation.tools.item4') }}</li>
       </ul>
     </div>
     <div class="col-span-2 relative hidden md:flex flex-col">
