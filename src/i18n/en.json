@@ -1,3 +1,49 @@
 {
-  "HELLO": "Hello world"
+  "general": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "opened": "Opened",
+    "seen": "Seen"
+  },
+  "header": {
+    "nav": {
+      "home": "Home",
+      "about": "About",
+      "team": "Team",
+      "getApp": "Get App",
+      "contactUs": "Contact Us"
+    },
+    "auth": {
+      "login": "Login",
+      "register": "Register",
+      "hello": "HELLO {name}!",
+      "accessDashboard": "Access Dashboard",
+      "logout": "Logout"
+    }
+  },
+  "home": {},
+  "about": {
+    "pageTitle": "ABOUT RAFIK",
+    "pageSubtitle": "THE FITNESS SQUIRE FOR ALL",
+    "description": "In an era where fitness information is everywhere, navigating the noise has never been harder. While science-backed knowledge is more accessible than ever, social media has also given rise to self-proclaimed \"experts\" who mislead people with flashy trends and empty promises—draining their time, money, and sometimes even harming their health.<br><br>That’s why we created <strong>Rafik</strong>. We believe that <strong>everyone deserves access to reliable fitness expertise</strong>—guidance that is not only effective but also ethical and sustainable. However, we also understand the challenges: in-person coaching can be expensive, and finding the right <strong>online</strong> trainer can feel like a gamble. <strong>Rafik eliminates the guesswork</strong> by <strong>connecting you with the right trainer</strong> while ensuring <strong>accountability</strong> at every step.<br><br>And to the trainers—<strong>we’ve got your back, too!</strong> By sharing your <strong>verified</strong> programs on our platform, you gain access to a <strong>serious and dedicated audience</strong> who genuinely wants to transform their lives. Rafik helps you <strong>manage, track, and grow your client base</strong> while ensuring your hard work gets the <strong>recognition it deserves</strong> through a fair and transparent review system.<br><br><strong>Rafik is our gift to the fitness community—we hope you enjoy it!</strong>",
+    "visionTitle": "Our Vision",
+    "visionDescription": "To empower individuals in the MENA to achieve their fitness goals with confidence and accountability, by providing personalized and reliable connections to expert trainers at affordable prices.",
+    "missionTitle": "Our Mission",
+    "missionDescription": "At Rafik, we connect people to fitness professionals who truly understand their needs, ensuring a tailored journey with measurable results. Through a platform built on trust, expertise, and accountability, we aim to foster a supportive community where everyone can reach their full potential, no matter their starting point."
+  },
+  "dashboard": {
+    "sidebar": {
+      "myDashboard": "My <br />Dashboard",
+      "workoutPrograms": "Workout &<br />Programs",
+      "myClients": "My <br />Clients",
+      "programEntitlements": "Program <br />Entitlements",
+      "listOfUsers": "List of <br />Users",
+      "auditPrograms": "Audit<br />Programs",
+      "settingsPreferences": "Settings &<br />Preferences",
+      "support": "Support",
+      "myProfile": "My Profile",
+      "logout": "Logout"
+    }
+  }
 }
