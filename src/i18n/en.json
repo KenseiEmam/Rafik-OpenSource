@@ -138,6 +138,27 @@
       "access": "Access Dashboard"
     }
   },
+  "register": {
+    "header": "REGISTER NOW TO BECOME AN AFFILIATE",
+    "alreadyRegistered": "Already Registered?",
+    "signInNow": "Sign In Now",
+    "form": {
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "rafik@example.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "*******",
+      "confirmPasswordLabel": "Confirm Password",
+      "joinNowButton": "JOIN NOW",
+      "passwordCriteria": {
+        "item1": "Must be at least 8 characters long.",
+        "item2": "Must contain at least one number and one special character.",
+        "item3": "Must not be too similar to the email address."
+      },
+      "successMessage": "Registration successful! Check your email to confirm your account.",
+      "errorSending": "Error: ",
+      "requirementsError": "Please ensure the form meets all requirements before submitting."
+    }
+  },
   "dashboard": {
     "sidebar": {
       "myDashboard": "My <br />Dashboard",
