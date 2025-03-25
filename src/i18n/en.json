@@ -127,6 +127,17 @@
     },
     "errorMessage": "Contact us at admin@rafikapp.ae to get access!"
   },
+  "login": {
+    "welcomeBack": "WELCOME BACK! TIME TO CATCH-UP",
+    "notRegisteredYet": "Not Registered Yet?",
+    "signUpNow": "Sign Up Now",
+    "form": {
+      "email": "Email Address",
+      "password": "Password",
+      "loading": "Loading",
+      "access": "Access Dashboard"
+    }
+  },
   "dashboard": {
     "sidebar": {
       "myDashboard": "My <br />Dashboard",
