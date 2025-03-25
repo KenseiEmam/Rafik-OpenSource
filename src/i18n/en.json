@@ -159,6 +159,72 @@
       "requirementsError": "Please ensure the form meets all requirements before submitting."
     }
   },
+  "privacy": {
+    "title": "Privacy Policy for Rafik Fitness Squire",
+    "sections": {
+      "introduction": {
+        "title": "1. Introduction",
+        "content": "Welcome to Rafik Fitness Squire! Your privacy is important to us, and we are committed to protecting your personal data. This Privacy Policy outlines how we collect, use, and safeguard your information when you use our app."
+      },
+      "informationCollected": {
+        "title": "2. Information We Collect",
+        "items": [
+          "<strong>Account Information:</strong> Name, email address, and password.",
+          "<strong>Profile Information:</strong> Users are required to upload a profile photo.",
+          "<strong>Health and Fitness Data:</strong> Data entered about workouts, diet, weight, and health metrics.",
+          "<strong>Device and Usage Data:</strong> Technical information like IP address, device type, and usage patterns."
+        ]
+      },
+      "howWeUse": {
+        "title": "3. How We Use Your Information",
+        "items": [
+          "To provide, maintain, and improve our app’s features.",
+          "To personalize your fitness experience and track progress.",
+          "To communicate updates, features, and support inquiries.",
+          "To ensure security and prevent unauthorized access."
+        ]
+      },
+      "dataSharing": {
+        "title": "4. Data Sharing and Disclosure",
+        "items": [
+          "<strong>Service Providers:</strong> Trusted third-party services assisting with app functionality.",
+          "<strong>Legal Requirements:</strong> Compliance with legal obligations when necessary."
+        ]
+      },
+      "dataSecurity": {
+        "title": "5. Data Security",
+        "content": "We implement security measures to protect your data. However, no method is completely secure, so we encourage safeguarding account credentials."
+      },
+      "yourRights": {
+        "title": "6. Your Rights and Choices",
+        "items": [
+          "Access, update, or delete account information.",
+          "Request removal of personal data.",
+          "Adjust app settings for profile visibility."
+        ]
+      },
+      "dataRetention": {
+        "title": "7. Data Retention",
+        "content": "We retain data as necessary for service provision or as required by law. Deleted accounts result in permanent data removal, except where retention is legally required."
+      },
+      "childrensPrivacy": {
+        "title": "8. Children’s Privacy",
+        "content": "Rafik Fitness Squire is not intended for children under 13. If data from a child is discovered, we will take steps to remove it."
+      },
+      "policyChanges": {
+        "title": "9. Changes to This Privacy Policy",
+        "content": "We may update this policy periodically. Continued use of the app after updates constitutes acceptance of the revised policy."
+      },
+      "contactUs": {
+        "title": "10. Contact Us",
+        "content": "If you have any questions, contact us at [Insert Contact Email]."
+      },
+      "accountDeletion": {
+        "title": "11. Request Account & Data Deletion",
+        "content": "If you wish to delete your account and associated data, please visit <a href=\"https://rafikapp.ae/delete-account\" class=\"text-blue-500 hover:underline\">rafikapp.ae/delete-account</a>. Once your request is submitted, your data will be permanently removed, except where retention is legally required."
+      }
+    }
+  },
   "dashboard": {
     "sidebar": {
       "myDashboard": "My <br />Dashboard",
