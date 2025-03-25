@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, onUnmounted, onBeforeUnmount, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { useUserStore } from '@/stores/user'
-import WorkoutPlanner from '@/components/ProgramTabs/WorkoutPlanner.vue'
-import Swal from 'sweetalert2'
-import router from '@/router'
-import GeneralDetails from '@/components/UserTabs/GeneralDetails.vue'
-import { formatDistanceToNow, parseISO } from "date-fns";
-import { fromZonedTime } from "date-fns-tz";
-import TraineeDetails from '@/components/UserTabs/TraineeDetails.vue'
-import TrainerDetails from '@/components/UserTabs/TrainerDetails.vue'
-import Cetifications from '@/components/ProfileTabs/Cetifications.vue'
+import { ref, onMounted, computed, onUnmounted, onBeforeUnmount, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useUserStore } from '@/stores/user';
+import WorkoutPlanner from '@/components/ProgramTabs/WorkoutPlanner.vue';
+import Swal from 'sweetalert2';
+import router from '@/router';
+import GeneralDetails from '@/components/UserTabs/GeneralDetails.vue';
+import { formatDistanceToNow, parseISO } from 'date-fns';
+import { fromZonedTime } from 'date-fns-tz';
+import TraineeDetails from '@/components/UserTabs/TraineeDetails.vue';
+import TrainerDetails from '@/components/UserTabs/TrainerDetails.vue';
+import Cetifications from '@/components/ProfileTabs/Cetifications.vue';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
-function humanizeDate(date: any, timeZone: string = "UTC") {
+function humanizeDate(date: any, timeZone: string = 'UTC') {
   if (!date) {
     return null;
   }
@@ -23,55 +25,53 @@ function humanizeDate(date: any, timeZone: string = "UTC") {
   return formatDistanceToNow(utcDate, { addSuffix: true });
 }
 
-const activeTab = ref('General Details')
+const activeTab = ref('General Details');
 
 const compareDate = computed(() => {
-  if (!userStore.UserDetail?.last_active) return false
-  const lastActive =fromZonedTime(new Date(userStore.UserDetail.last_active),"UTC")
-  const now = new Date()
+  if (!userStore.UserDetail?.last_active) return false;
+  const lastActive = fromZonedTime(new Date(userStore.UserDetail.last_active), 'UTC');
+  const now = new Date();
 
   // Consider the user online if their last activity was within the last 5 minutes
-  const isOnline = now.getTime() - lastActive.getTime() <= 5 * 60 * 1000
-  console.log( now.getTime() - lastActive.getTime())
+  const isOnline = now.getTime() - lastActive.getTime() <= 5 * 60 * 1000;
+  console.log(now.getTime() - lastActive.getTime());
 
-
-  return isOnline
-})
+  return isOnline;
+});
 interface UserInterface {
-  id?: number
-  trainer_profile?: string
-  avatar?: string
-  email?: string
-  gender?: string // Mapped from users.sex
-  nationality?: string
-  dob?: Date
-  phone?: string
-  first_name?: string
-  last_name?: string
-  last_active?: Date | string
+  id?: number;
+  trainer_profile?: string;
+  avatar?: string;
+  email?: string;
+  gender?: string; // Mapped from users.sex
+  nationality?: string;
+  dob?: Date;
+  phone?: string;
+  first_name?: string;
+  last_name?: string;
+  last_active?: Date | string;
 }
-interface ClientInterface extends UserInterface{
-  program_details?: any
-  last_active?: Date
-  profile?: any
+interface ClientInterface extends UserInterface {
+  program_details?: any;
+  last_active?: Date;
+  profile?: any;
 }
 
 // Access the route object
-const route = useRoute()
-const userStore = useUserStore()
+const route = useRoute();
+const userStore = useUserStore();
 
 // Change active tab handler
 function setActiveTab(tab: string) {
-  activeTab.value = tab
+  activeTab.value = tab;
 }
-
 
 // Function to refresh the route/component
 function refreshComponent() {
-  router.go(0) // This reloads the current route
+  router.go(0); // This reloads the current route
 }
-const showAddProgramModal = ref(false)
-const showCancelModal = ref(false)
+const showAddProgramModal = ref(false);
+const showCancelModal = ref(false);
 // Function to show success alerts
 function showSuccess(message: string) {
   Swal.fire({
@@ -85,8 +85,8 @@ function showSuccess(message: string) {
     icon: 'success',
     cancelButtonColor: '#d33',
     background: '#081411',
-    color: '#E8F3ED',
-  }) // Refresh after success
+    color: '#E8F3ED'
+  }); // Refresh after success
 }
 
 // Function to show error alerts
@@ -98,40 +98,38 @@ function showError(message: string) {
     confirmButtonColor: '#d33',
     cancelButtonColor: '#d33',
     background: '#081411',
-    color: '#E8F3ED',
-  })
+    color: '#E8F3ED'
+  });
 }
-function fetchDetails(){
+function fetchDetails() {
   userStore.wipeOut();
-  setActiveTab('General Details')
-  const userId = parseInt(route.params.id as string)
+  setActiveTab('General Details');
+  const userId = parseInt(route.params.id as string);
   if (userId) {
-    userStore.fetchUser(userId).then(()=>{
-      if(userStore.UserDetail.id)
-    {
+    userStore
+      .fetchUser(userId)
+      .then(() => {
+        if (userStore.UserDetail.id) {
+          if (userStore.UserDetail.profile_id) {
+            userStore.getUserClient(userStore.UserDetail.id);
+          }
 
-      if(userStore.UserDetail.profile_id){
-
-        userStore.getUserClient(userStore.UserDetail.id)
-      }
-
-       if (userStore.UserDetail.trainer_profile)
-       {
-         userStore.getTrainer(userStore.UserDetail.id)
-       }
-    }
-
-    }).catch(() => {
-      showError('Failed to load user details.')
-    })
+          if (userStore.UserDetail.trainer_profile) {
+            userStore.getTrainer(userStore.UserDetail.id);
+          }
+        }
+      })
+      .catch(() => {
+        showError('Failed to load user details.');
+      });
   }
 }
 watch(() => route.params.id, fetchDetails);
 
 // Fetch the user when the component mounts
 onMounted(() => {
-  fetchDetails()
-})
+  fetchDetails();
+});
 
 onBeforeUnmount(() => {
   userStore.wipeOut();
@@ -151,7 +149,10 @@ onBeforeUnmount(() => {
           <div class="pr-6 space-y-4 col-span-2">
             <div class="flex items-center gap-6">
               <img
-                :src="userStore.UserDetail?.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
+                :src="
+                  userStore.UserDetail?.avatar ||
+                  'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
+                "
                 alt=""
                 class="w-32 h-32 object-cover rounded-full border-2 border-rafik"
               />
@@ -159,127 +160,155 @@ onBeforeUnmount(() => {
                 <h1 class="title-small w-1/3">
                   {{
                     userStore.UserDetail?.first_name + ' ' + userStore.UserDetail?.last_name ||
-                    'Loading...'
+                    t('dashboard.users.single.loading')
                   }}
                 </h1>
                 <p class="text-body text-justify 2xl:w-5/6">
-                  {{ userStore.UserDetail?.email || 'Loading...' }}
+                  {{ userStore.UserDetail?.email || t('dashboard.users.single.loading') }}
                 </p>
                 <div
                   class="py-1 px-4 3xl:px-5 2xl:py-2 2xl:text-sm text-sm rounded-3xl max-w-max text-rafik-pritext dark:text-rafik-darkpritext uppercase font-semibold"
                   :class="compareDate ? 'bg-rafik-alternate' : 'bg-rafik-secondary'"
                 >
-                  {{ compareDate ? 'Online' : 'Away' }}
+                  {{
+                    compareDate
+                      ? t('dashboard.users.single.status.online')
+                      : t('dashboard.users.single.status.away')
+                  }}
                 </div>
               </div>
             </div>
           </div>
           <div class="flex flex-col gap-4 justify-between">
             <div class="uppercase flex justify-between gap-3 text-sm">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">Status:</p>
+              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                {{ t('dashboard.users.single.details.status') }}:
+              </p>
               <p class="text-rafik-secondary">{{ userStore.UserDetail.audit_status }}</p>
             </div>
             <div class="uppercase flex justify-between gap-3 text-sm">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">Date Joined:</p>
-              <p v-if="userStore.UserDetail.created_at" class="text-rafik-secondary">{{ new Date (userStore.UserDetail.created_at).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" }) }}</p>
-            </div>
-            <div class="uppercase flex justify-between gap-3 text-sm">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">Last Active:</p>
-              <p class="text-rafik-secondary">
-                {{ humanizeDate(userStore.UserDetail.last_active)|| 'Never' }}
+              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                {{ t('dashboard.users.single.details.dateJoined') }}:
+              </p>
+              <p v-if="userStore.UserDetail.created_at" class="text-rafik-secondary">
+                {{
+                  new Date(userStore.UserDetail.created_at).toLocaleDateString('en-GB', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })
+                }}
               </p>
             </div>
-
+            <div class="uppercase flex justify-between gap-3 text-sm">
+              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                {{ t('dashboard.users.single.details.lastActive') }}:
+              </p>
+              <p class="text-rafik-secondary">
+                {{
+                  humanizeDate(userStore.UserDetail.last_active) ||
+                  t('dashboard.users.single.never')
+                }}
+              </p>
+            </div>
           </div>
           <div class="pl-6 flex-1 min-w-max h-full">
-            <div class="flex flex-col flex-1 gap-4 border-l pl-2 border-rafik-sectext dark:border-rafik-darksectext text-left">
+            <div
+              class="flex flex-col flex-1 gap-4 border-l pl-2 border-rafik-sectext dark:border-rafik-darksectext text-left"
+            >
               <button
                 v-if="userStore.UserDetail.audit_status !== 'suspended'"
                 class="text-body uppercase text-left hover:text-rafik-secondary text-rafik"
               >
-                Suspend User
+                {{ t('dashboard.users.single.actions.suspendUser') }}
               </button>
               <button
                 v-if="userStore.UserDetail.audit_status !== 'banned'"
                 class="text-body uppercase text-left hover:text-red-300 text-red-500"
               >
-                Ban User
+                {{ t('dashboard.users.single.actions.banUser') }}
               </button>
               <button
                 v-if="userStore.UserDetail.audit_status !== 'active'"
                 class="text-body uppercase text-left hover:text-green-300 text-rafik-alternate"
               >
-                Activate
+                {{ t('dashboard.users.single.actions.activateUser') }}
               </button>
-              <button
-
-                class="text-body uppercase text-red-500 hover:text-red-400 text-left"
-
-              >
-                Delete User
+              <button class="text-body uppercase text-red-500 hover:text-red-400 text-left">
+                {{ t('dashboard.users.single.actions.deleteUser') }}
               </button>
-
             </div>
           </div>
         </div>
       </div>
       <!-- Tabs -->
-      <div class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext">
+      <div
+        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
+      >
         <button
           :class="
-            activeTab === 'General Details' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'
+            activeTab === 'General Details'
+              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              : 'hover:opacity-70'
           "
           class="nav-btn"
           @click="setActiveTab('General Details')"
         >
-          General Details
+          {{ t('dashboard.users.single.tabs.generalDetails') }}
         </button>
         <button
           :class="
-            activeTab === 'Trainer Details' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'
+            activeTab === 'Trainer Details'
+              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              : 'hover:opacity-70'
           "
           v-if="userStore.O_Trainer"
           class="nav-btn uppercase"
           @click="setActiveTab('Trainer Details')"
         >
-          Trainer Details
+          {{ t('dashboard.users.single.tabs.trainerDetails') }}
         </button>
         <button
           :class="
-            activeTab === 'Trainee Details' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'
+            activeTab === 'Trainee Details'
+              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              : 'hover:opacity-70'
           "
           v-if="userStore.Client"
           class="nav-btn uppercase"
           @click="setActiveTab('Trainee Details')"
         >
-          Trainee Details
+          {{ t('dashboard.users.single.tabs.traineeDetails') }}
         </button>
         <button
           :class="
-            activeTab === 'Certifications' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'
+            activeTab === 'Certifications'
+              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              : 'hover:opacity-70'
           "
           v-if="userStore.O_Trainer"
           class="nav-btn uppercase"
           @click="setActiveTab('Certifications')"
         >
-          Certifications
+          {{ t('dashboard.users.single.tabs.certifications') }}
         </button>
         <button
           :class="
-            activeTab === 'Workout-Plan' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'
+            activeTab === 'Workout-Plan'
+              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              : 'hover:opacity-70'
           "
           v-if="userStore.Client?.program_details"
           class="nav-btn uppercase"
           @click="setActiveTab('Workout-Plan')"
         >
-          Workout-Plan
+          {{ t('dashboard.users.single.tabs.workoutPlan') }}
         </button>
       </div>
 
       <!-- Render Box -->
       <div style="min-height: 50vh" class="over-flow-y-auto flex-1">
         <transition name="fade">
-
           <WorkoutPlanner
             :program="userStore.Client.program_details"
             admin
@@ -287,15 +316,22 @@ onBeforeUnmount(() => {
             v-if="activeTab === 'Workout-Plan' && userStore.Client"
           />
           <TrainerDetails
-          :trainer="userStore.O_Trainer"
-            v-else-if="activeTab === 'Trainer Details' && userStore.O_Trainer"/>
+            :trainer="userStore.O_Trainer"
+            v-else-if="activeTab === 'Trainer Details' && userStore.O_Trainer"
+          />
           <TraineeDetails
             :client="userStore.Client"
             v-else-if="activeTab === 'Trainee Details' && userStore.Client"
           />
-          <GeneralDetails :client="userStore.UserDetail" v-else-if="activeTab === 'General Details'"/>
-
-          <Cetifications admin  v-else-if="activeTab === 'Certifications' && userStore.O_Trainer?.certifications_links" :certifications="userStore.O_Trainer.certifications_links"/>
+          <GeneralDetails
+            :client="userStore.UserDetail"
+            v-else-if="activeTab === 'General Details'"
+          />
+          <Cetifications
+            admin
+            v-else-if="activeTab === 'Certifications' && userStore.O_Trainer?.certifications_links"
+            :certifications="userStore.O_Trainer.certifications_links"
+          />
         </transition>
       </div>
     </div>
