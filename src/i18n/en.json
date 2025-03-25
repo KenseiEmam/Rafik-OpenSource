@@ -33,6 +33,27 @@
     "missionTitle": "Our Mission",
     "missionDescription": "At Rafik, we connect people to fitness professionals who truly understand their needs, ensuring a tailored journey with measurable results. Through a platform built on trust, expertise, and accountability, we aim to foster a supportive community where everyone can reach their full potential, no matter their starting point."
   },
+  "team": {
+    "meetTheFounders": "MEET THE FOUNDERS",
+    "subtitle": "from fitness enthusiasts to fitness enthusiasts",
+    "members": {
+      "mohamed": {
+        "name": "Mohamed Marei",
+        "qualification": "CPT & Software Engineer",
+        "role": "CHIEF EXECUTIVE OFFICER"
+      },
+      "abdulMounem": {
+        "name": "AbdulMounem Shetta",
+        "qualification": "CPT & Nutritionist",
+        "role": "CHIEF OPERATIONS OFFICER"
+      },
+      "sami": {
+        "name": "Sami Walid Azzam",
+        "qualification": "MS in Computer Engineering",
+        "role": "CHIEF TECHNOLOGY OFFICER"
+      }
+    }
+  },
   "application": {
     "alert": "Text Us!",
     "lookingForTrainer": "Looking for your perfect trainer?",
