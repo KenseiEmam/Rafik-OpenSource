@@ -470,6 +470,46 @@
           "selectWorkingHours": "Select your available working hours for training sessions.",
           "allDay": "All Day"
         }
+      },
+      "program": {
+        "add": {
+          "addProgram": "Add Program",
+          "newProgramsMessage": "New programs will be set to the status of draft. You may have up to 3 active programs at a time and 3 drafts.",
+          "programPhoto": "Program Photo",
+          "removeImage": "Remove Image",
+          "dragAndDrop": "Drag and drop an image here, or click to upload",
+          "programName": "Program Name",
+          "programDescription": "Program Description",
+          "difficultyLevel": "Difficulty Level",
+          "selectDifficultyLevel": "Select Difficulty Level",
+          "foundational": "Foundational",
+          "beginner": "Beginner",
+          "intermediate": "Intermediate",
+          "advanced": "Advanced",
+          "cancel": "Cancel",
+          "uploadImageError": "Please upload a program photo.",
+          "uploadError": "Error uploading file:",
+          "uploadErrorMessage": "Failed to upload the program photo. Please try again.",
+          "urlError": "Failed to retrieve the URL for the program photo.",
+          "programNameRequired": "Program name is required.",
+          "programDescriptionRequired": "Program description is required.",
+          "difficultyLevelRequired": "Please select a difficulty level."
+        }
+      },
+      "clients": {
+        "searchPlaceholder": "Search by name or email...",
+        "showingText": "Showing {count} row(s)",
+        "dateJoined": "Date Joined",
+        "expiresOn": "Expires On",
+        "planMonths": "Plan (Months)",
+        "status": "Status",
+        "viewClient": "View Client",
+        "removeClient": "Remove Client",
+        "noClients": "No clients just yet!",
+        "prev": "Prev",
+        "next": "Next",
+        "pageText": "Page {current} of {total}",
+        "months": "month"
       }
     }
   }
