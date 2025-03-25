@@ -39,6 +39,11 @@ interface Settings {
   dark_mode: boolean;
   units: number;
 }
+ type Role =   {
+  id: number,
+  role_name:string,
+  role_description:string,
+}
 
 interface TrainerSettings {
   seats_available:number,
@@ -47,6 +52,7 @@ interface TrainerSettings {
 }
 export const useSettingsStore = defineStore('Settings', () => {
   const settings = ref<Settings | null>(null);
+  const roles = ref< Role[] | null>(null)
   const trainer_settings = ref<TrainerSettings | null>(null);
   // Fetch user settings by user_id
   async function fetchSettings(user_id: string) {
@@ -69,7 +75,22 @@ export const useSettingsStore = defineStore('Settings', () => {
       showError('Failed to fetch trainer settings.');
     }
   }
+  async function fetchRoles() {
+    try {
+      const { data, error } = await supabase
+        .from('roles')
+        .select('*')
 
+      if (error) throw new Error(error.message);
+
+      roles.value = data;
+
+
+      return roles.value;
+    } catch (error) {
+      showError('Failed to fetch roles');
+    }
+  }
   // Insert settings by user_id
   async function InsertSettings( user_id:number) {
     try {
@@ -155,8 +176,10 @@ export const useSettingsStore = defineStore('Settings', () => {
   return {
     settings,
     trainer_settings,
+    roles,
     fetchSettings,
     fetchTrainerSettings,
+    fetchRoles,
     InsertSettings,
     updateSettings,
     updateTrainerSettings

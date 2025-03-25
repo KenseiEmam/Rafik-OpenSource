@@ -19,12 +19,20 @@
         >
           Trainer Settings
         </button>
+        <button v-if="userStore.userProfile.roles.includes('Admin')"
+          :class="activeTab === 'Roles and Permissions' ? 'text-rafik-secondary dark:text-rafik-darkpritext' : ''"
+          class="nav-btn uppercase "
+          @click="setActiveTab('Roles and Permissions')"
+        >
+          Roles and Permissions
+        </button>
 
       </div>
       <div>
         <transition name="slide-fade">
           <GeneralSettings v-if="activeTab === 'General Setting'"/>
           <TrainerSettings v-else-if="activeTab === 'Trainer Settings' && userStore.userProfile.roles.includes('Trainer')"/>
+          <RolesandPerms v-else-if="activeTab === 'Roles and Permissions' && userStore.userProfile.roles.includes('Admin')"/>
         </transition>
       </div>
     </div>
@@ -40,7 +48,7 @@ import PageTitle from '@/components/Navigation/PageTitle.vue'
 import GeneralSettings from '@/components/SettingsTabs/GeneralSettings.vue'
 import TrainerSettings from '@/components/SettingsTabs/TrainerSettings.vue'
 import Swal from 'sweetalert2'
-
+import RolesandPerms from '@/components/SettingsTabs/RolesandPerms.vue'
 const userStore = useUserStore()
 const activeTab = ref("General Setting");
 // Change active tab handler
