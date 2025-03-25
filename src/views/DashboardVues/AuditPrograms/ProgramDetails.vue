@@ -6,12 +6,13 @@ import DetailsTabProgram from '@/components/ProgramTabs/DetailsTabPRogram.vue';
 import WorkoutPlanner from '@/components/ProgramTabs/WorkoutPlanner.vue';
 import ClientTable from '@/components/ProgramTabs/ClientTable.vue';
 import PricingModel from '@/components/ProgramTabs/PricingModel.vue';
-import DocumentsForms from '@/components/ProgramTabs/DocumentsForms.vue';
+// import DocumentsForms from '@/components/ProgramTabs/DocumentsForms.vue';
 import Swal from 'sweetalert2';
 import router from '@/router';
+import { useI18n } from 'vue-i18n';
 
 const activeTab = ref('Details');
-
+const { t } = useI18n();
 // Access the route object and store
 const route = useRoute();
 const programStore = useProgramStore();
@@ -31,7 +32,7 @@ onMounted(() => {
   if (programId) {
     programStore.fetchProgram(programId).catch(() => {
       Swal.fire({
-        title: 'Error!',
+        title: t('general.error'),
         text: 'Failed to load program details.',
         icon: 'error',
         confirmButtonColor: '#d33',
@@ -61,7 +62,7 @@ function setActiveTab(tab: string) {
         <img
           :src="programStore.Program.program_photo"
           class="w-full h-full object-cover absolute"
-          alt="Program Photo"
+          :alt="t('dashboard.auditPrograms.single.alt.programPhoto')"
         />
         <div class="w-full opacity-70 h-full bg-rafik-pribg dark:bg-rafik-darkpribg absolute"></div>
         <div
@@ -71,16 +72,21 @@ function setActiveTab(tab: string) {
             <div class="flex items-center justify-between">
               <!-- Non-editable Title -->
               <h1 class="title-small w-1/3">
-                {{ programStore.Program?.program_name || 'Loading...' }}
+                {{
+                  programStore.Program?.program_name || t('dashboard.auditPrograms.single.loading')
+                }}
               </h1>
               <h2 class="header-medium">
-                {{ programStore.Program?.status || 'Loading...' }}
+                {{ programStore.Program?.status || t('dashboard.auditPrograms.single.loading') }}
               </h2>
             </div>
 
             <!-- Non-editable Description -->
             <p class="text-body text-justify 2xl:w-5/6">
-              {{ programStore.Program?.program_description || 'Loading...' }}
+              {{
+                programStore.Program?.program_description ||
+                t('dashboard.auditPrograms.single.loading')
+              }}
             </p>
 
             <!-- Additional Program Details -->
@@ -111,7 +117,8 @@ function setActiveTab(tab: string) {
                     d="M176 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l16 0 0 34.4C92.3 113.8 16 200 16 304c0 114.9 93.1 208 208 208s208-93.1 208-208c0-41.8-12.3-80.7-33.5-113.2l24.1-24.1c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L355.7 143c-28.1-23-62.2-38.8-99.7-44.6L256 64l16 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L224 0 176 0zm72 192l0 128c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-128c0-13.3 10.7-24 24-24s24 10.7 24 24z"
                   />
                 </svg>
-                {{ programStore.Program.avg_session_time }} mins/session
+                {{ programStore.Program.avg_session_time }}
+                {{ t('dashboard.auditPrograms.single.avgSessionTime') }}
               </h3>
               <h3 class="uppercase flex gap-2 items-center">
                 <svg
@@ -125,30 +132,32 @@ function setActiveTab(tab: string) {
                     d="M96 32l0 32L48 64C21.5 64 0 85.5 0 112l0 48 448 0 0-48c0-26.5-21.5-48-48-48l-48 0 0-32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 32L160 64l0-32c0-17.7-14.3-32-32-32S96 14.3 96 32zM448 192L0 192 0 464c0 26.5 21.5 48 48 48l352 0c26.5 0 48-21.5 48-48l0-272z"
                   />
                 </svg>
-                {{ programStore.Program.avg_days_per_week }} days/week
+                {{ programStore.Program.avg_days_per_week }}
+                {{ t('dashboard.auditPrograms.single.daysPerWeek') }}
               </h3>
             </div>
           </div>
           <div class="pl-6 flex-1 min-w-max">
-            <div class="flex flex-col flex-1 gap-4 border-rafik-sectext dark:border-rafik-darksectext text-left justify-center">
-              <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">View Language</button> -->
+            <div
+              class="flex flex-col flex-1 gap-4 border-rafik-sectext dark:border-rafik-darksectext text-left justify-center"
+            >
               <button
                 class="uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
                 v-if="programStore.Program.status == 'Review'"
               >
-                Accept Publish Request
+                {{ t('dashboard.auditPrograms.single.actions.acceptPublish') }}
               </button>
               <button
                 class="uppercase text-left text-red-500 hover:text-red-400"
                 v-if="programStore.Program.status == 'Review'"
               >
-                Deny Request
+                {{ t('dashboard.auditPrograms.single.actions.denyRequest') }}
               </button>
               <button
                 class="uppercase text-left text-rafik-secondary hover:text-rafik"
                 v-if="programStore.Program.status == 'Active'"
               >
-                Reset to Draft (Suspend)
+                {{ t('dashboard.auditPrograms.single.actions.resetToDraft') }}
               </button>
             </div>
           </div>
@@ -168,7 +177,7 @@ function setActiveTab(tab: string) {
           class="nav-btn"
           @click="setActiveTab('Details')"
         >
-          Details
+          {{ t('dashboard.auditPrograms.single.tabs.details') }}
         </button>
         <button
           :class="
@@ -179,7 +188,7 @@ function setActiveTab(tab: string) {
           class="nav-btn uppercase"
           @click="setActiveTab('Workouts')"
         >
-          Workouts
+          {{ t('dashboard.auditPrograms.single.tabs.workouts') }}
         </button>
         <button
           :class="
@@ -190,7 +199,7 @@ function setActiveTab(tab: string) {
           class="nav-btn uppercase"
           @click="setActiveTab('Clients')"
         >
-          Clients
+          {{ t('dashboard.auditPrograms.single.tabs.clients') }}
         </button>
         <button
           :class="
@@ -201,7 +210,7 @@ function setActiveTab(tab: string) {
           class="nav-btn uppercase"
           @click="setActiveTab('Pricing')"
         >
-          Pricing
+          {{ t('dashboard.auditPrograms.single.tabs.pricing') }}
         </button>
       </div>
 

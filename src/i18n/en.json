@@ -319,6 +319,67 @@
         },
         "never": "Never"
       }
+    },
+    "auditPrograms": {
+      "list": {
+        "pageTitle": {
+          "subheader": "all",
+          "header": "program"
+        },
+        "searchPlaceholder": "Search by name/description ...",
+        "selectTrainer": {
+          "label": "Select Trainer",
+          "placeholder": "Search for trainer..."
+        },
+        "filters": {
+          "allPrograms": "All Programs",
+          "active": "Active",
+          "draft": "Draft",
+          "review": "Review"
+        },
+        "tableHeaders": {
+          "programName": "Program Name",
+          "difficulty": "Difficulty",
+          "status": "Status",
+          "trainer": "Trainer",
+          "price": "Price (AED/Month)",
+          "workoutsPerWeek": "Workouts/Week"
+        },
+        "actions": {
+          "viewProgram": "View Program",
+          "deleteProgram": "Delete Program"
+        },
+        "loading": "Loading...",
+        "noResults": "No Programs found for your query.",
+        "pagination": {
+          "page": "Page {page}",
+          "previousPage": "Previous Page",
+          "nextPage": "Next Page"
+        }
+      },
+      "single": {
+        "pageTitle": {
+          "subheader": "all",
+          "header": "program"
+        },
+        "loading": "Loading...",
+        "avgSessionTime": "mins/session",
+        "daysPerWeek": "days/week",
+        "actions": {
+          "acceptPublish": "Accept Publish Request",
+          "denyRequest": "Deny Request",
+          "resetToDraft": "Reset to Draft (Suspend)"
+        },
+        "tabs": {
+          "details": "Details",
+          "workouts": "Workouts",
+          "clients": "Clients",
+          "pricing": "Pricing"
+        },
+        "alt": {
+          "programPhoto": "Program Photo"
+        }
+      }
     }
   }
 }
