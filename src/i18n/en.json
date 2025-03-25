@@ -260,6 +260,65 @@
         "settings": "Settings"
       },
       "stats": "Statistics Dashboard <br> Coming Soon"
+    },
+    "users": {
+      "list": {
+        "pageTitle": {
+          "subheader": "All",
+          "header": "Users"
+        },
+        "searchPlaceholder": "Type to Search Users...",
+        "filters": {
+          "allUsers": "All Users",
+          "trainer": "Trainer",
+          "trainee": "Trainee",
+          "customerCare": "Customer Care"
+        },
+        "tableHeaders": {
+          "id": "ID",
+          "details": "Details",
+          "roles": "Roles",
+          "gender": "Gender",
+          "age": "Age"
+        },
+        "actions": {
+          "viewUser": "View User",
+          "deleteUser": "Delete User"
+        },
+        "loading": "Loading...",
+        "noUsersFound": "No Users found for your query.",
+        "pagination": {
+          "page": "Page {page}",
+          "previousPage": "Previous Page",
+          "nextPage": "Next Page"
+        }
+      },
+      "single": {
+        "loading": "Loading...",
+        "status": {
+          "online": "Online",
+          "away": "Away"
+        },
+        "details": {
+          "status": "Status",
+          "dateJoined": "Date Joined",
+          "lastActive": "Last Active"
+        },
+        "actions": {
+          "suspendUser": "Suspend User",
+          "banUser": "Ban User",
+          "activateUser": "Activate",
+          "deleteUser": "Delete User"
+        },
+        "tabs": {
+          "generalDetails": "General Details",
+          "trainerDetails": "Trainer Details",
+          "traineeDetails": "Trainee Details",
+          "certifications": "Certifications",
+          "workoutPlan": "Workout-Plan"
+        },
+        "never": "Never"
+      }
     }
   }
 }
