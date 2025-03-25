@@ -380,6 +380,65 @@
           "programPhoto": "Program Photo"
         }
       }
+    },
+    "tabs": {
+      "user": {
+        "general": {
+          "userProfile": "User Profile",
+          "age": "Age",
+          "gender": "Gender",
+          "nationality": "Nationality",
+          "phone": "Phone",
+          "roles": "Roles",
+          "moneyGenerated": "Money Generated",
+          "moneySpent": "Money Spent",
+          "moneyOwed": "Money Owed",
+          "comingSoon": "Coming Soon",
+          "auditLogs": "Audit Logs",
+          "logsUpdateComingSoon": "Logs update coming soon!",
+          "na": "N/A"
+        },
+        "trainer": {
+          "trainerBio": "Trainer Bio",
+          "trainerData": "Trainer Data",
+          "title": "Title",
+          "yearsOfExperience": "Years of Experience",
+          "maxClients": "Maximum Clients",
+          "availableHours": "Available Hours",
+          "worksWith": "Works with",
+          "na": "N/A",
+          "years": "years",
+          "listOfPrograms": "List of Programs",
+          "created": "Created",
+          "viewProgram": "View Program"
+        },
+        "trainee": {
+          "clientMetrics": "Client Metrics",
+          "height": "Height",
+          "weight": "Weight",
+          "goalWeight": "Goal Weight",
+          "bodyFatPercent": "Body Fat Percent",
+          "experience": "Experience",
+          "fitnessGoal": "Fitness Goal",
+          "sportsPlayed": "Sports Played",
+          "dietPreference": "Diet Preference",
+          "clientProgram": "Client Program",
+          "joinedOn": "Joined On",
+          "expiresOn": "Expires On",
+          "pricePackage": "Price Package",
+          "trainer": "Trainer",
+          "visitProgram": "Visit Program",
+          "notAssigned": "Not Assigned To Any Programs",
+          "loading": "Loading...",
+          "na": "N/A",
+          "nonePaying": "None Paying",
+          "errorFetchingWeight": "Error fetching weight: ",
+          "unexpectedErrorFetchingWeight": "Unexpected error fetching weight: ",
+          "errorFetchingProgram": "Error fetching program: ",
+          "unexpectedErrorFetchingProgram": "Unexpected error fetching program: ",
+          "errorFetchingTrainerName": "Error fetching trainer name: "
+        }
+      }
     }
   }
 }
