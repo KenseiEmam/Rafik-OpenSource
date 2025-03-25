@@ -11,7 +11,7 @@ const { t } = useI18n();
 function showSuccess(message: string) {
   Swal.fire({
     title: t('general.success'),
-    text: message || t('contact.form.successMessage'),
+    text: message || t('home.form.successMessage'),
     icon: 'success',
     toast: true,
     position: 'top-right',
@@ -26,7 +26,7 @@ function showSuccess(message: string) {
 function showError(message: string) {
   Swal.fire({
     title: t('general.error'),
-    text: t('contact.form.errorSending') + message,
+    text: t('home.form.errorSending') + message,
     icon: 'error',
     confirmButtonColor: '#d33',
     background: '#081411',
@@ -55,7 +55,7 @@ async function sendEmail() {
     }
 
     // Assuming the function returns an object with a "message" property
-    showSuccess(data?.message || t('contact.form.successMessage'));
+    showSuccess(data?.message || t('home.form.successMessage'));
     formData.value = { name: '', email: '', message: '' };
   } catch (err: any) {
     console.error(err);
@@ -75,10 +75,10 @@ async function sendEmail() {
       <!-- Left Column: Contact Details -->
       <div class="col-span-2 gap-4 relative flex flex-col">
         <h1 class="font-black uppercase text-rafik md:title-small text-xl md:text-3xl">
-          {{ t('contact.form.header') }}
+          {{ t('home.form.header') }}
         </h1>
         <p class="mb-4 text-body">
-          {{ t('contact.form.description') }}
+          {{ t('home.form.description') }}
         </p>
         <div class="flex-1 flex flex-col gap-4">
           <!-- Call -->
@@ -97,9 +97,9 @@ async function sendEmail() {
             </div>
             <div class="w-full">
               <h3 class="uppercase text-rafik-pritext dark:text-rafik-darkpritext md:header-small">
-                {{ t('contact.form.call.label') }}
+                {{ t('home.form.call.label') }}
               </h3>
-              <p class="text-body">{{ t('contact.form.call.number') }}</p>
+              <p class="text-body">{{ t('home.form.call.number') }}</p>
             </div>
           </div>
           <!-- Mail -->
@@ -118,9 +118,9 @@ async function sendEmail() {
             </div>
             <div class="w-full">
               <h3 class="uppercase text-rafik-pritext dark:text-rafik-darkpritext md:header-small">
-                {{ t('contact.form.mail.label') }}
+                {{ t('home.form.mail.label') }}
               </h3>
-              <p class="text-body">{{ t('contact.form.mail.address') }}</p>
+              <p class="text-body">{{ t('home.form.mail.address') }}</p>
             </div>
           </div>
           <!-- Find Us -->
@@ -139,9 +139,9 @@ async function sendEmail() {
             </div>
             <div class="w-full">
               <h3 class="uppercase text-rafik-pritext dark:text-rafik-darkpritext md:header-small">
-                {{ t('contact.form.find.label') }}
+                {{ t('home.form.find.label') }}
               </h3>
-              <p class="text-body">{{ t('contact.form.find.address') }}</p>
+              <p class="text-body">{{ t('home.form.find.address') }}</p>
             </div>
           </div>
           <!-- Social Icons -->
@@ -153,45 +153,45 @@ async function sendEmail() {
         class="md:border-l md:pl-8 space-y-4 border-rafik-sectext dark:border-rafik-darksectext flex w-full items-center justify-center flex-col"
       >
         <h3 class="uppercase text-rafik-pritext dark:text-rafik-darkpritext md:header-small">
-          {{ t('contact.form.sendMessage') }}
+          {{ t('home.form.sendMessage') }}
         </h3>
         <form class="space-y-4 w-full" @submit.prevent="sendEmail">
           <div class="form-control">
-            <label for="Name">{{ t('contact.form.formLabels.fullName') }}</label>
+            <label for="Name">{{ t('home.form.formLabels.fullName') }}</label>
             <input
               name="Name"
               v-model="formData.name"
               class="rafik-text-input"
               type="text"
-              :placeholder="t('contact.form.formPlaceholders.fullName')"
+              :placeholder="t('home.form.formPlaceholders.fullName')"
               required
             />
           </div>
           <div class="form-control">
-            <label for="email">{{ t('contact.form.formLabels.email') }}</label>
+            <label for="email">{{ t('home.form.formLabels.email') }}</label>
             <input
               name="email"
               v-model="formData.email"
               class="rafik-text-input"
               type="email"
-              :placeholder="t('contact.form.formPlaceholders.email')"
+              :placeholder="t('home.form.formPlaceholders.email')"
               required
             />
           </div>
           <div class="form-control">
-            <label for="message">{{ t('contact.form.formLabels.message') }}</label>
+            <label for="message">{{ t('home.form.formLabels.message') }}</label>
             <textarea
               name="message"
               v-model="formData.message"
               class="rafik-text-input"
               rows="6"
-              :placeholder="t('contact.form.formPlaceholders.message')"
+              :placeholder="t('home.form.formPlaceholders.message')"
               required
             ></textarea>
           </div>
           <div class="flex w-full">
             <button type="submit" class="btn-lg mx-auto">
-              {{ t('contact.form.sendButton') }}
+              {{ t('home.form.sendButton') }}
             </button>
           </div>
         </form>

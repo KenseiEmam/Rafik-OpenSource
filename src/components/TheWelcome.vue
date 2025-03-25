@@ -11,8 +11,8 @@ const { t } = useI18n();
     <div class="md:flex hidden fixed z-40 bottom-5 justify-center left-0 right-0">
       <div class="card rounded-full px-12">
         <h3 class="text-body text-center">
-          {{ t('contact.welcome.traineeQuery') }}
-          <RouterLink to="application">{{ t('contact.welcome.getOurApp') }}</RouterLink>
+          {{ t('home.welcome.traineeQuery') }}
+          <RouterLink to="application">{{ t('home.welcome.getOurApp') }}</RouterLink>
         </h3>
       </div>
     </div>
@@ -31,22 +31,22 @@ const { t } = useI18n();
     </div>
     <div class="md:col-span-3 relative z-20 -top-16">
       <h1 class="header-small md:header-large font-black">
-        {{ t('contact.welcome.headline1') }}
+        {{ t('home.welcome.headline1') }}
       </h1>
       <h1 class="title-medium mb-16 text-2xl md:text-5xl">
-        {{ t('contact.welcome.headline2') }}
+        {{ t('home.welcome.headline2') }}
       </h1>
       <div class="md:flex gap-4 my-5 hidden">
         <RouterLink to="login" @click="emit('changeComp')" class="btn-lg">
-          {{ t('contact.welcome.accessDashboard') }}
+          {{ t('home.welcome.accessDashboard') }}
         </RouterLink>
       </div>
       <div class="flex flex-col gap-4 my-5 md:hidden">
         <div class="label text-center text-sm">
-          {{ t('contact.welcome.trainerAccess') }}
+          {{ t('home.welcome.trainerAccess') }}
         </div>
         <RouterLink to="application" class="btn-lg-outline uppercase">
-          {{ t('contact.welcome.traineeGetApp') }}
+          {{ t('home.welcome.traineeGetApp') }}
         </RouterLink>
       </div>
     </div>

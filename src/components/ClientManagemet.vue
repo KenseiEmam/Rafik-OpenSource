@@ -8,10 +8,10 @@ const { t } = useI18n();
   <div class="min-h-72 flex-1 mb-16 relative w-full">
     <h1 class="title-small my-8 pb-4 border-b border-rafik">
       <span class="text-rafik-pritext dark:text-rafik-darkpritext">
-        {{ t('contact.clientManagement.unparalleled') }}
+        {{ t('home.clientManagement.unparalleled') }}
       </span>
       <br />
-      {{ t('contact.clientManagement.management') }}
+      {{ t('home.clientManagement.management') }}
     </h1>
     <div class="grid md:grid-cols-2 gap-4 items-center mt-8">
       <div class="pb-8 gap-8 flex flex-col">
@@ -21,7 +21,7 @@ const { t } = useI18n();
           alt=""
         />
         <p class="text-body pl-4 border-l border-rafik-secondary">
-          {{ t('contact.clientManagement.filterClients') }}
+          {{ t('home.clientManagement.filterClients') }}
         </p>
       </div>
       <div class="pb-8 gap-8 flex flex-col">
@@ -38,7 +38,7 @@ const { t } = useI18n();
           />
         </div>
         <p class="text-body pl-4 border-l border-rafik-secondary">
-          {{ t('contact.clientManagement.zoomClientLogs') }}
+          {{ t('home.clientManagement.zoomClientLogs') }}
         </p>
       </div>
 
@@ -56,7 +56,7 @@ const { t } = useI18n();
           />
         </div>
         <p class="text-body pl-4 border-l border-rafik-secondary">
-          {{ t('contact.clientManagement.entitlementSystem') }}
+          {{ t('home.clientManagement.entitlementSystem') }}
         </p>
       </div>
       <div class="pb-8 gap-8 flex flex-col">
@@ -66,7 +66,7 @@ const { t } = useI18n();
           alt=""
         />
         <p class="text-body pl-4 border-l border-rafik-secondary">
-          {{ t('contact.clientManagement.clientInsights') }}
+          {{ t('home.clientManagement.clientInsights') }}
         </p>
       </div>
     </div>
