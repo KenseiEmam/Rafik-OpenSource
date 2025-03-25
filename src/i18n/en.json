@@ -68,6 +68,17 @@
     },
     "errorMessage": "Contact us at admin@rafikapp.ae to get access!"
   },
+  "contact": {
+    "welcome": {
+      "traineeQuery": "Are you a trainee looking for trainers?",
+      "getOurApp": "Get Our App",
+      "headline1": "READY TO OPTIMIZE YOUR ONLINE TRAINING?",
+      "headline2": "JOIN NOW AND ENTER OUR AFFILIATE PROGRAM",
+      "accessDashboard": "ACCESS THE DASHBOARD",
+      "trainerAccess": "Trainer dashboard access only on PC",
+      "traineeGetApp": "Trainee? Get Our App"
+    }
+  },
   "dashboard": {
     "sidebar": {
       "myDashboard": "My <br />Dashboard",
