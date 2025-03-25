@@ -225,6 +225,19 @@
       }
     }
   },
+  "deleteAccount": {
+    "header": "Request Account & Data Deletion",
+    "description": "Fill in your details below to request the deletion of your account and associated data.",
+    "form": {
+      "emailLabel": "Email Address",
+      "fullNameLabel": "Full Name",
+      "confirmLabel": "I understand that this action is irreversible.",
+      "submitButton": "Submit Request",
+      "processing": "Processing...",
+      "successMessage": "Your request has been submitted. We will process it shortly.",
+      "errorSubmitting": "Error submitting request: "
+    }
+  },
   "dashboard": {
     "sidebar": {
       "myDashboard": "My <br />Dashboard",
