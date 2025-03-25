@@ -88,6 +88,14 @@
         "item3": "Add assisting text documents to reply to your clients outside your working hours using an AI interpreter.",
         "item4": "Set up your own custom pricing model and create discount codes to share with your followers at a fingers touch."
       }
+    },
+    "clientManagement": {
+      "unparalleled": "UNPARALLELLED",
+      "management": "CLIENT MANAGEMENT",
+      "filterClients": "Search and filter all your clients to your desired priorities and scheduled needs.",
+      "zoomClientLogs": "Zoom in and take an even deeper look into your client's daily lives from their detailed workout and diet logs.",
+      "entitlementSystem": "Sign up clients at your own rates and prices then add them to your programs using our entitlement system.",
+      "clientInsights": "Get all your client insights and customize their individual workout plan."
     }
   },
   "dashboard": {
