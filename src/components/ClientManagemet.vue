@@ -1,9 +1,17 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+</script>
 
 <template>
   <div class="min-h-72 flex-1 mb-16 relative w-full">
     <h1 class="title-small my-8 pb-4 border-b border-rafik">
-      <span class="text-rafik-pritext dark:text-rafik-darkpritext">UNPARALLELLED</span> <br />CLIENT MANAGEMENT
+      <span class="text-rafik-pritext dark:text-rafik-darkpritext">
+        {{ t('contact.clientManagement.unparalleled') }}
+      </span>
+      <br />
+      {{ t('contact.clientManagement.management') }}
     </h1>
     <div class="grid md:grid-cols-2 gap-4 items-center mt-8">
       <div class="pb-8 gap-8 flex flex-col">
@@ -13,7 +21,7 @@
           alt=""
         />
         <p class="text-body pl-4 border-l border-rafik-secondary">
-          Search and filter all your clients to your desired priorities and scheduled needs.
+          {{ t('contact.clientManagement.filterClients') }}
         </p>
       </div>
       <div class="pb-8 gap-8 flex flex-col">
@@ -29,10 +37,8 @@
             alt=""
           />
         </div>
-
         <p class="text-body pl-4 border-l border-rafik-secondary">
-          Zoom in and take an even deeper look into your client's daily lives from their detailed
-          workout and diet logs.
+          {{ t('contact.clientManagement.zoomClientLogs') }}
         </p>
       </div>
 
@@ -50,8 +56,7 @@
           />
         </div>
         <p class="text-body pl-4 border-l border-rafik-secondary">
-          Sign up clients at your own rates and prices then add them to your programs using our
-          entitlement system.
+          {{ t('contact.clientManagement.entitlementSystem') }}
         </p>
       </div>
       <div class="pb-8 gap-8 flex flex-col">
@@ -61,7 +66,7 @@
           alt=""
         />
         <p class="text-body pl-4 border-l border-rafik-secondary">
-          Get all your client insights and customize their individual workout plan.
+          {{ t('contact.clientManagement.clientInsights') }}
         </p>
       </div>
     </div>

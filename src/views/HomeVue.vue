@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
-import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
-import ProgramCreation from '../components/ProgramCreation.vue'
-import ClientManagemet from '../components/ClientManagemet.vue'
-import ContactVue from '../components/Forms/ContactVue.vue'
+import TheWelcome from '../components/TheWelcome.vue';
+import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue';
+import ProgramCreation from '../components/ProgramCreation.vue';
+import ClientManagemet from '../components/ClientManagemet.vue';
+import ContactVue from '../components/Forms/ContactVue.vue';
 </script>
 
 <template>
-  <main class="dark flex-1 mebsite-body flex-col flex ">
+  <main class="dark flex-1 mebsite-body flex-col flex">
     <WebsiteHeader />
     <Transition name="slide-fade" appear>
       <div class="relative flex flex-col">
@@ -20,3 +20,4 @@ import ContactVue from '../components/Forms/ContactVue.vue'
   </main>
 </template>
 <!-- Sami sucks -->
+<!-- Emam sucks too :) -->
