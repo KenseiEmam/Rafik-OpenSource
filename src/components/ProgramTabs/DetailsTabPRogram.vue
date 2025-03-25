@@ -1,45 +1,55 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue';
+import { useUserStore } from '@/stores/user';
 
 const props = defineProps({
   program: {
     type: Object,
-    required: true,
+    required: true
   },
   admin: {
     type: Boolean,
-    default: false,
-  },
-})
+    default: false
+  }
+});
 
-// Emit events to the parent (only emitted when not in read-only mode)
-const emit = defineEmits(['update-tags', 'update-focus'])
+// Emit events to the parent (only emitted when not in read‑only mode)
+const emit = defineEmits(['update-tags', 'update-focus']);
 
 // Reactive slider values
-const strength = ref(25)
-const cardio = ref(25)
-const hypertrophy = ref(25)
-const agility = ref(25)
-const refresh = ref(false)
+const strength = ref(25);
+const cardio = ref(25);
+const hypertrophy = ref(25);
+const agility = ref(25);
+const refresh = ref(false);
 
 // Function to refresh slider values from the program prop
 const refreshSliders = () => {
-  refresh.value = true // Optionally hide UI temporarily
-  strength.value = props.program.program_focus[0] ?? 25
-  hypertrophy.value = props.program.program_focus[1] ?? 25
-  agility.value = props.program.program_focus[2] ?? 25
-  cardio.value = props.program.program_focus[3] ?? 25
-  setTimeout(() => (refresh.value = false), 0) // Allow UI to re-render
-}
+  refresh.value = true; // Optionally hide UI temporarily
+  strength.value = props.program.program_focus[0] ?? 25;
+  hypertrophy.value = props.program.program_focus[1] ?? 25;
+  agility.value = props.program.program_focus[2] ?? 25;
+  cardio.value = props.program.program_focus[3] ?? 25;
+  setTimeout(() => (refresh.value = false), 0); // Allow UI to re-render
+};
+
+const userStore = useUserStore();
+
+// If in admin mode and a trainer_id is provided, fetch the trainer details
+onMounted(async () => {
+  if (props.admin && props.program.trainer_id) {
+    await userStore.getTrainer(props.program.trainer_id);
+  }
+});
 
 // Watch for changes in the program prop and update slider values
-watch(() => props.program, refreshSliders, { deep: true, immediate: true })
+watch(() => props.program, refreshSliders, { deep: true, immediate: true });
 
 // Computed total percentage value
-const total = ref(100)
+const total = ref(100);
 
 // New tag input state
-const newTag = ref('')
+const newTag = ref('');
 
 // Watch slider values and emit updated focus (only if not in read-only mode)
 watch([strength, cardio, hypertrophy, agility], () => {
@@ -47,45 +57,45 @@ watch([strength, cardio, hypertrophy, agility], () => {
     Number(strength.value) +
     Number(hypertrophy.value) +
     Number(cardio.value) +
-    Number(agility.value)
+    Number(agility.value);
 
   if (total.value === 100 && !props.admin) {
     const updatedFocus = [
       Number(strength.value),
       Number(hypertrophy.value),
       Number(agility.value),
-      Number(cardio.value),
-    ]
+      Number(cardio.value)
+    ];
     if (JSON.stringify(props.program.program_focus) !== JSON.stringify(updatedFocus)) {
-      emit('update-focus', updatedFocus)
+      emit('update-focus', updatedFocus);
     }
   }
-})
+});
 
 // Function to add a new tag (does nothing if admin is true)
 const addTag = () => {
-  if (props.admin) return // Read-only: do not add a tag
-  const tag = newTag.value.trim()
+  if (props.admin) return; // Read‑only: do not add a tag
+  const tag = newTag.value.trim();
   if (tag && !props.program.tags.includes(tag)) {
-    emit('update-tags', [...props.program.tags, tag])
+    emit('update-tags', [...props.program.tags, tag]);
   }
-  newTag.value = '' // Clear input field
-}
+  newTag.value = ''; // Clear input field
+};
 
 // Function to remove a tag (does nothing if admin is true)
 const removeTag = (tagToRemove: string) => {
-  if (props.admin) return // Read-only: do not remove tags
+  if (props.admin) return; // Read‑only: do not remove tags
   emit(
     'update-tags',
-    props.program.tags.filter((tag: string) => tag !== tagToRemove),
-  )
-}
+    props.program.tags.filter((tag: string) => tag !== tagToRemove)
+  );
+};
 </script>
 
 <template>
   <div class="grid md:grid-cols-2 items-center relative flex-1 gap-4 items-stretch">
-    <!-- Quick Stats Section -->
-    <div class="card p-8 h-full">
+    <!-- Quick Stats / Trainer Details Section -->
+    <div v-if="!admin" class="card p-8 h-full">
       <h3 class="contentH-medium">Quick Stats</h3>
       <p class="text-body">
         Below you can find a quick rundown of the program's current statistics. We are working on a
@@ -132,6 +142,34 @@ const removeTag = (tagToRemove: string) => {
         </div>
       </div>
     </div>
+    <!-- Trainer Details (Admin Mode) -->
+    <div v-else class="card p-8 h-full">
+      <h3 class="contentH-medium">Trainer Details</h3>
+      <div class="flex flex-col justify-between h-full" v-if="userStore.O_Trainer">
+        <!-- Display trainer title (using 'name') and bio -->
+        <div class="mt-4">
+          <p class="subheader-small font-bold">
+            {{
+              `${userStore.O_Trainer.title} ${userStore.O_Trainer.first_name} ${userStore.O_Trainer.last_name}`
+            }}
+          </p>
+          <p class="text-body">{{ userStore.O_Trainer.bio }}</p>
+        </div>
+
+        <!-- Button to navigate to the trainer's user page -->
+        <div class="mb-4">
+          <Router-link
+            :to="{ name: 'single-user', params: { id: userStore.O_Trainer.id } }"
+            class="mt-auto inline-block px-4 py-2 bg-rafik-pritext dark:bg-rafik-darkpritext text-white rounded"
+          >
+            View Trainer Profile
+          </Router-link>
+        </div>
+      </div>
+      <div v-else>
+        <p class="text-body">Loading trainer details...</p>
+      </div>
+    </div>
 
     <!-- Sliders Section -->
     <div class="card p-8">
@@ -159,7 +197,7 @@ const removeTag = (tagToRemove: string) => {
             min="0"
             max="100"
             step="5"
-            :disabled="admin"
+            :class="{ 'read-only-slider': admin }"
           />
         </div>
 
@@ -178,7 +216,7 @@ const removeTag = (tagToRemove: string) => {
             min="0"
             max="100"
             step="5"
-            :disabled="admin"
+            :class="{ 'read-only-slider': admin }"
           />
         </div>
 
@@ -197,7 +235,7 @@ const removeTag = (tagToRemove: string) => {
             min="0"
             max="100"
             step="5"
-            :disabled="admin"
+            :class="{ 'read-only-slider': admin }"
           />
         </div>
 
@@ -216,7 +254,7 @@ const removeTag = (tagToRemove: string) => {
             min="0"
             max="100"
             step="5"
-            :disabled="admin"
+            :class="{ 'read-only-slider': admin }"
           />
         </div>
 
@@ -238,7 +276,7 @@ const removeTag = (tagToRemove: string) => {
       </p>
 
       <div class="flex flex-col gap-4 mt-6">
-        <!-- Input for new tag (disabled if admin is true) -->
+        <!-- Input for new tag (shown only if not in admin mode) -->
         <input
           v-model="newTag"
           type="text"
@@ -256,11 +294,7 @@ const removeTag = (tagToRemove: string) => {
             class="bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext px-3 py-1 rounded-full flex items-center gap-2"
           >
             <span>{{ tag }}</span>
-            <button
-              @click="removeTag(tag)"
-              class="text-red-500 hover:text-red-700"
-              :disabled="admin"
-            >
+            <button @click="removeTag(tag)" class="text-red-500 hover:text-red-700" v-if="!admin">
               ✕
             </button>
           </div>
@@ -289,5 +323,9 @@ input[type='range']::-moz-range-thumb {
   border-radius: 9999px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
   cursor: pointer;
+}
+
+.read-only-slider {
+  pointer-events: none; /* Disables interaction */
 }
 </style>
