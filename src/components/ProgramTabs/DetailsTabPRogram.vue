@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
 import { useUserStore } from '@/stores/user';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const props = defineProps({
   program: {
     type: Object,
@@ -96,55 +98,66 @@ const removeTag = (tagToRemove: string) => {
   <div class="grid md:grid-cols-2 items-center relative flex-1 gap-4 items-stretch">
     <!-- Quick Stats / Trainer Details Section -->
     <div v-if="!admin" class="card p-8 h-full">
-      <h3 class="contentH-medium">Quick Stats</h3>
+      <h3 class="contentH-medium">{{ t('dashboard.tabs.program.details.quickStats') }}</h3>
       <p class="text-body">
-        Below you can find a quick rundown of the program's current statistics. We are working on a
-        much better dashboard.
+        {{ t('dashboard.tabs.program.details.quickStatsDescription') }}
       </p>
       <div
         class="flex flex-col divide-y divide-rafik-sectext dark:divide-rafik-darksectext gap-3 mt-4"
       >
         <div class="flex justify-between gap-4 py-2">
           <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">
-            Total Clients:
+            {{ t('dashboard.tabs.program.details.totalClients') }}
           </p>
-          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">Coming Soon...</p>
+          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">
+            {{ t('dashboard.tabs.program.details.comingSoon') }}
+          </p>
         </div>
         <div class="flex justify-between gap-4 py-2">
           <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">
-            Revenue this Month:
+            {{ t('dashboard.tabs.program.details.revenueThisMonth') }}
           </p>
-          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">Coming Soon...</p>
+          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">
+            {{ t('dashboard.tabs.program.details.comingSoon') }}
+          </p>
         </div>
         <div class="flex justify-between gap-4 py-2">
           <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">
-            Total Revenue:
+            {{ t('dashboard.tabs.program.details.totalRevenue') }}
           </p>
-          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">Coming Soon...</p>
+          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">
+            {{ t('dashboard.tabs.program.details.comingSoon') }}
+          </p>
         </div>
         <div class="flex justify-between gap-4 py-2">
           <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">
-            Best Month:
+            {{ t('dashboard.tabs.program.details.bestMonth') }}
           </p>
-          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">Coming Soon...</p>
+          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">
+            {{ t('dashboard.tabs.program.details.comingSoon') }}
+          </p>
         </div>
         <div class="flex justify-between gap-4 py-2">
           <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">
-            Client Retention:
+            {{ t('dashboard.tabs.program.details.clientRetention') }}
           </p>
-          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">Coming Soon...</p>
+          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">
+            {{ t('dashboard.tabs.program.details.comingSoon') }}
+          </p>
         </div>
         <div class="flex justify-between gap-4 py-2">
           <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">
-            Growth Rate:
+            {{ t('dashboard.tabs.program.details.growthRate') }}
           </p>
-          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">Coming Soon...</p>
+          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">
+            {{ t('dashboard.tabs.program.details.comingSoon') }}
+          </p>
         </div>
       </div>
     </div>
     <!-- Trainer Details (Admin Mode) -->
     <div v-else class="card p-8 h-full">
-      <h3 class="contentH-medium">Trainer Details</h3>
+      <h3 class="contentH-medium">{{ t('dashboard.tabs.program.details.trainerDetails') }}</h3>
       <div class="flex flex-col justify-between h-full" v-if="userStore.O_Trainer">
         <!-- Display trainer title (using 'name') and bio -->
         <div class="mt-4">
@@ -160,34 +173,34 @@ const removeTag = (tagToRemove: string) => {
         <div class="mb-4">
           <Router-link
             :to="{ name: 'single-user', params: { id: userStore.O_Trainer.user_id } }"
-            class="mt-auto inline-block px-4 py-2 bg-rafik-pribg hover:bg-rafik dark:hover:bg-rafik dark:bg-rafik-darkpribg  text-rafik-pritext dark:text-rafik-darkpritext hover:text-white rounded"
+            class="mt-auto inline-block px-4 py-2 bg-rafik-pribg hover:bg-rafik dark:hover:bg-rafik dark:bg-rafik-darkpribg text-rafik-pritext dark:text-rafik-darkpritext hover:text-white rounded"
           >
-            View Trainer Profile
+            {{ t('dashboard.tabs.program.details.viewTrainerProfile') }}
           </Router-link>
         </div>
       </div>
       <div v-else>
-        <p class="text-body">Loading trainer details...</p>
+        <p class="text-body">{{ t('dashboard.tabs.program.details.loadingTrainerDetails') }}</p>
       </div>
     </div>
 
     <!-- Sliders Section -->
     <div class="card p-8">
-      <h3 class="contentH-medium">Exercise Focus</h3>
+      <h3 class="contentH-medium">{{ t('dashboard.tabs.program.details.exerciseFocus') }}</h3>
       <p v-if="!admin" class="text-body">
-        Use the sliders to modify the exercise focus percentages. They must add up to 100%.
+        {{ t('dashboard.tabs.program.details.exerciseFocusDescriptionUser') }}
       </p>
       <p v-else class="text-body">
-        The exercise focus percentages are displayed below. These values are read-only.
+        {{ t('dashboard.tabs.program.details.exerciseFocusDescriptionAdmin') }}
       </p>
 
       <div v-if="!refresh" class="flex flex-col gap-6 mt-6">
         <!-- Strength Slider -->
         <div>
           <div class="flex justify-between">
-            <label class="inline-block text-rafik-pritext dark:text-rafik-darkpritext"
-              >Strength</label
-            >
+            <label class="inline-block text-rafik-pritext dark:text-rafik-darkpritext">
+              {{ t('dashboard.tabs.program.details.strength') }}
+            </label>
             <span class="text-rafik-pritext dark:text-rafik-darkpritext">{{ strength }}%</span>
           </div>
           <input
@@ -204,9 +217,9 @@ const removeTag = (tagToRemove: string) => {
         <!-- Hypertrophy Slider -->
         <div>
           <div class="flex justify-between">
-            <label class="inline-block text-rafik-pritext dark:text-rafik-darkpritext"
-              >Hypertrophy</label
-            >
+            <label class="inline-block text-rafik-pritext dark:text-rafik-darkpritext">
+              {{ t('dashboard.tabs.program.details.hypertrophy') }}
+            </label>
             <span class="text-rafik-pritext dark:text-rafik-darkpritext">{{ hypertrophy }}%</span>
           </div>
           <input
@@ -223,9 +236,9 @@ const removeTag = (tagToRemove: string) => {
         <!-- Agility Slider -->
         <div>
           <div class="flex justify-between">
-            <label class="inline-block text-rafik-pritext dark:text-rafik-darkpritext"
-              >Agility</label
-            >
+            <label class="inline-block text-rafik-pritext dark:text-rafik-darkpritext">
+              {{ t('dashboard.tabs.program.details.agility') }}
+            </label>
             <span class="text-rafik-pritext dark:text-rafik-darkpritext">{{ agility }}%</span>
           </div>
           <input
@@ -242,9 +255,9 @@ const removeTag = (tagToRemove: string) => {
         <!-- Cardio Slider -->
         <div>
           <div class="flex justify-between">
-            <label class="inline-block text-rafik-pritext dark:text-rafik-darkpritext"
-              >Cardio</label
-            >
+            <label class="inline-block text-rafik-pritext dark:text-rafik-darkpritext">
+              {{ t('dashboard.tabs.program.details.cardio') }}
+            </label>
             <span class="text-rafik-pritext dark:text-rafik-darkpritext">{{ cardio }}%</span>
           </div>
           <input
@@ -260,19 +273,19 @@ const removeTag = (tagToRemove: string) => {
 
         <!-- Warning Message for Incorrect Total -->
         <p v-if="!admin && total !== 100" class="text-red-500 text-sm">
-          The total percentage must equal 100%. Current total: {{ total }}%
+          {{ t('dashboard.tabs.program.details.totalPercentageWarning', { total }) }}
         </p>
       </div>
     </div>
 
     <!-- Tags Section -->
     <div class="card p-8 col-span-2">
-      <h3 class="contentH-medium">Tags</h3>
+      <h3 class="contentH-medium">{{ t('dashboard.tabs.program.details.tags') }}</h3>
       <p v-if="!admin" class="text-body">
-        Add tags by typing in the field below and pressing Enter. Click on a tag to remove it.
+        {{ t('dashboard.tabs.program.details.tagsInstruction') }}
       </p>
       <p v-else class="text-body">
-        The tags associated with this program are displayed below. These values are read-only.
+        {{ t('dashboard.tabs.program.details.tagsReadOnlyInstruction') }}
       </p>
 
       <div class="flex flex-col gap-4 mt-6">
@@ -281,7 +294,7 @@ const removeTag = (tagToRemove: string) => {
           v-model="newTag"
           type="text"
           class="rafik-text-input"
-          placeholder="Add a new tag"
+          :placeholder="t('dashboard.tabs.program.details.addNewTag')"
           @keyup.enter="addTag"
           v-if="!admin"
         />
@@ -295,7 +308,7 @@ const removeTag = (tagToRemove: string) => {
           >
             <span>{{ tag }}</span>
             <button @click="removeTag(tag)" class="text-red-500 hover:text-red-700" v-if="!admin">
-              ✕
+              {{ t('dashboard.tabs.program.details.removeTagButton') }}
             </button>
           </div>
         </div>

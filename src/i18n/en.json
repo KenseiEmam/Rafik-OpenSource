@@ -86,7 +86,7 @@
   "about": {
     "pageTitle": "ABOUT RAFIK",
     "pageSubtitle": "THE FITNESS SQUIRE FOR ALL",
-    "description": "In an era where fitness information is everywhere, navigating the noise has never been harder. While science-backed knowledge is more accessible than ever, social media has also given rise to self-proclaimed \"experts\" who mislead people with flashy trends and empty promises—draining their time, money, and sometimes even harming their health.<br><br>That’s why we created <strong>Rafik</strong>. We believe that <strong>everyone deserves access to reliable fitness expertise</strong>—guidance that is not only effective but also ethical and sustainable. However, we also understand the challenges: in-person coaching can be expensive, and finding the right <strong>online</strong> trainer can feel like a gamble. <strong>Rafik eliminates the guesswork</strong> by <strong>connecting you with the right trainer</strong> while ensuring <strong>accountability</strong> at every step.<br><br>And to the trainers—<strong>we’ve got your back, too!</strong> By sharing your <strong>verified</strong> programs on our platform, you gain access to a <strong>serious and dedicated audience</strong> who genuinely wants to transform their lives. Rafik helps you <strong>manage, track, and grow your client base</strong> while ensuring your hard work gets the <strong>recognition it deserves</strong> through a fair and transparent review system.<br><br><strong>Rafik is our gift to the fitness community—we hope you enjoy it!</strong>",
+    "description": "In an era where fitness information is everywhere, navigating the noise has never been harder. While science-backed knowledge is more accessible than ever, social media has also given rise to self-proclaimed \"experts\" who mislead people with flashy trends and empty promises—draining their time, money, and sometimes even harming their health.<br><br>That's why we created <strong>Rafik</strong>. We believe that <strong>everyone deserves access to reliable fitness expertise</strong>—guidance that is not only effective but also ethical and sustainable. However, we also understand the challenges: in-person coaching can be expensive, and finding the right <strong>online</strong> trainer can feel like a gamble. <strong>Rafik eliminates the guesswork</strong> by <strong>connecting you with the right trainer</strong> while ensuring <strong>accountability</strong> at every step.<br><br>And to the trainers—<strong>we've got your back, too!</strong> By sharing your <strong>verified</strong> programs on our platform, you gain access to a <strong>serious and dedicated audience</strong> who genuinely wants to transform their lives. Rafik helps you <strong>manage, track, and grow your client base</strong> while ensuring your hard work gets the <strong>recognition it deserves</strong> through a fair and transparent review system.<br><br><strong>Rafik is our gift to the fitness community—we hope you enjoy it!</strong>",
     "visionTitle": "Our Vision",
     "visionDescription": "To empower individuals in the MENA to achieve their fitness goals with confidence and accountability, by providing personalized and reliable connections to expert trainers at affordable prices.",
     "missionTitle": "Our Mission",
@@ -178,7 +178,7 @@
       "howWeUse": {
         "title": "3. How We Use Your Information",
         "items": [
-          "To provide, maintain, and improve our app’s features.",
+          "To provide, maintain, and improve our app's features.",
           "To personalize your fitness experience and track progress.",
           "To communicate updates, features, and support inquiries.",
           "To ensure security and prevent unauthorized access."
@@ -208,7 +208,7 @@
         "content": "We retain data as necessary for service provision or as required by law. Deleted accounts result in permanent data removal, except where retention is legally required."
       },
       "childrensPrivacy": {
-        "title": "8. Children’s Privacy",
+        "title": "8. Children's Privacy",
         "content": "Rafik Fitness Squire is not intended for children under 13. If data from a child is discovered, we will take steps to remove it."
       },
       "policyChanges": {
@@ -494,22 +494,90 @@
           "programNameRequired": "Program name is required.",
           "programDescriptionRequired": "Program description is required.",
           "difficultyLevelRequired": "Please select a difficulty level."
+        },
+        "clients": {
+          "searchPlaceholder": "Search by name or email...",
+          "showingText": "Showing {count} row(s)",
+          "dateJoined": "Date Joined",
+          "expiresOn": "Expires On",
+          "planMonths": "Plan (Months)",
+          "status": "Status",
+          "viewClient": "View Client",
+          "removeClient": "Remove Client",
+          "noClients": "No clients just yet!",
+          "prev": "Prev",
+          "next": "Next",
+          "pageText": "Page {current} of {total}",
+          "months": "month"
+        },
+        "details": {
+          "quickStats": "Quick Stats",
+          "quickStatsDescription": "Below you can find a quick rundown of the program's current statistics. We are working on a much better dashboard.",
+          "totalClients": "Total Clients:",
+          "comingSoon": "Coming Soon...",
+          "revenueThisMonth": "Revenue this Month:",
+          "totalRevenue": "Total Revenue:",
+          "bestMonth": "Best Month:",
+          "clientRetention": "Client Retention:",
+          "growthRate": "Growth Rate:",
+          "trainerDetails": "Trainer Details",
+          "viewTrainerProfile": "View Trainer Profile",
+          "loadingTrainerDetails": "Loading trainer details...",
+          "exerciseFocus": "Exercise Focus",
+          "exerciseFocusDescriptionUser": "Use the sliders to modify the exercise focus percentages. They must add up to 100%.",
+          "exerciseFocusDescriptionAdmin": "The exercise focus percentages are displayed below. These values are read-only.",
+          "strength": "Strength",
+          "hypertrophy": "Hypertrophy",
+          "agility": "Agility",
+          "cardio": "Cardio",
+          "totalPercentageWarning": "The total percentage must equal 100%. Current total: {total}%",
+          "tags": "Tags",
+          "tagsInstruction": "Add tags by typing in the field below and pressing Enter. Click on a tag to remove it.",
+          "tagsReadOnlyInstruction": "The tags associated with this program are displayed below. These values are read-only.",
+          "addNewTag": "Add a new tag",
+          "removeTagButton": "✕"
+        },
+        "docForms": {
+          "clientInductionForm": "Client Induction Form",
+          "clientInductionDescription": "The client induction form is sent to all clients once they are subscribed to the program. It should usually include questions pertaining to client readiness and also about their goals for the specific program.",
+          "addTextInduction": "+ Add Text",
+          "addNumberInduction": "+ Add Number",
+          "addBooleanInduction": "+ Add Boolean",
+          "addMediaUploadInduction": "+ Add Media Upload",
+          "questionLabel": "{type} Question",
+          "addNewQuestionPlaceholder": "Add a new {type} Question",
+          "removeInduction": "X",
+          "clientFollowUpForm": "Client Follow-Up Form",
+          "clientFollowUpDescription": "The follow-up form is sent automatically to clients on a regular basis based on the interval set up in your settings. This form usually asks clients about their progress and urges them to update their weight setting.",
+          "addTextFollow": "+ Add Text",
+          "addNumberFollow": "+ Add Number",
+          "addBooleanFollow": "+ Add Boolean",
+          "addMediaUploadFollow": "+ Add Media Upload",
+          "removeFollow": "X",
+          "aiReferralDocument": "AI Referral Document",
+          "aiReferralDescription": "The AI referral document is used to respond to clients on a daily basis. Clients will have the option to refer to the trainer AI chat for quick questions, and the trainer can review the AI's response. Direct trainer messages will occur in a different inbox.",
+          "viewDocument": "VIEW DOCUMENT",
+          "changeDocument": "CHANGE DOCUMENT",
+          "uploadDocument": "UPLOAD DOCUMENT",
+          "deleteDocument": "Delete Document",
+          "processing": "Processing..."
+        },
+        "pricing": {
+          "subscriptionModels": "Subscription Models",
+          "subscriptionModelsDescriptionUser": "Enable/disable subscription packages and manage their prices. Price changes will be reviewed.",
+          "subscriptionModelsDescriptionAdmin": "Subscription packages and their prices.",
+          "price_one": "1 Month",
+          "price_three": "3 Months",
+          "price_six": "6 Months",
+          "price_year": "1 Year",
+          "monthlyPriceLabel": "MONTHLY PRICE (AED)",
+          "na": "N/A",
+          "promoCodes": "Promo Codes",
+          "promoCodesDescription": "Type your promo code in the input below and press enter to add it. You can remove promo codes and adjust their values.",
+          "addPromoPlaceholder": "Add a new promo code",
+          "discountLabel": "% DISCOUNT",
+          "valueForPromo": "Value for {code}"
         }
-      },
-      "clients": {
-        "searchPlaceholder": "Search by name or email...",
-        "showingText": "Showing {count} row(s)",
-        "dateJoined": "Date Joined",
-        "expiresOn": "Expires On",
-        "planMonths": "Plan (Months)",
-        "status": "Status",
-        "viewClient": "View Client",
-        "removeClient": "Remove Client",
-        "noClients": "No clients just yet!",
-        "prev": "Prev",
-        "next": "Next",
-        "pageText": "Page {current} of {total}",
-        "months": "month"
       }
     }
   }
