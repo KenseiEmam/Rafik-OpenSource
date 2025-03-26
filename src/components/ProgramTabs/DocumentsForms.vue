@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { ref, watch, defineEmits } from "vue";
-import debounce  from "lodash/debounce";
-import { supabase } from "@/lib/supabaseClient";
+import { ref, watch, defineEmits } from 'vue';
+import debounce from 'lodash/debounce';
+import { supabase } from '@/lib/supabaseClient';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 // Props to receive the program object
 const props = defineProps({
   program: {
     type: Object,
-    required: true,
-  },
+    required: true
+  }
 });
 const isProcessing = ref(false); // New state for tracking processing
 
@@ -21,7 +24,7 @@ const handleFileUpload = async (event: any) => {
         .from('storage') // your bucket name
         .upload(`media/${file.name}`, file, {
           cacheControl: '3600', // Cache for 1 hour
-          upsert: true, // To overwrite if the file already exists
+          upsert: true // To overwrite if the file already exists
         });
 
       if (error) {
@@ -30,12 +33,10 @@ const handleFileUpload = async (event: any) => {
       }
 
       // Retrieve the public URL for the uploaded file
-      const { data: urlData } = await supabase.storage
-        .from("storage")
-        .getPublicUrl(data.path);
+      const { data: urlData } = await supabase.storage.from('storage').getPublicUrl(data.path);
 
       if (!urlData?.publicUrl) {
-        alert("Failed to retrieve the URL for the program photo.");
+        alert('Failed to retrieve the URL for the program photo.');
         return null;
       }
 
@@ -76,7 +77,7 @@ const deleteDocument = async () => {
       emit('updateProgramField', 'referral', null);
 
       console.log('Document deleted successfully.');
-    } catch (err:any) {
+    } catch (err: any) {
       console.error('Error deleting document:', err.message);
     } finally {
       isProcessing.value = false; // Set processing state to false after the process
@@ -99,8 +100,8 @@ const follow = ref<Question[]>(props.program.follow || []);
 function addInduction(type: string) {
   inductions.value.push({
     type: type,
-    question: "",
-    answer: null,
+    question: '',
+    answer: null
   });
   emitUpdate();
 }
@@ -120,8 +121,8 @@ function removeInduction(index: number) {
 function addFollow(type: string) {
   follow.value.push({
     type: type,
-    question: "",
-    answer: null,
+    question: '',
+    answer: null
   });
   emitUpdate();
 }
@@ -132,107 +133,174 @@ function removeFollow(index: number) {
 }
 
 // Debounced function to update the program
-const emit = defineEmits(["updateProgramField"]);
+const emit = defineEmits(['updateProgramField']);
 
 const emitUpdate = debounce(() => {
-  emit("updateProgramField", "inductions", inductions.value);
-  emit("updateProgramField", "follow", follow.value);
+  emit('updateProgramField', 'inductions', inductions.value);
+  emit('updateProgramField', 'follow', follow.value);
 }, 500);
 
 // Watch for question input changes
-watch(
-  () => [...inductions.value, ...follow.value].map((q) => q.question),
-  emitUpdate,
-  { deep: true }
-);
+watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitUpdate, {
+  deep: true
+});
 </script>
 
 <template>
   <div class="grid md:grid-cols-2 2xl:grid-cols-3 items-start h-full relative flex-1 gap-4">
     <!-- Induction Form -->
-    <div style="height: 60vh;" class="card p-8 h-full overflow-y-auto space-y-4">
-      <h3 class="contentH-medium">Client Induction Form</h3>
+    <div style="height: 60vh" class="card p-8 h-full overflow-y-auto space-y-4">
+      <h3 class="contentH-medium">
+        {{ t('dashboard.tabs.program.docForms.clientInductionForm') }}
+      </h3>
       <p class="text-label text-rafik-sectext dark:text-rafik-darksectext">
-        The client induction form is sent to all clients once they are subscribed to the program. It should usually include questions pertaining to client readiness and also about their goals for the specific program.
+        {{ t('dashboard.tabs.program.docForms.clientInductionDescription') }}
       </p>
-      <div class="text-sm 2xl:text-sm flex gap-4 flex-wrap divide-x divide-rafik-sectext dark:divide-rafik-darksectext">
-        <button @click="addInduction('text')" class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">+ Add Text </button>
-        <button @click="addInduction('number')" class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">+ Add Number </button>
-        <button @click="addInduction('boolean')" class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">+ Add Boolean</button>
-        <button @click="addInduction('upload')" class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">+ Add Media Upload</button>
+      <div
+        class="text-sm 2xl:text-sm flex gap-4 flex-wrap divide-x divide-rafik-sectext dark:divide-rafik-darksectext"
+      >
+        <button
+          @click="addInduction('text')"
+          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+        >
+          {{ t('dashboard.tabs.program.docForms.addTextInduction') }}
+        </button>
+        <button
+          @click="addInduction('number')"
+          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+        >
+          {{ t('dashboard.tabs.program.docForms.addNumberInduction') }}
+        </button>
+        <button
+          @click="addInduction('boolean')"
+          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+        >
+          {{ t('dashboard.tabs.program.docForms.addBooleanInduction') }}
+        </button>
+        <button
+          @click="addInduction('upload')"
+          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+        >
+          {{ t('dashboard.tabs.program.docForms.addMediaUploadInduction') }}
+        </button>
       </div>
       <div class="flex flex-col gap-3">
-        <div v-for="(question, index) in inductions" :key="index" class="card p-6 border-rafik gradient-bg flex justify-between items-center text-left border">
+        <div
+          v-for="(question, index) in inductions"
+          :key="index"
+          class="card p-6 border-rafik gradient-bg flex justify-between items-center text-left border"
+        >
           <div class="space-y-2">
-            <p class="uppercase text-sm 2xl:text-sm font-semibold">{{ question.type }} Question</p>
+            <p class="uppercase text-sm 2xl:text-sm font-semibold">
+              {{ t('dashboard.tabs.program.docForms.questionLabel', { type: question.type }) }}
+            </p>
             <input
               v-model="question.question"
               class="bg-transparent text-rafik-pritext dark:text-rafik-darkpritext px-0 header-small text-base 2xl:text-lg focus:outline-none border-none focus:ring-0"
               type="text"
-              :placeholder="'Add a new ' + question.type + ' Question'"
+              :placeholder="
+                t('dashboard.tabs.program.docForms.addNewQuestionPlaceholder', {
+                  type: question.type
+                })
+              "
               :id="question.type + index"
             />
           </div>
-          <button @click="removeInduction(index)" class="text-red-500 hover:text-red-300 text-xl">X</button>
+          <button @click="removeInduction(index)" class="text-red-500 hover:text-red-300 text-xl">
+            {{ t('dashboard.tabs.program.docForms.removeInduction') }}
+          </button>
         </div>
       </div>
     </div>
 
     <!-- Follow-Up Form -->
-    <div style="height: 60vh;" class="card p-8 h-full overflow-y-auto space-y-4">
-      <h3 class="contentH-medium">Client Follow-Up Form</h3>
+    <div style="height: 60vh" class="card p-8 h-full overflow-y-auto space-y-4">
+      <h3 class="contentH-medium">{{ t('dashboard.tabs.program.docForms.clientFollowUpForm') }}</h3>
       <p class="text-label text-rafik-sectext dark:text-rafik-darksectext">
-        The follow-up form is sent automatically to clients on a regular basis based on the interval set up in your settings. This form usually asks clients about their progress and urges them to update their weight setting.
+        {{ t('dashboard.tabs.program.docForms.clientFollowUpDescription') }}
       </p>
-      <div class="text-sm 2xl:text-sm flex gap-4 flex-wrap divide-x divide-rafik-sectext dark:divide-rafik-darksectext">
-        <button @click="addFollow('text')" class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">+ Add Text </button>
-        <button @click="addFollow('number')" class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">+ Add Number </button>
-        <button @click="addFollow('boolean')" class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">+ Add Boolean</button>
-        <button @click="addFollow('upload')" class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">+ Add Media Upload</button>
+      <div
+        class="text-sm 2xl:text-sm flex gap-4 flex-wrap divide-x divide-rafik-sectext dark:divide-rafik-darksectext"
+      >
+        <button
+          @click="addFollow('text')"
+          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+        >
+          {{ t('dashboard.tabs.program.docForms.addTextFollow') }}
+        </button>
+        <button
+          @click="addFollow('number')"
+          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+        >
+          {{ t('dashboard.tabs.program.docForms.addNumberFollow') }}
+        </button>
+        <button
+          @click="addFollow('boolean')"
+          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+        >
+          {{ t('dashboard.tabs.program.docForms.addBooleanFollow') }}
+        </button>
+        <button
+          @click="addFollow('upload')"
+          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+        >
+          {{ t('dashboard.tabs.program.docForms.addMediaUploadFollow') }}
+        </button>
       </div>
       <div class="flex flex-col gap-3">
-        <div v-for="(question, index) in follow" :key="index" class="card p-6 border-rafik gradient-bg flex justify-between items-center text-left border">
+        <div
+          v-for="(question, index) in follow"
+          :key="index"
+          class="card p-6 border-rafik gradient-bg flex justify-between items-center text-left border"
+        >
           <div class="space-y-2">
-            <p class="uppercase text-sm 2xl:text-sm font-semibold">{{ question.type }} Question</p>
+            <p class="uppercase text-sm 2xl:text-sm font-semibold">
+              {{ t('dashboard.tabs.program.docForms.questionLabel', { type: question.type }) }}
+            </p>
             <input
               v-model="question.question"
               class="bg-transparent text-rafik-pritext dark:text-rafik-darkpritext px-0 header-small text-base 2xl:text-lg focus:outline-none border-none focus:ring-0"
               type="text"
-              :placeholder="'Add a new ' + question.type + ' Question'"
+              :placeholder="
+                t('dashboard.tabs.program.docForms.addNewQuestionPlaceholder', {
+                  type: question.type
+                })
+              "
               :id="question.type + index"
             />
           </div>
-          <button @click="removeFollow(index)" class="text-red-500 hover:text-red-300 text-xl">X</button>
+          <button @click="removeFollow(index)" class="text-red-500 hover:text-red-300 text-xl">
+            {{ t('dashboard.tabs.program.docForms.removeFollow') }}
+          </button>
         </div>
       </div>
     </div>
 
     <!-- Referral Document -->
     <div class="card p-8 overflow-y-auto space-y-4 col-span-2 2xl:col-span-1">
-      <h3 class="contentH-medium">AI Referral Document</h3>
+      <h3 class="contentH-medium">{{ t('dashboard.tabs.program.docForms.aiReferralDocument') }}</h3>
       <p class="text-label text-rafik-sectext dark:text-rafik-darksectext">
-        The AI referral document is used to respond to clients on a daily basis. Clients will have the option to refer to the trainer AI chat for quick questions, and the trainer can review the AI's response. Direct trainer messages will occur in a different inbox.
+        {{ t('dashboard.tabs.program.docForms.aiReferralDescription') }}
       </p>
       <div class="flex flex-col gap-4">
         <!-- View Document button -->
         <a :href="program.referral" target="_blank" v-if="program.referral" class="btn-lg-outline">
-          VIEW DOCUMENT
+          {{ t('dashboard.tabs.program.docForms.viewDocument') }}
         </a>
-    <!-- File input and buttons -->
-    <input
-      type="file"
-      @change="handleFileUpload"
-      class="hidden"
-      ref="fileInput"
-    />
-    <button
-      v-if="!isProcessing"
-      @click="triggerFileInput"
-      class="btn-lg"
-      :disabled="isProcessing"
-    >
-      {{ program.referral ? 'CHANGE DOCUMENT' : 'UPLOAD DOCUMENT' }}
-    </button>
+        <!-- File input and buttons -->
+        <input type="file" @change="handleFileUpload" class="hidden" ref="fileInput" />
+        <button
+          v-if="!isProcessing"
+          @click="triggerFileInput"
+          class="btn-lg"
+          :disabled="isProcessing"
+        >
+          {{
+            program.referral
+              ? t('dashboard.tabs.program.docForms.changeDocument')
+              : t('dashboard.tabs.program.docForms.uploadDocument')
+          }}
+        </button>
 
         <!-- Delete Document button -->
         <button
@@ -241,12 +309,15 @@ watch(
           class="btn-lg bg-red-500 hover:bg-red-600 uppercase"
           :disabled="isProcessing"
         >
-          Delete Document
+          {{ t('dashboard.tabs.program.docForms.deleteDocument') }}
         </button>
 
         <!-- Processing placeholder -->
-        <div v-if="isProcessing" class="absolute inset-0 flex items-center justify-center bg-opacity-50 bg-gray-500 z-10">
-          <div class="text-white">Processing...</div>
+        <div
+          v-if="isProcessing"
+          class="absolute inset-0 flex items-center justify-center bg-opacity-50 bg-gray-500 z-10"
+        >
+          <div class="text-white">{{ t('dashboard.tabs.program.docForms.processing') }}</div>
         </div>
       </div>
     </div>
