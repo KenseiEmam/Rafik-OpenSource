@@ -1281,6 +1281,15 @@
       "noWorkoutLogged": "No workout Logged on",
       "minsSession": "mins/session",
       "daysWeek": "days/week"
+    },
+    "settings": {
+      "subheader": "Settings &",
+      "header": "Preferences",
+      "generalSettingsTab": "General Settings",
+      "trainerSettingsTab": "Trainer Settings",
+      "rolesAndPermissionsTab": "Roles and Permissions",
+      "successTitle": "Success!",
+      "errorTitle": "Error!"
     }
   }
 }
