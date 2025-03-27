@@ -321,6 +321,63 @@
         "never": "Never"
       }
     },
+    "clients": {
+      "details": {
+        "clientIsOnline": "Client is online",
+        "clientIsOffline": "Client is offline",
+        "successTitle": "Success!",
+        "errorTitle": "Error!",
+        "clientNotFound": "Client not found!",
+        "failedToLoadClient": "Failed to load client details.",
+        "changeSuccessful": "Change successful!",
+        "failedToChange": "Failed to change. Please try again.",
+        "cancelConfirmTitle": "Hold!",
+        "cancelConfirmText": "Please be sure that once cancelled, the program subscription cannot be uncancelled and the client will be lost.",
+        "cancelConfirmButton": "Proceed!",
+        "noUserIdFound": "No UserID found.",
+        "noUserProgramFound": "No user program found in store.",
+        "errorCreatingCancellation": "Error creating cancellation",
+        "cancellationInReview": "Cancellation is now in review!",
+        "errorCancellingProgram": "Error cancelling program.",
+        "updatedSuccessfully": "Field updated successfully!",
+        "failedToUpdateField": "Failed to update this field. Please try again.",
+        "loading": "Loading...",
+        "online": "Online",
+        "away": "Away",
+        "statusLabel": "Status:",
+        "workoutIteration": "Workout-Iteration",
+        "dietLastLogged": "Diet Last Logged:",
+        "noLogs": "No Logs",
+        "progress": "Progress:",
+        "changeProgram": "Change Program",
+        "cancelSubscription": "Cancel Subscription",
+        "cancellationPending": "Cancellation Pending",
+        "subscriptionCancelled": "X Subscription Cancelled",
+        "detailsTab": "Details",
+        "workoutPlanTab": "Workout-Plan",
+        "workoutLogTab": "Workout-Log",
+        "dietLogTab": "Diet-Log",
+        "statisticsTab": "Statistics"
+      },
+      "list": {
+        "active": "Active",
+        "clients": "Clients",
+        "loading": "Loading...",
+        "prev": "<<",
+        "next": ">>",
+        "pageLabel": "Page:",
+        "dateJoined": "Date Joined",
+        "expiresOn": "Expires On",
+        "planMonths": "Plan (Months)",
+        "status": "Status",
+        "pageSize": "Page size",
+        "totalClients": "total clients",
+        "monthsSuffix": "months",
+        "viewProgram": "View Program",
+        "messageClient": "Message Client",
+        "removeClient": "Remove Client"
+      }
+    },
     "auditPrograms": {
       "list": {
         "pageTitle": {

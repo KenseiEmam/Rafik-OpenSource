@@ -5,14 +5,30 @@
       class="flex-1 px-8 py-12 flex flex-col w-full 2xl:px-12 2xl:py-24 gap-6"
     >
       <!-- Page Title -->
-      <PageTitle subheader="Active" header="Clients" />
+      <PageTitle
+        :subheader="t('dashboard.clients.list.active')"
+        :header="t('dashboard.clients.list.clients')"
+      />
 
       <!-- Loading State -->
-      <div v-if="loading" class=" h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body">
-          <img src="@/assets/Large Icon.png"  class="w-24 h-24 animate-bounce hidden dark:inline-block" alt="">
-<img src="@/assets/Large Icon Light.png"  class="w-24 h-24 animate-bounce dark:hidden" alt="">
-          <p class="text-lg animate-pulse">
-          Loading...
+      <div
+        v-if="loading"
+        class="h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body"
+      >
+        <!-- Dark Mode Icon -->
+        <img
+          src="@/assets/Large Icon.png"
+          class="w-24 h-24 animate-bounce hidden dark:inline-block"
+          alt=""
+        />
+        <!-- Light Mode Icon -->
+        <img
+          src="@/assets/Large Icon Light.png"
+          class="w-24 h-24 animate-bounce dark:hidden"
+          alt=""
+        />
+        <p class="text-lg animate-pulse">
+          {{ t('dashboard.clients.list.loading') }}
         </p>
       </div>
 
@@ -26,20 +42,26 @@
                   v-if="userStore.client_count"
                   class="flex items-center gap-4 my-6 text-sm 2xl:text-sm"
                 >
-                  <!-- Tabs Navigation -->
+                  <!-- Tabs Navigation (Pagination) -->
                   <button
-                    @click="updatePage(page - 1)"
                     v-if="page > 1"
+                    @click="updatePage(page - 1)"
                     class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
                   >
-                    <<
+                    {{ t('dashboard.clients.list.prev') }}
                   </button>
-                  <p class="min-w-max text-rafik-sectext dark:text-rafik-darksectext capitalize">Page:</p>
-                  <div class="flex text-rafik-sectext dark:text-rafik-darksectext gap-4 pr-4" v-if="userStore.client_count">
+
+                  <p class="min-w-max text-rafik-sectext dark:text-rafik-darksectext capitalize">
+                    {{ t('dashboard.clients.list.pageLabel') }}
+                  </p>
+                  <div
+                    v-if="userStore.client_count"
+                    class="flex text-rafik-sectext dark:text-rafik-darksectext gap-4 pr-4"
+                  >
                     <button
-                      @click="updatePage(p)"
                       v-for="p in Math.ceil(userStore.client_count / numbers)"
                       :key="p"
+                      @click="updatePage(p)"
                       class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
                       :class="{ 'text-rafik-pritext dark:text-rafik-darkpritext': p === page }"
                     >
@@ -48,25 +70,27 @@
                   </div>
 
                   <button
-                    class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
-                    @click="updatePage(page + 1)"
                     v-if="page < Math.ceil(userStore.client_count / numbers)"
+                    @click="updatePage(page + 1)"
+                    class="px-4 py-2 text-rafik-sectext dark:text-rafik-darkpritext min-w-max hover:text-rafik-pritext"
                   >
-                    >>
+                    {{ t('dashboard.clients.list.next') }}
                   </button>
                 </div>
               </th>
-              <th>Date Joined</th>
-              <th>Expires On</th>
-              <th>Plan (Months)</th>
-              <th>Status</th>
+              <th>{{ t('dashboard.clients.list.dateJoined') }}</th>
+              <th>{{ t('dashboard.clients.list.expiresOn') }}</th>
+              <th>{{ t('dashboard.clients.list.planMonths') }}</th>
+              <th>{{ t('dashboard.clients.list.status') }}</th>
               <th>
                 <div class="flex justify-end px-3 items-center gap-3">
-                  <p class="text-body min-w-max text-sm 2xl:text-base">Page size</p>
+                  <p class="text-body min-w-max text-sm 2xl:text-base">
+                    {{ t('dashboard.clients.list.pageSize') }}
+                  </p>
                   <select
+                    name="records"
                     v-model="numbers"
                     @change="updatePage(page)"
-                    name="records"
                     class="rafik-text-input w-32 text-sm p-2"
                   >
                     <option value="5">5</option>
@@ -75,7 +99,7 @@
                   </select>
                 </div>
                 <p class="text-sm mt-3 text-body min-w-max text-sm text-right">
-                  {{ userStore.client_count }} total clients
+                  {{ userStore.client_count }} {{ t('dashboard.clients.list.totalClients') }}
                 </p>
               </th>
             </tr>
@@ -90,8 +114,11 @@
                 class="flex gap-6 rounded-l-xl text-left items-center py-4 pl-3 bg-rafik-secbg dark:bg-rafik-darksecbg"
               >
                 <img
-                  :src="client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
-                  class="w-12  rounded-full border-2 border-rafik h-12 "
+                  :src="
+                    client.avatar ||
+                    'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
+                  "
+                  class="w-12 h-12 rounded-full border-2 border-rafik"
                   alt="Avatar"
                 />
                 <div>
@@ -100,127 +127,118 @@
                 </div>
               </td>
 
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg ">
-                {{ new Date(client.program_details.created_at).toLocaleDateString('en-GB', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })
-                    || '-'
+              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg">
+                {{
+                  new Date(client.program_details.created_at).toLocaleDateString('en-GB', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  }) || '-'
                 }}
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg ">
-                {{ new Date(client.program_details.expires_on).toLocaleDateString('en-GB', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })
-                    || '-'
+              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg">
+                {{
+                  new Date(client.program_details.expires_on).toLocaleDateString('en-GB', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  }) || '-'
                 }}
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg ">
-                {{ client.program_details.months_package
-                    || '-'
-                }} months
+              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg">
+                {{ client.program_details.months_package || '-' }}
+                {{ t('dashboard.clients.list.monthsSuffix') }}
               </td>
-              <td class="uppercase bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik ">
+              <td class="uppercase bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik">
                 {{ client.program_details.status || '-' }}
               </td>
               <td
                 class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right rounded-r-xl"
               >
                 <svg
-                  @click="(show_action = client.id)"
+                  @click="show_action = client.id"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
-                  class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext cursor-pointer ml-auto"
+                  class="text-rafik-sectext dark:text-rafik-darkpritext h-7 mx-7 hover:text-rafik-pritext cursor-pointer ml-auto"
                   viewBox="0 0 128 512"
                 >
                   <path
-                    d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"
+                    d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112
+                       56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56
+                       56 0 1 0 112 0z"
                   />
                 </svg>
                 <div
-                  v-if="show_action == client.id"
+                  v-if="show_action === client.id"
                   @mouseleave="handleLeave()"
-                  class="absolute min-w-16 px-2 z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg shadow-lg divide-y divide-y-rafik-sectext"
+                  class="absolute min-w-16 px-2 z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg shadow-lg divide-y divide-rafik-sectext"
                 >
                   <Router-link
                     :to="{ name: 'client-details', params: { id: client.id } }"
-                    class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded"
+                    class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext rounded"
                   >
-                    View Program
+                    {{ t('dashboard.clients.list.viewProgram') }}
                   </Router-link>
-                  <!-- <button class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded">
-                    Message Client
+                  <!-- Future Feature (messaging):
+                  <button class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext rounded">
+                    {{ t('dashboard.clients.list.messageClient') }}
                   </button> -->
                   <button
                     class="px-3 py-5 text-red-500 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-red-300 rounded"
                   >
-                    Remove Client
+                    {{ t('dashboard.clients.list.removeClient') }}
                   </button>
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
-
-        <!-- Pagination -->
+        <!-- Pagination (Optional) -->
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import PageTitle from '@/components/Navigation/PageTitle.vue'
-import { computed, onMounted, ref } from 'vue'
-import { useUserStore } from '@/stores/user'
-import { useExerciseStore } from '@/stores/exercisestores'
-import router from '@/router'
-import AddProgramModal from '@/components/ProgramTabs/AddProgramModal.vue'
-import ExerciseList from '@/components/ExerciseList.vue'
+import PageTitle from '@/components/Navigation/PageTitle.vue';
+import { computed, onMounted, ref } from 'vue';
+import { useUserStore } from '@/stores/user';
+import router from '@/router';
+import { useI18n } from 'vue-i18n';
 
-const filter = ref('All')
-const activeTab = ref('Active Program')
-const userStore = useUserStore()
-const page = ref(1)
-const numbers = ref(10)
-const showAddProgramModal = ref(false)
-const loading = ref(false)
-const show_action = ref()
+const { t } = useI18n();
 
+// Refs & store
+const filter = ref('All');
+const activeTab = ref('Active Program');
+const userStore = useUserStore();
+const page = ref(1);
+const numbers = ref(10);
+const loading = ref(false);
+const show_action = ref();
+
+// Pagination controls
 function handleLeave() {
   setTimeout(() => {
-    show_action.value = null
-  }, 500)
+    show_action.value = null;
+  }, 500);
 }
 
-// Change active tab handler
-function setActiveTab(tab: string) {
-  activeTab.value = tab
-}
-
-// Update Exercise page
 function updatePage(value: number) {
-  page.value = value
-  loading.value = true
+  page.value = value;
+  loading.value = true;
   userStore.getActiveClientsForTrainer(page.value, numbers.value).then(() => {
-    loading.value = false
-  })
+    loading.value = false;
+  });
 }
 
-// Route to details
-function detailsRoute(id: string) {
-  router.push({ name: 'user-details', params: { id: id } })
-}
-
-// Fetch users on component mount
+// On mount, fetch clients
 onMounted(() => {
-  loading.value = true
+  loading.value = true;
   userStore.getActiveClientsForTrainer(page.value, numbers.value).then(() => {
-    loading.value = false
-  })
-})
+    loading.value = false;
+  });
+});
 </script>
 
 <style scoped>
@@ -236,7 +254,7 @@ tbody > tr {
 }
 
 .card:hover {
-  background-image:linear-gradient(135deg, #f3eeeb 36%, #fff2cb)
+  background-image: linear-gradient(135deg, #f3eeeb 36%, #fff2cb);
 }
 .dark .card:hover {
   background-image: linear-gradient(135deg, #081411 36%, #295f42);
