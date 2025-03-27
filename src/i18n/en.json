@@ -1205,6 +1205,61 @@
         "Intermediate": "Intermediate",
         "Advanced": "Advanced"
       }
+    },
+    "support": {
+      "create": {
+        "createNewTicket": "Create New Ticket",
+        "subjectLabel": "Subject",
+        "selectSubjectPlaceholder": "Select a subject",
+        "generalInquiry": "General Inquiry",
+        "techIssue": "Technical Issue/ Bug",
+        "relatedToProgram": "Related to a Program",
+        "relatedToClient": "Related to a Client",
+        "selectProgram": "Select Program",
+        "loadingPrograms": "Loading programs...",
+        "selectProgramPlaceholder": "Select a program",
+        "selectClient": "Select Client",
+        "loadingClients": "Loading clients...",
+        "selectClientPlaceholder": "Select a client",
+        "messageLabel": "Message",
+        "messagePlaceholder": "Describe your issue...",
+        "attachMediaLabel": "Attach Media (Optional)",
+        "cancelButton": "Cancel",
+        "submitTicketButton": "Submit Ticket",
+        "errors": {
+          "subjectRequired": "Please select a subject.",
+          "optionRequired": "Please select an option.",
+          "messageRequired": "Please enter a message."
+        }
+      },
+      "list": {
+        "supportTickets": "Support Tickets",
+        "yourTickets": "Your Tickets",
+        "createNewTicket": "Create New Ticket",
+        "loadingTickets": "Loading tickets, please hold...",
+        "ticketID": "Ticket ID",
+        "subject": "Subject",
+        "status": "Status",
+        "createdOn": "Created On",
+        "action": "Action",
+        "view": "View",
+        "noTicketsFound": "No support tickets found. Create one to get started!",
+        "errorTitle": "Error!",
+        "uploadCreateFail": "Failed to upload media and create ticket"
+      },
+      "view": {
+        "statusLabel": "Status:",
+        "unspecified": "Unspecified",
+        "createdOn": "Created on:",
+        "noMessages": "No messages yet. Start the conversation!",
+        "addResponse": "Add a Response",
+        "responsePlaceholder": "Type your message...",
+        "sendResponseButton": "Send Response",
+        "errorTitle": "Error!",
+        "messageEmptyError": "Message cannot be empty.",
+        "youLabel": "You",
+        "supportLabel": "Support"
+      }
     }
   }
 }
