@@ -12,6 +12,14 @@
     "seen": "Seen",
     "na": "N/A"
   },
+
+  "footer": {
+    "about": "About",
+    "download": "Download",
+    "contact": "Contact",
+    "privacyPolicy": "Privacy Policy",
+    "deleteAccount": "Delete Account"
+  },
   "header": {
     "nav": {
       "home": "Home",
@@ -65,8 +73,8 @@
         "number": "mob: +971 56 866 3114"
       },
       "mail": {
-        "label": "Mail us:",
-        "address": "admin@rafik.ae"
+        "label": "Mail us:"
+
       },
       "find": {
         "label": "Find Us At:",
@@ -80,7 +88,7 @@
       },
       "formPlaceholders": {
         "fullName": "rafik",
-        "email": "rafik@example.com",
+
         "message": "Write us a message here..."
       },
       "sendButton": "SEND",
@@ -149,7 +157,6 @@
     "signInNow": "Sign In Now",
     "form": {
       "emailLabel": "Email Address",
-      "emailPlaceholder": "rafik@example.com",
       "passwordLabel": "Password",
       "passwordPlaceholder": "*******",
       "confirmPasswordLabel": "Confirm Password",

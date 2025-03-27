@@ -4,6 +4,7 @@ import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue';
 import ProgramCreation from '../components/ProgramCreation.vue';
 import ClientManagemet from '../components/ClientManagemet.vue';
 import ContactVue from '../components/Forms/ContactVue.vue';
+import Footer from '@/components/Navigation/Footer.vue';
 </script>
 
 <template>
@@ -17,6 +18,7 @@ import ContactVue from '../components/Forms/ContactVue.vue';
         <ContactVue />
       </div>
     </Transition>
+    <Footer/>
   </main>
 </template>
 <!-- Sami sucks -->

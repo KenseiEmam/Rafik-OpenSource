@@ -44,7 +44,13 @@ const userStore = useUserStore();
 const settingstores = useSettingsStore();
 const localSettings = localStorage.getItem('dark_mode');
 onMounted(() => {
-  userStore.getUserProfileNO();
+  userStore.getUserProfileNO().then(()=>
+    {
+      if (settingstores.settings) {
+        locale.value = settingstores.settings.language; // ✅ Set locale inside setup
+      }
+    }
+  );
 });
 import DashboardSideBar from '../../components/Navigation/DashboardSideBar.vue';
 import PostOffice from '../../components/Offcanvas/PostOffice.vue';

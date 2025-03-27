@@ -12,6 +12,13 @@
     "seen": "تمت المشاهدة",
     "na": "غير متوفر"
   },
+  "footer": {
+    "about": "حول",
+    "download": "تحميل",
+    "contact": "اتصال",
+    "privacyPolicy": "سياسة الخصوصية",
+    "deleteAccount": "حذف الحساب"
+  },
   "header": {
     "nav": {
       "home": "الرئيسية",
@@ -65,8 +72,7 @@
         "number": "موبايل: +971 56 866 3114"
       },
       "mail": {
-        "label": "راسلنا عبر البريد:",
-        "address": "admin@rafik.ae"
+        "label": "راسلنا عبر البريد:"
       },
       "find": {
         "label": "ابحث عنا في:",
@@ -80,7 +86,6 @@
       },
       "formPlaceholders": {
         "fullName": "رفيق",
-        "email": "rafik@example.com",
         "message": "اكتب رسالتك هنا..."
       },
       "sendButton": "إرسال",
@@ -149,7 +154,6 @@
     "signInNow": "سجل الدخول الآن",
     "form": {
       "emailLabel": "عنوان البريد الإلكتروني",
-      "emailPlaceholder": "rafik@example.com",
       "passwordLabel": "كلمة المرور",
       "passwordPlaceholder": "*******",
       "confirmPasswordLabel": "تأكيد كلمة المرور",
