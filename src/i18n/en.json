@@ -1072,6 +1072,21 @@
         "compound": "compound",
         "cardio": "cardio",
         "plyometric": "plyometric"
+      },
+      "public": {
+        "successTitle": "Success!",
+        "errorTitle": "Error!",
+        "duplicateConfirmTitle": "Duplicate Exercise?",
+        "duplicateConfirmText": "A duplicate of this exercise will be created and added to your list of custom exercises.",
+        "duplicateConfirmButton": "Duplicate this Exercise",
+        "loadFail": "Failed to load exercise details.",
+        "noVideoAvailable": "No Video Available",
+        "loading": "Loading...",
+        "duplicateExercise": "Duplicate Exercise",
+        "musclesWorked": "Muscles Worked",
+        "tipsTechnique": "Tips and Technique",
+        "equipmentRequired": "Equipment Required",
+        "alternatives": "Alternatives"
       }
     }
   }
