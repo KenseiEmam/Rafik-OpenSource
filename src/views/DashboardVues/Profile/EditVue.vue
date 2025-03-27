@@ -7,21 +7,21 @@
       <!-- Tabs -->
       <div class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext">
         <button
-          :class="activeTab === 'profile' ? 'text-rafik-secondary dark:text-rafik-darkpritext' : ''"
+          :class="activeTab === 'profile' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
           class="nav-btn"
           @click="activeTab = 'profile'"
         >
           Details
         </button>
         <button
-          :class="activeTab === 'account' ? 'text-rafik-secondary dark:text-rafik-darkpritext' : ''"
+          :class="activeTab === 'account' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
           class="nav-btn uppercase"
           @click="activeTab = 'account'"
         >
           Change Password
         </button>
         <button
-          :class="activeTab === 'certifications' ? 'text-rafik-secondary dark:text-rafik-darkpritext' : ''"
+          :class="activeTab === 'certifications' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
           class="nav-btn uppercase"
           @click="activeTab = 'certifications'"
         >

@@ -10,21 +10,21 @@
       <!-- Tabs -->
       <div class="flex  gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext">
         <button
-          :class="activeTab === 'Active Program' ? 'text-rafik-secondary dark:text-rafik-darkpritext' : ''"
+          :class="activeTab === 'Active Program' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
           class="nav-btn "
           @click="setActiveTab('Active Program')"
         >
           Active Programs
         </button>
         <button
-          :class="activeTab === 'Drafted Programs' ? 'text-rafik-secondary dark:text-rafik-darkpritext' : ''"
+          :class="activeTab === 'Drafted Programs' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
           class="nav-btn uppercase "
           @click="setActiveTab('Drafted Programs')"
         >
           Drafted Programs
         </button>
         <button
-          :class="activeTab === 'Exercise Library' ? 'text-rafik-secondary dark:text-rafik-darkpritext' : ''"
+          :class="activeTab === 'Exercise Library' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
           class="nav-btn uppercase "
           @click="setActiveTab('Exercise Library')"
         >
