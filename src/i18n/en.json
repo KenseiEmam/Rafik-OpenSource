@@ -1,4 +1,8 @@
 {
+  "lang": {
+    "en": "English",
+    "ar": "العربية"
+  },
   "general": {
     "rafik": "Rafik",
     "loading": "Loading...",
