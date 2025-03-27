@@ -7,6 +7,7 @@ import WorkoutPlanner from '@/components/ProgramTabs/WorkoutPlanner.vue';
 import ClientTable from '@/components/ProgramTabs/ClientTable.vue';
 import PricingModel from '@/components/ProgramTabs/PricingModel.vue';
 // import DocumentsForms from '@/components/ProgramTabs/DocumentsForms.vue';
+import ReviewsTab from '@/components/ProgramTabs/ReviewsTab.vue';
 import Swal from 'sweetalert2';
 import router from '@/router';
 import { useI18n } from 'vue-i18n';
@@ -212,6 +213,17 @@ function setActiveTab(tab: string) {
         >
           {{ t('dashboard.auditPrograms.single.tabs.pricing') }}
         </button>
+        <button
+          :class="
+            activeTab === 'Reviews'
+              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              : 'hover:opacity-70'
+          "
+          class="nav-btn uppercase"
+          @click="setActiveTab('Reviews')"
+        >
+          Reviews
+        </button>
       </div>
 
       <!-- Tab Content -->
@@ -226,6 +238,7 @@ function setActiveTab(tab: string) {
           <ClientTable admin v-else-if="activeTab === 'Clients'" :program="programStore.Program" />
           <PricingModel admin v-else-if="activeTab === 'Pricing'" :program="programStore.Program" />
           <!-- <DocumentsForms v-else-if="activeTab === 'Documents'" :program="programStore.Program" /> -->
+          <ReviewsTab admin v-else-if="activeTab === 'Reviews'" :program="programStore.Program"/>
         </transition>
       </div>
     </div>

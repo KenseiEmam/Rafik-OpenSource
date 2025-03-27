@@ -13,6 +13,7 @@
         <p>{{ t('dashboard.tabs.program.planner.dayCycleLabel') }}</p>
       </div>
       <!-- Tabs Navigation -->
+<<<<<<< HEAD
       <button
         v-for="(workout, index) in editedWorkouts"
         :key="index"
@@ -32,6 +33,30 @@
               : t('dashboard.tabs.program.planner.workout') + ' ' + (index + 1)
         }}
       </button>
+=======
+
+            <draggable
+        class="flex gap-4 mb-5"
+        v-model="editedWorkouts"
+        handle=".handle"
+        @start="drag = true"
+        @end="drag = false"
+        item-key="index"
+      >
+        <template #item="{ element, index }">
+          <button
+            @click="activeTab = index"
+            :class="activeTab === index ? 'border-rafik text-rafik-pritext dark:text-rafik-darkpritext' : 'text-rafik-sectext dark:text-rafik-darksectext border-transparent'"
+            class="px-4 py-2 min-w-max border-b-2 flex items-center gap-2"
+          >
+            <svg v-if="isEditing" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="h-5 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move">
+              <path d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 160c-22.1 0-40-17.9-40-40L0 72C0 49.9 17.9 32 40 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40z"/>
+            </svg>
+            {{ element.workout_name ? element.workout_name : (element.rest_day ? 'Rest Day' : 'Workout ' + (index + 1)) }}
+          </button>
+        </template>
+      </draggable>
+>>>>>>> 80d2c069882b3847b39952241dffc7557516d618
 
       <div v-if="!admin" class="ml-auto">
         <button v-if="!isEditing" class="btn-sm-outline min-w-max" @click="enableEditMode">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useProgramStore } from "@/stores/programstores";
 import DetailsTabProgram from "@/components/ProgramTabs/DetailsTabPRogram.vue";
@@ -7,8 +7,10 @@ import WorkoutPlanner from "@/components/ProgramTabs/WorkoutPlanner.vue";
 import ClientTable from "@/components/ProgramTabs/ClientTable.vue"
 import PricingModel from "@/components/ProgramTabs/PricingModel.vue"
 import DocumentsForms from "@/components/ProgramTabs/DocumentsForms.vue";
+import ReviewsTab from "@/components/ProgramTabs/ReviewsTab.vue";
 import Swal from 'sweetalert2'
 import router from "@/router";
+import { supabase } from "@/lib/supabaseClient";
 
 const activeTab = ref("Details");
 
@@ -244,6 +246,121 @@ onMounted(() => {
   }
 });
 
+
+// --- New Code for difficulty_level select dropdown ---
+
+// Define the possible difficulty levels
+const difficulties = ["Foundational", "Beginner", "Intermediate", "Advanced"];
+
+// Initialize the selected difficulty value; fallback to the first option if not yet set
+const selectedDifficulty = ref(
+  programStore.Program?.difficulty_level || difficulties[0]
+);
+
+// Keep the local value in sync when the program is fetched/updated
+watch(
+  () => programStore.Program?.difficulty_level,
+  (newVal) => {
+    if (newVal) {
+      selectedDifficulty.value = newVal;
+    }
+  }
+);
+
+// When the select changes, update the program field
+function onDifficultyChange() {
+  updateProgramField("difficulty_level", selectedDifficulty.value);
+}
+
+// changePhoto Function
+const loading = ref(false)
+const selectedFile = ref<File | null>(null)
+  const uploadPhoto = async (event: Event) => {
+  if (!programStore.Program) {
+    showError("No program found in the store!")
+    return
+  }
+  loading.value = true
+  const target = event.target as HTMLInputElement
+  if (target.files && target.files[0]) {
+    selectedFile.value = target.files[0]
+
+    // If there is an old photo, attempt to delete it
+    if (programStore.Program.program_photo) {
+      // Adjust the extraction logic below to match your storage URL structure
+      try {
+        const oldPhotoUrl = programStore.Program.program_photo
+        // Assuming the public URL is in the format:
+        // https://<supabase_url>/storage/v1/object/public/storage/media/filename
+        const url = new URL(oldPhotoUrl)
+        // Extract path starting with "media/"
+        const pathStart = url.pathname.indexOf("media/")
+        if (pathStart !== -1) {
+          const oldPath = url.pathname.substring(pathStart)
+          const { error: deleteError } = await supabase.storage
+            .from('storage')
+            .remove([oldPath])
+          if (deleteError) {
+            console.error("Failed to delete old photo:", deleteError)
+            // Optionally, you can notify the user or decide whether to continue
+          } else {
+            console.log("Old photo deleted successfully")
+          }
+        }
+      } catch (err) {
+        console.error("Error deleting old photo:", err)
+      }
+    }
+
+    const uploadedUrl = await uploadFileToBucket()
+    if (uploadedUrl) {
+      try {
+        const { error } = await supabase
+          .from('programs')
+          .update({ program_photo: uploadedUrl })
+          .eq('id', programStore.Program.id)
+        if (error) throw error
+
+        programStore.Program.program_photo = uploadedUrl
+        showSuccess('Program photo updated successfully!')
+      } catch (err: any) {
+        console.error(err)
+        showError(`Failed to update program picture: ${err.message}`)
+      } finally {
+        loading.value = false // Set loading to false once data is loaded
+      }
+    } else {
+      loading.value = false
+    }
+  }
+}
+
+const uploadFileToBucket = async (): Promise<string | null> => {
+  if (!selectedFile.value) {
+    showError('Please select an image.')
+    return null
+  }
+  try {
+    const { data, error } = await supabase.storage
+      .from('storage')
+      .upload(`media/${Date.now()}_${selectedFile.value.name}`, selectedFile.value, {
+        cacheControl: '3600',
+        upsert: true,
+      })
+    if (error) throw error
+
+    const { data: publicUrlData } = supabase.storage
+      .from('storage')
+      .getPublicUrl(data.path)
+    return publicUrlData.publicUrl
+  } catch (err: any) {
+    console.error(err)
+    showError(`Upload failed: ${err.message}`)
+    return null
+  }
+}
+
+
 </script>
 
 <template>
@@ -251,6 +368,7 @@ onMounted(() => {
     <div v-if="programStore.Program" class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-3 2xl:space-y-6">
       <div class="border group flex flex-col relative border-rafik-alternate rounded-lg overflow-hidden">
         <img
+        v-if="!loading"
           :src="programStore.Program.program_photo"
           class="w-full h-full object-cover absolute"
           alt=""
@@ -297,14 +415,29 @@ onMounted(() => {
               {{ programStore.Program?.program_description || "Loading..." }}
             </p>
             <div class="flex gap-8 justify-between">
-              <h3 class=" uppercase flex gap-2 items-center ">
+              <!-- Replace difficulty level text with a select dropdown -->
+              <div class="uppercase flex gap-2 items-center">
                 <svg xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   stroke="currentColor"
                   class="w-6 text-rafik-sectext dark:text-rafik-darksectext"
                   viewBox="0 0 448 512">
                   <path d="M160 80c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 352c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-352zM0 272c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 160c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48L0 272zM368 96l32 0c26.5 0 48 21.5 48 48l0 288c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-288c0-26.5 21.5-48 48-48z"/></svg>
-                {{ programStore.Program.difficulty_level }}</h3>
+                <select
+                  v-model="selectedDifficulty"
+                  @change="onDifficultyChange"
+                  class="bg-transparent border-0 text-body focus:outline-none "
+                >
+                  <option
+                    v-for="difficulty in difficulties"
+                    :key="difficulty"
+                    :value="difficulty"
+                    class="bg-rafik-secbg dark:bg-rafik-darksecbg"
+                  >
+                    {{ difficulty }}
+                  </option>
+                </select>
+              </div>
               <h3 class=" uppercase flex gap-2 items-center ">
                 <svg xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -328,20 +461,24 @@ onMounted(() => {
               <!-- <button class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext">View Language</button> -->
               <button
               @click="DraftProgram"
-                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
                 v-if="programStore.Program.status == 'Active'"
               >
                 Change to Draft
               </button>
               <button
               @click="ActiveProgram"
-                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
                 v-if="programStore.Program.status == 'Draft'"
               >
                 Publish to Active
               </button>
+              <input :disabled="loading" type="file" @change="uploadPhoto"  accept="image/*" class="hidden" id="upload-photo" />
+              <label for="upload-photo" class="text-body cursor-pointer uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext">
+                {{loading?'loading...':'Change Photo'}}
+              </label>
               <p class="text-body uppercase opacity-50" v-if="programStore.Program.status == 'Review'">Under Review</p>
-              <button @click="DeleteProgram" class="text-body uppercase text-red-500 hover:text-red-400 text-left">Delete Program</button>
+              <button @click="DeleteProgram" class=" uppercase text-red-500 hover:text-red-400 text-left">Delete Program</button>
             </div>
           </div>
         </div>
@@ -384,13 +521,13 @@ onMounted(() => {
         >
           Documents
         </button> -->
-        <!-- <button
+        <button
           :class="activeTab === 'Reviews' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
           class="nav-btn uppercase "
           @click="setActiveTab('Reviews')"
         >
           Reviews
-        </button> -->
+        </button>
       </div>
 
       <!-- Render Box -->
@@ -420,6 +557,10 @@ onMounted(() => {
             v-else-if="activeTab === 'Documents'"
             @updateProgramField="updateProgramField"
             :program="programStore.Program"
+          />
+          <ReviewsTab
+            :program="programStore.Program"
+            v-else-if="activeTab === 'Reviews'"
           />
         </transition>
 
