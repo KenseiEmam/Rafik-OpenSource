@@ -3,6 +3,7 @@ import './assets/main.css';
 import { createApp } from 'vue';
 import { createI18n } from 'vue-i18n';
 import * as EN from '@/i18n/en.json';
+import * as AR from '@/i18n/ar.json';
 import { createPinia } from 'pinia';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
@@ -31,7 +32,7 @@ const i18n = createI18n<MessageSchema, 'en' | 'ar'>({
       ...EN
     },
     ar: {
-      //...AR
+      ...AR
     }
   }
 });
