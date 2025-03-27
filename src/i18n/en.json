@@ -834,6 +834,30 @@
           "synergistsDesc": "Below are the synergist or stabilizer muscle groups involved in this exercise.",
           "addNewMuscle": "Add a new muscle"
         }
+      },
+      "profile": {
+        "certifications": {
+          "loading": "Loading...",
+          "noCertifications": "No Certifications uploaded",
+          "view": "View",
+          "delete": "Delete",
+          "uploadMore": "Upload More",
+          "successTitle": "Success!",
+          "errorTitle": "Error!",
+          "trainerNotFound": "Trainer data not found.",
+          "alreadyUploaded": "Certificate '{fileName}' is already uploaded.",
+          "uploadSuccess": "Certificate '{fileName}' uploaded successfully!",
+          "uploadFailed": "Upload failed: {error}",
+          "fetchFailed": "Fetch Failed: {error}",
+          "deleteConfirmTitle": "Hold!",
+          "deleteConfirmText": "Once the certificate is deleted it cannot be retrieved. This affects your program review process.",
+          "deleteConfirmButton": "Delete Anyway!",
+          "userIdNotFound": "User ID not found",
+          "trainerProfileUpdated": "Trainer profile updated with new certification link!",
+          "trainerProfileUpdateFailed": "Failed to update trainer profile: {error}",
+          "deleteSuccess": "Deleted '{certName}' successfully.",
+          "deleteFailed": "Delete failed: {error}"
+        }
       }
     },
     "offCanvas": {
