@@ -835,6 +835,23 @@
           "addNewMuscle": "Add a new muscle"
         }
       }
+    },
+    "offCanvas": {
+      "exercise": {
+        "addExercise": "Add Exercise +",
+        "straightExercise": "Straight Exercise",
+        "exercise": "Exercise",
+        "library": "LIBRARY",
+        "searchPlaceholder": "Type to Search Exercises...",
+        "addCustomExercise": "Add Custom Exercise",
+        "noExercisesFound": "No exercises found.",
+        "primeMovers": "Prime Movers:",
+        "select": "Select",
+        "selected": "Selected",
+        "addExercises": "ADD EXERCISES",
+        "selectedCount": "Selected ({current}{max})",
+        "confirmAddingExercises": "Confirm adding {count} exercises?"
+      }
     }
   }
 }
