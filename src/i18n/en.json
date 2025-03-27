@@ -1029,6 +1029,50 @@
         "contactFormLink": "get in touch with us through our contact form here.",
         "featureComingSoon": "Feature Coming Soon"
       }
+    },
+    "exercises": {
+      "personal": {
+        "successTitle": "Success!",
+        "errorTitle": "Error!",
+        "failedDeleteVideo": "Failed to delete the video from storage.",
+        "videoRemoved": "Exercise video removed successfully!",
+        "errorRemovingVideo": "An error occurred while removing the video.",
+        "pleaseUploadVideo": "Please upload an exercise video.",
+        "uploadFailedAlert": "Failed to upload the exercise video. Please try again.",
+        "failedRetrieveUrl": "Failed to retrieve the URL for the exercise video.",
+        "uploadErrorOccurred": "An error occurred while uploading the exercise video.",
+        "titleUpdated": "Exercise title updated successfully!",
+        "titleUpdateError": "Error updating title.",
+        "descriptionUpdated": "Exercise description updated successfully!",
+        "descriptionUpdateError": "Error updating description.",
+        "typeUpdated": "Exercise type updated to {type}!",
+        "typeUpdateFail": "Failed to update exercise type.",
+        "deleteConfirmTitle": "Are you sure?",
+        "deleteConfirmText": "This will permanently delete the exercise from the exercise lists.",
+        "deleteConfirmButton": "Yes, delete it!",
+        "exerciseNotFound": "Exercise not found!",
+        "importSuccess": "Import successful!",
+        "importFailed": "Failed to import. Please try again.",
+        "fieldUpdated": "{field} updated successfully!",
+        "fieldUpdateFail": "Failed to update {field}. Please try again.",
+        "failedToLoadDetails": "Failed to load exercise details.",
+        "removeVideo": "Remove Video",
+        "dragDropVideo": "Drag and drop a video here, or click to upload",
+        "processingTitle": "Hold",
+        "processingRequest": "Processing your request...",
+        "loadingPlaceholder": "Loading...",
+        "deleteExercise": "Delete Exercise",
+        "musclesWorked": "Muscles Worked",
+        "tipsTechnique": "Tips and Technique",
+        "equipmentRequired": "Equipment Required",
+        "alternatives": "Alternatives",
+        "isolation": "isolation",
+        "stretch": "stretch",
+        "bodyweight": "bodyweight",
+        "compound": "compound",
+        "cardio": "cardio",
+        "plyometric": "plyometric"
+      }
     }
   }
 }
