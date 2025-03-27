@@ -47,7 +47,7 @@ const { t, locale } = useI18n();
 
       <!-- Button Section -->
       <div :class="locale === 'ar'?'border-r':'border-l'"
-        class=" border-rafik-sectext dark:border-rafik-darksectext  px-8 flex flex-col gap-4 ml-auto py-4 h-full 2xl:h-44 justify-between"
+        class=" border-rafik-sectext dark:border-rafik-darksectext  px-8 flex flex-col gap-4 ms-auto py-4 h-full 2xl:h-44 justify-between"
       >
         <router-link :to="{ name: 'trainer-profile' }" class=" opacity-50 text-rafik-sectext dark:text-rafik-darksectext hover:text-rafik-pritext hover:dark:text-rafik-darkpritext 2xl:text-xl">
           {{ t('dashboard.home.button.viewProfile') }}

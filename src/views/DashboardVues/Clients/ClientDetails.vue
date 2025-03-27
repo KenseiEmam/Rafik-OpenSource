@@ -315,7 +315,7 @@ onBeforeUnmount(() => {
               </p>
             </div>
           </div>
-          <div class="pl-6 flex-1 min-w-max h-full">
+          <div :class="locale === 'ar'?'pr-6':'pl-6'" class=" flex-1 min-w-max h-full">
             <div :class="locale === 'ar'?'border-r pr-2':'border-l pl-2'"
               class="flex flex-col flex-1 gap-4  border-rafik-sectext dark:border-rafik-darksectext text-left"
             >

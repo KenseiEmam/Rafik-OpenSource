@@ -12,7 +12,7 @@
       <h2 class="header-small" v-else>
         {{ t('dashboard.tabs.settings.rolesAndPerms.noUserSelected') }}
       </h2>
-      <div :class="locale === 'ar'?'mr-auto':'ml-auto'" class="w-64">
+      <div :class="locale === 'ar'?'me-auto':'ms-auto'" class="w-64">
         <label
           class="block text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext mb-1"
         >

@@ -45,7 +45,7 @@
             <h2 class="header-small">
               {{ t('dashboard.entitlements.list.youCurrentlyHave') }}
             </h2>
-            <p class="contentH-large 2xl:text-7xl" :class="locale === 'ar' ? 'mr-auto' : 'ml-auto'">
+            <p class="contentH-large 2xl:text-7xl" :class="locale === 'ar' ? 'me-auto' : 'ms-auto'">
               {{ entitlementStore.entitlements.filter((e) => !e.client_email).length }}
             </p>
             <h2 class="header-small text-rafik-secondary uppercase font-semibold">

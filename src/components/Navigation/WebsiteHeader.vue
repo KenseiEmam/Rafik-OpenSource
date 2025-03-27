@@ -7,13 +7,13 @@
       <RouterLink to="/application" class="min-w-max">{{ t('header.nav.getApp') }}</RouterLink>
       <a href="/#contact" class="">{{ t('header.nav.contactUs') }}</a>
     </nav>
-    <div v-if="!checkLogin()" class="md:flex gap-8 hidden items-center ml-auto min-w-max">
+    <div v-if="!checkLogin()" class="md:flex gap-8 hidden items-center ms-auto min-w-max">
       <RouterLink to="login" class="btn-sm">{{ t('header.auth.login') }}</RouterLink>
       <RouterLink to="register" class="btn-sm-outline">{{ t('header.auth.register') }}</RouterLink>
     </div>
     <div
       v-else-if="userStore.userProfile && checkUser()"
-      class="md:flex hidden gap-4 items-center ml-auto min-w-max"
+      class="md:flex hidden gap-4 items-center ms-auto min-w-max"
     >
       <img
         :src="

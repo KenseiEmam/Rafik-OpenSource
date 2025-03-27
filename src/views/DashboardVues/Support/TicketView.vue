@@ -47,7 +47,7 @@
               <p class="header-small mb-1">
                 {{ userName(msg) }}
               </p>
-              <span class="subheader-small ml-auto">
+              <span class="subheader-small ms-auto">
                 {{
                   new Date(msg.created_at).toLocaleTimeString('en-GB', {
                     day: '2-digit',

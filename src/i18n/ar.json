@@ -368,7 +368,7 @@
         "statisticsTab": "الإحصائيات"
       },
       "list": {
-        "active": "نشط",
+        "active": "صفحة",
         "clients": "العملاء",
         "loading": "جار التحميل...",
         "prev": "<<",
@@ -399,7 +399,7 @@
         },
         "filters": {
           "allPrograms": "كل البرامج",
-          "active": "نشط",
+          "active": "نشيط",
           "draft": "مسودة",
           "review": "قيد المراجعة"
         },

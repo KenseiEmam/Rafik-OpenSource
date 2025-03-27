@@ -24,7 +24,7 @@ const { t , locale } = useI18n();
         class="w-40 h-40 rounded-full bottom-24 opacity-80 absolute right-24 bg-rafik-sectext dark:bg-rafik-darksectext content"
       ></div>
       <img
-        class="max-h-64 object-cover ml-auto relative grayscale"
+        class="max-h-64 object-cover ms-auto relative grayscale"
         src="/src/assets/running_man.png"
         alt=""
       />
@@ -58,7 +58,7 @@ const { t , locale } = useI18n();
         class="w-80 h-80 rounded-full bottom-24 opacity-80 absolute right-24 bg-rafik-sectext dark:bg-rafik-darksectext content"
       ></div>
       <img
-        class="max-h-128 w-full object-cover ml-auto relative grayscale"
+        class="max-h-128 w-full object-cover ms-auto relative grayscale"
         src="/src/assets/running_man.png"
         alt=""
       />

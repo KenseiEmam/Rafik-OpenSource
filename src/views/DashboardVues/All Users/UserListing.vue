@@ -19,7 +19,7 @@
           />
         </div>
         <!-- Filter Buttons -->
-        <div class="mr-auto flex gap-4">
+        <div class="me-auto flex gap-4">
           <button
             @click="updateFilter('All')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
@@ -124,7 +124,7 @@
                   @click="show_action = user.id"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
-                  class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext cursor-pointer ml-auto"
+                  class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext cursor-pointer ms-auto"
                   viewBox="0 0 128 512"
                 >
                   <path

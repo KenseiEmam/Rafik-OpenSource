@@ -1,9 +1,17 @@
 @import './base.css';
-@import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&family=Poiret+One&family=Staatliches&display=swap');
-h1,h2,h3,h4,h5, .nav-btn{
+@import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&family=Poiret+One&family=Staatliches&family=Baloo+Bhaijaan+2:wght@400..800&display=swap');
+
+h1, h2, h3, h4, h5, .nav-btn {
   font-family: "Staatliches", sans-serif !important;
-  /* font-weight: 400 !important; */
-  font-style: normal;
+}
+
+[lang="ar"] h1, 
+[lang="ar"] h2, 
+[lang="ar"] h3, 
+[lang="ar"] h4, 
+[lang="ar"] h5, 
+[lang="ar"] .nav-btn {
+  font-family: "Baloo Bhaijaan 2", sans-serif !important;
 }
 .website-body {
   width: 100%;

@@ -13,7 +13,7 @@ const { locale } = useI18n();
 </script>
 
 <template>
-  <div :dir="locale === 'ar' ? 'rtl' : 'ltr'" class="w-full min-h-screen min-w-screen">
+  <div :lang="locale" :dir="locale === 'ar' ? 'rtl' : 'ltr'" class="w-full min-h-screen min-w-screen">
     <RouterView />
   </div>
 </template>

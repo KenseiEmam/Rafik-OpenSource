@@ -165,7 +165,7 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
 
           <label
             v-if="key !== 'price_one'"
-            class="flex items-center ml-auto mr-4 space-x-2 cursor-pointer"
+            class="flex items-center ms-auto mr-4 space-x-2 cursor-pointer"
           >
             <input type="checkbox" v-model="isEnabled[key]" class="hidden" />
             <div
@@ -223,7 +223,7 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
               class="flex w-full items-center p-4 2xl:p-8 gap-4"
             >
               <p class="uppercase subheader-small">{{ promo.code }}</p>
-              <div class="flex items-center ml-auto">
+              <div class="flex items-center ms-auto">
                 <div class="form-control max-w-min text-center">
                   <label class="text-body">
                     {{ t('dashboard.tabs.program.pricing.discountLabel') }}
