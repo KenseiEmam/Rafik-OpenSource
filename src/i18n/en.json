@@ -865,6 +865,15 @@
         "importConfirmText": "This will overwrite all exercise values besides name and details. You cannot undo this and all previous data will be lost!",
         "yesOverwrite": "Yes, overwrite!",
         "cancelButtonText": "Cancel"
+      },
+      "postOffice": {
+        "post": "POST",
+        "office": "OFFICE",
+        "reachOut": "Reach out to {name}!",
+        "seen": "Seen",
+        "sent": "Sent",
+        "opened": "Opened",
+        "received": "Received"
       }
     }
   }
