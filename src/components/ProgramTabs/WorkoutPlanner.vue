@@ -163,8 +163,7 @@
           >
           <template #item="{ element, index }">
               <!-- MULTI-SET EXERCISE -->
-              <div
-                v-if="element.type === 'multi-set'"
+              <div v-if="element.type === 'multi-set'"
                 class="gradient-bg border border-rafik-sectext dark:border-rafik-darksectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
               >
                 <svg
@@ -401,8 +400,7 @@
               </div>
 
               <!-- SINGLE EXERCISE -->
-              <div
-                v-else
+              <div v-else
                 class="gradient-bg border border-rafik-sectext dark:border-rafik-darksectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
               >
                 <svg
