@@ -54,7 +54,7 @@ import { onMounted, ref, watch, nextTick, computed } from 'vue';
 import { useSettingsStore } from '@/stores/settingstores';
 import { debounce } from 'lodash';
 import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 interface TrainerSettings {
   seats_available: number;

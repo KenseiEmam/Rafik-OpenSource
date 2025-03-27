@@ -1,11 +1,23 @@
+```vue
 <template>
-  <div :class="open ? 'right-0 h-screen' : '-right-128 h-0'" class="absolute flex items-start">
+  <div
+    :dir="locale === 'ar' ? 'rtl' : 'ltr'"
+    :class="[open ? (locale === 'ar' ? 'left-0 h-screen' : 'right-0 h-screen') : (locale === 'ar' ? '-left-128 h-0' : '-right-128 h-0')]"
+    class="absolute flex items-start"
+  >
     <!-- Drawer Toggle Button -->
     <button
       @click="open = !open"
-      class="rounded-l-full bg-rafik-pribg dark:bg-rafik-darkpribg border border-r-0 border-rafik-sectext dark:border-rafik-darksectext px-8 py-4 mt-64 relative left-1 z-20"
+      :class="locale === 'ar'
+        ? 'rounded-r-full bg-rafik-secbg dark:bg-rafik-darksecbg border border-l-0 px-8 py-4 mt-64 relative right-1 z-20'
+        : 'rounded-l-full bg-rafik-secbg dark:bg-rafik-darksecbg border border-r-0 px-8 py-4 mt-64 relative left-1 z-20'"
     >
-      <span v-if="checkNew" class="absolute flex size-4 top-2 right-6">
+      <span
+        v-if="checkNew"
+        :class="locale === 'ar'
+          ? 'absolute flex size-4 top-2 left-6'
+          : 'absolute flex size-4 top-2 right-6'"
+      >
         <span
           class="absolute inline-flex h-full w-full animate-ping rounded-full bg-rafik opacity-75"
         ></span>
@@ -29,7 +41,7 @@
     <!-- Drawer Content -->
     <div
       :class="open ? 'h-screen' : 'h-0'"
-      class="border-rafik-sectext dark:border-rafik-darksectext border-l w-128 bg-rafik-pribg dark:bg-rafik-darkpribg items-between justify-between gap-10 flex flex-col p-8 2xl:py-16 h-full relative z-10"
+      class="border-rafik-sectext dark:border-rafik-darksectext border-l w-128 bg-rafik-secbg dark:bg-rafik-darksecbg items-between justify-between gap-10 flex flex-col p-8 2xl:py-16 h-full relative z-10"
     >
       <!-- Header Section -->
       <div class="flex gap-10 justify-between">
@@ -68,10 +80,8 @@
           class="p-6 border hover:border-rafik-secondary card cursor-pointer rounded-xl bg-rafik-secbg dark:bg-rafik-darksecbg flex gap-6 w-full items-center"
         >
           <img
-            :src="
-              client.avatar ||
-              'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
-            "
+            :src="client.avatar ||
+              'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
             alt=""
             class="rounded-full border-2 2xl:h-24 2xl:w-24 border-rafik-secondary object-cover w-16 h-16"
           />
@@ -81,8 +91,7 @@
             </h2>
             <p
               :class="{
-                'text-rafik-pritext dark:text-rafik-darkpritext':
-                  !client.seen_at && client.sent_by == client.id
+                'text-rafik-pritext dark:text-rafik-darkpritext': !client.seen_at && client.sent_by == client.id
               }"
               class="text-body line-clamp-1 text-sm mb-2"
             >
@@ -96,7 +105,6 @@
             </p>
 
             <!-- Seen Tick -->
-            <!-- If the trainer has read the message (seen_at) and the message is from the client -->
             <div
               v-if="client.seen_at && client.sent_by !== client.id"
               class="text-rafik-teritiary flex items-center"
@@ -109,14 +117,11 @@
               >
                 <path
                   fill-rule="evenodd"
-                  d="M16.707 4.293a1 1 0 0 0-1.414
-                     0L8 11.586 4.707 8.293a1 1 0 1 0-1.414
-                     1.414l4 4a1 1 0 0 0 1.414
-                     0l8-8a1 1 0 0 0 0-1.414z"
+                  d="M16.707 4.293a1 1 0 0 0-1.414 0L8 11.586 4.707 8.293a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.414 0l8-8a1 1 0 0 0 0-1.414z"
                   clip-rule="evenodd"
                 />
               </svg>
-              <span class="ml-2 text-sm">
+              <span :class="locale === 'ar' ? 'mr-2 text-sm' : 'ml-2 text-sm'">
                 {{ t('dashboard.offCanvas.postOffice.seen') }}
               </span>
             </div>
@@ -134,14 +139,11 @@
               >
                 <path
                   fill-rule="evenodd"
-                  d="M16.707 4.293a1 1 0 0 0-1.414
-                     0L8 11.586 4.707 8.293a1 1 0 1 0-1.414
-                     1.414l4 4a1 1 0 0 0 1.414
-                     0l8-8a1 1 0 0 0 0-1.414z"
+                  d="M16.707 4.293a1 1 0 0 0-1.414 0L8 11.586 4.707 8.293a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.414 0l8-8a1 1 0 0 0 0-1.414z"
                   clip-rule="evenodd"
                 />
               </svg>
-              <span class="ml-2 text-sm">
+              <span :class="locale === 'ar' ? 'mr-2 text-sm' : 'ml-2 text-sm'">
                 {{ t('dashboard.offCanvas.postOffice.sent') }}
               </span>
             </p>
@@ -181,7 +183,7 @@ import { formatDistanceToNow, parseISO } from 'date-fns';
 import { fromZonedTime } from 'date-fns-tz';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 function humanizeDate(date: any, timeZone: string = 'UTC') {
   if (!date) {
@@ -297,3 +299,4 @@ const sortedChatClients = computed(() => {
   background-image: linear-gradient(135deg, #f3eeeb 36%, #fff2cb);
 }
 </style>
+```

@@ -272,7 +272,7 @@ import AddProgramModal from '@/components/ProgramTabs/AddProgramModal.vue';
 import ExerciseList from '@/components/ExerciseList.vue';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 // State
 const filter = ref('All');

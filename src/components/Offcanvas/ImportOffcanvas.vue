@@ -14,8 +14,8 @@
     style="background-color: #000000aa"
   >
     <div class="flex-1 w-full h-full content" @click="ModalOn = false"></div>
-    <div
-      class="p-8 py-12 border-l border-rafik-sectext dark:border-rafik-darksectext bg-rafik-pribg dark:bg-rafik-darkpribg w-128 h-full space-y-8 relative"
+    <div :class="locale === 'ar'?'border-r':'border-l'"
+      class="p-8 py-12  border-rafik-sectext dark:border-rafik-darksectext bg-rafik-pribg dark:bg-rafik-darkpribg w-128 h-full space-y-8 relative"
     >
       <div>
         <h2 class="subheader-medium uppercase">
@@ -120,7 +120,7 @@ import AddExerciseModal from '@/components/ExerciseTabs/AddExerciseModal.vue';
 import Swal from 'sweetalert2';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 const ModalOn = ref<boolean>(false);
 const exerciseStore = useExerciseStore();

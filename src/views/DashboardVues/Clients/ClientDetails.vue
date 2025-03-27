@@ -13,7 +13,7 @@ import CancelProgramModal from '@/components/ClientTabs/CancelProgramModal.vue';
 import { supabase } from '@/lib/supabaseClient';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 const activeTab = ref('Details');
 
@@ -316,8 +316,8 @@ onBeforeUnmount(() => {
             </div>
           </div>
           <div class="pl-6 flex-1 min-w-max h-full">
-            <div
-              class="flex flex-col flex-1 gap-4 border-l pl-2 border-rafik-sectext dark:border-rafik-darksectext text-left"
+            <div :class="locale === 'ar'?'border-r pr-2':'border-l pl-2'"
+              class="flex flex-col flex-1 gap-4  border-rafik-sectext dark:border-rafik-darksectext text-left"
             >
               <!-- If subscription is active -->
               <button

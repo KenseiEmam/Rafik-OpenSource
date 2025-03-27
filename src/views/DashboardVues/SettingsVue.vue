@@ -76,7 +76,7 @@ import RolesandPerms from '@/components/SettingsTabs/RolesandPerms.vue';
 import Swal from 'sweetalert2';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 const userStore = useUserStore();
 const activeTab = ref('General Setting');

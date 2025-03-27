@@ -64,7 +64,7 @@ import type { Program } from '@/stores/programstores';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 const props = defineProps({
   visible: {

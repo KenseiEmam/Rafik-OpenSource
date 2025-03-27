@@ -9,7 +9,7 @@ import router from '@/router';
 import ClientDetails from '@/views/DashboardVues/Clients/ClientDetails.vue';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 // Function to show error alerts
 function showError(message: string) {

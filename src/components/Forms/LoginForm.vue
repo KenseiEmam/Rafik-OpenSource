@@ -43,7 +43,7 @@ const loading = ref<boolean>(false);
 const email = ref<string>('');
 const password = ref<string>('');
 const userStore = useUserStore();
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 if (localStorage.getItem('LoggedInUser') && localStorage.getItem('UserID')) {
   router.push({ name: 'dashboard-home' });

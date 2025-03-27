@@ -111,31 +111,31 @@ nav a {
     @apply w-full placeholder:text-rafik-sectext dark:placeholder:text-rafik-darksectext bg-rafik-secbg dark:bg-rafik-darksecbg 2xl:text-lg p-3 outline-none border-rafik-sectext dark:border-rafik-darksectext border rounded-md text-rafik-pritext dark:text-rafik-darkpritext;
   }
   .title-large {
-    @apply font-black 2xl:text-8xl leading-none text-6xl text-rafik uppercase tracking-widest tracking-widest ;
+    @apply font-black 2xl:text-8xl leading-none text-6xl text-rafik uppercase   ;
   }
   .title-medium {
-    @apply font-black 2xl:text-6xl leading-none text-4xl text-rafik uppercase tracking-widest tracking-widest ;
+    @apply font-black 2xl:text-6xl leading-none text-4xl text-rafik uppercase   ;
   }
   .title-small {
-    @apply font-black 2xl:text-4xl leading-none text-2xl text-rafik uppercase tracking-widest ;
+    @apply font-black 2xl:text-4xl leading-none text-2xl text-rafik uppercase  ;
   }
   .header-large {
-    @apply 2xl:text-5xl text-3xl leading-none text-rafik-pritext dark:text-rafik-darkpritext uppercase tracking-widest ;
+    @apply 2xl:text-5xl text-3xl leading-none text-rafik-pritext dark:text-rafik-darkpritext uppercase  ;
   }
   .header-medium {
-    @apply 2xl:text-3xl text-xl leading-none text-rafik-pritext dark:text-rafik-darkpritext uppercase tracking-widest ;
+    @apply 2xl:text-3xl text-xl leading-none text-rafik-pritext dark:text-rafik-darkpritext uppercase  ;
   }
   .header-small {
-    @apply 2xl:text-xl text-lg leading-none text-rafik-pritext dark:text-rafik-darkpritext uppercase tracking-widest ;
+    @apply 2xl:text-xl text-lg leading-none text-rafik-pritext dark:text-rafik-darkpritext uppercase  ;
   }
   .contentH-large {
-    @apply font-bold text-4xl leading-none text-rafik-secondary uppercase tracking-widest ;
+    @apply font-bold text-4xl leading-none text-rafik-secondary uppercase  ;
   }
   .contentH-medium {
-    @apply font-bold text-2xl leading-none text-rafik-secondary uppercase tracking-widest ;
+    @apply font-bold text-2xl leading-none text-rafik-secondary uppercase  ;
   }
   .contentH-small {
-    @apply font-bold text-lg leading-none text-rafik-secondary uppercase tracking-widest ;
+    @apply font-bold text-lg leading-none text-rafik-secondary uppercase  ;
   }
   .subheader-large {
     @apply font-semibold text-4xl leading-tight text-rafik-sectext dark:text-rafik-darksectext leading-snug;
@@ -148,7 +148,7 @@ nav a {
   }
 
   .text-body {
-    @apply font-medium text-sm  2xl:text-base text-rafik-sectext dark:text-rafik-darksectext tracking-widest leading-6 2xl:leading-8;
+    @apply font-medium text-sm  2xl:text-base text-rafik-sectext dark:text-rafik-darksectext  leading-6 2xl:leading-8;
   }
   .label {
     @apply font-medium text-sm  text-rafik-teritiary;
@@ -172,7 +172,7 @@ nav a {
     @apply py-1.5 px-3 font-bold min-w-20 2xl:min-w-24 border-rafik hover:bg-rafik hover:text-white border-2 border-rafik font-bold rounded-lg 2xl:text-sm text-rafik capitalize text-center hover:shadow-lg shadow-sm hover:opacity-80 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
   }
   .nav-btn{
-    @apply text-base/5  2xl:text-lg/5 uppercase tracking-wider text-left max-w-max;
+    @apply text-base/5  2xl:text-lg/5 uppercase tracking-wider ;
   }
   .custom-select {
     @apply block w-full p-4 text-sm text-rafik-sectext dark:text-rafik-darksectext 

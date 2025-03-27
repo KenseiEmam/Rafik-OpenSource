@@ -11,7 +11,7 @@ import ImportOffcanvas from '@/components/Offcanvas/ImportOffcanvas.vue';
 import { supabase } from '@/lib/supabaseClient';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 const activeTab = ref('Muscles');
 function setActiveTab(tab: string) {
@@ -397,7 +397,8 @@ onMounted(() => {
 
         <!-- Right-Side Tools (Import / Delete) -->
         <div
-          class="pl-6 flex-1 min-w-max border-l border-rafik-sectext dark:border-rafik-darksectext"
+        :class="locale === 'ar'?'border-r':'border-l'"
+          class="pl-6 flex-1 min-w-max  border-rafik-sectext dark:border-rafik-darksectext"
         >
           <div
             class="flex flex-col flex-1 h-96 justify-center gap-4 border-rafik-sectext dark:border-rafik-darksectext text-left"

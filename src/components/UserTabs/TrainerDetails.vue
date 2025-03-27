@@ -103,7 +103,7 @@ import { supabase } from '../../lib/supabaseClient';
 import Swal from 'sweetalert2';
 import { useProgramStore } from '@/stores/programstores';
 import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+const { t , locale } = useI18n();
 const programStore = useProgramStore();
 // Success and Error Alerts
 function showSuccess(message: string) {

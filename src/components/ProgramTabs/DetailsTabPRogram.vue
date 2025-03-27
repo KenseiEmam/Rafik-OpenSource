@@ -3,7 +3,7 @@ import { ref, watch, onMounted } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t , locale } = useI18n();
 const props = defineProps({
   program: {
     type: Object,

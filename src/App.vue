@@ -2,15 +2,18 @@
 import { RouterView } from 'vue-router'
 import { onMounted } from 'vue'
 import { initFlowbite } from 'flowbite'
+import { useI18n } from 'vue-i18n'
 
-// initialize components based on data attribute selectors
+// Initialize components based on data attribute selectors
 onMounted(() => {
     initFlowbite();
 })
+
+const { locale } = useI18n();
 </script>
 
 <template>
-  <div class="w-full min-h-screen min-w-screen .gradient-bg">
+  <div :dir="locale === 'ar' ? 'rtl' : 'ltr'" class="w-full min-h-screen min-w-screen">
     <RouterView />
   </div>
 </template>

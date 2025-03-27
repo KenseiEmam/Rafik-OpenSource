@@ -107,7 +107,7 @@
 import { useDietStore } from '@/stores/dietstores';
 import { onMounted, ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 const dietStore = useDietStore();
 const props = defineProps(['profile']);

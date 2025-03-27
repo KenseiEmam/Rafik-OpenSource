@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
 import Swal from 'sweetalert2';
 import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+const { t, locale } = useI18n();
 // Success and Error Alerts
 
 // Function to show error alerts
@@ -172,7 +172,7 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
             >
               <div
                 class="w-8 h-8 bg-rafik-pritext dark:bg-rafik-darkpritext rounded-full shadow-md transform transition-transform"
-                :class="{ 'translate-x-8': isEnabled[key] }"
+                :class="isEnabled[key] ? (locale === 'ar' ? '-translate-x-8' : 'translate-x-8') : ''"
               ></div>
             </div>
           </label>

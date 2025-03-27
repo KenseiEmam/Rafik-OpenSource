@@ -3,7 +3,7 @@ import { useI18n } from 'vue-i18n';
 import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue';
 import SocialIcons from '../components/SocialIcons.vue';
 
-const { t } = useI18n();
+const { t , locale } = useI18n();
 </script>
 
 <template>

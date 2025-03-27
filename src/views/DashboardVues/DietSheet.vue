@@ -11,7 +11,7 @@ import 'vue3-circle-progress/dist/circle-progress.css';
 import CircleProgress from 'vue3-circle-progress';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 interface mealInterface {
   meal_name: String;

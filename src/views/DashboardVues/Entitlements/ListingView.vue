@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen overflow-auto">
+  <div :dir="locale === 'ar' ? 'rtl' : 'ltr'" class="flex h-screen overflow-auto">
     <div
       v-if="entitlementStore.entitlements"
       class="flex-1 px-8 py-12 flex flex-col w-full 2xl:px-12 2xl:py-24 gap-6"
@@ -45,7 +45,7 @@
             <h2 class="header-small">
               {{ t('dashboard.entitlements.list.youCurrentlyHave') }}
             </h2>
-            <p class="contentH-large 2xl:text-7xl ml-auto">
+            <p class="contentH-large 2xl:text-7xl" :class="locale === 'ar' ? 'mr-auto' : 'ml-auto'">
               {{ entitlementStore.entitlements.filter((e) => !e.client_email).length }}
             </p>
             <h2 class="header-small text-rafik-secondary uppercase font-semibold">
@@ -96,7 +96,7 @@
           <tbody>
             <tr v-for="client in userStore.Entitled" :key="client.id" class="rounded-xl p-4">
               <td
-                class="flex gap-6 rounded-l-xl text-left items-center py-4 pl-3 bg-rafik-secbg dark:bg-rafik-darksecbg"
+                :class="locale === 'ar' ? 'flex gap-6 text-right items-center py-4 pr-3 bg-rafik-secbg dark:bg-rafik-darksecbg' : 'flex gap-6 text-left items-center py-4 pl-3 bg-rafik-secbg dark:bg-rafik-darksecbg'"
               >
                 <img
                   :src="client.avatar || defaultAvatar"
@@ -134,7 +134,7 @@
               <td class="uppercase bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik">
                 {{ client.program_details.status || client }}
               </td>
-              <td class="uppercase bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik rounded-r-xl">
+              <td class="uppercase bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik">
                 <div class="flex justify-center">
                   <label class="flex items-center space-x-2 cursor-pointer">
                     <input
@@ -149,7 +149,7 @@
                     >
                       <div
                         class="w-8 h-8 bg-rafik-pritext dark:bg-rafik-darkpritext rounded-full shadow-md transform transition-transform"
-                        :class="{ 'translate-x-8': client.program_details.auto_reroll }"
+                        :class="client.program_details.auto_reroll ? (locale === 'ar' ? '-translate-x-8' : 'translate-x-8') : ''"
                       ></div>
                     </div>
                   </label>
@@ -180,7 +180,7 @@ import AssignEntitlementsModal from './AssignEntitlementsModal.vue';
 import router from '@/router';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 // Store references
 const entitlementStore = useEntitlementStore();

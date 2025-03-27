@@ -183,7 +183,7 @@ import debounce from 'lodash/debounce';
 import { useExerciseStore } from '@/stores/exercisestores';
 import AddExerciseModal from '@/components/ExerciseTabs/AddExerciseModal.vue';
 import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 const ModalOn = ref<boolean>(false);
 const exerciseStore = useExerciseStore();

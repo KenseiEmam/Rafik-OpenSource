@@ -1,5 +1,5 @@
 <template>
-  <div
+  <div :dir="locale === 'ar' ? 'rtl' : 'ltr'"
     class="h-screen overflow-y-auto border-rafik-sectext dark:border-rafik-darksectext bg-rafik-secbg dark:bg-rafik-darksecbg flex flex-col p-8 gap-8 2xl:items-between 2xl:p-16"
   >
     <div class="relative">
@@ -16,7 +16,7 @@
         alt="Dark mode logo"
       />
     </div>
-    <nav v-if="userStore.userProfile?.roles" class="flex flex-col gap-4 2xl:gap-10 my-auto">
+    <nav  v-if="userStore.userProfile?.roles" class="flex flex-col gap-4 2xl:gap-10 my-auto">
       <RouterLink :to="{ name: 'dashboard-home' }" class="nav-btn">
         <span v-html="t('dashboard.sidebar.myDashboard')" />
       </RouterLink>
@@ -66,12 +66,12 @@
       <RouterLink :to="{ name: 'trainer-profile' }" class="nav-btn 2xl:text-lg text-base">
         <span v-html="t('dashboard.sidebar.myProfile')" />
       </RouterLink>
-      <button
+      <a
         @click="handleLogOut"
-        class="text-left nav-btn 2xl:text-lg text-base text-red-600 pl-4"
+        class=" nav-btn 2xl:text-lg text-base text-red-600 pl-4"
       >
         {{ t('dashboard.sidebar.logout') }}
-      </button>
+    </a>
     </nav>
   </div>
 </template>
@@ -82,7 +82,7 @@ import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
 
 const userStore = useUserStore();
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 const handleLogOut = async (): Promise<void> => {
   userStore.LogOut();
@@ -104,7 +104,6 @@ header {
 nav {
   width: 100%;
   font-size: 12px;
-  text-align: center;
 }
 
 nav a.router-link-exact-active {
@@ -140,7 +139,6 @@ nav a {
   }
 
   nav {
-    text-align: left;
     margin-left: -1rem;
     font-size: 1rem;
     padding: 1rem 0;

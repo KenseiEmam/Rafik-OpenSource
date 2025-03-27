@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
 interface User {
   first_name: string;
   last_name: string;
@@ -10,12 +12,14 @@ const props = defineProps<{
   user: User;
 }>();
 
-import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+const { t, locale } = useI18n();
 </script>
 
 <template>
-  <div class="px-8 py-12 flex-1 flex flex-col w-full h-full 2xl:px-12 2xl:py-24">
+  <div
+    class="px-8 py-12 flex-1 flex flex-col w-full h-full 2xl:px-12 2xl:py-24"
+    :dir="locale === 'ar' ? 'rtl' : 'ltr'"
+  >
     <div
       class="card w-full bg-rafik-secbg dark:bg-rafik-darksecbg p-8 2xl:py-16 flex gap-6 2xl:gap-10 border-0 items-center"
       v-if="props.user"
@@ -42,17 +46,21 @@ const { t } = useI18n();
       </div>
 
       <!-- Button Section -->
-      <div
-        class="border-l border-rafik-sectext dark:border-rafik-darksectext text-left px-8 flex flex-col gap-4 ml-auto py-4 h-full 2xl:h-44 justify-between"
+      <div :class="locale === 'ar'?'border-r':'border-l'"
+        class=" border-rafik-sectext dark:border-rafik-darksectext  px-8 flex flex-col gap-4 ml-auto py-4 h-full 2xl:h-44 justify-between"
       >
-      <router-link :to="{name:'trainer-profile'}" class="text-left opacity-50 text-rafik-sectext dark:text-rafik-darksectext hover:text-rafik-pritext hover:dark:text-rafik-darkpritext 2xl:text-xl">{{ t('dashboard.home.button.viewProfile') }}</router-link>
-        <router-link to="" disabled class="text-left opacity-50 text-rafik-sectext dark:text-rafik-darksectext hover:text-red-500 2xl:text-xl ">{{ t('dashboard.home.button.checkCharts') }}</router-link>
-        <router-link :to="{name:'settings'}" class="text-left opacity-50 text-rafik-sectext dark:text-rafik-darksectext hover:text-rafik-pritext hover:dark:text-rafik-darkpritext 2xl:text-xl">{{ t('dashboard.home.button.settings') }}</router-link>
+        <router-link :to="{ name: 'trainer-profile' }" class=" opacity-50 text-rafik-sectext dark:text-rafik-darksectext hover:text-rafik-pritext hover:dark:text-rafik-darkpritext 2xl:text-xl">
+          {{ t('dashboard.home.button.viewProfile') }}
+        </router-link>
+        <router-link to="" disabled class=" opacity-50 text-rafik-sectext dark:text-rafik-darksectext hover:text-red-500 2xl:text-xl">
+          {{ t('dashboard.home.button.checkCharts') }}
+        </router-link>
+        <router-link :to="{ name: 'settings' }" class=" opacity-50 text-rafik-sectext dark:text-rafik-darksectext hover:text-rafik-pritext hover:dark:text-rafik-darkpritext 2xl:text-xl">
+          {{ t('dashboard.home.button.settings') }}
+        </router-link>
       </div>
     </div>
-    <div
-      class="space-y-8 flex-1 flex flex-col h-full w-full items-center justify-center over-flow-auto w-64"
-    >
+    <div class="space-y-8 flex-1 flex flex-col h-full w-full items-center justify-center over-flow-auto w-64">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
