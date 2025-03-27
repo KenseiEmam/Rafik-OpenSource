@@ -66,7 +66,10 @@
           >
             <div
               class="w-8 h-8 bg-rafik-sectext dark:bg-rafik-darksectext flex items-center justify-center rounded-full shadow-md transform transition-transform"
-              :class="{ 'translate-x-8': localSettings.dark_mode }"
+              :class="{
+        'translate-x-0': !localSettings.dark_mode,
+        [locale === 'ar' ? '-translate-x-8' : 'translate-x-8']: localSettings.dark_mode
+      }"
             >
               <transition name="fade">
                 <svg
@@ -179,7 +182,7 @@ onMounted(async () => {
   }
   localSettings.value = { ...defaultSettings, ...storeSettings };
   // Update the active locale to match the fetched setting
-  locale.value = localSettings.value.language;
+
   await nextTick();
   skipInitialUpdate.value = false;
 });

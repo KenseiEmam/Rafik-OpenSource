@@ -634,6 +634,7 @@
           "price_three": "3 أشهر",
           "price_six": "6 أشهر",
           "price_year": "سنة واحدة",
+          "subscription": "اشتراك {duration} ",
           "monthlyPriceLabel": "السعر الشهري (درهم)",
           "na": "غير متوفر",
           "promoCodes": "رموز الخصم",

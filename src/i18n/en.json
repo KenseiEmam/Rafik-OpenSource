@@ -634,6 +634,7 @@
           "price_three": "3 Months",
           "price_six": "6 Months",
           "price_year": "1 Year",
+          "subscription": " {duration} Subscription",
           "monthlyPriceLabel": "MONTHLY PRICE (AED)",
           "na": "N/A",
           "promoCodes": "Promo Codes",
