@@ -6,21 +6,21 @@
       <!-- Tabs -->
       <div class="flex  gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext">
         <button
-          :class="activeTab === 'General Setting' ? 'text-rafik-secondary dark:text-rafik-darkpritext' : ''"
+          :class="activeTab === 'General Setting' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
           class="nav-btn "
           @click="setActiveTab('General Setting')"
         >
           General Settings
         </button>
         <button v-if="userStore.userProfile.roles.includes('Trainer')"
-          :class="activeTab === 'Trainer Settings' ? 'text-rafik-secondary dark:text-rafik-darkpritext' : ''"
+          :class="activeTab === 'Trainer Settings' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
           class="nav-btn uppercase "
           @click="setActiveTab('Trainer Settings')"
         >
           Trainer Settings
         </button>
         <button v-if="userStore.userProfile.roles.includes('Admin')"
-          :class="activeTab === 'Roles and Permissions' ? 'text-rafik-secondary dark:text-rafik-darkpritext' : ''"
+          :class="activeTab === 'Roles and Permissions' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
           class="nav-btn uppercase "
           @click="setActiveTab('Roles and Permissions')"
         >
