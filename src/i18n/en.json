@@ -5,7 +5,8 @@
     "success": "Success!",
     "error": "Error!",
     "opened": "Opened",
-    "seen": "Seen"
+    "seen": "Seen",
+    "na": "N/A"
   },
   "header": {
     "nav": {
@@ -617,6 +618,91 @@
           "addMultiSet": "Add Multi-Set",
           "supersetsCircuits": "Supersets/Circuits",
           "restAndRecover": "Rest and Recover"
+        }
+      },
+      "clients": {
+        "cancelProgram": {
+          "raiseCancellationRequest": "Raise Cancellation Request",
+          "cancellationDescription": "To protect client rights, trainers can only cancel requests after providing a compelling reason and having their cancellation request approved. Please provide your reason below to cancel this client's subscription.",
+          "cancellationReason": "Cancellation Reason",
+          "returnButton": "Return",
+          "cancelSubscription": "Cancel Subscription",
+          "reasonRequired": "Cancellation reason is required."
+        },
+        "changeProgram": {
+          "changeProgramTitle": "Change Program",
+          "description": "Click on one of the programs below to add it to have it overwrite the clients workouts and program details, please understand this will not change the status or price of the client subscription.",
+          "loading": "Loading...",
+          "noProgramsFound": "Seems you have no other programs just yet, get ahead and add one to your arsenal at our",
+          "programListingPage": "Program Listing Page",
+          "cancel": "Cancel",
+          "changeProgramTo": "Change program to {programName}",
+          "overwriteWarning": "This will overwrite the user program workouts and details permanently and all previous changes will be lost. Subscription plan will not change.",
+          "confirmOverwrite": "Yes, overwrite!"
+        },
+        "details": {
+          "profile": "Client Profile",
+          "age": "Age",
+          "gender": "Gender",
+          "nationality": "Nationality",
+          "phone": "Phone",
+          "metrics": "Client Metrics",
+          "height": "Height",
+          "cm": "cm",
+          "weight": "Weight",
+          "kg": "kg",
+          "goalWeight": "Goal Weight",
+          "bodyFatPercent": "Body Fat Percent",
+          "fitness": "Client Fitness",
+          "experience": "Experience",
+          "fitnessGoal": "Fitness Goal",
+          "sportsPlayed": "Sports Played",
+          "dietPreference": "Diet Preference",
+          "NA": "N/A",
+          "program": "Client Program",
+          "joinedOn": "Joined On",
+          "expiresOn": "Expires On",
+          "pricePackage": "Price Package",
+          "visit": "Visit Program",
+          "goals": {
+            "get_fitter": "Get Fitter",
+            "build_physique": "Build Physique",
+            "increase_strength": "Increase Strength",
+            "recovery": "Recovery",
+            "sport_specific": "Sport Specific"
+          }
+        },
+        "dietLog": {
+          "showingRows": "Showing {count} row(s)",
+          "dateLogged": "Date Logged",
+          "calories": "Calories",
+          "macroSplit": "Macro Split",
+          "noOfMeals": "No. of Meals",
+          "missingMeals": "missing meals",
+          "moreDetails": "More Details",
+          "prev": "Prev",
+          "next": "Next",
+          "pageOf": "Page {current} of {total}"
+        },
+        "workoutLog": {
+          "searchByName": "Search by name...",
+          "showingRows": "Showing {count} row(s)",
+          "completed": "Completed",
+          "name": "Name",
+          "created": "Created",
+          "performance": "Performance",
+          "feel": "Feel",
+          "moreDetails": "More Details",
+          "prev": "Prev",
+          "next": "Next",
+          "pageOf": "Page {current} of {total}",
+          "feels": {
+            "terrible": "Terrible",
+            "poor": "Poor",
+            "average": "Average",
+            "good": "Good",
+            "excellent": "Excellent"
+          }
         }
       }
     }
