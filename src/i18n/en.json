@@ -968,6 +968,32 @@
         "programRequired": "Please select a program.",
         "emailsRequired": "Please enter at least one email.",
         "emailsCountExceeded": "You cannot assign more than {count} entitlements."
+      },
+      "list": {
+        "client": "Client",
+        "entitlements": "Entitlements",
+        "loading": "Loading...",
+        "whatAreEntitlements": "What Are Entitlements?",
+        "entitlementsDescription": "Entitlements are trainer-purchased subscriptions that can be assigned to trainees, allowing trainers to charge their own rates for their services. Each entitlement lasts for one month, after which a new one must be assigned for continued training access. To streamline the process, trainers can add clients to the auto-update queue below. This ensures that when a trainee’s subscription expires, a new entitlement is automatically assigned, preventing any interruptions in their training.",
+        "youCurrentlyHave": "You currently have:",
+        "avlEntitlements": "Avl. Entitlements",
+        "purchaseMore": "Purchase More",
+        "processingRequest": "Processing Request Please Wait",
+        "dateJoined": "Date Joined",
+        "expiresOn": "Expires On",
+        "planMonths": "Plan (Months)",
+        "status": "Status",
+        "autoReroll": "Auto-Reroll",
+        "monthsSuffix": "months",
+        "noEntitledUsers": ":/ No Entitled Users Found. Assign some to see down here!",
+        "successTitle": "Success!",
+        "errorTitle": "Error!",
+        "autoRerollEnabled": "Client will now be resubscribed automatically!",
+        "autoRerollDisabled": "Client removed from reroll list and will not be resubscribed!",
+        "tooManyEntitlements": "You can only assign up to the available number of entitlements.",
+        "alreadyAssigned": "A user with this email is already assigned to a program.",
+        "programNotFound": "Program not found!",
+        "emailsSentSuccessfully": "Emails sent successfully!"
       }
     }
   }
