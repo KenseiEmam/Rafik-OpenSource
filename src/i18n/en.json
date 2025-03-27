@@ -1134,6 +1134,21 @@
         "noImageSelected": "Please select an image.",
         "uploadFail": "Upload failed: {error}"
       }
+    },
+    "programs": {
+      "list": {
+        "workoutsAnd": "workouts &",
+        "programs": "programs",
+        "activeProgramsTab": "Active Programs",
+        "draftedProgramsTab": "Drafted Programs",
+        "exerciseLibraryTab": "Exercise Library",
+        "aed": "AED",
+        "inRevenue": "in Revenue",
+        "monthly": "Monthly",
+        "addAnother": "ADD ANOTHER",
+        "expandYourArsenal": "Expand your arsenal and revenue potential by adding another program. The review process may take 3 days to a week.",
+        "status": "Status"
+      }
     }
   }
 }
