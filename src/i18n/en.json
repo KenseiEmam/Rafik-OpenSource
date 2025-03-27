@@ -851,6 +851,20 @@
         "addExercises": "ADD EXERCISES",
         "selectedCount": "Selected ({current}{max})",
         "confirmAddingExercises": "Confirm adding {count} exercises?"
+      },
+      "import": {
+        "importTemplate": "Import Template",
+        "exercise": "Exercise",
+        "library": "LIBRARY",
+        "selectAnExercise": "Select an exercise to import. Once imported, all details besides the exercise name and description will be changed permanently.",
+        "searchPlaceholder": "Type to Search Exercises...",
+        "primeMovers": "Prime Movers:",
+        "importButton": "Import",
+        "noExercisesFound": "No exercises found.",
+        "importConfirmTitle": "Import this exercise?",
+        "importConfirmText": "This will overwrite all exercise values besides name and details. You cannot undo this and all previous data will be lost!",
+        "yesOverwrite": "Yes, overwrite!",
+        "cancelButtonText": "Cancel"
       }
     }
   }
