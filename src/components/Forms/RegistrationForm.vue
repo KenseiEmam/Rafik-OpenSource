@@ -11,7 +11,7 @@
           v-model="email"
           class="rafik-text-input"
           type="email"
-          :placeholder="t('register.form.emailPlaceholder')"
+          placeholder="rafik@example.ae"
           required
         />
       </div>

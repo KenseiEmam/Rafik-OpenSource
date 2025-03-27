@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
 import SetUpForm from '../components/Forms/SetUpForm.vue'
+import Footer from '@/components/Navigation/Footer.vue';
 </script>
 
 <template>
@@ -11,5 +12,6 @@ import SetUpForm from '../components/Forms/SetUpForm.vue'
           <SetUpForm />
 
     </Transition>
+    <Footer/>
   </main>
 </template>

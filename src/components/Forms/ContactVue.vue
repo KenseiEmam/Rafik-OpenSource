@@ -120,7 +120,7 @@ async function sendEmail() {
               <h3 class="uppercase text-rafik-pritext dark:text-rafik-darkpritext md:header-small">
                 {{ t('home.form.mail.label') }}
               </h3>
-              <p class="text-body">{{ t('home.form.mail.address') }}</p>
+              <p class="text-body">admin@rafik.ae</p>
             </div>
           </div>
           <!-- Find Us -->
@@ -174,7 +174,7 @@ async function sendEmail() {
               v-model="formData.email"
               class="rafik-text-input"
               type="email"
-              :placeholder="t('home.form.formPlaceholders.email')"
+              placeholder="rafik@example.com"
               required
             />
           </div>

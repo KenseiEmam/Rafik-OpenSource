@@ -2,7 +2,7 @@
 import { useI18n } from 'vue-i18n';
 import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue';
 import SocialIcons from '../components/SocialIcons.vue';
-
+import Footer from '@/components/Navigation/Footer.vue';
 const { t , locale } = useI18n();
 </script>
 
@@ -47,6 +47,7 @@ const { t , locale } = useI18n();
         </div>
       </div>
     </div>
+    <Footer/>
   </main>
 </template>
 

@@ -9,12 +9,12 @@ const { t , locale } = useI18n();
     class="flex flex-col justify-center md:grid md:grid-cols-5 items-center min-h-screen flex-1 relative -mt-32"
   >
     <div class="md:flex hidden fixed z-40 bottom-5 justify-center left-0 right-0">
-      <div class="card rounded-full px-12">
+      <!-- <div class="card rounded-full px-12">
         <h3 class="text-body text-center">
           {{ t('home.welcome.traineeQuery') }}
           <RouterLink to="application">{{ t('home.welcome.getOurApp') }}</RouterLink>
         </h3>
-      </div>
+      </div> -->
     </div>
     <div class="md:hidden relative top-6">
       <div

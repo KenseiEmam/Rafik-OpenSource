@@ -2,7 +2,7 @@
 import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue';
 import LoginForm from '../components/Forms/LoginForm.vue';
 import { useI18n } from 'vue-i18n';
-
+import Footer from '@/components/Navigation/Footer.vue';
 const { t , locale } = useI18n();
 </script>
 
@@ -33,5 +33,6 @@ const { t , locale } = useI18n();
         </div>
       </div>
     </Transition>
+    <Footer/>
   </main>
 </template>
