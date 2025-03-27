@@ -84,7 +84,7 @@
           </thead>
           <tbody class="space-y-6">
             <tr v-for="user in users" :key="user.id" class="p-4">
-              <td class="rounded-l-xl bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <td class=" bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
                 {{ user.id }}
               </td>
               <td
@@ -118,7 +118,7 @@
                 {{ calculateAge(user.dob) || 'N/A' }}
               </td>
               <td
-                class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right rounded-r-xl"
+                class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right "
               >
                 <svg
                   @click="show_action = user.id"
@@ -226,7 +226,7 @@ import { ref, computed, onMounted, watch } from 'vue';
 import debounce from 'lodash/debounce';
 import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 interface User {
   id: string;

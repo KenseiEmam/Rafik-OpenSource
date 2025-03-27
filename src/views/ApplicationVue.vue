@@ -3,7 +3,7 @@ import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue';
 import Swal from 'sweetalert2';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 // Function to show error alerts
 function showError(message: string) {

@@ -12,7 +12,7 @@ import TraineeDetails from '@/components/UserTabs/TraineeDetails.vue';
 import TrainerDetails from '@/components/UserTabs/TrainerDetails.vue';
 import Cetifications from '@/components/ProfileTabs/Cetifications.vue';
 import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 function humanizeDate(date: any, timeZone: string = 'UTC') {
   if (!date) {
@@ -213,8 +213,8 @@ onBeforeUnmount(() => {
             </div>
           </div>
           <div class="pl-6 flex-1 min-w-max h-full">
-            <div
-              class="flex flex-col flex-1 gap-4 border-l pl-2 border-rafik-sectext dark:border-rafik-darksectext text-left"
+            <div :class="locale === 'ar'?'border-r pr-2':'border-l pl-2'"
+              class="flex flex-col flex-1 gap-4   border-rafik-sectext dark:border-rafik-darksectext text-left"
             >
               <button
                 v-if="userStore.UserDetail.audit_status !== 'suspended'"

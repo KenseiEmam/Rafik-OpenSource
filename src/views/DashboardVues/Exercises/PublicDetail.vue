@@ -9,7 +9,7 @@ import EquipReq from '@/components/ExerciseTabs/EquipReq.vue';
 import ExerciseAlt from '@/components/ExerciseTabs/ExerciseAlt.vue';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 // Tabs
 const activeTab = ref('Muscles');
@@ -122,7 +122,8 @@ onMounted(() => {
 
         <!-- Right Tools (Duplicate) -->
         <div
-          class="pl-6 flex-1 min-w-max border-l border-rafik-sectext dark:border-rafik-darksectext"
+        :class="locale === 'ar'?'border-r':'border-l'"
+          class="pl-6 flex-1 min-w-max border-rafik-sectext dark:border-rafik-darksectext"
         >
           <div
             class="flex flex-col flex-1 h-96 justify-center gap-4 border-rafik-sectext dark:border-rafik-darksectext text-left"

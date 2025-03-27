@@ -2,6 +2,9 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { supabase } from '../lib/supabaseClient';
 import Swal from 'sweetalert2';
+import { useI18n } from 'vue-i18n';
+
+
 // Success and Error Alerts
 function showSuccess(message: string) {
   Swal.fire({
@@ -54,6 +57,7 @@ export const useSettingsStore = defineStore('Settings', () => {
   const settings = ref<Settings | null>(null);
   const roles = ref<Role[] | null>(null);
   const trainer_settings = ref<TrainerSettings | null>(null);
+  const { t , locale } = useI18n();
   // Fetch user settings by user_id
   async function fetchSettings(user_id: string) {
     try {
@@ -69,7 +73,7 @@ export const useSettingsStore = defineStore('Settings', () => {
       localStorage.setItem('langauge', data.language);
       localStorage.setItem('dark_mode', data.dark_mode);
       localStorage.setItem('units', data.units);
-
+      locale.value = data.language;
       return settings.value;
     } catch (error) {
       showError('Failed to fetch trainer settings.');

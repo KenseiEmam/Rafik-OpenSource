@@ -23,8 +23,8 @@
         class="w-16 h-16 2xl:w-20 2xl:h-20 border border-rafik-pribg ring-2 ring-rafik rounded-full object-cover"
         alt=""
       />
-      <div
-        class="text-body text-rafik-sectext dark:text-rafik-darksectext uppercase pl-3 border-l border-rafik-sectext dark:border-rafik-darksectext py-2"
+      <div :class="locale === 'ar'?'border-r':'border-l'"
+        class="text-body text-rafik-sectext dark:text-rafik-darksectext uppercase pl-3  border-rafik-sectext dark:border-rafik-darksectext py-2"
       >
         <p>{{ t('header.auth.hello', { name: userStore.userProfile.first_name }) }}</p>
         <div class="flex gap-4">
@@ -52,7 +52,7 @@ import { onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const userStore = useUserStore();
-const { t } = useI18n();
+const { t ,locale } = useI18n();
 
 onMounted(() => {
   if (localStorage.getItem('LoggedInUser') && localStorage.getItem('UserID')) {

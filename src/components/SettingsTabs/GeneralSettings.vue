@@ -31,21 +31,13 @@
         </p>
       </div>
       <div class="w-32 2xl:w-64">
-        <!-- <select v-model="localSettings.language" name="language-select" class="rafik-text-input">
-          <option value="en">
-            {{ t('dashboard.tabs.settings.general.english') }}
-          </option>
-          <option value="ar" disabled>
-            {{ t('dashboard.tabs.settings.general.arabic') }}
-          </option>
-        </select> -->
-        <select v-model="$i18n.locale" name="language-select" class="rafik-text-input">
+        <select v-model="localSettings.language" name="language-select" class="rafik-text-input">
           <option
-            v-for="locale in $i18n.availableLocales"
-            :key="`locale-${locale}`"
-            :value="locale"
+            v-for="loc in $i18n.availableLocales"
+            :key="`locale-${loc}`"
+            :value="loc"
           >
-            {{ t(`lang.${locale}`) }}
+            {{ t(`lang.${loc}`) }}
           </option>
         </select>
       </div>
@@ -146,8 +138,8 @@ import { onMounted, ref, watch, nextTick, computed } from 'vue';
 import { useSettingsStore } from '@/stores/settingstores';
 import { useI18n } from 'vue-i18n';
 
-// Provide translation function
-const { t } = useI18n();
+// Destructure t and locale from i18n
+const { t, locale } = useI18n();
 
 // Access your settings store
 const useSettings = useSettingsStore();
@@ -186,6 +178,8 @@ onMounted(async () => {
     }
   }
   localSettings.value = { ...defaultSettings, ...storeSettings };
+  // Update the active locale to match the fetched setting
+  locale.value = localSettings.value.language;
   await nextTick();
   skipInitialUpdate.value = false;
 });
@@ -198,6 +192,14 @@ watch(localSettingsStr, async (newStr, oldStr) => {
     await useSettings.updateSettings(newSettings);
   }
 });
+
+// Watch the language setting to update the active locale
+watch(
+  () => localSettings.value.language,
+  (newLang) => {
+    locale.value = newLang;
+  }
+);
 </script>
 
 <style scoped></style>

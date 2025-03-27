@@ -135,7 +135,7 @@ import { useProgramStore } from '@/stores/programstores';
 import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 const emits = defineEmits(['close', 'submit']);
 

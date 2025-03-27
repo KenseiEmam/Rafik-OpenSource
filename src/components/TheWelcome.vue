@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const emit = defineEmits(['changeComp']);
 import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+const { t , locale } = useI18n();
 </script>
 
 <template>

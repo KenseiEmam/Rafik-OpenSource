@@ -321,7 +321,7 @@ import VueDatePicker from '@vuepic/vue-datepicker'; // presumably needed for <Vu
 import '@vuepic/vue-datepicker/dist/main.css'; // or wherever your styling is
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t , locale } = useI18n();
 // Dark mode from localStorage
 const darkness = localStorage.getItem('dark_mode');
 

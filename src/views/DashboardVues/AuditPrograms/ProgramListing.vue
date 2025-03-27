@@ -120,7 +120,7 @@
           </thead>
           <tbody class="space-y-6">
             <tr v-for="program in programs" :key="program.id" class="p-4">
-              <td class="rounded-l-xl bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
                 {{ program.program_name }}
               </td>
               <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize">
@@ -144,7 +144,7 @@
                 {{ program.avg_days_per_week }}
               </td>
               <td
-                class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right rounded-r-xl"
+                class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right "
               >
                 <svg
                   @click="show_action = program.id"
@@ -257,7 +257,7 @@ import { useI18n } from 'vue-i18n';
 // Search query and dropdown visibility
 const searchQuery = ref('');
 const dropdownVisible = ref(false);
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 // The selected trainer (if needed for your filters)
 const selectedTrainer = ref(null);

@@ -115,7 +115,7 @@
 import { useWorkoutStore } from '@/stores/workoutstores';
 import { onMounted, ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+const { t , locale } = useI18n();
 
 const workoutStore = useWorkoutStore();
 const props = defineProps(['program']);

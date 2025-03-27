@@ -3,7 +3,7 @@ import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue';
 import RegistrationForm from '../components/Forms/RegistrationForm.vue';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
+const { t , locale } = useI18n();
 </script>
 
 <template>

@@ -618,7 +618,7 @@ import { debounce } from 'lodash';
 import Swal from 'sweetalert2';
 import { useI18n } from 'vue-i18n';
 // Success and Error Alerts
-const { t } = useI18n();
+const { t , locale } = useI18n();
 function showSuccess(message: string) {
   Swal.fire({
     title: 'Success!',

@@ -94,7 +94,7 @@ import { useSettingsStore } from '@/stores/settingstores';
 import { supabase } from '@/lib/supabaseClient';
 import Swal from 'sweetalert2';
 import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+const { t , locale } = useI18n();
 // Search query and dropdown visibility
 const searchQuery = ref('');
 const dropdownVisible = ref(false);
