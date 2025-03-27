@@ -677,6 +677,13 @@
           "addMultiSet": "Add Multi-Set",
           "supersetsCircuits": "Supersets/Circuits",
           "restAndRecover": "Rest and Recover"
+        },
+        "reviews": {
+          "errorTitle": "Error!",
+          "noUserError": "No user found for this review",
+          "overallRating": "Overall Rating of",
+          "basedOnTotal": "Based on a total of {count} review | Based on a total of {count} reviews.",
+          "noReviews": "No Reviews just yet!"
         }
       },
       "clients": {
