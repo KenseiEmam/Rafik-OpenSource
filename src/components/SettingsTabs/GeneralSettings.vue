@@ -31,12 +31,21 @@
         </p>
       </div>
       <div class="w-32 2xl:w-64">
-        <select v-model="localSettings.language" name="language-select" class="rafik-text-input">
+        <!-- <select v-model="localSettings.language" name="language-select" class="rafik-text-input">
           <option value="en">
             {{ t('dashboard.tabs.settings.general.english') }}
           </option>
           <option value="ar" disabled>
             {{ t('dashboard.tabs.settings.general.arabic') }}
+          </option>
+        </select> -->
+        <select v-model="$i18n.locale" name="language-select" class="rafik-text-input">
+          <option
+            v-for="locale in $i18n.availableLocales"
+            :key="`locale-${locale}`"
+            :value="locale"
+          >
+            {{ t(`lang.${locale}`) }}
           </option>
         </select>
       </div>

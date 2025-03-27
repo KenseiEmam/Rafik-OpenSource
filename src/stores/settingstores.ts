@@ -1,7 +1,7 @@
-import { ref } from 'vue'
-import { defineStore } from 'pinia'
-import { supabase } from '../lib/supabaseClient'
-import Swal from 'sweetalert2'
+import { ref } from 'vue';
+import { defineStore } from 'pinia';
+import { supabase } from '../lib/supabaseClient';
+import Swal from 'sweetalert2';
 // Success and Error Alerts
 function showSuccess(message: string) {
   Swal.fire({
@@ -14,8 +14,8 @@ function showSuccess(message: string) {
     position: 'top-right',
     icon: 'success',
     background: '#081411',
-    color: '#E8F3ED',
-  })
+    color: '#E8F3ED'
+  });
 }
 
 // Function to show error alerts
@@ -27,8 +27,8 @@ function showError(message: string) {
     confirmButtonColor: '#d33',
     cancelButtonColor: '#d33',
     background: '#081411',
-    color: '#E8F3ED',
-  })
+    color: '#E8F3ED'
+  });
 }
 
 // Interface for settings
@@ -39,36 +39,36 @@ interface Settings {
   dark_mode: boolean;
   units: number;
 }
- type Role =   {
-  id: number,
-  role_name:string,
-  role_description:string,
-}
+type Role = {
+  id: number;
+  role_name: string;
+  role_description: string;
+};
 
 interface TrainerSettings {
-  seats_available:number,
-  follow_up:number,
-  available_hours:string,
+  seats_available: number;
+  follow_up: number;
+  available_hours: string;
 }
 export const useSettingsStore = defineStore('Settings', () => {
   const settings = ref<Settings | null>(null);
-  const roles = ref< Role[] | null>(null)
+  const roles = ref<Role[] | null>(null);
   const trainer_settings = ref<TrainerSettings | null>(null);
   // Fetch user settings by user_id
   async function fetchSettings(user_id: string) {
     try {
       const { data, error } = await supabase
         .from('user_settings')
-        .select('*', )
+        .select('*')
         .eq('user_id', user_id)
         .single();
 
       if (error) throw new Error(error.message);
 
       settings.value = data;
-      localStorage.setItem("langauge", data.language)
-      localStorage.setItem("dark_mode", data.dark_mode)
-      localStorage.setItem("units", data.units)
+      localStorage.setItem('langauge', data.language);
+      localStorage.setItem('dark_mode', data.dark_mode);
+      localStorage.setItem('units', data.units);
 
       return settings.value;
     } catch (error) {
@@ -77,14 +77,11 @@ export const useSettingsStore = defineStore('Settings', () => {
   }
   async function fetchRoles() {
     try {
-      const { data, error } = await supabase
-        .from('roles')
-        .select('*')
+      const { data, error } = await supabase.from('roles').select('*');
 
       if (error) throw new Error(error.message);
 
       roles.value = data;
-
 
       return roles.value;
     } catch (error) {
@@ -92,19 +89,17 @@ export const useSettingsStore = defineStore('Settings', () => {
     }
   }
   // Insert settings by user_id
-  async function InsertSettings( user_id:number) {
+  async function InsertSettings(user_id: number) {
     try {
-
-      if(!settings.value) throw new Error("User settings not loaded yet , try again!")
+      if (!settings.value) throw new Error('User settings not loaded yet , try again!');
       const { data, error } = await supabase
         .from('user_settings')
-        .insert({user_id})
+        .insert({ user_id })
         .select()
         .single();
 
       if (error) throw new Error(error.message);
       settings.value = data;
-
     } catch (error) {
       showError('Failed to create settings.');
     }
@@ -112,9 +107,8 @@ export const useSettingsStore = defineStore('Settings', () => {
 
   // Fetch trainer settings by user_id
   async function fetchTrainerSettings() {
-
     try {
-      const user_id= localStorage.getItem('UserID')
+      const user_id = localStorage.getItem('UserID');
       if (!user_id) throw new Error('No User ID in Local Storage');
       const { data, error } = await supabase
         .from('trainer_profile')
@@ -132,10 +126,9 @@ export const useSettingsStore = defineStore('Settings', () => {
   }
 
   // Update settings by user_id
-  async function updateSettings( updatedSettings: Partial<Settings>) {
+  async function updateSettings(updatedSettings: Partial<Settings>) {
     try {
-
-      if(!settings.value) throw new Error("User settings not loaded yet , try again!")
+      if (!settings.value) throw new Error('User settings not loaded yet , try again!');
       const { data, error } = await supabase
         .from('user_settings')
         .update(updatedSettings)
@@ -146,32 +139,30 @@ export const useSettingsStore = defineStore('Settings', () => {
       if (error) throw new Error(error.message);
       settings.value = data;
       showSuccess('Settings updated successfully!');
-
     } catch (error) {
       showError('Failed to update settings.');
     }
   }
 
-    // Update trainer settings by user_id
-    async function updateTrainerSettings( updatedSettings: Partial<TrainerSettings>) {
-      try {
-        const user_id= localStorage.getItem('UserID')
-        if (!user_id) throw new Error('No User ID in Local Storage');
-        const { data, error } = await supabase
-          .from('trainer_profile')
-          .update(updatedSettings)
-          .eq('user_id', user_id)
-          .select()
-          .single();
+  // Update trainer settings by user_id
+  async function updateTrainerSettings(updatedSettings: Partial<TrainerSettings>) {
+    try {
+      const user_id = localStorage.getItem('UserID');
+      if (!user_id) throw new Error('No User ID in Local Storage');
+      const { data, error } = await supabase
+        .from('trainer_profile')
+        .update(updatedSettings)
+        .eq('user_id', user_id)
+        .select()
+        .single();
 
-        if (error) throw new Error(error.message);
-        trainer_settings.value = data;
+      if (error) throw new Error(error.message);
+      trainer_settings.value = data;
       showSuccess('Trainer Settings updated successfully!');
-
-      } catch (error) {
-        showError('Failed to update settings.');
-      }
+    } catch (error) {
+      showError('Failed to update settings.');
     }
+  }
 
   return {
     settings,
