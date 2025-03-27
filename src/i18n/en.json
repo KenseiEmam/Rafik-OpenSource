@@ -501,6 +501,8 @@
         "general": {
           "unitsAndMeasurements": "Units and Measurements",
           "unitsExplanation": "The units displayed to you when viewing our dashboard do not affect the units viewed by clients!",
+          "metricOption":"Metric (cm/kg)",
+          "imperialOption":"Imperial (inch/lb)",
           "languages": "Languages",
           "languageExplanation": "Choose the display language for your user dashboard, this also does not affect your trainees!",
           "english": "English",
