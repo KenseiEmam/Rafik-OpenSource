@@ -823,6 +823,16 @@
             "descriptionRequired": "Exercise description is required.",
             "typeRequired": "Please select a type."
           }
+        },
+        "movers": {
+          "agonists": "Agonists",
+          "antagonists": "Antagonists",
+          "synergists": "Synergists",
+          "addMuscleDesc": "Add muscle groups by typing in the field below and pressing Enter. Click on a muscle group to remove it.",
+          "agonistsDesc": "Below are the agonistic or primary muscle groups involved in this exercise.",
+          "antagonistsDesc": "Below are the antagonist or opposing muscle groups involved in this exercise.",
+          "synergistsDesc": "Below are the synergist or stabilizer muscle groups involved in this exercise.",
+          "addNewMuscle": "Add a new muscle"
         }
       }
     }
