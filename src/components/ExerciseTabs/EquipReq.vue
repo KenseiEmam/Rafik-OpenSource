@@ -1,58 +1,79 @@
 <template>
   <div class="grid grid-cols-3 gap-4 h-full items-stretch flex-1 min-h-128">
+    <!-- Benches & Frames -->
     <div class="card p-4 2xl:p-6 flex flex-col gap-4">
-      <h3 class="contentH-small">Benches & Frames</h3>
+      <h3 class="contentH-small">
+        {{ t('dashboard.tabs.exercise.equipReq.benchesAndFrames') }}
+      </h3>
       <div class="flex flex-wrap gap-2">
         <button
-          v-for="item in benches"
-          :key="item"
-          @click="props.personal && toggleEquipment(item)"
+          v-for="(item, index) in tm('dashboard.tabs.exercise.equipReq.benches')"
+          :key="index"
+          @click="props.personal && toggleEquipment(rt(item))"
           :disabled="!props.personal"
           :class="{
-            'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext': equipment.includes(item),
-            'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext': !equipment.includes(item),
+            'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext': equipment.includes(
+              rt(item)
+            ),
+            'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext':
+              !equipment.includes(rt(item)),
             'opacity-50 cursor-not-allowed': !props.personal
           }"
-          class="px-3 py-1 rounded-full">
-          {{ item }}
+          class="px-3 py-1 rounded-full"
+        >
+          {{ rt(item) }}
         </button>
       </div>
     </div>
 
+    <!-- Free Weights -->
     <div class="card p-4 2xl:p-6 flex flex-col gap-4">
-      <h3 class="contentH-small">Free Weights</h3>
+      <h3 class="contentH-small">
+        {{ t('dashboard.tabs.exercise.equipReq.freeWeightsHeading') }}
+      </h3>
       <div class="flex flex-wrap gap-2">
         <button
-          v-for="item in freeWeights"
-          :key="item"
-          @click="props.personal && toggleEquipment(item)"
+          v-for="(item, index) in tm('dashboard.tabs.exercise.equipReq.freeWeights')"
+          :key="index"
+          @click="props.personal && toggleEquipment(rt(item))"
           :disabled="!props.personal"
           :class="{
-            'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext': equipment.includes(item),
-            'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext': !equipment.includes(item),
+            'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext': equipment.includes(
+              rt(item)
+            ),
+            'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext':
+              !equipment.includes(rt(item)),
             'opacity-50 cursor-not-allowed': !props.personal
           }"
-          class="px-3 py-1 rounded-full">
-          {{ item }}
+          class="px-3 py-1 rounded-full"
+        >
+          {{ rt(item) }}
         </button>
       </div>
     </div>
 
+    <!-- Grips & Accessories -->
     <div class="card p-4 2xl:p-6 flex flex-col gap-4">
-      <h3 class="contentH-small">Grips & Accessories</h3>
+      <h3 class="contentH-small">
+        {{ t('dashboard.tabs.exercise.equipReq.gripsAndAccessories') }}
+      </h3>
       <div class="flex flex-wrap gap-2">
         <button
-          v-for="item in accessories"
-          :key="item"
-          @click="props.personal && toggleEquipment(item)"
+          v-for="(item, index) in tm('dashboard.tabs.exercise.equipReq.accessories')"
+          :key="index"
+          @click="props.personal && toggleEquipment(rt(item))"
           :disabled="!props.personal"
           :class="{
-            'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext': equipment.includes(item),
-            'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext': !equipment.includes(item),
+            'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext': equipment.includes(
+              rt(item)
+            ),
+            'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext':
+              !equipment.includes(rt(item)),
             'opacity-50 cursor-not-allowed': !props.personal
           }"
-          class="px-3 py-1 rounded-full">
-          {{ item }}
+          class="px-3 py-1 rounded-full"
+        >
+          {{ rt(item) }}
         </button>
       </div>
     </div>
@@ -61,49 +82,37 @@
 
 <script setup lang="ts">
 import { ref, defineProps, defineEmits } from 'vue';
-
+import { useI18n } from 'vue-i18n';
+const { t, rt, tm } = useI18n();
 const props = defineProps({
   exercise: {
     type: Object,
-    required: true,
+    required: true
   },
   personal: {
     type: Boolean,
-    required: true,
-  },
+    required: true
+  }
 });
-const emit = defineEmits(["update-equipment"]);
+const emit = defineEmits(['update-equipment']);
 
+// Initialize the user's selected equipment from the exercise object
 const equipment = ref([...props.exercise.equipment]);
 
-const benches = [
-  "Incline Bench", "Decline Bench", "Flat Bench", "Strength Chair", "Squat Rack",
-  "Multipurpose Trainer", "Pull Up Bar", "Dip Bars", "Smith Machine",
-  "Resistance Machine", "Treadmill", "Assault Bike", "Rowing Machine", "Eliptical", "Cardio Bike", "Skiier"
-];
-
-const freeWeights = [
-  "Barbell", "Olympic Barbell", "Hexbar", "Sled", "Plates",
-  "Dumbbells", "Kettlebells", "Med Ball", "Resistance Bands", "Chains", "Weighted Vest", "Ezbar", "Cambert Bar", "Atlas Stone", "Axle", "Battle Ropes", "Log"
-];
-
-const accessories = [
-  "Belt for Weights", "Straight Bar", "EZ Curl Bar", "Rope Attachment",
-  "Single Handle", "D-Grip Handle", "V-Bar", "Triangle Grip",
-  "Revolving D-Grip", "Revolving Straight Bar", "Revolving V-Bar",
-  "Ankle Strap", "Tricep Strap", "Double D-Grip Handle",
-  "Straps"
-];
-
-const toggleEquipment = (item:any) => {
+/**
+ * Toggle an item in the equipment array, then emit it upwards.
+ * This stores or removes the "raw text" from the array,
+ * using the translated string to match.
+ */
+const toggleEquipment = (item: string) => {
   if (!props.personal) return;
 
   if (equipment.value.includes(item)) {
-    equipment.value = equipment.value.filter(e => e !== item);
+    equipment.value = equipment.value.filter((e) => e !== item);
   } else {
     equipment.value.push(item);
   }
-  emit("update-equipment", equipment.value);
+  emit('update-equipment', equipment.value);
 };
 </script>
 
