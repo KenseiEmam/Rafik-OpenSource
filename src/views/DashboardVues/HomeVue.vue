@@ -15,7 +15,7 @@ const props = defineProps<{
   <div class="px-8 py-12 flex-1 flex flex-col w-full h-full 2xl:px-12 2xl:py-24">
     <div
       class="card w-full bg-rafik-secbg dark:bg-rafik-darksecbg p-8 2xl:py-16 flex gap-6 2xl:gap-10 border-0 items-center"
-
+      v-if="props.user"
     >
       <!-- User Avatar -->
       <img
@@ -38,9 +38,9 @@ const props = defineProps<{
       <div
         class="border-l border-rafik-sectext dark:border-rafik-darksectext text-left px-8 flex flex-col gap-4 ml-auto py-4 h-full 2xl:h-44 justify-between"
       >
-        <button class="text-left opacity-50 hover:text-red-500 2xl:text-lg">View Profile</button>
-        <button class="text-left opacity-50 hover:text-red-500 2xl:text-lg">Check Charts</button>
-        <button class="text-left opacity-50 hover:text-red-500 2xl:text-lg">Settings</button>
+      <router-link :to="{name:'trainer-profile'}" class="text-left opacity-50 text-rafik-sectext dark:text-rafik-darksectext hover:text-rafik-pritext hover:dark:text-rafik-darkpritext 2xl:text-xl">View Profile</router-link>
+        <router-link to="" disabled class="text-left opacity-50 text-rafik-sectext dark:text-rafik-darksectext hover:text-red-500 2xl:text-xl ">Check Charts</router-link>
+        <router-link :to="{name:'settings'}" class="text-left opacity-50 text-rafik-sectext dark:text-rafik-darksectext hover:text-rafik-pritext hover:dark:text-rafik-darkpritext 2xl:text-xl">Settings</router-link>
       </div>
     </div>
     <div class="space-y-8 flex-1 flex flex-col  h-full w-full items-center justify-center over-flow-auto w-64">
