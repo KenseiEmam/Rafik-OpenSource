@@ -42,7 +42,7 @@
         </template>
       </draggable>
 
-      <div v-if="!admin" class="ml-auto">
+      <div v-if="!admin" class="ms-auto">
         <button v-if="!isEditing" class="btn-sm-outline min-w-max" @click="enableEditMode">
           {{ t('dashboard.tabs.program.planner.editProgram') }}
         </button>
@@ -205,7 +205,7 @@
                       </p>
                     </div>
 
-                    <div class="ml-auto space-y-3">
+                    <div class="ms-auto space-y-3">
                       <div v-if="isEditing" class="flex gap-4 justify-between items-end">
                         <label class="text-body">
                           {{ t('dashboard.tabs.program.planner.totalSets') }}:
@@ -261,7 +261,7 @@
                             </p>
                           </div>
 
-                          <div class="ml-auto space-y-3">
+                          <div class="ms-auto space-y-3">
                             <div
                               class="flex justify-between gap-4 w-full text-rafik-sectext dark:text-rafik-darksectext text-body"
                             >
@@ -369,7 +369,7 @@
 
                           <div
                             v-if="isEditing"
-                            class="flex justify-between ml-auto min-w-max mt-auto"
+                            class="flex justify-between ms-auto min-w-max mt-auto"
                           >
                             <button
                               class="hover:text-red-400 text-red-500"
@@ -387,7 +387,7 @@
                       v-if="isEditing"
                     />
                   </div>
-                  <div v-if="isEditing" class="flex justify-end ml-auto min-w-max mt-auto">
+                  <div v-if="isEditing" class="flex justify-end ms-auto min-w-max mt-auto">
                     <button
                       class="hover:text-red-400 text-red-500"
                       @click="removeExercise(activeTab, index)"
@@ -446,7 +446,7 @@
                       </p>
                     </div>
 
-                    <div class="ml-auto space-y-3">
+                    <div class="ms-auto space-y-3">
                       <div v-if="isEditing" class="flex gap-4 justify-between items-end">
                         <label class="text-body">
                           {{ t('dashboard.tabs.program.planner.totalSets') }}:
@@ -571,7 +571,7 @@
                       </div>
                     </div>
 
-                    <div v-if="isEditing" class="flex justify-between ml-auto min-w-max mt-auto">
+                    <div v-if="isEditing" class="flex justify-between ms-auto min-w-max mt-auto">
                       <button
                         class="hover:text-red-400 text-red-500"
                         @click="removeExercise(activeTab, index)"

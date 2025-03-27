@@ -111,7 +111,8 @@
               class="rounded-xl p-4 w-full"
             >
               <td
-                class="flex gap-6  text-left items-center py-4 pl-3 bg-rafik-secbg dark:bg-rafik-darksecbg"
+              :class="locale === 'ar'? 'pr-3':'pl-3'"
+                class="flex gap-6  text-left items-center py-4  bg-rafik-secbg dark:bg-rafik-darksecbg"
               >
                 <img
                   :src="
@@ -159,7 +160,7 @@
                   @click="show_action = client.id"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
-                  class="text-rafik-sectext dark:text-rafik-darkpritext h-7 mx-7 hover:text-rafik-pritext cursor-pointer ml-auto"
+                  class="text-rafik-sectext dark:text-rafik-darkpritext h-7 mx-7 hover:text-rafik-pritext cursor-pointer ms-auto"
                   viewBox="0 0 128 512"
                 >
                   <path

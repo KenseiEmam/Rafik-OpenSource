@@ -24,7 +24,7 @@ const { t , locale } = useI18n();
             class="w-96 h-96 rounded-full bottom-0 opacity-80 absolute right-16 bg-rafik content"
           ></div>
           <img
-            class="w-128 object-cover ml-auto relative grayscale"
+            class="w-128 object-cover ms-auto relative grayscale"
             src="https://static.vecteezy.com/system/resources/thumbnails/046/464/329/small_2x/smiling-man-holding-and-pointing-at-laptop-on-transparent-background-png.png"
             alt=""
           />

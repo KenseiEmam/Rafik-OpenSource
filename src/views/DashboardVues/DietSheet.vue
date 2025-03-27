@@ -199,7 +199,7 @@ onMounted(() => {
               </div>
               <p class="text-rafik-pritext dark:text-rafik-darkpritext flex w-full">
                 {{ t('dashboard.dietSheet.protein') }}:
-                <span class="ml-auto text-rafik-secondary mr-3">
+                <span class="ms-auto text-rafik-secondary mr-3">
                   {{ Math.ceil(dietStore.Diet.overall_macros[0]) }}
                 </span>
                 / {{ Math.ceil(dietStore.Diet.goal_macros[0]) }}
@@ -220,7 +220,7 @@ onMounted(() => {
               </div>
               <p class="text-rafik-pritext dark:text-rafik-darkpritext flex w-full">
                 {{ t('dashboard.dietSheet.carbohydrates') }}:
-                <span class="ml-auto text-rafik-teritiary mr-3">
+                <span class="ms-auto text-rafik-teritiary mr-3">
                   {{ Math.ceil(dietStore.Diet.overall_macros[1]) }}
                 </span>
                 / {{ Math.ceil(dietStore.Diet.goal_macros[1]) }}
@@ -241,7 +241,7 @@ onMounted(() => {
               </div>
               <p class="text-rafik-pritext dark:text-rafik-darkpritext flex w-full">
                 {{ t('dashboard.dietSheet.fats') }}:
-                <span class="ml-auto text-rafik-alternate mr-3">
+                <span class="ms-auto text-rafik-alternate mr-3">
                   {{ Math.ceil(dietStore.Diet.overall_macros[2]) }}
                 </span>
                 / {{ Math.ceil(dietStore.Diet.goal_macros[2]) }}

@@ -29,7 +29,7 @@ const { t , locale } = useI18n();
         class="flex-col gap-6 flex md:col-span-2 md:border-l border-rafik-sectext dark:border-rafik-darksectext md:pl-8"
       >
         <img
-          class="md:h-64 w-full 2xl:h-96 object-cover object-top ml-auto mb-auto"
+          class="md:h-64 w-full 2xl:h-96 object-cover object-top ms-auto mb-auto"
           src="/src/assets/rafik.png"
           alt=""
         />

@@ -46,8 +46,8 @@ const localSettings = localStorage.getItem('dark_mode');
 onMounted(() => {
   userStore.getUserProfileNO().then(()=>
     {
-      if (settingstores.settings) {
-        locale.value = settingstores.settings.language; // ✅ Set locale inside setup
+      if (localStorage.getItem('language')) {
+        locale.value = localStorage.getItem('language') || 'en'; // ✅ Set locale inside setup
       }
     }
   );

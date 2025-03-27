@@ -69,7 +69,7 @@ export const useSettingsStore = defineStore('Settings', () => {
       if (error) throw new Error(error.message);
 
       settings.value = data;
-      localStorage.setItem('langauge', data.language);
+      localStorage.setItem('language', data.language);
       localStorage.setItem('dark_mode', data.dark_mode);
       localStorage.setItem('units', data.units);
 
