@@ -956,6 +956,19 @@
         "opened": "Opened",
         "received": "Received"
       }
+    },
+    "entitlements": {
+      "modal": {
+        "assignEntitlements": "ASSIGN ENTITLEMENTS",
+        "programToAssign": "Program to Assign",
+        "chooseProgramPlaceholder": "Choose program from the list",
+        "assigneeEmailsLabel": "Assignee Emails:",
+        "emailsPlaceholder": "Separate multiple emails with commas",
+        "assignButton": "Assign",
+        "programRequired": "Please select a program.",
+        "emailsRequired": "Please enter at least one email.",
+        "emailsCountExceeded": "You cannot assign more than {count} entitlements."
+      }
     }
   }
 }
