@@ -1260,6 +1260,27 @@
         "youLabel": "You",
         "supportLabel": "Support"
       }
+    },
+    "dietSheet": {
+      "loadDietFail": "Failed to load Diet details.",
+      "successTitle": "Success!",
+      "errorTitle": "Error!",
+      "dietLogFor": "Diet Log For:",
+      "loading": "Loading...",
+      "by": "BY",
+      "totalCalories": "Total Calories",
+      "protein": "Protein",
+      "carbohydrates": "Carbohydrates",
+      "fats": "Fats",
+      "mealBreakdown": "Meal Breakdown",
+      "olderVariableName": "Older Variable Name",
+      "energy": "Energy",
+      "servings": "Servings",
+      "mealNotLogged": "Meal Not Logged",
+      "relevantMetrics": "Relevant Metrics",
+      "noWorkoutLogged": "No workout Logged on",
+      "minsSession": "mins/session",
+      "daysWeek": "days/week"
     }
   }
 }
