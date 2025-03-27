@@ -9,8 +9,8 @@
     <button
       @click="open = !open"
       :class="locale === 'ar'
-        ? 'rounded-r-full bg-rafik-secbg dark:bg-rafik-darksecbg border border-l-0 px-8 py-4 mt-64 relative right-1 z-20'
-        : 'rounded-l-full bg-rafik-secbg dark:bg-rafik-darksecbg border border-r-0 px-8 py-4 mt-64 relative left-1 z-20'"
+        ? 'rounded-r-full bg-rafik-secbg dark:bg-rafik-darksecbg border-2 border-rafik-sectext dark:border-rafik-darksectext border-l-0 px-8 py-4 mt-64 relative right-1 z-20'
+        : 'rounded-l-full bg-rafik-secbg dark:bg-rafik-darksecbg border-2 border-rafik-sectext dark:border-rafik-darksectext border-r-0 px-8 py-4 mt-64 relative left-1 z-20'"
     >
       <span
         v-if="checkNew"
@@ -41,7 +41,7 @@
     <!-- Drawer Content -->
     <div
       :class="open ? 'h-screen' : 'h-0'"
-      class="border-rafik-sectext dark:border-rafik-darksectext border-l w-128 bg-rafik-secbg dark:bg-rafik-darksecbg items-between justify-between gap-10 flex flex-col p-8 2xl:py-16 h-full relative z-10"
+      class="border-rafik-sectext dark:border-rafik-darksectext border-x w-128 bg-rafik-secbg dark:bg-rafik-darksecbg items-between justify-between gap-10 flex flex-col p-8 2xl:py-16 h-full relative z-10"
     >
       <!-- Header Section -->
       <div class="flex gap-10 justify-between">

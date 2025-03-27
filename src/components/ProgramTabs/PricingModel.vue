@@ -49,10 +49,10 @@ const isEnabled = ref({
 
 // Reactive state for prices
 const prices = ref({
-  price_one: program.price_one ?? 0,
-  price_three: program.price_three ?? 0,
-  price_six: program.price_six ?? 0,
-  price_year: program.price_year ?? 0
+  price_one: program.price_one ?? null,
+  price_three: program.price_three ?? null,
+  price_six: program.price_six ?? null,
+  price_year: program.price_year ?? null
 });
 
 // Watch for switch toggles and update only the corresponding price
@@ -159,7 +159,10 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
           :key="key"
           class="flex card p-6 2xl:p-8 items-center justify-between"
         >
-          <span class="font-medium">{{ t(key) }} Subscription</span>
+        <span class="font-medium">
+          {{ t('dashboard.tabs.program.pricing.subscription', { duration: t(`dashboard.tabs.program.pricing.${key}`) }) }}
+        </span>
+
           <label
             v-if="key !== 'price_one'"
             class="flex items-center ml-auto mr-4 space-x-2 cursor-pointer"

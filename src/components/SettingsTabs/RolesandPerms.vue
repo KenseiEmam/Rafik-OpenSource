@@ -12,7 +12,7 @@
       <h2 class="header-small" v-else>
         {{ t('dashboard.tabs.settings.rolesAndPerms.noUserSelected') }}
       </h2>
-      <div class="ml-auto w-64">
+      <div :class="locale === 'ar'?'mr-auto':'ml-auto'" class="w-64">
         <label
           class="block text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext mb-1"
         >
@@ -68,18 +68,19 @@
                 readonly
               />
               <div
-                class="w-16 h-8 flex items-center border-rafik-sectext dark:border-rafik-darksectext border-2 rounded-full transition-all"
-                :class="
-                  selectedUser.roles.includes(role.role_name)
-                    ? 'bg-rafik'
-                    : 'bg-rafik-secbg dark:bg-rafik-darsecbg'
-                "
-              >
-                <div
-                  class="w-8 h-8 bg-rafik-sectext dark:bg-rafik-darksectext dark:bg-rafik-darksectext flex items-center justify-center rounded-full shadow-md transform transition-transform"
-                  :class="{ 'translate-x-8': selectedUser.roles.includes(role.role_name) }"
-                ></div>
-              </div>
+    class="w-16 h-8 flex items-center border-rafik-sectext dark:border-rafik-darksectext border-2 rounded-full transition-all"
+    :class="selectedUser.roles.includes(role.role_name)
+      ? 'bg-rafik'
+      : 'bg-rafik-secbg dark:bg-rafik-darsecbg'"
+  >
+    <div
+      class="w-8 h-8 bg-rafik-sectext dark:bg-rafik-darksectext flex items-center justify-center rounded-full shadow-md transform transition-transform duration-300"
+      :class="{
+        'translate-x-0': !selectedUser.roles.includes(role.role_name),
+        [locale === 'ar' ? '-translate-x-8' : 'translate-x-8']: selectedUser.roles.includes(role.role_name)
+      }"
+    ></div>
+  </div>
             </label>
           </div>
         </div>
