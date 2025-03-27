@@ -75,7 +75,7 @@ const showCancelModal = ref(false);
 // Function to show success alerts
 function showSuccess(message: string) {
   Swal.fire({
-    title: 'Success!',
+    title: t('general.success'),
     showConfirmButton: false,
     timerProgressBar: true,
     timer: 1500,
@@ -92,7 +92,7 @@ function showSuccess(message: string) {
 // Function to show error alerts
 function showError(message: string) {
   Swal.fire({
-    title: 'Error!',
+    title: t('general.error'),
     text: message,
     icon: 'error',
     confirmButtonColor: '#d33',
