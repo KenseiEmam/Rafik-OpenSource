@@ -1,5 +1,5 @@
 <template>
-  <div
+  <div :dir="locale === 'ar' ? 'rtl' : 'ltr'"
     class="h-screen overflow-y-auto border-rafik-sectext dark:border-rafik-darksectext bg-rafik-secbg dark:bg-rafik-darksecbg flex flex-col p-8 gap-8 2xl:items-between 2xl:p-16"
   >
     <div class="relative">
@@ -16,66 +16,78 @@
         alt="Dark mode logo"
       />
     </div>
-    <nav v-if="userStore.userProfile?.roles" class="flex flex-col gap-4 2xl:gap-10 my-auto">
-      <RouterLink :to="{ name: 'dashboard-home' }" class="nav-btn">My <br />Dashboard</RouterLink>
+    <nav  v-if="userStore.userProfile?.roles" class="flex flex-col gap-4 2xl:gap-10 my-auto">
+      <RouterLink :to="{ name: 'dashboard-home' }" class="nav-btn">
+        <span v-html="t('dashboard.sidebar.myDashboard')" />
+      </RouterLink>
       <RouterLink
         v-if="userStore.userProfile?.roles.includes('Trainer')"
         :to="{ name: 'programs-list' }"
-        class="nav-btn "
-        >Workout &<br />Programs</RouterLink
+        class="nav-btn"
       >
+        <span v-html="t('dashboard.sidebar.workoutPrograms')" />
+      </RouterLink>
       <RouterLink
         v-if="userStore.userProfile?.roles.includes('Trainer')"
         :to="{ name: 'client-list' }"
-        class="nav-btn "
-        >My <br />Clients</RouterLink
+        class="nav-btn"
       >
+        <span v-html="t('dashboard.sidebar.myClients')" />
+      </RouterLink>
       <RouterLink
         v-if="userStore.userProfile?.roles.includes('Trainer')"
         :to="{ name: 'entitlement-list' }"
-        class="nav-btn "
-        >Program <br />Entitlements</RouterLink
+        class="nav-btn"
       >
+        <span v-html="t('dashboard.sidebar.programEntitlements')" />
+      </RouterLink>
       <RouterLink
         v-if="userStore.userProfile?.roles.includes('Admin')"
         :to="{ name: 'users-list' }"
-        class="nav-btn "
-        >List of <br />Users</RouterLink
+        class="nav-btn"
       >
-      <RouterLink :to="{ name: 'audit-list' }" class="nav-btn "
-        >Audit<br />Programs</RouterLink
-      >
-      <RouterLink :to="{ name: 'settings' }" class="nav-btn "
-        >Settings &<br />Preferences</RouterLink
-      >
+        <span v-html="t('dashboard.sidebar.listOfUsers')" />
+      </RouterLink>
+      <RouterLink :to="{ name: 'audit-list' }" class="nav-btn">
+        <span v-html="t('dashboard.sidebar.auditPrograms')" />
+      </RouterLink>
+      <RouterLink :to="{ name: 'settings' }" class="nav-btn">
+        <span v-html="t('dashboard.sidebar.settingsPreferences')" />
+      </RouterLink>
     </nav>
     <nav v-if="userStore.userProfile?.roles" class="flex flex-col gap-4 mt-auto 2xl:gap-8 text-sm">
       <RouterLink
         v-if="userStore.userProfile?.roles.includes('Trainer')"
         :to="{ name: 'ticket-list' }"
-        class="nav-btn 2xl:text-lg text-base "
-        >Support</RouterLink
+        class="nav-btn 2xl:text-lg text-base"
       >
-      <RouterLink :to="{ name: 'trainer-profile' }" class="nav-btn 2xl:text-lg text-base "
-        >My Profile</RouterLink
+        <span v-html="t('dashboard.sidebar.support')" />
+      </RouterLink>
+      <RouterLink :to="{ name: 'trainer-profile' }" class="nav-btn 2xl:text-lg text-base">
+        <span v-html="t('dashboard.sidebar.myProfile')" />
+      </RouterLink>
+      <a
+        @click="handleLogOut"
+        class=" nav-btn 2xl:text-lg text-base text-red-600 pl-4"
       >
-      <button @click="handleLogOut" class="text-left nav-btn 2xl:text-lg text-base  text-red-600 pl-4">
-        Logout
-      </button>
+        {{ t('dashboard.sidebar.logout') }}
+    </a>
     </nav>
   </div>
 </template>
-<script setup lang="ts">
-import router from '@/router'
-import { useUserStore } from '@/stores/user'
 
-const userStore = useUserStore()
+<script setup lang="ts">
+import router from '@/router';
+import { useUserStore } from '@/stores/user';
+import { useI18n } from 'vue-i18n';
+
+const userStore = useUserStore();
+const { t , locale } = useI18n();
 
 const handleLogOut = async (): Promise<void> => {
-  userStore.LogOut()
-
-  router.push({ name: 'home' })
-}
+  userStore.LogOut();
+  router.push({ name: 'home' });
+};
 </script>
 
 <style scoped>
@@ -92,7 +104,6 @@ header {
 nav {
   width: 100%;
   font-size: 12px;
-  text-align: center;
 }
 
 nav a.router-link-exact-active {
@@ -128,10 +139,8 @@ nav a {
   }
 
   nav {
-    text-align: left;
     margin-left: -1rem;
     font-size: 1rem;
-
     padding: 1rem 0;
   }
 }

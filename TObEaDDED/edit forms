@@ -9,7 +9,7 @@
                      Editing document Type {{type.name}}
                     </h1>
                     <div class="flex gap-2">
-                      <button class="mr-2 ml-auto text-t3-cancel  dark:text-red-400" v-if="scopeCheck('delete_types')" @click="deleteType">Delete</button>
+                      <button class="mr-2 ms-auto text-t3-cancel  dark:text-red-400" v-if="scopeCheck('delete_types')" @click="deleteType">Delete</button>
                       <button class=" dark:hover:text-red-300 hover:text-red-300 text-red-500 dark:text-red-400 px-4 py-2 rounded-xl" @click="cancel()">Cancel</button>
         <button class="text-white dark:text-white hover:bg-t3-light dark:hover:bg-t3-light dark:bg-t3-nightCard bg-t3 px-4 py-2 rounded-md" @click="editType()">Save Changes</button>
       </div>
@@ -131,7 +131,7 @@
             <div class="ml-3 text-center">
               <input class=" w-full bg-transparent capitalize focus:outline-none text-xl text-t3 dark:text-white font-bold" v-model="element.status" type="text" placeholder="Name of Step">
             </div>
-            <button class="mr-2 ml-auto text-t3-cancel dark:text-red-400" @click="deleteReview( index)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-t3-cencel">
+            <button class="mr-2 ms-auto text-t3-cancel dark:text-red-400" @click="deleteReview( index)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-t3-cencel">
   <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
   </svg>
   </button>
@@ -196,7 +196,7 @@
                 </div>
               </div>
           </div>
-          <div class="ml-auto px-4 border-l h-full w-44 border-t3-mutedText2 relative space-y-2  text-t3-mutedText2 dark:text-t3-mutedNight">
+          <div class="ms-auto px-4 border-l h-full w-44 border-t3-mutedText2 relative space-y-2  text-t3-mutedText2 dark:text-t3-mutedNight">
           <div v-if="element.type === 'text' || element.type === 'longtext' " >
             <div class="flex  rounded-t-xl">
               <div >
@@ -213,7 +213,7 @@
           <div v-if="element.type === 'number' || element.type === 'date' || element.type === 'country' || element.type === 'mobile' " >
             <div class="flex   rounded-t-xl">
               <div >
-                <h1 class="text-base ml-auto capitalize"> {{element.type}} Field</h1>
+                <h1 class="text-base ms-auto capitalize"> {{element.type}} Field</h1>
                 
               </div>
             </div>
@@ -294,7 +294,7 @@
               </p>
             </div>
           </div>
-          <button class="mr-2 ml-auto text-t3-cancel dark:text-red-400" @click="deleteCustomer( index)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-t3-cencel">
+          <button class="mr-2 ms-auto text-t3-cancel dark:text-red-400" @click="deleteCustomer( index)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-t3-cencel">
   <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
   </svg>
   </button>
@@ -326,7 +326,7 @@
           <p>
             {{tag.name}}
           </p>
-          <button class="mr-2 ml-auto text-t3-cancel dark:text-red-400" @click="deleteTag( index)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-t3-cencel">
+          <button class="mr-2 ms-auto text-t3-cancel dark:text-red-400" @click="deleteTag( index)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-t3-cencel">
   <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
   </svg>
   </button>

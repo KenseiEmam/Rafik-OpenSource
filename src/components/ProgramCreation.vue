@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const { t , locale } = useI18n();
+</script>
 
 <template>
   <div
@@ -11,31 +15,18 @@
     />
     <div class="w-full h-full bg-gradient-to-r from-40% from-rafik-darksecbg absolute"></div>
     <div class="col-span-3 relative space-y-4">
-      <h3 class="font-black text-rafik text-xl md:text-3xl md:title-small">CREATE PROGRAMS THAT SHOW OFF THE REAL YOU</h3>
-      <p class="text-body">
-        Our top of the line in-house tools are like nothing else on the market, allowing you
-        complete flexibility and ease of use to create tailored programs for your clients in an
-        efficient time frame.
-        <br />
-      </p>
-      <h3 class="font-bold text-rafik-secondary uppercase md:contentH-small">Our tools include but are not limited to:</h3>
+      <h3 class="font-black text-rafik text-xl md:text-3xl md:title-small">
+        {{ t('home.programCreation.headline') }}
+      </h3>
+      <p class="text-body">{{ t('home.programCreation.description') }}<br /></p>
+      <h3 class="font-bold text-rafik-secondary uppercase md:contentH-small">
+        {{ t('home.programCreation.toolsHeader') }}
+      </h3>
       <ul class="list-disc ml-6 text-body space-y-4 text-rafik-pritext dark:text-rafik-darkpritext">
-        <li>
-          An extensive library of exercises that you can use or duplicate to create your own custom
-          ones. Save these custom exercises for private use, or share them with other PTs.
-        </li>
-        <li>
-          A program creator that allows you to set metrics and create customized workout schedules
-          unbound by convential week cycles.
-        </li>
-        <li>
-          Add assissting text documents to reply to your clients outside your working hours using an
-          AI interpretter.
-        </li>
-        <li>
-          Set up your own custom pricing model and create discount codes to share with your
-          followers at a fingers touch.
-        </li>
+        <li>{{ t('home.programCreation.tools.item1') }}</li>
+        <li>{{ t('home.programCreation.tools.item2') }}</li>
+        <li>{{ t('home.programCreation.tools.item3') }}</li>
+        <li>{{ t('home.programCreation.tools.item4') }}</li>
       </ul>
     </div>
     <div class="col-span-2 relative hidden md:flex flex-col">

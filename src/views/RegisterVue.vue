@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue'
-import RegistrationForm from '../components/Forms/RegistrationForm.vue'
+import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue';
+import RegistrationForm from '../components/Forms/RegistrationForm.vue';
+import { useI18n } from 'vue-i18n';
+import Footer from '@/components/Navigation/Footer.vue';
+const { t , locale } = useI18n();
 </script>
 
 <template>
@@ -9,26 +12,25 @@ import RegistrationForm from '../components/Forms/RegistrationForm.vue'
     <Transition name="slide-fade" appear>
       <div class="grid md:grid-cols-2 items-center min-h-64 flex-1 mb-16">
         <div>
-          <h1 class="header-large mb-3">REGISTER NOW TO BECOME AN AFFILIATE</h1>
-
+          <h1 class="header-large mb-3">{{ t('register.header') }}</h1>
           <RegistrationForm />
           <h3 class="text-body">
-            Already Registered?
-            <RouterLink to="login"> Sign In Now</RouterLink>
+            {{ t('register.alreadyRegistered') }}
+            <RouterLink to="login"> {{ t('register.signInNow') }}</RouterLink>
           </h3>
         </div>
         <div class="relative">
           <div
             class="w-96 h-96 rounded-full bottom-0 opacity-80 absolute right-16 bg-rafik content"
           ></div>
-
           <img
-            class="w-128 object-cover ml-auto relative grayscale"
+            class="w-128 object-cover ms-auto relative grayscale"
             src="https://static.vecteezy.com/system/resources/thumbnails/046/464/329/small_2x/smiling-man-holding-and-pointing-at-laptop-on-transparent-background-png.png"
             alt=""
           />
         </div>
       </div>
     </Transition>
+    <Footer/>
   </main>
 </template>

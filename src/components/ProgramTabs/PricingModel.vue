@@ -3,6 +3,8 @@ import { ref, watch, nextTick } from 'vue';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
 import Swal from 'sweetalert2';
+import { useI18n } from 'vue-i18n';
+const { t, locale } = useI18n();
 // Success and Error Alerts
 
 // Function to show error alerts
@@ -47,10 +49,10 @@ const isEnabled = ref({
 
 // Reactive state for prices
 const prices = ref({
-  price_one: program.price_one ?? 0,
-  price_three: program.price_three ?? 0,
-  price_six: program.price_six ?? 0,
-  price_year: program.price_year ?? 0
+  price_one: program.price_one ?? null,
+  price_three: program.price_three ?? null,
+  price_six: program.price_six ?? null,
+  price_year: program.price_year ?? null
 });
 
 // Watch for switch toggles and update only the corresponding price
@@ -144,28 +146,26 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
   <div class="grid md:grid-cols-2 items-start relative flex-1 gap-4">
     <!-- Subscription Pricing -->
     <div class="py-8 h-full">
-      <h3 class="contentH-medium">Subscription Models</h3>
+      <h3 class="contentH-medium">{{ t('dashboard.tabs.program.pricing.subscriptionModels') }}</h3>
       <p v-if="!admin" class="text-body">
-        Enable/disable subscription packages and manage their prices. Price changes will be
-        reviewed.
+        {{ t('dashboard.tabs.program.pricing.subscriptionModelsDescriptionUser') }}
       </p>
-      <p v-else class="text-body">Subscription packages and their prices.</p>
+      <p v-else class="text-body">
+        {{ t('dashboard.tabs.program.pricing.subscriptionModelsDescriptionAdmin') }}
+      </p>
       <div class="space-y-3">
         <div
-          v-for="(label, key) in {
-            price_one: '1 Month',
-            price_three: '3 Months',
-            price_six: '6 Months',
-            price_year: '1 Year'
-          }"
+          v-for="key in ['price_one', 'price_three', 'price_six', 'price_year'] as const"
           :key="key"
           class="flex card p-6 2xl:p-8 items-center justify-between"
         >
-          <span class="font-medium">{{ label }} Subscription</span>
+        <span class="font-medium">
+          {{ t('dashboard.tabs.program.pricing.subscription', { duration: t(`dashboard.tabs.program.pricing.${key}`) }) }}
+        </span>
 
           <label
-            v-if="label !== '1 Month'"
-            class="flex items-center ml-auto mr-4 space-x-2 cursor-pointer"
+            v-if="key !== 'price_one'"
+            class="flex items-center ms-auto mr-4 space-x-2 cursor-pointer"
           >
             <input type="checkbox" v-model="isEnabled[key]" class="hidden" />
             <div
@@ -175,12 +175,14 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
             >
               <div
                 class="w-8 h-8 bg-rafik-pritext dark:bg-rafik-darkpritext rounded-full shadow-md transform transition-transform"
-                :class="{ 'translate-x-8': isEnabled[key] }"
+                :class="isEnabled[key] ? (locale === 'ar' ? '-translate-x-8' : 'translate-x-8') : ''"
               ></div>
             </div>
           </label>
           <div>
-            <h2 class="subheader-small">MONTHLY PRICE (AED)</h2>
+            <h2 class="subheader-small">
+              {{ t('dashboard.tabs.program.pricing.monthlyPriceLabel') }}
+            </h2>
             <input
               v-if="!admin"
               type="number"
@@ -190,7 +192,7 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
               :class="{ 'bg-red-500 cursor-not-allowed': !isEnabled[key] && !admin }"
             />
             <p v-else class="text-rafik-sectext dark:text-rafik-darksectext">
-              {{ prices[key] || 'N/A' }}
+              {{ prices[key] || t('dashboard.tabs.program.pricing.na') }}
             </p>
           </div>
         </div>
@@ -198,10 +200,9 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
     </div>
     <div v-if="!admin" style="height: 50vh" class="py-8 flex-col gap-3">
       <!-- Promo Codes -->
-      <h3 class="contentH-medium">Promo Codes</h3>
+      <h3 class="contentH-medium">{{ t('dashboard.tabs.program.pricing.promoCodes') }}</h3>
       <p class="text-body">
-        Type your promo code in the input below and press enter to add it. You can remove promo
-        codes and adjust their values.
+        {{ t('dashboard.tabs.program.pricing.promoCodesDescription') }}
       </p>
       <div class="card px-8 h-full overflow-y-auto">
         <div class="flex flex-col gap-4 mt-6">
@@ -210,7 +211,7 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
             v-model="newPromo"
             type="text"
             class="rafik-text-input"
-            placeholder="Add a new promo code"
+            :placeholder="t('dashboard.tabs.program.pricing.addPromoPlaceholder')"
             @keyup.enter="addPromo"
           />
 
@@ -222,14 +223,18 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
               class="flex w-full items-center p-4 2xl:p-8 gap-4"
             >
               <p class="uppercase subheader-small">{{ promo.code }}</p>
-              <div class="flex items-center ml-auto">
+              <div class="flex items-center ms-auto">
                 <div class="form-control max-w-min text-center">
-                  <label class="text-body">% DISCOUNT</label>
+                  <label class="text-body">
+                    {{ t('dashboard.tabs.program.pricing.discountLabel') }}
+                  </label>
                   <input
                     v-model="promo.value"
                     @input="updatePromoValue(promo, promo.value)"
                     type="number"
-                    :placeholder="'Value for ' + promo.code"
+                    :placeholder="
+                      t('dashboard.tabs.program.pricing.valueForPromo', { code: promo.code })
+                    "
                     class="rafik-text-input w-24 2xl:w-32 text-sm"
                   />
                 </div>
