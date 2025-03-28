@@ -3,96 +3,102 @@
     <form class="my-8 space-y-6" @submit.prevent="signUpNewUser">
       <!-- Email Field -->
       <div class="form-control">
-        <label for="email" class="block text-sm font-medium">Email Address</label>
+        <label for="email" class="block text-sm font-medium">
+          {{ t('register.form.emailLabel') }}
+        </label>
         <input
           id="email"
           v-model="email"
           class="rafik-text-input"
           type="email"
-          placeholder="rafik@example.com"
+          placeholder="rafik@example.ae"
           required
         />
       </div>
 
       <!-- Password Field -->
       <div class="form-control">
-        <label for="password" class="block text-sm font-medium">Password</label>
+        <label for="password" class="block text-sm font-medium">
+          {{ t('register.form.passwordLabel') }}
+        </label>
         <input
           id="password"
           v-model="password"
           class="rafik-text-input"
           type="password"
-          placeholder="*******"
+          :placeholder="t('register.form.passwordPlaceholder')"
           required
           @input="validatePassword"
         />
-        <ul
-          class="list-disc text-sm mt-2 ml-6 text-gray-600"
-          :class="{'text-red-500': !isPasswordValid}"
-        >
-          <li>Must be at least 8 characters long.</li>
-          <li>Must contain at least one number and one special character.</li>
-          <li>Must not be too similar to the email address.</li>
+        <ul class="list-disc text-sm mt-2 ml-6" :class="{ 'text-red-500': !isPasswordValid }">
+          <li>{{ t('register.form.passwordCriteria.item1') }}</li>
+          <li>{{ t('register.form.passwordCriteria.item2') }}</li>
+          <li>{{ t('register.form.passwordCriteria.item3') }}</li>
         </ul>
       </div>
 
       <!-- Confirm Password Field -->
       <div class="form-control">
-        <label for="confirm-password" class="block text-sm font-medium">Confirm Password</label>
+        <label for="confirm-password" class="block text-sm font-medium">
+          {{ t('register.form.confirmPasswordLabel') }}
+        </label>
         <input
           id="confirm-password"
           v-model="confirmPassword"
           class="rafik-text-input"
           type="password"
-          placeholder="*******"
+          :placeholder="t('register.form.passwordPlaceholder')"
           required
         />
       </div>
 
       <!-- Submit Button -->
       <button type="submit" class="btn-lg w-full" :disabled="!canSubmit">
-        JOIN NOW
+        {{ t('register.form.joinNowButton') }}
       </button>
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { supabase } from "@/lib/supabaseClient";
-import router from '@/router'
-import Swal from 'sweetalert2'
-// Success and Error Alerts
+import { ref, computed } from 'vue';
+import { supabase } from '@/lib/supabaseClient';
+import router from '@/router';
+import Swal from 'sweetalert2';
+import { useI18n } from 'vue-i18n';
+
+const { t , locale } = useI18n();
+
+// SweetAlert2 helper functions using translations
 function showSuccess(message: string) {
   Swal.fire({
-    title: 'Success!',
-    showConfirmButton: false,
-    timerProgressBar: true,
-    timer: 1500,
+    title: t('general.success'),
     text: message,
+    icon: 'success',
     toast: true,
     position: 'top-right',
-    icon: 'success',
+    showConfirmButton: false,
+    timer: 1500,
+    timerProgressBar: true,
     background: '#081411',
-    color: '#E8F3ED',
-  })
+    color: '#E8F3ED'
+  });
 }
 
-// Function to show error alerts
 function showError(message: string) {
   Swal.fire({
-    title: 'Error!',
+    title: t('general.error'),
     text: message,
     icon: 'error',
     confirmButtonColor: '#d33',
-    cancelButtonColor: '#d33',
     background: '#081411',
-    color: '#E8F3ED',
-  })
+    color: '#E8F3ED'
+  });
 }
-const email = ref<string>("");
-const password = ref<string>("");
-const confirmPassword = ref<string>("");
+
+const email = ref<string>('');
+const password = ref<string>('');
+const confirmPassword = ref<string>('');
 
 // Reactive validation states
 const isPasswordValid = ref<boolean>(false);
@@ -113,20 +119,23 @@ async function signUpNewUser() {
     try {
       const { error } = await supabase.auth.signUp({
         email: email.value,
-        password: password.value,
-
+        password: password.value
       });
 
       if (error) throw error;
-      router.push({name:'login'});
-      showSuccess("Registration successful! Check your email to confirm your account.");
+      router.push({ name: 'login' });
+      showSuccess(t('register.form.successMessage'));
+      // Reset form fields
+      email.value = '';
+      password.value = '';
+      confirmPassword.value = '';
     } catch (error) {
       if (error instanceof Error) {
-       showError(`Error: ${error.message}`);
+        showError(t('register.form.errorSending') + error.message);
       }
     }
   } else {
-   showError("Please ensure the form meets all requirements before submitting.");
+    showError(t('register.form.requirementsError'));
   }
 }
 </script>

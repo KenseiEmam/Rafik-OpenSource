@@ -1,89 +1,144 @@
 <script setup lang="ts">
-
+import { useI18n } from 'vue-i18n';
+const { t, tm, rt } = useI18n();
 </script>
 
 <template>
-  <div class="dark text-body flex-1 relative ">
+  <div class="dark text-body flex-1 relative">
+    <div class="container mx-auto px-4 py-16">
+      <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
+        <!-- Main Title -->
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">
+          {{ t('privacy.title') }}
+        </h1>
 
-  <div class="container mx-auto px-4 py-16">
-    <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
-      <h1 class="text-3xl font-bold text-gray-800 mb-4">Privacy Policy for Rafik Fitness Squire</h1>
+        <!-- Section 1: Introduction -->
+        <section class="mt-6">
+          <h2 class="text-2xl font-semibold text-gray-700">
+            {{ t('privacy.sections.introduction.title') }}
+          </h2>
+          <p class="text-gray-600 mt-2">
+            {{ t('privacy.sections.introduction.content') }}
+          </p>
+        </section>
 
-      <section class="mt-6">
-        <h2 class="text-2xl font-semibold text-gray-700">1. Introduction</h2>
-        <p class="text-gray-600 mt-2">Welcome to Rafik Fitness Squire! Your privacy is important to us, and we are committed to protecting your personal data. This Privacy Policy outlines how we collect, use, and safeguard your information when you use our app.</p>
-      </section>
+        <!-- Section 2: Information We Collect -->
+        <section class="mt-6">
+          <h2 class="text-2xl font-semibold text-gray-700">
+            {{ t('privacy.sections.informationCollected.title') }}
+          </h2>
+          <ul class="list-disc list-inside text-gray-600 mt-2">
+            <li
+              v-for="(item, index) in tm('privacy.sections.informationCollected.items')"
+              :key="index"
+              v-html="rt(item)"
+            ></li>
+          </ul>
+        </section>
 
-      <section class="mt-6">
-        <h2 class="text-2xl font-semibold text-gray-700">2. Information We Collect</h2>
-        <ul class="list-disc list-inside text-gray-600 mt-2">
-          <li><strong>Account Information:</strong> Name, email address, and password.</li>
-          <li><strong>Profile Information:</strong> Users are required to upload a profile photo.</li>
-          <li><strong>Health and Fitness Data:</strong> Data entered about workouts, diet, weight, and health metrics.</li>
-          <li><strong>Device and Usage Data:</strong> Technical information like IP address, device type, and usage patterns.</li>
-        </ul>
-      </section>
+        <!-- Section 3: How We Use Your Information -->
+        <section class="mt-6">
+          <h2 class="text-2xl font-semibold text-gray-700">
+            {{ t('privacy.sections.howWeUse.title') }}
+          </h2>
+          <ul class="list-disc list-inside text-gray-600 mt-2">
+            <li v-for="(item, index) in tm('privacy.sections.howWeUse.items')" :key="index">
+              {{ item }}
+            </li>
+          </ul>
+        </section>
 
-      <section class="mt-6">
-        <h2 class="text-2xl font-semibold text-gray-700">3. How We Use Your Information</h2>
-        <ul class="list-disc list-inside text-gray-600 mt-2">
-          <li>To provide, maintain, and improve our app’s features.</li>
-          <li>To personalize your fitness experience and track progress.</li>
-          <li>To communicate updates, features, and support inquiries.</li>
-          <li>To ensure security and prevent unauthorized access.</li>
-        </ul>
-      </section>
+        <!-- Section 4: Data Sharing and Disclosure -->
+        <section class="mt-6">
+          <h2 class="text-2xl font-semibold text-gray-700">
+            {{ t('privacy.sections.dataSharing.title') }}
+          </h2>
+          <ul class="list-disc list-inside text-gray-600 mt-2">
+            <li
+              v-for="(item, index) in tm('privacy.sections.dataSharing.items')"
+              :key="index"
+              v-html="rt(item)"
+            ></li>
+          </ul>
+        </section>
 
-      <section class="mt-6">
-        <h2 class="text-2xl font-semibold text-gray-700">4. Data Sharing and Disclosure</h2>
-        <ul class="list-disc list-inside text-gray-600 mt-2">
-          <li><strong>Service Providers:</strong> Trusted third-party services assisting with app functionality.</li>
-          <li><strong>Legal Requirements:</strong> Compliance with legal obligations when necessary.</li>
-        </ul>
-      </section>
+        <!-- Section 5: Data Security -->
+        <section class="mt-6">
+          <h2 class="text-2xl font-semibold text-gray-700">
+            {{ t('privacy.sections.dataSecurity.title') }}
+          </h2>
+          <p class="text-gray-600 mt-2">
+            {{ t('privacy.sections.dataSecurity.content') }}
+          </p>
+        </section>
 
-      <section class="mt-6">
-        <h2 class="text-2xl font-semibold text-gray-700">5. Data Security</h2>
-        <p class="text-gray-600 mt-2">We implement security measures to protect your data. However, no method is completely secure, so we encourage safeguarding account credentials.</p>
-      </section>
+        <!-- Section 6: Your Rights and Choices -->
+        <section class="mt-6">
+          <h2 class="text-2xl font-semibold text-gray-700">
+            {{ t('privacy.sections.yourRights.title') }}
+          </h2>
+          <ul class="list-disc list-inside text-gray-600 mt-2">
+            <li v-for="(item, index) in tm('privacy.sections.yourRights.items')" :key="index">
+              {{ item }}
+            </li>
+          </ul>
+        </section>
 
-      <section class="mt-6">
-        <h2 class="text-2xl font-semibold text-gray-700">6. Your Rights and Choices</h2>
-        <ul class="list-disc list-inside text-gray-600 mt-2">
-          <li>Access, update, or delete account information.</li>
-          <li>Request removal of personal data.</li>
-          <li>Adjust app settings for profile visibility.</li>
-        </ul>
-      </section>
+        <!-- Section 7: Data Retention -->
+        <section class="mt-6">
+          <h2 class="text-2xl font-semibold text-gray-700">
+            {{ t('privacy.sections.dataRetention.title') }}
+          </h2>
+          <p class="text-gray-600 mt-2">
+            {{ t('privacy.sections.dataRetention.content') }}
+          </p>
+        </section>
 
-      <section class="mt-6">
-        <h2 class="text-2xl font-semibold text-gray-700">7. Data Retention</h2>
-        <p class="text-gray-600 mt-2">We retain data as necessary for service provision or as required by law. Deleted accounts result in permanent data removal, except where retention is legally required.</p>
-      </section>
+        <!-- Section 8: Children's Privacy -->
+        <section class="mt-6">
+          <h2 class="text-2xl font-semibold text-gray-700">
+            {{ t('privacy.sections.childrensPrivacy.title') }}
+          </h2>
+          <p class="text-gray-600 mt-2">
+            {{ t('privacy.sections.childrensPrivacy.content') }}
+          </p>
+        </section>
 
-      <section class="mt-6">
-        <h2 class="text-2xl font-semibold text-gray-700">8. Children’s Privacy</h2>
-        <p class="text-gray-600 mt-2">Rafik Fitness Squire is not intended for children under 13. If data from a child is discovered, we will take steps to remove it.</p>
-      </section>
+        <!-- Section 9: Changes to This Privacy Policy -->
+        <section class="mt-6">
+          <h2 class="text-2xl font-semibold text-gray-700">
+            {{ t('privacy.sections.policyChanges.title') }}
+          </h2>
+          <p class="text-gray-600 mt-2">
+            {{ t('privacy.sections.policyChanges.content') }}
+          </p>
+        </section>
 
-      <section class="mt-6">
-        <h2 class="text-2xl font-semibold text-gray-700">9. Changes to This Privacy Policy</h2>
-        <p class="text-gray-600 mt-2">We may update this policy periodically. Continued use of the app after updates constitutes acceptance of the revised policy.</p>
-      </section>
+        <!-- Section 10: Contact Us -->
+        <section class="mt-6">
+          <h2 class="text-2xl font-semibold text-gray-700">
+            {{ t('privacy.sections.contactUs.title') }}
+          </h2>
+          <p class="text-gray-600 mt-2">
+            {{ t('privacy.sections.contactUs.content') }}
+          </p>
+        </section>
 
-      <section class="mt-6">
-        <h2 class="text-2xl font-semibold text-gray-700">10. Contact Us</h2>
-        <p class="text-gray-600 mt-2">If you have any questions, contact us at [Insert Contact Email].</p>
-      </section>
-
-      <section class="mt-6">
-        <h2 class="text-2xl font-semibold text-gray-700">11. Request Account & Data Deletion</h2>
-        <p class="text-gray-600 mt-2">If you wish to delete your account and associated data, please visit <a href="https://rafikapp.ae/delete-account" class="text-blue-500 hover:underline">rafikapp.ae/delete-account</a>. Once your request is submitted, your data will be permanently removed, except where retention is legally required.</p>
-      </section>
+        <!-- Section 11: Request Account & Data Deletion -->
+        <section class="mt-6">
+          <h2 class="text-2xl font-semibold text-gray-700">
+            {{ t('privacy.sections.accountDeletion.title') }}
+          </h2>
+          <p
+            class="text-gray-600 mt-2"
+            v-html="rt(t('privacy.sections.accountDeletion.content'))"
+          ></p>
+        </section>
+      </div>
     </div>
   </div>
-  </div>
 </template>
-<style>
 
+<style>
+/* Additional styling if needed */
 </style>

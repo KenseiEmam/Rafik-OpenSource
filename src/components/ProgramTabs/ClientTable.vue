@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-12">
+  <div :dir="locale === 'ar' ? 'rtl' : 'ltr'" class="mt-12">
     <!-- Search Section -->
     <div class="flex items-center justify-between mb-4 gap-6">
       <div class="flex gap-3">
@@ -7,12 +7,14 @@
         <input
           v-model="searchQuery"
           type="text"
-          placeholder="Search by name or email..."
+          :placeholder="t('dashboard.tabs.program.clients.searchPlaceholder')"
           class="rafik-text-input border rounded-lg w-64"
         />
       </div>
       <hr class="w-full border-rafik-sectext dark:border-rafik-darksectext border-b" />
-      <span class="text-sm">Showing {{ filteredClients.length }} row(s)</span>
+      <span class="text-sm">{{
+        t('dashboard.tabs.program.clients.showingText', { count: filteredClients.length })
+      }}</span>
     </div>
 
     <!-- Client Table -->
@@ -20,10 +22,10 @@
       <thead class="font-bold">
         <tr>
           <th></th>
-          <th>Date Joined</th>
-          <th>Expires On</th>
-          <th>Plan (Months)</th>
-          <th>Status</th>
+          <th>{{ t('dashboard.tabs.program.clients.dateJoined') }}</th>
+          <th>{{ t('dashboard.tabs.program.clients.expiresOn') }}</th>
+          <th>{{ t('dashboard.tabs.program.clients.planMonths') }}</th>
+          <th>{{ t('dashboard.tabs.program.clients.status') }}</th>
           <th></th>
         </tr>
       </thead>
@@ -72,7 +74,8 @@
           <td>
             {{
               client.program_details.length
-                ? client.program_details[0].months_package + ' month'
+                ? client.program_details[0].months_package +
+                  ` ${t('dashboard.tabs.program.clients.months')}`
                 : '-'
             }}
           </td>
@@ -103,33 +106,37 @@
                 }"
                 class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded"
               >
-                View Client
+                {{ t('dashboard.tabs.program.clients.viewClient') }}
               </Router-link>
               <!-- Only show Remove Client if not in admin (read-only) mode -->
               <button
                 v-if="!admin"
                 class="px-3 py-5 text-red-500 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-red-300 rounded"
               >
-                Remove Client
+                {{ t('dashboard.tabs.program.clients.removeClient') }}
               </button>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
-    <p v-else class="my-16 w-full text-center text-sm text-body">No clients just yet!</p>
+    <p v-else class="my-16 w-full text-center text-sm text-body">
+      {{ t('dashboard.tabs.program.clients.noClients') }}
+    </p>
     <!-- Pagination -->
     <div v-if="totalPages > 1" class="flex justify-between items-center mt-4">
       <button @click="prevPage" :disabled="currentPage === 1" class="px-4 py-2 border rounded-lg">
-        Prev
+        {{ t('dashboard.tabs.program.clients.prev') }}
       </button>
-      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <span>{{
+        t('dashboard.tabs.program.clients.pageText', { current: currentPage, total: totalPages })
+      }}</span>
       <button
         @click="nextPage"
         :disabled="currentPage === totalPages"
         class="px-4 py-2 border rounded-lg"
       >
-        Next
+        {{ t('dashboard.tabs.program.clients.next') }}
       </button>
     </div>
   </div>
@@ -138,6 +145,8 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue';
 import { useUserStore } from '@/stores/user';
+import { useI18n } from 'vue-i18n';
+const { t, locale } = useI18n();  // Added locale to dynamically change direction
 
 // Define props including the new "admin" boolean prop
 const props = defineProps({

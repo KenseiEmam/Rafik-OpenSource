@@ -1,0 +1,1334 @@
+{
+  "lang": {
+    "en": "English",
+    "ar": "العربية"
+  },
+  "general": {
+    "rafik": "Rafik",
+    "loading": "Loading...",
+    "success": "Success!",
+    "error": "Error!",
+    "opened": "Opened",
+    "seen": "Seen",
+    "na": "N/A"
+  },
+
+  "footer": {
+    "about": "About",
+    "download": "Download",
+    "contact": "Contact",
+    "privacyPolicy": "Privacy Policy",
+    "deleteAccount": "Delete Account"
+  },
+  "header": {
+    "nav": {
+      "home": "Home",
+      "about": "About",
+      "team": "Team",
+      "getApp": "Get App",
+      "contactUs": "Contact Us"
+    },
+    "auth": {
+      "login": "Login",
+      "register": "Register",
+      "hello": "HELLO {name}!",
+      "accessDashboard": "Access Dashboard",
+      "logout": "Logout"
+    }
+  },
+  "home": {
+    "welcome": {
+      "traineeQuery": "Are you a trainee looking for trainers?",
+      "getOurApp": "Get Our App",
+      "headline1": "READY TO OPTIMIZE YOUR ONLINE TRAINING?",
+      "headline2": "JOIN NOW AND ENTER OUR AFFILIATE PROGRAM",
+      "accessDashboard": "ACCESS THE DASHBOARD",
+      "trainerAccess": "Trainer dashboard access only on PC",
+      "traineeGetApp": "Trainee? Get Our App"
+    },
+    "programCreation": {
+      "headline": "CREATE PROGRAMS THAT SHOW OFF THE REAL YOU",
+      "description": "Our top of the line in-house tools are like nothing else on the market, allowing you complete flexibility and ease of use to create tailored programs for your clients in an efficient time frame.",
+      "toolsHeader": "Our tools include but are not limited to:",
+      "tools": {
+        "item1": "An extensive library of exercises that you can use or duplicate to create your own custom ones. Save these custom exercises for private use, or share them with other PTs.",
+        "item2": "A program creator that allows you to set metrics and create customized workout schedules unbound by conventional week cycles.",
+        "item3": "Add assisting text documents to reply to your clients outside your working hours using an AI interpreter.",
+        "item4": "Set up your own custom pricing model and create discount codes to share with your followers at a fingers touch."
+      }
+    },
+    "clientManagement": {
+      "unparalleled": "UNPARALLELLED",
+      "management": "CLIENT MANAGEMENT",
+      "filterClients": "Search and filter all your clients to your desired priorities and scheduled needs.",
+      "zoomClientLogs": "Zoom in and take an even deeper look into your client's daily lives from their detailed workout and diet logs.",
+      "entitlementSystem": "Sign up clients at your own rates and prices then add them to your programs using our entitlement system.",
+      "clientInsights": "Get all your client insights and customize their individual workout plan."
+    },
+    "form": {
+      "header": "Would Love to Hear From You",
+      "description": "Have a question about our training? Our Models? Our Services? Reach us through the methods down below!",
+      "call": {
+        "label": "Give us a call:",
+        "number": "mob: +971 56 866 3114"
+      },
+      "mail": {
+        "label": "Mail us:"
+
+      },
+      "find": {
+        "label": "Find Us At:",
+        "address": "Enter address here..."
+      },
+      "sendMessage": "Send us A Message",
+      "formLabels": {
+        "fullName": "Full Name",
+        "email": "Email Address",
+        "message": "Message"
+      },
+      "formPlaceholders": {
+        "fullName": "rafik",
+
+        "message": "Write us a message here..."
+      },
+      "sendButton": "SEND",
+      "successMessage": "Email sent successfully!",
+      "errorSending": "Error sending email: "
+    }
+  },
+  "about": {
+    "pageTitle": "ABOUT RAFIK",
+    "pageSubtitle": "THE FITNESS SQUIRE FOR ALL",
+    "description": "In an era where fitness information is everywhere, navigating the noise has never been harder. While science-backed knowledge is more accessible than ever, social media has also given rise to self-proclaimed \"experts\" who mislead people with flashy trends and empty promises—draining their time, money, and sometimes even harming their health.<br><br>That's why we created <strong>Rafik</strong>. We believe that <strong>everyone deserves access to reliable fitness expertise</strong>—guidance that is not only effective but also ethical and sustainable. However, we also understand the challenges: in-person coaching can be expensive, and finding the right <strong>online</strong> trainer can feel like a gamble. <strong>Rafik eliminates the guesswork</strong> by <strong>connecting you with the right trainer</strong> while ensuring <strong>accountability</strong> at every step.<br><br>And to the trainers—<strong>we've got your back, too!</strong> By sharing your <strong>verified</strong> programs on our platform, you gain access to a <strong>serious and dedicated audience</strong> who genuinely wants to transform their lives. Rafik helps you <strong>manage, track, and grow your client base</strong> while ensuring your hard work gets the <strong>recognition it deserves</strong> through a fair and transparent review system.<br><br><strong>Rafik is our gift to the fitness community—we hope you enjoy it!</strong>",
+    "visionTitle": "Our Vision",
+    "visionDescription": "To empower individuals in the MENA to achieve their fitness goals with confidence and accountability, by providing personalized and reliable connections to expert trainers at affordable prices.",
+    "missionTitle": "Our Mission",
+    "missionDescription": "At Rafik, we connect people to fitness professionals who truly understand their needs, ensuring a tailored journey with measurable results. Through a platform built on trust, expertise, and accountability, we aim to foster a supportive community where everyone can reach their full potential, no matter their starting point."
+  },
+  "team": {
+    "meetTheFounders": "MEET THE FOUNDERS",
+    "subtitle": "from fitness enthusiasts to fitness enthusiasts",
+    "members": {
+      "mohamed": {
+        "name": "Mohamed Marei",
+        "qualification": "CPT & Software Engineer",
+        "role": "CHIEF EXECUTIVE OFFICER"
+      },
+      "abdulMounem": {
+        "name": "AbdulMounem Shetta",
+        "qualification": "CPT & Nutritionist",
+        "role": "CHIEF OPERATIONS OFFICER"
+      },
+      "sami": {
+        "name": "Sami Walid Azzam",
+        "qualification": "MS in Computer Engineering",
+        "role": "CHIEF TECHNOLOGY OFFICER"
+      }
+    }
+  },
+  "application": {
+    "alert": "Text Us!",
+    "lookingForTrainer": "Looking for your perfect trainer?",
+    "installOur": "INSTALL OUR",
+    "rafik": "RAFIK SQUIRE APP",
+    "description": "Optimize your training, diet, sports performance and more, with nifty pricing, certified trainers, and communication to keep your programs customized to your needs.",
+    "download": {
+      "downloadOnThe": "Download on the",
+      "appStore": "App Store",
+      "getItOn": "GET IT ON",
+      "googlePlay": "Google Play"
+    },
+    "errorMessage": "Contact us at admin@rafikapp.ae to get access!"
+  },
+  "login": {
+    "welcomeBack": "WELCOME BACK! TIME TO CATCH-UP",
+    "notRegisteredYet": "Not Registered Yet?",
+    "signUpNow": "Sign Up Now",
+    "form": {
+      "email": "Email Address",
+      "password": "Password",
+      "loading": "Loading",
+      "access": "Access Dashboard"
+    }
+  },
+  "register": {
+    "header": "REGISTER NOW TO BECOME AN AFFILIATE",
+    "alreadyRegistered": "Already Registered?",
+    "signInNow": "Sign In Now",
+    "form": {
+      "emailLabel": "Email Address",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "*******",
+      "confirmPasswordLabel": "Confirm Password",
+      "joinNowButton": "JOIN NOW",
+      "passwordCriteria": {
+        "item1": "Must be at least 8 characters long.",
+        "item2": "Must contain at least one number and one special character.",
+        "item3": "Must not be too similar to the email address."
+      },
+      "successMessage": "Registration successful! Check your email to confirm your account.",
+      "errorSending": "Error: ",
+      "requirementsError": "Please ensure the form meets all requirements before submitting."
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy for Rafik Fitness Squire",
+    "sections": {
+      "introduction": {
+        "title": "1. Introduction",
+        "content": "Welcome to Rafik Fitness Squire! Your privacy is important to us, and we are committed to protecting your personal data. This Privacy Policy outlines how we collect, use, and safeguard your information when you use our app."
+      },
+      "informationCollected": {
+        "title": "2. Information We Collect",
+        "items": [
+          "<strong>Account Information:</strong> Name, email address, and password.",
+          "<strong>Profile Information:</strong> Users are required to upload a profile photo.",
+          "<strong>Health and Fitness Data:</strong> Data entered about workouts, diet, weight, and health metrics.",
+          "<strong>Device and Usage Data:</strong> Technical information like IP address, device type, and usage patterns."
+        ]
+      },
+      "howWeUse": {
+        "title": "3. How We Use Your Information",
+        "items": [
+          "To provide, maintain, and improve our app's features.",
+          "To personalize your fitness experience and track progress.",
+          "To communicate updates, features, and support inquiries.",
+          "To ensure security and prevent unauthorized access."
+        ]
+      },
+      "dataSharing": {
+        "title": "4. Data Sharing and Disclosure",
+        "items": [
+          "<strong>Service Providers:</strong> Trusted third-party services assisting with app functionality.",
+          "<strong>Legal Requirements:</strong> Compliance with legal obligations when necessary."
+        ]
+      },
+      "dataSecurity": {
+        "title": "5. Data Security",
+        "content": "We implement security measures to protect your data. However, no method is completely secure, so we encourage safeguarding account credentials."
+      },
+      "yourRights": {
+        "title": "6. Your Rights and Choices",
+        "items": [
+          "Access, update, or delete account information.",
+          "Request removal of personal data.",
+          "Adjust app settings for profile visibility."
+        ]
+      },
+      "dataRetention": {
+        "title": "7. Data Retention",
+        "content": "We retain data as necessary for service provision or as required by law. Deleted accounts result in permanent data removal, except where retention is legally required."
+      },
+      "childrensPrivacy": {
+        "title": "8. Children's Privacy",
+        "content": "Rafik Fitness Squire is not intended for children under 13. If data from a child is discovered, we will take steps to remove it."
+      },
+      "policyChanges": {
+        "title": "9. Changes to This Privacy Policy",
+        "content": "We may update this policy periodically. Continued use of the app after updates constitutes acceptance of the revised policy."
+      },
+      "contactUs": {
+        "title": "10. Contact Us",
+        "content": "If you have any questions, contact us at [Insert Contact Email]."
+      },
+      "accountDeletion": {
+        "title": "11. Request Account & Data Deletion",
+        "content": "If you wish to delete your account and associated data, please visit <a href=\"https://rafikapp.ae/delete-account\" class=\"text-blue-500 hover:underline\">rafikapp.ae/delete-account</a>. Once your request is submitted, your data will be permanently removed, except where retention is legally required."
+      }
+    }
+  },
+  "deleteAccount": {
+    "header": "Request Account & Data Deletion",
+    "description": "Fill in your details below to request the deletion of your account and associated data.",
+    "form": {
+      "emailLabel": "Email Address",
+      "fullNameLabel": "Full Name",
+      "confirmLabel": "I understand that this action is irreversible.",
+      "submitButton": "Submit Request",
+      "processing": "Processing...",
+      "successMessage": "Your request has been submitted. We will process it shortly.",
+      "errorSubmitting": "Error submitting request: "
+    }
+  },
+  "dashboard": {
+    "sidebar": {
+      "myDashboard": "My <br />Dashboard",
+      "workoutPrograms": "Workout &<br />Programs",
+      "myClients": "My <br />Clients",
+      "programEntitlements": "Program <br />Entitlements",
+      "listOfUsers": "List of <br />Users",
+      "auditPrograms": "Audit<br />Programs",
+      "settingsPreferences": "Settings &<br />Preferences",
+      "support": "Support",
+      "myProfile": "My Profile",
+      "logout": "Logout"
+    },
+    "home": {
+      "welcomeBack": "Welcome Back",
+      "description": "We've kept an eye on your clients and programs while you were gone and made some charts. Please take your time to check them out below.",
+      "button": {
+        "viewProfile": "View Profile",
+        "checkCharts": "Check Charts",
+        "settings": "Settings"
+      },
+      "stats": "Statistics Dashboard <br> Coming Soon"
+    },
+    "users": {
+      "list": {
+        "pageTitle": {
+          "subheader": "All",
+          "header": "Users"
+        },
+        "searchPlaceholder": "Type to Search Users...",
+        "filters": {
+          "allUsers": "All Users",
+          "trainer": "Trainer",
+          "trainee": "Trainee",
+          "customerCare": "Customer Care"
+        },
+        "tableHeaders": {
+          "id": "ID",
+          "details": "Details",
+          "roles": "Roles",
+          "gender": "Gender",
+          "age": "Age"
+        },
+        "actions": {
+          "viewUser": "View User",
+          "deleteUser": "Delete User"
+        },
+        "loading": "Loading...",
+        "noUsersFound": "No Users found for your query.",
+        "pagination": {
+          "page": "Page {page}",
+          "previousPage": "Previous Page",
+          "nextPage": "Next Page"
+        }
+      },
+      "single": {
+        "loading": "Loading...",
+        "status": {
+          "online": "Online",
+          "away": "Away"
+        },
+        "details": {
+          "status": "Status",
+          "dateJoined": "Date Joined",
+          "lastActive": "Last Active"
+        },
+        "actions": {
+          "suspendUser": "Suspend User",
+          "banUser": "Ban User",
+          "activateUser": "Activate",
+          "deleteUser": "Delete User"
+        },
+        "tabs": {
+          "generalDetails": "General Details",
+          "trainerDetails": "Trainer Details",
+          "traineeDetails": "Trainee Details",
+          "certifications": "Certifications",
+          "workoutPlan": "Workout-Plan"
+        },
+        "never": "Never"
+      }
+    },
+    "clients": {
+      "details": {
+        "clientIsOnline": "Client is online",
+        "clientIsOffline": "Client is offline",
+        "successTitle": "Success!",
+        "errorTitle": "Error!",
+        "clientNotFound": "Client not found!",
+        "failedToLoadClient": "Failed to load client details.",
+        "changeSuccessful": "Change successful!",
+        "failedToChange": "Failed to change. Please try again.",
+        "cancelConfirmTitle": "Hold!",
+        "cancelConfirmText": "Please be sure that once cancelled, the program subscription cannot be uncancelled and the client will be lost.",
+        "cancelConfirmButton": "Proceed!",
+        "noUserIdFound": "No UserID found.",
+        "noUserProgramFound": "No user program found in store.",
+        "errorCreatingCancellation": "Error creating cancellation",
+        "cancellationInReview": "Cancellation is now in review!",
+        "errorCancellingProgram": "Error cancelling program.",
+        "updatedSuccessfully": "Field updated successfully!",
+        "failedToUpdateField": "Failed to update this field. Please try again.",
+        "loading": "Loading...",
+        "online": "Online",
+        "away": "Away",
+        "statusLabel": "Status:",
+        "workoutIteration": "Workout-Iteration",
+        "dietLastLogged": "Diet Last Logged:",
+        "noLogs": "No Logs",
+        "progress": "Progress:",
+        "changeProgram": "Change Program",
+        "cancelSubscription": "Cancel Subscription",
+        "cancellationPending": "Cancellation Pending",
+        "subscriptionCancelled": "X Subscription Cancelled",
+        "detailsTab": "Details",
+        "workoutPlanTab": "Workout-Plan",
+        "workoutLogTab": "Workout-Log",
+        "dietLogTab": "Diet-Log",
+        "statisticsTab": "Statistics"
+      },
+      "list": {
+        "active": "Active",
+        "clients": "Clients",
+        "loading": "Loading...",
+        "prev": "<<",
+        "next": ">>",
+        "pageLabel": "Page:",
+        "dateJoined": "Date Joined",
+        "expiresOn": "Expires On",
+        "planMonths": "Plan (Months)",
+        "status": "Status",
+        "pageSize": "Page size",
+        "totalClients": "total clients",
+        "monthsSuffix": "months",
+        "viewProgram": "View Program",
+        "messageClient": "Message Client",
+        "removeClient": "Remove Client"
+      }
+    },
+    "auditPrograms": {
+      "list": {
+        "pageTitle": {
+          "subheader": "all",
+          "header": "program"
+        },
+        "searchPlaceholder": "Search by name/description ...",
+        "selectTrainer": {
+          "label": "Select Trainer",
+          "placeholder": "Search for trainer..."
+        },
+        "filters": {
+          "allPrograms": "All Programs",
+          "active": "Active",
+          "draft": "Draft",
+          "review": "Review"
+        },
+        "tableHeaders": {
+          "programName": "Program Name",
+          "difficulty": "Difficulty",
+          "status": "Status",
+          "trainer": "Trainer",
+          "price": "Price (AED/Month)",
+          "workoutsPerWeek": "Workouts/Week"
+        },
+        "actions": {
+          "viewProgram": "View Program",
+          "deleteProgram": "Delete Program"
+        },
+        "loading": "Loading...",
+        "noResults": "No Programs found for your query.",
+        "pagination": {
+          "page": "Page {page}",
+          "previousPage": "Previous Page",
+          "nextPage": "Next Page"
+        }
+      },
+      "single": {
+        "pageTitle": {
+          "subheader": "all",
+          "header": "program"
+        },
+        "loading": "Loading...",
+        "avgSessionTime": "mins/session",
+        "daysPerWeek": "days/week",
+        "actions": {
+          "acceptPublish": "Accept Publish Request",
+          "denyRequest": "Deny Request",
+          "resetToDraft": "Reset to Draft (Suspend)"
+        },
+        "tabs": {
+          "details": "Details",
+          "workouts": "Workouts",
+          "clients": "Clients",
+          "pricing": "Pricing"
+        },
+        "alt": {
+          "programPhoto": "Program Photo"
+        }
+      }
+    },
+    "tabs": {
+      "user": {
+        "general": {
+          "userProfile": "User Profile",
+          "age": "Age",
+          "gender": "Gender",
+          "nationality": "Nationality",
+          "phone": "Phone",
+          "roles": "Roles",
+          "moneyGenerated": "Money Generated",
+          "moneySpent": "Money Spent",
+          "moneyOwed": "Money Owed",
+          "comingSoon": "Coming Soon",
+          "auditLogs": "Audit Logs",
+          "logsUpdateComingSoon": "Logs update coming soon!",
+          "na": "N/A"
+        },
+        "trainer": {
+          "trainerBio": "Trainer Bio",
+          "trainerData": "Trainer Data",
+          "title": "Title",
+          "yearsOfExperience": "Years of Experience",
+          "maxClients": "Maximum Clients",
+          "availableHours": "Available Hours",
+          "worksWith": "Works with",
+          "na": "N/A",
+          "years": "years",
+          "listOfPrograms": "List of Programs",
+          "created": "Created",
+          "viewProgram": "View Program"
+        },
+        "trainee": {
+          "clientMetrics": "Client Metrics",
+          "height": "Height",
+          "weight": "Weight",
+          "goalWeight": "Goal Weight",
+          "bodyFatPercent": "Body Fat Percent",
+          "experience": "Experience",
+          "fitnessGoal": "Fitness Goal",
+          "sportsPlayed": "Sports Played",
+          "dietPreference": "Diet Preference",
+          "clientProgram": "Client Program",
+          "joinedOn": "Joined On",
+          "expiresOn": "Expires On",
+          "pricePackage": "Price Package",
+          "trainer": "Trainer",
+          "visitProgram": "Visit Program",
+          "notAssigned": "Not Assigned To Any Programs",
+          "loading": "Loading...",
+          "na": "N/A",
+          "nonePaying": "None Paying",
+          "errorFetchingWeight": "Error fetching weight: ",
+          "unexpectedErrorFetchingWeight": "Unexpected error fetching weight: ",
+          "errorFetchingProgram": "Error fetching program: ",
+          "unexpectedErrorFetchingProgram": "Unexpected error fetching program: ",
+          "errorFetchingTrainerName": "Error fetching trainer name: "
+        }
+      },
+      "settings": {
+        "general": {
+          "unitsAndMeasurements": "Units and Measurements",
+          "unitsExplanation": "The units displayed to you when viewing our dashboard do not affect the units viewed by clients!",
+          "metricOption": "Metric (cm/kg)",
+          "imperialOption": "Imperial (inch/lb)",
+          "languages": "Languages",
+          "languageExplanation": "Choose the display language for your user dashboard, this also does not affect your trainees!",
+          "english": "English",
+          "arabic": "Arabic",
+          "theme": "Theme",
+          "themeExplanation": "Choose your preference between a dark minty theme and a light creamy theme!",
+          "coolNight": "Cool Night",
+          "warmSunshine": "Warm Sunshine",
+          "deleteAccount": "Delete Account"
+        },
+        "rolesAndPerms": {
+          "showingRolesFor": "Showing Roles for {firstName} {lastName}",
+          "noUserSelected": "No User Selected Yet!",
+          "selectUser": "Select User to view their roles:",
+          "searchPlaceholder": "Search for user...",
+          "rolesUpdated": "Roles updated successfully",
+          "errorUpdatingRoles": "Error updating roles: "
+        },
+        "trainer": {
+          "seatsAvailable": "Seats Available",
+          "adjustSeats": "Adjust the number of seats available for training sessions.",
+          "followUpInterval": "Follow Up Interval",
+          "setFollowUp": "Set the number of days between client follow-up forms.",
+          "workingHours": "Working Hours",
+          "selectWorkingHours": "Select your available working hours for training sessions.",
+          "allDay": "All Day"
+        }
+      },
+      "program": {
+        "add": {
+          "addProgram": "Add Program",
+          "newProgramsMessage": "New programs will be set to the status of draft. You may have up to 3 active programs at a time and 3 drafts.",
+          "programPhoto": "Program Photo",
+          "removeImage": "Remove Image",
+          "dragAndDrop": "Drag and drop an image here, or click to upload",
+          "programName": "Program Name",
+          "programDescription": "Program Description",
+          "difficultyLevel": "Difficulty Level",
+          "selectDifficultyLevel": "Select Difficulty Level",
+          "foundational": "Foundational",
+          "beginner": "Beginner",
+          "intermediate": "Intermediate",
+          "advanced": "Advanced",
+          "cancel": "Cancel",
+          "uploadImageError": "Please upload a program photo.",
+          "uploadError": "Error uploading file:",
+          "uploadErrorMessage": "Failed to upload the program photo. Please try again.",
+          "urlError": "Failed to retrieve the URL for the program photo.",
+          "programNameRequired": "Program name is required.",
+          "programDescriptionRequired": "Program description is required.",
+          "difficultyLevelRequired": "Please select a difficulty level."
+        },
+        "clients": {
+          "searchPlaceholder": "Search by name or email...",
+          "showingText": "Showing {count} row(s)",
+          "dateJoined": "Date Joined",
+          "expiresOn": "Expires On",
+          "planMonths": "Plan (Months)",
+          "status": "Status",
+          "viewClient": "View Client",
+          "removeClient": "Remove Client",
+          "noClients": "No clients just yet!",
+          "prev": "Prev",
+          "next": "Next",
+          "pageText": "Page {current} of {total}",
+          "months": "month"
+        },
+        "details": {
+          "quickStats": "Quick Stats",
+          "quickStatsDescription": "Below you can find a quick rundown of the program's current statistics. We are working on a much better dashboard.",
+          "totalClients": "Total Clients:",
+          "comingSoon": "Coming Soon...",
+          "revenueThisMonth": "Revenue this Month:",
+          "totalRevenue": "Total Revenue:",
+          "bestMonth": "Best Month:",
+          "clientRetention": "Client Retention:",
+          "growthRate": "Growth Rate:",
+          "trainerDetails": "Trainer Details",
+          "viewTrainerProfile": "View Trainer Profile",
+          "loadingTrainerDetails": "Loading trainer details...",
+          "exerciseFocus": "Exercise Focus",
+          "exerciseFocusDescriptionUser": "Use the sliders to modify the exercise focus percentages. They must add up to 100%.",
+          "exerciseFocusDescriptionAdmin": "The exercise focus percentages are displayed below. These values are read-only.",
+          "strength": "Strength",
+          "hypertrophy": "Hypertrophy",
+          "agility": "Agility",
+          "cardio": "Cardio",
+          "totalPercentageWarning": "The total percentage must equal 100%. Current total: {total}%",
+          "tags": "Tags",
+          "tagsInstruction": "Add tags by typing in the field below and pressing Enter. Click on a tag to remove it.",
+          "tagsReadOnlyInstruction": "The tags associated with this program are displayed below. These values are read-only.",
+          "addNewTag": "Add a new tag",
+          "removeTagButton": "✕"
+        },
+        "docForms": {
+          "clientInductionForm": "Client Induction Form",
+          "clientInductionDescription": "The client induction form is sent to all clients once they are subscribed to the program. It should usually include questions pertaining to client readiness and also about their goals for the specific program.",
+          "addTextInduction": "+ Add Text",
+          "addNumberInduction": "+ Add Number",
+          "addBooleanInduction": "+ Add Boolean",
+          "addMediaUploadInduction": "+ Add Media Upload",
+          "questionLabel": "{type} Question",
+          "addNewQuestionPlaceholder": "Add a new {type} Question",
+          "removeInduction": "X",
+          "clientFollowUpForm": "Client Follow-Up Form",
+          "clientFollowUpDescription": "The follow-up form is sent automatically to clients on a regular basis based on the interval set up in your settings. This form usually asks clients about their progress and urges them to update their weight setting.",
+          "addTextFollow": "+ Add Text",
+          "addNumberFollow": "+ Add Number",
+          "addBooleanFollow": "+ Add Boolean",
+          "addMediaUploadFollow": "+ Add Media Upload",
+          "removeFollow": "X",
+          "aiReferralDocument": "AI Referral Document",
+          "aiReferralDescription": "The AI referral document is used to respond to clients on a daily basis. Clients will have the option to refer to the trainer AI chat for quick questions, and the trainer can review the AI's response. Direct trainer messages will occur in a different inbox.",
+          "viewDocument": "VIEW DOCUMENT",
+          "changeDocument": "CHANGE DOCUMENT",
+          "uploadDocument": "UPLOAD DOCUMENT",
+          "deleteDocument": "Delete Document",
+          "processing": "Processing..."
+        },
+        "pricing": {
+          "subscriptionModels": "Subscription Models",
+          "subscriptionModelsDescriptionUser": "Enable/disable subscription packages and manage their prices. Price changes will be reviewed.",
+          "subscriptionModelsDescriptionAdmin": "Subscription packages and their prices.",
+          "price_one": "1 Month",
+          "price_three": "3 Months",
+          "price_six": "6 Months",
+          "price_year": "1 Year",
+          "subscription": " {duration} Subscription",
+          "monthlyPriceLabel": "MONTHLY PRICE (AED)",
+          "na": "N/A",
+          "promoCodes": "Promo Codes",
+          "promoCodesDescription": "Type your promo code in the input below and press enter to add it. You can remove promo codes and adjust their values.",
+          "addPromoPlaceholder": "Add a new promo code",
+          "discountLabel": "% DISCOUNT",
+          "valueForPromo": "Value for {code}"
+        },
+        "planner": {
+          "dayCyclePlaceholder": "7",
+          "dayCycleLabel": "DAY CYCLE:",
+          "workout": "Workout",
+          "restDay": "Rest Day",
+          "editProgram": "EDIT PROGRAM",
+          "cancel": "CANCEL",
+          "submit": "SUBMIT",
+          "workoutNamePlaceholder": "Workout Name",
+          "editToAddName": "Edit to add name...",
+          "workoutSummaryPlaceholder": "Workout Summary",
+          "editToAddSummary": "Edit to add workout summary...",
+          "completionTimeMins": "Completion Time (mins)",
+          "completionTimePlaceholder": "Completion Time",
+          "zeroMins": "00 mins",
+          "totalSets": "Total Sets",
+          "totalSetsPlaceholder": "Sets",
+          "exercises": "Exercises",
+          "noExercises": "No exercises added yet! Edit to add!",
+          "innerExercises": "Inner Exercises",
+          "multipleExerciseGroup": "Multiple Exercise Group",
+          "averageIntensity": "Average Intensity:",
+          "averageRepetitions": "Average Repetitions:",
+          "time": "Time",
+          "reps": "Reps",
+          "loadKg": "Load (kg)",
+          "kgs": "Kgs",
+          "kgsPlaceholder": "Kgs",
+          "repsPlaceholder": "Reps",
+          "speed": "Speed",
+          "set": "Set",
+          "sets": "Sets",
+          "changeAll": "Change All",
+          "removeExercise": "Remove Exercise",
+          "exercise": "exercise",
+          "noMedia": "No Media",
+          "addMultiSet": "Add Multi-Set",
+          "supersetsCircuits": "Supersets/Circuits",
+          "restAndRecover": "Rest and Recover"
+        },
+        "reviews": {
+          "errorTitle": "Error!",
+          "noUserError": "No user found for this review",
+          "overallRating": "Overall Rating of",
+          "basedOnTotal": "Based on a total of {count} review | Based on a total of {count} reviews.",
+          "noReviews": "No Reviews just yet!"
+        }
+      },
+      "clients": {
+        "cancelProgram": {
+          "raiseCancellationRequest": "Raise Cancellation Request",
+          "cancellationDescription": "To protect client rights, trainers can only cancel requests after providing a compelling reason and having their cancellation request approved. Please provide your reason below to cancel this client's subscription.",
+          "cancellationReason": "Cancellation Reason",
+          "returnButton": "Return",
+          "cancelSubscription": "Cancel Subscription",
+          "reasonRequired": "Cancellation reason is required."
+        },
+        "changeProgram": {
+          "changeProgramTitle": "Change Program",
+          "description": "Click on one of the programs below to add it to have it overwrite the clients workouts and program details, please understand this will not change the status or price of the client subscription.",
+          "loading": "Loading...",
+          "noProgramsFound": "Seems you have no other programs just yet, get ahead and add one to your arsenal at our",
+          "programListingPage": "Program Listing Page",
+          "cancel": "Cancel",
+          "changeProgramTo": "Change program to {programName}",
+          "overwriteWarning": "This will overwrite the user program workouts and details permanently and all previous changes will be lost. Subscription plan will not change.",
+          "confirmOverwrite": "Yes, overwrite!"
+        },
+        "details": {
+          "profile": "Client Profile",
+          "age": "Age",
+          "gender": "Gender",
+          "nationality": "Nationality",
+          "phone": "Phone",
+          "metrics": "Client Metrics",
+          "height": "Height",
+          "cm": "cm",
+          "weight": "Weight",
+          "kg": "kg",
+          "goalWeight": "Goal Weight",
+          "bodyFatPercent": "Body Fat Percent",
+          "fitness": "Client Fitness",
+          "experience": "Experience",
+          "fitnessGoal": "Fitness Goal",
+          "sportsPlayed": "Sports Played",
+          "dietPreference": "Diet Preference",
+          "NA": "N/A",
+          "program": "Client Program",
+          "joinedOn": "Joined On",
+          "expiresOn": "Expires On",
+          "pricePackage": "Price Package",
+          "visit": "Visit Program",
+          "goals": {
+            "get_fitter": "Get Fitter",
+            "build_physique": "Build Physique",
+            "increase_strength": "Increase Strength",
+            "recovery": "Recovery",
+            "sport_specific": "Sport Specific"
+          }
+        },
+        "dietLog": {
+          "showingRows": "Showing {count} row(s)",
+          "dateLogged": "Date Logged",
+          "calories": "Calories",
+          "macroSplit": "Macro Split",
+          "noOfMeals": "No. of Meals",
+          "missingMeals": "missing meals",
+          "moreDetails": "More Details",
+          "prev": "Prev",
+          "next": "Next",
+          "pageOf": "Page {current} of {total}"
+        },
+        "workoutLog": {
+          "searchByName": "Search by name...",
+          "showingRows": "Showing {count} row(s)",
+          "completed": "Completed",
+          "name": "Name",
+          "created": "Created",
+          "performance": "Performance",
+          "feel": "Feel",
+          "moreDetails": "More Details",
+          "prev": "Prev",
+          "next": "Next",
+          "pageOf": "Page {current} of {total}",
+          "feels": {
+            "terrible": "Terrible",
+            "poor": "Poor",
+            "average": "Average",
+            "good": "Good",
+            "excellent": "Excellent"
+          }
+        }
+      },
+      "exercise": {
+        "tips": {
+          "safetyGuidelines": "Safety Guidelines",
+          "safetyGuidelinesDescription": "Ensure proper form and technique to prevent injuries.",
+          "clickToAddSafetyGuidelines": "Click to add safety guidelines",
+          "stepsHeading": "Steps",
+          "stepsDescription": "Follow these steps to perform the exercise correctly.",
+          "addNewStep": "Add a new step",
+          "coachingCuesHeading": "Coaching Cues",
+          "coachingCuesDescription": "Key points to focus on for optimal performance.",
+          "addNewCue": "Add a new cue"
+        },
+        "alt": {
+          "exerciseAlternatives": "Exercise Alternatives",
+          "belowIsListOfAlternatives": "Below is a list of alternatives.",
+          "youCanAddUpTo3": "You can add up to 3 alternatives of your liking.",
+          "youHaveSelected": "You have selected {count}/3",
+          "primeMovers": "Prime Movers:",
+          "synergists": "Synergists:",
+          "antagonists": "Antagonists:",
+          "remove": "Remove",
+          "noAlternativesFound": "No alternatives found. Click the button below to add some."
+        },
+        "featured": {},
+        "list": {
+          "typeToSearchExercises": "Type to Search Exercises...",
+          "allEx": "All Ex.",
+          "personalEx": "Personal Ex.",
+          "publicEx": "Public Ex.",
+          "addCustomExercise": "+ADD CUSTOM EXERCISE",
+          "customExercise": "Custom Exercise",
+          "primeMovers": "Prime Movers:",
+          "synergists": "Synergists:",
+          "antagonists": "Antagonists:",
+          "noExercisesFound": "No Exercises found for your query.",
+          "pageLabel": "Page",
+          "previousPage": "Previous Page",
+          "nextPage": "Next Page"
+        },
+        "equipReq": {
+          "benchesAndFrames": "Benches & Frames",
+          "freeWeightsHeading": "Free Weights",
+          "gripsAndAccessories": "Grips & Accessories",
+          "benches": [
+            "Incline Bench",
+            "Decline Bench",
+            "Flat Bench",
+            "Strength Chair",
+            "Squat Rack",
+            "Multipurpose Trainer",
+            "Pull Up Bar",
+            "Dip Bars",
+            "Smith Machine",
+            "Resistance Machine",
+            "Treadmill",
+            "Assault Bike",
+            "Rowing Machine",
+            "Eliptical",
+            "Cardio Bike",
+            "Skiier"
+          ],
+          "freeWeights": [
+            "Barbell",
+            "Olympic Barbell",
+            "Hexbar",
+            "Sled",
+            "Plates",
+            "Dumbbells",
+            "Kettlebells",
+            "Med Ball",
+            "Resistance Bands",
+            "Chains",
+            "Weighted Vest",
+            "Ezbar",
+            "Cambert Bar",
+            "Atlas Stone",
+            "Axle",
+            "Battle Ropes",
+            "Log"
+          ],
+          "accessories": [
+            "Belt for Weights",
+            "Straight Bar",
+            "EZ Curl Bar",
+            "Rope Attachment",
+            "Single Handle",
+            "D-Grip Handle",
+            "V-Bar",
+            "Triangle Grip",
+            "Revolving D-Grip",
+            "Revolving Straight Bar",
+            "Revolving V-Bar",
+            "Ankle Strap",
+            "Tricep Strap",
+            "Double D-Grip Handle",
+            "Straps"
+          ]
+        },
+        "add": {
+          "title": "Add Exercise",
+          "description": "New exercises will be added to your custom exercise library and can be used in your programs. You will be redirected to further edit your exercise.",
+          "exerciseNameLabel": "Exercise Name",
+          "exerciseDescriptionLabel": "Exercise Description",
+          "exerciseTypeLabel": "Exercise Type",
+          "selectExerciseTypePlaceholder": "Select Exercise Type",
+          "optionCompound": "Compound",
+          "optionIsolation": "Isolation",
+          "optionBodyweight": "Bodyweight",
+          "optionCardio": "Cardiovascular",
+          "optionStretch": "Stretch",
+          "optionPlyometric": "Plyometric",
+          "cancelButton": "Cancel",
+          "addExerciseButton": "Add Exercise",
+          "errors": {
+            "nameRequired": "Exercise name is required.",
+            "descriptionRequired": "Exercise description is required.",
+            "typeRequired": "Please select a type."
+          }
+        },
+        "movers": {
+          "agonists": "Agonists",
+          "antagonists": "Antagonists",
+          "synergists": "Synergists",
+          "addMuscleDesc": "Add muscle groups by typing in the field below and pressing Enter. Click on a muscle group to remove it.",
+          "agonistsDesc": "Below are the agonistic or primary muscle groups involved in this exercise.",
+          "antagonistsDesc": "Below are the antagonist or opposing muscle groups involved in this exercise.",
+          "synergistsDesc": "Below are the synergist or stabilizer muscle groups involved in this exercise.",
+          "addNewMuscle": "Add a new muscle"
+        }
+      },
+      "profile": {
+        "certifications": {
+          "loading": "Loading...",
+          "noCertifications": "No Certifications uploaded",
+          "view": "View",
+          "delete": "Delete",
+          "uploadMore": "Upload More",
+          "successTitle": "Success!",
+          "errorTitle": "Error!",
+          "trainerNotFound": "Trainer data not found.",
+          "alreadyUploaded": "Certificate '{fileName}' is already uploaded.",
+          "uploadSuccess": "Certificate '{fileName}' uploaded successfully!",
+          "uploadFailed": "Upload failed: {error}",
+          "fetchFailed": "Fetch Failed: {error}",
+          "deleteConfirmTitle": "Hold!",
+          "deleteConfirmText": "Once the certificate is deleted it cannot be retrieved. This affects your program review process.",
+          "deleteConfirmButton": "Delete Anyway!",
+          "userIdNotFound": "User ID not found",
+          "trainerProfileUpdated": "Trainer profile updated with new certification link!",
+          "trainerProfileUpdateFailed": "Failed to update trainer profile: {error}",
+          "deleteSuccess": "Deleted '{certName}' successfully.",
+          "deleteFailed": "Delete failed: {error}"
+        }
+      }
+    },
+    "offCanvas": {
+      "exercise": {
+        "addExercise": "Add Exercise +",
+        "straightExercise": "Straight Exercise",
+        "exercise": "Exercise",
+        "library": "LIBRARY",
+        "searchPlaceholder": "Type to Search Exercises...",
+        "addCustomExercise": "Add Custom Exercise",
+        "noExercisesFound": "No exercises found.",
+        "primeMovers": "Prime Movers:",
+        "select": "Select",
+        "selected": "Selected",
+        "addExercises": "ADD EXERCISES",
+        "selectedCount": "Selected ({current}{max})",
+        "confirmAddingExercises": "Confirm adding {count} exercises?"
+      },
+      "import": {
+        "importTemplate": "Import Template",
+        "exercise": "Exercise",
+        "library": "LIBRARY",
+        "selectAnExercise": "Select an exercise to import. Once imported, all details besides the exercise name and description will be changed permanently.",
+        "searchPlaceholder": "Type to Search Exercises...",
+        "primeMovers": "Prime Movers:",
+        "importButton": "Import",
+        "noExercisesFound": "No exercises found.",
+        "importConfirmTitle": "Import this exercise?",
+        "importConfirmText": "This will overwrite all exercise values besides name and details. You cannot undo this and all previous data will be lost!",
+        "yesOverwrite": "Yes, overwrite!",
+        "cancelButtonText": "Cancel"
+      },
+      "postOffice": {
+        "post": "POST",
+        "office": "OFFICE",
+        "reachOut": "Reach out to {name}!",
+        "seen": "Seen",
+        "sent": "Sent",
+        "opened": "Opened",
+        "received": "Received"
+      }
+    },
+    "entitlements": {
+      "modal": {
+        "assignEntitlements": "ASSIGN ENTITLEMENTS",
+        "programToAssign": "Program to Assign",
+        "chooseProgramPlaceholder": "Choose program from the list",
+        "assigneeEmailsLabel": "Assignee Emails:",
+        "emailsPlaceholder": "Separate multiple emails with commas",
+        "assignButton": "Assign",
+        "programRequired": "Please select a program.",
+        "emailsRequired": "Please enter at least one email.",
+        "emailsCountExceeded": "You cannot assign more than {count} entitlements."
+      },
+      "list": {
+        "client": "Client",
+        "entitlements": "Entitlements",
+        "loading": "Loading...",
+        "whatAreEntitlements": "What Are Entitlements?",
+        "entitlementsDescription": "Entitlements are trainer-purchased subscriptions that can be assigned to trainees, allowing trainers to charge their own rates for their services. Each entitlement lasts for one month, after which a new one must be assigned for continued training access. To streamline the process, trainers can add clients to the auto-update queue below. This ensures that when a trainee’s subscription expires, a new entitlement is automatically assigned, preventing any interruptions in their training.",
+        "youCurrentlyHave": "You currently have:",
+        "avlEntitlements": "Avl. Entitlements",
+        "purchaseMore": "Purchase More",
+        "processingRequest": "Processing Request Please Wait",
+        "dateJoined": "Date Joined",
+        "expiresOn": "Expires On",
+        "planMonths": "Plan (Months)",
+        "status": "Status",
+        "autoReroll": "Auto-Reroll",
+        "monthsSuffix": "months",
+        "noEntitledUsers": ":/ No Entitled Users Found. Assign some to see down here!",
+        "successTitle": "Success!",
+        "errorTitle": "Error!",
+        "autoRerollEnabled": "Client will now be resubscribed automatically!",
+        "autoRerollDisabled": "Client removed from reroll list and will not be resubscribed!",
+        "tooManyEntitlements": "You can only assign up to the available number of entitlements.",
+        "alreadyAssigned": "A user with this email is already assigned to a program.",
+        "programNotFound": "Program not found!",
+        "emailsSentSuccessfully": "Emails sent successfully!"
+      },
+      "purchase": {
+        "entitlements": "Entitlements",
+        "client": "Client",
+        "entitlementPackages": "Entitlement Packages",
+        "loneSoldierTitle": "Lone Soldier",
+        "loneSoldierDescription": "Train your first soldier and bring them up to your high ranks of knighthood. This is perfect for those just starting out who want to try our squiring services.",
+        "loneSoldierPrice": "$2.99",
+        "packLeaderTitle": "Pack Leader",
+        "packLeaderDescription": "A man with a solid following of brothers of iron. This bundle boasts 10 entitlements at an all-time low price. Perfect for those seeking to create a name for themselves in the world of fitness.",
+        "packLeaderPrice": "$2.50",
+        "weHaveAnArmyTitle": "We Have an Army",
+        "weHaveAnArmyDescription": "A large bundle of 30 entitlements, allowing you to transfer your legion of clients all at once at a highly discounted price you will not find anywhere else. A grand bundle for those who command an army of followers ready to walk their path.",
+        "weHaveAnArmyPrice": "$1.99",
+        "perEntitlement": "Per Entitlement",
+        "noOfUnits": "No of Units",
+        "numOfEntitlements": "No. of Entitlements",
+        "totalPrice": "Total Price",
+        "billingInformation": "Billing Information",
+        "fullNameOnCard": "Full Name (as on Card)",
+        "emailAddress": "Email Address",
+        "phoneNumber": "Phone Number",
+        "country": "Country",
+        "state": "State",
+        "city": "City",
+        "zipCode": "Zip Code",
+        "addressLine": "Address Line",
+        "cardInformation": "Card Information",
+        "cardNumber": "Card Number",
+        "expirationDate": "Expiration Date",
+        "cvv": "CVV",
+        "unavailableMessage": "As this feature is currently unavailable, we encourage all trainers to get verified in order to get our free 30 entitlements starter pack. Enjoy your current experience and if you require even more entitlements please ",
+        "contactFormLink": "get in touch with us through our contact form here.",
+        "featureComingSoon": "Feature Coming Soon"
+      }
+    },
+    "exercises": {
+      "personal": {
+        "successTitle": "Success!",
+        "errorTitle": "Error!",
+        "failedDeleteVideo": "Failed to delete the video from storage.",
+        "videoRemoved": "Exercise video removed successfully!",
+        "errorRemovingVideo": "An error occurred while removing the video.",
+        "pleaseUploadVideo": "Please upload an exercise video.",
+        "uploadFailedAlert": "Failed to upload the exercise video. Please try again.",
+        "failedRetrieveUrl": "Failed to retrieve the URL for the exercise video.",
+        "uploadErrorOccurred": "An error occurred while uploading the exercise video.",
+        "titleUpdated": "Exercise title updated successfully!",
+        "titleUpdateError": "Error updating title.",
+        "descriptionUpdated": "Exercise description updated successfully!",
+        "descriptionUpdateError": "Error updating description.",
+        "typeUpdated": "Exercise type updated to {type}!",
+        "typeUpdateFail": "Failed to update exercise type.",
+        "deleteConfirmTitle": "Are you sure?",
+        "deleteConfirmText": "This will permanently delete the exercise from the exercise lists.",
+        "deleteConfirmButton": "Yes, delete it!",
+        "exerciseNotFound": "Exercise not found!",
+        "importSuccess": "Import successful!",
+        "importFailed": "Failed to import. Please try again.",
+        "fieldUpdated": "{field} updated successfully!",
+        "fieldUpdateFail": "Failed to update {field}. Please try again.",
+        "failedToLoadDetails": "Failed to load exercise details.",
+        "removeVideo": "Remove Video",
+        "dragDropVideo": "Drag and drop a video here, or click to upload",
+        "processingTitle": "Hold",
+        "processingRequest": "Processing your request...",
+        "loadingPlaceholder": "Loading...",
+        "deleteExercise": "Delete Exercise",
+        "musclesWorked": "Muscles Worked",
+        "tipsTechnique": "Tips and Technique",
+        "equipmentRequired": "Equipment Required",
+        "alternatives": "Alternatives",
+        "isolation": "isolation",
+        "stretch": "stretch",
+        "bodyweight": "bodyweight",
+        "compound": "compound",
+        "cardio": "cardio",
+        "plyometric": "plyometric"
+      },
+      "public": {
+        "successTitle": "Success!",
+        "errorTitle": "Error!",
+        "duplicateConfirmTitle": "Duplicate Exercise?",
+        "duplicateConfirmText": "A duplicate of this exercise will be created and added to your list of custom exercises.",
+        "duplicateConfirmButton": "Duplicate this Exercise",
+        "loadFail": "Failed to load exercise details.",
+        "noVideoAvailable": "No Video Available",
+        "loading": "Loading...",
+        "duplicateExercise": "Duplicate Exercise",
+        "musclesWorked": "Muscles Worked",
+        "tipsTechnique": "Tips and Technique",
+        "equipmentRequired": "Equipment Required",
+        "alternatives": "Alternatives"
+      }
+    },
+    "profile": {
+      "edit": {
+        "my": "my",
+        "profile": "profile",
+        "detailsTab": "Details",
+        "changePasswordTab": "Change Password",
+        "certificationsTab": "Certifications",
+        "loading": "Loading...",
+        "newPasswordLabel": "New Password",
+        "confirmPasswordLabel": "Confirm Password",
+        "passwordPlaceholder": "*******",
+        "passwordRequirement1": "Must be at least 8 characters long.",
+        "passwordRequirement2": "Must contain at least one number and one special character.",
+        "passwordRequirement3": "Must not be too similar to the email address.",
+        "changePasswordButton": "Change Password",
+        "firstNameLabel": "First Name",
+        "lastNameLabel": "Last Name",
+        "emailLabel": "Email Address",
+        "titleLabel": "Title",
+        "phoneLabel": "Phone",
+        "dobLabel": "Date of Birth:",
+        "nationalityLabel": "Nationality",
+        "nationalityPlaceholder": "Select Nationality:",
+        "genderLabel": "Gender",
+        "experienceLabel": "Years of Experience",
+        "bioLabel": "Bio",
+        "bioPlaceholder": "Tell us about yourself...",
+        "saveProfileButton": "Save Profile",
+        "uploadPhotoLabel": "Upload Photo",
+        "successTitle": "Success!",
+        "errorTitle": "Error!",
+        "passwordCriteriaFail": "Passwords do not fit criteria!",
+        "passwordChangeSuccess": "Password changed successfully!",
+        "passwordChangeFailed": "Failed to change password: {error}",
+        "fetchProfileError": "Failed to load profile data.",
+        "trainerDataNotFound": "Trainer data not found.",
+        "profileUpdateSuccess": "Profile information updated successfully!",
+        "profileUpdateFail": "Failed to update profile: {error}",
+        "photoUpdateSuccess": "Profile picture updated successfully!",
+        "photoUpdateFail": "Failed to update profile picture: {error}",
+        "noImageSelected": "Please select an image.",
+        "uploadFail": "Upload failed: {error}"
+      }
+    },
+    "programs": {
+      "list": {
+        "workoutsAnd": "workouts &",
+        "programs": "programs",
+        "activeProgramsTab": "Active Programs",
+        "draftedProgramsTab": "Drafted Programs",
+        "exerciseLibraryTab": "Exercise Library",
+        "aed": "AED",
+        "inRevenue": "in Revenue",
+        "monthly": "Monthly",
+        "addAnother": "ADD ANOTHER",
+        "expandYourArsenal": "Expand your arsenal and revenue potential by adding another program. The review process may take 3 days to a week.",
+        "status": "Status"
+      },
+      "details": {
+        "successTitle": "Success!",
+        "errorTitle": "Error!",
+        "programNotFound": "Program not found!",
+        "fieldUpdated": "{field} updated successfully!",
+        "fieldUpdateFailed": "Failed to update {field}. Please try again.",
+        "pricesUpdated": "Prices updated successfully!",
+        "updatePricesFail": "Failed to update prices. Please try again.",
+        "deleteConfirmTitle": "Are you sure?",
+        "deleteConfirmText": "This will create a delete request for this program...",
+        "deleteConfirmButton": "Yes, delete it!",
+        "programDeleted": "The program has been deleted.",
+        "draftConfirmTitle": "Hold On?",
+        "draftConfirmText": "The program will be removed off the market...",
+        "draftConfirmButton": "Set to draft",
+        "programDrafted": "The program has been set to draft.",
+        "activateConfirmTitle": "Activate?",
+        "activateConfirmText": "The program will be set to review, and once reviewed, it becomes visible on the market.",
+        "activateConfirmButton": "Activate",
+        "programUnderReview": "The program is being reviewed!",
+        "cannotHaveMoreActive": "You cannot have more than 3 active programs! Set one to Draft first to free up a slot!",
+        "loadProgramFail": "Failed to load program details.",
+        "workoutsAnd": "workouts &",
+        "programs": "programs",
+        "loadingPlaceholder": "Loading...",
+        "minsSession": "mins/session",
+        "daysWeek": "days/week",
+        "changeToDraftButton": "Change to Draft",
+        "publishToActiveButton": "Publish to Active",
+        "loadingPhoto": "loading...",
+        "changePhotoButton": "Change Photo",
+        "underReview": "Under Review",
+        "deleteProgramButton": "Delete Program",
+        "tabDetails": "Details",
+        "tabWorkouts": "Workouts",
+        "tabClients": "Clients",
+        "tabPricing": "Pricing",
+        "tabDocuments": "Documents",
+        "tabReviews": "Reviews",
+        "noProgramInStore": "No program found in the store!",
+        "programPhotoUpdated": "Program photo updated successfully!",
+        "updateProgramPhotoFail": "Failed to update program picture: {error}",
+        "noImageSelected": "Please select an image.",
+        "uploadFailed": "Upload failed: {error}",
+        "Foundational": "Foundational",
+        "Beginner": "Beginner",
+        "Intermediate": "Intermediate",
+        "Advanced": "Advanced"
+      }
+    },
+    "support": {
+      "create": {
+        "createNewTicket": "Create New Ticket",
+        "subjectLabel": "Subject",
+        "selectSubjectPlaceholder": "Select a subject",
+        "generalInquiry": "General Inquiry",
+        "techIssue": "Technical Issue/ Bug",
+        "relatedToProgram": "Related to a Program",
+        "relatedToClient": "Related to a Client",
+        "selectProgram": "Select Program",
+        "loadingPrograms": "Loading programs...",
+        "selectProgramPlaceholder": "Select a program",
+        "selectClient": "Select Client",
+        "loadingClients": "Loading clients...",
+        "selectClientPlaceholder": "Select a client",
+        "messageLabel": "Message",
+        "messagePlaceholder": "Describe your issue...",
+        "attachMediaLabel": "Attach Media (Optional)",
+        "cancelButton": "Cancel",
+        "submitTicketButton": "Submit Ticket",
+        "errors": {
+          "subjectRequired": "Please select a subject.",
+          "optionRequired": "Please select an option.",
+          "messageRequired": "Please enter a message."
+        }
+      },
+      "list": {
+        "supportTickets": "Support Tickets",
+        "yourTickets": "Your Tickets",
+        "createNewTicket": "Create New Ticket",
+        "loadingTickets": "Loading tickets, please hold...",
+        "ticketID": "Ticket ID",
+        "subject": "Subject",
+        "status": "Status",
+        "createdOn": "Created On",
+        "action": "Action",
+        "view": "View",
+        "noTicketsFound": "No support tickets found. Create one to get started!",
+        "errorTitle": "Error!",
+        "uploadCreateFail": "Failed to upload media and create ticket"
+      },
+      "view": {
+        "statusLabel": "Status:",
+        "unspecified": "Unspecified",
+        "createdOn": "Created on:",
+        "noMessages": "No messages yet. Start the conversation!",
+        "addResponse": "Add a Response",
+        "responsePlaceholder": "Type your message...",
+        "sendResponseButton": "Send Response",
+        "errorTitle": "Error!",
+        "messageEmptyError": "Message cannot be empty.",
+        "youLabel": "You",
+        "supportLabel": "Support"
+      }
+    },
+    "dietSheet": {
+      "loadDietFail": "Failed to load Diet details.",
+      "successTitle": "Success!",
+      "errorTitle": "Error!",
+      "dietLogFor": "Diet Log For:",
+      "loading": "Loading...",
+      "by": "BY",
+      "totalCalories": "Total Calories",
+      "protein": "Protein",
+      "carbohydrates": "Carbohydrates",
+      "fats": "Fats",
+      "mealBreakdown": "Meal Breakdown",
+      "olderVariableName": "Older Variable Name",
+      "energy": "Energy",
+      "servings": "Servings",
+      "mealNotLogged": "Meal Not Logged",
+      "relevantMetrics": "Relevant Metrics",
+      "noWorkoutLogged": "No workout Logged on",
+      "minsSession": "mins/session",
+      "daysWeek": "days/week"
+    },
+    "workoutSheet": {
+      "successTitle": "Success!",
+      "errorTitle": "Error!",
+      "failedToLoadWorkoutDetails": "Failed to load Workout details.",
+      "workoutLogFor": "Workout Log For:",
+      "loading": "Loading...",
+      "by": "BY",
+      "program": "Program:",
+      "workoutIteration": "Workout-Iteration",
+      "week": "Week:",
+      "setsDone": "Sets Done:",
+      "avgIntensity": "AVG Intensity",
+      "feel": "Feel:",
+      "na": "N/A",
+      "notRecorded": "Not Recorded",
+      "feels": ["Terrible", "Poor", "Average", "Good", "Excellent"],
+      "setPerformance": "Set Performance",
+      "olderVariableName": "Older Variable Name",
+      "olderVariableType": "Older Variable Type",
+      "filler": "Filler",
+      "setLabel": "Set {number}",
+      "weight": "Weight",
+      "kg": "KG",
+      "reps": "Reps",
+      "relevantMetrics": "Relevant Metrics",
+      "featureComingSoon": "Feature Coming Soon"
+    },
+    "settings": {
+      "subheader": "Settings &",
+      "header": "Preferences",
+      "generalSettingsTab": "General Settings",
+      "trainerSettingsTab": "Trainer Settings",
+      "rolesAndPermissionsTab": "Roles and Permissions",
+      "successTitle": "Success!",
+      "errorTitle": "Error!"
+    }
+  }
+}

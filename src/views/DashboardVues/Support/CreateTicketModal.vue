@@ -1,10 +1,12 @@
 <template>
   <div class="card p-12 items-center text-left">
-    <h2 class="header-medium mb-6">Create New Ticket</h2>
+    <h2 class="header-medium mb-6">{{ t('dashboard.support.create.createNewTicket') }}</h2>
     <form @submit.prevent="submitForm">
       <!-- Subject Selection -->
       <div class="mb-4">
-        <label for="subject" class="block text-sm font-medium mb-2">Subject</label>
+        <label for="subject" class="block text-sm font-medium mb-2">
+          {{ t('dashboard.support.create.subjectLabel') }}
+        </label>
         <select
           id="subject"
           v-model="subject"
@@ -12,19 +14,33 @@
           :class="{ 'border-red-500': errors.subject }"
           required
         >
-          <option disabled value="">Select a subject</option>
-          <option value="General Inquiry">General Inquiry</option>
-          <option value="Technical Issue/ Bug">Technical Issue/ Bug</option>
-          <option value="Related to a Program">Related to a Program</option>
-          <option value="Related to a Client">Related to a Client</option>
+          <option disabled value="">
+            {{ t('dashboard.support.create.selectSubjectPlaceholder') }}
+          </option>
+          <option value="General Inquiry">
+            {{ t('dashboard.support.create.generalInquiry') }}
+          </option>
+          <option value="Technical Issue/ Bug">
+            {{ t('dashboard.support.create.techIssue') }}
+          </option>
+          <option value="Related to a Program">
+            {{ t('dashboard.support.create.relatedToProgram') }}
+          </option>
+          <option value="Related to a Client">
+            {{ t('dashboard.support.create.relatedToClient') }}
+          </option>
         </select>
         <span v-if="errors.subject" class="text-red-500 text-sm">{{ errors.subject }}</span>
       </div>
 
       <!-- Conditional select for "Related to a Program" -->
       <div v-if="subject === 'Related to a Program'" class="mb-4">
-        <label for="relatedProgram" class="block text-sm font-medium mb-2">Select Program</label>
-        <div v-if="loadingPrograms" class="text-sm text-gray-400">Loading programs...</div>
+        <label for="relatedProgram" class="block text-sm font-medium mb-2">
+          {{ t('dashboard.support.create.selectProgram') }}
+        </label>
+        <div v-if="loadingPrograms" class="text-sm text-gray-400">
+          {{ t('dashboard.support.create.loadingPrograms') }}
+        </div>
         <select
           v-else
           id="relatedProgram"
@@ -33,7 +49,9 @@
           :class="{ 'border-red-500': errors.relatedTo }"
           required
         >
-          <option disabled value="">Select a program</option>
+          <option disabled value="">
+            {{ t('dashboard.support.create.selectProgramPlaceholder') }}
+          </option>
           <option v-for="program in programOptions" :key="program.id" :value="program.id">
             {{ program.program_name }}
           </option>
@@ -43,8 +61,12 @@
 
       <!-- Conditional select for "Related to a Client" -->
       <div v-if="subject === 'Related to a Client'" class="mb-4">
-        <label for="relatedClient" class="block text-sm font-medium mb-2">Select Client</label>
-        <div v-if="loadingClients" class="text-sm text-gray-400">Loading clients...</div>
+        <label for="relatedClient" class="block text-sm font-medium mb-2">
+          {{ t('dashboard.support.create.selectClient') }}
+        </label>
+        <div v-if="loadingClients" class="text-sm text-gray-400">
+          {{ t('dashboard.support.create.loadingClients') }}
+        </div>
         <select
           v-else
           id="relatedClient"
@@ -53,7 +75,9 @@
           :class="{ 'border-red-500': errors.relatedTo }"
           required
         >
-          <option disabled value="">Select a client</option>
+          <option disabled value="">
+            {{ t('dashboard.support.create.selectClientPlaceholder') }}
+          </option>
           <option v-for="client in clientOptions" :key="client.id" :value="client.id">
             {{ client.email }}
           </option>
@@ -63,13 +87,15 @@
 
       <!-- Message Textarea -->
       <div class="mb-4">
-        <label for="message" class="block text-sm font-medium mb-2">Message</label>
+        <label for="message" class="block text-sm font-medium mb-2">
+          {{ t('dashboard.support.create.messageLabel') }}
+        </label>
         <textarea
           id="message"
           v-model="message"
           class="rafik-text-input"
           rows="4"
-          placeholder="Describe your issue..."
+          :placeholder="t('dashboard.support.create.messagePlaceholder')"
           :class="{ 'border-red-500': errors.message }"
           required
         ></textarea>
@@ -78,7 +104,9 @@
 
       <!-- Media Attachments -->
       <div class="mb-4">
-        <label for="media" class="block text-sm font-medium mb-2">Attach Media (Optional)</label>
+        <label for="media" class="block text-sm font-medium mb-2">
+          {{ t('dashboard.support.create.attachMediaLabel') }}
+        </label>
         <input
           id="media"
           type="file"
@@ -90,98 +118,105 @@
 
       <!-- Action Buttons -->
       <div class="flex justify-end gap-4">
-        <button type="button" class="btn-lg-outline" @click="$emit('close')">Cancel</button>
-        <button type="submit" class="btn-lg">Submit Ticket</button>
+        <button type="button" class="btn-lg-outline" @click="$emit('close')">
+          {{ t('dashboard.support.create.cancelButton') }}
+        </button>
+        <button type="submit" class="btn-lg">
+          {{ t('dashboard.support.create.submitTicketButton') }}
+        </button>
       </div>
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useProgramStore } from '@/stores/programstores'
-import { useUserStore } from '@/stores/user'
+import { ref, watch } from 'vue';
+import { useProgramStore } from '@/stores/programstores';
+import { useUserStore } from '@/stores/user';
+import { useI18n } from 'vue-i18n';
 
-const emits = defineEmits(['close', 'submit'])
+const { t , locale } = useI18n();
+
+const emits = defineEmits(['close', 'submit']);
 
 // Local form state
-const subject = ref('')
-const message = ref('')
-const relatedTo = ref('') // Holds the selected program/client id
-const errors = ref<Record<string, string>>({})
+const subject = ref('');
+const message = ref('');
+const relatedTo = ref(''); // Holds the selected program/client id
+const errors = ref<Record<string, string>>({});
 
 // Media attachments
-const media = ref<File[]>([])
+const media = ref<File[]>([]);
 
 // For program options and loading state
-const programOptions = ref<any[]>([])
-const loadingPrograms = ref(false)
+const programOptions = ref<any[]>([]);
+const loadingPrograms = ref(false);
 
 // For client options and loading state
-const clientOptions = ref<any[]>([])
-const loadingClients = ref(false)
+const clientOptions = ref<any[]>([]);
+const loadingClients = ref(false);
 
-const programStore = useProgramStore()
-const userStore = useUserStore()
+const programStore = useProgramStore();
+const userStore = useUserStore();
 
 // Watch for subject changes to fetch appropriate data
 watch(subject, async (newValue) => {
   // Reset the relatedTo field when subject changes
-  relatedTo.value = ''
+  relatedTo.value = '';
   if (newValue === 'Related to a Program') {
-    loadingPrograms.value = true
-    await programStore.getAllPrograms()
-    programOptions.value = programStore.AllPrograms || []
-    loadingPrograms.value = false
+    loadingPrograms.value = true;
+    await programStore.getAllPrograms();
+    programOptions.value = programStore.AllPrograms || [];
+    loadingPrograms.value = false;
   } else if (newValue === 'Related to a Client') {
-    loadingClients.value = true
+    loadingClients.value = true;
     // Using default page 1 and pageSize 100; adjust as needed
-    await userStore.getActiveClientsForTrainer(1, 100)
-    clientOptions.value = userStore.AllClients || []
-    loadingClients.value = false
+    await userStore.getActiveClientsForTrainer(1, 100);
+    clientOptions.value = userStore.AllClients || [];
+    loadingClients.value = false;
   }
-})
+});
 
 // Handle file upload event and store selected files
 function handleFileUpload(event: Event) {
-  const target = event.target as HTMLInputElement
+  const target = event.target as HTMLInputElement;
   if (target.files) {
-    media.value = Array.from(target.files)
+    media.value = Array.from(target.files);
   }
 }
 
 // Basic validation before submission
 function validateForm() {
-  errors.value = {}
+  errors.value = {};
   if (!subject.value) {
-    errors.value.subject = 'Please select a subject.'
+    errors.value.subject = t('dashboard.support.create.errors.subjectRequired');
   }
   if (
     (subject.value === 'Related to a Program' || subject.value === 'Related to a Client') &&
     !relatedTo.value
   ) {
-    errors.value.relatedTo = 'Please select an option.'
+    errors.value.relatedTo = t('dashboard.support.create.errors.optionRequired');
   }
   if (!message.value) {
-    errors.value.message = 'Please enter a message.'
+    errors.value.message = t('dashboard.support.create.errors.messageRequired');
   }
-  return Object.keys(errors.value).length === 0
+  return Object.keys(errors.value).length === 0;
 }
 
 // Handle form submission and emit the data to the parent
 function submitForm() {
-  if (!validateForm()) return
+  if (!validateForm()) return;
   emits('submit', {
     subject: subject.value,
     message: message.value,
     related_to: relatedTo.value,
-    media: media.value,
-  })
+    media: media.value
+  });
   // Reset fields
-  subject.value = ''
-  message.value = ''
-  relatedTo.value = ''
-  media.value = []
+  subject.value = '';
+  message.value = '';
+  relatedTo.value = '';
+  media.value = [];
 }
 </script>
 
