@@ -24,7 +24,7 @@ const isEditingTitle = ref(false);
 const isEditingDescription = ref(false);
 
 // The list of exercise types. We keep the array as is, but use t(type) in the template.
-const types = ref(['isolation', 'stretch', 'bodyweight', 'compound', 'cardio', 'plyometric']);
+const types = ref(['isolation', 'stretch', 'bodyweight', 'compound', 'cardio', 'plyometric','isometric','drill','hiit']);
 
 const editableTitle = ref('');
 const editableDescription = ref('');
@@ -378,7 +378,7 @@ onMounted(() => {
           </p>
 
           <!-- Types List -->
-          <div class="grid grid-cols-3 2xl:grid-cols-6 gap-2 2xl:gap-4">
+          <div class="grid grid-cols-3  gap-2 2xl:gap-4">
             <div v-for="(type, index) in types" :key="index">
               <button
                 @click="selectType(type)"
