@@ -378,7 +378,7 @@ onMounted(() => {
           </p>
 
           <!-- Types List -->
-          <div class="grid grid-cols-3  gap-2 2xl:gap-4">
+          <div class="flex flex-wrap gap-2 2xl:gap-4">
             <div v-for="(type, index) in types" :key="index">
               <button
                 @click="selectType(type)"
@@ -387,7 +387,7 @@ onMounted(() => {
                     ? 'border-rafik-pritext dark:border-rafik-darkpritext text-rafik-pritext dark:text-rafik-darkpritext border-2'
                     : 'border border-rafik-sectext dark:border-rafik-darksectext opacity-80 hover:opacity-100'
                 "
-                class="truncate w-full h-24 2xl:w-32 2xl:h-32 text-sm text-wrap rounded-xl font-bold flex items-center justify-center bg-rafik-pribg dark:bg-rafik-darkpribg uppercase"
+                class="truncate h-24 w-24 2xl:w-32 2xl:h-32 text-xs 2xl:text-sm text-wrap rounded-xl font-bold flex items-center justify-center bg-rafik-pribg dark:bg-rafik-darkpribg uppercase"
               >
                 {{ t(type) }}
               </button>
