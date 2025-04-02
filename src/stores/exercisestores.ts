@@ -356,28 +356,28 @@ async function fetchPublicExercise(id: string) {
     }
   }
 
-  // Search exercises across both Personal and Public
-  async function fetchRelevantExercises(searchQuery: string) {
-    const UserID = getUserID();
-    if (!UserID) {
-      showError("No user ID found in localStorage.");
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase
-        .from("exercises")
-        .select()
-        .or(`trainer_id.eq.${UserID},trainer_id.is.null`)
-        .ilike("exercise_name", `%${searchQuery}%`);
-
-      if (error) throw error;
-
-      AllExercises.value = data || [];
-    } catch (error) {
-      showError("Error fetching relevant exercises.");
-    }
+// Search exercises using a Postgres RPC to handle array searches
+async function fetchRelevantExercises(searchQuery: string) {
+  const UserID = getUserID();
+  if (!UserID) {
+    showError("No user ID found in localStorage.");
+    return;
   }
+
+  try {
+    const { data, error } = await supabase.rpc("search_exercises", {
+      search_query: searchQuery,
+      user_id: parseInt(UserID)
+    });
+
+    if (error) throw error;
+    AllExercises.value = data || [];
+  } catch (error) {
+    showError("Error fetching relevant exercises.");
+  }
+}
+
+
 
   // Search exercises across both Personal and Public with Pagination
   async function fetchRelevantExercisesPage(searchQuery: string, page: number, filter:string) {
