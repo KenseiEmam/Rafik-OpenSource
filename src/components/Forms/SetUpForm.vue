@@ -109,7 +109,7 @@ const validateAndSubmit = async () => {
     return;
   }
 
-  if (dob != null) {
+  if (dob === null) {
     showError("Please enter a valid date of birth.");
     return;
   }
