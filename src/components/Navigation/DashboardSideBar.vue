@@ -42,7 +42,7 @@
         <span v-html="t('dashboard.sidebar.programEntitlements')" />
       </RouterLink>
       <RouterLink
-        v-if="userStore.userProfile?.roles.includes('Admin')"
+        v-if="userStore.userProfile?.roles.includes('Administrator')"
         :to="{ name: 'users-list' }"
         class="nav-btn"
       >
@@ -55,7 +55,8 @@
       >
         <span v-html="t('dashboard.sidebar.listOfUsers')" />
       </RouterLink>
-      <RouterLink :to="{ name: 'audit-list' }" class="nav-btn">
+      <RouterLink :to="{ name: 'audit-list' }" class="nav-btn"
+      v-if="userStore.userProfile?.roles.includes('Administrator')">
         <span v-html="t('dashboard.sidebar.auditPrograms')" />
       </RouterLink>
       <RouterLink :to="{ name: 'settings' }" class="nav-btn">

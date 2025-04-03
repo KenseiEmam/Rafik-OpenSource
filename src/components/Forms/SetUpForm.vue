@@ -134,6 +134,8 @@ const validateAndSubmit = async () => {
       throw new Error("Failed to generate public URL for the image.");
     }
     const darkness = localStorage.getItem('dark_mode')
+
+
     // Save the data to the `users` table
     const { data, error } = await supabase.from("users").upsert({
       email,
@@ -144,13 +146,28 @@ const validateAndSubmit = async () => {
       nationality,
       phone,
       avatar: urlData.publicUrl,
-    });
+    }).select().single();
+
+
+
 
     if (error) {
       console.error(error);
       showError("Error saving profile. Please try again.");
       return;
     }
+    const userId = data.id
+    // Insert settings
+    const { data: settingsProfile, error: settingsError } = await supabase
+      .from("user_settings")
+      .insert({
+        user_id: userId ,
+      })
+      .select()
+      .single();
+
+    if (settingsError) throw settingsError;
+
 
     showSuccess("Profile successfully updated!");
     userStore.getUserProfile()
