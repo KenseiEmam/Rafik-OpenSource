@@ -74,21 +74,39 @@ const router = createRouter({
           component: () => import('../views/DashboardVues/HomeVue.vue'),
         },
         {
-          path: 'users', // Default child route for /dashboard
+          path: 'users',
           meta:{requiresAdmin:true},
 
           children: [
             {
-              path: '', // Default child route for /dashboard/programs
+              path: '', // Default child route for /dashboard/users
               name: 'users-list',
               component: () => import('../views/DashboardVues/All Users/UserListing.vue'),
 
             },
             {
-              path: ':id', // Dynamic route for program details
+              path: ':id', // Dynamic route for user details
               name: 'single-user',
               component: () => import('../views/DashboardVues/All Users/UserDetails.vue'),
             },
+          ],
+        },
+        {
+          path: 'organization',
+          meta:{requiresOrgAdmin:true},
+
+          children: [
+            {
+              path: 'users', // Default child route for /dashboard/organization/users
+              name: 'org-users-list',
+              component: () => import('../views/DashboardVues/Organizational/UsersList.vue'),
+
+            },
+            // {
+            //   path: ':id', // Dynamic route for program details
+            //   name: 'org-single-user',
+            //   component: () => import('../views/DashboardVues/All Users/UserDetails.vue'),
+            // },
           ],
         },
         {
@@ -282,6 +300,16 @@ router.beforeEach((to) => {
       query: { redirect: to.fullPath },
     };
   }
+
+  // Requires Org Admin Role
+  // Check userStore.userPRofile is fetched
+  if(to.meta.requiresOrgAdmin && !localStorage.getItem('Roles')?.includes("Organization Admin"))
+    {
+      return {
+        path: '/login',
+        query: { redirect: to.fullPath },
+      };
+    }
 
 });
 

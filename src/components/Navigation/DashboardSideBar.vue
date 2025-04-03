@@ -48,6 +48,13 @@
       >
         <span v-html="t('dashboard.sidebar.listOfUsers')" />
       </RouterLink>
+      <RouterLink
+        v-if="userStore.userProfile?.roles.includes('Organization Admin')"
+        :to="{ name: 'org-users-list' }"
+        class="nav-btn"
+      >
+        <span v-html="t('dashboard.sidebar.listOfUsers')" />
+      </RouterLink>
       <RouterLink :to="{ name: 'audit-list' }" class="nav-btn">
         <span v-html="t('dashboard.sidebar.auditPrograms')" />
       </RouterLink>

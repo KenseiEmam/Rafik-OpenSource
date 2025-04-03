@@ -276,6 +276,10 @@
           "subheader": "كل",
           "header": "المستخدمين"
         },
+        "pageTitleOrg": {
+          "subheader": "مستخدمين",
+          "header": "الشركة"
+        },
         "searchPlaceholder": "اكتب للبحث عن المستخدمين...",
         "filters": {
           "allUsers": "كل المستخدمين",
