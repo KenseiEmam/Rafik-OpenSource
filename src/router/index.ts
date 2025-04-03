@@ -293,7 +293,7 @@ router.beforeEach((to) => {
   }
   // Requires Admin Handle
   // Check userStore.userPRofile is fetched
-  if(to.meta.requiresAdmin && !localStorage.getItem('Roles')?.includes("Admin"))
+  if(to.meta.requiresAdmin && !localStorage.getItem('Roles')?.includes("Administrator"))
   {
     return {
       path: '/login',

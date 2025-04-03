@@ -49,7 +49,8 @@ interface UserInterface {
   profile_id?:number,
   last_active?: Date | string,
   audit_status?: string,
-  roles? :string[]
+  roles? :string[],
+  organization?:number
 }
 interface ClientInterface extends UserInterface{
   program_details?: any
