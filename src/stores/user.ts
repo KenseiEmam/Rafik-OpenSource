@@ -49,7 +49,8 @@ interface UserInterface {
   profile_id?:number,
   last_active?: Date | string,
   audit_status?: string,
-  roles? :string[]
+  roles? :string[],
+  organization?:number
 }
 interface ClientInterface extends UserInterface{
   program_details?: any
@@ -147,6 +148,9 @@ export const useUserStore = defineStore('User', () => {
   const All_count = ref<number>(0)
 
 
+// Organizationals
+const All_Org_Users = ref<any|null>()
+const All_Org_count = ref<number>(0)
 
 
 
@@ -207,7 +211,7 @@ async function getUserProfile() {
     localStorage.setItem("UserID", data.id);
     localStorage.setItem("LoggedInTrainer", data.is_staff ? "true" : "false");
     localStorage.setItem("Roles", data.roles);
-
+    localStorage.setItem("OrgID", data.organization);
     userProfile.value = data;
 
     // Redirect based on trainer status
@@ -218,6 +222,7 @@ async function getUserProfile() {
     localStorage.removeItem("UserID");
     localStorage.removeItem("LoggedInTrainer");
     localStorage.removeItem("Roles");
+    localStorage.removeItem("OrgID")
 
     // Redirect only if user profile is not found
     router.push("/setup-user-profile");
@@ -226,128 +231,204 @@ async function getUserProfile() {
 }
 
 
-// Fetch Users Based On Filters with Pagination
-async function fetchUsers(filters: Filter, page: number, pageSize: number) {
-  try {
-    // Start building the query; count: 'exact' returns the total count
-    let query = supabase
-      .from("users")
-      .select("*", { count: "exact" });
+  // Fetch Users Based On Filters with Pagination
+  async function fetchUsers(filters: Filter, page: number, pageSize: number) {
+    try {
+      // Start building the query; count: 'exact' returns the total count
+      let query = supabase
+        .from("users")
+        .select("*", { count: "exact" });
 
-    // Filter by roles if provided
-    if (filters.roles && filters.roles.length > 0) {
-      query = query.contains("roles", filters.roles);
+      // Filter by roles if provided
+      if (filters.roles && filters.roles.length > 0) {
+        query = query.contains("roles", filters.roles);
+      }
+
+      // Filter by name (search in first_name or last_name, case-insensitive)
+      if (filters.name && filters.name.trim() !== "") {
+        query = query.or(
+          `first_name.ilike.%${filters.name}%,last_name.ilike.%${filters.name}%`
+        );
+      }
+
+
+      // Apply pagination: calculate the start and end indexes for the range
+      const start = (page - 1) * pageSize;
+      const end = page * pageSize - 1;
+      query = query.range(start, end);
+
+      const { data, error, count } = await query;
+
+      if (error || !data) {
+        throw new Error(`Error fetching users: ${error?.message || "Users not found"}`);
+      }
+
+      // Store data (and count if needed)
+      All_Users.value = data;
+      if(count)
+      All_count.value = count;
+      // Optionally, you can use count to display total records if required:
+      // totalCount.value = count;
+
+    } catch (error: any) {
+      showError(error);
     }
-
-    // Filter by name (search in first_name or last_name, case-insensitive)
-    if (filters.name && filters.name.trim() !== "") {
-      query = query.or(
-        `first_name.ilike.%${filters.name}%,last_name.ilike.%${filters.name}%`
-      );
-    }
-
-
-    // Apply pagination: calculate the start and end indexes for the range
-    const start = (page - 1) * pageSize;
-    const end = page * pageSize - 1;
-    query = query.range(start, end);
-
-    const { data, error, count } = await query;
-
-    if (error || !data) {
-      throw new Error(`Error fetching users: ${error?.message || "Users not found"}`);
-    }
-
-    // Store data (and count if needed)
-    All_Users.value = data;
-    if(count)
-    All_count.value = count;
-    // Optionally, you can use count to display total records if required:
-    // totalCount.value = count;
-
-  } catch (error: any) {
-    showError(error);
   }
-}
 
-// Fetch Users Based On ID
-async function fetchUser(id: number) {
-  try {
-    // Start building the query; count: 'exact' returns the total count
+  // Fetch Users Based On ID
+  async function fetchUser(id: number) {
+    try {
+      // Start building the query; count: 'exact' returns the total count
 
 
-    const { data, error} = await supabase.from('users').select('*').eq('id',id).single();
+      const { data, error} = await supabase.from('users').select('*').eq('id',id).single();
 
-    if (error || !data) {
-      throw new Error(`Error fetching users: ${error?.message || "Users not found"}`);
+      if (error || !data) {
+        throw new Error(`Error fetching users: ${error?.message || "Users not found"}`);
+      }
+
+      // Store data (and count if needed)
+      UserDetail.value = data;
+
+
+    } catch (error: any) {
+      showError(error);
     }
-
-    // Store data (and count if needed)
-    UserDetail.value = data;
-
-
-  } catch (error: any) {
-    showError(error);
   }
-}
 
-// Fetch Logged In Trainer
-async function getLoggedTrainer() {
-  try {
-    const id = localStorage.getItem('UserID')
-    if (!id) {
-      throw new Error('No user ID found in the store.')
+
+  // Fetch Users Based On Org, Filters with Pagination
+  async function fetchOrgUsers(filters: Filter, page: number, pageSize: number) {
+    try {
+      const orgID = localStorage.getItem('OrgID');
+      if(!orgID)
+      {
+        throw new Error('Organizational ID not Found')
+      }
+      // Start building the query; count: 'exact' returns the total count
+      let query = supabase
+        .from("users")
+        .select("*", { count: "exact" })
+        .eq("organization", orgID);
+
+      // Filter by roles if provided
+      if (filters.roles && filters.roles.length > 0) {
+        query = query.contains("roles", filters.roles);
+      }
+
+      // Filter by name (search in first_name or last_name, case-insensitive)
+      if (filters.name && filters.name.trim() !== "") {
+        query = query.or(
+          `first_name.ilike.%${filters.name}%,last_name.ilike.%${filters.name}%`
+        );
+      }
+
+
+      // Apply pagination: calculate the start and end indexes for the range
+      const start = (page - 1) * pageSize;
+      const end = page * pageSize - 1;
+      query = query.range(start, end);
+
+      const { data, error, count } = await query;
+
+      if (error || !data) {
+        throw new Error(`Error fetching users: ${error?.message || "Users not found"}`);
+      }
+
+      // Store data (and count if needed)
+      All_Org_Users.value = data;
+      if(count)
+      All_Org_count.value = count;
+      // Optionally, you can use count to display total records if required:
+      // totalCount.value = count;
+
+    } catch (error: any) {
+      showError(error);
     }
-    // Fetch the user profile based on the provided user ID (id)
-    const { data: userProfiles, error: profileError } = await supabase
-      .from('trainer_profile')
-      .select('*')
-      .eq('user_id', id) // Match user_id, as we have the user id here
-      .single() // Since we're looking for a single profile
-
-    if (profileError) {
-      throw new Error(`Error fetching user profile: ${profileError.message}`)
-    }
-
-    if (!userProfiles) {
-      return null // If no profile found for the given user ID, return null
-    }
-
-    // Fetch user details from the users table based on the provided user_id
-    const { data: users, error: userError } = await supabase
-      .from('users')
-      .select(
-        'id, avatar, email, first_name, last_name, dob,sex, nationality, phone, last_active',
-      )
-      .eq('id', id)
-      .single() // We expect a single user here
-
-    if (userError) {
-      throw new Error(`Error fetching user details: ${userError.message}`)
-    }
-
-    // Assign the client object with the user details and associated program
-    Trainer.value = {
-      user_id: id,
-      avatar: users.avatar,
-      email: users.email,
-      gender: users.sex,
-      nationality: users.nationality,
-      phone: users.phone,
-      first_name: users.first_name,
-      last_name: users.last_name,
-      dob: users.dob,
-      last_active: users.last_active, // This includes the single program the client is associated with
-      ...userProfiles,
-    }
-
-    return Trainer.value
-  } catch (error: any) {
-    console.error(error)
-    alert(`Failed to load client: ${error.message || 'Unknown error'}`)
-    return null
   }
-}
+
+  // Fetch Users Based On ID and Org
+  async function fetchOrgUser(id: number) {
+    try {
+      // Start building the query; count: 'exact' returns the total count
+
+      const orgID = localStorage.getItem('OrgID');
+      if(!orgID)
+      {
+        throw new Error('Organizational ID not Found')
+      }
+      const { data, error} = await supabase.from('users').select('*').eq('id',id).eq("organization", orgID).single();
+
+      if (error || !data) {
+        throw new Error(`Error fetching users: ${error?.message || "Users not found"}`);
+      }
+
+      // Store data (and count if needed)
+      UserDetail.value = data;
+
+
+    } catch (error: any) {
+      showError(error);
+    }
+  }
+
+  // Fetch Logged In Trainer
+  async function getLoggedTrainer() {
+    try {
+      const id = localStorage.getItem('UserID')
+      if (!id) {
+        throw new Error('No user ID found in the store.')
+      }
+      // Fetch the user profile based on the provided user ID (id)
+      const { data: userProfiles, error: profileError } = await supabase
+        .from('trainer_profile')
+        .select('*')
+        .eq('user_id', id) // Match user_id, as we have the user id here
+        .single() // Since we're looking for a single profile
+
+      if (profileError) {
+        throw new Error(`Error fetching user profile: ${profileError.message}`)
+      }
+
+      if (!userProfiles) {
+        return null // If no profile found for the given user ID, return null
+      }
+
+      // Fetch user details from the users table based on the provided user_id
+      const { data: users, error: userError } = await supabase
+        .from('users')
+        .select(
+          'id, avatar, email, first_name, last_name, dob,sex, nationality, phone, last_active',
+        )
+        .eq('id', id)
+        .single() // We expect a single user here
+
+      if (userError) {
+        throw new Error(`Error fetching user details: ${userError.message}`)
+      }
+
+      // Assign the client object with the user details and associated program
+      Trainer.value = {
+        user_id: id,
+        avatar: users.avatar,
+        email: users.email,
+        gender: users.sex,
+        nationality: users.nationality,
+        phone: users.phone,
+        first_name: users.first_name,
+        last_name: users.last_name,
+        dob: users.dob,
+        last_active: users.last_active, // This includes the single program the client is associated with
+        ...userProfiles,
+      }
+
+      return Trainer.value
+    } catch (error: any) {
+      console.error(error)
+      alert(`Failed to load client: ${error.message || 'Unknown error'}`)
+      return null
+    }
+  }
 
   // Fetches clients related to a program
   async function getClients(id: number) {
@@ -415,7 +496,7 @@ async function getLoggedTrainer() {
       alert(`Failed to load clients: ${error.message || 'Unknown error'}`)
     }
   }
-  // Fetches Entitled related to anEntitlement
+  // Fetches Entitled
   async function getEntitled() {
     try {
       // Fetch user_programs where entitlement_id matches the given id
@@ -491,7 +572,7 @@ async function getLoggedTrainer() {
       alert(`Failed to load clients: ${error.message || 'Unknown error'}`)
     }
   }
-
+  // Fetch Clients for a Trainer
   async function getActiveClientsForTrainer(page: number, pageSize: number) {
     try {
       const trainerId = localStorage.getItem('UserID')
@@ -599,6 +680,7 @@ async function getLoggedTrainer() {
       client_count.value = 0
     }
   }
+  // Fetch Clients for a The Chat Logs
   async function getChatClients() {
     try {
       const trainerId = localStorage.getItem('UserID')
@@ -719,7 +801,7 @@ async function getLoggedTrainer() {
       showError('Error updating program:' + error)
     }
   }
-
+  // Fetch Singular Client
   async function getClient(id: number) {
     try {
 
@@ -796,6 +878,7 @@ async function getLoggedTrainer() {
       return null
     }
   }
+  // Fetch User Client????
   async function getUserClient(id: number) {
     try {
 
@@ -873,7 +956,7 @@ async function getLoggedTrainer() {
     }
   }
 
-
+  // Fetch Trainer Profile
   async function getTrainer(id:number) {
     try {
       if (!id) {
@@ -956,12 +1039,14 @@ async function getLoggedTrainer() {
       localStorage.setItem('UserID', data[0].id)
       localStorage.setItem('LoggedInTrainer', data[0].is_staff)
       localStorage.setItem("Roles", data[0].roles);
+      localStorage.setItem("OrgID", data[0].organization);
       userProfile.value = data[0]
       return userProfile.value
     } catch (error: any) {
       console.error(error)
       localStorage.removeItem('UserID')
       localStorage.removeItem("Roles");
+      localStorage.removeItem("OrgID");
       // Display a user-friendly error message in the UI instead of an alert.
       alert(`Failed to load user profile: ${error.message || 'Unknown error'}`)
     }
@@ -986,6 +1071,8 @@ async function getLoggedTrainer() {
     client_count,
     All_Users,
     All_count,
+    All_Org_Users,
+    All_Org_count,
     UserDetail,
     O_Trainer,
     getChatClients,
@@ -1003,6 +1090,8 @@ async function getLoggedTrainer() {
     updateClientProgram,
     fetchUsers,
     fetchUser,
+    fetchOrgUser,
+    fetchOrgUsers,
     getTrainer
   }
 })
