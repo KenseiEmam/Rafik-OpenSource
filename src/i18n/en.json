@@ -279,6 +279,10 @@
           "subheader": "All",
           "header": "Users"
         },
+        "pageTitleOrg": {
+          "subheader": "Organizational",
+          "header": "Users"
+        },
         "searchPlaceholder": "Type to Search Users...",
         "filters": {
           "allUsers": "All Users",

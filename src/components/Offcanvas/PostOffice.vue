@@ -1,4 +1,4 @@
-```vue
+
 <template>
   <div
     :dir="locale === 'ar' ? 'rtl' : 'ltr'"
