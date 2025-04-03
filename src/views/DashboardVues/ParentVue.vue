@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="settingstores.settings"
+    v-if="settingstores.settings && userStore.userProfile"
     :class="settingstores.settings.dark_mode ? 'dark' : ''"
     :dir="locale === 'ar' ? 'rtl' : 'ltr'"
     class="flex h-screen overflow-hidden w-full gradient-bg"
@@ -15,7 +15,7 @@
       </router-view>
     </div>
 
-    <PostOffice />
+    <PostOffice v-if="userStore.userProfile.roles?.includes('Trainer')"/>
   </div>
   <div
     v-else
