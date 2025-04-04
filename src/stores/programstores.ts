@@ -97,6 +97,11 @@ export const useProgramStore = defineStore('Program', () => {
   const Program = ref<Program | null>(null);
 
 
+
+  // Organizational
+  const All_Org_Count = ref<number>(0);
+  const All_Org_Programs= ref<Program[] | null>(null)
+
   // Fetch all programs
   async function getAllPrograms() {
     const UserID = localStorage.getItem('UserID')
@@ -165,6 +170,60 @@ export const useProgramStore = defineStore('Program', () => {
       AllPrograms.value = data;
       if(count)
       AllCount.value = count;
+      // Optionally, you can use count to display total records if required:
+      // totalCount.value = count;
+
+    } catch (error: any) {
+      showError(error);
+    }
+  }
+
+   // Fetch Users Based On Filters with Pagination
+   async function fetchOrgAuditPrograms(filters: Filter, page: number, pageSize: number) {
+    try {
+      const orgID = localStorage.getItem('OrgID');
+      if(!orgID)
+      {
+        throw new Error('Organizational ID not Found')
+      }
+
+      // Start building the query; count: 'exact' returns the total count
+      let query = supabase
+        .from("programs")
+        .select("*", { count: "exact" });
+
+      // Filter by status if provided (handling multiple statuses)
+    if (filters.status && filters.status.length > 0) {
+      query = query.in("status", filters.status);
+    }
+
+      // Filter by name (search in first_name or last_name, case-insensitive)
+      if (filters.name && filters.name.trim() !== "") {
+        query = query.or(
+          `program_name.ilike.%${filters.name}%,program_description.ilike.%${filters.name}%`
+        );
+      }
+
+      // Filter by trainer_id (if provided and is a valid number)
+    if (filters.trainer!== undefined && filters.trainer!== null) {
+      query = query.eq("trainer_id", filters.trainer);
+    }
+
+      // Apply pagination: calculate the start and end indexes for the range
+      const start = (page - 1) * pageSize;
+      const end = page * pageSize - 1;
+      query = query.range(start, end);
+      query = query.eq("organization",orgID)
+      const { data, error, count } = await query;
+
+      if (error || !data) {
+        throw new Error(`Error fetching users: ${error?.message || "Users not found"}`);
+      }
+
+      // Store data (and count if needed)
+      All_Org_Programs.value = data;
+      if(count)
+      All_Org_Count.value = count;
       // Optionally, you can use count to display total records if required:
       // totalCount.value = count;
 
@@ -349,6 +408,9 @@ export const useProgramStore = defineStore('Program', () => {
     ActivePrograms,
     DraftedPrograms,
     Program,
+    All_Org_Count,
+    All_Org_Programs,
+    fetchOrgAuditPrograms,
     fetchAuditPrograms,
     wipeOut,
     wipeOutAll,
