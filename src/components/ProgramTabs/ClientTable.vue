@@ -146,7 +146,7 @@
 import { onMounted, ref, computed } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
-const { t, locale } = useI18n();  // Added locale to dynamically change direction
+const { t, locale } = useI18n(); // Added locale to dynamically change direction
 
 // Define props including the new "admin" boolean prop
 const props = defineProps({

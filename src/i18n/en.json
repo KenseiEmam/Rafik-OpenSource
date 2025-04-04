@@ -74,7 +74,6 @@
       },
       "mail": {
         "label": "Mail us:"
-
       },
       "find": {
         "label": "Find Us At:",
@@ -284,6 +283,21 @@
           "header": "Users"
         },
         "searchPlaceholder": "Type to Search Users...",
+        "addUser": "Add User",
+        "addUserModal": {
+          "title": "Add New User",
+          "subtitle": "Enter the user's details below to add a new user.",
+          "emailLabel": "Email Address",
+          "emailRequired": "Email is required.",
+          "invalidEmail": "Please enter a valid email address.",
+          "userTypeLabel": "User Type",
+          "selectUserType": "Select User Type",
+          "trainer": "Trainer",
+          "trainee": "Trainee",
+          "userTypeRequired": "User type is required.",
+          "cancel": "Cancel",
+          "submit": "Add User"
+        },
         "filters": {
           "allUsers": "All Users",
           "trainer": "Trainer",
