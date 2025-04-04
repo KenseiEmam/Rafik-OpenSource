@@ -46,6 +46,11 @@
             {{ t('dashboard.users.list.filters.trainee') }}
           </button>
         </div>
+        <div>
+          <button @click="showAddUserModal = true" class="btn-md rounded">
+            {{ t('dashboard.users.list.addUser') }}
+          </button>
+        </div>
       </div>
 
       <!-- Data Table -->
@@ -73,7 +78,7 @@
           </thead>
           <tbody class="space-y-6">
             <tr v-for="user in users" :key="user.id" class="p-4">
-              <td class=" bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
                 {{ user.id }}
               </td>
               <td
@@ -106,9 +111,7 @@
               <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
                 {{ calculateAge(user.dob) || 'N/A' }}
               </td>
-              <td
-                class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right "
-              >
+              <td class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right">
                 <svg
                   @click="show_action = user.id"
                   xmlns="http://www.w3.org/2000/svg"
@@ -207,6 +210,7 @@
         </button>
       </div>
     </div>
+    <AddUserModal :visible="showAddUserModal" @close="showAddUserModal = false" @submit="addUser" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -215,7 +219,8 @@ import { ref, computed, onMounted, watch } from 'vue';
 import debounce from 'lodash/debounce';
 import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
-const { t , locale } = useI18n();
+import AddUserModal from './AddUserModal.vue';
+const { t, locale } = useI18n();
 
 interface User {
   id: string;
@@ -243,6 +248,25 @@ const holdQuery = ref('');
 const filters = ref<Filter>({ roles: [], name: '', active: true });
 
 const show_action = ref();
+
+const showAddUserModal = ref(false);
+// Add new program
+function addUser(email: string, type: 'trainer' | 'trainee') {
+  loading.value = true;
+  page.value = 1;
+  filters.value.name = '';
+  filters.value.roles = [];
+  filters.value.active = true;
+  holdQuery.value = '';
+  loadUsers()
+    .catch((e) => {
+      console.error('Error fetching users:', e);
+    })
+    .finally(() => {
+      userStore.addOrgUser(email, type);
+      showAddUserModal.value = false;
+    });
+}
 
 function handleLeave() {
   setTimeout(() => {

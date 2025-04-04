@@ -281,6 +281,21 @@
           "header": "الشركة"
         },
         "searchPlaceholder": "اكتب للبحث عن المستخدمين...",
+        "addUser": "إضافة مستخدم",
+        "addUserModal": {
+          "title": "إضافة مستخدم جديد",
+          "subtitle": "أدخل تفاصيل المستخدم أدناه لإضافة مستخدم جديد.",
+          "emailLabel": "عنوان البريد الإلكتروني",
+          "emailRequired": "البريد الإلكتروني مطلوب.",
+          "invalidEmail": "يرجى إدخال بريد إلكتروني صالح.",
+          "userTypeLabel": "نوع المستخدم",
+          "selectUserType": "اختر نوع المستخدم",
+          "trainer": "مدرب",
+          "trainee": "متدرب",
+          "userTypeRequired": "نوع المستخدم مطلوب.",
+          "cancel": "إلغاء",
+          "submit": "إضافة مستخدم"
+        },
         "filters": {
           "allUsers": "كل المستخدمين",
           "trainer": "مدرب",
