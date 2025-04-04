@@ -1,10 +1,10 @@
-import { ref } from 'vue'
-import { defineStore } from 'pinia'
-import { supabase } from '../lib/supabaseClient'
-import { useSettingsStore } from './settingstores'
-import router from '@/router'
-import Swal from 'sweetalert2'
-import UserDetails from '@/views/DashboardVues/All Users/UserDetails.vue'
+import { ref } from 'vue';
+import { defineStore } from 'pinia';
+import { supabase } from '../lib/supabaseClient';
+import { useSettingsStore } from './settingstores';
+import router from '@/router';
+import Swal from 'sweetalert2';
+import UserDetails from '@/views/DashboardVues/All Users/UserDetails.vue';
 // Success and Error Alerts
 function showSuccess(message: string) {
   Swal.fire({
@@ -17,8 +17,8 @@ function showSuccess(message: string) {
     position: 'top-right',
     icon: 'success',
     background: '#081411',
-    color: '#E8F3ED',
-  })
+    color: '#E8F3ED'
+  });
 }
 
 // Function to show error alerts
@@ -30,227 +30,209 @@ function showError(message: string) {
     confirmButtonColor: '#d33',
     cancelButtonColor: '#d33',
     background: '#081411',
-    color: '#E8F3ED',
-  })
+    color: '#E8F3ED'
+  });
 }
 
 interface UserInterface {
-  id?: number
-  created_at?:Date
-  trainer_profile?: string
-  avatar?: string
-  email?: string
-  gender?: string // Mapped from users.sex
-  nationality?: string
-  dob?: Date
-  phone?: string
-  first_name?: string
-  last_name?: string
-  profile_id?:number,
-  last_active?: Date | string,
-  audit_status?: string,
-  roles? :string[],
-  organization?:number
+  id?: number;
+  created_at?: Date;
+  trainer_profile?: string;
+  avatar?: string;
+  email?: string;
+  gender?: string; // Mapped from users.sex
+  nationality?: string;
+  dob?: Date;
+  phone?: string;
+  first_name?: string;
+  last_name?: string;
+  profile_id?: number;
+  last_active?: Date | string;
+  audit_status?: string;
+  roles?: string[];
+  organization?: number;
 }
-interface ClientInterface extends UserInterface{
-  program_details?: any
-  last_active?: Date
-  profile?: any
+interface ClientInterface extends UserInterface {
+  program_details?: any;
+  last_active?: Date;
+  profile?: any;
 }
 
 interface TrainerInterface extends UserInterface {
-
-  title: string
-  years_of_experience: number
-  certifications: number[]
-  programs: number[]
-  clients: number[]
-  rating: number | null
-  bio: string | null
-  seats_available: number | null
-  preferred_clients: string[] | null
-  certifications_links: string[] | null
-  user_id:number | null
+  title: string;
+  years_of_experience: number;
+  certifications: number[];
+  programs: number[];
+  clients: number[];
+  rating: number | null;
+  bio: string | null;
+  seats_available: number | null;
+  preferred_clients: string[] | null;
+  certifications_links: string[] | null;
+  user_id: number | null;
 }
 
 type Exercise = {
-  id: string
-  exercise_name?: string
-  type?: string
-  intensity?: string
-  sets?: number
-  reps?: number
-}
+  id: string;
+  exercise_name?: string;
+  type?: string;
+  intensity?: string;
+  sets?: number;
+  reps?: number;
+};
 
 type Filter = {
-  roles:string[],
-  name:string,
-  active:boolean,
-}
+  roles: string[];
+  name: string;
+  active: boolean;
+};
 type Workout = {
-  workout_name: string
-  workout_summary?: string
-  time_to_complete?: string
-  sets_per_session?: number
-  rest_day?: boolean
-  exercises: Exercise[]
-}
+  workout_name: string;
+  workout_summary?: string;
+  time_to_complete?: string;
+  sets_per_session?: number;
+  rest_day?: boolean;
+  exercises: Exercise[];
+};
 type Program = {
-  id: string
-  program_name?: string
-  program_description?: string
-  program_focus?: string[] // Add program_focus here (assumed to be an array of strings)
-  status?: string
-  trainer_id?: number
-  difficulty_level?: string
-  avg_session_time?: number
-  avg_days_per_week?: number
-  overall_rating?: number
-  price_one?: number
-  price_three?: number
-  price_six?: number
-  price_years?: number
-  tags?: string[]
-  workouts?: Workout[]
-  program_photo?: string
-  weekly_cycle?: number
+  id: string;
+  program_name?: string;
+  program_description?: string;
+  program_focus?: string[]; // Add program_focus here (assumed to be an array of strings)
+  status?: string;
+  trainer_id?: number;
+  difficulty_level?: string;
+  avg_session_time?: number;
+  avg_days_per_week?: number;
+  overall_rating?: number;
+  price_one?: number;
+  price_three?: number;
+  price_six?: number;
+  price_years?: number;
+  tags?: string[];
+  workouts?: Workout[];
+  program_photo?: string;
+  weekly_cycle?: number;
   // Add any other properties your program might have
-}
+};
 interface Session {
-  access_token?: string
-  refresh_token?: string
-  expires_in?: number
-  expires_at?: number
+  access_token?: string;
+  refresh_token?: string;
+  expires_in?: number;
+  expires_at?: number;
 }
-
 
 export const useUserStore = defineStore('User', () => {
-
-
   // For Logged in User
-  const User = ref<UserInterface>({})
-  const Trainer = ref<TrainerInterface | null>(null)
-  const userProfile = ref<UserInterface | null>(null)
-
-
-
+  const User = ref<UserInterface>({});
+  const Trainer = ref<TrainerInterface | null>(null);
+  const userProfile = ref<UserInterface | null>(null);
 
   // For Other Users
-  const AllClients = ref<ClientInterface[]>([]) // Ensure it's typed as an array
-  const ChatClients = ref<ClientInterface[]>([]) // Ensure it's typed as an array
-  const Entitled = ref<ClientInterface[]>([]) // Ensure it's typed as an array
-  const Client = ref<ClientInterface | null>(null) // Ensure Client can be null
-  const O_Trainer = ref<TrainerInterface | null>(null)
-  const UserDetail = ref<UserInterface>({})
-  const client_count = ref<number | null>(0)
-  const session = ref<Session>({})
-  const All_Users = ref<any|null>()
-  const All_count = ref<number>(0)
+  const AllClients = ref<ClientInterface[]>([]); // Ensure it's typed as an array
+  const ChatClients = ref<ClientInterface[]>([]); // Ensure it's typed as an array
+  const Entitled = ref<ClientInterface[]>([]); // Ensure it's typed as an array
+  const Client = ref<ClientInterface | null>(null); // Ensure Client can be null
+  const O_Trainer = ref<TrainerInterface | null>(null);
+  const UserDetail = ref<UserInterface>({});
+  const client_count = ref<number | null>(0);
+  const session = ref<Session>({});
+  const All_Users = ref<any | null>();
+  const All_count = ref<number>(0);
 
-
-// Organizationals
-const All_Org_Users = ref<any|null>()
-const All_Org_count = ref<number>(0)
-
-
-
+  // Organizationals
+  const All_Org_Users = ref<any | null>();
+  const All_Org_count = ref<number>(0);
 
   //Login Handler
   function LogIn(data: UserInterface, sesh: Session) {
-    User.value.id = data.id
-    User.value.email = data.email
+    User.value.id = data.id;
+    User.value.email = data.email;
     session.value = {
       access_token: sesh.access_token,
       refresh_token: sesh.refresh_token,
       expires_in: sesh.expires_in,
-      expires_at: sesh.expires_at,
-    }
+      expires_at: sesh.expires_at
+    };
 
     if (User.value.email) {
-      localStorage.setItem('LoggedInUser', User.value.email)
+      localStorage.setItem('LoggedInUser', User.value.email);
       // Trainer Check
-      getUserProfile()
+      getUserProfile();
     }
 
-    if (session.value.access_token) localStorage.setItem('AccessToken', session.value.access_token)
+    if (session.value.access_token) localStorage.setItem('AccessToken', session.value.access_token);
   }
 
   // Logout Handler
   function LogOut() {
-    User.value = {}
-    userProfile.value = null
-    session.value = {}
-    localStorage.removeItem('LoggedInUser')
-    localStorage.removeItem('LoggedInTrainer')
-    localStorage.removeItem('UserID')
-    localStorage.removeItem('AccessToken')
-    localStorage.removeItem("Roles");
+    User.value = {};
+    userProfile.value = null;
+    session.value = {};
+    localStorage.removeItem('LoggedInUser');
+    localStorage.removeItem('LoggedInTrainer');
+    localStorage.removeItem('UserID');
+    localStorage.removeItem('AccessToken');
+    localStorage.removeItem('Roles');
   }
 
- // Fetch User Profile Function
-async function getUserProfile() {
-  const loggedInUser = localStorage.getItem("LoggedInUser");
+  // Fetch User Profile Function
+  async function getUserProfile() {
+    const loggedInUser = localStorage.getItem('LoggedInUser');
 
-  if (!loggedInUser) {
-    console.error("No logged-in user found in localStorage.");
-    return;
-  }
-
-  try {
-    const { data, error } = await supabase
-      .from("users")
-      .select("*") // Select only required fields
-      .eq("email", loggedInUser)
-      .single();
-
-    if (error || !data) {
-      throw new Error(`Error fetching user profile: ${error?.message || "User not found"}`);
+    if (!loggedInUser) {
+      console.error('No logged-in user found in localStorage.');
+      return;
     }
 
-    // Store user information in localStorage
-    localStorage.setItem("UserID", data.id);
-    localStorage.setItem("LoggedInTrainer", data.is_staff ? "true" : "false");
-    localStorage.setItem("Roles", data.roles);
-    localStorage.setItem("OrgID", data.organization);
-    userProfile.value = data;
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*') // Select only required fields
+        .eq('email', loggedInUser)
+        .single();
 
-    // Redirect based on trainer status
-    router.push({ name: "dashboard-home" });
+      if (error || !data) {
+        throw new Error(`Error fetching user profile: ${error?.message || 'User not found'}`);
+      }
 
-    return userProfile.value;
-  } catch (error:any) {
-    localStorage.removeItem("UserID");
-    localStorage.removeItem("LoggedInTrainer");
-    localStorage.removeItem("Roles");
-    localStorage.removeItem("OrgID")
+      // Store user information in localStorage
+      localStorage.setItem('UserID', data.id);
+      localStorage.setItem('LoggedInTrainer', data.is_staff ? 'true' : 'false');
+      localStorage.setItem('Roles', data.roles);
+      localStorage.setItem('OrgID', data.organization);
+      userProfile.value = data;
 
-    // Redirect only if user profile is not found
-    router.push("/setup-user-profile");
+      // Redirect based on trainer status
+      router.push({ name: 'dashboard-home' });
 
+      return userProfile.value;
+    } catch (error: any) {
+      localStorage.removeItem('UserID');
+      localStorage.removeItem('LoggedInTrainer');
+      localStorage.removeItem('Roles');
+      localStorage.removeItem('OrgID');
+
+      // Redirect only if user profile is not found
+      router.push('/setup-user-profile');
+    }
   }
-}
-
 
   // Fetch Users Based On Filters with Pagination
   async function fetchUsers(filters: Filter, page: number, pageSize: number) {
     try {
       // Start building the query; count: 'exact' returns the total count
-      let query = supabase
-        .from("users")
-        .select("*", { count: "exact" });
+      let query = supabase.from('users').select('*', { count: 'exact' });
 
       // Filter by roles if provided
       if (filters.roles && filters.roles.length > 0) {
-        query = query.contains("roles", filters.roles);
+        query = query.contains('roles', filters.roles);
       }
 
       // Filter by name (search in first_name or last_name, case-insensitive)
-      if (filters.name && filters.name.trim() !== "") {
-        query = query.or(
-          `first_name.ilike.%${filters.name}%,last_name.ilike.%${filters.name}%`
-        );
+      if (filters.name && filters.name.trim() !== '') {
+        query = query.or(`first_name.ilike.%${filters.name}%,last_name.ilike.%${filters.name}%`);
       }
-
 
       // Apply pagination: calculate the start and end indexes for the range
       const start = (page - 1) * pageSize;
@@ -260,16 +242,14 @@ async function getUserProfile() {
       const { data, error, count } = await query;
 
       if (error || !data) {
-        throw new Error(`Error fetching users: ${error?.message || "Users not found"}`);
+        throw new Error(`Error fetching users: ${error?.message || 'Users not found'}`);
       }
 
       // Store data (and count if needed)
       All_Users.value = data;
-      if(count)
-      All_count.value = count;
+      if (count) All_count.value = count;
       // Optionally, you can use count to display total records if required:
       // totalCount.value = count;
-
     } catch (error: any) {
       showError(error);
     }
@@ -280,49 +260,38 @@ async function getUserProfile() {
     try {
       // Start building the query; count: 'exact' returns the total count
 
-
-      const { data, error} = await supabase.from('users').select('*').eq('id',id).single();
+      const { data, error } = await supabase.from('users').select('*').eq('id', id).single();
 
       if (error || !data) {
-        throw new Error(`Error fetching users: ${error?.message || "Users not found"}`);
+        throw new Error(`Error fetching users: ${error?.message || 'Users not found'}`);
       }
 
       // Store data (and count if needed)
       UserDetail.value = data;
-
-
     } catch (error: any) {
       showError(error);
     }
   }
 
-
   // Fetch Users Based On Org, Filters with Pagination
   async function fetchOrgUsers(filters: Filter, page: number, pageSize: number) {
     try {
       const orgID = localStorage.getItem('OrgID');
-      if(!orgID)
-      {
-        throw new Error('Organizational ID not Found')
+      if (!orgID) {
+        throw new Error('Organizational ID not Found');
       }
       // Start building the query; count: 'exact' returns the total count
-      let query = supabase
-        .from("users")
-        .select("*", { count: "exact" })
-        .eq("organization", orgID);
+      let query = supabase.from('users').select('*', { count: 'exact' }).eq('organization', orgID);
 
       // Filter by roles if provided
       if (filters.roles && filters.roles.length > 0) {
-        query = query.contains("roles", filters.roles);
+        query = query.contains('roles', filters.roles);
       }
 
       // Filter by name (search in first_name or last_name, case-insensitive)
-      if (filters.name && filters.name.trim() !== "") {
-        query = query.or(
-          `first_name.ilike.%${filters.name}%,last_name.ilike.%${filters.name}%`
-        );
+      if (filters.name && filters.name.trim() !== '') {
+        query = query.or(`first_name.ilike.%${filters.name}%,last_name.ilike.%${filters.name}%`);
       }
-
 
       // Apply pagination: calculate the start and end indexes for the range
       const start = (page - 1) * pageSize;
@@ -332,16 +301,14 @@ async function getUserProfile() {
       const { data, error, count } = await query;
 
       if (error || !data) {
-        throw new Error(`Error fetching users: ${error?.message || "Users not found"}`);
+        throw new Error(`Error fetching users: ${error?.message || 'Users not found'}`);
       }
 
       // Store data (and count if needed)
       All_Org_Users.value = data;
-      if(count)
-      All_Org_count.value = count;
+      if (count) All_Org_count.value = count;
       // Optionally, you can use count to display total records if required:
       // totalCount.value = count;
-
     } catch (error: any) {
       showError(error);
     }
@@ -353,20 +320,22 @@ async function getUserProfile() {
       // Start building the query; count: 'exact' returns the total count
 
       const orgID = localStorage.getItem('OrgID');
-      if(!orgID)
-      {
-        throw new Error('Organizational ID not Found')
+      if (!orgID) {
+        throw new Error('Organizational ID not Found');
       }
-      const { data, error} = await supabase.from('users').select('*').eq('id',id).eq("organization", orgID).single();
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', id)
+        .eq('organization', orgID)
+        .single();
 
       if (error || !data) {
-        throw new Error(`Error fetching users: ${error?.message || "Users not found"}`);
+        throw new Error(`Error fetching users: ${error?.message || 'Users not found'}`);
       }
 
       // Store data (and count if needed)
       UserDetail.value = data;
-
-
     } catch (error: any) {
       showError(error);
     }
@@ -375,36 +344,36 @@ async function getUserProfile() {
   // Fetch Logged In Trainer
   async function getLoggedTrainer() {
     try {
-      const id = localStorage.getItem('UserID')
+      const id = localStorage.getItem('UserID');
       if (!id) {
-        throw new Error('No user ID found in the store.')
+        throw new Error('No user ID found in the store.');
       }
       // Fetch the user profile based on the provided user ID (id)
       const { data: userProfiles, error: profileError } = await supabase
         .from('trainer_profile')
         .select('*')
         .eq('user_id', id) // Match user_id, as we have the user id here
-        .single() // Since we're looking for a single profile
+        .single(); // Since we're looking for a single profile
 
       if (profileError) {
-        throw new Error(`Error fetching user profile: ${profileError.message}`)
+        throw new Error(`Error fetching user profile: ${profileError.message}`);
       }
 
       if (!userProfiles) {
-        return null // If no profile found for the given user ID, return null
+        return null; // If no profile found for the given user ID, return null
       }
 
       // Fetch user details from the users table based on the provided user_id
       const { data: users, error: userError } = await supabase
         .from('users')
         .select(
-          'id, avatar, email, first_name, last_name, dob,sex, nationality, phone, last_active',
+          'id, avatar, email, first_name, last_name, dob,sex, nationality, phone, last_active'
         )
         .eq('id', id)
-        .single() // We expect a single user here
+        .single(); // We expect a single user here
 
       if (userError) {
-        throw new Error(`Error fetching user details: ${userError.message}`)
+        throw new Error(`Error fetching user details: ${userError.message}`);
       }
 
       // Assign the client object with the user details and associated program
@@ -419,14 +388,14 @@ async function getUserProfile() {
         last_name: users.last_name,
         dob: users.dob,
         last_active: users.last_active, // This includes the single program the client is associated with
-        ...userProfiles,
-      }
+        ...userProfiles
+      };
 
-      return Trainer.value
+      return Trainer.value;
     } catch (error: any) {
-      console.error(error)
-      alert(`Failed to load client: ${error.message || 'Unknown error'}`)
-      return null
+      console.error(error);
+      alert(`Failed to load client: ${error.message || 'Unknown error'}`);
+      return null;
     }
   }
 
@@ -438,47 +407,47 @@ async function getUserProfile() {
         .from('user_programs')
         .select('*')
         .eq('program_id', id)
-        .neq('status', 'cancelled')
+        .neq('status', 'cancelled');
 
       if (programError) {
-        throw new Error(`Error fetching user programs: ${programError.message}`)
+        throw new Error(`Error fetching user programs: ${programError.message}`);
       }
 
       if (!programs || programs.length === 0) {
-        AllClients.value = []
-        return
+        AllClients.value = [];
+        return;
       }
 
       // Extract client IDs from user_profiles
-      const clientProfileIds = programs.map((p) => p.client_id)
+      const clientProfileIds = programs.map((p) => p.client_id);
 
       // Fetch user_ids from user_profiles
       const { data: userProfiles, error: profileError } = await supabase
         .from('profiles')
         .select('id, user_id')
-        .in('id', clientProfileIds)
+        .in('id', clientProfileIds);
 
       if (profileError) {
-        throw new Error(`Error fetching user profiles: ${profileError.message}`)
+        throw new Error(`Error fetching user profiles: ${profileError.message}`);
       }
 
-      const userIds = userProfiles.map((profile) => profile.user_id)
+      const userIds = userProfiles.map((profile) => profile.user_id);
 
       // Fetch user details from users table
       const { data: users, error: userError } = await supabase
         .from('users')
         .select('id,avatar, email, first_name, last_name')
-        .in('id', userIds)
+        .in('id', userIds);
 
       if (userError) {
-        throw new Error(`Error fetching user details: ${userError.message}`)
+        throw new Error(`Error fetching user details: ${userError.message}`);
       }
 
       // Merge client details with their respective program details
       AllClients.value = userProfiles
         .map((profile) => {
-          const user = users.find((u) => u.id === profile.user_id)
-          const programDetails = programs.filter((program) => program.client_id === profile.id)
+          const user = users.find((u) => u.id === profile.user_id);
+          const programDetails = programs.filter((program) => program.client_id === profile.id);
           return user
             ? {
                 id: user.id,
@@ -486,14 +455,14 @@ async function getUserProfile() {
                 email: user.email,
                 first_name: user.first_name,
                 last_name: user.last_name,
-                program_details: programDetails,
+                program_details: programDetails
               }
-            : null
+            : null;
         })
-        .filter((client) => client !== null)
+        .filter((client) => client !== null);
     } catch (error: any) {
-      console.error(error)
-      alert(`Failed to load clients: ${error.message || 'Unknown error'}`)
+      console.error(error);
+      alert(`Failed to load clients: ${error.message || 'Unknown error'}`);
     }
   }
   // Fetches Entitled
@@ -503,156 +472,49 @@ async function getUserProfile() {
       const { data: programs, error: programError } = await supabase
         .from('user_programs')
         .select('*')
-        .eq('trainer_id', localStorage.getItem("UserID"))
+        .eq('trainer_id', localStorage.getItem('UserID'))
         .neq('status', 'cancelled')
-        .not('entitlement_id', 'is', null) // ✅ Correct way to filter out NULLs
+        .not('entitlement_id', 'is', null); // ✅ Correct way to filter out NULLs
 
       if (programError) {
-        throw new Error(`Error fetching user programs: ${programError.message}`)
+        throw new Error(`Error fetching user programs: ${programError.message}`);
       }
 
       if (!programs || programs.length === 0) {
-        Entitled.value = []
-        return
+        Entitled.value = [];
+        return;
       }
 
       // Extract client IDs from user_profiles
-      const clientProfileIds = programs.map((p) => p.client_id)
+      const clientProfileIds = programs.map((p) => p.client_id);
 
       // Fetch user_ids from user_profiles
       const { data: userProfiles, error: profileError } = await supabase
         .from('profiles')
         .select('id, user_id')
-        .in('id', clientProfileIds)
+        .in('id', clientProfileIds);
 
       if (profileError) {
-        throw new Error(`Error fetching user profiles: ${profileError.message}`)
+        throw new Error(`Error fetching user profiles: ${profileError.message}`);
       }
 
-      const userIds = userProfiles.map((profile) => profile.user_id)
+      const userIds = userProfiles.map((profile) => profile.user_id);
 
       // Fetch user details from users table
       const { data: users, error: userError } = await supabase
         .from('users')
         .select('*')
-        .in('id', userIds)
+        .in('id', userIds);
 
       if (userError) {
-        throw new Error(`Error fetching user details: ${userError.message}`)
+        throw new Error(`Error fetching user details: ${userError.message}`);
       }
 
       // Merge client details with their respective program details
       Entitled.value = userProfiles
-      .map((profile) => {
-        const user = users.find((u) => u.id === profile.user_id)
-        const programDetails = programs.find(
-          (program) => program.client_id === profile.id,
-        )
-
-        return user
-          ? {
-              id: user.id,
-              avatar: user.avatar,
-              email: user.email,
-              gender: user.sex,
-              nationality: user.nationality,
-              phone: user.phone,
-              first_name: user.first_name,
-              last_name: user.last_name,
-              dob: user.dob,
-              profile: profile,
-              program_details: programDetails,
-              last_active: user.last_active,
-            }
-          : null
-      })
-      .filter((client) => client !== null)
-    } catch (error: any) {
-      console.error(error)
-      alert(`Failed to load clients: ${error.message || 'Unknown error'}`)
-    }
-  }
-  // Fetch Clients for a Trainer
-  async function getActiveClientsForTrainer(page: number, pageSize: number) {
-    try {
-      const trainerId = localStorage.getItem('UserID')
-      if (!trainerId) {
-        showError('Trainer ID not found in local storage.')
-        AllClients.value = []
-        client_count.value = 0
-        return
-      }
-
-      // Fetch total count for pagination
-      const { count, error: countError } = await supabase
-        .from('user_programs')
-        .select('client_id', { count: 'exact', head: true })
-        .eq('trainer_id', trainerId)
-        .neq('status', 'cancelled')
-
-      if (countError) {
-        showError(`Error fetching total count: ${countError.message}`)
-        AllClients.value = []
-        client_count.value = 0
-        return
-      }
-
-      const { data: activePrograms, error: programError } = await supabase
-        .from('user_programs')
-        .select('*')
-        .eq('trainer_id', trainerId)
-        .neq('status', 'cancelled')
-        .range((page - 1) * pageSize, page * pageSize - 1)
-
-      if (programError) {
-        showError(`Error fetching user programs: ${programError.message}`)
-        AllClients.value = []
-        client_count.value = 0
-        return
-      }
-
-      if (!activePrograms || activePrograms.length === 0) {
-        AllClients.value = []
-        client_count.value = count
-        return
-      }
-
-      const clientProfileIds = [...new Set(activePrograms.map((program) => program.client_id))]
-
-      const { data: userProfiles, error: profileError } = await supabase
-        .from('profiles')
-        .select('id, user_id')
-        .in('id', clientProfileIds)
-
-      if (profileError) {
-        showError(`Error fetching user profiles: ${profileError.message}`)
-        AllClients.value = []
-        client_count.value = count
-        return
-      }
-
-      const userIds = userProfiles.map((profile) => profile.user_id)
-
-      const { data: users, error: userError } = await supabase
-        .from('users')
-        .select(
-          'id, avatar, email, first_name, last_name, dob, sex, nationality, phone, last_active',
-        )
-        .in('id', userIds)
-
-      if (userError) {
-        showError(`Error fetching user details: ${userError.message}`)
-        AllClients.value = []
-        client_count.value = count
-        return
-      }
-
-      AllClients.value = userProfiles
         .map((profile) => {
-          const user = users.find((u) => u.id === profile.user_id)
-          const programDetails = activePrograms.find(
-            (program) => program.client_id === profile.id,
-          )
+          const user = users.find((u) => u.id === profile.user_id);
+          const programDetails = programs.find((program) => program.client_id === profile.id);
 
           return user
             ? {
@@ -667,28 +529,25 @@ async function getUserProfile() {
                 dob: user.dob,
                 profile: profile,
                 program_details: programDetails,
-                last_active: user.last_active,
+                last_active: user.last_active
               }
-            : null
+            : null;
         })
-        .filter((client) => client !== null)
-
-      client_count.value = count
+        .filter((client) => client !== null);
     } catch (error: any) {
-      showError(`Unexpected error: ${error.message || 'Unknown error'}`)
-      AllClients.value = []
-      client_count.value = 0
+      console.error(error);
+      alert(`Failed to load clients: ${error.message || 'Unknown error'}`);
     }
   }
-  // Fetch Clients for a The Chat Logs
-  async function getChatClients() {
+  // Fetch Clients for a Trainer
+  async function getActiveClientsForTrainer(page: number, pageSize: number) {
     try {
-      const trainerId = localStorage.getItem('UserID')
+      const trainerId = localStorage.getItem('UserID');
       if (!trainerId) {
-        showError('Trainer ID not found in local storage.')
-        ChatClients.value = []
-        client_count.value = 0
-        return
+        showError('Trainer ID not found in local storage.');
+        AllClients.value = [];
+        client_count.value = 0;
+        return;
       }
 
       // Fetch total count for pagination
@@ -696,13 +555,13 @@ async function getUserProfile() {
         .from('user_programs')
         .select('client_id', { count: 'exact', head: true })
         .eq('trainer_id', trainerId)
-        .neq('status', 'cancelled')
+        .neq('status', 'cancelled');
 
       if (countError) {
-        showError(`Error fetching total count: ${countError.message}`)
-        ChatClients.value = []
-        client_count.value = 0
-        return
+        showError(`Error fetching total count: ${countError.message}`);
+        AllClients.value = [];
+        client_count.value = 0;
+        return;
       }
 
       const { data: activePrograms, error: programError } = await supabase
@@ -710,56 +569,162 @@ async function getUserProfile() {
         .select('*')
         .eq('trainer_id', trainerId)
         .neq('status', 'cancelled')
+        .range((page - 1) * pageSize, page * pageSize - 1);
 
       if (programError) {
-        showError(`Error fetching user programs: ${programError.message}`)
-        ChatClients.value = []
-        client_count.value = 0
-        return
+        showError(`Error fetching user programs: ${programError.message}`);
+        AllClients.value = [];
+        client_count.value = 0;
+        return;
       }
 
       if (!activePrograms || activePrograms.length === 0) {
-        ChatClients.value = []
-        client_count.value = count
-        return
+        AllClients.value = [];
+        client_count.value = count;
+        return;
       }
 
-      const clientProfileIds = [...new Set(activePrograms.map((program) => program.client_id))]
+      const clientProfileIds = [...new Set(activePrograms.map((program) => program.client_id))];
 
       const { data: userProfiles, error: profileError } = await supabase
         .from('profiles')
         .select('id, user_id')
-        .in('id', clientProfileIds)
+        .in('id', clientProfileIds);
 
       if (profileError) {
-        showError(`Error fetching user profiles: ${profileError.message}`)
-        ChatClients.value = []
-        client_count.value = count
-        return
+        showError(`Error fetching user profiles: ${profileError.message}`);
+        AllClients.value = [];
+        client_count.value = count;
+        return;
       }
 
-      const userIds = userProfiles.map((profile) => profile.user_id)
+      const userIds = userProfiles.map((profile) => profile.user_id);
 
       const { data: users, error: userError } = await supabase
         .from('users')
         .select(
-          'id, avatar, email, first_name, last_name, dob, sex, nationality, phone, last_active',
+          'id, avatar, email, first_name, last_name, dob, sex, nationality, phone, last_active'
         )
-        .in('id', userIds)
+        .in('id', userIds);
 
       if (userError) {
-        showError(`Error fetching user details: ${userError.message}`)
-        ChatClients.value = []
-        client_count.value = count
-        return
+        showError(`Error fetching user details: ${userError.message}`);
+        AllClients.value = [];
+        client_count.value = count;
+        return;
+      }
+
+      AllClients.value = userProfiles
+        .map((profile) => {
+          const user = users.find((u) => u.id === profile.user_id);
+          const programDetails = activePrograms.find((program) => program.client_id === profile.id);
+
+          return user
+            ? {
+                id: user.id,
+                avatar: user.avatar,
+                email: user.email,
+                gender: user.sex,
+                nationality: user.nationality,
+                phone: user.phone,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                dob: user.dob,
+                profile: profile,
+                program_details: programDetails,
+                last_active: user.last_active
+              }
+            : null;
+        })
+        .filter((client) => client !== null);
+
+      client_count.value = count;
+    } catch (error: any) {
+      showError(`Unexpected error: ${error.message || 'Unknown error'}`);
+      AllClients.value = [];
+      client_count.value = 0;
+    }
+  }
+  // Fetch Clients for a The Chat Logs
+  async function getChatClients() {
+    try {
+      const trainerId = localStorage.getItem('UserID');
+      if (!trainerId) {
+        showError('Trainer ID not found in local storage.');
+        ChatClients.value = [];
+        client_count.value = 0;
+        return;
+      }
+
+      // Fetch total count for pagination
+      const { count, error: countError } = await supabase
+        .from('user_programs')
+        .select('client_id', { count: 'exact', head: true })
+        .eq('trainer_id', trainerId)
+        .neq('status', 'cancelled');
+
+      if (countError) {
+        showError(`Error fetching total count: ${countError.message}`);
+        ChatClients.value = [];
+        client_count.value = 0;
+        return;
+      }
+
+      const { data: activePrograms, error: programError } = await supabase
+        .from('user_programs')
+        .select('*')
+        .eq('trainer_id', trainerId)
+        .neq('status', 'cancelled');
+
+      if (programError) {
+        showError(`Error fetching user programs: ${programError.message}`);
+        ChatClients.value = [];
+        client_count.value = 0;
+        return;
+      }
+
+      if (!activePrograms || activePrograms.length === 0) {
+        ChatClients.value = [];
+        client_count.value = count;
+        return;
+      }
+
+      const clientProfileIds = [...new Set(activePrograms.map((program) => program.client_id))];
+
+      const { data: userProfiles, error: profileError } = await supabase
+        .from('profiles')
+        .select('id, user_id')
+        .in('id', clientProfileIds);
+
+      if (profileError) {
+        showError(`Error fetching user profiles: ${profileError.message}`);
+        ChatClients.value = [];
+        client_count.value = count;
+        return;
+      }
+
+      const userIds = userProfiles.map((profile) => profile.user_id);
+
+      const { data: users, error: userError } = await supabase
+        .from('users')
+        .select(
+          'id, avatar, email, first_name, last_name, dob, sex, nationality, phone, last_active'
+        )
+        .in('id', userIds);
+
+      if (userError) {
+        showError(`Error fetching user details: ${userError.message}`);
+        ChatClients.value = [];
+        client_count.value = count;
+        return;
       }
 
       ChatClients.value = userProfiles
         .map((profile) => {
-          const user = users.find((u) => u.id === profile.user_id)
+          const user = users.find((u) => u.id === profile.user_id);
           const programDetails = activePrograms.filter(
-            (program) => program.client_id === profile.id,
-          )
+            (program) => program.client_id === profile.id
+          );
 
           return user
             ? {
@@ -769,17 +734,17 @@ async function getUserProfile() {
                 first_name: user.first_name,
                 last_name: user.last_name,
                 program_details: programDetails[0],
-                last_active: user.last_active,
+                last_active: user.last_active
               }
-            : null
+            : null;
         })
-        .filter((client) => client !== null)
+        .filter((client) => client !== null);
 
-      client_count.value = count
+      client_count.value = count;
     } catch (error: any) {
-      showError(`Unexpected error: ${error.message || 'Unknown error'}`)
-      AllClients.value = []
-      client_count.value = 0
+      showError(`Unexpected error: ${error.message || 'Unknown error'}`);
+      AllClients.value = [];
+      client_count.value = 0;
     }
   }
   // Update Client Program
@@ -788,71 +753,69 @@ async function getUserProfile() {
       const { error } = await supabase
         .from('user_programs')
         .update(updateData)
-        .eq('id', updateData.id)
+        .eq('id', updateData.id);
 
-      if (error) throw new Error(error.message)
+      if (error) throw new Error(error.message);
 
       // Update local state
       if (Client.value?.program_details?.id === updateData.id) {
-        Object.assign(Client.value?.program_details, updateData)
-        showSuccess('Successfully updated client workout plan!')
+        Object.assign(Client.value?.program_details, updateData);
+        showSuccess('Successfully updated client workout plan!');
       }
     } catch (error) {
-      showError('Error updating program:' + error)
+      showError('Error updating program:' + error);
     }
   }
   // Fetch Singular Client
   async function getClient(id: number) {
     try {
-
       // Fetch the user profile based on the provided user ID (id)
       const { data: userProfiles, error: profileError } = await supabase
         .from('profiles')
         .select('*')
         .eq('user_id', id) // Match user_id, as we have the user id here
-        .single() // Since we're looking for a single profile
+        .single(); // Since we're looking for a single profile
 
       if (profileError) {
-        throw new Error(`Error fetching user profile: ${profileError.message}`)
+        throw new Error(`Error fetching user profile: ${profileError.message}`);
       }
 
       if (!userProfiles) {
-        return null // If no profile found for the given user ID, return null
+        return null; // If no profile found for the given user ID, return null
       }
       const is_admin = localStorage.getItem('Roles')?.includes('Admin');
       const user_id = localStorage.getItem('UserID');
 
       let programs, programError; // Declare variables outside
 
-        ({ data: programs, error: programError } = await supabase
-          .from('user_programs')
-          .select('*')
-          .eq('client_id', userProfiles.id)
-          .eq('trainer_id', user_id)
-          .neq('status', 'cancelled')
-          .single());
-
+      ({ data: programs, error: programError } = await supabase
+        .from('user_programs')
+        .select('*')
+        .eq('client_id', userProfiles.id)
+        .eq('trainer_id', user_id)
+        .neq('status', 'cancelled')
+        .single());
 
       // Now, `programs` and `programError` are accessible here
       if (programError) {
         console.error('Error fetching program:', programError);
       }
-      let promAssign = null
+      let promAssign = null;
       if (programs) {
-        promAssign = programs
+        promAssign = programs;
       }
 
       // Fetch user details from the users table based on the provided user_id
       const { data: users, error: userError } = await supabase
         .from('users')
         .select(
-          'id, avatar, email, first_name, last_name, dob,sex, nationality, phone, last_active',
+          'id, avatar, email, first_name, last_name, dob,sex, nationality, phone, last_active'
         )
         .eq('id', id)
-        .single() // We expect a single user here
+        .single(); // We expect a single user here
 
       if (userError) {
-        throw new Error(`Error fetching user details: ${userError.message}`)
+        throw new Error(`Error fetching user details: ${userError.message}`);
       }
 
       // Assign the client object with the user details and associated program
@@ -868,68 +831,65 @@ async function getUserProfile() {
         dob: users.dob,
         profile: userProfiles,
         program_details: promAssign,
-        last_active: users.last_active, // This includes the single program the client is associated with
-      }
+        last_active: users.last_active // This includes the single program the client is associated with
+      };
 
-      return Client.value
+      return Client.value;
     } catch (error: any) {
-      console.error(error)
-      alert(`Failed to load client: ${error.message || 'Unknown error'}`)
-      return null
+      console.error(error);
+      alert(`Failed to load client: ${error.message || 'Unknown error'}`);
+      return null;
     }
   }
   // Fetch User Client????
   async function getUserClient(id: number) {
     try {
-
       // Fetch the user profile based on the provided user ID (id)
       const { data: userProfiles, error: profileError } = await supabase
         .from('profiles')
         .select('*')
         .eq('user_id', id) // Match user_id, as we have the user id here
-        .single() // Since we're looking for a single profile
+        .single(); // Since we're looking for a single profile
 
       if (profileError) {
-        throw new Error(`Error fetching user profile: ${profileError.message}`)
+        throw new Error(`Error fetching user profile: ${profileError.message}`);
       }
 
       if (!userProfiles) {
-        return null // If no profile found for the given user ID, return null
+        return null; // If no profile found for the given user ID, return null
       }
       const is_admin = localStorage.getItem('Roles')?.includes('Admin');
       const user_id = localStorage.getItem('UserID');
 
       let programs, programError; // Declare variables outside
 
-
-        ({ data: programs, error: programError } = await supabase
-          .from('user_programs')
-          .select('*')
-          .eq('client_id', userProfiles.id)
-          .neq('status', 'cancelled')
-          .single());
-
+      ({ data: programs, error: programError } = await supabase
+        .from('user_programs')
+        .select('*')
+        .eq('client_id', userProfiles.id)
+        .neq('status', 'cancelled')
+        .single());
 
       // Now, `programs` and `programError` are accessible here
       if (programError) {
         console.error('Error fetching program:', programError);
       }
-      let promAssign = null
+      let promAssign = null;
       if (programs) {
-        promAssign = programs
+        promAssign = programs;
       }
 
       // Fetch user details from the users table based on the provided user_id
       const { data: users, error: userError } = await supabase
         .from('users')
         .select(
-          'id, avatar, email, first_name, last_name, dob,sex, nationality, phone, last_active',
+          'id, avatar, email, first_name, last_name, dob,sex, nationality, phone, last_active'
         )
         .eq('id', id)
-        .single() // We expect a single user here
+        .single(); // We expect a single user here
 
       if (userError) {
-        throw new Error(`Error fetching user details: ${userError.message}`)
+        throw new Error(`Error fetching user details: ${userError.message}`);
       }
 
       // Assign the client object with the user details and associated program
@@ -945,49 +905,49 @@ async function getUserProfile() {
         dob: users.dob,
         profile: userProfiles,
         program_details: promAssign,
-        last_active: users.last_active, // This includes the single program the client is associated with
-      }
+        last_active: users.last_active // This includes the single program the client is associated with
+      };
 
-      return Client.value
+      return Client.value;
     } catch (error: any) {
-      console.error(error)
-      alert(`Failed to load client: ${error.message || 'Unknown error'}`)
-      return null
+      console.error(error);
+      alert(`Failed to load client: ${error.message || 'Unknown error'}`);
+      return null;
     }
   }
 
   // Fetch Trainer Profile
-  async function getTrainer(id:number) {
+  async function getTrainer(id: number) {
     try {
       if (!id) {
-        throw new Error('No user ID found in the store.')
+        throw new Error('No user ID found in the store.');
       }
       // Fetch the user profile based on the provided user ID (id)
       const { data: userProfiles, error: profileError } = await supabase
         .from('trainer_profile')
         .select('*')
         .eq('user_id', id) // Match user_id, as we have the user id here
-        .single() // Since we're looking for a single profile
+        .single(); // Since we're looking for a single profile
 
       if (profileError) {
-        throw new Error(`Error fetching user profile: ${profileError.message}`)
+        throw new Error(`Error fetching user profile: ${profileError.message}`);
       }
 
       if (!userProfiles) {
-        return null // If no profile found for the given user ID, return null
+        return null; // If no profile found for the given user ID, return null
       }
 
       // Fetch user details from the users table based on the provided user_id
       const { data: users, error: userError } = await supabase
         .from('users')
         .select(
-          'id, avatar, email, first_name, last_name, dob,sex, nationality, phone, last_active',
+          'id, avatar, email, first_name, last_name, dob,sex, nationality, phone, last_active'
         )
         .eq('id', id)
-        .single() // We expect a single user here
+        .single(); // We expect a single user here
 
       if (userError) {
-        throw new Error(`Error fetching user details: ${userError.message}`)
+        throw new Error(`Error fetching user details: ${userError.message}`);
       }
 
       // Assign the client object with the user details and associated program
@@ -1002,62 +962,133 @@ async function getUserProfile() {
         last_name: users.last_name,
         dob: users.dob,
         last_active: users.last_active, // This includes the single program the client is associated with
-        ...userProfiles,
-      }
+        ...userProfiles
+      };
 
-      return O_Trainer.value
+      return O_Trainer.value;
     } catch (error: any) {
-      console.error(error)
-      alert(`Failed to load client: ${error.message || 'Unknown error'}`)
-      return null
+      console.error(error);
+      alert(`Failed to load client: ${error.message || 'Unknown error'}`);
+      return null;
     }
   }
   // Fetch User Profile Function with no RR
   async function getUserProfileNO() {
-    const loggedInUser = localStorage.getItem('LoggedInUser')
+    const loggedInUser = localStorage.getItem('LoggedInUser');
 
     if (!loggedInUser) {
-      throw new Error('No logged-in user found in localStorage.')
+      throw new Error('No logged-in user found in localStorage.');
     }
 
     try {
-      const { data, error } = await supabase.from('users').select().eq('email', loggedInUser)
+      const { data, error } = await supabase.from('users').select().eq('email', loggedInUser);
 
       if (error) {
-        throw new Error(`Error fetching user profile: ${error.message}`)
+        throw new Error(`Error fetching user profile: ${error.message}`);
       }
       // Fetch Settings for User
-      const useSettings = useSettingsStore()
+      const useSettings = useSettingsStore();
 
-      useSettings.fetchSettings(data[0].id)
-      const { error:logerror } = await supabase.from('users').update({last_active: new Date()}).eq('email', loggedInUser).select()
+      useSettings.fetchSettings(data[0].id);
+      const { error: logerror } = await supabase
+        .from('users')
+        .update({ last_active: new Date() })
+        .eq('email', loggedInUser)
+        .select();
 
       if (logerror) {
-        throw new Error(`Error fetching updating last active: ${logerror.message}`)
+        throw new Error(`Error fetching updating last active: ${logerror.message}`);
       }
 
-      localStorage.setItem('UserID', data[0].id)
-      localStorage.setItem('LoggedInTrainer', data[0].is_staff)
-      localStorage.setItem("Roles", data[0].roles);
-      localStorage.setItem("OrgID", data[0].organization);
-      userProfile.value = data[0]
-      return userProfile.value
+      localStorage.setItem('UserID', data[0].id);
+      localStorage.setItem('LoggedInTrainer', data[0].is_staff);
+      localStorage.setItem('Roles', data[0].roles);
+      localStorage.setItem('OrgID', data[0].organization);
+      userProfile.value = data[0];
+      return userProfile.value;
     } catch (error: any) {
-      console.error(error)
-      localStorage.removeItem('UserID')
-      localStorage.removeItem("Roles");
-      localStorage.removeItem("OrgID");
+      console.error(error);
+      localStorage.removeItem('UserID');
+      localStorage.removeItem('Roles');
+      localStorage.removeItem('OrgID');
       // Display a user-friendly error message in the UI instead of an alert.
-      alert(`Failed to load user profile: ${error.message || 'Unknown error'}`)
+      alert(`Failed to load user profile: ${error.message || 'Unknown error'}`);
     }
   }
 
+  // Add Program
+  async function addOrgUser(email: string, type: 'trainer' | 'trainee') {
+    try {
+      const orgId = localStorage.getItem('OrgID');
+      const newUser = {
+        email: email,
+        roles:
+          type === 'trainer' ? ['Organization Trnr', 'Organization Trnee'] : ['Organization Trnee'],
+        is_staff: true,
+        organization: orgId
+      };
+
+      // Insert the new program and return the inserted row
+      const { data, error } = await supabase.from('users').insert(newUser).select().single(); // Ensures a single row is returned
+
+      if (error) throw new Error(error.message);
+      if (!data) throw new Error('Program creation failed');
+      const userSettings = {
+        user_id: data.id
+      };
+
+      const { error: settingsError } = await supabase
+        .from('user_settings')
+        .insert(userSettings)
+        .select()
+        .single(); // Ensures a single row is returned
+
+      if (settingsError) throw new Error(settingsError.message);
+
+      const { data: orgData, error: orgError } = await supabase
+        .from('organizations')
+        .select('name')
+        .eq('id', orgId)
+        .single();
+      if (orgError) throw new Error(orgError.message);
+      if (!orgData) throw new Error('Organization not found');
+
+      if (type === 'trainer') {
+        const trainerProfile = {
+          user_id: data.id,
+          title: `${orgData.name} - Trainer`
+        };
+        const { error: trainerError } = await supabase
+          .from('trainer_profile')
+          .insert(trainerProfile)
+          .select()
+          .single(); // Ensures a single row is returned
+        if (trainerError) throw new Error(trainerError.message);
+      } else {
+        const trainerProfile = {
+          user_id: data.id
+        };
+        const { error: trainerError } = await supabase
+          .from('profiles')
+          .insert(trainerProfile)
+          .select()
+          .single(); // Ensures a single row is returned
+        if (trainerError) throw new Error(trainerError.message);
+      }
+
+      // Add to local state
+      All_Org_Users.value?.push?.(data);
+    } catch (error) {
+      alert('Error creating program: ' + error);
+      return null;
+    }
+  }
 
   // Wipe out old date
-  function wipeOut(){
-    O_Trainer.value = null
-    Client.value = null
-    UserDetail.value = {}
+  function wipeOut() {
+    O_Trainer.value = null;
+    Client.value = null;
+    UserDetail.value = {};
   }
 
   return {
@@ -1092,6 +1123,7 @@ async function getUserProfile() {
     fetchUser,
     fetchOrgUser,
     fetchOrgUsers,
-    getTrainer
-  }
-})
+    getTrainer,
+    addOrgUser
+  };
+});
