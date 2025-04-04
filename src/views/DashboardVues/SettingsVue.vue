@@ -34,7 +34,7 @@
           {{ t('dashboard.settings.trainerSettingsTab') }}
         </button>
         <button
-          v-if="userStore.userProfile.roles.includes('Admin')"
+          v-if="userStore.userProfile.roles.includes('Administrator')"
           :class="
             activeTab === 'Roles and Permissions'
               ? 'text-rafik-pritext dark:text-rafik-darkpritext'
@@ -57,7 +57,7 @@
           />
           <RolesandPerms
             v-else-if="
-              activeTab === 'Roles and Permissions' && userStore.userProfile.roles.includes('Admin')
+              activeTab === 'Roles and Permissions' && userStore.userProfile.roles.includes('Administrator')
             "
           />
         </transition>
