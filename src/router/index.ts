@@ -102,6 +102,12 @@ const router = createRouter({
               component: () => import('../views/DashboardVues/Organizational/UsersList.vue'),
 
             },
+            {
+              path: 'programs', // Default child route for /dashboard/organization/users
+              name: 'org-programs-list',
+              component: () => import('../views/DashboardVues/Organizational/ProgramsList.vue'),
+
+            },
             // {
             //   path: ':id', // Dynamic route for program details
             //   name: 'org-single-user',
