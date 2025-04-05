@@ -271,27 +271,49 @@ export const useProgramStore = defineStore('Program', () => {
   // Fetch singular Program
   async function fetchProgram(id: string) {
     try {
-      const { data, error } = await supabase
+      const orgID = localStorage.getItem('OrgID');
+      const userID = localStorage.getItem('UserID');
+      const roles = localStorage.getItem('Roles') || '';
+      if(!userID)
+        throw new Error('no user id??');
+      // Start building the query
+      let query = supabase
         .from('programs')
         .select()
         .eq('id', id)
-        .neq('status', 'Deleted')
-        .single() // Expect a single record
+        .neq('status', 'Deleted');
 
-      if (error) throw new Error(error.message)
+      // Filter by organization if orgID exists
+      if (orgID) {
+        query = query.eq('organization', orgID);
+      }
 
-      Program.value = data
+      // Filter by trainer_id if user is not an Admin
+      if (!roles.includes('Admin') && userID) {
+        query = query.eq('trainer_id', userID);
+      }
+
+      const { data, error } = await query.single(); // Expect a single record
+
+      if (error) throw new Error(error.message);
+      if (data.trainer_id !== parseInt(userID)) {
+        if (router.currentRoute.value.name !== 'audit-program') {
+          router.push({ name: 'audit-program' });
+        }
+      }
+      Program.value = data;
     } catch (error) {
       Swal.fire({
         title: 'Whoops',
         text: 'No program found',
         icon: 'error',
       }).then(() => {
-        router.push({ name: 'programs-list' })
-      })
-      console.error('Error fetching program:', error)
+        router.push({ name: 'programs-list' });
+      });
+      console.error('Error fetching program:', error);
     }
   }
+
 
   // Fetch only active programs
   async function getActivePrograms() {
