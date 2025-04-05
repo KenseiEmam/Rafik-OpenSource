@@ -174,6 +174,7 @@ export const useUserStore = defineStore('User', () => {
     localStorage.removeItem('UserID');
     localStorage.removeItem('AccessToken');
     localStorage.removeItem('Roles');
+    localStorage.removeItem('OrgID')
   }
 
   // Fetch User Profile Function
@@ -200,6 +201,7 @@ export const useUserStore = defineStore('User', () => {
       localStorage.setItem('UserID', data.id);
       localStorage.setItem('LoggedInTrainer', data.is_staff ? 'true' : 'false');
       localStorage.setItem('Roles', data.roles);
+      if(data.organization !== null)
       localStorage.setItem('OrgID', data.organization);
       userProfile.value = data;
 
@@ -256,22 +258,30 @@ export const useUserStore = defineStore('User', () => {
   }
 
   // Fetch Users Based On ID
-  async function fetchUser(id: number) {
-    try {
-      // Start building the query; count: 'exact' returns the total count
+async function fetchUser(id: number) {
+  try {
+    const orgID = localStorage.getItem('OrgID');
 
-      const { data, error } = await supabase.from('users').select('*').eq('id', id).single();
+    // Build base query
+    let query = supabase.from('users').select('*').eq('id', id);
 
-      if (error || !data) {
-        throw new Error(`Error fetching users: ${error?.message || 'Users not found'}`);
-      }
-
-      // Store data (and count if needed)
-      UserDetail.value = data;
-    } catch (error: any) {
-      showError(error);
+    // Conditionally filter by organization if orgID exists
+    if (orgID) {
+      query = query.eq('organization', orgID);
     }
+
+    const { data, error } = await query.single();
+
+    if (error || !data) {
+      throw new Error(`Error fetching users: ${error?.message || 'Users not found'}`);
+    }
+
+    UserDetail.value = data;
+  } catch (error: any) {
+    showError(error);
   }
+}
+
 
   // Fetch Users Based On Org, Filters with Pagination
   async function fetchOrgUsers(filters: Filter, page: number, pageSize: number) {
@@ -314,32 +324,7 @@ export const useUserStore = defineStore('User', () => {
     }
   }
 
-  // Fetch Users Based On ID and Org
-  async function fetchOrgUser(id: number) {
-    try {
-      // Start building the query; count: 'exact' returns the total count
 
-      const orgID = localStorage.getItem('OrgID');
-      if (!orgID) {
-        throw new Error('Organizational ID not Found');
-      }
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', id)
-        .eq('organization', orgID)
-        .single();
-
-      if (error || !data) {
-        throw new Error(`Error fetching users: ${error?.message || 'Users not found'}`);
-      }
-
-      // Store data (and count if needed)
-      UserDetail.value = data;
-    } catch (error: any) {
-      showError(error);
-    }
-  }
 
   // Fetch Logged In Trainer
   async function getLoggedTrainer() {
@@ -1003,6 +988,7 @@ export const useUserStore = defineStore('User', () => {
       localStorage.setItem('UserID', data[0].id);
       localStorage.setItem('LoggedInTrainer', data[0].is_staff);
       localStorage.setItem('Roles', data[0].roles);
+      if(data[0].organization)
       localStorage.setItem('OrgID', data[0].organization);
       userProfile.value = data[0];
       return userProfile.value;
@@ -1121,7 +1107,6 @@ export const useUserStore = defineStore('User', () => {
     updateClientProgram,
     fetchUsers,
     fetchUser,
-    fetchOrgUser,
     fetchOrgUsers,
     getTrainer,
     addOrgUser
