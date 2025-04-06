@@ -1055,27 +1055,33 @@ export const useUserStore = defineStore('User', () => {
         if (orgError) throw new Error(orgError.message);
         if (!orgData) throw new Error('Organization not found');
 
+        const profileData = { user_id: data.id };
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .insert(profileData)
+          .select('id')
+          .single();
+        if (profileError) throw new Error(profileError.message);
+        const update: any = { profile_id: profile.id };
         if (type === 'trainer') {
           const trainerProfile = {
             user_id: data.id,
             title: `${orgData.name} - Trainer`
           };
-          const { error: trainerError } = await supabase
+          const { data: trainer, error: trainerError } = await supabase
             .from('trainer_profile')
             .insert(trainerProfile)
-            .select()
+            .select('id')
             .single();
           if (trainerError) throw new Error(trainerError.message);
-        } else {
-          const profileData = { user_id: data.id };
-          const { error: profileError } = await supabase
-            .from('profiles')
-            .insert(profileData)
-            .select()
-            .single();
-          if (profileError) throw new Error(profileError.message);
+          update.trainer_profile = trainer.id;
         }
+        const { error: updateError } = await supabase
+          .from('users')
+          .update(update)
+          .eq('id', data.id);
 
+        if (updateError) throw new Error(updateError.message);
         // Add the successfully inserted email to our array.
         insertedEmails.push(email);
         // Also update local state.
