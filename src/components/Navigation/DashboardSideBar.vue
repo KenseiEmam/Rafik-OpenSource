@@ -1,5 +1,6 @@
 <template>
-  <div :dir="locale === 'ar' ? 'rtl' : 'ltr'"
+  <div
+    :dir="locale === 'ar' ? 'rtl' : 'ltr'"
     class="h-screen overflow-y-auto border-rafik-sectext dark:border-rafik-darksectext bg-rafik-secbg dark:bg-rafik-darksecbg flex flex-col p-8 gap-8 2xl:items-between 2xl:p-16"
   >
     <div class="relative">
@@ -16,26 +17,35 @@
         alt="Dark mode logo"
       />
     </div>
-    <nav  v-if="userStore.userProfile?.roles" class="flex flex-col gap-4 2xl:gap-10 my-auto">
+    <nav v-if="userStore.userProfile?.roles" class="flex flex-col gap-4 2xl:gap-10 my-auto">
       <RouterLink :to="{ name: 'dashboard-home' }" class="nav-btn">
         <span v-html="t('dashboard.sidebar.myDashboard')" />
       </RouterLink>
       <RouterLink
-        v-if="userStore.userProfile?.roles.includes('Trainer')"
+        v-if="
+          userStore.userProfile?.roles.includes('Trainer') ||
+          userStore.userProfile?.roles.includes('Trnr')
+        "
         :to="{ name: 'programs-list' }"
         class="nav-btn"
       >
         <span v-html="t('dashboard.sidebar.workoutPrograms')" />
       </RouterLink>
       <RouterLink
-        v-if="userStore.userProfile?.roles.includes('Trainer')"
+        v-if="
+          userStore.userProfile?.roles.includes('Trainer') ||
+          userStore.userProfile?.roles.includes('Trnr')
+        "
         :to="{ name: 'client-list' }"
         class="nav-btn"
       >
         <span v-html="t('dashboard.sidebar.myClients')" />
       </RouterLink>
       <RouterLink
-        v-if="userStore.userProfile?.roles.includes('Trainer')"
+        v-if="
+          userStore.userProfile?.roles.includes('Trainer') ||
+          userStore.userProfile?.roles.includes('Trnr')
+        "
         :to="{ name: 'entitlement-list' }"
         class="nav-btn"
       >
@@ -62,8 +72,11 @@
       >
         <span v-html="t('dashboard.sidebar.auditPrograms')" />
       </RouterLink>
-      <RouterLink :to="{ name: 'audit-list' }" class="nav-btn"
-      v-if="userStore.userProfile?.roles.includes('Administrator')">
+      <RouterLink
+        :to="{ name: 'audit-list' }"
+        class="nav-btn"
+        v-if="userStore.userProfile?.roles.includes('Administrator')"
+      >
         <span v-html="t('dashboard.sidebar.auditPrograms')" />
       </RouterLink>
       <RouterLink :to="{ name: 'settings' }" class="nav-btn">
@@ -72,7 +85,10 @@
     </nav>
     <nav v-if="userStore.userProfile?.roles" class="flex flex-col gap-4 mt-auto 2xl:gap-8 text-sm">
       <RouterLink
-        v-if="userStore.userProfile?.roles.includes('Trainer')"
+        v-if="
+          userStore.userProfile?.roles.includes('Trainer') ||
+          userStore.userProfile?.roles.includes('Trnr')
+        "
         :to="{ name: 'ticket-list' }"
         class="nav-btn 2xl:text-lg text-base"
       >
@@ -81,12 +97,9 @@
       <RouterLink :to="{ name: 'trainer-profile' }" class="nav-btn 2xl:text-lg text-base">
         <span v-html="t('dashboard.sidebar.myProfile')" />
       </RouterLink>
-      <a
-        @click="handleLogOut"
-        class=" nav-btn 2xl:text-lg text-base text-red-600 pl-4"
-      >
+      <a @click="handleLogOut" class="nav-btn 2xl:text-lg text-base text-red-600 pl-4">
         {{ t('dashboard.sidebar.logout') }}
-    </a>
+      </a>
     </nav>
   </div>
 </template>
@@ -97,7 +110,7 @@ import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
 
 const userStore = useUserStore();
-const { t , locale } = useI18n();
+const { t, locale } = useI18n();
 
 const handleLogOut = async (): Promise<void> => {
   userStore.LogOut();
