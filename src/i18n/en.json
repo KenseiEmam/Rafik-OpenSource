@@ -284,6 +284,7 @@
         },
         "searchPlaceholder": "Type to Search Users...",
         "addUser": "Add User",
+        "assignBulk": "Assign in Bulk",
         "addUserModal": {
           "title": "Add New User",
           "subtitle": "Enter the user's details below to add a new user.",
