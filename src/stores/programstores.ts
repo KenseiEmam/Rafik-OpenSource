@@ -130,6 +130,33 @@ export const useProgramStore = defineStore('Program', () => {
     }
   }
 
+  // Fetch all programs
+  async function getOrgPrograms() {
+    const orgID = localStorage.getItem('OrgID')
+
+    if (!orgID) {
+      throw new Error('No user organization ID found in localStorage.')
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('programs')
+        .select()
+        .eq('organization', orgID)
+        .neq('status', 'Deleted')
+
+      if (error) {
+        throw new Error(`Error fetching programs: ${error.message}`)
+      }
+
+      All_Org_Programs.value = data || []
+      return AllPrograms.value
+    } catch (error: any) {
+      console.error(error)
+      alert(`Failed to load programs: ${error.message || 'Unknown error'}`)
+    }
+  }
+
   // Fetch Users Based On Filters with Pagination
   async function fetchAuditPrograms(filters: Filter, page: number, pageSize: number) {
     try {
@@ -220,7 +247,7 @@ export const useProgramStore = defineStore('Program', () => {
         throw new Error(`Error fetching users: ${error?.message || "Users not found"}`);
       }
 
-      // Store data (and count if needed)
+      // Store data  (and count if needed)
       All_Org_Programs.value = data;
       if(count)
       All_Org_Count.value = count;
@@ -437,6 +464,7 @@ export const useProgramStore = defineStore('Program', () => {
     wipeOut,
     wipeOutAll,
     getTrainersPrograms,
+    getOrgPrograms,
     getAllPrograms,
     getActivePrograms,
     getDraftedPrograms,
