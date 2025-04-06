@@ -411,7 +411,12 @@
       "list": {
         "pageTitle": {
           "subheader": "all",
-          "header": "program"
+          "header": "programs"
+        },
+        
+        "pageOrgTitle": {
+          "subheader": "Organizational",
+          "header": "programs"
         },
         "searchPlaceholder": "Search by name/description ...",
         "selectTrainer": {
