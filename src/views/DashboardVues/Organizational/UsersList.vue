@@ -250,8 +250,8 @@ const filters = ref<Filter>({ roles: [], name: '', active: true });
 const show_action = ref();
 
 const showAddUserModal = ref(false);
-// Add new program
-function addUser(email: string, type: 'trainer' | 'trainee') {
+// Add new Users
+function addUser(emails: string[], type: 'trainer' | 'trainee') {
   loading.value = true;
   page.value = 1;
   filters.value.name = '';
@@ -263,7 +263,7 @@ function addUser(email: string, type: 'trainer' | 'trainee') {
       console.error('Error fetching users:', e);
     })
     .finally(() => {
-      userStore.addOrgUser(email, type);
+      userStore.addOrgUser(emails, type);
       showAddUserModal.value = false;
     });
 }

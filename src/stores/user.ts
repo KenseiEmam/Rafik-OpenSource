@@ -1016,71 +1016,74 @@ export const useUserStore = defineStore('User', () => {
     }
   }
 
-  // Add Program
-  async function addOrgUser(email: string, type: 'trainer' | 'trainee') {
-    try {
-      const orgId = localStorage.getItem('OrgID');
-      const newUser = {
-        email: email,
-        roles:
-          type === 'trainer' ? ['Organization Trnr', 'Organization Trnee'] : ['Organization Trnee'],
-        is_staff: true,
-        organization: orgId
-      };
-
-      // Insert the new program and return the inserted row
-      const { data, error } = await supabase.from('users').insert(newUser).select().single(); // Ensures a single row is returned
-
-      if (error) throw new Error(error.message);
-      if (!data) throw new Error('Program creation failed');
-      const userSettings = {
-        user_id: data.id
-      };
-
-      const { error: settingsError } = await supabase
-        .from('user_settings')
-        .insert(userSettings)
-        .select()
-        .single(); // Ensures a single row is returned
-
-      if (settingsError) throw new Error(settingsError.message);
-
-      const { data: orgData, error: orgError } = await supabase
-        .from('organizations')
-        .select('name')
-        .eq('id', orgId)
-        .single();
-      if (orgError) throw new Error(orgError.message);
-      if (!orgData) throw new Error('Organization not found');
-
-      if (type === 'trainer') {
-        const trainerProfile = {
-          user_id: data.id,
-          title: `${orgData.name} - Trainer`
+  async function addOrgUser(emails: string[], type: 'trainer' | 'trainee') {
+    for (const email of emails) {
+      try {
+        const orgId = localStorage.getItem('OrgID');
+        const newUser = {
+          email: email,
+          roles:
+            type === 'trainer'
+              ? ['Organization Trnr', 'Organization Trnee']
+              : ['Organization Trnee'],
+          is_staff: true,
+          organization: orgId
         };
-        const { error: trainerError } = await supabase
-          .from('trainer_profile')
-          .insert(trainerProfile)
-          .select()
-          .single(); // Ensures a single row is returned
-        if (trainerError) throw new Error(trainerError.message);
-      } else {
-        const trainerProfile = {
+
+        // Insert the new user and return the inserted row
+        const { data, error } = await supabase.from('users').insert(newUser).select().single();
+
+        if (error) throw new Error(error.message);
+        if (!data) throw new Error('User creation failed');
+
+        const userSettings = {
           user_id: data.id
         };
-        const { error: trainerError } = await supabase
-          .from('profiles')
-          .insert(trainerProfile)
-          .select()
-          .single(); // Ensures a single row is returned
-        if (trainerError) throw new Error(trainerError.message);
-      }
 
-      // Add to local state
-      All_Org_Users.value?.push?.(data);
-    } catch (error) {
-      alert('Error creating program: ' + error);
-      return null;
+        const { error: settingsError } = await supabase
+          .from('user_settings')
+          .insert(userSettings)
+          .select()
+          .single();
+
+        if (settingsError) throw new Error(settingsError.message);
+
+        const { data: orgData, error: orgError } = await supabase
+          .from('organizations')
+          .select('name')
+          .eq('id', orgId)
+          .single();
+        if (orgError) throw new Error(orgError.message);
+        if (!orgData) throw new Error('Organization not found');
+
+        if (type === 'trainer') {
+          const trainerProfile = {
+            user_id: data.id,
+            title: `${orgData.name} - Trainer`
+          };
+          const { error: trainerError } = await supabase
+            .from('trainer_profile')
+            .insert(trainerProfile)
+            .select()
+            .single();
+          if (trainerError) throw new Error(trainerError.message);
+        } else {
+          const profileData = {
+            user_id: data.id
+          };
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .insert(profileData)
+            .select()
+            .single();
+          if (profileError) throw new Error(profileError.message);
+        }
+
+        // Add to local state
+        All_Org_Users.value?.push?.(data);
+      } catch (error) {
+        alert('Error creating user: ' + error);
+      }
     }
   }
 
