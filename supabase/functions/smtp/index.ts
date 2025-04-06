@@ -30,10 +30,6 @@ router
     // Simple POST route to test the function.
     ctx.response.body = "Hello World";
   })
-  .get("/smtp", (ctx) => {
-    // Simple GET route to test the function.
-    ctx.response.body = "Hello World";
-  })
   .post("/smtp", async (ctx) => {
     try {
       let name: string, email: string, message: string;
@@ -190,6 +186,73 @@ Message: ${message}
       }
     } catch (error) {
       console.error("Error in POST /join-request function:", error);
+      ctx.response.status = 500;
+      setJsonCors(ctx);
+      ctx.response.body = {
+        error: "Internal Server Error",
+        message: error.toString(),
+      };
+    }
+  })
+  .post("/smtp/org-join-request", async (ctx) => {
+    try {
+      // Ensure the request has a JSON body.
+      if (ctx.request.hasBody) {
+        const reqBody = ctx.request.body({ type: "json" });
+        const data = await reqBody.value;
+
+        // Expecting a JSON array of emails.
+        if (!Array.isArray(data) || data.length === 0) {
+          ctx.response.status = 400;
+          setJsonCors(ctx);
+          ctx.response.body = { error: "Missing required emails" };
+          return;
+        }
+        const emails: string[] = data;
+
+        // Send email to each address.
+        const results = [];
+        for (const email of emails) {
+          const payload = {
+            from: `Rafik App <${noReply}>`,
+            to: [email],
+            subject: "Join Request to Our Organization",
+            html: orgTemplate,
+          };
+
+          const response = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: {
+              Authorization: "Bearer re_3fq5Vwyc_5kCmPe9youaPhzj1ZpeQQ3j7", // Use env variable in production.
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          });
+
+          if (!response.ok) {
+            results.push({ email, error: await response.text() });
+          } else {
+            results.push({
+              email,
+              status: "sent",
+              metadata: await response.json(),
+            });
+          }
+        }
+
+        ctx.response.status = 200;
+        setJsonCors(ctx);
+        ctx.response.body = {
+          message: "Emails sent successfully",
+          results,
+        };
+      } else {
+        ctx.response.status = 400;
+        setJsonCors(ctx);
+        ctx.response.body = { error: "No body found." };
+      }
+    } catch (error) {
+      console.error("Error in POST /smtp/org-join-request function:", error);
       ctx.response.status = 500;
       setJsonCors(ctx);
       ctx.response.body = {
