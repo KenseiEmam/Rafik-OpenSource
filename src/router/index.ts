@@ -75,61 +75,51 @@ const router = createRouter({
         },
         {
           path: 'users',
-          meta:{requiresAdmin:true},
-
           children: [
             {
               path: '', // Default child route for /dashboard/users
               name: 'users-list',
               component: () => import('../views/DashboardVues/All Users/UserListing.vue'),
-
+              meta:{requiresAdmin:true},
             },
             {
               path: ':id', // Dynamic route for user details
               name: 'single-user',
               component: () => import('../views/DashboardVues/All Users/UserDetails.vue'),
+              meta:{requiresAnyAdmin:true},
             },
           ],
         },
         {
           path: 'organization',
           meta:{requiresOrgAdmin:true},
-
           children: [
             {
               path: 'users', // Default child route for /dashboard/organization/users
               name: 'org-users-list',
               component: () => import('../views/DashboardVues/Organizational/UsersList.vue'),
-
             },
             {
               path: 'programs', // Default child route for /dashboard/organization/users
               name: 'org-programs-list',
               component: () => import('../views/DashboardVues/Organizational/ProgramsList.vue'),
-
             },
-            // {
-            //   path: ':id', // Dynamic route for program details
-            //   name: 'org-single-user',
-            //   component: () => import('../views/DashboardVues/All Users/UserDetails.vue'),
-            // },
           ],
         },
         {
           path: 'audit-programs', // Default child route for /dashboard
-          meta:{requiresAdmin:true},
-
           children: [
             {
               path: '', // Default child route for /dashboard/programs
               name: 'audit-list',
               component: () => import('../views/DashboardVues/AuditPrograms/ProgramListing.vue'),
-
+              meta:{requiresAdmin:true},
             },
             {
               path: ':id', // Dynamic route for program details
               name: 'audit-program',
               component: () => import('../views/DashboardVues/AuditPrograms/ProgramDetails.vue'),
+              meta:{requiresAnyAdmin:true},
             },
           ],
         },
@@ -141,7 +131,6 @@ const router = createRouter({
               path: '', // Default child route for /dashboard/programs
               name: 'programs-list',
               component: () => import('../views/DashboardVues/Programs/ListingVue.vue'),
-
             },
             {
               path: ':id', // Dynamic route for program details
@@ -310,6 +299,16 @@ router.beforeEach((to) => {
   // Requires Org Admin Role
   // Check userStore.userPRofile is fetched
   if(to.meta.requiresOrgAdmin && !localStorage.getItem('Roles')?.includes("Organization Admin"))
+    {
+      return {
+        path: '/login',
+        query: { redirect: to.fullPath },
+      };
+    }
+
+    // Requires Any type of Admin Role
+  // Check userStore.userPRofile is fetched
+  if(to.meta.requiresAnyAdmin && !localStorage.getItem('Roles')?.includes("Organization Admin") && !localStorage.getItem('Roles')?.includes("Administrator"))
     {
       return {
         path: '/login',

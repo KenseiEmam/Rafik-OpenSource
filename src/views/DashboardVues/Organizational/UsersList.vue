@@ -28,7 +28,7 @@
             {{ t('dashboard.users.list.filters.allUsers') }}
           </button>
           <button
-            @click="updateFilter('Trainer')"
+            @click="updateFilter('Organization Trnr')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
             :class="
               filters.roles.includes('Trainer') ? 'border-rafik gradient-bg text-rafik' : 'border'
@@ -46,7 +46,10 @@
             {{ t('dashboard.users.list.filters.trainee') }}
           </button>
         </div>
-        <div>
+        <div class="flex gap-2">
+          <button @click="showAssignEntitlementModal = true" class="btn-md-outline rounded">
+            {{ t('dashboard.users.list.assignBulk') }}
+          </button>
           <button @click="showAddUserModal = true" class="btn-md rounded">
             {{ t('dashboard.users.list.addUser') }}
           </button>
@@ -211,6 +214,13 @@
       </div>
     </div>
     <AddUserModal :visible="showAddUserModal" @close="showAddUserModal = false" @submit="addUser" />
+    <OrgAssign
+            :availableCount="entitlementStore.unusedEntitlementCount"
+            :programs="programStore.All_Org_Programs || []"
+            :visible="showAssignEntitlementModal"
+            @submit="onAssignModalSubmit"
+            @close="showAssignEntitlementModal = false"
+          />
   </div>
 </template>
 <script lang="ts" setup>
@@ -219,7 +229,12 @@ import { ref, computed, onMounted, watch } from 'vue';
 import debounce from 'lodash/debounce';
 import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
-import AddUserModal from './AddUserModal.vue';
+import AddUserModal from '@/components/UserTabs/AddUserModal.vue';
+import { useProgramStore } from '@/stores/programstores';
+import { useEntitlementStore } from '@/stores/entitlementstores';
+import Swal from 'sweetalert2';
+import OrgAssign from './OrgAssign.vue';
+import { supabase } from '@/lib/supabaseClient';
 const { t, locale } = useI18n();
 
 interface User {
@@ -248,8 +263,43 @@ const holdQuery = ref('');
 const filters = ref<Filter>({ roles: [], name: '', active: true });
 
 const show_action = ref();
-
+// Store references
+const entitlementStore = useEntitlementStore();
+const programStore = useProgramStore();
+// Local reactive states
+const showAssignEntitlementModal = ref(false);
+const processing = ref(false);
 const showAddUserModal = ref(false);
+
+
+// Success and Error Alerts
+function showSuccess(messageKey: string) {
+  Swal.fire({
+    title: t('dashboard.entitlements.list.successTitle'),
+    showConfirmButton: false,
+    timerProgressBar: true,
+    timer: 1500,
+    text: t(messageKey),
+    toast: true,
+    position: 'top-right',
+    icon: 'success',
+    background: '#081411',
+    color: '#E8F3ED'
+  });
+}
+
+function showError(messageKey: string) {
+  Swal.fire({
+    title: t('dashboard.entitlements.list.errorTitle'),
+    text: t(messageKey),
+    icon: 'error',
+    confirmButtonColor: '#d33',
+    background: '#081411',
+    color: '#E8F3ED'
+  });
+}
+
+
 // Add new program
 function addUser(email: string, type: 'trainer' | 'trainee') {
   loading.value = true;
@@ -273,6 +323,126 @@ function handleLeave() {
     show_action.value = null;
   }, 500);
 }
+
+
+// Called when the AssignEntitlementsModal emits a "submit" event
+async function onAssignModalSubmit(payload: { programId: string; emails: string[] }) {
+  const { programId, emails } = payload;
+  await assignEntitlementsToUsers(programId, emails);
+  showAssignEntitlementModal.value = false;
+}
+
+async function assignEntitlementsToUsers(programId: string, emails: string[]) {
+  processing.value = true;
+  const orgID = localStorage.getItem('OrgID');
+  const availableEntitlements = entitlementStore.entitlements.filter(
+    (e) => e.client_email === null
+  );
+
+  if (emails.length > availableEntitlements.length) {
+    showError('dashboard.entitlements.list.tooManyEntitlements');
+    processing.value = false;
+    return;
+  }
+
+  const program = programStore.All_Org_Programs?.find((p) => p.id === programId);
+  if (!program) {
+    showError('dashboard.entitlements.list.programNotFound');
+    processing.value = false;
+    return;
+  }
+
+  const invalidEmails = [];
+  const validUsers = [];
+
+  for (const email of emails) {
+    const { data: user, error } = await supabase
+      .from('users')
+      .select()
+      .eq('email', email)
+      .eq('organization', orgID)
+      .maybeSingle();
+
+    if (error) {
+      invalidEmails.push(`Error checking user ${email}: ${error.message}`);
+      continue;
+    }
+
+    if (!user) {
+      invalidEmails.push(`User with email ${email} does not exist or is not part of the organization.`);
+      continue;
+    }
+
+    const userAlreadyAssigned = entitlementStore.entitlements.find(
+      (entitlement) => entitlement.client_email === email
+    );
+
+    if (userAlreadyAssigned) {
+      invalidEmails.push(`User with email ${email} is already assigned an entitlement.`);
+      continue;
+    }
+
+    validUsers.push({ email, user });
+  }
+
+  if (invalidEmails.length > 0) {
+    showError(invalidEmails.join('\n'));
+  }
+
+  for (const { email, user } of validUsers) {
+    const entitlement = availableEntitlements[emails.indexOf(email)];
+    if (entitlement) {
+      await entitlementStore.assignEntitlement(entitlement.id, email, program);
+      const data = {
+        weekly_cycle: program.weekly_cycle,
+        client_id: user.profile_id,
+        price_package: 0,
+        workouts: program.workouts,
+        months_package: 1,
+        status: 'active',
+        program_id: program.id,
+        auto_reroll: true,
+        entitlement_id: entitlement.id,
+      };
+      const { data: userProgramData, error: userProgramError } = await supabase
+        .from('user_programs')
+        .insert([data])
+        .select('id')
+        .single();
+
+      if (userProgramError) {
+        showError('Error creating user program: ' + userProgramError.message);
+        return;
+      }
+
+      // Update the entitlement with the new user_program_id and set status to 'active'
+      const { error: entitlementUpdateError } = await supabase
+        .from('entitlements')
+        .update({
+          user_program_id: userProgramData.id,
+          status: 'active'
+        })
+        .eq('id', entitlement.id);
+
+      if (entitlementUpdateError) {
+        showError('Error updating entitlement: ' + entitlementUpdateError.message);
+        return;
+      }
+    }
+  }
+
+  if (invalidEmails.length === 0) {
+    showSuccess('dashboard.entitlements.list.emailsSentSuccessfully');
+  }
+  else {
+    showSuccess('Assignment completed with Errors')
+  }
+
+  await Promise.all([entitlementStore.getEntitlements(), userStore.getEntitled()]);
+  processing.value = false;
+}
+
+
 
 const totalPages = computed(() => Math.ceil(totalCount.value / pageSize.value));
 // Function to load users
@@ -329,9 +499,19 @@ function updatePage(newPage: number) {
     loadUsers();
   }
 }
+// On mount, load entitlements, programs, and user data
+onMounted(() => {
+  loading.value = true;
+  loadUsers()
+  entitlementStore
+    .getEntitlements()
+    .then(programStore.getOrgPrograms)
+    .then(userStore.getEntitled)
+    .then(() => {
+      loading.value = false;
+    });
+});
 
-// Load users on component mount
-onMounted(loadUsers);
 
 // Watch for changes in the store's All_Org_Users and update the list
 watch(
