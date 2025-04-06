@@ -110,7 +110,10 @@
               <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">
                 {{ t('dashboard.auditPrograms.list.tableHeaders.trainer') }}
               </th>
-              <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">
+              <th
+                v-if="!isOrg"
+                class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider"
+              >
                 {{ t('dashboard.auditPrograms.list.tableHeaders.price') }}
               </th>
               <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">
@@ -138,7 +141,7 @@
                   {{ program.trainer_id }}
                 </router-link>
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <td v-if="!isOrg" class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
                 {{ program.price_one }}
               </td>
               <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
