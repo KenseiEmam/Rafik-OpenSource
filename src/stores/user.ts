@@ -1017,6 +1017,7 @@ export const useUserStore = defineStore('User', () => {
   }
 
   async function addOrgUser(emails: string[], type: 'trainer' | 'trainee') {
+    const insertedEmails: string[] = [];
     for (const email of emails) {
       try {
         const orgId = localStorage.getItem('OrgID');
@@ -1030,15 +1031,13 @@ export const useUserStore = defineStore('User', () => {
           organization: orgId
         };
 
-        // Insert the new user and return the inserted row
+        // Bulk insert the new user.
         const { data, error } = await supabase.from('users').insert(newUser).select().single();
 
         if (error) throw new Error(error.message);
         if (!data) throw new Error('User creation failed');
 
-        const userSettings = {
-          user_id: data.id
-        };
+        const userSettings = { user_id: data.id };
 
         const { error: settingsError } = await supabase
           .from('user_settings')
@@ -1068,9 +1067,7 @@ export const useUserStore = defineStore('User', () => {
             .single();
           if (trainerError) throw new Error(trainerError.message);
         } else {
-          const profileData = {
-            user_id: data.id
-          };
+          const profileData = { user_id: data.id };
           const { error: profileError } = await supabase
             .from('profiles')
             .insert(profileData)
@@ -1079,10 +1076,29 @@ export const useUserStore = defineStore('User', () => {
           if (profileError) throw new Error(profileError.message);
         }
 
-        // Add to local state
+        // Add the successfully inserted email to our array.
+        insertedEmails.push(email);
+        // Also update local state.
         All_Org_Users.value?.push?.(data);
       } catch (error) {
         alert('Error creating user: ' + error);
+      }
+    }
+
+    // If at least one user was inserted, send the org join request emails.
+    if (insertedEmails.length > 0) {
+      try {
+        const { data, error } = await supabase.functions.invoke('smtp/org-join-request', {
+          method: 'POST',
+          body: insertedEmails // Passing the array of emails.
+        });
+        if (error) {
+          console.error('Error sending org join request emails:', error);
+        } else {
+          console.log('Org join request emails sent:', data);
+        }
+      } catch (error) {
+        console.error('Error invoking org join request function:', error);
       }
     }
   }
