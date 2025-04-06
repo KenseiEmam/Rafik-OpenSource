@@ -408,8 +408,12 @@
     "auditPrograms": {
       "list": {
         "pageTitle": {
-          "subheader": "الكل",
-          "header": "البرنامج"
+          "subheader": "كل",
+          "header": "البرامج"
+        },
+        "pageOrdTitle": {
+          "subheader": "برامج",
+          "header": "الشركة"
         },
         "searchPlaceholder": "ابحث بالاسم/الوصف ...",
         "selectTrainer": {
