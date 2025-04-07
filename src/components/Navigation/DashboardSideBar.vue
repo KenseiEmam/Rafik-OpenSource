@@ -42,10 +42,7 @@
         <span v-html="t('dashboard.sidebar.myClients')" />
       </RouterLink>
       <RouterLink
-        v-if="
-          userStore.userProfile?.roles.includes('Trainer') ||
-          userStore.userProfile?.roles.includes('Organization Trnr')
-        "
+        v-if="userStore.userProfile?.roles.includes('Trainer')"
         :to="{ name: 'entitlement-list' }"
         class="nav-btn"
       >

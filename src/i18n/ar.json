@@ -1350,7 +1350,28 @@
       "trainerSettingsTab": "إعدادات المدرب",
       "rolesAndPermissionsTab": "الأدوار والصلاحيات",
       "successTitle": "نجاح!",
-      "errorTitle": "خطأ!"
+      "errorTitle": "خطأ!",
+      "organizationSettingsTab": "إعدادات المؤسسة",
+      "organizationSettingsTabLoading": "جاري تحميل إعدادات المؤسسة...",
+      "organizationLogoUploadLabel": "رفع الشعار",
+      "orgNameLabel": "اسم المؤسسة",
+      "orgNamePlaceholder": "أدخل اسم المؤسسة",
+      "orgAddressLabel": "العنوان",
+      "orgAddressPlaceholder": "أدخل العنوان",
+      "orgDomainsLabel": "نطاقات المؤسسة (مفصولة بفواصل)",
+      "orgDomainsPlaceholder": "أدخل النطاقات مفصولة بفواصل",
+      "orgCountryLabel": "الدولة",
+      "orgCountryPlaceholder": "اختر الدولة",
+      "orgTrainerAssignLabel": "السماح للمدربين بتعيين المتدربين",
+      "orgDescriptionLabel": "الوصف",
+      "orgDescriptionPlaceholder": "أدخل وصفًا موجزًا",
+      "orgSaveButton": "حفظ",
+      "orgNoOrgIdFound": "لم يتم العثور على معرّف المؤسسة في ملفك الشخصي!",
+      "orgFetchError": "تعذّر جلب بيانات المؤسسة: {error}",
+      "orgUpdateSuccess": "تم تحديث المؤسسة بنجاح",
+      "orgUpdateFail": "فشل في تحديث المؤسسة: {error}",
+      "orgLogoUploadSuccess": "تم رفع الشعار بنجاح!",
+      "orgLogoUploadFail": "حدث خطأ أثناء رفع الشعار: {error}"
     }
   }
 }

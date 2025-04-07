@@ -14,6 +14,7 @@
       <div
         class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
       >
+        <!-- General Settings Tab -->
         <button
           :class="
             activeTab === 'General Setting' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''
@@ -23,6 +24,8 @@
         >
           {{ t('dashboard.settings.generalSettingsTab') }}
         </button>
+
+        <!-- Trainer Settings Tab -->
         <button
           v-if="userStore.userProfile.roles.includes('Trainer')"
           :class="
@@ -33,6 +36,8 @@
         >
           {{ t('dashboard.settings.trainerSettingsTab') }}
         </button>
+
+        <!-- Roles & Permissions Tab -->
         <button
           v-if="userStore.userProfile.roles.includes('Administrator')"
           :class="
@@ -45,21 +50,210 @@
         >
           {{ t('dashboard.settings.rolesAndPermissionsTab') }}
         </button>
+
+        <!-- Organization Settings Tab (Only if user is Organization Trnr) -->
+        <button
+          v-if="userStore.userProfile.roles.includes('Organization Trnr')"
+          :class="
+            activeTab === 'Organization Settings'
+              ? 'text-rafik-pritext dark:text-rafik-darkpritext'
+              : ''
+          "
+          class="nav-btn uppercase"
+          @click="setActiveTab('Organization Settings')"
+        >
+          {{ t('dashboard.settings.organizationSettingsTab') }}
+        </button>
       </div>
 
+      <!-- Tab Contents -->
       <div>
         <transition name="slide-fade">
+          <!-- General Settings -->
           <GeneralSettings v-if="activeTab === 'General Setting'" />
+
+          <!-- Trainer Settings -->
           <TrainerSettings
             v-else-if="
               activeTab === 'Trainer Settings' && userStore.userProfile.roles.includes('Trainer')
             "
           />
+
+          <!-- Roles & Permissions -->
           <RolesandPerms
             v-else-if="
-              activeTab === 'Roles and Permissions' && userStore.userProfile.roles.includes('Administrator')
+              activeTab === 'Roles and Permissions' &&
+              userStore.userProfile.roles.includes('Administrator')
             "
           />
+
+          <!-- Organization Settings -->
+          <template
+            v-else-if="
+              activeTab === 'Organization Settings' &&
+              userStore.userProfile.roles.includes('Organization Trnr')
+            "
+          >
+            <!-- Loading Spinner -->
+            <div
+              v-if="loadingOrg"
+              class="h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body"
+            >
+              <!-- Example spinner images (adjust paths as needed) -->
+              <img
+                src="@/assets/Large Icon.png"
+                class="w-24 h-24 animate-bounce hidden dark:inline-block"
+                alt="spinner"
+              />
+              <img
+                src="@/assets/Large Icon Light.png"
+                class="w-24 h-24 animate-bounce dark:hidden"
+                alt="spinner"
+              />
+              <p class="text-lg animate-pulse">
+                {{ t('dashboard.settings.organizationSettingsTabLoading') }}
+              </p>
+            </div>
+
+            <!-- Organization Form (split into 2 columns) -->
+            <div v-else class="grid 2xl:w-2/3 grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- LEFT COLUMN -->
+              <div class="space-y-4 flex flex-col items-center md:items-stretch">
+                <!-- Organization Logo -->
+                <div class="flex flex-col items-center md:items-start space-y-3">
+                  <img
+                    v-if="orgData.logo"
+                    :src="orgData.logo"
+                    alt="Organization Logo"
+                    class="w-44 h-44 2xl:h-64 2xl:w-64 rounded-xl"
+                  />
+                  <input
+                    type="file"
+                    id="uploadOrgLogo"
+                    class="hidden"
+                    @change="uploadOrgLogo"
+                    accept="image/*"
+                  />
+                  <label
+                    for="uploadOrgLogo"
+                    class="btn-md-outline w-full w-44 2xl:w-64 cursor-pointer text-center"
+                  >
+                    {{ t('dashboard.settings.organizationLogoUploadLabel') }}
+                  </label>
+                </div>
+
+                <!-- Organization Name -->
+                <div class="form-control w-full">
+                  <label class="block text-sm font-medium">
+                    {{ t('dashboard.settings.orgNameLabel') }}
+                  </label>
+                  <input
+                    v-model="orgData.name"
+                    class="rafik-text-input w-full"
+                    type="text"
+                    :placeholder="t('dashboard.settings.orgNamePlaceholder')"
+                  />
+                </div>
+
+                <!-- Description (textarea) -->
+                <div class="form-control w-full">
+                  <label class="block text-sm font-medium">
+                    {{ t('dashboard.settings.orgDescriptionLabel') }}
+                  </label>
+                  <textarea
+                    v-model="orgData.description"
+                    rows="2"
+                    class="rafik-text-input w-full"
+                    :placeholder="t('dashboard.settings.orgDescriptionPlaceholder')"
+                  ></textarea>
+                </div>
+              </div>
+
+              <!-- RIGHT COLUMN -->
+              <div class="space-y-4">
+                <!-- Country (select) -->
+                <div class="form-control">
+                  <label class="block text-sm font-medium">
+                    {{ t('dashboard.settings.orgCountryLabel') }}
+                  </label>
+                  <select v-model="orgData.country" class="rafik-text-input w-full">
+                    <option :value="''" disabled>
+                      {{ t('dashboard.settings.orgCountryPlaceholder') }}
+                    </option>
+                    <option v-for="c in countries" :key="c.code" :value="c.code">
+                      {{ c.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <!-- Address -->
+                <div class="form-control">
+                  <label class="block text-sm font-medium">
+                    {{ t('dashboard.settings.orgAddressLabel') }}
+                  </label>
+                  <textarea
+                    v-model="orgData.address"
+                    class="rafik-text-input w-full"
+                    type="text"
+                    rows="3"
+                    :placeholder="t('dashboard.settings.orgAddressPlaceholder')"
+                  ></textarea>
+                </div>
+
+                <!-- Domains (textarea) -->
+                <div class="form-control">
+                  <label class="block text-sm font-medium">
+                    {{ t('dashboard.settings.orgDomainsLabel') }}
+                  </label>
+                  <textarea
+                    v-model="domainString"
+                    class="rafik-text-input w-full"
+                    rows="7"
+                    :placeholder="t('dashboard.settings.orgDomainsPlaceholder')"
+                  ></textarea>
+                </div>
+
+                <!-- Trainer Assign (toggle) -->
+                <div class="form-control flex flex-row items-center gap-3 switch-mt">
+                  <span class="text-lg font-medium">
+                    {{ t('dashboard.settings.orgTrainerAssignLabel') }}
+                  </span>
+                  <label
+                    class="flex items-center ms-auto mr-4 space-x-2 cursor-pointer switch-label"
+                  >
+                    <input
+                      type="checkbox"
+                      id="trainerAssign"
+                      v-model="orgData.trainer_assign"
+                      class="hidden"
+                    />
+                    <div
+                      class="w-16 h-8 flex items-center border-rafik-pritext dark:border-rafik-darkpritext border-2 rounded-full transition-all"
+                      :class="{ 'bg-rafik': orgData.trainer_assign }"
+                    >
+                      <div
+                        class="w-8 h-8 bg-rafik-pritext dark:bg-rafik-darkpritext rounded-full shadow-md transform transition-transform"
+                        :class="
+                          orgData.trainer_assign
+                            ? locale === 'ar'
+                              ? '-translate-x-8'
+                              : 'translate-x-8'
+                            : ''
+                        "
+                      ></div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <!-- SAVE BUTTON (Full-width row) -->
+              <div class="md:col-span-2">
+                <button class="btn-lg w-full md:w-auto" @click="updateOrganization">
+                  {{ t('dashboard.settings.orgSaveButton') }}
+                </button>
+              </div>
+            </div>
+          </template>
         </transition>
       </div>
     </div>
@@ -67,7 +261,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useUserStore } from '@/stores/user';
 import PageTitle from '@/components/Navigation/PageTitle.vue';
 import GeneralSettings from '@/components/SettingsTabs/GeneralSettings.vue';
@@ -75,10 +269,12 @@ import TrainerSettings from '@/components/SettingsTabs/TrainerSettings.vue';
 import RolesandPerms from '@/components/SettingsTabs/RolesandPerms.vue';
 import Swal from 'sweetalert2';
 import { useI18n } from 'vue-i18n';
+import { supabase } from '@/lib/supabaseClient';
+import { countries } from '@/lib/countries'; // Assuming you have a JSON file with country data
 
-const { t , locale } = useI18n();
-
+const { t, locale } = useI18n(); // now we also destructure `locale`
 const userStore = useUserStore();
+
 const activeTab = ref('General Setting');
 
 // Change active tab handler
@@ -86,7 +282,7 @@ function setActiveTab(tab: string) {
   activeTab.value = tab;
 }
 
-// Success and Error Alerts (if needed for this page)
+// Success and Error Alerts
 function showSuccess(message: string) {
   Swal.fire({
     title: t('dashboard.settings.successTitle'),
@@ -112,10 +308,163 @@ function showError(message: string) {
     color: '#E8F3ED'
   });
 }
+
+/* ------------------------------------------------------------------
+   ORGANIZATION SETTINGS LOGIC
+   ------------------------------------------------------------------ */
+const loadingOrg = ref(false);
+
+// We'll store all org data in orgData
+const orgData = ref<any>({
+  id: null,
+  created_at: null,
+  name: '',
+  domains: [],
+  description: '',
+  logo: '',
+  country: '',
+  address: '',
+  trainer_assign: false
+});
+
+const domainString = ref('');
+const logoFile = ref<File | null>(null);
+
+// On mount, if user is 'Organization Trnr', fetch org data
+onMounted(async () => {
+  if (userStore.userProfile?.roles?.includes('Organization Trnr')) {
+    loadingOrg.value = true;
+    await getOrganization();
+    loadingOrg.value = false;
+  }
+});
+
+// Fetching organization data based on user profile
+async function getOrganization() {
+  try {
+    const orgId = userStore.userProfile?.organization;
+    if (!orgId) {
+      showError(t('dashboard.settings.orgNoOrgIdFound'));
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('organizations')
+      .select('*')
+      .eq('id', orgId)
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    // Initialize orgData
+    orgData.value = { ...data };
+    // If domains is an array, convert to multiline text
+    if (Array.isArray(data.domains)) {
+      domainString.value = data.domains.join(', ');
+    }
+  } catch (err: any) {
+    console.error('Error fetching organization data:', err);
+    showError(
+      t('dashboard.settings.orgFetchError', {
+        error: err.message || 'Unknown error'
+      })
+    );
+  }
+}
+
+// Called by "Save" button to update the org row
+async function updateOrganization() {
+  try {
+    // Convert domainString to array
+    const domainsArray =
+      domainString.value.trim().length > 0
+        ? domainString.value.split(',').map((d: string) => d.trim())
+        : [];
+
+    const { error } = await supabase
+      .from('organizations')
+      .update({
+        name: orgData.value.name,
+        domains: domainsArray,
+        description: orgData.value.description,
+        logo: orgData.value.logo,
+        country: orgData.value.country,
+        address: orgData.value.address,
+        trainer_assign: orgData.value.trainer_assign
+      })
+      .eq('id', orgData.value.id);
+
+    if (error) throw error;
+
+    showSuccess(t('dashboard.settings.orgUpdateSuccess'));
+    // Optionally refetch data
+    await getOrganization();
+  } catch (err: any) {
+    console.error('Error updating organization:', err);
+    showError(
+      t('dashboard.settings.orgUpdateFail', {
+        error: err.message || 'Unknown error'
+      })
+    );
+  }
+}
+
+// Handle file input change for logo
+async function uploadOrgLogo(event: Event) {
+  const target = event.target as HTMLInputElement;
+  if (!target.files || !target.files[0]) {
+    return;
+  }
+  logoFile.value = target.files[0];
+  try {
+    loadingOrg.value = true;
+    const uploadedUrl = await uploadOrgLogoToBucket(logoFile.value);
+    if (uploadedUrl) {
+      orgData.value.logo = uploadedUrl;
+      showSuccess(t('dashboard.settings.orgLogoUploadSuccess'));
+    }
+  } catch (err: any) {
+    console.error('Error uploading logo:', err);
+    showError(
+      t('dashboard.settings.orgLogoUploadFail', {
+        error: err.message || 'Unknown error'
+      })
+    );
+  } finally {
+    loadingOrg.value = false;
+  }
+}
+
+// Actually upload the file to your Supabase Storage
+async function uploadOrgLogoToBucket(file: File): Promise<string | null> {
+  try {
+    const fileName = `org_logos/${Date.now()}_${file.name}`;
+    const { data, error } = await supabase.storage.from('storage').upload(fileName, file, {
+      cacheControl: '3600',
+      upsert: true
+    });
+
+    if (error) throw error;
+    const { data: publicUrlData } = supabase.storage.from('storage').getPublicUrl(data.path);
+
+    return publicUrlData.publicUrl;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
 </script>
 
 <style scoped>
 .form-control label {
   margin-bottom: 0.25rem;
+}
+.switch-mt {
+  margin-top: 2rem !important;
+}
+.switch-label {
+  margin-bottom: 0 !important;
 }
 </style>
