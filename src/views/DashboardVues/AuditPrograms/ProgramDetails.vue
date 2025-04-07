@@ -13,9 +13,10 @@ import router from '@/router';
 import { useI18n } from 'vue-i18n';
 
 const activeTab = ref('Details');
-const { t , locale } = useI18n();
+const { t, locale } = useI18n();
 // Access the route object and store
 const route = useRoute();
+const isOrg = !!localStorage.getItem('isOrg');
 const programStore = useProgramStore();
 
 // Function to refresh the current route (if needed)
@@ -156,7 +157,7 @@ function setActiveTab(tab: string) {
               </button>
               <button
                 class="uppercase text-left text-rafik-secondary hover:text-rafik"
-                v-if="programStore.Program.status == 'Active'"
+                v-if="programStore.Program.status == 'Active' && !isOrg"
               >
                 {{ t('dashboard.auditPrograms.single.actions.resetToDraft') }}
               </button>
@@ -238,7 +239,7 @@ function setActiveTab(tab: string) {
           <ClientTable admin v-else-if="activeTab === 'Clients'" :program="programStore.Program" />
           <PricingModel admin v-else-if="activeTab === 'Pricing'" :program="programStore.Program" />
           <!-- <DocumentsForms v-else-if="activeTab === 'Documents'" :program="programStore.Program" /> -->
-          <ReviewsTab admin v-else-if="activeTab === 'Reviews'" :program="programStore.Program"/>
+          <ReviewsTab admin v-else-if="activeTab === 'Reviews'" :program="programStore.Program" />
         </transition>
       </div>
     </div>

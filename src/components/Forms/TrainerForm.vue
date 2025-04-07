@@ -243,7 +243,16 @@ const handleSubmit = async () => {
 
     if (trainerError) throw trainerError;
 
+    // Insert settings
+    const { data: settingsProfile, error: settingsError } = await supabase
+      .from("user_settings")
+      .insert({
+        user_id: userId,
+      })
+      .select()
+      .single();
 
+    if (settingsError) throw settingsError;
 
 
     // Update user row with new trainer profile ID and is_staff set to true

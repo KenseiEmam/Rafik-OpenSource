@@ -9,22 +9,21 @@
         {{ t('dashboard.users.list.addUserModal.subtitle') }}
       </p>
       <form @submit.prevent="submitForm" class="grid grid-cols-1 gap-6">
-        <!-- Email Field -->
+        <!-- Emails Field (TextArea) -->
         <div class="mb-4">
-          <label for="user_email" class="block text-sm font-medium">
+          <label for="user_emails" class="block text-sm font-medium">
             {{ t('dashboard.users.list.addUserModal.emailLabel') }}
           </label>
-          <input
-            type="email"
-            id="user_email"
-            placeholder="name@example.com"
-            v-model="user.email"
+          <textarea
+            id="user_emails"
+            :placeholder="t('dashboard.users.list.addUserModal.emailsPlaceholder')"
+            v-model="user.emails"
             class="rafik-text-input"
             required
-            :class="{ 'border-red-500': errors.email }"
-          />
-          <span v-if="errors.email" class="text-red-500 text-sm">
-            {{ errors.email }}
+            :class="{ 'border-red-500': errors.emails }"
+          ></textarea>
+          <span v-if="errors.emails" class="text-red-500 text-sm">
+            {{ errors.emails }}
           </span>
         </div>
         <!-- User Type Field -->
@@ -84,42 +83,60 @@ const props = defineProps({
 const emits = defineEmits(['close', 'submit']);
 
 interface UserForm {
-  email: string;
+  emails: string;
   type: string;
 }
 
 const user = ref<UserForm>({
-  email: '',
+  emails: '',
   type: ''
 });
 
-const errors = ref<{ email?: string; type?: string }>({});
+const errors = ref<{ emails?: string; type?: string }>({});
 
 const validateForm = () => {
   errors.value = {};
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (!user.value.email) {
-    errors.value.email = t('dashboard.users.list.addUserModal.emailRequired');
-  } else if (!emailRegex.test(user.value.email)) {
-    errors.value.email = t('dashboard.users.list.addUserModal.invalidEmail');
+  if (!user.value.emails) {
+    errors.value.emails = t('dashboard.users.list.addUserModal.emailRequired');
+  } else {
+    // Split the emails by commas, trim spaces and remove empties
+    const emailsArray = user.value.emails
+      .split(',')
+      .map((email) => email.trim())
+      .filter((email) => email.length > 0);
+    if (emailsArray.length === 0) {
+      errors.value.emails = t('dashboard.users.list.addUserModal.emailRequired');
+    } else {
+      for (const email of emailsArray) {
+        if (!emailRegex.test(email)) {
+          errors.value.emails = t('dashboard.users.list.addUserModal.invalidEmail');
+          break;
+        }
+      }
+    }
   }
 
   if (!user.value.type) {
     errors.value.type = t('dashboard.users.list.addUserModal.userTypeRequired');
   }
-
   return Object.keys(errors.value).length === 0;
 };
 
 const submitForm = () => {
   if (!validateForm()) return;
 
-  // Emit the email and user type to the parent component
-  emits('submit', user.value.email, user.value.type);
+  const emailsArray = user.value.emails
+    .split(',')
+    .map((email) => email.trim())
+    .filter((email) => email.length > 0);
+
+  // Emit an array of emails and the user type to the parent component
+  emits('submit', emailsArray, user.value.type);
 
   // Reset the form fields
-  user.value.email = '';
+  user.value.emails = '';
   user.value.type = '';
 };
 </script>

@@ -95,8 +95,6 @@ export const useEntitlementStore = defineStore('Entitlement', () => {
     }
   }
 
-
-
   // Count unused entitlements (those with null client_id)
   function updateUnusedEntitlementCount() {
     if (!entitlements.value) return

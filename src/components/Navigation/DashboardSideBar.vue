@@ -24,7 +24,7 @@
       <RouterLink
         v-if="
           userStore.userProfile?.roles.includes('Trainer') ||
-          userStore.userProfile?.roles.includes('Trnr')
+          userStore.userProfile?.roles.includes('Organization Trnr')
         "
         :to="{ name: 'programs-list' }"
         class="nav-btn"
@@ -34,7 +34,7 @@
       <RouterLink
         v-if="
           userStore.userProfile?.roles.includes('Trainer') ||
-          userStore.userProfile?.roles.includes('Trnr')
+          userStore.userProfile?.roles.includes('Organization Trnr')
         "
         :to="{ name: 'client-list' }"
         class="nav-btn"
@@ -44,7 +44,7 @@
       <RouterLink
         v-if="
           userStore.userProfile?.roles.includes('Trainer') ||
-          userStore.userProfile?.roles.includes('Trnr')
+          userStore.userProfile?.roles.includes('Organization Trnr')
         "
         :to="{ name: 'entitlement-list' }"
         class="nav-btn"
@@ -87,7 +87,7 @@
       <RouterLink
         v-if="
           userStore.userProfile?.roles.includes('Trainer') ||
-          userStore.userProfile?.roles.includes('Trnr')
+          userStore.userProfile?.roles.includes('Organization Trnr')
         "
         :to="{ name: 'ticket-list' }"
         class="nav-btn 2xl:text-lg text-base"
