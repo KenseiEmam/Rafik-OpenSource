@@ -1353,7 +1353,28 @@
       "trainerSettingsTab": "Trainer Settings",
       "rolesAndPermissionsTab": "Roles and Permissions",
       "successTitle": "Success!",
-      "errorTitle": "Error!"
+      "errorTitle": "Error!",
+      "organizationSettingsTab": "Organization Settings",
+      "organizationSettingsTabLoading": "Loading Organization Settings...",
+      "organizationLogoUploadLabel": "Upload Logo",
+      "orgNameLabel": "Organization Name",
+      "orgNamePlaceholder": "Enter organization name",
+      "orgAddressLabel": "Address",
+      "orgAddressPlaceholder": "Enter address",
+      "orgDomainsLabel": "Organization Domains (comma-separated)",
+      "orgDomainsPlaceholder": "Enter domains separated by commas",
+      "orgCountryLabel": "Country",
+      "orgCountryPlaceholder": "Select country",
+      "orgTrainerAssignLabel": "Allow Trainers to Assign Trainees",
+      "orgDescriptionLabel": "Description",
+      "orgDescriptionPlaceholder": "Enter a brief description",
+      "orgSaveButton": "Save",
+      "orgNoOrgIdFound": "No organization ID found in your profile!",
+      "orgFetchError": "Unable to fetch organization data: {error}",
+      "orgUpdateSuccess": "Organization updated successfully",
+      "orgUpdateFail": "Failed to update organization: {error}",
+      "orgLogoUploadSuccess": "Logo uploaded successfully!",
+      "orgLogoUploadFail": "Error uploading logo: {error}"
     }
   }
 }
