@@ -215,12 +215,12 @@
     </div>
     <AddUserModal :visible="showAddUserModal" @close="showAddUserModal = false" @submit="addUser" />
     <OrgAssign
-            :availableCount="entitlementStore.unusedEntitlementCount"
-            :programs="programStore.All_Org_Programs || []"
-            :visible="showAssignEntitlementModal"
-            @submit="onAssignModalSubmit"
-            @close="showAssignEntitlementModal = false"
-          />
+      :availableCount="entitlementStore.unusedEntitlementCount"
+      :programs="programStore.All_Org_Programs || []"
+      :visible="showAssignEntitlementModal"
+      @submit="onAssignModalSubmit"
+      @close="showAssignEntitlementModal = false"
+    />
   </div>
 </template>
 <script lang="ts" setup>
@@ -300,8 +300,8 @@ function showError(messageKey: string) {
 }
 
 
-// Add new program
-function addUser(email: string, type: 'trainer' | 'trainee') {
+// Add new Users
+function addUser(emails: string[], type: 'trainer' | 'trainee') {
   loading.value = true;
   page.value = 1;
   filters.value.name = '';
@@ -313,7 +313,7 @@ function addUser(email: string, type: 'trainer' | 'trainee') {
       console.error('Error fetching users:', e);
     })
     .finally(() => {
-      userStore.addOrgUser(email, type);
+      userStore.addOrgUser(emails, type);
       showAddUserModal.value = false;
     });
 }
@@ -323,7 +323,6 @@ function handleLeave() {
     show_action.value = null;
   }, 500);
 }
-
 
 // Called when the AssignEntitlementsModal emits a "submit" event
 async function onAssignModalSubmit(payload: { programId: string; emails: string[] }) {
@@ -369,7 +368,9 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
     }
 
     if (!user) {
-      invalidEmails.push(`User with email ${email} does not exist or is not part of the organization.`);
+      invalidEmails.push(
+        `User with email ${email} does not exist or is not part of the organization.`
+      );
       continue;
     }
 
@@ -402,7 +403,7 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
         status: 'active',
         program_id: program.id,
         auto_reroll: true,
-        entitlement_id: entitlement.id,
+        entitlement_id: entitlement.id
       };
       const { data: userProgramData, error: userProgramError } = await supabase
         .from('user_programs')
@@ -433,16 +434,13 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
 
   if (invalidEmails.length === 0) {
     showSuccess('dashboard.entitlements.list.emailsSentSuccessfully');
-  }
-  else {
-    showSuccess('Assignment completed with Errors')
+  } else {
+    showSuccess('Assignment completed with Errors');
   }
 
   await Promise.all([entitlementStore.getEntitlements(), userStore.getEntitled()]);
   processing.value = false;
 }
-
-
 
 const totalPages = computed(() => Math.ceil(totalCount.value / pageSize.value));
 // Function to load users
@@ -502,7 +500,7 @@ function updatePage(newPage: number) {
 // On mount, load entitlements, programs, and user data
 onMounted(() => {
   loading.value = true;
-  loadUsers()
+  loadUsers();
   entitlementStore
     .getEntitlements()
     .then(programStore.getOrgPrograms)
@@ -511,7 +509,6 @@ onMounted(() => {
       loading.value = false;
     });
 });
-
 
 // Watch for changes in the store's All_Org_Users and update the list
 watch(

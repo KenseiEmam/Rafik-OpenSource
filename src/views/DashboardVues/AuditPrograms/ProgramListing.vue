@@ -77,6 +77,7 @@
             :class="
               filters.status.includes('Draft') ? 'border-rafik gradient-bg text-rafik' : 'border'
             "
+            v-if="!isOrg"
           >
             {{ t('dashboard.auditPrograms.list.filters.draft') }}
           </button>
@@ -109,7 +110,10 @@
               <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">
                 {{ t('dashboard.auditPrograms.list.tableHeaders.trainer') }}
               </th>
-              <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">
+              <th
+                v-if="!isOrg"
+                class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider"
+              >
                 {{ t('dashboard.auditPrograms.list.tableHeaders.price') }}
               </th>
               <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">
@@ -137,15 +141,13 @@
                   {{ program.trainer_id }}
                 </router-link>
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <td v-if="!isOrg" class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
                 {{ program.price_one }}
               </td>
               <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
                 {{ program.avg_days_per_week }}
               </td>
-              <td
-                class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right "
-              >
+              <td class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right">
                 <svg
                   @click="show_action = program.id"
                   xmlns="http://www.w3.org/2000/svg"
@@ -257,11 +259,11 @@ import { useI18n } from 'vue-i18n';
 // Search query and dropdown visibility
 const searchQuery = ref('');
 const dropdownVisible = ref(false);
-const { t , locale } = useI18n();
+const { t, locale } = useI18n();
 
 // The selected trainer (if needed for your filters)
 const selectedTrainer = ref(null);
-
+const isOrg = !!localStorage.getItem('OrgID');
 // Filter options based on search query
 const filteredOptions = computed(() => {
   if (!searchQuery.value) return trainerOptions.value;

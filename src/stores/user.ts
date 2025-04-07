@@ -1002,71 +1002,96 @@ async function fetchUser(id: number) {
     }
   }
 
-  // Add Program
-  async function addOrgUser(email: string, type: 'trainer' | 'trainee') {
-    try {
-      const orgId = localStorage.getItem('OrgID');
-      const newUser = {
-        email: email,
-        roles:
-          type === 'trainer' ? ['Organization Trnr', 'Organization Trnee'] : ['Organization Trnee'],
-        is_staff: true,
-        organization: orgId
-      };
-
-      // Insert the new program and return the inserted row
-      const { data, error } = await supabase.from('users').insert(newUser).select().single(); // Ensures a single row is returned
-
-      if (error) throw new Error(error.message);
-      if (!data) throw new Error('Program creation failed');
-      const userSettings = {
-        user_id: data.id
-      };
-
-      const { error: settingsError } = await supabase
-        .from('user_settings')
-        .insert(userSettings)
-        .select()
-        .single(); // Ensures a single row is returned
-
-      if (settingsError) throw new Error(settingsError.message);
-
-      const { data: orgData, error: orgError } = await supabase
-        .from('organizations')
-        .select('name')
-        .eq('id', orgId)
-        .single();
-      if (orgError) throw new Error(orgError.message);
-      if (!orgData) throw new Error('Organization not found');
-
-      if (type === 'trainer') {
-        const trainerProfile = {
-          user_id: data.id,
-          title: `${orgData.name} - Trainer`
+  async function addOrgUser(emails: string[], type: 'trainer' | 'trainee') {
+    const insertedEmails: string[] = [];
+    for (const email of emails) {
+      try {
+        const orgId = localStorage.getItem('OrgID');
+        const newUser = {
+          email: email,
+          roles:
+            type === 'trainer'
+              ? ['Organization Trnr', 'Organization Trnee']
+              : ['Organization Trnee'],
+          is_staff: true,
+          organization: orgId
         };
-        const { error: trainerError } = await supabase
-          .from('trainer_profile')
-          .insert(trainerProfile)
+
+        // Bulk insert the new user.
+        const { data, error } = await supabase.from('users').insert(newUser).select().single();
+
+        if (error) throw new Error(error.message);
+        if (!data) throw new Error('User creation failed');
+
+        const userSettings = { user_id: data.id };
+
+        const { error: settingsError } = await supabase
+          .from('user_settings')
+          .insert(userSettings)
           .select()
-          .single(); // Ensures a single row is returned
-        if (trainerError) throw new Error(trainerError.message);
-      } else {
-        const trainerProfile = {
-          user_id: data.id
-        };
-        const { error: trainerError } = await supabase
+          .single();
+
+        if (settingsError) throw new Error(settingsError.message);
+
+        const { data: orgData, error: orgError } = await supabase
+          .from('organizations')
+          .select('name')
+          .eq('id', orgId)
+          .single();
+        if (orgError) throw new Error(orgError.message);
+        if (!orgData) throw new Error('Organization not found');
+
+        const profileData = { user_id: data.id };
+        const { data: profile, error: profileError } = await supabase
           .from('profiles')
-          .insert(trainerProfile)
-          .select()
-          .single(); // Ensures a single row is returned
-        if (trainerError) throw new Error(trainerError.message);
-      }
+          .insert(profileData)
+          .select('id')
+          .single();
+        if (profileError) throw new Error(profileError.message);
+        const update: any = { profile_id: profile.id };
+        if (type === 'trainer') {
+          const trainerProfile = {
+            user_id: data.id,
+            title: `${orgData.name} - Trainer`
+          };
+          const { data: trainer, error: trainerError } = await supabase
+            .from('trainer_profile')
+            .insert(trainerProfile)
+            .select('id')
+            .single();
+          if (trainerError) throw new Error(trainerError.message);
+          update.trainer_profile = trainer.id;
+        }
+        const { error: updateError } = await supabase
+          .from('users')
+          .update(update)
+          .eq('id', data.id);
 
-      // Add to local state
-      All_Org_Users.value?.push?.(data);
-    } catch (error) {
-      alert('Error creating program: ' + error);
-      return null;
+        if (updateError) throw new Error(updateError.message);
+        // Add the successfully inserted email to our array.
+        insertedEmails.push(email);
+        // Also update local state.
+        All_Org_Users.value?.push?.(data);
+      } catch (error) {
+        alert('Error creating user: ' + error);
+      }
+    }
+
+    // If at least one user was inserted, send the org join request emails.
+    if (insertedEmails.length > 0) {
+      try {
+        const { data, error } = await supabase.functions.invoke('smtp/org-join-request', {
+          method: 'POST',
+          body: insertedEmails // Passing the array of emails.
+        });
+        if (error) {
+          console.error('Error sending org join request emails:', error);
+        } else {
+          console.log('Org join request emails sent:', data);
+        }
+      } catch (error) {
+        console.error('Error invoking org join request function:', error);
+      }
     }
   }
 

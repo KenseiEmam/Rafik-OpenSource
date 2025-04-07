@@ -288,6 +288,7 @@
         "addUserModal": {
           "title": "Add New User",
           "subtitle": "Enter the user's details below to add a new user.",
+          "emailsPlaceholder": "Separate multiple emails with commas",
           "emailLabel": "Email Address",
           "emailRequired": "Email is required.",
           "invalidEmail": "Please enter a valid email address.",
@@ -414,7 +415,7 @@
           "subheader": "all",
           "header": "programs"
         },
-        
+
         "pageOrgTitle": {
           "subheader": "Organizational",
           "header": "programs"
