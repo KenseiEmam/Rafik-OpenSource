@@ -135,6 +135,7 @@ function confirmCancel(value: string) {
     }
   });
 }
+const workout_it = ref(0)
 
 /** Actually send the cancel request & update user program. */
 async function cancelProgram(value: string) {
@@ -211,11 +212,48 @@ async function updateClientProgram(field: string, value: any) {
   }
 }
 
+
+/** Update the profile's iteration then update workouts. */
+async function updateIteration() {
+  if (!clientStore.Client?.id) {
+    showError('dashboard.clients.details.clientNotFound');
+    return;
+  }
+
+  // Assuming the profile ID is the same as client ID
+  const profileId = clientStore.Client.profile.id;
+
+  const { error: error1 } = await supabase
+    .from('profiles')
+    .update({ workout_iteration: workout_it.value })
+    .eq('id', profileId);
+
+  if (error1) {
+    showError('dashboard.clients.details.failedToUpdateField');
+    return;
+  }
+
+  try {
+    await clientStore.updateClientProgram({
+      id: clientStore.Client.program_details.id,
+      workouts: clientStore.Client.program_details.workouts,
+    });
+    await clientStore.getClient(clientStore.Client.id);
+    showSuccess('dashboard.clients.details.updatedSuccessfully');
+  } catch (error) {
+    showError('dashboard.clients.details.failedToUpdateField');
+    console.error('Error updating workouts', error);
+  }
+}
+
+
 // On mount, fetch the client details
 onMounted(() => {
   const clientId = parseInt(route.params.id as string);
   if (clientId) {
-    clientStore.getClient(clientId).catch(() => {
+    clientStore.getClient(clientId).then(()=>{
+      workout_it.value=clientStore.Client?.profile.workout_iteration
+    }).catch(() => {
       showError('dashboard.clients.details.failedToLoadClient');
     });
   }
@@ -280,14 +318,7 @@ onBeforeUnmount(() => {
                 {{ clientStore.Client.program_details?.status }}
               </p>
             </div>
-            <div class="uppercase flex justify-between gap-3 text-sm">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
-                {{ t('dashboard.clients.details.workoutIteration') }}
-              </p>
-              <p class="text-rafik-secondary">
-                {{ clientStore.Client.profile.workout_iteration }}
-              </p>
-            </div>
+
             <div class="uppercase flex justify-between gap-3 text-sm">
               <p class="text-rafik-pritext dark:text-rafik-darkpritext">
                 {{ t('dashboard.clients.details.dietLastLogged') }}
@@ -317,8 +348,19 @@ onBeforeUnmount(() => {
           </div>
           <div :class="locale === 'ar'?'pr-6':'pl-6'" class=" flex-1 min-w-max h-full">
             <div :class="locale === 'ar'?'border-r pr-2':'border-l pl-2'"
-              class="flex flex-col flex-1 gap-4  border-rafik-sectext dark:border-rafik-darksectext text-left"
+              class="flex flex-col flex-1 gap-4 h-full border-rafik-sectext dark:border-rafik-darksectext text-left"
             >
+
+            <div class="uppercase text-sm">
+              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                {{ t('dashboard.clients.details.workoutIteration') }}
+              </p>
+              <select v-model="workout_it" @change="updateIteration" class="rafik-text-input p-2 text-sm" name="" id="">
+                <option v-for="workout,index in clientStore.Client.program_details.workouts" :value="index">
+                  {{ workout.workout_name }}
+                </option>
+              </select>
+            </div>
               <!-- If subscription is active -->
               <button
                 v-if="clientStore.Client.program_details.status === 'active'"
