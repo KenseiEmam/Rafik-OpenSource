@@ -13,7 +13,7 @@ import router from '@/router';
 import { supabase } from '@/lib/supabaseClient';
 import { useI18n } from 'vue-i18n';
 
-const { t , locale } = useI18n();
+const { t, locale } = useI18n();
 
 const activeTab = ref('Details');
 
@@ -635,17 +635,19 @@ async function uploadFileToBucket(): Promise<string | null> {
         >
           {{ t('dashboard.programs.details.tabPricing') }}
         </button>
-        <!--
+
         <button
-          :class="activeTab === 'Documents'
-            ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
-            : 'hover:opacity-70'"
+          :class="
+            activeTab === 'Documents'
+              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              : 'hover:opacity-70'
+          "
           class="nav-btn uppercase"
           @click="setActiveTab('Documents')"
         >
           {{ t('dashboard.programs.details.tabDocuments') }}
         </button>
-        -->
+
         <button
           :class="
             activeTab === 'Reviews'
