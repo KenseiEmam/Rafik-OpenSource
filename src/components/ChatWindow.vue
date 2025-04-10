@@ -10,7 +10,10 @@
       >
         <div class="flex items-center gap-4" v-if="Client">
           <img
-            :src="Client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
+            :src="
+              Client.avatar ||
+              'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
+            "
             alt=""
             class="rounded-full border-2 border-rafik-secondary object-cover w-16 h-16"
           />
@@ -39,14 +42,25 @@
         class="h-64 2xl:h-96 p-6 overflow-y-auto space-y-5 bg-rafik-secbg dark:bg-rafik-darksecbg"
         ref="chatContainer"
       >
-      <div v-if="loading" class=" h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body">
-          <img src="@/assets/Large Icon.png"  class="w-24 h-24 animate-bounce hidden dark:inline-block" alt="">
-<img src="@/assets/Large Icon Light.png"  class="w-24 h-24 animate-bounce dark:hidden" alt="">
-          <p class="text-lg animate-pulse">
-          Loading...
-        </p>
-      </div>
+        <!-- Loading Spinner -->
+        <div
+          v-if="loading"
+          class="h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body"
+        >
+          <img
+            src="@/assets/Large Icon.png"
+            class="w-24 h-24 animate-bounce hidden dark:inline-block"
+            alt="spinner"
+          />
+          <img
+            src="@/assets/Large Icon Light.png"
+            class="w-24 h-24 animate-bounce dark:hidden"
+            alt="spinner"
+          />
+          <p class="text-lg animate-pulse">Loading...</p>
+        </div>
 
+        <!-- Each Message -->
         <div class="flex flex-col" v-for="message in messages" :key="message.id">
           <div
             class="flex items-start gap-2"
@@ -55,7 +69,10 @@
             <!-- Avatar for received messages -->
             <img
               v-if="message.sent_by === Client.id"
-              :src="Client.avatar || 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'"
+              :src="
+                Client.avatar ||
+                'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
+              "
               class="w-8 h-8 rounded-full border border-rafik-sectext dark:border-rafik-darksectext"
             />
 
@@ -68,7 +85,9 @@
                   : 'bg-rafik-pribg dark:bg-rafik-darkpribg text-right'
               "
             >
-              <p :class="!message.seen_at ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''">{{ message.content }}</p>
+              <p :class="!message.seen_at ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''">
+                {{ message.content }}
+              </p>
               <span class="text-xs block mt-1 text-gray-300">
                 {{ formatDate(message.created_at) }}
                 <span v-if="message.sent_by !== Client.id">
@@ -80,11 +99,35 @@
                     fill="currentColor"
                   >
                     <path
-                      d="M504.5 75.5c9.9-10.5 9.4-27-1.2-36.8s-27-9.4-36.8 1.2l-304 320c-3.6 3.8-9.7 3.9-13.5.3L45.1 214.5c-10-9.6-25.7-9.3-35.3.7s-9.3 25.7.7 35.3l103.1 98.5c19.5 18.7 50.2 18.3 69.1-.8L504.5 75.5z"
+                      d="M504.5 75.5c9.9-10.5 9.4-27-1.2-36.8s-27-9.4-36.8 1.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480l0-83.6c0-4 1.5-7.8 4.2-10.8L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z"
                     />
                   </svg>
                 </span>
               </span>
+
+              <!-- READ-ONLY FORM VIEW (if this message references a form) -->
+              <div v-if="message.form && formsMapValue[message.form]" class="text-sm mt-2">
+                <h4 class="font-bold mb-2">
+                  <!-- If your table stores 'type' for induction/follow, you can show it here -->
+
+                  <span class="uppercase">
+                    {{ formsMapValue[message.form].status }}
+                    {{ formsMapValue[message.form].type + ' Form' }}
+                  </span>
+                </h4>
+                <div
+                  v-for="(q, i) in formsMapValue[message.form].questions"
+                  :key="i"
+                  class="mb-2 border-b last:border-none pb-2"
+                >
+                  <p class="font-medium">
+                    {{ q.question }}
+                  </p>
+                  <p v-if="q.answer !== null" class="pl-4 text-sm italic">Answer: {{ q.answer }}</p>
+                  <p v-else class="pl-4 text-sm italic opacity-70">No answer yet</p>
+                </div>
+              </div>
+              <!-- /End form section -->
             </div>
           </div>
         </div>
@@ -122,24 +165,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick, onUnmounted } from 'vue'
-import { supabase } from '@/lib/supabaseClient'
-import Swal from 'sweetalert2'
+import { ref, watch, nextTick, onUnmounted, computed } from 'vue';
+import { supabase } from '@/lib/supabaseClient';
+import Swal from 'sweetalert2';
+
 type Message = {
-  id: number
-  content: string
-  media?: string
-  seen_at?: Date | null
-  sent_by: number
-  user_program: number
-  created_at: string
-}
+  id: number;
+  content: string;
+  media?: string;
+  seen_at?: Date | null;
+  sent_by: number | string;
+  user_program: number;
+  created_at: string;
+  form?: number | null; // if there's a form ID
+};
 
-const props = defineProps<{ visible: boolean; Client: any }>()
-const loading = ref(true)
-const emits = defineEmits(['close'])
+// PROPS
+const props = defineProps<{
+  visible: boolean;
+  Client: any;
+  formsMap?: Record<number, any>; // optional: map of formId -> form object
+}>();
 
-// Success and Error Alerts
+const emits = defineEmits(['close']);
+
+// Basic usage: formsMapValue is a computed fallback to an empty object
+const formsMapValue = computed(() => props.formsMap || {});
+
+// Alerts
 function showSuccess(message: string) {
   Swal.fire({
     title: 'Success!',
@@ -151,10 +204,9 @@ function showSuccess(message: string) {
     position: 'top-right',
     icon: 'success',
     background: '#081411',
-    color: '#E8F3ED',
-  })
+    color: '#E8F3ED'
+  });
 }
-
 function showError(message: string) {
   Swal.fire({
     title: 'Error!',
@@ -162,81 +214,88 @@ function showError(message: string) {
     icon: 'error',
     confirmButtonColor: '#d33',
     background: '#081411',
-    color: '#E8F3ED',
-  })
+    color: '#E8F3ED'
+  });
 }
-const messages = ref<Message[]>([])
-const chatContainer = ref<HTMLElement | null>(null)
-const chatSubscription = ref<any | null>(null)
-const sending = ref('')
 
+// State
+const messages = ref<Message[]>([]);
+const chatContainer = ref<HTMLElement | null>(null);
+const chatSubscription = ref<any | null>(null);
+const sending = ref('');
+const loading = ref(true);
+
+// Submit a message
 const submitMessage = async () => {
-  if (!sending.value.trim()) return // Prevent empty messages
+  if (!sending.value.trim()) return; // Prevent empty messages
 
   if (!props.Client?.program_details?.id) {
-    showError('Client program ID is missing.')
-    return
+    showError('Client program ID is missing.');
+    return;
   }
-  const UserID = localStorage.getItem('UserID')
-  // Create the message object
+  const UserID = localStorage.getItem('UserID');
+  if (!UserID) {
+    showError('No trainer user ID found in local storage!');
+    return;
+  }
+
   const newMessage = {
     content: sending.value,
-    sent_by: UserID, // Replace with the actual user ID
+    sent_by: UserID,
     user_program: props.Client.program_details.id,
-    created_at: new Date().toISOString(),
-  }
+    created_at: new Date().toISOString()
+  };
 
-  // Insert the message into the database
-  const { data, error } = await supabase.from('chat_messages').insert([newMessage]).select()
-
+  const { data, error } = await supabase.from('chat_messages').insert([newMessage]).select();
   if (error) {
-    showError('Failed to send message.')
-    console.error('Supabase error:', error)
-    return
+    showError('Failed to send message.');
+    console.error('Supabase error:', error);
+    return;
   }
 
-  // Clear input and push the new message to the UI
-  sending.value = ''
+  sending.value = '';
+  scrollToBottom();
+};
 
-  // Scroll to the latest message
-  scrollToBottom()
-}
-// Fetch messages when Client is set
+// Watch for changes in props.Client to refetch messages
 watch(
   () => props.Client,
   async (newClient) => {
     if (newClient) {
-      await fetchMessages()
-      subscribeToChat()
-      markMessagesAsSeen()
+      await fetchMessages();
+      subscribeToChat();
+      markMessagesAsSeen();
     }
   },
-  { immediate: true },
-)
+  { immediate: true }
+);
 
+// Fetch all messages for this user_program
 async function fetchMessages() {
-  if (!props.Client?.program_details?.id) return
+  if (!props.Client?.program_details?.id) return;
+  loading.value = true;
 
   const { data, error } = await supabase
     .from('chat_messages')
     .select('*')
     .eq('user_program', props.Client.program_details.id)
-    .order('created_at', { ascending: true })
+    .order('created_at', { ascending: true });
 
-  if (error) console.error('Error fetching messages:', error)
-  else {
-    loading.value = false
-    messages.value = data
-    scrollToBottom()
+  if (error) {
+    console.error('Error fetching messages:', error);
+  } else {
+    messages.value = data || [];
+    scrollToBottom();
   }
+  loading.value = false;
 }
 
-// Subscribe to real-time chat updates
+// Subscribe real-time
 function subscribeToChat() {
-  if (!props.Client?.program_details?.id) return
+  if (!props.Client?.program_details?.id) return;
 
   if (chatSubscription.value) {
-    chatSubscription.value.unsubscribe()
+    chatSubscription.value.unsubscribe();
   }
 
   chatSubscription.value = supabase
@@ -245,61 +304,59 @@ function subscribeToChat() {
       'postgres_changes',
       { event: 'INSERT', schema: 'public', table: 'chat_messages' },
       (payload) => {
-        const newMessage = payload.new as Message
-        messages.value.push(newMessage)
-        scrollToBottom()
-      },
+        const newMessage = payload.new as Message;
+        messages.value.push(newMessage);
+        scrollToBottom();
+      }
     )
-    .subscribe()
+    .subscribe();
 }
 
-// Mark messages as seen when opened
+// Mark messages as seen if they were sent by the client and have no seen_at
 async function markMessagesAsSeen() {
-  if (!props.Client?.program_details?.id) return
+  if (!props.Client?.program_details?.id) return;
+  // We only mark as seen the client's messages
+  const unseenMessages = messages.value.filter((m) => !m.seen_at && m.sent_by == props.Client.id);
+  if (unseenMessages.length === 0) return;
 
-  const unseenMessages = messages.value.filter((m) => !m.seen_at && m.sent_by === props.Client.id)
-  if (unseenMessages.length === 0) return
-
-  const ids = unseenMessages.map((m) => m.id)
-  await supabase.from('chat_messages').update({ seen_at: new Date().toISOString() }).in('id', ids)
+  const ids = unseenMessages.map((m) => m.id);
+  await supabase.from('chat_messages').update({ seen_at: new Date().toISOString() }).in('id', ids);
 }
 
-// Format timestamps into humanized dates
+// Format date
 function formatDate(timestamp: string) {
-  const date = new Date(timestamp)
-  const now = new Date()
-  const diff = Math.floor((now.getTime() - date.getTime()) / 1000)
+  const date = new Date(timestamp);
+  const now = new Date();
+  const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-  if (diff < 60) return 'Just now'
-  if (diff < 3600) return `${Math.floor(diff / 60)} min ago`
-  if (diff < 86400) return `${Math.floor(diff / 3600)} hrs ago`
-  return date.toLocaleDateString()
+  if (diff < 60) return 'Just now';
+  if (diff < 3600) return `${Math.floor(diff / 60)} min ago`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)} hrs ago`;
+  return date.toLocaleDateString();
 }
 
-// Auto-scroll to the latest message
+// Scroll
 function scrollToBottom() {
   nextTick(() => {
     if (chatContainer.value) {
-      chatContainer.value.scrollTop = chatContainer.value.scrollHeight
+      chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
     }
-  })
+  });
 }
 
-// Cleanup subscription on unmount
+// Cleanup subscription
 onUnmounted(() => {
   if (chatSubscription.value) {
-    chatSubscription.value.unsubscribe()
+    chatSubscription.value.unsubscribe();
   }
-})
+});
 </script>
 
 <style scoped>
 .dark li:hover {
   background-image: linear-gradient(135deg, #081411 36%, #295f42);
 }
-li:hover{
-  background-image:linear-gradient(135deg, #f3eeeb 36%, #fff2cb)
+li:hover {
+  background-image: linear-gradient(135deg, #f3eeeb 36%, #fff2cb);
 }
-
-
 </style>
