@@ -122,8 +122,7 @@
                 <!-- Organization Logo -->
                 <div class="flex flex-col items-center md:items-start space-y-3">
                   <img
-                    v-if="orgData.logo"
-                    :src="orgData.logo"
+                    :src="orgData.logo || '/placeholder.jpg'"
                     alt="Organization Logo"
                     class="w-44 h-44 2xl:h-64 2xl:w-64 rounded-xl"
                   />
