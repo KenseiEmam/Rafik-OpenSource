@@ -118,8 +118,7 @@
             <div class="grid grid-cols-3 col-span-2 gap-6">
               <div class="flex flex-col items-center space-y-4">
                 <img
-                  v-if="userStore.Trainer.avatar"
-                  :src="userStore.Trainer.avatar"
+                  :src="userStore.Trainer.avatar || '/user-placeholder.jpg'"
                   alt="Trainer Avatar"
                   class="w-44 h-44 2xl:h-64 2xl:w-64 rounded-xl"
                 />
@@ -321,7 +320,7 @@ import VueDatePicker from '@vuepic/vue-datepicker'; // presumably needed for <Vu
 import '@vuepic/vue-datepicker/dist/main.css'; // or wherever your styling is
 import { useI18n } from 'vue-i18n';
 
-const { t , locale } = useI18n();
+const { t, locale } = useI18n();
 // Dark mode from localStorage
 const darkness = localStorage.getItem('dark_mode');
 
