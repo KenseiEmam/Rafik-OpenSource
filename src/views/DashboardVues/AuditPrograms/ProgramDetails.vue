@@ -6,7 +6,7 @@ import DetailsTabProgram from '@/components/ProgramTabs/DetailsTabPRogram.vue';
 import WorkoutPlanner from '@/components/ProgramTabs/WorkoutPlanner.vue';
 import ClientTable from '@/components/ProgramTabs/ClientTable.vue';
 import PricingModel from '@/components/ProgramTabs/PricingModel.vue';
-// import DocumentsForms from '@/components/ProgramTabs/DocumentsForms.vue';
+import DocumentsForms from '@/components/ProgramTabs/DocumentsForms.vue';
 import ReviewsTab from '@/components/ProgramTabs/ReviewsTab.vue';
 import Swal from 'sweetalert2';
 import router from '@/router';
@@ -238,7 +238,7 @@ function setActiveTab(tab: string) {
           />
           <ClientTable admin v-else-if="activeTab === 'Clients'" :program="programStore.Program" />
           <PricingModel admin v-else-if="activeTab === 'Pricing'" :program="programStore.Program" />
-          <!-- <DocumentsForms v-else-if="activeTab === 'Documents'" :program="programStore.Program" /> -->
+          <DocumentsForms v-else-if="activeTab === 'Documents'" :program="programStore.Program" />
           <ReviewsTab admin v-else-if="activeTab === 'Reviews'" :program="programStore.Program" />
         </transition>
       </div>
