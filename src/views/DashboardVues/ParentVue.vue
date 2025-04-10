@@ -15,7 +15,12 @@
       </router-view>
     </div>
 
-    <PostOffice v-if="userStore.userProfile.roles?.includes('Trainer')"/>
+    <PostOffice
+      v-if="
+        userStore.userProfile.roles?.includes('Trainer') ||
+        userStore.userProfile.roles?.includes('Organization Trnr')
+      "
+    />
   </div>
   <div
     v-else
@@ -44,13 +49,11 @@ const userStore = useUserStore();
 const settingstores = useSettingsStore();
 const localSettings = localStorage.getItem('dark_mode');
 onMounted(() => {
-  userStore.getUserProfileNO().then(()=>
-    {
-      if (localStorage.getItem('language')) {
-        locale.value = localStorage.getItem('language') || 'en'; // ✅ Set locale inside setup
-      }
+  userStore.getUserProfileNO().then(() => {
+    if (localStorage.getItem('language')) {
+      locale.value = localStorage.getItem('language') || 'en'; // ✅ Set locale inside setup
     }
-  );
+  });
 });
 import DashboardSideBar from '../../components/Navigation/DashboardSideBar.vue';
 import PostOffice from '../../components/Offcanvas/PostOffice.vue';
