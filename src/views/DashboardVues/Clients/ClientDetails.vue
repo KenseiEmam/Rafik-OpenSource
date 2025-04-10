@@ -357,7 +357,7 @@ onBeforeUnmount(() => {
               </p>
               <select v-model="workout_it" @change="updateIteration" class="rafik-text-input p-2 text-sm" name="" id="">
                 <option v-for="workout,index in clientStore.Client.program_details.workouts" :value="index">
-                  {{ workout.workout_name }}
+                  {{ workout.workout_name || 'Rest Day' }}
                 </option>
               </select>
             </div>
