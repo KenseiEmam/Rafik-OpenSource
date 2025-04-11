@@ -2,15 +2,15 @@
   <div class="my-12">
     <!-- Search Section -->
     <div class="flex items-center justify-between mb-4 gap-6">
-      <div class="flex gap-3">
-        <!-- Search Bar -->
+      <!-- <div class="flex gap-3">
+        //Search Bar
         <input
           v-model="searchQuery"
           type="text"
           :placeholder="t('dashboard.tabs.clients.workoutLog.searchByName')"
           class="rafik-text-input border rounded-lg w-64"
         />
-      </div>
+      </div> -->
       <hr class="w-full border-rafik-sectext dark:border-rafik-darksectext border-b" />
       <span class="text-sm">
         {{ t('dashboard.tabs.clients.workoutLog.showingRows', { count: filteredWorkouts.length }) }}
@@ -77,7 +77,7 @@
           <td class="px-3 relative">
             <RouterLink
               :to="{ name: 'workout-sheet', params: { id: workout.id } }"
-              class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded text-sm"
+              class="px-3 py-5 text-rafik-sectext hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksecext rounded text-sm"
             >
               {{ t('dashboard.tabs.clients.workoutLog.moreDetails') }}
             </RouterLink>
