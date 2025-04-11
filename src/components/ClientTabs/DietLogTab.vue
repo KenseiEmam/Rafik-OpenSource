@@ -69,7 +69,7 @@
           <td class="px-3 relative">
             <Router-link
               :to="{ name: 'diet-sheet', params: { id: diet.id } }"
-              class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded text-sm"
+              class="px-3 py-5 text-rafik-sectext hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksecext rounded text-sm"
             >
               {{ t('dashboard.tabs.clients.dietLog.moreDetails') }}
             </Router-link>
