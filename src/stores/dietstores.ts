@@ -118,6 +118,7 @@ export const useDietStore = defineStore('Diet', () => {
         .from('nutritional_sheets')
         .select('*')
         .eq('profile_id', id)
+        .order('created_at', { ascending: false }); // Most recent first
       if (error) throw error
 
 
