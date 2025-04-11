@@ -113,13 +113,14 @@ export const useWorkoutStore = defineStore('Workout', () => {
 
   async function getAllWorkouts(id: number) {
     try {
-      // Fetch the user profile based on the provided user ID (id)
-      const { data:workout_data, error } = await supabase
-        .from('workout_sheets')
-        .select('*')
-        .is('done',true)
-        .eq('user_program_id', id)
-      if (error) throw error
+      const { data: workout_data, error } = await supabase
+      .from('workout_sheets')
+      .select('*')
+      .eq('done', true)
+      .eq('user_program_id', id)
+      .order('created_at', { ascending: false }); // Most recent first
+
+    if (error) throw error;
 
 
 
