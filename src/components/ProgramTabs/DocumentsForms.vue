@@ -3,7 +3,7 @@ import { ref, watch, defineEmits } from 'vue';
 import debounce from 'lodash/debounce';
 import { supabase } from '@/lib/supabaseClient';
 import { useI18n } from 'vue-i18n';
-
+import draggable from 'vuedraggable';
 const { t , locale } = useI18n();
 // Props to receive the program object
 const props = defineProps({
@@ -185,31 +185,65 @@ watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitU
         </button>
       </div>
       <div class="flex flex-col gap-3">
-        <div
-          v-for="(question, index) in inductions"
-          :key="index"
-          class="card p-6 border-rafik gradient-bg flex justify-between items-center text-left border"
+        <draggable
+            class="flex flex-col gap-4 mb-5"
+            v-model="inductions"
+            handle=".handle"
+
+            item-key="id"
+          >
+          <template #item="{ element, index }">
+            <div
+          class="card p-6 pl-2 border-rafik gradient-bg flex justify-between items-center text-left border gap-3"
         >
-          <div class="space-y-2">
+        <svg
+
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 320 512"
+                  fill="currentColor"
+                  class="h-6 mr-3 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move"
+                >
+                  <path
+                    d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0
+                       22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0
+                       -48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40
+                       17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1
+                       0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320
+                       c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48
+                       0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40
+                       40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0
+                       48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9
+                       -40-40l0-48c0-22.1 17.9-40 40-40zM40 160c-22.1
+                       0-40-17.9-40-40L0 72C0 49.9 17.9 32 40 32l48 0c22.1
+                       0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48
+                       0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1
+                       -17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0
+                       -48c0-22.1 17.9-40 40-40z"
+                  />
+                </svg>
+          <div class="space-y-2 w-full ">
             <p class="uppercase text-sm 2xl:text-sm font-semibold">
-              {{ t('dashboard.tabs.program.docForms.questionLabel', { type: question.type }) }}
+              {{ t('dashboard.tabs.program.docForms.questionLabel', { type: element.type }) }}
             </p>
             <input
-              v-model="question.question"
-              class="bg-transparent text-rafik-pritext dark:text-rafik-darkpritext px-0 header-small text-base 2xl:text-lg focus:outline-none border-none focus:ring-0"
+              v-model="element.question"
+              class="bg-transparent text-rafik-pritext dark:text-rafik-darkpritext px-0  text-base 2xl:text-lg focus:outline-none border-none focus:ring-0 w-full"
               type="text"
               :placeholder="
                 t('dashboard.tabs.program.docForms.addNewQuestionPlaceholder', {
-                  type: question.type
+                  type: element.type
                 })
               "
-              :id="question.type + index"
+              :id="element.type + index"
             />
           </div>
           <button @click="removeInduction(index)" class="text-red-500 hover:text-red-300 text-xl">
             {{ t('dashboard.tabs.program.docForms.removeInduction') }}
           </button>
         </div>
+          </template>
+        </draggable>
+
       </div>
     </div>
 
@@ -248,31 +282,65 @@ watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitU
         </button>
       </div>
       <div class="flex flex-col gap-3">
-        <div
-          v-for="(question, index) in follow"
-          :key="index"
-          class="card p-6 border-rafik gradient-bg flex justify-between items-center text-left border"
+        <draggable
+            class="flex flex-col gap-4 mb-5"
+            v-model="follow"
+            handle=".handle"
+
+            item-key="id"
+          >
+          <template #item="{ element, index }">
+            <div
+          class="card p-6 pl-2 border-rafik gradient-bg flex justify-between items-center text-left border gap-3"
         >
-          <div class="space-y-2">
+        <svg
+
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 320 512"
+                  fill="currentColor"
+                  class="h-6 mr-3 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move"
+                >
+                  <path
+                    d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0
+                       22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0
+                       -48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40
+                       17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1
+                       0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320
+                       c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48
+                       0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40
+                       40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0
+                       48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9
+                       -40-40l0-48c0-22.1 17.9-40 40-40zM40 160c-22.1
+                       0-40-17.9-40-40L0 72C0 49.9 17.9 32 40 32l48 0c22.1
+                       0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48
+                       0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1
+                       -17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0
+                       -48c0-22.1 17.9-40 40-40z"
+                  />
+                </svg>
+          <div class="space-y-2 w-full ">
             <p class="uppercase text-sm 2xl:text-sm font-semibold">
-              {{ t('dashboard.tabs.program.docForms.questionLabel', { type: question.type }) }}
+              {{ t('dashboard.tabs.program.docForms.questionLabel', { type: element.type }) }}
             </p>
             <input
-              v-model="question.question"
-              class="bg-transparent text-rafik-pritext dark:text-rafik-darkpritext px-0 header-small text-base 2xl:text-lg focus:outline-none border-none focus:ring-0"
+              v-model="element.question"
+              class="bg-transparent text-rafik-pritext dark:text-rafik-darkpritext px-0  text-base 2xl:text-lg focus:outline-none border-none focus:ring-0 w-full"
               type="text"
               :placeholder="
                 t('dashboard.tabs.program.docForms.addNewQuestionPlaceholder', {
-                  type: question.type
+                  type: element.type
                 })
               "
-              :id="question.type + index"
+              :id="element.type + index"
             />
           </div>
           <button @click="removeFollow(index)" class="text-red-500 hover:text-red-300 text-xl">
             {{ t('dashboard.tabs.program.docForms.removeFollow') }}
           </button>
         </div>
+          </template>
+        </draggable>
+
       </div>
     </div>
 

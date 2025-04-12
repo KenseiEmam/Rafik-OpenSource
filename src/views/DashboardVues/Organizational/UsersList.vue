@@ -129,18 +129,18 @@
                 <div
                   v-if="show_action == user.id"
                   @mouseleave="handleLeave()"
-                  class="absolute min-w-16 px-2 z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg shadow-lg divide-y divide-rafik-sectext"
+                  class="absolute min-w-16  z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg shadow-lg divide-y divide-rafik-sectext dark:divide-rafik-darksectext"
                 >
                   <Router-link
                     :to="{ name: 'single-user', params: { id: user.id } }"
-                    class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded"
+                    class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext rounded"
                   >
                     {{ t('dashboard.users.list.actions.viewUser') }}
                   </Router-link>
                   <button
                     class="px-3 py-5 text-red-500 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-red-300 rounded"
                   >
-                    {{ t('dashboard.users.list.actions.deleteUser') }}
+                    <h4>{{ t('dashboard.users.list.actions.deleteUser') }}</h4>
                   </button>
                 </div>
               </td>
