@@ -104,7 +104,7 @@
                   name: admin ? 'single-user' : 'client-details',
                   params: { id: client.id }
                 }"
-                class="px-3 py-5 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext rounded"
+                class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext rounded"
               >
                 {{ t('dashboard.tabs.program.clients.viewClient') }}
               </Router-link>
