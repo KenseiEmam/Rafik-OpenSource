@@ -63,6 +63,7 @@
         <!-- Each Message -->
         <div class="flex flex-col" v-for="message in messages" :key="message.id">
           <div
+            :id="String(message.id)"
             class="flex items-start gap-2"
             :class="message.sent_by === Client.id ? 'justify-start' : 'justify-end'"
           >
@@ -165,7 +166,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick, onUnmounted, computed } from 'vue';
+import { ref, watch, nextTick, onUnmounted, computed, onMounted } from 'vue';
 import { supabase } from '@/lib/supabaseClient';
 import Swal from 'sweetalert2';
 
@@ -185,6 +186,7 @@ const props = defineProps<{
   visible: boolean;
   Client: any;
   formsMap?: Record<number, any>; // optional: map of formId -> form object
+  messageId?: number; // optional: scroll to this message on mount
 }>();
 
 const emits = defineEmits(['close']);
@@ -259,9 +261,9 @@ const submitMessage = async () => {
 
 // Watch for changes in props.Client to refetch messages
 watch(
-  () => props.Client,
-  async (newClient) => {
-    if (newClient) {
+  () => props.visible,
+  async (visible) => {
+    if (visible && props.Client) {
       await fetchMessages();
       subscribeToChat();
       markMessagesAsSeen();
@@ -318,7 +320,9 @@ async function fetchMessages() {
       }
     }
 
-    scrollToBottom();
+     if (!props.messageId) {
+      scrollToBottom();
+    }
   }
   loading.value = false;
 }
@@ -367,6 +371,20 @@ function formatDate(timestamp: string) {
   if (diff < 86400) return `${Math.floor(diff / 3600)} hrs ago`;
   return date.toLocaleDateString();
 }
+
+// Scroll to a specific message
+function scrollToMessage(id: number) {
+  const messageElement = document.getElementById(String(id));
+  if (messageElement && chatContainer.value) {
+    chatContainer.value.scrollTop = messageElement.offsetTop - chatContainer.value.offsetTop;
+  }
+}
+
+onMounted(() => {
+  if (props.messageId) {
+    scrollToMessage(props.messageId);
+  }
+});
 
 // Scroll
 function scrollToBottom() {
