@@ -188,7 +188,6 @@
     <ChatWindow
       :visible="chatsStore.active"
       :Client="chatsStore.client"
-      :formsMap="chatsStore.formsMap"
       @close="close"
       :message-id="chatsStore.messageId"
     />
