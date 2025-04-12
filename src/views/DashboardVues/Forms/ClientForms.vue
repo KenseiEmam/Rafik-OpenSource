@@ -10,18 +10,31 @@
       <div class="flex justify-between items-end gap-4 mb-3 relative">
         <!-- Status Select Bar -->
         <div class="relative w-128">
-          <select @change="loadUsers" class="rafik-text-input" name="" v-model="filters.status" id="">
-            <option value="">{{t('dashboard.auditForms.list.statusPlaceholder') }}</option>
+          <select
+            @change="loadUsers"
+            class="rafik-text-input"
+            name=""
+            v-model="filters.status"
+            id=""
+          >
+            <option value="">{{ t('dashboard.auditForms.list.statusPlaceholder') }}</option>
             <option value="pending">Pending</option>
             <option value="submitted">Submitted</option>
           </select>
         </div>
         <!-- Program Select Bar -->
         <div class="relative w-128">
-          <select @change="loadUsers" class="rafik-text-input" name="" v-model="filters.program" id="">
-            <option :value="null">{{t('dashboard.auditForms.list.programPlaceholder') }}</option>
-            <option v-for="program in ProgramStore.AllPrograms" :value="program.id">{{program.program_name}}</option>
-
+          <select
+            @change="loadUsers"
+            class="rafik-text-input"
+            name=""
+            v-model="filters.program"
+            id=""
+          >
+            <option :value="null">{{ t('dashboard.auditForms.list.programPlaceholder') }}</option>
+            <option v-for="program in ProgramStore.AllPrograms" :value="program.id">
+              {{ program.program_name }}
+            </option>
           </select>
         </div>
         <!-- Trainer Selection -->
@@ -113,8 +126,7 @@
             </tr>
           </thead>
           <tbody class="space-y-6">
-            <tr v-for="form,index in forms" :key="index" class="p-4">
-
+            <tr v-for="(form, index) in forms" :key="index" class="p-4">
               <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize">
                 {{
                   new Date(form.created_at).toLocaleDateString('en-GB', {
@@ -129,17 +141,20 @@
                   :to="{ name: 'single-user', params: { id: form.client_id } }"
                   class="text-rafik-pritext hover:text-rafik-pribg dark:text-rafik-darkpritext dark:hover:text-rafik-darkpribg"
                 >
-                {{ form.client_id }}
-              </router-link>
+                  {{ form.client_id }}
+                </router-link>
               </td>
               <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize">
                 <router-link
                   :to="{ name: 'program-details', params: { id: form.program_id } }"
                   class="text-rafik-pritext hover:text-rafik-pribg dark:text-rafik-darkpritext dark:hover:text-rafik-darkpribg"
                 >
-                {{ ProgramStore.AllPrograms?.find(program => parseInt(program.id) == form.program_id )?.program_name || 'No Name found'}}
-              </router-link>
-
+                  {{
+                    ProgramStore.AllPrograms?.find(
+                      (program) => parseInt(program.id) == form.program_id
+                    )?.program_name || 'No Name found'
+                  }}
+                </router-link>
               </td>
               <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
                 {{ form.status }}
@@ -149,7 +164,7 @@
               </td>
               <td class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right">
                 <svg
-                  @click="$router.push({name:''})"
+                  @click="() => chatsStore.openById(form.client_id, form.message_id)"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext cursor-pointer ms-auto"
@@ -232,17 +247,19 @@
 </template>
 <script lang="ts" setup>
 import PageTitle from '@/components/Navigation/PageTitle.vue';
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, watch, onUnmounted } from 'vue';
 import debounce from 'lodash/debounce';
 import { useProgramStore } from '@/stores/programstores';
 import { supabase } from '@/lib/supabaseClient';
 import { useFormStore } from '@/stores/formstores';
+import { useChatsStore } from '@/stores/chatsstores';
 import { useI18n } from 'vue-i18n';
+import { useUserStore } from '@/stores/user';
 
 // Interface for Form
 interface Form {
   id: string;
-  created_at:Date;
+  created_at: Date;
   questions: any[];
   message_id: number;
   status: string;
@@ -261,7 +278,8 @@ type Filter = {
 const searchQuery = ref('');
 const dropdownVisible = ref(false);
 const { t, locale } = useI18n();
-const formStores= useFormStore()
+const formStores = useFormStore();
+const chatsStore = useChatsStore();
 const forms = ref<Form[] | null>(null);
 // The selected client (if needed for your filters)
 const selectedTrainer = ref(null);
@@ -338,7 +356,7 @@ const totalCount = ref(0);
 const page = ref(1);
 const pageSize = ref(10);
 const holdQuery = ref('');
-const filters = ref<Filter>({ status: '', type: [], client: null, program:null });
+const filters = ref<Filter>({ status: '', type: [], client: null, program: null });
 
 const show_action = ref();
 
@@ -396,10 +414,30 @@ function updatePage(newPage: number) {
   }
 }
 
-// Load program on component mount
-onMounted(() => {
-  loadUsers();
-  ProgramStore.getAllPrograms()
+// Real-time subscription
+function subscribeToChatMessages() {
+  const channel = supabase.channel('chat_messages');
+
+  channel
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'chat_messages' }, async () => {
+      console.log('New message received, refetching...');
+      await chatsStore.fetchLatestMessages();
+    })
+    .subscribe();
+}
+
+const clientStore = useUserStore();
+
+onMounted(async () => {
+  await loadUsers();
+  await ProgramStore.getAllPrograms();
+  await clientStore.getChatClients();
+  await chatsStore.fetchLatestMessages();
+  subscribeToChatMessages();
+});
+
+onUnmounted(() => {
+  supabase.channel('chat_messages').unsubscribe();
 });
 
 // Watch for changes in the store's AllPrograms and update the list

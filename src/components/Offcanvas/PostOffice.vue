@@ -81,9 +81,9 @@
       <!-- Client List -->
       <div class="space-y-4 flex-1 flex flex-col overflow-auto w-full">
         <div
-          v-for="client in sortedChatClients"
+          v-for="client in chatsStore.sortedChatClients"
           :key="client.id"
-          @click="activateChat(client)"
+          @click="chatsStore.open(client)"
           :class="{
             'border-rafik-pritext dark:border-rafik-darkpritext':
               !client.seen_at && client.sent_by == client.id
@@ -186,10 +186,11 @@
     <!-- Chat Window -->
     <!-- NOTE: we now pass :formsMap="formsMap" so ChatWindow can display the forms -->
     <ChatWindow
-      :visible="chatActive"
-      :Client="chatClient"
-      :formsMap="formsMap"
-      @close="chatActive = false"
+      :visible="chatsStore.active"
+      :Client="chatsStore.client"
+      :formsMap="chatsStore.formsMap"
+      @close="close"
+      :message-id="chatsStore.messageId"
     />
   </div>
 </template>
@@ -202,6 +203,7 @@ import ChatWindow from '@/components/ChatWindow.vue';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { fromZonedTime } from 'date-fns-tz';
 import { useI18n } from 'vue-i18n';
+import { useChatsStore } from '@/stores/chatsstores';
 
 const { t, locale } = useI18n();
 
@@ -211,31 +213,16 @@ function humanizeDate(date: any, timeZone: string = 'UTC') {
   return formatDistanceToNow(utcDate, { addSuffix: true });
 }
 
-const chatActive = ref(false);
 const open = ref(false);
 const clientStore = useUserStore();
-const chatClient = ref<any>(null);
 
-// This holds the latest message for each user_program ID.
-const latestMessages = ref<
-  Record<
-    string,
-    {
-      content: string;
-      created_at: string;
-      seen_at: string | null;
-      sent_by: number;
-      form: number | null;
-    }
-  >
->({});
-
-// NEW: We'll store forms by their ID so we can pass them into ChatWindow.
-const formsMap = ref<Record<number, any>>({});
+// Chat window states
+const chatsStore = useChatsStore();
+const close = chatsStore.close;
 
 onMounted(async () => {
   await clientStore.getChatClients();
-  await fetchLatestMessages();
+  await chatsStore.fetchLatestMessages();
   subscribeToChatMessages();
 });
 
@@ -248,71 +235,10 @@ const checkNew = computed(() => {
   const userId = localStorage.getItem('UserID');
   const userIdInt = userId ? parseInt(userId, 10) : null;
 
-  return Object.values(latestMessages.value).some(
+  return Object.values(chatsStore.latestMessages).some(
     (msg) => !msg.seen_at && msg.sent_by !== userIdInt
   );
 });
-
-function activateChat(client: any) {
-  chatClient.value = client;
-  chatActive.value = true;
-}
-
-// Fetch the latest messages + associated forms
-async function fetchLatestMessages() {
-  try {
-    const userProgramIds = clientStore.ChatClients.flatMap(
-      (client) => client.program_details?.id || []
-    );
-    if (userProgramIds.length === 0) return;
-
-    const { data, error } = await supabase.rpc('get_latest_messages2', {
-      program_ids: userProgramIds
-    });
-
-    if (error) {
-      throw new Error(`Error fetching messages: ${error.message}`);
-    }
-
-    // Build an array of form IDs to fetch
-    const formIds: number[] = [];
-    const tempMessages: any = {};
-
-    for (const msg of data) {
-      tempMessages[msg.user_program] = {
-        content: msg.content,
-        created_at: msg.created_at,
-        seen_at: msg.seen_at,
-        sent_by: msg.sent_by,
-        form: msg.form
-      };
-      if (msg.form) {
-        formIds.push(msg.form);
-      }
-    }
-
-    latestMessages.value = tempMessages;
-
-    // If we have any form IDs, fetch them all at once
-    if (formIds.length > 0) {
-      const { data: formsData, error: formsError } = await supabase
-        .from('forms')
-        .select('*')
-        .in('id', formIds);
-
-      if (formsError) {
-        console.error('Error fetching forms:', formsError);
-      } else if (formsData) {
-        // Store each form object by its ID
-        for (const f of formsData) {
-          formsMap.value[f.id] = f;
-        }
-      }
-    }
-  } catch (error: any) {
-    console.error(error);
-  }
-}
 
 // Real-time subscription
 function subscribeToChatMessages() {
@@ -321,26 +247,10 @@ function subscribeToChatMessages() {
   channel
     .on('postgres_changes', { event: '*', schema: 'public', table: 'chat_messages' }, async () => {
       console.log('New message received, refetching...');
-      await fetchLatestMessages();
+      await chatsStore.fetchLatestMessages();
     })
     .subscribe();
 }
-
-// Sort clients by the latest message timestamp
-const sortedChatClients = computed(() => {
-  return [...clientStore.ChatClients]
-    .map((client) => {
-      const msg = latestMessages.value[client.program_details?.id] || null;
-      return {
-        ...client,
-        latestMessage: msg?.content || null,
-        lastMessageTime: msg?.created_at || '1970-01-01',
-        sent_by: msg?.sent_by || '1',
-        seen_at: msg?.seen_at || null
-      };
-    })
-    .sort((a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime());
-});
 </script>
 
 <style scoped>
