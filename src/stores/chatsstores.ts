@@ -49,7 +49,6 @@ export const useChatsStore = defineStore('Chats', () => {
       }
     >
   >({});
-  const formsMap = ref<Record<number, any>>({});
   const clientStore = useUserStore();
   const sortedChatClients = computed(() => {
     console.log('SORTED CHAT CLIENTS GOT CALLED');
@@ -113,11 +112,6 @@ export const useChatsStore = defineStore('Chats', () => {
 
         if (formsError) {
           console.error('Error fetching forms:', formsError);
-        } else if (formsData) {
-          // Store each form object by its ID
-          for (const f of formsData) {
-            formsMap.value[f.id] = f;
-          }
         }
       }
     } catch (error: any) {
@@ -153,7 +147,6 @@ export const useChatsStore = defineStore('Chats', () => {
     client,
     messageId,
     latestMessages,
-    formsMap,
     sortedChatClients,
     fetchLatestMessages,
     open,
