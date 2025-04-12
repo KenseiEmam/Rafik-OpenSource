@@ -140,6 +140,17 @@ const router = createRouter({
           ]
         },
         {
+          path: 'forms', // Child route for /dashboard/forms
+          meta: { requiresAnyTrainer: true },
+          children: [
+            {
+              path: '', // Default child route for /dashboard/forms
+              name: 'forms-list',
+              component: () => import('../views/DashboardVues/Forms/ClientForms.vue')
+            }
+          ]
+        },
+        {
           path: 'clients', // Child route for /dashboard/clients
           meta: { requiresAnyTrainer: true },
           children: [

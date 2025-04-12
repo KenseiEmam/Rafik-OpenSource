@@ -255,6 +255,7 @@
       "programEntitlements": "استحقاقات<br /> البرامج",
       "listOfUsers": "قائمة<br /> المستخدمين",
       "auditPrograms": "مراجعة<br /> البرامج",
+      "auditForms": "نماذج<br />العملاء ",
       "settingsPreferences": "الإعدادات<br /> والتفضيلات",
       "support": "الدعم",
       "myProfile": "ملفي الشخصي",
@@ -286,7 +287,6 @@
         "addUserModal": {
           "title": "إضافة مستخدم جديد",
           "subtitle": "أدخل تفاصيل المستخدم أدناه لإضافة مستخدم جديد.",
-          "emailsPlaceholder": "افصل بين عناوين البريد الإلكتروني بفواصل",
           "emailLabel": "عنوان البريد الإلكتروني",
           "emailRequired": "البريد الإلكتروني مطلوب.",
           "invalidEmail": "يرجى إدخال بريد إلكتروني صالح.",
@@ -374,7 +374,7 @@
         "online": "متصل",
         "away": "بعيد",
         "statusLabel": "الحالة:",
-        "workoutIteration": "تكرار التمرين",
+        "workoutIteration": "التمرين التالي",
         "dietLastLogged": "آخر تسجيل للنظام الغذائي:",
         "noLogs": "لا توجد سجلات",
         "progress": "التقدم:",
@@ -464,6 +464,62 @@
         "tabs": {
           "details": "التفاصيل",
           "workouts": "التمارين",
+          "clients": "العملاء",
+          "pricing": "التسعير"
+        },
+        "alt": {
+          "programPhoto": "صورة البرنامج"
+        }
+      }
+    },
+    "auditForms": {
+      "list": {
+        "pageTitle": {
+          "subheader": "العميل ",
+          "header": "نماذج"
+        },
+        "statusPlaceholder": "تصفية حسب الحالة ...",
+        "programPlaceholder": "تصفية حسب البرنامج ...",
+        "selectTrainer": {
+          "label": "اختر العميل",
+          "placeholder": "ابحث عن العميل..."
+        },
+        "filters": {
+          "allForms": "كل الأنواع",
+          "followup": "المتابعة",
+          "Induction": "التهيئة"
+        },
+        "tableHeaders": {
+          "created": "تاريخ الإنشاء",
+          "clientId": "معرّف العميل",
+          "program": "البرنامج",
+          "status": "الحالة",
+          "numberOfQuestions": "عدد الأسئلة"
+        },
+        "loading": "جار التحميل...",
+        "noResults": "لم يتم العثور على أي نماذج وفقًا لطلبك.",
+        "pagination": {
+          "page": "الصفحة {page}",
+          "previousPage": "الصفحة السابقة",
+          "nextPage": "الصفحة التالية"
+        }
+      },
+      "single": {
+        "pageTitle": {
+          "subheader": "الكل",
+          "header": "البرنامج"
+        },
+        "loading": "جار التحميل...",
+        "avgSessionTime": "دقائق/الجلسة",
+        "daysPerWeek": "أيام/الأسبوع",
+        "actions": {
+          "acceptPublish": "قبول طلب النشر",
+          "denyRequest": "رفض الطلب",
+          "resetToDraft": "إعادة التعيين إلى المسودة (تعليق)"
+        },
+        "tabs": {
+          "details": "التفاصيل",
+          "workouts": "تمارين",
           "clients": "العملاء",
           "pricing": "التسعير"
         },
@@ -1350,28 +1406,7 @@
       "trainerSettingsTab": "إعدادات المدرب",
       "rolesAndPermissionsTab": "الأدوار والصلاحيات",
       "successTitle": "نجاح!",
-      "errorTitle": "خطأ!",
-      "organizationSettingsTab": "إعدادات المؤسسة",
-      "organizationSettingsTabLoading": "جاري تحميل إعدادات المؤسسة...",
-      "organizationLogoUploadLabel": "رفع الشعار",
-      "orgNameLabel": "اسم المؤسسة",
-      "orgNamePlaceholder": "أدخل اسم المؤسسة",
-      "orgAddressLabel": "العنوان",
-      "orgAddressPlaceholder": "أدخل العنوان",
-      "orgDomainsLabel": "نطاقات المؤسسة (مفصولة بفواصل)",
-      "orgDomainsPlaceholder": "أدخل النطاقات مفصولة بفواصل",
-      "orgCountryLabel": "الدولة",
-      "orgCountryPlaceholder": "اختر الدولة",
-      "orgTrainerAssignLabel": "السماح للمدربين بتعيين المتدربين",
-      "orgDescriptionLabel": "الوصف",
-      "orgDescriptionPlaceholder": "أدخل وصفًا موجزًا",
-      "orgSaveButton": "حفظ",
-      "orgNoOrgIdFound": "لم يتم العثور على معرّف المؤسسة في ملفك الشخصي!",
-      "orgFetchError": "تعذّر جلب بيانات المؤسسة: {error}",
-      "orgUpdateSuccess": "تم تحديث المؤسسة بنجاح",
-      "orgUpdateFail": "فشل في تحديث المؤسسة: {error}",
-      "orgLogoUploadSuccess": "تم رفع الشعار بنجاح!",
-      "orgLogoUploadFail": "حدث خطأ أثناء رفع الشعار: {error}"
+      "errorTitle": "خطأ!"
     }
   }
 }
