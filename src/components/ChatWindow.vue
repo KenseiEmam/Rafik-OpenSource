@@ -107,17 +107,17 @@
               </span>
 
               <!-- READ-ONLY FORM VIEW (if this message references a form) -->
-              <div v-if="message.form && formsMapValue[message.form]" class="text-sm mt-2">
+              <div v-if="message.form && formsMap[message.form]" class="text-sm mt-2">
                 <h4 class="font-bold mb-2">
                   <!-- If your table stores 'type' for induction/follow, you can show it here -->
 
                   <span class="uppercase">
-                    {{ formsMapValue[message.form].status }}
-                    {{ formsMapValue[message.form].type + ' Form' }}
+                    {{ formsMap[message.form].status }}
+                    {{ formsMap[message.form].type + ' Form' }}
                   </span>
                 </h4>
                 <div
-                  v-for="(q, i) in formsMapValue[message.form].questions"
+                  v-for="(q, i) in formsMap[message.form].questions"
                   :key="i"
                   class="mb-2 border-b last:border-none pb-2"
                 >
@@ -191,9 +191,8 @@ const props = defineProps<{
 
 const emits = defineEmits(['close']);
 
-// Basic usage: formsMapValue is a computed fallback to an empty object
-const formsMapValue = computed(() => props.formsMap || {});
 
+console.log(props.formsMap)
 // Alerts
 function showSuccess(message: string) {
   Swal.fire({
@@ -226,7 +225,8 @@ const chatContainer = ref<HTMLElement | null>(null);
 const chatSubscription = ref<any | null>(null);
 const sending = ref('');
 const loading = ref(true);
-
+// NEW: We'll store forms by their ID so we can pass them into ChatWindow.
+const formsMap = ref<Record<number, any>>({});
 // Submit a message
 const submitMessage = async () => {
   if (!sending.value.trim()) return; // Prevent empty messages
@@ -272,6 +272,9 @@ watch(
   { immediate: true }
 );
 
+    // Build an array of form IDs to fetch
+    const formIds: number[] = [];
+    const tempMessages: any = {};
 // Fetch all messages for this user_program
 async function fetchMessages() {
   if (!props.Client?.program_details?.id) return;
@@ -287,7 +290,37 @@ async function fetchMessages() {
     console.error('Error fetching messages:', error);
   } else {
     messages.value = data || [];
-    if (!props.messageId) {
+    for (const msg of data) {
+      tempMessages[msg.user_program] = {
+        content: msg.content,
+        created_at: msg.created_at,
+        seen_at: msg.seen_at,
+        sent_by: msg.sent_by,
+        form: msg.form
+      };
+      if (msg.form) {
+        formIds.push(msg.form);
+      }
+    }
+
+    // If we have any form IDs, fetch them all at once
+    if (formIds.length > 0) {
+      const { data: formsData, error: formsError } = await supabase
+        .from('forms')
+        .select('*')
+        .in('id', formIds);
+
+      if (formsError) {
+        console.error('Error fetching forms:', formsError);
+      } else if (formsData) {
+        // Store each form object by its ID
+        for (const f of formsData) {
+          formsMap.value[f.id] = f;
+        }
+      }
+    }
+
+     if (!props.messageId) {
       scrollToBottom();
     }
   }
