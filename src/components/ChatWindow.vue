@@ -185,14 +185,11 @@ type Message = {
 const props = defineProps<{
   visible: boolean;
   Client: any;
-  formsMap?: Record<number, any>; // optional: map of formId -> form object
   messageId?: number; // optional: scroll to this message on mount
 }>();
 
 const emits = defineEmits(['close']);
 
-
-console.log(props.formsMap)
 // Alerts
 function showSuccess(message: string) {
   Swal.fire({
@@ -272,9 +269,9 @@ watch(
   { immediate: true }
 );
 
-    // Build an array of form IDs to fetch
-    const formIds: number[] = [];
-    const tempMessages: any = {};
+// Build an array of form IDs to fetch
+const formIds: number[] = [];
+const tempMessages: any = {};
 // Fetch all messages for this user_program
 async function fetchMessages() {
   if (!props.Client?.program_details?.id) return;
@@ -288,6 +285,7 @@ async function fetchMessages() {
 
   if (error) {
     console.error('Error fetching messages:', error);
+    loading.value = false;
   } else {
     messages.value = data || [];
     for (const msg of data) {
@@ -319,12 +317,13 @@ async function fetchMessages() {
         }
       }
     }
-
-     if (!props.messageId) {
+    loading.value = false;
+    if (!props.messageId) {
       scrollToBottom();
+    } else {
+      scrollToMessage(props.messageId);
     }
   }
-  loading.value = false;
 }
 
 // Subscribe real-time
@@ -375,7 +374,12 @@ function formatDate(timestamp: string) {
 // Scroll to a specific message
 function scrollToMessage(id: number) {
   const messageElement = document.getElementById(String(id));
+  console.log('Message element:', messageElement);
+  console.log(String(id));
   if (messageElement && chatContainer.value) {
+    console.log('Scrolling to message:', id);
+    console.log('Message element:', messageElement.offsetTop);
+    console.log('Chat container:', chatContainer.value.offsetTop);
     chatContainer.value.scrollTop = messageElement.offsetTop - chatContainer.value.offsetTop;
   }
 }
@@ -383,8 +387,20 @@ function scrollToMessage(id: number) {
 onMounted(() => {
   if (props.messageId) {
     scrollToMessage(props.messageId);
+  } else {
+    console.log('NO MESSAGE ID');
   }
 });
+
+watch(
+  () => props.messageId,
+  (newId) => {
+    if (newId) {
+      scrollToMessage(newId);
+    }
+  },
+  { immediate: true }
+);
 
 // Scroll
 function scrollToBottom() {
