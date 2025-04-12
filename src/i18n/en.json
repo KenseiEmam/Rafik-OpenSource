@@ -257,6 +257,7 @@
       "programEntitlements": "Program <br />Entitlements",
       "listOfUsers": "List of <br />Users",
       "auditPrograms": "Audit<br />Programs",
+      "auditForms": "Client<br />Forms",
       "settingsPreferences": "Settings &<br />Preferences",
       "support": "Support",
       "myProfile": "My Profile",
@@ -445,6 +446,62 @@
         },
         "loading": "Loading...",
         "noResults": "No Programs found for your query.",
+        "pagination": {
+          "page": "Page {page}",
+          "previousPage": "Previous Page",
+          "nextPage": "Next Page"
+        }
+      },
+      "single": {
+        "pageTitle": {
+          "subheader": "all",
+          "header": "program"
+        },
+        "loading": "Loading...",
+        "avgSessionTime": "mins/session",
+        "daysPerWeek": "days/week",
+        "actions": {
+          "acceptPublish": "Accept Publish Request",
+          "denyRequest": "Deny Request",
+          "resetToDraft": "Reset to Draft (Suspend)"
+        },
+        "tabs": {
+          "details": "Details",
+          "workouts": "Workouts",
+          "clients": "Clients",
+          "pricing": "Pricing"
+        },
+        "alt": {
+          "programPhoto": "Program Photo"
+        }
+      }
+    },
+    "auditForms": {
+      "list": {
+        "pageTitle": {
+          "subheader": "Client ",
+          "header": "Forms"
+        },
+        "statusPlaceholder": "Filter by Status ...",
+        "programPlaceholder": "Filter by Program ...",
+        "selectTrainer": {
+          "label": "Select Client",
+          "placeholder": "Search for client..."
+        },
+        "filters": {
+          "allForms": "All Types",
+          "followup": "Follow Up",
+          "Induction": "Induction"
+        },
+        "tableHeaders": {
+          "created": "Created At",
+          "clientId": "Client ID",
+          "program": "Program",
+          "status": "Status",
+          "numberOfQuestions": "Number Of Questions"
+        },
+        "loading": "Loading...",
+        "noResults": "No Forms found for your query.",
         "pagination": {
           "page": "Page {page}",
           "previousPage": "Previous Page",

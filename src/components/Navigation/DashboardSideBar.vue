@@ -76,6 +76,14 @@
       >
         <span v-html="t('dashboard.sidebar.auditPrograms')" />
       </RouterLink>
+      <RouterLink
+        :to="{ name: 'forms-list' }"
+        class="nav-btn"
+        v-if="userStore.userProfile?.roles.includes('Trainer') ||
+          userStore.userProfile?.roles.includes('Organization Trnr')"
+      >
+        <span v-html="t('dashboard.sidebar.auditForms')" />
+      </RouterLink>
       <RouterLink :to="{ name: 'settings' }" class="nav-btn">
         <span v-html="t('dashboard.sidebar.settingsPreferences')" />
       </RouterLink>
