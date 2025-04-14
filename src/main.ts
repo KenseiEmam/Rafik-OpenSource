@@ -21,6 +21,7 @@ import { faUserSecret } from '@fortawesome/free-solid-svg-icons';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
+// @ts-ignore
 import VueTelInput from 'vue-tel-input';
 import 'vue-tel-input/vue-tel-input.css';
 
