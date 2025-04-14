@@ -389,6 +389,7 @@
         "workoutPlanTab": "Workout-Plan",
         "workoutLogTab": "Workout-Log",
         "dietLogTab": "Diet-Log",
+        "weightLogTab": "Weight-Log",
         "statisticsTab": "Statistics"
       },
       "list": {
@@ -840,6 +841,18 @@
           "noOfMeals": "No. of Meals",
           "missingMeals": "missing meals",
           "moreDetails": "More Details",
+          "prev": "Prev",
+          "next": "Next",
+          "pageOf": "Page {current} of {total}"
+        },
+        "weightLog": {
+          "showingRows": "Showing {count} row(s)",
+          "dateLogged": "Date Logged",
+          "weight": "Weight",
+          "previous": "Previous Weight",
+          "progress": "Progress",
+          "goal": "Goal Weight",
+          "photo": "Photo",
           "prev": "Prev",
           "next": "Next",
           "pageOf": "Page {current} of {total}"
