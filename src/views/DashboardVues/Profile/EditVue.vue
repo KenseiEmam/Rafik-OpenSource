@@ -196,11 +196,16 @@
                   <label class="block text-sm font-medium" for="phone">
                     {{ t('dashboard.profile.edit.phoneLabel') }}
                   </label>
-                  <input
+                  <vue-tel-input
                     id="phone"
                     v-model="userStore.Trainer.phone"
-                    class="rafik-text-input w-full"
-                    type="tel"
+                    styleClasses="phone-input"
+                    :placeholder="t('dashboard.profile.edit.phoneLabel')"
+                    :inputOptions="{ showDialCode: true, styleClasses: 'rafik-text-input w-full' }"
+                    :invalidMsg="t('dashboard.profile.edit.invalidPhone')"
+                    validCharactersOnly
+                    autocomplete="on"
+                    name="telephone"
                     required
                   />
                 </div>
@@ -319,6 +324,7 @@ import Swal from 'sweetalert2';
 import VueDatePicker from '@vuepic/vue-datepicker'; // presumably needed for <VueDatePicker/>
 import '@vuepic/vue-datepicker/dist/main.css'; // or wherever your styling is
 import { useI18n } from 'vue-i18n';
+import { VueTelInput } from 'vue-tel-input';
 
 const { t, locale } = useI18n();
 // Dark mode from localStorage

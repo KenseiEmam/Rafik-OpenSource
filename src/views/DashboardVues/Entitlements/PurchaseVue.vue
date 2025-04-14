@@ -157,7 +157,14 @@
             <label class="text-sm font-medium text-rafic-sectext">
               {{ t('dashboard.entitlements.purchase.country') }}
             </label>
-            <input type="text" class="rafik-text-input w-full my-2" v-model="country" />
+            <select v-model="country" class="rafik-text-input w-full my-2">
+              <option :value="''" disabled>
+                {{ t('dashboard.entitlements.purchase.countryPlaceholder') }}
+              </option>
+              <option v-for="c in countries" :key="c.code" :value="c.code">
+                {{ c.name }}
+              </option>
+            </select>
           </div>
           <!-- State -->
           <div>
@@ -230,10 +237,11 @@
 
 <script lang="ts" setup>
 import PageTitle from '@/components/Navigation/PageTitle.vue';
+import { countries } from '@/lib/countries';
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-const { t , locale } = useI18n();
+const { t, locale } = useI18n();
 
 // Store package amounts
 const packAmounts = ref<number[]>([0, 0, 0]);
