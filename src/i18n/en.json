@@ -305,6 +305,7 @@
           "allUsers": "All Users",
           "trainer": "Trainer",
           "trainee": "Trainee",
+          "enrolledTrainee": "Enrolled Trainee",
           "customerCare": "Customer Care"
         },
         "tableHeaders": {

@@ -302,6 +302,7 @@
           "allUsers": "كل المستخدمين",
           "trainer": "مدرب",
           "trainee": "متدرب",
+          "enrolledTrainee": "متدرب مسجل",
           "customerCare": "خدمة العملاء"
         },
         "tableHeaders": {

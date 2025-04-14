@@ -85,6 +85,7 @@ type Filter = {
   roles: string[];
   name: string;
   active: boolean;
+  enrolled?: boolean;
 };
 type Workout = {
   workout_name: string;
@@ -174,7 +175,7 @@ export const useUserStore = defineStore('User', () => {
     localStorage.removeItem('UserID');
     localStorage.removeItem('AccessToken');
     localStorage.removeItem('Roles');
-    localStorage.removeItem('OrgID')
+    localStorage.removeItem('OrgID');
   }
 
   // Fetch User Profile Function
@@ -201,8 +202,7 @@ export const useUserStore = defineStore('User', () => {
       localStorage.setItem('UserID', data.id);
       localStorage.setItem('LoggedInTrainer', data.is_staff ? 'true' : 'false');
       localStorage.setItem('Roles', data.roles);
-      if(data.organization !== null)
-      localStorage.setItem('OrgID', data.organization);
+      if (data.organization !== null) localStorage.setItem('OrgID', data.organization);
       userProfile.value = data;
 
       // Redirect based on trainer status
@@ -258,30 +258,29 @@ export const useUserStore = defineStore('User', () => {
   }
 
   // Fetch Users Based On ID
-async function fetchUser(id: number) {
-  try {
-    const orgID = localStorage.getItem('OrgID');
+  async function fetchUser(id: number) {
+    try {
+      const orgID = localStorage.getItem('OrgID');
 
-    // Build base query
-    let query = supabase.from('users').select('*').eq('id', id);
+      // Build base query
+      let query = supabase.from('users').select('*').eq('id', id);
 
-    // Conditionally filter by organization if orgID exists
-    if (orgID) {
-      query = query.eq('organization', orgID);
+      // Conditionally filter by organization if orgID exists
+      if (orgID) {
+        query = query.eq('organization', orgID);
+      }
+
+      const { data, error } = await query.single();
+
+      if (error || !data) {
+        throw new Error(`Error fetching users: ${error?.message || 'Users not found'}`);
+      }
+
+      UserDetail.value = data;
+    } catch (error: any) {
+      showError(error);
     }
-
-    const { data, error } = await query.single();
-
-    if (error || !data) {
-      throw new Error(`Error fetching users: ${error?.message || 'Users not found'}`);
-    }
-
-    UserDetail.value = data;
-  } catch (error: any) {
-    showError(error);
   }
-}
-
 
   // Fetch Users Based On Org, Filters with Pagination
   async function fetchOrgUsers(filters: Filter, page: number, pageSize: number) {
@@ -290,41 +289,61 @@ async function fetchUser(id: number) {
       if (!orgID) {
         throw new Error('Organizational ID not Found');
       }
-      // Start building the query; count: 'exact' returns the total count
+
+      // Basic query
       let query = supabase.from('users').select('*', { count: 'exact' }).eq('organization', orgID);
 
-      // Filter by roles if provided
+      // 1) Filter by roles if provided
       if (filters.roles && filters.roles.length > 0) {
         query = query.contains('roles', filters.roles);
       }
 
-      // Filter by name (search in first_name or last_name, case-insensitive)
+      // 2) Filter by name
       if (filters.name && filters.name.trim() !== '') {
         query = query.or(`first_name.ilike.%${filters.name}%,last_name.ilike.%${filters.name}%`);
       }
 
-      // Apply pagination: calculate the start and end indexes for the range
+      // 3) If filters.enrolled is true, filter out users whose profile entry
+      //    has user_program_id != null
+      if (filters.enrolled) {
+        // First, get all profile IDs whose user_program_id is not null
+        const { data: enrolledProfiles, error: profileError } = await supabase
+          .from('profiles')
+          .select('id')
+          .not('user_program_id', 'is', null);
+
+        if (profileError) {
+          throw new Error(`Error fetching profiles: ${profileError.message}`);
+        }
+
+        // If there are no such profiles, we can force an empty result:
+        if (!enrolledProfiles || enrolledProfiles.length === 0) {
+          // Force the query to return no users
+          query = query.in('profile_id', [0]); // There's presumably no profile row with id=0
+        } else {
+          // Collect valid profile IDs and filter the user query on them
+          const enrolledProfileIds = enrolledProfiles.map((p) => p.id);
+          query = query.in('profile_id', enrolledProfileIds);
+        }
+      }
+
+      // Apply pagination
       const start = (page - 1) * pageSize;
       const end = page * pageSize - 1;
       query = query.range(start, end);
 
+      // Execute
       const { data, error, count } = await query;
-
       if (error || !data) {
         throw new Error(`Error fetching users: ${error?.message || 'Users not found'}`);
       }
 
-      // Store data (and count if needed)
       All_Org_Users.value = data;
       if (count) All_Org_count.value = count;
-      // Optionally, you can use count to display total records if required:
-      // totalCount.value = count;
     } catch (error: any) {
       showError(error);
     }
   }
-
-
 
   // Fetch Logged In Trainer
   async function getLoggedTrainer() {
@@ -988,8 +1007,7 @@ async function fetchUser(id: number) {
       localStorage.setItem('UserID', data[0].id);
       localStorage.setItem('LoggedInTrainer', data[0].is_staff);
       localStorage.setItem('Roles', data[0].roles);
-      if(data[0].organization)
-      localStorage.setItem('OrgID', data[0].organization);
+      if (data[0].organization) localStorage.setItem('OrgID', data[0].organization);
       userProfile.value = data[0];
       return userProfile.value;
     } catch (error: any) {

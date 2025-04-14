@@ -1,6 +1,6 @@
 import './assets/main.css';
 
-import { createApp } from 'vue';
+import { createApp, type App as Application } from 'vue';
 import { createI18n } from 'vue-i18n';
 import * as EN from '@/i18n/en.json';
 import * as AR from '@/i18n/ar.json';
@@ -39,10 +39,18 @@ const i18n = createI18n<MessageSchema, 'en' | 'ar'>({
 
 const app = createApp(App);
 
+const VueTelInputPlugin = {
+  install(app: Application) {
+    app.component('VueTelInput', VueTelInput);
+  }
+};
+
 app.use(createPinia());
 app.use(VueSweetalert2);
 app.use(router);
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.component('VueDatePicker', VueDatePicker);
 app.use(i18n);
+
+app.use(VueTelInputPlugin);
 app.mount('#app');
