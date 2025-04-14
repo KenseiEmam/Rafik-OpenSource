@@ -317,13 +317,6 @@ const validateAndSubmit = async () => {
       </div>
       <div>
         <label for="phone" class="text-body uppercase">Phone Number</label>
-        <input
-          v-model="formData.phone"
-          type="tel"
-          id="phone"
-          class="rafik-text-input"
-          placeholder="Enter your phone number"
-        />
         <vue-tel-input
           id="phone"
           v-model="formData.phone"
