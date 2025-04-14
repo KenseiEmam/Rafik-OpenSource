@@ -40,6 +40,7 @@
     "vue-search-select": "^3.2.0",
     "vue-select-next": "^0.1.6",
     "vue-sweetalert2": "^5.0.11",
+    "vue-tel-input": "^9.3.0",
     "vue3-circle-progress": "^1.0.7",
     "vue3-cropper": "^0.4.0",
     "vuedraggable": "^4.1.0"
@@ -51,6 +52,7 @@
     "@types/lodash": "^4.17.15",
     "@types/node": "^22.9.0",
     "@types/text-encoding": "^0.0.40",
+    "@types/vue-tel-input": "^2.1.7",
     "@vitejs/plugin-vue": "^5.1.4",
     "@vitejs/plugin-vue-jsx": "^4.0.1",
     "@vitest/eslint-plugin": "1.1.7",

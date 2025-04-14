@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { supabase } from "@/lib/supabaseClient"; // Ensure Supabase is correctly set up
-import router from "@/router";
-import { useUserStore } from "@/stores/user";
-import Swal from "sweetalert2";
-import { useNationalStore } from '@/stores/nationalities'
+import { onMounted, ref } from 'vue';
+import { supabase } from '@/lib/supabaseClient'; // Ensure Supabase is correctly set up
+import router from '@/router';
+import { useUserStore } from '@/stores/user';
+import Swal from 'sweetalert2';
+import { useNationalStore } from '@/stores/nationalities';
+import { VueTelInput } from 'vue-tel-input';
 
-
-const nationalStore = useNationalStore()
-const darkness = localStorage.getItem('dark_mode')
-onMounted(()=>{
-  nationalStore.getNationalities()
-})
+const nationalStore = useNationalStore();
+const darkness = localStorage.getItem('dark_mode');
+onMounted(() => {
+  nationalStore.getNationalities();
+});
 // Success and Error Alerts
 function showSuccess(message: string) {
   Swal.fire({
@@ -24,8 +24,8 @@ function showSuccess(message: string) {
     position: 'top-right',
     icon: 'success',
     background: '#081411',
-    color: '#E8F3ED',
-  })
+    color: '#E8F3ED'
+  });
 }
 
 function showError(message: string) {
@@ -36,31 +36,38 @@ function showError(message: string) {
     confirmButtonColor: '#d33',
     cancelButtonColor: '#d33',
     background: '#081411',
-    color: '#E8F3ED',
-  })
+    color: '#E8F3ED'
+  });
 }
-const isLoading= ref(false)
+const isLoading = ref(false);
 const fileInput = ref<HTMLInputElement | null>(null);
 const uploadedImage = ref<string | null>(null); // Preview image
 const selectedFile = ref<File | null>(null); // File to upload
-const userStore =useUserStore();
-if (!localStorage.getItem('LoggedInUser') ){
-  router.push('login')
+const userStore = useUserStore();
+if (!localStorage.getItem('LoggedInUser')) {
+  router.push('login');
 }
-if (localStorage.getItem('LoggedInUser') && localStorage.getItem('UserID')  && localStorage.getItem('LoggedInTrainer') == 'false' ){
-  router.push('register-as-a-trainer')
-}
-else if (localStorage.getItem('LoggedInUser') && localStorage.getItem('UserID') && localStorage.getItem('LoggedInTrainer') == 'true'){
-  router.push({name:'dashboard-home'})
+if (
+  localStorage.getItem('LoggedInUser') &&
+  localStorage.getItem('UserID') &&
+  localStorage.getItem('LoggedInTrainer') == 'false'
+) {
+  router.push('register-as-a-trainer');
+} else if (
+  localStorage.getItem('LoggedInUser') &&
+  localStorage.getItem('UserID') &&
+  localStorage.getItem('LoggedInTrainer') == 'true'
+) {
+  router.push({ name: 'dashboard-home' });
 }
 
 const formData = ref({
-  firstName: "",
-  lastName: "",
-  sex: "",
+  firstName: '',
+  lastName: '',
+  sex: '',
   dob: new Date(new Date().setFullYear(new Date().getFullYear() - 16)),
-  nationality: "",
-  phone: "",
+  nationality: '',
+  phone: ''
 });
 
 const triggerFileInput = () => {
@@ -86,97 +93,95 @@ const handleFileChange = (event: Event) => {
 const removeImage = () => {
   uploadedImage.value = null;
   selectedFile.value = null;
-  if (fileInput.value) fileInput.value.value = "";
+  if (fileInput.value) fileInput.value.value = '';
 };
 
 const validateAndSubmit = async () => {
-  const email = localStorage.getItem("LoggedInUser");
-  isLoading.value = true
+  const email = localStorage.getItem('LoggedInUser');
+  isLoading.value = true;
   if (!email) {
-    showError("No logged-in user found. Please log in.");
+    showError('No logged-in user found. Please log in.');
     return;
   }
 
   const { firstName, lastName, sex, dob, nationality, phone } = formData.value;
 
   if (!selectedFile.value) {
-    showError("Please upload a profile picture.");
+    showError('Please upload a profile picture.');
     return;
   }
 
   if (!firstName || !lastName || !sex || !dob || !nationality || !phone) {
-    showError("All fields are required.");
+    showError('All fields are required.');
     return;
   }
 
   if (dob === null) {
-    showError("Please enter a valid date of birth.");
+    showError('Please enter a valid date of birth.');
     return;
   }
 
   try {
     // Upload the file to Supabase storage
     const { data: storageData, error: storageError } = await supabase.storage
-      .from("storage") // Replace with your bucket name
+      .from('storage') // Replace with your bucket name
       .upload(`avatars/${selectedFile.value.name}`, selectedFile.value, {
-        cacheControl: "3600",
-        upsert: true,
+        cacheControl: '3600',
+        upsert: true
       });
 
     if (storageError) throw storageError;
 
     // Generate the public URL
     const { data: urlData } = supabase.storage
-      .from("storage")
+      .from('storage')
       .getPublicUrl(`avatars/${selectedFile.value.name}`);
 
     if (!urlData?.publicUrl) {
-      throw new Error("Failed to generate public URL for the image.");
+      throw new Error('Failed to generate public URL for the image.');
     }
-    const darkness = localStorage.getItem('dark_mode')
-
+    const darkness = localStorage.getItem('dark_mode');
 
     // Save the data to the `users` table
-    const { data, error } = await supabase.from("users").upsert({
-      email,
-      first_name: firstName,
-      last_name: lastName,
-      sex,
-      dob,
-      nationality,
-      phone,
-      avatar: urlData.publicUrl,
-    }).select().single();
-
-
-
+    const { data, error } = await supabase
+      .from('users')
+      .upsert({
+        email,
+        first_name: firstName,
+        last_name: lastName,
+        sex,
+        dob,
+        nationality,
+        phone,
+        avatar: urlData.publicUrl
+      })
+      .select()
+      .single();
 
     if (error) {
       console.error(error);
-      showError("Error saving profile. Please try again.");
+      showError('Error saving profile. Please try again.');
       return;
     }
-    const userId = data.id
+    const userId = data.id;
     // Insert settings
     const { data: settingsProfile, error: settingsError } = await supabase
-      .from("user_settings")
+      .from('user_settings')
       .insert({
-        user_id: userId ,
+        user_id: userId
       })
       .select()
       .single();
 
     if (settingsError) throw settingsError;
 
-
-    showSuccess("Profile successfully updated!");
-    userStore.getUserProfile()
+    showSuccess('Profile successfully updated!');
+    userStore.getUserProfile();
   } catch (err) {
     console.error(err);
-    showError("An error occurred. Please try again.");
-  }
-  finally{
-    isLoading.value =false
+    showError('An error occurred. Please try again.');
+  } finally {
+    isLoading.value = false;
   }
 };
 </script>
@@ -191,13 +196,22 @@ const validateAndSubmit = async () => {
       <h2 class="text-body text-rafik-sectext dark:text-rafik-darksectext">
         Set up your profile to tell your clients more about yourself...
       </h2>
-      <div v-if="isLoading" class=" h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body">
-          <img src="@/assets/Large Icon.png"  class="w-24 h-24 animate-bounce hidden dark:inline-block" alt="">
-<img src="@/assets/Large Icon Light.png"  class="w-24 h-24 animate-bounce dark:hidden" alt="">
-          <p >
-          Loading...
-        </p>
-        </div>
+      <div
+        v-if="isLoading"
+        class="h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body"
+      >
+        <img
+          src="@/assets/Large Icon.png"
+          class="w-24 h-24 animate-bounce hidden dark:inline-block"
+          alt=""
+        />
+        <img
+          src="@/assets/Large Icon Light.png"
+          class="w-24 h-24 animate-bounce dark:hidden"
+          alt=""
+        />
+        <p>Loading...</p>
+      </div>
       <div v-else>
         <div>
           <!-- Profile Picture -->
@@ -264,7 +278,6 @@ const validateAndSubmit = async () => {
               placeholder="Enter your last name"
             />
           </div>
-
         </div>
       </div>
       <div>
@@ -278,22 +291,30 @@ const validateAndSubmit = async () => {
       </div>
       <!-- dob -->
       <div class="form-control">
-            <label class="block text-sm font-medium" for="dob">Date of Birth:</label>
-            <VueDatePicker :dark="darkness === 'true'" v-model="formData.dob" placeholder="Select Date" :enable-time-picker="false"  :max-date="new Date(new Date().setFullYear(new Date().getFullYear() - 16))"  />
-          </div>
-       <!-- Nationality -->
-       <div class="form-control">
-            <label class="block text-sm font-medium" for="nationality">Nationality</label>
-            <select
-              id="nationality"
-              v-model="formData.nationality"
-              class="rafik-text-input w-full"
-              required
-            >
-            <option value="" disabled selected>Select Nationality:</option>
-            <option v-for="Nat in nationalStore.Nationalities" :value="Nat.nationality">{{ Nat.nationality }}</option>
-            </select>
-          </div>
+        <label class="block text-sm font-medium" for="dob">Date of Birth:</label>
+        <VueDatePicker
+          :dark="darkness === 'true'"
+          v-model="formData.dob"
+          placeholder="Select Date"
+          :enable-time-picker="false"
+          :max-date="new Date(new Date().setFullYear(new Date().getFullYear() - 16))"
+        />
+      </div>
+      <!-- Nationality -->
+      <div class="form-control">
+        <label class="block text-sm font-medium" for="nationality">Nationality</label>
+        <select
+          id="nationality"
+          v-model="formData.nationality"
+          class="rafik-text-input w-full"
+          required
+        >
+          <option value="" disabled selected>Select Nationality:</option>
+          <option v-for="Nat in nationalStore.Nationalities" :value="Nat.nationality">
+            {{ Nat.nationality }}
+          </option>
+        </select>
+      </div>
       <div>
         <label for="phone" class="text-body uppercase">Phone Number</label>
         <input
@@ -302,6 +323,17 @@ const validateAndSubmit = async () => {
           id="phone"
           class="rafik-text-input"
           placeholder="Enter your phone number"
+        />
+        <vue-tel-input
+          id="phone"
+          v-model="formData.phone"
+          styleClasses="phone-input"
+          placeholder="Enter your phone number"
+          :inputOptions="{ showDialCode: true, styleClasses: 'rafik-text-input' }"
+          invalidMsg="'Invalid phone number'"
+          validCharactersOnly
+          autocomplete="on"
+          name="telephone"
         />
       </div>
       <input :disabled="isLoading" type="submit" class="btn-lg" value="Submit" />

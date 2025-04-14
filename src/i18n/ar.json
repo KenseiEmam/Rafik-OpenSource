@@ -1130,6 +1130,7 @@
         "emailAddress": "عنوان البريد الإلكتروني",
         "phoneNumber": "رقم الهاتف",
         "country": "البلد",
+        "countryPlaceholder": "اختر بلدك",
         "state": "الولاية",
         "city": "المدينة",
         "zipCode": "الرمز البريدي",
