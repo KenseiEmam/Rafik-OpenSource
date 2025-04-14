@@ -40,10 +40,23 @@
             @click="updateFilter('Trainee')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
             :class="
-              filters.roles.includes('Trainee') ? 'border-rafik gradient-bg text-rafik' : 'border'
+              filters.roles.includes('Trainee') && !filters.enrolled
+                ? 'border-rafik gradient-bg text-rafik'
+                : 'border'
             "
           >
             {{ t('dashboard.users.list.filters.trainee') }}
+          </button>
+          <button
+            @click="updateFilter('Trainee', true)"
+            class="card border 2xl:text-base text-sm min-w-max uppercase"
+            :class="
+              filters.roles.includes('Trainee') && filters.enrolled
+                ? 'border-rafik gradient-bg text-rafik'
+                : 'border'
+            "
+          >
+            {{ t('dashboard.users.list.filters.enrolledTrainee') }}
           </button>
         </div>
         <div class="flex gap-2">
@@ -129,7 +142,7 @@
                 <div
                   v-if="show_action == user.id"
                   @mouseleave="handleLeave()"
-                  class="absolute min-w-16  z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg shadow-lg divide-y divide-rafik-sectext dark:divide-rafik-darksectext"
+                  class="absolute min-w-16 z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg shadow-lg divide-y divide-rafik-sectext dark:divide-rafik-darksectext"
                 >
                   <Router-link
                     :to="{ name: 'single-user', params: { id: user.id } }"
@@ -271,7 +284,6 @@ const showAssignEntitlementModal = ref(false);
 const processing = ref(false);
 const showAddUserModal = ref(false);
 
-
 // Success and Error Alerts
 function showSuccess(messageKey: string) {
   Swal.fire({
@@ -298,7 +310,6 @@ function showError(messageKey: string) {
     color: '#E8F3ED'
   });
 }
-
 
 // Add new Users
 function addUser(emails: string[], type: 'trainer' | 'trainee') {
@@ -467,12 +478,14 @@ function handleSearch(event: Event) {
   debouncedFetchUsers(target.value);
 }
 
-function updateFilter(filterType: string) {
+function updateFilter(filterType: string, enrolled?: boolean) {
   loading.value = true;
   if (filterType === 'All') {
     filters.value.roles = [];
+    filters.value.enrolled = false;
   } else {
     filters.value.roles = [filterType];
+    filters.value.enrolled = enrolled || false;
   }
   page.value = 1;
   loadUsers();
