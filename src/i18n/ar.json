@@ -385,7 +385,8 @@
         "detailsTab": "التفاصيل",
         "workoutPlanTab": "خطة التمرين",
         "workoutLogTab": "سجل التمرين",
-        "dietLogTab": "سجل النظام الغذائي",
+        "dietLogTab": "سجل الوزن",
+        "weightLogTab": "سجل النظام الغذائي",
         "statisticsTab": "الإحصائيات"
       },
       "list": {
@@ -839,6 +840,18 @@
           "prev": "السابق",
           "next": "التالي",
           "pageOf": "صفحة {current} من {total}"
+        },
+        "weightLog": {
+          "showingRows": "عرض {count} صف(وف)",
+          "dateLogged": "تاريخ التسجيل",
+          "weight": "الوزن",
+          "previous": "الوزن السابق",
+          "progress": "التقدم",
+          "goal": "الوزن المستهدف",
+          "photo": "صورة",
+          "prev": "السابق",
+          "next": "التالي",
+          "pageOf": "الصفحة {current} من {total}"
         },
         "workoutLog": {
           "searchByName": "ابحث بالاسم...",
