@@ -21,6 +21,9 @@ import { faUserSecret } from '@fortawesome/free-solid-svg-icons';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
+import VueTelInput from 'vue-tel-input';
+import 'vue-tel-input/vue-tel-input.css';
+
 /* add icons to the library */
 library.add(faUserSecret);
 type MessageSchema = typeof EN;
@@ -45,4 +48,5 @@ app.use(router);
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.component('VueDatePicker', VueDatePicker);
 app.use(i18n);
+app.use(VueTelInput);
 app.mount('#app');
