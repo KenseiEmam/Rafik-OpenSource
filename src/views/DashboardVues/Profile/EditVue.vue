@@ -324,7 +324,6 @@ import Swal from 'sweetalert2';
 import VueDatePicker from '@vuepic/vue-datepicker'; // presumably needed for <VueDatePicker/>
 import '@vuepic/vue-datepicker/dist/main.css'; // or wherever your styling is
 import { useI18n } from 'vue-i18n';
-import { VueTelInput } from 'vue-tel-input';
 
 const { t, locale } = useI18n();
 // Dark mode from localStorage
