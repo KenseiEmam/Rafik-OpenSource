@@ -56,6 +56,17 @@
           >
             {{ t('dashboard.users.list.filters.customerCare') }}
           </button>
+          <button
+            @click="updateFilter('Trainee', true)"
+            class="card border 2xl:text-base text-sm min-w-max uppercase"
+            :class="
+              filters.roles.includes('Trainee') && filters.enrolled
+                ? 'border-rafik gradient-bg text-rafik'
+                : 'border'
+            "
+          >
+            {{ t('dashboard.users.list.filters.enrolledTrainee') }}
+          </button>
         </div>
       </div>
 
@@ -239,10 +250,12 @@ interface User {
   roles: string[];
 }
 
+
 type Filter = {
   roles: string[];
   name: string;
   active: boolean;
+  enrolled:boolean;
 };
 const loading = ref(true);
 const userStore = useUserStore();
@@ -251,7 +264,7 @@ const totalCount = ref(0);
 const page = ref(1);
 const pageSize = ref(10);
 const holdQuery = ref('');
-const filters = ref<Filter>({ roles: [], name: '', active: true });
+const filters = ref<Filter>({ roles: [], name: '', active: true, enrolled:false });
 
 const show_action = ref();
 
@@ -286,12 +299,14 @@ function handleSearch(event: Event) {
   debouncedFetchUsers(target.value);
 }
 
-function updateFilter(filterType: string) {
+function updateFilter(filterType: string, enrolled?: boolean) {
   loading.value = true;
   if (filterType === 'All') {
     filters.value.roles = [];
+    filters.value.enrolled = false;
   } else {
     filters.value.roles = [filterType];
+    filters.value.enrolled = enrolled || false;
   }
   page.value = 1;
   loadUsers();

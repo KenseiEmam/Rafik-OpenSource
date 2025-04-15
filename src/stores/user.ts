@@ -236,6 +236,30 @@ export const useUserStore = defineStore('User', () => {
         query = query.or(`first_name.ilike.%${filters.name}%,last_name.ilike.%${filters.name}%`);
       }
 
+      // 3) If filters.enrolled is true, filter out users whose profile entry
+      //    has user_program_id != null
+      if (filters.enrolled) {
+        // First, get all profile IDs whose user_program_id is not null
+        const { data: enrolledProfiles, error: profileError } = await supabase
+          .from('profiles')
+          .select('id')
+          .not('user_program_id', 'is', null);
+
+        if (profileError) {
+          throw new Error(`Error fetching profiles: ${profileError.message}`);
+        }
+
+        // If there are no such profiles, we can force an empty result:
+        if (!enrolledProfiles || enrolledProfiles.length === 0) {
+          // Force the query to return no users
+          query = query.in('profile_id', [0]); // There's presumably no profile row with id=0
+        } else {
+          // Collect valid profile IDs and filter the user query on them
+          const enrolledProfileIds = enrolledProfiles.map((p) => p.id);
+          query = query.in('profile_id', enrolledProfileIds);
+        }
+      }
+
       // Apply pagination: calculate the start and end indexes for the range
       const start = (page - 1) * pageSize;
       const end = page * pageSize - 1;
