@@ -43,11 +43,11 @@ const i18n = createI18n<MessageSchema, 'en' | 'ar'>({
 
 const app = createApp(App);
 
-const VueTelInputPlugin = {
-  install(app: Application) {
-    app.component('VueTelInput', VueTelInput);
-  }
-};
+// const VueTelInputPlugin = {
+//   install(app: Application) {
+//     app.component('VueTelInput', VueTelInput);
+//   }
+// };
 
 app.use(createPinia());
 app.use(VueSweetalert2);
@@ -55,5 +55,5 @@ app.use(router);
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.component('VueDatePicker', VueDatePicker);
 app.use(i18n);
-app.use(VueTelInputPlugin);
+// app.use(VueTelInputPlugin);
 app.mount('#app');
