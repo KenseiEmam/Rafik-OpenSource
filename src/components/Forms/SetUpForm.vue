@@ -5,7 +5,7 @@ import router from '@/router';
 import { useUserStore } from '@/stores/user';
 import Swal from 'sweetalert2';
 import { useNationalStore } from '@/stores/nationalities';
-import { VueTelInput } from 'vue-tel-input';
+// import { VueTelInput } from 'vue-tel-input';
 
 const nationalStore = useNationalStore();
 const darkness = localStorage.getItem('dark_mode');
@@ -111,7 +111,7 @@ const validateAndSubmit = async () => {
     return;
   }
 
-  if (!firstName || !lastName || !sex || !dob || !nationality || !phone) {
+  if (!firstName || !lastName || !sex || !dob || !nationality ) {
     showError('All fields are required.');
     return;
   }
@@ -315,7 +315,7 @@ const validateAndSubmit = async () => {
           </option>
         </select>
       </div>
-      <div>
+      <!-- <div>
         <label for="phone" class="text-body uppercase">Phone Number</label>
         <vue-tel-input
           id="phone"
@@ -328,7 +328,7 @@ const validateAndSubmit = async () => {
           autocomplete="on"
           name="telephone"
         />
-      </div>
+      </div> -->
       <input :disabled="isLoading" type="submit" class="btn-lg" value="Submit" />
     </form>
   </div>
