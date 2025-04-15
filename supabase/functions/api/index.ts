@@ -220,7 +220,7 @@ router
           try {
             // Send the OAuth 1.0 request to FatSecret API
             const response = await sendOAuthRequest(method, path, params);
-            ctx.response.status = response.status;
+            ctx.response.status = 200;
             setJsonCors(ctx);
             ctx.response.body = response;
           } catch (error: any) {
