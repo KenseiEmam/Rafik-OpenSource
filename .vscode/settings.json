@@ -1,5 +1,4 @@
 {
-  "deno.enablePaths": ["supabase/functions"],
   "deno.lint": true,
   "deno.unstable": [
     "bare-node-builtins",
@@ -19,6 +18,8 @@
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["supabase"],
-  "deno.enable": true
+  "cSpell.words": ["langchain", "supabase"],
+  "deno.enable": true,
+  "deno.enablePaths": [],
+  "deno.codeLens.test": true
 }

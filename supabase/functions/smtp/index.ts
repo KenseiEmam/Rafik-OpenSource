@@ -1,6 +1,7 @@
 import { corsHeaders } from "../_shared/corsHeaders.ts";
 import { template } from "../_shared/template.ts";
-import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
+import { Application, Context, Router } from "@oak/oak";
+import { orgTemplate } from "../_shared/orgTemplate.ts";
 
 // In production, replace these with environment variables.
 const fromEmail = "email@rafikapp.ae";
@@ -8,7 +9,7 @@ const toEmail = "admin@rafikapp.ae";
 const noReply = "noreply@rafikapp.ae";
 
 // Helper function to set JSON and CORS headers.
-function setJsonCors(ctx: any) {
+function setJsonCors(ctx: Context) {
   ctx.response.headers.set("Content-Type", "application/json");
   Object.entries(corsHeaders).forEach(([key, value]) => {
     ctx.response.headers.set(key, value);
@@ -36,7 +37,7 @@ router
 
       // Ensure the request has a JSON body.
       if (ctx.request.hasBody) {
-        const reqBody = ctx.request.body({ type: "json" });
+        const reqBody = await ctx.request.body.json();
         const data = await reqBody.value;
         name = data.name;
         email = data.email;
@@ -100,7 +101,7 @@ Message: ${message}
         setJsonCors(ctx);
         ctx.response.body = {
           error: "Internal Server Error",
-          message: error.toString(),
+          message: JSON.stringify(error),
         };
       }
     } catch (error) {
@@ -109,7 +110,7 @@ Message: ${message}
       setJsonCors(ctx);
       ctx.response.body = {
         error: "Internal Server Error",
-        message: error.toString(),
+        message: JSON.stringify(error),
       };
     }
   })
@@ -122,7 +123,7 @@ Message: ${message}
 
       // Ensure the request has a JSON body.
       if (ctx.request.hasBody) {
-        const reqBody = ctx.request.body({ type: "json" });
+        const reqBody = await ctx.request.body.json();
         const data = await reqBody.value;
         userName = data.userName;
         programName = data.programName;
@@ -181,7 +182,7 @@ Message: ${message}
         setJsonCors(ctx);
         ctx.response.body = {
           error: "Internal Server Error",
-          message: error.toString(),
+          message: JSON.stringify(error),
         };
       }
     } catch (error) {
@@ -190,7 +191,7 @@ Message: ${message}
       setJsonCors(ctx);
       ctx.response.body = {
         error: "Internal Server Error",
-        message: error.toString(),
+        message: JSON.stringify(error),
       };
     }
   })
@@ -198,7 +199,7 @@ Message: ${message}
     try {
       // Ensure the request has a JSON body.
       if (ctx.request.hasBody) {
-        const reqBody = ctx.request.body({ type: "json" });
+        const reqBody = await ctx.request.body.json();
         const data = await reqBody.value;
 
         // Expecting a JSON array of emails.
@@ -257,7 +258,7 @@ Message: ${message}
       setJsonCors(ctx);
       ctx.response.body = {
         error: "Internal Server Error",
-        message: error.toString(),
+        message: JSON.stringify(error),
       };
     }
   });

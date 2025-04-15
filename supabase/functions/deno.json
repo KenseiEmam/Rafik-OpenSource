@@ -1,0 +1,18 @@
+{
+  "nodeModulesDir": "auto",
+  "tasks": {
+    "dev": "deno run --watch main.ts"
+  },
+  "imports": {
+    "@oak/oak": "jsr:@oak/oak@^17.1.4",
+    "@supabase/functions-js": "jsr:@supabase/functions-js@^2.4.4",
+    "@supabase/supabase-js": "jsr:@supabase/supabase-js@^2.49.4",
+    "langchain": "npm:langchain@^0.3.21",
+    "langchain/": "npm:/langchain@^0.3.21/",
+    "@langchain/community": "npm:@langchain/community@^0.3.40",
+    "@langchain/community/": "npm:/@langchain/community@^0.3.40/",
+    "@langchain/core": "npm:@langchain/core@^0.3.44",
+    "@langchain/openai": "npm:@langchain/openai@^0.5.5",
+    "mammoth": "npm:mammoth@^1.9.0"
+  }
+}

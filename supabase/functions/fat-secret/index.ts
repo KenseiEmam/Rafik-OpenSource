@@ -1,5 +1,6 @@
+// deno-lint-ignore-file no-explicit-any
 // Supabase setup
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import "@supabase/functions-js/edge-runtime.d.ts";
 import { corsHeaders } from "../_shared/corsHeaders.ts";
 
 // Generate a unique nonce (random string) for each request
@@ -9,7 +10,7 @@ function generateNonce(length: number): string {
   let result = "";
   for (let i = 0; i < length; i++) {
     result += possibleChars.charAt(
-      Math.floor(Math.random() * possibleChars.length),
+      Math.floor(Math.random() * possibleChars.length)
     );
   }
   return result;
@@ -17,10 +18,9 @@ function generateNonce(length: number): string {
 
 // Function to percent-encode according to RFC 3986
 function percentEncode(str: string): string {
-  return encodeURIComponent(str)
-    .replace(/[!'()*]/g, function (c) {
-      return "%" + c.charCodeAt(0).toString(16).toUpperCase();
-    });
+  return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
+    return "%" + c.charCodeAt(0).toString(16).toUpperCase();
+  });
 }
 
 // Function to convert ArrayBuffer to Base64
@@ -36,7 +36,7 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
 // Generate the HMAC-SHA1 signature using the built-in Deno crypto API
 async function generateHMACSHA1Signature(
   key: string,
-  data: string,
+  data: string
 ): Promise<string> {
   const encoder = new TextEncoder();
   const keyData = encoder.encode(key);
@@ -47,14 +47,10 @@ async function generateHMACSHA1Signature(
     keyData,
     { name: "HMAC", hash: "SHA-1" },
     false,
-    ["sign"],
+    ["sign"]
   );
 
-  const signature = await crypto.subtle.sign(
-    "HMAC",
-    cryptoKey,
-    dataToSign,
-  );
+  const signature = await crypto.subtle.sign("HMAC", cryptoKey, dataToSign);
 
   // Correctly convert the signature to a base64 string
   const base64Signature = arrayBufferToBase64(signature);
@@ -66,7 +62,7 @@ async function generateHMACSHA1Signature(
 async function sendOAuthRequest(
   method: string,
   path: string,
-  params: Record<string, string>,
+  params: Record<string, string>
 ) {
   const baseUrl = "https://platform.fatsecret.com/rest/server.api";
   const consumerKey = Deno.env.get("FAT_SOURCE_CONSUMER_KEY") ?? "";
@@ -75,7 +71,7 @@ async function sendOAuthRequest(
   const nonce = generateNonce(16);
 
   // OAuth parameters
-  const oauthParams = {
+  const oauthParams: Record<string, string> = {
     oauth_consumer_key: consumerKey,
     oauth_nonce: nonce,
     oauth_signature_method: "HMAC-SHA1",
@@ -111,7 +107,7 @@ async function sendOAuthRequest(
   // Generate the OAuth signature
   const signature = await generateHMACSHA1Signature(
     signingKey,
-    signatureBaseString,
+    signatureBaseString
   );
 
   // Log for debugging
@@ -175,7 +171,7 @@ Deno.serve(async (req) => {
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 400,
-      },
+      }
     );
   }
 
@@ -187,7 +183,7 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error: any) {
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: error?.message || error }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 400,
     });
