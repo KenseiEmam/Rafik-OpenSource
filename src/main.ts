@@ -22,8 +22,8 @@ import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
 // @ts-ignore
-import VueTelInput from 'vue-tel-input';
-import 'vue-tel-input/vue-tel-input.css';
+import VueTelInput from 'vue3-tel-input'
+import 'vue3-tel-input/dist/vue3-tel-input.css'
 
 /* add icons to the library */
 library.add(faUserSecret);
@@ -43,17 +43,14 @@ const i18n = createI18n<MessageSchema, 'en' | 'ar'>({
 
 const app = createApp(App);
 
-// const VueTelInputPlugin = {
-//   install(app: Application) {
-//     app.component('VueTelInput', VueTelInput);
-//   }
-// };
+
 
 app.use(createPinia());
 app.use(VueSweetalert2);
 app.use(router);
+app.use(VueTelInput);
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.component('VueDatePicker', VueDatePicker);
 app.use(i18n);
-// app.use(VueTelInputPlugin);
+
 app.mount('#app');
