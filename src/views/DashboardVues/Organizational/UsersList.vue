@@ -265,6 +265,7 @@ type Filter = {
   roles: string[];
   name: string;
   active: boolean;
+  enrolled:boolean;
 };
 const loading = ref(true);
 const userStore = useUserStore();
@@ -273,7 +274,7 @@ const totalCount = ref(0);
 const page = ref(1);
 const pageSize = ref(10);
 const holdQuery = ref('');
-const filters = ref<Filter>({ roles: [], name: '', active: true });
+const filters = ref<Filter>({ roles: [], name: '', active: true, enrolled:false });
 
 const show_action = ref();
 // Store references
