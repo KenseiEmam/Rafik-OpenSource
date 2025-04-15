@@ -9,7 +9,7 @@ import { TextLoader } from "langchain/document_loaders/fs/text";
 import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/cheerio";
 import { YoutubeLoader } from "@langchain/community/document_loaders/web/youtube";
 import { BaseDocumentLoader } from "@langchain/core/document_loaders/base";
-import { createClient } from "https://cdn.skypack.dev/@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL")!,
@@ -17,7 +17,7 @@ const supabase = createClient(
 );
 
 const embeddings = new OpenAIEmbeddings({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+  apiKey: Deno.env.OPENAI_API_KEY,
   model: "text-embedding-3-small",
 });
 

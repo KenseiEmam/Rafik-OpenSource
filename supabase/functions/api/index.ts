@@ -1,6 +1,8 @@
 import { corsHeaders } from "../_shared/corsHeaders.ts";
 import { Application, Context, Router } from "@oak/oak";
 import { sendOAuthRequest } from "../_shared/fatSecret.ts";
+import "officeparser";
+import "youtubei.js";
 import { generateAndStoreEmbeddings } from "../_shared/embedding.ts";
 import { getChatbotResponse } from "../_shared/chatbot.ts";
 

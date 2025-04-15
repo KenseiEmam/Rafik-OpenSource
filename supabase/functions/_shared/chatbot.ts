@@ -3,7 +3,7 @@ import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase"
 import { createRetrievalChain } from "langchain/chains/retrieval";
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { createClient } from "https://cdn.skypack.dev/@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL")!,
@@ -11,7 +11,7 @@ const supabase = createClient(
 );
 
 const embeddings = new OpenAIEmbeddings({
-  apiKey: Deno.env.NEXT_PUBLIC_OPENAI_API_KEY,
+  apiKey: Deno.env.OPENAI_API_KEY,
   model: "text-embedding-3-small",
 });
 
@@ -49,7 +49,7 @@ export const getChatbotResponse = async (
 
     const model = new ChatOpenAI({
       modelName: "gpt-4o-mini",
-      apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+      apiKey: Deno.env.OPENAI_API_KEY,
     });
 
     let systemMessage =
