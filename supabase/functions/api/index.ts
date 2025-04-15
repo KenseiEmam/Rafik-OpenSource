@@ -38,9 +38,8 @@ router
         ctx.response.body = { error: "No body found." };
         return;
       }
-      const reqBody = await ctx.request.body.json();
-      const data = await reqBody.value;
-      const { endpoint, ...rest } = data;
+      const data = await ctx.request.body.json();
+      const { endpoint, ...rest } = data || {};
       // Validate required fields.
       if (
         !endpoint ||
@@ -55,7 +54,7 @@ router
 
       switch (endpoint) {
         case "fat-secret": {
-          const { path, method = "GET", ...params } = rest;
+          const { path, method = "GET", ...params } = rest || {};
 
           // Validate the 'path' parameter
           if (!path || typeof path !== "string") {
@@ -83,7 +82,7 @@ router
           break;
         }
         case "ai-embed": {
-          const { chatbotId, path, type } = rest;
+          const { chatbotId, path, type } = rest || {};
           if (!chatbotId || !path || !type) {
             ctx.response.status = 400;
             setJsonCors(ctx);
@@ -102,7 +101,7 @@ router
           break;
         }
         case "ai-chat": {
-          const { chatbotId, message } = rest;
+          const { chatbotId, message } = rest || {};
           if (!chatbotId || !message) {
             ctx.response.status = 400;
             setJsonCors(ctx);

@@ -89,14 +89,64 @@ export const generateAndStoreEmbeddings = async (
     doc.chatbot_id = chatbotId;
   }
 
-  const vectorStore = await SupabaseVectorStore.fromDocuments(
-    docs,
-    embeddings,
-    {
-      client: supabase,
-      tableName: "ai_documents",
-      queryName: "match_documents",
+  try {
+    const vectorStore = await SupabaseVectorStore.fromDocuments(
+      docs,
+      embeddings,
+      {
+        client: supabase,
+        tableName: "ai_vectors",
+      }
+    );
+    console.log("Vector store created", vectorStore);
+
+    if (type === "file") {
+      const { error: insertError } = await supabase
+        .from("ai_media")
+        .insert([
+          {
+            chatbot_id: chatbotId,
+            type: "file",
+            name: path.split("/").pop() || "Untitled",
+            extension: path.split(".").pop() || "unknown",
+            path: path,
+          },
+        ])
+        .select()
+        .single();
+      if (insertError) {
+        console.error("Error inserting file metadata", insertError);
+        console.error("File path:", path);
+        // TODO: Should we delete the file from storage if the insert fails?
+        // const { error: deleteError } = await supabase.storage
+        //   .from("ai_documents")
+        //   .remove([path]);
+        // if (deleteError) {
+        //   console.error("Error deleting documents", deleteError);
+        // }
+        throw insertError;
+      }
+    } else if (type === "url") {
+      const { error: insertError } = await supabase.storage
+        .from("ai_media")
+        .insert([
+          {
+            chatbot_id: chatbotId,
+            type: "url",
+            name: "Webpage",
+            path: path,
+          },
+        ])
+        .select()
+        .single();
+      if (insertError) {
+        console.error("Error inserting URL metadata", insertError);
+        console.error("URL path:", path);
+        throw insertError;
+      }
     }
-  );
-  console.log("Vector store created", vectorStore);
+  } catch (e) {
+    console.error("Error creating vector store", e);
+    throw e;
+  }
 };

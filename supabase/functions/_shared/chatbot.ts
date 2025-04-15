@@ -36,7 +36,7 @@ export const getChatbotResponse = async (
   try {
     const vectorStore = new SupabaseVectorStore(embeddings, {
       client: supabase,
-      tableName: "ai_documents",
+      tableName: "ai_vectors",
       queryName: "search_ai_documents",
     });
 
