@@ -3,6 +3,7 @@ import { Application, Context, Router } from "@oak/oak";
 import { sendOAuthRequest } from "../_shared/fatSecret.ts";
 import "officeparser";
 import "youtubei.js";
+import "cheerio";
 import { generateAndStoreEmbeddings } from "../_shared/embedding.ts";
 import { getChatbotResponse } from "../_shared/chatbot.ts";
 
@@ -101,8 +102,8 @@ router
           break;
         }
         case "ai-chat": {
-          const { chatbotId, message } = rest || {};
-          if (!chatbotId || !message) {
+          const { chatbotId, userProgram } = rest || {};
+          if (!userProgram) {
             ctx.response.status = 400;
             setJsonCors(ctx);
             ctx.response.body = {
@@ -110,7 +111,7 @@ router
             };
             return;
           }
-          const reply = await getChatbotResponse(chatbotId, message);
+          const reply = await getChatbotResponse(chatbotId, userProgram);
           ctx.response.status = 200;
           setJsonCors(ctx);
           ctx.response.body = {
@@ -128,7 +129,7 @@ router
       setJsonCors(ctx);
       ctx.response.body = {
         error: "Internal Server Error",
-        message: JSON.stringify(error),
+        message: JSON.stringify(error.message || error),
       };
     }
   });

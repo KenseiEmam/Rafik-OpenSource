@@ -2,7 +2,11 @@ import { OpenAIEmbeddings, ChatOpenAI } from "@langchain/openai";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { createRetrievalChain } from "langchain/chains/retrieval";
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
-import { ChatPromptTemplate } from "@langchain/core/prompts";
+import {
+  ChatPromptTemplate,
+  MessagesPlaceholder,
+} from "@langchain/core/prompts";
+import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
@@ -17,8 +21,7 @@ const embeddings = new OpenAIEmbeddings({
 
 export const getChatbotResponse = async (
   chatbotId: string,
-  message: string,
-  isAdmin = false
+  userProgram: string
 ): Promise<string> => {
   // Fetch chatbot system prompt
   const { data: chatbot, error } = await supabase
@@ -28,6 +31,7 @@ export const getChatbotResponse = async (
     .single();
 
   if (error || !chatbot) {
+    console.error("Error fetching chatbot:", error);
     return (
       "Sorry, I am not able to answer that right now. Please try again later. error: " +
       JSON.stringify(error)
@@ -58,8 +62,25 @@ export const getChatbotResponse = async (
       systemMessage = chatbot.system_prompt + "\n\n" + systemMessage;
     }
 
+    const { data: messages, error: messagesError } = await supabase
+      .from("ai_chat_messages")
+      .select("*")
+      .eq("id", chatbotId)
+      .eq("user_program", userProgram)
+      .order("created_at", { ascending: false })
+      .limit(5);
+
+    if (messagesError || messages?.[0]?.role !== "user") {
+      console.error("Error fetching last messages:", messagesError);
+      return (
+        "Sorry, I am not able to answer that right now. Please try again later. error: " +
+        JSON.stringify(messagesError)
+      );
+    }
+
     const questionAnsweringPrompt = ChatPromptTemplate.fromMessages([
       ["system", systemMessage],
+      new MessagesPlaceholder("chat_history"),
       ["human", "{input}"],
     ]);
 
@@ -74,8 +95,29 @@ export const getChatbotResponse = async (
     });
 
     const response = await chain.invoke({
-      input: message,
+      input: messages[0]?.content || "",
+      chat_history: messages
+        .slice(1)
+        .map((msg) =>
+          msg.role === "user"
+            ? new HumanMessage(msg.content)
+            : new AIMessage(msg.content)
+        ),
     });
+
+    supabase
+      .from("ai_chat_messages")
+      .insert({
+        chatbot_id: chatbotId,
+        user_program: userProgram,
+        content: response.answer,
+        role: "ai",
+      })
+      .then(({ error }) => {
+        if (error) {
+          console.error("Error inserting message:", error);
+        }
+      });
 
     return response.answer;
   } catch (e) {

@@ -10,6 +10,7 @@ import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/
 import { YoutubeLoader } from "@langchain/community/document_loaders/web/youtube";
 import { BaseDocumentLoader } from "@langchain/core/document_loaders/base";
 import { createClient } from "@supabase/supabase-js";
+import { Buffer } from "https://deno.land/std@0.177.0/node/buffer.ts";
 
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL")!,
@@ -29,8 +30,8 @@ export const generateAndStoreEmbeddings = async (
   let documents: Document[];
   if (type === "file") {
     const { data, error } = await supabase.storage
-      .from("ai_documents")
-      .download(path);
+      .from("storage")
+      .download("ai_documents/" + path);
 
     if (error) throw error;
 

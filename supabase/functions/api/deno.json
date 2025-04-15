@@ -11,6 +11,7 @@
     "youtubei.js": "npm:youtubei.js@^12.2.0",
     "officeparser": "npm:officeparser@^4.0.4",
     "@langchain/openai": "npm:@langchain/openai@^0.5.5",
+    "cheerio": "npm:cheerio@^1.0.0-rc.12",
     "mammoth": "npm:mammoth@^1.9.0"
   }
 }
