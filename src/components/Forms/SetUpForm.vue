@@ -315,7 +315,7 @@ const validateAndSubmit = async () => {
           </option>
         </select>
       </div>
-      <!-- <div>
+      <div>
         <label for="phone" class="text-body uppercase">Phone Number</label>
         <vue-tel-input
           id="phone"
@@ -328,7 +328,7 @@ const validateAndSubmit = async () => {
           autocomplete="on"
           name="telephone"
         />
-      </div> -->
+      </div>
       <input :disabled="isLoading" type="submit" class="btn-lg" value="Submit" />
     </form>
   </div>
