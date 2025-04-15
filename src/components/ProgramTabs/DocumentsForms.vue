@@ -356,7 +356,11 @@ watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitU
           {{ t('dashboard.tabs.program.docForms.viewDocument') }}
         </a>
         <!-- File input and buttons -->
-        <input type="file" @change="handleFileUpload" class="hidden" ref="fileInput" />
+        <input   type="file"
+        accept="application/pdf"
+        @change="handleFileUpload"
+        class="hidden"
+        ref="fileInput" />
         <button
           v-if="!isProcessing"
           @click="triggerFileInput"
