@@ -105,6 +105,7 @@ router
               }),
             }
           );
+          //TODO: Return back the result based on the output of the fetch...
           ctx.response.status = 200;
           setJsonCors(ctx);
           ctx.response.body = {
