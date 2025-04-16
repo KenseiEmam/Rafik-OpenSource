@@ -12,7 +12,7 @@
     "jsr:@std/media-types@1": "1.1.0",
     "jsr:@std/path@1": "1.0.8",
     "jsr:@supabase/supabase-js@^2.49.4": "2.49.4",
-    "npm:@langchain/community@~0.3.40": "0.3.40_@browserbasehq+stagehand@1.14.0__@playwright+test@1.51.1__deepmerge@4.3.1__dotenv@16.5.0__openai@4.94.0___zod@3.24.2___ws@8.18.1__zod@3.24.2__ws@8.18.1_@ibm-cloud+watsonx-ai@1.6.4__@langchain+core@0.3.44___openai@4.94.0____zod@3.24.2____ws@8.18.1___zod@3.24.2__openai@4.94.0___zod@3.24.2___ws@8.18.1_@langchain+core@0.3.44__zod@3.24.2_ibm-cloud-sdk-core@5.3.2__axios@1.8.4_officeparser@4.2.0_openai@4.94.0__zod@3.24.2__ws@8.18.1_youtubei.js@12.2.0_zod@3.24.2_mammoth@1.9.0_cheerio@1.0.0",
+    "npm:@langchain/community@~0.3.40": "0.3.40_@browserbasehq+stagehand@1.14.0__@playwright+test@1.51.1__deepmerge@4.3.1__dotenv@16.5.0__openai@4.94.0___zod@3.24.2___ws@8.18.1__zod@3.24.2__ws@8.18.1_@ibm-cloud+watsonx-ai@1.6.4__@langchain+core@0.3.44___openai@4.94.0____zod@3.24.2____ws@8.18.1___zod@3.24.2__openai@4.94.0___zod@3.24.2___ws@8.18.1_@langchain+core@0.3.44__zod@3.24.2_ibm-cloud-sdk-core@5.3.2__axios@1.8.4_officeparser@4.2.0_openai@4.94.0__zod@3.24.2__ws@8.18.1_youtubei.js@12.2.0_zod@3.24.2_mammoth@1.9.0_cheerio@1.0.0_pdf-parse@1.1.1",
     "npm:@langchain/core@~0.3.44": "0.3.44_zod@3.24.2",
     "npm:@langchain/openai@~0.5.5": "0.5.5_@langchain+core@0.3.44__zod@3.24.2_zod@3.24.2_openai@4.94.0__zod@3.24.2__ws@8.18.1",
     "npm:@supabase/auth-js@2.69.1": "2.69.1",
@@ -27,6 +27,7 @@
     "npm:mammoth@^1.9.0": "1.9.0",
     "npm:officeparser@^4.0.4": "4.2.0",
     "npm:path-to-regexp@^6.3.0": "6.3.0",
+    "npm:pdf-parse@^1.1.1": "1.1.1",
     "npm:youtubei.js@^12.2.0": "12.2.0"
   },
   "jsr": {
@@ -220,6 +221,31 @@
         "mammoth",
         "officeparser",
         "openai@4.94.0_zod@3.24.2_ws@8.18.1",
+        "uuid",
+        "youtubei.js",
+        "zod",
+        "zod-to-json-schema"
+      ]
+    },
+    "@langchain/community@0.3.40_@browserbasehq+stagehand@1.14.0__@playwright+test@1.51.1__deepmerge@4.3.1__dotenv@16.5.0__openai@4.94.0___zod@3.24.2___ws@8.18.1__zod@3.24.2__ws@8.18.1_@ibm-cloud+watsonx-ai@1.6.4__@langchain+core@0.3.44___openai@4.94.0____zod@3.24.2____ws@8.18.1___zod@3.24.2__openai@4.94.0___zod@3.24.2___ws@8.18.1_@langchain+core@0.3.44__zod@3.24.2_ibm-cloud-sdk-core@5.3.2__axios@1.8.4_officeparser@4.2.0_openai@4.94.0__zod@3.24.2__ws@8.18.1_youtubei.js@12.2.0_zod@3.24.2_mammoth@1.9.0_cheerio@1.0.0_pdf-parse@1.1.1": {
+      "integrity": "sha512-UvpEebdFKJsjFBKeUOvvYHOEFsUcjZnyU1qNirtDajwjzTJlszXtv+Mq8F6w5mJsznpI9x7ZMNzAqydVxMG5hA==",
+      "dependencies": [
+        "@browserbasehq/stagehand",
+        "@ibm-cloud/watsonx-ai",
+        "@langchain/core@0.3.44_openai@4.94.0__zod@3.24.2__ws@8.18.1_zod@3.24.2",
+        "@langchain/openai@0.5.5_@langchain+core@0.3.44__openai@4.94.0___zod@3.24.2___ws@8.18.1__zod@3.24.2_zod@3.24.2_openai@4.94.0__ws@8.18.1__zod@3.24.2",
+        "binary-extensions",
+        "cheerio",
+        "expr-eval",
+        "flat",
+        "ibm-cloud-sdk-core",
+        "js-yaml",
+        "langchain@0.3.21_@langchain+core@0.3.44__openai@4.94.0___zod@3.24.2___ws@8.18.1__zod@3.24.2_openai@4.94.0__zod@3.24.2__ws@8.18.1_zod@3.24.2_cheerio@1.0.0",
+        "langsmith@0.3.16_openai@4.94.0__zod@3.24.2__ws@8.18.1_zod@3.24.2",
+        "mammoth",
+        "officeparser",
+        "openai@4.94.0_zod@3.24.2_ws@8.18.1",
+        "pdf-parse",
         "uuid",
         "youtubei.js",
         "zod",
@@ -620,6 +646,12 @@
     "css-what@6.1.0": {
       "integrity": "sha512-HTUrgRJ7r4dsZKU6GjmpfRK1O76h97Z8MfS1G0FozR+oF2kG6Vfe8JE6zwrkbxigziPHinCJ+gCPjA9EaBDtRw=="
     },
+    "debug@3.2.7": {
+      "integrity": "sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==",
+      "dependencies": [
+        "ms"
+      ]
+    },
     "debug@4.4.0": {
       "integrity": "sha512-6WTZ/IxCY/T6BALoZHaE4ctp9xm+Z5kY/pzYaCHRFeyVhojxlrm+46y68HA6hr0TcwEssoxNiDEUJQjfPZ/RYA==",
       "dependencies": [
@@ -873,7 +905,7 @@
         "@types/tough-cookie",
         "axios",
         "camelcase",
-        "debug",
+        "debug@4.4.0",
         "dotenv",
         "extend",
         "file-type@16.5.4",
@@ -1303,6 +1335,13 @@
     "path-to-regexp@6.3.0": {
       "integrity": "sha512-Yhpw4T9C6hPpgPeA28us07OJeqZ5EzQTkbfwuhsUg0c237RomFoETJgmp2sa3F/41gfLE6G5cqcYwznmeEeOlQ=="
     },
+    "pdf-parse@1.1.1": {
+      "integrity": "sha512-v6ZJ/efsBpGrGGknjtq9J/oC8tZWq0KWL5vQrk2GlzLEQPUDB1ex+13Rmidl1neNN358Jn9EHZw5y07FFtaC7A==",
+      "dependencies": [
+        "debug@3.2.7",
+        "node-ensure"
+      ]
+    },
     "peek-readable@4.1.0": {
       "integrity": "sha512-ZI3LnwUv5nOGbQzD9c2iDG6toheuXSZP5esSHBjopsXH4dg19soufvpUGA3uohi5anFtGb2lhAVdHzH6R/Evvg=="
     },
@@ -1676,6 +1715,7 @@
       "npm:langchain@~0.3.21",
       "npm:mammoth@^1.9.0",
       "npm:officeparser@^4.0.4",
+      "npm:pdf-parse@^1.1.1",
       "npm:youtubei.js@^12.2.0"
     ]
   }

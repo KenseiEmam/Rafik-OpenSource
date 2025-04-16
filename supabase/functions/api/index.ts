@@ -4,7 +4,6 @@ import { sendOAuthRequest } from "../_shared/fatSecret.ts";
 import "officeparser";
 import "youtubei.js";
 import "cheerio";
-import { generateAndStoreEmbeddings } from "../_shared/embedding.ts";
 import { getChatbotResponse } from "../_shared/chatbot.ts";
 
 // Helper function to set JSON and CORS headers.
@@ -92,7 +91,23 @@ router
             };
             return;
           }
-          await generateAndStoreEmbeddings(chatbotId, path, type);
+          await fetch(
+            "https://faas-fra1-afec6ce7.doserverless.co/api/v1/web/fn-7f8e933c-192a-4815-a302-6365f2819ef6/embed-api/embed",
+            {
+              headers: {
+                Authorization: `Bearer ${Deno.env.get(
+                  "SUPABASE_SERVICE_ROLE_KEY"
+                )}`,
+                "Content-Type": "application/json",
+              },
+              method: "POST",
+              body: JSON.stringify({
+                chatbotId,
+                path,
+                type,
+              }),
+            }
+          );
           ctx.response.status = 200;
           setJsonCors(ctx);
           ctx.response.body = {

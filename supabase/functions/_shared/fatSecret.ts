@@ -1,5 +1,5 @@
 // Generate a unique nonce (random string) for each request
-export function generateNonce(length: number): string {
+function generateNonce(length: number): string {
   const possibleChars =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let result = "";
@@ -12,14 +12,14 @@ export function generateNonce(length: number): string {
 }
 
 // Function to percent-encode according to RFC 3986
-export function percentEncode(str: string): string {
+function percentEncode(str: string): string {
   return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
     return "%" + c.charCodeAt(0).toString(16).toUpperCase();
   });
 }
 
 // Function to convert ArrayBuffer to Base64
-export function arrayBufferToBase64(buffer: ArrayBuffer): string {
+function arrayBufferToBase64(buffer: ArrayBuffer): string {
   let binary = "";
   const bytes = new Uint8Array(buffer);
   for (let i = 0; i < bytes.byteLength; i++) {
@@ -29,7 +29,7 @@ export function arrayBufferToBase64(buffer: ArrayBuffer): string {
 }
 
 // Generate the HMAC-SHA1 signature using the built-in Deno crypto API
-export async function generateHMACSHA1Signature(
+async function generateHMACSHA1Signature(
   key: string,
   data: string
 ): Promise<string> {
