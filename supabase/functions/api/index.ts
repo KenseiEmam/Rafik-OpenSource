@@ -1,9 +1,6 @@
 import { corsHeaders } from "../_shared/corsHeaders.ts";
 import { Application, Context, Router } from "@oak/oak";
 import { sendOAuthRequest } from "../_shared/fatSecret.ts";
-import "officeparser";
-import "youtubei.js";
-import "cheerio";
 import { getChatbotResponse } from "../_shared/chatbot.ts";
 
 // Helper function to set JSON and CORS headers.
