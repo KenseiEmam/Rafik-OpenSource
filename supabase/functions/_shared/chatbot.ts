@@ -82,7 +82,7 @@ export const getChatbotResponse = async (
     });
 
     let systemMessage =
-      "You are provided multiple context items that are related to the prompt you have to answer. Use the following pieces of context to answer the question at the end.\n\n{context}";
+      "Use the following pieces of context to answer the question at the end. If the question isn't addressed by the context, please ask the user to contact the trainer. Do not queries outside the context.\n\n{context}";
     if (chatbot.system_prompt) {
       systemMessage = chatbot.system_prompt + "\n\n" + systemMessage;
     }
