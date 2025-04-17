@@ -209,7 +209,7 @@ function DraftProgram() {
 
 // Activate Program
 function ActiveProgram() {
-  if (programStore.ActivePrograms?.length && programStore.ActivePrograms.length < 3) {
+  if ( programStore.ActivePrograms.length < 3) {
     Swal.fire({
       title: t('dashboard.programs.details.activateConfirmTitle'),
       text: t('dashboard.programs.details.activateConfirmText'),
@@ -224,12 +224,13 @@ function ActiveProgram() {
       if (result.isConfirmed) {
         updateProgramField('status', 'Active').then(() => {
           showSuccess(t('dashboard.programs.details.programUnderReview'));
-          refreshComponent();
+
         });
       }
     });
   } else {
     showError(t('dashboard.programs.details.cannotHaveMoreActive'));
+
   }
 }
 

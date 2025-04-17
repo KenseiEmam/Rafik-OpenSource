@@ -92,8 +92,8 @@ type Workout = {
 };
 export const useProgramStore = defineStore('Program', () => {
   const AllPrograms = ref<Program[] | null>(null);
-  const ActivePrograms = ref<Program[] | null>(null);
-  const DraftedPrograms = ref<Program[] | null>(null);
+  const ActivePrograms = ref<Program[] >([]);
+  const DraftedPrograms = ref<Program[]>([]);
   const AllCount = ref<number>(0);
   const Program = ref<Program | null>(null);
 

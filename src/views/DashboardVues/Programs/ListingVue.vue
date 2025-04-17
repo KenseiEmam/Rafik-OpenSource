@@ -168,7 +168,7 @@
         <!-- Drafted Programs -->
         <div
           v-else-if="activeTab === 'Drafted Programs'"
-          class="grid md:grid-cols-3 gap-8 h-full align-stretch"
+          class="grid md:grid-rows-3 md:grid-cols-2 gap-8 h-full align-stretch"
         >
           <!-- Existing Programs -->
           <div
@@ -201,25 +201,6 @@
               >
                 {{ program.program_name }}
               </h3>
-              <div
-                class="h-0 group-hover:h-auto transition opacity-0 group-hover:opacity-100 ease-in space-y-4"
-              >
-                <p
-                  class="text-body group-hover:text-rafik-pritext dark:group-hover:text-rafik-darkpritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext text-rafik-sectext dark:text-rafik-darksectext line-clamp-3"
-                >
-                  {{ program.program_description }}
-                </p>
-                <div class="grid grid-cols-2">
-                  <!-- Limit to 4 Tags -->
-                  <p
-                    class="text-body"
-                    v-for="(tag, index) in program.tags?.slice(0, 4)"
-                    :key="index"
-                  >
-                    {{ tag }}
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -284,12 +265,17 @@ const showAddProgramModal = ref(false);
 
 // Additional slots for placeholders
 const additionalSlots = computed(() => {
-  const programsCount = programStore.ActivePrograms?.length || 0;
+  const programsCount = programStore.ActivePrograms.length;
+  if(programStore.AllPrograms.length >= 6 )
+  {
+    return 0
+  }
+  else
   return Math.max(0, 3 - programsCount);
 });
 const additionalDrafs = computed(() => {
-  const programsCount = programStore.DraftedPrograms?.length || 0;
-  return Math.max(0, 3 - programsCount);
+  const programsCount = programStore.AllPrograms.length ;
+  return Math.max(0, 6 - programsCount);
 });
 
 // Switch tabs
