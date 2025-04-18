@@ -22,7 +22,7 @@ const embeddings = new OpenAIEmbeddings({
 export const getChatbotResponse = async (
   chatbotId: string,
   userProgram: string
-): Promise<string> => {
+): Promise<{ answer: string; context: any[] }> => {
   // Fetch chatbot system prompt
   const { data: chatbot, error } = await supabase
     .from("chatbots")
@@ -32,10 +32,12 @@ export const getChatbotResponse = async (
 
   if (error || !chatbot) {
     console.error("Error fetching chatbot:", error);
-    return (
-      "Sorry, I am not able to answer that right now. Please try again later. error: " +
-      JSON.stringify(error)
-    );
+    return {
+      answer:
+        "Sorry, I am not able to answer that right now. Please try again later. error: " +
+        JSON.stringify(error),
+      context: [],
+    };
   }
   try {
     const vectorStore = new SupabaseVectorStore(embeddings, {
@@ -48,7 +50,7 @@ export const getChatbotResponse = async (
       k: 5,
       searchType: "similarity",
       filter: (rpc) =>
-        rpc.eq("metadata->chatbot_id", JSON.stringify(chatbotId)),
+        rpc.filter("metadata->>chatbot_id", "eq", String(chatbotId)),
     });
 
     const model = new ChatOpenAI({
@@ -81,13 +83,29 @@ export const getChatbotResponse = async (
               "An error occurred with LLM invoke",
               error.message || error
             );
+            supabase
+              .from("ai_chat_messages")
+              .insert({
+                chatbot_id: chatbotId,
+                user_program: userProgram,
+                content:
+                  "Sorry, I am not able to answer that right now. Please try again later. error: " +
+                  JSON.stringify(error),
+                role: "ai",
+                tokens_used: null,
+              })
+              .then(({ error }) => {
+                if (error) {
+                  console.error("Error inserting message:", error);
+                }
+              });
           },
         },
       ],
     });
 
     let systemMessage =
-      "Use the following pieces of context to answer the question at the end. If the question isn't addressed by the context, please ask the user to contact the trainer. Do not queries outside the context.\n\n{context}";
+      "Use the following pieces of context to answer the question at the end. If the question isn't addressed at all by the context, please ask the user to contact the trainer. Do not answer queries completely outside the scope of the context.\n\n{context}";
     if (chatbot.system_prompt) {
       systemMessage = chatbot.system_prompt + "\n\n" + systemMessage;
     }
@@ -102,10 +120,12 @@ export const getChatbotResponse = async (
 
     if (messagesError || messages?.[0]?.role !== "user") {
       console.error("Error fetching last messages:", messagesError);
-      return (
-        "Sorry, I am not able to answer that right now. Please try again later. error: " +
-        JSON.stringify(messagesError)
-      );
+      return {
+        answer:
+          "Sorry, I am not able to answer that right now. Please try again later. error: " +
+          JSON.stringify(messagesError),
+        context: [],
+      };
     }
 
     const questionAnsweringPrompt = ChatPromptTemplate.fromMessages([
@@ -135,14 +155,17 @@ export const getChatbotResponse = async (
         ),
     });
 
-    return response.answer;
+    return { answer: response.answer, context: response.context };
   } catch (e) {
     console.error(e);
-    return (
+    const answer =
       "Sorry, I am not able to answer that right now. Please try again later.\n" +
       e +
       "\n" +
-      chatbotId
-    );
+      chatbotId;
+    return {
+      answer,
+      context: [],
+    };
   }
 };

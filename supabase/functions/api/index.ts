@@ -129,7 +129,8 @@ router
           setJsonCors(ctx);
           ctx.response.body = {
             success: true,
-            reply,
+            reply: reply.answer,
+            context: reply.context,
           };
           break;
         }
