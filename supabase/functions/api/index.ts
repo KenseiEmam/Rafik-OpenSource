@@ -14,7 +14,7 @@ function setJsonCors(ctx: Context) {
 const router = new Router();
 
 // Handle OPTIONS requests for all routes.
-router.options("/(.*)", (ctx) => {
+router.options("/api", (ctx) => {
   ctx.response.status = 204; // No content
   Object.entries(corsHeaders).forEach(([key, value]) => {
     ctx.response.headers.set(key, value);
