@@ -54,31 +54,36 @@ export const getChatbotResponse = async (
     const model = new ChatOpenAI({
       modelName: "gpt-4o-mini",
       apiKey: Deno.env.OPENAI_API_KEY,
-      callbacks: [{
-        handleLLMEnd(output){
-          if(!output.generations?.[0]?.[0]?.text){
-            console.error("generation doesn't exist or doesn't have a text")
-            return;
-          }
-          supabase
-          .from("ai_chat_messages")
-          .insert({
-            chatbot_id: chatbotId,
-            user_program: userProgram,
-            content: output.generations?.[0]?.[0]?.text,
-            role: "ai",
-            tokens_used: output.llmOutput?.tokenUsage?.totalTokens || null
-          })
-          .then(({ error }) => {
-            if (error) {
-              console.error("Error inserting message:", error);
+      callbacks: [
+        {
+          handleLLMEnd(output) {
+            if (!output.generations?.[0]?.[0]?.text) {
+              console.error("generation doesn't exist or doesn't have a text");
+              return;
             }
-          });
+            supabase
+              .from("ai_chat_messages")
+              .insert({
+                chatbot_id: chatbotId,
+                user_program: userProgram,
+                content: output.generations?.[0]?.[0]?.text,
+                role: "ai",
+                tokens_used: output.llmOutput?.tokenUsage?.totalTokens || null,
+              })
+              .then(({ error }) => {
+                if (error) {
+                  console.error("Error inserting message:", error);
+                }
+              });
+          },
+          handleLLMError(error) {
+            console.error(
+              "An error occurred with LLM invoke",
+              error.message || error
+            );
+          },
         },
-        handleLLMError(error){
-          console.error("An error occurred with LLM invoke", error.message || error)
-        }
-      }]
+      ],
     });
 
     let systemMessage =
@@ -90,7 +95,7 @@ export const getChatbotResponse = async (
     const { data: messages, error: messagesError } = await supabase
       .from("ai_chat_messages")
       .select("*")
-      .eq("id", chatbotId)
+      .eq("chatbot_id", chatbotId)
       .eq("user_program", userProgram)
       .order("created_at", { ascending: false })
       .limit(5);
