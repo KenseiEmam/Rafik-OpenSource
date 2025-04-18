@@ -4,7 +4,7 @@ import debounce from 'lodash/debounce';
 import { supabase } from '@/lib/supabaseClient';
 import { useI18n } from 'vue-i18n';
 import draggable from 'vuedraggable';
-const { t , locale } = useI18n();
+const { t, locale } = useI18n();
 // Props to receive the program object
 const props = defineProps({
   program: {
@@ -32,12 +32,38 @@ const handleFileUpload = async (event: any) => {
         return;
       }
 
+      const { data: chatbot, error: insertError } = await supabase
+        .from('chatbots')
+        .insert({
+          trainer_id: props.program.trainer_id,
+          program_id: props.program.id,
+          system_prompt: `You are a RAFIK AI, a customer support agent for a personal trainer. You will receive questions about their training program '${props.program.program_name}''.`
+        })
+        .select('id')
+        .single();
+
+      if (insertError) {
+        console.error('Error inserting chatbot:', insertError.message);
+        throw 'Error inserting chatbot';
+      }
+
+      const { error: embedError } = await supabase.functions.invoke('api/ai-embed', {
+        body: {
+          chatbotId: chatbot.id,
+          path: data.path,
+          type: 'file'
+        }
+      });
+
+      if (embedError) {
+        throw error;
+      }
+
       // Retrieve the public URL for the uploaded file
       const { data: urlData } = await supabase.storage.from('storage').getPublicUrl(data.path);
 
       if (!urlData?.publicUrl) {
-        alert('Failed to retrieve the URL for the program photo.');
-        return null;
+        throw 'Failed to retrieve the URL for the program photo.';
       }
 
       // Update the program store with the referral link
@@ -45,7 +71,10 @@ const handleFileUpload = async (event: any) => {
 
       console.log('File uploaded successfully:', urlData?.publicUrl);
     } catch (err: any) {
-      console.error('Error uploading file:', err.message);
+      if (typeof err == 'string') {
+        alert(err);
+      }
+      console.error('Error uploading file:', err);
     } finally {
       isProcessing.value = false; // Set processing state to false after the process
     }
@@ -186,25 +215,23 @@ watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitU
       </div>
       <div class="flex flex-col gap-3">
         <draggable
-            class="flex flex-col gap-4 mb-5"
-            v-model="inductions"
-            handle=".handle"
-
-            item-key="id"
-          >
+          class="flex flex-col gap-4 mb-5"
+          v-model="inductions"
+          handle=".handle"
+          item-key="id"
+        >
           <template #item="{ element, index }">
             <div
-          class="card p-6 pl-2 border-rafik gradient-bg flex justify-between items-center text-left border gap-3"
-        >
-        <svg
-
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 320 512"
-                  fill="currentColor"
-                  class="h-6 mr-3 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move"
-                >
-                  <path
-                    d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0
+              class="card p-6 pl-2 border-rafik gradient-bg flex justify-between items-center text-left border gap-3"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 320 512"
+                fill="currentColor"
+                class="h-6 mr-3 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move"
+              >
+                <path
+                  d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0
                        22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0
                        -48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40
                        17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1
@@ -219,31 +246,33 @@ watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitU
                        0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1
                        -17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0
                        -48c0-22.1 17.9-40 40-40z"
-                  />
-                </svg>
-          <div class="space-y-2 w-full ">
-            <p class="uppercase text-sm 2xl:text-sm font-semibold">
-              {{ t('dashboard.tabs.program.docForms.questionLabel', { type: element.type }) }}
-            </p>
-            <input
-              v-model="element.question"
-              class="bg-transparent text-rafik-pritext dark:text-rafik-darkpritext px-0  text-base 2xl:text-lg focus:outline-none border-none focus:ring-0 w-full"
-              type="text"
-              :placeholder="
-                t('dashboard.tabs.program.docForms.addNewQuestionPlaceholder', {
-                  type: element.type
-                })
-              "
-              :id="element.type + index"
-            />
-          </div>
-          <button @click="removeInduction(index)" class="text-red-500 hover:text-red-300 text-xl">
-            {{ t('dashboard.tabs.program.docForms.removeInduction') }}
-          </button>
-        </div>
+                />
+              </svg>
+              <div class="space-y-2 w-full">
+                <p class="uppercase text-sm 2xl:text-sm font-semibold">
+                  {{ t('dashboard.tabs.program.docForms.questionLabel', { type: element.type }) }}
+                </p>
+                <input
+                  v-model="element.question"
+                  class="bg-transparent text-rafik-pritext dark:text-rafik-darkpritext px-0 text-base 2xl:text-lg focus:outline-none border-none focus:ring-0 w-full"
+                  type="text"
+                  :placeholder="
+                    t('dashboard.tabs.program.docForms.addNewQuestionPlaceholder', {
+                      type: element.type
+                    })
+                  "
+                  :id="element.type + index"
+                />
+              </div>
+              <button
+                @click="removeInduction(index)"
+                class="text-red-500 hover:text-red-300 text-xl"
+              >
+                {{ t('dashboard.tabs.program.docForms.removeInduction') }}
+              </button>
+            </div>
           </template>
         </draggable>
-
       </div>
     </div>
 
@@ -282,26 +311,19 @@ watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitU
         </button>
       </div>
       <div class="flex flex-col gap-3">
-        <draggable
-            class="flex flex-col gap-4 mb-5"
-            v-model="follow"
-            handle=".handle"
-
-            item-key="id"
-          >
+        <draggable class="flex flex-col gap-4 mb-5" v-model="follow" handle=".handle" item-key="id">
           <template #item="{ element, index }">
             <div
-          class="card p-6 pl-2 border-rafik gradient-bg flex justify-between items-center text-left border gap-3"
-        >
-        <svg
-
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 320 512"
-                  fill="currentColor"
-                  class="h-6 mr-3 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move"
-                >
-                  <path
-                    d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0
+              class="card p-6 pl-2 border-rafik gradient-bg flex justify-between items-center text-left border gap-3"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 320 512"
+                fill="currentColor"
+                class="h-6 mr-3 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move"
+              >
+                <path
+                  d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0
                        22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0
                        -48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40
                        17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1
@@ -316,31 +338,30 @@ watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitU
                        0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1
                        -17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0
                        -48c0-22.1 17.9-40 40-40z"
-                  />
-                </svg>
-          <div class="space-y-2 w-full ">
-            <p class="uppercase text-sm 2xl:text-sm font-semibold">
-              {{ t('dashboard.tabs.program.docForms.questionLabel', { type: element.type }) }}
-            </p>
-            <input
-              v-model="element.question"
-              class="bg-transparent text-rafik-pritext dark:text-rafik-darkpritext px-0  text-base 2xl:text-lg focus:outline-none border-none focus:ring-0 w-full"
-              type="text"
-              :placeholder="
-                t('dashboard.tabs.program.docForms.addNewQuestionPlaceholder', {
-                  type: element.type
-                })
-              "
-              :id="element.type + index"
-            />
-          </div>
-          <button @click="removeFollow(index)" class="text-red-500 hover:text-red-300 text-xl">
-            {{ t('dashboard.tabs.program.docForms.removeFollow') }}
-          </button>
-        </div>
+                />
+              </svg>
+              <div class="space-y-2 w-full">
+                <p class="uppercase text-sm 2xl:text-sm font-semibold">
+                  {{ t('dashboard.tabs.program.docForms.questionLabel', { type: element.type }) }}
+                </p>
+                <input
+                  v-model="element.question"
+                  class="bg-transparent text-rafik-pritext dark:text-rafik-darkpritext px-0 text-base 2xl:text-lg focus:outline-none border-none focus:ring-0 w-full"
+                  type="text"
+                  :placeholder="
+                    t('dashboard.tabs.program.docForms.addNewQuestionPlaceholder', {
+                      type: element.type
+                    })
+                  "
+                  :id="element.type + index"
+                />
+              </div>
+              <button @click="removeFollow(index)" class="text-red-500 hover:text-red-300 text-xl">
+                {{ t('dashboard.tabs.program.docForms.removeFollow') }}
+              </button>
+            </div>
           </template>
         </draggable>
-
       </div>
     </div>
 
@@ -356,11 +377,13 @@ watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitU
           {{ t('dashboard.tabs.program.docForms.viewDocument') }}
         </a>
         <!-- File input and buttons -->
-        <input   type="file"
-        accept="application/pdf"
-        @change="handleFileUpload"
-        class="hidden"
-        ref="fileInput" />
+        <input
+          type="file"
+          accept="application/pdf"
+          @change="handleFileUpload"
+          class="hidden"
+          ref="fileInput"
+        />
         <button
           v-if="!isProcessing"
           @click="triggerFileInput"
