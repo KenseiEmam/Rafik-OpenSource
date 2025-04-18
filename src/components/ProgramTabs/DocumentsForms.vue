@@ -22,7 +22,7 @@ const handleFileUpload = async (event: any) => {
       // Upload the file to Supabase Storage under the "referrals" folder
       const { data, error } = await supabase.storage
         .from('storage') // your bucket name
-        .upload(`media/${file.name}`, file, {
+        .upload(`ai_documents/${props.program.id}/${file.name}`, file, {
           cacheControl: '3600', // Cache for 1 hour
           upsert: true // To overwrite if the file already exists
         });
@@ -66,7 +66,7 @@ const deleteDocument = async () => {
       // Delete the file from Supabase Storage
       const { error } = await supabase.storage
         .from('storage') // your bucket name
-        .remove([`media/${fileName}`]);
+        .remove([`ai_documents/${props.program.id}/${fileName}`]);
 
       if (error) {
         console.error('Error deleting document:', error.message);
