@@ -47,8 +47,10 @@ const handleFileUpload = async (event: any) => {
         throw 'Error inserting chatbot';
       }
 
-      const { error: embedError } = await supabase.functions.invoke('api/ai-embed', {
+      const { error: embedError } = await supabase.functions.invoke('api', {
+        method: 'POST',
         body: {
+          endpoint: 'ai-embed',
           chatbotId: chatbot.id,
           path: data.path,
           type: 'file'
