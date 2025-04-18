@@ -21,7 +21,7 @@
           class="nav-btn"
           @click="setActiveTab('Active Program')"
         >
-          {{ t('dashboard.programs.list.activeProgramsTab') }}
+          {{ t('dashboard.programs.list.activeProgramsTab') +' - '+programStore.ActivePrograms.length+'/3' }}
         </button>
         <button
           :class="
@@ -30,7 +30,7 @@
           class="nav-btn uppercase"
           @click="setActiveTab('Drafted Programs')"
         >
-          {{ t('dashboard.programs.list.draftedProgramsTab') }}
+          {{ t('dashboard.programs.list.draftedProgramsTab') +' - '+programStore.DraftedPrograms.length+ '/(' + (6-programStore.ActivePrograms.length) + ')' }}
         </button>
         <button
           :class="
