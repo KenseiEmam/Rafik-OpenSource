@@ -32,6 +32,8 @@ const handleFileUpload = async (event: any) => {
         return;
       }
 
+      console.log('File uploaded successfully:');
+
       let { data: chatbot, error: insertError } = await supabase
         .from('chatbots')
         .insert({
@@ -54,21 +56,27 @@ const handleFileUpload = async (event: any) => {
           throw 'Error inserting or selecting chatbot';
         } else {
           chatbot = chatbot2;
+          console.log('Old Chatbot selected successfully', chatbot);
         }
+      } else {
+        console.log('Chatbot inserted successfully', chatbot);
       }
 
-      const { error: embedError } = await supabase.functions.invoke('api', {
+      const { error: embedError, data: embedData } = await supabase.functions.invoke('api', {
         method: 'POST',
         body: {
           endpoint: 'ai-embed',
           chatbotId: chatbot.id,
-          path: data.path,
+          path: `${props.program.id}/${file.name}`,
           type: 'file'
         }
       });
 
-      if (embedError) {
-        throw error;
+      if (embedError || embedData?.success === false) {
+        console.error('Error embedding file:', embedData?.message, embedError.message);
+        throw embedError || embedData.message;
+      } else {
+        console.log(embedData.message || 'File embedded successfully');
       }
 
       // Retrieve the public URL for the uploaded file
@@ -114,10 +122,12 @@ const deleteDocument = async () => {
       if (chatError) {
         console.error('Error deleting chatbot:', chatError.message);
       } else {
-        const { error: vectorsError } = await supabase
+        const { error: vectorsError, data: deletedVectors } = await supabase
           .from('ai_vectors')
           .delete()
-          .filter('metadata->>chatbot_id', 'eq', String(chatData.id));
+          .filter('metadata->>chatbot_id', 'eq', String(chatData.id))
+          .select('id');
+        console.log('Vectors deleted:', deletedVectors);
         if (vectorsError) {
           console.error('Error deleting vectors:', vectorsError.message);
         }
