@@ -14,15 +14,35 @@ const props = defineProps({
 });
 const isProcessing = ref(false); // New state for tracking processing
 
+function cleanFileName(filename: string): string {
+  const parts = filename.split('.');
+  if (parts.length < 2) return 'file.pdf'; // Invalid filename
+
+  const ext = parts.pop(); // Get the extension
+  const name = parts.join('.'); // Rejoin in case filename had multiple dots
+
+  const cleanName = name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // Remove accents/diacritics
+    .replace(/[’‘“”]/g, '') // Remove fancy quotes
+    .replace(/[^a-zA-Z0-9 ]/g, '') // Remove non-alphanumerics (except space)
+    .trim()
+    .replace(/\s+/g, '_') // Replace spaces with underscores
+    .toLowerCase();
+
+  return `${cleanName}.${ext};`;
+}
+
 const handleFileUpload = async (event: any) => {
   const file = event.target.files[0];
   if (file) {
+    const fileName = cleanFileName(file.name);
     isProcessing.value = true; // Set processing state to true
     try {
       // Upload the file to Supabase Storage under the "referrals" folder
       const { data, error } = await supabase.storage
         .from('storage') // your bucket name
-        .upload(`ai_documents/${props.program.id}/${file.name}`, file, {
+        .upload(`ai_documents/${props.program.id}/${fileName}`, file, {
           cacheControl: '3600', // Cache for 1 hour
           upsert: true // To overwrite if the file already exists
         });
@@ -67,7 +87,7 @@ const handleFileUpload = async (event: any) => {
         body: {
           endpoint: 'ai-embed',
           chatbotId: chatbot.id,
-          path: `${props.program.id}/${file.name}`,
+          path: `${props.program.id}/${fileName}`,
           type: 'file'
         }
       });
