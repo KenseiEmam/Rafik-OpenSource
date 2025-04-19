@@ -32,7 +32,7 @@ const handleFileUpload = async (event: any) => {
         return;
       }
 
-      const { data: chatbot, error: insertError } = await supabase
+      let { data: chatbot, error: insertError } = await supabase
         .from('chatbots')
         .insert({
           trainer_id: props.program.trainer_id,
@@ -42,13 +42,25 @@ const handleFileUpload = async (event: any) => {
         .select('id')
         .single();
 
-      if (insertError) {
-        console.error('Error inserting chatbot:', insertError.message);
-        throw 'Error inserting chatbot';
+      if (insertError || !chatbot) {
+        console.error('Error inserting chatbot:', insertError?.message || 'No chatbot data');
+        let { data: chatbot2, error: selectError2 } = await supabase
+          .from('chatbots')
+          .select('id')
+          .eq('program_id', props.program.id)
+          .single();
+        if (selectError2 || !chatbot2) {
+          console.error('Error selecting chatbot:', selectError2?.message || 'No chatbot2 data');
+          throw 'Error inserting or selecting chatbot';
+        } else {
+          chatbot = chatbot2;
+        }
       }
 
-      const { error: embedError } = await supabase.functions.invoke('api/ai-embed', {
+      const { error: embedError } = await supabase.functions.invoke('api', {
+        method: 'POST',
         body: {
+          endpoint: 'ai-embed',
           chatbotId: chatbot.id,
           path: data.path,
           type: 'file'
@@ -91,6 +103,25 @@ const deleteDocument = async () => {
     try {
       // Extract the file name from the referral URL
       const fileName = props.program.referral.split('/').pop();
+
+      const { data: chatData, error: chatError } = await supabase
+        .from('chatbots')
+        .delete()
+        .eq('program_id', props.program.id)
+        .select('id')
+        .single();
+
+      if (chatError) {
+        console.error('Error deleting chatbot:', chatError.message);
+      } else {
+        const { error: vectorsError } = await supabase
+          .from('ai_vectors')
+          .delete()
+          .filter('metadata->>chatbot_id', 'eq', String(chatData.id));
+        if (vectorsError) {
+          console.error('Error deleting vectors:', vectorsError.message);
+        }
+      }
 
       // Delete the file from Supabase Storage
       const { error } = await supabase.storage
