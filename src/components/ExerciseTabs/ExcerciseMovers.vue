@@ -51,9 +51,9 @@
           :disabled="!personal"
           :class="{
             'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext':
-              exercise.prime.includes(muscle),
+              exercise.prime.includes(capitalize(muscle)),
             'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext':
-              !exercise.prime.includes(muscle),
+              !exercise.prime.includes(capitalize(muscle)),
             'opacity-50 cursor-not-allowed': !personal
           }"
           class="px-3 py-1 rounded-full"
@@ -69,9 +69,9 @@
           :disabled="!personal"
           :class="{
             'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext':
-              exercise.antagonist.includes(muscle),
+              exercise.antagonist.includes(capitalize(muscle)),
             'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext':
-              !exercise.antagonist.includes(muscle),
+              !exercise.antagonist.includes(capitalize(muscle)),
             'opacity-50 cursor-not-allowed': !personal
           }"
           class="px-3 py-1 rounded-full"
@@ -87,9 +87,9 @@
           :disabled="!personal"
           :class="{
             'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext':
-              exercise.synergist.includes(muscle),
+              exercise.synergist.includes(capitalize(muscle)),
             'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext':
-              !exercise.synergist.includes(muscle),
+              !exercise.synergist.includes(capitalize(muscle)),
             'opacity-50 cursor-not-allowed': !personal
           }"
           class="px-3 py-1 rounded-full"
@@ -120,17 +120,22 @@ const emit = defineEmits([
   'update-synergist'
 ]);
 
+// Capitalize helper
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
 // Shared muscle options for all mover types
 const muscles = [
   'Upper Traps',
   'Mid Traps',
   'Lower Traps',
   'Rotator Cuffs',
-  'Rear Delts',
-  'Lateral Delts',
-  'Posterior Delts',
+  'Rear Deltoid',
+  'Lateral Deltoid',
+  'Posterior Deltoid',
   'Upper Chest (Pectoralis Major)',
   'Mid/Lower Chest (Pectoralis Major)',
+  'Pectoralis Major',
+  'Shoulders',
   'Pectoralis Minor',
   'Intercostals',
   'Obliques',
@@ -142,12 +147,14 @@ const muscles = [
   'Latissimus Dorsi',
   'Rhomboids',
   'Teres Major',
-  'Biceps',
+  'Biceps Brachii',
   'Brachiallis',
   'Wrist Flexors',
   'Wrist Extensors',
-  'Triceps (Long Head)',
-  'Triceps (Medial Head)',
+  'Triceps Brachii (Long Head)',
+  'Triceps Brachii (Medial Head)',
+  'Triceps Brachii',
+  'Anchoneus',
   'Gluteus Maximus',
   'Gluteus Medius',
   'Gluteus Minimus',
@@ -155,25 +162,29 @@ const muscles = [
   'Adductors',
   'Quadriceps',
   'Hamstrings',
-  'Calves'
+  'Soleus',
+  'Gastrocnemius'
 ];
 
 function togglePrime(muscle: string) {
-  const list = props.exercise.prime.includes(muscle)
+  const m = capitalize(muscle);
+  const list = props.exercise.prime.includes(m)
     ? props.exercise.prime.filter((m: string) => m !== muscle)
     : [...props.exercise.prime, muscle];
   emit('update-prime', list);
 }
 
 function toggleAntagonist(muscle: string) {
-  const list = props.exercise.antagonist.includes(muscle)
+  const m = capitalize(muscle);
+  const list = props.exercise.antagonist.includes(m)
     ? props.exercise.antagonist.filter((m: string) => m !== muscle)
     : [...props.exercise.antagonist, muscle];
   emit('update-antagonist', list);
 }
 
 function toggleSynergist(muscle: string) {
-  const list = props.exercise.synergist.includes(muscle)
+  const m = capitalize(muscle);
+  const list = props.exercise.synergist.includes(m)
     ? props.exercise.synergist.filter((m: string) => m !== muscle)
     : [...props.exercise.synergist, muscle];
   emit('update-synergist', list);
