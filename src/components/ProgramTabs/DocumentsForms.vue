@@ -101,7 +101,9 @@ const deleteDocument = async () => {
         console.error('Error deleting document:', error.message);
         return;
       }
+      const {data:chatData,error:chatError} = await supabase.from('chatbots').delete().eq('program_id',props.program.id);
 
+      if(chatError) throw new Error(chatError.message)
       // Clear the referral URL from the program
       emit('updateProgramField', 'referral', null);
 
