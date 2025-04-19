@@ -10,7 +10,7 @@
       {{ t('dashboard.entitlements.modal.assignEntitlements') }}
     </h2>
     <p class="contentH-large 2xl:text-7xl mt-auto">
-      {{ entitlementstores.entitlements.filter((e) => !e.client_email).length }}
+      {{ entitlementstores.entitlements.filter((e:any) => !e.client_email).length }}
     </p>
     <h2 class="contentH-small text-rafik-secondary uppercase font-semibold mb-6">
       {{ t('dashboard.entitlements.list.avlEntitlements') }}

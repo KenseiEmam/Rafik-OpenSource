@@ -151,7 +151,7 @@
                 >
                   {{
                     ProgramStore.AllPrograms?.find(
-                      (program) => parseInt(program.id) == form.program_id
+                      (program:any) => parseInt(program.id) == form.program_id
                     )?.program_name || 'No Name found'
                   }}
                 </router-link>
