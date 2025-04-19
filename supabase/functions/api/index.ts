@@ -84,11 +84,12 @@ router
             ctx.response.status = 400;
             setJsonCors(ctx);
             ctx.response.body = {
+              success: false,
               error: "Missing required fields: chatbotId, doc_path, type",
             };
             return;
           }
-          await fetch(
+          const res = await fetch(
             "https://faas-fra1-afec6ce7.doserverless.co/api/v1/web/fn-7f8e933c-192a-4815-a302-6365f2819ef6/embed-api/embed",
             {
               headers: {
@@ -102,12 +103,33 @@ router
               }),
             }
           );
+
+          if (!res.ok) {
+            ctx.response.status = res.status;
+            setJsonCors(ctx);
+            ctx.response.body = {
+              success: false,
+              message: "Failed to generate embeddings (status not ok)",
+            };
+            return;
+          }
+          const result = await res.json();
+          if (!result.success) {
+            ctx.response.status = 500;
+            setJsonCors(ctx);
+            ctx.response.body = {
+              success: false,
+              message: result.error || "Failed to generate embeddings",
+            };
+            return;
+          }
           //TODO: Return back the result based on the output of the fetch...
           ctx.response.status = 200;
           setJsonCors(ctx);
           ctx.response.body = {
             success: true,
-            message: "Embeddings generated and stored successfully",
+            message:
+              result.message || "Embeddings generated and stored successfully",
           };
           break;
         }
