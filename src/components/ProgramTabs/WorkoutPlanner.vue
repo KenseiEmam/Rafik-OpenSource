@@ -240,7 +240,7 @@
                       <div class="flex-1">
                         <div class="flex gap-3 items-center mb-4">
                           <video
-                            v-if="embed.media.endsWith('.mp4') || embed.media.includes('video')"
+                            v-if="embed.media"
                             class="w-24 h-24 card border p-0 object-cover rounded-lg"
                             :src="embed.media"
                             ref="videoRef"
