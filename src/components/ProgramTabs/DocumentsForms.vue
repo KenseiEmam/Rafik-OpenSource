@@ -140,7 +140,6 @@ const deleteDocument = async () => {
 
       if (error) {
         console.error('Error deleting document:', error.message);
-        return;
       }
 
       // Clear the referral URL from the program
