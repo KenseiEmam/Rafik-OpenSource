@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, computed } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
 
@@ -24,7 +24,12 @@ const cardio = ref(25);
 const hypertrophy = ref(25);
 const agility = ref(25);
 const refresh = ref(false);
+const sortedMuscles = computed(() => {
+  const muscles = props.program?.sets_muscle;
+  if (!muscles || !Array.isArray(muscles)) return [];
 
+  return [...muscles].sort((a, b) => b.sets - a.sets);
+});
 // Function to refresh slider values from the program prop
 const refreshSliders = () => {
   refresh.value = true; // Optionally hide UI temporarily
@@ -113,7 +118,26 @@ const removeTag = (tagToRemove: string) => {
             {{ t('dashboard.tabs.program.details.comingSoon') }}
           </p>
         </div>
-        <div class="flex justify-between gap-4 py-2">
+
+
+        <div class=" py-2">
+          <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold mb-6">
+            {{ t('dashboard.tabs.program.details.mostFrequent') }}
+          </p>
+          <div
+              class="flex flex-wrap gap-2"
+
+            >
+              <div
+                v-for="(muscle, index) in sortedMuscles.slice(0,7)"
+                :key="index"
+                class="px-3 py-1 rounded-full border border-rafik-sectext dark:border-rafik-darksectext text-sm"
+              >
+                {{ muscle.muscle }} : {{ muscle.sets }}
+              </div>
+        </div>
+        </div>
+        <!-- <div class="flex justify-between gap-4 py-2">
           <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">
             {{ t('dashboard.tabs.program.details.revenueThisMonth') }}
           </p>
@@ -152,7 +176,7 @@ const removeTag = (tagToRemove: string) => {
           <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">
             {{ t('dashboard.tabs.program.details.comingSoon') }}
           </p>
-        </div>
+        </div> -->
       </div>
     </div>
     <!-- Trainer Details (Admin Mode) -->
