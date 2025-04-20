@@ -370,6 +370,7 @@ type Workout = {
   time_to_complete?: string;
   sets_per_session?: number;
   rest_day?: boolean;
+  sets_muscle?:any[];
   exercises: Exercise[];
 };
 type Exercise = {

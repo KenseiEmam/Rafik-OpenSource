@@ -107,7 +107,20 @@
                 t('dashboard.tabs.program.planner.editToAddSummary')
               }}
             </p>
+            <div
+              class="flex flex-wrap gap-2"
+              v-if="editedWorkouts[activeTab].sets_muscle"
+            >
+              <div
+                v-for="([muscle, sets], index) in sortedMuscles"
+                :key="index"
+                class="px-3 py-1 rounded-full border border-rafik-sectext dark:border-rafik-darksectext text-sm"
+              >
+                {{ muscle }} : {{ sets }}
+              </div>
+            </div>
           </div>
+
 
           <div class="space-y-6 mb-auto">
             <div
@@ -609,7 +622,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, watch, defineProps } from 'vue';
+import { ref, reactive, watch, defineProps, computed } from 'vue';
 import { useProgramStore } from '@/stores/programstores';
 import ExerciseOffcanvas from '../Offcanvas/ExerciseOffcanvas.vue';
 import { useUserStore } from '@/stores/user';
@@ -700,6 +713,7 @@ type Exercise = {
 type Workout = {
   workout_name: string;
   workout_summary?: string;
+  sets_muscle?:any[];
   time_to_complete?: string;
   sets_per_session?: number;
   rest_day?: boolean;
@@ -715,12 +729,13 @@ const drag = ref(true);
 const editedWorkouts = ref(
   props.program.workouts ? JSON.parse(JSON.stringify(props.program.workouts)) : []
 );
-
+console.log(editedWorkouts.value[0])
 // Watch for changes in `props.program` and update `editedWorkouts`
 watch(
   () => props.program.workouts,
   (newWorkouts) => {
     editedWorkouts.value = newWorkouts ? JSON.parse(JSON.stringify(newWorkouts)) : [];
+
   },
   { deep: true }
 );
@@ -909,7 +924,15 @@ watch(
   },
   { deep: true }
 );
+// Then in your computed:
+const sortedMuscles = computed(() => {
+  const tab = activeTab.value;
+  const muscles = editedWorkouts.value[tab]?.sets_muscle;
+  if (!muscles) return [];
 
+  return Object.entries(muscles)
+    .sort((a:any, b:any) => b[1] - a[1]);
+});
 // Microcycle swap function
 // --- Weekly Cycle Change Handler (DO NOT MODIFY ORIGINAL CODE ABOVE) ---
 
@@ -942,7 +965,8 @@ watch(
             workout_summary: '',
             time_to_complete: '',
             rest_day: false,
-            exercises: []
+            exercises: [],
+            sets_muscle:[],
           });
         }
         previousWeeklyCycle = newVal;

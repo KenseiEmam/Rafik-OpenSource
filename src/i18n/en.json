@@ -670,6 +670,7 @@
           "quickStatsDescription": "Below you can find a quick rundown of the program's current statistics. We are working on a much better dashboard.",
           "totalClients": "Total Clients:",
           "comingSoon": "Coming Soon...",
+          "mostFrequent":"Top Muscles Worked:",
           "revenueThisMonth": "Revenue this Month:",
           "totalRevenue": "Total Revenue:",
           "bestMonth": "Best Month:",

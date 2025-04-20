@@ -56,6 +56,7 @@ export type Program = {
   follow?: Question[];
   referral?: string;
   organization?: string;
+  sets_muscle?:any[];
   // Add any other properties your program might have
 };
 interface Question {
@@ -87,6 +88,7 @@ type Workout = {
   workout_summary?: string;
   time_to_complete?: string;
   sets_per_session?: number;
+  sets_muscle?:any[];
   rest_day?: boolean;
   exercises: Exercise[];
 };
