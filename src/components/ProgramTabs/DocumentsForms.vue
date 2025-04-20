@@ -18,7 +18,7 @@ function cleanFileName(filename: string): string {
   const parts = filename.split('.');
   if (parts.length < 2) return 'file.pdf'; // Invalid filename
 
-  const ext = parts.pop(); // Get the extension
+  const ext = parts.pop()?.toLowerCase(); // Get the extension
   const name = parts.join('.'); // Rejoin in case filename had multiple dots
 
   const cleanName = name
@@ -30,7 +30,7 @@ function cleanFileName(filename: string): string {
     .replace(/\s+/g, '_') // Replace spaces with underscores
     .toLowerCase();
 
-  return `${cleanName}.${ext};`;
+  return `${cleanName}.${ext}`;
 }
 
 const handleFileUpload = async (event: any) => {
@@ -94,7 +94,7 @@ const handleFileUpload = async (event: any) => {
 
       if (embedError || embedData?.success === false) {
         console.error('Error embedding file:', embedData?.message, embedError.message);
-        throw embedError || embedData.message;
+        throw String(embedError || embedData.message);
       } else {
         console.log(embedData.message || 'File embedded successfully');
       }
