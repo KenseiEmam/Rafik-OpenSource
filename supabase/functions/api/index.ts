@@ -110,6 +110,7 @@ router
             ctx.response.body = {
               success: false,
               message: "Failed to generate embeddings (status not ok)",
+              status: res.status,
             };
             return;
           }
@@ -118,8 +119,9 @@ router
             ctx.response.status = 500;
             setJsonCors(ctx);
             ctx.response.body = {
+              ...result,
               success: false,
-              message: result.error || "Failed to generate embeddings",
+              message: result.message || "Failed to generate embeddings (api)",
             };
             return;
           }
@@ -127,6 +129,7 @@ router
           ctx.response.status = 200;
           setJsonCors(ctx);
           ctx.response.body = {
+            ...result,
             success: true,
             message:
               result.message || "Embeddings generated and stored successfully",
