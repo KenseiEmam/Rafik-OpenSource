@@ -17,7 +17,7 @@
             })
           }}
         </p>
-        <p class="text-body">
+        <p class="text-body shorten">
           {{ ticket.message }}
         </p>
       </div>
@@ -102,7 +102,7 @@ import PageTitle from '@/components/Navigation/PageTitle.vue';
 import Swal from 'sweetalert2';
 import { useI18n } from 'vue-i18n';
 
-const { t , locale } = useI18n();
+const { t, locale } = useI18n();
 const ticketStore = useSupportStore();
 const route = useRoute();
 
@@ -158,4 +158,11 @@ function userName(msg: TicketMessage): string {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.shorten {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>
