@@ -70,6 +70,7 @@ interface TrainerInterface extends UserInterface {
   preferred_clients: string[] | null;
   certifications_links: string[] | null;
   user_id: number | null;
+  socials:Socials;
 }
 
 type Exercise = {
@@ -80,7 +81,7 @@ type Exercise = {
   sets?: number;
   reps?: number;
 };
-
+type Socials = {instagram: string| null, facebook: string| null, snapchat: string| null,x: string| null}
 type Filter = {
   roles: string[];
   name: string;

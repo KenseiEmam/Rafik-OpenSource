@@ -1233,6 +1233,8 @@
         "nationalityPlaceholder": "Select Nationality:",
         "genderLabel": "Gender",
         "experienceLabel": "Years of Experience",
+        "socialHandle": "Social Handles",
+        "socialDescription": "Show off your personality by sharing your socials handles with potential clients.",
         "bioLabel": "Bio",
         "bioPlaceholder": "Tell us about yourself...",
         "saveProfileButton": "Save Profile",

@@ -1229,6 +1229,8 @@
         "nationalityPlaceholder": "اختر الجنسية:",
         "genderLabel": "الجنس",
         "experienceLabel": "سنوات الخبرة",
+        "socialHandle": "روابط التواصل الاجتماعي",
+        "socialDescription": "عبّر عن شخصيتك من خلال مشاركة روابط حساباتك الاجتماعية مع العملاء المحتملين.",
         "bioLabel": "نبذة",
         "bioPlaceholder": "أخبرنا عن نفسك...",
         "saveProfileButton": "حفظ الملف الشخصي",
