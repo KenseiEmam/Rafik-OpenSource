@@ -216,9 +216,14 @@ onMounted(() => {
                     <div
                       v-for="(set, index) in exercise.true_sets"
                       :key="set"
-                      class="text-rafik-secondary"
+
+                      :class="{
+                        'text-red-500': set.weight_done < set.intensity,
+                        'text-green-500': set.weight_done > set.intensity,
+                        'text-rafik-secondary': set.weight_done == set.intensity
+                      }"
                     >
-                      {{ set.weight_done }} {{ t('dashboard.workoutSheet.kg') }}
+                      {{ set.weight_done }}<span v-if="set.weight_done != set.intensity" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.intensity }})</span> {{ t('dashboard.workoutSheet.kg') }}
                     </div>
                   </div>
                   <div class="flex-col flex gap-2 items-center min-w-max">
@@ -228,9 +233,14 @@ onMounted(() => {
                     <div
                       v-for="(set, index) in exercise.true_sets"
                       :key="set"
-                      class="text-rafik-secondary"
+
+                      :class="{
+                        'text-red-500': set.reps_done < set.reps,
+                        'text-green-500': set.reps_done > set.reps,
+                        'text-rafik-secondary': set.reps_done == set.reps
+                      }"
                     >
-                      {{ set.reps_done }}
+                      {{ set.reps_done }}<span v-if="set.reps_done != set.reps" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.reps }})</span>
                     </div>
                   </div>
                 </div>
