@@ -51,9 +51,9 @@
           {{ t('dashboard.settings.rolesAndPermissionsTab') }}
         </button>
 
-        <!-- Organization Settings Tab (Only if user is Organization Trnr) -->
+        <!-- Organization Settings Tab (Only if user is Organization Admin) -->
         <button
-          v-if="userStore.userProfile.roles.includes('Organization Trnr')"
+          v-if="userStore.userProfile.roles.includes('Organization Admin')"
           :class="
             activeTab === 'Organization Settings'
               ? 'text-rafik-pritext dark:text-rafik-darkpritext'
@@ -91,7 +91,7 @@
           <template
             v-else-if="
               activeTab === 'Organization Settings' &&
-              userStore.userProfile.roles.includes('Organization Trnr')
+              userStore.userProfile.roles.includes('Organization Admin')
             "
           >
             <!-- Loading Spinner -->
@@ -130,7 +130,7 @@
                     type="file"
                     id="uploadOrgLogo"
                     class="hidden"
-                    @change="uploadOrgLogo"
+                    @change="selectFile"
                     accept="image/*"
                   />
                   <label
@@ -244,7 +244,46 @@
                   </label>
                 </div>
               </div>
+                      <!-- A Popup for cropping -->
+            <!-- You can replace it with the framework's Modal component -->
+            <div class="modal-wrap fixed right-0 left-0 top-0 bottom-0 h-screen w-screen z-40 flex flex-col items-center justify-center" v-if="isShowModal">
+              <div class="modal-mask w-full h-full absolute bg-black opacity-50"></div>
+              <div class="modal-scroll-view w-1/3  m-auto ">
+                <div class="modal  flex flex-col gap-3 bg-black relative card p-8">
+                  <div class="modal-title">
+                    <span class="contentH-small">Crop Image</span>
 
+                  </div>
+
+                  <div class="modal-content">
+                    <!-- The component imported from `vue-picture-cropper` plugin -->
+                    <VuePictureCropper
+                      :boxStyle="{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: '#f8f8f8',
+                        margin: 'auto',
+                      }"
+                      :img="pic"
+                      :options="{
+                        viewMode: 1,
+                        dragMode: 'crop',
+                        aspectRatio: 1 / 1,
+                      }"
+                      @ready="ready"
+                    />
+                  </div>
+                  <div class="tools flex gap-3">
+                      <button class="btn-md bg-red-400 hover:bg-red-500 border-red-500" @click="isShowModal = false">
+                        Cancel
+                      </button>
+                      <button @click="getResult" class="btn-md" >
+                        Crop
+                      </button>
+                    </div>
+                </div>
+                </div>
+                </div>
               <!-- SAVE BUTTON (Full-width row) -->
               <div class="md:col-span-2">
                 <button class="btn-lg w-full md:w-auto" @click="updateOrganization">
@@ -260,7 +299,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import { useUserStore } from '@/stores/user';
 import PageTitle from '@/components/Navigation/PageTitle.vue';
 import GeneralSettings from '@/components/SettingsTabs/GeneralSettings.vue';
@@ -270,7 +309,7 @@ import Swal from 'sweetalert2';
 import { useI18n } from 'vue-i18n';
 import { supabase } from '@/lib/supabaseClient';
 import { countries } from '@/lib/countries'; // Assuming you have a JSON file with country data
-
+import VuePictureCropper, { cropper } from 'vue-picture-cropper'
 const { t, locale } = useI18n(); // now we also destructure `locale`
 const userStore = useUserStore();
 
@@ -311,6 +350,76 @@ function showError(message: string) {
 /* ------------------------------------------------------------------
    ORGANIZATION SETTINGS LOGIC
    ------------------------------------------------------------------ */
+
+
+
+
+// Cropping state & refs
+const isShowModal = ref<boolean>(false)
+const uploadInput = ref<HTMLInputElement | null>(null)
+const pic = ref<string>('')
+const result = reactive({ dataURL: '', blobURL: '' })
+const selectedFile = ref<File | null>(null)
+
+function selectFile(e: Event) {
+  pic.value = ''
+  result.dataURL = ''
+  result.blobURL = ''
+  const { files } = e.target as HTMLInputElement
+  if (!files || !files.length) return
+  const file = files[0]
+  const reader = new FileReader()
+  reader.readAsDataURL(file)
+  reader.onload = () => {
+    pic.value = String(reader.result)
+    isShowModal.value = true
+    if (!uploadInput.value) return
+    uploadInput.value.value = ''
+  }
+}
+
+
+
+function ready() {
+
+  console.log('Cropper is ready.')
+}
+
+async function getResult() {
+  if (!cropper) return
+  const base64 = cropper.getDataURL()
+  const blob: Blob | null = await cropper.getBlob()
+  if (!blob) return
+  const file = await cropper.getFile({})
+  result.dataURL = base64
+  result.blobURL = URL.createObjectURL(blob)
+  isShowModal.value = false
+  // set selectedFile for upload
+  selectedFile.value = file
+  // trigger upload with cropped file
+  if(file){
+  try {
+    loadingOrg.value = true;
+    const uploadedUrl = await uploadOrgLogoToBucket(file);
+    if (uploadedUrl) {
+      orgData.value.logo = uploadedUrl;
+      updateOrganization()
+    }
+  } catch (err: any) {
+    console.error('Error uploading logo:', err);
+    showError(
+      t('dashboard.settings.orgLogoUploadFail', {
+        error: err.message || 'Unknown error'
+      })
+    );
+  } finally {
+    loadingOrg.value = false;
+  }
+  }
+
+
+}
+
 const loadingOrg = ref(false);
 
 // We'll store all org data in orgData
@@ -327,11 +436,11 @@ const orgData = ref<any>({
 });
 
 const domainString = ref('');
-const logoFile = ref<File | null>(null);
 
-// On mount, if user is 'Organization Trnr', fetch org data
+
+// On mount, if user is 'Organization Admin', fetch org data
 onMounted(async () => {
-  if (userStore.userProfile?.roles?.includes('Organization Trnr')) {
+  if (userStore.userProfile?.roles?.includes('Organization Admin')) {
     loadingOrg.value = true;
     await getOrganization();
     loadingOrg.value = false;
@@ -410,31 +519,6 @@ async function updateOrganization() {
   }
 }
 
-// Handle file input change for logo
-async function uploadOrgLogo(event: Event) {
-  const target = event.target as HTMLInputElement;
-  if (!target.files || !target.files[0]) {
-    return;
-  }
-  logoFile.value = target.files[0];
-  try {
-    loadingOrg.value = true;
-    const uploadedUrl = await uploadOrgLogoToBucket(logoFile.value);
-    if (uploadedUrl) {
-      orgData.value.logo = uploadedUrl;
-      showSuccess(t('dashboard.settings.orgLogoUploadSuccess'));
-    }
-  } catch (err: any) {
-    console.error('Error uploading logo:', err);
-    showError(
-      t('dashboard.settings.orgLogoUploadFail', {
-        error: err.message || 'Unknown error'
-      })
-    );
-  } finally {
-    loadingOrg.value = false;
-  }
-}
 
 // Actually upload the file to your Supabase Storage
 async function uploadOrgLogoToBucket(file: File): Promise<string | null> {
