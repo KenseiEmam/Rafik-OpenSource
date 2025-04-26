@@ -1,11 +1,66 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { supabase } from '@/lib/supabaseClient'; // Ensure Supabase is correctly set up
 import router from '@/router';
 import { useUserStore } from '@/stores/user';
 import Swal from 'sweetalert2';
 import { useNationalStore } from '@/stores/nationalities';
-// import { VueTelInput } from 'vue-tel-input';
+import VuePictureCropper, { cropper } from 'vue-picture-cropper'
+import { useI18n } from 'vue-i18n';
+const { t , locale } = useI18n();
+// Cropping state & refs
+const isShowModal = ref<boolean>(false)
+const uploadInput = ref<HTMLInputElement | null>(null)
+const pic = ref<string>('')
+const result = reactive({ dataURL: '', blobURL: '' })
+
+
+function selectFile(e: Event) {
+  pic.value = ''
+  result.dataURL = ''
+  result.blobURL = ''
+  const { files } = e.target as HTMLInputElement
+  if (!files || !files.length) return
+  const file = files[0]
+  const reader = new FileReader()
+  reader.readAsDataURL(file)
+  reader.onload = () => {
+    pic.value = String(reader.result)
+    isShowModal.value = true
+    if (!uploadInput.value) return
+    uploadInput.value.value = ''
+  }
+}
+
+
+
+function ready() {
+
+  console.log('Cropper is ready.')
+}
+
+async function getResult() {
+  if (!cropper) return
+  const base64 = cropper.getDataURL()
+  const blob: Blob | null = await cropper.getBlob()
+  if (!blob) return
+  const file = await cropper.getFile({})
+  result.dataURL = base64
+  result.blobURL = URL.createObjectURL(blob)
+  isShowModal.value = false
+  if (file) {
+    selectedFile.value = file;
+
+    // Preview the image
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      uploadedImage.value = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
+}
+
 
 const nationalStore = useNationalStore();
 const darkness = localStorage.getItem('dark_mode');
@@ -74,21 +129,7 @@ const triggerFileInput = () => {
   fileInput.value?.click();
 };
 
-const handleFileChange = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  const file = target.files?.[0];
 
-  if (file) {
-    selectedFile.value = file;
-
-    // Preview the image
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      uploadedImage.value = e.target?.result as string;
-    };
-    reader.readAsDataURL(file);
-  }
-};
 
 const removeImage = () => {
   uploadedImage.value = null;
@@ -254,7 +295,7 @@ const validateAndSubmit = async () => {
             accept="image/*"
             class="hidden"
             ref="fileInput"
-            @change="handleFileChange"
+            @change="selectFile"
           />
         </div>
         <div class="space-y-6 w-full">
@@ -331,5 +372,45 @@ const validateAndSubmit = async () => {
       </div>
       <input :disabled="isLoading" type="submit" class="btn-lg" value="Submit" />
     </form>
+      <!-- A Popup for cropping -->
+            <!-- You can replace it with the framework's Modal component -->
+            <div class="modal-wrap fixed right-0 left-0 top-0 bottom-0 h-screen w-screen z-40 flex flex-col items-center justify-center" v-if="isShowModal">
+              <div class="modal-mask w-full h-full absolute bg-black opacity-50"></div>
+              <div class="modal-scroll-view w-1/3  m-auto ">
+                <div class="modal  flex flex-col gap-3 bg-black relative card p-8">
+                  <div class="modal-title">
+                    <span class="contentH-small">Crop Image</span>
+
+                  </div>
+
+                  <div class="modal-content">
+                    <!-- The component imported from `vue-picture-cropper` plugin -->
+                    <VuePictureCropper
+                      :boxStyle="{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: '#f8f8f8',
+                        margin: 'auto',
+                      }"
+                      :img="pic"
+                      :options="{
+                        viewMode: 1,
+                        dragMode: 'crop',
+                        aspectRatio: 1 / 1,
+                      }"
+                      @ready="ready"
+                    />
+                  </div>
+                  <div class="tools flex gap-3">
+                      <button class="btn-md bg-red-400 hover:bg-red-500 border-red-500" @click="isShowModal = false">
+                        Cancel
+                      </button>
+                      <button @click="getResult" class="btn-md" >
+                        Crop
+                      </button>
+                    </div>
+                </div>
+                </div>
+                </div>
   </div>
 </template>
