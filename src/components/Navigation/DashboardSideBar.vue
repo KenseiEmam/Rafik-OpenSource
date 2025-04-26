@@ -99,7 +99,10 @@
       >
         <span v-html="t('dashboard.sidebar.support')" />
       </RouterLink>
-      <RouterLink :to="{ name: 'trainer-profile' }" class="nav-btn 2xl:text-lg text-base">
+      <RouterLink v-if="
+          userStore.userProfile?.roles.includes('Trainer') ||
+          userStore.userProfile?.roles.includes('Organization Trnr')
+        " :to="{ name: 'trainer-profile' }" class="nav-btn 2xl:text-lg text-base">
         <span v-html="t('dashboard.sidebar.myProfile')" />
       </RouterLink>
       <a @click="handleLogOut" class="nav-btn 2xl:text-lg text-base text-red-600 pl-4">
