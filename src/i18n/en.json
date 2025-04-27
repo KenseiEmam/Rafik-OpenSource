@@ -1397,6 +1397,8 @@
     "workoutSheet": {
       "successTitle": "Success!",
       "errorTitle": "Error!",
+      "next":"Next Workout",
+      "previous":"Previous Workout",
       "failedToLoadWorkoutDetails": "Failed to load Workout details.",
       "workoutLogFor": "Workout Log For:",
       "loading": "Loading...",

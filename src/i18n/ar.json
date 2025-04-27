@@ -1393,6 +1393,8 @@
     "workoutSheet": {
       "successTitle": "نجاح!",
       "errorTitle": "خطأ!",
+      "next":"التالي",
+      "previous":"السابق",
       "failedToLoadWorkoutDetails": "فشل تحميل تفاصيل التمرين.",
       "workoutLogFor": "سجل التمرين لـ:",
       "loading": "جار التحميل...",
