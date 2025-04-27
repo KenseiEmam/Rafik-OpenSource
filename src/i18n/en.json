@@ -752,6 +752,8 @@
           "zeroMins": "00 mins",
           "totalSets": "Total Sets",
           "totalSetsPlaceholder": "Sets",
+          "recommendedRest": "Rest Recommended",
+          "recommendedRestPlaceholder": "Seconds",
           "exercises": "Exercises",
           "noExercises": "No exercises added yet! Edit to add!",
           "innerExercises": "Inner Exercises",
@@ -1397,6 +1399,8 @@
     "workoutSheet": {
       "successTitle": "Success!",
       "errorTitle": "Error!",
+      "next":"Next Workout",
+      "previous":"Previous Workout",
       "failedToLoadWorkoutDetails": "Failed to load Workout details.",
       "workoutLogFor": "Workout Log For:",
       "loading": "Loading...",

@@ -748,6 +748,8 @@
           "zeroMins": "00 دقيقة",
           "totalSets": "إجمالي المجموعات",
           "totalSetsPlaceholder": "المجموعات",
+          "recommendedRest": "الراحة الموصى بها",
+          "recommendedRestPlaceholder": "ثوانٍ",
           "exercises": "التمارين",
           "noExercises": "لم تتم إضافة تمارين بعد! قم بالتعديل لإضافتها!",
           "innerExercises": "تمارين داخلية",
@@ -1393,6 +1395,8 @@
     "workoutSheet": {
       "successTitle": "نجاح!",
       "errorTitle": "خطأ!",
+      "next":"التالي",
+      "previous":"السابق",
       "failedToLoadWorkoutDetails": "فشل تحميل تفاصيل التمرين.",
       "workoutLogFor": "سجل التمرين لـ:",
       "loading": "جار التحميل...",
