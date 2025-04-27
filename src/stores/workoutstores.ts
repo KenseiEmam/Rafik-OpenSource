@@ -63,6 +63,8 @@ type Workout = {
   done?:boolean;
   program_name?:string;
   user_program_id?:number;
+  next_workout?:number,
+  previous_id?:number,
 };
 export const useWorkoutStore = defineStore('Workout', () => {
 
@@ -100,9 +102,22 @@ export const useWorkoutStore = defineStore('Workout', () => {
       if (programsError) {
         throw new Error(`Error fetching parentprograms: ${programsError.message}`);
       }
+      // Fetch user_programs where user_program matches the given id
+      const { data: next_Wrokut, error: nxtError } = await supabase
+        .from('workout_sheets')
+        .select('id')
+        .eq('previous_id', workout_data.id)
+        .single();
 
-      Workout.value = {...workout_data, program_name:program_data.program_name }
 
+
+
+      if (next_Wrokut) {
+        Workout.value = {...workout_data, program_name:program_data.program_name, next_workout:next_Wrokut.id }
+      }
+      else{
+        Workout.value = {...workout_data, program_name:program_data.program_name, next_workout:null }
+      }
       return Workout.value;
 
     } catch (error: any) {
