@@ -116,18 +116,19 @@
             @submit.prevent="updateProfileInfo"
           >
             <div class="grid grid-cols-3 col-span-2 gap-6">
-              <div class="flex flex-col items-center space-y-4">
+              <div class="flex flex-col items-center space-y-4 ">
                 <img
                   :src="userStore.Trainer.avatar || '/user-placeholder.jpg'"
                   alt="Trainer Avatar"
                   class="w-44 h-44 2xl:h-64 2xl:w-64 rounded-xl"
                 />
                 <input
+                  ref="uploadInput"
+                  id="upload-photo"
                   type="file"
-                  @change="uploadPhoto"
+                  @change="selectFile"
                   accept="image/*"
                   class="hidden"
-                  id="upload-photo"
                 />
                 <label
                   for="upload-photo"
@@ -135,6 +136,7 @@
                 >
                   {{ t('dashboard.profile.edit.uploadPhotoLabel') }}
                 </label>
+
               </div>
               <div class="space-y-3">
                 <!-- First Name -->
@@ -365,14 +367,53 @@
             </div>
 
             <!-- Submit Button (Full width) -->
-            <div class="md:col-span-2">
+            <div v-if="!isShowModal" class="md:col-span-2">
               <button type="submit" class="btn-lg w-full md:w-auto">
                 {{ t('dashboard.profile.edit.saveProfileButton') }}
               </button>
             </div>
           </form>
         </div>
+                    <!-- A Popup for cropping -->
+            <!-- You can replace it with the framework's Modal component -->
+            <div class="modal-wrap fixed right-0 left-0 top-0 bottom-0 h-screen w-screen z-40 flex flex-col items-center justify-center" v-if="isShowModal">
+              <div class="modal-mask w-full h-full absolute bg-black opacity-50"></div>
+              <div class="modal-scroll-view w-1/3  m-auto ">
+                <div class="modal  flex flex-col gap-3 bg-black relative card p-8">
+                  <div class="modal-title">
+                    <span class="contentH-small">Crop Image</span>
 
+                  </div>
+
+                  <div class="modal-content">
+                    <!-- The component imported from `vue-picture-cropper` plugin -->
+                    <VuePictureCropper
+                      :boxStyle="{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: '#f8f8f8',
+                        margin: 'auto',
+                      }"
+                      :img="pic"
+                      :options="{
+                        viewMode: 1,
+                        dragMode: 'crop',
+                        aspectRatio: 1 / 1,
+                      }"
+                      @ready="ready"
+                    />
+                  </div>
+                  <div class="tools flex gap-3">
+                      <button class="btn-md bg-red-400 hover:bg-red-500 border-red-500" @click="isShowModal = false">
+                        Cancel
+                      </button>
+                      <button @click="getResult" class="btn-md" >
+                        Crop
+                      </button>
+                    </div>
+                </div>
+                </div>
+                </div>
         <!-- Certifications Tab -->
         <div
           v-else-if="activeTab === 'certifications' && userStore.Trainer.certifications_links"
@@ -386,7 +427,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue';
+
+import { ref, onMounted, computed, reactive } from 'vue';
+
 import { supabase } from '@/lib/supabaseClient';
 import { useUserStore } from '@/stores/user';
 import PageTitle from '@/components/Navigation/PageTitle.vue';
@@ -397,6 +440,7 @@ import VueDatePicker from '@vuepic/vue-datepicker'; // presumably needed for <Vu
 import '@vuepic/vue-datepicker/dist/main.css'; // or wherever your styling is
 import { useI18n } from 'vue-i18n';
 
+import VuePictureCropper, { cropper } from 'vue-picture-cropper'
 
 const { t, locale } = useI18n();
 // Dark mode from localStorage
@@ -433,7 +477,81 @@ function validatePassword() {
   isPasswordValid.value = hasNumber && hasSpecialChar && isLongEnough && notSimilarToEmail;
 }
 
-// Alerts
+
+
+// Cropping state & refs
+const isShowModal = ref<boolean>(false)
+const uploadInput = ref<HTMLInputElement | null>(null)
+const pic = ref<string>('')
+const result = reactive({ dataURL: '', blobURL: '' })
+const selectedFile = ref<File | null>(null)
+
+function selectFile(e: Event) {
+  pic.value = ''
+  result.dataURL = ''
+  result.blobURL = ''
+  const { files } = e.target as HTMLInputElement
+  if (!files || !files.length) return
+  const file = files[0]
+  const reader = new FileReader()
+  reader.readAsDataURL(file)
+  reader.onload = () => {
+    pic.value = String(reader.result)
+    isShowModal.value = true
+    if (!uploadInput.value) return
+    uploadInput.value.value = ''
+  }
+}
+
+
+
+function ready() {
+
+  console.log('Cropper is ready.')
+}
+
+async function getResult() {
+  if (!cropper) return
+  const base64 = cropper.getDataURL()
+  const blob: Blob | null = await cropper.getBlob()
+  if (!blob) return
+  const file = await cropper.getFile({})
+  result.dataURL = base64
+  result.blobURL = URL.createObjectURL(blob)
+  isShowModal.value = false
+  // set selectedFile for upload
+  selectedFile.value = file
+  // trigger upload with cropped file
+  if(file)
+  await uploadPhotoWithFile(file)
+else
+console.log('shit')
+}
+
+
+
+async function uploadPhotoWithFile(file: File) {
+  const UserId = localStorage.getItem('UserID')
+  if (!UserId || !userStore.Trainer) return
+  loading.value = true
+  selectedFile.value = file
+  try {
+    const uploadedUrl = await uploadFileToBucket()
+    if (uploadedUrl) {
+      const { error } = await supabase.from('users').update({ avatar: uploadedUrl }).eq('id', UserId)
+      if (error) throw error
+      userStore.Trainer.avatar = uploadedUrl
+      showSuccess(t('dashboard.profile.edit.photoUpdateSuccess'))
+    }
+  } catch (err: any) {
+    console.error(err)
+    showError(t('dashboard.profile.edit.photoUpdateFail', { error: err.message || 'Unknown error' }))
+  } finally {
+    loading.value = false
+  }
+}
+
+// original uploadPhoto logic replaced by new helper
 function showSuccess(message: string) {
   Swal.fire({
     title: t('dashboard.profile.edit.successTitle'),
@@ -579,42 +697,6 @@ async function updateProfileInfo() {
   }
 }
 
-// Photo upload logic
-const selectedFile = ref<File | null>(null);
-
-async function uploadPhoto(event: Event) {
-  const UserId = localStorage.getItem('UserID');
-  if (!UserId || !userStore.Trainer) {
-    showError(t('dashboard.profile.edit.trainerDataNotFound'));
-    return;
-  }
-  loading.value = true;
-  const target = event.target as HTMLInputElement;
-  if (target.files && target.files[0]) {
-    selectedFile.value = target.files[0];
-    const uploadedUrl = await uploadFileToBucket();
-    if (uploadedUrl) {
-      try {
-        const { error } = await supabase
-          .from('users')
-          .update({ avatar: uploadedUrl })
-          .eq('id', UserId);
-        if (error) throw error;
-        userStore.Trainer.avatar = uploadedUrl;
-        showSuccess(t('dashboard.profile.edit.photoUpdateSuccess'));
-      } catch (err: any) {
-        console.error(err);
-        showError(
-          t('dashboard.profile.edit.photoUpdateFail', {
-            error: err.message || 'Unknown error'
-          })
-        );
-      } finally {
-        loading.value = false;
-      }
-    }
-  }
-}
 
 async function uploadFileToBucket(): Promise<string | null> {
   if (!selectedFile.value) {
@@ -640,9 +722,11 @@ async function uploadFileToBucket(): Promise<string | null> {
   }
 }
 </script>
-
 <style scoped>
 .form-control label {
   margin-bottom: 0.25rem;
 }
+
 </style>
+
+

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useWorkoutStore } from '@/stores/workoutstores';
 import Swal from 'sweetalert2';
@@ -14,12 +14,18 @@ const { t, tm, rt } = useI18n();
 const route = useRoute();
 const workoutStore = useWorkoutStore();
 const clientStore = useUserStore();
-
+const loading = ref(false)
 // Function to refresh the route/component
 function refreshComponent() {
   router.go(0); // This reloads the current route
 }
-
+watch(
+  () => route.params.id,
+  () => {
+    fetchWorkout(); // Assuming you have a function like this
+  },
+  { immediate: true } // Optional: call once on mount
+);
 const showAddProgramModal = ref(false);
 const showCancelModal = ref(false);
 
@@ -53,26 +59,51 @@ function showError(message: string) {
   });
 }
 
-// Fetch the Workout when the component mounts
-onMounted(() => {
+function fetchWorkout(){
+  loading.value=true
   const workoutId = route.params.id as string;
   if (workoutId) {
     workoutStore
       .getWorkout(workoutId)
       .then(() => {
-        if (workoutStore.Workout?.client_id) clientStore.getClient(workoutStore.Workout.client_id);
+        if (workoutStore.Workout?.client_id) clientStore.getClient(workoutStore.Workout.client_id).then(()=>{
+          loading.value = false
+        });
       })
       .catch(() => {
         showError(t('dashboard.workoutSheet.failedToLoadWorkoutDetails'));
       });
   }
+}
+// Fetch the Workout when the component mounts
+onMounted(() => {
+ fetchWorkout()
 });
 </script>
 
 <template>
   <div class="flex h-screen overflow-auto">
+    <!-- Loading Spinner -->
     <div
-      v-if="workoutStore.Workout && clientStore.Client"
+        v-if="loading"
+        class="h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body"
+      >
+        <img
+          src="@/assets/Large Icon.png"
+          class="w-24 h-24 animate-bounce hidden dark:inline-block"
+          alt=""
+        />
+        <img
+          src="@/assets/Large Icon Light.png"
+          class="w-24 h-24 animate-bounce dark:hidden"
+          alt=""
+        />
+        <p class="text-lg animate-pulse">
+          {{ t('dashboard.profile.edit.loading') }}
+        </p>
+      </div>
+    <div
+      v-else-if="workoutStore.Workout && clientStore.Client"
       class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-8 2xl:space-y-6"
     >
       <!-- Upper Header Area -->
@@ -138,37 +169,9 @@ onMounted(() => {
             </div>
           </div>
           <!-- Second Group of Columns  -->
-          <div class="flex flex-col gap-4 justify-between">
-            <div class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
-                {{ t('dashboard.workoutSheet.setsDone') }}
-              </p>
-              <p class="text-rafik-secondary">
-                {{ workoutStore.Workout.average_volume || t('dashboard.workoutSheet.notRecorded') }}
-              </p>
-            </div>
-            <div class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
-                {{ t('dashboard.workoutSheet.avgIntensity') }}
-              </p>
-              <p class="text-rafik-secondary">
-                {{
-                  workoutStore.Workout.average_intensity || t('dashboard.workoutSheet.notRecorded')
-                }}
-              </p>
-            </div>
-            <div class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
-                {{ t('dashboard.workoutSheet.feel') }}
-              </p>
-              <p class="text-rafik-secondary">
-                {{
-                  workoutStore.Workout.feel
-                    ? rt(tm('dashboard.workoutSheet.feels')[workoutStore.Workout.feel - 1])
-                    : t('dashboard.workoutSheet.na')
-                }}
-              </p>
-            </div>
+          <div class="flex flex-col gap-4 justify-between ">
+            <router-link v-if="workoutStore.Workout.next_workout" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn" :to="{name:'workout-sheet', params:{id: workoutStore.Workout.next_workout}}"> Next Workout</router-link>
+            <router-link v-if="workoutStore.Workout.previous_id" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn" :to="{name:'workout-sheet', params:{id: workoutStore.Workout.previous_id}}"> Previous Workout</router-link>
           </div>
         </div>
       </div>
@@ -216,9 +219,14 @@ onMounted(() => {
                     <div
                       v-for="(set, index) in exercise.true_sets"
                       :key="set"
-                      class="text-rafik-secondary"
+
+                      :class="{
+                        'text-red-500': set.weight_done < set.intensity,
+                        'text-green-500': set.weight_done > set.intensity,
+                        'text-rafik-secondary': set.weight_done == set.intensity
+                      }"
                     >
-                      {{ set.weight_done }} {{ t('dashboard.workoutSheet.kg') }}
+                      {{ set.weight_done }}<span v-if="set.weight_done != set.intensity" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.intensity }})</span> {{ t('dashboard.workoutSheet.kg') }}
                     </div>
                   </div>
                   <div class="flex-col flex gap-2 items-center min-w-max">
@@ -228,9 +236,14 @@ onMounted(() => {
                     <div
                       v-for="(set, index) in exercise.true_sets"
                       :key="set"
-                      class="text-rafik-secondary"
+
+                      :class="{
+                        'text-red-500': set.reps_done < set.reps,
+                        'text-green-500': set.reps_done > set.reps,
+                        'text-rafik-secondary': set.reps_done == set.reps
+                      }"
                     >
-                      {{ set.reps_done }}
+                      {{ set.reps_done }}<span v-if="set.reps_done != set.reps" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.reps }})</span>
                     </div>
                   </div>
                 </div>

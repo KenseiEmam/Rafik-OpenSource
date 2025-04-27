@@ -239,6 +239,27 @@
                           {{ element.sets }}
                         </p>
                       </div>
+                      <div v-if="isEditing" class="flex gap-4 justify-between items-end">
+                        <label class="text-body">
+                          {{ t('dashboard.tabs.program.planner.recommendedRest') }}:
+                        </label>
+                        <input
+                          type="number"
+                          v-model.number="element.rest"
+                          class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
+                          :placeholder="t('dashboard.tabs.program.planner.recommendedRestPlaceholder')"
+                        />
+                      </div>
+                      <div
+                        v-else
+                        class="flex justify-between gap-4 w-full text-rafik-sectext dark:text-rafik-darksectext"
+                      >
+                        <p>{{ t('dashboard.tabs.program.planner.recommendedRest') }}:</p>
+                        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                          {{ element.rest }} secs
+                        </p>
+                      </div>
+
                     </div>
                   </div>
 
@@ -441,7 +462,7 @@
                 <div class="flex-1">
                   <div class="flex gap-3 items-center mb-4">
                     <video
-                      v-if="element.media.endsWith('.mp4') || element.media.includes('video')"
+                      v-if="element.media"
                       class="w-24 h-24 card border p-0 object-cover rounded-lg"
                       :src="element.media"
                       ref="videoRef"
@@ -478,6 +499,26 @@
                         <p>{{ t('dashboard.tabs.program.planner.totalSets') }}:</p>
                         <p class="text-rafik-pritext dark:text-rafik-darkpritext">
                           {{ element.sets }}
+                        </p>
+                      </div>
+                      <div v-if="isEditing" class="flex gap-4 justify-between items-end">
+                        <label class="text-body">
+                          {{ t('dashboard.tabs.program.planner.recommendedRest') }}:
+                        </label>
+                        <input
+                          type="number"
+                          v-model.number="element.rest"
+                          class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
+                          :placeholder="t('dashboard.tabs.program.planner.recommendedRestPlaceholder')"
+                        />
+                      </div>
+                      <div
+                        v-else
+                        class="flex justify-between gap-4 w-full text-rafik-sectext dark:text-rafik-darksectext"
+                      >
+                        <p>{{ t('dashboard.tabs.program.planner.recommendedRest') }}:</p>
+                        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                          {{ element.rest }} secs
                         </p>
                       </div>
                       <div
@@ -886,6 +927,7 @@ const handleAdd = (workoutIndex: number, list: any[]) => {
       sets: 3,
       reps: 0,
       intensity: 0,
+      rest:90,
       true_sets: [
         { reps: 0, intensity: 0, weight_done: 0, reps_done: 0 },
         { reps: 0, intensity: 0, weight_done: 0, reps_done: 0 },
@@ -913,6 +955,7 @@ const handleAddMulti = (workoutIndex: number) => {
   editedWorkouts.value[workoutIndex].exercises.push({
     exercise_name: 'Multi-Set',
     type: 'multi-set',
+    rest:90,
     sets: 3,
     embeds: []
   });
