@@ -428,7 +428,7 @@
 
 <script setup lang="ts">
 
-import { ref, onMounted, computed, reactive } from 'vue';
+import { ref, onMounted, computed, reactive, watch } from 'vue';
 
 import { supabase } from '@/lib/supabaseClient';
 import { useUserStore } from '@/stores/user';
