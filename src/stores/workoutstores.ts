@@ -40,6 +40,8 @@ type Exercise = {
   sets?: number;
   reps?: number;
   true_sets?:any[];
+  volume_mod?:string;
+  intensity_mod?:string;
   embeds?:Exercise[];
 };
 type Workout = {

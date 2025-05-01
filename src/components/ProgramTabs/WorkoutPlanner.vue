@@ -98,10 +98,10 @@
             <textarea
               v-if="isEditing"
               v-model="editedWorkouts[activeTab].workout_summary"
-              class="rafik-text-input border-0 bg-transparent text-rafik-sectext dark:text-rafik-darksectext whitespace-pre focus:ring-0 pb-1 border-b focus:border-rafik-alternate rounded-none mb-4"
+              class="rafik-text-input border-0 bg-transparent text-rafik-sectext dark:text-rafik-darksectext whitespace-pre-wrap focus:ring-0 pb-1 border-b focus:border-rafik-alternate rounded-none mb-4"
               :placeholder="t('dashboard.tabs.program.planner.workoutSummaryPlaceholder')"
             ></textarea>
-            <p v-else class="text-body mb-4 whitespace-pre">
+            <p v-else class="text-body mb-4 whitespace-pre-wrap">
               {{
                 editedWorkouts[activeTab].workout_summary ||
                 t('dashboard.tabs.program.planner.editToAddSummary')
@@ -479,7 +479,60 @@
                         {{ element.type }} {{ t('dashboard.tabs.program.planner.exercise') }}
                       </p>
                     </div>
+                    <div class="ms-auto space-y-3">
+                      <div v-if="isEditing" class="flex gap-4 justify-between items-end">
+                        <label class="text-body">
+                          {{ t('dashboard.tabs.program.planner.volumeMod') }}:
+                        </label>
+                        <select
+                          v-model="element.volume_mod"
+                          class="rafik-text-input border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
+                        >
+                        <option disabled :value=" undefined">{{t('dashboard.tabs.program.planner.volumeModPlaceholder')}}</option>
+                        <option value="Reps">Reps</option>
+                        <option value="Seconds">Seconds</option>
+                        <option value="Minutes">Minutes</option>
+                        <option value="Rounds">Rounds</option>
+                      </select>
+                      </div>
+                      <div
+                        v-else
+                        class="flex justify-between gap-4 w-full text-rafik-sectext dark:text-rafik-darksectext"
+                      >
+                        <p>{{ t('dashboard.tabs.program.planner.volumeMod') }}:</p>
+                        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                          {{ element.volume_mod || 'Reps' }}
+                        </p>
+                      </div>
+                      <div v-if="isEditing" class="flex gap-4 justify-between items-end">
+                        <label class="text-body">
+                          {{ t('dashboard.tabs.program.planner.intensityMod') }}:
+                        </label>
+                        <select
+                          v-model="element.intensity_mod"
+                          class="rafik-text-input border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
+                        >
+                        <option disabled :value=" undefined">{{t('dashboard.tabs.program.planner.intensityModPlaceholder')}}</option>
+                        <option value="Load(Kg)">Load(Kg)</option>
+                        <option value="Load(Lb)">Load(Lb)</option>
+                        <option value="Speed(Kmph)">Speed(Kmph)</option>
+                        <option value="Speed(mph)">Speed(mph)</option>
+                        <option value="RPE">RPE</option>
+                        <option value="Heart Rate">Heart Rate</option>
+                        <option value="RIR">RIR</option>
+                      </select>
+                      </div>
+                      <div
+                        v-else
+                        class="flex justify-between gap-4 w-full text-rafik-sectext dark:text-rafik-darksectext"
+                      >
+                        <p>{{ t('dashboard.tabs.program.planner.intensityMod') }}:</p>
+                        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                          {{ element.intensity_mod || "Load(Kg)"}}
+                        </p>
+                      </div>
 
+                    </div>
                     <div class="ms-auto space-y-3">
                       <div v-if="isEditing" class="flex gap-4 justify-between items-end">
                         <label class="text-body">
@@ -557,11 +610,7 @@
                           <p
                             class="text-rafik-pritext dark:text-rafik-darkpritext md:w-44 2xl:w-64"
                           >
-                            {{
-                              element.type === 'cardio'
-                                ? t('dashboard.tabs.program.planner.speed')
-                                : t('dashboard.tabs.program.planner.loadKg')
-                            }}
+                          {{ element.intensity_mod || "Load(Kg)"}}
                           </p>
                           <input
                             v-if="isEditing"
@@ -578,9 +627,7 @@
                             class="text-rafik-pritext dark:text-rafik-darkpritext md:w-44 2xl:w-64"
                           >
                             {{
-                              element.type === 'cardio' || element.type === 'isome'
-                                ? t('dashboard.tabs.program.planner.time')
-                                : t('dashboard.tabs.program.planner.reps')
+                              element.volume_mod || "Reps"
                             }}
                           </p>
                           <input
@@ -749,6 +796,8 @@ type Exercise = {
   intensity?: string;
   sets?: number;
   reps?: number;
+  volume_mod?: string;
+  intensity_mod?: string;
   true_sets?: any[];
 };
 type Workout = {
@@ -932,7 +981,9 @@ const handleAdd = (workoutIndex: number, list: any[]) => {
         { reps: 0, intensity: 0, weight_done: 0, reps_done: 0 },
         { reps: 0, intensity: 0, weight_done: 0, reps_done: 0 },
         { reps: 0, intensity: 0, weight_done: 0, reps_done: 0 }
-      ]
+      ],
+      intensity_mod: "Load(KG)",
+      volume_mod: "Reps"
     }))
   );
 };
