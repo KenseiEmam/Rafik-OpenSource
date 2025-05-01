@@ -35,7 +35,7 @@
           <textarea
             id="exercise_detail"
             v-model="exercise.exercise_detail"
-            class="rafik-text-input whitespace-pre"
+            class="rafik-text-input whitespace-pre-wrap"
             rows="4"
             required
             :class="{ 'border-red-500': errors.exercise_detail }"

@@ -183,7 +183,7 @@ async function sendEmail() {
             <textarea
               name="message"
               v-model="formData.message"
-              class="rafik-text-input whitespace-pre"
+              class="rafik-text-input whitespace-pre-wrap"
               rows="6"
               :placeholder="t('home.form.formPlaceholders.message')"
               required
