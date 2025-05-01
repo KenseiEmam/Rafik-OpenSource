@@ -3,7 +3,7 @@
     v-if="props.visible"
     class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center z-50"
   >
-    <div class="card rounded-lg shadow p-6">
+    <div class="card rounded-lg shadow p-6 w-1/2">
       <h2 class="contentH-small">{{ t('dashboard.users.list.addUserModal.title') }}</h2>
       <p class="text-body mb-4">
         {{ t('dashboard.users.list.addUserModal.subtitle') }}
@@ -20,6 +20,7 @@
             v-model="user.emails"
             class="rafik-text-input"
             required
+            row="5"
             :class="{ 'border-red-500': errors.emails }"
           ></textarea>
           <span v-if="errors.emails" class="text-red-500 text-sm">

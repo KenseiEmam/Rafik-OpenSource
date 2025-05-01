@@ -98,10 +98,10 @@
             <textarea
               v-if="isEditing"
               v-model="editedWorkouts[activeTab].workout_summary"
-              class="rafik-text-input border-0 bg-transparent text-rafik-sectext dark:text-rafik-darksectext focus:ring-0 pb-1 border-b focus:border-rafik-alternate rounded-none mb-4"
+              class="rafik-text-input border-0 bg-transparent text-rafik-sectext dark:text-rafik-darksectext whitespace-pre focus:ring-0 pb-1 border-b focus:border-rafik-alternate rounded-none mb-4"
               :placeholder="t('dashboard.tabs.program.planner.workoutSummaryPlaceholder')"
             ></textarea>
-            <p v-else class="text-body mb-4">
+            <p v-else class="text-body mb-4 whitespace-pre">
               {{
                 editedWorkouts[activeTab].workout_summary ||
                 t('dashboard.tabs.program.planner.editToAddSummary')

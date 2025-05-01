@@ -27,7 +27,7 @@
         <textarea
           v-model="formData.professionalSummary"
           id="professional-summary"
-          class="rafik-text-input"
+          class="rafik-text-input whitespace-pre"
           placeholder="Write a short professional summary about yourself"
         ></textarea>
       </div>

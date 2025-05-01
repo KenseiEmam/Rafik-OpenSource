@@ -40,6 +40,7 @@ type Exercise = {
   sets?: number;
   reps?: number;
   true_sets?:any[];
+  embeds?:Exercise[];
 };
 type Workout = {
   id:number;

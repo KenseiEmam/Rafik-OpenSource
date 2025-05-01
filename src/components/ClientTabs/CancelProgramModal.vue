@@ -19,7 +19,7 @@
           <textarea
             id="reason"
             v-model="reason"
-            class="rafik-text-input"
+            class="rafik-text-input whitespace-pre"
             rows="4"
             required
             :class="{ 'border-red-500': errors.reason }"

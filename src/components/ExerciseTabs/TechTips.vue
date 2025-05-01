@@ -11,7 +11,7 @@
       <div class="mt-4">
         <p
           v-if="!isEditingSafety"
-          class="text-body text-justify cursor-text hover:opacity-70"
+          class="text-body text-justify cursor-text hover:opacity-70 whitespace-pre"
           @click="editSafety"
         >
           {{
@@ -21,7 +21,7 @@
         <textarea
           v-else
           v-model="editableSafety"
-          class="rafik-text-input"
+          class="rafik-text-input whitespace-pre"
           @blur="saveSafety"
           @keyup.enter="saveSafety"
         ></textarea>
