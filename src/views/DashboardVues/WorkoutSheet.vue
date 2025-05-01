@@ -170,8 +170,8 @@ onMounted(() => {
           </div>
           <!-- Second Group of Columns  -->
           <div class="flex flex-col gap-4 justify-between ">
-            <router-link v-if="workoutStore.Workout.next_workout" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn" :to="{name:'workout-sheet', params:{id: workoutStore.Workout.next_workout}}"> Next Workout</router-link>
-            <router-link v-if="workoutStore.Workout.previous_id" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn" :to="{name:'workout-sheet', params:{id: workoutStore.Workout.previous_id}}"> Previous Workout</router-link>
+            <router-link v-if="workoutStore.Workout.next_workout" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn" :to="{name:'workout-sheet', params:{id: workoutStore.Workout.next_workout}}"> {{ t('dashboard.workoutSheet.next') }}</router-link>
+            <router-link v-if="workoutStore.Workout.previous_id" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn" :to="{name:'workout-sheet', params:{id: workoutStore.Workout.previous_id}}"> {{ t('dashboard.workoutSheet.previous') }}</router-link>
           </div>
         </div>
       </div>
@@ -195,7 +195,7 @@ onMounted(() => {
               <h3 class="subheader-small uppercase">
                 {{ exercise.type || t('dashboard.workoutSheet.olderVariableType') }}
               </h3>
-              <div class="grid grid-cols-4">
+              <div v-if="exercise.type !== 'multi-set'" class="grid grid-cols-4">
                 <div class="col-span-3 flex-col flex gap-2">
                   <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body opacity-0">
                     {{ t('dashboard.workoutSheet.filler') }}
@@ -210,7 +210,9 @@ onMounted(() => {
                     </p>
                     <hr class="border border-rafik-sectext dark:border-rafik-darksectext w-full" />
                   </div>
+
                 </div>
+
                 <div class="grid-cols-2 grid gap-3">
                   <div class="flex-col flex gap-2 items-center min-w-max">
                     <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
@@ -229,7 +231,7 @@ onMounted(() => {
                       {{ set.weight_done }}<span v-if="set.weight_done != set.intensity" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.intensity }})</span> {{ t('dashboard.workoutSheet.kg') }}
                     </div>
                   </div>
-                  <div class="flex-col flex gap-2 items-center min-w-max">
+                  <div  class="flex-col flex gap-2 items-center min-w-max">
                     <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
                       {{ t('dashboard.workoutSheet.reps') }}
                     </h4>
@@ -248,6 +250,80 @@ onMounted(() => {
                   </div>
                 </div>
               </div>
+              <div v-else class="flex flex-col gap-4 ps-3 border-s border-rafik-sectext dark:border-rafik-darksectext">
+                   <!-- List of embeds -->
+                   <li
+                    v-for="embed in exercise.embeds"
+                    :key="embed.id"
+                  >
+                    <h3 class="header-small text-lg 2xl:text-2xl">
+                      {{ embed.exercise_name || t('dashboard.workoutSheet.olderVariableName') }}
+                    </h3>
+                    <h3 class="subheader-small uppercase">
+                      {{ embed.type || t('dashboard.workoutSheet.olderVariableType') }}
+                    </h3>
+                    <div  class="grid grid-cols-4">
+                      <div class="col-span-3 flex-col flex gap-2">
+                        <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body opacity-0">
+                          {{ t('dashboard.workoutSheet.filler') }}
+                        </h4>
+                        <div
+                          v-for="(set, index) in embed.true_sets"
+                          :key="set"
+                          class="flex gap-3 w-full items-center"
+                        >
+                          <p class="text-rafik-pritext dark:text-rafik-darkpritext min-w-max">
+                            {{ t('dashboard.workoutSheet.setLabel', { number: index + 1 }) }}
+                          </p>
+                          <hr class="border border-rafik-sectext dark:border-rafik-darksectext w-full" />
+                        </div>
+
+                      </div>
+
+                      <div class="grid-cols-2 grid gap-3">
+                        <div class="flex-col flex gap-2 items-center min-w-max">
+                          <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
+                            {{ t('dashboard.workoutSheet.weight') }}
+                          </h4>
+                          <div
+                            v-for="(set, index) in embed.true_sets"
+                            :key="set"
+
+                            :class="{
+                              'text-red-500': set.weight_done < set.intensity,
+                              'text-green-500': set.weight_done > set.intensity,
+                              'text-rafik-secondary': set.weight_done == set.intensity
+                            }"
+                          >
+                            {{ set.weight_done }}<span v-if="set.weight_done != set.intensity" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.intensity }})</span> {{ t('dashboard.workoutSheet.kg') }}
+                          </div>
+                        </div>
+                        <div  class="flex-col flex gap-2 items-center min-w-max">
+                          <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
+                            {{ t('dashboard.workoutSheet.reps') }}
+                          </h4>
+                          <div
+                            v-for="(set, index) in embed.true_sets"
+                            :key="set"
+
+                            :class="{
+                              'text-red-500': set.reps_done < set.reps,
+                              'text-green-500': set.reps_done > set.reps,
+                              'text-rafik-secondary': set.reps_done == set.reps
+                            }"
+                          >
+                            {{ set.reps_done }}<span v-if="set.reps_done != set.reps" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.reps }})</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <!-- End embeds -->
+              </div>
+
+
+
+
             </li>
           </ul>
         </div>

@@ -397,9 +397,8 @@ async function uploadFileToBucket(): Promise<string | null> {
               v-if="isEditingDescription"
               v-model="editableDescription"
               @blur="saveDescription"
-              @keyup.enter="saveDescription"
               cols="3"
-              class="text-body 2xl:w-5/6 bg-transparent border-b border-rafik-sectext dark:border-rafik-darksectext focus:outline-none"
+              class="text-body 2xl:w-5/6 bg-transparent border-b border-rafik-sectext dark:border-rafik-darksectext focus:outline-none whitespace-pre"
               :placeholder="
                 programStore.Program?.program_description ||
                 t('dashboard.programs.details.loadingPlaceholder')
@@ -407,7 +406,7 @@ async function uploadFileToBucket(): Promise<string | null> {
             ></textarea>
             <p
               v-else
-              class="text-body text-justify hover:opacity-70 2xl:w-5/6 cursor-text"
+              class="text-body text-justify hover:opacity-70 2xl:w-5/6 cursor-text whitespace-pre"
               @click="editDescription"
             >
               {{

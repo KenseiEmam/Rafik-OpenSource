@@ -72,12 +72,12 @@
             <textarea
               id="program_description"
               v-model="program.program_description"
-              class="rafik-text-input"
+              class="rafik-text-input whitespace-pre"
               rows="4"
               required
               :class="{ 'border-red-500': errors.program_description }"
             ></textarea>
-            <span v-if="errors.program_description" class="text-red-500 text-sm">{{
+            <span v-if="errors.program_description" class="text-red-500 text-sm whitespace-pre">{{
               errors.program_description
             }}</span>
           </div>
