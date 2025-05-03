@@ -982,7 +982,7 @@ const handleAdd = (workoutIndex: number, list: any[]) => {
         { reps: 0, intensity: 0, weight_done: 0, reps_done: 0 },
         { reps: 0, intensity: 0, weight_done: 0, reps_done: 0 }
       ],
-      intensity_mod: "Load(KG)",
+      intensity_mod: "Load(Kg)",
       volume_mod: "Reps"
     }))
   );
