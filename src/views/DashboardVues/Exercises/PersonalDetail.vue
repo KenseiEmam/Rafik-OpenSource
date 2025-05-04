@@ -360,7 +360,7 @@ onMounted(() => {
             @blur="saveDescription"
             @keyup.enter="saveDescription"
             cols="3"
-            class="text-body 2xl:w-5/6 bg-transparent whitespace-pre border-b border-rafik-sectext dark:border-rafik-darksectext focus:outline-none whitespace-pre"
+            class="text-body 2xl:w-5/6 bg-transparent whitespace-pre-wrap border-b border-rafik-sectext dark:border-rafik-darksectext focus:outline-none whitespace-pre-wrap"
             :placeholder="
               exerciseStore.Exercise?.exercise_detail ||
               t('dashboard.exercises.personal.loadingPlaceholder')
@@ -368,7 +368,7 @@ onMounted(() => {
           ></textarea>
           <p
             v-else
-            class="text-body text-justify whitespace-pre hover:opacity-70 2xl:w-5/6 cursor-text whitespace-pre"
+            class="text-body text-justify whitespace-pre-wrap hover:opacity-70 2xl:w-5/6 cursor-text whitespace-pre-wrap"
             @click="editDescription"
           >
             {{

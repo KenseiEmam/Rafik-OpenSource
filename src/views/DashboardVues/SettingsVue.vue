@@ -162,7 +162,7 @@
                   <textarea
                     v-model="orgData.description"
                     rows="2"
-                    class="rafik-text-input w-full whitespace-pre"
+                    class="rafik-text-input w-full whitespace-pre-wrap"
                     :placeholder="t('dashboard.settings.orgDescriptionPlaceholder')"
                   ></textarea>
                 </div>

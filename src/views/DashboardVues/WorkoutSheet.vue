@@ -216,7 +216,7 @@ onMounted(() => {
                 <div class="grid-cols-2 grid gap-3">
                   <div class="flex-col flex gap-2 items-center min-w-max">
                     <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
-                      {{ t('dashboard.workoutSheet.weight') }}
+                      {{ exercise.intensity_mod || 'Load(Kg)' }}
                     </h4>
                     <div
                       v-for="(set, index) in exercise.true_sets"
@@ -233,7 +233,7 @@ onMounted(() => {
                   </div>
                   <div  class="flex-col flex gap-2 items-center min-w-max">
                     <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
-                      {{ t('dashboard.workoutSheet.reps') }}
+                      {{ exercise.volume_mod || 'Reps' }}
                     </h4>
                     <div
                       v-for="(set, index) in exercise.true_sets"
