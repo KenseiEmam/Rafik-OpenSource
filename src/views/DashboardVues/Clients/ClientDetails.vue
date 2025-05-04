@@ -13,6 +13,7 @@ import CancelProgramModal from '@/components/ClientTabs/CancelProgramModal.vue';
 import { supabase } from '@/lib/supabaseClient';
 import { useI18n } from 'vue-i18n';
 import WeightLog from '@/components/ClientTabs/WeightLog.vue';
+import TrophyRoom from '@/components/ClientTabs/TrophyRoom.vue';
 
 const { t , locale } = useI18n();
 
@@ -468,6 +469,14 @@ onBeforeUnmount(() => {
         >
           {{ t('dashboard.clients.details.weightLogTab') }}
         </button>
+        <button
+          class="nav-btn uppercase"
+          :class="activeTab === 'Trophy-Room' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
+          @click="setActiveTab('Trophy-Room')"
+        >
+          {{ t('dashboard.clients.details.trophyRoom') }}
+        </button>
+
         <!-- Placeholder if you want additional tabs:
         <button
           class="nav-btn uppercase"
@@ -499,6 +508,8 @@ onBeforeUnmount(() => {
           <DietLogTab v-else-if="activeTab === 'Diet-Log'" :profile="clientStore.Client.profile" />
           <!-- Weight Log Tab -->
           <WeightLog v-else-if="activeTab === 'Weight-Log'" :profile="clientStore.Client.profile" />
+          <!-- Trophy Room Tab -->
+           <TrophyRoom v-else-if="activeTab === 'Trophy-Room'" :client="clientStore.Client.profile" />
         </transition>
       </div>
     </div>

@@ -124,7 +124,7 @@ async function sendEmail() {
             </div>
           </div>
           <!-- Find Us -->
-          <div class="flex items-center w-full gap-4 py-4 pr-4">
+          <!-- <div class="flex items-center w-full gap-4 py-4 pr-4">
             <div class="card rounded-full bg-rafik-sectext dark:bg-rafik-darksectext p-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -143,7 +143,7 @@ async function sendEmail() {
               </h3>
               <p class="text-body">{{ t('home.form.find.address') }}</p>
             </div>
-          </div>
+          </div> -->
           <!-- Social Icons -->
           <SocialIcons class="w-3/4 mx-auto mt-6" :in="'hi'" :fb="'hi'" :yt="'hi'" :tw="'hi'" />
         </div>
