@@ -209,11 +209,11 @@ onMounted(() => {
                 v-if="
                 (clientStore.Client.profile.best_perf
                   ?.find((ex: BestPerf) => ex.exercise === exercise.id)
-                  ?.value ?? 0
+                  ?.orm ?? 0
                 ) <= (
                   workoutStore.Workout.best_perf
                     ?.find((ex: BestPerf) => ex.exercise === exercise.id)
-                    ?.value ?? 0
+                    ?.orm ?? 0
                 )
               "
               >
