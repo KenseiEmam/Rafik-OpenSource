@@ -23,6 +23,10 @@ interface BestPerf {
   exercise: string
   orm: number
 }
+function getBestPerf(exerciseId:any) {
+
+  return workoutStore.Workout?.best_perf?.find(ex => ex.exercise == exerciseId);
+}
 watch(
   () => route.params.id,
   () => {
@@ -204,7 +208,9 @@ onMounted(() => {
               </h3>
               <div v-if="workoutStore.Workout.best_perf" class="flex justify-between w-full my-3">
 
-                <p v-if="workoutStore.Workout.best_perf.find(ex => ex.exercise == exercise.id)" class="text-body"> Estimated ORM : {{workoutStore.Workout.best_perf?.find(ex => ex.exercise == exercise.id).orm ? workoutStore.Workout.best_perf?.find(ex => ex.exercise == exercise.id).orm : 'N/A' }}</p>
+                <p v-if="getBestPerf(exercise.id)" class="text-body">
+                  Estimated ORM : {{ getBestPerf(exercise.id)?.orm ?? 'N/A' }}
+                </p>
                 <p class="text-rafik"
                 v-if="
                 (clientStore.Client.profile.best_perf
