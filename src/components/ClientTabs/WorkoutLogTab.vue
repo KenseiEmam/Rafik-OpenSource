@@ -69,8 +69,8 @@
           </td>
           <td>
             {{
-              workout.feel
-                ? t(`dashboard.tabs.clients.workoutLog.feels.${feels[workout.feel - 1]}`)
+              workout.feel.enjoyment
+                ? t(`dashboard.tabs.clients.workoutLog.feels.${feels[workout.feel.enjoyment - 1]}`)
                 : t('general.na')
             }}
           </td>
