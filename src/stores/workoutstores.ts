@@ -60,7 +60,7 @@ type Workout = {
   created_at?:Date;
   date_started?:Date;
   date_completed?:Date;
-  feel?:number;
+  feel?:any;
   sets_muscle?:any[];
   client_id?:number;
   done?:boolean;
