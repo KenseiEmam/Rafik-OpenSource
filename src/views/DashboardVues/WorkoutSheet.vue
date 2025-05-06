@@ -19,6 +19,10 @@ const loading = ref(false)
 function refreshComponent() {
   router.go(0); // This reloads the current route
 }
+interface BestPerf {
+  exercise: string
+  orm: number
+}
 watch(
   () => route.params.id,
   () => {
@@ -58,7 +62,10 @@ function showError(message: string) {
     color: '#E8F3ED'
   });
 }
-
+const difficulty = ref(['Too Hard', 'Challenging', 'Just Right', 'Easy', 'Too Easy']);
+const pumps = ref(['Not there', 'Temporary', 'Alright', 'Pumped', 'Insane pump']);
+const enjoyment = ref(['Hated', 'Poor', 'Ok', 'Nice', 'Loved']);
+const exhaust = ref(['No sweat', 'Warmed Up', 'Just Right', 'Tired', 'Exhausted']);
 function fetchWorkout(){
   loading.value=true
   const workoutId = route.params.id as string;
@@ -195,6 +202,24 @@ onMounted(() => {
               <h3 class="subheader-small uppercase">
                 {{ exercise.type || t('dashboard.workoutSheet.olderVariableType') }}
               </h3>
+              <div v-if="workoutStore.Workout.best_perf" class="flex justify-between w-full my-3">
+
+                <p class="text-body"> Estimated ORM : {{workoutStore.Workout.best_perf.find(ex => ex.exercise == exercise.id)? workoutStore.Workout.best_perf.find(ex => ex.exercise == exercise.id).orm : 'N/A' }}</p>
+                <p class="text-rafik"
+                v-if="
+                (clientStore.Client.profile.best_perf
+                  ?.find((ex: BestPerf) => ex.exercise === exercise.id)
+                  ?.value ?? 0
+                ) <= (
+                  workoutStore.Workout.best_perf
+                    ?.find((ex: BestPerf) => ex.exercise === exercise.id)
+                    ?.value ?? 0
+                )
+              "
+              >
+               🏆 New Best!
+              </p>
+              </div>
               <div v-if="exercise.type !== 'multi-set'" class="grid grid-cols-4">
                 <div class="col-span-3 flex-col flex gap-2">
                   <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body opacity-0">
@@ -332,22 +357,26 @@ onMounted(() => {
           <h3 class="contentH-small mb-6">
             {{ t('dashboard.workoutSheet.relevantMetrics') }}
           </h3>
-          <div class="card p-8 2xl:py-12 flex flex-col items-center" style="height: 60vh">
-            <div class="space-y-8 my-auto flex flex-col items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                stroke="currentColor"
-                class="w-12 text-rafik-sectext dark:text-rafik-darksectext"
-                viewBox="0 0 448 512"
-              >
-                <path
-                  d="M176 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l16 0 0 34.4C92.3 113.8 16 200 16 304c0 114.9 93.1 208 208 208s208-93.1 208-208c0-41.8-12.3-80.7-33.5-113.2l24.1-24.1c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L355.7 143c-28.1-23-62.2-38.8-99.7-44.6L256 64l16 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L224 0 176 0zm72 192l0 128c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-128c0-13.3 10.7-24 24-24s24 10.7 24 24z"
-                />
-              </svg>
-              <p>
-                {{ t('dashboard.workoutSheet.featureComingSoon') }}
-              </p>
+          <div class="card p-8 2xl:py-12 flex flex-col items-center gap-6" style="height: 60vh">
+            <div class="flex w-full justify-between items-center">
+              <p class="text-rafik font-semibold"> {{ t('dashboard.workoutSheet.enjoyment') }} </p>
+              <p> {{  workoutStore.Workout.feel?.enjoyment ? enjoyment[workoutStore.Workout.feel?.enjoyment-1] : t('general.na') }}</p>
+            </div>
+            <div class="flex w-full justify-between items-center">
+              <p class="text-rafik font-semibold"> {{ t('dashboard.workoutSheet.pump') }} </p>
+              <p> {{ workoutStore.Workout.feel?.pump ? pumps[workoutStore.Workout.feel?.pump-1] : t('general.na') }}</p>
+            </div>
+            <div class="flex w-full justify-between items-center">
+              <p class="text-rafik font-semibold"> {{ t('dashboard.workoutSheet.exhaust') }} </p>
+              <p> {{ workoutStore.Workout.feel?.exhaustion? exhaust[workoutStore.Workout.feel?.exhaustion-1] : t('general.na') }}</p>
+            </div>
+            <div class="flex w-full justify-between items-center">
+              <p class="text-rafik font-semibold"> {{ t('dashboard.workoutSheet.difficulty') }} </p>
+              <p> {{ workoutStore.Workout.feel?.difficulty? difficulty[workoutStore.Workout.feel?.difficulty-1] : t('general.na') }}</p>
+            </div>
+            <div class="spece-y-3 w-full">
+              <p class="text-rafik font-semibold"> {{ t('dashboard.workoutSheet.extras') }} </p>
+              <p> {{ workoutStore.Workout.feel?.comments || t('dashboard.workoutSheet.featureComingSoon') }}</p>
             </div>
           </div>
         </div>

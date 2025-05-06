@@ -1432,8 +1432,13 @@
       "weight": "Weight",
       "kg": "KG",
       "reps": "Reps",
-      "relevantMetrics": "Relevant Metrics",
-      "featureComingSoon": "Feature Coming Soon"
+      "relevantMetrics": "Trainee Review",
+      "enjoyment": "Exercise Enjoyment:",
+      "pump": "Pump feel: ",
+      "exhaust": "Exhaustion and Fatigue:",
+      "difficulty": "Difficulty of Workout:",
+      "extras": " Extra Comments: (Changes made to workout and so on)",
+      "featureComingSoon": "No comments left!"
     },
     "settings": {
       "subheader": "Settings &",

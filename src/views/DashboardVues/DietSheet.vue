@@ -101,7 +101,7 @@ function formatServing(amount: number, servingName: string): string {
   }
   return `${amount} ${servingName}`;
 }
-const feels = ref(['Terrible', 'Poor', 'Average', 'Good', 'Excellent']);
+
 onMounted(() => {
   const dietId = route.params.id as string;
   if (dietId) {
