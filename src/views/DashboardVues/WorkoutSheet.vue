@@ -204,7 +204,7 @@ onMounted(() => {
               </h3>
               <div v-if="workoutStore.Workout.best_perf" class="flex justify-between w-full my-3">
 
-                <p class="text-body"> Estimated ORM : {{workoutStore.Workout.best_perf.find(ex => ex.exercise == exercise.id)? workoutStore.Workout.best_perf.find(ex => ex.exercise == exercise.id).orm : 'N/A' }}</p>
+                <p class="text-body"> Estimated ORM : {{workoutStore.Workout.best_perf?.find(ex => ex.exercise == exercise.id).orm? workoutStore.Workout.best_perf?.find(ex => ex.exercise == exercise.id).orm : 'N/A' }}</p>
                 <p class="text-rafik"
                 v-if="
                 (clientStore.Client.profile.best_perf
