@@ -1,4 +1,9 @@
 <script setup lang="ts">
+/* Props & emits */
+const props = defineProps<{ selected: string | null }>();
+const emit = defineEmits<{ (e: 'select-tier', tier: string): void }>();
+
+/* Core plans */
 const tiers = [
   {
     name: 'Starter',
@@ -19,9 +24,11 @@ const tiers = [
     features: ['Unlimited users', 'Full API access', 'Dedicated success manager']
   }
 ];
-defineEmits<{
-  (e: 'select-tier', tier: string): void;
-}>();
+
+/* Custom plan copy */
+const customCopy =
+  'Need enterprise-scale features, unique integrations or white-labelling? ' +
+  "Talk to us and we'll craft a bespoke package that fits your exact workflow.";
 </script>
 
 <template>
@@ -29,7 +36,9 @@ defineEmits<{
     <h3 class="text-center mb-12 text-2xl md:text-4xl 2xl:text-5xl md:header-large">
       Choose <span class="text-rafik font-black">Your</span> Plan
     </h3>
-    <div class="grid md:grid-cols-3 gap-8">
+
+    <!-- Three-tier grid -->
+    <div class="grid md:grid-cols-3 gap-8 mb-8">
       <div
         v-for="tier in tiers"
         :key="tier.name"
@@ -52,10 +61,31 @@ defineEmits<{
           </li>
         </ul>
 
-        <button class="btn-lg-outline mt-8 w-full" @click="$emit('select-tier', tier.name)">
-          Choose plan
+        <!-- Highlight if chosen -->
+        <button
+          :class="[props.selected === tier.name ? 'btn-lg' : 'btn-lg-outline', 'mt-8 w-full']"
+          @click="emit('select-tier', tier.name)"
+        >
+          {{ props.selected === tier.name ? 'Selected' : 'Choose plan' }}
         </button>
       </div>
+    </div>
+
+    <!-- Full-width custom plan card -->
+    <div
+      class="card p-8 flex flex-col md:flex-row items-start md:items-center gap-6 border hover:border-rafik-secondary transition"
+    >
+      <div class="flex-1">
+        <h3 class="title-small font-black mb-2">Custom Plan</h3>
+        <p class="text-body opacity-80">{{ customCopy }}</p>
+      </div>
+
+      <button
+        :class="[props.selected === 'Custom' ? 'btn-lg' : 'btn-lg-outline', 'w-full md:w-auto']"
+        @click="emit('select-tier', 'Custom')"
+      >
+        {{ props.selected === 'Custom' ? 'Selected' : 'Contact us' }}
+      </button>
     </div>
   </section>
 </template>
