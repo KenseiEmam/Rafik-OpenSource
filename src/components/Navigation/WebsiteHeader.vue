@@ -1,13 +1,12 @@
 <template>
   <header class="md:w-full flex items-center relative z-50 align-center gap-8 my-10">
     <nav class="flex mt-0 gap-6 text-sm md:text-base md:gap-8 w-full items-center">
-
-    <img src="@/assets/rafik.png" :class="['w-24', { 'shimmer-effect': logoShimmer }]" alt="">
+      <img src="@/assets/rafik.png" :class="['w-24', { 'shimmer-effect': logoShimmer }]" alt="" />
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="organizations">For Organisations</RouterLink>
       <RouterLink to="coaches">For Coaches</RouterLink>
       <RouterLink to="athletes" class="min-w-max">For Athletes</RouterLink>
-      <a href="demo" class="">Get a Demo</a>
+      <RouterLink to="request-demo" class="min-w-max">Get a Demo</RouterLink>
     </nav>
     <div v-if="!checkLogin()" class="md:flex gap-3 hidden items-center ms-auto min-w-max">
       <RouterLink to="register" class="btn-md">Request Demo</RouterLink>
@@ -25,8 +24,9 @@
         class="w-16 h-16 2xl:w-20 2xl:h-20 border border-rafik-pribg ring-2 ring-rafik rounded-full object-cover"
         alt=""
       />
-      <div :class="locale === 'ar'?'border-r':'border-l'"
-        class="text-body text-rafik-sectext dark:text-rafik-darksectext uppercase pl-3  border-rafik-sectext dark:border-rafik-darksectext py-2"
+      <div
+        :class="locale === 'ar' ? 'border-r' : 'border-l'"
+        class="text-body text-rafik-sectext dark:text-rafik-darksectext uppercase pl-3 border-rafik-sectext dark:border-rafik-darksectext py-2"
       >
         <p>{{ t('header.auth.hello', { name: userStore.userProfile.first_name }) }}</p>
         <div class="flex gap-4">
@@ -63,7 +63,7 @@ onMounted(() => {
   }, 10000); // shimmer every 10 seconds
 });
 const userStore = useUserStore();
-const { t ,locale } = useI18n();
+const { t, locale } = useI18n();
 
 onMounted(() => {
   if (localStorage.getItem('LoggedInUser') && localStorage.getItem('UserID')) {
