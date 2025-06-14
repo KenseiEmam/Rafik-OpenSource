@@ -25,7 +25,7 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/LoginVue.vue')
     },
-     {
+    {
       path: '/organizations',
       name: 'organizations',
       // route level code-splitting
@@ -33,7 +33,7 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('@/views/Organizations.vue')
     },
-     {
+    {
       path: '/coaches',
       name: 'coaches',
       // route level code-splitting
@@ -41,7 +41,7 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('@/views/Coaches.vue')
     },
-     {
+    {
       path: '/athletes',
       name: 'athletes',
       // route level code-splitting
@@ -49,7 +49,7 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('@/views/Athletes.vue')
     },
-     {
+    {
       path: '/request-demo',
       name: 'demo',
       // route level code-splitting
