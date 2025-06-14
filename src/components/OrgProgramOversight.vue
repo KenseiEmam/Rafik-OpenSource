@@ -31,26 +31,17 @@ const { t, locale } = useI18n();
     </div>
     <div class="col-span-2 relative hidden md:flex flex-col">
       <img
-        class="h-72 card p-0 border absolute z-30 my-0 right-0 top-10"
-        src="/src/assets/metrics.webp"
+        class="h-38 p-0 absolute z-30 my-0 right-2 -bottom-5"
+        src="/src/assets/stat-4.png"
         alt=""
       />
-      <!-- <img
-        class="w-32 card p-0 border absolute z-30 top-32 left-10"
-        src="/src/assets/Select Exercise Off-Canvas.png"
-        alt=""
-      />
+      <img class="h-32 p-0 absolute z-30 my-0 right-24 top-5" src="/src/assets/stat.png" alt="" />
+
       <img
-        class="h-36 card p-0 border absolute z-30 my-0 right-5"
-        style="top: 45%; bottom: 50%"
-        src="/src/assets/W&P- Active Programs.png"
+        class="w-24 p-0 absolute z-30 my-0 top-10 -right-2"
+        src="/src/assets/stat-2.png"
         alt=""
       />
-      <img
-        class="h-52 card p-0 border absolute z-30 my-0 left-16 -bottom-5"
-        src="/src/assets/W&P- Exercise Details.png"
-        alt=""
-      /> -->
     </div>
   </div>
 </template>
