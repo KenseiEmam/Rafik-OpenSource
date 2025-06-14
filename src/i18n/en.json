@@ -1446,6 +1446,7 @@
       "generalSettingsTab": "General Settings",
       "trainerSettingsTab": "Trainer Settings",
       "rolesAndPermissionsTab": "Roles and Permissions",
+      "notificationsTab": "Notifications",
       "successTitle": "Success!",
       "errorTitle": "Error!",
       "organizationSettingsTab": "Organization Settings",

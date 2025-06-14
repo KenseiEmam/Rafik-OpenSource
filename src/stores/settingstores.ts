@@ -40,6 +40,7 @@ interface Settings {
   language: string;
   dark_mode: boolean;
   units: number;
+  notifications:string[];
 }
 type Role = {
   id: number;
