@@ -1,15 +1,17 @@
 <template>
   <header class="md:w-full flex items-center relative z-50 align-center gap-8 my-10">
-    <nav class="flex mt-0 gap-6 md:gap-8 w-full">
-      <RouterLink to="/">{{ t('header.nav.home') }}</RouterLink>
-      <RouterLink to="about">{{ t('header.nav.about') }}</RouterLink>
-      <RouterLink to="team">{{ t('header.nav.team') }}</RouterLink>
-      <RouterLink to="/application" class="min-w-max">{{ t('header.nav.getApp') }}</RouterLink>
-      <a href="/#contact" class="">{{ t('header.nav.contactUs') }}</a>
+    <nav class="flex mt-0 gap-6 text-sm md:text-base md:gap-8 w-full items-center">
+
+    <img src="@/assets/rafik.png" :class="['w-24', { 'shimmer-effect': logoShimmer }]" alt="">
+      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="team">For Organisations</RouterLink>
+      <RouterLink to="team">For Coaches</RouterLink>
+      <RouterLink to="/application" class="min-w-max">For Athletes</RouterLink>
+      <a href="/#contact" class="">Get a Demo</a>
     </nav>
-    <div v-if="!checkLogin()" class="md:flex gap-8 hidden items-center ms-auto min-w-max">
-      <RouterLink to="login" class="btn-sm">{{ t('header.auth.login') }}</RouterLink>
-      <RouterLink to="register" class="btn-sm-outline">{{ t('header.auth.register') }}</RouterLink>
+    <div v-if="!checkLogin()" class="md:flex gap-3 hidden items-center ms-auto min-w-max">
+      <RouterLink to="register" class="btn-md">Request Demo</RouterLink>
+      <RouterLink to="login" class="btn-md-outline">Login</RouterLink>
     </div>
     <div
       v-else-if="userStore.userProfile && checkUser()"
@@ -48,9 +50,18 @@
 
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+const logoShimmer = ref(false);
 
+onMounted(() => {
+  setInterval(() => {
+    logoShimmer.value = true;
+    setTimeout(() => {
+      logoShimmer.value = false;
+    }, 1200); // matches shimmer duration
+  }, 10000); // shimmer every 10 seconds
+});
 const userStore = useUserStore();
 const { t ,locale } = useI18n();
 
@@ -82,12 +93,11 @@ header {
 
 nav {
   width: 100%;
-  font-size: 12px;
   text-align: center;
 }
 
 nav a.router-link-exact-active {
-  color: var(--vt-c-text-dark1);
+  color: white;
 }
 
 nav a.router-link-exact-active:hover {
@@ -113,11 +123,18 @@ nav a {
     place-items: flex-start;
     flex-wrap: wrap;
   }
+@keyframes shimmer {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.8); }
+  100% { filter: brightness(1); }
+}
 
+.shimmer-effect {
+  animation: shimmer 1.2s ease-in-out;
+}
   nav {
     text-align: left;
     margin-left: -1rem;
-    font-size: 1rem;
     padding: 1rem 0;
   }
 }
