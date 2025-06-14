@@ -1,12 +1,61 @@
 <script setup lang="ts">
-const emit = defineEmits(['changeComp']);
+import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-const { t , locale } = useI18n();
+
+const emit = defineEmits(['changeComp']);
+const { t, locale } = useI18n();
+
+const words = ['stronger', 'fitter', 'smarter', 'faster'];
+const title = ref(words[0]);
+
+const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+function randomizeText(target: string, duration = 600) {
+  return new Promise<void>((resolve) => {
+    const steps = 10;
+    const interval = duration / steps;
+    let step = 0;
+
+    const original = target.split('');
+    const display = [...original];
+
+    const scramble = () => {
+      for (let i = 0; i < original.length; i++) {
+        if (step < steps - 1) {
+          display[i] = chars[Math.floor(Math.random() * chars.length)];
+        } else {
+          display[i] = original[i];
+        }
+      }
+
+      title.value = display.join('');
+
+      if (step < steps) {
+        step++;
+        setTimeout(scramble, interval);
+      } else {
+        resolve();
+      }
+    };
+
+    scramble();
+  });
+}
+
+onMounted(async () => {
+  let index = 0;
+  while (true) {
+    await randomizeText(words[index]);
+    await new Promise((r) => setTimeout(r, 1600));
+    index = (index + 1) % words.length;
+  }
+});
 </script>
+
 
 <template>
   <div
-    class="flex flex-col justify-center md:grid md:grid-cols-5 items-center min-h-screen flex-1 relative -mt-32"
+    class="flex flex-col justify-center md:grid md:grid-cols-5 items-center my-48 flex-1 relative "
   >
     <div class="md:flex hidden fixed z-40 bottom-5 justify-center left-0 right-0">
       <!-- <div class="card rounded-full px-12">
@@ -30,25 +79,26 @@ const { t , locale } = useI18n();
       />
     </div>
     <div class="md:col-span-3 relative z-20 -top-16">
-      <h1 class="header-small md:header-large font-black">
-        {{ t('home.welcome.headline1') }}
+      <h1 class="header-medium md:header-large font-black">
+        Your Athletes
       </h1>
-      <h1 class="title-medium mb-16 text-2xl md:text-5xl">
-        {{ t('home.welcome.headline2') }}
+      <h1 class="title-large   ">
+        {{title}}
       </h1>
-      <div class="md:flex gap-4 my-5 hidden">
-        <RouterLink to="login" @click="emit('changeComp')" class="btn-lg">
-          {{ t('home.welcome.accessDashboard') }}
+      <p class="subheader-medium w-3/4 mb-16">
+        Guarantee peak athletic performance
+        through intelligent program design tools and
+        comprehensive analytics.
+      </p>
+      <div class="md:flex flex-col gap-4 my-5 hidden">
+        <RouterLink to="login" @click="emit('changeComp')" class="btn-lg w-32">
+          Request a Demo
+        </RouterLink>
+        <RouterLink to="login" @click="emit('changeComp')" class="btn-lg-outline w-32">
+          Learn More
         </RouterLink>
       </div>
-      <div class="flex flex-col gap-4 my-5 md:hidden">
-        <div class="label text-center text-sm">
-          {{ t('home.welcome.trainerAccess') }}
-        </div>
-        <RouterLink to="application" class="btn-lg-outline uppercase">
-          {{ t('home.welcome.traineeGetApp') }}
-        </RouterLink>
-      </div>
+
     </div>
     <div class="md:col-span-2 hidden md:block relative">
       <div
