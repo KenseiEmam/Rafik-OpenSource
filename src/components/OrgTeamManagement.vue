@@ -12,7 +12,7 @@
       <!-- Roster -->
       <div class="pb-8 gap-8 flex flex-col">
         <img
-          src="/src/assets/My Clients.png"
+          src="/src/assets/Entitlements.png"
           class="h-64 card rounded-xl m-auto shadow-lg"
           alt=""
         />
@@ -31,7 +31,7 @@
             alt=""
           />
           <img
-            src="/src/assets/Diet Log Breakdown.png"
+            src="/src/assets/Client Statistics.png"
             class="h-52 absolute right-10 bottom-0 card rounded-xl m-auto shadow-lg"
             alt=""
           />
@@ -45,7 +45,7 @@
       <!-- Progress -->
       <div class="pb-8 gap-8 flex flex-col">
         <img
-          src="/src/assets/WK-progress.png"
+          src="/src/assets/W&P- Custom Exercises.png"
           class="h-64 card rounded-xl m-auto shadow-lg"
           alt=""
         />
@@ -57,7 +57,11 @@
 
       <!-- Scheduling -->
       <div class="pb-8 gap-8 flex flex-col">
-        <img src="/src/assets/WK-plan.png" class="h-64 card rounded-xl m-auto shadow-lg" alt="" />
+        <img
+          src="/src/assets/W&P- Edit Program Workouts.png"
+          class="h-64 card rounded-xl m-auto shadow-lg"
+          alt=""
+        />
         <p class="text-body pl-4 border-l border-rafik-secondary">
           Align calendars, facilities and travel logistics to keep everyone on-time and
           competition-ready.
