@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-const cards = [{text:'Schools & Clubs',img:'https://images.unsplash.com/photo-1638149055389-05cd7b2fac2f?q=80&w=3871&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'},{text:'Coaches',img:'https://images.unsplash.com/photo-1529932398402-e0b30f66a559?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'},{text:'Athletes',img:'https://images.unsplash.com/photo-1526676317768-d9b14f15615a?q=80&w=3987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}]
+const cards = [{text:'Schools & Clubs',page:'organizations',img:'https://images.unsplash.com/photo-1638149055389-05cd7b2fac2f?q=80&w=3871&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'},{text:'Coaches',page:'coaches',img:'https://images.unsplash.com/photo-1529932398402-e0b30f66a559?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'},{text:'Athletes',page:'athletes',img:'https://images.unsplash.com/photo-1526676317768-d9b14f15615a?q=80&w=3987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}]
 const { t , locale } = useI18n();
 </script>
 
@@ -14,8 +14,8 @@ const { t , locale } = useI18n();
      Learn How <span class="text-rafik font-black">Rafik</span> Helps
       </h3>
       <div class="grid grid-cols-3 h-96 2xl:h-128 align-stretch w-full text-body text-rafik-pritext dark:text-rafik-darkpritext">
-              <div v-for="card in cards"
-        class="border group flex flex-col cursor-pointer relative border-rafik-darksectext hover:border-rafik-secondary h-full  overflow-hidden "
+              <router-link :to="{name:card.page}" v-for="card in cards"
+        class="border group flex flex-col cursor-pointer relative border-rafik-darksectext hover:border-rafik-secondary h-full  overflow-hidden p-0"
       >
             <img
               :src="card.img"
@@ -33,7 +33,7 @@ const { t , locale } = useI18n();
         >
           <h3 class="header-medium opacity-40 group-hover:opacity-100 italic mt-auto group-hover:mb-auto 2xl:header-medium group-hover:title-medium group-hover:-rotate-90 transform origin-bottom">{{ card.text }}</h3>
       </div>
-      </div>
+      </router-link>
     </div>
     </div>
   </div>
