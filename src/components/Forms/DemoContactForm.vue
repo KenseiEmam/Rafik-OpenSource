@@ -72,7 +72,17 @@ async function send() {
   }
 }
 
-const sportsOpts = ['Football', 'Basketball', 'Volleyball', 'Other'];
+const sportsOpts = [
+  'Football',
+  'Basketball',
+  'Volleyball',
+  'Track general fitness',
+  'Rugby',
+  'Jiu-jitsu',
+  'Karate',
+  'Track & Field',
+  'Other'
+];
 </script>
 
 <template>
