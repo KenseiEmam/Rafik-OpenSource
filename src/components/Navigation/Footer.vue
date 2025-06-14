@@ -13,9 +13,10 @@
       </div>
       <!-- Center: Navigation Links -->
       <div class="flex text-xs 2xl:text-base space-x-6 mb-4 md:mb-0">
-        <a href="/about" class="hover:text-rafik-darkpritext text-rafik-darksectext">{{ t('footer.about') }}</a>
-        <a href="/application" class="hover:text-rafik-darkpritext text-rafik-darksectext">{{ t('footer.download') }}</a>
-        <a href="/contact" class="hover:text-rafik-darkpritext text-rafik-darksectext">{{ t('footer.contact') }}</a>
+        <a href="/organizations" class="hover:text-rafik-darkpritext text-rafik-darksectext">Organization</a>
+        <a href="/coaches" class="hover:text-rafik-darkpritext text-rafik-darksectext">Coach</a>
+        <a href="/athletes" class="hover:text-rafik-darkpritext text-rafik-darksectext">Athlete</a>
+        <a href="/request-demo" class="hover:text-rafik-darkpritext text-rafik-darksectext">Demo</a>
         <a href="/privacy-policy" class="hover:text-rafik-darkpritext text-rafik-darksectext">{{ t('footer.privacyPolicy') }}</a>
         <a href="/delete-account" class="hover:text-rafik-darkpritext text-rafik-darksectext">{{ t('footer.deleteAccount') }}</a>
       </div>

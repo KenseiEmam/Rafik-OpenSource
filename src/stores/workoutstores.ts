@@ -40,8 +40,11 @@ type Exercise = {
   sets?: number;
   reps?: number;
   true_sets?:any[];
+  volume_mod?:string;
+  intensity_mod?:string;
   embeds?:Exercise[];
 };
+
 type Workout = {
   id:number;
   workout_name: string;
@@ -58,7 +61,7 @@ type Workout = {
   created_at?:Date;
   date_started?:Date;
   date_completed?:Date;
-  feel?:number;
+  feel?:any;
   sets_muscle?:any[];
   client_id?:number;
   done?:boolean;
@@ -66,6 +69,7 @@ type Workout = {
   user_program_id?:number;
   next_workout?:number,
   previous_id?:number,
+  best_perf:any[],
 };
 export const useWorkoutStore = defineStore('Workout', () => {
 

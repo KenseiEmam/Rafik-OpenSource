@@ -37,7 +37,15 @@ h5,
 .fade-leave-active {
   transition: opacity 0.5s ease;
 }
+@keyframes shimmer {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(2); }
+  100% { filter: brightness(1); }
+}
 
+.shimmer-effect {
+  animation: shimmer 1.2s ease-in-out;
+}
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;

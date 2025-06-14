@@ -51,6 +51,19 @@
           {{ t('dashboard.settings.rolesAndPermissionsTab') }}
         </button>
 
+        <!-- Notifcations  -->
+        <button
+          :class="
+            activeTab === 'Notifications'
+              ? 'text-rafik-pritext dark:text-rafik-darkpritext'
+              : ''
+          "
+          class="nav-btn uppercase"
+          @click="setActiveTab('Notifications')"
+        >
+          {{ t('dashboard.settings.notificationsTab') }}
+        </button>
+
         <!-- Organization Settings Tab (Only if user is Organization Admin) -->
         <button
           v-if="userStore.userProfile.roles.includes('Organization Admin')"
@@ -86,7 +99,12 @@
               userStore.userProfile.roles.includes('Administrator')
             "
           />
-
+          <!-- Notification Settings -->
+          <Notifications
+           v-else-if="
+              activeTab === 'Notifications'
+            "
+          />
           <!-- Organization Settings -->
           <template
             v-else-if="
@@ -162,7 +180,7 @@
                   <textarea
                     v-model="orgData.description"
                     rows="2"
-                    class="rafik-text-input w-full whitespace-pre"
+                    class="rafik-text-input w-full whitespace-pre-wrap"
                     :placeholder="t('dashboard.settings.orgDescriptionPlaceholder')"
                   ></textarea>
                 </div>
@@ -310,6 +328,7 @@ import { useI18n } from 'vue-i18n';
 import { supabase } from '@/lib/supabaseClient';
 import { countries } from '@/lib/countries'; // Assuming you have a JSON file with country data
 import VuePictureCropper, { cropper } from 'vue-picture-cropper'
+import Notifications from '@/components/SettingsTabs/Notifications.vue';
 const { t, locale } = useI18n(); // now we also destructure `locale`
 const userStore = useUserStore();
 

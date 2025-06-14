@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import TheWelcome from '../components/TheWelcome.vue';
 import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue';
-import ProgramCreation from '../components/ProgramCreation.vue';
-import ClientManagemet from '../components/ClientManagemet.vue';
 import ContactVue from '../components/Forms/ContactVue.vue';
 import Footer from '@/components/Navigation/Footer.vue';
+import ForWho from '@/components/ForWho.vue';
+import WhyweDo from '@/components/WhyweDo.vue';
 </script>
 
 <template>
@@ -13,8 +13,9 @@ import Footer from '@/components/Navigation/Footer.vue';
     <Transition name="slide-fade" appear>
       <div class="relative flex flex-col">
         <TheWelcome />
-        <ProgramCreation />
-        <ClientManagemet />
+        <ForWho/>
+        <WhyweDo/>
+
         <ContactVue />
       </div>
     </Transition>

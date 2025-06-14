@@ -11,7 +11,7 @@
         <p :class="locale === 'ar' ? 'me-auto max-w-24' : 'ms-auto max-w-24'">
           {{ t('dashboard.tabs.clients.trophyRoom.estimate') }}
         </p>
-        <p class="text-rafik font-bold">{{ perf.orm }}</p>
+        <p class="text-rafik font-bold">{{ perf.orm }} {{ perf.intensity_mod || "Kgs" }}</p>
       </div>
     </div>
     <p v-else class="text-rafik-pritext dark:text-rafik-darkpritext text-lg font-semibold my-16 mx-auto text-center">
@@ -28,7 +28,7 @@ import { useI18n } from 'vue-i18n';
 const { t, locale } = useI18n();
 
 // Props to receive the client object
-type Perf = { exercise: string; orm: number };
+type Perf = { exercise: string; orm: number; intensity_mod?:string; };
 const props = defineProps<{ client: { best_perf?: Perf[] } }>();
 const { client } = props;
 

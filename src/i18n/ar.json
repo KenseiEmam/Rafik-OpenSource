@@ -751,6 +751,10 @@
           "totalSetsPlaceholder": "المجموعات",
           "recommendedRest": "الراحة الموصى بها",
           "recommendedRestPlaceholder": "ثوانٍ",
+          "volumeMod": "مُعدِّل الحجم",
+          "volumeModPlaceholder": "اختر مُعدِّل الحجم",
+          "intensityMod": "مُعدِّل الشدة",
+          "intensityModPlaceholder": "اختر مُعدِّل الشدة",
           "exercises": "التمارين",
           "noExercises": "لم تتم إضافة تمارين بعد! قم بالتعديل لإضافتها!",
           "innerExercises": "تمارين داخلية",
@@ -1423,8 +1427,13 @@
       "weight": "الوزن",
       "kg": "كجم",
       "reps": "التكرارات",
-      "relevantMetrics": "المقاييس ذات الصلة",
-      "featureComingSoon": "الميزة قادمة قريبًا"
+      "relevantMetrics": "مراجعة المتدرب",
+  "enjoyment": "مدى الاستمتاع بالتمرين:",
+  "pump": "شعور بالضخامة:",
+  "exhaust": "الإرهاق والتعب:",
+  "difficulty": "صعوبة التمرين:",
+  "extras": "تعليقات إضافية: (تعديلات أُجريت على التمرين وما إلى ذلك)",
+  "featureComingSoon": "لم يتم ترك أي تعليقات!"
     },
     "settings": {
       "subheader": "الإعدادات و",
@@ -1432,6 +1441,7 @@
       "generalSettingsTab": "الإعدادات العامة",
       "trainerSettingsTab": "إعدادات المدرب",
       "rolesAndPermissionsTab": "الأدوار والصلاحيات",
+      "notificationsTab": "الإشعارات",
       "successTitle": "نجاح!",
       "errorTitle": "خطأ!"
     }
