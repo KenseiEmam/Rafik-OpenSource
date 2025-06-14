@@ -39,7 +39,7 @@ h5,
 }
 @keyframes shimmer {
   0% { filter: brightness(1); }
-  50% { filter: brightness(10); }
+  50% { filter: brightness(2); }
   100% { filter: brightness(1); }
 }
 
