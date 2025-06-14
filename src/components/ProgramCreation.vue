@@ -26,7 +26,7 @@ const { t , locale } = useI18n();
         <li>{{ t('home.programCreation.tools.item1') }}</li>
         <li>{{ t('home.programCreation.tools.item2') }}</li>
         <li>{{ t('home.programCreation.tools.item3') }}</li>
-        <li>{{ t('home.programCreation.tools.item4') }}</li>
+
       </ul>
     </div>
     <div class="col-span-2 relative hidden md:flex flex-col">
