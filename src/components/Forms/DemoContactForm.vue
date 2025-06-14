@@ -77,16 +77,16 @@ const sportsOpts = ['Football', 'Basketball', 'Volleyball', 'Other'];
 
 <template>
   <section class="flex-1 mb-24 w-full">
-    <div class="md:grid md:grid-cols-2 gap-8 w-full">
+    <div class="w-full">
       <!-- Left – pitch / context -->
-      <div class="flex flex-col gap-6">
+      <div>
         <h2 class="title-small font-black text-rafik">Let’s Talk</h2>
         <p class="text-body">
           Ready to unlock data-driven performance? Fill in the details below and our team will
           schedule your personalised demo.
         </p>
 
-        <div v-if="props.selectedTier" class="card p-4 flex items-center gap-3 w-max">
+        <div v-if="props.selectedTier" class="card p-4 flex items-center gap-3 w-max mt-3 mb-6">
           <span class="text-sm opacity-80">Chosen Plan:</span>
           <span class="font-semibold">{{ props.selectedTier }}</span>
         </div>

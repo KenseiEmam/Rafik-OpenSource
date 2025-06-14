@@ -4,15 +4,14 @@
 
     <Transition name="slide-fade" appear>
       <div class="relative flex flex-col">
-        <!-- 0) Optional hero (recommended) -->
+        <!-- Hero -->
         <DemoHero />
 
-        <!-- 1) Pricing (commented out for now) -->
+        <!-- Subscription tiers -->
+        <SubscriptionTiers :selected="selectedTier" @select-tier="handleSelectTier" />
 
-        <SubscriptionTiers @select-tier="handleSelectTier" />
-
-        <!-- 2) Contact -->
-        <DemoContactForm id="demo-contact" :selected-tier="selectedTier" />
+        <!-- Contact form – only visible AFTER a plan is picked -->
+        <DemoContactForm v-if="selectedTier" id="demo-contact" :selected-tier="selectedTier" />
       </div>
     </Transition>
 
@@ -20,21 +19,23 @@
   </main>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, nextTick } from 'vue';
 import WebsiteHeader from '@/components/Navigation/WebsiteHeader.vue';
 import Footer from '@/components/Navigation/Footer.vue';
 
 import DemoHero from '@/components/DemoHero.vue';
-/*  ⬇️  Uncomment when the tier cards are finalised */
+/* ⬇️  Uncomment when tiers go live */
 import SubscriptionTiers from '@/components/SubscriptionTiers.vue';
 
 import DemoContactForm from '@/components/Forms/DemoContactForm.vue';
 
 const selectedTier = ref<string | null>(null);
 
-function handleSelectTier(tier: string) {
+async function handleSelectTier(tier: string) {
   selectedTier.value = tier;
-  // Smooth-scroll the user to the contact form
+
+  // Wait until the form is in the DOM, then scroll into view
+  await nextTick();
   document.getElementById('demo-contact')?.scrollIntoView({ behavior: 'smooth' });
 }
 </script>
