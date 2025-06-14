@@ -4,10 +4,10 @@
 
     <img src="@/assets/rafik.png" :class="['w-24', { 'shimmer-effect': logoShimmer }]" alt="">
       <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="team">For Organisations</RouterLink>
-      <RouterLink to="team">For Coaches</RouterLink>
-      <RouterLink to="/application" class="min-w-max">For Athletes</RouterLink>
-      <a href="/#contact" class="">Get a Demo</a>
+      <RouterLink to="organizations">For Organisations</RouterLink>
+      <RouterLink to="coaches">For Coaches</RouterLink>
+      <RouterLink to="athletes" class="min-w-max">For Athletes</RouterLink>
+      <a href="demo" class="">Get a Demo</a>
     </nav>
     <div v-if="!checkLogin()" class="md:flex gap-3 hidden items-center ms-auto min-w-max">
       <RouterLink to="register" class="btn-md">Request Demo</RouterLink>
@@ -123,15 +123,7 @@ nav a {
     place-items: flex-start;
     flex-wrap: wrap;
   }
-@keyframes shimmer {
-  0% { filter: brightness(1); }
-  50% { filter: brightness(1.8); }
-  100% { filter: brightness(1); }
-}
 
-.shimmer-effect {
-  animation: shimmer 1.2s ease-in-out;
-}
   nav {
     text-align: left;
     margin-left: -1rem;

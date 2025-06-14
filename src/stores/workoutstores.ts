@@ -44,11 +44,7 @@ type Exercise = {
   intensity_mod?:string;
   embeds?:Exercise[];
 };
-interface BestPerf {
-  exercise: string
-  orm: number
-  intensity_modifier:string
-}
+
 type Workout = {
   id:number;
   workout_name: string;
@@ -73,7 +69,7 @@ type Workout = {
   user_program_id?:number;
   next_workout?:number,
   previous_id?:number,
-  best_perf:BestPerf[],
+  best_perf:any[],
 };
 export const useWorkoutStore = defineStore('Workout', () => {
 
