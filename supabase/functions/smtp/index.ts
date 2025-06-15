@@ -33,18 +33,21 @@ router
   })
   .post("/smtp", async (ctx) => {
     try {
-      let name: string, email: string, message: string;
+      let content: any;
 
       // Ensure the request has a JSON body.
       if (ctx.request.hasBody) {
         const reqBody = await ctx.request.body.json();
-        const data = await reqBody.value;
-        name = data.name;
-        email = data.email;
-        message = data.message;
+        content = reqBody;
 
         // Validate required fields.
-        if (!name || !email || !message) {
+        if (
+          !content ||
+          typeof content !== "object" ||
+          !Object.keys(content).length
+        ) {
+          console.warn("Invalid content:", content);
+          console.warn("request body:", reqBody);
           ctx.response.status = 400;
           setJsonCors(ctx);
           ctx.response.body = { error: "Missing required fields" };
@@ -56,14 +59,24 @@ router
         ctx.response.body = { error: "No body found." };
         return;
       }
-
+      const name =
+        content.name ||
+        content.firstName ||
+        content.fullName ||
+        content.organization ||
+        content.email ||
+        "Unknown";
       const emailSubject = `New Contact Form Submission from ${name}`;
+
+      const formContent = Object.entries(content).reduce(
+        (acc, [key, value]) => `${acc}${key}: ${value}\n`,
+        ""
+      );
+
       const emailBody = `
 You have a new contact form submission:
 
-Name: ${name}
-Email: ${email}
-Message: ${message}
+${formContent}
       `;
 
       // Send email using the Resend API.
@@ -123,8 +136,7 @@ Message: ${message}
 
       // Ensure the request has a JSON body.
       if (ctx.request.hasBody) {
-        const reqBody = await ctx.request.body.json();
-        const data = await reqBody.value;
+        const data = await ctx.request.body.json();
         userName = data.userName;
         programName = data.programName;
         trainerName = data.trainerName;
@@ -199,8 +211,7 @@ Message: ${message}
     try {
       // Ensure the request has a JSON body.
       if (ctx.request.hasBody) {
-        const reqBody = await ctx.request.body.json();
-        const data = await reqBody.value;
+        const data = await ctx.request.body.json();
 
         // Expecting a JSON array of emails.
         if (!Array.isArray(data) || data.length === 0) {
@@ -212,7 +223,7 @@ Message: ${message}
         const emails: string[] = data;
 
         // Send email to each address.
-        const results = [];
+        const results: any[] = [];
         for (const email of emails) {
           const payload = {
             from: `Rafik App <${noReply}>`,
