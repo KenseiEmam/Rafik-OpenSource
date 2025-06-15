@@ -1,5 +1,5 @@
 import { corsHeaders } from "../_shared/corsHeaders.ts";
-import { template } from "../_shared/template.ts";
+import { feedbackTemplate, template } from "../_shared/template.ts";
 import { Application, Context, Router } from "@oak/oak";
 import { orgTemplate } from "../_shared/orgTemplate.ts";
 
@@ -106,7 +106,7 @@ ${formContent}
         setJsonCors(ctx);
         ctx.response.body = {
           message: "Email sent successfully",
-          metadata: await response.json(), 
+          metadata: await response.json(),
         };
       } catch (error) {
         console.error("Error sending email:", error);
@@ -207,8 +207,7 @@ ${formContent}
       };
     }
   })
-
-  .post("/smtp/feedback", async (ctx) => {
+  .post("/smtp/workout-feedback", async (ctx) => {
     try {
       let userName: string,
         trainerEmail: string,
@@ -218,11 +217,11 @@ ${formContent}
         exhaustion: number,
         enjoyment: number,
         additionalNotes: string;
-  
+
       if (ctx.request.hasBody) {
         const reqBody = await ctx.request.body.json();
         const data = await reqBody.value;
-  
+
         // Extract data
         userName = data.userName;
         trainerEmail = data.trainerEmail;
@@ -231,10 +230,12 @@ ${formContent}
         pump = data.pump;
         exhaustion = data.exhaustion;
         enjoyment = data.enjoyment;
-        additionalNotes = data.additionalNotes || "No additional notes provided.";
-  
+        additionalNotes =
+          data.additionalNotes || "No additional notes provided.";
+
         // Validation
-        if (!userName ||
+        if (
+          !userName ||
           !trainerEmail ||
           !programName ||
           difficulty == null ||
@@ -253,26 +254,19 @@ ${formContent}
         ctx.response.body = { error: "No body found." };
         return;
       }
-  
-      // Star display helper
-      const stars = (val: number) => "★".repeat(val) + "☆".repeat(5 - val);
-  
+
       // Construct email
       const emailSubject = `Workout Feedback from ${userName}`;
-      const emailBody = `
-        <h2>🏋️‍♀️ New Workout Feedback</h2>
-        <p><strong>User:</strong> ${userName}</p>
-        <p><strong>Program:</strong> ${programName}</p>
-        <hr />
-        <p><strong>Difficulty:</strong> ${stars(difficulty)} (${difficulty}/5)</p>
-        <p><strong>Pump:</strong> ${stars(pump)} (${pump}/5)</p>
-        <p><strong>Exhaustion:</strong> ${stars(exhaustion)} (${exhaustion}/5)</p>
-        <p><strong>Enjoyment:</strong> ${stars(enjoyment)} (${enjoyment}/5)</p>
-        <hr />
-        <p><strong>Additional Notes:</strong></p>
-        <p>${additionalNotes}</p>
-      `;
-  
+      const emailBody = feedbackTemplate(
+        userName,
+        programName,
+        difficulty,
+        pump,
+        exhaustion,
+        enjoyment,
+        additionalNotes
+      );
+
       // Send email
       const response = await fetch("https://api.resend.com/emails", {
         method: "POST",
@@ -287,11 +281,11 @@ ${formContent}
           html: emailBody,
         }),
       });
-  
+
       if (!response.ok) {
         throw new Error(`Email failed: ${await response.text()}`);
       }
-  
+
       ctx.response.status = 200;
       setJsonCors(ctx);
       ctx.response.body = {
