@@ -229,8 +229,7 @@ ${formContent}
         pump = data.pump;
         exhaustion = data.exhaustion;
         enjoyment = data.enjoyment;
-        additionalNotes =
-          data.additionalNotes || "No additional notes provided.";
+        additionalNotes = data.comments || "No additional notes provided.";
 
         // Validation
         if (
