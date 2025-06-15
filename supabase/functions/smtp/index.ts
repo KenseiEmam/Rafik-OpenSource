@@ -219,8 +219,7 @@ ${formContent}
         additionalNotes: string;
 
       if (ctx.request.hasBody) {
-        const reqBody = await ctx.request.body.json();
-        const data = await reqBody.value;
+        const data = await ctx.request.body.json();
 
         // Extract data
         userName = data.userName;
