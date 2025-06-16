@@ -5,10 +5,10 @@ const { t , locale } = useI18n();
 </script>
 
 <template>
-  <div class="flex gap-6 items-end">
+  <div class="md:flex gap-6 items-end">
       <img
           src="/src/assets/Communication.png"
-          class="h-96 w-auto card rounded-xl shadow-lg"
+          class="hidden md:block h-96 w-auto card rounded-xl shadow-lg"
           alt=""
         />
     <div class="border-rafik-secondary card items-center gap-6 w-full min-h-128 flex-1 px-3 py-6 md:py-12 md:px-12 relative items-stretch overflow-hidden" >
@@ -23,6 +23,11 @@ const { t , locale } = useI18n();
 
       </ul>
     </div>
+     <img
+          src="/src/assets/Communication.png"
+          class="md:hidden w-auto card rounded-xl shadow-lg"
+          alt=""
+        />
   </div>
 </template>
 <style scoped>

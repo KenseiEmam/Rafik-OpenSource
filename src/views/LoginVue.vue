@@ -18,7 +18,7 @@ const { t , locale } = useI18n();
           <LoginForm />
           <h3 class="text-body">
             {{ t('login.notRegisteredYet') }}
-            <RouterLink to="register"> {{ t('login.signUpNow') }}</RouterLink>
+            <RouterLink to="request-demo">Request a Demo</RouterLink>
           </h3>
         </div>
         <div class="relative">

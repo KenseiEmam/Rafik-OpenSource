@@ -5,8 +5,8 @@ const { t , locale } = useI18n();
 </script>
 
 <template>
-  <div class="grid grid-cols-2 gap-6 items-end">
-    <div class="relative h-full">
+  <div class="md:grid grid-cols-2 gap-6 items-end">
+    <div class="relative md:block hidden h-full">
 
       <img
           src="/src/assets/macrogoal.jpeg"
