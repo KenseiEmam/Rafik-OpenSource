@@ -24,7 +24,7 @@ import MoreFeatures from '@/components/MoreFeatures.vue';
         <SimpleAnalytics/>
         <MoreFeatures/>
         <div
-            class="grid md:grid-cols-5 border-rafik-secondary card items-end w-full  flex-1 mb-16 px-3 py-6 md:py-12 md:px-12 relative overflow-hidden my-16"
+            class="md:grid md:grid-cols-5 border-rafik-secondary card items-end w-full  flex-1 mb-16 px-3 py-6 md:py-12 md:px-12 relative overflow-hidden my-16"
           >
             <img
               src="https://images.unsplash.com/photo-1529165980561-f19d4acc4f3f?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -38,7 +38,7 @@ import MoreFeatures from '@/components/MoreFeatures.vue';
               </h3>
             </div>
 
-            <div class="col-span-2 relative hidden md:flex flex-col">
+            <div class="col-span-2 relative  flex flex-col">
              <router-link :to="{name:'demo'}" class="btn-lg " >Request a Demo</router-link>
 
             </div>

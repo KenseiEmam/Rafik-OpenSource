@@ -55,7 +55,7 @@ onMounted(async () => {
 
 <template>
   <div
-    class="flex flex-col justify-center md:grid md:grid-cols-5 items-center my-48 flex-1 relative "
+    class="flex flex-col justify-center md:grid md:grid-cols-5 items-center my:16 md:my-48 flex-1 relative "
   >
     <div class="md:flex hidden fixed z-40 bottom-5 justify-center left-0 right-0">
       <!-- <div class="card rounded-full px-12">
@@ -85,16 +85,16 @@ onMounted(async () => {
       <h1 class="title-large   ">
         {{title}}
       </h1>
-      <p class="subheader-medium w-3/4 mb-16">
+      <p class="text-body md:subheader-medium w-3/4 mb-4 md:mb-16">
         Guarantee peak athletic performance
         through intelligent program design tools and
         comprehensive analytics.
       </p>
-      <div class="md:flex flex-col gap-4 my-5 hidden">
-        <RouterLink to="login" @click="emit('changeComp')" class="btn-lg w-32">
+      <div class="flex flex-col gap-2 md:gap-4 md:my-5 ">
+        <RouterLink to="request-demo" @click="emit('changeComp')" class="btn-lg md:w-32">
           Request a Demo
         </RouterLink>
-        <RouterLink to="login" @click="emit('changeComp')" class="btn-lg-outline w-32">
+        <RouterLink to="organizations" @click="emit('changeComp')" class="btn-lg-outline md:w-32">
           Learn More
         </RouterLink>
       </div>

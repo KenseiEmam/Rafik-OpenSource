@@ -13,7 +13,7 @@ const { t , locale } = useI18n();
       <h3 class=" text-2xl md:text-4xl 2xl:text-5xl md:header-large">
      Learn How <span class="text-rafik font-black">Rafik</span> Helps
       </h3>
-      <div class="grid grid-cols-3 h-96 2xl:h-128 align-stretch w-full text-body text-rafik-pritext dark:text-rafik-darkpritext">
+      <div class="grid md:grid-cols-3 h-96 2xl:h-128 align-stretch w-full text-body text-rafik-pritext dark:text-rafik-darkpritext">
               <router-link :to="{name:card.page}" v-for="card in cards"
         class="border group flex flex-col cursor-pointer relative border-rafik-darksectext hover:border-rafik-secondary h-full  overflow-hidden p-0"
       >
