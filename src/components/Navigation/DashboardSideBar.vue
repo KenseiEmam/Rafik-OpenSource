@@ -84,6 +84,14 @@
       >
         <span v-html="t('dashboard.sidebar.auditForms')" />
       </RouterLink>
+      <RouterLink
+        :to="{ name: 'assessment-templates-list' }"
+        class="nav-btn"
+        v-if="userStore.userProfile?.roles.includes('Trainer') ||
+          userStore.userProfile?.roles.includes('Organization Trnr')"
+      >
+        <span v-html="t('dashboard.sidebar.assessmentTemplates')" />
+      </RouterLink>
       <RouterLink :to="{ name: 'settings' }" class="nav-btn">
         <span v-html="t('dashboard.sidebar.settingsPreferences')" />
       </RouterLink>

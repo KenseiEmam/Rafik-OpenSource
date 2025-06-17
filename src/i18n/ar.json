@@ -1444,6 +1444,62 @@
       "notificationsTab": "الإشعارات",
       "successTitle": "نجاح!",
       "errorTitle": "خطأ!"
+    },
+    "assessmentTemplates": {
+      "pageTitle": "قوالب",
+      "subheader": "التقييم",
+      "list": {
+        "pageTitle": {
+          "header": "قوالب التقييم",
+          "subheader": "إدارة قوالب التقييم الخاصة بك"
+        },
+        "searchPlaceholder": "البحث في القوالب...",
+        "createNew": "إنشاء جديد",
+        "table": {
+          "name": "الاسم",
+          "description": "الوصف",
+          "control": "التحكم",
+          "primary": "الأساسي",
+          "createdAt": "تاريخ الإنشاء",
+          "actions": "الإجراءات",
+          "edit": "تعديل",
+          "delete": "حذف"
+        },
+        "actions": {
+          "edit": "تعديل",
+          "delete": "حذف"
+        },
+        "deleteConfirm": {
+          "title": "حذف القالب",
+          "text": "هل أنت متأكد من حذف هذا القالب؟ لا يمكن التراجع عن هذا الإجراء."
+        },
+        "deleteSuccess": "تم حذف القالب بنجاح",
+        "deleteError": "خطأ في حذف القالب",
+        "saveError": "خطأ في حفظ القالب"
+      }
+    },
+    "tabs": {
+      "program": {
+        "template": {
+          "name": "اسم القالب",
+          "namePlaceholder": "أدخل اسم القالب",
+          "description": "الوصف",
+          "descriptionPlaceholder": "أدخل وصف القالب",
+          "control": "التحكم",
+          "selectControl": "اختر نوع التحكم",
+          "primary": "الأساسي",
+          "selectPrimary": "اختر النوع الأساسي",
+          "rounds": "الجولات",
+          "roundsPlaceholder": "أدخل عدد الجولات",
+          "controlValue": "قيمة التحكم",
+          "controlValuePlaceholder": "أدخل قيمة التحكم",
+          "createTemplate": "إنشاء قالب",
+          "editTemplate": "تعديل القالب",
+          "create": "إنشاء",
+          "save": "حفظ",
+          "cancel": "إلغاء"
+        }
+      }
     }
   }
 }
