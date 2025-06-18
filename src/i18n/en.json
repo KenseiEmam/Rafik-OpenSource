@@ -263,6 +263,7 @@
       "myProfile": "My Profile",
       "logout": "Logout",
       "assessmentTemplates": "Assessment Templates",
+      "myAssessments": "My <br />Assessments",
       "calendar":"Events Calendar"
     },
     "home": {
@@ -1529,6 +1530,30 @@
     "calendar":{
       "header":"My Events",
       "subheader":"Calendar"
+    },
+    "assessments": {
+      "pageTitle": {
+        "subheader": "My",
+        "header": "Assessments"
+      },
+      "loading": "Loading assessments...",
+      "list": {
+        "typeToSearchAssessments": "Type to search assessments...",
+        "allAssessments": "All",
+        "scheduled": "Scheduled",
+        "active": "Active",
+        "completed": "Completed",
+        "canceled": "Canceled",
+        "createAssessment": "Create Assessment",
+        "modalComingSoon": "Assessment creation coming soon.",
+        "close": "Close",
+        "noAssessmentsFound": "No assessments found.",
+        "assessors": "Assessors",
+        "noAssessors": "No assessors",
+        "pageLabel": "Page:",
+        "previousPage": "Previous Page",
+        "nextPage": "Next Page"
+      }
     }
   }
 }

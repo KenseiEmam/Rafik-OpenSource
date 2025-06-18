@@ -268,6 +268,17 @@ const router = createRouter({
                component: () => import('../views/DashboardVues/AssessmentTemplates/TemplateEdit.vue')
             }
           ]
+        },
+        {
+          path: 'assessments', // Child route for /dashboard/assessments
+          meta: { requiresAuth: true },
+          children: [
+            {
+              path: '', // Default child route for /dashboard/assessments
+              name: 'assessments',
+              component: () => import('../views/DashboardVues/AssessmentsVue.vue')
+            }
+          ]
         }
       ]
     },
