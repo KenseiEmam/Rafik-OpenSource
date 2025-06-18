@@ -94,8 +94,8 @@
           <!-- Middle Section: Assessment Template Name and Date -->
           <div class="flex-1 mb-4">
             <h2 class="title-small text-base 2xl:text-xl mb-2">
-              {{ assessment.template_data ? 
-                  (assessment.template_data.template_name || assessment.template_data.name || 'Untitled Assessment') 
+              {{ assessment.template && assessmentStore.templateData[assessment.template] ? 
+                  (assessmentStore.templateData[assessment.template].template_name || assessmentStore.templateData[assessment.template].name || 'Untitled Assessment') 
                   : 'Loading...' }}
             </h2>
             <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
