@@ -76,7 +76,7 @@ const filteredAssessments = computed(() => {
 
   // Apply search filter
   if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase();
+    const query = searchQuery.value.trim().toLowerCase();
     
     filtered = filtered.filter(assessment => {
       // Search by template name
@@ -86,28 +86,30 @@ const filteredAssessments = computed(() => {
         return true;
       }
 
-      // Search by trainee names
+      // Search by trainee names and emails
       const traineesData = assessmentStore.trainees;
       if (assessment.trainees && traineesData) {
         for (const traineeId of assessment.trainees) {
           const trainee = traineesData[traineeId];
           if (trainee) {
             const traineeName = `${trainee.first_name || ''} ${trainee.last_name || ''}`.toLowerCase();
-            if (traineeName.includes(query)) {
+            const traineeEmail = trainee.email?.toLowerCase() || '';
+            if (traineeName.includes(query) || traineeEmail.includes(query)) {
               return true;
             }
           }
         }
       }
 
-      // Search by assessor names
+      // Search by assessor names and emails
       const assessorsData = assessmentStore.assessors;
       if (assessment.assessors && assessorsData) {
         for (const assessorId of assessment.assessors) {
           const assessor = assessorsData[assessorId];
           if (assessor) {
             const assessorName = `${assessor.first_name || ''} ${assessor.last_name || ''}`.toLowerCase();
-            if (assessorName.includes(query)) {
+            const assessorEmail = assessor.email?.toLowerCase() || '';
+            if (assessorName.includes(query) || assessorEmail.includes(query)) {
               return true;
             }
           }

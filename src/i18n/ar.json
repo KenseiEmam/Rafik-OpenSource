@@ -1512,12 +1512,12 @@
   },
   "assessments": {
     "pageTitle": {
-      "subheader": "تقييماتي",
-      "header": "التقييمات"
+      "header": "تقييماتي",
+      "subheader": "إدارة وتتبع تقييماتك"
     },
-    "loading": "جار تحميل التقييمات...",
+    "loading": "جاري تحميل التقييمات...",
     "list": {
-      "typeToSearchAssessments": "ابحث في التقييمات...",
+      "typeToSearchAssessments": "اكتب للبحث في التقييمات...",
       "allAssessments": "الكل",
       "scheduled": "مجدول",
       "active": "نشط",
@@ -1526,12 +1526,19 @@
       "createAssessment": "إنشاء تقييم",
       "modalComingSoon": "إنشاء التقييم قريباً.",
       "close": "إغلاق",
-      "noAssessmentsFound": "لا توجد تقييمات.",
-      "assessors": "المقيمون",
-      "noAssessors": "لا يوجد مقيمون",
-      "pageLabel": "صفحة:",
+      "noAssessmentsFound": "لم يتم العثور على تقييمات.",
+      "assessors": "المقيّمون",
+      "noAssessors": "لا يوجد مقيّمون",
+      "pageLabel": "الصفحة:",
       "previousPage": "الصفحة السابقة",
       "nextPage": "الصفحة التالية"
+    },
+    "details": {
+      "pageTitle": {
+        "header": "تفاصيل التقييم",
+        "subheader": "عرض معلومات التقييم والنتائج"
+      },
+      "comingSoon": "صفحة تفاصيل التقييم قريباً..."
     }
   }
 }
