@@ -198,7 +198,6 @@
 <script lang="ts" setup>
 import router from '@/router';
 import { ref, watch } from 'vue';
-import debounce from 'lodash/debounce';
 import { useAssessmentStore } from '@/stores/assessmentstores';
 import { useI18n } from 'vue-i18n';
 
@@ -261,7 +260,14 @@ function getStatusClasses(status: string): string {
 // Handle input change
 function handleSearch(event: Event) {
   const target = event.target as HTMLInputElement;
-  debouncedFetchAssessments(target.value);
+  const query = target.value;
+  holdQuery.value = query;
+  if (query) {
+    emits('updatePageSearch', pageEdit.value, query, filterEdit.value);
+  } else {
+    // Clear search when query is empty
+    emits('updatePage', 1, filterEdit.value);
+  }
 }
 
 const pageEdit = ref(props.page);
@@ -282,14 +288,6 @@ watch(
     filterEdit.value = newfilter;
   }
 );
-
-// Debounced function to fetch relevant assessments
-const debouncedFetchAssessments = debounce((query: string) => {
-  holdQuery.value = query;
-  if (query) {
-    emits('updatePageSearch', pageEdit.value, query, filterEdit.value);
-  }
-}, 500);
 
 function updateFilter(value: string) {
   if (holdQuery.value) {
