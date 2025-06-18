@@ -264,10 +264,7 @@ export const useAssessmentStore = defineStore('Assessment', () => {
     // Remove duplicates
     const uniqueTemplateIds = [...new Set(templateIds)];
     
-    console.log('Template IDs to fetch:', uniqueTemplateIds);
-    
     if (uniqueTemplateIds.length === 0) {
-      console.log('No template IDs to fetch');
       return;
     }
 
@@ -279,13 +276,10 @@ export const useAssessmentStore = defineStore('Assessment', () => {
 
       if (error) throw error;
 
-      console.log('Fetched template data:', data);
-
       if (data) {
         // Store template data in reactive ref
         data.forEach(template => {
           templateData.value[String(template.id)] = template;
-          console.log(`Stored template ${template.id}:`, template);
         });
       }
     } catch (error: any) {

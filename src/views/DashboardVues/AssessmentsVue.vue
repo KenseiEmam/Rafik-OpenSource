@@ -77,18 +77,39 @@ const filteredAssessments = computed(() => {
   // Apply search filter
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase();
+    
     filtered = filtered.filter(assessment => {
       // Search by template name
-      const templateName = assessment.template_data?.template_name?.toLowerCase() || '';
-      if (templateName.includes(query)) return true;
+      const templateData = assessment.template ? assessmentStore.templateData[assessment.template] : null;
+      const templateName = templateData?.template_name?.toLowerCase() || '';
+      if (templateName.includes(query)) {
+        return true;
+      }
 
       // Search by trainee names
-      if (assessment.trainees) {
+      const traineesData = assessmentStore.trainees;
+      if (assessment.trainees && traineesData) {
         for (const traineeId of assessment.trainees) {
-          const trainee = assessmentStore.trainees.value[traineeId];
+          const trainee = traineesData[traineeId];
           if (trainee) {
             const traineeName = `${trainee.first_name || ''} ${trainee.last_name || ''}`.toLowerCase();
-            if (traineeName.includes(query)) return true;
+            if (traineeName.includes(query)) {
+              return true;
+            }
+          }
+        }
+      }
+
+      // Search by assessor names
+      const assessorsData = assessmentStore.assessors;
+      if (assessment.assessors && assessorsData) {
+        for (const assessorId of assessment.assessors) {
+          const assessor = assessorsData[assessorId];
+          if (assessor) {
+            const assessorName = `${assessor.first_name || ''} ${assessor.last_name || ''}`.toLowerCase();
+            if (assessorName.includes(query)) {
+              return true;
+            }
           }
         }
       }
