@@ -262,7 +262,8 @@
       "support": "Support",
       "myProfile": "My Profile",
       "logout": "Logout",
-      "assessmentTemplates": "Assessment Templates"
+      "assessmentTemplates": "Assessment Templates",
+      "calendar":"Events Calendar"
     },
     "home": {
       "welcomeBack": "Welcome Back",
@@ -1524,6 +1525,10 @@
         "deleteError": "Error deleting template",
         "saveError": "Error saving template"
       }
+    },
+    "calendar":{
+      "header":"My Events",
+      "subheader":"Calendar"
     }
   }
 }
