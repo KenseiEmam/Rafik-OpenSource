@@ -53,16 +53,15 @@
       </button>
     </div>
 
-    <ul v-if="props.assessments?.length > 0" class="grid grid-cols-3 grid-rows-3 gap-6 items-center">
-      <!--  
-        When ready add the link to the router-link
+    <ul
+      v-if="props.assessments?.length > 0"
+      class="grid grid-cols-3 grid-rows-3 gap-6 items-center"
+    >
+      <router-link
         :to="{
           name: 'assessment-details',
           params: { id: assessment.id }
-        }" 
-        -->
-        <router-link
-       
+        }"
         v-for="(assessment, index) in props.assessments"
         :key="assessment.id"
         class="h-full text-rafik-sectext dark:text-rafik-darksectext"
@@ -74,19 +73,29 @@
           <div class="flex items-center justify-between gap-4 mb-4">
             <div class="flex items-center gap-3">
               <img
-                :src="assessmentStore.trainees[assessment.trainees?.[0]]?.avatar || '/user-placeholder.jpg'"
+                :src="
+                  assessmentStore.trainees[assessment.trainees?.[0]]?.avatar ||
+                  '/user-placeholder.jpg'
+                "
                 alt="Trainee Avatar"
-                class="w-12 h-12 rounded-full border-2 border-rafik object-cover"
+                class="w-14 h-14 rounded-full border-2 border-rafik object-cover"
               />
               <div>
-                <h3 class="title-small text-base 2xl:text-lg">
-                  {{ assessmentStore.trainees[assessment.trainees?.[0]] ? 
-                      `${assessmentStore.trainees[assessment.trainees?.[0]].first_name || ''} ${assessmentStore.trainees[assessment.trainees?.[0]].last_name || ''}`.trim() || 'Unknown Trainee' 
-                      : 'Loading...' }}
-                </h3>
+                <p class="header-small">
+                  {{
+                    assessmentStore.trainees[assessment.trainees?.[0]]
+                      ? `${assessmentStore.trainees[assessment.trainees?.[0]].first_name || ''} ${assessmentStore.trainees[assessment.trainees?.[0]].last_name || ''}`.trim() ||
+                        'Unknown Trainee'
+                      : 'Loading...'
+                  }}
+                </p>
+                <p>{{ assessmentStore.trainees[assessment.trainees?.[0]]?.email || '' }}</p>
               </div>
             </div>
-            <p v-if="assessment.trainees && assessment.trainees.length > 1" class="label text-rafik-secondary text-xs">
+            <p
+              v-if="assessment.trainees && assessment.trainees.length > 1"
+              class="label text-rafik-secondary text-sm"
+            >
               +{{ assessment.trainees.length - 1 }} more
             </p>
           </div>
@@ -94,17 +103,21 @@
           <!-- Middle Section: Assessment Template Name and Date -->
           <div class="flex-1 mb-4">
             <h2 class="title-small text-base 2xl:text-xl mb-2">
-              {{ assessment.template && assessmentStore.templateData[assessment.template] ? 
-                  (assessmentStore.templateData[assessment.template].template_name || assessmentStore.templateData[assessment.template].name || 'Untitled Assessment') 
-                  : 'Loading...' }}
+              {{
+                assessment.template && assessmentStore.templateData[assessment.template]
+                  ? assessmentStore.templateData[assessment.template].template_name ||
+                    assessmentStore.templateData[assessment.template].name ||
+                    'Untitled Assessment'
+                  : 'Loading...'
+              }}
             </h2>
             <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
               {{ formatDate(assessment.created_at) }}
             </p>
-            
+
             <!-- Status Badge -->
             <div class="mt-3">
-              <span 
+              <span
                 class="px-3 py-1 text-xs rounded-full font-semibold uppercase"
                 :class="getStatusClasses(assessment.status)"
               >
@@ -127,9 +140,12 @@
                   class="label text-rafik-secondary hover:text-rafik-pritext dark:hover:text-rafik-darkpritext transition-colors"
                   @click.stop
                 >
-                  {{ assessmentStore.assessors[assessorId] ? 
-                      `${assessmentStore.assessors[assessorId].first_name || ''} ${assessmentStore.assessors[assessorId].last_name || ''}`.trim() || 'Unknown Assessor' 
-                      : 'Loading...' }}{{ index < assessment.assessors.length - 1 ? ',' : '' }}
+                  {{
+                    assessmentStore.assessors[assessorId]
+                      ? `${assessmentStore.assessors[assessorId].first_name || ''} ${assessmentStore.assessors[assessorId].last_name || ''}`.trim() ||
+                        'Unknown Assessor'
+                      : 'Loading...'
+                  }}{{ index < assessment.assessors.length - 1 ? ',' : '' }}
                 </router-link>
               </template>
               <span v-else class="label text-rafik-sectext dark:text-rafik-darksectext">
@@ -140,7 +156,7 @@
         </div>
       </router-link>
     </ul>
-    
+
     <div v-else class="space-y-6 flex flex-col items-center py-12">
       <p class="text-rafik-pritext dark:text-rafik-darkpritext">
         {{ t('dashboard.assessments.list.noAssessmentsFound') }}
@@ -183,7 +199,10 @@
     </div>
 
     <!-- Add Assessment Modal (placeholder for now) -->
-    <div v-if="showAddAssessmentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div
+      v-if="showAddAssessmentModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    >
       <div class="card p-8 max-w-md w-full mx-4">
         <h3 class="title-small mb-4">{{ t('dashboard.assessments.list.createAssessment') }}</h3>
         <p class="text-body mb-6">{{ t('dashboard.assessments.list.modalComingSoon') }}</p>
@@ -316,4 +335,4 @@ function updatePage(page: number) {
 .card:hover {
   background-image: linear-gradient(135deg, #f3eeeb 36%, #fff2cb);
 }
-</style> 
+</style>

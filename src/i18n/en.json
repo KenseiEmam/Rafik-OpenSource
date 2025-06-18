@@ -1553,6 +1553,13 @@
         "pageLabel": "Page:",
         "previousPage": "Previous Page",
         "nextPage": "Next Page"
+      },
+      "details": {
+        "pageTitle": {
+          "header": "Assessment Details",
+          "subheader": "View assessment information and results"
+        },
+        "comingSoon": "Assessment details page coming soon..."
       }
     }
   }
