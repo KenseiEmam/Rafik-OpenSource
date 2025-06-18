@@ -248,6 +248,12 @@ const router = createRouter({
             }
           ]
         },
+            {
+      path: '/Calendar',
+      name:"events-calendar",
+       meta: { requiresAuth: true },
+      component: () => import('../views//DashboardVues/Calendar/Calendar.vue')
+    },
         {
           path: 'assessment-templates', // Child route for /dashboard/assessment-templates
           meta: { requiresAuth: true },
