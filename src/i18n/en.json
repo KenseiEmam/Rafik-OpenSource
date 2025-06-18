@@ -261,7 +261,8 @@
       "settingsPreferences": "Settings &<br />Preferences",
       "support": "Support",
       "myProfile": "My Profile",
-      "logout": "Logout"
+      "logout": "Logout",
+      "assessmentTemplates": "Assessment Templates"
     },
     "home": {
       "welcomeBack": "Welcome Back",
@@ -788,6 +789,25 @@
           "overallRating": "Overall Rating of",
           "basedOnTotal": "Based on a total of {count} review | Based on a total of {count} reviews.",
           "noReviews": "No Reviews just yet!"
+        },
+        "template": {
+          "name": "Template Name",
+          "namePlaceholder": "Enter template name",
+          "description": "Description",
+          "descriptionPlaceholder": "Enter template description",
+          "control": "Control",
+          "selectControl": "Select control type",
+          "primary": "Primary",
+          "selectPrimary": "Select primary type",
+          "rounds": "Rounds",
+          "roundsPlaceholder": "Enter number of rounds",
+          "controlValue": "Control Value",
+          "controlValuePlaceholder": "Enter control value",
+          "createTemplate": "Create Template",
+          "editTemplate": "Edit Template",
+          "create": "Create",
+          "save": "Save",
+          "cancel": "Cancel"
         }
       },
       "clients": {
@@ -1104,7 +1124,7 @@
         "entitlements": "Entitlements",
         "loading": "Loading...",
         "whatAreEntitlements": "What Are Entitlements?",
-        "entitlementsDescription": "Entitlements are trainer-purchased subscriptions that can be assigned to trainees, allowing trainers to charge their own rates for their services. Each entitlement lasts for one month, after which a new one must be assigned for continued training access. To streamline the process, trainers can add clients to the auto-update queue below. This ensures that when a trainee’s subscription expires, a new entitlement is automatically assigned, preventing any interruptions in their training.",
+        "entitlementsDescription": "Entitlements are trainer-purchased subscriptions that can be assigned to trainees, allowing trainers to charge their own rates for their services. Each entitlement lasts for one month, after which a new one must be assigned for continued training access. To streamline the process, trainers can add clients to the auto-update queue below. This ensures that when a trainee's subscription expires, a new entitlement is automatically assigned, preventing any interruptions in their training.",
         "youCurrentlyHave": "You currently have:",
         "avlEntitlements": "Avl. Entitlements",
         "purchaseMore": "Purchase More",
@@ -1470,6 +1490,40 @@
       "orgUpdateFail": "Failed to update organization: {error}",
       "orgLogoUploadSuccess": "Logo uploaded successfully!",
       "orgLogoUploadFail": "Error uploading logo: {error}"
+    },
+    "assessmentTemplates": {
+      "pageTitle": "Assessment",
+      "subheader": "Templates",
+      "searchPlaceholder": "Search templates...",
+      "list": {
+        "pageTitle": {
+          "header": "Templates",
+          "subheader": "Assessment"
+        },
+        "searchPlaceholder": "Search templates...",
+        "createNew": "Create New",
+        "table": {
+          "name": "Name",
+          "description": "Description",
+          "control": "Control",
+          "primary": "Primary",
+          "createdAt": "Created At",
+          "actions": "Actions",
+          "edit": "Edit",
+          "delete": "Delete"
+        },
+        "actions": {
+          "edit": "Edit",
+          "delete": "Delete"
+        },
+        "deleteConfirm": {
+          "title": "Delete Template",
+          "text": "Are you sure you want to delete this template? This action cannot be undone."
+        },
+        "deleteSuccess": "Template deleted successfully",
+        "deleteError": "Error deleting template",
+        "saveError": "Error saving template"
+      }
     }
   }
 }
