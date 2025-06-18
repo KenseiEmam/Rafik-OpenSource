@@ -38,7 +38,7 @@
           </div>
         </div>
 
-        <!-- Control and Primary Fields -->
+        <!-- Control and Primary Fields
         <div class="grid grid-cols-3 gap-6">
           <div class="col-span-2 space-y-4">
             <div>
@@ -123,7 +123,7 @@
               />
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- Action Buttons -->
         <div class="flex justify-end gap-4 mt-8">
@@ -169,25 +169,17 @@ const emit = defineEmits(['close', 'submit']);
 const template = ref({
   name: '',
   description: '',
-  control: undefined,
-  primary: undefined,
-  rounds: 0,
-  controlValue: 0
 });
 
 const resetForm = () => {
   template.value = {
     name: '',
     description: '',
-    control: undefined,
-    primary: undefined,
-    rounds: 0,
-    controlValue: 0
   };
 };
 
 const handleSubmit = () => {
-  if (!template.value.name || !template.value.description || !template.value.control || !template.value.primary) {
+  if (!template.value.name || !template.value.description ) {
     return;
   }
 
@@ -201,11 +193,11 @@ const handleClose = () => {
 };
 
 // Watch for changes in the initialData prop
-watch(() => props.templateData, (newData) => {
+watch(() => props.templateData, (newData:any) => {
   if (newData) {
     template.value = { ...newData };
   } else {
     resetForm();
   }
 }, { immediate: true });
-</script> 
+</script>
