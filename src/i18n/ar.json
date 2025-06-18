@@ -260,6 +260,8 @@
       "support": "الدعم",
       "myProfile": "ملفي الشخصي",
       "logout": "تسجيل الخروج",
+      "assessmentTemplates": "قوالب التقييم",
+      "myAssessments": "تقييماتي<br />",
       "calendar":"جدول فعالياتي"
     },
     "home": {
@@ -1505,7 +1507,31 @@
     
   },
   "calendar": {
-  "header": "جدول ",
-  "subheader": "فعالياتي"
-}
+    "header": "فعالياتي",
+    "subheader": "التقويم"
+  },
+  "assessments": {
+    "pageTitle": {
+      "subheader": "تقييماتي",
+      "header": "التقييمات"
+    },
+    "loading": "جار تحميل التقييمات...",
+    "list": {
+      "typeToSearchAssessments": "ابحث في التقييمات...",
+      "allAssessments": "الكل",
+      "scheduled": "مجدول",
+      "active": "نشط",
+      "completed": "مكتمل",
+      "canceled": "ملغي",
+      "createAssessment": "إنشاء تقييم",
+      "modalComingSoon": "إنشاء التقييم قريباً.",
+      "close": "إغلاق",
+      "noAssessmentsFound": "لا توجد تقييمات.",
+      "assessors": "المقيمون",
+      "noAssessors": "لا يوجد مقيمون",
+      "pageLabel": "صفحة:",
+      "previousPage": "الصفحة السابقة",
+      "nextPage": "الصفحة التالية"
+    }
+  }
 }
