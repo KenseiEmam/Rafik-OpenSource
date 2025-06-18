@@ -87,7 +87,7 @@
       <RouterLink
         :to="{ name: 'assessment-templates-list' }"
         class="nav-btn"
-        v-if="userStore.userProfile?.roles.includes('Trainer') ||
+        v-if="userStore.userProfile?.roles.includes('Organization Admin') ||
           userStore.userProfile?.roles.includes('Organization Trnr')"
       >
         <span v-html="t('dashboard.sidebar.assessmentTemplates')" />

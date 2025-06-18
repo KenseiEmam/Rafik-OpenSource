@@ -250,12 +250,16 @@ const router = createRouter({
         },
         {
           path: 'assessment-templates', // Child route for /dashboard/assessment-templates
-          meta: { requiresAnyTrainer: true },
+          meta: { requiresAuth: true },
           children: [
             {
               path: '', // Default child route for /dashboard/assessment-templates
               name: 'assessment-templates-list',
               component: () => import('../views/DashboardVues/AssessmentTemplates/ListingVue.vue')
+            } ,{
+              path: ':id', // Dynamic route for exercise details
+              name: 'assessment-template',
+               component: () => import('../views/DashboardVues/AssessmentTemplates/TemplateEdit.vue')
             }
           ]
         }
