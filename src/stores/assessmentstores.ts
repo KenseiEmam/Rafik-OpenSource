@@ -64,6 +64,9 @@ export const useAssessmentStore = defineStore('Assessment', () => {
   // New refs for trainees and assessors
   const trainees = ref<{ [id: string]: UserDetails }>({});
   const assessors = ref<{ [id: string]: UserDetails }>({});
+  
+  // New ref for template data
+  const templateData = ref<{ [id: string]: any }>({});
 
   async function getAssessment(id: number) {
     try {
@@ -253,7 +256,7 @@ export const useAssessmentStore = defineStore('Assessment', () => {
 
     // Collect all unique template IDs
     assessments.forEach(assessment => {
-      if (assessment.template && !assessment.template_data) {
+      if (assessment.template && !templateData.value[assessment.template]) {
         templateIds.push(assessment.template);
       }
     });
@@ -279,17 +282,10 @@ export const useAssessmentStore = defineStore('Assessment', () => {
       console.log('Fetched template data:', data);
 
       if (data) {
-        // Create a map for quick lookup - convert IDs to strings for consistent comparison
-        const templateMap = new Map(data.map(template => [String(template.id), template]));
-        
-        // Update all assessments with their template data
-        assessments.forEach(assessment => {
-          if (assessment.template && templateMap.has(String(assessment.template))) {
-            assessment.template_data = templateMap.get(String(assessment.template));
-            console.log(`Updated assessment ${assessment.id} with template:`, assessment.template_data);
-          } else if (assessment.template) {
-            console.log(`Template not found for assessment ${assessment.id}, template ID: ${assessment.template}`);
-          }
+        // Store template data in reactive ref
+        data.forEach(template => {
+          templateData.value[String(template.id)] = template;
+          console.log(`Stored template ${template.id}:`, template);
         });
       }
     } catch (error: any) {
@@ -302,6 +298,7 @@ export const useAssessmentStore = defineStore('Assessment', () => {
     AllAssessments, 
     trainees,
     assessors,
+    templateData,
     getAssessment, 
     getAllAssessments,
     // DO NOT USE THESE FUNCTIONS BELOW UNLESS NEEDED. THEY ARE MADE FOR INTERNAL USE.
