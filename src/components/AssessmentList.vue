@@ -71,7 +71,7 @@
           class="card p-6 w-full hover:border-rafik border border-transparent flex flex-col h-full"
         >
           <!-- Top Section: Trainee Details -->
-          <div class="flex items-center gap-4 mb-4">
+          <div class="flex items-center justify-between gap-4 mb-4">
             <div class="flex items-center gap-3">
               <img
                 :src="assessmentStore.trainees[assessment.trainees?.[0]]?.avatar || '/user-placeholder.jpg'"
@@ -84,11 +84,11 @@
                       `${assessmentStore.trainees[assessment.trainees?.[0]].first_name || ''} ${assessmentStore.trainees[assessment.trainees?.[0]].last_name || ''}`.trim() || 'Unknown Trainee' 
                       : 'Loading...' }}
                 </h3>
-                <p v-if="assessment.trainees && assessment.trainees.length > 1" class="label text-rafik-secondary text-xs">
-                  +{{ assessment.trainees.length - 1 }} more
-                </p>
               </div>
             </div>
+            <p v-if="assessment.trainees && assessment.trainees.length > 1" class="label text-rafik-secondary text-xs">
+              +{{ assessment.trainees.length - 1 }} more
+            </p>
           </div>
 
           <!-- Middle Section: Assessment Template Name and Date -->
