@@ -261,7 +261,12 @@ export const useAssessmentStore = defineStore('Assessment', () => {
     // Remove duplicates
     const uniqueTemplateIds = [...new Set(templateIds)];
     
-    if (uniqueTemplateIds.length === 0) return;
+    console.log('Template IDs to fetch:', uniqueTemplateIds);
+    
+    if (uniqueTemplateIds.length === 0) {
+      console.log('No template IDs to fetch');
+      return;
+    }
 
     try {
       const { data, error } = await supabase
@@ -271,14 +276,19 @@ export const useAssessmentStore = defineStore('Assessment', () => {
 
       if (error) throw error;
 
+      console.log('Fetched template data:', data);
+
       if (data) {
-        // Create a map for quick lookup
-        const templateMap = new Map(data.map(template => [template.id, template]));
+        // Create a map for quick lookup - convert IDs to strings for consistent comparison
+        const templateMap = new Map(data.map(template => [String(template.id), template]));
         
         // Update all assessments with their template data
         assessments.forEach(assessment => {
-          if (assessment.template && templateMap.has(assessment.template)) {
-            assessment.template_data = templateMap.get(assessment.template);
+          if (assessment.template && templateMap.has(String(assessment.template))) {
+            assessment.template_data = templateMap.get(String(assessment.template));
+            console.log(`Updated assessment ${assessment.id} with template:`, assessment.template_data);
+          } else if (assessment.template) {
+            console.log(`Template not found for assessment ${assessment.id}, template ID: ${assessment.template}`);
           }
         });
       }

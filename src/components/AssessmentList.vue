@@ -94,7 +94,9 @@
           <!-- Middle Section: Assessment Template Name and Date -->
           <div class="flex-1 mb-4">
             <h2 class="title-small text-base 2xl:text-xl mb-2">
-              {{ assessment.template_data?.template_name || 'Untitled Assessment' }}
+              {{ assessment.template_data ? 
+                  (assessment.template_data.template_name || assessment.template_data.name || 'Untitled Assessment') 
+                  : 'Loading...' }}
             </h2>
             <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
               {{ formatDate(assessment.created_at) }}
