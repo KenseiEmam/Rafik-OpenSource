@@ -247,6 +247,17 @@ const router = createRouter({
               component: () => import('../views/DashboardVues/Exercises/PublicDetail.vue')
             }
           ]
+        },
+        {
+          path: 'assessment-templates', // Child route for /dashboard/assessment-templates
+          meta: { requiresAnyTrainer: true },
+          children: [
+            {
+              path: '', // Default child route for /dashboard/assessment-templates
+              name: 'assessment-templates-list',
+              component: () => import('../views/DashboardVues/AssessmentTemplates/ListingVue.vue')
+            }
+          ]
         }
       ]
     },
