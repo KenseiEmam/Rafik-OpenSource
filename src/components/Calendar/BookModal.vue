@@ -56,14 +56,15 @@
             >
               <option disabled selected value="">Select event type</option>
               <option value="meeting">Meeting</option>
-              <option value="assessment" disabled>Assessment</option>
+              <option value="assessment" >Assessment</option>
               <option value="game">Team Game</option>
               <option value="away">Away</option>
               <option value="other">Other</option>
             </select>
           </div>
-          <div v-if="template.type !== 'assessment'">
-           <label class="block text-sm font-medium mb-2">
+          <div v-if=" template.type !== 'assessment' && userStore.userProfile?.roles">
+            <div v-if="userStore.userProfile?.roles.includes('Organization Admin')">
+              <label class="block text-sm font-medium mb-2">
             Assign Users
           </label>
             <MultiSelect v-if="availableUsers.length > 0"
@@ -72,9 +73,92 @@
               :dark="darkness === 'true'"
               searchable
             />
+            </div>
+            <div v-else class="flex items-center gap-3">
+              <span class="bg-rafik animate-pulse w-4 h-4 rounded-full content"></span>
+              <p class="text-body">Self Assigning this schedule</p>
+            </div>
+
+          </div>
+          <div v-else class="space-y-4">
+
+            <div class="relative ">
+           <!-- Trainer Selection -->
+              <div class="w-full">
+                <label
+                  class="block text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext mb-1"
+                >
+                  {{ t('dashboard.auditPrograms.list.selectTrainer.label') }}
+                </label>
+                <div class="relative">
+                  <!-- Search Input -->
+                  <input
+                    type="search"
+                    v-model="searchQuery"
+                    @focus="dropdownVisible = true"
+                    @input="fetchFilteredTrainers"
+                    @blur="handleBlur"
+                    class="w-full p-3 border rounded-md bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext focus:outline-none"
+                    :placeholder="t('dashboard.auditPrograms.list.selectTrainer.placeholder')"
+                  />
+                  <!-- Dropdown -->
+                  <div
+                    v-if="dropdownVisible && trainerOptions.length"
+                    class="absolute z-10 mt-1 w-full bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext max-h-60 overflow-auto"
+                  >
+                    <div
+                      v-for="trainer in trainerOptions"
+                      :key="trainer.id"
+                      @click="selectOption(trainer)"
+                      class="p-3 hover:bg-rafik-secondary hover:text-rafik-pritext cursor-pointer"
+                    >
+                      {{ (trainer.first_name || 'no') + ' '+ (trainer.last_name || 'name')  }}
+                      <span class="text-xs opacity-50"> {{ trainer.email }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="relative ">
+           <!-- Trainer Selection -->
+              <div class="w-full">
+                <label
+                  class="block text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext mb-1"
+                >
+                  Select Trainee
+                </label>
+                <div class="relative">
+                  <!-- Search Input -->
+                  <input
+                    type="search"
+                    v-model="searchQuery2"
+                    @focus="dropdownVisible2 = true"
+                    @input="fetchFilteredTrainees"
+                    @blur="handleTraineeBlur"
+                    class="w-full p-3 border rounded-md bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext focus:outline-none"
+                    placeholder="Select Trainee"
+                  />
+                  <!-- Dropdown -->
+                  <div
+                    v-if="dropdownVisible2 && traineeOptions.length"
+                    class="absolute z-10 mt-1 w-full bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext max-h-60 overflow-auto"
+                  >
+                    <div
+                      v-for="trainee in traineeOptions"
+                      :key="trainee.id"
+                      @click="selectTraineeOption(trainee)"
+                      class="p-3 hover:bg-rafik-secondary hover:text-rafik-pritext cursor-pointer"
+                    >
+                      {{ (trainee.first_name || 'no') + ' '+ (trainee.last_name || 'name')  }}
+                      <span class="text-xs opacity-50"> {{ trainee.email }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
           </div>
         </div>
-     <p v-if="(template.time_end <= template.time_start) && template.time_end !== new Date()" class="text-red-500 ">
+     <p v-if="(template.time_end <= template.time_start) && showendDate" class="text-red-500 ">
   End time cannot be before or equal to start time!
 </p>
 
@@ -101,13 +185,28 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch , onMounted } from 'vue';
+import { ref, watch , onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useUserStore } from '@/stores/user';
 const startTime = ref({ hours: 0, minutes: 0 });
-const { t } = useI18n();
+const searchQuery = ref('');
+const searchQuery2 = ref('');
+const dropdownVisible = ref(false);
+const dropdownVisible2 = ref(false);
+const { t, locale } = useI18n();
+const loading = ref(true);
 const darkness = localStorage.getItem('dark_mode');
 const userStore = useUserStore()
+const traineeOptions = ref<any[]>([]);
+const trainerOptions = ref<any[]>([]);
+const assessment = ref({
+  assessors:[],
+  slot:null,
+  trainees:[],
+  status:'scheduled',
+  template:null,
+  organization:null
+})
 import { supabase } from '@/lib/supabaseClient';
 
 import 'vue-multiselect/dist/vue-multiselect.css';
@@ -116,7 +215,125 @@ interface Option {
   id: string | number;
   name: string;
 }
+
 const availableUsers = ref<{ id: number; name: string }[]>([]);
+// The selected trainer (if needed for your filters)
+const selectedTrainer = ref(null);
+const selectedTrainee = ref(null);
+const isOrg = !!localStorage.getItem('OrgID');
+
+// Set the selected trainer and hide dropdown
+function selectOption(option: any) {
+  selectedTrainer.value = option;
+  searchQuery.value = `${option.first_name} ${option.last_name}`  ;
+  dropdownVisible.value = false;
+
+  assessment.value.assessors.push = option.id;
+
+}
+// Set the selected trainer and hide dropdown
+function selectTraineeOption(option: any) {
+  selectedTrainee.value = option;
+  searchQuery2.value = `${option.first_name} ${option.last_name}`  ;
+  dropdownVisible2.value = false;
+
+  assessment.value.trainees.push = option.id;
+
+}
+// Optional: Hide the dropdown if clicking outside
+document.addEventListener('click', (e: any) => {
+  const el = document.querySelector('.relative');
+  if (el && !el.contains(e.target)) {
+    dropdownVisible.value = false;
+  }
+});
+// Optional: Hide the dropdown if clicking outside
+document.addEventListener('click', (e: any) => {
+  const el = document.querySelector('.relative');
+  if (el && !el.contains(e.target)) {
+    dropdownVisible2.value = false;
+  }
+});
+async function fetchFilteredTrainers() {
+  dropdownVisible.value = true;
+  if (!searchQuery.value) {
+    trainerOptions.value = [];
+    return;
+  }
+ const orgId = userStore.userProfile?.organization;
+
+  if (orgId) {
+  const { data, error } = await supabase
+    .from('users')
+    .select('id, first_name, last_name, email')
+    .eq('organization', orgId)
+    .contains('roles', ['Organization Trnr'])
+    .or(
+      `first_name.ilike.%${searchQuery.value}%, last_name.ilike.%${searchQuery.value}%, email.ilike.%${searchQuery.value}%`
+    );
+
+  if (error) {
+    console.error('Error fetching trainers:', error.message);
+    return;
+  }
+
+  trainerOptions.value = data;
+}
+}
+async function fetchFilteredTrainees() {
+  dropdownVisible2.value = true;
+  if (!searchQuery2.value) {
+    traineeOptions.value = [];
+    return;
+  }
+ const orgId = userStore.userProfile?.organization;
+
+  if (orgId) {
+  const { data, error } = await supabase
+    .from('users')
+    .select('id, first_name, last_name, email')
+    .eq('organization', orgId)
+    .contains('roles', ['Organization Trnee'])
+    .or(
+      `first_name.ilike.%${searchQuery2.value}%, last_name.ilike.%${searchQuery2.value}%, email.ilike.%${searchQuery2.value}%`
+    );
+
+  if (error) {
+    console.error('Error fetching trainees:', error.message);
+    return;
+  }
+
+  traineeOptions.value = data;
+}
+}
+// Reset filter when search input is cleared (native clear button)
+watch(searchQuery, (newValue) => {
+  if (!newValue) resetFilter();
+});
+
+watch(searchQuery2, (newValue) => {
+  if (!newValue) resetTraineeFilter();
+});
+function resetFilter() {
+  assessment.value.assessors = [];
+  trainerOptions.value = [];
+  dropdownVisible.value = false;
+}
+function resetTraineeFilter() {
+  assessment.value.trainees = [];
+  traineeOptions.value = [];
+  dropdownVisible2.value = false;
+}
+function handleBlur() {
+  setTimeout(() => {
+    dropdownVisible.value = false;
+  }, 200);
+}
+function handleTraineeBlur() {
+  setTimeout(() => {
+    dropdownVisible2.value = false;
+  }, 200);
+}
 onMounted(async () => {
   const orgId = userStore.userProfile?.organization;
 
