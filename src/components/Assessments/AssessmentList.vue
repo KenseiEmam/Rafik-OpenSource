@@ -48,14 +48,14 @@
           {{ t('dashboard.assessments.list.canceled') }}
         </button>
       </div>
-      <button @click="showAddAssessmentModal = true" class="min-w-max btn-sm-outline">
+      <button @click="showAddAssessmentModal = true" class="min-w-max btn-md-outline">
         {{ t('dashboard.assessments.list.createAssessment') }}
       </button>
     </div>
 
     <ul
       v-if="props.assessments?.length > 0"
-      class="grid grid-cols-3 grid-rows-3 gap-6 items-center"
+      class="grid grid-cols-3 grid-rows-3 gap-6 items-center flex-1 h-full"
     >
       <router-link
         :to="{
@@ -67,18 +67,18 @@
         class="h-full text-rafik-sectext dark:text-rafik-darksectext"
       >
         <div
-          class="card p-6 w-full hover:border-rafik border border-transparent flex flex-col h-full"
+          class="card px-10 p-6 w-full hover:border-rafik border border-transparent flex flex-col h-full"
         >
           <!-- Top Section: Trainee Details -->
-          <div class="flex items-center justify-between gap-4 mb-4">
-            <div class="flex items-center gap-3">
+          <div v-if="assessment.trainees" class="flex items-center border-b-2 py-4 border-rafik-pribg dark:border-rafik-darkpribg justify-between gap-4 mb-4">
+            <div class="flex items-center gap-3 ">
               <img
                 :src="
                   assessmentStore.trainees[assessment.trainees?.[0]]?.avatar ||
                   '/user-placeholder.jpg'
                 "
                 alt="Trainee Avatar"
-                class="w-14 h-14 rounded-full border-2 border-rafik object-cover"
+                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-rafik object-cover"
               />
               <div>
                 <p class="header-small">
@@ -89,18 +89,7 @@
                       : 'Loading...'
                   }}
                 </p>
-                <p>{{ assessmentStore.trainees[assessment.trainees?.[0]]?.email || '' }}</p>
-              </div>
-            </div>
-            <p
-              v-if="assessment.trainees && assessment.trainees.length > 1"
-              class="label text-rafik-secondary text-sm"
-            >
-              +{{ assessment.trainees.length - 1 }} more
-            </p>
-          </div>
-
-          <!-- Middle Section: Assessment Template Name and Date -->
+               <!-- Middle Section: Assessment Template Name and Date -->
           <div class="flex-1 mb-4">
             <h2 class="title-small text-base 2xl:text-xl mb-2">
               {{
@@ -114,11 +103,14 @@
             <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
               {{ formatDate(assessment.created_at) }}
             </p>
+              </div>
+            </div>
 
+          </div>
             <!-- Status Badge -->
             <div class="mt-3">
               <span
-                class="px-3 py-1 text-xs rounded-full font-semibold uppercase"
+                class="px-3 py-1 rounded-full font-semibold uppercase"
                 :class="getStatusClasses(assessment.status)"
               >
                 {{ assessment.status }}
@@ -127,8 +119,8 @@
           </div>
 
           <!-- Bottom Section: Assessors -->
-          <div class="mt-auto">
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext mb-2">
+          <div class="mt-auto ">
+            <p class="label text-rafik-pritext dark:text-rafik-darkpritext mb-2 py-2">
               {{ t('dashboard.assessments.list.assessors') }}
             </p>
             <div class="flex flex-wrap gap-1">
@@ -137,7 +129,7 @@
                   v-for="(assessorId, index) in assessment.assessors"
                   :key="assessorId"
                   :to="{ name: 'single-user', params: { id: assessorId } }"
-                  class="label text-rafik-secondary hover:text-rafik-pritext dark:hover:text-rafik-darkpritext transition-colors"
+                  class="label text-rafik-secondary card bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext transition-colors"
                   @click.stop
                 >
                   {{
@@ -145,7 +137,7 @@
                       ? `${assessmentStore.assessors[assessorId].first_name || ''} ${assessmentStore.assessors[assessorId].last_name || ''}`.trim() ||
                         'Unknown Assessor'
                       : 'Loading...'
-                  }}{{ index < assessment.assessors.length - 1 ? ',' : '' }}
+                  }}
                 </router-link>
               </template>
               <span v-else class="label text-rafik-sectext dark:text-rafik-darksectext">
@@ -252,14 +244,17 @@ const props = defineProps<{
 
 const emits = defineEmits(['updatePage', 'updatePageSearch']);
 
-// Helper functions
 function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString('en-GB', {
+  return new Date(dateString).toLocaleString('en-GB', {
     day: '2-digit',
     month: 'short',
-    year: 'numeric'
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
   });
 }
+
 
 function getStatusClasses(status: string): string {
   switch (status.toLowerCase()) {
@@ -329,10 +324,5 @@ function updatePage(page: number) {
 </script>
 
 <style scoped>
-.dark .card:hover {
-  background-image: linear-gradient(135deg, #081411 36%, #295f42);
-}
-.card:hover {
-  background-image: linear-gradient(135deg, #f3eeeb 36%, #fff2cb);
-}
+
 </style>
