@@ -13,12 +13,35 @@ import type { EventInput } from '@fullcalendar/core';
 const calendarEvents = ref<EventInput[]>([]);
 
 function slotsToEvents(slots: any[]): EventInput[] {
-  return slots.map(slot => ({
+  return slots.map(slot => {
+    let bgc = ''
+    switch(slot.type)
+    {
+      case 'meeting':
+      bgc='#CB901C'
+      break;
+      case 'assessment':
+      bgc='#2EBE71'
+      break;
+      case 'game':
+      bgc='#B02DEF'
+      break;
+      case 'away':
+      bgc='#FF0000'
+      break;
+      default:
+        bgc= '#081411'
+    }
+    return  {
     id: String(slot.id),
     title: slot.type,
     start: slot.time_start,
     end: slot.time_end,
-  }));
+    backgroundColor:bgc,
+    display:'block'
+  }
+  }
+   );
 }
 
 // Load slots and update calendar events
@@ -33,6 +56,11 @@ const calendarOptions = ref<CalendarOptions>({
   initialView: 'dayGridMonth',
   height: '100%',
   events: calendarEvents.value,
+  headerToolbar: {
+    left: 'prev,next',
+    center: 'title',
+    right: 'dayGridWeek,dayGridDay,dayGridMonth' // user can switch between the two
+  },
   dateClick: handleDateClick,
 });
 
@@ -133,7 +161,7 @@ watch(calendarEvents, (newEvents) => {
 
 /* Events */
 :deep(.fc-event) {
-  @apply bg-rafik text-rafik-pribg rounded px-2 py-0.5 font-semibold cursor-pointer;
+  @apply text-rafik-pribg rounded px-2 py-0.5 font-semibold cursor-pointer;
   border: none !important;
 }
 /* Column headers */
