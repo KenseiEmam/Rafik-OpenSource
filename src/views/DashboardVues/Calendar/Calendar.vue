@@ -6,6 +6,7 @@
         :subheader="t('dashboard.calendar.header')"
         :header="t('dashboard.calendar.subheader')"
       />
+      <p class=" text-body "> Click a date block to create a slot.</p>
       <div class=" relative flex flex-col  flex-1 h-full 2xl:w-4/5">
         <FullCalendar  v-if="showCalendar"/>
       </div>
