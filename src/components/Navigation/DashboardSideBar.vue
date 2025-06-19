@@ -92,6 +92,14 @@
       >
         <span v-html="t('dashboard.sidebar.assessmentTemplates')" />
       </RouterLink>
+      <RouterLink
+        :to="{ name: 'assessments' }"
+        class="nav-btn"
+        v-if="userStore.userProfile?.roles.includes('Organization Admin') ||
+          userStore.userProfile?.roles.includes('Organization Trnr')"
+      >
+        <span v-html="t('dashboard.sidebar.myAssessments')" />
+      </RouterLink>
         <RouterLink
         :to="{ name: 'events-calendar' }"
         class="nav-btn max-w-min"
