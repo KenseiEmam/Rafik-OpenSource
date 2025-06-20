@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="visible"
+    v-if="visible  && userStore.userProfile?.roles"
     class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center z-50"
   >
     <div class="card rounded-lg shadow p-8 w-128  ">
@@ -62,7 +62,7 @@
               <option value="other">Other</option>
             </select>
           </div>
-          <div v-if=" template.type !== 'assessment' && userStore.userProfile?.roles">
+          <div v-if=" template.type !== 'assessment'">
             <div v-if="userStore.userProfile?.roles.includes('Organization Admin')">
               <label class="block text-sm font-medium mb-2">
             Assign Users
@@ -76,13 +76,13 @@
             </div>
             <div v-else class="flex items-center gap-3">
               <span class="bg-rafik animate-pulse w-4 h-4 rounded-full content"></span>
-              <p class="text-body">Self Assigning this schedule</p>
+              <p class="text-body">Self Assigning this scheduled event.</p>
             </div>
 
           </div>
           <div v-else class="space-y-4">
 
-            <div class="relative ">
+            <div v-if="userStore.userProfile?.roles.includes('Organization Admin')" class="relative ">
            <!-- Trainer Selection -->
               <div class="w-full">
                 <label
@@ -119,6 +119,10 @@
                 </div>
               </div>
           </div>
+          <div v-else class="flex items-center gap-3">
+              <span class="bg-rafik animate-pulse w-4 h-4 rounded-full content"></span>
+              <p class="text-body">Self Assigning this scheduled assessment.</p>
+            </div>
           <div class="relative ">
            <!-- Trainer Selection -->
               <div class="w-full">
@@ -156,6 +160,20 @@
                 </div>
               </div>
           </div>
+
+          <div>
+            <label class="block text-sm font-medium mb-2">
+              Choose Template
+            </label>
+            <select
+              v-model="assessment.template"
+              class="rafik-text-input w-full"
+              required
+            >
+              <option selected :value="null">Select assessment template</option>
+              <option v-for="temp in myTemplates" :value="temp.id">{{temp.template_name}}</option>
+            </select>
+          </div>
           </div>
         </div>
      <p v-if="(template.time_end <= template.time_start) && showendDate" class="text-red-500 ">
@@ -185,7 +203,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch , onMounted, computed } from 'vue';
+import { ref, watch , onMounted, computed, type PropType } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useUserStore } from '@/stores/user';
 const startTime = ref({ hours: 0, minutes: 0 });
@@ -199,14 +217,22 @@ const darkness = localStorage.getItem('dark_mode');
 const userStore = useUserStore()
 const traineeOptions = ref<any[]>([]);
 const trainerOptions = ref<any[]>([]);
-const assessment = ref({
-  assessors:[],
-  slot:null,
-  trainees:[],
-  status:'scheduled',
-  template:null,
-  organization:null
-})
+const assessment = ref<{
+  assessors: number[],
+  slot: any,
+  trainees: number[],
+  status: string,
+  template: any,
+  organization: any
+}>({
+  assessors: [],
+  slot: null,
+  trainees: [],
+  status: 'scheduled',
+  template: null,
+  organization: null
+});
+
 import { supabase } from '@/lib/supabaseClient';
 
 import 'vue-multiselect/dist/vue-multiselect.css';
@@ -215,7 +241,10 @@ interface Option {
   id: string | number;
   name: string;
 }
-
+interface myTemp {
+  id: string | number;
+  template_name: string;
+}
 const availableUsers = ref<{ id: number; name: string }[]>([]);
 // The selected trainer (if needed for your filters)
 const selectedTrainer = ref(null);
@@ -227,8 +256,8 @@ function selectOption(option: any) {
   selectedTrainer.value = option;
   searchQuery.value = `${option.first_name} ${option.last_name}`  ;
   dropdownVisible.value = false;
-
-  assessment.value.assessors.push = option.id;
+  if(option.id)
+  assessment.value.assessors.push(option.id);
 
 }
 // Set the selected trainer and hide dropdown
@@ -237,7 +266,7 @@ function selectTraineeOption(option: any) {
   searchQuery2.value = `${option.first_name} ${option.last_name}`  ;
   dropdownVisible2.value = false;
 
-  assessment.value.trainees.push = option.id;
+  assessment.value.trainees.push(option.id);
 
 }
 // Optional: Hide the dropdown if clicking outside
@@ -357,6 +386,7 @@ onMounted(async () => {
 });
 function changeType(event:any){
   template.value.type = event.target.value
+  template.value.users = []
 }
 const props = defineProps({
   visible: {
@@ -370,6 +400,10 @@ const props = defineProps({
   templateData: {
     type: Object,
     default: () => ({})
+  },
+  myTemplates: {
+    type: Array as PropType<myTemp[]>,
+    default: () => []
   }
 });
 const showDate = ref(null)
@@ -428,12 +462,47 @@ const resetForm = () => {
   type: "meeting",
   assessment: null, // Optional assessment relation
   };
+  assessment.value={
+  assessors:[],
+  slot:null,
+  trainees:[],
+  status:'scheduled',
+  template:null,
+  organization:null
+}
 };
 
 const handleSubmit = () => {
   if (!template.value.time_start || !template.value.time_end) {
     return;
   }
+
+
+  if(!userStore.userProfile?.roles?.includes('Organization Admin'))
+  {
+    const uid = localStorage.getItem('UserID')
+    if(uid)
+    {
+      if (template.value.type === 'assessment')
+      assessment.value.assessors.push(parseInt(uid))
+      else
+      template.value.users.push({id:uid, name:'blade'})
+    }
+  }
+  if (template.value.type === 'assessment') {
+  const assessors = assessment.value.assessors.map(id => ({
+    id,
+    name: 'bongle' // You’ll need to implement or replace this
+  }));
+
+  const trainees = assessment.value.trainees.map(id => ({
+    id,
+    name: 'bingle'
+  }));
+
+  template.value.users = [...assessors, ...trainees];
+}
+
 
   // Safely convert user objects to IDs if necessary
   if (Array.isArray(template.value.users)) {
@@ -442,7 +511,8 @@ const handleSubmit = () => {
     );
   }
 
-  emit('submit', template.value);
+
+  emit('submit', template.value, assessment.value);
   resetForm();
 };
 
