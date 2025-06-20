@@ -5,9 +5,12 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import type { CalendarOptions } from '@fullcalendar/core';
 import BookModal from './BookModal.vue';
+import { useTemplateStore } from '@/stores/templatestores';
 import { useSlotStore } from '@/stores/slotstores';
-
+import { useUserStore } from '@/stores/user';
 const slotStore = useSlotStore();
+const templateStore = useTemplateStore();
+const userStore= useUserStore();
 import type { EventInput } from '@fullcalendar/core';
 
 const calendarEvents = ref<EventInput[]>([]);
@@ -66,10 +69,21 @@ const calendarOptions = ref<CalendarOptions>({
 
 const templateData = ref({ date: null });
 
-async function handleSubmit(slot: any) {
+async function handleSubmit(slot: any, assessment:any) {
   // Slot is handled externally, just reload slots & calendar here
 
   showCalendar.value = false;
+  if(slot.type === 'assessment')
+    {
+  await slotStore.insertAssessmentSlot(slot,assessment).then(()=>{
+    loadSlots().then(() => {
+    showCalendar.value = true;
+    showModal.value = false;
+    templateData.value.date = null
+  });
+  })
+}
+else{
   await slotStore.insertSlot(slot).then(()=>{
     loadSlots().then(() => {
     showCalendar.value = true;
@@ -77,6 +91,9 @@ async function handleSubmit(slot: any) {
     templateData.value.date = null
   });
   })
+
+}
+
 
 }
 
@@ -96,7 +113,10 @@ function closeModal() {
 
 onMounted(() => {
   loadSlots().then(() => {
-    showCalendar.value = true;
+    templateStore.fetchTemplates(userStore.userProfile).then(()=>{
+
+      showCalendar.value = true;
+    })
   });
 });
 
@@ -116,6 +136,7 @@ watch(calendarEvents, (newEvents) => {
       @close="closeModal"
       @submit="handleSubmit"
       :templateData="templateData"
+      :myTemplates="templateStore.AllTemplates"
     />
     <FullCalendar v-if="showCalendar" :options="calendarOptions" />
   </div>

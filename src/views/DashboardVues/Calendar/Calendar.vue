@@ -6,8 +6,35 @@
         :subheader="t('dashboard.calendar.header')"
         :header="t('dashboard.calendar.subheader')"
       />
-      <p class=" text-body "> Click a date block to create a slot.</p>
+
+
       <div class=" relative flex flex-col  flex-1 h-full 2xl:w-4/5">
+        <div class="flex items-center px-6 gap-3 card w-full">
+        <ul class="list-disc ms-3 ">
+           <li class=" text-body ">Click a date block to create a slot.</li>
+           <li class=" text-body ">Click an event slot to view/edit it.</li>
+        </ul>
+        <div class="flex items-center ms-auto gap-1">
+          <span class="w-3 h-3 rounded-full bg-rafik-secondary"></span>
+          <p class="text-sm "> Meeting</p>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="w-3 h-3 rounded-full bg-rafik-alternate"></span>
+          <p class="text-sm "> Assessment</p>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="w-3 h-3 rounded-full bg-rafik-teritiary"></span>
+          <p class="text-sm "> Team Game</p>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="w-3 h-3 rounded-full bg-rafik-error"></span>
+          <p class="text-sm "> Away</p>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="w-3 h-3 rounded-full bg-black"></span>
+          <p class="text-sm "> Other</p>
+        </div>
+      </div>
         <FullCalendar  v-if="showCalendar"/>
       </div>
     </div>

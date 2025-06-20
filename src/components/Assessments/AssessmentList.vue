@@ -48,9 +48,11 @@
           {{ t('dashboard.assessments.list.canceled') }}
         </button>
       </div>
-      <button @click="showAddAssessmentModal = true" class="min-w-max btn-md-outline">
-        {{ t('dashboard.assessments.list.createAssessment') }}
-      </button>
+      <router-link :to="{name:'events-calendar'}" class="min-w-max btn-md-outline
+      flex group">
+        <svg class="w-5 h-5 me-2 group-hover:text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <div>Open Calendar</div>
+      </router-link>
     </div>
 
     <ul
@@ -199,7 +201,7 @@
         <h3 class="title-small mb-4">{{ t('dashboard.assessments.list.createAssessment') }}</h3>
         <p class="text-body mb-6">{{ t('dashboard.assessments.list.modalComingSoon') }}</p>
         <button @click="showAddAssessmentModal = false" class="btn-md w-full">
-          {{ t('dashboard.assessments.list.close') }}
+          View Calendar
         </button>
       </div>
     </div>
