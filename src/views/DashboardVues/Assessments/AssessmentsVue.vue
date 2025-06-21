@@ -48,7 +48,7 @@ import { useI18n } from 'vue-i18n';
 import { useAssessmentStore } from '@/stores/assessmentstores';
 import { useUserStore } from '@/stores/user';
 import PageTitle from '@/components/Navigation/PageTitle.vue';
-import AssessmentList from '@/components/AssessmentList.vue';
+import AssessmentList from '@/components/Assessments/AssessmentList.vue';
 
 const { t } = useI18n();
 const assessmentStore = useAssessmentStore();
@@ -69,7 +69,7 @@ const filteredAssessments = computed(() => {
 
   // Apply status filter
   if (currentFilter.value !== 'All') {
-    filtered = filtered.filter(assessment => 
+    filtered = filtered.filter(assessment =>
       assessment.status.toLowerCase() === currentFilter.value.toLowerCase()
     );
   }
@@ -77,7 +77,7 @@ const filteredAssessments = computed(() => {
   // Apply search filter
   if (searchQuery.value) {
     const query = searchQuery.value.trim().toLowerCase();
-    
+
     filtered = filtered.filter(assessment => {
       // Search by template name
       const templateData = assessment.template ? assessmentStore.templateData[assessment.template] : null;
@@ -147,7 +147,7 @@ function handleSearchUpdate(page: number, query: string, filter: string) {
 // Fetch assessments
 async function fetchAssessments() {
   if (!userStore.userProfile) return;
-  
+
   try {
     loading.value = true;
     await assessmentStore.getAllAssessments(userStore.userProfile);
@@ -168,4 +168,4 @@ onMounted(async () => {
     await fetchAssessments();
   }
 });
-</script> 
+</script>
