@@ -1,24 +1,144 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import type { CalendarOptions } from '@fullcalendar/core';
+import BookModal from './BookModal.vue';
+import { useTemplateStore } from '@/stores/templatestores';
+import { useSlotStore } from '@/stores/slotstores';
+import { useUserStore } from '@/stores/user';
+const slotStore = useSlotStore();
+const templateStore = useTemplateStore();
+const userStore= useUserStore();
+import type { EventInput } from '@fullcalendar/core';
 
+const calendarEvents = ref<EventInput[]>([]);
+
+function slotsToEvents(slots: any[]): EventInput[] {
+  return slots.map(slot => {
+    let bgc = ''
+    switch(slot.type)
+    {
+      case 'meeting':
+      bgc='#CB901C'
+      break;
+      case 'assessment':
+      bgc='#2EBE71'
+      break;
+      case 'game':
+      bgc='#B02DEF'
+      break;
+      case 'away':
+      bgc='#FF0000'
+      break;
+      default:
+        bgc= '#081411'
+    }
+    return  {
+    id: String(slot.id),
+    title: slot.type,
+    start: slot.time_start,
+    end: slot.time_end,
+    backgroundColor:bgc,
+    display:'block'
+  }
+  }
+   );
+}
+
+// Load slots and update calendar events
+async function loadSlots() {
+  await slotStore.getAllSlots();
+  calendarEvents.value = slotsToEvents(slotStore.AllSlots);
+}
+
+// FullCalendar options, events bound reactively
 const calendarOptions = ref<CalendarOptions>({
   plugins: [dayGridPlugin, interactionPlugin],
   initialView: 'dayGridMonth',
   height: '100%',
-  aspectRatio: 1,
-  events: [],
+  events: calendarEvents.value,
+  headerToolbar: {
+    left: 'prev,next',
+    center: 'title',
+    right: 'dayGridWeek,dayGridDay,dayGridMonth' // user can switch between the two
+  },
+  dateClick: handleDateClick,
+});
+
+const templateData = ref({ date: null });
+
+async function handleSubmit(slot: any, assessment:any) {
+  // Slot is handled externally, just reload slots & calendar here
+
+  showCalendar.value = false;
+  if(slot.type === 'assessment')
+    {
+  await slotStore.insertAssessmentSlot(slot,assessment).then(()=>{
+    loadSlots().then(() => {
+    showCalendar.value = true;
+    showModal.value = false;
+    templateData.value.date = null
+  });
+  })
+}
+else{
+  await slotStore.insertSlot(slot).then(()=>{
+    loadSlots().then(() => {
+    showCalendar.value = true;
+    showModal.value = false;
+    templateData.value.date = null
+  });
+  })
+
+}
+
+
+}
+
+function handleDateClick(event: any) {
+  // Pass date string without time to modal
+  const dateOnly = event.dateStr.split('T')[0];
+  templateData.value.date = dateOnly;
+}
+
+// Control flags for rendering
+const showCalendar = ref(false);
+const showModal = ref(false);
+
+function closeModal() {
+  templateData.value.date = null;
+}
+
+onMounted(() => {
+  loadSlots().then(() => {
+    templateStore.fetchTemplates(userStore.userProfile).then(()=>{
+
+      showCalendar.value = true;
+    })
+  });
+});
+
+// Keep calendarOptions.events in sync with calendarEvents ref
+watch(calendarEvents, (newEvents) => {
+  calendarOptions.value = {
+    ...calendarOptions.value,
+    events: newEvents,
+  };
 });
 </script>
 
 <template>
-  <div
-    class="rafik-pribg dark:rafik-darkpribg rounded-lg p-4 h-full"
-  >
-    <FullCalendar :options="calendarOptions" />
+  <div class="rafik-pribg dark:rafik-darkpribg rounded-lg p-4 h-full">
+    <BookModal
+      :visible="templateData.date !== null"
+      @close="closeModal"
+      @submit="handleSubmit"
+      :templateData="templateData"
+      :myTemplates="templateStore.AllTemplates"
+    />
+    <FullCalendar v-if="showCalendar" :options="calendarOptions" />
   </div>
 </template>
 
@@ -34,7 +154,7 @@ const calendarOptions = ref<CalendarOptions>({
 
 /* Toolbar title (month/year) */
 :deep(.fc-toolbar-title) {
-  @apply text-rafik  dark:text-rafik-darkpritext font-semibold text-lg;
+  @apply text-rafik dark:text-rafik-darkpritext font-semibold text-lg;
 }
 
 /* Buttons */
@@ -62,16 +182,16 @@ const calendarOptions = ref<CalendarOptions>({
 
 /* Events */
 :deep(.fc-event) {
-  @apply bg-rafik text-rafik-pribg rounded px-2 py-0.5 font-semibold cursor-pointer;
+  @apply text-rafik-pribg rounded px-2 py-0.5 font-semibold cursor-pointer;
   border: none !important;
 }
-/* Events */
+/* Column headers */
 :deep(.fc-col-header) {
   @apply bg-rafik-pribg dark:bg-rafik-darkpribg rounded px-2 py-0.5 font-semibold cursor-pointer;
   border: none !important;
 }
 :deep(.fc-col-header-cell-cushion) {
-  @apply bg-rafik-pribg dark:bg-rafik-darkpribg dark:text-rafik-pritext text-rafik-pritext  rounded px-2 py-0.5 font-semibold cursor-pointer;
+  @apply bg-rafik-pribg dark:bg-rafik-darkpribg dark:text-rafik-darkpritext text-rafik-pritext rounded px-2 py-0.5 font-semibold cursor-pointer;
   border: none !important;
 }
 </style>

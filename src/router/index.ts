@@ -276,12 +276,12 @@ const router = createRouter({
             {
               path: '', // Default child route for /dashboard/assessments
               name: 'assessments',
-              component: () => import('../views/DashboardVues/AssessmentsVue.vue')
+              component: () => import('../views/DashboardVues/TraineeAssessments/AssessmentsVue.vue')
             },
             {
               path: ':id', // Dynamic route for assessment details
               name: 'assessment-details',
-              component: () => import('../views/DashboardVues/AssessmentDetails.vue')
+              component: () => import('../views/DashboardVues/TraineeAssessments/AssessmentDetails.vue')
             }
           ]
         }
