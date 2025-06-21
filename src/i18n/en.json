@@ -263,7 +263,7 @@
       "myProfile": "My Profile",
       "logout": "Logout",
       "assessmentTemplates": "Assessment Templates",
-      "myAssessments": "My <br />Assessments",
+      "myAssessments": "Trainee <br />Assessments",
       "calendar":"Events Calendar"
     },
     "home": {
@@ -1535,7 +1535,7 @@
     },
     "assessments": {
       "pageTitle": {
-        "subheader": "My",
+        "subheader": "Trainee",
         "header": "Assessments"
       },
       "loading": "Loading assessments...",
@@ -1546,7 +1546,7 @@
         "active": "Active",
         "completed": "Completed",
         "canceled": "Canceled",
-        "createAssessment": "Create Assessment",
+        "createAssessment": "Book Assessment",
         "modalComingSoon": "Assessment creation coming soon.",
         "close": "Close",
         "noAssessmentsFound": "No assessments found.",
