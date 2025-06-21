@@ -1510,6 +1510,8 @@
           "control": "Control",
           "primary": "Primary",
           "createdAt": "Created At",
+          "noDrills": "Number of Drills",
+          "createdBy": "Created By",
           "actions": "Actions",
           "edit": "Edit",
           "delete": "Delete"

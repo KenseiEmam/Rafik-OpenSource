@@ -31,8 +31,8 @@
           <thead>
             <tr >
               <th class="uppercase p-4">{{ t('dashboard.assessmentTemplates.list.table.name') }}</th>
-              <th class="uppercase p-4">Created by</th>
-              <th class="uppercase p-4">Number of Drills</th>
+              <th class="uppercase p-4">{{ t('dashboard.assessmentTemplates.list.table.createdBy') }}</th>
+              <th class="uppercase p-4">{{ t('dashboard.assessmentTemplates.list.table.noDrills') }}</th>
               <th class="uppercase p-4">{{ t('dashboard.assessmentTemplates.list.table.createdAt') }}</th>
               <th class="uppercase p-4"></th>
             </tr>

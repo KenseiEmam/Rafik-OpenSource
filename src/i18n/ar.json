@@ -1464,6 +1464,8 @@
           "control": "التحكم",
           "primary": "الأساسي",
           "createdAt": "تاريخ الإنشاء",
+          "noDrills": "عدد التمارين",
+          "createdBy": "أنشئ بواسطة",
           "actions": "الإجراءات",
           "edit": "تعديل",
           "delete": "حذف"
