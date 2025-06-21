@@ -60,30 +60,40 @@ type UserDetails = {
 export const useAssessmentStore = defineStore('Assessment', () => {
   const AllAssessments = ref<Assessment[]>([]);
   const AssessmentItem = ref<Assessment | null>(null);
-  
+
   // New refs for trainees and assessors
   const trainees = ref<{ [id: string]: UserDetails }>({});
   const assessors = ref<{ [id: string]: UserDetails }>({});
-  
+
   // New ref for template data
   const templateData = ref<{ [id: string]: any }>({});
+async function getAssessment(id: number) {
+  try {
+    const { data, error } = await supabase
+      .from('assessment')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-  async function getAssessment(id: number) {
-    try {
-      const { data, error } = await supabase
-        .from('assessment')
-        .select('*')
-        .eq('id', id)
-        .single();
-      if (error) throw error;
-      AssessmentItem.value = data;
-      return AssessmentItem.value;
-    } catch (error: any) {
-      console.error(error);
-      showError(`Failed to load assessment: ${error.message || 'Unknown error'}`);
-      return null;
-    }
+    if (error) throw error;
+
+    // Assign basic data
+    AssessmentItem.value = data;
+
+    if(AssessmentItem.value)
+    // Enrich: fetch related template and user info
+    await Promise.all([
+      fetchAllUserDetails([AssessmentItem.value])
+    ]);
+
+    return AssessmentItem.value;
+  } catch (error: any) {
+    console.error(error);
+    showError(`Failed to load assessment: ${error.message || 'Unknown error'}`);
+    return null;
   }
+}
+
 
   async function getAllAssessments(userProfile: any) {
     try {
@@ -101,7 +111,7 @@ export const useAssessmentStore = defineStore('Assessment', () => {
         filtered = data.filter((assessment: any) => Array.isArray(assessment.assessors) && assessment.assessors.includes(userProfile.id));
       }
       AllAssessments.value = filtered;
-      
+
       // (non-blocking) After getting assessments, fetch template data and user details
       Promise.all([
         fetchAllTemplateData(filtered),
@@ -110,7 +120,7 @@ export const useAssessmentStore = defineStore('Assessment', () => {
         console.error(e);
         showError(`Failed to load assessment data: ${e.message || 'Unknown error'}`);
       });
-      
+
       return AllAssessments.value;
     } catch (error: any) {
       console.error(error);
@@ -144,7 +154,7 @@ export const useAssessmentStore = defineStore('Assessment', () => {
       console.error(`Error fetching ${type} details for ID ${userId}:`, error);
       // Don't show error to user for individual user fetches to avoid spam
     }
-    
+
     return null;
   }
 
@@ -153,10 +163,10 @@ export const useAssessmentStore = defineStore('Assessment', () => {
     if (!userIds || userIds.length === 0) return;
 
     const userStore = type === 'trainee' ? trainees : assessors;
-    
+
     // Filter out IDs that already exist in the store
     const missingIds = userIds.filter(id => !userStore.value[id]);
-    
+
     if (missingIds.length === 0) return;
 
     try {
@@ -263,7 +273,7 @@ export const useAssessmentStore = defineStore('Assessment', () => {
 
     // Remove duplicates
     const uniqueTemplateIds = [...new Set(templateIds)];
-    
+
     if (uniqueTemplateIds.length === 0) {
       return;
     }
@@ -287,13 +297,13 @@ export const useAssessmentStore = defineStore('Assessment', () => {
     }
   }
 
-  return { 
-    AssessmentItem, 
-    AllAssessments, 
+  return {
+    AssessmentItem,
+    AllAssessments,
     trainees,
     assessors,
     templateData,
-    getAssessment, 
+    getAssessment,
     getAllAssessments,
     // DO NOT USE THESE FUNCTIONS BELOW UNLESS NEEDED. THEY ARE MADE FOR INTERNAL USE.
     fetchUserDetails,
@@ -304,4 +314,4 @@ export const useAssessmentStore = defineStore('Assessment', () => {
     fetchAllTemplateData,
     clearUserDetails
   };
-}); 
+});
