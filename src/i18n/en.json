@@ -618,7 +618,10 @@
           "selectUser": "Select User to view their roles:",
           "searchPlaceholder": "Search for user...",
           "rolesUpdated": "Roles updated successfully",
-          "errorUpdatingRoles": "Error updating roles: "
+          "errorUpdatingRoles": "Error updating roles: ",
+          "errorFetchingUsers": "Error fetching users",
+          "cannotRemoveOwnAdminRole": "You cannot remove your own Administrator role",
+          "cannotRemoveOwnOrgAdminRole": "You cannot remove your own Organization Admin role"
         },
         "trainer": {
           "seatsAvailable": "Seats Available",
