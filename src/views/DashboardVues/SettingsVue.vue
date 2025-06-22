@@ -39,7 +39,7 @@
 
         <!-- Roles & Permissions Tab -->
         <button
-          v-if="userStore.userProfile.roles.includes('Administrator')"
+          v-if="userStore.userProfile.roles.includes('Administrator') || userStore.userProfile.roles.includes('Organization Admin')"
           :class="
             activeTab === 'Roles and Permissions'
               ? 'text-rafik-pritext dark:text-rafik-darkpritext'
@@ -96,7 +96,7 @@
           <RolesandPerms
             v-else-if="
               activeTab === 'Roles and Permissions' &&
-              userStore.userProfile.roles.includes('Administrator')
+              userStore.userProfile.roles.includes('Administrator') || userStore.userProfile.roles.includes('Organization Admin')
             "
           />
           <!-- Notification Settings -->
