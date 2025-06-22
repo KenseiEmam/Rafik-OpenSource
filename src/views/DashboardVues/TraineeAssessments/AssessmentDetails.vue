@@ -19,6 +19,7 @@ const templateStore =useTemplateStore();
 const slotStore =useSlotStore();
 const loading = ref(false)
 const activeTab = ref('Details');
+const editing = ref(false);
 const timeElapsedSeconds = ref(0);
 const formattedTimeElapsed = ref('00:00:00');
 let timerInterval: any = null;
@@ -30,6 +31,61 @@ function setActiveTab(tab: string) {
 function refreshComponent() {
   router.go(0); // This reloads the current route
 }
+
+
+function calculateAge(dob: Date) {
+  if (!dob) return null;
+  const birthDate = new Date(dob);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+
+  // Adjust age if birthday hasn't happened yet this year
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+}
+// Reactive reference to store the weight
+const weight = ref<string | null>(null);
+const program = ref<any>(null);
+const goals = ['get_fitter', 'build_physique', 'increase_strength', 'recovery', 'sport_specific'];
+// Computed property to fetch weight from Supabase
+const fetchWeight = async (weightId: number) => {
+  try {
+    const { data, error } = await supabase
+      .from('weights')
+      .select('weight')
+      .eq('id', weightId)
+      .single();
+
+    if (error) {
+      showError('Error fetching weight:' + error.message);
+      return null;
+    }
+
+    return data?.weight || null;
+  } catch (err) {
+    showError('Unexpected error fetching weight:' + err);
+    return null;
+  }
+};
+
+const fetchProgram = async (programId: number) => {
+  try {
+    const { data, error } = await supabase.from('programs').select().eq('id', programId).single();
+
+    if (error) {
+      showError('Error fetching program:' + error.message);
+      return null;
+    }
+
+    return data || null;
+  } catch (err) {
+    showError('Unexpected error fetching program:' + err);
+    return null;
+  }
+};
 interface BestPerf {
   exercise: string
   orm: number
@@ -93,46 +149,69 @@ const difficulty = ref(['Too Hard', 'Challenging', 'Just Right', 'Easy', 'Too Ea
 const pumps = ref(['Not there', 'Temporary', 'Alright', 'Pumped', 'Insane pump']);
 const enjoyment = ref(['Hated', 'Poor', 'Ok', 'Nice', 'Loved']);
 const exhaust = ref(['No sweat', 'Warmed Up', 'Just Right', 'Tired', 'Exhausted']);
-function fetchWorkout(){
-
-  loading.value=true
+async function fetchWorkout() {
+  loading.value = true;
   const assessmentId = route.params.id as string;
-  if (assessmentId) {
-    assessmentStore
-      .getAssessment(parseInt(assessmentId))
-      .then(() => {
-        if (assessmentStore.AssessmentItem?.trainees && assessmentStore.AssessmentItem?.trainees.length > 0) clientStore.fetchUser(parseInt(assessmentStore.AssessmentItem?.trainees[0])).then(()=>{
 
-        if (assessmentStore.AssessmentItem?.slot ) slotStore.getSlot(assessmentStore.AssessmentItem?.slot ).then(()=>{
-          if (assessmentStore.AssessmentItem?.template ) templateStore.fetchTemplateById(assessmentStore.AssessmentItem?.template ).then(()=>{
-            if(slotStore.SlotItem?.time_start)
-           {
-             const start = new Date(slotStore.SlotItem?.time_start).getTime();
-            const now = new Date().getTime();
-            timeElapsedSeconds.value = Math.floor((now - start) / 1000);
-            formattedTimeElapsed.value = formatTimeElapsed(timeElapsedSeconds.value);
+  try {
+    if (!assessmentId) return;
 
-            // Clear existing timer
-            if (timerInterval) clearInterval(timerInterval);
+    await assessmentStore.getAssessment(parseInt(assessmentId));
 
-            // Start live timer
-            timerInterval = setInterval(() => {
-              timeElapsedSeconds.value++;
-              formattedTimeElapsed.value = formatTimeElapsed(timeElapsedSeconds.value);
-            }, 1000);
-           }
+    if (
+      assessmentStore.AssessmentItem?.trainees &&
+      assessmentStore.AssessmentItem.trainees.length > 0
+    ) {
+      await clientStore.fetchUser(parseInt(assessmentStore.AssessmentItem.trainees[0]));
+    }
 
-            loading.value = false
-        });
-        });
+    if (assessmentStore.AssessmentItem?.slot) {
+      await slotStore.getSlot(assessmentStore.AssessmentItem.slot);
+    }
 
-        });
-      })
-      .catch(() => {
-        showError(t('dashboard.workoutSheet.failedToLoadWorkoutDetails'));
-      });
+    if (assessmentStore.AssessmentItem?.template) {
+      await templateStore.fetchTemplateById(assessmentStore.AssessmentItem.template);
+    }
+
+    if (slotStore.SlotItem?.time_start) {
+      const start = new Date(slotStore.SlotItem.time_start).getTime();
+      const now = new Date().getTime();
+      timeElapsedSeconds.value = Math.floor((now - start) / 1000);
+      formattedTimeElapsed.value = formatTimeElapsed(timeElapsedSeconds.value);
+
+      // Clear existing timer
+      if (timerInterval) clearInterval(timerInterval);
+
+      // Start live timer
+      timerInterval = setInterval(() => {
+        timeElapsedSeconds.value++;
+        formattedTimeElapsed.value = formatTimeElapsed(timeElapsedSeconds.value);
+      }, 1000);
+    }
+
+    if (clientStore.Client?.profile_id) {
+      await clientStore.getUserClient(clientStore.Client.profile_id);
+
+      const weightId = clientStore.Client?.profile.weight_id;
+      const programId = clientStore.Client?.program_details.program_id;
+
+      if (weightId) {
+        const clientWeight = await fetchWeight(weightId);
+        weight.value = clientWeight;
+      }
+
+      if (programId) {
+        const parentProgram = await fetchProgram(programId);
+        program.value = parentProgram;
+      }
+    }
+  } catch (error) {
+    showError(t('dashboard.workoutSheet.failedToLoadWorkoutDetails'));
+  } finally {
+    loading.value = false;
   }
 }
+
 // Fetch the Workout when the component mounts
 onMounted(() => {
  fetchWorkout()
@@ -235,9 +314,11 @@ onMounted(() => {
             <button v-if="assessmentStore.AssessmentItem.assessors?.includes(getUserID()) && assessmentStore.AssessmentItem.status == 'scheduled'" class="text-rafik-secondary dark:text-rafik nav-btn">Start Assessment </button>
             <button v-if="assessmentStore.AssessmentItem.assessors?.includes(getUserID()) && assessmentStore.AssessmentItem.status == 'active'" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">End Assessment </button>
             <button v-if=" assessmentStore.AssessmentItem.status == 'scheduled'" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">Change Template </button>
-            <button v-if="assessmentStore.AssessmentItem.assessors?.includes(getUserID()) && assessmentStore.AssessmentItem.status == 'completed'" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">Edit Assessment </button>
+            <button v-if="assessmentStore.AssessmentItem.assessors?.includes(getUserID()) && assessmentStore.AssessmentItem.status == 'completed'" @click="editing = true" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">Edit Assessment </button>
+            <button v-if="editing" class="text-rafik nav-btn">Save Edits </button>
+            <button v-if="editing" class="text-red-500 dark:text-red-400 nav-btn">Cancel Edits </button>
             <button v-if="assessmentStore.AssessmentItem.status == 'completed'" class="text-yellow-500 dark:text-yellow-400 nav-btn">Dispute Assessment </button>
-            <button  class="text-red-500 dark:text-red-400 nav-btn">Cancel Assessment </button>
+            <button v-if="!editing" class="text-red-500 dark:text-red-400 nav-btn">Cancel Assessment </button>
             <!-- <button class="text-red-500 dark:text-red-400 nav-btn">Delete Assessment </button> -->
           </div>
         </div>
@@ -395,13 +476,13 @@ onMounted(() => {
       </div>
 
       <!-- Drills Tab -->
-          <ul v-if="activeTab === 'Drills'" class="flex gap-3 flex-col w-full pb-16 overflow-y-auto" style="max-height: 60vh">
+      <ul v-else-if="activeTab === 'Drills'" class="flex gap-3 flex-col w-full pb-16 overflow-y-auto" style="max-height: 60vh">
             <li
               v-for="exercise in templateStore.TemplateItem?.drills"
               :key="exercise.id"
               class="card p-8 2xl:py-12"
             >
-              <h3 class="title-small text-lg 2xl:text-2xl">
+              <h3 class="contentH-small text-lg 2xl:text-2xl">
                 {{ exercise.exercise_name || t('dashboard.workoutSheet.olderVariableName') }}
               </h3>
               <h3 class="header-small uppercase">
@@ -427,7 +508,7 @@ onMounted(() => {
                🏆 New Best!
               </p>
               </div> -->
-              <div  class="grid grid-cols-4">
+              <div>
                 <div class="col-span-3 flex-col flex gap-2">
                   <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body opacity-0">
                     {{ t('dashboard.workoutSheet.filler') }}
@@ -435,47 +516,158 @@ onMounted(() => {
                   <div
                     v-for="(set, index) in exercise.true_sets"
                     :key="set"
-                    class="flex gap-3 w-full items-center"
+                    class="flex gap-6 w-full items-center"
                   >
-                    <p class="text-rafik-pritext dark:text-rafik-darkpritext min-w-max">
+                    <p class="text-rafik-pritext dark:text-rafik-darkpritext min-w-max py-2.5">
                        Round {{  index + 1 }}
                     </p>
                     <hr class="border border-rafik-sectext dark:border-rafik-darksectext w-full" />
+                    <p v-if="(assessmentStore.AssessmentItem.status === 'active' || editing) && assessmentStore.AssessmentItem.assessors?.includes(getUserID())  " >{{ exercise.primary_variable || 'Load(Kg)' }}</p>
+                     <div
+                    >
+
+                    <input v-model="set.primary_done" v-if="(assessmentStore.AssessmentItem.status === 'active' || editing) && assessmentStore.AssessmentItem.assessors?.includes(getUserID())  "  type="number" class="text-rafik-pritext dark:text-rafik-darkpritext py-2 rafik-text-input" >
+                    <p v-else class="min-w-max">{{ set.primary_done }} {{ t('dashboard.workoutSheet.kg') }}</p>
+
+                    </div>
                   </div>
 
                 </div>
 
 
-                  <div class="flex-col flex gap-2 items-center min-w-max">
-                    <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
-                      {{ exercise.primary_variable || 'Load(Kg)' }}
-                    </h4>
-                    <div
-                      v-for="(set, index) in exercise.true_sets"
-                      :key="set"
-
-                      :class="{
-                        'text-red-500': set.primary_done < set.intensity,
-                        'text-green-500': set.primary_done > set.intensity,
-                        'text-rafik-secondary': set.primary_done == set.intensity
-                      }"
-                    >
-                      {{ set.primary_done }} {{ t('dashboard.workoutSheet.kg') }}
-                    </div>
-                  </div>
-
               </div>
 
             </li>
-          </ul>
+      </ul>
 
+      <!-- Trainee Details Tab -->
+      <div v-else-if="activeTab === 'Trainee'" class="grid mt-6 gap-3 ">
+      <div class="flex flex-col gap-3 pl-3 2xl:gap-5 card">
+        <h3 class="contentH-small text-sm 2xl:text-xl mb-3 2xl:mb-3 2xl:mb-8">
+          Trainee Profile
+        </h3>
+        <div v-if="clientStore.UserDetail.dob" class="flex justify-between uppercase text-sm 2xl:text-base">
+          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+            {{ t('dashboard.tabs.clients.details.age') }}
+          </p>
+          <p class="text-rafik-secondary">{{ calculateAge(clientStore.UserDetail.dob) || 'N/A' }}</p>
+        </div>
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
+          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+            {{ t('dashboard.tabs.clients.details.gender') }}
+          </p>
+          <p class="text-rafik-secondary">{{ clientStore.UserDetail.gender || 'N/A' }}</p>
+        </div>
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
+          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+            {{ t('dashboard.tabs.clients.details.nationality') }}
+          </p>
+          <p class="text-rafik-secondary">{{ clientStore.UserDetail.nationality || 'N/A' }}</p>
+        </div>
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
+          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+            {{ t('dashboard.tabs.clients.details.phone') }}
+          </p>
+          <p class="text-rafik-secondary">{{ clientStore.UserDetail.phone || 'N/A' }}</p>
+        </div>
+      </div>
 
+      <div class="flex flex-col gap-3 pl-3 2xl:gap-5 card">
+        <h3 class="contentH-small text-sm 2xl:text-xl mb-3 2xl:mb-3">
+          Trainee Metrics
+        </h3>
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
+          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+            {{ t('dashboard.tabs.clients.details.height') }}
+          </p>
+          <p class="text-rafik-secondary">
+            {{ clientStore.Client?.profile.height || 'N/A' }} {{ t('dashboard.tabs.clients.details.cm') }}
+          </p>
+        </div>
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
+          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+            {{ t('dashboard.tabs.clients.details.weight') }}
+          </p>
+          <!-- Use the computed value for weight -->
+          <p class="text-rafik-secondary">
+            {{ weight || 'N/A' }} {{ t('dashboard.tabs.clients.details.kg') }}
+          </p>
+        </div>
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
+          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+            {{ t('dashboard.tabs.clients.details.goalWeight') }}
+          </p>
+          <p class="text-rafik-secondary">{{ clientStore.Client?.profile.weight_goal || 'N/A' }} kg</p>
+        </div>
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
+          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+            {{ t('dashboard.tabs.clients.details.bodyFatPercent') }}
+          </p>
+          <p class="text-rafik-secondary">{{ clientStore.Client?.profile.body_fat + '%' || 'N/A' }}</p>
+        </div>
+      </div>
 
+      <div class="flex flex-col gap-3 pl-3 2xl:gap-5 card">
+        <h3 class="contentH-small text-sm 2xl:text-xl mb-3 2xl:mb-3">
+          Trainee Fitness
+        </h3>
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
+          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+            {{ t('dashboard.tabs.clients.details.experience') }}
+          </p>
+          <p class="text-rafik-secondary">
+            {{ clientStore.Client?.profile.experience || t('dashboard.tabs.clients.details.NA') }}
+          </p>
+        </div>
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
+          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+            {{ t('dashboard.tabs.clients.details.fitnessGoal') }}
+          </p>
+          <p
+            class="text-rafik-secondary"
+            v-for="(goal, index) in clientStore.Client?.profile.fitness_goal"
+            :key="goal"
+          >
+            {{ t(`dashboard.tabs.clients.details.goals.${goals[goal - 1]}`) }}
+            <span v-if="index + 1 !== clientStore.Client?.profile.fitness_goal.length">,</span>
+          </p>
+          <p class="text-rafik-secondary" v-if="!clientStore.Client?.profile.fitness_goal">N/A</p>
+        </div>
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
+          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+            {{ t('dashboard.tabs.clients.details.sportsPlayed') }}
+          </p>
+          <p
+            class="text-rafik-secondary"
+            v-for="(sport, index) in clientStore.Client?.profile.sports_played"
+            :key="sport"
+          >
+            {{ sport }}
+            <span v-if="index + 1 !== clientStore.Client?.profile.sports_played.length">,</span>
+          </p>
+          <p class="text-rafik-secondary" v-if="!clientStore.Client?.profile.sports_played">N/A</p>
+        </div>
+        <div class="flex justify-between uppercase text-sm 2xl:text-base">
+          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+            {{ t('dashboard.tabs.clients.details.dietPreference') }}
+          </p>
+          <p
+            class="text-rafik-secondary"
+            v-for="(diet, index) in clientStore.Client?.profile.diet_preference"
+            :key="diet"
+          >
+            {{ diet
+            }}<span v-if="index + 1 !== clientStore.Client?.profile.diet_preference.length">, </span>
+          </p>
+          <p class="text-rafik-secondary" v-if="!clientStore.Client?.profile.diet_preference">N/A</p>
+        </div>
+      </div>
+      </div>
 
         </div>
         <!-- Notes -->
         <div>
-          <h3 class="contentH-small mb-6">
+          <h3 class="contentH-small mb-3 2xl:mb-3">
             📝 Notes:
           </h3>
           <div class="card p-8 2xl:py-12 flex flex-col items-center gap-6" style="height: 60vh">
