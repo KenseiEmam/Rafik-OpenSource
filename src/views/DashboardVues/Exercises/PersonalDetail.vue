@@ -192,9 +192,9 @@ function showSuccess(message: string) {
     toast: true,
     position: 'top-right',
     icon: 'success',
-    confirmButtonColor: '#CB901C',
-    background: '#081411',
-    color: '#E8F3ED'
+    confirmButtonColor: '#1578ac',
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -204,8 +204,8 @@ function showError(message: string) {
     text: message,
     icon: 'error',
     confirmButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -217,10 +217,10 @@ function DeleteExercise(id: string) {
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: t('dashboard.exercises.personal.deleteConfirmButton'),
-    confirmButtonColor: '#CB901C',
+    confirmButtonColor: '#1578ac',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   }).then((result) => {
     if (result.isConfirmed) {
       exerciseStore.deleteExercise(id);
@@ -292,7 +292,7 @@ onMounted(() => {
           <div v-if="exerciseStore.Exercise.media" class="h-96 w-128 group relative mx-auto">
             <video
               :src="exerciseStore.Exercise.media"
-              class="h-96 w-128 border-rafik-sectext dark:border-rafik-darksectext border-2 object-cover rounded-lg mx-auto"
+              class="h-96 w-128 border-topsets-sectext dark:border-topsets-darksectext border-2 object-cover rounded-lg mx-auto"
               controls
             ></video>
             <button
@@ -304,7 +304,7 @@ onMounted(() => {
           </div>
           <div
             v-else
-            class="h-96 w-128 border-2 border-dashed border-gray-400 mx-auto rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg dark:bg-rafik-darksecbg focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            class="h-96 w-128 border-2 border-dashed border-gray-400 mx-auto rounded-lg flex items-center justify-center cursor-pointer hover:bg-topsets-secbg dark:bg-topsets-darksecbg focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             @click="triggerFileInput"
           >
             <span class="text-center text-gray-500">
@@ -338,7 +338,7 @@ onMounted(() => {
               v-model="editableTitle"
               @blur="saveTitle"
               @keyup.enter="saveTitle"
-              class="title-small bg-transparent border-b border-rafik-sectext dark:border-rafik-darksectext focus:outline-none"
+              class="title-small bg-transparent border-b border-topsets-sectext dark:border-topsets-darksectext focus:outline-none"
               type="text"
               :placeholder="
                 exerciseStore.Exercise?.exercise_name ||
@@ -360,7 +360,7 @@ onMounted(() => {
             @blur="saveDescription"
             @keyup.enter="saveDescription"
             cols="3"
-            class="text-body 2xl:w-5/6 bg-transparent whitespace-pre-wrap border-b border-rafik-sectext dark:border-rafik-darksectext focus:outline-none whitespace-pre-wrap"
+            class="text-body 2xl:w-5/6 bg-transparent whitespace-pre-wrap border-b border-topsets-sectext dark:border-topsets-darksectext focus:outline-none whitespace-pre-wrap"
             :placeholder="
               exerciseStore.Exercise?.exercise_detail ||
               t('dashboard.exercises.personal.loadingPlaceholder')
@@ -384,10 +384,10 @@ onMounted(() => {
                 @click="selectType(type)"
                 :class="
                   exerciseStore.Exercise.type?.toLowerCase() === type
-                    ? 'border-rafik-pritext dark:border-rafik-darkpritext text-rafik-pritext dark:text-rafik-darkpritext border-2'
-                    : 'border border-rafik-sectext dark:border-rafik-darksectext opacity-80 hover:opacity-100'
+                    ? 'border-topsets-pritext dark:border-topsets-darkpritext text-topsets-pritext dark:text-topsets-darkpritext border-2'
+                    : 'border border-topsets-sectext dark:border-topsets-darksectext opacity-80 hover:opacity-100'
                 "
-                class="truncate h-24 w-24 2xl:w-32 2xl:h-32 text-xs 2xl:text-sm text-wrap rounded-xl font-bold flex items-center justify-center bg-rafik-pribg dark:bg-rafik-darkpribg uppercase"
+                class="truncate h-24 w-24 2xl:w-32 2xl:h-32 text-xs 2xl:text-sm text-wrap rounded-xl font-bold flex items-center justify-center bg-topsets-pribg dark:bg-topsets-darkpribg uppercase"
               >
                 {{ t(type) }}
               </button>
@@ -398,10 +398,10 @@ onMounted(() => {
         <!-- Right-Side Tools (Import / Delete) -->
         <div
         :class="locale === 'ar'?'border-r':'border-l'"
-          class="pl-6 flex-1 min-w-max  border-rafik-sectext dark:border-rafik-darksectext"
+          class="pl-6 flex-1 min-w-max  border-topsets-sectext dark:border-topsets-darksectext"
         >
           <div
-            class="flex flex-col flex-1 h-96 justify-center gap-4 border-rafik-sectext dark:border-rafik-darksectext text-left"
+            class="flex flex-col flex-1 h-96 justify-center gap-4 border-topsets-sectext dark:border-topsets-darksectext text-left"
           >
             <ImportOffcanvas @import-exercise="importExercise" />
             <button
@@ -416,12 +416,12 @@ onMounted(() => {
 
       <!-- Tab Navigation -->
       <div
-        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
+        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-topsets-sectext dark:border-topsets-darksectext"
       >
         <button
           :class="
             activeTab === 'Muscles'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn"
@@ -432,7 +432,7 @@ onMounted(() => {
         <button
           :class="
             activeTab === 'Tips and Technique'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"
@@ -443,7 +443,7 @@ onMounted(() => {
         <button
           :class="
             activeTab === 'Equipment'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"
@@ -454,7 +454,7 @@ onMounted(() => {
         <button
           :class="
             activeTab === 'Alternatives'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"

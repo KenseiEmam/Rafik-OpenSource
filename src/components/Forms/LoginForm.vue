@@ -6,9 +6,9 @@
         <input
           name="email"
           v-model="email"
-          class="rafik-text-input"
+          class="topsets-text-input"
           type="email"
-          placeholder="rafik@example.com"
+          placeholder="topsets@example.com"
           required
         />
       </div>
@@ -17,7 +17,7 @@
         <input
           v-model="password"
           name="password"
-          class="rafik-text-input"
+          class="topsets-text-input"
           type="password"
           placeholder="*******"
           required

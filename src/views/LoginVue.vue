@@ -7,7 +7,7 @@ const { t , locale } = useI18n();
 </script>
 
 <template>
-  <main class="dark flex-1 mebsite-body flex-col flex">
+  <main class="flex-1 mebsite-body flex-col flex">
     <WebsiteHeader />
     <Transition name="slide-fade" appear>
       <div class="grid md:grid-cols-2 items-center min-h-64 flex-1 mb-16">
@@ -23,7 +23,7 @@ const { t , locale } = useI18n();
         </div>
         <div class="relative">
           <div
-            class="w-96 h-96 rounded-full bottom-0 opacity-80 absolute -right-16 bg-rafik content"
+            class="w-96 h-96 rounded-full bottom-0 opacity-80 absolute -right-16 bg-topsets content"
           ></div>
           <img
             class="w-128 object-cover ms-auto relative grayscale"

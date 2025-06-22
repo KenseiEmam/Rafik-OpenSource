@@ -3,11 +3,11 @@
   <div class="text-center">
     <button
       @click="openModal"
-      class="header-small p-4 border border-rafik-pritext dark:border-rafik-darkpritext text-sm rounded hover:opacity-70"
+      class="header-small p-4 border border-topsets-pritext dark:border-topsets-darkpritext text-sm rounded hover:opacity-70"
     >
       {{ t('dashboard.offCanvas.exercise.addExercise') }}
       <br />
-      <span class="text-sm text-rafik-sectext dark:text-rafik-darksectext">
+      <span class="text-sm text-topsets-sectext dark:text-topsets-darksectext">
         {{ t('dashboard.offCanvas.exercise.straightExercise') }}
       </span>
     </button>
@@ -21,7 +21,7 @@
   >
     <div class="flex-1 w-full h-full content" @click="ModalOn = false"></div>
     <div
-      class="p-8 py-12 border-l border-rafik-sectext dark:border-rafik-darksectext bg-rafik-pribg dark:bg-rafik-darkpribg w-128 h-full space-y-8 relative"
+      class="p-8 py-12 border-l border-topsets-sectext dark:border-topsets-darksectext bg-topsets-pribg dark:bg-topsets-darkpribg w-128 h-full space-y-8 relative"
     >
       <div>
         <h2 class="subheader-medium uppercase">
@@ -57,7 +57,7 @@
           <input
             type="search"
             @input="handleSearch"
-            class="block w-full p-4 text-sm text-rafik-sectext dark:text-rafik-darksectext border rounded-lg bg-rafik-pribg dark:bg-rafik-darkpribg"
+            class="block w-full p-4 text-sm text-topsets-sectext dark:text-topsets-darksectext border rounded-lg bg-topsets-pribg dark:bg-topsets-darkpribg"
             :placeholder="t('dashboard.offCanvas.exercise.searchPlaceholder')"
             required
           />
@@ -67,7 +67,7 @@
       <!-- Add custom exercise button -->
       <div
         @click="showAddExerciseModal = true"
-        class="border-2 border-dashed flex p-3 hover:cursor-pointer hover:opacity-70 w-full items-center justify-center border-rafik-sectext dark:border-rafik-darksectext bg-rafik-pribg dark:bg-rafik-darkpribg rounded-lg overflow-hidden"
+        class="border-2 border-dashed flex p-3 hover:cursor-pointer hover:opacity-70 w-full items-center justify-center border-topsets-sectext dark:border-topsets-darksectext bg-topsets-pribg dark:bg-topsets-darkpribg rounded-lg overflow-hidden"
       >
         <p class="text-center header-small uppercase">
           {{ t('dashboard.offCanvas.exercise.addCustomExercise') }}
@@ -82,19 +82,19 @@
         <ul class="overflow-auto space-y-4">
           <li v-for="exercise in exerciseStore.AllExercises" :key="exercise.id">
             <div
-              class="card p-6 border-rafik gradient-bg flex justify-between items-center text-left border"
+              class="card p-6 border-topsets gradient-bg flex justify-between items-center text-left border"
             >
               <div>
                 <h2 class="header-small">{{ exercise.exercise_name }}</h2>
                 <h2 class="subheader-small uppercase mb-6">
                   {{ exercise.type }}
                 </h2>
-                <p class="label text-rafik-secondary">
+                <p class="label text-topsets-secondary">
                   {{ t('dashboard.offCanvas.exercise.primeMovers') }}
                 </p>
                 <div class="flex gap-2 flex-wrap">
                   <p
-                    class="label text-rafik-secondary"
+                    class="label text-topsets-secondary"
                     v-for="(mover, index) in exercise.prime"
                     :key="index"
                   >
@@ -107,7 +107,7 @@
               <button
                 @click="toggleSelection(exercise)"
                 :class="{
-                  'bg-rafik': isSelected(exercise),
+                  'bg-topsets': isSelected(exercise),
                   'bg-gray-500': !isSelected(exercise)
                 }"
                 class="px-4 py-2 text-white rounded-lg"
@@ -131,7 +131,7 @@
 
       <!-- Selected Exercises Section -->
       <div
-        class="fixed bottom-0 p-6 border-l border-rafik-sctext bg-rafik-secbg dark:bg-rafik-darksecbg flex flex-col w-128 right-0 gap-4"
+        class="fixed bottom-0 p-6 border-l border-topsets-sctext bg-topsets-secbg dark:bg-topsets-darksecbg flex flex-col w-128 right-0 gap-4"
       >
         <h4 class="contentH-small uppercase">
           {{

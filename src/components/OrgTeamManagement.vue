@@ -2,8 +2,8 @@
 
 <template>
   <div class="min-h-72 flex-1 mb-16 relative w-full">
-    <h1 class="title-small my-8 pb-4 border-b border-rafik">
-      <span class="text-rafik-pritext dark:text-rafik-darkpritext"> Unified </span>
+    <h1 class="title-small my-8 pb-4 border-b border-topsets">
+      <span class="text-topsets-pritext dark:text-topsets-darkpritext"> Unified </span>
       <br />
       Team&nbsp;&amp;&nbsp;Athlete&nbsp;Management
     </h1>
@@ -16,7 +16,7 @@
           class="h-64 card rounded-xl m-auto shadow-lg"
           alt=""
         />
-        <p class="text-body pl-4 border-l border-rafik-secondary">
+        <p class="text-body pl-4 border-l border-topsets-secondary">
           View every athlete and staff member in one place. Filter by sport, squad, status or
           eligibility to keep your programme running smoothly.
         </p>
@@ -36,7 +36,7 @@
             alt=""
           />
         </div>
-        <p class="text-body pl-4 border-l border-rafik-secondary">
+        <p class="text-body pl-4 border-l border-topsets-secondary">
           Monitor workload, wellness and compliance to protect athlete health and drive consistent
           performance.
         </p>
@@ -49,7 +49,7 @@
           class="h-64 card rounded-xl m-auto shadow-lg"
           alt=""
         />
-        <p class="text-body pl-4 border-l border-rafik-secondary">
+        <p class="text-body pl-4 border-l border-topsets-secondary">
           Organisation-level dashboards surface trends across teams so you can benchmark success and
           spot red flags early.
         </p>
@@ -62,7 +62,7 @@
           class="h-64 card rounded-xl m-auto shadow-lg"
           alt=""
         />
-        <p class="text-body pl-4 border-l border-rafik-secondary">
+        <p class="text-body pl-4 border-l border-topsets-secondary">
           Align calendars, facilities and travel logistics to keep everyone on-time and
           competition-ready.
         </p>

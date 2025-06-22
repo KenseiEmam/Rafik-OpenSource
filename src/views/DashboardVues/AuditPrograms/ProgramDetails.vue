@@ -39,8 +39,8 @@ onMounted(() => {
         icon: 'error',
         confirmButtonColor: '#d33',
         cancelButtonColor: '#d33',
-        background: '#081411',
-        color: '#E8F3ED'
+        background: '#132e3d',
+        color: '#ececec'
       });
     });
   }
@@ -59,16 +59,16 @@ function setActiveTab(tab: string) {
       class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-3 2xl:space-y-6"
     >
       <div
-        class="border group flex flex-col relative border-rafik-alternate rounded-lg overflow-hidden"
+        class="border group flex flex-col relative border-topsets-alternate rounded-lg overflow-hidden"
       >
         <img
           :src="programStore.Program.program_photo"
           class="w-full h-full object-cover absolute"
           :alt="t('dashboard.auditPrograms.single.alt.programPhoto')"
         />
-        <div class="w-full opacity-70 h-full bg-rafik-pribg dark:bg-rafik-darkpribg absolute"></div>
+        <div class="w-full opacity-70 h-full bg-topsets-pribg dark:bg-topsets-darkpribg absolute"></div>
         <div
-          class="p-8 2xl:p-16 2xl:py-24 space-y-4 relative grid items-stretch grid-cols-4 divide-x divide-rafik-sectext dark:divide-rafik-darksectext divide-x-solid"
+          class="p-8 2xl:p-16 2xl:py-24 space-y-4 relative grid items-stretch grid-cols-4 divide-x divide-topsets-sectext dark:divide-topsets-darksectext divide-x-solid"
         >
           <div class="pr-6 space-y-4 col-span-3">
             <div class="flex items-center justify-between">
@@ -98,7 +98,7 @@ function setActiveTab(tab: string) {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   stroke="currentColor"
-                  class="w-6 text-rafik-sectext dark:text-rafik-darksectext"
+                  class="w-6 text-topsets-sectext dark:text-topsets-darksectext"
                   viewBox="0 0 448 512"
                 >
                   <path
@@ -112,7 +112,7 @@ function setActiveTab(tab: string) {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   stroke="currentColor"
-                  class="w-6 text-rafik-sectext dark:text-rafik-darksectext"
+                  class="w-6 text-topsets-sectext dark:text-topsets-darksectext"
                   viewBox="0 0 448 512"
                 >
                   <path
@@ -127,7 +127,7 @@ function setActiveTab(tab: string) {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   stroke="currentColor"
-                  class="w-6 text-rafik-sectext dark:text-rafik-darksectext"
+                  class="w-6 text-topsets-sectext dark:text-topsets-darksectext"
                   viewBox="0 0 448 512"
                 >
                   <path
@@ -141,10 +141,10 @@ function setActiveTab(tab: string) {
           </div>
           <div class="pl-6 flex-1 min-w-max">
             <div
-              class="flex flex-col flex-1 gap-4 border-rafik-sectext dark:border-rafik-darksectext text-left justify-center"
+              class="flex flex-col flex-1 gap-4 border-topsets-sectext dark:border-topsets-darksectext text-left justify-center"
             >
               <button
-                class="uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+                class="uppercase text-left hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
                 v-if="programStore.Program.status == 'Review'"
               >
                 {{ t('dashboard.auditPrograms.single.actions.acceptPublish') }}
@@ -156,7 +156,7 @@ function setActiveTab(tab: string) {
                 {{ t('dashboard.auditPrograms.single.actions.denyRequest') }}
               </button>
               <button
-                class="uppercase text-left text-rafik-secondary hover:text-rafik"
+                class="uppercase text-left text-topsets-secondary hover:text-topsets"
                 v-if="programStore.Program.status == 'Active' && !isOrg"
               >
                 {{ t('dashboard.auditPrograms.single.actions.resetToDraft') }}
@@ -168,12 +168,12 @@ function setActiveTab(tab: string) {
 
       <!-- Tabs Navigation -->
       <div
-        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
+        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-topsets-sectext dark:border-topsets-darksectext"
       >
         <button
           :class="
             activeTab === 'Details'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn"
@@ -184,7 +184,7 @@ function setActiveTab(tab: string) {
         <button
           :class="
             activeTab === 'Workouts'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"
@@ -195,7 +195,7 @@ function setActiveTab(tab: string) {
         <button
           :class="
             activeTab === 'Clients'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"
@@ -206,7 +206,7 @@ function setActiveTab(tab: string) {
         <button
           :class="
             activeTab === 'Pricing'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"
@@ -217,7 +217,7 @@ function setActiveTab(tab: string) {
         <button
           :class="
             activeTab === 'Reviews'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"

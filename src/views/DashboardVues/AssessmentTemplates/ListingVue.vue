@@ -14,7 +14,7 @@
           <input
             type="search"
             @input="handleSearch"
-            class="block w-full p-4 text-sm text-rafik-sectext dark:text-rafik-darksectext border rounded-lg bg-rafik-pribg dark:bg-rafik-darkpribg"
+            class="block w-full p-4 text-sm text-topsets-sectext dark:text-topsets-darksectext border rounded-lg bg-topsets-pribg dark:bg-topsets-darkpribg"
             :placeholder="t('dashboard.assessmentTemplates.list.searchPlaceholder')"
             required
           />
@@ -42,16 +42,16 @@
               v-for="template in filteredTemplates"
               :key="template.id"  class="rounded-xl p-4 w-full"
             >
-              <td  class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 rounded-s">{{ template.template_name }}</td>
-              <td  class="bg-rafik-secbg dark:bg-rafik-darksecbg">{{ template.created_by }}</td>
-              <td  class="bg-rafik-secbg dark:bg-rafik-darksecbg">{{ template.drills?.length }}</td>
-              <td  class="bg-rafik-secbg dark:bg-rafik-darksecbg">{{ formatDate(template.created_at) }}</td>
-              <td  class="bg-rafik-secbg dark:bg-rafik-darksecbg relative rounded-e">
+              <td  class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4 rounded-s">{{ template.template_name }}</td>
+              <td  class="bg-topsets-secbg dark:bg-topsets-darksecbg">{{ template.created_by }}</td>
+              <td  class="bg-topsets-secbg dark:bg-topsets-darksecbg">{{ template.drills?.length }}</td>
+              <td  class="bg-topsets-secbg dark:bg-topsets-darksecbg">{{ formatDate(template.created_at) }}</td>
+              <td  class="bg-topsets-secbg dark:bg-topsets-darksecbg relative rounded-e">
                 <svg
                   @click="show_action = template.id"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
-                  class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext cursor-pointer ms-auto"
+                  class="text-topsets-sectext dark:text-topsets-darksectext h-7 mx-7 hover:text-topsets-pritext dark:hover:text-topsets-darkpritext cursor-pointer ms-auto"
                   viewBox="0 0 128 512"
                 >
                   <path
@@ -61,16 +61,16 @@
                 <div
                   v-if="show_action == template.id"
                   @mouseleave="handleLeave()"
-                  class="absolute min-w-16 z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg shadow-lg divide-y divide-rafik-sectext dark:divide-rafik-darksectext"
+                  class="absolute min-w-16 z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-topsets-secbg dark:bg-topsets-darksecbg shadow-lg divide-y divide-topsets-sectext dark:divide-topsets-darksectext"
                 >
                   <button
-                   @click="router.push({name:'assessment-template', params:{id:template.id}})"  class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext rounded"
+                   @click="router.push({name:'assessment-template', params:{id:template.id}})"  class="px-3 py-5 hover:bg-topsets-pribg w-full text-center dark:bg-topsets-darkpribg hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darksectext rounded"
                   >
                     View
                   </button>
                   <button
                     @click="handleDelete(template)"
-                    class="px-3 py-5 text-red-500 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-red-300 rounded"
+                    class="px-3 py-5 text-red-500 hover:bg-topsets-pribg dark:bg-topsets-darkpribg hover:text-red-300 rounded"
                   >
                     {{ t('dashboard.assessmentTemplates.list.actions.delete') }}
                   </button>
@@ -87,11 +87,11 @@
         class="h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body"
       >
         <img
-          src="@/assets/Large Icon.png"
+          src="@/assets/ts-trans-dark.png"
           class="w-24 h-24 animate-bounce hidden dark:inline-block"
           alt=""
         />
-        <img src="@/assets/Large Icon Light.png" class="w-24 h-24 animate-bounce dark:hidden" alt="" />
+        <img src="@/assets/ts-trans-light.png" class="w-24 h-24 animate-bounce dark:hidden" alt="" />
         <p class="text-lg animate-pulse">{{ t('general.loading') }}</p>
       </div>
     </div>
@@ -196,10 +196,10 @@ const handleDelete = async (template: any) => {
       text: t('dashboard.assessmentTemplates.list.deleteConfirm.text'),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#CB901C',
+      confirmButtonColor: '#1578ac',
       cancelButtonColor: '#d33',
-      background: '#081411',
-      color: '#E8F3ED',
+      background: '#132e3d',
+      color: '#ececec',
       confirmButtonText: 'Delete',
       cancelButtonText: 'Cancel'
     });
@@ -243,9 +243,9 @@ tbody > tr {
 }
 
 .card:hover {
-  background-image: linear-gradient(135deg, #f3eeeb 36%, #fff2cb);
+  background-image: linear-gradient(135deg, #ececec 36%, #bfc7cb);
 }
 .dark .card:hover {
-  background-image: linear-gradient(135deg, #081411 36%, #295f42);
+  background-image: linear-gradient(135deg, #132e3d 36%, #154b5d);
 }
 </style>

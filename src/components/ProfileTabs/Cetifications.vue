@@ -5,12 +5,12 @@
   >
     <!-- Dark Mode Icon -->
     <img
-      src="@/assets/Large Icon.png"
+      src="@/assets/ts-trans-dark.png"
       class="w-24 h-24 animate-bounce hidden dark:inline-block"
       alt=""
     />
     <!-- Light Mode Icon -->
-    <img src="@/assets/Large Icon Light.png" class="w-24 h-24 animate-bounce dark:hidden" alt="" />
+    <img src="@/assets/ts-trans-light.png" class="w-24 h-24 animate-bounce dark:hidden" alt="" />
     <p class="text-lg animate-pulse">
       {{ t('dashboard.tabs.profile.certifications.loading') }}
     </p>
@@ -89,8 +89,8 @@ const showSuccess = (messageKey: string, interpolation: Record<string, any> = {}
     timer: 1500,
     toast: true,
     position: 'top-right',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 };
 
@@ -100,8 +100,8 @@ const showError = (messageKey: string, interpolation: Record<string, any> = {}) 
     text: t(messageKey, interpolation),
     icon: 'error',
     confirmButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 };
 
@@ -193,10 +193,10 @@ function handleDelete(name: string) {
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: t('dashboard.tabs.profile.certifications.deleteConfirmButton'),
-    confirmButtonColor: '#CB901C',
+    confirmButtonColor: '#1578ac',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   }).then((result) => {
     if (result.isConfirmed) {
       deleteCertification(name);

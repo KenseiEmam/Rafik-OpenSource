@@ -1,19 +1,19 @@
 <template>
   <div
     :dir="locale === 'ar' ? 'rtl' : 'ltr'"
-    class="h-screen overflow-y-auto border-rafik-sectext dark:border-rafik-darksectext bg-rafik-secbg dark:bg-rafik-darksecbg flex flex-col p-8 gap-8 2xl:items-between 2xl:p-16"
+    class="h-screen overflow-y-auto border-topsets-sectext dark:border-topsets-darksectext bg-topsets-secbg dark:bg-topsets-darksecbg flex flex-col p-8 gap-8 2xl:items-between 2xl:p-16"
   >
     <div class="relative">
       <!-- Light mode image: visible by default, hidden in dark mode -->
       <img
         class="w-24 2xl:h-auto 2xl:w-44 object-cover block dark:hidden"
-        src="/src/assets/rafik_light.png"
+        src="/src/assets/ts-trans-light.png"
         alt="Light mode logo"
       />
       <!-- Dark mode image: hidden by default, visible in dark mode -->
       <img
-        class="w-24 2xl:h-auto 2xl:w-44 object-cover hidden dark:block"
-        src="/src/assets/rafik.png"
+        class="w-64 2xl:h-auto 2xl:w-44 object-cover hidden dark:block"
+        src="/src/assets/ts-trans-dark.png"
         alt="Dark mode logo"
       />
     </div>
@@ -202,7 +202,7 @@ nav {
 }
 
 nav a.router-link-exact-active {
-  color: #190a03;
+  color: #132e3d;
 }
 .dark nav a.router-link-exact-active {
   color: #ffffff;

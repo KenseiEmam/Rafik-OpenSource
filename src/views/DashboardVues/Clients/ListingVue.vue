@@ -17,13 +17,13 @@
       >
         <!-- Dark Mode Icon -->
         <img
-          src="@/assets/Large Icon.png"
+          src="@/assets/ts-trans-dark.png"
           class="w-24 h-24 animate-bounce hidden dark:inline-block"
           alt=""
         />
         <!-- Light Mode Icon -->
         <img
-          src="@/assets/Large Icon Light.png"
+          src="@/assets/ts-trans-light.png"
           class="w-24 h-24 animate-bounce dark:hidden"
           alt=""
         />
@@ -46,24 +46,24 @@
                   <button
                     v-if="page > 1"
                     @click="updatePage(page - 1)"
-                    class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+                    class="px-4 py-2 text-topsets-sectext dark:text-topsets-darksectext min-w-max hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
                   >
                     {{ t('dashboard.clients.list.prev') }}
                   </button>
 
-                  <p class="min-w-max text-rafik-sectext dark:text-rafik-darksectext capitalize">
+                  <p class="min-w-max text-topsets-sectext dark:text-topsets-darksectext capitalize">
                     {{ t('dashboard.clients.list.pageLabel') }}
                   </p>
                   <div
                     v-if="userStore.client_count"
-                    class="flex text-rafik-sectext dark:text-rafik-darksectext gap-4 pr-4"
+                    class="flex text-topsets-sectext dark:text-topsets-darksectext gap-4 pr-4"
                   >
                     <button
                       v-for="p in Math.ceil(userStore.client_count / numbers)"
                       :key="p"
                       @click="updatePage(p)"
-                      class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
-                      :class="{ 'text-rafik-pritext dark:text-rafik-darkpritext': p === page }"
+                      class="hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
+                      :class="{ 'text-topsets-pritext dark:text-topsets-darkpritext': p === page }"
                     >
                       {{ p }}
                     </button>
@@ -72,7 +72,7 @@
                   <button
                     v-if="page < Math.ceil(userStore.client_count / numbers)"
                     @click="updatePage(page + 1)"
-                    class="px-4 py-2 text-rafik-sectext dark:text-rafik-darkpritext min-w-max hover:text-rafik-pritext"
+                    class="px-4 py-2 text-topsets-sectext dark:text-topsets-darkpritext min-w-max hover:text-topsets-pritext"
                   >
                     {{ t('dashboard.clients.list.next') }}
                   </button>
@@ -91,7 +91,7 @@
                     name="records"
                     v-model="numbers"
                     @change="updatePage(page)"
-                    class="rafik-text-input w-32 text-sm p-2"
+                    class="topsets-text-input w-32 text-sm p-2"
                   >
                     <option value="5">5</option>
                     <option value="10" selected>10</option>
@@ -112,14 +112,14 @@
             >
               <td
               :class="locale === 'ar'? 'pr-3':'pl-3'"
-                class="flex gap-6  text-left items-center py-4  bg-rafik-secbg dark:bg-rafik-darksecbg"
+                class="flex gap-6  text-left items-center py-4  bg-topsets-secbg dark:bg-topsets-darksecbg"
               >
                 <img
                   :src="
                     client.avatar ||
                     'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
                   "
-                  class="w-12 h-12 rounded-full border-2 border-rafik"
+                  class="w-12 h-12 rounded-full border-2 border-topsets"
                   alt="Avatar"
                 />
                 <div>
@@ -128,7 +128,7 @@
                 </div>
               </td>
 
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg">
                 {{
                   new Date(client.program_details.created_at).toLocaleDateString('en-GB', {
                     year: 'numeric',
@@ -137,7 +137,7 @@
                   }) || '-'
                 }}
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg">
                 {{
                   new Date(client.program_details.expires_on).toLocaleDateString('en-GB', {
                     year: 'numeric',
@@ -146,21 +146,21 @@
                   }) || '-'
                 }}
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg">
                 {{ client.program_details.months_package || '-' }}
                 {{ t('dashboard.clients.list.monthsSuffix') }}
               </td>
-              <td class="uppercase bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik">
+              <td class="uppercase bg-topsets-secbg dark:bg-topsets-darksecbg text-topsets">
                 {{ client.program_details.status || '-' }}
               </td>
               <td
-                class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right "
+                class="px-3 bg-topsets-secbg dark:bg-topsets-darksecbg relative text-right "
               >
                 <svg
                   @click="show_action = client.id"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
-                  class="text-rafik-sectext dark:text-rafik-darkpritext h-7 mx-7 hover:text-rafik-pritext cursor-pointer ms-auto"
+                  class="text-topsets-sectext dark:text-topsets-darkpritext h-7 mx-7 hover:text-topsets-pritext cursor-pointer ms-auto"
                   viewBox="0 0 128 512"
                 >
                   <path
@@ -172,20 +172,20 @@
                 <div
                   v-if="show_action === client.id"
                   @mouseleave="handleLeave()"
-                  class="absolute min-w-16  z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg shadow-lg divide-y divide-rafik-sectext dark:divide-rafik-darksectext"
+                  class="absolute min-w-16  z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-topsets-secbg dark:bg-topsets-darksecbg shadow-lg divide-y divide-topsets-sectext dark:divide-topsets-darksectext"
                 >
                   <Router-link
                     :to="{ name: 'client-details', params: { id: client.id } }"
-                    class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext rounded"
+                    class="px-3 py-5 hover:bg-topsets-pribg w-full text-center dark:bg-topsets-darkpribg hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darksectext rounded"
                   >
                     {{ t('dashboard.clients.list.viewProgram') }}
                   </Router-link>
                   <!-- Future Feature (messaging):
-                  <button class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext rounded">
+                  <button class="px-3 py-5 hover:bg-topsets-pribg w-full text-center dark:bg-topsets-darkpribg hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darksectext rounded">
                     {{ t('dashboard.clients.list.messageClient') }}
                   </button> -->
                   <button
-                    class="px-3 py-5 text-red-500 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-red-300 rounded"
+                    class="px-3 py-5 text-red-500 hover:bg-topsets-pribg dark:bg-topsets-darkpribg hover:text-red-300 rounded"
                   >
                     {{ t('dashboard.clients.list.removeClient') }}
                   </button>
@@ -255,9 +255,9 @@ tbody > tr {
 }
 
 .card:hover {
-  background-image: linear-gradient(135deg, #f3eeeb 36%, #fff2cb);
+  background-image: linear-gradient(135deg, #ececec 36%, #bfc7cb);
 }
 .dark .card:hover {
-  background-image: linear-gradient(135deg, #081411 36%, #295f42);
+  background-image: linear-gradient(135deg, #132e3d 36%, #154b5d);
 }
 </style>

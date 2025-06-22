@@ -4,28 +4,25 @@
       <!-- Left: Logo -->
       <div class="mb-4 md:mb-0 flex-col items-center flex text-center">
         <!-- Replace with your logo image or component -->
-        <img src="@/assets/rafik.png" alt="Logo" class="h-16 2xl:h-32" />
-        <div class="md:flex gap-4">
-          <h1 class="header-small">RAFIK </h1>
-        <p class="subheader-small text-xs w-28">Your Personal Fitness Squire</p>
-        </div>
+        <img src="@/assets/ts-light-text.png" alt="Logo" class="h-24 2xl:h-44 rounded-full" />
+
 
       </div>
       <!-- Center: Navigation Links -->
       <div class="flex flex-col md:flex-row items-center text-xs 2xl:text-base gap-2 md:gap-6 mb-4 md:mb-0">
-        <a href="/organizations" class="hover:text-rafik-darkpritext text-rafik-darksectext">Organization</a>
-        <a href="/coaches" class="hover:text-rafik-darkpritext text-rafik-darksectext">Coach</a>
-        <a href="/athletes" class="hover:text-rafik-darkpritext text-rafik-darksectext">Athlete</a>
-        <a href="/request-demo" class="hover:text-rafik-darkpritext text-rafik-darksectext">Demo</a>
-        <a href="/privacy-policy" class="hover:text-rafik-darkpritext text-rafik-darksectext">{{ t('footer.privacyPolicy') }}</a>
-        <a href="/delete-account" class="hover:text-rafik-darkpritext text-rafik-darksectext">{{ t('footer.deleteAccount') }}</a>
+        <a href="/organizations" class="hover:text-topsets-pritext text-topsets-sectext">Organization</a>
+        <a href="/coaches" class="hover:text-topsets-pritext text-topsets-sectext">Coach</a>
+        <a href="/athletes" class="hover:text-topsets-pritext text-topsets-sectext">Athlete</a>
+        <a href="/request-demo" class="hover:text-topsets-pritext text-topsets-sectext">Demo</a>
+        <a href="/privacy-policy" class="hover:text-topsets-pritext text-topsets-sectext">{{ t('footer.privacyPolicy') }}</a>
+        <a href="/delete-account" class="hover:text-topsets-pritext text-topsets-sectext">{{ t('footer.deleteAccount') }}</a>
       </div>
       <!-- Right: Language Selector -->
       <div>
         <select
           v-model="selectedLanguage"
           @change="changeLanguage"
-          class="rafik-text-input text-white p-2 rounded"
+          class="topsets-text-input text-white p-2 rounded"
         >
           <option value="en">🇺🇸 English</option>
           <option value="ar">🇸🇦 العربية</option>

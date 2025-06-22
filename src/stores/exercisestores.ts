@@ -43,8 +43,8 @@ export const useExerciseStore = defineStore("Exercise", () => {
       toast: true,
       position: "top-right",
       icon: "success",
-      background: "#081411",
-      color: "#E8F3ED",
+      background: "#132e3d",
+      color: "#ececec",
     });
   }
 
@@ -54,8 +54,8 @@ export const useExerciseStore = defineStore("Exercise", () => {
       text: message,
       icon: "error",
       confirmButtonColor: "#d33",
-      background: "#081411",
-      color: "#E8F3ED",
+      background: "#132e3d",
+      color: "#ececec",
     });
   }
 
@@ -174,8 +174,8 @@ async function getPageExercises(page: number, filter:string) {
         text: "No exercise found",
         icon: "error",
         confirmButtonColor: "#d33",
-        background: "#081411",
-        color: "#E8F3ED",
+        background: "#132e3d",
+        color: "#ececec",
       }).then(()=>{
         router.push({name:'programs-list'})
       });
@@ -251,7 +251,7 @@ async function fetchPublicExercise(id: string) {
         // Delay opening the URL slightly for better UX
         setTimeout(() => {
           window.open(
-            `http://rafikapp.ae/dashboard/exercises/personal/${data[0].id}`,
+            `http://topsetsapp.ae/dashboard/exercises/personal/${data[0].id}`,
             "_blank"
           );
         }, 500);
@@ -296,7 +296,7 @@ async function fetchPublicExercise(id: string) {
         // Delay opening the URL slightly for better UX
         setTimeout(() => {
           window.open(
-            `http://rafikapp.ae/dashboard/exercises/personal/${data[0].id}`,
+            `http://topsetsapp.ae/dashboard/exercises/personal/${data[0].id}`,
             "_blank"
           );
         }, 500);

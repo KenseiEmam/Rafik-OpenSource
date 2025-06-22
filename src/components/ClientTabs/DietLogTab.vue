@@ -2,7 +2,7 @@
   <div class="my-12">
     <!-- Search Section -->
     <div class="flex items-center justify-between mb-4 gap-6">
-      <hr class="w-full border-rafik-sectext dark:border-rafik-darksectext border-b" />
+      <hr class="w-full border-topsets-sectext dark:border-topsets-darksectext border-b" />
       <span class="text-sm">
         {{ t('dashboard.tabs.clients.dietLog.showingRows', { count: filteredDiets.length }) }}
       </span>
@@ -26,7 +26,7 @@
         <tr
           v-for="diet in filteredDiets"
           :key="diet.id"
-          class="border-b border-rafik-sectext dark:border-rafik-darksectext h-12"
+          class="border-b border-topsets-sectext dark:border-topsets-darksectext h-12"
         >
           <td>
             {{
@@ -69,7 +69,7 @@
           <td class="px-3 relative">
             <Router-link
               :to="{ name: 'diet-sheet', params: { id: diet.id } }"
-              class="px-3 py-5 text-rafik-sectext hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksecext rounded text-sm"
+              class="px-3 py-5 text-topsets-sectext hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darksecext rounded text-sm"
             >
               {{ t('dashboard.tabs.clients.dietLog.moreDetails') }}
             </Router-link>
@@ -83,7 +83,7 @@
       <button
         @click="prevPage"
         :disabled="currentPage === 1"
-        class="px-4 py-2 border rounded-lg hover:border-rafik hover:text-rafik"
+        class="px-4 py-2 border rounded-lg hover:border-topsets hover:text-topsets"
       >
         {{ t('dashboard.tabs.clients.dietLog.prev') }}
       </button>
@@ -95,7 +95,7 @@
       <button
         @click="nextPage"
         :disabled="currentPage === totalPages"
-        class="px-4 py-2 border rounded-lg hover:border-rafik hover:text-rafik"
+        class="px-4 py-2 border rounded-lg hover:border-topsets hover:text-topsets"
       >
         {{ t('dashboard.tabs.clients.dietLog.next') }}
       </button>

@@ -18,7 +18,7 @@
     <ul v-if="editedAlts.length > 0" class="grid grid-cols-3 gap-6 items-center">
       <li v-for="(exercise, index) in editedAlts" :key="exercise.id" class="h-full">
         <div
-          class="card p-6 min-w-96 border-rafik gradient-bg flex justify-between h-full items-center"
+          class="card p-6 min-w-96 border-topsets gradient-bg flex justify-between h-full items-center"
         >
           <div>
             <h2 class="title-small text-xl">{{ exercise.exercise_name }}</h2>
@@ -26,12 +26,12 @@
             <p class="text-sm my-4">{{ exercise.exercise_detail }}</p>
 
             <!-- Prime Movers -->
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
+            <p class="label text-topsets-pritext dark:text-topsets-darkpritext">
               {{ t('dashboard.tabs.exercise.alt.primeMovers') }}
             </p>
             <div class="flex gap-2 flex-wrap mb-2">
               <p
-                class="label text-rafik-secondary"
+                class="label text-topsets-secondary"
                 v-for="(mover, i) in exercise.prime ?? []"
                 :key="'prime-' + i"
               >
@@ -40,12 +40,12 @@
             </div>
 
             <!-- Synergists -->
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
+            <p class="label text-topsets-pritext dark:text-topsets-darkpritext">
               {{ t('dashboard.tabs.exercise.alt.synergists') }}
             </p>
             <div class="flex gap-2 flex-wrap mb-2">
               <p
-                class="label text-rafik-secondary"
+                class="label text-topsets-secondary"
                 v-for="(synergist, i) in exercise.synergist ?? []"
                 :key="'synergist-' + i"
               >
@@ -54,12 +54,12 @@
             </div>
 
             <!-- Antagonists -->
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
+            <p class="label text-topsets-pritext dark:text-topsets-darkpritext">
               {{ t('dashboard.tabs.exercise.alt.antagonists') }}
             </p>
             <div class="flex gap-2 flex-wrap">
               <p
-                class="label text-rafik-secondary"
+                class="label text-topsets-secondary"
                 v-for="(antagonist, i) in exercise.antagonist ?? []"
                 :key="'antagonist-' + i"
               >
@@ -88,7 +88,7 @@
     </ul>
 
     <div v-else class="space-y-6 flex flex-col items-center py-12">
-      <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+      <p class="text-topsets-pritext dark:text-topsets-darkpritext">
         {{ t('dashboard.tabs.exercise.alt.noAlternativesFound') }}
       </p>
       <ExerciseOffcanvas

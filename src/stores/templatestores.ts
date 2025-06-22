@@ -40,8 +40,8 @@ export const useTemplateStore = defineStore("template", () => {
         icon: "error",
         title: "Error fetching templates",
         text: error.message || "Unknown error",
-        background: "#081411",
-        color: "#E8F3ED",
+        background: "#132e3d",
+        color: "#ececec",
       });
     }
   }
@@ -69,8 +69,8 @@ export const useTemplateStore = defineStore("template", () => {
         icon: "error",
         title: "Error loading template",
         text: error.message || "Unknown error",
-        background: "#081411",
-        color: "#E8F3ED",
+        background: "#132e3d",
+        color: "#ececec",
       });
       TemplateItem.value = null;
       throw error;
@@ -109,16 +109,16 @@ export const useTemplateStore = defineStore("template", () => {
       Swal.fire({
         icon: "success",
         title: "Template updated",
-        background: "#081411",
-        color: "#E8F3ED",
+        background: "#132e3d",
+        color: "#ececec",
       });
     } catch (error: any) {
       Swal.fire({
         icon: "error",
         title: "Error updating template",
         text: error.message || "Unknown error",
-        background: "#081411",
-        color: "#E8F3ED",
+        background: "#132e3d",
+        color: "#ececec",
       });
       throw error;
     }
@@ -140,8 +140,8 @@ export const useTemplateStore = defineStore("template", () => {
         icon: "error",
         title: "Error creating template",
         text: error.message || "Unknown error",
-        background: "#081411",
-        color: "#E8F3ED",
+        background: "#132e3d",
+        color: "#ececec",
       });
       throw error;
     }
@@ -176,8 +176,8 @@ async function fetchCreatedByUser(userId: number) {
         icon: "error",
         title: "Error deleting template",
         text: error.message || "Unknown error",
-        background: "#081411",
-        color: "#E8F3ED",
+        background: "#132e3d",
+        color: "#ececec",
       });
       throw error;
     }

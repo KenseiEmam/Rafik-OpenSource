@@ -23,13 +23,13 @@
                 readonly
               />
               <div
-                class="w-16 h-8 flex items-center border-rafik-sectext dark:border-rafik-darksectext border-2 rounded-full transition-all"
+                class="w-16 h-8 flex items-center border-topsets-sectext dark:border-topsets-darksectext border-2 rounded-full transition-all"
                 :class="settingsStore.settings!.notifications?.includes(notif.code)
-                  ? 'bg-rafik'
-                  : 'bg-rafik-secbg dark:bg-rafik-darsecbg'"
+                  ? 'bg-topsets'
+                  : 'bg-topsets-secbg dark:bg-topsets-darsecbg'"
               >
                 <div
-                  class="w-8 h-8 bg-rafik-sectext dark:bg-rafik-darksectext flex items-center justify-center rounded-full shadow-md transform transition-transform duration-300"
+                  class="w-8 h-8 bg-topsets-sectext dark:bg-topsets-darksectext flex items-center justify-center rounded-full shadow-md transform transition-transform duration-300"
                   :class="{
                     'translate-x-0': !settingsStore.settings!.notifications?.includes(notif.code),
                     [locale === 'ar' ? '-translate-x-8' : 'translate-x-8']: settingsStore.settings!.notifications?.includes(notif.code)
@@ -93,8 +93,8 @@ function showSuccess(message: string) {
     toast: true,
     position: 'top-right',
     icon: 'success',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -104,8 +104,8 @@ function showError(message: string) {
     text: message,
     icon: 'error',
     confirmButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 

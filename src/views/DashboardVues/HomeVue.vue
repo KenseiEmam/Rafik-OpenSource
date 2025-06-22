@@ -21,7 +21,7 @@ const { t, locale } = useI18n();
     :dir="locale === 'ar' ? 'rtl' : 'ltr'"
   >
     <div
-      class="card w-full bg-rafik-secbg dark:bg-rafik-darksecbg p-8 2xl:py-16 flex gap-6 2xl:gap-10 border-0 items-center"
+      class="card w-full bg-topsets-secbg dark:bg-topsets-darksecbg p-8 2xl:py-16 flex gap-6 2xl:gap-10 border-0 items-center"
       v-if="props.user"
     >
       <!-- User Avatar -->
@@ -30,13 +30,13 @@ const { t, locale } = useI18n();
           props.user.avatar ||
           'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
         "
-        class="w-32 h-32 2xl:w-52 2xl:h-52 ring-rafik ring-1 rounded-full self-center"
+        class="w-32 h-32 2xl:w-52 2xl:h-52 ring-topsets ring-1 rounded-full self-center"
         alt="User Avatar"
       />
 
       <!-- Welcome Text Section -->
       <div class="w-1/2 flex flex-col justify-center">
-        <h2 class="header-small text-rafik-sectext dark:text-rafik-darksectext">
+        <h2 class="header-small text-topsets-sectext dark:text-topsets-darksectext">
           {{ t('dashboard.home.welcomeBack') }}
         </h2>
         <h2 class="title-small">{{ props.user.first_name }}</h2>
@@ -47,15 +47,15 @@ const { t, locale } = useI18n();
 
       <!-- Button Section -->
       <div :class="locale === 'ar'?'border-r':'border-l'"
-        class=" border-rafik-sectext dark:border-rafik-darksectext  px-8 flex flex-col gap-4 ms-auto py-4 h-full 2xl:h-44 justify-between"
+        class=" border-topsets-sectext dark:border-topsets-darksectext  px-8 flex flex-col gap-4 ms-auto py-4 h-full 2xl:h-44 justify-between"
       >
-        <router-link :to="{ name: 'trainer-profile' }" class=" opacity-50 text-rafik-sectext dark:text-rafik-darksectext hover:text-rafik-pritext hover:dark:text-rafik-darkpritext 2xl:text-xl">
+        <router-link :to="{ name: 'trainer-profile' }" class=" opacity-50 text-topsets-sectext dark:text-topsets-darksectext hover:text-topsets-pritext hover:dark:text-topsets-darkpritext 2xl:text-xl">
           {{ t('dashboard.home.button.viewProfile') }}
         </router-link>
-        <router-link to="" disabled class=" opacity-50 text-rafik-sectext dark:text-rafik-darksectext hover:text-red-500 2xl:text-xl">
+        <router-link to="" disabled class=" opacity-50 text-topsets-sectext dark:text-topsets-darksectext hover:text-red-500 2xl:text-xl">
           {{ t('dashboard.home.button.checkCharts') }}
         </router-link>
-        <router-link :to="{ name: 'settings' }" class=" opacity-50 text-rafik-sectext dark:text-rafik-darksectext hover:text-rafik-pritext hover:dark:text-rafik-darkpritext 2xl:text-xl">
+        <router-link :to="{ name: 'settings' }" class=" opacity-50 text-topsets-sectext dark:text-topsets-darksectext hover:text-topsets-pritext hover:dark:text-topsets-darkpritext 2xl:text-xl">
           {{ t('dashboard.home.button.settings') }}
         </router-link>
       </div>
@@ -65,7 +65,7 @@ const { t, locale } = useI18n();
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
         stroke="currentColor"
-        class="w-12 text-rafik-sectext dark:text-rafik-darksectext"
+        class="w-12 text-topsets-sectext dark:text-topsets-darksectext"
         viewBox="0 0 448 512"
       >
         <path

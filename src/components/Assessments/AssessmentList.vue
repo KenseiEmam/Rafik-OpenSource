@@ -6,7 +6,7 @@
         <input
           type="search"
           @input="handleSearch"
-          class="block w-full p-4 text-sm text-rafik-sectext dark:text-rafik-darksectext border rounded-lg bg-rafik-pribg dark:bg-rafik-darkpribg"
+          class="block w-full p-4 text-sm text-topsets-sectext dark:text-topsets-darksectext border rounded-lg bg-topsets-pribg dark:bg-topsets-darkpribg"
           :placeholder="t('dashboard.assessments.list.typeToSearchAssessments')"
           required
         />
@@ -15,35 +15,35 @@
         <button
           @click="updateFilter('All')"
           class="card border 2xl:text-base text-sm min-w-max uppercase"
-          :class="filter === 'All' ? 'border-rafik gradient-bg text-rafik' : 'border'"
+          :class="filter === 'All' ? 'border-topsets gradient-bg text-topsets' : 'border'"
         >
           {{ t('dashboard.assessments.list.allAssessments') }}
         </button>
         <button
           @click="updateFilter('scheduled')"
           class="card border 2xl:text-base text-sm min-w-max uppercase"
-          :class="filter === 'scheduled' ? 'border-rafik gradient-bg text-rafik' : 'border'"
+          :class="filter === 'scheduled' ? 'border-topsets gradient-bg text-topsets' : 'border'"
         >
           {{ t('dashboard.assessments.list.scheduled') }}
         </button>
         <button
           @click="updateFilter('active')"
           class="card border 2xl:text-base text-sm min-w-max uppercase"
-          :class="filter === 'active' ? 'border-rafik gradient-bg text-rafik' : 'border'"
+          :class="filter === 'active' ? 'border-topsets gradient-bg text-topsets' : 'border'"
         >
           {{ t('dashboard.assessments.list.active') }}
         </button>
         <button
           @click="updateFilter('completed')"
           class="card border 2xl:text-base text-sm min-w-max uppercase"
-          :class="filter === 'completed' ? 'border-rafik gradient-bg text-rafik' : 'border'"
+          :class="filter === 'completed' ? 'border-topsets gradient-bg text-topsets' : 'border'"
         >
           {{ t('dashboard.assessments.list.completed') }}
         </button>
         <button
           @click="updateFilter('canceled')"
           class="card border 2xl:text-base text-sm min-w-max uppercase"
-          :class="filter === 'canceled' ? 'border-rafik gradient-bg text-rafik' : 'border'"
+          :class="filter === 'canceled' ? 'border-topsets gradient-bg text-topsets' : 'border'"
         >
           {{ t('dashboard.assessments.list.canceled') }}
         </button>
@@ -66,13 +66,13 @@
         }"
         v-for="(assessment, index) in props.assessments"
         :key="assessment.id"
-        class="h-full text-rafik-sectext dark:text-rafik-darksectext"
+        class="h-full text-topsets-sectext dark:text-topsets-darksectext"
       >
         <div
-          class="card px-10 p-6 w-full hover:border-rafik border border-transparent flex flex-col h-full"
+          class="card px-10 p-6 w-full hover:border-topsets border border-transparent flex flex-col h-full"
         >
           <!-- Top Section: Trainee Details -->
-          <div v-if="assessment.trainees" class="flex items-center border-b-2 py-4 border-rafik-pribg dark:border-rafik-darkpribg justify-between gap-4 mb-4">
+          <div v-if="assessment.trainees" class="flex items-center border-b-2 py-4 border-topsets-pribg dark:border-topsets-darkpribg justify-between gap-4 mb-4">
             <div class="flex items-center gap-3 ">
               <img
                 :src="
@@ -80,7 +80,7 @@
                   '/user-placeholder.jpg'
                 "
                 alt="Trainee Avatar"
-                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-rafik object-cover"
+                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-topsets object-cover"
               />
               <div>
                 <p class="header-small">
@@ -102,7 +102,7 @@
                   : 'Loading...'
               }}
             </h2>
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
+            <p class="label text-topsets-pritext dark:text-topsets-darkpritext">
               {{ formatDate(assessment.created_at) }}
             </p>
               </div>
@@ -122,7 +122,7 @@
 
           <!-- Bottom Section: Assessors -->
           <div class="mt-auto ">
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext mb-2 py-2">
+            <p class="label text-topsets-pritext dark:text-topsets-darkpritext mb-2 py-2">
               {{ t('dashboard.assessments.list.assessors') }}
             </p>
             <div class="flex flex-wrap gap-1">
@@ -131,7 +131,7 @@
                   v-for="(assessorId, index) in assessment.assessors"
                   :key="assessorId"
                   :to="{ name: 'single-user', params: { id: assessorId } }"
-                  class="label text-rafik-secondary card bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext transition-colors"
+                  class="label text-topsets-secondary card bg-topsets-pribg dark:bg-topsets-darkpribg hover:text-topsets-pritext dark:hover:text-topsets-darkpritext transition-colors"
                   @click.stop
                 >
                   {{
@@ -142,7 +142,7 @@
                   }}
                 </router-link>
               </template>
-              <span v-else class="label text-rafik-sectext dark:text-rafik-darksectext">
+              <span v-else class="label text-topsets-sectext dark:text-topsets-darksectext">
                 {{ t('dashboard.assessments.list.noAssessors') }}
               </span>
             </div>
@@ -152,7 +152,7 @@
     </ul>
 
     <div v-else class="space-y-6 flex flex-col items-center py-12">
-      <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+      <p class="text-topsets-pritext dark:text-topsets-darkpritext">
         {{ t('dashboard.assessments.list.noAssessmentsFound') }}
       </p>
     </div>
@@ -162,23 +162,23 @@
       <p class="header-small min-w-max">
         {{ t('dashboard.assessments.list.pageLabel') }} {{ page }}
       </p>
-      <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
-      <div class="flex text-rafik-sectext dark:text-rafik-darksectext gap-4 px-4">
+      <hr class="border w-full border-topsets-sectext dark:border-topsets-darksectext" />
+      <div class="flex text-topsets-sectext dark:text-topsets-darksectext gap-4 px-4">
         <button
           v-for="p in Math.ceil(props.count / 9)"
           :key="p"
           @click="updatePage(p)"
-          class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
-          :class="{ 'text-rafik-pritext dark:text-rafik-darkpritext': p === page }"
+          class="hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
+          :class="{ 'text-topsets-pritext dark:text-topsets-darkpritext': p === page }"
         >
           {{ p }}
         </button>
       </div>
-      <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
+      <hr class="border w-full border-topsets-sectext dark:border-topsets-darksectext" />
       <button
         v-if="props.page > 1"
         @click="updatePage(pageEdit - 1)"
-        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+        class="px-4 py-2 text-topsets-sectext dark:text-topsets-darksectext min-w-max hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
       >
         {{ t('dashboard.assessments.list.previousPage') }}
       </button>
@@ -186,7 +186,7 @@
       <button
         v-if="props.page < Math.ceil(props.count / 9)"
         @click="updatePage(pageEdit + 1)"
-        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+        class="px-4 py-2 text-topsets-sectext dark:text-topsets-darksectext min-w-max hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
       >
         {{ t('dashboard.assessments.list.nextPage') }}
       </button>

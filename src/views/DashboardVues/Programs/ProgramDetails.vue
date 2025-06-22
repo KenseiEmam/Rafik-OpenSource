@@ -105,8 +105,8 @@ function showSuccess(message: string) {
     position: 'top-right',
     icon: 'success',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -117,8 +117,8 @@ function showError(message: string) {
     icon: 'error',
     confirmButtonColor: '#d33',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -171,10 +171,10 @@ function DeleteProgram() {
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: t('dashboard.programs.details.deleteConfirmButton'),
-    confirmButtonColor: '#CB901C',
+    confirmButtonColor: '#1578ac',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   }).then((result) => {
     if (result.isConfirmed) {
       updateProgramField('status', 'Deleted').then(() => {
@@ -193,10 +193,10 @@ function DraftProgram() {
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: t('dashboard.programs.details.draftConfirmButton'),
-    confirmButtonColor: '#CB901C',
+    confirmButtonColor: '#1578ac',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   }).then((result) => {
     if (result.isConfirmed) {
       updateProgramField('status', 'Draft').then(() => {
@@ -216,10 +216,10 @@ function ActiveProgram() {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: t('dashboard.programs.details.activateConfirmButton'),
-      confirmButtonColor: '#CB901C',
+      confirmButtonColor: '#1578ac',
       cancelButtonColor: '#d33',
-      background: '#081411',
-      color: '#E8F3ED'
+      background: '#132e3d',
+      color: '#ececec'
     }).then((result) => {
       if (result.isConfirmed) {
         updateProgramField('status', 'Active').then(() => {
@@ -352,7 +352,7 @@ async function uploadFileToBucket(): Promise<string | null> {
     >
       <!-- Page Title + Banner -->
       <div
-        class="border group flex flex-col relative border-rafik-alternate rounded-lg overflow-hidden"
+        class="border group flex flex-col relative border-topsets-alternate rounded-lg overflow-hidden"
       >
         <img
           v-if="!loading"
@@ -360,9 +360,9 @@ async function uploadFileToBucket(): Promise<string | null> {
           class="w-full h-full object-cover absolute"
           alt=""
         />
-        <div class="w-full opacity-70 h-full bg-rafik-pribg dark:bg-rafik-darkpribg absolute"></div>
+        <div class="w-full opacity-70 h-full bg-topsets-pribg dark:bg-topsets-darkpribg absolute"></div>
         <div
-          class="p-8 2xl:p-16 2xl:py-24 space-y-4 relative grid items-stretch grid-cols-4 divide-x divide-rafik-sectext dark:divide-rafik-darksectext divide-x-solid"
+          class="p-8 2xl:p-16 2xl:py-24 space-y-4 relative grid items-stretch grid-cols-4 divide-x divide-topsets-sectext dark:divide-topsets-darksectext divide-x-solid"
         >
           <div class="pr-6 space-y-4 col-span-3">
             <div class="flex items-center justify-between">
@@ -372,7 +372,7 @@ async function uploadFileToBucket(): Promise<string | null> {
                 v-model="editableTitle"
                 @blur="saveTitle"
                 @keyup.enter="saveTitle"
-                class="title-small w-1/3 bg-transparent border-b border-rafik-sectext dark:border-rafik-darksectext focus:outline-none"
+                class="title-small w-1/3 bg-transparent border-b border-topsets-sectext dark:border-topsets-darksectext focus:outline-none"
                 type="text"
                 :placeholder="
                   programStore.Program?.program_name ||
@@ -398,7 +398,7 @@ async function uploadFileToBucket(): Promise<string | null> {
               v-model="editableDescription"
               @blur="saveDescription"
               cols="3"
-              class="text-body 2xl:w-5/6 bg-transparent border-b border-rafik-sectext dark:border-rafik-darksectext focus:outline-none whitespace-pre-wrap"
+              class="text-body 2xl:w-5/6 bg-transparent border-b border-topsets-sectext dark:border-topsets-darksectext focus:outline-none whitespace-pre-wrap"
               :placeholder="
                 programStore.Program?.program_description ||
                 t('dashboard.programs.details.loadingPlaceholder')
@@ -422,7 +422,7 @@ async function uploadFileToBucket(): Promise<string | null> {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   stroke="currentColor"
-                  class="w-6 text-rafik-sectext dark:text-rafik-darksectext"
+                  class="w-6 text-topsets-sectext dark:text-topsets-darksectext"
                   viewBox="0 0 448 512"
                 >
                   <path
@@ -446,7 +446,7 @@ async function uploadFileToBucket(): Promise<string | null> {
                     v-for="difficulty in difficulties"
                     :key="difficulty"
                     :value="difficulty"
-                    class="bg-rafik-secbg dark:bg-rafik-darksecbg"
+                    class="bg-topsets-secbg dark:bg-topsets-darksecbg"
                   >
                     {{ t(difficulty) }}
                   </option>
@@ -459,7 +459,7 @@ async function uploadFileToBucket(): Promise<string | null> {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   stroke="currentColor"
-                  class="w-6 text-rafik-sectext dark:text-rafik-darksectext"
+                  class="w-6 text-topsets-sectext dark:text-topsets-darksectext"
                   viewBox="0 0 448 512"
                 >
                   <path
@@ -492,7 +492,7 @@ async function uploadFileToBucket(): Promise<string | null> {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   stroke="currentColor"
-                  class="w-6 text-rafik-sectext dark:text-rafik-darksectext"
+                  class="w-6 text-topsets-sectext dark:text-topsets-darksectext"
                   viewBox="0 0 448 512"
                 >
                   <path
@@ -534,18 +534,18 @@ async function uploadFileToBucket(): Promise<string | null> {
           </div>
           <div class="pl-6 flex-1 min-w-max">
             <div
-              class="flex flex-col flex-1 gap-4 border-rafik-sectext dark:border-rafik-darksectext text-left"
+              class="flex flex-col flex-1 gap-4 border-topsets-sectext dark:border-topsets-darksectext text-left"
             >
               <button
                 @click="DraftProgram"
-                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
+                class="text-body uppercase text-left hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darksectext"
                 v-if="programStore.Program.status == 'Active'"
               >
                 {{ t('dashboard.programs.details.changeToDraftButton') }}
               </button>
               <button
                 @click="ActiveProgram"
-                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
+                class="text-body uppercase text-left hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darksectext"
                 v-if="programStore.Program.status == 'Draft'"
               >
                 {{ t('dashboard.programs.details.publishToActiveButton') }}
@@ -561,7 +561,7 @@ async function uploadFileToBucket(): Promise<string | null> {
               />
               <label
                 for="upload-photo"
-                class="text-body cursor-pointer uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
+                class="text-body cursor-pointer uppercase text-left hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darksectext"
               >
                 {{
                   loading
@@ -589,12 +589,12 @@ async function uploadFileToBucket(): Promise<string | null> {
 
       <!-- Tabs -->
       <div
-        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
+        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-topsets-sectext dark:border-topsets-darksectext"
       >
         <button
           :class="
             activeTab === 'Details'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn"
@@ -605,7 +605,7 @@ async function uploadFileToBucket(): Promise<string | null> {
         <button
           :class="
             activeTab === 'Workouts'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"
@@ -616,7 +616,7 @@ async function uploadFileToBucket(): Promise<string | null> {
         <button
           :class="
             activeTab === 'Clients'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"
@@ -627,7 +627,7 @@ async function uploadFileToBucket(): Promise<string | null> {
         <button
           :class="
             activeTab === 'Pricing'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"
@@ -639,7 +639,7 @@ async function uploadFileToBucket(): Promise<string | null> {
         <button
           :class="
             activeTab === 'Documents'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"
@@ -651,7 +651,7 @@ async function uploadFileToBucket(): Promise<string | null> {
         <button
           :class="
             activeTab === 'Reviews'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"

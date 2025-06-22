@@ -13,45 +13,45 @@
           {{ t('dashboard.tabs.user.trainer.trainerData') }}
         </h3>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.user.trainer.title') }}
           </p>
-          <p class="text-rafik-secondary">
+          <p class="text-topsets-secondary">
             {{ props.trainer.title || t('dashboard.tabs.user.trainer.na') }}
           </p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.user.trainer.yearsOfExperience') }}
           </p>
-          <p class="text-rafik-secondary">
+          <p class="text-topsets-secondary">
             {{ props.trainer.years_of_experience || t('dashboard.tabs.user.trainer.na') }}
             {{ t('dashboard.tabs.user.trainer.years') }}
           </p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.user.trainer.maxClients') }}
           </p>
-          <p class="text-rafik-secondary">
+          <p class="text-topsets-secondary">
             {{ props.trainer.seats_available || t('dashboard.tabs.user.trainer.na') }}
           </p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.user.trainer.availableHours') }}
           </p>
-          <p class="text-rafik-secondary">
+          <p class="text-topsets-secondary">
             {{ props.trainer.available_hours || t('dashboard.tabs.user.trainer.na') }}
           </p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.user.trainer.worksWith') }}
           </p>
           <div class="flex flex-wrap gap-3">
             <p
-              class="text-rafik-secondary"
+              class="text-topsets-secondary"
               v-for="(diet, index) in props.trainer.preferred_clients"
               :key="diet"
             >
@@ -69,11 +69,11 @@
 
           <div class="grid grid-cols-3 2xl:grid-cols-6 gap-6 my-auto">
             <div
-              class="p-6 border-rafik border rounded-xl gradient-bg flex flex-col"
+              class="p-6 border-topsets border rounded-xl gradient-bg flex flex-col"
               v-for="program in programStore.AllPrograms"
             >
               <h2 class="header-small">{{ program.program_name }}</h2>
-              <p class="text-rafik-alternate">{{ program.status }}</p>
+              <p class="text-topsets-alternate">{{ program.status }}</p>
               <p class="text-body" v-if="program.created_at">
                 {{ t('dashboard.tabs.user.trainer.created') }}:
                 {{
@@ -86,7 +86,7 @@
               </p>
               <router-link
                 :to="{ name: 'audit-program', params: { id: program.id } }"
-                class="text-rafik-teritiary text-center mt-auto mx-auto"
+                class="text-topsets-teritiary text-center mt-auto mx-auto"
                 >{{ t('dashboard.tabs.user.trainer.viewProgram') }}</router-link
               >
             </div>
@@ -116,8 +116,8 @@ function showSuccess(message: string) {
     toast: true,
     position: 'top-right',
     icon: 'success',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -127,8 +127,8 @@ function showError(message: string) {
     text: message,
     icon: 'error',
     confirmButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 // Props to receive the program object

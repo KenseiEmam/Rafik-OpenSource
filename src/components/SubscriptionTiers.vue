@@ -8,7 +8,7 @@ const tiers = [
   {
     name: 'Starter',
     price: 'Free',
-    desc: 'Perfect for small schools or clubs trying Rafik for the first time.',
+    desc: 'Perfect for small schools or clubs trying Topsets for the first time.',
     features: ['Up to 25 users', 'Core analytics', 'Community support']
   },
   {
@@ -34,7 +34,7 @@ const customCopy =
 <template>
   <section class="w-full mb-24 mt-3">
     <h3 class="text-center mb-12 text-2xl md:text-4xl 2xl:text-5xl md:header-large">
-      Choose <span class="text-rafik font-black">Your</span> Plan
+      Choose <span class="text-topsets font-black">Your</span> Plan
     </h3>
 
     <!-- Three-tier grid -->
@@ -42,15 +42,15 @@ const customCopy =
       <div
         v-for="tier in tiers"
         :key="tier.name"
-        class="card p-8 flex flex-col border hover:border-rafik-secondary transition"
+        class="card p-8 flex flex-col border hover:border-topsets-secondary transition"
       >
         <h3 class="title-small font-black mb-2">{{ tier.name }}</h3>
-        <p class="header-medium text-rafik mb-4">{{ tier.price }}</p>
+        <p class="header-medium text-topsets mb-4">{{ tier.price }}</p>
         <p class="text-body mb-6 opacity-80">{{ tier.desc }}</p>
 
         <ul class="space-y-2 flex-1">
           <li v-for="f in tier.features" :key="f" class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-rafik-secondary" viewBox="0 0 20 20" fill="currentColor">
+            <svg class="w-4 h-4 text-topsets-secondary" viewBox="0 0 20 20" fill="currentColor">
               <path
                 fill-rule="evenodd"
                 d="M16.707 5.293a1 1 0 010 1.414L8.414 15H5v-3.414l8.293-8.293a1 1 0 011.414 0z"
@@ -73,7 +73,7 @@ const customCopy =
 
     <!-- Full-width custom plan card -->
     <div
-      class="card p-8 flex flex-col md:flex-row items-start md:items-center gap-6 border hover:border-rafik-secondary transition"
+      class="card p-8 flex flex-col md:flex-row items-start md:items-center gap-6 border hover:border-topsets-secondary transition"
     >
       <div class="flex-1">
         <h3 class="title-small font-black mb-2">Custom Plan</h3>

@@ -108,20 +108,20 @@ const removeTag = (tagToRemove: string) => {
         {{ t('dashboard.tabs.program.details.quickStatsDescription') }}
       </p>
       <div
-        class="flex flex-col divide-y divide-rafik-sectext dark:divide-rafik-darksectext gap-3 mt-4"
+        class="flex flex-col divide-y divide-topsets-sectext dark:divide-topsets-darksectext gap-3 mt-4"
       >
         <div class="flex justify-between gap-4 py-2">
-          <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">
+          <p class="xl:text-lg text-topsets-pritext dark:text-topsets-darkpritext font-semibold">
             {{ t('dashboard.tabs.program.details.totalClients') }}
           </p>
-          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">
+          <p class="xl:text-lg text-topsets-sectext dark:text-topsets-darksectext">
             {{ t('dashboard.tabs.program.details.comingSoon') }}
           </p>
         </div>
 
 
         <div class=" py-2">
-          <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold mb-6">
+          <p class="xl:text-lg text-topsets-pritext dark:text-topsets-darkpritext font-semibold mb-6">
             {{ t('dashboard.tabs.program.details.mostFrequent') }}
           </p>
           <div
@@ -131,49 +131,49 @@ const removeTag = (tagToRemove: string) => {
               <div
                 v-for="(muscle, index) in sortedMuscles.slice(0,7)"
                 :key="index"
-                class="px-3 py-1 rounded-full border border-rafik-sectext dark:border-rafik-darksectext text-sm"
+                class="px-3 py-1 rounded-full border border-topsets-sectext dark:border-topsets-darksectext text-sm"
               >
                 {{ muscle.muscle }} : {{ muscle.sets }}
               </div>
         </div>
         </div>
         <!-- <div class="flex justify-between gap-4 py-2">
-          <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">
+          <p class="xl:text-lg text-topsets-pritext dark:text-topsets-darkpritext font-semibold">
             {{ t('dashboard.tabs.program.details.revenueThisMonth') }}
           </p>
-          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">
+          <p class="xl:text-lg text-topsets-sectext dark:text-topsets-darksectext">
             {{ t('dashboard.tabs.program.details.comingSoon') }}
           </p>
         </div>
         <div class="flex justify-between gap-4 py-2">
-          <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">
+          <p class="xl:text-lg text-topsets-pritext dark:text-topsets-darkpritext font-semibold">
             {{ t('dashboard.tabs.program.details.totalRevenue') }}
           </p>
-          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">
+          <p class="xl:text-lg text-topsets-sectext dark:text-topsets-darksectext">
             {{ t('dashboard.tabs.program.details.comingSoon') }}
           </p>
         </div>
         <div class="flex justify-between gap-4 py-2">
-          <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">
+          <p class="xl:text-lg text-topsets-pritext dark:text-topsets-darkpritext font-semibold">
             {{ t('dashboard.tabs.program.details.bestMonth') }}
           </p>
-          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">
+          <p class="xl:text-lg text-topsets-sectext dark:text-topsets-darksectext">
             {{ t('dashboard.tabs.program.details.comingSoon') }}
           </p>
         </div>
         <div class="flex justify-between gap-4 py-2">
-          <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">
+          <p class="xl:text-lg text-topsets-pritext dark:text-topsets-darkpritext font-semibold">
             {{ t('dashboard.tabs.program.details.clientRetention') }}
           </p>
-          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">
+          <p class="xl:text-lg text-topsets-sectext dark:text-topsets-darksectext">
             {{ t('dashboard.tabs.program.details.comingSoon') }}
           </p>
         </div>
         <div class="flex justify-between gap-4 py-2">
-          <p class="xl:text-lg text-rafik-pritext dark:text-rafik-darkpritext font-semibold">
+          <p class="xl:text-lg text-topsets-pritext dark:text-topsets-darkpritext font-semibold">
             {{ t('dashboard.tabs.program.details.growthRate') }}
           </p>
-          <p class="xl:text-lg text-rafik-sectext dark:text-rafik-darksectext">
+          <p class="xl:text-lg text-topsets-sectext dark:text-topsets-darksectext">
             {{ t('dashboard.tabs.program.details.comingSoon') }}
           </p>
         </div> -->
@@ -197,7 +197,7 @@ const removeTag = (tagToRemove: string) => {
         <div class="mb-4">
           <Router-link
             :to="{ name: 'single-user', params: { id: userStore.O_Trainer.user_id } }"
-            class="mt-auto inline-block px-4 py-2 bg-rafik-pribg hover:bg-rafik dark:hover:bg-rafik dark:bg-rafik-darkpribg text-rafik-pritext dark:text-rafik-darkpritext hover:text-white rounded"
+            class="mt-auto inline-block px-4 py-2 bg-topsets-pribg hover:bg-topsets dark:hover:bg-topsets dark:bg-topsets-darkpribg text-topsets-pritext dark:text-topsets-darkpritext hover:text-white rounded"
           >
             {{ t('dashboard.tabs.program.details.viewTrainerProfile') }}
           </Router-link>
@@ -222,15 +222,15 @@ const removeTag = (tagToRemove: string) => {
         <!-- Strength Slider -->
         <div>
           <div class="flex justify-between">
-            <label class="inline-block text-rafik-pritext dark:text-rafik-darkpritext">
+            <label class="inline-block text-topsets-pritext dark:text-topsets-darkpritext">
               {{ t('dashboard.tabs.program.details.strength') }}
             </label>
-            <span class="text-rafik-pritext dark:text-rafik-darkpritext">{{ strength }}%</span>
+            <span class="text-topsets-pritext dark:text-topsets-darkpritext">{{ strength }}%</span>
           </div>
           <input
             v-model="strength"
             type="range"
-            class="h-[4px] w-full cursor-pointer appearance-none bg-rafik-alternate"
+            class="h-[4px] w-full cursor-pointer appearance-none bg-topsets-alternate"
             min="0"
             max="100"
             step="5"
@@ -241,15 +241,15 @@ const removeTag = (tagToRemove: string) => {
         <!-- Hypertrophy Slider -->
         <div>
           <div class="flex justify-between">
-            <label class="inline-block text-rafik-pritext dark:text-rafik-darkpritext">
+            <label class="inline-block text-topsets-pritext dark:text-topsets-darkpritext">
               {{ t('dashboard.tabs.program.details.hypertrophy') }}
             </label>
-            <span class="text-rafik-pritext dark:text-rafik-darkpritext">{{ hypertrophy }}%</span>
+            <span class="text-topsets-pritext dark:text-topsets-darkpritext">{{ hypertrophy }}%</span>
           </div>
           <input
             v-model="hypertrophy"
             type="range"
-            class="h-[4px] w-full cursor-pointer appearance-none bg-rafik-teritiary"
+            class="h-[4px] w-full cursor-pointer appearance-none bg-topsets-teritiary"
             min="0"
             max="100"
             step="5"
@@ -260,15 +260,15 @@ const removeTag = (tagToRemove: string) => {
         <!-- Agility Slider -->
         <div>
           <div class="flex justify-between">
-            <label class="inline-block text-rafik-pritext dark:text-rafik-darkpritext">
+            <label class="inline-block text-topsets-pritext dark:text-topsets-darkpritext">
               {{ t('dashboard.tabs.program.details.agility') }}
             </label>
-            <span class="text-rafik-pritext dark:text-rafik-darkpritext">{{ agility }}%</span>
+            <span class="text-topsets-pritext dark:text-topsets-darkpritext">{{ agility }}%</span>
           </div>
           <input
             v-model="agility"
             type="range"
-            class="h-[4px] w-full cursor-pointer appearance-none bg-rafik-secondary"
+            class="h-[4px] w-full cursor-pointer appearance-none bg-topsets-secondary"
             min="0"
             max="100"
             step="5"
@@ -279,15 +279,15 @@ const removeTag = (tagToRemove: string) => {
         <!-- Cardio Slider -->
         <div>
           <div class="flex justify-between">
-            <label class="inline-block text-rafik-pritext dark:text-rafik-darkpritext">
+            <label class="inline-block text-topsets-pritext dark:text-topsets-darkpritext">
               {{ t('dashboard.tabs.program.details.cardio') }}
             </label>
-            <span class="text-rafik-pritext dark:text-rafik-darkpritext">{{ cardio }}%</span>
+            <span class="text-topsets-pritext dark:text-topsets-darkpritext">{{ cardio }}%</span>
           </div>
           <input
             v-model="cardio"
             type="range"
-            class="h-[4px] w-full cursor-pointer appearance-none bg-rafik"
+            class="h-[4px] w-full cursor-pointer appearance-none bg-topsets"
             min="0"
             max="100"
             step="5"
@@ -317,7 +317,7 @@ const removeTag = (tagToRemove: string) => {
         <input
           v-model="newTag"
           type="text"
-          class="rafik-text-input"
+          class="topsets-text-input"
           :placeholder="t('dashboard.tabs.program.details.addNewTag')"
           @keyup.enter="addTag"
           v-if="!admin"
@@ -328,7 +328,7 @@ const removeTag = (tagToRemove: string) => {
           <div
             v-for="(tag, index) in props.program.tags"
             :key="index"
-            class="bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext px-3 py-1 rounded-full flex items-center gap-2"
+            class="bg-topsets-secbg dark:bg-topsets-darksecbg text-topsets-sectext dark:text-topsets-darksectext px-3 py-1 rounded-full flex items-center gap-2"
           >
             <span>{{ tag }}</span>
             <button @click="removeTag(tag)" class="text-red-500 hover:text-red-700" v-if="!admin">

@@ -5,7 +5,7 @@ import Footer from '@/components/Navigation/Footer.vue';
 </script>
 
 <template>
-  <main class="dark flex-1 mebsite-body flex-col flex">
+  <main class="flex-1 mebsite-body flex-col flex">
     <WebsiteHeader />
     <Transition name="slide-fade" appear>
 

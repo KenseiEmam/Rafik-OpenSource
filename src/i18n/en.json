@@ -4,7 +4,7 @@
     "ar": "العربية"
   },
   "general": {
-    "rafik": "Rafik",
+    "topsets": "Topsets",
     "loading": "Loading...",
     "success": "Success!",
     "error": "Error!",
@@ -86,7 +86,7 @@
         "message": "Message"
       },
       "formPlaceholders": {
-        "fullName": "rafik",
+        "fullName": "topsets",
 
         "message": "Write us a message here..."
       },
@@ -96,13 +96,13 @@
     }
   },
   "about": {
-    "pageTitle": "ABOUT RAFIK",
+    "pageTitle": "ABOUT TOPSETS",
     "pageSubtitle": "THE FITNESS SQUIRE FOR ALL",
-    "description": "In an era where fitness information is everywhere, navigating the noise has never been harder. While science-backed knowledge is more accessible than ever, social media has also given rise to self-proclaimed \"experts\" who mislead people with flashy trends and empty promises—draining their time, money, and sometimes even harming their health.<br><br>That's why we created <strong>Rafik</strong>. We believe that <strong>everyone deserves access to reliable fitness expertise</strong>—guidance that is not only effective but also ethical and sustainable. However, we also understand the challenges: in-person coaching can be expensive, and finding the right <strong>online</strong> trainer can feel like a gamble. <strong>Rafik eliminates the guesswork</strong> by <strong>connecting you with the right trainer</strong> while ensuring <strong>accountability</strong> at every step.<br><br>And to the trainers—<strong>we've got your back, too!</strong> By sharing your <strong>verified</strong> programs on our platform, you gain access to a <strong>serious and dedicated audience</strong> who genuinely wants to transform their lives. Rafik helps you <strong>manage, track, and grow your client base</strong> while ensuring your hard work gets the <strong>recognition it deserves</strong> through a fair and transparent review system.<br><br><strong>Rafik is our gift to the fitness community—we hope you enjoy it!</strong>",
+    "description": "In an era where fitness information is everywhere, navigating the noise has never been harder. While science-backed knowledge is more accessible than ever, social media has also given rise to self-proclaimed \"experts\" who mislead people with flashy trends and empty promises—draining their time, money, and sometimes even harming their health.<br><br>That's why we created <strong>Topsets</strong>. We believe that <strong>everyone deserves access to reliable fitness expertise</strong>—guidance that is not only effective but also ethical and sustainable. However, we also understand the challenges: in-person coaching can be expensive, and finding the right <strong>online</strong> trainer can feel like a gamble. <strong>Topsets eliminates the guesswork</strong> by <strong>connecting you with the right trainer</strong> while ensuring <strong>accountability</strong> at every step.<br><br>And to the trainers—<strong>we've got your back, too!</strong> By sharing your <strong>verified</strong> programs on our platform, you gain access to a <strong>serious and dedicated audience</strong> who genuinely wants to transform their lives. Topsets helps you <strong>manage, track, and grow your client base</strong> while ensuring your hard work gets the <strong>recognition it deserves</strong> through a fair and transparent review system.<br><br><strong>Topsets is our gift to the fitness community—we hope you enjoy it!</strong>",
     "visionTitle": "Our Vision",
     "visionDescription": "To empower individuals in the MENA to achieve their fitness goals with confidence and accountability, by providing personalized and reliable connections to expert trainers at affordable prices.",
     "missionTitle": "Our Mission",
-    "missionDescription": "At Rafik, we connect people to fitness professionals who truly understand their needs, ensuring a tailored journey with measurable results. Through a platform built on trust, expertise, and accountability, we aim to foster a supportive community where everyone can reach their full potential, no matter their starting point."
+    "missionDescription": "At Topsets, we connect people to fitness professionals who truly understand their needs, ensuring a tailored journey with measurable results. Through a platform built on trust, expertise, and accountability, we aim to foster a supportive community where everyone can reach their full potential, no matter their starting point."
   },
   "team": {
     "meetTheFounders": "MEET THE FOUNDERS",
@@ -129,7 +129,7 @@
     "alert": "Text Us!",
     "lookingForTrainer": "Looking for your perfect trainer?",
     "installOur": "INSTALL OUR",
-    "rafik": "RAFIK SQUIRE APP",
+    "topsets": "TOPSETS SQUIRE APP",
     "description": "Optimize your training, diet, sports performance and more, with nifty pricing, certified trainers, and communication to keep your programs customized to your needs.",
     "download": {
       "downloadOnThe": "Download on the",
@@ -137,7 +137,7 @@
       "getItOn": "GET IT ON",
       "googlePlay": "Google Play"
     },
-    "errorMessage": "Contact us at admin@rafikapp.ae to get access!"
+    "errorMessage": "Contact us at admin@topsetsapp.ae to get access!"
   },
   "login": {
     "welcomeBack": "WELCOME BACK! TIME TO CATCH-UP",
@@ -171,11 +171,11 @@
     }
   },
   "privacy": {
-    "title": "Privacy Policy for Rafik Fitness Squire",
+    "title": "Privacy Policy for Topsets Fitness Squire",
     "sections": {
       "introduction": {
         "title": "1. Introduction",
-        "content": "Welcome to Rafik Fitness Squire! Your privacy is important to us, and we are committed to protecting your personal data. This Privacy Policy outlines how we collect, use, and safeguard your information when you use our app."
+        "content": "Welcome to Topsets Fitness Squire! Your privacy is important to us, and we are committed to protecting your personal data. This Privacy Policy outlines how we collect, use, and safeguard your information when you use our app."
       },
       "informationCollected": {
         "title": "2. Information We Collect",
@@ -220,7 +220,7 @@
       },
       "childrensPrivacy": {
         "title": "8. Children's Privacy",
-        "content": "Rafik Fitness Squire is not intended for children under 13. If data from a child is discovered, we will take steps to remove it."
+        "content": "Topsets Fitness Squire is not intended for children under 13. If data from a child is discovered, we will take steps to remove it."
       },
       "policyChanges": {
         "title": "9. Changes to This Privacy Policy",
@@ -232,7 +232,7 @@
       },
       "accountDeletion": {
         "title": "11. Request Account & Data Deletion",
-        "content": "If you wish to delete your account and associated data, please visit <a href=\"https://rafikapp.ae/delete-account\" class=\"text-blue-500 hover:underline\">rafikapp.ae/delete-account</a>. Once your request is submitted, your data will be permanently removed, except where retention is legally required."
+        "content": "If you wish to delete your account and associated data, please visit <a href=\"https://topsetsapp.ae/delete-account\" class=\"text-blue-500 hover:underline\">topsetsapp.ae/delete-account</a>. Once your request is submitted, your data will be permanently removed, except where retention is legally required."
       }
     }
   },
@@ -608,8 +608,8 @@
           "arabic": "Arabic",
           "theme": "Theme",
           "themeExplanation": "Choose your preference between a dark minty theme and a light creamy theme!",
-          "coolNight": "Cool Night",
-          "warmSunshine": "Warm Sunshine",
+          "coolNight": "Dark Matte",
+          "warmSunshine": "Metallic Light",
           "deleteAccount": "Delete Account"
         },
         "rolesAndPerms": {

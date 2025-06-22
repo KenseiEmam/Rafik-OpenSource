@@ -67,10 +67,10 @@ onMounted(async () => {
     </div>
     <div class="md:hidden relative top-6">
       <div
-        class="w-40 h-40 rounded-full bottom-16 opacity-80 absolute right-0 bg-rafik content"
+        class="w-40 h-40 rounded-full bottom-16 opacity-80 absolute right-0 bg-topsets content"
       ></div>
       <div
-        class="w-40 h-40 rounded-full bottom-24 opacity-80 absolute right-24 bg-rafik-sectext dark:bg-rafik-darksectext content"
+        class="w-40 h-40 rounded-full bottom-24 opacity-80 absolute right-24 bg-topsets-sectext dark:bg-topsets-darksectext content"
       ></div>
       <img
         class="max-h-64 object-cover ms-auto relative grayscale"
@@ -102,10 +102,10 @@ onMounted(async () => {
     </div>
     <div class="md:col-span-2 hidden md:block relative">
       <div
-        class="w-80 h-80 rounded-full bottom-16 opacity-80 absolute right-0 bg-rafik content"
+        class="w-80 h-80 rounded-full bottom-16 opacity-80 absolute right-0 bg-topsets content"
       ></div>
       <div
-        class="w-80 h-80 rounded-full bottom-24 opacity-80 absolute right-24 bg-rafik-sectext dark:bg-rafik-darksectext content"
+        class="w-80 h-80 rounded-full bottom-24 opacity-80 absolute right-24 bg-topsets-sectext dark:bg-topsets-darksectext content"
       ></div>
       <img
         class="max-h-128 w-full object-cover ms-auto relative grayscale"

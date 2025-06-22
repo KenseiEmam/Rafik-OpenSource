@@ -6,8 +6,8 @@ const { t , locale } = useI18n();
 
 <template>
   <div class="min-h-72 flex-1 mb-16 relative w-full">
-    <h1 class="title-small my-8 pb-4 border-b border-rafik">
-      <span class="text-rafik-pritext dark:text-rafik-darkpritext">
+    <h1 class="title-small my-8 pb-4 border-b border-topsets">
+      <span class="text-topsets-pritext dark:text-topsets-darkpritext">
        Easier than ever
       </span>
       <br />
@@ -20,7 +20,7 @@ const { t , locale } = useI18n();
           class="h-96 card rounded-xl m-auto shadow-lg"
           alt=""
         />
-        <p class="text-body pl-4 border-l border-rafik-secondary">
+        <p class="text-body pl-4 border-l border-topsets-secondary">
           Get exercise and drill breakdowns before noting down your set performance.
         </p>
       </div>
@@ -37,7 +37,7 @@ const { t , locale } = useI18n();
             alt=""
           />
         </div>
-        <p class="text-body pl-4 border-l border-rafik-secondary">
+        <p class="text-body pl-4 border-l border-topsets-secondary">
          Log your meals and get diet recommendations from your coach that align with your macros.
         </p>
       </div>
@@ -48,7 +48,7 @@ const { t , locale } = useI18n();
           class="h-96 card rounded-xl m-auto shadow-lg"
           alt=""
         />
-        <p class="text-body pl-4 border-l border-rafik-secondary">
+        <p class="text-body pl-4 border-l border-topsets-secondary">
            Log your own metrics and weight to give you and your coaches better progress insight.
         </p>
       </div>

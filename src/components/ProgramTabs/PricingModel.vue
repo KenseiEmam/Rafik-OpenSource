@@ -18,8 +18,8 @@ function showError(message: string) {
     icon: 'error',
     confirmButtonColor: '#d33',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 // Props to receive the program object
@@ -170,11 +170,11 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
             <input type="checkbox" v-model="isEnabled[key]" class="hidden" />
             <div
               v-if="!admin"
-              class="w-16 h-8 flex items-center border-rafik-pritext dark:border-rafik-darkpritext border-2 rounded-full transition-all"
-              :class="{ 'bg-rafik': isEnabled[key] }"
+              class="w-16 h-8 flex items-center border-topsets-pritext dark:border-topsets-darkpritext border-2 rounded-full transition-all"
+              :class="{ 'bg-topsets': isEnabled[key] }"
             >
               <div
-                class="w-8 h-8 bg-rafik-pritext dark:bg-rafik-darkpritext rounded-full shadow-md transform transition-transform"
+                class="w-8 h-8 bg-topsets-pritext dark:bg-topsets-darkpritext rounded-full shadow-md transform transition-transform"
                 :class="isEnabled[key] ? (locale === 'ar' ? '-translate-x-8' : 'translate-x-8') : ''"
               ></div>
             </div>
@@ -188,10 +188,10 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
               type="number"
               v-model="prices[key]"
               :disabled="!isEnabled[key]"
-              class="rafik-text-input text-right w-24 2xl:w-32"
+              class="topsets-text-input text-right w-24 2xl:w-32"
               :class="{ 'bg-red-500 cursor-not-allowed': !isEnabled[key] && !admin }"
             />
-            <p v-else class="text-rafik-sectext dark:text-rafik-darksectext">
+            <p v-else class="text-topsets-sectext dark:text-topsets-darksectext">
               {{ prices[key] || t('dashboard.tabs.program.pricing.na') }}
             </p>
           </div>
@@ -210,13 +210,13 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
           <input
             v-model="newPromo"
             type="text"
-            class="rafik-text-input"
+            class="topsets-text-input"
             :placeholder="t('dashboard.tabs.program.pricing.addPromoPlaceholder')"
             @keyup.enter="addPromo"
           />
 
           <!-- Display promo codes -->
-          <div class="flex flex-col divide-y divide-rafik-sectext dark:divide-rafik-darksectext">
+          <div class="flex flex-col divide-y divide-topsets-sectext dark:divide-topsets-darksectext">
             <div
               v-for="(promo, index) in program.promos"
               :key="index"
@@ -235,7 +235,7 @@ const updatePromoValue = debounce((promo: PromoCode, newValue: number) => {
                     :placeholder="
                       t('dashboard.tabs.program.pricing.valueForPromo', { code: promo.code })
                     "
-                    class="rafik-text-input w-24 2xl:w-32 text-sm"
+                    class="topsets-text-input w-24 2xl:w-32 text-sm"
                   />
                 </div>
               </div>

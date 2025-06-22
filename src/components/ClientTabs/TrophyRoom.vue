@@ -11,10 +11,10 @@
         <p :class="locale === 'ar' ? 'me-auto max-w-24' : 'ms-auto max-w-24'">
           {{ t('dashboard.tabs.clients.trophyRoom.estimate') }}
         </p>
-        <p class="text-rafik font-bold">{{ perf.orm }} {{ perf.intensity_mod || "Kgs" }}</p>
+        <p class="text-topsets font-bold">{{ perf.orm }} {{ perf.intensity_mod || "Kgs" }}</p>
       </div>
     </div>
-    <p v-else class="text-rafik-pritext dark:text-rafik-darkpritext text-lg font-semibold my-16 mx-auto text-center">
+    <p v-else class="text-topsets-pritext dark:text-topsets-darkpritext text-lg font-semibold my-16 mx-auto text-center">
       {{ t('dashboard.tabs.clients.trophyRoom.empty') }}
     </p>
   </div>

@@ -2,12 +2,12 @@
   <div class="flex-1 space-y-6 py-6">
     <!-- Toolbar -->
     <div class="flex justify-between items-center gap-4 flex-wrap">
-      <div class="flex text-rafik-pritext dark:text-rafik-darkpritext min-w-max gap-3 items-center">
+      <div class="flex text-topsets-pritext dark:text-topsets-darkpritext min-w-max gap-3 items-center">
         <input
           :disabled="admin"
           type="number"
           v-model.number="program.weekly_cycle"
-          class="rafik-text-input w-16 text-right"
+          class="topsets-text-input w-16 text-right"
           :placeholder="t('dashboard.tabs.program.planner.dayCyclePlaceholder')"
         />
         <p>{{ t('dashboard.tabs.program.planner.dayCycleLabel') }}</p>
@@ -25,10 +25,10 @@
         <template #item="{ element, index }">
           <button
             @click="activeTab = index"
-            :class="activeTab === index ? 'border-rafik text-rafik-pritext dark:text-rafik-darkpritext' : 'text-rafik-sectext dark:text-rafik-darksectext border-transparent'"
+            :class="activeTab === index ? 'border-topsets text-topsets-pritext dark:text-topsets-darkpritext' : 'text-topsets-sectext dark:text-topsets-darksectext border-transparent'"
             class="px-4 py-2 min-w-max border-b-2 flex items-center gap-2"
           >
-            <svg v-if="isEditing" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="h-5 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move">
+            <svg v-if="isEditing" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="h-5 handle text-topsets-sectext dark:text-topsets-darksectext hover:cursor-move">
               <path d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 160c-22.1 0-40-17.9-40-40L0 72C0 49.9 17.9 32 40 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40z"/>
             </svg>
             {{
@@ -61,15 +61,15 @@
     <div class="card p-0 flex flex-col" v-if="editedWorkouts.length">
       <label
         v-if="isEditing"
-        class="flex items-center w-full mr-4 space-x-2 cursor-pointer border-b border-rafik-sectext dark:border-rafik-darksectext bg-rafik-secbg dark:bg-rafik-darksecbg p-8 rounded-t-xl"
+        class="flex items-center w-full mr-4 space-x-2 cursor-pointer border-b border-topsets-sectext dark:border-topsets-darksectext bg-topsets-secbg dark:bg-topsets-darksecbg p-8 rounded-t-xl"
       >
         <input type="checkbox" v-model="editedWorkouts[activeTab].rest_day" class="hidden" />
         <div
-          class="w-12 h-6 flex items-center border-rafik-pritext dark:border-rafik-darkpritext border-2 rounded-full transition-all"
-          :class="{ 'bg-rafik': editedWorkouts[activeTab].rest_day }"
+          class="w-12 h-6 flex items-center border-topsets-pritext dark:border-topsets-darkpritext border-2 rounded-full transition-all"
+          :class="{ 'bg-topsets': editedWorkouts[activeTab].rest_day }"
         >
           <div
-            class="w-6 h-6 bg-rafik-pritext dark:bg-rafik-darkpritext rounded-full shadow-md transform transition-transform"
+            class="w-6 h-6 bg-topsets-pritext dark:bg-topsets-darkpritext rounded-full shadow-md transform transition-transform"
             :class="{ 'translate-x-6': editedWorkouts[activeTab].rest_day }"
           ></div>
         </div>
@@ -85,10 +85,10 @@
             <input
               v-if="isEditing"
               v-model="editedWorkouts[activeTab].workout_name"
-              class="rafik-text-input border-0 bg-transparent text-rafik-sectext dark:text-rafik-darksectext focus:ring-0 pb-1 border-b focus:border-rafik-alternate rounded-none text-3xl text-rafik contentH-medium mb-2"
+              class="topsets-text-input border-0 bg-transparent text-topsets-sectext dark:text-topsets-darksectext focus:ring-0 pb-1 border-b focus:border-topsets-alternate rounded-none text-3xl text-topsets contentH-medium mb-2"
               :placeholder="t('dashboard.tabs.program.planner.workoutNamePlaceholder')"
             />
-            <h3 v-else class="text-rafik contentH-medium">
+            <h3 v-else class="text-topsets contentH-medium">
               {{
                 editedWorkouts[activeTab].workout_name ||
                 t('dashboard.tabs.program.planner.editToAddName')
@@ -98,7 +98,7 @@
             <textarea
               v-if="isEditing"
               v-model="editedWorkouts[activeTab].workout_summary"
-              class="rafik-text-input border-0 bg-transparent text-rafik-sectext dark:text-rafik-darksectext whitespace-pre-wrap focus:ring-0 pb-1 border-b focus:border-rafik-alternate rounded-none mb-4"
+              class="topsets-text-input border-0 bg-transparent text-topsets-sectext dark:text-topsets-darksectext whitespace-pre-wrap focus:ring-0 pb-1 border-b focus:border-topsets-alternate rounded-none mb-4"
               :placeholder="t('dashboard.tabs.program.planner.workoutSummaryPlaceholder')"
             ></textarea>
             <p v-else class="text-body mb-4 whitespace-pre-wrap">
@@ -114,7 +114,7 @@
               <div
                 v-for="([muscle, sets], index) in sortedMuscles"
                 :key="index"
-                class="px-3 py-1 rounded-full border border-rafik-sectext dark:border-rafik-darksectext text-sm"
+                class="px-3 py-1 rounded-full border border-topsets-sectext dark:border-topsets-darksectext text-sm"
               >
                 {{ muscle }} : {{ sets }}
               </div>
@@ -124,10 +124,10 @@
 
           <div class="space-y-6 mb-auto">
             <div
-              class="flex justify-between text-rafik-pritext dark:text-rafik-darkpritext w-full gap-12"
+              class="flex justify-between text-topsets-pritext dark:text-topsets-darkpritext w-full gap-12"
             >
               <p>{{ t('dashboard.tabs.program.planner.completionTimeMins') }}</p>
-              <p class="text-rafik-secondary" v-if="!isEditing">
+              <p class="text-topsets-secondary" v-if="!isEditing">
                 {{
                   editedWorkouts[activeTab].time_to_complete + 'mins' ||
                   t('dashboard.tabs.program.planner.zeroMins')
@@ -136,17 +136,17 @@
               <input
                 v-if="isEditing"
                 v-model="editedWorkouts[activeTab].time_to_complete"
-                class="rafik-text-input border-0 bg-transparent text-rafik-sectext dark:text-rafik-darksectext mb-auto focus:ring-0 pb-1 border-b focus:border-rafik-alternate rounded-none"
+                class="topsets-text-input border-0 bg-transparent text-topsets-sectext dark:text-topsets-darksectext mb-auto focus:ring-0 pb-1 border-b focus:border-topsets-alternate rounded-none"
                 :placeholder="t('dashboard.tabs.program.planner.completionTimePlaceholder')"
               />
             </div>
 
             <div
               v-if="!isEditing"
-              class="flex justify-between text-rafik-pritext dark:text-rafik-darkpritext w-full"
+              class="flex justify-between text-topsets-pritext dark:text-topsets-darkpritext w-full"
             >
               <p>{{ t('dashboard.tabs.program.planner.totalSets') }}</p>
-              <p class="text-rafik-secondary">
+              <p class="text-topsets-secondary">
                 {{ calculateTotalSets(editedWorkouts[activeTab].exercises) }}
               </p>
             </div>
@@ -154,7 +154,7 @@
         </div>
 
         <!-- Editable Exercises -->
-        <div class="mt-4 mb-3 p-6 bg-rafik-secbg dark:bg-rafik-darksecbg rounded-xl">
+        <div class="mt-4 mb-3 p-6 bg-topsets-secbg dark:bg-topsets-darksecbg rounded-xl">
           <h4 class="header-small w-2/3 mx-auto text-center">
             {{ t('dashboard.tabs.program.planner.exercises') }}
           </h4>
@@ -176,14 +176,14 @@
           >
           <template #item="{ element, index }">
               <div v-if="element.type === 'multi-set'"
-                class="gradient-bg border border-rafik-sectext dark:border-rafik-darksectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
+                class="gradient-bg border border-topsets-sectext dark:border-topsets-darksectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
               >
                 <svg
                   v-if="isEditing"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 320 512"
                   fill="currentColor"
-                  class="h-12 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move"
+                  class="h-12 handle text-topsets-sectext dark:text-topsets-darksectext hover:cursor-move"
                 >
                   <path
                     d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0
@@ -211,9 +211,9 @@
                         v-else
                         type="text"
                         v-model="element.exercise_name"
-                        class="p-0 contentH-small text-rafik-sectext dark:text-rafik-darksectext border-0 bg-transparent focus:outline-none focus:ring-0 focus:border-0"
+                        class="p-0 contentH-small text-topsets-sectext dark:text-topsets-darksectext border-0 bg-transparent focus:outline-none focus:ring-0 focus:border-0"
                       />
-                      <p class="text-rafik-pritext dark:text-rafik-darkpritext capitalize">
+                      <p class="text-topsets-pritext dark:text-topsets-darkpritext capitalize">
                         {{ t('dashboard.tabs.program.planner.multipleExerciseGroup') }}
                       </p>
                     </div>
@@ -226,16 +226,16 @@
                         <input
                           type="number"
                           v-model.number="element.sets"
-                          class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
+                          class="topsets-text-input w-16 border-0 focus:ring-0 pb-1 border-topsets-sectext dark:border-topsets-darksectext border-b focus:border-topsets-alternate rounded-none"
                           :placeholder="t('dashboard.tabs.program.planner.totalSetsPlaceholder')"
                         />
                       </div>
                       <div
                         v-else
-                        class="flex justify-between gap-4 w-full text-rafik-sectext dark:text-rafik-darksectext"
+                        class="flex justify-between gap-4 w-full text-topsets-sectext dark:text-topsets-darksectext"
                       >
                         <p>{{ t('dashboard.tabs.program.planner.totalSets') }}:</p>
-                        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                        <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                           {{ element.sets }}
                         </p>
                       </div>
@@ -246,16 +246,16 @@
                         <input
                           type="number"
                           v-model.number="element.rest"
-                          class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
+                          class="topsets-text-input w-16 border-0 focus:ring-0 pb-1 border-topsets-sectext dark:border-topsets-darksectext border-b focus:border-topsets-alternate rounded-none"
                           :placeholder="t('dashboard.tabs.program.planner.recommendedRestPlaceholder')"
                         />
                       </div>
                       <div
                         v-else
-                        class="flex justify-between gap-4 w-full text-rafik-sectext dark:text-rafik-darksectext"
+                        class="flex justify-between gap-4 w-full text-topsets-sectext dark:text-topsets-darksectext"
                       >
                         <p>{{ t('dashboard.tabs.program.planner.recommendedRest') }}:</p>
-                        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                        <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                           {{ element.rest }} secs
                         </p>
                       </div>
@@ -263,13 +263,13 @@
                     </div>
                   </div>
 
-                  <div class="space-y-6 card border-0 bg-rafik-secbg dark:bg-rafik-darksecbg p-6">
+                  <div class="space-y-6 card border-0 bg-topsets-secbg dark:bg-topsets-darksecbg p-6">
                     <h3 class="text-body uppercase text-center">
                       {{ t('dashboard.tabs.program.planner.innerExercises') }}
                     </h3>
                     <div
                       v-for="(embed, eindex) in element.embeds"
-                      class="gradient-bg border border-rafik-sectext dark:border-rafik-darksectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
+                      class="gradient-bg border border-topsets-sectext dark:border-topsets-darksectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
                     >
                       <div class="flex-1">
                         <div class="flex gap-3 items-center mb-4">
@@ -290,26 +290,26 @@
 
                           <div>
                             <h2 class="contentH-small">{{ embed.exercise_name }}</h2>
-                            <p class="text-rafik-pritext dark:text-rafik-darkpritext capitalize">
+                            <p class="text-topsets-pritext dark:text-topsets-darkpritext capitalize">
                               {{ embed.type }} {{ t('dashboard.tabs.program.planner.exercise') }}
                             </p>
                           </div>
 
                           <div class="ms-auto space-y-3">
                             <div
-                              class="flex justify-between gap-4 w-full text-rafik-sectext dark:text-rafik-darksectext text-body"
+                              class="flex justify-between gap-4 w-full text-topsets-sectext dark:text-topsets-darksectext text-body"
                             >
                               <p>{{ t('dashboard.tabs.program.planner.averageIntensity') }}</p>
-                              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                              <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                                 {{ embed.intensity }} kg
                               </p>
                             </div>
 
                             <div
-                              class="flex justify-between gap-4 w-full text-rafik-sectext dark:text-rafik-darksectext text-body"
+                              class="flex justify-between gap-4 w-full text-topsets-sectext dark:text-topsets-darksectext text-body"
                             >
                               <p>{{ t('dashboard.tabs.program.planner.averageRepetitions') }}</p>
-                              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                              <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                                 {{ embed.reps }}
                               </p>
                             </div>
@@ -319,7 +319,7 @@
                         <div class="flex gap-6">
                           <div class="space-y-2 w-full">
                             <div
-                              class="flex w-full justify-between items-end py-2 border-b border-rafik-pritext dark:border-rafik-darkpritext"
+                              class="flex w-full justify-between items-end py-2 border-b border-topsets-pritext dark:border-topsets-darkpritext"
                             >
                               <h2 class="header-small text-sm w-12">
                                 {{
@@ -330,7 +330,7 @@
                               </h2>
                               <div class="space-y-2">
                                 <p
-                                  class="text-rafik-pritext dark:text-rafik-darkpritext md:w-44 2xl:w-64"
+                                  class="text-topsets-pritext dark:text-topsets-darkpritext md:w-44 2xl:w-64"
                                 >
                                   {{
                                     embed.type === 'cardio'
@@ -344,13 +344,13 @@
                                   type="number"
                                   @input="changeAll($event, embed.true_sets)"
                                   name="all-intensities"
-                                  class="rafik-text-input border-0 focus:ring-0 pb-1 focus:border-rafik-alternate md:w-44 2xl:w-64"
+                                  class="topsets-text-input border-0 focus:ring-0 pb-1 focus:border-topsets-alternate md:w-44 2xl:w-64"
                                   placeholder="-"
                                 />
                               </div>
                               <div class="space-y-2">
                                 <p
-                                  class="text-rafik-pritext dark:text-rafik-darkpritext md:w-44 2xl:w-64"
+                                  class="text-topsets-pritext dark:text-topsets-darkpritext md:w-44 2xl:w-64"
                                 >
                                   {{
                                     embed.type === 'cardio' || embed.type === 'isometric'
@@ -364,19 +364,19 @@
                                   type="number"
                                   @input="changeAll($event, embed.true_sets)"
                                   name="all-reps"
-                                  class="rafik-text-input border-0 focus:ring-0 pb-1 focus:border-rafik-alternate md:w-44 2xl:w-64"
+                                  class="topsets-text-input border-0 focus:ring-0 pb-1 focus:border-topsets-alternate md:w-44 2xl:w-64"
                                   placeholder="-"
                                 />
                               </div>
                             </div>
 
                             <div
-                              class="flex w-full justify-between items-end py-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
+                              class="flex w-full justify-between items-end py-2 border-b border-topsets-sectext dark:border-topsets-darksectext"
                               v-for="(set, sindex) in embed.true_sets"
                               :key="sindex"
                             >
                               <h2
-                                class="header-small text-sm w-12 text-rafik-sectext dark:text-rafik-darksectext"
+                                class="header-small text-sm w-12 text-topsets-sectext dark:text-topsets-darksectext"
                               >
                                 {{ t('dashboard.tabs.program.planner.set') }} {{ sindex + 1 }}
                               </h2>
@@ -385,7 +385,7 @@
                                   :disabled="!isEditing"
                                   type="number"
                                   v-model.number="set.intensity"
-                                  class="rafik-text-input border-0 focus:ring-0 pb-1 focus:border-rafik-alternate md:w-44 2xl:w-64"
+                                  class="topsets-text-input border-0 focus:ring-0 pb-1 focus:border-topsets-alternate md:w-44 2xl:w-64"
                                   placeholder="0"
                                 />
                               </div>
@@ -394,7 +394,7 @@
                                   :disabled="!isEditing"
                                   type="number"
                                   v-model.number="set.reps"
-                                  class="rafik-text-input border-0 focus:ring-0 pb-1 focus:border-rafik-alternate md:w-44 2xl:w-64"
+                                  class="topsets-text-input border-0 focus:ring-0 pb-1 focus:border-topsets-alternate md:w-44 2xl:w-64"
                                   placeholder="0"
                                 />
                               </div>
@@ -432,14 +432,14 @@
                 </div>
               </div>
               <div v-else
-                class="gradient-bg border border-rafik-sectext dark:border-rafik-darksectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
+                class="gradient-bg border border-topsets-sectext dark:border-topsets-darksectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
               >
                 <svg
                   v-if="isEditing"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 320 512"
                   fill="currentColor"
-                  class="h-12 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move"
+                  class="h-12 handle text-topsets-sectext dark:text-topsets-darksectext hover:cursor-move"
                 >
                   <path
                     d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0
@@ -475,7 +475,7 @@
 
                     <div>
                       <h2 class="contentH-small">{{ element.exercise_name }}</h2>
-                      <p class="text-rafik-pritext dark:text-rafik-darkpritext capitalize">
+                      <p class="text-topsets-pritext dark:text-topsets-darkpritext capitalize">
                         {{ element.type }} {{ t('dashboard.tabs.program.planner.exercise') }}
                       </p>
                     </div>
@@ -486,7 +486,7 @@
                         </label>
                         <select
                           v-model="element.volume_mod"
-                          class="rafik-text-input border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
+                          class="topsets-text-input border-0 focus:ring-0 pb-1 border-topsets-sectext dark:border-topsets-darksectext border-b focus:border-topsets-alternate rounded-none"
                         >
                         <option disabled :value=" undefined">{{t('dashboard.tabs.program.planner.volumeModPlaceholder')}}</option>
                         <option value="Reps">Reps</option>
@@ -497,10 +497,10 @@
                       </div>
                       <div
                         v-else
-                        class="flex justify-between gap-4 w-full text-rafik-sectext dark:text-rafik-darksectext"
+                        class="flex justify-between gap-4 w-full text-topsets-sectext dark:text-topsets-darksectext"
                       >
                         <p>{{ t('dashboard.tabs.program.planner.volumeMod') }}:</p>
-                        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                        <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                           {{ element.volume_mod || 'Reps' }}
                         </p>
                       </div>
@@ -510,7 +510,7 @@
                         </label>
                         <select
                           v-model="element.intensity_mod"
-                          class="rafik-text-input border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
+                          class="topsets-text-input border-0 focus:ring-0 pb-1 border-topsets-sectext dark:border-topsets-darksectext border-b focus:border-topsets-alternate rounded-none"
                         >
                         <option disabled :value=" undefined">{{t('dashboard.tabs.program.planner.intensityModPlaceholder')}}</option>
                         <option value="Load(Kg)">Load(Kg)</option>
@@ -524,10 +524,10 @@
                       </div>
                       <div
                         v-else
-                        class="flex justify-between gap-4 w-full text-rafik-sectext dark:text-rafik-darksectext"
+                        class="flex justify-between gap-4 w-full text-topsets-sectext dark:text-topsets-darksectext"
                       >
                         <p>{{ t('dashboard.tabs.program.planner.intensityMod') }}:</p>
-                        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                        <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                           {{ element.intensity_mod || "Load(Kg)"}}
                         </p>
                       </div>
@@ -541,16 +541,16 @@
                         <input
                           type="number"
                           v-model.number="element.sets"
-                          class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
+                          class="topsets-text-input w-16 border-0 focus:ring-0 pb-1 border-topsets-sectext dark:border-topsets-darksectext border-b focus:border-topsets-alternate rounded-none"
                           :placeholder="t('dashboard.tabs.program.planner.totalSetsPlaceholder')"
                         />
                       </div>
                       <div
                         v-else
-                        class="flex justify-between gap-4 w-full text-rafik-sectext dark:text-rafik-darksectext"
+                        class="flex justify-between gap-4 w-full text-topsets-sectext dark:text-topsets-darksectext"
                       >
                         <p>{{ t('dashboard.tabs.program.planner.totalSets') }}:</p>
-                        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                        <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                           {{ element.sets }}
                         </p>
                       </div>
@@ -561,33 +561,33 @@
                         <input
                           type="number"
                           v-model.number="element.rest"
-                          class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
+                          class="topsets-text-input w-16 border-0 focus:ring-0 pb-1 border-topsets-sectext dark:border-topsets-darksectext border-b focus:border-topsets-alternate rounded-none"
                           :placeholder="t('dashboard.tabs.program.planner.recommendedRestPlaceholder')"
                         />
                       </div>
                       <div
                         v-else
-                        class="flex justify-between gap-4 w-full text-rafik-sectext dark:text-rafik-darksectext"
+                        class="flex justify-between gap-4 w-full text-topsets-sectext dark:text-topsets-darksectext"
                       >
                         <p>{{ t('dashboard.tabs.program.planner.recommendedRest') }}:</p>
-                        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                        <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                           {{ element.rest }} secs
                         </p>
                       </div>
                       <div
-                        class="flex justify-between gap-4 w-full text-rafik-sectext dark:text-rafik-darksectext text-body"
+                        class="flex justify-between gap-4 w-full text-topsets-sectext dark:text-topsets-darksectext text-body"
                       >
                         <p>{{ t('dashboard.tabs.program.planner.averageIntensity') }}</p>
-                        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                        <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                           {{ element.intensity }} kg
                         </p>
                       </div>
 
                       <div
-                        class="flex justify-between gap-4 w-full text-rafik-sectext dark:text-rafik-darksectext text-body"
+                        class="flex justify-between gap-4 w-full text-topsets-sectext dark:text-topsets-darksectext text-body"
                       >
                         <p>{{ t('dashboard.tabs.program.planner.averageRepetitions') }}</p>
-                        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+                        <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                           {{ element.reps }}
                         </p>
                       </div>
@@ -597,7 +597,7 @@
                   <div class="flex gap-6">
                     <div class="space-y-2 w-full">
                       <div
-                        class="flex w-full justify-between items-end py-2 border-b border-rafik-pritext dark:border-rafik-darkpritext"
+                        class="flex w-full justify-between items-end py-2 border-b border-topsets-pritext dark:border-topsets-darkpritext"
                       >
                         <h2 class="header-small text-sm w-12">
                           {{
@@ -608,7 +608,7 @@
                         </h2>
                         <div class="space-y-2">
                           <p
-                            class="text-rafik-pritext dark:text-rafik-darkpritext md:w-44 2xl:w-64"
+                            class="text-topsets-pritext dark:text-topsets-darkpritext md:w-44 2xl:w-64"
                           >
                           {{ element.intensity_mod || "Load(Kg)"}}
                           </p>
@@ -618,13 +618,13 @@
                             type="number"
                             @input="changeAll($event, element.true_sets)"
                             name="all-intensities"
-                            class="rafik-text-input border-0 focus:ring-0 pb-1 md:w-44 2xl:w-64 focus:border-rafik-alternate"
+                            class="topsets-text-input border-0 focus:ring-0 pb-1 md:w-44 2xl:w-64 focus:border-topsets-alternate"
                             placeholder="-"
                           />
                         </div>
                         <div class="space-y-2">
                           <p
-                            class="text-rafik-pritext dark:text-rafik-darkpritext md:w-44 2xl:w-64"
+                            class="text-topsets-pritext dark:text-topsets-darkpritext md:w-44 2xl:w-64"
                           >
                             {{
                               element.volume_mod || "Reps"
@@ -636,18 +636,18 @@
                             type="number"
                             @input="changeAll($event, element.true_sets)"
                             name="all-reps"
-                            class="rafik-text-input border-0 focus:ring-0 pb-1 md:w-44 2xl:w-64 focus:border-rafik-alternate"
+                            class="topsets-text-input border-0 focus:ring-0 pb-1 md:w-44 2xl:w-64 focus:border-topsets-alternate"
                             placeholder="-"
                           />
                         </div>
                       </div>
                       <div
-                        class="flex w-full justify-between items-end py-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
+                        class="flex w-full justify-between items-end py-2 border-b border-topsets-sectext dark:border-topsets-darksectext"
                         v-for="(set, sindex) in element.true_sets"
                         :key="sindex"
                       >
                         <h2
-                          class="header-small text-sm w-12 text-rafik-sectext dark:text-rafik-darksectext"
+                          class="header-small text-sm w-12 text-topsets-sectext dark:text-topsets-darksectext"
                         >
                           {{ t('dashboard.tabs.program.planner.set') }} {{ sindex + 1 }}
                         </h2>
@@ -656,7 +656,7 @@
                             :disabled="!isEditing"
                             type="number"
                             v-model.number="set.intensity"
-                            class="rafik-text-input md:w-44 2xl:w-64 border-0 focus:ring-0 pb-1 focus:border-rafik-alternate"
+                            class="topsets-text-input md:w-44 2xl:w-64 border-0 focus:ring-0 pb-1 focus:border-topsets-alternate"
                             :placeholder="t('dashboard.tabs.program.planner.kgsPlaceholder')"
                           />
                         </div>
@@ -665,7 +665,7 @@
                             :disabled="!isEditing"
                             type="number"
                             v-model.number="set.reps"
-                            class="rafik-text-input md:w-44 2xl:w-64 border-0 focus:ring-0 pb-1 focus:border-rafik-alternate"
+                            class="topsets-text-input md:w-44 2xl:w-64 border-0 focus:ring-0 pb-1 focus:border-topsets-alternate"
                             :placeholder="t('dashboard.tabs.program.planner.repsPlaceholder')"
                           />
                         </div>
@@ -691,18 +691,18 @@
             <button
               @click="handleAddMulti(activeTab)"
               v-if="isEditing"
-              class="header-small p-4 border border-rafik-pritext dark:border-rafik-darkpritext rounded hover:opacity-70 text-sm"
+              class="header-small p-4 border border-topsets-pritext dark:border-topsets-darkpritext rounded hover:opacity-70 text-sm"
             >
               {{ t('dashboard.tabs.program.planner.addMultiSet') }} +
               <br />
-              <span class="text-sm text-rafik-sectext dark:text-rafik-darksectext">
+              <span class="text-sm text-topsets-sectext dark:text-topsets-darksectext">
                 {{ t('dashboard.tabs.program.planner.supersetsCircuits') }}
               </span>
             </button>
           </div>
         </div>
       </div>
-      <div v-else class="my-auto text-center text-rafik contentH-medium uppercase p-8">
+      <div v-else class="my-auto text-center text-topsets contentH-medium uppercase p-8">
         {{ t('dashboard.tabs.program.planner.restAndRecover') }}
       </div>
     </div>
@@ -730,8 +730,8 @@ function showSuccess(message: string) {
     toast: true,
     position: 'top-right',
     icon: 'success',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -743,8 +743,8 @@ function showError(message: string) {
     icon: 'error',
     confirmButtonColor: '#d33',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 type Program = {
@@ -1075,10 +1075,10 @@ watch(
           showCancelButton: true,
           confirmButtonText: 'Yes, proceed',
           cancelButtonText: 'Cancel',
-          confirmButtonColor: '#CB901C',
+          confirmButtonColor: '#1578ac',
           cancelButtonColor: '#d33',
-          background: '#081411',
-          color: '#E8F3ED'
+          background: '#132e3d',
+          color: '#ececec'
         });
         if (result.isConfirmed) {
           editedWorkouts.value = editedWorkouts.value.slice(0, newVal);

@@ -18,7 +18,7 @@
             id="user_emails"
             :placeholder="t('dashboard.users.list.addUserModal.emailsPlaceholder')"
             v-model="user.emails"
-            class="rafik-text-input"
+            class="topsets-text-input"
             required
             row="5"
             :class="{ 'border-red-500': errors.emails }"
@@ -35,7 +35,7 @@
           <select
             id="user_type"
             v-model="user.type"
-            class="rafik-text-input"
+            class="topsets-text-input"
             required
             :class="{ 'border-red-500': errors.type }"
           >

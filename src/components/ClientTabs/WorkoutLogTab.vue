@@ -8,10 +8,10 @@
           v-model="searchQuery"
           type="text"
           :placeholder="t('dashboard.tabs.clients.workoutLog.searchByName')"
-          class="rafik-text-input border rounded-lg w-64"
+          class="topsets-text-input border rounded-lg w-64"
         />
       </div> -->
-      <hr class="w-full border-rafik-sectext dark:border-rafik-darksectext border-b" />
+      <hr class="w-full border-topsets-sectext dark:border-topsets-darksectext border-b" />
       <span class="text-sm">
         {{ t('dashboard.tabs.clients.workoutLog.showingRows', { count: filteredWorkouts.length }) }}
       </span>
@@ -33,7 +33,7 @@
         <tr
           v-for="workout in filteredWorkouts"
           :key="workout.id"
-          class="border-b border-rafik-sectext dark:border-rafik-darksectext h-12"
+          class="border-b border-topsets-sectext dark:border-topsets-darksectext h-12"
         >
           <td>
             {{
@@ -77,7 +77,7 @@
           <td class="px-3 relative">
             <RouterLink
               :to="{ name: 'workout-sheet', params: { id: workout.id } }"
-              class="px-3 py-5 text-rafik-sectext hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksecext rounded text-sm"
+              class="px-3 py-5 text-topsets-sectext hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darksecext rounded text-sm"
             >
               {{ t('dashboard.tabs.clients.workoutLog.moreDetails') }}
             </RouterLink>
@@ -91,7 +91,7 @@
       <button
         @click="prevPage"
         :disabled="currentPage === 1"
-        class="px-4 py-2 border rounded-lg hover:border-rafik hover:text-rafik"
+        class="px-4 py-2 border rounded-lg hover:border-topsets hover:text-topsets"
       >
         {{ t('dashboard.tabs.clients.workoutLog.prev') }}
       </button>
@@ -103,7 +103,7 @@
       <button
         @click="nextPage"
         :disabled="currentPage === totalPages"
-        class="px-4 py-2 border rounded-lg hover:border-rafik hover:text-rafik"
+        class="px-4 py-2 border rounded-lg hover:border-topsets hover:text-topsets"
       >
         {{ t('dashboard.tabs.clients.workoutLog.next') }}
       </button>

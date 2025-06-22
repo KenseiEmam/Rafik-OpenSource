@@ -27,7 +27,7 @@
         </h2>
         <input
           v-model="editableTemplate.template_name"
-          class="w-full rafik-text-input"
+          class="w-full topsets-text-input"
         />
 
         <h2 class="block header-small">
@@ -35,7 +35,7 @@
         </h2>
         <textarea
           v-model="editableTemplate.template_description"
-          class="w-full rafik-text-input"
+          class="w-full topsets-text-input"
           rows="3"
         />
       </div>
@@ -60,14 +60,14 @@
           >
           <template #item="{ element, index }">
               <div v-if="element.type === 'multi-set'"
-                class="gradient-bg border border-rafik-sectext dark:border-rafik-darksectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
+                class="gradient-bg border border-topsets-sectext dark:border-topsets-darksectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
               >
                 <svg
 
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 320 512"
                   fill="currentColor"
-                  class="h-12 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move"
+                  class="h-12 handle text-topsets-sectext dark:text-topsets-darksectext hover:cursor-move"
                 >
                   <path
                     d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0
@@ -93,9 +93,9 @@
                       <input
                         type="text"
                         v-model="element.drill_name"
-                        class="p-0 contentH-small text-rafik-sectext dark:text-rafik-darksectext border-0 bg-transparent focus:outline-none focus:ring-0 focus:border-0"
+                        class="p-0 contentH-small text-topsets-sectext dark:text-topsets-darksectext border-0 bg-transparent focus:outline-none focus:ring-0 focus:border-0"
                       />
-                      <p class="text-rafik-pritext dark:text-rafik-darkpritext capitalize">
+                      <p class="text-topsets-pritext dark:text-topsets-darkpritext capitalize">
                         {{ t('dashboard.tabs.program.planner.multipleExerciseGroup') }}
                       </p>
                     </div>
@@ -108,7 +108,7 @@
                         <input
                           type="number"
                           v-model.number="element.rounds"
-                          class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
+                          class="topsets-text-input w-16 border-0 focus:ring-0 pb-1 border-topsets-sectext dark:border-topsets-darksectext border-b focus:border-topsets-alternate rounded-none"
                           :placeholder="t('dashboard.tabs.program.planner.totalSetsPlaceholder')"
                         />
                       </div>
@@ -119,7 +119,7 @@
                         <input
                           type="number"
                           v-model.number="element.metric"
-                          class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
+                          class="topsets-text-input w-16 border-0 focus:ring-0 pb-1 border-topsets-sectext dark:border-topsets-darksectext border-b focus:border-topsets-alternate rounded-none"
                           :placeholder="t('dashboard.tabs.program.planner.recommendedRestPlaceholder')"
                         />
                       </div>
@@ -128,13 +128,13 @@
                     </div>
                   </div>
 
-                  <div class="space-y-6 card border-0 bg-rafik-secbg dark:bg-rafik-darksecbg p-6">
+                  <div class="space-y-6 card border-0 bg-topsets-secbg dark:bg-topsets-darksecbg p-6">
                     <h3 class="text-body uppercase text-center">
                       {{ t('dashboard.tabs.program.planner.innerExercises') }}
                     </h3>
                     <div
                       v-for="(embed, eindex) in element.embeds"
-                      class="gradient-bg border border-rafik-sectext dark:border-rafik-darksectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
+                      class="gradient-bg border border-topsets-sectext dark:border-topsets-darksectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
                     >
                       <div class="flex-1">
                         <div class="flex gap-3 items-center mb-4">
@@ -155,7 +155,7 @@
 
                           <div>
                             <h2 class="contentH-small">{{ embed.drill_name }}</h2>
-                            <p class="text-rafik-pritext dark:text-rafik-darkpritext capitalize">
+                            <p class="text-topsets-pritext dark:text-topsets-darkpritext capitalize">
                               {{ embed.type }} {{ t('dashboard.tabs.program.planner.exercise') }}
                             </p>
                           </div>
@@ -186,7 +186,7 @@
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 320 512"
                   fill="currentColor"
-                  class="h-6 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move"
+                  class="h-6 handle text-topsets-sectext dark:text-topsets-darksectext hover:cursor-move"
                 >
                   <path
                     d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0
@@ -222,7 +222,7 @@
 
                     <div>
                       <h2 class="contentH-small">{{ element.exercise_name }}</h2>
-                      <p class="text-rafik-pritext dark:text-rafik-darkpritext capitalize">
+                      <p class="text-topsets-pritext dark:text-topsets-darkpritext capitalize">
                         {{ element.type }} {{ t('dashboard.tabs.program.planner.exercise') }}
                       </p>
                     </div>
@@ -233,7 +233,7 @@
                         </label>
                         <select
                           v-model="element.control_unit"
-                          class="rafik-text-input border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
+                          class="topsets-text-input border-0 focus:ring-0 pb-1 border-topsets-sectext dark:border-topsets-darksectext border-b focus:border-topsets-alternate rounded-none"
                         >
                         <option disabled :value=" undefined">Control Unit</option>
                         <option value="Reps">Reps</option>
@@ -256,7 +256,7 @@
                         </label>
                         <select
                           v-model="element.primary_variable"
-                          class="rafik-text-input border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
+                          class="topsets-text-input border-0 focus:ring-0 pb-1 border-topsets-sectext dark:border-topsets-darksectext border-b focus:border-topsets-alternate rounded-none"
                         >
                         <option disabled :value=" undefined">Primary Unit</option>
                         <option value="Reps">Reps</option>
@@ -282,7 +282,7 @@
                         <input
                           type="number"
                           v-model.number="element.rounds"
-                          class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
+                          class="topsets-text-input w-16 border-0 focus:ring-0 pb-1 border-topsets-sectext dark:border-topsets-darksectext border-b focus:border-topsets-alternate rounded-none"
                           :placeholder="t('dashboard.tabs.program.planner.totalSetsPlaceholder')"
                         />
                       </div>
@@ -294,7 +294,7 @@
                         <input
                           type="number"
                           v-model.number="element.metric"
-                          class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
+                          class="topsets-text-input w-16 border-0 focus:ring-0 pb-1 border-topsets-sectext dark:border-topsets-darksectext border-b focus:border-topsets-alternate rounded-none"
                           :placeholder="t('dashboard.tabs.program.planner.recommendedRestPlaceholder')"
                         />
                       </div>

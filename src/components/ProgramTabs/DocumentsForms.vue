@@ -59,7 +59,7 @@ const handleFileUpload = async (event: any) => {
         .insert({
           trainer_id: props.program.trainer_id,
           program_id: props.program.id,
-          system_prompt: `You are a RAFIK AI, a customer support agent for a personal trainer. You will receive questions about their training program '${props.program.program_name}''.`
+          system_prompt: `You are a TOPSETS AI, a customer support agent for a personal trainer. You will receive questions about their training program '${props.program.program_name}''.`
         })
         .select('id')
         .single();
@@ -244,33 +244,33 @@ watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitU
       <h3 class="contentH-medium">
         {{ t('dashboard.tabs.program.docForms.clientInductionForm') }}
       </h3>
-      <p class="text-label text-rafik-sectext dark:text-rafik-darksectext">
+      <p class="text-label text-topsets-sectext dark:text-topsets-darksectext">
         {{ t('dashboard.tabs.program.docForms.clientInductionDescription') }}
       </p>
       <div
-        class="text-sm 2xl:text-sm flex gap-4 flex-wrap divide-x divide-rafik-sectext dark:divide-rafik-darksectext"
+        class="text-sm 2xl:text-sm flex gap-4 flex-wrap divide-x divide-topsets-sectext dark:divide-topsets-darksectext"
       >
         <button
           @click="addInduction('text')"
-          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+          class="pl-2 hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
         >
           {{ t('dashboard.tabs.program.docForms.addTextInduction') }}
         </button>
         <button
           @click="addInduction('number')"
-          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+          class="pl-2 hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
         >
           {{ t('dashboard.tabs.program.docForms.addNumberInduction') }}
         </button>
         <button
           @click="addInduction('boolean')"
-          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+          class="pl-2 hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
         >
           {{ t('dashboard.tabs.program.docForms.addBooleanInduction') }}
         </button>
         <button
           @click="addInduction('upload')"
-          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+          class="pl-2 hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
         >
           {{ t('dashboard.tabs.program.docForms.addMediaUploadInduction') }}
         </button>
@@ -284,13 +284,13 @@ watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitU
         >
           <template #item="{ element, index }">
             <div
-              class="card p-6 pl-2 border-rafik gradient-bg flex justify-between items-center text-left border gap-3"
+              class="card p-6 pl-2 border-topsets gradient-bg flex justify-between items-center text-left border gap-3"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 320 512"
                 fill="currentColor"
-                class="h-6 mr-3 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move"
+                class="h-6 mr-3 handle text-topsets-sectext dark:text-topsets-darksectext hover:cursor-move"
               >
                 <path
                   d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0
@@ -316,7 +316,7 @@ watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitU
                 </p>
                 <input
                   v-model="element.question"
-                  class="bg-transparent text-rafik-pritext dark:text-rafik-darkpritext px-0 text-base 2xl:text-lg focus:outline-none border-none focus:ring-0 w-full"
+                  class="bg-transparent text-topsets-pritext dark:text-topsets-darkpritext px-0 text-base 2xl:text-lg focus:outline-none border-none focus:ring-0 w-full"
                   type="text"
                   :placeholder="
                     t('dashboard.tabs.program.docForms.addNewQuestionPlaceholder', {
@@ -341,33 +341,33 @@ watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitU
     <!-- Follow-Up Form -->
     <div style="height: 60vh" class="card p-8 h-full overflow-y-auto space-y-4">
       <h3 class="contentH-medium">{{ t('dashboard.tabs.program.docForms.clientFollowUpForm') }}</h3>
-      <p class="text-label text-rafik-sectext dark:text-rafik-darksectext">
+      <p class="text-label text-topsets-sectext dark:text-topsets-darksectext">
         {{ t('dashboard.tabs.program.docForms.clientFollowUpDescription') }}
       </p>
       <div
-        class="text-sm 2xl:text-sm flex gap-4 flex-wrap divide-x divide-rafik-sectext dark:divide-rafik-darksectext"
+        class="text-sm 2xl:text-sm flex gap-4 flex-wrap divide-x divide-topsets-sectext dark:divide-topsets-darksectext"
       >
         <button
           @click="addFollow('text')"
-          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+          class="pl-2 hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
         >
           {{ t('dashboard.tabs.program.docForms.addTextFollow') }}
         </button>
         <button
           @click="addFollow('number')"
-          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+          class="pl-2 hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
         >
           {{ t('dashboard.tabs.program.docForms.addNumberFollow') }}
         </button>
         <button
           @click="addFollow('boolean')"
-          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+          class="pl-2 hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
         >
           {{ t('dashboard.tabs.program.docForms.addBooleanFollow') }}
         </button>
         <button
           @click="addFollow('upload')"
-          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+          class="pl-2 hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
         >
           {{ t('dashboard.tabs.program.docForms.addMediaUploadFollow') }}
         </button>
@@ -376,13 +376,13 @@ watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitU
         <draggable class="flex flex-col gap-4 mb-5" v-model="follow" handle=".handle" item-key="id">
           <template #item="{ element, index }">
             <div
-              class="card p-6 pl-2 border-rafik gradient-bg flex justify-between items-center text-left border gap-3"
+              class="card p-6 pl-2 border-topsets gradient-bg flex justify-between items-center text-left border gap-3"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 320 512"
                 fill="currentColor"
-                class="h-6 mr-3 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move"
+                class="h-6 mr-3 handle text-topsets-sectext dark:text-topsets-darksectext hover:cursor-move"
               >
                 <path
                   d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0
@@ -408,7 +408,7 @@ watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitU
                 </p>
                 <input
                   v-model="element.question"
-                  class="bg-transparent text-rafik-pritext dark:text-rafik-darkpritext px-0 text-base 2xl:text-lg focus:outline-none border-none focus:ring-0 w-full"
+                  class="bg-transparent text-topsets-pritext dark:text-topsets-darkpritext px-0 text-base 2xl:text-lg focus:outline-none border-none focus:ring-0 w-full"
                   type="text"
                   :placeholder="
                     t('dashboard.tabs.program.docForms.addNewQuestionPlaceholder', {
@@ -430,7 +430,7 @@ watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitU
     <!-- Referral Document -->
     <div class="card p-8 overflow-y-auto space-y-4 col-span-2 2xl:col-span-1">
       <h3 class="contentH-medium">{{ t('dashboard.tabs.program.docForms.aiReferralDocument') }}</h3>
-      <p class="text-label text-rafik-sectext dark:text-rafik-darksectext">
+      <p class="text-label text-topsets-sectext dark:text-topsets-darksectext">
         {{ t('dashboard.tabs.program.docForms.aiReferralDescription') }}
       </p>
       <div class="flex flex-col gap-4">

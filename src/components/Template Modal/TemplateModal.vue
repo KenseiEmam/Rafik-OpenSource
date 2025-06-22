@@ -18,7 +18,7 @@
             <input
               v-model="template.name"
               type="text"
-              class="rafik-text-input w-full"
+              class="topsets-text-input w-full"
               :placeholder="t('dashboard.tabs.program.template.namePlaceholder')"
               required
             />
@@ -30,7 +30,7 @@
             </label>
             <textarea
               v-model="template.description"
-              class="rafik-text-input w-full"
+              class="topsets-text-input w-full"
               :placeholder="t('dashboard.tabs.program.template.descriptionPlaceholder')"
               rows="3"
               required

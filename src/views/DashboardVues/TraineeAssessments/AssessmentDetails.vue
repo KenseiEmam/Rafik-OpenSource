@@ -128,8 +128,8 @@ function showSuccess(message: string) {
     position: 'top-right',
     icon: 'success',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -141,8 +141,8 @@ function showError(message: string) {
     icon: 'error',
     confirmButtonColor: '#d33',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 const difficulty = ref(['Too Hard', 'Challenging', 'Just Right', 'Easy', 'Too Easy']);
@@ -226,12 +226,12 @@ onMounted(() => {
         class="h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body"
       >
         <img
-          src="@/assets/Large Icon.png"
+          src="@/assets/ts-trans-dark.png"
           class="w-24 h-24 animate-bounce hidden dark:inline-block"
           alt=""
         />
         <img
-          src="@/assets/Large Icon Light.png"
+          src="@/assets/ts-trans-light.png"
           class="w-24 h-24 animate-bounce dark:hidden"
           alt=""
         />
@@ -245,13 +245,13 @@ onMounted(() => {
     >
       <!-- Upper Header Area -->
       <div
-        class="border group flex flex-col relative gradient-bg border-rafik-alternate rounded-lg overflow-hidden"
+        class="border group flex flex-col relative gradient-bg border-topsets-alternate rounded-lg overflow-hidden"
       >
         <div v-if="slotStore.SlotItem" class="p-8 2xl:p-16 2xl:py-24 space-y-4 relative gap-6 items-stretch grid grid-cols-4">
           <div class="pr-6 space-y-4 col-span-2">
             <div class="flex items-center gap-6">
               <img :src="clientStore.UserDetail.avatar ||
-                    'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" class="2xl:w-32 2xl:h-32 w-24 h-24 rounded-full border-2 border-rafik-secondary"alt="">
+                    'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" class="2xl:w-32 2xl:h-32 w-24 h-24 rounded-full border-2 border-topsets-secondary"alt="">
               <div class="space-y-2">
                 <h1 class="title-small">
                   {{
@@ -278,44 +278,44 @@ onMounted(() => {
           <!-- First Group of Columns -->
           <div v-if="slotStore.SlotItem" class="flex flex-col gap-4 justify-between">
             <div class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+              <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                 Status:
               </p>
-              <p class="text-rafik-secondary">{{ assessmentStore.AssessmentItem.status }}</p>
+              <p class="text-topsets-secondary">{{ assessmentStore.AssessmentItem.status }}</p>
             </div>
           <!-- Scheduled Start -->
           <div class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
-            <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+            <p class="text-topsets-pritext dark:text-topsets-darkpritext">
               Scheduled Start:
             </p>
-            <p class="text-rafik-secondary">
+            <p class="text-topsets-secondary">
               {{ new Date(slotStore.SlotItem.time_start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
             </p>
           </div>
 
           <!-- Estimated End -->
           <div class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
-            <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+            <p class="text-topsets-pritext dark:text-topsets-darkpritext">
               Estimated End:
             </p>
-            <p class="text-rafik-secondary">
+            <p class="text-topsets-secondary">
               {{ new Date(slotStore.SlotItem.time_end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
             </p>
           </div>
             <div v-if="assessmentStore.AssessmentItem.status == 'active'" class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+              <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                Time Elapsed:
               </p>
-              <p class="text-rafik-secondary">{{ formattedTimeElapsed }}</p>
+              <p class="text-topsets-secondary">{{ formattedTimeElapsed }}</p>
             </div>
           </div>
           <!-- Second Group of Columns  -->
           <div class="flex flex-col gap-4 justify-center ">
-            <button v-if="assessmentStore.AssessmentItem.assessors?.includes(getUserID()) && assessmentStore.AssessmentItem.status == 'scheduled'" class="text-rafik-secondary dark:text-rafik nav-btn">Start Assessment </button>
-            <button v-if="assessmentStore.AssessmentItem.assessors?.includes(getUserID()) && assessmentStore.AssessmentItem.status == 'active'" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">End Assessment </button>
-            <button v-if=" assessmentStore.AssessmentItem.status == 'scheduled'" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">Change Template </button>
-            <button v-if="assessmentStore.AssessmentItem.assessors?.includes(getUserID()) && assessmentStore.AssessmentItem.status == 'completed'" @click="editing = true" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">Edit Assessment </button>
-            <button v-if="editing" class="text-rafik nav-btn">Save Edits </button>
+            <button v-if="assessmentStore.AssessmentItem.assessors?.includes(getUserID()) && assessmentStore.AssessmentItem.status == 'scheduled'" class="text-topsets-secondary dark:text-topsets nav-btn">Start Assessment </button>
+            <button v-if="assessmentStore.AssessmentItem.assessors?.includes(getUserID()) && assessmentStore.AssessmentItem.status == 'active'" class="text-topsets-pritext dark:text-topsets-darkpritext nav-btn">End Assessment </button>
+            <button v-if=" assessmentStore.AssessmentItem.status == 'scheduled'" class="text-topsets-pritext dark:text-topsets-darkpritext nav-btn">Change Template </button>
+            <button v-if="assessmentStore.AssessmentItem.assessors?.includes(getUserID()) && assessmentStore.AssessmentItem.status == 'completed'" @click="editing = true" class="text-topsets-pritext dark:text-topsets-darkpritext nav-btn">Edit Assessment </button>
+            <button v-if="editing" class="text-topsets nav-btn">Save Edits </button>
             <button v-if="editing" class="text-red-500 dark:text-red-400 nav-btn">Cancel Edits </button>
             <button v-if="assessmentStore.AssessmentItem.status == 'completed'" class="text-yellow-500 dark:text-yellow-400 nav-btn">Dispute Assessment </button>
             <button v-if="!editing" class="text-red-500 dark:text-red-400 nav-btn">Cancel Assessment </button>
@@ -330,12 +330,12 @@ onMounted(() => {
         <div class="2xl:col-span-2">
            <!-- Tabs Navigation -->
       <div
-        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
+        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-topsets-sectext dark:border-topsets-darksectext"
       >
         <button
           :class="
             activeTab === 'Details'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn"
@@ -346,7 +346,7 @@ onMounted(() => {
         <button
           :class="
             activeTab === 'Drills'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"
@@ -357,7 +357,7 @@ onMounted(() => {
         <button
           :class="
             activeTab === 'Trainee'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"
@@ -368,7 +368,7 @@ onMounted(() => {
         <!-- <button
           :class="
             activeTab === 'Audit'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"
@@ -390,15 +390,15 @@ onMounted(() => {
             {{ templateStore.TemplateItem?.template_description }}
           </p>
           <div class="mt-6">
-            <p class="dark:text-rafik-darkpritext text-rafik-pritext text-sm md:text-base">{{ templateStore.TemplateItem?.etc }} minutes to complete.</p>
+            <p class="dark:text-topsets-darkpritext text-topsets-pritext text-sm md:text-base">{{ templateStore.TemplateItem?.etc }} minutes to complete.</p>
           </div>
           <div class="mt-6">
-            <p class="dark:text-rafik-darkpritext text-rafik-pritext text-sm md:text-base">({{ templateStore.TemplateItem?.drills?.length }}) drills in total.</p>
+            <p class="dark:text-topsets-darkpritext text-topsets-pritext text-sm md:text-base">({{ templateStore.TemplateItem?.drills?.length }}) drills in total.</p>
           </div>
         </div>
         <div class="p-6 card">
           <h3 class="contentH-small ">Assessors: </h3>
-          <div class="space-y-3 divide-y divide-rafik-sectext dark:divide-rafik-darksectext">
+          <div class="space-y-3 divide-y divide-topsets-sectext dark:divide-topsets-darksectext">
               <template v-if="assessmentStore.AssessmentItem.assessors && assessmentStore.AssessmentItem.assessors.length > 0">
                 <router-link
                   v-for="(assessorId, index) in assessmentStore.AssessmentItem.assessors"
@@ -408,7 +408,7 @@ onMounted(() => {
                   @click.stop
                 >
                 <img :src="assessmentStore.assessors[assessorId].avatar ||
-                    'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" class="w-16 h-16 rounded-full border-2 border-rafik-secondary">
+                    'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" class="w-16 h-16 rounded-full border-2 border-topsets-secondary">
                 <div>
                   <p class="header-small text-lg ">
                      {{
@@ -430,14 +430,14 @@ onMounted(() => {
 
                 </router-link>
               </template>
-              <span v-else class="label text-rafik-sectext dark:text-rafik-darksectext">
+              <span v-else class="label text-topsets-sectext dark:text-topsets-darksectext">
                 {{ t('dashboard.assessments.list.noAssessors') }}
               </span>
             </div>
         </div>
         <div class="p-6 card">
           <h3 class="contentH-small ">Created By: </h3>
-          <div class="space-y-3 divide-y divide-rafik-sectext dark:divide-rafik-darksectext">
+          <div class="space-y-3 divide-y divide-topsets-sectext dark:divide-topsets-darksectext">
               <template v-if="templateStore.TemplateItem?.created_by_user ">
                 <router-link
 
@@ -446,7 +446,7 @@ onMounted(() => {
                   @click.stop
                 >
                 <img :src="templateStore.TemplateItem?.created_by_user.avatar ||
-                    'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" class="w-16 h-16 rounded-full border-2 border-rafik-secondary">
+                    'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" class="w-16 h-16 rounded-full border-2 border-topsets-secondary">
                 <div>
                   <p class="header-small text-lg ">
                      {{
@@ -468,7 +468,7 @@ onMounted(() => {
 
                 </router-link>
               </template>
-              <span v-else class="label text-rafik-sectext dark:text-rafik-darksectext mt-6">
+              <span v-else class="label text-topsets-sectext dark:text-topsets-darksectext mt-6">
                 No User Data Found
               </span>
             </div>
@@ -493,7 +493,7 @@ onMounted(() => {
                 <p v-if="getBestPerf(exercise.id)" class="text-body">
                   Estimated ORM : {{ getBestPerf(exercise.id)?.orm ?? 'N/A' }}
                 </p>
-                <p class="text-rafik"
+                <p class="text-topsets"
                 v-if="
                 (clientStore.Client.profile.best_perf
                   ?.find((ex: BestPerf) => ex.exercise === exercise.id)
@@ -510,7 +510,7 @@ onMounted(() => {
               </div> -->
               <div>
                 <div class="col-span-3 flex-col flex gap-2">
-                  <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body opacity-0">
+                  <h4 class="text-topsets-pritext dark:text-topsets-darkpritext text-body opacity-0">
                     {{ t('dashboard.workoutSheet.filler') }}
                   </h4>
                   <div
@@ -518,15 +518,15 @@ onMounted(() => {
                     :key="set"
                     class="flex gap-6 w-full items-center"
                   >
-                    <p class="text-rafik-pritext dark:text-rafik-darkpritext min-w-max py-2.5">
+                    <p class="text-topsets-pritext dark:text-topsets-darkpritext min-w-max py-2.5">
                        Round {{  index + 1 }}
                     </p>
-                    <hr class="border border-rafik-sectext dark:border-rafik-darksectext w-full" />
+                    <hr class="border border-topsets-sectext dark:border-topsets-darksectext w-full" />
                     <p v-if="(assessmentStore.AssessmentItem.status === 'active' || editing) && assessmentStore.AssessmentItem.assessors?.includes(getUserID())  " >{{ exercise.primary_variable || 'Load(Kg)' }}</p>
                      <div
                     >
 
-                    <input v-model="set.primary_done" v-if="(assessmentStore.AssessmentItem.status === 'active' || editing) && assessmentStore.AssessmentItem.assessors?.includes(getUserID())  "  type="number" class="text-rafik-pritext dark:text-rafik-darkpritext py-2 rafik-text-input" >
+                    <input v-model="set.primary_done" v-if="(assessmentStore.AssessmentItem.status === 'active' || editing) && assessmentStore.AssessmentItem.assessors?.includes(getUserID())  "  type="number" class="text-topsets-pritext dark:text-topsets-darkpritext py-2 topsets-text-input" >
                     <p v-else class="min-w-max">{{ set.primary_done }} {{ t('dashboard.workoutSheet.kg') }}</p>
 
                     </div>
@@ -547,28 +547,28 @@ onMounted(() => {
           Trainee Profile
         </h3>
         <div v-if="clientStore.UserDetail.dob" class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.age') }}
           </p>
-          <p class="text-rafik-secondary">{{ calculateAge(clientStore.UserDetail.dob) || 'N/A' }}</p>
+          <p class="text-topsets-secondary">{{ calculateAge(clientStore.UserDetail.dob) || 'N/A' }}</p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.gender') }}
           </p>
-          <p class="text-rafik-secondary">{{ clientStore.UserDetail.gender || 'N/A' }}</p>
+          <p class="text-topsets-secondary">{{ clientStore.UserDetail.gender || 'N/A' }}</p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.nationality') }}
           </p>
-          <p class="text-rafik-secondary">{{ clientStore.UserDetail.nationality || 'N/A' }}</p>
+          <p class="text-topsets-secondary">{{ clientStore.UserDetail.nationality || 'N/A' }}</p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.phone') }}
           </p>
-          <p class="text-rafik-secondary">{{ clientStore.UserDetail.phone || 'N/A' }}</p>
+          <p class="text-topsets-secondary">{{ clientStore.UserDetail.phone || 'N/A' }}</p>
         </div>
       </div>
 
@@ -577,33 +577,33 @@ onMounted(() => {
           Trainee Metrics
         </h3>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.height') }}
           </p>
-          <p class="text-rafik-secondary">
+          <p class="text-topsets-secondary">
             {{ clientStore.Client?.profile.height || 'N/A' }} {{ t('dashboard.tabs.clients.details.cm') }}
           </p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.weight') }}
           </p>
           <!-- Use the computed value for weight -->
-          <p class="text-rafik-secondary">
+          <p class="text-topsets-secondary">
             {{ weight || 'N/A' }} {{ t('dashboard.tabs.clients.details.kg') }}
           </p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.goalWeight') }}
           </p>
-          <p class="text-rafik-secondary">{{ clientStore.Client?.profile.weight_goal || 'N/A' }} kg</p>
+          <p class="text-topsets-secondary">{{ clientStore.Client?.profile.weight_goal || 'N/A' }} kg</p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.bodyFatPercent') }}
           </p>
-          <p class="text-rafik-secondary">{{ clientStore.Client?.profile.body_fat + '%' || 'N/A' }}</p>
+          <p class="text-topsets-secondary">{{ clientStore.Client?.profile.body_fat + '%' || 'N/A' }}</p>
         </div>
       </div>
 
@@ -612,54 +612,54 @@ onMounted(() => {
           Trainee Fitness
         </h3>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.experience') }}
           </p>
-          <p class="text-rafik-secondary">
+          <p class="text-topsets-secondary">
             {{ clientStore.Client?.profile.experience || t('dashboard.tabs.clients.details.NA') }}
           </p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.fitnessGoal') }}
           </p>
           <p
-            class="text-rafik-secondary"
+            class="text-topsets-secondary"
             v-for="(goal, index) in clientStore.Client?.profile.fitness_goal"
             :key="goal"
           >
             {{ t(`dashboard.tabs.clients.details.goals.${goals[goal - 1]}`) }}
             <span v-if="index + 1 !== clientStore.Client?.profile.fitness_goal.length">,</span>
           </p>
-          <p class="text-rafik-secondary" v-if="!clientStore.Client?.profile.fitness_goal">N/A</p>
+          <p class="text-topsets-secondary" v-if="!clientStore.Client?.profile.fitness_goal">N/A</p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.sportsPlayed') }}
           </p>
           <p
-            class="text-rafik-secondary"
+            class="text-topsets-secondary"
             v-for="(sport, index) in clientStore.Client?.profile.sports_played"
             :key="sport"
           >
             {{ sport }}
             <span v-if="index + 1 !== clientStore.Client?.profile.sports_played.length">,</span>
           </p>
-          <p class="text-rafik-secondary" v-if="!clientStore.Client?.profile.sports_played">N/A</p>
+          <p class="text-topsets-secondary" v-if="!clientStore.Client?.profile.sports_played">N/A</p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.dietPreference') }}
           </p>
           <p
-            class="text-rafik-secondary"
+            class="text-topsets-secondary"
             v-for="(diet, index) in clientStore.Client?.profile.diet_preference"
             :key="diet"
           >
             {{ diet
             }}<span v-if="index + 1 !== clientStore.Client?.profile.diet_preference.length">, </span>
           </p>
-          <p class="text-rafik-secondary" v-if="!clientStore.Client?.profile.diet_preference">N/A</p>
+          <p class="text-topsets-secondary" v-if="!clientStore.Client?.profile.diet_preference">N/A</p>
         </div>
       </div>
       </div>

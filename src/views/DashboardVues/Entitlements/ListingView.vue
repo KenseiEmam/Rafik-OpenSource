@@ -17,13 +17,13 @@
       >
         <!-- Dark Mode Icon -->
         <img
-          src="@/assets/Large Icon.png"
+          src="@/assets/ts-trans-dark.png"
           class="w-24 h-24 animate-bounce hidden dark:inline-block"
           alt=""
         />
         <!-- Light Mode Icon -->
         <img
-          src="@/assets/Large Icon Light.png"
+          src="@/assets/ts-trans-light.png"
           class="w-24 h-24 animate-bounce dark:hidden"
           alt=""
         />
@@ -48,7 +48,7 @@
             <p class="contentH-large 2xl:text-7xl" :class="locale === 'ar' ? 'me-auto' : 'ms-auto'">
               {{ entitlementStore.entitlements.filter((e) => !e.client_email).length }}
             </p>
-            <h2 class="header-small text-rafik-secondary uppercase font-semibold">
+            <h2 class="header-small text-topsets-secondary uppercase font-semibold">
               {{ t('dashboard.entitlements.list.avlEntitlements') }}
             </h2>
           </div>
@@ -96,11 +96,11 @@
           <tbody>
             <tr v-for="client in userStore.Entitled" :key="client.id" class="rounded-xl p-4">
               <td
-                :class="locale === 'ar' ? 'flex gap-6 text-right items-center py-4 pr-3 bg-rafik-secbg dark:bg-rafik-darksecbg' : 'flex gap-6 text-left items-center py-4 pl-3 bg-rafik-secbg dark:bg-rafik-darksecbg'"
+                :class="locale === 'ar' ? 'flex gap-6 text-right items-center py-4 pr-3 bg-topsets-secbg dark:bg-topsets-darksecbg' : 'flex gap-6 text-left items-center py-4 pl-3 bg-topsets-secbg dark:bg-topsets-darksecbg'"
               >
                 <img
                   :src="client.avatar || defaultAvatar"
-                  class="w-12 h-12 rounded-full border-2 border-rafik"
+                  class="w-12 h-12 rounded-full border-2 border-topsets"
                   alt="Avatar"
                 />
                 <div>
@@ -109,7 +109,7 @@
                 </div>
               </td>
 
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg">
                 {{
                   new Date(client.program_details.created_at).toLocaleDateString('en-GB', {
                     year: 'numeric',
@@ -118,7 +118,7 @@
                   }) || '-'
                 }}
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg">
                 {{
                   new Date(client.program_details.expires_on).toLocaleDateString('en-GB', {
                     year: 'numeric',
@@ -127,14 +127,14 @@
                   }) || '-'
                 }}
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg">
                 {{ client.program_details.months_package || '-' }}
                 {{ t('dashboard.entitlements.list.monthsSuffix') }}
               </td>
-              <td class="uppercase bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik">
+              <td class="uppercase bg-topsets-secbg dark:bg-topsets-darksecbg text-topsets">
                 {{ client.program_details.status || client }}
               </td>
-              <td class="uppercase bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik">
+              <td class="uppercase bg-topsets-secbg dark:bg-topsets-darksecbg text-topsets">
                 <div class="flex justify-center">
                   <label class="flex items-center space-x-2 cursor-pointer">
                     <input
@@ -144,11 +144,11 @@
                       class="hidden"
                     />
                     <div
-                      class="w-16 h-8 flex items-center border-rafik-pritext dark:border-rafik-darkpritext border-2 rounded-full transition-all"
-                      :class="{ 'bg-rafik': client.program_details.auto_reroll }"
+                      class="w-16 h-8 flex items-center border-topsets-pritext dark:border-topsets-darkpritext border-2 rounded-full transition-all"
+                      :class="{ 'bg-topsets': client.program_details.auto_reroll }"
                     >
                       <div
-                        class="w-8 h-8 bg-rafik-pritext dark:bg-rafik-darkpritext rounded-full shadow-md transform transition-transform"
+                        class="w-8 h-8 bg-topsets-pritext dark:bg-topsets-darkpritext rounded-full shadow-md transform transition-transform"
                         :class="client.program_details.auto_reroll ? (locale === 'ar' ? '-translate-x-8' : 'translate-x-8') : ''"
                       ></div>
                     </div>
@@ -212,8 +212,8 @@ function showSuccess(messageKey: string) {
     toast: true,
     position: 'top-right',
     icon: 'success',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -223,8 +223,8 @@ function showError(messageKey: string) {
     text: t(messageKey),
     icon: 'error',
     confirmButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 

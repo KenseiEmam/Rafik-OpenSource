@@ -12,11 +12,11 @@
 
       <!-- Tabs -->
       <div
-        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
+        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-topsets-sectext dark:border-topsets-darksectext"
       >
         <button
           :class="
-            activeTab === 'Active Program' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''
+            activeTab === 'Active Program' ? 'text-topsets-pritext dark:text-topsets-darkpritext' : ''
           "
           class="nav-btn"
           @click="setActiveTab('Active Program')"
@@ -25,7 +25,7 @@
         </button>
         <button
           :class="
-            activeTab === 'Drafted Programs' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''
+            activeTab === 'Drafted Programs' ? 'text-topsets-pritext dark:text-topsets-darkpritext' : ''
           "
           class="nav-btn uppercase"
           @click="setActiveTab('Drafted Programs')"
@@ -34,7 +34,7 @@
         </button>
         <button
           :class="
-            activeTab === 'Exercise Library' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''
+            activeTab === 'Exercise Library' ? 'text-topsets-pritext dark:text-topsets-darkpritext' : ''
           "
           class="nav-btn uppercase"
           @click="setActiveTab('Exercise Library')"
@@ -54,7 +54,7 @@
             v-for="program in programStore.ActivePrograms"
             :key="program.id"
             @click="detailsRoute(program.id)"
-            class="border-2 group flex flex-col relative border-rafik-sectext dark:border-rafik-darksectext hover:border-rafik-secondary hover:cursor-pointer rounded-lg overflow-hidden"
+            class="border-2 group flex flex-col relative border-topsets-sectext dark:border-topsets-darksectext hover:border-topsets-secondary hover:cursor-pointer rounded-lg overflow-hidden"
           >
             <img
               :src="program.program_photo"
@@ -62,21 +62,21 @@
               alt=""
             />
             <div
-              class="w-full opacity-70 h-full bg-rafik-pribg dark:bg-rafik-darkpribg absolute"
+              class="w-full opacity-70 h-full bg-topsets-pribg dark:bg-topsets-darkpribg absolute"
             ></div>
             <div
-              class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-white dark:from-rafik-alternate to-50 absolute"
+              class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-white dark:from-topsets-alternate to-50 absolute"
             ></div>
             <div class="p-8 space-y-4 relative flex flex-col items-end">
               <h2
-                class="subheader-medium flex gap-4 items-center group-hover:text-rafik-pritext dark:group-hover:text-rafik-darkpritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+                class="subheader-medium flex gap-4 items-center group-hover:text-topsets-pritext dark:group-hover:text-topsets-darkpritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   stroke="currentColor"
                   fill="currentColor"
                   viewBox="0 0 576 512"
-                  class="w-8 2xl:w-10 text-rafik-sectext dark:text-rafik-darksectext group-hover:text-rafik"
+                  class="w-8 2xl:w-10 text-topsets-sectext dark:text-topsets-darksectext group-hover:text-topsets"
                 >
                   <path
                     d="M316.9 18C311.6 7 300.4 0 288.1
@@ -115,7 +115,7 @@
             </div>
             <div class="p-8 space-y-4 relative mt-auto">
               <h3
-                class="title-small text-rafik-sectext dark:text-rafik-darksectext group-hover:text-rafik"
+                class="title-small text-topsets-sectext dark:text-topsets-darksectext group-hover:text-topsets"
               >
                 {{ program.program_name }}
               </h3>
@@ -123,7 +123,7 @@
                 class="h-0 group-hover:h-auto transition opacity-0 group-hover:opacity-100 ease-in space-y-4"
               >
                 <p
-                  class="text-body group-hover:text-rafik-pritext dark:group-hover:text-rafik-darkpritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext text-rafik-sectext dark:text-rafik-darksectext line-clamp-3"
+                  class="text-body group-hover:text-topsets-pritext dark:group-hover:text-topsets-darkpritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext text-topsets-sectext dark:text-topsets-darksectext line-clamp-3"
                 >
                   {{ program.program_description }}
                 </p>
@@ -153,13 +153,13 @@
             v-for="index in additionalSlots"
             :key="'placeholder-' + index"
             @click="showAddProgramModal = true"
-            class="border-2 border-dashed flex hover:cursor-pointer hover:opacity-70 flex-col items-center justify-center border-rafik-sectext dark:border-rafik-darksectext bg-rafik-pribg dark:bg-rafik-darkpribg rounded-lg overflow-hidden"
+            class="border-2 border-dashed flex hover:cursor-pointer hover:opacity-70 flex-col items-center justify-center border-topsets-sectext dark:border-topsets-darksectext bg-topsets-pribg dark:bg-topsets-darkpribg rounded-lg overflow-hidden"
           >
             <p class="text-center header-small uppercase w-1/3">
               +<br />
               {{ t('dashboard.programs.list.addAnother') }}
             </p>
-            <p class="text-center label text-rafik-sectext dark:text-rafik-darksectext w-1/2">
+            <p class="text-center label text-topsets-sectext dark:text-topsets-darksectext w-1/2">
               {{ t('dashboard.programs.list.expandYourArsenal') }}
             </p>
           </div>
@@ -175,7 +175,7 @@
             v-for="program in programStore.DraftedPrograms"
             :key="program.id"
             @click="detailsRoute(program.id)"
-            class="border-2 group flex flex-col relative border-rafik-sectext dark:border-rafik-darksectext hover:border-rafik-secondary hover:cursor-pointer rounded-lg overflow-hidden"
+            class="border-2 group flex flex-col relative border-topsets-sectext dark:border-topsets-darksectext hover:border-topsets-secondary hover:cursor-pointer rounded-lg overflow-hidden"
           >
             <img
               :src="program.program_photo"
@@ -183,21 +183,21 @@
               alt=""
             />
             <div
-              class="w-full opacity-70 h-full bg-rafik-pribg dark:bg-rafik-darkpribg absolute"
+              class="w-full opacity-70 h-full bg-topsets-pribg dark:bg-topsets-darkpribg absolute"
             ></div>
             <div
-              class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-white dark:from-rafik-alternate to-50 absolute"
+              class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-white dark:from-topsets-alternate to-50 absolute"
             ></div>
             <div class="p-8 space-y-4 relative flex flex-col items-end">
               <h2
-                class="subheader-medium flex gap-4 items-center group-hover:text-rafik-pritext dark:group-hover:text-rafik-darkpritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+                class="subheader-medium flex gap-4 items-center group-hover:text-topsets-pritext dark:group-hover:text-topsets-darkpritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
               >
                 {{ t('dashboard.programs.list.status') }}: {{ program.status }}
               </h2>
             </div>
             <div class="p-8 space-y-4 relative mt-auto">
               <h3
-                class="title-small text-rafik-sectext dark:text-rafik-darksectext group-hover:text-rafik"
+                class="title-small text-topsets-sectext dark:text-topsets-darksectext group-hover:text-topsets"
               >
                 {{ program.program_name }}
               </h3>
@@ -209,13 +209,13 @@
             v-for="index in additionalDrafs"
             :key="'placeholder-' + index"
             @click="showAddProgramModal = true"
-            class="border-2 border-dashed flex hover:cursor-pointer hover:opacity-70 flex-col items-center justify-center border-rafik-sectext dark:border-rafik-darksectext bg-rafik-pribg dark:bg-rafik-darkpribg rounded-lg overflow-hidden"
+            class="border-2 border-dashed flex hover:cursor-pointer hover:opacity-70 flex-col items-center justify-center border-topsets-sectext dark:border-topsets-darksectext bg-topsets-pribg dark:bg-topsets-darkpribg rounded-lg overflow-hidden"
           >
             <p class="text-center header-small uppercase w-1/3">
               +<br />
               {{ t('dashboard.programs.list.addAnother') }}
             </p>
-            <p class="text-center label text-rafik-sectext dark:text-rafik-darksectext w-1/2">
+            <p class="text-center label text-topsets-sectext dark:text-topsets-darksectext w-1/2">
               {{ t('dashboard.programs.list.expandYourArsenal') }}
             </p>
           </div>

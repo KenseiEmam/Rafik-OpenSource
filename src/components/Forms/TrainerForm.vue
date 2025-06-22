@@ -2,10 +2,10 @@
   <div class="flex justify-center items-center">
     <form
       @submit.prevent="handleSubmit"
-      class="card border-rafik p-8 rounded-lg shadow-md w-full space-y-6"
+      class="card border-topsets p-8 rounded-lg shadow-md w-full space-y-6"
     >
       <h1 class="header-large">Professional Details</h1>
-      <h2 class="text-body text-rafik-sectext dark:text-rafik-darksectext">
+      <h2 class="text-body text-topsets-sectext dark:text-topsets-darksectext">
         Let’s set up your professional profile to showcase your skills and attract the right clients.
       </h2>
 
@@ -16,7 +16,7 @@
           v-model="formData.preferredTitle"
           type="text"
           id="preferred-title"
-          class="rafik-text-input"
+          class="topsets-text-input"
           placeholder="Enter your preferred title (e.g., Certified Personal Trainer)"
         />
       </div>
@@ -27,7 +27,7 @@
         <textarea
           v-model="formData.professionalSummary"
           id="professional-summary"
-          class="rafik-text-input whitespace-pre-wrap"
+          class="topsets-text-input whitespace-pre-wrap"
           placeholder="Write a short professional summary about yourself"
         ></textarea>
       </div>
@@ -39,7 +39,7 @@
           v-model="formData.yearsExperience"
           type="number"
           id="years-experience"
-          class="rafik-text-input"
+          class="topsets-text-input"
           placeholder="Enter your years of experience"
         />
       </div>
@@ -52,17 +52,17 @@
           <div
             v-for="client in clientOptions"
             :key="client"
-            class="px-4 py-2 border rounded-lg text-sm cursor-pointer hover:bg-rafik-secbg dark:bg-rafik-darksecbg"
+            class="px-4 py-2 border rounded-lg text-sm cursor-pointer hover:bg-topsets-secbg dark:bg-topsets-darksecbg"
             :class="{
-              'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext': formData.preferredClients.includes(client),
-              'text-rafik-sectext dark:text-rafik-darksectext': !formData.preferredClients.includes(client),
+              'bg-topsets-secondary text-topsets-pritext dark:text-topsets-darkpritext': formData.preferredClients.includes(client),
+              'text-topsets-sectext dark:text-topsets-darksectext': !formData.preferredClients.includes(client),
             }"
             @click="toggleClientSelection(client)"
           >
             {{ client }}
           </div>
         </div>
-        <p class="label text-rafik-sectext dark:text-rafik-darksectext mt-2">
+        <p class="label text-topsets-sectext dark:text-topsets-darksectext mt-2">
           You can select up to 5 preferred client types.
         </p>
       </div>
@@ -70,15 +70,15 @@
       <!-- Certifications -->
       <div>
         <label class="text-body uppercase">Relevant Certifications</label>
-        <p class="text-rafik-sectext dark:text-rafik-darksectext label my-2">
+        <p class="text-topsets-sectext dark:text-topsets-darksectext label my-2">
           Please make sure you upload your training license relevant to your country of operation, as well as one training certification. Other certifications such as diplomas or specialization certificates are not necessary to access the dashboard, however, they may play an important role when accepting program submissions.
         </p>
         <div class="w-full flex flex-col gap-4">
           <div
-            class="border-2 border-dashed border-rafik-sectext dark:border-rafik-darksectext rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg dark:bg-rafik-darksecbg focus:ring-2 focus:ring-offset-2 focus:ring-background-rafik-pribg p-4"
+            class="border-2 border-dashed border-topsets-sectext dark:border-topsets-darksectext rounded-lg flex items-center justify-center cursor-pointer hover:bg-topsets-secbg dark:bg-topsets-darksecbg focus:ring-2 focus:ring-offset-2 focus:ring-background-topsets-pribg p-4"
             @click="triggerFileInput"
           >
-            <span class="text-rafik-sectext dark:text-rafik-darksectext">
+            <span class="text-topsets-sectext dark:text-topsets-darksectext">
               Drag and drop files here, or click to upload
             </span>
           </div>
@@ -94,7 +94,7 @@
             <li
               v-for="(file, index) in uploadedFiles"
               :key="file.name"
-              class="text-rafik-sectext dark:text-rafik-darksectext flex justify-between py-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
+              class="text-topsets-sectext dark:text-topsets-darksectext flex justify-between py-2 border-b border-topsets-sectext dark:border-topsets-darksectext"
             >
               <p>{{ file.name }}</p>
               <button @click="handleFileRemove(index)" class="text-red-500 hover:text-red-300">Remove</button>
@@ -105,8 +105,8 @@
 
       <!-- Loading Indicator -->
       <div v-if="loading" class=" h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body">
-          <img src="@/assets/Large Icon.png"  class="w-24 h-24 animate-bounce hidden dark:inline-block" alt="">
-<img src="@/assets/Large Icon Light.png"  class="w-24 h-24 animate-bounce dark:hidden" alt="">
+          <img src="@/assets/ts-trans-dark.png"  class="w-24 h-24 animate-bounce hidden dark:inline-block" alt="">
+<img src="@/assets/ts-trans-light.png"  class="w-24 h-24 animate-bounce dark:hidden" alt="">
           <p class="text-lg animate-pulse">
           Loading...
         </p>
@@ -136,8 +136,8 @@ function showSuccess(message: string) {
     toast: true,
     position: 'top-right',
     icon: 'success',
-    background: '#081411',
-    color: '#E8F3ED',
+    background: '#132e3d',
+    color: '#ececec',
   })
 }
 
@@ -148,8 +148,8 @@ function showError(message: string) {
     icon: 'error',
     confirmButtonColor: '#d33',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED',
+    background: '#132e3d',
+    color: '#ececec',
   })
 }
 

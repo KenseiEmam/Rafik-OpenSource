@@ -31,9 +31,9 @@ function showSuccess(message: string) {
     toast: true,
     position: 'top-right',
     icon: 'success',
-    confirmButtonColor: '#CB901C',
-    background: '#081411',
-    color: '#E8F3ED'
+    confirmButtonColor: '#1578ac',
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -43,8 +43,8 @@ function showError(message: string) {
     text: message,
     icon: 'error',
     confirmButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -56,10 +56,10 @@ function DupeExercise() {
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: t('dashboard.exercises.public.duplicateConfirmButton'),
-    confirmButtonColor: '#CB901C',
+    confirmButtonColor: '#1578ac',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   }).then((result) => {
     if (result.isConfirmed && exerciseStore.Exercise) {
       exerciseStore.createDupe(exerciseStore.Exercise);
@@ -97,7 +97,7 @@ onMounted(() => {
           v-if="exerciseStore.Exercise.media"
           :src="exerciseStore.Exercise.media"
           alt="Uploaded Preview"
-          class="h-96 w-128 border-rafik-sectext dark:border-rafik-darksectext border-2 object-cover rounded-lg mx-auto"
+          class="h-96 w-128 border-topsets-sectext dark:border-topsets-darksectext border-2 object-cover rounded-lg mx-auto"
           controls
         ></video>
         <div v-else class="h-96 w-128 card flex items-center flex-col gap-6 justify-center">
@@ -123,14 +123,14 @@ onMounted(() => {
         <!-- Right Tools (Duplicate) -->
         <div
         :class="locale === 'ar'?'border-r':'border-l'"
-          class="pl-6 flex-1 min-w-max border-rafik-sectext dark:border-rafik-darksectext"
+          class="pl-6 flex-1 min-w-max border-topsets-sectext dark:border-topsets-darksectext"
         >
           <div
-            class="flex flex-col flex-1 h-96 justify-center gap-4 border-rafik-sectext dark:border-rafik-darksectext text-left"
+            class="flex flex-col flex-1 h-96 justify-center gap-4 border-topsets-sectext dark:border-topsets-darksectext text-left"
           >
             <button
               @click="DupeExercise"
-              class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+              class="text-body uppercase text-left hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
             >
               {{ t('dashboard.exercises.public.duplicateExercise') }}
             </button>
@@ -140,12 +140,12 @@ onMounted(() => {
 
       <!-- Tabs -->
       <div
-        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
+        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-topsets-sectext dark:border-topsets-darksectext"
       >
         <button
           :class="
             activeTab === 'Muscles'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn"
@@ -156,7 +156,7 @@ onMounted(() => {
         <button
           :class="
             activeTab === 'Tips and Technique'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"
@@ -167,7 +167,7 @@ onMounted(() => {
         <button
           :class="
             activeTab === 'Equipment'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"
@@ -178,7 +178,7 @@ onMounted(() => {
         <button
           :class="
             activeTab === 'Alternatives'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn uppercase"

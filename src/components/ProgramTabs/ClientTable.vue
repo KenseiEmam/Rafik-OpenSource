@@ -8,10 +8,10 @@
           v-model="searchQuery"
           type="text"
           :placeholder="t('dashboard.tabs.program.clients.searchPlaceholder')"
-          class="rafik-text-input border rounded-lg w-64"
+          class="topsets-text-input border rounded-lg w-64"
         />
       </div>
-      <hr class="w-full border-rafik-sectext dark:border-rafik-darksectext border-b" />
+      <hr class="w-full border-topsets-sectext dark:border-topsets-darksectext border-b" />
       <span class="text-sm">{{
         t('dashboard.tabs.program.clients.showingText', { count: filteredClients.length })
       }}</span>
@@ -33,7 +33,7 @@
         <tr
           v-for="client in filteredClients"
           :key="client.id"
-          class="border-b border-rafik-sectext dark:border-rafik-darksectext"
+          class="border-b border-topsets-sectext dark:border-topsets-darksectext"
         >
           <td class="flex gap-2 text-left items-center py-4">
             <img
@@ -41,7 +41,7 @@
                 client.avatar ||
                 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
               "
-              class="w-12 rounded-full border border-rafik-sectext dark:border-rafik-darksectext h-12"
+              class="w-12 rounded-full border border-topsets-sectext dark:border-topsets-darksectext h-12"
               alt="Avatar"
             />
             <div>
@@ -87,7 +87,7 @@
               @click="show_action = client.id"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
-              class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext cursor-pointer"
+              class="text-topsets-sectext dark:text-topsets-darksectext h-7 mx-7 hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext cursor-pointer"
               viewBox="0 0 128 512"
             >
               <path
@@ -97,21 +97,21 @@
             <div
               v-if="show_action == client.id"
               @mouseleave="handleLeave()"
-              class="absolute min-w-16 px-2 top-5 flex flex-col items-center text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg shadow-lg z-40 divide-y divide-y-rafik-sectext"
+              class="absolute min-w-16 px-2 top-5 flex flex-col items-center text-sm rounded bg-topsets-secbg dark:bg-topsets-darksecbg shadow-lg z-40 divide-y divide-y-topsets-sectext"
             >
               <Router-link
                 :to="{
                   name: admin ? 'single-user' : 'client-details',
                   params: { id: client.id }
                 }"
-                class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext rounded"
+                class="px-3 py-5 hover:bg-topsets-pribg w-full text-center dark:bg-topsets-darkpribg hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darksectext rounded"
               >
                 {{ t('dashboard.tabs.program.clients.viewClient') }}
               </Router-link>
               <!-- Only show Remove Client if not in admin (read-only) mode -->
               <button
                 v-if="!admin"
-                class="px-3 py-5 text-red-500 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-red-300 rounded"
+                class="px-3 py-5 text-red-500 hover:bg-topsets-pribg dark:bg-topsets-darkpribg hover:text-red-300 rounded"
               >
                 {{ t('dashboard.tabs.program.clients.removeClient') }}
               </button>

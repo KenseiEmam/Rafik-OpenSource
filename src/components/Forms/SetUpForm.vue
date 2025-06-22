@@ -78,8 +78,8 @@ function showSuccess(message: string) {
     toast: true,
     position: 'top-right',
     icon: 'success',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -90,8 +90,8 @@ function showError(message: string) {
     icon: 'error',
     confirmButtonColor: '#d33',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 const isLoading = ref(false);
@@ -231,10 +231,10 @@ const validateAndSubmit = async () => {
   <div class="flex justify-center items-center">
     <form
       @submit.prevent="validateAndSubmit"
-      class="card border-rafik p-8 rounded-lg shadow-md w-full space-y-6"
+      class="card border-topsets p-8 rounded-lg shadow-md w-full space-y-6"
     >
       <h1 class="header-large">Almost There!</h1>
-      <h2 class="text-body text-rafik-sectext dark:text-rafik-darksectext">
+      <h2 class="text-body text-topsets-sectext dark:text-topsets-darksectext">
         Set up your profile to tell your clients more about yourself...
       </h2>
       <div
@@ -242,12 +242,12 @@ const validateAndSubmit = async () => {
         class="h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body"
       >
         <img
-          src="@/assets/Large Icon.png"
+          src="@/assets/ts-trans-dark.png"
           class="w-24 h-24 animate-bounce hidden dark:inline-block"
           alt=""
         />
         <img
-          src="@/assets/Large Icon Light.png"
+          src="@/assets/ts-trans-light.png"
           class="w-24 h-24 animate-bounce dark:hidden"
           alt=""
         />
@@ -258,11 +258,11 @@ const validateAndSubmit = async () => {
           <!-- Profile Picture -->
           <label
             for="profile-picture"
-            class="block text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext mb-2"
+            class="block text-sm font-medium text-topsets-sectext dark:text-topsets-darksectext mb-2"
           >
             Profile Picture
           </label>
-          <p class="label text-rafik-sectext dark:text-rafik-darksectext">
+          <p class="label text-topsets-sectext dark:text-topsets-darksectext">
             Upload a nice photo of your face...
           </p>
           <div v-if="uploadedImage" class="w-64 h-64 relative">
@@ -281,10 +281,10 @@ const validateAndSubmit = async () => {
 
           <div
             v-else
-            class="w-64 h-64 border-2 border-dashed border-rafik-sectext dark:border-rafik-darksectext rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg dark:bg-rafik-darksecbg focus:ring-2 focus:ring-offset-2 focus:ring-background-rafik-pribg"
+            class="w-64 h-64 border-2 border-dashed border-topsets-sectext dark:border-topsets-darksectext rounded-lg flex items-center justify-center cursor-pointer hover:bg-topsets-secbg dark:bg-topsets-darksecbg focus:ring-2 focus:ring-offset-2 focus:ring-background-topsets-pribg"
             @click="triggerFileInput"
           >
-            <span class="text-center text-rafik-sectext dark:text-rafik-darksectext">
+            <span class="text-center text-topsets-sectext dark:text-topsets-darksectext">
               Drag and drop an image here, or click to upload
             </span>
           </div>
@@ -305,7 +305,7 @@ const validateAndSubmit = async () => {
               v-model="formData.firstName"
               type="text"
               id="first-name"
-              class="rafik-text-input"
+              class="topsets-text-input"
               placeholder="Enter your first name"
             />
           </div>
@@ -315,7 +315,7 @@ const validateAndSubmit = async () => {
               v-model="formData.lastName"
               type="text"
               id="last-name"
-              class="rafik-text-input"
+              class="topsets-text-input"
               placeholder="Enter your last name"
             />
           </div>
@@ -323,7 +323,7 @@ const validateAndSubmit = async () => {
       </div>
       <div>
         <label for="sex" class="text-body uppercase">Sex</label>
-        <select v-model="formData.sex" id="sex" class="rafik-text-input">
+        <select v-model="formData.sex" id="sex" class="topsets-text-input">
           <option value="" disabled selected>Select your sex</option>
           <option value="male">Male</option>
           <option value="female">Female</option>
@@ -347,7 +347,7 @@ const validateAndSubmit = async () => {
         <select
           id="nationality"
           v-model="formData.nationality"
-          class="rafik-text-input w-full"
+          class="topsets-text-input w-full"
           required
         >
           <option value="" disabled selected>Select Nationality:</option>
@@ -363,7 +363,7 @@ const validateAndSubmit = async () => {
           v-model="formData.phone"
           styleClasses="phone-input"
           placeholder="Enter your phone number"
-          :inputOptions="{ showDialCode: true, styleClasses: 'rafik-text-input' }"
+          :inputOptions="{ showDialCode: true, styleClasses: 'topsets-text-input' }"
           invalidMsg="'Invalid phone number'"
           validCharactersOnly
           autocomplete="on"

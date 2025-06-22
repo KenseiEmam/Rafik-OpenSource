@@ -9,9 +9,9 @@
         <input
           id="email"
           v-model="email"
-          class="rafik-text-input"
+          class="topsets-text-input"
           type="email"
-          placeholder="rafik@example.ae"
+          placeholder="topsets@example.ae"
           required
         />
       </div>
@@ -24,7 +24,7 @@
         <input
           id="password"
           v-model="password"
-          class="rafik-text-input"
+          class="topsets-text-input"
           type="password"
           :placeholder="t('register.form.passwordPlaceholder')"
           required
@@ -45,7 +45,7 @@
         <input
           id="confirm-password"
           v-model="confirmPassword"
-          class="rafik-text-input"
+          class="topsets-text-input"
           type="password"
           :placeholder="t('register.form.passwordPlaceholder')"
           required
@@ -80,8 +80,8 @@ function showSuccess(message: string) {
     showConfirmButton: false,
     timer: 1500,
     timerProgressBar: true,
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -91,8 +91,8 @@ function showError(message: string) {
     text: message,
     icon: 'error',
     confirmButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 

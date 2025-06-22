@@ -67,8 +67,8 @@ function showSuccess(messageKey: string) {
     position: 'top-right',
     icon: 'success',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -80,8 +80,8 @@ function showError(messageKey: string) {
     icon: 'error',
     confirmButtonColor: '#d33',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -127,10 +127,10 @@ function confirmCancel(value: string) {
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: t('dashboard.clients.details.cancelConfirmButton'),
-    confirmButtonColor: '#CB901C',
+    confirmButtonColor: '#1578ac',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   }).then((result) => {
     if (result.isConfirmed) {
       cancelProgram(value);
@@ -275,7 +275,7 @@ onBeforeUnmount(() => {
     >
       <!-- Header Card -->
       <div
-        class="border group flex flex-col relative gradient-bg border-rafik-alternate rounded-lg overflow-hidden"
+        class="border group flex flex-col relative gradient-bg border-topsets-alternate rounded-lg overflow-hidden"
       >
         <div class="p-8 2xl:p-16 2xl:py-24 space-y-4 relative items-stretch grid grid-cols-4">
           <div class="pr-6 space-y-4 col-span-2">
@@ -286,7 +286,7 @@ onBeforeUnmount(() => {
                   'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
                 "
                 alt=""
-                class="w-32 h-32 object-cover rounded-full border-2 border-rafik"
+                class="w-32 h-32 object-cover rounded-full border-2 border-topsets"
               />
               <div class="space-y-2">
                 <h1 class="title-small w-1/3">
@@ -299,8 +299,8 @@ onBeforeUnmount(() => {
                   {{ clientStore.Client?.email || t('dashboard.clients.details.loading') }}
                 </p>
                 <div
-                  class="py-1 px-4 3xl:px-5 2xl:py-2 2xl:text-sm text-sm rounded-3xl max-w-max text-rafik-pritext dark:text-rafik-darkpritext uppercase font-semibold"
-                  :class="compareDate ? 'bg-rafik-alternate' : 'bg-rafik-secondary'"
+                  class="py-1 px-4 3xl:px-5 2xl:py-2 2xl:text-sm text-sm rounded-3xl max-w-max text-topsets-pritext dark:text-topsets-darkpritext uppercase font-semibold"
+                  :class="compareDate ? 'bg-topsets-alternate' : 'bg-topsets-secondary'"
                 >
                   {{
                     compareDate
@@ -313,19 +313,19 @@ onBeforeUnmount(() => {
           </div>
           <div class="flex flex-col gap-4 justify-between">
             <div class="uppercase flex justify-between gap-3 text-sm">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+              <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                 {{ t('dashboard.clients.details.statusLabel') }}
               </p>
-              <p class="text-rafik-secondary">
+              <p class="text-topsets-secondary">
                 {{ clientStore.Client.program_details?.status }}
               </p>
             </div>
 
             <div class="uppercase flex justify-between gap-3 text-sm">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+              <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                 {{ t('dashboard.clients.details.dietLastLogged') }}
               </p>
-              <p class="text-rafik-secondary">
+              <p class="text-topsets-secondary">
                 {{
                   clientStore.Client.program_details?.diet_last_logged ||
                   t('dashboard.clients.details.noLogs')
@@ -333,10 +333,10 @@ onBeforeUnmount(() => {
               </p>
             </div>
             <div class="uppercase flex justify-between gap-3 text-sm">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+              <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                 {{ t('dashboard.clients.details.progress') }}
               </p>
-              <p class="text-rafik-secondary">
+              <p class="text-topsets-secondary">
                 {{
                   Math.ceil(
                     (clientStore.Client.program_details?.volume_progress +
@@ -350,14 +350,14 @@ onBeforeUnmount(() => {
           </div>
           <div :class="locale === 'ar'?'pr-6':'pl-6'" class=" flex-1 min-w-max h-full">
             <div :class="locale === 'ar'?'border-r pr-2':'border-l pl-2'"
-              class="flex flex-col flex-1 gap-4 h-full border-rafik-sectext dark:border-rafik-darksectext text-left"
+              class="flex flex-col flex-1 gap-4 h-full border-topsets-sectext dark:border-topsets-darksectext text-left"
             >
 
             <div class="uppercase text-sm">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+              <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                 {{ t('dashboard.clients.details.workoutIteration') }}
               </p>
-              <select v-model="workout_it" @change="updateIteration" class="rafik-text-input p-2 text-sm" name="" id="">
+              <select v-model="workout_it" @change="updateIteration" class="topsets-text-input p-2 text-sm" name="" id="">
                 <option v-for="workout,index in clientStore.Client.program_details.workouts" :value="index">
                   {{ workout.workout_name || 'Rest Day' }}
                 </option>
@@ -367,7 +367,7 @@ onBeforeUnmount(() => {
               <button
                 v-if="clientStore.Client.program_details.status === 'active'"
                 @click="showAddProgramModal = true"
-                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+                class="text-body uppercase text-left hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
               >
                 {{ t('dashboard.clients.details.changeProgram') }}
               </button>
@@ -381,7 +381,7 @@ onBeforeUnmount(() => {
               <!-- If subscription is in review -->
               <button
                 v-else-if="clientStore.Client.program_details.status === 'review'"
-                class="text-body uppercase text-rafik-secondary text-left cursor-default"
+                class="text-body uppercase text-topsets-secondary text-left cursor-default"
               >
                 {{ t('dashboard.clients.details.cancellationPending') }}
               </button>
@@ -412,13 +412,13 @@ onBeforeUnmount(() => {
 
       <!-- Tabs -->
       <div
-        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
+        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-topsets-sectext dark:border-topsets-darksectext"
       >
         <button
           class="nav-btn"
           :class="
             activeTab === 'Details'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : ' hover:opacity-70'
           "
           @click="setActiveTab('Details')"
@@ -429,7 +429,7 @@ onBeforeUnmount(() => {
           class="nav-btn uppercase"
           :class="
             activeTab === 'Workout-Plan'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : ' hover:opacity-70'
           "
           @click="setActiveTab('Workout-Plan')"
@@ -440,7 +440,7 @@ onBeforeUnmount(() => {
           class="nav-btn uppercase"
           :class="
             activeTab === 'Workout-Log'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : ' hover:opacity-70'
           "
           @click="setActiveTab('Workout-Log')"
@@ -451,7 +451,7 @@ onBeforeUnmount(() => {
           class="nav-btn uppercase"
           :class="
             activeTab === 'Diet-Log'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : ' hover:opacity-70'
           "
           @click="setActiveTab('Diet-Log')"
@@ -462,7 +462,7 @@ onBeforeUnmount(() => {
           class="nav-btn uppercase"
           :class="
             activeTab === 'Diet-Log'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : ' hover:opacity-70'
           "
           @click="setActiveTab('Weight-Log')"
@@ -471,7 +471,7 @@ onBeforeUnmount(() => {
         </button>
         <button
           class="nav-btn uppercase"
-          :class="activeTab === 'Trophy-Room' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
+          :class="activeTab === 'Trophy-Room' ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default' : ' hover:opacity-70'"
           @click="setActiveTab('Trophy-Room')"
         >
           {{ t('dashboard.clients.details.trophyRoom') }}
@@ -480,7 +480,7 @@ onBeforeUnmount(() => {
         <!-- Placeholder if you want additional tabs:
         <button
           class="nav-btn uppercase"
-          :class="activeTab === 'Statistics' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
+          :class="activeTab === 'Statistics' ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default' : ' hover:opacity-70'"
           @click="setActiveTab('Statistics')"
         >
           {{ t('dashboard.clients.details.statisticsTab') }}

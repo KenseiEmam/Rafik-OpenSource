@@ -28,7 +28,7 @@
           v-for="msg in ticketMessages"
           :key="msg.id"
           class="card gradient-bg rounded-xl p-6 mb-4 flex gap-4 items-start"
-          :class="[msg.sender_role === 'user' ? '' : 'ring-rafik ring-1']"
+          :class="[msg.sender_role === 'user' ? '' : 'ring-topsets ring-1']"
         >
           <div
             class="w-12 h-12 rounded-full bg-gray-500 flex-shrink-0 flex items-center justify-center text-white"
@@ -38,7 +38,7 @@
                 ticketUsers[msg.sender_id]?.avatar ||
                 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
               "
-              class="w-12 h-12 ring-rafik ring-1 rounded-full self-center"
+              class="w-12 h-12 ring-topsets ring-1 rounded-full self-center"
               alt="User Avatar"
             />
           </div>
@@ -75,7 +75,7 @@
         <form @submit.prevent="submitResponse">
           <textarea
             v-model="newMessage"
-            class="rafik-text-input w-full mb-4"
+            class="topsets-text-input w-full mb-4"
             rows="3"
             :placeholder="t('dashboard.support.view.responsePlaceholder')"
             required
@@ -127,8 +127,8 @@ async function submitResponse() {
       title: t('dashboard.support.view.errorTitle'),
       text: t('dashboard.support.view.messageEmptyError'),
       icon: 'error',
-      background: '#081411',
-      color: '#E8F3ED'
+      background: '#132e3d',
+      color: '#ececec'
     });
     return;
   }

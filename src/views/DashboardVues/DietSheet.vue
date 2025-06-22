@@ -41,8 +41,8 @@ function showSuccess(message: string) {
     position: 'top-right',
     icon: 'success',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 function showError(message: string) {
@@ -52,8 +52,8 @@ function showError(message: string) {
     icon: 'error',
     confirmButtonColor: '#d33',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 function populateMeal(breakfast: number[], lunch: number[], dinner: number[], supper: number[]) {
@@ -136,7 +136,7 @@ onMounted(() => {
     >
       <!-- Upper Header Area -->
       <div
-        class="border group flex flex-col relative gradient-bg border-rafik-alternate rounded-lg overflow-hidden"
+        class="border group flex flex-col relative gradient-bg border-topsets-alternate rounded-lg overflow-hidden"
       >
         <div
           v-if="dietStore.Diet.overall_macros && dietStore.Diet.goal_macros"
@@ -170,13 +170,13 @@ onMounted(() => {
           <!-- First Group of Columns -->
           <div class="flex flex-col gap-4 items-center justify-between col-span-2">
             <circle-progress
-              fill-color="#D7BD21"
-              empty-color="#000503"
+              fill-color="#3995c5"
+              empty-color="#0f425d"
               :percent="Math.ceil(dietStore.Diet.overall_macros[3] / dietStore.Diet.goal_macros[3])"
             />
-            <p class="text-rafik-pritext dark:text-rafik-darkpritext flex uppercase">
+            <p class="text-topsets-pritext dark:text-topsets-darkpritext flex uppercase">
               {{ t('dashboard.dietSheet.totalCalories') }}:
-              <span class="ml-12 text-rafik mr-3">
+              <span class="ml-12 text-topsets mr-3">
                 {{ Math.ceil(dietStore.Diet.overall_macros[3]) }}
               </span>
               / {{ Math.ceil(dietStore.Diet.goal_macros[3]) }}
@@ -186,10 +186,10 @@ onMounted(() => {
           <div class="flex flex-col gap-4 justify-between">
             <div class="uppercase flex flex-col w-full gap-3 text-sm 2xl:text-base">
               <div
-                class="h-6 w-full bg-rafik-secbg dark:bg-rafik-darksecbg rounded-full overflow-auto"
+                class="h-6 w-full bg-topsets-secbg dark:bg-topsets-darksecbg rounded-full overflow-auto"
               >
                 <div
-                  class="bg-rafik-secondary h-6 rounded-full"
+                  class="bg-topsets-secondary h-6 rounded-full"
                   :style="
                     'width:' +
                     Math.ceil(dietStore.Diet.overall_macros[0] / dietStore.Diet.goal_macros[0]) +
@@ -197,9 +197,9 @@ onMounted(() => {
                   "
                 ></div>
               </div>
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext flex w-full">
+              <p class="text-topsets-pritext dark:text-topsets-darkpritext flex w-full">
                 {{ t('dashboard.dietSheet.protein') }}:
-                <span class="ms-auto text-rafik-secondary mr-3">
+                <span class="ms-auto text-topsets-secondary mr-3">
                   {{ Math.ceil(dietStore.Diet.overall_macros[0]) }}
                 </span>
                 / {{ Math.ceil(dietStore.Diet.goal_macros[0]) }}
@@ -207,10 +207,10 @@ onMounted(() => {
             </div>
             <div class="uppercase flex flex-col w-full gap-3 text-sm 2xl:text-base">
               <div
-                class="h-6 w-full bg-rafik-secbg dark:bg-rafik-darksecbg rounded-full overflow-auto"
+                class="h-6 w-full bg-topsets-secbg dark:bg-topsets-darksecbg rounded-full overflow-auto"
               >
                 <div
-                  class="bg-rafik-teritiary h-6 rounded-full"
+                  class="bg-topsets-teritiary h-6 rounded-full"
                   :style="
                     'width:' +
                     Math.ceil(dietStore.Diet.overall_macros[1] / dietStore.Diet.goal_macros[1]) +
@@ -218,9 +218,9 @@ onMounted(() => {
                   "
                 ></div>
               </div>
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext flex w-full">
+              <p class="text-topsets-pritext dark:text-topsets-darkpritext flex w-full">
                 {{ t('dashboard.dietSheet.carbohydrates') }}:
-                <span class="ms-auto text-rafik-teritiary mr-3">
+                <span class="ms-auto text-topsets-teritiary mr-3">
                   {{ Math.ceil(dietStore.Diet.overall_macros[1]) }}
                 </span>
                 / {{ Math.ceil(dietStore.Diet.goal_macros[1]) }}
@@ -228,10 +228,10 @@ onMounted(() => {
             </div>
             <div class="uppercase flex flex-col w-full gap-3 text-sm 2xl:text-base">
               <div
-                class="h-6 w-full bg-rafik-secbg dark:bg-rafik-darksecbg rounded-full overflow-auto"
+                class="h-6 w-full bg-topsets-secbg dark:bg-topsets-darksecbg rounded-full overflow-auto"
               >
                 <div
-                  class="bg-rafik-alternate h-6 rounded-full"
+                  class="bg-topsets-alternate h-6 rounded-full"
                   :style="
                     'width:' +
                     Math.ceil(dietStore.Diet.overall_macros[2] / dietStore.Diet.goal_macros[2]) +
@@ -239,9 +239,9 @@ onMounted(() => {
                   "
                 ></div>
               </div>
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext flex w-full">
+              <p class="text-topsets-pritext dark:text-topsets-darkpritext flex w-full">
                 {{ t('dashboard.dietSheet.fats') }}:
-                <span class="ms-auto text-rafik-alternate mr-3">
+                <span class="ms-auto text-topsets-alternate mr-3">
                   {{ Math.ceil(dietStore.Diet.overall_macros[2]) }}
                 </span>
                 / {{ Math.ceil(dietStore.Diet.goal_macros[2]) }}
@@ -263,13 +263,13 @@ onMounted(() => {
               </h3>
               <h3 class="subheader-small font-bold">
                 P: {{ meal.protein }}g , C: {{ meal.carbohydrates }}g , F: {{ meal.fats }}g ,
-                <span class="text-rafik-secondary font-bold">
+                <span class="text-topsets-secondary font-bold">
                   {{ t('dashboard.dietSheet.energy') }}: {{ meal.calories }}kCal
                 </span>
               </h3>
               <div v-if="meal.foods && meal.foods.length > 0" class="grid grid-cols-4">
                 <div class="col-span-3 flex-col flex gap-2">
-                  <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body opacity-0">
+                  <h4 class="text-topsets-pritext dark:text-topsets-darkpritext text-body opacity-0">
                     Filler
                   </h4>
                   <div
@@ -277,21 +277,21 @@ onMounted(() => {
                     :key="food"
                     class="flex gap-3 w-full items-center"
                   >
-                    <p class="text-rafik-pritext dark:text-rafik-darkpritext min-w-max">
+                    <p class="text-topsets-pritext dark:text-topsets-darkpritext min-w-max">
                       {{ food.food_name }}
                     </p>
-                    <hr class="border border-rafik-sectext dark:border-rafik-darksectext w-full" />
+                    <hr class="border border-topsets-sectext dark:border-topsets-darksectext w-full" />
                   </div>
                 </div>
                 <div>
                   <div class="flex-col flex gap-2 items-center">
-                    <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
+                    <h4 class="text-topsets-pritext dark:text-topsets-darkpritext text-body">
                       {{ t('dashboard.dietSheet.servings') }}
                     </h4>
                     <div
                       v-for="(food, index) in meal.foods"
                       :key="food"
-                      class="text-rafik-secondary"
+                      class="text-topsets-secondary"
                     >
                       {{ formatServing(food.serving_amount, food.serving_name) }}
                     </div>

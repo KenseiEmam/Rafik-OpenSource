@@ -17,8 +17,8 @@
       @click="open = !open"
       :class="
         locale === 'ar'
-          ? 'rounded-r-full bg-rafik-secbg dark:bg-rafik-darksecbg border-2 border-rafik-sectext dark:border-rafik-darksectext border-l-0 px-8 py-4 mt-64 relative right-1 z-20'
-          : 'rounded-l-full bg-rafik-secbg dark:bg-rafik-darksecbg border-2 border-rafik-sectext dark:border-rafik-darksectext border-r-0 px-8 py-4 mt-64 relative left-1 z-20'
+          ? 'rounded-r-full bg-topsets-secbg dark:bg-topsets-darksecbg border-2 border-topsets-sectext dark:border-topsets-darksectext border-l-0 px-8 py-4 mt-64 relative right-1 z-20'
+          : 'rounded-l-full bg-topsets-secbg dark:bg-topsets-darksecbg border-2 border-topsets-sectext dark:border-topsets-darksectext border-r-0 px-8 py-4 mt-64 relative left-1 z-20'
       "
     >
       <span
@@ -30,15 +30,15 @@
         "
       >
         <span
-          class="absolute inline-flex h-full w-full animate-ping rounded-full bg-rafik opacity-75"
+          class="absolute inline-flex h-full w-full animate-ping rounded-full bg-topsets opacity-75"
         ></span>
-        <span class="relative inline-flex size-4 rounded-full bg-rafik"></span>
+        <span class="relative inline-flex size-4 rounded-full bg-topsets"></span>
       </span>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 512 512"
         fill="currentColor"
-        class="text-rafik-sectext dark:text-rafik-darksectext w-8"
+        class="text-topsets-sectext dark:text-topsets-darksectext w-8"
       >
         <path
           d="M224 32L64 32C46.3 32 32 46.3 32 64l0 64c0 17.7 14.3 32 32 32l377.4 0c4.2 0 8.3-1.7 11.3-4.7l48-48
@@ -52,7 +52,7 @@
     <!-- Drawer Content -->
     <div
       :class="open ? 'h-screen' : 'h-0'"
-      class="border-rafik-sectext dark:border-rafik-darksectext border-x w-128 bg-rafik-secbg dark:bg-rafik-darksecbg items-between justify-between gap-10 flex flex-col p-8 2xl:py-16 h-full relative z-10"
+      class="border-topsets-sectext dark:border-topsets-darksectext border-x w-128 bg-topsets-secbg dark:bg-topsets-darksecbg items-between justify-between gap-10 flex flex-col p-8 2xl:py-16 h-full relative z-10"
     >
       <!-- Header Section -->
       <div class="flex gap-10 justify-between">
@@ -65,7 +65,7 @@
           fill="currentColor"
           stroke="currentColor"
           viewBox="0 0 448 512"
-          class="w-6 text-rafik-sectext dark:text-rafik-darksectext"
+          class="w-6 text-topsets-sectext dark:text-topsets-darksectext"
         >
           <path
             d="M224 0c-17.7 0-32 14.3-32 32l0 19.2C119 66 64 130.6 64 208l0 18.8c0 47-17.3 92.4-48.5
@@ -85,10 +85,10 @@
           :key="client.id"
           @click="chatsStore.open(client)"
           :class="{
-            'border-rafik-pritext dark:border-rafik-darkpritext':
+            'border-topsets-pritext dark:border-topsets-darkpritext':
               !client.seen_at && client.sent_by == client.id
           }"
-          class="p-6 border hover:border-rafik-secondary card cursor-pointer rounded-xl bg-rafik-secbg dark:bg-rafik-darksecbg flex gap-6 w-full items-center"
+          class="p-6 border hover:border-topsets-secondary card cursor-pointer rounded-xl bg-topsets-secbg dark:bg-topsets-darksecbg flex gap-6 w-full items-center"
         >
           <img
             :src="
@@ -96,15 +96,15 @@
               'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
             "
             alt=""
-            class="rounded-full border-2 2xl:h-24 2xl:w-24 border-rafik-secondary object-cover w-16 h-16"
+            class="rounded-full border-2 2xl:h-24 2xl:w-24 border-topsets-secondary object-cover w-16 h-16"
           />
           <div class="flex-1">
-            <h2 class="header-small text-rafik-secondary">
+            <h2 class="header-small text-topsets-secondary">
               {{ client.first_name }} {{ client.last_name }}
             </h2>
             <p
               :class="{
-                'text-rafik-pritext dark:text-rafik-darkpritext':
+                'text-topsets-pritext dark:text-topsets-darkpritext':
                   !client.seen_at && client.sent_by == client.id
               }"
               class="text-body line-clamp-1 text-sm mb-2"
@@ -121,11 +121,11 @@
             <!-- Seen Tick -->
             <div
               v-if="client.seen_at && client.sent_by !== client.id"
-              class="text-rafik-teritiary flex items-center"
+              class="text-topsets-teritiary flex items-center"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 text-rafik-teritiary"
+                class="w-4 h-4 text-topsets-teritiary"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -147,7 +147,7 @@
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 text-rafik-sectext dark:text-rafik-darksectext"
+                class="w-4 h-4 text-topsets-sectext dark:text-topsets-darksectext"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -254,9 +254,9 @@ function subscribeToChatMessages() {
 
 <style scoped>
 .dark .card:hover {
-  background-image: linear-gradient(135deg, #081411 36%, #295f42);
+  background-image: linear-gradient(135deg, #132e3d 36%, #154b5d);
 }
 .card:hover {
-  background-image: linear-gradient(135deg, #f3eeeb 36%, #fff2cb);
+  background-image: linear-gradient(135deg, #ececec 36%, #bfc7cb);
 }
 </style>

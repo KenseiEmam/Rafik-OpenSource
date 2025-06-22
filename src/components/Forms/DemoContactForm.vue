@@ -19,8 +19,8 @@ function toastSuccess(msg: string) {
     showConfirmButton: false,
     timer: 1500,
     timerProgressBar: true,
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 function modalError(msg: string) {
@@ -29,8 +29,8 @@ function modalError(msg: string) {
     text: msg,
     icon: 'error',
     confirmButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -90,7 +90,7 @@ const sportsOpts = [
     <div class="w-full">
       <!-- Left – pitch / context -->
       <div>
-        <h2 class="title-small font-black text-rafik">Let’s Talk</h2>
+        <h2 class="title-small font-black text-topsets">Let’s Talk</h2>
         <p class="text-body">
           Ready to unlock data-driven performance? Fill in the details below and our team will
           schedule your personalised demo.
@@ -104,13 +104,13 @@ const sportsOpts = [
 
       <!-- Right – form -->
       <form
-        class="card p-6 space-y-4 border-rafik-sectext dark:border-rafik-darksectext w-full"
+        class="card p-6 space-y-4 border-topsets-sectext dark:border-topsets-darksectext w-full"
         @submit.prevent="send"
       >
         <!-- Organisation -->
         <div class="form-control">
           <label>Organization legal name</label>
-          <input v-model="form.organization" class="rafik-text-input" required />
+          <input v-model="form.organization" class="topsets-text-input" required />
         </div>
 
         <!-- Contact Email -->
@@ -118,7 +118,7 @@ const sportsOpts = [
           <label>Contact Email</label>
           <input
             v-model="form.email"
-            class="rafik-text-input"
+            class="topsets-text-input"
             type="email"
             placeholder="info@school.edu"
             required
@@ -130,7 +130,7 @@ const sportsOpts = [
           <label>Estimated number of users</label>
           <input
             v-model="form.users"
-            class="rafik-text-input"
+            class="topsets-text-input"
             type="number"
             min="1"
             placeholder="e.g. 120"
@@ -143,7 +143,7 @@ const sportsOpts = [
           <label>Organization sports (optional)</label>
           <div class="flex flex-wrap gap-4">
             <label v-for="s in sportsOpts" :key="s" class="flex items-center gap-2 text-sm">
-              <input type="checkbox" :value="s" v-model="form.sports" class="accent-rafik" />
+              <input type="checkbox" :value="s" v-model="form.sports" class="accent-topsets" />
               {{ s }}
             </label>
           </div>
@@ -154,7 +154,7 @@ const sportsOpts = [
           <label>Address (optional)</label>
           <input
             v-model="form.address"
-            class="rafik-text-input"
+            class="topsets-text-input"
             placeholder="City / State / Country"
           />
         </div>
@@ -164,7 +164,7 @@ const sportsOpts = [
           <label>Phone number (optional)</label>
           <input
             v-model="form.phone"
-            class="rafik-text-input"
+            class="topsets-text-input"
             type="tel"
             placeholder="+971 5X XXX XXXX"
           />
@@ -173,7 +173,7 @@ const sportsOpts = [
         <!-- Message -->
         <div class="form-control">
           <label>Message (optional)</label>
-          <textarea v-model="form.message" rows="5" class="rafik-text-input" />
+          <textarea v-model="form.message" rows="5" class="topsets-text-input" />
         </div>
 
         <button type="submit" class="btn-lg w-full" :disabled="loading">

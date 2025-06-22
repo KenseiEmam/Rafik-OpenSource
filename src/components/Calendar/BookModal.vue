@@ -51,7 +51,7 @@
             </label>
             <select
               @change="changeType"
-              class="rafik-text-input w-full"
+              class="topsets-text-input w-full"
               required
             >
               <option disabled selected value="">Select event type</option>
@@ -75,7 +75,7 @@
             />
             </div>
             <div v-else class="flex items-center gap-3">
-              <span class="bg-rafik animate-pulse w-4 h-4 rounded-full content"></span>
+              <span class="bg-topsets animate-pulse w-4 h-4 rounded-full content"></span>
               <p class="text-body">Self Assigning this scheduled event.</p>
             </div>
 
@@ -86,7 +86,7 @@
            <!-- Trainer Selection -->
               <div class="w-full">
                 <label
-                  class="block text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext mb-1"
+                  class="block text-sm font-medium text-topsets-sectext dark:text-topsets-darksectext mb-1"
                 >
                   {{ t('dashboard.auditPrograms.list.selectTrainer.label') }}
                 </label>
@@ -98,19 +98,19 @@
                     @focus="dropdownVisible = true"
                     @input="fetchFilteredTrainers"
                     @blur="handleBlur"
-                    class="w-full p-3 border rounded-md bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext focus:outline-none"
+                    class="w-full p-3 border rounded-md bg-topsets-secbg dark:bg-topsets-darksecbg text-topsets-sectext dark:text-topsets-darksectext focus:outline-none"
                     :placeholder="t('dashboard.auditPrograms.list.selectTrainer.placeholder')"
                   />
                   <!-- Dropdown -->
                   <div
                     v-if="dropdownVisible && trainerOptions.length"
-                    class="absolute z-10 mt-1 w-full bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext max-h-60 overflow-auto"
+                    class="absolute z-10 mt-1 w-full bg-topsets-secbg dark:bg-topsets-darksecbg border border-topsets-sectext dark:border-topsets-darksectext max-h-60 overflow-auto"
                   >
                     <div
                       v-for="trainer in trainerOptions"
                       :key="trainer.id"
                       @click="selectOption(trainer)"
-                      class="p-3 hover:bg-rafik-secondary hover:text-rafik-pritext cursor-pointer"
+                      class="p-3 hover:bg-topsets-secondary hover:text-topsets-pritext cursor-pointer"
                     >
                       {{ (trainer.first_name || 'no') + ' '+ (trainer.last_name || 'name')  }}
                       <span class="text-xs opacity-50"> {{ trainer.email }}</span>
@@ -120,14 +120,14 @@
               </div>
           </div>
           <div v-else class="flex items-center gap-3">
-              <span class="bg-rafik animate-pulse w-4 h-4 rounded-full content"></span>
+              <span class="bg-topsets animate-pulse w-4 h-4 rounded-full content"></span>
               <p class="text-body">Self Assigning this scheduled assessment.</p>
             </div>
           <div class="relative ">
            <!-- Trainer Selection -->
               <div class="w-full">
                 <label
-                  class="block text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext mb-1"
+                  class="block text-sm font-medium text-topsets-sectext dark:text-topsets-darksectext mb-1"
                 >
                   Select Trainee
                 </label>
@@ -139,19 +139,19 @@
                     @focus="dropdownVisible2 = true"
                     @input="fetchFilteredTrainees"
                     @blur="handleTraineeBlur"
-                    class="w-full p-3 border rounded-md bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext focus:outline-none"
+                    class="w-full p-3 border rounded-md bg-topsets-secbg dark:bg-topsets-darksecbg text-topsets-sectext dark:text-topsets-darksectext focus:outline-none"
                     placeholder="Select Trainee"
                   />
                   <!-- Dropdown -->
                   <div
                     v-if="dropdownVisible2 && traineeOptions.length"
-                    class="absolute z-10 mt-1 w-full bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext max-h-60 overflow-auto"
+                    class="absolute z-10 mt-1 w-full bg-topsets-secbg dark:bg-topsets-darksecbg border border-topsets-sectext dark:border-topsets-darksectext max-h-60 overflow-auto"
                   >
                     <div
                       v-for="trainee in traineeOptions"
                       :key="trainee.id"
                       @click="selectTraineeOption(trainee)"
-                      class="p-3 hover:bg-rafik-secondary hover:text-rafik-pritext cursor-pointer"
+                      class="p-3 hover:bg-topsets-secondary hover:text-topsets-pritext cursor-pointer"
                     >
                       {{ (trainee.first_name || 'no') + ' '+ (trainee.last_name || 'name')  }}
                       <span class="text-xs opacity-50"> {{ trainee.email }}</span>
@@ -167,7 +167,7 @@
             </label>
             <select
               v-model="assessment.template"
-              class="rafik-text-input w-full"
+              class="topsets-text-input w-full"
               required
             >
               <option selected :value="null">Select assessment template</option>

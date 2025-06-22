@@ -19,7 +19,7 @@
           <textarea
             id="reason"
             v-model="reason"
-            class="rafik-text-input whitespace-pre-wrap"
+            class="topsets-text-input whitespace-pre-wrap"
             rows="4"
             required
             :class="{ 'border-red-500': errors.reason }"
@@ -87,6 +87,6 @@ onMounted(() => {
 </script>
 <style scoped>
 li:hover {
-  background-image: linear-gradient(135deg, #081411 36%, #295f42);
+  background-image: linear-gradient(135deg, #132e3d 36%, #154b5d);
 }
 </style>

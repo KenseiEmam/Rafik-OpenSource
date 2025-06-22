@@ -22,8 +22,8 @@ function showError(message: string) {
     icon: 'error',
     confirmButtonColor: '#d33',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -91,7 +91,7 @@ onMounted(loadReviews);
           ? (Math.round(program.overall_rating * 100) / 100).toFixed(1)
           : (Math.round(0 * 100) / 100).toFixed(1)
         }}
-        <span class="text-rafik">⭐</span>
+        <span class="text-topsets">⭐</span>
       </h2>
       <p class="header-small">
         {{ t('dashboard.tabs.program.reviews.basedOnTotal', { count: reviews.length }) }}

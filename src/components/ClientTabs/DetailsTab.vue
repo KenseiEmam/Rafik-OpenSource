@@ -1,33 +1,33 @@
 <template>
   <div class="flex-1 2xl:space-y-16 space-y-6 pb-6 h-full">
-    <div class="grid grid-cols-3 gap-6 divide-x divide-rafik-sectext dark:divide-rafik-darksectext">
+    <div class="grid grid-cols-3 gap-6 divide-x divide-topsets-sectext dark:divide-topsets-darksectext">
       <div class="flex flex-col gap-3 pl-3 2xl:gap-5">
         <h3 class="contentH-small text-sm 2xl:text-xl mb-6 2xl:mb-8">
           {{ t('dashboard.tabs.clients.details.profile') }}
         </h3>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.age') }}
           </p>
-          <p class="text-rafik-secondary">{{ calculateAge(props.client.dob) || 'N/A' }}</p>
+          <p class="text-topsets-secondary">{{ calculateAge(props.client.dob) || 'N/A' }}</p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.gender') }}
           </p>
-          <p class="text-rafik-secondary">{{ props.client.gender || 'N/A' }}</p>
+          <p class="text-topsets-secondary">{{ props.client.gender || 'N/A' }}</p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.nationality') }}
           </p>
-          <p class="text-rafik-secondary">{{ props.client.nationality || 'N/A' }}</p>
+          <p class="text-topsets-secondary">{{ props.client.nationality || 'N/A' }}</p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.phone') }}
           </p>
-          <p class="text-rafik-secondary">{{ props.client.phone || 'N/A' }}</p>
+          <p class="text-topsets-secondary">{{ props.client.phone || 'N/A' }}</p>
         </div>
       </div>
 
@@ -36,33 +36,33 @@
           {{ t('dashboard.tabs.clients.details.metrics') }}
         </h3>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.height') }}
           </p>
-          <p class="text-rafik-secondary">
+          <p class="text-topsets-secondary">
             {{ props.client.profile.height || 'N/A' }} {{ t('dashboard.tabs.clients.details.cm') }}
           </p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.weight') }}
           </p>
           <!-- Use the computed value for weight -->
-          <p class="text-rafik-secondary">
+          <p class="text-topsets-secondary">
             {{ weight || 'N/A' }} {{ t('dashboard.tabs.clients.details.kg') }}
           </p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.goalWeight') }}
           </p>
-          <p class="text-rafik-secondary">{{ props.client.profile.weight_goal || 'N/A' }} kg</p>
+          <p class="text-topsets-secondary">{{ props.client.profile.weight_goal || 'N/A' }} kg</p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.bodyFatPercent') }}
           </p>
-          <p class="text-rafik-secondary">{{ props.client.profile.body_fat + '%' || 'N/A' }}</p>
+          <p class="text-topsets-secondary">{{ props.client.profile.body_fat + '%' || 'N/A' }}</p>
         </div>
       </div>
 
@@ -71,54 +71,54 @@
           {{ t('dashboard.tabs.clients.details.fitness') }}
         </h3>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.experience') }}
           </p>
-          <p class="text-rafik-secondary">
+          <p class="text-topsets-secondary">
             {{ props.client.profile.experience || t('dashboard.tabs.clients.details.NA') }}
           </p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.fitnessGoal') }}
           </p>
           <p
-            class="text-rafik-secondary"
+            class="text-topsets-secondary"
             v-for="(goal, index) in props.client.profile.fitness_goal"
             :key="goal"
           >
             {{ t(`dashboard.tabs.clients.details.goals.${goals[goal - 1]}`) }}
             <span v-if="index + 1 !== props.client.profile.fitness_goal.length">,</span>
           </p>
-          <p class="text-rafik-secondary" v-if="!props.client.profile.fitness_goal">N/A</p>
+          <p class="text-topsets-secondary" v-if="!props.client.profile.fitness_goal">N/A</p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.sportsPlayed') }}
           </p>
           <p
-            class="text-rafik-secondary"
+            class="text-topsets-secondary"
             v-for="(sport, index) in props.client.profile.sports_played"
             :key="sport"
           >
             {{ sport }}
             <span v-if="index + 1 !== props.client.profile.sports_played.length">,</span>
           </p>
-          <p class="text-rafik-secondary" v-if="!props.client.profile.sports_played">N/A</p>
+          <p class="text-topsets-secondary" v-if="!props.client.profile.sports_played">N/A</p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.dietPreference') }}
           </p>
           <p
-            class="text-rafik-secondary"
+            class="text-topsets-secondary"
             v-for="(diet, index) in props.client.profile.diet_preference"
             :key="diet"
           >
             {{ diet
             }}<span v-if="index + 1 !== props.client.profile.diet_preference.length">, </span>
           </p>
-          <p class="text-rafik-secondary" v-if="!props.client.profile.diet_preference">N/A</p>
+          <p class="text-topsets-secondary" v-if="!props.client.profile.diet_preference">N/A</p>
         </div>
       </div>
     </div>
@@ -132,10 +132,10 @@
       </div>
       <div class="flex flex-col gap-3">
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.joinedOn') }}
           </p>
-          <p class="text-rafik-secondary">
+          <p class="text-topsets-secondary">
             {{
               new Date(props.client.program_details.created_at).toLocaleDateString('en-GB', {
                 year: 'numeric',
@@ -146,10 +146,10 @@
           </p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.expiresOn') }}
           </p>
-          <p class="text-rafik-secondary">
+          <p class="text-topsets-secondary">
             {{
               new Date(props.client.program_details.expires_on).toLocaleDateString('en-GB', {
                 year: 'numeric',
@@ -160,10 +160,10 @@
           </p>
         </div>
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.pricePackage') }}
           </p>
-          <p class="text-rafik-secondary">
+          <p class="text-topsets-secondary">
             {{
               props.client.program_details.price_pavckage
                 ? props.client.program_details.price_pavckage + ' AED'
@@ -200,8 +200,8 @@ function showSuccess(message: string) {
     toast: true,
     position: 'top-right',
     icon: 'success',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -211,8 +211,8 @@ function showError(message: string) {
     text: message,
     icon: 'error',
     confirmButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 // Props to receive the program object

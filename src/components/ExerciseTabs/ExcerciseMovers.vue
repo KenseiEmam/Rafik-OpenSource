@@ -5,7 +5,7 @@
   >
     <!-- Filters -->
     <div class="flex flex-col gap-6">
-      <div @click="active ='prime'" :class="active == 'prime'?'gradient-bg text-rafik-pritext dark:text-rafik-darkpritext':''" class="card cursor-pointer hover:opacity-80 p-4 2xl:p-6 flex flex-col gap-3 flex-1">
+      <div @click="active ='prime'" :class="active == 'prime'?'gradient-bg text-topsets-pritext dark:text-topsets-darkpritext':''" class="card cursor-pointer hover:opacity-80 p-4 2xl:p-6 flex flex-col gap-3 flex-1">
         <h3 class="text-xl">{{ t('dashboard.tabs.exercise.movers.agonists') }}</h3>
         <p >
           {{
@@ -15,7 +15,7 @@
           }}
         </p>
       </div>
-      <div @click="active ='antagonist'" :class="active == 'antagonist'?'gradient-bg text-rafik-pritext dark:text-rafik-darkpritext':''" class="card cursor-pointer hover:opacity-80 p-4 2xl:p-6 flex flex-col gap-3 flex-1">
+      <div @click="active ='antagonist'" :class="active == 'antagonist'?'gradient-bg text-topsets-pritext dark:text-topsets-darkpritext':''" class="card cursor-pointer hover:opacity-80 p-4 2xl:p-6 flex flex-col gap-3 flex-1">
         <h3 class="text-xl">{{ t('dashboard.tabs.exercise.movers.antagonists') }}</h3>
         <p >
           {{
@@ -25,7 +25,7 @@
           }}
         </p>
       </div>
-      <div @click="active ='synergists'" :class="active == 'synergists'?'gradient-bg text-rafik-pritext dark:text-rafik-darkpritext':''" class="card cursor-pointer hover:opacity-80 p-4 2xl:p-6 flex flex-col gap-3 flex-1">
+      <div @click="active ='synergists'" :class="active == 'synergists'?'gradient-bg text-topsets-pritext dark:text-topsets-darkpritext':''" class="card cursor-pointer hover:opacity-80 p-4 2xl:p-6 flex flex-col gap-3 flex-1">
         <h3 class="text-xl">{{ t('dashboard.tabs.exercise.movers.synergists') }}</h3>
         <p >
           {{
@@ -50,9 +50,9 @@
           @click="personal && togglePrime(muscle)"
           :disabled="!personal"
           :class="{
-            'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext':
+            'bg-topsets-secondary text-topsets-pritext dark:text-topsets-darkpritext':
               exercise.prime.includes(capitalize(muscle)),
-            'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext':
+            'bg-topsets-secbg dark:bg-topsets-darksecbg border border-topsets-sectext dark:border-topsets-darksectext text-topsets-sectext dark:text-topsets-darksectext':
               !exercise.prime.includes(capitalize(muscle)),
             'opacity-50 cursor-not-allowed': !personal
           }"
@@ -68,9 +68,9 @@
           @click="personal && toggleAntagonist(muscle)"
           :disabled="!personal"
           :class="{
-            'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext':
+            'bg-topsets-secondary text-topsets-pritext dark:text-topsets-darkpritext':
               exercise.antagonist.includes(capitalize(muscle)),
-            'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext':
+            'bg-topsets-secbg dark:bg-topsets-darksecbg border border-topsets-sectext dark:border-topsets-darksectext text-topsets-sectext dark:text-topsets-darksectext':
               !exercise.antagonist.includes(capitalize(muscle)),
             'opacity-50 cursor-not-allowed': !personal
           }"
@@ -86,9 +86,9 @@
           @click="personal && toggleSynergist(muscle)"
           :disabled="!personal"
           :class="{
-            'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext':
+            'bg-topsets-secondary text-topsets-pritext dark:text-topsets-darkpritext':
               exercise.synergist.includes(capitalize(muscle)),
-            'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext':
+            'bg-topsets-secbg dark:bg-topsets-darksecbg border border-topsets-sectext dark:border-topsets-darksectext text-topsets-sectext dark:text-topsets-darksectext':
               !exercise.synergist.includes(capitalize(muscle)),
             'opacity-50 cursor-not-allowed': !personal
           }"

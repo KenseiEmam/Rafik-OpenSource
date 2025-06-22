@@ -14,7 +14,7 @@
       </h2>
       <div :class="locale === 'ar' ? 'me-auto' : 'ms-auto'" class="w-64">
         <label
-          class="block text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext mb-1"
+          class="block text-sm font-medium text-topsets-sectext dark:text-topsets-darksectext mb-1"
         >
           {{ t('dashboard.tabs.settings.rolesAndPerms.selectUser') }}
         </label>
@@ -26,19 +26,19 @@
             @focus="dropdownVisible = true"
             @input="fetchFilteredUsers"
             @blur="handleBlur"
-            class="w-full p-3 border rounded-xl bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext focus:outline-none"
+            class="w-full p-3 border rounded-xl bg-topsets-secbg dark:bg-topsets-darksecbg text-topsets-sectext dark:text-topsets-darksectext focus:outline-none"
             :placeholder="t('dashboard.tabs.settings.rolesAndPerms.searchPlaceholder')"
           />
           <!-- Dropdown -->
           <div
             v-if="dropdownVisible && userOptions.length"
-            class="absolute z-10 mt-1 w-full bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext rounded-xl max-h-60 overflow-auto"
+            class="absolute z-10 mt-1 w-full bg-topsets-secbg dark:bg-topsets-darksecbg border border-topsets-sectext dark:border-topsets-darksectext rounded-xl max-h-60 overflow-auto"
           >
             <div
               v-for="user in userOptions"
               :key="user.id"
               @click="selectOption(user)"
-              class="p-3 hover:bg-rafik-secondary hover:text-rafik-pritext cursor-pointer"
+              class="p-3 hover:bg-topsets-secondary hover:text-topsets-pritext cursor-pointer"
             >
               {{ user.first_name }} {{ user.last_name }}
               <span class="text-xs opacity-50"> {{ user.email }}</span>
@@ -69,15 +69,15 @@
                 readonly
               />
               <div
-                class="w-16 h-8 flex items-center border-rafik-sectext dark:border-rafik-darksectext border-2 rounded-full transition-all"
+                class="w-16 h-8 flex items-center border-topsets-sectext dark:border-topsets-darksectext border-2 rounded-full transition-all"
                 :class="
                   selectedUser.roles.includes(role.role_name)
-                    ? 'bg-rafik'
-                    : 'bg-rafik-secbg dark:bg-rafik-darsecbg'
+                    ? 'bg-topsets'
+                    : 'bg-topsets-secbg dark:bg-topsets-darsecbg'
                 "
               >
                 <div
-                  class="w-8 h-8 bg-rafik-sectext dark:bg-rafik-darksectext flex items-center justify-center rounded-full shadow-md transform transition-transform duration-300"
+                  class="w-8 h-8 bg-topsets-sectext dark:bg-topsets-darksectext flex items-center justify-center rounded-full shadow-md transform transition-transform duration-300"
                   :class="{
                     'translate-x-0': !selectedUser.roles.includes(role.role_name),
                     [locale === 'ar' ? '-translate-x-8' : 'translate-x-8']:
@@ -157,8 +157,8 @@ function showSuccess(message: string) {
     toast: true,
     position: 'top-right',
     icon: 'success',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -170,8 +170,8 @@ function showError(message: string) {
     icon: 'error',
     confirmButtonColor: '#d33',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 // Fetch filtered users based on searchQuery

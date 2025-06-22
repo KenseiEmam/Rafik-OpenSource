@@ -6,16 +6,16 @@ const { t , locale } = useI18n();
 
 <template>
   <div
-    class="border-rafik-secondary w-full  items-center w-full my-3 flex-1 mb-16 relative items-stretch overflow-hidden"
+    class="border-topsets-secondary w-full  items-center w-full my-3 flex-1 mb-16 relative items-stretch overflow-hidden"
   >
 
     <div class="col-span-3 relative space-y-4">
       <h3 class=" text-2xl md:text-4xl 2xl:text-5xl md:header-large">
-     Learn How <span class="text-rafik font-black">Rafik</span> Helps
+     Learn How <span class="text-topsets font-black">Topsets</span> Helps
       </h3>
-      <div class="grid md:grid-cols-3 h-96 2xl:h-128 align-stretch w-full text-body text-rafik-pritext dark:text-rafik-darkpritext">
+      <div class="grid md:grid-cols-3 h-96 2xl:h-128 align-stretch w-full text-body text-topsets-pritext dark:text-topsets-darkpritext">
               <router-link :to="{name:card.page}" v-for="card in cards"
-        class="border group flex flex-col cursor-pointer relative border-rafik-darksectext hover:border-rafik-secondary h-full  overflow-hidden p-0"
+        class="border group flex flex-col cursor-pointer relative border-topsets-darksectext hover:border-topsets-secondary h-full  overflow-hidden p-0"
       >
             <img
               :src="card.img"
@@ -23,10 +23,10 @@ const { t , locale } = useI18n();
               alt=""
             />
             <div
-              class="w-full opacity-70 h-full bg-rafik-pribg dark:bg-rafik-darkpribg absolute"
+              class="w-full opacity-70 h-full bg-topsets-pribg dark:bg-topsets-darkpribg absolute"
             ></div>
             <div
-              class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-white dark:from-rafik-alternate to-50 absolute"
+              class="w-full opacity-0 group-hover:opacity-60 h-full bg-gradient-to-t from-white dark:from-topsets-alternate to-50 absolute"
             ></div>
         <div
           class="p-8 2xl:p-16 h-full relative flex flex-col"
@@ -40,6 +40,6 @@ const { t , locale } = useI18n();
 </template>
 <style scoped>
 li::marker {
-  color: #d7bd21;
+  color: #3995c5;
 }
 </style>

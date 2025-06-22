@@ -15,8 +15,8 @@ function showSuccess(message: string) {
     showConfirmButton: false,
     timer: 1500,
     timerProgressBar: true,
-    background: '#081411',
-    color: '#E8F3ED',
+    background: '#132e3d',
+    color: '#ececec',
   });
 }
 
@@ -26,8 +26,8 @@ function showError(message: string) {
     text: message,
     icon: 'error',
     confirmButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED',
+    background: '#132e3d',
+    color: '#ececec',
   });
 }
 

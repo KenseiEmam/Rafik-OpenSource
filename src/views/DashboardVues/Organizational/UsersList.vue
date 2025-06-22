@@ -13,7 +13,7 @@
           <input
             type="search"
             @input="handleSearch"
-            class="block w-full p-4 text-sm text-rafik-sectext dark:text-rafik-darksectext border rounded-lg bg-rafik-pribg dark:bg-rafik-darkpribg"
+            class="block w-full p-4 text-sm text-topsets-sectext dark:text-topsets-darksectext border rounded-lg bg-topsets-pribg dark:bg-topsets-darkpribg"
             :placeholder="t('dashboard.users.list.searchPlaceholder')"
             required
           />
@@ -23,7 +23,7 @@
           <button
             @click="updateFilter('All')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
-            :class="filters.roles.length === 0 ? 'border-rafik gradient-bg text-rafik' : 'border'"
+            :class="filters.roles.length === 0 ? 'border-topsets gradient-bg text-topsets' : 'border'"
           >
             {{ t('dashboard.users.list.filters.allUsers') }}
           </button>
@@ -31,7 +31,7 @@
             @click="updateFilter('Organization Trnr')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
             :class="
-              filters.roles.includes('Trainer') ? 'border-rafik gradient-bg text-rafik' : 'border'
+              filters.roles.includes('Trainer') ? 'border-topsets gradient-bg text-topsets' : 'border'
             "
           >
             {{ t('dashboard.users.list.filters.trainer') }}
@@ -41,7 +41,7 @@
             class="card border 2xl:text-base text-sm min-w-max uppercase"
             :class="
               filters.roles.includes('Trainee') && !filters.enrolled
-                ? 'border-rafik gradient-bg text-rafik'
+                ? 'border-topsets gradient-bg text-topsets'
                 : 'border'
             "
           >
@@ -52,7 +52,7 @@
             class="card border 2xl:text-base text-sm min-w-max uppercase"
             :class="
               filters.roles.includes('Trainee') && filters.enrolled
-                ? 'border-rafik gradient-bg text-rafik'
+                ? 'border-topsets gradient-bg text-topsets'
                 : 'border'
             "
           >
@@ -94,18 +94,18 @@
           </thead>
           <tbody class="space-y-6">
             <tr v-for="user in users" :key="user.id" class="p-4">
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4">
                 {{ user.id }}
               </td>
               <td
-                class="flex gap-6 text-left items-center py-4 pl-3 bg-rafik-secbg dark:bg-rafik-darksecbg"
+                class="flex gap-6 text-left items-center py-4 pl-3 bg-topsets-secbg dark:bg-topsets-darksecbg"
               >
                 <img
                   :src="
                     user.avatar ||
                     'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
                   "
-                  class="w-12 rounded-full border-2 border-rafik h-12"
+                  class="w-12 rounded-full border-2 border-topsets h-12"
                   alt="Avatar"
                 />
                 <div>
@@ -113,7 +113,7 @@
                   <p>{{ user.email }}</p>
                 </div>
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4 capitalize">
                 <div class="flex flex-wrap text-sm items-center">
                   <p v-for="(role, index) in user.roles" :key="index">
                     {{ role }}
@@ -121,18 +121,18 @@
                   </p>
                 </div>
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4 capitalize">
                 {{ user.sex }}
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4">
                 {{ calculateAge(user.dob) || 'N/A' }}
               </td>
-              <td class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right">
+              <td class="px-3 bg-topsets-secbg dark:bg-topsets-darksecbg relative text-right">
                 <svg
                   @click="show_action = user.id"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
-                  class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext cursor-pointer ms-auto"
+                  class="text-topsets-sectext dark:text-topsets-darksectext h-7 mx-7 hover:text-topsets-pritext dark:hover:text-topsets-darkpritext cursor-pointer ms-auto"
                   viewBox="0 0 128 512"
                 >
                   <path
@@ -142,16 +142,16 @@
                 <div
                   v-if="show_action == user.id"
                   @mouseleave="handleLeave()"
-                  class="absolute min-w-16 z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg shadow-lg divide-y divide-rafik-sectext dark:divide-rafik-darksectext"
+                  class="absolute min-w-16 z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-topsets-secbg dark:bg-topsets-darksecbg shadow-lg divide-y divide-topsets-sectext dark:divide-topsets-darksectext"
                 >
                   <Router-link
                     :to="{ name: 'single-user', params: { id: user.id } }"
-                    class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext rounded"
+                    class="px-3 py-5 hover:bg-topsets-pribg w-full text-center dark:bg-topsets-darkpribg hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darksectext rounded"
                   >
                     {{ t('dashboard.users.list.actions.viewUser') }}
                   </Router-link>
                   <button
-                    class="px-3 py-5 text-red-500 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-red-300 rounded"
+                    class="px-3 py-5 text-red-500 hover:bg-topsets-pribg dark:bg-topsets-darkpribg hover:text-red-300 rounded"
                   >
                     <h4>{{ t('dashboard.users.list.actions.deleteUser') }}</h4>
                   </button>
@@ -167,12 +167,12 @@
         class="h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body"
       >
         <img
-          src="@/assets/Large Icon.png"
+          src="@/assets/ts-trans-dark.png"
           class="w-24 h-24 animate-bounce hidden dark:inline-block"
           alt=""
         />
         <img
-          src="@/assets/Large Icon Light.png"
+          src="@/assets/ts-trans-light.png"
           class="w-24 h-24 animate-bounce dark:hidden"
           alt=""
         />
@@ -182,7 +182,7 @@
       </div>
       <!-- No Users Found -->
       <div v-else class="space-y-6 flex flex-col items-center py-12">
-        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+        <p class="text-topsets-pritext dark:text-topsets-darkpritext">
           {{ t('dashboard.users.list.noUsersFound') }}
         </p>
       </div>
@@ -196,31 +196,31 @@
         <p class="header-small min-w-max">
           {{ t('dashboard.users.list.pagination.page', { page: page }) }}
         </p>
-        <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
-        <div class="flex text-rafik-sectext dark:text-rafik-darksectext gap-4 px-4">
+        <hr class="border w-full border-topsets-sectext dark:border-topsets-darksectext" />
+        <div class="flex text-topsets-sectext dark:text-topsets-darksectext gap-4 px-4">
           <button
             v-for="p in Math.ceil(userStore.All_Org_count / pageSize)"
             :key="p"
             @click="updatePage(p)"
-            class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
-            :class="p === page ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
+            class="hover:text-topsets-pritext dark:hover:text-topsets-darkpritext"
+            :class="p === page ? 'text-topsets-pritext dark:text-topsets-darkpritext' : ''"
           >
             {{ p }}
           </button>
         </div>
-        <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
+        <hr class="border w-full border-topsets-sectext dark:border-topsets-darksectext" />
         <!-- Previous/Next Buttons -->
         <button
           v-if="page > 1"
           @click="updatePage(page - 1)"
-          class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
+          class="px-4 py-2 text-topsets-sectext dark:text-topsets-darksectext min-w-max hover:text-topsets-pritext dark:hover:text-topsets-darkpritext"
         >
           {{ t('dashboard.users.list.pagination.previousPage') }}
         </button>
         <button
           v-if="page < Math.ceil(userStore.All_Org_count / pageSize)"
           @click="updatePage(page + 1)"
-          class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
+          class="px-4 py-2 text-topsets-sectext dark:text-topsets-darksectext min-w-max hover:text-topsets-pritext dark:hover:text-topsets-darkpritext"
         >
           {{ t('dashboard.users.list.pagination.nextPage') }}
         </button>
@@ -296,8 +296,8 @@ function showSuccess(messageKey: string) {
     toast: true,
     position: 'top-right',
     icon: 'success',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -307,8 +307,8 @@ function showError(messageKey: string) {
     text: t(messageKey),
     icon: 'error',
     confirmButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -552,9 +552,9 @@ tbody > tr {
 }
 
 .card:hover {
-  background-image: linear-gradient(135deg, #f3eeeb 36%, #fff2cb);
+  background-image: linear-gradient(135deg, #ececec 36%, #bfc7cb);
 }
 .dark .card:hover {
-  background-image: linear-gradient(135deg, #081411 36%, #295f42);
+  background-image: linear-gradient(135deg, #132e3d 36%, #154b5d);
 }
 </style>

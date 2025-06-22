@@ -7,7 +7,7 @@
           {{ t('dashboard.tabs.clients.weightLog.showingRows') }}
         </p>
 
-        <select v-model="pageSize" @change="loadUsers" name="" class=" rafik-text-input min-w-32" id="">
+        <select v-model="pageSize" @change="loadUsers" name="" class=" topsets-text-input min-w-32" id="">
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="30">30</option>
@@ -34,7 +34,7 @@
         <tr
           v-for="weight in weightStore.AllWeights"
           :key="weight.id"
-          class="border-b border-rafik-sectext dark:border-rafik-darksectext h-12"
+          class="border-b border-topsets-sectext dark:border-topsets-darksectext h-12"
         >
           <td>
             {{
@@ -80,12 +80,12 @@
         class="h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body"
       >
         <img
-          src="@/assets/Large Icon.png"
+          src="@/assets/ts-trans-dark.png"
           class="w-24 h-24 animate-bounce hidden dark:inline-block"
           alt=""
         />
         <img
-          src="@/assets/Large Icon Light.png"
+          src="@/assets/ts-trans-light.png"
           class="w-24 h-24 animate-bounce dark:hidden"
           alt=""
         />
@@ -95,7 +95,7 @@
       </div>
       <!-- No Results -->
       <div v-else class="space-y-6 flex flex-col items-center py-12">
-        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+        <p class="text-topsets-pritext dark:text-topsets-darkpritext">
           {{ t('dashboard.auditPrograms.list.noResults') }}
         </p>
       </div>
@@ -108,31 +108,31 @@
         <p class="header-small min-w-max">
           {{ t('dashboard.auditPrograms.list.pagination.page', { page: page }) }}
         </p>
-        <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
-        <div class="flex text-rafik-sectext dark:text-rafik-darksectext gap-4 px-4">
+        <hr class="border w-full border-topsets-sectext dark:border-topsets-darksectext" />
+        <div class="flex text-topsets-sectext dark:text-topsets-darksectext gap-4 px-4">
           <button
             v-for="p in Math.ceil(weightStore.Count / pageSize)"
             :key="p"
             @click="updatePage(p)"
-            class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
-            :class="p === page ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
+            class="hover:text-topsets-pritext dark:hover:text-topsets-darkpritext"
+            :class="p === page ? 'text-topsets-pritext dark:text-topsets-darkpritext' : ''"
           >
             {{ p }}
           </button>
         </div>
-        <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
+        <hr class="border w-full border-topsets-sectext dark:border-topsets-darksectext" />
         <!-- Previous/Next Buttons -->
         <button
           v-if="page > 1"
           @click="updatePage(page - 1)"
-          class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
+          class="px-4 py-2 text-topsets-sectext dark:text-topsets-darksectext min-w-max hover:text-topsets-pritext dark:hover:text-topsets-darkpritext"
         >
           {{ t('dashboard.auditPrograms.list.pagination.previousPage') }}
         </button>
         <button
           v-if="page < Math.ceil(weightStore.Count / pageSize)"
           @click="updatePage(page + 1)"
-          class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
+          class="px-4 py-2 text-topsets-sectext dark:text-topsets-darksectext min-w-max hover:text-topsets-pritext dark:hover:text-topsets-darkpritext"
         >
           {{ t('dashboard.auditPrograms.list.pagination.nextPage') }}
         </button>

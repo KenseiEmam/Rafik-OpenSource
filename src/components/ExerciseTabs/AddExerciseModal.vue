@@ -18,7 +18,7 @@
             type="text"
             id="exercise_name"
             v-model="exercise.exercise_name"
-            class="rafik-text-input"
+            class="topsets-text-input"
             required
             :class="{ 'border-red-500': errors.exercise_name }"
           />
@@ -35,7 +35,7 @@
           <textarea
             id="exercise_detail"
             v-model="exercise.exercise_detail"
-            class="rafik-text-input whitespace-pre-wrap"
+            class="topsets-text-input whitespace-pre-wrap"
             rows="4"
             required
             :class="{ 'border-red-500': errors.exercise_detail }"
@@ -53,7 +53,7 @@
           <select
             id="type"
             v-model="exercise.type"
-            class="rafik-text-input"
+            class="topsets-text-input"
             required
             :class="{ 'border-red-500': errors.type }"
           >

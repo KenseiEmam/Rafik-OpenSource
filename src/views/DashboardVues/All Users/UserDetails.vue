@@ -84,8 +84,8 @@ function showSuccess(message: string) {
     position: 'top-right',
     icon: 'success',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   }); // Refresh after success
 }
 
@@ -97,8 +97,8 @@ function showError(message: string) {
     icon: 'error',
     confirmButtonColor: '#d33',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 function fetchDetails() {
@@ -143,7 +143,7 @@ onBeforeUnmount(() => {
       class="flex-1 px-8 py-12 w-full 2xl:px-12 2xl:py-24 space-y-8 2xl:space-y-6"
     >
       <div
-        class="border group flex flex-col relative gradient-bg border-rafik-alternate rounded-lg overflow-hidden"
+        class="border group flex flex-col relative gradient-bg border-topsets-alternate rounded-lg overflow-hidden"
       >
         <div class="p-8 2xl:p-16 2xl:py-24 space-y-4 relative items-stretch grid grid-cols-4">
           <div class="pr-6 space-y-4 col-span-2">
@@ -154,7 +154,7 @@ onBeforeUnmount(() => {
                   'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
                 "
                 alt=""
-                class="w-32 h-32 object-cover rounded-full border-2 border-rafik"
+                class="w-32 h-32 object-cover rounded-full border-2 border-topsets"
               />
               <div class="space-y-2">
                 <h1 class="title-small w-1/3">
@@ -167,8 +167,8 @@ onBeforeUnmount(() => {
                   {{ userStore.UserDetail?.email || t('dashboard.users.single.loading') }}
                 </p>
                 <div
-                  class="py-1 px-4 3xl:px-5 2xl:py-2 2xl:text-sm text-sm rounded-3xl max-w-max text-rafik-pritext dark:text-rafik-darkpritext uppercase font-semibold"
-                  :class="compareDate ? 'bg-rafik-alternate' : 'bg-rafik-secondary'"
+                  class="py-1 px-4 3xl:px-5 2xl:py-2 2xl:text-sm text-sm rounded-3xl max-w-max text-topsets-pritext dark:text-topsets-darkpritext uppercase font-semibold"
+                  :class="compareDate ? 'bg-topsets-alternate' : 'bg-topsets-secondary'"
                 >
                   {{
                     compareDate
@@ -181,16 +181,16 @@ onBeforeUnmount(() => {
           </div>
           <div class="flex flex-col gap-4 justify-between">
             <div class="uppercase flex justify-between gap-3 text-sm">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+              <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                 {{ t('dashboard.users.single.details.status') }}:
               </p>
-              <p class="text-rafik-secondary">{{ userStore.UserDetail.audit_status }}</p>
+              <p class="text-topsets-secondary">{{ userStore.UserDetail.audit_status }}</p>
             </div>
             <div class="uppercase flex justify-between gap-3 text-sm">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+              <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                 {{ t('dashboard.users.single.details.dateJoined') }}:
               </p>
-              <p v-if="userStore.UserDetail.created_at" class="text-rafik-secondary">
+              <p v-if="userStore.UserDetail.created_at" class="text-topsets-secondary">
                 {{
                   new Date(userStore.UserDetail.created_at).toLocaleDateString('en-GB', {
                     year: 'numeric',
@@ -201,10 +201,10 @@ onBeforeUnmount(() => {
               </p>
             </div>
             <div class="uppercase flex justify-between gap-3 text-sm">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+              <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                 {{ t('dashboard.users.single.details.lastActive') }}:
               </p>
-              <p class="text-rafik-secondary">
+              <p class="text-topsets-secondary">
                 {{
                   humanizeDate(userStore.UserDetail.last_active) ||
                   t('dashboard.users.single.never')
@@ -214,11 +214,11 @@ onBeforeUnmount(() => {
           </div>
           <div class="pl-6 flex-1 min-w-max h-full">
             <div :class="locale === 'ar'?'border-r pr-2':'border-l pl-2'"
-              class="flex flex-col flex-1 gap-4   border-rafik-sectext dark:border-rafik-darksectext text-left"
+              class="flex flex-col flex-1 gap-4   border-topsets-sectext dark:border-topsets-darksectext text-left"
             >
               <button
                 v-if="userStore.UserDetail.audit_status !== 'suspended'"
-                class="text-body uppercase text-left hover:text-rafik-secondary text-rafik"
+                class="text-body uppercase text-left hover:text-topsets-secondary text-topsets"
               >
                 {{ t('dashboard.users.single.actions.suspendUser') }}
               </button>
@@ -230,7 +230,7 @@ onBeforeUnmount(() => {
               </button>
               <button
                 v-if="userStore.UserDetail.audit_status !== 'active'"
-                class="text-body uppercase text-left hover:text-green-300 text-rafik-alternate"
+                class="text-body uppercase text-left hover:text-green-300 text-topsets-alternate"
               >
                 {{ t('dashboard.users.single.actions.activateUser') }}
               </button>
@@ -243,12 +243,12 @@ onBeforeUnmount(() => {
       </div>
       <!-- Tabs -->
       <div
-        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
+        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-topsets-sectext dark:border-topsets-darksectext"
       >
         <button
           :class="
             activeTab === 'General Details'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           class="nav-btn"
@@ -259,7 +259,7 @@ onBeforeUnmount(() => {
         <button
           :class="
             activeTab === 'Trainer Details'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           v-if="userStore.O_Trainer"
@@ -271,7 +271,7 @@ onBeforeUnmount(() => {
         <button
           :class="
             activeTab === 'Trainee Details'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           v-if="userStore.Client"
@@ -283,7 +283,7 @@ onBeforeUnmount(() => {
         <button
           :class="
             activeTab === 'Certifications'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           v-if="userStore.O_Trainer"
@@ -295,7 +295,7 @@ onBeforeUnmount(() => {
         <button
           :class="
             activeTab === 'Workout-Plan'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : 'hover:opacity-70'
           "
           v-if="userStore.Client?.program_details"

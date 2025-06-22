@@ -13,7 +13,7 @@
           <input
             type="search"
             @input="handleSearch"
-            class="block w-full p-4 text-sm text-rafik-sectext dark:text-rafik-darksectext border rounded-lg bg-rafik-pribg dark:bg-rafik-darkpribg"
+            class="block w-full p-4 text-sm text-topsets-sectext dark:text-topsets-darksectext border rounded-lg bg-topsets-pribg dark:bg-topsets-darkpribg"
             :placeholder="t('dashboard.auditPrograms.list.searchPlaceholder')"
             required
           />
@@ -21,7 +21,7 @@
         <!-- Trainer Selection -->
         <div class="w-64">
           <label
-            class="block text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext mb-1"
+            class="block text-sm font-medium text-topsets-sectext dark:text-topsets-darksectext mb-1"
           >
             {{ t('dashboard.auditPrograms.list.selectTrainer.label') }}
           </label>
@@ -33,19 +33,19 @@
               @focus="dropdownVisible = true"
               @input="fetchFilteredTrainers"
               @blur="handleBlur"
-              class="w-full p-3 border rounded-xl bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext focus:outline-none"
+              class="w-full p-3 border rounded-xl bg-topsets-secbg dark:bg-topsets-darksecbg text-topsets-sectext dark:text-topsets-darksectext focus:outline-none"
               :placeholder="t('dashboard.auditPrograms.list.selectTrainer.placeholder')"
             />
             <!-- Dropdown -->
             <div
               v-if="dropdownVisible && trainerOptions.length"
-              class="absolute z-10 mt-1 w-full bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext rounded-xl max-h-60 overflow-auto"
+              class="absolute z-10 mt-1 w-full bg-topsets-secbg dark:bg-topsets-darksecbg border border-topsets-sectext dark:border-topsets-darksectext rounded-xl max-h-60 overflow-auto"
             >
               <div
                 v-for="trainer in trainerOptions"
                 :key="trainer.id"
                 @click="selectOption(trainer)"
-                class="p-3 hover:bg-rafik-secondary hover:text-rafik-pritext cursor-pointer"
+                class="p-3 hover:bg-topsets-secondary hover:text-topsets-pritext cursor-pointer"
               >
                 {{ trainer.first_name }} {{ trainer.last_name }}
                 <span class="text-xs opacity-50"> {{ trainer.email }}</span>
@@ -58,7 +58,7 @@
           <button
             @click="updateFilter('All')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
-            :class="filters.status.length === 0 ? 'border-rafik gradient-bg text-rafik' : 'border'"
+            :class="filters.status.length === 0 ? 'border-topsets gradient-bg text-topsets' : 'border'"
           >
             {{ t('dashboard.auditPrograms.list.filters.allPrograms') }}
           </button>
@@ -66,7 +66,7 @@
             @click="updateFilter('Active')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
             :class="
-              filters.status.includes('Active') ? 'border-rafik gradient-bg text-rafik' : 'border'
+              filters.status.includes('Active') ? 'border-topsets gradient-bg text-topsets' : 'border'
             "
           >
             {{ t('dashboard.auditPrograms.list.filters.active') }}
@@ -75,7 +75,7 @@
             @click="updateFilter('Draft')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
             :class="
-              filters.status.includes('Draft') ? 'border-rafik gradient-bg text-rafik' : 'border'
+              filters.status.includes('Draft') ? 'border-topsets gradient-bg text-topsets' : 'border'
             "
           >
             {{ t('dashboard.auditPrograms.list.filters.draft') }}
@@ -84,7 +84,7 @@
             @click="updateFilter('Review')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
             :class="
-              filters.status.includes('Review') ? 'border-rafik gradient-bg text-rafik' : 'border'
+              filters.status.includes('Review') ? 'border-topsets gradient-bg text-topsets' : 'border'
             "
           >
             {{ t('dashboard.auditPrograms.list.filters.review') }}
@@ -120,37 +120,37 @@
           </thead>
           <tbody class="space-y-6">
             <tr v-for="program in programs" :key="program.id" class="p-4">
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4">
                 {{ program.program_name }}
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4 capitalize">
                 {{ program.difficulty_level }}
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4 capitalize">
                 {{ program.status }}
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4">
                 <router-link
                   :to="{ name: 'single-user', params: { id: program.trainer_id } }"
-                  class="text-rafik-pritext hover:text-rafik-pribg dark:text-rafik-darkpritext dark:hover:text-rafik-darkpribg"
+                  class="text-topsets-pritext hover:text-topsets-pribg dark:text-topsets-darkpritext dark:hover:text-topsets-darkpribg"
                 >
                   {{ program.trainer_id }}
                 </router-link>
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4">
                 {{ program.price_one }}
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4">
                 {{ program.avg_days_per_week }}
               </td>
               <td
-                class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right "
+                class="px-3 bg-topsets-secbg dark:bg-topsets-darksecbg relative text-right "
               >
                 <svg
                   @click="show_action = program.id"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
-                  class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext cursor-pointer ms-auto"
+                  class="text-topsets-sectext dark:text-topsets-darksectext h-7 mx-7 hover:text-topsets-pritext dark:hover:text-topsets-darkpritext cursor-pointer ms-auto"
                   viewBox="0 0 128 512"
                 >
                   <path
@@ -160,16 +160,16 @@
                 <div
                   v-if="show_action == program.id"
                   @mouseleave="handleLeave()"
-                  class="absolute min-w-16  z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg shadow-lg divide-y divide-rafik-sectext dark:divide-rafik-darksectext"
+                  class="absolute min-w-16  z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-topsets-secbg dark:bg-topsets-darksecbg shadow-lg divide-y divide-topsets-sectext dark:divide-topsets-darksectext"
                 >
                   <Router-link
                     :to="{ name: 'audit-program', params: { id: program.id } }"
-                    class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext rounded"
+                    class="px-3 py-5 hover:bg-topsets-pribg w-full text-center dark:bg-topsets-darkpribg hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darksectext rounded"
                   >
                     {{ t('dashboard.auditPrograms.list.actions.viewProgram') }}
                   </Router-link>
                   <button
-                    class="px-3 py-5 text-red-500 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-red-300 rounded"
+                    class="px-3 py-5 text-red-500 hover:bg-topsets-pribg dark:bg-topsets-darkpribg hover:text-red-300 rounded"
                   >
                     {{ t('dashboard.auditPrograms.list.actions.deleteProgram') }}
                   </button>
@@ -185,12 +185,12 @@
         class="h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body"
       >
         <img
-          src="@/assets/Large Icon.png"
+          src="@/assets/ts-trans-dark.png"
           class="w-24 h-24 animate-bounce hidden dark:inline-block"
           alt=""
         />
         <img
-          src="@/assets/Large Icon Light.png"
+          src="@/assets/ts-trans-light.png"
           class="w-24 h-24 animate-bounce dark:hidden"
           alt=""
         />
@@ -200,7 +200,7 @@
       </div>
       <!-- No Results -->
       <div v-else class="space-y-6 flex flex-col items-center py-12">
-        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+        <p class="text-topsets-pritext dark:text-topsets-darkpritext">
           {{ t('dashboard.auditPrograms.list.noResults') }}
         </p>
       </div>
@@ -213,31 +213,31 @@
         <p class="header-small min-w-max">
           {{ t('dashboard.auditPrograms.list.pagination.page', { page: page }) }}
         </p>
-        <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
-        <div class="flex text-rafik-sectext dark:text-rafik-darksectext gap-4 px-4">
+        <hr class="border w-full border-topsets-sectext dark:border-topsets-darksectext" />
+        <div class="flex text-topsets-sectext dark:text-topsets-darksectext gap-4 px-4">
           <button
             v-for="p in Math.ceil(ProgramStore.All_Org_Count / pageSize)"
             :key="p"
             @click="updatePage(p)"
-            class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
-            :class="p === page ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
+            class="hover:text-topsets-pritext dark:hover:text-topsets-darkpritext"
+            :class="p === page ? 'text-topsets-pritext dark:text-topsets-darkpritext' : ''"
           >
             {{ p }}
           </button>
         </div>
-        <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
+        <hr class="border w-full border-topsets-sectext dark:border-topsets-darksectext" />
         <!-- Previous/Next Buttons -->
         <button
           v-if="page > 1"
           @click="updatePage(page - 1)"
-          class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
+          class="px-4 py-2 text-topsets-sectext dark:text-topsets-darksectext min-w-max hover:text-topsets-pritext dark:hover:text-topsets-darkpritext"
         >
           {{ t('dashboard.auditPrograms.list.pagination.previousPage') }}
         </button>
         <button
           v-if="page < Math.ceil(ProgramStore.All_Org_Count / pageSize)"
           @click="updatePage(page + 1)"
-          class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
+          class="px-4 py-2 text-topsets-sectext dark:text-topsets-darksectext min-w-max hover:text-topsets-pritext dark:hover:text-topsets-darkpritext"
         >
           {{ t('dashboard.auditPrograms.list.pagination.nextPage') }}
         </button>
@@ -498,15 +498,15 @@ tbody > tr {
 .custom-v-select .vs__selected,
 .custom-v-select input,
 .custom-v-select .vs__search {
-  background-color: #f3eeeb !important; /* rafik.pribg */
-  border: 1px solid #8c644c !important; /* rafik.sectext */
-  color: #8c644c !important; /* rafik.sectext */
+  background-color: #ececec !important; /* topsets.pribg */
+  border: 1px solid #0f425d !important; /* topsets.sectext */
+  color: #0f425d !important; /* topsets.sectext */
 }
 
 .card:hover {
-  background-image: linear-gradient(135deg, #f3eeeb 36%, #fff2cb);
+  background-image: linear-gradient(135deg, #ececec 36%, #bfc7cb);
 }
 .dark .card:hover {
-  background-image: linear-gradient(135deg, #081411 36%, #295f42);
+  background-image: linear-gradient(135deg, #132e3d 36%, #154b5d);
 }
 </style>

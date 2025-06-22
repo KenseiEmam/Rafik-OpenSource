@@ -12,17 +12,17 @@
 
       <!-- Tabs -->
       <div
-        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
+        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-topsets-sectext dark:border-topsets-darksectext"
       >
         <button
-          :class="activeTab === 'profile' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
+          :class="activeTab === 'profile' ? 'text-topsets-pritext dark:text-topsets-darkpritext' : ''"
           class="nav-btn"
           @click="activeTab = 'profile'"
         >
           {{ t('dashboard.profile.edit.detailsTab') }}
         </button>
         <button
-          :class="activeTab === 'account' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
+          :class="activeTab === 'account' ? 'text-topsets-pritext dark:text-topsets-darkpritext' : ''"
           class="nav-btn uppercase"
           @click="activeTab = 'account'"
         >
@@ -30,7 +30,7 @@
         </button>
         <button
           :class="
-            activeTab === 'certifications' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''
+            activeTab === 'certifications' ? 'text-topsets-pritext dark:text-topsets-darkpritext' : ''
           "
           class="nav-btn uppercase"
           @click="activeTab = 'certifications'"
@@ -45,12 +45,12 @@
         class="h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body"
       >
         <img
-          src="@/assets/Large Icon.png"
+          src="@/assets/ts-trans-dark.png"
           class="w-24 h-24 animate-bounce hidden dark:inline-block"
           alt=""
         />
         <img
-          src="@/assets/Large Icon Light.png"
+          src="@/assets/ts-trans-light.png"
           class="w-24 h-24 animate-bounce dark:hidden"
           alt=""
         />
@@ -73,7 +73,7 @@
                   :placeholder="t('dashboard.profile.edit.passwordPlaceholder')"
                   type="password"
                   v-model="newPassword"
-                  class="rafik-text-input w-full"
+                  class="topsets-text-input w-full"
                 />
               </div>
 
@@ -86,7 +86,7 @@
                   :placeholder="t('dashboard.profile.edit.passwordPlaceholder')"
                   type="password"
                   v-model="confirmPassword"
-                  class="rafik-text-input w-full"
+                  class="topsets-text-input w-full"
                 />
               </div>
 
@@ -147,7 +147,7 @@
                   <input
                     id="first_name"
                     v-model="userStore.Trainer.first_name"
-                    class="rafik-text-input w-full"
+                    class="topsets-text-input w-full"
                     type="text"
                     required
                   />
@@ -160,7 +160,7 @@
                   <input
                     id="last_name"
                     v-model="userStore.Trainer.last_name"
-                    class="rafik-text-input w-full"
+                    class="topsets-text-input w-full"
                     type="text"
                     required
                   />
@@ -173,7 +173,7 @@
                   <input
                     id="email"
                     v-model="userStore.Trainer.email"
-                    class="rafik-text-input w-full"
+                    class="topsets-text-input w-full"
                     type="email"
                     readonly
                   />
@@ -188,7 +188,7 @@
                   <input
                     id="title"
                     v-model="userStore.Trainer.title"
-                    class="rafik-text-input w-full"
+                    class="topsets-text-input w-full"
                     type="text"
                     required
                   />
@@ -203,7 +203,7 @@
                     v-model:input="phone"
                     styleClasses="phone-input"
                     :placeholder="t('dashboard.profile.edit.phoneLabel')"
-                    :inputOptions="{ showDialCode: true, styleClasses: 'rafik-text-input w-full' }"
+                    :inputOptions="{ showDialCode: true, styleClasses: 'topsets-text-input w-full' }"
                     :invalidMsg="t('dashboard.profile.edit.invalidPhone')"
                     validCharactersOnly
                     name="telephone"
@@ -234,7 +234,7 @@
                 <select
                   id="nationality"
                   v-model="userStore.Trainer.nationality"
-                  class="rafik-text-input w-full"
+                  class="topsets-text-input w-full"
                   required
                 >
                   <option value="" disabled selected>
@@ -258,7 +258,7 @@
                 <input
                   id="gender"
                   v-model="userStore.Trainer.gender"
-                  class="rafik-text-input w-full"
+                  class="topsets-text-input w-full"
                   type="text"
                   readonly
                 />
@@ -272,7 +272,7 @@
                 <input
                   id="years_of_experience"
                   v-model.number="userStore.Trainer.years_of_experience"
-                  class="rafik-text-input w-full"
+                  class="topsets-text-input w-full"
                   type="number"
                   min="0"
                   required
@@ -342,7 +342,7 @@
                 <input
                   :id="platform"
                   v-model="userStore.Trainer.socials[platform]"
-                  class="rafik-text-input w-full pl-10"
+                  class="topsets-text-input w-full pl-10"
                   type="text"
                   :placeholder="`@${platform}`"
                 />
@@ -361,7 +361,7 @@
               <textarea
                 id="bio"
                 v-model="userStore.Trainer.bio"
-                class="rafik-text-input w-full h-full"
+                class="topsets-text-input w-full h-full"
                 :placeholder="t('dashboard.profile.edit.bioPlaceholder')"
               ></textarea>
             </div>
@@ -562,8 +562,8 @@ function showSuccess(message: string) {
     toast: true,
     position: 'top-right',
     icon: 'success',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -573,8 +573,8 @@ function showError(message: string) {
     text: message,
     icon: 'error',
     confirmButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 

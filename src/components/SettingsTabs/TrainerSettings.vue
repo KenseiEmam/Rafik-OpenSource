@@ -10,7 +10,7 @@
         <input
           type="number"
           v-model.number="localTrainerSettings.seats_available"
-          class="rafik-text-input"
+          class="topsets-text-input"
           min="0"
         />
       </div>
@@ -26,7 +26,7 @@
         <input
           type="number"
           v-model.number="localTrainerSettings.follow_up"
-          class="rafik-text-input"
+          class="topsets-text-input"
           min="1"
         />
       </div>
@@ -39,7 +39,7 @@
         <p class="text-body">{{ t('dashboard.tabs.settings.trainer.selectWorkingHours') }}</p>
       </div>
       <div class="w-32 2xl:w-64">
-        <select v-model="localTrainerSettings.available_hours" class="rafik-text-input">
+        <select v-model="localTrainerSettings.available_hours" class="topsets-text-input">
           <option v-for="option in workingHoursOptions" :key="option" :value="option">
             {{ option }}
           </option>

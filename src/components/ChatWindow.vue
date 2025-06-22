@@ -6,7 +6,7 @@
     <div class="card border shadow p-0 overflow-hidden rounded-lg shadow min-w-128 w-1/3">
       <!-- Header -->
       <div
-        class="p-6 gradient-bg border-b border-rafik-sectext dark:border-rafik-darksectext w-full flex justify-between items-center"
+        class="p-6 gradient-bg border-b border-topsets-sectext dark:border-topsets-darksectext w-full flex justify-between items-center"
       >
         <div class="flex items-center gap-4" v-if="Client">
           <img
@@ -15,7 +15,7 @@
               'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
             "
             alt=""
-            class="rounded-full border-2 border-rafik-secondary object-cover w-16 h-16"
+            class="rounded-full border-2 border-topsets-secondary object-cover w-16 h-16"
           />
           <div>
             <h3 class="header-small text-base">{{ Client.first_name }} {{ Client.last_name }}</h3>
@@ -26,7 +26,7 @@
           xmlns="http://www.w3.org/2000/svg"
           stroke="currentColor"
           fill="currentColor"
-          class="w-6 h-6 text-rafik-pritext dark:text-rafik-darkpritext hover:text-rafik cursor-pointer"
+          class="w-6 h-6 text-topsets-pritext dark:text-topsets-darkpritext hover:text-topsets cursor-pointer"
           viewBox="0 0 384 512"
           @click="$emit('close')"
         >
@@ -39,7 +39,7 @@
       <!-- Messages -->
       <ul
         v-if="Client"
-        class="h-64 2xl:h-96 p-6 overflow-y-auto space-y-5 bg-rafik-secbg dark:bg-rafik-darksecbg"
+        class="h-64 2xl:h-96 p-6 overflow-y-auto space-y-5 bg-topsets-secbg dark:bg-topsets-darksecbg"
         ref="chatContainer"
       >
         <!-- Loading Spinner -->
@@ -48,12 +48,12 @@
           class="h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body"
         >
           <img
-            src="@/assets/Large Icon.png"
+            src="@/assets/ts-trans-dark.png"
             class="w-24 h-24 animate-bounce hidden dark:inline-block"
             alt="spinner"
           />
           <img
-            src="@/assets/Large Icon Light.png"
+            src="@/assets/ts-trans-light.png"
             class="w-24 h-24 animate-bounce dark:hidden"
             alt="spinner"
           />
@@ -74,7 +74,7 @@
                 Client.avatar ||
                 'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
               "
-              class="w-8 h-8 rounded-full border border-rafik-sectext dark:border-rafik-darksectext"
+              class="w-8 h-8 rounded-full border border-topsets-sectext dark:border-topsets-darksectext"
             />
 
             <!-- Message Bubble -->
@@ -82,11 +82,11 @@
               class="p-3 rounded-lg max-w-[75%]"
               :class="
                 message.sent_by === Client.id
-                  ? 'bg-rafik-pribg dark:bg-rafik-darkpribg text-left '
-                  : 'bg-rafik-pribg dark:bg-rafik-darkpribg text-right'
+                  ? 'bg-topsets-pribg dark:bg-topsets-darkpribg text-left '
+                  : 'bg-topsets-pribg dark:bg-topsets-darkpribg text-right'
               "
             >
-              <p :class="!message.seen_at ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''">
+              <p :class="!message.seen_at ? 'text-topsets-pritext dark:text-topsets-darkpritext' : ''">
                 {{ message.content }}
               </p>
               <span class="text-xs block mt-1 text-gray-300">
@@ -144,7 +144,7 @@
           v-model="sending"
           placeholder="Type your message here ..."
           type="text"
-          class="w-full border-0 ring-0 outline-none focus:outline-none focus:ring-0 rafik-text-input bg-transparent"
+          class="w-full border-0 ring-0 outline-none focus:outline-none focus:ring-0 topsets-text-input bg-transparent"
         />
         <button type="submit" :disabled="!sending.trim()">
           <svg
@@ -152,7 +152,7 @@
             viewBox="0 0 512 512"
             stroke="currentColor"
             fill="currentColor"
-            class="w-6 h-6 text-rafik-pritext dark:text-rafik-darkpritext hover:text-rafik cursor-pointer mr-8"
+            class="w-6 h-6 text-topsets-pritext dark:text-topsets-darkpritext hover:text-topsets cursor-pointer mr-8"
             :class="{ 'opacity-50 cursor-not-allowed': !sending.trim() }"
           >
             <path
@@ -201,8 +201,8 @@ function showSuccess(message: string) {
     toast: true,
     position: 'top-right',
     icon: 'success',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 function showError(message: string) {
@@ -211,8 +211,8 @@ function showError(message: string) {
     text: message,
     icon: 'error',
     confirmButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -435,9 +435,9 @@ onUnmounted(() => {
 
 <style scoped>
 .dark li:hover {
-  background-image: linear-gradient(135deg, #081411 36%, #295f42);
+  background-image: linear-gradient(135deg, #132e3d 36%, #154b5d);
 }
 li:hover {
-  background-image: linear-gradient(135deg, #f3eeeb 36%, #fff2cb);
+  background-image: linear-gradient(135deg, #ececec 36%, #bfc7cb);
 }
 </style>

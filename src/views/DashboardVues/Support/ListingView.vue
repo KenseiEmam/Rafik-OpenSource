@@ -40,7 +40,7 @@
             <tr
               v-for="ticket in ticketStore.tickets"
               :key="ticket.id"
-              class="rounded-xl p-4 border-b border-rafik-sectext"
+              class="rounded-xl p-4 border-b border-topsets-sectext"
             >
               <td class="py-4">{{ ticket.id }}</td>
               <td class="py-4">{{ ticket.subject }}</td>
@@ -140,8 +140,8 @@ async function onTicketSubmit(ticketData: {
       text: error.message || t('dashboard.support.list.uploadCreateFail'),
       icon: 'error',
       confirmButtonColor: '#d33',
-      background: '#081411',
-      color: '#E8F3ED'
+      background: '#132e3d',
+      color: '#ececec'
     });
   }
 }

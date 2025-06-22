@@ -29,7 +29,7 @@
           </div>
           <div
             v-else
-            class="w-64 h-64 border-2 border-dashed border-gray-400 rounded-lg flex items-center justify-center cursor-pointer hover:bg-rafik-secbg dark:bg-rafik-darksecbg focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            class="w-64 h-64 border-2 border-dashed border-gray-400 rounded-lg flex items-center justify-center cursor-pointer hover:bg-topsets-secbg dark:bg-topsets-darksecbg focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             @click="triggerFileInput"
           >
             <span class="text-center text-gray-500">
@@ -55,7 +55,7 @@
               type="text"
               id="program_name"
               v-model="program.program_name"
-              class="rafik-text-input"
+              class="topsets-text-input"
               required
               :class="{ 'border-red-500': errors.program_name }"
             />
@@ -72,7 +72,7 @@
             <textarea
               id="program_description"
               v-model="program.program_description"
-              class="rafik-text-input whitespace-pre-wrap"
+              class="topsets-text-input whitespace-pre-wrap"
               rows="4"
               required
               :class="{ 'border-red-500': errors.program_description }"
@@ -90,7 +90,7 @@
             <select
               id="difficulty_level"
               v-model="program.difficulty_level"
-              class="rafik-text-input"
+              class="topsets-text-input"
               required
               :class="{ 'border-red-500': errors.difficulty_level }"
             >

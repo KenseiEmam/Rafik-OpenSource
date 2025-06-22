@@ -15,19 +15,19 @@
            <li class=" text-body ">Click an event slot to view/edit it.</li>
         </ul>
         <div class="flex items-center ms-auto gap-1">
-          <span class="w-3 h-3 rounded-full bg-rafik-secondary"></span>
+          <span class="w-3 h-3 rounded-full bg-topsets-secondary"></span>
           <p class="text-sm "> Meeting</p>
         </div>
         <div class="flex items-center gap-1">
-          <span class="w-3 h-3 rounded-full bg-rafik-alternate"></span>
+          <span class="w-3 h-3 rounded-full bg-topsets-alternate"></span>
           <p class="text-sm "> Assessment</p>
         </div>
         <div class="flex items-center gap-1">
-          <span class="w-3 h-3 rounded-full bg-rafik-teritiary"></span>
+          <span class="w-3 h-3 rounded-full bg-topsets-teritiary"></span>
           <p class="text-sm "> Team Game</p>
         </div>
         <div class="flex items-center gap-1">
-          <span class="w-3 h-3 rounded-full bg-rafik-error"></span>
+          <span class="w-3 h-3 rounded-full bg-topsets-error"></span>
           <p class="text-sm "> Away</p>
         </div>
         <div class="flex items-center gap-1">

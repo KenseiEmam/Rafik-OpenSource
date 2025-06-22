@@ -28,12 +28,12 @@
             </span>
           </h4>
           <div class="flex mt-3 justify-between items-center mt-6">
-            <label class="text-rafik-secondary uppercase font-semibold text-sm">
+            <label class="text-topsets-secondary uppercase font-semibold text-sm">
               {{ t('dashboard.entitlements.purchase.noOfUnits') }}
             </label>
             <input
               type="number"
-              class="rafik-text-input border-rafik-secondary w-32"
+              class="topsets-text-input border-topsets-secondary w-32"
               v-model="packAmounts[0]"
               min="0"
             />
@@ -59,12 +59,12 @@
             </span>
           </h4>
           <div class="flex mt-3 justify-between items-center mt-6">
-            <label class="text-rafik-secondary uppercase font-semibold text-sm">
+            <label class="text-topsets-secondary uppercase font-semibold text-sm">
               {{ t('dashboard.entitlements.purchase.noOfUnits') }}
             </label>
             <input
               type="number"
-              class="rafik-text-input border-rafik-secondary w-32"
+              class="topsets-text-input border-topsets-secondary w-32"
               v-model="packAmounts[1]"
               min="0"
             />
@@ -90,12 +90,12 @@
             </span>
           </h4>
           <div class="flex mt-3 justify-between items-center mt-6">
-            <label class="text-rafik-secondary uppercase font-semibold text-sm">
+            <label class="text-topsets-secondary uppercase font-semibold text-sm">
               {{ t('dashboard.entitlements.purchase.noOfUnits') }}
             </label>
             <input
               type="number"
-              class="rafik-text-input border-rafik-secondary w-32"
+              class="topsets-text-input border-topsets-secondary w-32"
               v-model="packAmounts[2]"
               min="0"
             />
@@ -109,7 +109,7 @@
       <h3 class="header-small">
         {{ t('dashboard.entitlements.purchase.numOfEntitlements') }}
       </h3>
-      <hr class="w-full border border-rafik-sectext dark:border-rafik-darksectext" />
+      <hr class="w-full border border-topsets-sectext dark:border-topsets-darksectext" />
       <h3 class="header-small">
         {{ totalEntitlement }}
       </h3>
@@ -119,7 +119,7 @@
       <h3 class="header-small">
         {{ t('dashboard.entitlements.purchase.totalPrice') }}
       </h3>
-      <hr class="w-full border border-rafik-sectext dark:border-rafik-darksectext" />
+      <hr class="w-full border border-topsets-sectext dark:border-topsets-darksectext" />
       <h3 class="header-small">${{ totalPrice.toFixed(2) }}</h3>
     </div>
 
@@ -136,28 +136,28 @@
             <label class="text-sm font-medium text-rafic-sectext">
               {{ t('dashboard.entitlements.purchase.fullNameOnCard') }}
             </label>
-            <input type="text" class="rafik-text-input w-full my-2" v-model="billingName" />
+            <input type="text" class="topsets-text-input w-full my-2" v-model="billingName" />
           </div>
           <!-- Email -->
           <div>
             <label class="text-sm font-medium text-rafic-sectext">
               {{ t('dashboard.entitlements.purchase.emailAddress') }}
             </label>
-            <input type="email" class="rafik-text-input w-full my-2" v-model="email" />
+            <input type="email" class="topsets-text-input w-full my-2" v-model="email" />
           </div>
           <!-- Phone Number -->
           <div>
             <label class="text-sm font-medium text-rafic-sectext">
               {{ t('dashboard.entitlements.purchase.phoneNumber') }}
             </label>
-            <input type="tel" class="rafik-text-input w-full my-2" v-model="phone" />
+            <input type="tel" class="topsets-text-input w-full my-2" v-model="phone" />
           </div>
           <!-- Country -->
           <div>
             <label class="text-sm font-medium text-rafic-sectext">
               {{ t('dashboard.entitlements.purchase.country') }}
             </label>
-            <select v-model="country" class="rafik-text-input w-full my-2">
+            <select v-model="country" class="topsets-text-input w-full my-2">
               <option :value="''" disabled>
                 {{ t('dashboard.entitlements.purchase.countryPlaceholder') }}
               </option>
@@ -171,28 +171,28 @@
             <label class="text-sm font-medium text-rafic-sectext">
               {{ t('dashboard.entitlements.purchase.state') }}
             </label>
-            <input type="text" class="rafik-text-input w-full my-2" v-model="state" />
+            <input type="text" class="topsets-text-input w-full my-2" v-model="state" />
           </div>
           <!-- City -->
           <div>
             <label class="text-sm font-medium text-rafic-sectext">
               {{ t('dashboard.entitlements.purchase.city') }}
             </label>
-            <input type="text" class="rafik-text-input w-full my-2" v-model="city" />
+            <input type="text" class="topsets-text-input w-full my-2" v-model="city" />
           </div>
           <!-- Zip Code -->
           <div>
             <label class="text-sm font-medium text-rafic-sectext">
               {{ t('dashboard.entitlements.purchase.zipCode') }}
             </label>
-            <input type="text" class="rafik-text-input w-full my-2" v-model="zip" />
+            <input type="text" class="topsets-text-input w-full my-2" v-model="zip" />
           </div>
           <!-- Address Line -->
           <div class="col-span-2">
             <label class="text-sm font-medium text-rafic-sectext">
               {{ t('dashboard.entitlements.purchase.addressLine') }}
             </label>
-            <input type="text" class="rafik-text-input w-full my-2" v-model="address" />
+            <input type="text" class="topsets-text-input w-full my-2" v-model="address" />
           </div>
         </div>
       </div>
@@ -205,20 +205,20 @@
         <label class="text-sm font-medium text-rafic-sectext">
           {{ t('dashboard.entitlements.purchase.cardNumber') }}
         </label>
-        <input type="text" class="rafik-text-input w-full my-2" v-model="cardNumber" />
+        <input type="text" class="topsets-text-input w-full my-2" v-model="cardNumber" />
 
         <div class="grid grid-cols-2 gap-4 mt-4 mb-6">
           <div>
             <label class="text-sm font-medium text-rafic-sectext">
               {{ t('dashboard.entitlements.purchase.expirationDate') }}
             </label>
-            <input type="text" class="rafik-text-input w-full my-2" v-model="expiryDate" />
+            <input type="text" class="topsets-text-input w-full my-2" v-model="expiryDate" />
           </div>
           <div>
             <label class="text-sm font-medium text-rafic-sectext">
               {{ t('dashboard.entitlements.purchase.cvv') }}
             </label>
-            <input type="text" class="rafik-text-input w-full my-2" v-model="cvv" />
+            <input type="text" class="topsets-text-input w-full my-2" v-model="cvv" />
           </div>
         </div>
         <p class="text-body mt-6">

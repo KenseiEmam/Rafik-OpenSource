@@ -6,7 +6,7 @@
         <input
           type="search"
           @input="handleSearch"
-          class="block w-full p-4 text-sm text-rafik-sectext dark:text-rafik-darksectext border rounded-lg bg-rafik-pribg dark:bg-rafik-darkpribg"
+          class="block w-full p-4 text-sm text-topsets-sectext dark:text-topsets-darksectext border rounded-lg bg-topsets-pribg dark:bg-topsets-darkpribg"
           :placeholder="t('dashboard.tabs.exercise.list.typeToSearchExercises')"
           required
         />
@@ -15,21 +15,21 @@
         <button
           @click="updateFilter('All')"
           class="card border 2xl:text-base text-sm min-w-max uppercase"
-          :class="filter === 'All' ? 'border-rafik gradient-bg text-rafik' : 'border'"
+          :class="filter === 'All' ? 'border-topsets gradient-bg text-topsets' : 'border'"
         >
           {{ t('dashboard.tabs.exercise.list.allEx') }}
         </button>
         <button
           @click="updateFilter('private')"
           class="card border 2xl:text-base text-sm min-w-max uppercase"
-          :class="filter === 'private' ? 'border-rafik gradient-bg text-rafik' : 'border'"
+          :class="filter === 'private' ? 'border-topsets gradient-bg text-topsets' : 'border'"
         >
           {{ t('dashboard.tabs.exercise.list.personalEx') }}
         </button>
         <button
           @click="updateFilter('public')"
           class="card border 2xl:text-base text-sm min-w-max uppercase"
-          :class="filter === 'public' ? 'border-rafik gradient-bg text-rafik' : 'border'"
+          :class="filter === 'public' ? 'border-topsets gradient-bg text-topsets' : 'border'"
         >
           {{ t('dashboard.tabs.exercise.list.publicEx') }}
         </button>
@@ -47,10 +47,10 @@
         }"
         v-for="(exercise, index) in props.exercises"
         :key="exercise.id"
-        class="h-full text-rafik-sectext dark:text-rafik-darksectext"
+        class="h-full text-topsets-sectext dark:text-topsets-darksectext"
       >
         <div
-          class="card p-6 w-full hover:border-rafik border border-transparent flex justify-between h-full items-center"
+          class="card p-6 w-full hover:border-topsets border border-transparent flex justify-between h-full items-center"
         >
           <div>
             <h2 class="title-small text-base 2xl:text-xl">
@@ -66,12 +66,12 @@
               {{ exercise.exercise_detail }}
             </p>
             <!-- Prime Movers -->
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
+            <p class="label text-topsets-pritext dark:text-topsets-darkpritext">
               {{ t('dashboard.tabs.exercise.list.primeMovers') }}
             </p>
             <div class="flex gap-2 flex-wrap mb-2">
               <p
-                class="label text-rafik-secondary"
+                class="label text-topsets-secondary"
                 v-for="(mover, i) in exercise.prime ?? []"
                 :key="'prime-' + i"
               >
@@ -80,12 +80,12 @@
             </div>
 
             <!-- Synergists -->
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
+            <p class="label text-topsets-pritext dark:text-topsets-darkpritext">
               {{ t('dashboard.tabs.exercise.list.synergists') }}
             </p>
             <div class="flex gap-2 flex-wrap mb-2">
               <p
-                class="label text-rafik-secondary"
+                class="label text-topsets-secondary"
                 v-for="(synergist, i) in exercise.synergist ?? []"
                 :key="'synergist-' + i"
               >
@@ -94,12 +94,12 @@
             </div>
 
             <!-- Antagonists -->
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
+            <p class="label text-topsets-pritext dark:text-topsets-darkpritext">
               {{ t('dashboard.tabs.exercise.list.antagonists') }}
             </p>
             <div class="flex gap-2 flex-wrap">
               <p
-                class="label text-rafik-secondary"
+                class="label text-topsets-secondary"
                 v-for="(antagonist, i) in exercise.antagonist ?? []"
                 :key="'antagonist-' + i"
               >
@@ -111,7 +111,7 @@
       </router-link>
     </ul>
     <div v-else class="space-y-6 flex flex-col items-center py-12">
-      <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+      <p class="text-topsets-pritext dark:text-topsets-darkpritext">
         {{ t('dashboard.tabs.exercise.list.noExercisesFound') }}
       </p>
     </div>
@@ -121,23 +121,23 @@
       <p class="header-small min-w-max">
         {{ t('dashboard.tabs.exercise.list.pageLabel') }} {{ page }}
       </p>
-      <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
-      <div class="flex text-rafik-sectext dark:text-rafik-darksectext gap-4 px-4">
+      <hr class="border w-full border-topsets-sectext dark:border-topsets-darksectext" />
+      <div class="flex text-topsets-sectext dark:text-topsets-darksectext gap-4 px-4">
         <button
           v-for="p in Math.ceil(props.count / 9)"
           :key="p"
           @click="updatePage(p)"
-          class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
-          :class="{ 'text-rafik-pritext dark:text-rafik-darkpritext': p === page }"
+          class="hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
+          :class="{ 'text-topsets-pritext dark:text-topsets-darkpritext': p === page }"
         >
           {{ p }}
         </button>
       </div>
-      <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
+      <hr class="border w-full border-topsets-sectext dark:border-topsets-darksectext" />
       <button
         v-if="props.page > 1"
         @click="updatePage(pageEdit - 1)"
-        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+        class="px-4 py-2 text-topsets-sectext dark:text-topsets-darksectext min-w-max hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
       >
         {{ t('dashboard.tabs.exercise.list.previousPage') }}
       </button>
@@ -145,7 +145,7 @@
       <button
         v-if="props.page < Math.ceil(props.count / 9)"
         @click="updatePage(pageEdit + 1)"
-        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+        class="px-4 py-2 text-topsets-sectext dark:text-topsets-darksectext min-w-max hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
       >
         {{ t('dashboard.tabs.exercise.list.nextPage') }}
       </button>
@@ -252,9 +252,9 @@ function updatePage(page: number) {
 
 <style scoped>
 .dark .card:hover {
-  background-image: linear-gradient(135deg, #081411 36%, #295f42);
+  background-image: linear-gradient(135deg, #132e3d 36%, #154b5d);
 }
 .card:hover {
-  background-image: linear-gradient(135deg, #f3eeeb 36%, #fff2cb);
+  background-image: linear-gradient(135deg, #ececec 36%, #bfc7cb);
 }
 </style>

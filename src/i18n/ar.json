@@ -4,7 +4,7 @@
     "ar": "العربية"
   },
   "general": {
-    "rafik": "رفيق",
+    "topsets": "رفيق",
     "loading": "جار التحميل...",
     "success": "نجاح!",
     "error": "خطأ!",
@@ -127,7 +127,7 @@
     "alert": "راسلنا!",
     "lookingForTrainer": "هل تبحث عن المدرب المثالي لك؟",
     "installOur": "ثبت تطبيق",
-    "rafik": "تطبيق رفيق",
+    "topsets": "تطبيق رفيق",
     "description": "حسّن تدريباتك ونظامك الغذائي وأدائك الرياضي وأكثر، مع تسعير مبتكر، ومدربين معتمدين، وتواصل يضمن تخصيص برامجك وفق احتياجاتك.",
     "download": {
       "downloadOnThe": "تحميل من",
@@ -135,7 +135,7 @@
       "getItOn": "احصل عليه على",
       "googlePlay": "جوجل بلاي"
     },
-    "errorMessage": "تواصل معنا على admin@rafikapp.ae للحصول على الوصول!"
+    "errorMessage": "تواصل معنا على admin@topsetsapp.ae للحصول على الوصول!"
   },
   "login": {
     "welcomeBack": "مرحبًا بعودتك! حان وقت المتابعة",
@@ -230,7 +230,7 @@
       },
       "accountDeletion": {
         "title": "11. طلب حذف الحساب والبيانات",
-        "content": "إذا كنتم ترغبون في حذف حسابكم والبيانات المرتبطة به، يرجى زيارة <a href=\"https://rafikapp.ae/delete-account\" class=\"text-blue-500 hover:underline\">rafikapp.ae/delete-account</a>. بمجرد تقديم الطلب، سيتم حذف بياناتكم نهائيًا، باستثناء الحالات التي تتطلب الاحتفاظ بها قانونيًا."
+        "content": "إذا كنتم ترغبون في حذف حسابكم والبيانات المرتبطة به، يرجى زيارة <a href=\"https://topsetsapp.ae/delete-account\" class=\"text-blue-500 hover:underline\">topsetsapp.ae/delete-account</a>. بمجرد تقديم الطلب، سيتم حذف بياناتكم نهائيًا، باستثناء الحالات التي تتطلب الاحتفاظ بها قانونيًا."
       }
     }
   },
@@ -604,8 +604,8 @@
           "arabic": "العربية",
           "theme": "الثيم",
           "themeExplanation": "اختر بين الثيم الداكن النعناعي أو الثيم الفاتح الكريمي!",
-          "coolNight": "ليلة باردة",
-          "warmSunshine": "شمس دافئة",
+          "coolNight": "مطفي داكن",
+          "warmSunshine": "معدني فاتح",
           "deleteAccount": "حذف الحساب"
         },
         "rolesAndPerms": {

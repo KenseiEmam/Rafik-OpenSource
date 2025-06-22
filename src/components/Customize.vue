@@ -24,12 +24,12 @@ const { t , locale } = useI18n();
           alt=""
         />
     </div>
-    <div class="border-rafik-secondary card items-center gap-6 w-full min-h-128 flex-1 px-3 py-6 md:py-12 md:px-12 relative items-stretch overflow-hidden" >
+    <div class="border-topsets-secondary card items-center gap-6 w-full min-h-128 flex-1 px-3 py-6 md:py-12 md:px-12 relative items-stretch overflow-hidden" >
       <h1 class="header-medium mb-6 ">
        Customize your Athletic Journey
       </h1>
-      <p class="text-body mb-6">While we primarily prioritize an analytical approach, Rafik does not come show of personalization options that make you feel more at ease .</p>
-        <ul class="list-disc ml-6 text-body space-y-4 text-rafik-pritext dark:text-rafik-darkpritext">
+      <p class="text-body mb-6">While we primarily prioritize an analytical approach, Topsets does not come show of personalization options that make you feel more at ease .</p>
+        <ul class="list-disc ml-6 text-body space-y-4 text-topsets-pritext dark:text-topsets-darkpritext">
         <li>Define your personal goals and preferences, providing your coaches with transparency. </li>
         <li>Set your own macro targets that align well with your dieting preferences.</li>
         <li>Join your favorite strength or performance program from a library curated by us and your coaches.</li>
@@ -40,6 +40,6 @@ const { t , locale } = useI18n();
 </template>
 <style scoped>
 li::marker {
-  color: #d7bd21;
+  color: #3995c5;
 }
 </style>

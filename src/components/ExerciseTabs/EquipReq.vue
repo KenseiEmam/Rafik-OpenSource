@@ -12,10 +12,10 @@
           @click="props.personal && toggleEquipment(rt(item))"
           :disabled="!props.personal"
           :class="{
-            'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext': equipment.includes(
+            'bg-topsets-secondary text-topsets-pritext dark:text-topsets-darkpritext': equipment.includes(
               rt(item)
             ),
-            'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext':
+            'bg-topsets-secbg dark:bg-topsets-darksecbg border border-topsets-sectext dark:border-topsets-darksectext text-topsets-sectext dark:text-topsets-darksectext':
               !equipment.includes(rt(item)),
             'opacity-50 cursor-not-allowed': !props.personal
           }"
@@ -38,10 +38,10 @@
           @click="props.personal && toggleEquipment(rt(item))"
           :disabled="!props.personal"
           :class="{
-            'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext': equipment.includes(
+            'bg-topsets-secondary text-topsets-pritext dark:text-topsets-darkpritext': equipment.includes(
               rt(item)
             ),
-            'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext':
+            'bg-topsets-secbg dark:bg-topsets-darksecbg border border-topsets-sectext dark:border-topsets-darksectext text-topsets-sectext dark:text-topsets-darksectext':
               !equipment.includes(rt(item)),
             'opacity-50 cursor-not-allowed': !props.personal
           }"
@@ -64,10 +64,10 @@
           @click="props.personal && toggleEquipment(rt(item))"
           :disabled="!props.personal"
           :class="{
-            'bg-rafik-secondary text-rafik-pritext dark:text-rafik-darkpritext': equipment.includes(
+            'bg-topsets-secondary text-topsets-pritext dark:text-topsets-darkpritext': equipment.includes(
               rt(item)
             ),
-            'bg-rafik-secbg dark:bg-rafik-darksecbg border border-rafik-sectext dark:border-rafik-darksectext text-rafik-sectext dark:text-rafik-darksectext':
+            'bg-topsets-secbg dark:bg-topsets-darksecbg border border-topsets-sectext dark:border-topsets-darksectext text-topsets-sectext dark:text-topsets-darksectext':
               !equipment.includes(rt(item)),
             'opacity-50 cursor-not-allowed': !props.personal
           }"

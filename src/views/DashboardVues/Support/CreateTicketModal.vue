@@ -10,7 +10,7 @@
         <select
           id="subject"
           v-model="subject"
-          class="rafik-text-input"
+          class="topsets-text-input"
           :class="{ 'border-red-500': errors.subject }"
           required
         >
@@ -45,7 +45,7 @@
           v-else
           id="relatedProgram"
           v-model="relatedTo"
-          class="rafik-text-input"
+          class="topsets-text-input"
           :class="{ 'border-red-500': errors.relatedTo }"
           required
         >
@@ -71,7 +71,7 @@
           v-else
           id="relatedClient"
           v-model="relatedTo"
-          class="rafik-text-input"
+          class="topsets-text-input"
           :class="{ 'border-red-500': errors.relatedTo }"
           required
         >
@@ -93,7 +93,7 @@
         <textarea
           id="message"
           v-model="message"
-          class="rafik-text-input"
+          class="topsets-text-input"
           rows="4"
           :placeholder="t('dashboard.support.create.messagePlaceholder')"
           :class="{ 'border-red-500': errors.message }"
@@ -112,7 +112,7 @@
           type="file"
           multiple
           @change="handleFileUpload"
-          class="rafik-text-input"
+          class="topsets-text-input"
         />
       </div>
 

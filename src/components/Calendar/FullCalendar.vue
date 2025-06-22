@@ -21,19 +21,19 @@ function slotsToEvents(slots: any[]): EventInput[] {
     switch(slot.type)
     {
       case 'meeting':
-      bgc='#CB901C'
+      bgc='#1578ac'
       break;
       case 'assessment':
-      bgc='#2EBE71'
+      bgc='#1ea191'
       break;
       case 'game':
-      bgc='#B02DEF'
+      bgc='#3995c5'
       break;
       case 'away':
       bgc='#FF0000'
       break;
       default:
-        bgc= '#081411'
+        bgc= '#132e3d'
     }
     return  {
     id: String(slot.id),
@@ -130,7 +130,7 @@ watch(calendarEvents, (newEvents) => {
 </script>
 
 <template>
-  <div class="rafik-pribg dark:rafik-darkpribg rounded-lg p-4 h-full">
+  <div class="topsets-pribg dark:topsets-darkpribg rounded-lg p-4 h-full">
     <BookModal
       :visible="templateData.date !== null"
       @close="closeModal"
@@ -143,7 +143,7 @@ watch(calendarEvents, (newEvents) => {
 </template>
 
 <style scoped>
-/* Override FullCalendar styles to use Rafik colors */
+/* Override FullCalendar styles to use Topsets colors */
 
 /* General calendar background and text */
 :deep(.fc) {
@@ -154,44 +154,44 @@ watch(calendarEvents, (newEvents) => {
 
 /* Toolbar title (month/year) */
 :deep(.fc-toolbar-title) {
-  @apply text-rafik dark:text-rafik-darkpritext font-semibold text-lg;
+  @apply text-topsets dark:text-topsets-darkpritext font-semibold text-lg;
 }
 
 /* Buttons */
 :deep(.fc-button) {
-  @apply bg-rafik-alternate text-rafik-darkpritext border-none rounded-md px-3 py-1.5 transition-colors duration-200;
+  @apply bg-topsets-alternate text-topsets-darkpritext border-none rounded-md px-3 py-1.5 transition-colors duration-200;
 }
 :deep(.fc-button:hover),
 :deep(.fc-button:focus) {
-  @apply bg-rafik-alternate text-white outline-none;
+  @apply bg-topsets-alternate text-white outline-none;
 }
 
 /* Day cells */
 :deep(.fc-daygrid-day) {
-  @apply bg-rafik-secbg bg-opacity-50 dark:bg-rafik-darksecbg dark:bg-opacity-50 border border-rafik-sectext dark:border-rafik-darksectext rounded-sm;
+  @apply bg-topsets-secbg bg-opacity-50 dark:bg-topsets-darksecbg dark:bg-opacity-50 border border-topsets-sectext dark:border-topsets-darksectext rounded-sm;
 }
 
 :deep(.fc-daygrid-day-number) {
-  @apply text-rafik-pritext dark:text-rafik-darkpritext font-medium;
+  @apply text-topsets-pritext dark:text-topsets-darkpritext font-medium;
 }
 
 :deep(.fc-day-today) {
-  @apply bg-rafik-secbg dark:bg-rafik-darksecbg !important;
+  @apply bg-topsets-secbg dark:bg-topsets-darksecbg !important;
   color: white !important;
 }
 
 /* Events */
 :deep(.fc-event) {
-  @apply text-rafik-pribg rounded px-2 py-0.5 font-semibold cursor-pointer;
+  @apply text-topsets-pribg rounded px-2 py-0.5 font-semibold cursor-pointer;
   border: none !important;
 }
 /* Column headers */
 :deep(.fc-col-header) {
-  @apply bg-rafik-pribg dark:bg-rafik-darkpribg rounded px-2 py-0.5 font-semibold cursor-pointer;
+  @apply bg-topsets-pribg dark:bg-topsets-darkpribg rounded px-2 py-0.5 font-semibold cursor-pointer;
   border: none !important;
 }
 :deep(.fc-col-header-cell-cushion) {
-  @apply bg-rafik-pribg dark:bg-rafik-darkpribg dark:text-rafik-darkpritext text-rafik-pritext rounded px-2 py-0.5 font-semibold cursor-pointer;
+  @apply bg-topsets-pribg dark:bg-topsets-darkpribg dark:text-topsets-darkpritext text-topsets-pritext rounded px-2 py-0.5 font-semibold cursor-pointer;
   border: none !important;
 }
 </style>

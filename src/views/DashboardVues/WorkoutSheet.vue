@@ -49,8 +49,8 @@ function showSuccess(message: string) {
     position: 'top-right',
     icon: 'success',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -62,8 +62,8 @@ function showError(message: string) {
     icon: 'error',
     confirmButtonColor: '#d33',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 const difficulty = ref(['Too Hard', 'Challenging', 'Just Right', 'Easy', 'Too Easy']);
@@ -100,12 +100,12 @@ onMounted(() => {
         class="h-full flex flex-col gap-2 items-center justify-center text-center w-full text-body"
       >
         <img
-          src="@/assets/Large Icon.png"
+          src="@/assets/ts-trans-dark.png"
           class="w-24 h-24 animate-bounce hidden dark:inline-block"
           alt=""
         />
         <img
-          src="@/assets/Large Icon Light.png"
+          src="@/assets/ts-trans-light.png"
           class="w-24 h-24 animate-bounce dark:hidden"
           alt=""
         />
@@ -119,7 +119,7 @@ onMounted(() => {
     >
       <!-- Upper Header Area -->
       <div
-        class="border group flex flex-col relative gradient-bg border-rafik-alternate rounded-lg overflow-hidden"
+        class="border group flex flex-col relative gradient-bg border-topsets-alternate rounded-lg overflow-hidden"
       >
         <div class="p-8 2xl:p-16 2xl:py-24 space-y-4 relative gap-6 items-stretch grid grid-cols-4">
           <div class="pr-6 space-y-4 col-span-2">
@@ -153,7 +153,7 @@ onMounted(() => {
           <!-- First Group of Columns -->
           <div class="flex flex-col gap-4 justify-between">
             <div class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+              <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                 {{ t('dashboard.workoutSheet.program') }}
               </p>
               <router-link
@@ -161,28 +161,28 @@ onMounted(() => {
                   name: 'program-details',
                   params: { id: clientStore.Client.program_details.program_id }
                 }"
-                class="text-rafik-secondary"
+                class="text-topsets-secondary"
               >
                 {{ workoutStore.Workout.program_name }}
               </router-link>
             </div>
             <div class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+              <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                 {{ t('dashboard.workoutSheet.workoutIteration') }}
               </p>
-              <p class="text-rafik-secondary">{{ workoutStore.Workout.iteration }}</p>
+              <p class="text-topsets-secondary">{{ workoutStore.Workout.iteration }}</p>
             </div>
             <div class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
-              <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+              <p class="text-topsets-pritext dark:text-topsets-darkpritext">
                 {{ t('dashboard.workoutSheet.week') }}
               </p>
-              <p class="text-rafik-secondary">{{ workoutStore.Workout.week_of_program }}</p>
+              <p class="text-topsets-secondary">{{ workoutStore.Workout.week_of_program }}</p>
             </div>
           </div>
           <!-- Second Group of Columns  -->
           <div class="flex flex-col gap-4 justify-between ">
-            <router-link v-if="workoutStore.Workout.next_workout" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn" :to="{name:'workout-sheet', params:{id: workoutStore.Workout.next_workout}}"> {{ t('dashboard.workoutSheet.next') }}</router-link>
-            <router-link v-if="workoutStore.Workout.previous_id" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn" :to="{name:'workout-sheet', params:{id: workoutStore.Workout.previous_id}}"> {{ t('dashboard.workoutSheet.previous') }}</router-link>
+            <router-link v-if="workoutStore.Workout.next_workout" class="text-topsets-pritext dark:text-topsets-darkpritext nav-btn" :to="{name:'workout-sheet', params:{id: workoutStore.Workout.next_workout}}"> {{ t('dashboard.workoutSheet.next') }}</router-link>
+            <router-link v-if="workoutStore.Workout.previous_id" class="text-topsets-pritext dark:text-topsets-darkpritext nav-btn" :to="{name:'workout-sheet', params:{id: workoutStore.Workout.previous_id}}"> {{ t('dashboard.workoutSheet.previous') }}</router-link>
           </div>
         </div>
       </div>
@@ -211,7 +211,7 @@ onMounted(() => {
                 <p v-if="getBestPerf(exercise.id)" class="text-body">
                   Estimated ORM : {{ getBestPerf(exercise.id)?.orm ?? 'N/A' }}
                 </p>
-                <p class="text-rafik"
+                <p class="text-topsets"
                 v-if="
                 (clientStore.Client.profile.best_perf
                   ?.find((ex: BestPerf) => ex.exercise === exercise.id)
@@ -228,7 +228,7 @@ onMounted(() => {
               </div>
               <div v-if="exercise.type !== 'multi-set'" class="grid grid-cols-4">
                 <div class="col-span-3 flex-col flex gap-2">
-                  <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body opacity-0">
+                  <h4 class="text-topsets-pritext dark:text-topsets-darkpritext text-body opacity-0">
                     {{ t('dashboard.workoutSheet.filler') }}
                   </h4>
                   <div
@@ -236,17 +236,17 @@ onMounted(() => {
                     :key="set"
                     class="flex gap-3 w-full items-center"
                   >
-                    <p class="text-rafik-pritext dark:text-rafik-darkpritext min-w-max">
+                    <p class="text-topsets-pritext dark:text-topsets-darkpritext min-w-max">
                       {{ t('dashboard.workoutSheet.setLabel', { number: index + 1 }) }}
                     </p>
-                    <hr class="border border-rafik-sectext dark:border-rafik-darksectext w-full" />
+                    <hr class="border border-topsets-sectext dark:border-topsets-darksectext w-full" />
                   </div>
 
                 </div>
 
                 <div class="grid-cols-2 grid gap-3">
                   <div class="flex-col flex gap-2 items-center min-w-max">
-                    <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
+                    <h4 class="text-topsets-pritext dark:text-topsets-darkpritext text-body">
                       {{ exercise.intensity_mod || 'Load(Kg)' }}
                     </h4>
                     <div
@@ -256,14 +256,14 @@ onMounted(() => {
                       :class="{
                         'text-red-500': set.weight_done < set.intensity,
                         'text-green-500': set.weight_done > set.intensity,
-                        'text-rafik-secondary': set.weight_done == set.intensity
+                        'text-topsets-secondary': set.weight_done == set.intensity
                       }"
                     >
-                      {{ set.weight_done }}<span v-if="set.weight_done != set.intensity" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.intensity }})</span> {{ t('dashboard.workoutSheet.kg') }}
+                      {{ set.weight_done }}<span v-if="set.weight_done != set.intensity" class="text-topsets-sectext dark:text-topsets-darksectext text-xs">({{ set.intensity }})</span> {{ t('dashboard.workoutSheet.kg') }}
                     </div>
                   </div>
                   <div  class="flex-col flex gap-2 items-center min-w-max">
-                    <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
+                    <h4 class="text-topsets-pritext dark:text-topsets-darkpritext text-body">
                       {{ exercise.volume_mod || 'Reps' }}
                     </h4>
                     <div
@@ -273,15 +273,15 @@ onMounted(() => {
                       :class="{
                         'text-red-500': set.reps_done < set.reps,
                         'text-green-500': set.reps_done > set.reps,
-                        'text-rafik-secondary': set.reps_done == set.reps
+                        'text-topsets-secondary': set.reps_done == set.reps
                       }"
                     >
-                      {{ set.reps_done }}<span v-if="set.reps_done != set.reps" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.reps }})</span>
+                      {{ set.reps_done }}<span v-if="set.reps_done != set.reps" class="text-topsets-sectext dark:text-topsets-darksectext text-xs">({{ set.reps }})</span>
                     </div>
                   </div>
                 </div>
               </div>
-              <div v-else class="flex flex-col gap-4 ps-3 border-s border-rafik-sectext dark:border-rafik-darksectext">
+              <div v-else class="flex flex-col gap-4 ps-3 border-s border-topsets-sectext dark:border-topsets-darksectext">
                    <!-- List of embeds -->
                    <li
                     v-for="embed in exercise.embeds"
@@ -295,7 +295,7 @@ onMounted(() => {
                     </h3>
                     <div  class="grid grid-cols-4">
                       <div class="col-span-3 flex-col flex gap-2">
-                        <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body opacity-0">
+                        <h4 class="text-topsets-pritext dark:text-topsets-darkpritext text-body opacity-0">
                           {{ t('dashboard.workoutSheet.filler') }}
                         </h4>
                         <div
@@ -303,17 +303,17 @@ onMounted(() => {
                           :key="set"
                           class="flex gap-3 w-full items-center"
                         >
-                          <p class="text-rafik-pritext dark:text-rafik-darkpritext min-w-max">
+                          <p class="text-topsets-pritext dark:text-topsets-darkpritext min-w-max">
                             {{ t('dashboard.workoutSheet.setLabel', { number: index + 1 }) }}
                           </p>
-                          <hr class="border border-rafik-sectext dark:border-rafik-darksectext w-full" />
+                          <hr class="border border-topsets-sectext dark:border-topsets-darksectext w-full" />
                         </div>
 
                       </div>
 
                       <div class="grid-cols-2 grid gap-3">
                         <div class="flex-col flex gap-2 items-center min-w-max">
-                          <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
+                          <h4 class="text-topsets-pritext dark:text-topsets-darkpritext text-body">
                             {{ t('dashboard.workoutSheet.weight') }}
                           </h4>
                           <div
@@ -323,14 +323,14 @@ onMounted(() => {
                             :class="{
                               'text-red-500': set.weight_done < set.intensity,
                               'text-green-500': set.weight_done > set.intensity,
-                              'text-rafik-secondary': set.weight_done == set.intensity
+                              'text-topsets-secondary': set.weight_done == set.intensity
                             }"
                           >
-                            {{ set.weight_done }}<span v-if="set.weight_done != set.intensity" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.intensity }})</span> {{ t('dashboard.workoutSheet.kg') }}
+                            {{ set.weight_done }}<span v-if="set.weight_done != set.intensity" class="text-topsets-sectext dark:text-topsets-darksectext text-xs">({{ set.intensity }})</span> {{ t('dashboard.workoutSheet.kg') }}
                           </div>
                         </div>
                         <div  class="flex-col flex gap-2 items-center min-w-max">
-                          <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
+                          <h4 class="text-topsets-pritext dark:text-topsets-darkpritext text-body">
                             {{ t('dashboard.workoutSheet.reps') }}
                           </h4>
                           <div
@@ -340,10 +340,10 @@ onMounted(() => {
                             :class="{
                               'text-red-500': set.reps_done < set.reps,
                               'text-green-500': set.reps_done > set.reps,
-                              'text-rafik-secondary': set.reps_done == set.reps
+                              'text-topsets-secondary': set.reps_done == set.reps
                             }"
                           >
-                            {{ set.reps_done }}<span v-if="set.reps_done != set.reps" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.reps }})</span>
+                            {{ set.reps_done }}<span v-if="set.reps_done != set.reps" class="text-topsets-sectext dark:text-topsets-darksectext text-xs">({{ set.reps }})</span>
                           </div>
                         </div>
                       </div>
@@ -365,23 +365,23 @@ onMounted(() => {
           </h3>
           <div class="card p-8 2xl:py-12 flex flex-col items-center gap-6" style="height: 60vh">
             <div class="flex w-full justify-between items-center">
-              <p class="text-rafik font-semibold"> {{ t('dashboard.workoutSheet.enjoyment') }} </p>
+              <p class="text-topsets font-semibold"> {{ t('dashboard.workoutSheet.enjoyment') }} </p>
               <p> {{  workoutStore.Workout.feel?.enjoyment ? enjoyment[workoutStore.Workout.feel?.enjoyment-1] : t('general.na') }}</p>
             </div>
             <div class="flex w-full justify-between items-center">
-              <p class="text-rafik font-semibold"> {{ t('dashboard.workoutSheet.pump') }} </p>
+              <p class="text-topsets font-semibold"> {{ t('dashboard.workoutSheet.pump') }} </p>
               <p> {{ workoutStore.Workout.feel?.pump ? pumps[workoutStore.Workout.feel?.pump-1] : t('general.na') }}</p>
             </div>
             <div class="flex w-full justify-between items-center">
-              <p class="text-rafik font-semibold"> {{ t('dashboard.workoutSheet.exhaust') }} </p>
+              <p class="text-topsets font-semibold"> {{ t('dashboard.workoutSheet.exhaust') }} </p>
               <p> {{ workoutStore.Workout.feel?.exhaustion? exhaust[workoutStore.Workout.feel?.exhaustion-1] : t('general.na') }}</p>
             </div>
             <div class="flex w-full justify-between items-center">
-              <p class="text-rafik font-semibold"> {{ t('dashboard.workoutSheet.difficulty') }} </p>
+              <p class="text-topsets font-semibold"> {{ t('dashboard.workoutSheet.difficulty') }} </p>
               <p> {{ workoutStore.Workout.feel?.difficulty? difficulty[workoutStore.Workout.feel?.difficulty-1] : t('general.na') }}</p>
             </div>
             <div class="spece-y-3 w-full">
-              <p class="text-rafik font-semibold"> {{ t('dashboard.workoutSheet.extras') }} </p>
+              <p class="text-topsets font-semibold"> {{ t('dashboard.workoutSheet.extras') }} </p>
               <p> {{ workoutStore.Workout.feel?.comments || t('dashboard.workoutSheet.featureComingSoon') }}</p>
             </div>
           </div>

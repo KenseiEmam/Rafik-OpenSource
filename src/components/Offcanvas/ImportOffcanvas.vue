@@ -2,7 +2,7 @@
   <!-- Drawer toggle button -->
   <button
     @click="openModal"
-    class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+    class="text-body uppercase text-left hover:text-topsets-pritext dark:hover:text-topsets-darkpritext dark:text-topsets-darkpritext"
   >
     {{ t('dashboard.offCanvas.import.importTemplate') }}
   </button>
@@ -15,7 +15,7 @@
   >
     <div class="flex-1 w-full h-full content" @click="ModalOn = false"></div>
     <div :class="locale === 'ar'?'border-r':'border-l'"
-      class="p-8 py-12  border-rafik-sectext dark:border-rafik-darksectext bg-rafik-pribg dark:bg-rafik-darkpribg w-128 h-full space-y-8 relative"
+      class="p-8 py-12  border-topsets-sectext dark:border-topsets-darksectext bg-topsets-pribg dark:bg-topsets-darkpribg w-128 h-full space-y-8 relative"
     >
       <div>
         <h2 class="subheader-medium uppercase">
@@ -53,7 +53,7 @@
           <input
             type="search"
             @input="handleSearch"
-            class="block w-full p-4 text-sm text-rafik-sectext dark:text-rafik-darksectext border rounded-lg bg-rafik-pribg dark:bg-rafik-darkpribg"
+            class="block w-full p-4 text-sm text-topsets-sectext dark:text-topsets-darksectext border rounded-lg bg-topsets-pribg dark:bg-topsets-darkpribg"
             :placeholder="t('dashboard.offCanvas.import.searchPlaceholder')"
             required
           />
@@ -68,19 +68,19 @@
         <ul class="overflow-auto space-y-4">
           <li v-for="exercise in exerciseStore.AllExercises" :key="exercise.id">
             <div
-              class="card p-6 border-rafik gradient-bg flex justify-between items-center text-left border"
+              class="card p-6 border-topsets gradient-bg flex justify-between items-center text-left border"
             >
               <div>
                 <h2 class="header-small">{{ exercise.exercise_name }}</h2>
                 <h2 class="subheader-small uppercase mb-6">
                   {{ exercise.type }}
                 </h2>
-                <p class="label text-rafik-secondary">
+                <p class="label text-topsets-secondary">
                   {{ t('dashboard.offCanvas.import.primeMovers') }}
                 </p>
                 <div class="flex gap-2 flex-wrap">
                   <p
-                    class="label text-rafik-secondary"
+                    class="label text-topsets-secondary"
                     v-for="(mover, index) in exercise.prime"
                     :key="index"
                   >
@@ -92,7 +92,7 @@
               <!-- Select Button -->
               <button
                 @click="importExercise(exercise)"
-                class="px-4 bg-rafik hover:bg-rafik-secondary py-2 text-white rounded-lg"
+                class="px-4 bg-topsets hover:bg-topsets-secondary py-2 text-white rounded-lg"
               >
                 {{ t('dashboard.offCanvas.import.importButton') }}
               </button>
@@ -164,10 +164,10 @@ function importExercise(exercise: Record<string, any>) {
     showCancelButton: true,
     confirmButtonText: t('dashboard.offCanvas.import.yesOverwrite'),
     cancelButtonText: t('dashboard.offCanvas.import.cancelButtonText'),
-    confirmButtonColor: '#CB901C',
+    confirmButtonColor: '#1578ac',
     cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   }).then((result) => {
     if (result.isConfirmed) {
       emits('importExercise', exercise);

@@ -10,7 +10,7 @@
           <input
             v-model="formData.email"
             name="email"
-            class="rafik-text-input"
+            class="topsets-text-input"
             type="email"
             required
           />
@@ -18,7 +18,7 @@
 
         <div class="form-control">
           <label for="fullname">{{ t('deleteAccount.form.fullNameLabel') }}</label>
-          <input v-model="formData.fullname" name="fullname" class="rafik-text-input" type="text" />
+          <input v-model="formData.fullname" name="fullname" class="topsets-text-input" type="text" />
         </div>
 
         <div class="flex items-center space-x-2">
@@ -74,8 +74,8 @@ function showSuccess(message: any) {
     showConfirmButton: false,
     timer: 1500,
     timerProgressBar: true,
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -85,8 +85,8 @@ function showError(message: any) {
     text: message,
     icon: 'error',
     confirmButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 

@@ -15,7 +15,7 @@
         <select
           id="program"
           v-model="selectedProgram"
-          class="rafik-text-input"
+          class="topsets-text-input"
           required
           :class="{ 'border-red-500': errors.selectedProgram }"
         >
@@ -39,7 +39,7 @@
         <textarea
           id="emails"
           v-model="emailsText"
-          class="rafik-text-input"
+          class="topsets-text-input"
           rows="4"
           :placeholder="t('dashboard.entitlements.modal.emailsPlaceholder')"
           :class="{ 'border-red-500': errors.emailsText }"

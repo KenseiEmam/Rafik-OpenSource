@@ -21,7 +21,7 @@
         <textarea
           v-else
           v-model="editableSafety"
-          class="rafik-text-input whitespace-pre-wrap"
+          class="topsets-text-input whitespace-pre-wrap"
           @blur="saveSafety"
           @keyup.enter="saveSafety"
         ></textarea>
@@ -41,7 +41,7 @@
           v-if="personal"
           v-model="newStep"
           type="text"
-          class="rafik-text-input"
+          class="topsets-text-input"
           :placeholder="t('dashboard.tabs.exercise.tips.addNewStep')"
           @keyup.enter="addStep"
         />
@@ -49,7 +49,7 @@
           <div
             v-for="(step, index) in props.exercise.steps"
             :key="index"
-            class="bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext p-3 w-full rounded-md flex items-center justify-between gap-2"
+            class="bg-topsets-secbg dark:bg-topsets-darksecbg text-topsets-sectext dark:text-topsets-darksectext p-3 w-full rounded-md flex items-center justify-between gap-2"
           >
             <span>{{ index + 1 }}. {{ step }}</span>
             <button
@@ -77,7 +77,7 @@
           v-if="personal"
           v-model="newCue"
           type="text"
-          class="rafik-text-input"
+          class="topsets-text-input"
           :placeholder="t('dashboard.tabs.exercise.tips.addNewCue')"
           @keyup.enter="addCue"
         />
@@ -85,7 +85,7 @@
           <div
             v-for="(cue, index) in props.exercise.cues"
             :key="index"
-            class="bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext px-3 py-1 rounded-md flex items-center gap-2"
+            class="bg-topsets-secbg dark:bg-topsets-darksecbg text-topsets-sectext dark:text-topsets-darksectext px-3 py-1 rounded-md flex items-center gap-2"
           >
             <span>{{ cue }}</span>
             <button v-if="personal" @click="removeCue(cue)" class="text-red-500 hover:text-red-700">

@@ -67,14 +67,14 @@ h5,
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #d7bd21;
+  background-color: #3995c5;
   border-radius: 20px;
   border: 6px solid transparent;
   background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #cb901c;
+  background-color: #1578ac;
 }
 .slide-fade-enter-from,
 .slide-fade-leave-to {
@@ -85,19 +85,19 @@ h5,
 #app {
   height: 100vh;
   overflow-y: auto;
-  background-image: linear-gradient(135deg, #081411 36%, #295f42);
+  background-image: linear-gradient(135deg, #ececec 36%, #bfc7cb);
 }
 .gradient-bg {
-  background-image: linear-gradient(135deg, #f3eeeb 36%, #fff2cb);
+  background-image: linear-gradient(135deg, #ececec 36%, #bfc7cb);
 }
 .gradient-bg.dark {
-  background-image: linear-gradient(135deg, #081411 36%, #295f42);
+  background-image: linear-gradient(135deg, #132e3d 36%, #154b5d);
 }
 .dark .gradient-bg {
-  background-image: linear-gradient(135deg, #081411 36%, #295f42);
+  background-image: linear-gradient(135deg, #132e3d 36%, #154b5d);
 }
 svg {
-  color: #d7bd21;
+  color: #3995c5;
 }
 a {
   text-decoration: none;
@@ -111,7 +111,7 @@ nav a {
   color: var(--vt-c-text-dark-2);
 }
 .dark nav a {
-  color: #9fb9b2;
+  color: #bac3c8;
 }
 
 @layer components {
@@ -119,87 +119,87 @@ nav a {
     @apply flex flex-col gap-1 w-full;
   }
   .card {
-    @apply rounded-lg p-3 bg-rafik-secbg dark:bg-rafik-darksecbg shadow;
+    @apply rounded-lg p-3 bg-topsets-secbg dark:bg-topsets-darksecbg shadow;
   }
-  .rafik-text-input {
-    @apply w-full placeholder:text-rafik-sectext dark:placeholder:text-rafik-darksectext bg-rafik-secbg dark:bg-rafik-darksecbg 2xl:text-lg p-3 outline-none border-rafik-sectext dark:border-rafik-darksectext border rounded-md text-rafik-pritext dark:text-rafik-darkpritext;
+  .topsets-text-input {
+    @apply w-full placeholder:text-topsets-sectext dark:placeholder:text-topsets-darksectext bg-topsets-secbg dark:bg-topsets-darksecbg 2xl:text-lg p-3 outline-none border-topsets-sectext dark:border-topsets-darksectext border rounded-md text-topsets-pritext dark:text-topsets-darkpritext;
   }
   .phone-input {
-    @apply w-full placeholder:text-rafik-sectext dark:placeholder:text-rafik-darksectext bg-rafik-secbg dark:bg-rafik-darksecbg 2xl:text-lg  outline-none border-rafik-sectext dark:border-rafik-darksectext border rounded-md text-rafik-pritext dark:text-rafik-darkpritext shadow-none !important;
+    @apply w-full placeholder:text-topsets-sectext dark:placeholder:text-topsets-darksectext bg-topsets-secbg dark:bg-topsets-darksecbg 2xl:text-lg  outline-none border-topsets-sectext dark:border-topsets-darksectext border rounded-md text-topsets-pritext dark:text-topsets-darkpritext shadow-none !important;
   }
   .title-large {
-    @apply font-black 2xl:text-8xl leading-none text-6xl text-rafik uppercase;
+    @apply font-black 2xl:text-8xl leading-none text-6xl text-topsets uppercase;
   }
   .title-medium {
-    @apply font-black 2xl:text-6xl leading-none text-4xl text-rafik uppercase;
+    @apply font-black 2xl:text-6xl leading-none text-4xl text-topsets uppercase;
   }
   .title-small {
-    @apply font-black 2xl:text-4xl leading-none text-2xl text-rafik uppercase;
+    @apply font-black 2xl:text-4xl leading-none text-2xl text-topsets uppercase;
   }
   .header-large {
-    @apply 2xl:text-5xl text-3xl leading-none text-rafik-pritext dark:text-rafik-darkpritext uppercase;
+    @apply 2xl:text-5xl text-3xl leading-none text-topsets-pritext dark:text-topsets-darkpritext uppercase;
   }
   .header-medium {
-    @apply 2xl:text-3xl text-xl leading-none text-rafik-pritext dark:text-rafik-darkpritext uppercase;
+    @apply 2xl:text-3xl text-xl leading-none text-topsets-pritext dark:text-topsets-darkpritext uppercase;
   }
   .header-small {
-    @apply 2xl:text-xl text-lg leading-none text-rafik-pritext dark:text-rafik-darkpritext uppercase;
+    @apply 2xl:text-xl text-lg leading-none text-topsets-pritext dark:text-topsets-darkpritext uppercase;
   }
   .contentH-large {
-    @apply font-bold text-4xl leading-none text-rafik-secondary uppercase;
+    @apply font-bold text-4xl leading-none text-topsets-secondary uppercase;
   }
   .contentH-medium {
-    @apply font-bold text-2xl leading-none text-rafik-secondary uppercase;
+    @apply font-bold text-2xl leading-none text-topsets-secondary uppercase;
   }
   .contentH-small {
-    @apply font-bold text-lg leading-none text-rafik-secondary uppercase;
+    @apply font-bold text-lg leading-none text-topsets-secondary uppercase;
   }
   .subheader-large {
-    @apply font-semibold text-4xl leading-tight text-rafik-sectext dark:text-rafik-darksectext leading-snug;
+    @apply font-semibold text-4xl leading-tight text-topsets-sectext dark:text-topsets-darksectext leading-snug;
   }
   .subheader-medium {
-    @apply font-semibold text-2xl leading-tight text-rafik-sectext dark:text-rafik-darksectext leading-snug;
+    @apply font-semibold text-2xl leading-tight text-topsets-sectext dark:text-topsets-darksectext leading-snug;
   }
   .subheader-small {
-    @apply font-semibold text-lg leading-tight text-rafik-sectext dark:text-rafik-darksectext leading-snug;
+    @apply font-semibold text-lg leading-tight text-topsets-sectext dark:text-topsets-darksectext leading-snug;
   }
 
   .text-body {
-    @apply font-medium text-sm  2xl:text-base text-rafik-sectext dark:text-rafik-darksectext  leading-6 2xl:leading-8;
+    @apply font-medium text-sm  2xl:text-base text-topsets-sectext dark:text-topsets-darksectext  leading-6 2xl:leading-8;
   }
   .label {
-    @apply font-medium text-sm  text-rafik-teritiary;
+    @apply font-medium text-sm  text-topsets-teritiary;
   }
   .btn-lg {
-    @apply py-4 px-8 font-bold min-w-44 2xl:min-w-48 bg-rafik border-2 border-rafik hover:bg-rafik rounded-lg 2xl:text-xl text-white capitalize text-center hover:shadow-lg shadow-sm hover:opacity-80 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
+    @apply py-4 px-8 font-bold min-w-44 2xl:min-w-48 bg-topsets border-2 border-topsets hover:bg-topsets rounded-lg 2xl:text-xl text-white capitalize text-center hover:shadow-lg shadow-sm hover:opacity-80 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
   }
   .btn-lg-outline {
-    @apply py-4 px-8 font-bold min-w-44 2xl:min-w-48 border-rafik hover:bg-rafik hover:text-white border-2 border-rafik font-bold rounded-lg 2xl:text-xl text-rafik capitalize text-center hover:shadow-lg shadow-sm hover:opacity-80 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
+    @apply py-4 px-8 font-bold min-w-44 2xl:min-w-48 border-topsets hover:bg-topsets hover:text-white border-2 border-topsets font-bold rounded-lg 2xl:text-xl text-topsets capitalize text-center hover:shadow-lg shadow-sm hover:opacity-80 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
   }
   .btn-md {
-    @apply py-3 px-6 font-bold min-w-32 2xl:min-w-36 bg-rafik border-2 border-rafik hover:bg-rafik rounded-lg 2xl:text-base text-white capitalize text-center hover:shadow-lg shadow-sm hover:opacity-80 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
+    @apply py-3 px-6 font-bold min-w-32 2xl:min-w-36 bg-topsets border-2 border-topsets hover:bg-topsets rounded-lg 2xl:text-base text-white capitalize text-center hover:shadow-lg shadow-sm hover:opacity-80 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
   }
   .btn-md-outline {
-    @apply py-3 px-6 font-bold min-w-32 2xl:min-w-36 border-rafik hover:bg-rafik hover:text-white border-2 border-rafik font-bold rounded-lg 2xl:text-base text-rafik capitalize text-center hover:shadow-lg shadow-sm hover:opacity-80 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
+    @apply py-3 px-6 font-bold min-w-32 2xl:min-w-36 border-topsets hover:bg-topsets hover:text-white border-2 border-topsets font-bold rounded-lg 2xl:text-base text-topsets capitalize text-center hover:shadow-lg shadow-sm hover:opacity-80 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
   }
   .btn-sm {
-    @apply py-1.5 px-3 font-bold min-w-20 2xl:min-w-24 bg-rafik border-2 border-rafik hover:bg-rafik rounded-lg 2xl:text-sm text-white capitalize text-center hover:shadow-lg shadow-sm hover:opacity-80 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
+    @apply py-1.5 px-3 font-bold min-w-20 2xl:min-w-24 bg-topsets border-2 border-topsets hover:bg-topsets rounded-lg 2xl:text-sm text-white capitalize text-center hover:shadow-lg shadow-sm hover:opacity-80 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
   }
   .btn-sm-outline {
-    @apply py-1.5 px-3 font-bold min-w-20 2xl:min-w-24 border-rafik hover:bg-rafik hover:text-white border-2 border-rafik font-bold rounded-lg 2xl:text-sm text-rafik capitalize text-center hover:shadow-lg shadow-sm hover:opacity-80 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
+    @apply py-1.5 px-3 font-bold min-w-20 2xl:min-w-24 border-topsets hover:bg-topsets hover:text-white border-2 border-topsets font-bold rounded-lg 2xl:text-sm text-topsets capitalize text-center hover:shadow-lg shadow-sm hover:opacity-80 hover:opacity-90 hover:ring-white ring-1 ease-in-out;
   }
   .nav-btn {
     @apply text-base/5  2xl:text-lg/5 uppercase tracking-wider;
   }
   .custom-select {
-    @apply block w-full p-4 text-sm text-rafik-sectext dark:text-rafik-darksectext 
-           border rounded-lg bg-rafik-pribg dark:bg-rafik-darkpribg focus:ring-rafik 
-           focus:border-rafik outline-none;
+    @apply block w-full p-4 text-sm text-topsets-sectext dark:text-topsets-darksectext 
+           border rounded-lg bg-topsets-pribg dark:bg-topsets-darkpribg focus:ring-topsets 
+           focus:border-topsets outline-none;
   }
 
   /* Dropdown styling */
   .custom-select .vs__dropdown-toggle {
-    @apply border-none bg-rafik-pribg dark:bg-rafik-darkpribg text-rafik-sectext;
+    @apply border-none bg-topsets-pribg dark:bg-topsets-darkpribg text-topsets-sectext;
   }
 
   /* Placeholder text */
@@ -209,23 +209,23 @@ nav a {
 
   /* Dropdown options */
   .custom-select .vs__dropdown-menu {
-    @apply bg-rafik-pribg dark:bg-rafik-darkpribg border border-rafik-sectext
-           dark:border-rafik-darksectext rounded-lg shadow-lg;
+    @apply bg-topsets-pribg dark:bg-topsets-darkpribg border border-topsets-sectext
+           dark:border-topsets-darksectext rounded-lg shadow-lg;
   }
 
   /* Selected value */
   .custom-select .vs__selected {
-    @apply text-rafik text-sm;
+    @apply text-topsets text-sm;
   }
 
   /* Clear button */
   .custom-select .vs__clear {
-    @apply text-rafik hover:text-red-500;
+    @apply text-topsets hover:text-red-500;
   }
 
   /* Searchable input */
   .custom-select .vs__search {
-    @apply text-rafik-sectext dark:text-rafik-darksectext;
+    @apply text-topsets-sectext dark:text-topsets-darksectext;
   }
 }
 
@@ -234,78 +234,78 @@ nav a {
 }
 
 .vti__dropdown:hover {
-  @apply bg-rafik-sectext dark:bg-rafik-darksectext;
+  @apply bg-topsets-sectext dark:bg-topsets-darksectext;
 }
 .vti__dropdown-list {
-  @apply bg-rafik-secbg dark:bg-rafik-darksecbg !important;
+  @apply bg-topsets-secbg dark:bg-topsets-darksecbg !important;
 }
 
 .vti__dropdown-item.highlighted {
-  @apply hover:bg-rafik-sectext dark:hover:bg-rafik-darksectext;
+  @apply hover:bg-topsets-sectext dark:hover:bg-topsets-darksectext;
 }
 .form-control .dp__theme_light {
-  --dp-background-color: #e2d8d1; /* rafik-secbg */
-  --dp-text-color: #190a03; /* rafik-pritext */
-  --dp-hover-color: #cb901c; /* rafik-secondary */
+  --dp-background-color: #bac3c8; /* topsets-secbg */
+  --dp-text-color: #132e3d; /* topsets-pritext */
+  --dp-hover-color: #1578ac; /* topsets-secondary */
   --dp-hover-text-color: #ffffff;
-  --dp-hover-icon-color: #8c644c; /* rafik-sectext */
-  --dp-primary-color: #b02def; /* rafik-tertiary */
-  --dp-primary-disabled-color: #cb901c; /* rafik-secondary */
+  --dp-hover-icon-color: #0f425d; /* topsets-sectext */
+  --dp-primary-color: #b02def; /* topsets-tertiary */
+  --dp-primary-disabled-color: #1578ac; /* topsets-secondary */
   --dp-primary-text-color: #ffffff;
-  --dp-secondary-color: #d7bd21; /* rafik-primary */
-  --dp-border-color: #8c644c; /* rafik-sectext */
-  --dp-menu-border-color: #8c644c;
-  --dp-border-color-hover: #cb901c;
+  --dp-secondary-color: #3995c5; /* topsets-primary */
+  --dp-border-color: #0f425d; /* topsets-sectext */
+  --dp-menu-border-color: #0f425d;
+  --dp-border-color-hover: #1578ac;
   --dp-border-color-focus: #b02def;
   --dp-disabled-color: #a9a9a9;
   --dp-disabled-color-text: #d0d0d0;
-  --dp-scroll-bar-background: #e2d8d1;
-  --dp-scroll-bar-color: #8c644c;
-  --dp-success-color: #295f42; /* rafik-darkeralt */
-  --dp-success-color-disabled: #2ebe71; /* rafik-alternate */
-  --dp-icon-color: #8c644c;
-  --dp-danger-color: #ff5733; /* rafik-streak */
+  --dp-scroll-bar-background: #bac3c8;
+  --dp-scroll-bar-color: #0f425d;
+  --dp-success-color: #154b5d; /* topsets-darkeralt */
+  --dp-success-color-disabled: #1ea191; /* topsets-alternate */
+  --dp-icon-color: #0f425d;
+  --dp-danger-color: #ff5733; /* topsets-streak */
   --dp-marker-color: #ff5733;
-  --dp-tooltip-color: #cb901c;
+  --dp-tooltip-color: #1578ac;
   --dp-highlight-color: rgba(208, 155, 0, 0.2);
-  --dp-range-between-dates-background-color: var(--dp-hover-color, #cb901c);
+  --dp-range-between-dates-background-color: var(--dp-hover-color, #1578ac);
   --dp-range-between-dates-text-color: var(--dp-hover-text-color, #fff);
   --dp-range-between-border-color: var(--dp-hover-color, #fff);
 }
 
 .dark .dp__theme_dark {
-  --dp-background-color: #000503; /* rafik-darksecbg */
-  --dp-text-color: #e8f3ed; /* rafik-darkpritext */
-  --dp-hover-color: #9fb9b2; /* rafik-darksectext */
-  --dp-hover-text-color: #e8f3ed;
-  --dp-hover-icon-color: #d7bd21; /* rafik-primary */
-  --dp-primary-color: #b02def; /* rafik-tertiary */
-  --dp-primary-disabled-color: #9fb9b2; /* rafik-darksectext */
-  --dp-primary-text-color: #e8f3ed;
-  --dp-secondary-color: #d7bd21; /* rafik-primary */
-  --dp-border-color: #9fb9b2; /* rafik-darksectext */
-  --dp-menu-border-color: #9fb9b2;
+  --dp-background-color: #0f425d; /* topsets-darksecbg */
+  --dp-text-color: #ececec; /* topsets-darkpritext */
+  --dp-hover-color: #bac3c8; /* topsets-darksectext */
+  --dp-hover-text-color: #ececec;
+  --dp-hover-icon-color: #3995c5; /* topsets-primary */
+  --dp-primary-color: #b02def; /* topsets-tertiary */
+  --dp-primary-disabled-color: #bac3c8; /* topsets-darksectext */
+  --dp-primary-text-color: #ececec;
+  --dp-secondary-color: #3995c5; /* topsets-primary */
+  --dp-border-color: #bac3c8; /* topsets-darksectext */
+  --dp-menu-border-color: #bac3c8;
   --dp-border-color-hover: #b02def;
-  --dp-border-color-focus: #d7bd21;
+  --dp-border-color-focus: #3995c5;
   --dp-disabled-color: #737373;
   --dp-disabled-color-text: #d0d0d0;
-  --dp-scroll-bar-background: #081411; /* rafik-darkpribg */
-  --dp-scroll-bar-color: #9fb9b2;
-  --dp-success-color: #2ebe71; /* rafik-alternate */
-  --dp-success-color-disabled: #295f42; /* rafik-darkeralt */
-  --dp-icon-color: #d7bd21; /* rafik-primary */
-  --dp-danger-color: #ff5733; /* rafik-streak */
+  --dp-scroll-bar-background: #132e3d; /* topsets-darkpribg */
+  --dp-scroll-bar-color: #bac3c8;
+  --dp-success-color: #1ea191; /* topsets-alternate */
+  --dp-success-color-disabled: #154b5d; /* topsets-darkeralt */
+  --dp-icon-color: #3995c5; /* topsets-primary */
+  --dp-danger-color: #ff5733; /* topsets-streak */
   --dp-marker-color: #ff5733;
-  --dp-tooltip-color: #9fb9b2;
+  --dp-tooltip-color: #bac3c8;
   --dp-highlight-color: rgba(208, 155, 0, 0.2);
-  --dp-range-between-dates-background-color: var(--dp-hover-color, #9fb9b2);
-  --dp-range-between-dates-text-color: var(--dp-hover-text-color, #e8f3ed);
-  --dp-range-between-border-color: var(--dp-hover-color, #e8f3ed);
+  --dp-range-between-dates-background-color: var(--dp-hover-color, #bac3c8);
+  --dp-range-between-dates-text-color: var(--dp-hover-text-color, #ececec);
+  --dp-range-between-border-color: var(--dp-hover-color, #ececec);
 }
 
 @media (hover: hover) {
   a:hover {
-    background-color: hsla(51, 100%, 37%, 0.2);
+    background-color: hsla(193, 100%, 37%, 0.2);
     cursor: pointer;
   }
 }

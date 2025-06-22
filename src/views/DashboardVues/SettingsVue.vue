@@ -12,12 +12,12 @@
 
       <!-- Tabs -->
       <div
-        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-rafik-sectext dark:border-rafik-darksectext"
+        class="flex gap-8 2xl:gap-16 items-center pb-2 border-b border-topsets-sectext dark:border-topsets-darksectext"
       >
         <!-- General Settings Tab -->
         <button
           :class="
-            activeTab === 'General Setting' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''
+            activeTab === 'General Setting' ? 'text-topsets-pritext dark:text-topsets-darkpritext' : ''
           "
           class="nav-btn"
           @click="setActiveTab('General Setting')"
@@ -29,7 +29,7 @@
         <button
           v-if="userStore.userProfile.roles.includes('Trainer')"
           :class="
-            activeTab === 'Trainer Settings' ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''
+            activeTab === 'Trainer Settings' ? 'text-topsets-pritext dark:text-topsets-darkpritext' : ''
           "
           class="nav-btn uppercase"
           @click="setActiveTab('Trainer Settings')"
@@ -42,7 +42,7 @@
           v-if="userStore.userProfile.roles.includes('Administrator') || userStore.userProfile.roles.includes('Organization Admin')"
           :class="
             activeTab === 'Roles and Permissions'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext'
               : ''
           "
           class="nav-btn uppercase"
@@ -55,7 +55,7 @@
         <button
           :class="
             activeTab === 'Notifications'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext'
               : ''
           "
           class="nav-btn uppercase"
@@ -69,7 +69,7 @@
           v-if="userStore.userProfile.roles.includes('Organization Admin')"
           :class="
             activeTab === 'Organization Settings'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext'
               : ''
           "
           class="nav-btn uppercase"
@@ -119,12 +119,12 @@
             >
               <!-- Example spinner images (adjust paths as needed) -->
               <img
-                src="@/assets/Large Icon.png"
+                src="@/assets/ts-trans-dark.png"
                 class="w-24 h-24 animate-bounce hidden dark:inline-block"
                 alt="spinner"
               />
               <img
-                src="@/assets/Large Icon Light.png"
+                src="@/assets/ts-trans-light.png"
                 class="w-24 h-24 animate-bounce dark:hidden"
                 alt="spinner"
               />
@@ -166,7 +166,7 @@
                   </label>
                   <input
                     v-model="orgData.name"
-                    class="rafik-text-input w-full"
+                    class="topsets-text-input w-full"
                     type="text"
                     :placeholder="t('dashboard.settings.orgNamePlaceholder')"
                   />
@@ -180,7 +180,7 @@
                   <textarea
                     v-model="orgData.description"
                     rows="2"
-                    class="rafik-text-input w-full whitespace-pre-wrap"
+                    class="topsets-text-input w-full whitespace-pre-wrap"
                     :placeholder="t('dashboard.settings.orgDescriptionPlaceholder')"
                   ></textarea>
                 </div>
@@ -193,7 +193,7 @@
                   <label class="block text-sm font-medium">
                     {{ t('dashboard.settings.orgCountryLabel') }}
                   </label>
-                  <select v-model="orgData.country" class="rafik-text-input w-full">
+                  <select v-model="orgData.country" class="topsets-text-input w-full">
                     <option :value="''" disabled>
                       {{ t('dashboard.settings.orgCountryPlaceholder') }}
                     </option>
@@ -210,7 +210,7 @@
                   </label>
                   <textarea
                     v-model="orgData.address"
-                    class="rafik-text-input w-full"
+                    class="topsets-text-input w-full"
                     type="text"
                     rows="3"
                     :placeholder="t('dashboard.settings.orgAddressPlaceholder')"
@@ -224,7 +224,7 @@
                   </label>
                   <textarea
                     v-model="domainString"
-                    class="rafik-text-input w-full"
+                    class="topsets-text-input w-full"
                     rows="7"
                     :placeholder="t('dashboard.settings.orgDomainsPlaceholder')"
                   ></textarea>
@@ -245,11 +245,11 @@
                       class="hidden"
                     />
                     <div
-                      class="w-16 h-8 flex items-center border-rafik-pritext dark:border-rafik-darkpritext border-2 rounded-full transition-all"
-                      :class="{ 'bg-rafik': orgData.trainer_assign }"
+                      class="w-16 h-8 flex items-center border-topsets-pritext dark:border-topsets-darkpritext border-2 rounded-full transition-all"
+                      :class="{ 'bg-topsets': orgData.trainer_assign }"
                     >
                       <div
-                        class="w-8 h-8 bg-rafik-pritext dark:bg-rafik-darkpritext rounded-full shadow-md transform transition-transform"
+                        class="w-8 h-8 bg-topsets-pritext dark:bg-topsets-darkpritext rounded-full shadow-md transform transition-transform"
                         :class="
                           orgData.trainer_assign
                             ? locale === 'ar'
@@ -350,8 +350,8 @@ function showSuccess(message: string) {
     toast: true,
     position: 'top-right',
     icon: 'success',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
@@ -361,8 +361,8 @@ function showError(message: string) {
     text: message,
     icon: 'error',
     confirmButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
+    background: '#132e3d',
+    color: '#ececec'
   });
 }
 
