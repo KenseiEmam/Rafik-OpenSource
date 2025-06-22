@@ -614,7 +614,10 @@
           "selectUser": "اختر المستخدم لعرض أدواره:",
           "searchPlaceholder": "ابحث عن مستخدم...",
           "rolesUpdated": "تم تحديث الأدوار بنجاح",
-          "errorUpdatingRoles": "خطأ في تحديث الأدوار: "
+          "errorUpdatingRoles": "خطأ في تحديث الأدوار: ",
+          "errorFetchingUsers": "خطأ في جلب المستخدمين",
+          "cannotRemoveOwnAdminRole": "لا يمكنك إزالة دور المدير الخاص بك",
+          "cannotRemoveOwnOrgAdminRole": "لا يمكنك إزالة دور مدير المؤسسة الخاص بك"
         },
         "trainer": {
           "seatsAvailable": "المقاعد المتاحة",

@@ -12,7 +12,7 @@
       <h2 class="header-small" v-else>
         {{ t('dashboard.tabs.settings.rolesAndPerms.noUserSelected') }}
       </h2>
-      <div :class="locale === 'ar'?'me-auto':'ms-auto'" class="w-64">
+      <div :class="locale === 'ar' ? 'me-auto' : 'ms-auto'" class="w-64">
         <label
           class="block text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext mb-1"
         >
@@ -49,38 +49,42 @@
     </div>
 
     <div class="flex flex-col gap-8">
-      <div
-        v-for="role in settingsStore.roles"
-        :key="role.id"
-        class="card p-8 flex justify-between items-center"
-      >
+      <div v-for="role in roles" :key="role.id" class="card p-8 flex justify-between items-center">
         <div>
           <h3 class="header-small">{{ role.role_name }}</h3>
           <p class="text-body">{{ role.role_description }}</p>
         </div>
         <div v-if="selectedUser && selectedUser.roles" class="w-32 2xl:w-64">
           <div class="flex items-center gap-4">
-            <label class="flex items-center space-x-2 cursor-pointer" @click="toggleRole(role)">
+            <label
+              class="flex items-center space-x-2 cursor-pointer"
+              @click="toggleRole(role)"
+              :class="{ 'opacity-50': isRoleToggleDisabled(role) }"
+            >
               <input
                 type="checkbox"
                 class="hidden"
                 :checked="selectedUser.roles.includes(role.role_name)"
+                :disabled="isRoleToggleDisabled(role)"
                 readonly
               />
               <div
-    class="w-16 h-8 flex items-center border-rafik-sectext dark:border-rafik-darksectext border-2 rounded-full transition-all"
-    :class="selectedUser.roles.includes(role.role_name)
-      ? 'bg-rafik'
-      : 'bg-rafik-secbg dark:bg-rafik-darsecbg'"
-  >
-    <div
-      class="w-8 h-8 bg-rafik-sectext dark:bg-rafik-darksectext flex items-center justify-center rounded-full shadow-md transform transition-transform duration-300"
-      :class="{
-        'translate-x-0': !selectedUser.roles.includes(role.role_name),
-        [locale === 'ar' ? '-translate-x-8' : 'translate-x-8']: selectedUser.roles.includes(role.role_name)
-      }"
-    ></div>
-  </div>
+                class="w-16 h-8 flex items-center border-rafik-sectext dark:border-rafik-darksectext border-2 rounded-full transition-all"
+                :class="
+                  selectedUser.roles.includes(role.role_name)
+                    ? 'bg-rafik'
+                    : 'bg-rafik-secbg dark:bg-rafik-darsecbg'
+                "
+              >
+                <div
+                  class="w-8 h-8 bg-rafik-sectext dark:bg-rafik-darksectext flex items-center justify-center rounded-full shadow-md transform transition-transform duration-300"
+                  :class="{
+                    'translate-x-0': !selectedUser.roles.includes(role.role_name),
+                    [locale === 'ar' ? '-translate-x-8' : 'translate-x-8']:
+                      selectedUser.roles.includes(role.role_name)
+                  }"
+                ></div>
+              </div>
             </label>
           </div>
         </div>
@@ -90,18 +94,59 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, computed } from 'vue';
 import { useSettingsStore } from '@/stores/settingstores';
 import { supabase } from '@/lib/supabaseClient';
 import Swal from 'sweetalert2';
 import { useI18n } from 'vue-i18n';
-const { t , locale } = useI18n();
+import { useUserStore } from '@/stores/user';
+const { t, locale } = useI18n();
 // Search query and dropdown visibility
 const searchQuery = ref('');
 const dropdownVisible = ref(false);
 const userOptions = ref<any[]>([]);
 const selectedUser = ref<any>(null);
 const settingsStore = useSettingsStore();
+const userStore = useUserStore();
+
+const roles = computed(() => {
+  if (userStore.userProfile?.roles?.includes('Administrator')) {
+    return settingsStore.roles;
+  }
+  if (userStore.userProfile?.roles?.includes('Organization Admin')) {
+    return settingsStore.roles?.filter((role: any) => role.role_name.startsWith('Organization'));
+  }
+  return [];
+});
+
+// Check if a role toggle should be disabled for the current user
+const isRoleToggleDisabled = computed(() => (role: any) => {
+  if (!selectedUser.value || !userStore.userProfile) return false;
+
+  // Check if the selected user is the current user
+  const isCurrentUser = selectedUser.value.id === userStore.userProfile.id;
+
+  if (!isCurrentUser) return false;
+
+  // Administrator cannot remove their own Administrator role
+  if (
+    role.role_name === 'Administrator' &&
+    userStore.userProfile.roles?.includes('Administrator')
+  ) {
+    return true;
+  }
+
+  // Organization Admin cannot remove their own Organization Admin role
+  if (
+    role.role_name === 'Organization Admin' &&
+    userStore.userProfile.roles?.includes('Organization Admin')
+  ) {
+    return true;
+  }
+
+  return false;
+});
+
 function showSuccess(message: string) {
   Swal.fire({
     title: t('general.success'),
@@ -137,16 +182,46 @@ async function fetchFilteredUsers() {
     return;
   }
 
-  const { data, error } = await supabase
-    .from('users')
-    .select('id, first_name, last_name, email, roles')
-    .or(
-      `first_name.ilike.%${searchQuery.value}%,last_name.ilike.%${searchQuery.value}%,email.ilike.%${searchQuery.value}%`
-    )
-    .limit(10);
+  const isOrgAdmin = userStore.userProfile?.roles?.includes('Organization Admin');
+  const isFullAdmin = userStore.userProfile?.roles?.includes('Administrator');
+
+  if (!isFullAdmin && !isOrgAdmin) {
+    showError(t('dashboard.tabs.settings.rolesAndPerms.errorFetchingUsers'));
+    console.log('You are not authorized to view this page');
+    userOptions.value = [];
+    return;
+  }
+
+  const orgError = isOrgAdmin ? !userStore.userProfile?.organization : false;
+  if (orgError) {
+    showError(t('dashboard.tabs.settings.rolesAndPerms.errorFetchingUsers'));
+    console.log('No organization id found');
+    userOptions.value = [];
+    return;
+  }
+
+  const query = isFullAdmin
+    ? supabase
+        .from('users')
+        .select('id, first_name, last_name, email, roles')
+        .or(
+          `first_name.ilike.%${searchQuery.value}%,last_name.ilike.%${searchQuery.value}%,email.ilike.%${searchQuery.value}%`
+        )
+        .limit(10)
+    : supabase
+        .from('users')
+        .select('id, first_name, last_name, email, roles')
+        .eq('organization', userStore.userProfile!.organization!)
+        .or(
+          `first_name.ilike.%${searchQuery.value}%,last_name.ilike.%${searchQuery.value}%,email.ilike.%${searchQuery.value}%`
+        )
+        .limit(10);
+
+  const { data, error } = await query;
 
   if (error) {
     console.error('Error fetching users:', error.message);
+    userOptions.value = [];
     return;
   }
   userOptions.value = data;
@@ -177,6 +252,23 @@ function handleBlur() {
 
 // Toggle a role for the selected user and update the database accordingly
 async function toggleRole(role: any) {
+  if (isRoleToggleDisabled.value(role)) {
+    if (
+      role.role_name === 'Administrator' &&
+      userStore.userProfile?.roles?.includes('Administrator')
+    ) {
+      showError(t('dashboard.tabs.settings.rolesAndPerms.cannotRemoveOwnAdminRole'));
+    }
+
+    if (
+      role.role_name === 'Organization Admin' &&
+      userStore.userProfile?.roles?.includes('Organization Admin')
+    ) {
+      showError(t('dashboard.tabs.settings.rolesAndPerms.cannotRemoveOwnOrgAdminRole'));
+    }
+    showError(t('dashboard.tabs.settings.rolesAndPerms.cannotRemoveOwnAdminRole'));
+    return;
+  }
   if (!selectedUser.value) return;
 
   // Copy current roles (or initialize if null)
