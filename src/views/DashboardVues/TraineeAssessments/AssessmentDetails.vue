@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, onUnmounted } from 'vue';
+import { ref, onMounted, watch, onUnmounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useAssessmentStore } from '@/stores/assessmentstores';
 import Swal from 'sweetalert2';
@@ -31,7 +31,64 @@ function setActiveTab(tab: string) {
 function refreshComponent() {
   router.go(0); // This reloads the current route
 }
-
+const isWithin30Min = computed(() => {
+  if (!slotStore.SlotItem?.time_start) return false;
+  const now = new Date();
+  const start = new Date(slotStore.SlotItem.time_start);
+  const diffInMinutes = Math.abs((now.getTime() - start.getTime()) / 60000);
+  return diffInMinutes <= 30;
+});
+function checkStart(){
+   Swal.fire({
+    title: 'Starting Assessment',
+    text: 'This begins logging, however this also begins the timer and assessment time is logged.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Start anyway',
+    confirmButtonColor: '#CB901C',
+    cancelButtonColor: '#d33',
+    background: '#081411',
+    color: '#E8F3ED'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      activateAssessment()
+    }
+  });
+}
+function checkEdit(){
+   Swal.fire({
+    title: 'Update Performance ',
+    text: 'This log your results and changes performance.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Complete ',
+    confirmButtonColor: '#CB901C',
+    cancelButtonColor: '#d33',
+    background: '#081411',
+    color: '#E8F3ED'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      updateAssessment()
+    }
+  });
+}
+function checkEnd(){
+   Swal.fire({
+    title: 'Completing Assessment',
+    text: 'This log your results and cement the time and performance.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Complete ',
+    confirmButtonColor: '#CB901C',
+    cancelButtonColor: '#d33',
+    background: '#081411',
+    color: '#E8F3ED'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      EndAssessment()
+    }
+  });
+}
 
 function calculateAge(dob: Date) {
   if (!dob) return null;
@@ -97,7 +154,56 @@ function formatTimeElapsed(seconds: number) {
   return `${hrs}:${mins}:${secs}`;
 }
 function getUserID(){
- return  localStorage.getItem("UserID")|| '0'
+  const id = localStorage.getItem("UserID")
+
+ return  id|| '0'
+}
+function checkAssessor() {
+  const currentUserId = parseInt(getUserID());
+  const assessors = assessmentStore.AssessmentItem?.assessors || [];
+
+  return assessors.some((e: any) => parseInt(e) === currentUserId);
+}
+function activateAssessment(){
+   const assessmentId = route.params.id as string;
+   const now = new Date
+  if (assessmentId)
+{
+
+  assessmentStore.updateAssessment(parseInt(assessmentId),{status:'active', started:now.toISOString(), drills:assessmentStore.AssessmentItem?.drills}).then(()=>{
+    fetchWorkout()
+  })
+
+}
+}
+function updateAssessment(){
+   const assessmentId = route.params.id as string;
+   const now = new Date
+  if (assessmentId)
+{
+
+  assessmentStore.updateAssessment(parseInt(assessmentId),{drills:assessmentStore.AssessmentItem?.drills}).then(()=>{
+    fetchWorkout()
+    editing.value =false
+  })
+
+}
+}
+function cancelUpdate(){
+
+    fetchWorkout()
+    editing.value =false
+
+}
+function EndAssessment(){
+   const assessmentId = route.params.id as string;
+   const now = new Date
+   console.log(assessmentStore.AssessmentItem?.drills)
+  if (assessmentId){
+  assessmentStore.updateAssessment(parseInt(assessmentId),{status:'complete', ended:now.toISOString(), drills:assessmentStore.AssessmentItem?.drills}).then(()=>{
+    fetchWorkout()
+  })
+}
 }
 // function getBestPerf(exerciseId:any) {
 
@@ -145,6 +251,7 @@ function showError(message: string) {
     color: '#E8F3ED'
   });
 }
+const newScores = ref(Object)
 const difficulty = ref(['Too Hard', 'Challenging', 'Just Right', 'Easy', 'Too Easy']);
 const pumps = ref(['Not there', 'Temporary', 'Alright', 'Pumped', 'Insane pump']);
 const enjoyment = ref(['Hated', 'Poor', 'Ok', 'Nice', 'Loved']);
@@ -284,22 +391,28 @@ onMounted(() => {
               <p class="text-rafik-secondary">{{ assessmentStore.AssessmentItem.status }}</p>
             </div>
           <!-- Scheduled Start -->
-          <div class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
+          <div class="uppercase flex  gap-2 text-sm 2xl:text-base">
             <p class="text-rafik-pritext dark:text-rafik-darkpritext">
               Scheduled Start:
             </p>
-            <p class="text-rafik-secondary">
+            <p class="ms-auto text-rafik-secondary">
               {{ new Date(slotStore.SlotItem.time_start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
+            </p>
+            <p v-if="assessmentStore.AssessmentItem.started" class="text-xs my-auto">
+              (Actual {{ new Date(assessmentStore.AssessmentItem.started).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }})
             </p>
           </div>
 
           <!-- Estimated End -->
-          <div class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
+          <div class="uppercase flex  gap-3 text-sm 2xl:text-base">
             <p class="text-rafik-pritext dark:text-rafik-darkpritext">
               Estimated End:
             </p>
-            <p class="text-rafik-secondary">
+            <p class="ms-auto text-rafik-secondary">
               {{ new Date(slotStore.SlotItem.time_end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
+            </p>
+            <p v-if="assessmentStore.AssessmentItem.ended" class="text-xs my-auto">
+              (Actual {{ new Date(assessmentStore.AssessmentItem.ended).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }})
             </p>
           </div>
             <div v-if="assessmentStore.AssessmentItem.status == 'active'" class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
@@ -310,15 +423,31 @@ onMounted(() => {
             </div>
           </div>
           <!-- Second Group of Columns  -->
-          <div class="flex flex-col gap-4 justify-center ">
-            <button v-if="assessmentStore.AssessmentItem.assessors?.includes(getUserID()) && assessmentStore.AssessmentItem.status == 'scheduled'" class="text-rafik-secondary dark:text-rafik nav-btn">Start Assessment </button>
-            <button v-if="assessmentStore.AssessmentItem.assessors?.includes(getUserID()) && assessmentStore.AssessmentItem.status == 'active'" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">End Assessment </button>
+                    <div class="flex flex-col gap-4 justify-center ">
+                      <!-- Start Assessment or Missed -->
+          <div v-if="checkAssessor() && assessmentStore.AssessmentItem.status == 'scheduled'">
+            <button
+              @click="checkStart"
+              v-if="isWithin30Min"
+              class="text-rafik-secondary dark:text-rafik nav-btn"
+            >
+              Start Assessment
+            </button>
+            <span
+              v-else
+              class="text-red-500 dark:text-red-400 uppercase text-sm  text-center font-semibold"
+            >
+              Cannot start assessment before or after 30 minutes of scheduled time
+            </span>
+          </div>
+
+            <button @click="checkEnd" v-if="checkAssessor() && assessmentStore.AssessmentItem.status == 'active'" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">End Assessment </button>
             <button v-if=" assessmentStore.AssessmentItem.status == 'scheduled'" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">Change Template </button>
-            <button v-if="assessmentStore.AssessmentItem.assessors?.includes(getUserID()) && assessmentStore.AssessmentItem.status == 'completed'" @click="editing = true" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">Edit Assessment </button>
-            <button v-if="editing" class="text-rafik nav-btn">Save Edits </button>
-            <button v-if="editing" class="text-red-500 dark:text-red-400 nav-btn">Cancel Edits </button>
-            <button v-if="assessmentStore.AssessmentItem.status == 'completed'" class="text-yellow-500 dark:text-yellow-400 nav-btn">Dispute Assessment </button>
-            <button v-if="!editing" class="text-red-500 dark:text-red-400 nav-btn">Cancel Assessment </button>
+            <button v-if="checkAssessor() && assessmentStore.AssessmentItem.status == 'complete' && !editing" @click="editing = true" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">Edit Assessment </button>
+            <button @click="checkEdit" v-if="editing" class="text-rafik nav-btn">Save Edits </button>
+            <button @click="cancelUpdate" v-if="editing" class="text-red-500 dark:text-red-400 nav-btn">Cancel Edits </button>
+            <button v-if="assessmentStore.AssessmentItem.status == 'complete' && !editing" class="text-yellow-500 dark:text-yellow-400 nav-btn">Dispute Assessment </button>
+            <button v-if="!editing && assessmentStore.AssessmentItem.status == 'scheduled'" class="text-red-500 dark:text-red-400 nav-btn">Cancel Assessment </button>
             <!-- <button class="text-red-500 dark:text-red-400 nav-btn">Delete Assessment </button> -->
           </div>
         </div>
@@ -392,11 +521,10 @@ onMounted(() => {
           <div class="mt-6">
             <p class="dark:text-rafik-darkpritext text-rafik-pritext text-sm md:text-base">{{ templateStore.TemplateItem?.etc }} minutes to complete.</p>
           </div>
-          <div class="mt-6">
-            <p class="dark:text-rafik-darkpritext text-rafik-pritext text-sm md:text-base">({{ templateStore.TemplateItem?.drills?.length }}) drills in total.</p>
-          </div>
+
         </div>
-        <div class="p-6 card">
+        <div class="flex gap-2 w-full">
+          <div class="p-6 card flex-1">
           <h3 class="contentH-small ">Assessors: </h3>
           <div class="space-y-3 divide-y divide-rafik-sectext dark:divide-rafik-darksectext">
               <template v-if="assessmentStore.AssessmentItem.assessors && assessmentStore.AssessmentItem.assessors.length > 0">
@@ -435,7 +563,7 @@ onMounted(() => {
               </span>
             </div>
         </div>
-        <div class="p-6 card">
+        <div class="p-6 card flex-1">
           <h3 class="contentH-small ">Created By: </h3>
           <div class="space-y-3 divide-y divide-rafik-sectext dark:divide-rafik-darksectext">
               <template v-if="templateStore.TemplateItem?.created_by_user ">
@@ -473,12 +601,34 @@ onMounted(() => {
               </span>
             </div>
         </div>
+        </div>
+
+<div v-if="assessmentStore.AssessmentItem.overall_performance" class="p-6 card">
+          <h3 class="contentH-small ">Results</h3>
+          <p class="text-body">
+            Below are the results for drill performances:
+          </p>
+          <div v-for="perf in assessmentStore.AssessmentItem.overall_performance " class="p-6 gradient-bg card my-2 flex gap-6 items-center justify-between">
+            <div >
+              <h4 class="header-small">{{ assessmentStore.AssessmentItem.drills?.find(d => d.id == perf.exercise).exercise_name }}</h4>
+               <h4 class="subheader-small">{{ assessmentStore.AssessmentItem.drills?.find(d => d.id == perf.exercise).type }}</h4>
+
+
+            </div>
+            <div>
+              <p>Best Round: {{ perf.orm }}</p>
+              <p>Trend: +{{ perf.orm }}</p>
+              <p>Pass: Yes</p>
+            </div>
+          </div>
+
+        </div>
       </div>
 
       <!-- Drills Tab -->
       <ul v-else-if="activeTab === 'Drills'" class="flex gap-3 flex-col w-full pb-16 overflow-y-auto" style="max-height: 60vh">
             <li
-              v-for="exercise in templateStore.TemplateItem?.drills"
+              v-for="exercise in assessmentStore.AssessmentItem.drills"
               :key="exercise.id"
               class="card p-8 2xl:py-12"
             >
@@ -522,11 +672,11 @@ onMounted(() => {
                        Round {{  index + 1 }}
                     </p>
                     <hr class="border border-rafik-sectext dark:border-rafik-darksectext w-full" />
-                    <p v-if="(assessmentStore.AssessmentItem.status === 'active' || editing) && assessmentStore.AssessmentItem.assessors?.includes(getUserID())  " >{{ exercise.primary_variable || 'Load(Kg)' }}</p>
+                    <p v-if="(assessmentStore.AssessmentItem.status === 'active' || editing) && checkAssessor()  " >{{ exercise.primary_variable || 'Load(Kg)' }}</p>
                      <div
                     >
 
-                    <input v-model="set.primary_done" v-if="(assessmentStore.AssessmentItem.status === 'active' || editing) && assessmentStore.AssessmentItem.assessors?.includes(getUserID())  "  type="number" class="text-rafik-pritext dark:text-rafik-darkpritext py-2 rafik-text-input" >
+                    <input v-model="set.primary_done" v-if="(assessmentStore.AssessmentItem.status === 'active' || editing) && checkAssessor()  "  type="number" class="text-rafik-pritext dark:text-rafik-darkpritext py-2 rafik-text-input" >
                     <p v-else class="min-w-max">{{ set.primary_done }} {{ t('dashboard.workoutSheet.kg') }}</p>
 
                     </div>
