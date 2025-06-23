@@ -296,6 +296,37 @@ async function getAssessment(id: number) {
       console.error('Error fetching template data:', error);
     }
   }
+    async function updateAssessment(id: number, updates: Partial<Assessment>) {
+    try {
+      const { data, error } = await supabase
+        .from('assessment')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      showSuccess('Assessment updated successfully.');
+
+      // Update the local AssessmentItem if it's the same ID
+      if (AssessmentItem.value?.id === id) {
+        AssessmentItem.value = { ...AssessmentItem.value, ...updates };
+      }
+
+      // Update in AllAssessments if it exists there
+      const index = AllAssessments.value.findIndex(a => a.id === id);
+      if (index !== -1) {
+        AllAssessments.value[index] = { ...AllAssessments.value[index], ...updates };
+      }
+
+      return data;
+    } catch (error: any) {
+      console.error(error);
+      showError(`Failed to update assessment: ${error.message || 'Unknown error'}`);
+      return null;
+    }
+  }
 
   return {
     AssessmentItem,
@@ -305,6 +336,7 @@ async function getAssessment(id: number) {
     templateData,
     getAssessment,
     getAllAssessments,
+    updateAssessment,
     // DO NOT USE THESE FUNCTIONS BELOW UNLESS NEEDED. THEY ARE MADE FOR INTERNAL USE.
     fetchUserDetails,
     fetchMultipleUserDetails,
