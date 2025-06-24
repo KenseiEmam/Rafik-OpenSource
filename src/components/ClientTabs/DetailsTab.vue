@@ -159,7 +159,7 @@
             }}
           </p>
         </div>
-        <div class="flex justify-between uppercase text-sm 2xl:text-base">
+        <!-- <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">
             {{ t('dashboard.tabs.clients.details.pricePackage') }}
           </p>
@@ -170,7 +170,7 @@
                 : 'None Paying'
             }}
           </p>
-        </div>
+        </div> -->
         <div class="flex justify-center uppercase">
           <router-link
             :to="{ name: 'program-details', params: { id: program.id } }"

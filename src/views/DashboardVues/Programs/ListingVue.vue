@@ -102,7 +102,7 @@
                     : (Math.round(0 * 100) / 100).toFixed(1)
                 }}
               </h2>
-              <div
+              <!-- <div
                 class="scale-x-0 group-hover:scale-x-100 origin-right duration-150 ease-in-out"
                 v-if="program.price_one"
               >
@@ -111,7 +111,7 @@
                   {{ t('dashboard.programs.list.aed') }}
                   {{ t('dashboard.programs.list.inRevenue') }}
                 </p>
-              </div>
+              </div> -->
             </div>
             <div class="p-8 space-y-4 relative mt-auto">
               <h3
@@ -137,13 +137,13 @@
                     {{ tag }}
                   </p>
                 </div>
-                <h3 class="contentH-large">
+                <!-- <h3 class="contentH-large">
                   {{ program.price_one }}
                   {{ t('dashboard.programs.list.aed') }}
                   <p class="text-body">
                     {{ t('dashboard.programs.list.monthly') }}
                   </p>
-                </h3>
+                </h3> -->
               </div>
             </div>
           </div>

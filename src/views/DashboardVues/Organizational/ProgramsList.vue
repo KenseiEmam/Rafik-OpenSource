@@ -109,9 +109,9 @@
               <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">
                 {{ t('dashboard.auditPrograms.list.tableHeaders.trainer') }}
               </th>
-              <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">
+              <!-- <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">
                 {{ t('dashboard.auditPrograms.list.tableHeaders.price') }}
-              </th>
+              </th> -->
               <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">
                 {{ t('dashboard.auditPrograms.list.tableHeaders.workoutsPerWeek') }}
               </th>
@@ -137,9 +137,9 @@
                   {{ program.trainer_id }}
                 </router-link>
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <!-- <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
                 {{ program.price_one }}
-              </td>
+              </td> -->
               <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
                 {{ program.avg_days_per_week }}
               </td>

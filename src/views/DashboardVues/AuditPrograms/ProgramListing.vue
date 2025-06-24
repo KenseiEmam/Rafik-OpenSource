@@ -110,12 +110,12 @@
               <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">
                 {{ t('dashboard.auditPrograms.list.tableHeaders.trainer') }}
               </th>
-              <th
+              <!-- <th
                 v-if="!isOrg"
                 class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider"
               >
                 {{ t('dashboard.auditPrograms.list.tableHeaders.price') }}
-              </th>
+              </th> -->
               <th class="px-4 py-2 text-left text-sm font-medium uppercase tracking-wider">
                 {{ t('dashboard.auditPrograms.list.tableHeaders.workoutsPerWeek') }}
               </th>
@@ -141,9 +141,9 @@
                   {{ program.trainer_id }}
                 </router-link>
               </td>
-              <td v-if="!isOrg" class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <!-- <td v-if="!isOrg" class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
                 {{ program.price_one }}
-              </td>
+              </td> -->
               <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
                 {{ program.avg_days_per_week }}
               </td>
