@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, onUnmounted, computed } from 'vue';
+import { ref, onMounted, watch, onUnmounted, computed, reactive, toRaw } from 'vue';
 import { useRoute } from 'vue-router';
 import { useAssessmentStore } from '@/stores/assessmentstores';
 import Swal from 'sweetalert2';
@@ -13,15 +13,52 @@ const { t, tm, rt } = useI18n();
 
 // Access the route object
 const route = useRoute();
+
 const assessmentStore = useAssessmentStore();
 const clientStore = useUserStore();
 const templateStore =useTemplateStore();
+const previousAssessmentWithSameTemplate = ref<any>(null);
 const slotStore =useSlotStore();
 const loading = ref(false)
 const activeTab = ref('Details');
 const editing = ref(false);
 const timeElapsedSeconds = ref(0);
 const formattedTimeElapsed = ref('00:00:00');
+const commentValue =ref('')
+
+// Reactive object to hold users keyed by user ID
+const commentUsers = reactive<Record<string, any>>({});
+const getUserById = (userId: string) => {
+  return commentUsers[userId] || null;
+};
+async function fetchUsersForComments() {
+  const comments = assessmentStore.AssessmentItem?.comments || [];
+
+  // Extract unique user IDs from comments
+  const userIds = [...new Set(comments.map(c => c.user).filter(Boolean))];
+
+  if (userIds.length === 0) return;
+
+  // Fetch user details from Supabase in one query
+  const { data, error } = await supabase
+    .from('users') // or your actual users table name
+    .select('id, first_name, last_name, email, avatar') // adjust columns as needed
+    .in('id', userIds);
+
+  if (error) {
+    console.error('Error fetching users for comments:', error.message);
+    return;
+  }
+
+  if (data) {
+    // Clear previous entries
+    for (const key in commentUsers) delete commentUsers[key];
+    // Populate commentUsers object keyed by user id for quick access
+    data.forEach(user => {
+      commentUsers[user.id] = user;
+    });
+  }
+}
 let timerInterval: any = null;
 // Handler to change active tab
 function setActiveTab(tab: string) {
@@ -30,6 +67,12 @@ function setActiveTab(tab: string) {
 // Function to refresh the route/component
 function refreshComponent() {
   router.go(0); // This reloads the current route
+}
+function checkAbide(event:any, exercise:any, set:any){
+  if(event.target.value ==  exercise.metric)
+set.control_abide = true
+else
+set.control_abide = false
 }
 const isWithin30Min = computed(() => {
   if (!slotStore.SlotItem?.time_start) return false;
@@ -55,39 +98,52 @@ function checkStart(){
     }
   });
 }
-function checkEdit(){
-   Swal.fire({
-    title: 'Update Performance ',
-    text: 'This log your results and changes performance.',
+function checkEdit(): void {
+
+  Swal.fire({
+    title: 'Update Performance',
+    text: 'This logs your results and changes performance. Summarize the assessment.',
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonText: 'Complete ',
+    confirmButtonText: 'Complete',
     confirmButtonColor: '#CB901C',
     cancelButtonColor: '#d33',
+
     background: '#081411',
     color: '#E8F3ED'
   }).then((result) => {
     if (result.isConfirmed) {
-      updateAssessment()
+      updateAssessment();
     }
   });
 }
+
+
 function checkEnd(){
    Swal.fire({
-    title: 'Completing Assessment',
-    text: 'This log your results and cement the time and performance.',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Complete ',
-    confirmButtonColor: '#CB901C',
-    cancelButtonColor: '#d33',
-    background: '#081411',
-    color: '#E8F3ED'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      EndAssessment()
+  title: 'Completing Assessment',
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonText: 'Complete',
+  confirmButtonColor: '#CB901C',
+  cancelButtonColor: '#d33',
+  input: 'textarea',
+  inputLabel: 'Enter a summary of the trainee performance',
+  inputValue: '', // optional: you can prefill with something like assessmentStore.AssessmentItem?.summary || ''
+  inputValidator: (value: string): string | null => {
+    if (!value) {
+      return 'You need to write a summary!';
     }
-  });
+    return null;
+  },
+  background: '#081411',
+  color: '#E8F3ED'
+}).then((result) => {
+  if (result.isConfirmed) {
+    EndAssessment(result.value); // Pass the summary to your function if needed
+  }
+});
+
 }
 
 function calculateAge(dob: Date) {
@@ -189,19 +245,42 @@ function updateAssessment(){
 
 }
 }
+function addComment() {
+  const assessmentId = route.params.id as string;
+  const user = localStorage.getItem('UserID');
+  console.log('err')
+  if (!user || !assessmentId) return;
+
+  // Clone the current comments array safely
+  const existingComments = assessmentStore.AssessmentItem?.comments || [];
+  const rawComments = Array.isArray(existingComments) ? toRaw(existingComments) : [];
+  const comment  = commentValue.value
+  // Create a new copy
+  const newComments = [...rawComments, { user, comment}];
+
+  assessmentStore.updateAssessment(parseInt(assessmentId), {
+    comments: newComments
+  }).then(() => {
+    fetchWorkout();
+    editing.value = false;
+  }).catch(err => {
+    console.error('Failed to add comment:', err.message);
+  });
+}
 function cancelUpdate(){
 
     fetchWorkout()
     editing.value =false
 
 }
-function EndAssessment(){
+function EndAssessment(summary:any){
    const assessmentId = route.params.id as string;
    const now = new Date
    console.log(assessmentStore.AssessmentItem?.drills)
   if (assessmentId){
-  assessmentStore.updateAssessment(parseInt(assessmentId),{status:'complete', ended:now.toISOString(), drills:assessmentStore.AssessmentItem?.drills}).then(()=>{
+  assessmentStore.updateAssessment(parseInt(assessmentId),{status:'complete', ended:now.toISOString(), drills:assessmentStore.AssessmentItem?.drills, summary:summary}).then(()=>{
     fetchWorkout()
+    commentValue.value = ''
   })
 }
 }
@@ -310,6 +389,30 @@ async function fetchWorkout() {
       if (programId) {
         const parentProgram = await fetchProgram(programId);
         program.value = parentProgram;
+      }
+    }
+
+
+    // Fetch users related to comments after assessment is loaded
+    await fetchUsersForComments();
+
+    // Fetch Previous
+    if (assessmentStore.AssessmentItem?.template && assessmentStore.AssessmentItem?.id) {
+      const traineeId = assessmentStore.AssessmentItem.trainees?.[0];
+
+      const { data, error } = await supabase
+  .from('assessment') // ✅ your confirmed table name
+  .select('*')
+  .eq('template', assessmentStore.AssessmentItem.template)
+  .neq('id', assessmentStore.AssessmentItem.id)
+  .contains('trainees', [traineeId]) // ✅ correct for PostgreSQL integer[] array field
+  .order('created_at', { ascending: false })
+  .limit(1);
+
+      if (error) {
+        console.error('Error fetching previous assessment:', error.message);
+      } else if (data && data.length > 0) {
+        previousAssessmentWithSameTemplate.value = data[0];
       }
     }
   } catch (error) {
@@ -442,12 +545,12 @@ onMounted(() => {
           </div>
 
             <button @click="checkEnd" v-if="checkAssessor() && assessmentStore.AssessmentItem.status == 'active'" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">End Assessment </button>
-            <button v-if=" assessmentStore.AssessmentItem.status == 'scheduled'" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">Change Template </button>
+            <!-- <button v-if=" assessmentStore.AssessmentItem.status == 'scheduled'" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">Change Template </button> -->
             <button v-if="checkAssessor() && assessmentStore.AssessmentItem.status == 'complete' && !editing" @click="editing = true" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">Edit Assessment </button>
             <button @click="checkEdit" v-if="editing" class="text-rafik nav-btn">Save Edits </button>
             <button @click="cancelUpdate" v-if="editing" class="text-red-500 dark:text-red-400 nav-btn">Cancel Edits </button>
-            <button v-if="assessmentStore.AssessmentItem.status == 'complete' && !editing" class="text-yellow-500 dark:text-yellow-400 nav-btn">Dispute Assessment </button>
-            <button v-if="!editing && assessmentStore.AssessmentItem.status == 'scheduled'" class="text-red-500 dark:text-red-400 nav-btn">Cancel Assessment </button>
+            <!-- <button v-if="assessmentStore.AssessmentItem.status == 'complete' && !editing" class="text-yellow-500 dark:text-yellow-400 nav-btn">Dispute Assessment </button> -->
+            <!-- <button v-if="!editing && assessmentStore.AssessmentItem.status == 'scheduled'" class="text-red-500 dark:text-red-400 nav-btn">Cancel Assessment </button> -->
             <!-- <button class="text-red-500 dark:text-red-400 nav-btn">Delete Assessment </button> -->
           </div>
         </div>
@@ -513,6 +616,7 @@ onMounted(() => {
 
       <!-- Summary Tab  -->
       <div v-if="activeTab == 'Details'" class="flex flex-col gap-3 w-full py-6">
+        <!-- Summary -->
         <div class="p-6 card">
           <h3 class="contentH-small ">Assessment Summary </h3>
           <p class="text-body">
@@ -523,6 +627,8 @@ onMounted(() => {
           </div>
 
         </div>
+
+        <!--  -->
         <div class="flex gap-2 w-full">
           <div class="p-6 card flex-1">
           <h3 class="contentH-small ">Assessors: </h3>
@@ -602,8 +708,15 @@ onMounted(() => {
             </div>
         </div>
         </div>
+        <!-- Results -->
+        <div v-if="assessmentStore.AssessmentItem.summary" class="p-6 card">
+          <h3 class="contentH-small ">Assessor Recap </h3>
+          <p class="text-body">
+            {{assessmentStore.AssessmentItem.summary }}
+          </p>
+        </div>
 
-<div v-if="assessmentStore.AssessmentItem.overall_performance" class="p-6 card">
+        <div v-if="assessmentStore.AssessmentItem.overall_performance" class="p-6 card">
           <h3 class="contentH-small ">Results</h3>
           <p class="text-body">
             Below are the results for drill performances:
@@ -616,9 +729,30 @@ onMounted(() => {
 
             </div>
             <div>
-              <p>Best Round: {{ perf.orm }}</p>
-              <p>Trend: +{{ perf.orm }}</p>
-              <p>Pass: Yes</p>
+              <p>Best Round: <span class="text-rafik-secondary">{{ perf.orm }}</span></p>
+              <p v-if="previousAssessmentWithSameTemplate">Trend: +{{ perf.orm }}</p>
+              <p>
+              Pass:
+              <span
+                :class="(() => {
+                  const prevPerf = previousAssessmentWithSameTemplate?.overall_performance?.find(
+                    (pr: any) => pr.exercise === perf.exercise
+                  );
+                  return !prevPerf || perf.orm >= prevPerf.orm ? 'text-green-500' : 'text-red-500';
+                })()"
+              >
+                {{
+                  (() => {
+                    const prevPerf = previousAssessmentWithSameTemplate?.overall_performance?.find(
+                      (pr: any) => pr.exercise === perf.exercise
+                    );
+                    return !prevPerf || perf.orm >= prevPerf.orm ? 'Yes' : 'No';
+                  })()
+                }}
+              </span>
+              </p>
+
+
             </div>
           </div>
 
@@ -672,12 +806,24 @@ onMounted(() => {
                        Round {{  index + 1 }}
                     </p>
                     <hr class="border border-rafik-sectext dark:border-rafik-darksectext w-full" />
-                    <p v-if="(assessmentStore.AssessmentItem.status === 'active' || editing) && checkAssessor()  " >{{ exercise.primary_variable || 'Load(Kg)' }}</p>
+
                      <div
                     >
+                    <div v-if="(assessmentStore.AssessmentItem.status === 'active' || editing) && checkAssessor()  " class="flex gap-2">
+                      <div>
+                        <p>{{ exercise.primary_variable || 'Load(Kg)' }}</p>
+                        <input v-model="set.primary_done"   type="number" class="text-rafik-pritext dark:text-rafik-darkpritext py-2 rafik-text-input" >
+                      </div>
+                      <div>
+                        <p>{{ exercise.control_unit || 'Reps' }}</p>
+                      <input @input="checkAbide($event, exercise, set)" type="number" class="text-rafik-pritext dark:text-rafik-darkpritext py-2 rafik-text-input" >
+                      </div>
+                    </div>
 
-                    <input v-model="set.primary_done" v-if="(assessmentStore.AssessmentItem.status === 'active' || editing) && checkAssessor()  "  type="number" class="text-rafik-pritext dark:text-rafik-darkpritext py-2 rafik-text-input" >
-                    <p v-else class="min-w-max">{{ set.primary_done }} {{ t('dashboard.workoutSheet.kg') }}</p>
+                    <p v-else                       :class="{
+                        'text-red-500': !set.control_abide,
+                        'text-rafik-secondary': set.control_abide
+                      }" class="min-w-max">{{ set.primary_done }} {{ t('dashboard.workoutSheet.kg') }}</p>
 
                     </div>
                   </div>
@@ -820,8 +966,57 @@ onMounted(() => {
           <h3 class="contentH-small mb-3 2xl:mb-3">
             📝 Notes:
           </h3>
-          <div class="card p-8 2xl:py-12 flex flex-col items-center gap-6" style="height: 60vh">
-            <p class="text-body "> Feature to be added soon</p>
+          <div class="card p-8 2xl:py-12 flex flex-col items-center gap-3 overflow-y-auto" style="height: 60vh">
+            <div class="w-full flex gap-3">
+              <textarea name="" v-model="commentValue" rows="3" class="rafik-text-input  flex-1" placeholder="Write a comment here" >
+
+              </textarea>
+              <button @click="addComment" class="btn-sm-outline  h-full ">
+                SEND
+              </button>
+            </div>
+            <p v-if="!assessmentStore.AssessmentItem.comments" class="text-body  text-sm opacity-60 mt-auto"> Nothing yet</p>
+            <p v-if="!assessmentStore.AssessmentItem.comments" class="text-body  text-sm opacity-60 mb-auto"> Be the first to start the conversation.</p>
+              <div
+              class="space-y-2 gradient-bg card w-full p-3"
+              v-for="comment in assessmentStore.AssessmentItem.comments"
+              :key="comment.comment"
+            >
+              <div class="space-y-3 divide-y divide-rafik-sectext  dark:divide-rafik-darksectext">
+                <template v-if="getUserById(comment.user)">
+                  <router-link
+                    :to="{ name: 'single-user', params: { id: getUserById(comment.user).id } }"
+                    class="flex gap-2 items-center hover:background-none"
+                    @click.stop
+                  >
+                    <img
+                      :src="
+                        getUserById(comment.user).avatar ||
+                        'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
+                      "
+                      class="w-12 h-12 rounded-full border-2 border-rafik-secondary"
+                      alt="User avatar"
+                    />
+                    <div>
+                      <p class="header-small text-lg">
+                        {{
+                          `${getUserById(comment.user).first_name || ''} ${getUserById(comment.user).last_name || ''}`.trim() ||
+                          'Unknown User'
+                        }}
+                      </p>
+                      <p class="text-body text-sm lowercase">
+                        {{ getUserById(comment.user).email || 'Unknown Email' }}
+                      </p>
+                    </div>
+                  </router-link>
+                </template>
+                <span v-else class="label text-rafik-sectext dark:text-rafik-darksectext mt-6">
+                  No User Data Found
+                </span>
+              </div>
+              <p class="pl-6 text-justify text-body">{{ comment.comment }}</p>
+            </div>
+
           </div>
         </div>
       </div>
