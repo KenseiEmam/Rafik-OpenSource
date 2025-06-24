@@ -123,6 +123,15 @@ interface Session {
   expires_in?: number;
   expires_at?: number;
 }
+interface ChatClient {
+  id: number;
+  avatar: string | null;
+  email: string;
+  first_name: string;
+  last_name: string;
+  last_active?: string;
+  program_details?: any;
+}
 
 export const useUserStore = defineStore('User', () => {
   // For Logged in User
@@ -132,7 +141,7 @@ export const useUserStore = defineStore('User', () => {
 
   // For Other Users
   const AllClients = ref<ClientInterface[]>([]); // Ensure it's typed as an array
-  const ChatClients = ref<ClientInterface[]>([]); // Ensure it's typed as an array
+  const ChatClients = ref<ChatClient[]>([]);
   const Entitled = ref<ClientInterface[]>([]); // Ensure it's typed as an array
   const Client = ref<ClientInterface | null>(null); // Ensure Client can be null
   const O_Trainer = ref<TrainerInterface | null>(null);
@@ -568,214 +577,132 @@ export const useUserStore = defineStore('User', () => {
       alert(`Failed to load clients: ${error.message || 'Unknown error'}`);
     }
   }
-  // Fetch Clients for a Trainer
-  async function getActiveClientsForTrainer(page: number, pageSize: number) {
-    try {
-      const trainerId = localStorage.getItem('UserID');
-      if (!trainerId) {
-        showError('Trainer ID not found in local storage.');
-        AllClients.value = [];
-        client_count.value = 0;
-        return;
-      }
+async function getActiveClientsForTrainer(page: number, pageSize: number) {
+  try {
+    const trainerId = localStorage.getItem('UserID');
+    if (!trainerId) throw new Error('Trainer ID not found.');
 
-      // Fetch total count for pagination
-      const { count, error: countError } = await supabase
-        .from('user_programs')
-        .select('client_id', { count: 'exact', head: true })
-        .eq('trainer_id', trainerId)
-        .neq('status', 'cancelled');
+    // Step 1: Get paginated profiles coached by this trainer
+    const { data: profiles, error: profileError, count } = await supabase
+      .from('profiles')
+      .select('id, user_id', { count: 'exact' }) // Get total count for pagination
+      .eq('coach', trainerId)
+      .range((page - 1) * pageSize, page * pageSize - 1);
 
-      if (countError) {
-        showError(`Error fetching total count: ${countError.message}`);
-        AllClients.value = [];
-        client_count.value = 0;
-        return;
-      }
+    if (profileError || !profiles) throw profileError;
 
-      const { data: activePrograms, error: programError } = await supabase
-        .from('user_programs')
-        .select('*')
-        .eq('trainer_id', trainerId)
-        .neq('status', 'cancelled')
-        .range((page - 1) * pageSize, page * pageSize - 1);
+    const userIds = profiles.map(p => p.user_id);
+    const profileIds = profiles.map(p => p.id);
 
-      if (programError) {
-        showError(`Error fetching user programs: ${programError.message}`);
-        AllClients.value = [];
-        client_count.value = 0;
-        return;
-      }
+    // Step 2: Get users and their programs *only for these paginated profiles*
+    const [{ data: users, error: userError }, { data: programs, error: programError }] =
+      await Promise.all([
+        supabase
+          .from('users')
+          .select('id, avatar, email, first_name, last_name, dob, sex, nationality, phone, last_active')
+          .in('id', userIds),
+        supabase
+          .from('user_programs')
+          .select('*')
+          .in('client_id', profileIds)
+          .neq('status', 'cancelled')
+      ]);
 
-      if (!activePrograms || activePrograms.length === 0) {
-        AllClients.value = [];
-        client_count.value = count;
-        return;
-      }
+    if (userError || programError) throw userError || programError;
 
-      const clientProfileIds = [...new Set(activePrograms.map((program) => program.client_id))];
+    // Step 3: Merge data
+    AllClients.value = profiles
+      .map(profile => {
+        const user = users.find(u => u.id === profile.user_id);
+        const programDetails = programs.find(p => p.client_id === profile.id);
+        return user
+          ? {
+              id: user.id,
+              avatar: user.avatar,
+              email: user.email,
+              gender: user.sex,
+              nationality: user.nationality,
+              phone: user.phone,
+              first_name: user.first_name,
+              last_name: user.last_name,
+              dob: user.dob,
+              profile,
+              program_details: programDetails,
+              last_active: user.last_active
+            }
+          : null;
+      })
+      .filter((client): client is NonNullable<typeof client> => client !== null);
 
-      const { data: userProfiles, error: profileError } = await supabase
-        .from('profiles')
-        .select('id, user_id')
-        .in('id', clientProfileIds);
-
-      if (profileError) {
-        showError(`Error fetching user profiles: ${profileError.message}`);
-        AllClients.value = [];
-        client_count.value = count;
-        return;
-      }
-
-      const userIds = userProfiles.map((profile) => profile.user_id);
-
-      const { data: users, error: userError } = await supabase
-        .from('users')
-        .select(
-          'id, avatar, email, first_name, last_name, dob, sex, nationality, phone, last_active'
-        )
-        .in('id', userIds);
-
-      if (userError) {
-        showError(`Error fetching user details: ${userError.message}`);
-        AllClients.value = [];
-        client_count.value = count;
-        return;
-      }
-
-      AllClients.value = userProfiles
-        .map((profile) => {
-          const user = users.find((u) => u.id === profile.user_id);
-          const programDetails = activePrograms.find((program) => program.client_id === profile.id);
-
-          return user
-            ? {
-                id: user.id,
-                avatar: user.avatar,
-                email: user.email,
-                gender: user.sex,
-                nationality: user.nationality,
-                phone: user.phone,
-                first_name: user.first_name,
-                last_name: user.last_name,
-                dob: user.dob,
-                profile: profile,
-                program_details: programDetails,
-                last_active: user.last_active
-              }
-            : null;
-        })
-        .filter((client) => client !== null);
-
-      client_count.value = count;
-    } catch (error: any) {
-      showError(`Unexpected error: ${error.message || 'Unknown error'}`);
-      AllClients.value = [];
-      client_count.value = 0;
-    }
+    // Step 4: Set total count
+    client_count.value = count ?? AllClients.value.length;
+  } catch (error: any) {
+    showError(error.message || 'Unexpected error');
+    AllClients.value = [];
+    client_count.value = 0;
   }
-  // Fetch Clients for a The Chat Logs
-  async function getChatClients() {
-    try {
-      const trainerId = localStorage.getItem('UserID');
-      if (!trainerId) {
-        showError('Trainer ID not found in local storage.');
-        ChatClients.value = [];
-        client_count.value = 0;
-        return;
-      }
+}
 
-      // Fetch total count for pagination
-      const { count, error: countError } = await supabase
-        .from('user_programs')
-        .select('client_id', { count: 'exact', head: true })
-        .eq('trainer_id', trainerId)
-        .neq('status', 'cancelled');
 
-      if (countError) {
-        showError(`Error fetching total count: ${countError.message}`);
-        ChatClients.value = [];
-        client_count.value = 0;
-        return;
-      }
-
-      const { data: activePrograms, error: programError } = await supabase
-        .from('user_programs')
-        .select('*')
-        .eq('trainer_id', trainerId)
-        .neq('status', 'cancelled');
-
-      if (programError) {
-        showError(`Error fetching user programs: ${programError.message}`);
-        ChatClients.value = [];
-        client_count.value = 0;
-        return;
-      }
-
-      if (!activePrograms || activePrograms.length === 0) {
-        ChatClients.value = [];
-        client_count.value = count;
-        return;
-      }
-
-      const clientProfileIds = [...new Set(activePrograms.map((program) => program.client_id))];
-
-      const { data: userProfiles, error: profileError } = await supabase
-        .from('profiles')
-        .select('id, user_id')
-        .in('id', clientProfileIds);
-
-      if (profileError) {
-        showError(`Error fetching user profiles: ${profileError.message}`);
-        ChatClients.value = [];
-        client_count.value = count;
-        return;
-      }
-
-      const userIds = userProfiles.map((profile) => profile.user_id);
-
-      const { data: users, error: userError } = await supabase
-        .from('users')
-        .select(
-          'id, avatar, email, first_name, last_name, dob, sex, nationality, phone, last_active'
-        )
-        .in('id', userIds);
-
-      if (userError) {
-        showError(`Error fetching user details: ${userError.message}`);
-        ChatClients.value = [];
-        client_count.value = count;
-        return;
-      }
-
-      ChatClients.value = userProfiles
-        .map((profile) => {
-          const user = users.find((u) => u.id === profile.user_id);
-          const programDetails = activePrograms.filter(
-            (program) => program.client_id === profile.id
-          );
-
-          return user
-            ? {
-                id: user.id,
-                avatar: user.avatar,
-                email: user.email,
-                first_name: user.first_name,
-                last_name: user.last_name,
-                program_details: programDetails[0],
-                last_active: user.last_active
-              }
-            : null;
-        })
-        .filter((client) => client !== null);
-
-      client_count.value = count;
-    } catch (error: any) {
-      showError(`Unexpected error: ${error.message || 'Unknown error'}`);
-      AllClients.value = [];
-      client_count.value = 0;
+async function getChatClients() {
+  try {
+    const trainerId = localStorage.getItem('UserID');
+    if (!trainerId) {
+      showError('Trainer ID not found in local storage.');
+      ChatClients.value = [];
+      return;
     }
+
+    // Get profiles where this trainer is the coach
+    const { data: profiles, error: profileError } = await supabase
+      .from('profiles')
+      .select('id, user_id')
+      .eq('coach', trainerId);
+
+    if (profileError || !profiles) throw profileError || new Error('No profiles found');
+
+    const profileIds = profiles.map(p => p.id);
+    const userIds = profiles.map(p => p.user_id);
+
+    // Fetch users associated with those profiles
+    const [{ data: users, error: userError }, { data: programs, error: programError }] =
+      await Promise.all([
+        supabase.from('users')
+          .select('id, avatar, email, first_name, last_name, last_active')
+          .in('id', userIds),
+        supabase.from('user_programs')
+          .select('*')
+          .in('client_id', profileIds)
+          .neq('status', 'cancelled')
+      ]);
+
+    if (userError || programError) throw userError || programError;
+
+     // Safely map users to clients
+    const clients = profiles.map((profile) => {
+      const user = users?.find(u => u.id === profile.user_id);
+      const programDetails = programs?.find(p => p.client_id === profile.id);
+      if (!user) return null;
+
+      return {
+        id: user.id,
+        avatar: user.avatar,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        last_active: user.last_active,
+        program_details: programDetails
+      } as ChatClient;
+    }).filter((client): client is ChatClient => client !== null);
+
+    ChatClients.value = clients;
+
+  } catch (error: any) {
+    showError(`Unexpected error: ${error.message || 'Unknown error'}`);
+    ChatClients.value = [];
   }
+}
+
   // Update Client Program
   async function updateClientProgram(updateData: Program) {
     try {
