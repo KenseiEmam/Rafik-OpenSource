@@ -245,29 +245,15 @@ const submitMessage = async () => {
     created_at: new Date().toISOString()
   };
 
-  const { error } = await supabase.from('chat_messages').insert([newMessage]).select();
-
+  const { data, error } = await supabase.from('chat_messages').insert([newMessage]).select();
   if (error) {
     showError('Failed to send message.');
     console.error('Supabase error:', error);
     return;
   }
+
   sending.value = '';
   scrollToBottom();
-  //props.Client.id
-  const { error: error2 } = await supabase.from('notifications').insert([
-    {
-      user_id: props.Client.id,
-      created_at: new Date().toISOString(),
-      title: `New message from your trainer`,
-      body: newMessage.content
-    }
-  ]);
-
-  if (error2) {
-    console.error('Supabase error:', error2);
-    return;
-  }
 };
 
 // Watch for changes in props.Client to refetch messages
