@@ -495,8 +495,6 @@ onBeforeUnmount(() => {
 
 
           </div>
-          <!-- Weight Log Tab -->
-          <WeightLog v-else-if="activeTab === 'Weight-Log'" :profile="clientStore.Client.profile" />
           <!-- Trophy Room Tab -->
            <TrophyRoom v-else-if="activeTab === 'Trophy-Room'" :client="clientStore.Client.profile" />
         </transition>
