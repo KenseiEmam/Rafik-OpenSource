@@ -36,7 +36,7 @@
         <button
           @click="updateFilter('complete')"
           class="card border 2xl:text-base text-sm min-w-max uppercase"
-          :class="filter === 'complete' ? 'border-rafik gradient-bg text-rafik' : 'border'"
+          :class="filter === 'complete' ? 'border-topsets gradient-bg text-topsets' : 'border'"
         >
           {{ t('dashboard.assessments.list.complete') }}
         </button>

@@ -161,7 +161,7 @@
           </p>
         </div>
         <!-- <div class="flex justify-between uppercase text-sm 2xl:text-base">
-          <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          <p class="text-topsets-pritext dark:text-topsets-darkpritext">
             {{ t('dashboard.tabs.clients.details.pricePackage') }}
           </p>
           <p class="text-topsets-secondary">

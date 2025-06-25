@@ -7,7 +7,7 @@
           {{ t('dashboard.tabs.clients.weightLog.showingRows') }}
         </p>
 
-        <select v-model="pageSize" @change="loadUsers" name="" class=" rafik-text-input min-w-24 p-2" id="">
+        <select v-model="pageSize" @change="loadUsers" name="" class=" topsets-text-input min-w-24 p-2" id="">
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="30">30</option>
@@ -95,7 +95,7 @@
       </div>
       <!-- No Results -->
       <div v-else class="space-y-6 flex flex-col items-center py-12">
-        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+        <p class="text-topsets-pritext dark:text-topsets-darkpritext">
           User has not logged weight.
         </p>
       </div>

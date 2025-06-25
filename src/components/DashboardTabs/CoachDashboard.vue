@@ -33,13 +33,13 @@
         }"
         v-for="(assessment, index) in assessments"
         :key="assessment.id"
-        class=" text-rafik-sectext dark:text-rafik-darksectext"
+        class=" text-topsets-sectext dark:text-topsets-darksectext"
       >
         <div
-          class="gradient-bg card p-6 w-full hover:border-rafik border border-transparent flex flex-col"
+          class="gradient-bg card p-6 w-full hover:border-topsets border border-transparent flex flex-col"
         >
           <!-- Top Section: Trainee Details -->
-          <div v-if="assessment.trainees" class="flex items-center border-b-2 py-4 border-rafik-pribg dark:border-rafik-darkpribg justify-between gap-4 mb-4">
+          <div v-if="assessment.trainees" class="flex items-center border-b-2 py-4 border-topsets-pribg dark:border-topsets-darkpribg justify-between gap-4 mb-4">
             <div class="flex items-center gap-3 ">
               <img
                 :src="
@@ -47,7 +47,7 @@
                   '/user-placeholder.jpg'
                 "
                 alt="Trainee Avatar"
-                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-rafik object-cover"
+                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-topsets object-cover"
               />
               <div>
                 <p class="header-small">
@@ -69,7 +69,7 @@
                   : 'Loading...'
               }}
             </h2>
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
+            <p class="label text-topsets-pritext dark:text-topsets-darkpritext">
               {{ formatDate(assessment.created_at) }}
             </p>
               </div>

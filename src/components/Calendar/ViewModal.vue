@@ -19,7 +19,7 @@
             <p class="block text-sm font-medium mb-2">
               Starting Time:
             </p>
-            <h3 class="text-rafik-secondary">{{ formattedStart }}</h3>
+            <h3 class="text-topsets-secondary">{{ formattedStart }}</h3>
           </div>
 
           <!-- Show time here as hours -->
@@ -27,7 +27,7 @@
             <p class="block text-sm font-medium mb-2">
               Ending Time:
             </p>
-            <h3 class="text-rafik-secondary">{{ formattedEnd }}</h3>
+            <h3 class="text-topsets-secondary">{{ formattedEnd }}</h3>
           </div>
 
 
@@ -50,9 +50,9 @@
                 class="gradient-bg p-3 rounded flex gap-3 items-center"
               >
               <img :src="user.avatar||
-                  'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" class="rounded-full h-16 w-16 border border-rafik-secondary" alt="">
+                  'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" class="rounded-full h-16 w-16 border border-topsets-secondary" alt="">
               <div>
-                <h3 class="text-lg text-rafik-secondary">{{ user.first_name }} {{ user.last_name }}</h3>
+                <h3 class="text-lg text-topsets-secondary">{{ user.first_name }} {{ user.last_name }}</h3>
                 <p class="text-xs" >{{ user.email }}</p>
               </div>
               </div>
@@ -72,9 +72,9 @@
                 class="gradient-bg p-3 rounded flex gap-3 items-center"
               >
               <img :src="user.avatar||
-                  'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" class="rounded-full h-16 w-16 border border-rafik-secondary" alt="">
+                  'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" class="rounded-full h-16 w-16 border border-topsets-secondary" alt="">
               <div>
-                <h3 class="text-lg text-rafik-secondary">{{ user.first_name }} {{ user.last_name }}</h3>
+                <h3 class="text-lg text-topsets-secondary">{{ user.first_name }} {{ user.last_name }}</h3>
                 <p class="text-xs" >{{ user.email }}</p>
               </div>
               </div>
@@ -91,9 +91,9 @@
                 class="gradient-bg p-3 rounded flex gap-3 items-center"
               >
               <img :src="user.avatar||
-                  'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" class="rounded-full h-16 w-16 border border-rafik-secondary" alt="">
+                  'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'" class="rounded-full h-16 w-16 border border-topsets-secondary" alt="">
               <div>
-                <h3 class="text-lg text-rafik-secondary">{{ user.first_name }} {{ user.last_name }}</h3>
+                <h3 class="text-lg text-topsets-secondary">{{ user.first_name }} {{ user.last_name }}</h3>
                 <p class="text-xs" >{{ user.email }}</p>
               </div>
               </div>

@@ -496,10 +496,10 @@ onMounted(() => {
             </div>
           <!-- Scheduled Start -->
           <div class="uppercase flex  gap-2 text-sm 2xl:text-base">
-            <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+            <p class="text-topsets-pritext dark:text-topsets-darkpritext">
               Scheduled Start:
             </p>
-            <p class="ms-auto text-rafik-secondary">
+            <p class="ms-auto text-topsets-secondary">
               {{ new Date(slotStore.SlotItem.time_start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
             </p>
             <p v-if="assessmentStore.AssessmentItem.started" class="text-xs my-auto">
@@ -509,10 +509,10 @@ onMounted(() => {
 
           <!-- Estimated End -->
           <div class="uppercase flex  gap-3 text-sm 2xl:text-base">
-            <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+            <p class="text-topsets-pritext dark:text-topsets-darkpritext">
               Estimated End:
             </p>
-            <p class="ms-auto text-rafik-secondary">
+            <p class="ms-auto text-topsets-secondary">
               {{ new Date(slotStore.SlotItem.time_end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
             </p>
             <p v-if="assessmentStore.AssessmentItem.ended" class="text-xs my-auto">
@@ -533,7 +533,7 @@ onMounted(() => {
             <button
               @click="checkStart"
               v-if="isWithin30Min"
-              class="text-rafik-secondary dark:text-rafik nav-btn"
+              class="text-topsets-secondary dark:text-topsets nav-btn"
             >
               Start Assessment
             </button>
@@ -545,10 +545,10 @@ onMounted(() => {
             </span>
           </div>
 
-            <button @click="checkEnd" v-if="checkAssessor() && assessmentStore.AssessmentItem.status == 'active'" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">End Assessment </button>
-            <!-- <button v-if=" assessmentStore.AssessmentItem.status == 'scheduled'" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">Change Template </button> -->
-            <button v-if="checkAssessor() && assessmentStore.AssessmentItem.status == 'complete' && !editing" @click="editing = true" class="text-rafik-pritext dark:text-rafik-darkpritext nav-btn">Edit Assessment </button>
-            <button @click="checkEdit" v-if="editing" class="text-rafik nav-btn">Save Edits </button>
+            <button @click="checkEnd" v-if="checkAssessor() && assessmentStore.AssessmentItem.status == 'active'" class="text-topsets-pritext dark:text-topsets-darkpritext nav-btn">End Assessment </button>
+            <!-- <button v-if=" assessmentStore.AssessmentItem.status == 'scheduled'" class="text-topsets-pritext dark:text-topsets-darkpritext nav-btn">Change Template </button> -->
+            <button v-if="checkAssessor() && assessmentStore.AssessmentItem.status == 'complete' && !editing" @click="editing = true" class="text-topsets-pritext dark:text-topsets-darkpritext nav-btn">Edit Assessment </button>
+            <button @click="checkEdit" v-if="editing" class="text-topsets nav-btn">Save Edits </button>
             <button @click="cancelUpdate" v-if="editing" class="text-red-500 dark:text-red-400 nav-btn">Cancel Edits </button>
             <!-- <button v-if="assessmentStore.AssessmentItem.status == 'complete' && !editing" class="text-yellow-500 dark:text-yellow-400 nav-btn">Dispute Assessment </button> -->
             <!-- <button v-if="!editing && assessmentStore.AssessmentItem.status == 'scheduled'" class="text-red-500 dark:text-red-400 nav-btn">Cancel Assessment </button> -->
@@ -730,7 +730,7 @@ onMounted(() => {
 
             </div>
             <div>
-              <p>Best Round: <span class="text-rafik-secondary">{{ perf.orm }}</span></p>
+              <p>Best Round: <span class="text-topsets-secondary">{{ perf.orm }}</span></p>
               <p v-if="previousAssessmentWithSameTemplate">Trend: +{{ perf.orm }}</p>
               <p>
               Pass:
@@ -751,7 +751,7 @@ onMounted(() => {
                   })()
                 }}
               </span>
-              <span v-else class="text-rafik">
+              <span v-else class="text-topsets">
                 TBD
               </span>
               </p>
@@ -809,24 +809,24 @@ onMounted(() => {
                     <p class="text-topsets-pritext dark:text-topsets-darkpritext min-w-max py-2.5">
                        Round {{  index + 1 }}
                     </p>
-                    <hr class="border border-rafik-sectext dark:border-rafik-darksectext w-full" />
+                    <hr class="border border-topsets-sectext dark:border-topsets-darksectext w-full" />
 
                      <div
                     >
                     <div v-if="(assessmentStore.AssessmentItem.status === 'active' || editing) && checkAssessor()  " class="flex gap-2">
                       <div>
                         <p>{{ exercise.primary_variable || 'Load(Kg)' }}</p>
-                        <input v-model="set.primary_done"   type="number" class="text-rafik-pritext dark:text-rafik-darkpritext py-2 rafik-text-input" >
+                        <input v-model="set.primary_done"   type="number" class="text-topsets-pritext dark:text-topsets-darkpritext py-2 topsets-text-input" >
                       </div>
                       <div>
                         <p>{{ exercise.control_unit || 'Reps' }}</p>
-                      <input @input="checkAbide($event, exercise, set)" type="number" class="text-rafik-pritext dark:text-rafik-darkpritext py-2 rafik-text-input" >
+                      <input @input="checkAbide($event, exercise, set)" type="number" class="text-topsets-pritext dark:text-topsets-darkpritext py-2 topsets-text-input" >
                       </div>
                     </div>
 
                     <p v-else                       :class="{
                         'text-red-500': !set.control_abide,
-                        'text-rafik-secondary': set.control_abide
+                        'text-topsets-secondary': set.control_abide
                       }" class="min-w-max">{{ set.primary_done }} {{ t('dashboard.workoutSheet.kg') }}</p>
 
                     </div>
@@ -972,7 +972,7 @@ onMounted(() => {
           </h3>
           <div class="card p-8 2xl:py-12 flex flex-col items-center gap-3 overflow-y-auto" style="height: 60vh">
             <div class="w-full flex gap-3">
-              <textarea name="" v-model="commentValue" rows="3" class="rafik-text-input  flex-1" placeholder="Write a comment here" >
+              <textarea name="" v-model="commentValue" rows="3" class="topsets-text-input  flex-1" placeholder="Write a comment here" >
 
               </textarea>
               <button @click="addComment" class="btn-sm-outline  h-full ">
@@ -986,7 +986,7 @@ onMounted(() => {
               v-for="comment in assessmentStore.AssessmentItem.comments"
               :key="comment.comment"
             >
-              <div class="space-y-3 divide-y divide-rafik-sectext  dark:divide-rafik-darksectext">
+              <div class="space-y-3 divide-y divide-topsets-sectext  dark:divide-topsets-darksectext">
                 <template v-if="getUserById(comment.user)">
                   <router-link
                     :to="{ name: 'single-user', params: { id: getUserById(comment.user).id } }"
@@ -998,7 +998,7 @@ onMounted(() => {
                         getUserById(comment.user).avatar ||
                         'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
                       "
-                      class="w-12 h-12 rounded-full border-2 border-rafik-secondary"
+                      class="w-12 h-12 rounded-full border-2 border-topsets-secondary"
                       alt="User avatar"
                     />
                     <div>
@@ -1014,7 +1014,7 @@ onMounted(() => {
                     </div>
                   </router-link>
                 </template>
-                <span v-else class="label text-rafik-sectext dark:text-rafik-darksectext mt-6">
+                <span v-else class="label text-topsets-sectext dark:text-topsets-darksectext mt-6">
                   No User Data Found
                 </span>
               </div>

@@ -137,10 +137,10 @@
                   {{ program.trainer_id }}
                 </router-link>
               </td>
-              <!-- <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <!-- <td class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4">
                 {{ program.price_one }}
               </td> -->
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4">
                 {{ program.avg_days_per_week }}
               </td>
               <td

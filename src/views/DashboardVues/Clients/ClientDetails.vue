@@ -441,7 +441,7 @@ onBeforeUnmount(() => {
           class="nav-btn uppercase"
           :class="
             activeTab === 'Client-Logs'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
+              ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
               : ' hover:opacity-70'
           "
           @click="setActiveTab('Client-Logs')"
