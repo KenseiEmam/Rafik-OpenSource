@@ -271,7 +271,7 @@
       "description": "We've kept an eye on your trainees and programs while you were gone and made some charts. Please take your time to check them out below.",
       "button": {
         "viewProfile": "View Profile",
-        "checkCharts": "Check Charts",
+        "checkCharts": "My Calendar",
         "settings": "Settings"
       },
       "stats": "Statistics Dashboard <br> Coming Soon"

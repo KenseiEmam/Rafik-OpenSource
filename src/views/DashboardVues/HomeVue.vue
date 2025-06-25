@@ -55,7 +55,7 @@ const { t, locale } = useI18n();
         <router-link :to="{ name: 'trainer-profile' }" class=" opacity-50 text-rafik-sectext dark:text-rafik-darksectext hover:text-rafik-pritext hover:dark:text-rafik-darkpritext 2xl:text-xl">
           {{ t('dashboard.home.button.viewProfile') }}
         </router-link>
-        <router-link to="" disabled class=" opacity-50 text-rafik-sectext dark:text-rafik-darksectext hover:text-red-500 2xl:text-xl">
+        <router-link :to="{ name: 'events-calendar' }" disabled class=" opacity-50 text-rafik-sectext dark:text-rafik-darksectext hover:text-red-500 2xl:text-xl">
           {{ t('dashboard.home.button.checkCharts') }}
         </router-link>
         <router-link :to="{ name: 'settings' }" class=" opacity-50 text-rafik-sectext dark:text-rafik-darksectext hover:text-rafik-pritext hover:dark:text-rafik-darkpritext 2xl:text-xl">
