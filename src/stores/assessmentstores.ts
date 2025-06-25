@@ -128,6 +128,50 @@ async function getAssessment(id: number) {
       return null;
     }
   }
+async function getTodaysAssessments(userProfile: any) {
+  try {
+    // Get today’s start and end in UTC
+    const now = new Date();
+    const startOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0));
+    const endOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999));
+
+    const { data, error } = await supabase
+      .from('assessment')
+      .select('*')
+      .eq('organization', userProfile.organization)
+      .gte('created_at', startOfDay.toISOString())
+      .lt('created_at', endOfDay.toISOString())
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    let filtered = data;
+    if (
+      userProfile?.roles?.includes('Organization Trnr') &&
+      !userProfile?.roles?.includes('Organization Admin')
+    ) {
+      filtered = filtered.filter(
+        (assessment: any) =>
+          Array.isArray(assessment.assessors) && assessment.assessors.includes(userProfile.id)
+      );
+    }
+
+    // Optionally: fetch related data
+    Promise.all([
+      fetchAllTemplateData(filtered),
+      fetchAllUserDetails(filtered),
+    ]).catch(e => {
+      console.error(e);
+      showError(`Failed to load assessment data: ${e.message || 'Unknown error'}`);
+    });
+
+    return filtered;
+  } catch (error: any) {
+    console.error(error);
+    showError(`Failed to load today's assessments: ${error.message || 'Unknown error'}`);
+    return null;
+  }
+}
 
   // Fetch user details for a single user ID
   async function fetchUserDetails(userId: string, type: 'trainee' | 'assessor') {
@@ -341,6 +385,7 @@ function clearAssessment() {
     getAssessment,
     getAllAssessments,
     updateAssessment,
+    getTodaysAssessments,
     // DO NOT USE THESE FUNCTIONS BELOW UNLESS NEEDED. THEY ARE MADE FOR INTERNAL USE.
     fetchUserDetails,
     fetchMultipleUserDetails,
