@@ -203,7 +203,7 @@ function setActiveTab(tab: string) {
         >
           {{ t('dashboard.auditPrograms.single.tabs.clients') }}
         </button>
-        <button
+        <!-- <button
           :class="
             activeTab === 'Pricing'
               ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
@@ -213,7 +213,7 @@ function setActiveTab(tab: string) {
           @click="setActiveTab('Pricing')"
         >
           {{ t('dashboard.auditPrograms.single.tabs.pricing') }}
-        </button>
+        </button> -->
         <button
           :class="
             activeTab === 'Reviews'

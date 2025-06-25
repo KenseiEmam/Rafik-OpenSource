@@ -73,32 +73,40 @@ export const useSlotStore = defineStore('Slot', () => {
       return null;
     }
   }
+async function getAllSlots(assessmentId?: number) {
+  try {
+    const roles = userStore.userProfile?.roles || [];
+    const orgId = userStore.userProfile?.organization;
+    const userId = localStorage.getItem('UserID');
 
-  // Fetch all slots, optionally filtered by assessment
-  async function getAllSlots(assessmentId?: number) {
-    try {
-      const orgId = userStore.userProfile?.organization;
-      let query = supabase
-        .from('slots')
-        .select('*')
-        .eq('organization',orgId)
-        .order('time_start', { ascending: true });
+    let query = supabase.from('slots').select('*').order('time_start', { ascending: true });
 
-      if (assessmentId) {
-        query = query.eq('assessment', assessmentId);
-      }
-
-      const { data, error } = await query;
-      if (error) throw error;
-
-      AllSlots.value = data || [];
-      return AllSlots.value;
-    } catch (error: any) {
-      console.error(error);
-      showError(`Failed to load slots: ${error.message || 'Unknown error'}`);
-      return null;
+    // If user is Org Trnr or Org Admin, filter by org
+    if (roles.includes('Organization Trnr') || roles.includes('Organization Admin')) {
+      query = query.eq('organization', orgId);
     }
+
+    // If user is NOT Admin or Org Admin, filter by their presence in users array
+    if (!roles.includes('Administrator') && !roles.includes('Organization Admin') && userId) {
+      query = query.contains('users', [parseInt(userId)]);
+    }
+
+    if (assessmentId) {
+      query = query.eq('assessment', assessmentId);
+    }
+
+    const { data, error } = await query;
+    if (error) throw error;
+
+    AllSlots.value = data || [];
+    return AllSlots.value;
+  } catch (error: any) {
+    console.error(error);
+    showError(`Failed to load slots: ${error.message || 'Unknown error'}`);
+    return null;
   }
+}
+
 async function insertSlot(newSlot: Omit<Slot, 'id' | 'created_at'| 'date'>) {
   try {
     const orgId = userStore.userProfile?.organization;

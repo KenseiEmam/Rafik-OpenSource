@@ -60,9 +60,9 @@
     "clientManagement": {
       "unparalleled": "UNPARALLELLED",
       "management": "CLIENT MANAGEMENT",
-      "filterClients": "Search and filter all your clients to your desired priorities and scheduled needs.",
+      "filterClients": "Search and filter all your trainees to your desired priorities and scheduled needs.",
       "zoomClientLogs": "Zoom in and take an even deeper look into your client's daily lives from their detailed workout and diet logs.",
-      "entitlementSystem": "Sign up clients at your own rates and prices then add them to your programs using our entitlement system.",
+      "entitlementSystem": "Sign up trainees at your own rates and prices then add them to your programs using our entitlement system.",
       "clientInsights": "Get all your client insights and customize their individual workout plan."
     },
     "form": {
@@ -253,7 +253,7 @@
     "sidebar": {
       "myDashboard": "My <br />Dashboard",
       "workoutPrograms": "Workout &<br />Programs",
-      "myClients": "My <br />Clients",
+      "myClients": "My <br />Trainees",
       "programEntitlements": "Program <br />Entitlements",
       "listOfUsers": "List of <br />Users",
       "auditPrograms": "Audit<br />Programs",
@@ -268,10 +268,10 @@
     },
     "home": {
       "welcomeBack": "Welcome Back",
-      "description": "We've kept an eye on your clients and programs while you were gone and made some charts. Please take your time to check them out below.",
+      "description": "We've kept an eye on your trainees and programs while you were gone and made some charts. Please take your time to check them out below.",
       "button": {
         "viewProfile": "View Profile",
-        "checkCharts": "Check Charts",
+        "checkCharts": "My Calendar",
         "settings": "Settings"
       },
       "stats": "Statistics Dashboard <br> Coming Soon"
@@ -392,14 +392,14 @@
         "detailsTab": "Details",
         "workoutPlanTab": "Workout-Plan",
         "workoutLogTab": "Workout-Log",
-        "dietLogTab": "Diet-Log",
+        "dietLogTab": "Client Logs",
         "weightLogTab": "Weight-Log",
         "trophyRoom":"Trophy Room",
         "statisticsTab": "Statistics"
       },
       "list": {
         "active": "Active",
-        "clients": "Clients",
+        "clients": "Trainees",
         "loading": "Loading...",
         "prev": "<<",
         "next": ">>",
@@ -409,7 +409,7 @@
         "planMonths": "Plan (Months)",
         "status": "Status",
         "pageSize": "Page size",
-        "totalClients": "total clients",
+        "totalClients": "total trainees",
         "monthsSuffix": "months",
         "viewProgram": "View Program",
         "messageClient": "Message Client",
@@ -474,7 +474,7 @@
         "tabs": {
           "details": "Details",
           "workouts": "Workouts",
-          "clients": "Clients",
+          "clients": "Trainees",
           "pricing": "Pricing"
         },
         "alt": {
@@ -530,7 +530,7 @@
         "tabs": {
           "details": "Details",
           "workouts": "Workouts",
-          "clients": "Clients",
+          "clients": "Trainees",
           "pricing": "Pricing"
         },
         "alt": {
@@ -560,7 +560,7 @@
           "trainerData": "Trainer Data",
           "title": "Title",
           "yearsOfExperience": "Years of Experience",
-          "maxClients": "Maximum Clients",
+          "maxClients": "Maximum Trainees",
           "availableHours": "Available Hours",
           "worksWith": "Works with",
           "na": "N/A",
@@ -599,7 +599,7 @@
       "settings": {
         "general": {
           "unitsAndMeasurements": "Units and Measurements",
-          "unitsExplanation": "The units displayed to you when viewing our dashboard do not affect the units viewed by clients!",
+          "unitsExplanation": "The units displayed to you when viewing our dashboard do not affect the units viewed by trainees!",
           "metricOption": "Metric (cm/kg)",
           "imperialOption": "Imperial (inch/lb)",
           "languages": "Languages",
@@ -666,7 +666,7 @@
           "status": "Status",
           "viewClient": "View Client",
           "removeClient": "Remove Client",
-          "noClients": "No clients just yet!",
+          "noClients": "No trainees just yet!",
           "prev": "Prev",
           "next": "Next",
           "pageText": "Page {current} of {total}",
@@ -675,7 +675,7 @@
         "details": {
           "quickStats": "Quick Stats",
           "quickStatsDescription": "Below you can find a quick rundown of the program's current statistics. We are working on a much better dashboard.",
-          "totalClients": "Total Clients:",
+          "totalClients": "Total Trainees:",
           "comingSoon": "Coming Soon...",
           "mostFrequent":"Top Muscles Worked:",
           "revenueThisMonth": "Revenue this Month:",
@@ -702,7 +702,7 @@
         },
         "docForms": {
           "clientInductionForm": "Client Induction Form",
-          "clientInductionDescription": "The client induction form is sent to all clients once they are subscribed to the program. It should usually include questions pertaining to client readiness and also about their goals for the specific program.",
+          "clientInductionDescription": "The client induction form is sent to all trainees once they are subscribed to the program. It should usually include questions pertaining to client readiness and also about their goals for the specific program.",
           "addTextInduction": "+ Add Text",
           "addNumberInduction": "+ Add Number",
           "addBooleanInduction": "+ Add Boolean",
@@ -711,14 +711,14 @@
           "addNewQuestionPlaceholder": "Add a new {type} Question",
           "removeInduction": "X",
           "clientFollowUpForm": "Client Follow-Up Form",
-          "clientFollowUpDescription": "The follow-up form is sent automatically to clients on a regular basis based on the interval set up in your settings. This form usually asks clients about their progress and urges them to update their weight setting.",
+          "clientFollowUpDescription": "The follow-up form is sent automatically to trainees on a regular basis based on the interval set up in your settings. This form usually asks trainees about their progress and urges them to update their weight setting.",
           "addTextFollow": "+ Add Text",
           "addNumberFollow": "+ Add Number",
           "addBooleanFollow": "+ Add Boolean",
           "addMediaUploadFollow": "+ Add Media Upload",
           "removeFollow": "X",
           "aiReferralDocument": "AI Referral Document",
-          "aiReferralDescription": "The AI referral document is used to respond to clients on a daily basis. Clients will have the option to refer to the trainer AI chat for quick questions, and the trainer can review the AI's response. Direct trainer messages will occur in a different inbox.",
+          "aiReferralDescription": "The AI referral document is used to respond to trainees on a daily basis. Trainees will have the option to refer to the trainer AI chat for quick questions, and the trainer can review the AI's response. Direct trainer messages will occur in a different inbox.",
           "viewDocument": "VIEW DOCUMENT",
           "changeDocument": "CHANGE DOCUMENT",
           "uploadDocument": "UPLOAD DOCUMENT",
@@ -826,7 +826,7 @@
         },
         "changeProgram": {
           "changeProgramTitle": "Change Program",
-          "description": "Click on one of the programs below to add it to have it overwrite the clients workouts and program details, please understand this will not change the status or price of the client subscription.",
+          "description": "Click on one of the programs below to add it to have it overwrite the trainees workouts and program details, please understand this will not change the status or price of the client subscription.",
           "loading": "Loading...",
           "noProgramsFound": "Seems you have no other programs just yet, get ahead and add one to your arsenal at our",
           "programListingPage": "Program Listing Page",
@@ -1129,7 +1129,7 @@
         "entitlements": "Entitlements",
         "loading": "Loading...",
         "whatAreEntitlements": "What Are Entitlements?",
-        "entitlementsDescription": "Entitlements are trainer-purchased subscriptions that can be assigned to trainees, allowing trainers to charge their own rates for their services. Each entitlement lasts for one month, after which a new one must be assigned for continued training access. To streamline the process, trainers can add clients to the auto-update queue below. This ensures that when a trainee's subscription expires, a new entitlement is automatically assigned, preventing any interruptions in their training.",
+        "entitlementsDescription": "Entitlements are trainer-purchased subscriptions that can be assigned to trainees, allowing trainers to charge their own rates for their services. Each entitlement lasts for one month, after which a new one must be assigned for continued training access. To streamline the process, trainers can add trainees to the auto-update queue below. This ensures that when a trainee's subscription expires, a new entitlement is automatically assigned, preventing any interruptions in their training.",
         "youCurrentlyHave": "You currently have:",
         "avlEntitlements": "Avl. Entitlements",
         "purchaseMore": "Purchase More",
@@ -1161,7 +1161,7 @@
         "packLeaderDescription": "A man with a solid following of brothers of iron. This bundle boasts 10 entitlements at an all-time low price. Perfect for those seeking to create a name for themselves in the world of fitness.",
         "packLeaderPrice": "$2.50",
         "weHaveAnArmyTitle": "We Have an Army",
-        "weHaveAnArmyDescription": "A large bundle of 30 entitlements, allowing you to transfer your legion of clients all at once at a highly discounted price you will not find anywhere else. A grand bundle for those who command an army of followers ready to walk their path.",
+        "weHaveAnArmyDescription": "A large bundle of 30 entitlements, allowing you to transfer your legion of trainees all at once at a highly discounted price you will not find anywhere else. A grand bundle for those who command an army of followers ready to walk their path.",
         "weHaveAnArmyPrice": "$1.99",
         "perEntitlement": "Per Entitlement",
         "noOfUnits": "No of Units",
@@ -1271,7 +1271,7 @@
         "genderLabel": "Gender",
         "experienceLabel": "Years of Experience",
         "socialHandle": "Social Handles",
-        "socialDescription": "Show off your personality by sharing your socials handles with potential clients.",
+        "socialDescription": "Show off your personality by sharing your socials handles with potential trainees.",
         "bioLabel": "Bio",
         "bioPlaceholder": "Tell us about yourself...",
         "saveProfileButton": "Save Profile",
@@ -1340,7 +1340,7 @@
         "deleteProgramButton": "Delete Program",
         "tabDetails": "Details",
         "tabWorkouts": "Workouts",
-        "tabClients": "Clients",
+        "tabClients": "Trainees",
         "tabPricing": "Pricing",
         "tabDocuments": "Documents",
         "tabReviews": "Reviews",
@@ -1368,7 +1368,7 @@
         "loadingPrograms": "Loading programs...",
         "selectProgramPlaceholder": "Select a program",
         "selectClient": "Select Client",
-        "loadingClients": "Loading clients...",
+        "loadingClients": "Loading trainees...",
         "selectClientPlaceholder": "Select a client",
         "messageLabel": "Message",
         "messagePlaceholder": "Describe your issue...",
@@ -1547,7 +1547,7 @@
         "allAssessments": "All",
         "scheduled": "Scheduled",
         "active": "Active",
-        "completed": "Completed",
+        "complete": "Completed",
         "canceled": "Canceled",
         "createAssessment": "Book Assessment",
         "modalComingSoon": "Assessment creation coming soon.",

@@ -1,5 +1,5 @@
 <template>
-  <div class="my-12">
+  <div >
     <!-- Search Section -->
     <div class="flex items-center justify-between mb-4 gap-6">
       <div class="text-sm flex gap-3 min-w-max items-center">
@@ -7,7 +7,7 @@
           {{ t('dashboard.tabs.clients.weightLog.showingRows') }}
         </p>
 
-        <select v-model="pageSize" @change="loadUsers" name="" class=" topsets-text-input min-w-32" id="">
+        <select v-model="pageSize" @change="loadUsers" name="" class=" rafik-text-input min-w-24 p-2" id="">
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="30">30</option>
@@ -41,7 +41,7 @@
               weight.created_at
                 ? new Date(weight.created_at).toLocaleDateString('en-GB', {
                     year: 'numeric',
-                    month: 'long',
+                    month: 'numeric',
                     day: 'numeric'
                   })
                 : '-'
@@ -95,8 +95,8 @@
       </div>
       <!-- No Results -->
       <div v-else class="space-y-6 flex flex-col items-center py-12">
-        <p class="text-topsets-pritext dark:text-topsets-darkpritext">
-          {{ t('dashboard.auditPrograms.list.noResults') }}
+        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+          User has not logged weight.
         </p>
       </div>
     <!-- Pagination -->
@@ -105,7 +105,7 @@
         class="flex justify-between items-center gap-4 my-6"
       >
         <!-- Page Number Tabs -->
-        <p class="header-small min-w-max">
+        <p class="header-small text-xs min-w-max">
           {{ t('dashboard.auditPrograms.list.pagination.page', { page: page }) }}
         </p>
         <hr class="border w-full border-topsets-sectext dark:border-topsets-darksectext" />

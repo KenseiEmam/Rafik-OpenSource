@@ -96,7 +96,7 @@
           <RolesandPerms
             v-else-if="
               activeTab === 'Roles and Permissions' &&
-              userStore.userProfile.roles.includes('Administrator') || userStore.userProfile.roles.includes('Organization Admin')
+              (userStore.userProfile.roles.includes('Administrator') || userStore.userProfile.roles.includes('Organization Admin'))
             "
           />
           <!-- Notification Settings -->

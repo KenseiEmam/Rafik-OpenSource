@@ -624,7 +624,7 @@ async function uploadFileToBucket(): Promise<string | null> {
         >
           {{ t('dashboard.programs.details.tabClients') }}
         </button>
-        <button
+        <!-- <button
           :class="
             activeTab === 'Pricing'
               ? 'text-topsets-pritext dark:text-topsets-darkpritext cursor-default'
@@ -634,7 +634,7 @@ async function uploadFileToBucket(): Promise<string | null> {
           @click="setActiveTab('Pricing')"
         >
           {{ t('dashboard.programs.details.tabPricing') }}
-        </button>
+        </button> -->
 
         <button
           :class="
