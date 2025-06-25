@@ -287,6 +287,7 @@ function EndAssessment(summary:any){
 // function getBestPerf(exerciseId:any) {
 
 onUnmounted(() => {
+  assessmentStore.clearAssessment
   if (timerInterval) clearInterval(timerInterval);
 });
 //   return assessmentStore.AssessmentItem?.best_perf?.find(ex => ex.exercise == exerciseId);
@@ -716,7 +717,7 @@ onMounted(() => {
           </p>
         </div>
 
-        <div v-if="assessmentStore.AssessmentItem.overall_performance" class="p-6 card">
+        <div v-if="assessmentStore.AssessmentItem.overall_performance " class="p-6 card">
           <h3 class="contentH-small ">Results</h3>
           <p class="text-body">
             Below are the results for drill performances:
@@ -733,7 +734,7 @@ onMounted(() => {
               <p v-if="previousAssessmentWithSameTemplate">Trend: +{{ perf.orm }}</p>
               <p>
               Pass:
-              <span
+              <span v-if=" assessmentStore.AssessmentItem.status === 'complete'"
                 :class="(() => {
                   const prevPerf = previousAssessmentWithSameTemplate?.overall_performance?.find(
                     (pr: any) => pr.exercise === perf.exercise
@@ -749,6 +750,9 @@ onMounted(() => {
                     return !prevPerf || perf.orm >= prevPerf.orm ? 'Yes' : 'No';
                   })()
                 }}
+              </span>
+              <span v-else class="text-rafik">
+                TBD
               </span>
               </p>
 

@@ -176,6 +176,7 @@ type Message = {
   media?: string;
   seen_at?: Date | null;
   sent_by: number | string;
+  sent_to: number | string;
   user_program: number;
   created_at: string;
   form?: number | null; // if there's a form ID
@@ -242,7 +243,8 @@ const submitMessage = async () => {
     content: sending.value,
     sent_by: UserID,
     user_program: props.Client.program_details.id,
-    created_at: new Date().toISOString()
+    created_at: new Date().toISOString(),
+    sent_to:props.Client.id,
   };
 
   const { error } = await supabase.from('chat_messages').insert([newMessage]).select();

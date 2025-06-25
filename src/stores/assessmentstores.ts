@@ -234,6 +234,7 @@ async function getAssessment(id: number) {
 
   // Clear user details (useful for cleanup)
   function clearUserDetails() {
+
     trainees.value = {};
     assessors.value = {};
   }
@@ -327,7 +328,10 @@ async function getAssessment(id: number) {
       return null;
     }
   }
-
+function clearAssessment() {
+  AssessmentItem.value = null;
+  clearUserDetails();
+}
   return {
     AssessmentItem,
     AllAssessments,
@@ -344,6 +348,7 @@ async function getAssessment(id: number) {
     fetchAssessmentUserDetails,
     fetchTemplateData,
     fetchAllTemplateData,
-    clearUserDetails
+    clearUserDetails,
+    clearAssessment
   };
 });
