@@ -162,7 +162,7 @@
         <span class="nav-btn" v-html="t('dashboard.sidebar.myProfile')" />
       </RouterLink>
 
-      <a @click="handleLogOut" class=" flex items-center gap-2 2xl:text-lg text-base text-red-600 pl-4">
+      <a @click="handleLogOut" class=" flex items-center gap-2 2xl:text-lg text-base  pl-4">
         <svg class="w-5 h-5 me-2 text-body" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         {{ t('dashboard.sidebar.logout') }}
       </a>

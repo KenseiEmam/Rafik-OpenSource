@@ -62,7 +62,7 @@
         <label class="flex items-center space-x-2 cursor-pointer">
           <input type="checkbox" v-model="localSettings.dark_mode" class="hidden" />
           <div
-            class="w-16 h-8 flex items-center bg-topsets-secondary dark:bg-topsets-alternate border-topsets-sectext dark:border-topsets-darksectext border-2 rounded-full transition-all"
+            class="w-16 h-8 flex items-center bg-topsets-secbg dark:bg-topsets-sectext border-topsets-sectext dark:border-topsets-darksectext border-2 rounded-full transition-all"
           >
             <div
               class="w-8 h-8 bg-topsets-sectext dark:bg-topsets-darksectext flex items-center justify-center rounded-full shadow-md transform transition-transform"
@@ -77,7 +77,7 @@
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 384 512"
                   fill="currentColor"
-                  class="w-3 text-topsets-alternate"
+                  class="w-3 text-topsets-darksecbg"
                 >
                   <path
                     d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2
@@ -92,7 +92,7 @@
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 512 512"
                   fill="currentColor"
-                  class="w-3 text-topsets-secondary"
+                  class="w-3 text-topsets-secbg"
                 >
                   <path
                     d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9
