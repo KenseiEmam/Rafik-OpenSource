@@ -137,7 +137,7 @@
       "getItOn": "GET IT ON",
       "googlePlay": "Google Play"
     },
-    "errorMessage": "Contact us at admin@topsetsapp.ae to get access!"
+    "errorMessage": "Contact us at admin@topsets.com to get access!"
   },
   "login": {
     "welcomeBack": "WELCOME BACK! TIME TO CATCH-UP",
@@ -232,7 +232,7 @@
       },
       "accountDeletion": {
         "title": "11. Request Account & Data Deletion",
-        "content": "If you wish to delete your account and associated data, please visit <a href=\"https://topsetsapp.ae/delete-account\" class=\"text-blue-500 hover:underline\">topsetsapp.ae/delete-account</a>. Once your request is submitted, your data will be permanently removed, except where retention is legally required."
+        "content": "If you wish to delete your account and associated data, please visit <a href=\"https://topsets.com/delete-account\" class=\"text-blue-500 hover:underline\">topsets.com/delete-account</a>. Once your request is submitted, your data will be permanently removed, except where retention is legally required."
       }
     }
   },

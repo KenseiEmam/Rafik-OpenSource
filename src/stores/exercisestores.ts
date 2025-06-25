@@ -251,7 +251,7 @@ async function fetchPublicExercise(id: string) {
         // Delay opening the URL slightly for better UX
         setTimeout(() => {
           window.open(
-            `http://topsetsapp.ae/dashboard/exercises/personal/${data[0].id}`,
+            `http://topsets.com/dashboard/exercises/personal/${data[0].id}`,
             "_blank"
           );
         }, 500);
@@ -296,7 +296,7 @@ async function fetchPublicExercise(id: string) {
         // Delay opening the URL slightly for better UX
         setTimeout(() => {
           window.open(
-            `http://topsetsapp.ae/dashboard/exercises/personal/${data[0].id}`,
+            `http://topsets.com/dashboard/exercises/personal/${data[0].id}`,
             "_blank"
           );
         }, 500);

@@ -10,10 +10,10 @@ const { t , locale } = useI18n();
   >
     <img
       src="https://plus.unsplash.com/premium_photo-1721755964191-c88e3c24f5cc?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-      class="w-full h-full object-cover absolute "
+      class="w-full h-full object-cover absolute grayscale"
       alt=""
     />
-    <div class="w-full h-full opacity-80 bg-topsets-darksecbg absolute"></div>
+    <div class="w-full h-full opacity-80 bg-topsets-secbg absolute"></div>
     <div class="col-span-3 relative space-y-4">
       <h3 class="font-black text-topsets text-xl md:text-3xl md:title-small">
         Limitless Experience

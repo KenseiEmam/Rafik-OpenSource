@@ -129,7 +129,7 @@
 
     <!-- Delete Account Link -->
     <div class="card p-8 header-small">
-      <a href="https://www.topsetsapp.ae/delete-account" class="text-red-500">
+      <a href="https://www.topsets.com/delete-account" class="text-red-500">
         {{ t('dashboard.tabs.settings.general.deleteAccount') }}
       </a>
     </div>
