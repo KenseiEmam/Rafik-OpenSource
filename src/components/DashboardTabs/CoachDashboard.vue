@@ -17,7 +17,11 @@
     <p class="my-6">None currently.</p>
   </div>
   <div class="card col-span-2 p-6">
-    <h3 class="2xl:contentH-small ">Today's Assessments <span v-if="!loadAssessments">({{ assessments.length }})</span></h3>
+    <div class="flex justify-between items-center">
+
+      <h3 class="2xl:contentH-small ">Today's Assessments <span v-if="!loadAssessments">({{ assessments.length }})</span></h3>
+      <router-link class="btn-sm-outline" :to="{name:'assessments'}">View My Asessments</router-link>
+    </div>
     <div class="h-full w-full flex overflow-x-auto gap 3 ">
       <p class="m-auto" v-if="loadAssessments && assessments.length <= 0">Loading Assessment Data...</p>
       <p class="m-auto" v-else-if="!loadAssessments && assessments.length <= 0">No assessments for today.</p>
