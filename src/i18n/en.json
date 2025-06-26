@@ -10,7 +10,8 @@
     "error": "Error!",
     "opened": "Opened",
     "seen": "Seen",
-    "na": "N/A"
+    "na": "N/A",
+    "cancel": "Cancel"
   },
 
   "footer": {
@@ -621,7 +622,23 @@
           "errorUpdatingRoles": "Error updating roles: ",
           "errorFetchingUsers": "Error fetching users",
           "cannotRemoveOwnAdminRole": "You cannot remove your own Administrator role",
-          "cannotRemoveOwnOrgAdminRole": "You cannot remove your own Organization Admin role"
+          "cannotRemoveOwnOrgAdminRole": "You cannot remove your own Organization Admin role",
+          "userManagement": "User Management",
+          "banUser": "Ban User",
+          "unbanUser": "Unban User",
+          "userBanned": "User Banned",
+          "userActive": "User Active",
+          "banConfirmation": "Are you sure you want to ban this user?",
+          "unbanConfirmation": "Are you sure you want to unban this user?",
+          "userBannedSuccess": "User has been banned successfully",
+          "userUnbannedSuccess": "User has been unbanned successfully",
+          "errorBanningUser": "Error banning user: ",
+          "errorUnbanningUser": "Error unbanning user: ",
+          "cannotBanYourself": "You cannot ban yourself",
+          "banUserDescription": "Banning a user will prevent them from accessing the platform. They will not be able to log in or use any features.",
+          "unbanUserDescription": "Unbanning a user will restore their access to the platform. They will be able to log in and use all features again.",
+          "bannedStatus": "BANNED",
+          "activeStatus": "ACTIVE"
         },
         "trainer": {
           "seatsAvailable": "Seats Available",
