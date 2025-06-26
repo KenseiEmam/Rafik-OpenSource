@@ -283,18 +283,18 @@
               </svg>
               <span class="text-body">Priority Support</span>
             </div>
-            <div class="flex items-center gap-3">
+            <!-- <div class="flex items-center gap-3">
               <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
               <span class="text-body">Custom Branding</span>
-            </div>
-            <div class="flex items-center gap-3">
+            </div> -->
+            <!-- <div class="flex items-center gap-3">
               <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
               <span class="text-body">API Access</span>
-            </div>
+            </div> -->
             <div class="flex items-center gap-3">
               <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -306,9 +306,9 @@
 
         <!-- Action Button -->
         <div class="flex justify-end">
-          <button 
+          <button
             @click="showComingSoon"
-            class="btn-lg bg-gradient-to-r from-rafik to-rafik-secondary hover:from-rafik-secondary hover:to-rafik text-white font-medium px-8 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-3"
+            class="btn-lg  text-white font-medium px-8 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-3"
           >
             {{ t('dashboard.settings.changePlan') }}
           </button>
@@ -558,4 +558,4 @@ function showComingSoon() {
 .switch-label {
   margin-bottom: 0 !important;
 }
-</style> 
+</style>
