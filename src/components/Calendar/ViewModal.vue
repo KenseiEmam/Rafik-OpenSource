@@ -30,7 +30,15 @@
             <h3 class="text-rafik-secondary">{{ formattedEnd }}</h3>
           </div>
 
-
+          <!-- Reschedule button for assessment slots -->
+          <div v-if="true || templateData.type === 'assessment' && templateData.status === 'scheduled' && canReschedule()" class="flex w-full items-center justify-between">
+            <button
+              @click="handleRescheduleClick"
+              class="btn-sm bg-rafik-secondary hover:bg-rafik text-white px-4 py-2 rounded text-sm"
+            >
+              Reschedule Assessment
+            </button>
+          </div>
 
         <p v-if="loading">Loading User Data</p>
 
@@ -127,6 +135,15 @@
       </div>
     </div>
   </div>
+  
+  <!-- Reschedule Modal -->
+  <RescheduleModal
+    :visible="showRescheduleModal"
+    :assessmentData="selectedAssessment"
+    :slotData="selectedSlot"
+    @close="showRescheduleModal = false"
+    @rescheduled="handleRescheduleComplete"
+  />
 </template>
 
 <script setup lang="ts">
@@ -140,10 +157,21 @@ import {
 import { useI18n } from 'vue-i18n';
 import { useAssessmentStore } from '@/stores/assessmentstores';
 import { supabase } from '@/lib/supabaseClient';
+import { useUserStore } from '@/stores/user';
+import { useSlotStore } from '@/stores/slotstores';
+import RescheduleModal from './RescheduleModal.vue';
 
 const { t, locale } = useI18n();          // locale already available
 const loading = ref(false);
 const assessmentStore = useAssessmentStore();
+const userStore = useUserStore();
+const slotStore = useSlotStore();
+
+// Reschedule modal state
+const showRescheduleModal = ref(false);
+const selectedAssessment = ref<any>(null);
+const selectedSlot = ref<any>(null);
+
 function checkPermssion(){
   const user = localStorage.getItem('UserID')
   const roles = localStorage.getItem('Roles')
@@ -180,7 +208,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['close', 'delete']);
+const emit = defineEmits(['close', 'delete', 'rescheduled']);
 const users = ref<any[]>([]);
 
 const filterAssessors = computed(() =>
@@ -295,6 +323,45 @@ const handleClose = () => {
   resetForm();
   emit('close');
 };
+
+// Check if user can reschedule this assessment
+function canReschedule(): boolean {
+  const userRoles = userStore.userProfile?.roles || [];
+  const userId = localStorage.getItem('UserID');
+  
+  // Organization Admin can reschedule any assessment
+  if (userRoles.includes('Organization Admin')) {
+    return true;
+  }
+  
+  // Organization Trnr can only reschedule assessments they're assigned to
+  if (userRoles.includes('Organization Trnr') && userId) {
+    return assessmentStore.AssessmentItem?.assessors?.includes(userId) || false;
+  }
+  
+  return false;
+}
+
+// Handle reschedule button click
+async function handleRescheduleClick() {
+  try {
+    selectedAssessment.value = assessmentStore.AssessmentItem;
+    selectedSlot.value = props.templateData;
+    showRescheduleModal.value = true;
+  } catch (error) {
+    console.error('Error preparing reschedule:', error);
+  }
+}
+
+// Handle reschedule completion
+async function handleRescheduleComplete() {
+  showRescheduleModal.value = false;
+  selectedAssessment.value = null;
+  selectedSlot.value = null;
+  
+  // Emit rescheduled event to refresh the calendar
+  emit('rescheduled');
+}
 </script>
 
 <style scoped>

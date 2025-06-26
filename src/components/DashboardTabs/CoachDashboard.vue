@@ -82,8 +82,18 @@
                 class="px-3 py-1 rounded-full font-semibold uppercase"
                 :class="getStatusClasses(assessment.status)"
               >
-                {{ assessment.status }}
+                {{ assessment.status }} 
               </span>
+            </div>
+            
+            <!-- Reschedule Button (only for scheduled assessments) -->
+            <div v-if="assessment.status === 'scheduled' && canReschedule(assessment)" class="mt-3">
+              <button
+                @click.stop="handleRescheduleClick(assessment)"
+                class="btn-sm bg-rafik-secondary hover:bg-rafik text-white px-3 py-1 rounded text-xs"
+              >
+                {{ t('dashboard.settings.rescheduleAssessmentButton') }}
+              </button>
             </div>
           </div>
         </div>
@@ -91,6 +101,15 @@
       </div>
     </div>
   </div>
+  
+  <!-- Reschedule Modal -->
+  <RescheduleModal
+    :visible="showRescheduleModal"
+    :assessmentData="selectedAssessment"
+    :slotData="selectedSlot"
+    @close="showRescheduleModal = false"
+    @rescheduled="handleRescheduleComplete"
+  />
   </div>
 </template>
 
@@ -99,6 +118,9 @@ import { onMounted, ref } from 'vue';
 import { supabase } from '@/lib/supabaseClient'; // Ensure Supabase is correctly set up
 import { useI18n } from 'vue-i18n';
 import { useAssessmentStore } from '@/stores/assessmentstores';
+import { useUserStore } from '@/stores/user';
+import { useSlotStore } from '@/stores/slotstores';
+import RescheduleModal from '@/components/Calendar/RescheduleModal.vue';
 type Assessment = {
   id: number;
   created_at: string;
@@ -121,6 +143,14 @@ const { t, locale } = useI18n();
 const assessments = ref<Assessment[]>([])
 const loadAssessments = ref(false)
 const assessmentStore = useAssessmentStore()
+const userStore = useUserStore()
+const slotStore = useSlotStore()
+
+// Reschedule modal state
+const showRescheduleModal = ref(false);
+const selectedAssessment = ref<Assessment | null>(null);
+const selectedSlot = ref<any>(null);
+
 const props = defineProps({
   user: Object
 });
@@ -148,6 +178,55 @@ function getStatusClasses(status: string): string {
       return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
     default:
       return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+  }
+}
+
+// Check if user can reschedule this assessment
+function canReschedule(assessment: Assessment): boolean {
+  const userRoles = userStore.userProfile?.roles || [];
+  const userId = localStorage.getItem('UserID');
+  
+  // Organization Admin can reschedule any assessment
+  if (userRoles.includes('Organization Admin')) {
+    return true;
+  }
+  
+  // Organization Trnr can only reschedule assessments they're assigned to
+  if (userRoles.includes('Organization Trnr') && userId) {
+    return assessment.assessors?.includes(userId) || false;
+  }
+  
+  return false;
+}
+
+// Handle reschedule button click
+async function handleRescheduleClick(assessment: Assessment) {
+  try {
+    // Find the associated slot
+    const slot = slotStore.AllSlots.find(s => s.assessment === assessment.id);
+    if (!slot) {
+      console.error('No slot found for assessment:', assessment.id);
+      return;
+    }
+    
+    selectedAssessment.value = assessment;
+    selectedSlot.value = slot;
+    showRescheduleModal.value = true;
+  } catch (error) {
+    console.error('Error preparing reschedule:', error);
+  }
+}
+
+// Handle reschedule completion
+async function handleRescheduleComplete() {
+  showRescheduleModal.value = false;
+  selectedAssessment.value = null;
+  selectedSlot.value = null;
+  
+  // Refresh the assessments by refetching today's assessments
+  if (props.user) {
+    const result = await assessmentStore.getTodaysAssessments(props.user);
+    assessments.value = result || [];
   }
 }
 
