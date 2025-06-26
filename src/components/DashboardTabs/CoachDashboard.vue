@@ -421,6 +421,7 @@ import { useFormStore } from '@/stores/formstores';
 import { useChatsStore } from '@/stores/chatsstores';
 
 import { useUserStore } from '@/stores/user';
+import { useSlotStore } from '@/stores/slotstores';
 
 // Interface for Form
 interface Form {
@@ -701,7 +702,7 @@ function canReschedule(assessment: Assessment): boolean {
 async function handleRescheduleClick(assessment: Assessment) {
   try {
     // Find the associated slot
-    const slot = slotStore.AllSlots.find(s => s.assessment === assessment.id);
+    const slot = slotStore.AllSlots.find((s:any) => s.assessment === assessment.id);
     if (!slot) {
       console.error('No slot found for assessment:', assessment.id);
       return;
