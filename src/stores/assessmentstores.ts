@@ -130,33 +130,52 @@ async function getAssessment(id: number) {
   }
 async function getTodaysAssessments(userProfile: any) {
   try {
-    // Get today’s start and end in UTC
     const now = new Date();
     const startOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0));
     const endOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999));
 
-    const { data, error } = await supabase
+    // Step 1: Fetch all assessments for this organization
+    const { data: assessments, error: assessmentError } = await supabase
       .from('assessment')
       .select('*')
-      .eq('organization', userProfile.organization)
-      .gte('created_at', startOfDay.toISOString())
-      .lt('created_at', endOfDay.toISOString())
-      .order('created_at', { ascending: false });
+      .eq('organization', userProfile.organization);
 
-    if (error) throw error;
+    if (assessmentError) throw assessmentError;
+    if (!assessments || assessments.length === 0) return [];
 
-    let filtered = data;
+    // Step 2: Get unique slot IDs
+    const slotIds = [...new Set(assessments.map((a: any) => a.slot).filter(Boolean))];
+
+    // Step 3: Fetch relevant slots
+    const { data: slots, error: slotError } = await supabase
+      .from('slots')
+      .select('id, time_start')
+      .in('id', slotIds);
+
+    if (slotError) throw slotError;
+
+    // Step 4: Map slot ID to time_start
+    const slotMap = Object.fromEntries(slots.map((s: any) => [s.id, new Date(s.time_start)]));
+
+    // Step 5: Filter assessments where slot.time_start is today
+    let filtered = assessments.filter((a: any) => {
+      const slotTime = slotMap[a.slot];
+      return slotTime && slotTime >= startOfDay && slotTime <= endOfDay;
+    });
+
+    // Step 6: Role-based filtering
     if (
       userProfile?.roles?.includes('Organization Trnr') &&
       !userProfile?.roles?.includes('Organization Admin')
     ) {
       filtered = filtered.filter(
         (assessment: any) =>
-          Array.isArray(assessment.assessors) && assessment.assessors.includes(userProfile.id)
+          Array.isArray(assessment.assessors) &&
+          assessment.assessors.includes(userProfile.id)
       );
     }
 
-    // Optionally: fetch related data
+    // Step 7: Fetch related data
     Promise.all([
       fetchAllTemplateData(filtered),
       fetchAllUserDetails(filtered),
@@ -172,6 +191,7 @@ async function getTodaysAssessments(userProfile: any) {
     return null;
   }
 }
+
 
   // Fetch user details for a single user ID
   async function fetchUserDetails(userId: string, type: 'trainee' | 'assessor') {

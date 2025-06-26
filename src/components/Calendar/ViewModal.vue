@@ -30,15 +30,7 @@
             <h3 class="text-rafik-secondary">{{ formattedEnd }}</h3>
           </div>
 
-          <!-- Reschedule button for assessment slots -->
-          <div v-if="true || templateData.type === 'assessment' && templateData.status === 'scheduled' && canReschedule()" class="flex w-full items-center justify-between">
-            <button
-              @click="handleRescheduleClick"
-              class="btn-sm bg-rafik-secondary hover:bg-rafik text-white px-4 py-2 rounded text-sm"
-            >
-              Reschedule Assessment
-            </button>
-          </div>
+
 
         <p v-if="loading">Loading User Data</p>
 
@@ -112,7 +104,7 @@
 
         <!-- Action Buttons -->
         <div
-          class="flex justify-end rtl:justify-start gap-4 mt-8"
+          class="flex justify-end rtl:justify-start gap-4 mt-8 wrap w-full"
         >
                   <button
             @click="emit('delete')" v-if="checkPermssion"
@@ -130,12 +122,21 @@
           <router-link :to="{name:'assessment-details', params:{id:templateData.assessment}}" v-if="templateData.assessment && !loading" class="btn-md rounded">
             View Assessment
           </router-link>
+        <!-- Reschedule button for assessment slots -->
 
         </div>
+        <div v-if="true || templateData.type === 'assessment' && templateData.status === 'scheduled' && canReschedule()" class="flex flex-1 items-center  w-full justify-between">
+            <button
+              @click="handleRescheduleClick"
+              class="btn-md w-full"
+            >
+              Reschedule Assessment
+            </button>
+          </div>
       </div>
     </div>
   </div>
-  
+
   <!-- Reschedule Modal -->
   <RescheduleModal
     :visible="showRescheduleModal"
@@ -328,17 +329,17 @@ const handleClose = () => {
 function canReschedule(): boolean {
   const userRoles = userStore.userProfile?.roles || [];
   const userId = localStorage.getItem('UserID');
-  
+
   // Organization Admin can reschedule any assessment
   if (userRoles.includes('Organization Admin')) {
     return true;
   }
-  
+
   // Organization Trnr can only reschedule assessments they're assigned to
   if (userRoles.includes('Organization Trnr') && userId) {
     return assessmentStore.AssessmentItem?.assessors?.includes(userId) || false;
   }
-  
+
   return false;
 }
 
@@ -358,7 +359,7 @@ async function handleRescheduleComplete() {
   showRescheduleModal.value = false;
   selectedAssessment.value = null;
   selectedSlot.value = null;
-  
+
   // Emit rescheduled event to refresh the calendar
   emit('rescheduled');
 }
