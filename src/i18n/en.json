@@ -1511,7 +1511,17 @@
       "orgUpdateSuccess": "Organization updated successfully",
       "orgUpdateFail": "Failed to update organization: {error}",
       "orgLogoUploadSuccess": "Logo uploaded successfully!",
-      "orgLogoUploadFail": "Error uploading logo: {error}"
+      "orgLogoUploadFail": "Error uploading logo: {error}",
+      "currentSubscriptionPlan": "Current Subscription Plan",
+      "subscriptionPlanDescription": "Manage your organization's subscription and billing details",
+      "planName": "Plan Name",
+      "activeTrainers": "Active Trainers",
+      "activeTrainees": "Active Trainees",
+      "yearlyCost": "Yearly Cost",
+      "planFeatures": "Plan Features",
+      "changePlan": "Change Plan",
+      "comingSoonTitle": "Coming Soon!",
+      "comingSoonMessage": "Plan management features will be available soon. Stay tuned for updates!"
     },
     "assessmentTemplates": {
       "pageTitle": "Assessment",
