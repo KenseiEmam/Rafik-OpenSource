@@ -9,6 +9,7 @@ import { useUserStore } from '@/stores/user';
 import { useTemplateStore } from '@/stores/templatestores';
 import { useI18n } from 'vue-i18n';
 import { useSlotStore } from '@/stores/slotstores';
+import RescheduleModal from '@/components/Calendar/RescheduleModal.vue';
 const { t, tm, rt } = useI18n();
 
 // Access the route object
@@ -302,6 +303,11 @@ watch(
 const showAddProgramModal = ref(false);
 const showCancelModal = ref(false);
 
+// Reschedule modal state
+const showRescheduleModal = ref(false);
+const selectedAssessment = ref<any>(null);
+const selectedSlot = ref<any>(null);
+
 // Function to show success alerts
 function showSuccess(message: string) {
   Swal.fire({
@@ -427,6 +433,45 @@ async function fetchWorkout() {
 onMounted(() => {
  fetchWorkout()
 });
+
+// Check if user can reschedule this assessment
+function canReschedule(): boolean {
+  const userRoles = localStorage.getItem('Roles') || '';
+  const userId = localStorage.getItem('UserID');
+  
+  // Organization Admin can reschedule any assessment
+  if (userRoles.includes('Organization Admin')) {
+    return true;
+  }
+  
+  // Organization Trnr can only reschedule assessments they're assigned to
+  if (userRoles.includes('Organization Trnr') && userId) {
+    return assessmentStore.AssessmentItem?.assessors?.includes(userId) || false;
+  }
+  
+  return false;
+}
+
+// Handle reschedule button click
+async function handleRescheduleClick() {
+  try {
+    selectedAssessment.value = assessmentStore.AssessmentItem;
+    selectedSlot.value = slotStore.SlotItem;
+    showRescheduleModal.value = true;
+  } catch (error) {
+    console.error('Error preparing reschedule:', error);
+  }
+}
+
+// Handle reschedule completion
+async function handleRescheduleComplete() {
+  showRescheduleModal.value = false;
+  selectedAssessment.value = null;
+  selectedSlot.value = null;
+  
+  // Refresh the assessment data
+  await fetchWorkout();
+}
 </script>
 
 <template>
@@ -518,6 +563,16 @@ onMounted(() => {
             <p v-if="assessmentStore.AssessmentItem.ended" class="text-xs my-auto">
               (Actual {{ new Date(assessmentStore.AssessmentItem.ended).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }})
             </p>
+          </div>
+          
+          <!-- Reschedule button for scheduled assessments -->
+          <div v-if="assessmentStore.AssessmentItem.status === 'scheduled' && canReschedule()" class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
+            <button 
+              @click="handleRescheduleClick" 
+              class="btn-sm bg-rafik-secondary hover:bg-rafik text-white px-4 py-2 rounded text-sm"
+            >
+              Reschedule Assessment
+            </button>
           </div>
             <div v-if="assessmentStore.AssessmentItem.status == 'active'" class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
               <p class="text-rafik-pritext dark:text-rafik-darkpritext">
@@ -1026,4 +1081,13 @@ onMounted(() => {
       </div>
     </div>
   </div>
+  
+  <!-- Reschedule Modal -->
+  <RescheduleModal
+    :visible="showRescheduleModal"
+    :assessmentData="selectedAssessment"
+    :slotData="selectedSlot"
+    @close="showRescheduleModal = false"
+    @rescheduled="handleRescheduleComplete"
+  />
 </template>
