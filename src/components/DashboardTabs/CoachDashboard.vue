@@ -299,10 +299,10 @@
             <!-- Status Badge -->
             <div class="mt-3">
               <span
-                class="px-3 py-1 bg-green-200 text-green-700 rounded-full font-semibold uppercase"
+                class="px-3 py-1 bg-amber-200 text-amber-700 rounded-full font-semibold uppercase"
 
               >
-                Active
+                Risk
               </span>
             </div>
           </div>
