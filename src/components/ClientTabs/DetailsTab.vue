@@ -122,15 +122,16 @@
         </div>
       </div>
     </div>
-    <div class="card p-8 grid gap-6 grid-cols-3 items-center 2xl:min-h-96" v-if="program">
-      <div class="col-span-2 space-y-4">
+    <div class="grid grid-cols-2 gap-6">
+       <div class="card p-8 flex flex-col gap-3  items-center 2xl:min-h-96" v-if="program">
+      <div class="space-y-4">
         <h3 class="text-sm contentH-small 2xl:text-base">
           {{ t('dashboard.tabs.clients.details.program') }}
         </h3>
         <h2 class="header-medium font-black">{{ program.program_name || 'Loading...' }}</h2>
         <p class="text-body">{{ program.program_description || 'Loading...' }}</p>
       </div>
-      <div class="flex flex-col gap-3">
+      <div class="flex flex-col w-full gap-3">
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">
             {{ t('dashboard.tabs.clients.details.joinedOn') }}
@@ -159,7 +160,7 @@
             }}
           </p>
         </div>
-        <div class="flex justify-between uppercase text-sm 2xl:text-base">
+        <!-- <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">
             {{ t('dashboard.tabs.clients.details.pricePackage') }}
           </p>
@@ -170,7 +171,7 @@
                 : 'None Paying'
             }}
           </p>
-        </div>
+        </div> -->
         <div class="flex justify-center uppercase">
           <router-link
             :to="{ name: 'program-details', params: { id: program.id } }"
@@ -180,6 +181,13 @@
         </div>
       </div>
     </div>
+    <div class="card  p-6">
+      <h3 class="contentH-small">Weight Log</h3>
+      <WeightLog :profile="client.profile" />
+    </div>
+
+    </div>
+
   </div>
 </template>
 
@@ -188,6 +196,7 @@ import { ref, computed, onMounted } from 'vue';
 import { supabase } from '../../lib/supabaseClient';
 import Swal from 'sweetalert2';
 import { useI18n } from 'vue-i18n';
+import WeightLog from './WeightLog.vue';
 const { t , locale } = useI18n();
 // Success and Error Alerts
 function showSuccess(message: string) {

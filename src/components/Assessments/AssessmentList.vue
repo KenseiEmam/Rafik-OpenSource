@@ -34,11 +34,11 @@
           {{ t('dashboard.assessments.list.active') }}
         </button>
         <button
-          @click="updateFilter('completed')"
+          @click="updateFilter('complete')"
           class="card border 2xl:text-base text-sm min-w-max uppercase"
-          :class="filter === 'completed' ? 'border-rafik gradient-bg text-rafik' : 'border'"
+          :class="filter === 'complete' ? 'border-rafik gradient-bg text-rafik' : 'border'"
         >
-          {{ t('dashboard.assessments.list.completed') }}
+          {{ t('dashboard.assessments.list.complete') }}
         </button>
         <button
           @click="updateFilter('canceled')"
@@ -264,7 +264,7 @@ function getStatusClasses(status: string): string {
       return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
     case 'active':
       return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-    case 'completed':
+    case 'complete':
       return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
     case 'canceled':
       return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';

@@ -176,6 +176,7 @@ type Message = {
   media?: string;
   seen_at?: Date | null;
   sent_by: number | string;
+  sent_to: number | string;
   user_program: number;
   created_at: string;
   form?: number | null; // if there's a form ID
@@ -242,18 +243,33 @@ const submitMessage = async () => {
     content: sending.value,
     sent_by: UserID,
     user_program: props.Client.program_details.id,
-    created_at: new Date().toISOString()
+    created_at: new Date().toISOString(),
+    sent_to:props.Client.id,
   };
 
-  const { data, error } = await supabase.from('chat_messages').insert([newMessage]).select();
+  const { error } = await supabase.from('chat_messages').insert([newMessage]).select();
+
   if (error) {
     showError('Failed to send message.');
     console.error('Supabase error:', error);
     return;
   }
-
   sending.value = '';
   scrollToBottom();
+  //props.Client.id
+  const { error: error2 } = await supabase.from('notifications').insert([
+    {
+      user_id: props.Client.id,
+      created_at: new Date().toISOString(),
+      title: `New message from your trainer`,
+      body: newMessage.content
+    }
+  ]);
+
+  if (error2) {
+    console.error('Supabase error:', error2);
+    return;
+  }
 };
 
 // Watch for changes in props.Client to refetch messages

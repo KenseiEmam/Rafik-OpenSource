@@ -436,39 +436,19 @@ onBeforeUnmount(() => {
         >
           {{ t('dashboard.clients.details.workoutPlanTab') }}
         </button>
+
         <button
           class="nav-btn uppercase"
           :class="
-            activeTab === 'Workout-Log'
+            activeTab === 'Client-Logs'
               ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
               : ' hover:opacity-70'
           "
-          @click="setActiveTab('Workout-Log')"
-        >
-          {{ t('dashboard.clients.details.workoutLogTab') }}
-        </button>
-        <button
-          class="nav-btn uppercase"
-          :class="
-            activeTab === 'Diet-Log'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
-              : ' hover:opacity-70'
-          "
-          @click="setActiveTab('Diet-Log')"
+          @click="setActiveTab('Client-Logs')"
         >
           {{ t('dashboard.clients.details.dietLogTab') }}
         </button>
-        <button
-          class="nav-btn uppercase"
-          :class="
-            activeTab === 'Diet-Log'
-              ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default'
-              : ' hover:opacity-70'
-          "
-          @click="setActiveTab('Weight-Log')"
-        >
-          {{ t('dashboard.clients.details.weightLogTab') }}
-        </button>
+
         <button
           class="nav-btn uppercase"
           :class="activeTab === 'Trophy-Room' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
@@ -499,15 +479,22 @@ onBeforeUnmount(() => {
             :program="clientStore.Client.program_details"
             :user="clientStore.Client?.id"
           />
-          <!-- Workout Log Tab -->
-          <WorkoutLogTab
-            v-else-if="activeTab === 'Workout-Log'"
+          <div class="flex flex-1 gap-2 w-full " v-else-if="activeTab === 'Client-Logs'">
+            <div class="flex-1 card space-y-3">
+              <h3 class="subheader-small pl-6">Workout Log</h3>
+              <WorkoutLogTab
+
             :program="clientStore.Client.program_details"
           />
-          <!-- Diet Log Tab -->
-          <DietLogTab v-else-if="activeTab === 'Diet-Log'" :profile="clientStore.Client.profile" />
-          <!-- Weight Log Tab -->
-          <WeightLog v-else-if="activeTab === 'Weight-Log'" :profile="clientStore.Client.profile" />
+            </div>
+            <div class="flex-1 card space-y-3">
+              <h3 class="subheader-small pl-6">Diet Log</h3>
+              <!-- Diet Log Tab -->
+          <DietLogTab class="flex-1 card" :profile="clientStore.Client.profile" />
+            </div>
+
+
+          </div>
           <!-- Trophy Room Tab -->
            <TrophyRoom v-else-if="activeTab === 'Trophy-Room'" :client="clientStore.Client.profile" />
         </transition>
