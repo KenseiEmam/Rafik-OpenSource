@@ -12,6 +12,8 @@ const slotStore = useSlotStore();
 const templateStore = useTemplateStore();
 const userStore= useUserStore();
 import type { EventInput } from '@fullcalendar/core';
+import ViewModal from './ViewModal.vue';
+import { supabase } from '@/lib/supabaseClient';
 
 const calendarEvents = ref<EventInput[]>([]);
 
@@ -47,6 +49,56 @@ function slotsToEvents(slots: any[]): EventInput[] {
    );
 }
 
+import Swal from 'sweetalert2';
+
+function showSuccess(message: string) {
+  Swal.fire({
+    title: 'Success!',
+    text: message,
+    icon: 'success',
+    toast: true,
+    position: 'top-right',
+    showConfirmButton: false,
+    timer: 1500,
+    timerProgressBar: true,
+    background: '#081411',
+    color: '#E8F3ED',
+  });
+}
+
+function showError(message: string) {
+  Swal.fire({
+    title: 'Error!',
+    text: message,
+    icon: 'error',
+    confirmButtonColor: '#d33',
+    background: '#081411',
+    color: '#E8F3ED',
+  });
+}
+
+async function handleDeleteSlot() {
+  if (!viewSlot.value || !viewSlot.value.id) return;
+
+  try {
+    const { error } = await supabase.from('slots').delete().eq('id', viewSlot.value.id);
+
+    if (error) throw error;
+
+    showSuccess('Slot deleted successfully.');
+
+    // Refresh slots
+    await loadSlots();
+
+    // Reset view slot
+    resetView();
+  } catch (err: any) {
+    console.error(err);
+    showError(`Failed to delete slot: ${err.message || 'Unknown error'}`);
+  }
+}
+
+const viewSlot = ref<any>(null)
 // Load slots and update calendar events
 async function loadSlots() {
   await slotStore.getAllSlots();
@@ -59,6 +111,10 @@ const calendarOptions = ref<CalendarOptions>({
   initialView: 'dayGridMonth',
   height: '100%',
   events: calendarEvents.value,
+  eventClick: function(info) {
+    viewSlot.value = slotStore.AllSlots.find(slot => slot.id === parseInt(info.event.id));
+
+  },
   headerToolbar: {
     left: 'prev,next',
     center: 'title',
@@ -96,7 +152,9 @@ else{
 
 
 }
-
+function resetView(){
+  viewSlot.value = null
+}
 function handleDateClick(event: any) {
   // Pass date string without time to modal
   const dateOnly = event.dateStr.split('T')[0];
@@ -137,6 +195,12 @@ watch(calendarEvents, (newEvents) => {
       @submit="handleSubmit"
       :templateData="templateData"
       :myTemplates="templateStore.AllTemplates"
+    />
+    <ViewModal
+      :visible="viewSlot !== null"
+      @close="resetView"
+      @delete="handleDeleteSlot"
+      :templateData="viewSlot"
     />
     <FullCalendar v-if="showCalendar" :options="calendarOptions" />
   </div>

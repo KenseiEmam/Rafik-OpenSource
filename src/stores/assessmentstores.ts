@@ -128,6 +128,50 @@ async function getAssessment(id: number) {
       return null;
     }
   }
+async function getTodaysAssessments(userProfile: any) {
+  try {
+    // Get today’s start and end in UTC
+    const now = new Date();
+    const startOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0));
+    const endOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999));
+
+    const { data, error } = await supabase
+      .from('assessment')
+      .select('*')
+      .eq('organization', userProfile.organization)
+      .gte('created_at', startOfDay.toISOString())
+      .lt('created_at', endOfDay.toISOString())
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    let filtered = data;
+    if (
+      userProfile?.roles?.includes('Organization Trnr') &&
+      !userProfile?.roles?.includes('Organization Admin')
+    ) {
+      filtered = filtered.filter(
+        (assessment: any) =>
+          Array.isArray(assessment.assessors) && assessment.assessors.includes(userProfile.id)
+      );
+    }
+
+    // Optionally: fetch related data
+    Promise.all([
+      fetchAllTemplateData(filtered),
+      fetchAllUserDetails(filtered),
+    ]).catch(e => {
+      console.error(e);
+      showError(`Failed to load assessment data: ${e.message || 'Unknown error'}`);
+    });
+
+    return filtered;
+  } catch (error: any) {
+    console.error(error);
+    showError(`Failed to load today's assessments: ${error.message || 'Unknown error'}`);
+    return null;
+  }
+}
 
   // Fetch user details for a single user ID
   async function fetchUserDetails(userId: string, type: 'trainee' | 'assessor') {
@@ -234,6 +278,7 @@ async function getAssessment(id: number) {
 
   // Clear user details (useful for cleanup)
   function clearUserDetails() {
+
     trainees.value = {};
     assessors.value = {};
   }
@@ -296,7 +341,41 @@ async function getAssessment(id: number) {
       console.error('Error fetching template data:', error);
     }
   }
+    async function updateAssessment(id: number, updates: Partial<Assessment>) {
+    try {
+      const { data, error } = await supabase
+        .from('assessment')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
 
+      if (error) throw error;
+
+      showSuccess('Assessment updated successfully.');
+
+      // Update the local AssessmentItem if it's the same ID
+      if (AssessmentItem.value?.id === id) {
+        AssessmentItem.value = { ...AssessmentItem.value, ...updates };
+      }
+
+      // Update in AllAssessments if it exists there
+      const index = AllAssessments.value.findIndex(a => a.id === id);
+      if (index !== -1) {
+        AllAssessments.value[index] = { ...AllAssessments.value[index], ...updates };
+      }
+
+      return data;
+    } catch (error: any) {
+      console.error(error);
+      showError(`Failed to update assessment: ${error.message || 'Unknown error'}`);
+      return null;
+    }
+  }
+function clearAssessment() {
+  AssessmentItem.value = null;
+  clearUserDetails();
+}
   return {
     AssessmentItem,
     AllAssessments,
@@ -305,6 +384,8 @@ async function getAssessment(id: number) {
     templateData,
     getAssessment,
     getAllAssessments,
+    updateAssessment,
+    getTodaysAssessments,
     // DO NOT USE THESE FUNCTIONS BELOW UNLESS NEEDED. THEY ARE MADE FOR INTERNAL USE.
     fetchUserDetails,
     fetchMultipleUserDetails,
@@ -312,6 +393,7 @@ async function getAssessment(id: number) {
     fetchAssessmentUserDetails,
     fetchTemplateData,
     fetchAllTemplateData,
-    clearUserDetails
+    clearUserDetails,
+    clearAssessment
   };
 });

@@ -140,7 +140,7 @@
             }}
           </p>
         </div>
-        <div class="flex justify-between uppercase text-sm 2xl:text-base">
+        <!-- <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">
             {{ t('dashboard.tabs.user.trainee.pricePackage') }}
           </p>
@@ -151,7 +151,7 @@
                 : t('dashboard.tabs.user.trainee.nonePaying')
             }}
           </p>
-        </div>
+        </div> -->
         <div class="flex justify-between uppercase text-sm 2xl:text-base">
           <p class="text-rafik-pritext dark:text-rafik-darkpritext">
             {{ t('dashboard.tabs.user.trainee.trainer') }}
