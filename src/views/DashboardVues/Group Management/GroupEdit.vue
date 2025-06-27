@@ -13,7 +13,9 @@
         <button class="btn-md-outline uppercase" @click="cancelEdit">{{ t('dashboard.groups.edit.cancel') }}</button>
       </div>
     </div>
+<div>
 
+</div>
     <!-- Editing Form -->
     <div v-if="group" class="space-y-6">
       <!-- Group Avatar Upload -->
@@ -25,7 +27,7 @@
       @click.prevent="removeImage"
       class="absolute w-full h-64 rounded opacity-0 hover:opacity-50 text-white bg-red-500 top-0 flex items-center justify-center hover:bg-red-600 focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
     >
-      {{ t('dashboard.groups.modal.removeAvatar') }}
+      Remove Photo
     </button>
   </div>
 
