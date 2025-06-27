@@ -264,6 +264,7 @@
       "myProfile": "My Profile",
       "logout": "Logout",
       "assessmentTemplates": "Assessment Templates",
+      "groupsList": "Group Management",
       "myAssessments": "Trainee <br />Assessments",
       "calendar":"Events Calendar"
     },
@@ -1609,6 +1610,39 @@
           "subheader": "View assessment information and results"
         },
         "comingSoon": "Assessment details page coming soon..."
+      }
+    },
+    "groups": {
+      "pageTitle": {
+        "subheader": "Group",
+        "header": "Management"
+      },
+      "loading": "Loading group data...",
+      "modal": {
+        "title": "Create New Group",
+        "groupName": "Group Name",
+        "groupNamePlaceholder": "Enter a group name",
+        "groupDescription": "Group Description",
+        "groupDescriptionPlaceholder": "Enter a brief description",
+        "status": "Status",
+        "statusActive": "Active",
+        "statusScheduled": "Scheduled",
+        "statusCanceled": "Canceled",
+        "assignAdmins": "Assign Administrators",
+        "assignMembers": "Assign Members",
+        "cancel": "Cancel",
+        "create": "Create Group"
+      },
+      "list": {
+        "typeToSearchGroups": "Type to search groups by users...",
+        "createGroup": "+ New Group",
+        "close": "Close",
+        "noGroupsFound": "No Groups found.",
+        "users": "users",
+        "noUsers": "No users",
+        "pageLabel": "Page:",
+        "previousPage": "Previous Page",
+        "nextPage": "Next Page"
       }
     }
   }

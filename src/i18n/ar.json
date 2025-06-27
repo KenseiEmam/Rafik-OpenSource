@@ -262,6 +262,7 @@
       "logout": "تسجيل الخروج",
       "assessmentTemplates": "قوالب التقييم",
       "myAssessments": "المتدربين<br />تقييمات ",
+      "groupsList": "إدارة المجموعات",
       "calendar":"جدول فعالياتي"
     },
     "home": {
@@ -1607,5 +1608,39 @@
       },
       "comingSoon": "صفحة تفاصيل التقييم قريباً..."
     }
+  },
+  "groups": {
+  "pageTitle": {
+    "header":"إدارة",
+    "subheader": "المجموعات"
+  },
+  "loading": "جارٍ تحميل بيانات المجموعة...",
+   "modal": {
+        "title": "إنشاء مجموعة جديدة",
+        "groupName": "اسم المجموعة",
+        "groupNamePlaceholder": "أدخل اسم المجموعة",
+        "groupDescription": "وصف المجموعة",
+        "groupDescriptionPlaceholder": "أدخل وصفاً موجزاً",
+        "status": "الحالة",
+        "statusActive": "نشطة",
+        "statusScheduled": "مجدولة",
+        "statusCanceled": "ملغاة",
+        "assignAdmins": "تعيين المسؤولين",
+        "assignMembers": "تعيين الأعضاء",
+        "cancel": "إلغاء",
+        "create": "إنشاء المجموعة"
+      },
+  "list": {
+    "typeToSearchGroups": "اكتب للبحث عن المجموعات حسب المستخدمين...",
+    "createGroup": "+ مجموعة جديدة",
+    "close": "إغلاق",
+    "noGroupsFound": "لم يتم العثور على مجموعات.",
+    "users": "المستخدمون",
+    "noUsers": "لا يوجد مستخدمون",
+    "pageLabel": "الصفحة:",
+    "previousPage": "الصفحة السابقة",
+    "nextPage": "الصفحة التالية"
   }
+}
+
 }

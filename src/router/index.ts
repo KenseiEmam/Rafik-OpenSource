@@ -284,6 +284,22 @@ const router = createRouter({
               component: () => import('../views/DashboardVues/TraineeAssessments/AssessmentDetails.vue')
             }
           ]
+        },
+        {
+          path: 'groups', // Child route for /dashboard/groups
+          meta: { requiresAuth: true },
+          children: [
+            {
+              path: '', // Default child route for /dashboard/groups
+              name: 'groups',
+              component: () => import('../views/DashboardVues/Group Management/ListingVue.vue')
+            },
+            {
+              path: ':id', // Dynamic route for group details
+              name: 'group-details',
+              component: () => import('../views/DashboardVues/Group Management/GroupEdit.vue')
+            }
+          ]
         }
       ]
     },
