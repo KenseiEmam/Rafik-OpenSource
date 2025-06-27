@@ -271,16 +271,7 @@ const uploadFileToBucket = async (): Promise<string | null> => {
     return null;
   }
 };
-export interface Group {
-  id: number;
-  group_name: string;
-  group_description: string;
-  status: 'active' | 'scheduled' | 'canceled';
-  admins: number[];
-  users: number[];
-  organization: number;
-  group_avatar?: string | null; // ✅ Add this line
-}
+
 async function handleSubmit() {
   let avatarUrl: string | null = null;
 
@@ -300,7 +291,7 @@ async function handleSubmit() {
     organization: userStore.userProfile?.organization
   };
 
-  const group = await groupStore.createGroup(payload as Partial<Group>);
+  const group = await groupStore.createGroup(payload);
   if (group) emit('created', group);
   resetForm();
 }
