@@ -238,7 +238,7 @@ import { supabase } from '@/lib/supabaseClient';
 import 'vue-multiselect/dist/vue-multiselect.css';
 import MultiSelect from '../MultiSelect.vue';
 interface Option {
-  id: string | number;
+  id: number;
   name: string;
 }
 interface myTemp {
@@ -486,7 +486,7 @@ const handleSubmit = () => {
       if (template.value.type === 'assessment')
       assessment.value.assessors.push(parseInt(uid))
       else
-      template.value.users.push({id:uid, name:'blade'})
+      template.value.users.push({id:parseInt(uid), name:'blade'})
     }
   }
   if (template.value.type === 'assessment') {
