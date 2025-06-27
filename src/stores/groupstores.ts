@@ -32,20 +32,20 @@ function showError(message: string) {
 }
 
 // Group type based on Supabase schema
-type Group = {
+export interface Group {
   id: number
   group_name: string
   group_avatar?: string | null
   group_description?: string | null
   status: string
   organization?: number | null
-  admins?: string[]
-  users?: string[]
+  admins?: number[]
+  users?: number[]
 }
 
 // User details type for admins and members
 type UserDetails = {
-  id: string
+  id: number | string
   [key: string]: any
 }
 
@@ -54,8 +54,8 @@ export const useGroupStore = defineStore('Group', () => {
   const GroupItem = ref<Group | null>(null)
 
   // Refs for detailed user info
-  const admins = ref<{ [id: string]: UserDetails }>({})
-  const members = ref<{ [id: string]: UserDetails }>({})
+  const admins = ref<{ [id: number]: UserDetails }>({})
+  const members = ref<{ [id: number]: UserDetails }>({})
 
   async function getAllGroups(userProfile: any) {
     try {
@@ -95,8 +95,8 @@ export const useGroupStore = defineStore('Group', () => {
 
       if (GroupItem.value) {
         await Promise.all([
-          fetchAssessmentUserDetails([GroupItem.value], 'admin'),
-          fetchAssessmentUserDetails([GroupItem.value], 'member')
+          fetchMultipleUserDetails(GroupItem.value.admins || [], 'admin'),
+          fetchMultipleUserDetails(GroupItem.value.users || [], 'member')
         ])
       }
 
@@ -192,8 +192,7 @@ export const useGroupStore = defineStore('Group', () => {
     }
   }
 
-  // Fetch users for groups
-  async function fetchMultipleUserDetails(userIds: string[], type: 'admin' | 'member') {
+  async function fetchMultipleUserDetails(userIds: number[], type: 'admin' | 'member') {
     if (!userIds.length) return
     const store = type === 'admin' ? admins : members
     const { data, error } = await supabase
@@ -201,11 +200,11 @@ export const useGroupStore = defineStore('Group', () => {
       .select('*')
       .in('id', userIds)
     if (error) return console.error(error)
-    data.forEach(u => { store.value[u.id] = u })
+    data.forEach((u: any) => { store.value[u.id] = u })
   }
 
   async function fetchAllUserDetails(groups: Group[], type: 'admin' | 'member') {
-    const allIds: string[] = []
+    const allIds: number[] = []
     groups.forEach(g => {
       const list = type === 'admin' ? g.admins : g.users
       if (list) allIds.push(...list)

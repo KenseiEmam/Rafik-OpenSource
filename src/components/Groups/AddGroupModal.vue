@@ -154,7 +154,7 @@ import { useUserStore } from '@/stores/user';
 import { useGroupStore } from '@/stores/groupstores';
 import MultiSelect from '@/components/MultiSelect.vue';
 import { supabase } from '@/lib/supabaseClient';
-
+import type { Group } from '@/stores/groupstores'; // ✅ Update path if different
 const { t, locale } = useI18n();
 const userStore = useUserStore();
 const groupStore = useGroupStore();
@@ -291,7 +291,7 @@ async function handleSubmit() {
     organization: userStore.userProfile?.organization
   };
 
-  const group = await groupStore.createGroup(payload);
+  const group = await groupStore.createGroup(payload as Partial<Group>);
   if (group) emit('created', group);
   resetForm();
 }
