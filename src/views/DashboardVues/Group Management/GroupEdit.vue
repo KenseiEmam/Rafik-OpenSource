@@ -1,464 +1,227 @@
 <template>
-  <div class="flex h-screen overflow-auto px-8 py-12 flex-col space-y-6 2xl:px-12 2xl:py-24">
-
-      <!-- Actions -->
-      <div class="flex gap-4 my-6 justify-between">
-        <div>
-          <h3 class="contentH-large mb-3">Editing Template</h3>
-          <p class="subheader-small" v-if="template">Created at: {{formatDate(template.created_at)}}</p>
-        </div>
-
-        <div class="flex gap-4 ">
-
-          <button class="btn-md uppercase" @click="handleUpdate">
-            Save
-          </button>
-          <button class="btn-md-outline uppercase" @click="cancelEdit">
-            Cancel
-          </button>
-        </div>
+  <div class="flex h-screen overflow-auto px-8 py-12 flex-col space-y-6">
+    <!-- Actions -->
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <h3 class="contentH-large mb-3">{{ group?.group_name || t('dashboard.groups.edit.title') }}</h3>
+        <p class="subheader-small" v-if="group.created_at">
+          Created at: {{ formatDate(group.created_at) }}
+        </p>
       </div>
-    <div v-if="template" class="space-y-6">
-      <!-- Editable Fields -->
+      <div class="flex gap-4">
+        <button class="btn-md uppercase" @click="saveGroup">{{ t('dashboard.groups.edit.save') }}</button>
+        <button class="btn-md-outline uppercase" @click="cancelEdit">{{ t('dashboard.groups.edit.cancel') }}</button>
+      </div>
+    </div>
+
+    <!-- Editing Form -->
+    <div v-if="group" class="space-y-6">
+      <!-- Group Avatar Upload -->
+<div class="flex items-center justify-center flex-col">
+
+  <div v-if="uploadedImage" class="w-full h-64 rounded relative">
+    <img :src="uploadedImage" alt="Group Avatar" class="w-full h-full object-cover" />
+    <button
+      @click.prevent="removeImage"
+      class="absolute w-full h-64 rounded opacity-0 hover:opacity-50 text-white bg-red-500 top-0 flex items-center justify-center hover:bg-red-600 focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+    >
+      {{ t('dashboard.groups.modal.removeAvatar') }}
+    </button>
+  </div>
+
+  <div
+    v-else
+    class="w-full h-64 rounded border-2 border-dashed border-gray-400 flex items-center justify-center cursor-pointer hover:bg-rafik-secbg dark:bg-rafik-darksecbg focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+    @click="triggerFileInput"
+  >
+    <span class="text-center text-gray-500 text-xs">
+      {{ t('dashboard.groups.modal.dragDrop') }}
+    </span>
+  </div>
+
+  <input
+    type="file"
+    accept="image/*"
+    class="hidden"
+    ref="fileInput"
+    @change="handleFileChange"
+  />
+</div>
 
       <div class="space-y-4">
-        <h2 class="block header-small">
-          Assessment Name
-        </h2>
-        <input
-          v-model="editableTemplate.template_name"
-          class="w-full rafik-text-input"
-        />
+        <h2 class="header-small">{{ t('dashboard.groups.edit.name') }}</h2>
+        <input v-model="editable.group_name" class="w-full rafik-text-input" />
 
-        <h2 class="block header-small">
-         Describe your assessment:
-        </h2>
-        <textarea
-          v-model="editableTemplate.template_description"
-          class="w-full rafik-text-input"
-          rows="3"
-        />
+        <h2 class="header-small">{{ t('dashboard.groups.edit.description') }}</h2>
+        <textarea v-model="editable.group_description" class="w-full rafik-text-input" rows="3" />
       </div>
 
-      <!-- Drills Section -->
+      <!-- Status -->
       <div>
-        <h2 class="header-small">
-          List of Drills:
-        </h2>
-         <div class="mt-4 mb-3  ">
-
-           <p v-if="!template.drills?.length" class="text-center subheader-small mt-2">
-          Click below to add drills...
-        </p>
-          <draggable
-            class="flex flex-col gap-4 mb-5"
-            v-model="editableTemplate.drills"
-            handle=".handle"
-            @start="drag = true"
-            @end="drag = false"
-            item-key="id"
-          >
-          <template #item="{ element, index }">
-              <div v-if="element.type === 'multi-set'"
-                class="gradient-bg border border-rafik-sectext dark:border-rafik-darksectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
-              >
-                <svg
-
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 320 512"
-                  fill="currentColor"
-                  class="h-12 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move"
-                >
-                  <path
-                    d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0
-                       22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0
-                       -48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40
-                       17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1
-                       0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320
-                       c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48
-                       0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40
-                       40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0
-                       48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9
-                       -40-40l0-48c0-22.1 17.9-40 40-40zM40 160c-22.1
-                       0-40-17.9-40-40L0 72C0 49.9 17.9 32 40 32l48 0c22.1
-                       0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48
-                       0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1
-                       -17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0
-                       -48c0-22.1 17.9-40 40-40z"
-                  />
-                </svg>
-                <div class="flex-1">
-                  <div class="flex gap-3 items-center mb-4">
-                    <div>
-                      <input
-                        type="text"
-                        v-model="element.drill_name"
-                        class="p-0 contentH-small text-rafik-sectext dark:text-rafik-darksectext border-0 bg-transparent focus:outline-none focus:ring-0 focus:border-0"
-                      />
-                      <p class="text-rafik-pritext dark:text-rafik-darkpritext capitalize">
-                        {{ t('dashboard.tabs.program.planner.multipleExerciseGroup') }}
-                      </p>
-                    </div>
-
-                    <div class="ms-auto space-y-3">
-                      <div class="flex gap-4 justify-between items-end">
-                        <label class="text-body">
-                          Rounds:
-                        </label>
-                        <input
-                          type="number"
-                          v-model.number="element.rounds"
-                          class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
-                          :placeholder="t('dashboard.tabs.program.planner.totalSetsPlaceholder')"
-                        />
-                      </div>
-                      <div  class="flex gap-4 justify-between items-end">
-                        <label class="text-body">
-                          Control Metric:
-                        </label>
-                        <input
-                          type="number"
-                          v-model.number="element.metric"
-                          class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
-                          :placeholder="t('dashboard.tabs.program.planner.recommendedRestPlaceholder')"
-                        />
-                      </div>
-
-
-                    </div>
-                  </div>
-
-                  <div class="space-y-6 card border-0 bg-rafik-secbg dark:bg-rafik-darksecbg p-6">
-                    <h3 class="text-body uppercase text-center">
-                      {{ t('dashboard.tabs.program.planner.innerExercises') }}
-                    </h3>
-                    <div
-                      v-for="(embed, eindex) in element.embeds"
-                      class="gradient-bg border border-rafik-sectext dark:border-rafik-darksectext rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
-                    >
-                      <div class="flex-1">
-                        <div class="flex gap-3 items-center mb-4">
-                          <video
-                            v-if="embed.media"
-                            class="w-24 h-24 card border p-0 object-cover rounded-lg"
-                            :src="embed.media"
-                            ref="videoRef"
-                            mutedgi
-                            loop
-                          ></video>
-                          <div
-                            v-else
-                            class="w-24 h-24 card border flex items-center justify-center"
-                          >
-                            <p class="text-sm">{{ t('dashboard.tabs.program.planner.noMedia') }}</p>
-                          </div>
-
-                          <div>
-                            <h2 class="contentH-small">{{ embed.drill_name }}</h2>
-                            <p class="text-rafik-pritext dark:text-rafik-darkpritext capitalize">
-                              {{ embed.type }} {{ t('dashboard.tabs.program.planner.exercise') }}
-                            </p>
-                          </div>
-
-                        </div>
-                      </div>
-                    </div>
-
-                    <ExerciseOffcanvas
-                      @addExercises="handleAddEmbed(element, $event)"
-                    />
-                  </div>
-                  <div class="flex justify-end ms-auto min-w-max mt-auto">
-                    <button
-                      class="hover:text-red-400 text-red-500"
-                      @click="removeExercise(index)"
-                    >
-                      {{ t('dashboard.tabs.program.planner.removeExercise') }}
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div v-else
-                class="card  rounded-xl shadow-xl p-6 gap-6 2xl:gap-12 flex items-center"
-              >
-                <svg
-
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 320 512"
-                  fill="currentColor"
-                  class="h-6 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move"
-                >
-                  <path
-                    d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0
-                       22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0
-                       -48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40
-                       17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1
-                       0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320
-                       c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48
-                       0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40
-                       40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0
-                       48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9
-                       -40-40l0-48c0-22.1 17.9-40 40-40zM40 160c-22.1
-                       0-40-17.9-40-40L0 72C0 49.9 17.9 32 40 32l48 0c22.1
-                       0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48
-                       0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1
-                       -17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0
-                       -48c0-22.1 17.9-40 40-40z"
-                  />
-                </svg>
-                <div class="flex-1">
-                  <div class="flex gap-3 items-center mb-4">
-                    <video
-                      v-if="element.media"
-                      class="w-24 h-24 card border p-0 object-cover rounded-lg"
-                      :src="element.media"
-                      ref="videoRef"
-                      mutedgi
-                      loop
-                    ></video>
-                    <div v-else class="w-24 h-24 card border flex items-center justify-center">
-                      <p class="text-sm">{{ t('dashboard.tabs.program.planner.noMedia') }}</p>
-                    </div>
-
-                    <div>
-                      <h2 class="contentH-small">{{ element.exercise_name }}</h2>
-                      <p class="text-rafik-pritext dark:text-rafik-darkpritext capitalize">
-                        {{ element.type }} {{ t('dashboard.tabs.program.planner.exercise') }}
-                      </p>
-                    </div>
-                    <div class="ms-auto space-y-3 ">
-                      <div  class="flex gap-4 justify-between items-end">
-                        <label class="text-body min-w-max">
-                          Control Unit:
-                        </label>
-                        <select
-                          v-model="element.control_unit"
-                          class="rafik-text-input border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
-                        >
-                        <option disabled :value=" undefined">Control Unit</option>
-                        <option value="Reps">Reps</option>
-                        <option value="Seconds">Seconds</option>
-                        <option value="Minutes">Minutes</option>
-                        <option value="Metres">Metres</option>
-                        <option value="Miles">Miles</option>
-                        <option value="Load(Kg)">Load(Kg)</option>
-                        <option value="Load(Lb)">Load(Lb)</option>
-                        <option value="Speed(Kmph)">Speed(Kmph)</option>
-                        <option value="Speed(mph)">Speed(mph)</option>
-                        <option value="RPE">RPE</option>
-                        <option value="Heart Rate">Heart Rate</option>
-                        <option value="RIR">RIR</option>
-                      </select>
-                      </div>
-                      <div v class="flex gap-4 justify-between items-end">
-                        <label class="text-body min-w-max">
-                          Primary Variable Unit:
-                        </label>
-                        <select
-                          v-model="element.primary_variable"
-                          class="rafik-text-input border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
-                        >
-                        <option disabled :value=" undefined">Primary Unit</option>
-                        <option value="Reps">Reps</option>
-                        <option value="Seconds">Seconds</option>
-                        <option value="Minutes">Minutes</option>
-                        <option value="Load(Kg)">Load(Kg)</option>
-                        <option value="Load(Lb)">Load(Lb)</option>
-                        <option value="Speed(Kmph)">Speed(Kmph)</option>
-                        <option value="Speed(mph)">Speed(mph)</option>
-                        <option value="RPE">RPE</option>
-                        <option value="Heart Rate">Heart Rate</option>
-                        <option value="RIR">RIR</option>
-                      </select>
-                      </div>
-
-
-                    </div>
-                    <div class="ms-auto space-y-3">
-                      <div class="flex gap-4 justify-between items-end">
-                        <label class="text-body">
-                          Rounds:
-                        </label>
-                        <input
-                          type="number"
-                          v-model.number="element.rounds"
-                          class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
-                          :placeholder="t('dashboard.tabs.program.planner.totalSetsPlaceholder')"
-                        />
-                      </div>
-
-                      <div  class="flex gap-4 justify-between items-end">
-                        <label class="text-body">
-                         Control Metric:
-                        </label>
-                        <input
-                          type="number"
-                          v-model.number="element.metric"
-                          class="rafik-text-input w-16 border-0 focus:ring-0 pb-1 border-rafik-sectext dark:border-rafik-darksectext border-b focus:border-rafik-alternate rounded-none"
-                          :placeholder="t('dashboard.tabs.program.planner.recommendedRestPlaceholder')"
-                        />
-                      </div>
-
-
-                    </div>
-                  </div>
-
-
-                </div>
-              </div>
-            </template>
-          </draggable>
-
-
-        </div>
-        <div class="text-center flex gap-3 items-center justify-center">
-            <ExerciseOffcanvas @addExercises="handleAdd"  />
-
-          </div>
+        <label class="block text-sm font-medium mb-2">{{ t('dashboard.groups.edit.status') }}</label>
+        <select v-model="editable.status" class="rafik-text-input w-full">
+          <option value="active">{{ t('dashboard.groups.status.active') }}</option>
+          <option value="scheduled">{{ t('dashboard.groups.status.scheduled') }}</option>
+          <option value="canceled">{{ t('dashboard.groups.status.canceled') }}</option>
+        </select>
       </div>
 
+      <!-- Admins MultiSelect -->
+      <div>
+        <label class="block text-sm font-medium mb-2">{{ t('dashboard.groups.edit.assignAdmins') }}</label>
+        <MultiSelect
+          v-model="editable.admins"
+          :options="allUsers"
+          :label="(u:any) => u.name"
+          :value="(u:any) => u.id"
+          searchable
+          dark
+        />
+      </div>
+
+      <!-- Users MultiSelect -->
+      <div>
+        <label class="block text-sm font-medium mb-2">{{ t('dashboard.groups.edit.assignUsers') }}</label>
+        <MultiSelect
+          v-model="editable.users"
+          :options="allUsers"
+          :label="(u:any) => u.name"
+          :value="(u:any) => u.id"
+          searchable
+          dark
+        />
+      </div>
     </div>
 
-    <!-- Loading or Error -->
-    <div v-else class="text-center mt-24 text-lg">
-      {{ t('general.loading') }}
-    </div>
+    <!-- Loading -->
+    <div v-else class="text-center mt-24 text-lg">{{ t('general.loading') }}</div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router';
+import { ref, reactive, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useTemplateStore } from '@/stores/templatestores';
-import PageTitle from '@/components/Navigation/PageTitle.vue';
-import Swal from 'sweetalert2';
-import { ref, onMounted , reactive, watch, defineProps, computed } from 'vue';
-import { useProgramStore } from '@/stores/programstores';
-import ExerciseOffcanvas from "@/components/Offcanvas/ExerciseOffcanvas.vue";
+import { useRoute, useRouter } from 'vue-router';
+import { useGroupStore} from '@/stores/groupstores';
+import type { Group} from '@/stores/groupstores';
 import { useUserStore } from '@/stores/user';
-import draggable from 'vuedraggable';
-import { debounce } from 'lodash';
+import MultiSelect from '@/components/MultiSelect.vue';
+import { supabase } from '@/lib/supabaseClient';
 
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const templateStore = useTemplateStore();
-const drag = ref(true);
-const templateId = route.params.id as string;
-const template = ref<any>(null);
-type Drill = {
-  drill_name?: string;
-  type?: string;
-  metric?: number;
-  rounds?: number;
-  sets?: number;
-  true_sets?: { primary_done: number; control_abide: boolean }[];
-  primary_variable?: string;
-  control_unit?: string;
-  embeds?: Drill[];
-};
+const groupStore = useGroupStore();
+const userStore = useUserStore();
 
-const editableTemplate = ref<{
-  template_name: string;
-  template_description: string;
-  drills: Drill[];
-}>({
-  template_name: '',
-  template_description: '',
-  drills: [],
-});
+const groupId = Number(route.params.id);
+const group = ref<Group>({} as Group);
+const fileInput = ref<HTMLInputElement | null>(null);
+const uploadedImage = ref<string | null>(null);
+const selectedFile = ref<File | null>(null);
 
-const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString();
-};
+const triggerFileInput = () => fileInput.value?.click();
 
-const fetchTemplate = async () => {
-  await templateStore.fetchTemplateById(templateId);
-  if (templateStore.TemplateItem) {
-    template.value = templateStore.TemplateItem;
-    editableTemplate.value = {
-      template_name: template.value.template_name,
-      template_description: template.value.template_description,
-      drills: JSON.parse(JSON.stringify(template.value.drills || [])) // ✅ ONLY THIS FIXED
+const handleFileChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  const file = target.files?.[0];
+  if (file) {
+    selectedFile.value = file;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      uploadedImage.value = e.target?.result as string;
     };
-  } else {
-    Swal.fire({
-      icon: 'error',
-      title: t('general.error'),
-      text: t('dashboard.assessmentTemplates.view.notFound')
-    });
-    router.push({ name: 'programs-list' });
+    reader.readAsDataURL(file);
   }
 };
 
-const handleUpdate = async () => {
-  console.log(editableTemplate.value)
-  await templateStore.updateTemplate({
-    ...template.value,
-    template_name: editableTemplate.value.template_name,
-    template_description: editableTemplate.value.template_description,
-    drills: editableTemplate.value.drills
+const removeImage = () => {
+  uploadedImage.value = null;
+  selectedFile.value = null;
+  if (fileInput.value) fileInput.value.value = '';
+};
+const uploadFileToBucket = async (): Promise<string | null> => {
+  if (!selectedFile.value) return null;
+  const { data, error } = await supabase.storage
+    .from('storage') // replace with your actual bucket name
+    .upload(`media/${Date.now()}_${selectedFile.value.name}`, selectedFile.value, {
+      cacheControl: '3600',
+      upsert: true
+    });
+
+  if (error) {
+    console.error('Upload error', error.message);
+    return null;
+  }
+
+  const { data: urlData } = supabase.storage.from('storage').getPublicUrl(data.path);
+  return urlData?.publicUrl ?? null;
+};
+async function saveGroup() {
+  let avatarUrl = null;
+  if (selectedFile.value) {
+    avatarUrl = await uploadFileToBucket();
+    if (!avatarUrl) return;
+  }
+
+  await groupStore.updateGroup(groupId, {
+    group_name: editable.group_name,
+    group_description: editable.group_description,
+    status: editable.status,
+    admins: editable.admins.map(a => a.id),
+    users: editable.users.map(u => u.id),
+    group_avatar: avatarUrl ?? group.value.group_avatar // Keep existing if no new
   });
-  await fetchTemplate();
-};
 
-const cancelEdit = () => {
-  editableTemplate.value = {
-    template_name: template.value.template_name,
-    template_description: template.value.template_description,
-    drills: editableTemplate.value.drills
-  };
-};
+  await load();
+}
 
-const handleAdd = (list: any[]) => {
-  editableTemplate.value.drills.push(
-    ...list.map((e) => ({
-      ...e,
-      rounds: 1,
-      metric: 5,
-      true_sets: [
-        { primary_done: 0, control_abide: true },
-        { primary_done: 0, control_abide: true },
-        { primary_done: 0, control_abide: true }
-      ],
-      primary_variable: "Load(Kg)",
-      control_unit: "Reps"
-    }))
-  );
-};
+const editable = reactive({
+  group_name: '',
+  group_description: '',
+  status: 'active',
+    admins: [] as { id: number; name: string }[],
+  users: [] as { id: number; name: string }[],
+});
+const allUsers = ref<{ id: number; name: string }[]>([]);
 
-const removeExercise = (exerciseIndex: number) => {
-  editableTemplate.value.drills.splice(exerciseIndex, 1);
-};
+function formatDate(date: string) {
+  return new Date(date).toLocaleString();
+}
 
-const removeEmbed = (exercise: any, exerciseIndex: number) => {
-  exercise.embeds.splice(exerciseIndex, 1);
-};
+async function load() {
+  const g = await groupStore.getGroup(groupId);
+  if (!g) return router.back();
+  group.value = g;
 
-const handleAddEmbed = (exercise: any, list: any[]) => {
-  exercise.embeds.push(
-    ...list.map((e) => ({
-      ...e,
-      rounds: exercise.sets,
-      true_sets: [
-        { primary_done: 0, control_abide: true },
-        { primary_done: 0, control_abide: true },
-        { primary_done: 0, control_abide: true }
-      ]
-    }))
-  );
-};
+  await groupStore.fetchAllUserDetails([g], 'admin');
+  await userStore.fetchOrgUsers({ roles: [], name: '', enrolled: false ,active:true }, 1, 1000);
+if (g.group_avatar) uploadedImage.value = g.group_avatar;
 
-const handleAddMulti = () => {
-  editableTemplate.value.drills.push({
-    drill_name: 'Multi-Set',
-    type: 'multi-set',
-    metric: 90,
-    rounds: 3,
-    embeds: []
-  });
-};
+  // After fetching, map them to options
+ allUsers.value = (userStore.All_Org_Users || []).map((user: any) => ({
+  id: user.id,
+  name: `${user.first_name} ${user.last_name}`.trim(),
+}));
 
-onMounted(fetchTemplate);
+
+Object.assign(editable, {
+  group_name: g.group_name,
+  group_description: g.group_description,
+  status: g.status,
+  admins: allUsers.value.filter((a: any) => g.admins?.includes(a.id)),
+  users: allUsers.value.filter((u: any) => g.users?.includes(u.id)),
+});
+
+
+
+}
+
+
+
+function cancelEdit() {
+  load();
+}
+
+onMounted(load);
 </script>
-
