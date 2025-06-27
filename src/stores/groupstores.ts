@@ -34,6 +34,7 @@ function showError(message: string) {
 // Group type based on Supabase schema
 export interface Group {
   id: number
+  created_at?: string
   group_name: string
   group_avatar?: string | null
   group_description?: string | null

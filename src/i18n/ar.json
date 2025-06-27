@@ -1633,6 +1633,7 @@
   "list": {
     "typeToSearchGroups": "اكتب للبحث عن المجموعات حسب المستخدمين...",
     "createGroup": "+ مجموعة جديدة",
+    "admins":"المشرفين",
     "close": "إغلاق",
     "noGroupsFound": "لم يتم العثور على مجموعات.",
     "users": "المستخدمون",
@@ -1640,7 +1641,21 @@
     "pageLabel": "الصفحة:",
     "previousPage": "الصفحة السابقة",
     "nextPage": "الصفحة التالية"
-  }
+  },"edit": {
+        "title": "تعديل المجموعة",
+        "name": "اسم المجموعة",
+        "description": "وصف المجموعة",
+        "status": "الحالة",
+        "assignAdmins": "تعيين المشرفين",
+        "assignUsers": "تعيين الأعضاء",
+        "save": "حفظ",
+        "cancel": "إلغاء"
+      },
+      "status": {
+        "active": "نشط",
+        "scheduled": "مجدول",
+        "canceled": "ملغي"
+      }
 }
 
 }
