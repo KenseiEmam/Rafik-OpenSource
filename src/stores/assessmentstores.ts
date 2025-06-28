@@ -100,7 +100,7 @@ async function getAssessment(id: number) {
       let query = supabase
         .from('assessment')
         .select('*')
-        .eq('organization', userProfile.organization)
+        .eq('organization', userProfile.organization || 0)
         .order('created_at', { ascending: false });
 
       const { data, error } = await query;
@@ -138,7 +138,7 @@ async function getTodaysAssessments(userProfile: any) {
     const { data: assessments, error: assessmentError } = await supabase
       .from('assessment')
       .select('*')
-      .eq('organization', userProfile.organization);
+      .eq('organization', userProfile.organization || 0);
 
     if (assessmentError) throw assessmentError;
     if (!assessments || assessments.length === 0) return [];

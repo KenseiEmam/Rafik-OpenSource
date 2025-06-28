@@ -16,10 +16,6 @@
     </div>
 
     <PostOffice
-      v-if="
-        userStore.userProfile.roles?.includes('Trainer') ||
-        userStore.userProfile.roles?.includes('Organization Trnr')
-      "
     />
   </div>
   <div
