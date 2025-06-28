@@ -438,17 +438,17 @@ onMounted(() => {
 function canReschedule(): boolean {
   const userRoles = localStorage.getItem('Roles') || '';
   const userId = localStorage.getItem('UserID');
-  
+
   // Organization Admin can reschedule any assessment
   if (userRoles.includes('Organization Admin')) {
     return true;
   }
-  
+
   // Organization Trnr can only reschedule assessments they're assigned to
   if (userRoles.includes('Organization Trnr') && userId) {
     return assessmentStore.AssessmentItem?.assessors?.includes(userId) || false;
   }
-  
+
   return false;
 }
 
@@ -468,7 +468,7 @@ async function handleRescheduleComplete() {
   showRescheduleModal.value = false;
   selectedAssessment.value = null;
   selectedSlot.value = null;
-  
+
   // Refresh the assessment data
   await fetchWorkout();
 }
@@ -564,12 +564,12 @@ async function handleRescheduleComplete() {
               (Actual {{ new Date(assessmentStore.AssessmentItem.ended).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }})
             </p>
           </div>
-          
+
           <!-- Reschedule button for scheduled assessments -->
           <div v-if="assessmentStore.AssessmentItem.status === 'scheduled' && canReschedule()" class="uppercase flex justify-between gap-3 text-sm 2xl:text-base">
-            <button 
-              @click="handleRescheduleClick" 
-              class="btn-sm bg-rafik-secondary hover:bg-rafik text-white px-4 py-2 rounded text-sm"
+            <button
+              @click="handleRescheduleClick"
+              class="btn-sm bg-topsets-secondary hover:bg-topsets text-white px-4 py-2 rounded text-sm"
             >
               Reschedule Assessment
             </button>
@@ -1081,7 +1081,7 @@ async function handleRescheduleComplete() {
       </div>
     </div>
   </div>
-  
+
   <!-- Reschedule Modal -->
   <RescheduleModal
     :visible="showRescheduleModal"

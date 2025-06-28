@@ -6,7 +6,7 @@
         <input
           type="search"
           @input="handleSearch"
-          class="block w-full p-4 text-sm text-rafik-sectext dark:text-rafik-darksectext border rounded-lg bg-rafik-pribg dark:bg-rafik-darkpribg"
+          class="block w-full p-4 text-sm text-topsets-sectext dark:text-topsets-darksectext border rounded-lg bg-topsets-pribg dark:bg-topsets-darkpribg"
           :placeholder="t('dashboard.groups.list.typeToSearchGroups')"
           required
         />
@@ -27,27 +27,27 @@
         v-for="group in props.groups"
         :key="group.id"
         :to="{ name: 'group-details', params: { id: group.id } }"
-        class="h-full text-rafik-sectext dark:text-rafik-darksectext"
+        class="h-full text-topsets-sectext dark:text-topsets-darksectext"
       >
         <div
-          class="card px-10 p-6 w-full hover:border-rafik border border-transparent flex flex-col h-full"
+          class="card px-10 p-6 w-full hover:border-topsets border border-transparent flex flex-col h-full"
         >
           <!-- Top: Group Avatar & Name -->
-          <div class="flex items-center border-b-2 py-4 border-rafik-pribg dark:border-rafik-darkpribg justify-between gap-4 mb-4">
+          <div class="flex items-center border-b-2 py-4 border-topsets-pribg dark:border-topsets-darkpribg justify-between gap-4 mb-4">
             <div class="flex items-center gap-3">
               <img
                 :src="group.group_avatar || '/group-placeholder.jpg'"
                 alt="Group Avatar"
-                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-rafik object-cover"
+                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-topsets object-cover"
               />
               <div>
                 <p class="header-small">
                   {{ group.group_name }}
                 </p>
-                <p class="label text-rafik-sectext dark:text-rafik-darksectext">
+                <p class="label text-topsets-sectext dark:text-topsets-darksectext">
                   {{ group.group_description || t('dashboard.groups.list.noDescription') }}
                 </p>
-                <p class="mt-6 dark:text-rafik-darksectext">
+                <p class="mt-6 dark:text-topsets-darksectext">
                   {{ group.users?.length || 0 }} users.
                 </p>
               </div>
@@ -65,7 +65,7 @@
 
           <!-- Bottom: Administrators -->
           <div class="mt-auto">
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext mb-2 py-2">
+            <p class="label text-topsets-pritext dark:text-topsets-darkpritext mb-2 py-2">
               {{ t('dashboard.groups.list.admins') }}
             </p>
             <div class="flex flex-wrap gap-1">
@@ -74,7 +74,7 @@
                   v-for="adminId in group.admins"
                   :key="adminId"
                   :to="{ name: 'single-user', params: { id: adminId } }"
-                  class="label text-rafik-secondary card bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext transition-colors"
+                  class="label text-topsets-secondary card bg-topsets-pribg dark:bg-topsets-darkpribg hover:text-topsets-pritext dark:hover:text-topsets-darkpritext transition-colors"
                   @click.stop
                 >
                   <div>
@@ -95,7 +95,7 @@
                   </div>
                 </router-link>
               </template>
-              <span v-else class="label text-rafik-sectext dark:text-rafik-darksectext">
+              <span v-else class="label text-topsets-sectext dark:text-topsets-darksectext">
                 {{ t('dashboard.groups.list.noAdmins') }}
               </span>
             </div>
@@ -105,7 +105,7 @@
     </ul>
 
     <div v-else class="space-y-6 flex flex-col items-center py-12">
-      <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+      <p class="text-topsets-pritext dark:text-topsets-darkpritext">
         {{ t('dashboard.groups.list.noGroupsFound') }}
       </p>
     </div>
@@ -115,30 +115,30 @@
       <p class="header-small min-w-max">
         {{ t('dashboard.groups.list.pageLabel') }} {{ props.page }}
       </p>
-      <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
-      <div class="flex text-rafik-sectext dark:text-rafik-darksectext gap-4 px-4">
+      <hr class="border w-full border-topsets-sectext dark:border-topsets-darksectext" />
+      <div class="flex text-topsets-sectext dark:text-topsets-darksectext gap-4 px-4">
         <button
           v-for="p in totalPages"
           :key="p"
           @click="updatePage(p)"
-          class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
-          :class="{ 'text-rafik-pritext dark:text-rafik-darkpritext': p === props.page }"
+          class="hover:text-topsets-pritext dark:hover:text-topsets-darkpritext"
+          :class="{ 'text-topsets-pritext dark:text-topsets-darkpritext': p === props.page }"
         >
           {{ p }}
         </button>
       </div>
-      <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
+      <hr class="border w-full border-topsets-sectext dark:border-topsets-darksectext" />
       <button
         v-if="props.page > 1"
         @click="updatePage(props.page - 1)"
-        class="px-4 py-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
+        class="px-4 py-2 hover:text-topsets-pritext dark:hover:text-topsets-darkpritext"
       >
         {{ t('dashboard.groups.list.previousPage') }}
       </button>
       <button
         v-if="props.page < totalPages"
         @click="updatePage(props.page + 1)"
-        class="px-4 py-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
+        class="px-4 py-2 hover:text-topsets-pritext dark:hover:text-topsets-darkpritext"
       >
         {{ t('dashboard.groups.list.nextPage') }}
       </button>

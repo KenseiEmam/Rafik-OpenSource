@@ -10,13 +10,13 @@
 
       <div v-if="assessmentData" class="space-y-6">
         <!-- Current Assessment Info -->
-        <div class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 rounded-lg">
+        <div class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4 rounded-lg">
           <h3 class="font-semibold mb-2">{{ t('dashboard.settings.currentAssessmentDetails') }}</h3>
           <div class="space-y-2 text-sm">
             <p><strong>{{ t('dashboard.settings.trainee') }}:</strong> {{ getTraineeName() }}</p>
             <p><strong>{{ t('dashboard.settings.template') }}:</strong> {{ getTemplateName() }}</p>
             <p><strong>{{ t('dashboard.settings.currentTime') }}:</strong> {{ formatCurrentTime() }}</p>
-            <p><strong>Status:</strong> 
+            <p><strong>Status:</strong>
               <span class="px-2 py-1 rounded text-xs" :class="getStatusClasses(assessmentData.status)">
                 {{ assessmentData.status }}
               </span>
@@ -42,7 +42,7 @@
 
             />
           </div>
-          
+
           <div>
             <label class="block text-sm font-medium mb-2">
               {{ t('dashboard.settings.newStartTime') }}
@@ -155,7 +155,7 @@ const canSubmit = computed(() => {
   const hasStartTime = !!startTimeValue.value;
   const hasEndTime = !!endTimeValue.value;
   const noError = !timeError.value;
-  
+
   // Create Date objects for comparison only when needed
   let validTimeRange = false;
   if (hasDate && hasStartTime && hasEndTime) {
@@ -167,7 +167,7 @@ const canSubmit = computed(() => {
       startTimeValue.value!.minutes,
       startTimeValue.value!.seconds
     );
-    
+
     const endDate = new Date(
       newDate.value!.getFullYear(),
       newDate.value!.getMonth(),
@@ -176,38 +176,38 @@ const canSubmit = computed(() => {
       endTimeValue.value!.minutes,
       endTimeValue.value!.seconds
     );
-    
+
     validTimeRange = startDate < endDate;
   }
-  
+
   return hasDate && hasStartTime && hasEndTime && noError && validTimeRange;
 });
 
 // Methods
 function getTraineeName(): string {
   if (!props.assessmentData?.trainees?.[0]) return 'Unknown Trainee';
-  
+
   const trainee = assessmentStore.trainees[props.assessmentData.trainees[0]];
   if (!trainee) return 'Loading...';
-  
+
   return `${trainee.first_name || ''} ${trainee.last_name || ''}`.trim() || 'Unknown Trainee';
 }
 
 function getTemplateName(): string {
   if (!props.assessmentData?.template) return 'No Template';
-  
+
   const template = assessmentStore.templateData[props.assessmentData.template];
   if (!template) return 'Loading...';
-  
+
   return template.template_name || template.name || 'Untitled Template';
 }
 
 function formatCurrentTime(): string {
   if (!props.slotData?.time_start || !props.slotData?.time_end) return 'No time set';
-  
+
   const start = new Date(props.slotData.time_start);
   const end = new Date(props.slotData.time_end);
-  
+
   return `${start.toLocaleString()} - ${end.toLocaleString()}`;
 }
 
@@ -228,7 +228,7 @@ function getStatusClasses(status: string): string {
 
 function mergeDateAndTime(dateString: string, time: { hours: number, minutes: number, seconds?: number }): Date {
   const [year, month, day] = dateString.split('-').map(Number);
-  
+
   return new Date(
     year,
     month - 1,
@@ -241,7 +241,7 @@ function mergeDateAndTime(dateString: string, time: { hours: number, minutes: nu
 
 function onDateChange(date: Date) {
   newDate.value = date;
-  
+
   // Update the Date objects for the time pickers if times are already selected
   if (startTimeValue.value) {
     newStartTime.value = new Date(
@@ -253,7 +253,7 @@ function onDateChange(date: Date) {
       startTimeValue.value.seconds
     );
   }
-  
+
   if (endTimeValue.value) {
     newEndTime.value = new Date(
       date.getFullYear(),
@@ -264,7 +264,7 @@ function onDateChange(date: Date) {
       endTimeValue.value.seconds
     );
   }
-  
+
   validateTimes();
 }
 
@@ -272,14 +272,14 @@ function onTimeStartChange(time: any) {
   if (!newDate.value) {
     return;
   }
-  
+
   // Store the time value
   startTimeValue.value = {
     hours: time.hours,
     minutes: time.minutes,
     seconds: time.seconds || 0
   };
-  
+
   // Update the Date object for the picker
   newStartTime.value = new Date(
     newDate.value.getFullYear(),
@@ -289,7 +289,7 @@ function onTimeStartChange(time: any) {
     time.minutes,
     time.seconds || 0
   );
-  
+
   validateTimes();
 }
 
@@ -297,14 +297,14 @@ function onTimeEndChange(time: any) {
   if (!newDate.value) {
     return;
   }
-  
+
   // Store the time value
   endTimeValue.value = {
     hours: time.hours,
     minutes: time.minutes,
     seconds: time.seconds || 0
   };
-  
+
   // Update the Date object for the picker
   newEndTime.value = new Date(
     newDate.value.getFullYear(),
@@ -314,13 +314,13 @@ function onTimeEndChange(time: any) {
     time.minutes,
     time.seconds || 0
   );
-  
+
   validateTimes();
 }
 
 function validateTimes() {
   timeError.value = '';
-  
+
   if (startTimeValue.value && endTimeValue.value) {
     const startDate = new Date(
       newDate.value!.getFullYear(),
@@ -330,7 +330,7 @@ function validateTimes() {
       startTimeValue.value.minutes,
       startTimeValue.value.seconds
     );
-    
+
     const endDate = new Date(
       newDate.value!.getFullYear(),
       newDate.value!.getMonth(),
@@ -339,7 +339,7 @@ function validateTimes() {
       endTimeValue.value.minutes,
       endTimeValue.value.seconds
     );
-    
+
     if (startDate >= endDate) {
       timeError.value = t('dashboard.settings.endTimeAfterStart');
     }
@@ -360,7 +360,7 @@ async function handleReschedule() {
       startTimeValue.value.minutes,
       startTimeValue.value.seconds
     );
-    
+
     const endDate = new Date(
       newDate.value.getFullYear(),
       newDate.value.getMonth(),
@@ -369,13 +369,13 @@ async function handleReschedule() {
       endTimeValue.value.minutes,
       endTimeValue.value.seconds
     );
-    
+
     await slotStore.rescheduleSlot(
       props.slotData.id,
       startDate.toISOString(),
       endDate.toISOString()
     );
-    
+
     emit('rescheduled');
     handleClose();
   } catch (error) {
@@ -407,4 +407,4 @@ watch(() => props.visible, (newValue) => {
 
 <style scoped>
 /* Add any custom styles here */
-</style> 
+</style>

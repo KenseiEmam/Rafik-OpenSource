@@ -33,7 +33,7 @@
 
   <div
     v-else
-    class="w-full h-64 rounded border-2 border-dashed border-gray-400 flex items-center justify-center cursor-pointer hover:bg-rafik-secbg dark:bg-rafik-darksecbg focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+    class="w-full h-64 rounded border-2 border-dashed border-gray-400 flex items-center justify-center cursor-pointer hover:bg-topsets-secbg dark:bg-topsets-darksecbg focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
     @click="triggerFileInput"
   >
     <span class="text-center text-gray-500 text-xs">
@@ -52,16 +52,16 @@
 
       <div class="space-y-4">
         <h2 class="header-small">{{ t('dashboard.groups.edit.name') }}</h2>
-        <input v-model="editable.group_name" class="w-full rafik-text-input" />
+        <input v-model="editable.group_name" class="w-full topsets-text-input" />
 
         <h2 class="header-small">{{ t('dashboard.groups.edit.description') }}</h2>
-        <textarea v-model="editable.group_description" class="w-full rafik-text-input" rows="3" />
+        <textarea v-model="editable.group_description" class="w-full topsets-text-input" rows="3" />
       </div>
 
       <!-- Status -->
       <div>
         <label class="block text-sm font-medium mb-2">{{ t('dashboard.groups.edit.status') }}</label>
-        <select v-model="editable.status" class="rafik-text-input w-full">
+        <select v-model="editable.status" class="topsets-text-input w-full">
           <option value="active">{{ t('dashboard.groups.status.active') }}</option>
           <option value="scheduled">{{ t('dashboard.groups.status.scheduled') }}</option>
           <option value="canceled">{{ t('dashboard.groups.status.canceled') }}</option>

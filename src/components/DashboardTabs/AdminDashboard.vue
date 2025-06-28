@@ -9,7 +9,7 @@
       <div >
         <div class="flex items-center justify-between mb-6">
           <div>
-            <h3 class="header-small text-rafik">{{ t('dashboard.settings.currentSubscriptionPlan') }}</h3>
+            <h3 class="header-small text-topsets">{{ t('dashboard.settings.currentSubscriptionPlan') }}</h3>
             <p class="text-body mt-2 opacity-80">
               {{ t('dashboard.settings.subscriptionPlanDescription') }}
             </p>
@@ -25,40 +25,40 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <!-- Plan Name -->
           <div class="flex flex-col ">
-            <span class="text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext uppercase mb-2">
+            <span class="text-sm font-medium text-topsets-sectext dark:text-topsets-darksectext uppercase mb-2">
               {{ t('dashboard.settings.planName') }}
             </span>
-            <span class="text-lg font-semibold text-rafik-pritext dark:text-rafik-darkpritext">
+            <span class="text-lg font-semibold text-topsets-pritext dark:text-topsets-darkpritext">
               Enterprise Pro
             </span>
           </div>
 
           <!-- Number of Trainers -->
           <div class="flex flex-col">
-            <span class="text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext uppercase mb-2">
+            <span class="text-sm font-medium text-topsets-sectext dark:text-topsets-darksectext uppercase mb-2">
               {{ t('dashboard.settings.activeTrainers') }}
             </span>
-            <span class="text-lg font-semibold text-rafik-pritext dark:text-rafik-darkpritext">
+            <span class="text-lg font-semibold text-topsets-pritext dark:text-topsets-darkpritext">
               24 / 50
             </span>
           </div>
 
           <!-- Number of Trainees -->
           <div class="flex flex-col">
-            <span class="text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext uppercase mb-2">
+            <span class="text-sm font-medium text-topsets-sectext dark:text-topsets-darksectext uppercase mb-2">
               {{ t('dashboard.settings.activeTrainees') }}
             </span>
-            <span class="text-lg font-semibold text-rafik-pritext dark:text-rafik-darkpritext">
+            <span class="text-lg font-semibold text-topsets-pritext dark:text-topsets-darkpritext">
               1,247 / 2,000
             </span>
           </div>
 
           <!-- Yearly Cost -->
           <div class="flex flex-col">
-            <span class="text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext uppercase mb-2">
+            <span class="text-sm font-medium text-topsets-sectext dark:text-topsets-darksectext uppercase mb-2">
               {{ t('dashboard.settings.yearlyCost') }}
             </span>
-            <span class="text-lg font-semibold text-rafik-pritext dark:text-rafik-darkpritext">
+            <span class="text-lg font-semibold text-topsets-pritext dark:text-topsets-darkpritext">
               $1,299.00
             </span>
           </div>
@@ -66,7 +66,7 @@
 
         <!-- Plan Features -->
         <div class="mb-8">
-          <h4 class="text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext uppercase mb-4">
+          <h4 class="text-sm font-medium text-topsets-sectext dark:text-topsets-darksectext uppercase mb-4">
             {{ t('dashboard.settings.planFeatures') }}
           </h4>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -182,13 +182,13 @@
         }"
         v-for="(assessment, index) in assessments"
         :key="assessment.id"
-        class=" text-rafik-sectext dark:text-rafik-darksectext"
+        class=" text-topsets-sectext dark:text-topsets-darksectext"
       >
         <div
-          class="gradient-bg card p-6 w-full hover:border-rafik border border-transparent flex flex-col"
+          class="gradient-bg card p-6 w-full hover:border-topsets border border-transparent flex flex-col"
         >
           <!-- Top Section: Trainee Details -->
-          <div v-if="assessment.trainees" class="flex flex-col items-center border-b-2 py-4 border-rafik-pribg dark:border-rafik-darkpribg justify-between gap-4 mb-4">
+          <div v-if="assessment.trainees" class="flex flex-col items-center border-b-2 py-4 border-topsets-pribg dark:border-topsets-darkpribg justify-between gap-4 mb-4">
             <div class="flex items-center gap-3 ">
               <img
                 :src="
@@ -196,7 +196,7 @@
                   '/user-placeholder.jpg'
                 "
                 alt="Trainee Avatar"
-                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-rafik object-cover"
+                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-topsets object-cover"
               />
               <div>
                 <p class="header-small">
@@ -218,7 +218,7 @@
                   : 'Loading...'
               }}
             </h2>
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
+            <p class="label text-topsets-pritext dark:text-topsets-darkpritext">
               {{ formatDate(assessment.created_at) }}
             </p>
               </div>
@@ -245,25 +245,25 @@
     <h3 class="2xl:contentH-small ">Top Trainers</h3>
     <div class="flex flex-col  h-full justify-center">
       <div class=" gradient-bg p-6 card">
-          <div  class="flex items-center border-rafik-pribg dark:border-rafik-darkpribg justify-between gap-4 mb-4">
+          <div  class="flex items-center border-topsets-pribg dark:border-topsets-darkpribg justify-between gap-4 mb-4">
             <div class="flex items-center gap-3 ">
               <img
                 :src="
                   '/user-placeholder.jpg'
                 "
                 alt="Trainee Avatar"
-                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-rafik object-cover"
+                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-topsets object-cover"
               />
               <div>
                 <h3 class="header-small">
-                  John Rafik
+                  John topsets
                 </h3>
                <!-- Middle Section: Assessment Template Name and Date -->
           <div class="flex-1 mb-4">
             <h2 class="title-small text-sm mb-2">
              #1 Top Trainer
             </h2>
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
+            <p class="label text-topsets-pritext dark:text-topsets-darkpritext">
               {{ formatDate(new Date().toString()) }}
             </p>
               </div>
@@ -288,25 +288,25 @@
         <div class="flex flex-col  h-full justify-center">
       <div class="flex flex-col  h-full justify-center">
       <div class=" gradient-bg p-6 card">
-          <div  class="flex items-center border-rafik-pribg dark:border-rafik-darkpribg justify-between gap-4 mb-4">
+          <div  class="flex items-center border-topsets-pribg dark:border-topsets-darkpribg justify-between gap-4 mb-4">
             <div class="flex items-center gap-3 ">
               <img
                 :src="
                   '/user-placeholder.jpg'
                 "
                 alt="Trainee Avatar"
-                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-rafik object-cover"
+                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-topsets object-cover"
               />
               <div>
                 <h3 class="header-small">
-                  Jill Rafik
+                  Jill topsets
                 </h3>
                <!-- Middle Section: Assessment Template Name and Date -->
           <div class="flex-1 mb-4">
             <h2 class="title-small text-sm mb-2">
              #1 Top Athlete
             </h2>
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
+            <p class="label text-topsets-pritext dark:text-topsets-darkpritext">
               {{ formatDate(new Date().toString()) }}
             </p>
               </div>

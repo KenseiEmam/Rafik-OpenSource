@@ -51,25 +51,25 @@
             <div class="flex flex-col  h-full justify-center">
       <div class="flex flex-col  h-full justify-center">
       <div class=" gradient-bg p-6 card">
-          <div  class="flex items-center border-rafik-pribg dark:border-rafik-darkpribg justify-between gap-4 mb-4">
+          <div  class="flex items-center border-topsets-pribg dark:border-topsets-darkpribg justify-between gap-4 mb-4">
             <div class="flex items-center gap-3 ">
               <img
                 :src="
                   '/user-placeholder.jpg'
                 "
                 alt="Trainee Avatar"
-                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-rafik object-cover"
+                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-topsets object-cover"
               />
               <div>
                 <h3 class="header-small">
-                  Jill Rafik
+                  Jill topsets
                 </h3>
                <!-- Middle Section: Assessment Template Name and Date -->
           <div class="flex-1 mb-4">
             <h2 class="title-small text-sm mb-2">
              #1 Top Athlete
             </h2>
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
+            <p class="label text-topsets-pritext dark:text-topsets-darkpritext">
               {{ formatDate(new Date().toString()) }}
             </p>
               </div>
@@ -100,7 +100,7 @@
           <button
             @click="updateFilter('All')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
-            :class="filters.type.length === 0 ? 'border-rafik gradient-bg text-rafik' : 'border'"
+            :class="filters.type.length === 0 ? 'border-topsets gradient-bg text-topsets' : 'border'"
           >
             {{ t('dashboard.auditForms.list.filters.allForms') }}
           </button>
@@ -108,7 +108,7 @@
             @click="updateFilter('induction')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
             :class="
-              filters.type.includes('induction') ? 'border-rafik gradient-bg text-rafik' : 'border'
+              filters.type.includes('induction') ? 'border-topsets gradient-bg text-topsets' : 'border'
             "
           >
             {{ t('dashboard.auditForms.list.filters.Induction') }}
@@ -117,7 +117,7 @@
             @click="updateFilter('follow-up')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
             :class="
-              filters.type.includes('follow-up') ? 'border-rafik gradient-bg text-rafik' : 'border'
+              filters.type.includes('follow-up') ? 'border-topsets gradient-bg text-topsets' : 'border'
             "
           >
             {{ t('dashboard.auditForms.list.filters.followup') }}
@@ -150,7 +150,7 @@
           </thead>
           <tbody class="space-y-6">
             <tr v-for="(form, index) in forms" :key="index" class="p-4">
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4 capitalize">
                 {{
                   new Date(form.created_at).toLocaleDateString('en-GB', {
                     year: 'numeric',
@@ -159,18 +159,18 @@
                   }) || '-'
                 }}
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4">
                 <router-link
                   :to="{ name: 'single-user', params: { id: form.client_id } }"
-                  class="text-rafik-pritext hover:text-rafik-pribg dark:text-rafik-darkpritext dark:hover:text-rafik-darkpribg"
+                  class="text-topsets-pritext hover:text-topsets-pribg dark:text-topsets-darkpritext dark:hover:text-topsets-darkpribg"
                 >
                   {{ form.client_id }}
                 </router-link>
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4 capitalize">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4 capitalize">
                 <router-link
                   :to="{ name: 'program-details', params: { id: form.program_id } }"
-                  class="text-rafik-pritext hover:text-rafik-pribg dark:text-rafik-darkpritext dark:hover:text-rafik-darkpribg"
+                  class="text-topsets-pritext hover:text-topsets-pribg dark:text-topsets-darkpritext dark:hover:text-topsets-darkpribg"
                 >
                   {{
                     ProgramStore.AllPrograms?.find(
@@ -179,18 +179,18 @@
                   }}
                 </router-link>
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4">
                 {{ form.status }}
               </td>
-              <td class="bg-rafik-secbg dark:bg-rafik-darksecbg p-4">
+              <td class="bg-topsets-secbg dark:bg-topsets-darksecbg p-4">
                 {{ form.questions.length }}
               </td>
-              <td class="px-3 bg-rafik-secbg dark:bg-rafik-darksecbg relative text-right">
+              <td class="px-3 bg-topsets-secbg dark:bg-topsets-darksecbg relative text-right">
                 <svg
                   @click="() => chatsStore.openById(form.client_id, form.message_id)"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
-                  class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext cursor-pointer ms-auto"
+                  class="text-topsets-sectext dark:text-topsets-darksectext h-7 mx-7 hover:text-topsets-pritext dark:hover:text-topsets-darkpritext cursor-pointer ms-auto"
                   viewBox="0 0 128 512"
                 >
                   <path
@@ -223,7 +223,7 @@
       </div>
       <!-- No Results -->
       <div v-else class="space-y-6 flex flex-col items-center py-12">
-        <p class="text-rafik-pritext dark:text-rafik-darkpritext">
+        <p class="text-topsets-pritext dark:text-topsets-darkpritext">
           {{ t('dashboard.auditForms.list.noResults') }}
         </p>
       </div>
@@ -236,31 +236,31 @@
         <p class="header-small min-w-max">
           {{ t('dashboard.auditForms.list.pagination.page', { page: page }) }}
         </p>
-        <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
-        <div class="flex text-rafik-sectext dark:text-rafik-darksectext gap-4 px-4">
+        <hr class="border w-full border-topsets-sectext dark:border-topsets-darksectext" />
+        <div class="flex text-topsets-sectext dark:text-topsets-darksectext gap-4 px-4">
           <button
             v-for="p in Math.ceil(ProgramStore.AllCount / pageSize)"
             :key="p"
             @click="updatePage(p)"
-            class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
-            :class="p === page ? 'text-rafik-pritext dark:text-rafik-darkpritext' : ''"
+            class="hover:text-topsets-pritext dark:hover:text-topsets-darkpritext"
+            :class="p === page ? 'text-topsets-pritext dark:text-topsets-darkpritext' : ''"
           >
             {{ p }}
           </button>
         </div>
-        <hr class="border w-full border-rafik-sectext dark:border-rafik-darksectext" />
+        <hr class="border w-full border-topsets-sectext dark:border-topsets-darksectext" />
         <!-- Previous/Next Buttons -->
         <button
           v-if="page > 1"
           @click="updatePage(page - 1)"
-          class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
+          class="px-4 py-2 text-topsets-sectext dark:text-topsets-darksectext min-w-max hover:text-topsets-pritext dark:hover:text-topsets-darkpritext"
         >
           {{ t('dashboard.auditForms.list.pagination.previousPage') }}
         </button>
         <button
           v-if="page < Math.ceil(ProgramStore.AllCount / pageSize)"
           @click="updatePage(page + 1)"
-          class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext"
+          class="px-4 py-2 text-topsets-sectext dark:text-topsets-darksectext min-w-max hover:text-topsets-pritext dark:hover:text-topsets-darkpritext"
         >
           {{ t('dashboard.auditForms.list.pagination.nextPage') }}
         </button>
@@ -271,25 +271,25 @@
             <div class="flex flex-col  h-full justify-center">
       <div class="flex flex-col  h-full justify-center">
       <div class=" gradient-bg p-6 card">
-          <div  class="flex items-center border-rafik-pribg dark:border-rafik-darkpribg justify-between gap-4 mb-4">
+          <div  class="flex items-center border-topsets-pribg dark:border-topsets-darkpribg justify-between gap-4 mb-4">
             <div class="flex items-center gap-3 ">
               <img
                 :src="
                   '/user-placeholder.jpg'
                 "
                 alt="Trainee Avatar"
-                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-rafik object-cover"
+                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-topsets object-cover"
               />
               <div>
                 <h3 class="header-small">
-                  Bill Rafik
+                  Bill topsets
                 </h3>
                <!-- Middle Section: Assessment Template Name and Date -->
           <div class="flex-1 mb-4">
             <h2 class="title-small text-sm text-red-400 mb-2">
              No Workouts
             </h2>
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
+            <p class="label text-topsets-pritext dark:text-topsets-darkpritext">
               {{ formatDate(new Date().toString()) }}
             </p>
               </div>
@@ -384,7 +384,7 @@
             <div v-if="assessment.status === 'scheduled' && canReschedule(assessment)" class="mt-3">
               <button
                 @click.stop="handleRescheduleClick(assessment)"
-                class="btn-sm bg-rafik-secondary hover:bg-rafik text-white px-3 py-1 rounded text-xs"
+                class="btn-sm bg-topsets-secondary hover:bg-topsets text-white px-3 py-1 rounded text-xs"
               >
                 {{ t('dashboard.settings.rescheduleAssessmentButton') }}
               </button>

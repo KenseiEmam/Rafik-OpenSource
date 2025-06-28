@@ -30,7 +30,7 @@
           </div>
           <div
             v-else
-            class="w-full h-64 rounded border-2 border-dashed border-gray-400  flex items-center justify-center cursor-pointer hover:bg-rafik-secbg dark:bg-rafik-darksecbg focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            class="w-full h-64 rounded border-2 border-dashed border-gray-400  flex items-center justify-center cursor-pointer hover:bg-topsets-secbg dark:bg-topsets-darksecbg focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             @click="triggerFileInput"
           >
             <span class="text-center text-gray-500 text-xs">
@@ -54,7 +54,7 @@
           <input
             v-model="form.group_name"
             type="text"
-            class="rafik-text-input w-full"
+            class="topsets-text-input w-full"
             :placeholder="t('dashboard.groups.modal.groupNamePlaceholder')"
             required
           />
@@ -67,7 +67,7 @@
           </label>
           <textarea
             v-model="form.group_description"
-            class="rafik-text-input w-full h-24"
+            class="topsets-text-input w-full h-24"
             :placeholder="t('dashboard.groups.modal.groupDescriptionPlaceholder')"
           />
         </div>
@@ -79,7 +79,7 @@
           </label>
           <select
             v-model="form.status"
-            class="rafik-text-input w-full"
+            class="topsets-text-input w-full"
             required
           >
             <option value="active">

@@ -54,7 +54,7 @@
           </label>
           <input
             v-model="orgData.name"
-            class="rafik-text-input w-full"
+            class="topsets-text-input w-full"
             type="text"
             :placeholder="t('dashboard.settings.orgNamePlaceholder')"
           />
@@ -68,7 +68,7 @@
           <textarea
             v-model="orgData.description"
             rows="2"
-            class="rafik-text-input w-full whitespace-pre-wrap"
+            class="topsets-text-input w-full whitespace-pre-wrap"
             :placeholder="t('dashboard.settings.orgDescriptionPlaceholder')"
           ></textarea>
         </div>
@@ -81,7 +81,7 @@
           <label class="block text-sm font-medium">
             {{ t('dashboard.settings.orgCountryLabel') }}
           </label>
-          <select v-model="orgData.country" class="rafik-text-input w-full">
+          <select v-model="orgData.country" class="topsets-text-input w-full">
             <option :value="''" disabled>
               {{ t('dashboard.settings.orgCountryPlaceholder') }}
             </option>
@@ -98,7 +98,7 @@
           </label>
           <textarea
             v-model="orgData.address"
-            class="rafik-text-input w-full"
+            class="topsets-text-input w-full"
             type="text"
             rows="3"
             :placeholder="t('dashboard.settings.orgAddressPlaceholder')"
@@ -112,7 +112,7 @@
           </label>
           <textarea
             v-model="domainString"
-            class="rafik-text-input w-full"
+            class="topsets-text-input w-full"
             rows="7"
             :placeholder="t('dashboard.settings.orgDomainsPlaceholder')"
           ></textarea>
@@ -133,11 +133,11 @@
               class="hidden"
             />
             <div
-              class="w-16 h-8 flex items-center border-rafik-pritext dark:border-rafik-darkpritext border-2 rounded-full transition-all"
-              :class="{ 'bg-rafik': orgData.trainer_assign }"
+              class="w-16 h-8 flex items-center border-topsets-pritext dark:border-topsets-darkpritext border-2 rounded-full transition-all"
+              :class="{ 'bg-topsets': orgData.trainer_assign }"
             >
               <div
-                class="w-8 h-8 bg-rafik-pritext dark:bg-rafik-darkpritext rounded-full shadow-md transform transition-transform"
+                class="w-8 h-8 bg-topsets-pritext dark:bg-topsets-darkpritext rounded-full shadow-md transform transition-transform"
                 :class="
                   orgData.trainer_assign
                     ? locale === 'ar'
@@ -204,7 +204,7 @@
       <div class="card p-8">
         <div class="flex items-center justify-between mb-6">
           <div>
-            <h3 class="header-small text-rafik">{{ t('dashboard.settings.currentSubscriptionPlan') }}</h3>
+            <h3 class="header-small text-topsets">{{ t('dashboard.settings.currentSubscriptionPlan') }}</h3>
             <p class="text-body mt-2 opacity-80">
               {{ t('dashboard.settings.subscriptionPlanDescription') }}
             </p>
@@ -220,40 +220,40 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <!-- Plan Name -->
           <div class="flex flex-col">
-            <span class="text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext uppercase mb-2">
+            <span class="text-sm font-medium text-topsets-sectext dark:text-topsets-darksectext uppercase mb-2">
               {{ t('dashboard.settings.planName') }}
             </span>
-            <span class="text-lg font-semibold text-rafik-pritext dark:text-rafik-darkpritext">
+            <span class="text-lg font-semibold text-topsets-pritext dark:text-topsets-darkpritext">
               Enterprise Pro
             </span>
           </div>
 
           <!-- Number of Trainers -->
           <div class="flex flex-col">
-            <span class="text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext uppercase mb-2">
+            <span class="text-sm font-medium text-topsets-sectext dark:text-topsets-darksectext uppercase mb-2">
               {{ t('dashboard.settings.activeTrainers') }}
             </span>
-            <span class="text-lg font-semibold text-rafik-pritext dark:text-rafik-darkpritext">
+            <span class="text-lg font-semibold text-topsets-pritext dark:text-topsets-darkpritext">
               24 / 50
             </span>
           </div>
 
           <!-- Number of Trainees -->
           <div class="flex flex-col">
-            <span class="text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext uppercase mb-2">
+            <span class="text-sm font-medium text-topsets-sectext dark:text-topsets-darksectext uppercase mb-2">
               {{ t('dashboard.settings.activeTrainees') }}
             </span>
-            <span class="text-lg font-semibold text-rafik-pritext dark:text-rafik-darkpritext">
+            <span class="text-lg font-semibold text-topsets-pritext dark:text-topsets-darkpritext">
               1,247 / 2,000
             </span>
           </div>
 
           <!-- Yearly Cost -->
           <div class="flex flex-col">
-            <span class="text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext uppercase mb-2">
+            <span class="text-sm font-medium text-topsets-sectext dark:text-topsets-darksectext uppercase mb-2">
               {{ t('dashboard.settings.yearlyCost') }}
             </span>
-            <span class="text-lg font-semibold text-rafik-pritext dark:text-rafik-darkpritext">
+            <span class="text-lg font-semibold text-topsets-pritext dark:text-topsets-darkpritext">
               $1,299.00
             </span>
           </div>
@@ -261,7 +261,7 @@
 
         <!-- Plan Features -->
         <div class="mb-8">
-          <h4 class="text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext uppercase mb-4">
+          <h4 class="text-sm font-medium text-topsets-sectext dark:text-topsets-darksectext uppercase mb-4">
             {{ t('dashboard.settings.planFeatures') }}
           </h4>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
