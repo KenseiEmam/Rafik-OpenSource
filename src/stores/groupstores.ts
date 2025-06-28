@@ -63,7 +63,7 @@ export const useGroupStore = defineStore('Group', () => {
       const { data, error } = await supabase
         .from('groups')
         .select('*')
-        .eq('organization', userProfile.organization)
+        .eq('organization', userProfile.organization || 0)
         .order('id', { ascending: false })
 
       if (error) throw error
