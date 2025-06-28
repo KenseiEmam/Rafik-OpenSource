@@ -48,7 +48,7 @@
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 
 interface Option {
-  id: string | number;
+  id: number;
   name: string;
 }
 

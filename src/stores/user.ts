@@ -51,6 +51,7 @@ interface UserInterface {
   audit_status?: string;
   roles?: string[];
   organization?: number;
+  groups?:number[];
 }
 interface ClientInterface extends UserInterface {
   program_details?: any;

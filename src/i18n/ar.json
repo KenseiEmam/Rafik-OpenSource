@@ -262,6 +262,7 @@
       "logout": "تسجيل الخروج",
       "assessmentTemplates": "قوالب التقييم",
       "myAssessments": "المتدربين<br />تقييمات ",
+      "groupsList": "إدارة المجموعات",
       "calendar":"جدول فعالياتي"
     },
     "home": {
@@ -617,7 +618,23 @@
           "errorUpdatingRoles": "خطأ في تحديث الأدوار: ",
           "errorFetchingUsers": "خطأ في جلب المستخدمين",
           "cannotRemoveOwnAdminRole": "لا يمكنك إزالة دور المدير الخاص بك",
-          "cannotRemoveOwnOrgAdminRole": "لا يمكنك إزالة دور مدير المؤسسة الخاص بك"
+          "cannotRemoveOwnOrgAdminRole": "لا يمكنك إزالة دور مدير المؤسسة الخاص بك",
+          "userManagement": "إدارة المستخدم",
+          "banUser": "حظر المستخدم",
+          "unbanUser": "إلغاء حظر المستخدم",
+          "userBanned": "تم حظر المستخدم",
+          "userActive": "المستخدم نشط",
+          "banConfirmation": "هل أنت متأكد من أنك تريد حظر هذا المستخدم؟",
+          "unbanConfirmation": "هل أنت متأكد من أنك تريد إلغاء حظر هذا المستخدم؟",
+          "userBannedSuccess": "تم حظر المستخدم بنجاح",
+          "userUnbannedSuccess": "تم إلغاء حظر المستخدم بنجاح",
+          "errorBanningUser": "خطأ في حظر المستخدم: ",
+          "errorUnbanningUser": "خطأ في إلغاء حظر المستخدم: ",
+          "cannotBanYourself": "لا يمكنك حظر نفسك",
+          "banUserDescription": "حظر المستخدم سيمنعه من الوصول إلى المنصة. لن يتمكن من تسجيل الدخول أو استخدام أي ميزات.",
+          "unbanUserDescription": "إلغاء حظر المستخدم سيعيد له الوصول إلى المنصة. سيكون قادراً على تسجيل الدخول واستخدام جميع الميزات مرة أخرى.",
+          "bannedStatus": "محظور",
+          "activeStatus": "نشط"
         },
         "trainer": {
           "seatsAvailable": "المقاعد المتاحة",
@@ -1449,7 +1466,53 @@
       "rolesAndPermissionsTab": "الأدوار والصلاحيات",
       "notificationsTab": "الإشعارات",
       "successTitle": "نجاح!",
-      "errorTitle": "خطأ!"
+      "errorTitle": "خطأ!",
+      "organizationSettingsTabLoading": "جار تحميل إعدادات المؤسسة...",
+      "orgNameLabel": "اسم المؤسسة",
+      "orgNamePlaceholder": "أدخل اسم المؤسسة",
+      "orgDescriptionLabel": "الوصف",
+      "orgDescriptionPlaceholder": "أدخل وصفاً موجزاً",
+      "orgCountryLabel": "البلد",
+      "orgCountryPlaceholder": "اختر البلد",
+      "orgAddressLabel": "العنوان",
+      "orgAddressPlaceholder": "أدخل عنوان المؤسسة",
+      "orgDomainsLabel": "النطاقات",
+      "orgDomainsPlaceholder": "أدخل النطاقات مفصولة بفواصل",
+      "orgTrainerAssignLabel": "تعيين المدربين تلقائياً",
+      "organizationLogoUploadLabel": "رفع شعار المؤسسة",
+      "orgSaveButton": "حفظ",
+      "orgNoOrgIdFound": "لم يتم العثور على معرف المؤسسة في ملفك الشخصي!",
+      "orgFetchError": "غير قادر على جلب بيانات المؤسسة: {error}",
+      "orgUpdateSuccess": "تم تحديث المؤسسة بنجاح",
+      "orgUpdateFail": "فشل في تحديث المؤسسة: {error}",
+      "orgLogoUploadFail": "فشل في رفع الشعار: {error}",
+      "currentSubscriptionPlan": "خطة الاشتراك الحالية",
+      "subscriptionPlanDescription": "إدارة اشتراك مؤسستك وتفاصيل الفوترة",
+      "planName": "اسم الخطة",
+      "activeTrainers": "المدربون النشطون",
+      "activeTrainees": "المتدربون النشطون",
+      "yearlyCost": "التكلفة السنوية",
+      "planFeatures": "ميزات الخطة",
+      "changePlan": "تغيير الخطة",
+      "comingSoonTitle": "قريباً!",
+      "comingSoonMessage": "ستكون ميزات إدارة الخطط متاحة قريباً. ترقبوا التحديثات!",
+      "rescheduleAssessment": "إعادة جدولة التقييم",
+      "currentAssessmentDetails": "تفاصيل التقييم الحالي",
+      "trainee": "المتدرب",
+      "template": "القالب",
+      "currentTime": "الوقت الحالي",
+      "newStartTime": "وقت البدء الجديد",
+      "newEndTime": "وقت الانتهاء الجديد",
+      "selectStartTime": "اختر وقت البدء",
+      "selectEndTime": "اختر وقت الانتهاء",
+      "selectDate": "اختر التاريخ",
+      "endTimeAfterStart": "يجب أن يكون وقت الانتهاء بعد وقت البدء",
+      "rescheduleAssessmentButton": "إعادة جدولة التقييم",
+      "cancel": "إلغاء",
+      "assessmentRescheduledSuccess": "تم إعادة جدولة التقييم بنجاح!",
+      "assessmentRescheduleFailed": "فشل في إعادة جدولة التقييم.",
+      "timeSlotConflict": "تعارض في الفترة الزمنية مع المواعيد الموجودة",
+      "noOrganizationId": "لم يتم العثور على معرف المؤسسة"
     },
     "assessmentTemplates": {
       "pageTitle": "قوالب",
@@ -1545,5 +1608,54 @@
       },
       "comingSoon": "صفحة تفاصيل التقييم قريباً..."
     }
-  }
+  },
+  "groups": {
+  "pageTitle": {
+    "header":"إدارة",
+    "subheader": "المجموعات"
+  },
+  "loading": "جارٍ تحميل بيانات المجموعة...",
+   "modal": {
+        "title": "إنشاء مجموعة جديدة",
+        "groupName": "اسم المجموعة",
+        "groupNamePlaceholder": "أدخل اسم المجموعة",
+        "groupDescription": "وصف المجموعة",
+        "groupDescriptionPlaceholder": "أدخل وصفاً موجزاً",
+        "status": "الحالة",
+        "statusActive": "نشطة",
+        "statusScheduled": "مجدولة",
+        "statusCanceled": "ملغاة",
+        "assignAdmins": "تعيين المسؤولين",
+        "assignMembers": "تعيين الأعضاء",
+        "cancel": "إلغاء",
+        "create": "إنشاء المجموعة"
+      },
+  "list": {
+    "typeToSearchGroups": "اكتب للبحث عن المجموعات حسب المستخدمين...",
+    "createGroup": "+ مجموعة جديدة",
+    "admins":"المشرفين",
+    "close": "إغلاق",
+    "noGroupsFound": "لم يتم العثور على مجموعات.",
+    "users": "المستخدمون",
+    "noUsers": "لا يوجد مستخدمون",
+    "pageLabel": "الصفحة:",
+    "previousPage": "الصفحة السابقة",
+    "nextPage": "الصفحة التالية"
+  },"edit": {
+        "title": "تعديل المجموعة",
+        "name": "اسم المجموعة",
+        "description": "وصف المجموعة",
+        "status": "الحالة",
+        "assignAdmins": "تعيين المشرفين",
+        "assignUsers": "تعيين الأعضاء",
+        "save": "حفظ",
+        "cancel": "إلغاء"
+      },
+      "status": {
+        "active": "نشط",
+        "scheduled": "مجدول",
+        "canceled": "ملغي"
+      }
+}
+
 }

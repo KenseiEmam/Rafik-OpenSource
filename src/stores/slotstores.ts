@@ -190,6 +190,60 @@ async function insertAssessmentSlot(newSlot: Omit<Slot, 'id' | 'created_at'| 'da
     throw error;
   }
 }
+
+async function rescheduleSlot(slotId: number, newTimeStart: string, newTimeEnd: string) {
+  try {
+    const orgId = userStore.userProfile?.organization;
+    if (!orgId) {
+      throw new Error('No organization ID found');
+    }
+
+    // Check for time conflicts with other slots
+    const { data: conflictingSlots, error: conflictError } = await supabase
+      .from('slots')
+      .select('*')
+      .eq('organization', orgId)
+      .neq('id', slotId)
+      .or(`and(time_start.lt.${newTimeEnd},time_end.gt.${newTimeStart})`);
+
+    if (conflictError) throw conflictError;
+
+    if (conflictingSlots && conflictingSlots.length > 0) {
+      throw new Error('Time slot conflicts with existing appointments');
+    }
+
+    // Update the slot
+    const { data, error } = await supabase
+      .from('slots')
+      .update({
+        time_start: newTimeStart,
+        time_end: newTimeEnd
+      })
+      .eq('id', slotId)
+      .eq('organization', orgId)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    // Update local state
+    const slotIndex = AllSlots.value.findIndex(slot => slot.id === slotId);
+    if (slotIndex !== -1) {
+      AllSlots.value[slotIndex] = { ...AllSlots.value[slotIndex], ...data };
+    }
+
+    if (SlotItem.value?.id === slotId) {
+      SlotItem.value = { ...SlotItem.value, ...data };
+    }
+
+    showSuccess('Assessment rescheduled successfully!');
+    return data;
+  } catch (error: any) {
+    console.error(error);
+    showError(error.message || 'Failed to reschedule assessment.');
+    throw error;
+  }
+}
   // Clear the current slot item
   function clearSlot() {
     SlotItem.value = null;
@@ -203,5 +257,6 @@ async function insertAssessmentSlot(newSlot: Omit<Slot, 'id' | 'created_at'| 'da
     insertAssessmentSlot,
     getAllSlots,
     clearSlot,
+    rescheduleSlot,
   };
 });

@@ -185,6 +185,12 @@ watch(calendarEvents, (newEvents) => {
     events: newEvents,
   };
 });
+
+async function handleRescheduled() {
+  // Refresh slots and calendar when assessment is rescheduled
+  resetView();
+  await loadSlots();
+}
 </script>
 
 <template>
@@ -200,6 +206,7 @@ watch(calendarEvents, (newEvents) => {
       :visible="viewSlot !== null"
       @close="resetView"
       @delete="handleDeleteSlot"
+      @rescheduled="handleRescheduled"
       :templateData="viewSlot"
     />
     <FullCalendar v-if="showCalendar" :options="calendarOptions" />

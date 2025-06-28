@@ -90,6 +90,67 @@
         </div>
       </div>
     </div>
+
+    <!-- User Management Section -->
+    <div v-if="selectedUser" class="mt-8">
+      <div class="card p-8">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="header-small">{{ t('dashboard.tabs.settings.rolesAndPerms.userManagement') }}</h3>
+            <p class="text-body mt-2">
+              {{ selectedUser.audit_status === 'banned' ? t('dashboard.tabs.settings.rolesAndPerms.banUserDescription') : t('dashboard.tabs.settings.rolesAndPerms.unbanUserDescription') }}
+            </p>
+          </div>
+          <div class="flex items-center gap-4">
+            <!-- Status Badge -->
+            <div
+              class="px-4 py-2 rounded-full text-sm font-medium"
+              :class="
+                selectedUser.audit_status === 'banned'
+                  ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                  : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+              "
+            >
+              {{ selectedUser.audit_status === 'banned' ? t('dashboard.tabs.settings.rolesAndPerms.bannedStatus') : t('dashboard.tabs.settings.rolesAndPerms.activeStatus') }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Ban/Unban Button -->
+        <div class="flex items-center gap-4">
+          <button
+            v-if="selectedUser.audit_status !== 'banned'"
+            @click="banUser"
+            :disabled="isCurrentUser"
+            class="px-6 py-3 bg-red-600 hover:bg-red-700 disabled:bg-red-400 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-colors duration-200 flex items-center gap-2"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+            </svg>
+            {{ t('dashboard.tabs.settings.rolesAndPerms.banUser') }}
+          </button>
+          
+          <button
+            v-else
+            @click="unbanUser"
+            class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium transition-colors duration-200 flex items-center gap-2"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            {{ t('dashboard.tabs.settings.rolesAndPerms.unbanUser') }}
+          </button>
+
+          <!-- Warning for current user -->
+          <div v-if="isCurrentUser && selectedUser.audit_status !== 'banned'" class="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+            </svg>
+            <span class="text-sm">{{ t('dashboard.tabs.settings.rolesAndPerms.cannotBanYourself') }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -145,6 +206,12 @@ const isRoleToggleDisabled = computed(() => (role: any) => {
   }
 
   return false;
+});
+
+// Check if the selected user is the current user
+const isCurrentUser = computed(() => {
+  if (!selectedUser.value || !userStore.userProfile) return false;
+  return selectedUser.value.id === userStore.userProfile.id;
 });
 
 function showSuccess(message: string) {
@@ -203,14 +270,14 @@ async function fetchFilteredUsers() {
   const query = isFullAdmin
     ? supabase
         .from('users')
-        .select('id, first_name, last_name, email, roles')
+        .select('id, first_name, last_name, email, roles, audit_status')
         .or(
           `first_name.ilike.%${searchQuery.value}%,last_name.ilike.%${searchQuery.value}%,email.ilike.%${searchQuery.value}%`
         )
         .limit(10)
     : supabase
         .from('users')
-        .select('id, first_name, last_name, email, roles')
+        .select('id, first_name, last_name, email, roles, audit_status')
         .eq('organization', userStore.userProfile!.organization!)
         .or(
           `first_name.ilike.%${searchQuery.value}%,last_name.ilike.%${searchQuery.value}%,email.ilike.%${searchQuery.value}%`
@@ -295,6 +362,79 @@ async function toggleRole(role: any) {
   // Immediately update the UI with the new roles array.
   selectedUser.value.roles = updatedRoles;
   showSuccess(t('dashboard.tabs.settings.rolesAndPerms.rolesUpdated'));
+}
+
+// Ban a user
+async function banUser() {
+  if (!selectedUser.value) return;
+  
+  if (isCurrentUser.value) {
+    showError(t('dashboard.tabs.settings.rolesAndPerms.cannotBanYourself'));
+    return;
+  }
+
+  const result = await Swal.fire({
+    title: t('dashboard.tabs.settings.rolesAndPerms.banUser'),
+    text: t('dashboard.tabs.settings.rolesAndPerms.banConfirmation'),
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: t('dashboard.tabs.settings.rolesAndPerms.banUser'),
+    cancelButtonText: t('general.cancel'),
+    background: '#081411',
+    color: '#E8F3ED'
+  });
+
+  if (result.isConfirmed) {
+    const { error } = await supabase
+      .from('users')
+      .update({ audit_status: 'banned' })
+      .eq('id', selectedUser.value.id);
+
+    if (error) {
+      showError(t('dashboard.tabs.settings.rolesAndPerms.errorBanningUser') + error.message);
+      return;
+    }
+
+    // Update the UI
+    selectedUser.value.audit_status = 'banned';
+    showSuccess(t('dashboard.tabs.settings.rolesAndPerms.userBannedSuccess'));
+  }
+}
+
+// Unban a user
+async function unbanUser() {
+  if (!selectedUser.value) return;
+
+  const result = await Swal.fire({
+    title: t('dashboard.tabs.settings.rolesAndPerms.unbanUser'),
+    text: t('dashboard.tabs.settings.rolesAndPerms.unbanConfirmation'),
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#28a745',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: t('dashboard.tabs.settings.rolesAndPerms.unbanUser'),
+    cancelButtonText: t('general.cancel'),
+    background: '#081411',
+    color: '#E8F3ED'
+  });
+
+  if (result.isConfirmed) {
+    const { error } = await supabase
+      .from('users')
+      .update({ audit_status: 'active' })
+      .eq('id', selectedUser.value.id);
+
+    if (error) {
+      showError(t('dashboard.tabs.settings.rolesAndPerms.errorUnbanningUser') + error.message);
+      return;
+    }
+
+    // Update the UI
+    selectedUser.value.audit_status = 'active';
+    showSuccess(t('dashboard.tabs.settings.rolesAndPerms.userUnbannedSuccess'));
+  }
 }
 
 onMounted(() => {

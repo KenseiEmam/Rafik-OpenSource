@@ -10,7 +10,8 @@
     "error": "Error!",
     "opened": "Opened",
     "seen": "Seen",
-    "na": "N/A"
+    "na": "N/A",
+    "cancel": "Cancel"
   },
 
   "footer": {
@@ -263,6 +264,7 @@
       "myProfile": "My Profile",
       "logout": "Logout",
       "assessmentTemplates": "Assessment Templates",
+      "groupsList": "Group Management",
       "myAssessments": "Trainee <br />Assessments",
       "calendar":"Events Calendar"
     },
@@ -621,7 +623,23 @@
           "errorUpdatingRoles": "Error updating roles: ",
           "errorFetchingUsers": "Error fetching users",
           "cannotRemoveOwnAdminRole": "You cannot remove your own Administrator role",
-          "cannotRemoveOwnOrgAdminRole": "You cannot remove your own Organization Admin role"
+          "cannotRemoveOwnOrgAdminRole": "You cannot remove your own Organization Admin role",
+          "userManagement": "User Management",
+          "banUser": "Ban User",
+          "unbanUser": "Unban User",
+          "userBanned": "User Banned",
+          "userActive": "User Active",
+          "banConfirmation": "Are you sure you want to ban this user?",
+          "unbanConfirmation": "Are you sure you want to unban this user?",
+          "userBannedSuccess": "User has been banned successfully",
+          "userUnbannedSuccess": "User has been unbanned successfully",
+          "errorBanningUser": "Error banning user: ",
+          "errorUnbanningUser": "Error unbanning user: ",
+          "cannotBanYourself": "You cannot ban yourself",
+          "banUserDescription": "Banning a user will prevent them from accessing the platform. They will not be able to log in or use any features.",
+          "unbanUserDescription": "Unbanning a user will restore their access to the platform. They will be able to log in and use all features again.",
+          "bannedStatus": "BANNED",
+          "activeStatus": "ACTIVE"
         },
         "trainer": {
           "seatsAvailable": "Seats Available",
@@ -1494,7 +1512,34 @@
       "orgUpdateSuccess": "Organization updated successfully",
       "orgUpdateFail": "Failed to update organization: {error}",
       "orgLogoUploadSuccess": "Logo uploaded successfully!",
-      "orgLogoUploadFail": "Error uploading logo: {error}"
+      "orgLogoUploadFail": "Error uploading logo: {error}",
+      "currentSubscriptionPlan": "Current Subscription Plan",
+      "subscriptionPlanDescription": "Manage your organization's subscription and billing details",
+      "planName": "Plan Name",
+      "activeTrainers": "Active Trainers",
+      "activeTrainees": "Active Trainees",
+      "yearlyCost": "Yearly Cost",
+      "planFeatures": "Plan Features",
+      "changePlan": "Change Plan",
+      "comingSoonTitle": "Coming Soon!",
+      "comingSoonMessage": "Plan management features will be available soon. Stay tuned for updates!",
+      "rescheduleAssessment": "Reschedule Assessment",
+      "currentAssessmentDetails": "Current Assessment Details",
+      "trainee": "Trainee",
+      "template": "Template",
+      "currentTime": "Current Time",
+      "newStartTime": "New Start Time",
+      "newEndTime": "New End Time",
+      "selectStartTime": "Select Start Time",
+      "selectEndTime": "Select End Time",
+      "selectDate": "Select Date",
+      "endTimeAfterStart": "End time must be after start time",
+      "rescheduleAssessmentButton": "Reschedule Assessment",
+      "cancel": "Cancel",
+      "assessmentRescheduledSuccess": "Assessment rescheduled successfully!",
+      "assessmentRescheduleFailed": "Failed to reschedule assessment.",
+      "timeSlotConflict": "Time slot conflicts with existing appointments",
+      "noOrganizationId": "No organization ID found"
     },
     "assessmentTemplates": {
       "pageTitle": "Assessment",
@@ -1565,6 +1610,56 @@
           "subheader": "View assessment information and results"
         },
         "comingSoon": "Assessment details page coming soon..."
+      }
+    },
+    "groups": {
+      "pageTitle": {
+        "subheader": "Group",
+        "header": "Management"
+      },
+      "loading": "Loading group data...",
+      "modal": {
+        "title": "Create New Group",
+        "groupName": "Group Name",
+        "groupNamePlaceholder": "Enter a group name",
+        "groupDescription": "Group Description",
+        "groupDescriptionPlaceholder": "Enter a brief description",
+        "status": "Status",
+        "statusActive": "Active",
+        "statusScheduled": "Scheduled",
+        "statusCanceled": "Canceled",
+        "assignAdmins": "Assign Administrators",
+        "assignMembers": "Assign Members",
+        "cancel": "Cancel",
+        "create": "Create Group"
+      },
+      "list": {
+        "typeToSearchGroups": "Type to search groups by users...",
+        "createGroup": "+ New Group",
+    "admins":"Admins",
+        "close": "Close",
+        "noGroupsFound": "No Groups found.",
+        "users": "users",
+        "noUsers": "No users",
+        "pageLabel": "Page:",
+        "previousPage": "Previous Page",
+        "nextPage": "Next Page"
+      },
+      
+       "edit": {
+        "title": "Edit Group",
+        "name": "Group Name",
+        "description": "Group Description",
+        "status": "Status",
+        "assignAdmins": "Assign Admins",
+        "assignUsers": "Assign Members",
+        "save": "Save",
+        "cancel": "Cancel"
+      },
+      "status": {
+        "active": "Active",
+        "scheduled": "Scheduled",
+        "canceled": "Canceled"
       }
     }
   }

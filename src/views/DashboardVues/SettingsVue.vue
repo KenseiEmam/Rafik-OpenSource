@@ -106,7 +106,7 @@
             "
           />
           <!-- Organization Settings -->
-          <template
+          <OrganizationSettings
             v-else-if="
               activeTab === 'Organization Settings' &&
               userStore.userProfile.roles.includes('Organization Admin')
@@ -317,19 +317,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, reactive } from 'vue';
+import { ref } from 'vue';
 import { useUserStore } from '@/stores/user';
+import { useI18n } from 'vue-i18n';
 import PageTitle from '@/components/Navigation/PageTitle.vue';
 import GeneralSettings from '@/components/SettingsTabs/GeneralSettings.vue';
 import TrainerSettings from '@/components/SettingsTabs/TrainerSettings.vue';
 import RolesandPerms from '@/components/SettingsTabs/RolesandPerms.vue';
-import Swal from 'sweetalert2';
-import { useI18n } from 'vue-i18n';
-import { supabase } from '@/lib/supabaseClient';
-import { countries } from '@/lib/countries'; // Assuming you have a JSON file with country data
-import VuePictureCropper, { cropper } from 'vue-picture-cropper'
+import OrganizationSettings from '@/components/SettingsTabs/OrganizationSettings.vue';
 import Notifications from '@/components/SettingsTabs/Notifications.vue';
-const { t, locale } = useI18n(); // now we also destructure `locale`
+
+const { t } = useI18n();
 const userStore = useUserStore();
 
 const activeTab = ref('General Setting');
