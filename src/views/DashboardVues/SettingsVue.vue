@@ -111,7 +111,7 @@
               activeTab === 'Organization Settings' &&
               userStore.userProfile.roles.includes('Organization Admin')
             "
-          >
+          />
             <!-- Loading Spinner -->
             <div
               v-if="loadingOrg"
