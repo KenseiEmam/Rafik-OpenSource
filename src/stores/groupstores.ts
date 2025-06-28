@@ -82,6 +82,50 @@ export const useGroupStore = defineStore('Group', () => {
       return null
     }
   }
+async function getRelevantGroups(userProfile: any) {
+  try {
+    const user_id = localStorage.getItem('UserID');
+    if (!user_id) throw new Error('User ID not found in localStorage');
+
+    const roles = userProfile?.roles || [];
+    const isAdmin =
+      roles.includes('Administrator') || roles.includes('Organization Admin');
+
+    let query = supabase
+      .from('groups')
+      .select('*')
+      .order('id', { ascending: false });
+
+    if (isAdmin) {
+      // Admins get all groups in their organization
+      query = query.eq('organization', userProfile.organization || 0);
+    } else {
+      // Regular users: fetch groups where they are in users OR admins
+      query = query.or(`users.cs.{${user_id}},admins.cs.{${user_id}}`);
+    }
+
+    const { data, error } = await query;
+
+    if (error) throw error;
+
+    AllGroups.value = data || [];
+
+    // Fetch related user details
+    Promise.all([
+      fetchAllUserDetails(AllGroups.value, 'admin'),
+      fetchAllUserDetails(AllGroups.value, 'member'),
+    ]).catch((e) =>
+      showError(`Failed to load group users: ${e.message || 'Unknown error'}`)
+    );
+
+    return AllGroups.value;
+  } catch (err: any) {
+    console.error(err);
+    showError(`Failed to load groups: ${err.message || 'Unknown error'}`);
+    return null;
+  }
+}
+
 
   async function getGroup(id: number) {
     try {
@@ -220,6 +264,7 @@ export const useGroupStore = defineStore('Group', () => {
     admins,
     members,
     getAllGroups,
+    getRelevantGroups,
     getGroup,
     createGroup,
     updateGroup,

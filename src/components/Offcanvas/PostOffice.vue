@@ -78,12 +78,15 @@
         </svg>
       </div>
       <!-- Tabs -->
-      <div class="flex gap-2 items-center justify-center w-full mb-auto">
+      <div v-if="clientStore.userProfile?.roles?.includes('Organization Trnr') || clientStore.userProfile?.roles?.includes('Trainer')" class="flex gap-2 items-center justify-center w-full mb-auto">
         <button @click="activeTab = 'Groups'" :class="activeTab === 'Groups'? 'btn-md':'btn-md-outline'" class="flex-1"> Group Chats</button>
         <button @click="activeTab = 'Trainees'" :class="activeTab === 'Trainees'? 'btn-md':'btn-md-outline'" class="flex-1"> Trainee Chats</button>
       </div>
       <!-- Client List -->
       <div v-if="activeTab === 'Trainees'  " class="space-y-4 flex-1 flex flex-col overflow-auto w-full">
+        <div v-if="chatsStore.sortedChatClients.length === 0" class="text-center text-sm text-muted">
+    No Trainees yet!
+  </div>
         <div
           v-for="client in chatsStore.sortedChatClients"
           :key="client.id"
@@ -186,6 +189,113 @@
           </div>
         </div>
       </div>
+      <!-- Groups List -->
+      <div v-else class="space-y-4 flex-1 flex flex-col overflow-auto w-full">
+  <div v-if="chatsStore.sortedChatGroups.length === 0" class="text-center text-sm text-muted">
+   You have not been added to any groups!
+  </div>
+        <div
+          v-for="group in chatsStore.sortedChatGroups"
+          :key="group.id"
+          @click="chatsStore.open(group)"
+          :class="{
+            'border-rafik-pritext dark:border-rafik-darkpritext':
+              !group.seen_at && group.sent_by == group.id
+          }"
+          class="p-6 border hover:border-rafik-secondary card cursor-pointer rounded-xl bg-rafik-secbg dark:bg-rafik-darksecbg flex gap-6 w-full items-center"
+        >
+          <img
+            :src="
+              group.group_avatar ||
+              'https://pexviywnztvqomfosvho.supabase.co/storage/v1/object/public/storage/avatars/default-avatar.png'
+            "
+            alt=""
+            class="rounded-full border-2 2xl:h-24 2xl:w-24 border-rafik-secondary object-cover w-16 h-16"
+          />
+          <div class="flex-1">
+            <h2 class="header-small text-rafik-secondary">
+              {{ group.group_name }}
+            </h2>
+            <p
+              :class="{
+                'text-rafik-pritext dark:text-rafik-darkpritext':
+                  !group.seen_at && group.sent_by == group.id
+              }"
+              class="text-body line-clamp-1 text-sm mb-2"
+            >
+              {{
+                group.latestGroupMessage
+                  ? group.latestGroupMessage
+                  : t('dashboard.offCanvas.postOffice.reachOut', {
+                      name: group.group_name
+                    })
+              }}
+            </p>
+
+            <!-- Seen Tick -->
+            <div
+              v-if="group.seen_at && group.sent_by !== group.id"
+              class="text-rafik-teritiary flex items-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4 text-rafik-teritiary"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M16.707 4.293a1 1 0 0 0-1.414 0L8 11.586 4.707 8.293a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.414 0l8-8a1 1 0 0 0 0-1.414z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <span :class="locale === 'ar' ? 'mr-2 text-sm' : 'ml-2 text-sm'">
+                {{ t('dashboard.offCanvas.postOffice.seen') }}
+              </span>
+            </div>
+
+            <!-- If the trainer has sent a message to the group, but the group hasn't seen it -->
+            <p
+              v-else-if="!group.seen_at && group.sent_by !== group.id"
+              class="text-sm opacity-70 flex text-body items-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4 text-rafik-sectext dark:text-rafik-darksectext"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M16.707 4.293a1 1 0 0 0-1.414 0L8 11.586 4.707 8.293a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.414 0l8-8a1 1 0 0 0 0-1.414z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <span :class="locale === 'ar' ? 'mr-2 text-sm' : 'ml-2 text-sm'">
+                {{ t('dashboard.offCanvas.postOffice.sent') }}
+              </span>
+            </p>
+
+            <!-- If the group has read the message and the message was from them originally -->
+            <p
+              v-else-if="group.seen_at && group.sent_by === group.id"
+              class="text-sm opacity-70 flex text-body items-center"
+            >
+              <span class="text-sm">
+                {{ t('dashboard.offCanvas.postOffice.opened') }}
+              </span>
+            </p>
+
+            <!-- Else we show that the trainer received the message at some time -->
+            <p v-else class="text-sm opacity-70 flex text-body items-center">
+              <span class="text-sm">
+                {{ t('dashboard.offCanvas.postOffice.received') }}
+                {{ humanizeDate(group.latestGroupMessageTime) }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- Chat Window -->
     <!-- NOTE: we now pass :formsMap="formsMap" so ChatWindow can display the forms -->
@@ -207,6 +317,8 @@ import { formatDistanceToNow, parseISO } from 'date-fns';
 import { fromZonedTime } from 'date-fns-tz';
 import { useI18n } from 'vue-i18n';
 import { useChatsStore } from '@/stores/chatsstores';
+import { useGroupStore } from '@/stores/groupstores';
+
 
 const { t, locale } = useI18n();
 const activeTab = ref("Groups")
@@ -218,6 +330,7 @@ function humanizeDate(date: any, timeZone: string = 'UTC') {
 
 const open = ref(false);
 const clientStore = useUserStore();
+const groupStore = useGroupStore();
 
 // Chat window states
 const chatsStore = useChatsStore();
@@ -226,6 +339,9 @@ const close = chatsStore.close;
 onMounted(async () => {
   await clientStore.getChatClients();
   await chatsStore.fetchLatestMessages();
+  if(clientStore.userProfile)
+    await groupStore.getRelevantGroups(clientStore.userProfile);
+    await chatsStore.fetchLatestGroupMessages();
   subscribeToChatMessages();
 });
 
