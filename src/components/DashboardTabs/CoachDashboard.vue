@@ -521,7 +521,7 @@ const loading = ref(true);
 const ProgramStore = useProgramStore();
 const totalCount = ref(0);
 const page = ref(1);
-const pageSize = ref(10);
+const pageSize = ref(5);
 const holdQuery = ref('');
 const filters = ref<Filter>({ status: '', type: [], client: null, program: null });
 

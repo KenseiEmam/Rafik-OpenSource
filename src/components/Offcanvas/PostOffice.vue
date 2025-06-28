@@ -52,7 +52,7 @@
     <!-- Drawer Content -->
     <div
       :class="open ? 'h-screen' : 'h-0'"
-      class="border-rafik-sectext dark:border-rafik-darksectext border-x w-128 bg-rafik-secbg dark:bg-rafik-darksecbg items-between justify-between gap-10 flex flex-col p-8 2xl:py-16 h-full relative z-10"
+      class="border-rafik-sectext dark:border-rafik-darksectext border-x w-128 bg-rafik-secbg dark:bg-rafik-darksecbg items-between justify-between gap-6 flex flex-col p-8 2xl:py-16 h-full relative z-10"
     >
       <!-- Header Section -->
       <div class="flex gap-10 justify-between">
@@ -77,9 +77,13 @@
           />
         </svg>
       </div>
-
+      <!-- Tabs -->
+      <div class="flex gap-2 items-center justify-center w-full mb-auto">
+        <button @click="activeTab = 'Groups'" :class="activeTab === 'Groups'? 'btn-md':'btn-md-outline'" class="flex-1"> Group Chats</button>
+        <button @click="activeTab = 'Trainees'" :class="activeTab === 'Trainees'? 'btn-md':'btn-md-outline'" class="flex-1"> Trainee Chats</button>
+      </div>
       <!-- Client List -->
-      <div class="space-y-4 flex-1 flex flex-col overflow-auto w-full">
+      <div v-if="activeTab === 'Trainees'  " class="space-y-4 flex-1 flex flex-col overflow-auto w-full">
         <div
           v-for="client in chatsStore.sortedChatClients"
           :key="client.id"
@@ -205,7 +209,7 @@ import { useI18n } from 'vue-i18n';
 import { useChatsStore } from '@/stores/chatsstores';
 
 const { t, locale } = useI18n();
-
+const activeTab = ref("Groups")
 function humanizeDate(date: any, timeZone: string = 'UTC') {
   if (!date) return null;
   const utcDate = fromZonedTime(parseISO(date), timeZone);
