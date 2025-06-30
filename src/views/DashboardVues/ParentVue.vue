@@ -52,5 +52,5 @@ onMounted(() => {
   });
 });
 import DashboardSideBar from '../../components/Navigation/DashboardSideBar.vue';
-import PostOffice from '../../components/Offcanvas/PostOffice.vue';
+import PostOffice from '../../components/Chats/PostOffice.vue';
 </script>

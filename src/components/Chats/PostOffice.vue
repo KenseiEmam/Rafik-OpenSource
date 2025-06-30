@@ -197,7 +197,7 @@
         <div
           v-for="group in chatsStore.sortedChatGroups"
           :key="group.id"
-          @click="chatsStore.open(group)"
+          @click="chatsStore.openGroup(group)"
           :class="{
             'border-rafik-pritext dark:border-rafik-darkpritext':
               !group.seen_at && group.sent_by == group.id
@@ -232,62 +232,10 @@
               }}
             </p>
 
-            <!-- Seen Tick -->
-            <div
-              v-if="group.seen_at && group.sent_by !== group.id"
-              class="text-rafik-teritiary flex items-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 text-rafik-teritiary"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.707 4.293a1 1 0 0 0-1.414 0L8 11.586 4.707 8.293a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.414 0l8-8a1 1 0 0 0 0-1.414z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              <span :class="locale === 'ar' ? 'mr-2 text-sm' : 'ml-2 text-sm'">
-                {{ t('dashboard.offCanvas.postOffice.seen') }}
-              </span>
-            </div>
 
-            <!-- If the trainer has sent a message to the group, but the group hasn't seen it -->
-            <p
-              v-else-if="!group.seen_at && group.sent_by !== group.id"
-              class="text-sm opacity-70 flex text-body items-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4 text-rafik-sectext dark:text-rafik-darksectext"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.707 4.293a1 1 0 0 0-1.414 0L8 11.586 4.707 8.293a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.414 0l8-8a1 1 0 0 0 0-1.414z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              <span :class="locale === 'ar' ? 'mr-2 text-sm' : 'ml-2 text-sm'">
-                {{ t('dashboard.offCanvas.postOffice.sent') }}
-              </span>
-            </p>
-
-            <!-- If the group has read the message and the message was from them originally -->
-            <p
-              v-else-if="group.seen_at && group.sent_by === group.id"
-              class="text-sm opacity-70 flex text-body items-center"
-            >
-              <span class="text-sm">
-                {{ t('dashboard.offCanvas.postOffice.opened') }}
-              </span>
-            </p>
 
             <!-- Else we show that the trainer received the message at some time -->
-            <p v-else class="text-sm opacity-70 flex text-body items-center">
+            <p  class="text-sm opacity-70 flex text-body items-center">
               <span class="text-sm">
                 {{ t('dashboard.offCanvas.postOffice.received') }}
                 {{ humanizeDate(group.latestGroupMessageTime) }}
@@ -305,6 +253,11 @@
       @close="close"
       :message-id="chatsStore.messageId"
     />
+    <ChatWindowGroup
+    :visible="chatsStore.activeGroup"
+      :group="chatsStore.group"
+      @close="close"
+      :message-id="chatsStore.messageId"/>
   </div>
 </template>
 
@@ -312,12 +265,13 @@
 import { onMounted, onUnmounted, ref, computed } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { supabase } from '@/lib/supabaseClient';
-import ChatWindow from '@/components/ChatWindow.vue';
+import ChatWindow from '@/components/Chats/ChatWindow.vue';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { fromZonedTime } from 'date-fns-tz';
 import { useI18n } from 'vue-i18n';
 import { useChatsStore } from '@/stores/chatsstores';
 import { useGroupStore } from '@/stores/groupstores';
+import ChatWindowGroup from './ChatWindowGroup.vue';
 
 
 const { t, locale } = useI18n();

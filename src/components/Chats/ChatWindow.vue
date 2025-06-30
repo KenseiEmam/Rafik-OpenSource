@@ -404,7 +404,7 @@ onMounted(() => {
   if (props.messageId) {
     scrollToMessage(props.messageId);
   } else {
-    console.log('NO MESSAGE ID');
+
   }
 });
 

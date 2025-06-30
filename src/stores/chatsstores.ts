@@ -36,6 +36,7 @@ function showError(message: string) {
 
 export const useChatsStore = defineStore('Chats', () => {
   const active = ref(false);
+  const activeGroup = ref(false);
   const client = ref<any>(null);
   const group = ref<any>(null);
   const messageId = ref<number | undefined>(undefined);
@@ -72,6 +73,7 @@ export const useChatsStore = defineStore('Chats', () => {
     return [...clientStore.ChatClients]
       .map((client) => {
         const msg = latestMessages.value[client.program_details?.id] || null;
+
         return {
           ...client,
           latestMessage: msg?.content || null,
@@ -84,57 +86,59 @@ export const useChatsStore = defineStore('Chats', () => {
         (a, b) => new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime()
       );
   });
-  const sortedChatGroups = computed(() => {
-    console.log('SORTED CHAT Groups GOT CALLED');
-    return [...groupStore.AllGroups]
-      .map((group) => {
-        const msg = latestGroupMessages.value[group.id] || null;
-        return {
-          ...group,
-          latestGroupMessage: msg?.content || null,
-          latestGroupMessageTime: msg?.created_at || '1970-01-01',
-          sent_by: msg?.sent_by || '1',
-          seen_at: msg?.seen_at || null
-        };
-      })
-      .sort(
-        (a, b) => new Date(b.latestGroupMessageTime).getTime() - new Date(a.latestGroupMessageTime).getTime()
-      );
-  });
+ const sortedChatGroups = computed(() => {
+
+  return [...groupStore.AllGroups]
+    .map((group) => {
+
+      const msg = latestGroupMessages.value[group.id] || null;
+      return {
+        ...group,
+        latestGroupMessage: msg?.content ?? null,
+        latestGroupMessageTime: msg?.created_at ?? '1970-01-01T00:00:00Z',
+        sent_by: msg?.sent_by ?? null,
+        seen_at: msg?.seen_at ?? null
+      };
+    })
+    .sort(
+      (a, b) =>
+        new Date(b.latestGroupMessageTime).getTime() -
+        new Date(a.latestGroupMessageTime).getTime()
+    );
+});
+
 // Add a fetch latest messages but for groups
-  async function fetchLatestGroupMessages() {
-    try {
-      const groupIDs = groupStore.AllGroups.flatMap(
-        (group) => group.id || []
-      );
-      if (groupIDs.length === 0) return;
+async function fetchLatestGroupMessages() {
+  try {
+    const groupIDs = groupStore.AllGroups.flatMap((group) => group.id || []);
+    if (groupIDs.length === 0) return;
 
-      const { data, error } = await supabase.rpc('get_latest_messages2', {
-        group: groupIDs
-      });
+    const { data, error } = await supabase.rpc('get_latest_group_messages', {
+      group_ids: groupIDs
+    });
 
-      if (error) {
-        throw new Error(`Error fetching messages: ${error.message}`);
-      }
-      const tempMessages: any = {};
-
-      for (const msg of data) {
-        tempMessages[msg.user_program] = {
-          content: msg.content,
-          created_at: msg.created_at,
-          seen_at: msg.seen_at,
-          sent_by: msg.sent_by,
-          form: msg.form,
-          group:msg.group
-        };
-      }
-
-      latestGroupMessages.value = tempMessages;
-
-    } catch (error: any) {
-      console.error(error);
+    if (error) {
+      throw new Error(`Error fetching messages: ${error.message}`);
     }
+
+    const tempMessages: any = {};
+
+    for (const msg of data) {
+      tempMessages[msg.group_id] = {
+        content: msg.content,
+        created_at: msg.created_at,
+        seen_at: msg.seen_at,
+        sent_by: msg.sent_by,
+        form: msg.form,
+        group: msg.group_id
+      };
+    }
+
+    latestGroupMessages.value = tempMessages;
+  } catch (error: any) {
+    console.error(error);
   }
+}
   // Fetch the latest messages + associated forms
   async function fetchLatestMessages() {
     try {
@@ -189,6 +193,8 @@ export const useChatsStore = defineStore('Chats', () => {
   const close = function () {
     active.value = false;
     client.value = null;
+    group.value = null;
+    activeGroup.value = false;
     messageId.value = undefined;
   };
 
@@ -196,7 +202,10 @@ export const useChatsStore = defineStore('Chats', () => {
     client.value = $client;
     active.value = true;
   };
-
+  const openGroup = ($group: any) => {
+    group.value = $group;
+    activeGroup.value = true;
+  };
   const openById = (id: number, m_id?: number) => {
     const client = sortedChatClients.value.find((client) => client.id === id);
     if (!client) {
@@ -211,6 +220,7 @@ export const useChatsStore = defineStore('Chats', () => {
 
   return {
     active,
+    activeGroup,
     client,
     group,
     messageId,
@@ -221,6 +231,7 @@ export const useChatsStore = defineStore('Chats', () => {
     fetchLatestMessages,
     fetchLatestGroupMessages,
     open,
+    openGroup,
     openById,
     close
   };
