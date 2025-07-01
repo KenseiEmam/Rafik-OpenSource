@@ -124,7 +124,14 @@ onMounted(() => {
         <div class="p-8 2xl:p-16 2xl:py-24 space-y-4 relative gap-6 items-stretch grid grid-cols-4">
           <div class="pr-6 space-y-4 col-span-2">
             <div class="flex items-center gap-6">
-              <div class="space-y-2">
+              <div v-if="workoutStore.Workout?.rest_day" class="space-y-2">
+
+                <h1 class="title-small">
+                 REST DAY!
+                </h1>
+
+              </div>
+              <div v-else class="space-y-2">
                 <h2 class="subheader-small">
                   {{ t('dashboard.workoutSheet.workoutLogFor') }}
                 </h2>

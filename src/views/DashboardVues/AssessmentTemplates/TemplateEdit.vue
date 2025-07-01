@@ -242,9 +242,9 @@
                         <option value="Metres">Metres</option>
                         <option value="Miles">Miles</option>
                         <option value="Load(Kg)">Load(Kg)</option>
-                        <option value="Load(Lb)">Load(Lb)</option>
+
                         <option value="Speed(Kmph)">Speed(Kmph)</option>
-                        <option value="Speed(mph)">Speed(mph)</option>
+
                         <option value="RPE">RPE</option>
                         <option value="Heart Rate">Heart Rate</option>
                         <option value="RIR">RIR</option>
@@ -263,9 +263,9 @@
                         <option value="Seconds">Seconds</option>
                         <option value="Minutes">Minutes</option>
                         <option value="Load(Kg)">Load(Kg)</option>
-                        <option value="Load(Lb)">Load(Lb)</option>
+
                         <option value="Speed(Kmph)">Speed(Kmph)</option>
-                        <option value="Speed(mph)">Speed(mph)</option>
+
                         <option value="RPE">RPE</option>
                         <option value="Heart Rate">Heart Rate</option>
                         <option value="RIR">RIR</option>
