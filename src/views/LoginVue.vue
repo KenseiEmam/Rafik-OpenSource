@@ -11,15 +11,22 @@ const { t , locale } = useI18n();
     <WebsiteHeader />
     <Transition name="slide-fade" appear>
       <div class="grid md:grid-cols-2 items-center min-h-64 flex-1 mb-16">
-        <div>
+        <div class="space-y-6">
           <h1 class="header-large mb-3">
             {{ t('login.welcomeBack') }}
           </h1>
           <LoginForm />
-          <h3 class="text-body">
-            {{ t('login.notRegisteredYet') }}
-            <RouterLink to="request-demo">Request a Demo</RouterLink>
-          </h3>
+          <div class="flex flex-col gap-2">
+            <RouterLink  to="register" class="text-lg">--> Just got invited by your admins?</RouterLink>
+            <RouterLink to="request-demo" class="text-lg">--> Not a part of our team?</RouterLink>
+          </div>
+
+
+
+
+
+
+
         </div>
         <div class="relative">
           <div
