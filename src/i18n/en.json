@@ -322,7 +322,27 @@
         },
         "actions": {
           "viewUser": "View User",
-          "deleteUser": "Delete User"
+          "deleteUser": "Delete User",
+          "assignToProgram": "Assign to Program",
+          "assignToCoach": "Assign to Coach",
+          "assign": "Assign"
+        },
+        "assignUserModal": {
+          "title": "Assign User",
+          "assignmentType": "Assignment Type",
+          "assignToProgram": "Assign to Program",
+          "assignToCoachDirectly": "Assign to Coach Directly",
+          "programToAssign": "Program to Assign",
+          "chooseProgramPlaceholder": "Choose a program...",
+          "coachToAssign": "Coach to Assign",
+          "chooseCoachPlaceholder": "Choose a coach...",
+          "cancel": "Cancel",
+          "assign": "Assign",
+          "processing": "Processing...",
+          "assignmentTypeRequired": "Please select an assignment type",
+          "programRequired": "Please select a program",
+          "coachRequired": "Please select a coach",
+          "noEntitlementsAvailable": "No entitlements available. Please purchase more entitlements first."
         },
         "loading": "Loading...",
         "noUsersFound": "No Users found for your query.",
@@ -582,12 +602,15 @@
           "sportsPlayed": "Sports Played",
           "dietPreference": "Diet Preference",
           "clientProgram": "Client Program",
+          "clientCoach": "Client Coach",
           "joinedOn": "Joined On",
           "expiresOn": "Expires On",
           "pricePackage": "Price Package",
           "trainer": "Trainer",
           "visitProgram": "Visit Program",
+          "visitCoach": "Visit Coach",
           "notAssigned": "Not Assigned To Any Programs",
+          "assignedToCoach": "Assigned to Coach",
           "loading": "Loading...",
           "na": "N/A",
           "nonePaying": "None Paying",
@@ -1133,14 +1156,22 @@
     "entitlements": {
       "modal": {
         "assignEntitlements": "ASSIGN ENTITLEMENTS",
+        "assignToCoach": "ASSIGN TO COACH",
+        "assignmentType": "Assignment Type",
+        "assignToProgram": "Assign to Program",
+        "assignToCoachDirectly": "Assign to Coach Directly",
         "programToAssign": "Program to Assign",
         "chooseProgramPlaceholder": "Choose program from the list",
+        "coachToAssign": "Coach to Assign",
+        "chooseCoachPlaceholder": "Choose coach from the list",
         "assigneeEmailsLabel": "Assignee Emails:",
         "emailsPlaceholder": "Separate multiple emails with commas",
         "assignButton": "Assign",
         "programRequired": "Please select a program.",
+        "coachRequired": "Please select a coach.",
         "emailsRequired": "Please enter at least one email.",
-        "emailsCountExceeded": "You cannot assign more than {count} entitlements."
+        "emailsCountExceeded": "You cannot assign more than {count} entitlements.",
+        "assignmentTypeRequired": "Please select an assignment type."
       },
       "list": {
         "client": "Client",

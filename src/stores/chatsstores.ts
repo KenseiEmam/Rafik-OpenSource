@@ -72,7 +72,8 @@ export const useChatsStore = defineStore('Chats', () => {
     console.log('SORTED CHAT CLIENTS GOT CALLED');
     return [...clientStore.ChatClients]
       .map((client) => {
-        const msg = latestMessages.value[client.program_details?.id] || null;
+        const messageKey = client.program_details?.id || `direct_${client.id}`;
+        const msg = latestMessages.value[messageKey] || null;
 
         return {
           ...client,
@@ -144,23 +145,73 @@ async function fetchLatestGroupMessages() {
     try {
       const userProgramIds = clientStore.ChatClients.flatMap(
         (client) => client.program_details?.id || []
+      ).filter(id => id !== null);
+      
+      const clientIds = clientStore.ChatClients.flatMap(
+        (client) => (client.program_details?.id === null || client.program_details?.id === undefined) ? client.id : []
       );
-      if (userProgramIds.length === 0) return;
 
-      const { data, error } = await supabase.rpc('get_latest_messages2', {
-        program_ids: userProgramIds
-      });
+      let allMessages: any[] = [];
 
-      if (error) {
-        throw new Error(`Error fetching messages: ${error.message}`);
+      // Fetch messages for clients with programs
+      if (userProgramIds.length > 0) {
+        const { data: programMessages, error: programError } = await supabase.rpc('get_latest_messages2', {
+          program_ids: userProgramIds
+        });
+
+        if (programError) {
+          throw new Error(`Error fetching program messages: ${programError.message}`);
+        }
+
+        if (programMessages) {
+          allMessages = allMessages.concat(programMessages);
+        }
+      }
+
+      // Fetch messages for clients assigned directly to coaches
+      if (clientIds.length > 0) {
+        const { data: directMessages, error: directError } = await supabase
+          .from('chat_messages')
+          .select('*')
+          .in('sent_to', clientIds)
+          .is('user_program', null)
+          .order('created_at', { ascending: false });
+
+        if (directError) {
+          throw new Error(`Error fetching direct messages: ${directError.message}`);
+        }
+
+        if (directMessages) {
+          // Group by sent_to and get the latest message for each client
+          const latestDirectMessages = directMessages.reduce((acc: any, msg: any) => {
+            if (!acc[msg.sent_to] || new Date(msg.created_at) > new Date(acc[msg.sent_to].created_at)) {
+              acc[msg.sent_to] = msg;
+            }
+            return acc;
+          }, {});
+
+          // Convert to the same format as program messages
+          const formattedDirectMessages = Object.values(latestDirectMessages).map((msg: any) => ({
+            user_program: null,
+            sent_to: msg.sent_to,
+            content: msg.content,
+            created_at: msg.created_at,
+            seen_at: msg.seen_at,
+            sent_by: msg.sent_by,
+            form: msg.form
+          }));
+
+          allMessages = allMessages.concat(formattedDirectMessages);
+        }
       }
 
       // Build an array of form IDs to fetch
       const formIds: number[] = [];
       const tempMessages: any = {};
 
-      for (const msg of data) {
-        tempMessages[msg.user_program] = {
+      for (const msg of allMessages) {
+        const key = msg.user_program || `direct_${msg.sent_to}`;
+        tempMessages[key] = {
           content: msg.content,
           created_at: msg.created_at,
           seen_at: msg.seen_at,

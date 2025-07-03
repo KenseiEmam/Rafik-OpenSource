@@ -318,7 +318,27 @@
         },
         "actions": {
           "viewUser": "عرض المستخدم",
-          "deleteUser": "حذف المستخدم"
+          "deleteUser": "حذف المستخدم",
+          "assignToProgram": "تعيين للبرنامج",
+          "assignToCoach": "تعيين للمدرب",
+          "assign": "تعيين"
+        },
+        "assignUserModal": {
+          "title": "تعيين المستخدم",
+          "assignmentType": "نوع التعيين",
+          "assignToProgram": "تعيين للبرنامج",
+          "assignToCoachDirectly": "تعيين للمدرب مباشرة",
+          "programToAssign": "البرنامج المراد تعيينه",
+          "chooseProgramPlaceholder": "اختر برنامج...",
+          "coachToAssign": "المدرب المراد تعيينه",
+          "chooseCoachPlaceholder": "اختر مدرب...",
+          "cancel": "إلغاء",
+          "assign": "تعيين",
+          "processing": "جار المعالجة...",
+          "assignmentTypeRequired": "يرجى اختيار نوع التعيين",
+          "programRequired": "يرجى اختيار برنامج",
+          "coachRequired": "يرجى اختيار مدرب",
+          "noEntitlementsAvailable": "لا توجد استحقاقات متاحة. يرجى شراء المزيد من الاستحقاقات أولاً."
         },
         "loading": "جار التحميل...",
         "noUsersFound": "لم يتم العثور على مستخدمين لطلبك.",
@@ -577,12 +597,15 @@
           "sportsPlayed": "الرياضات التي يمارسها",
           "dietPreference": "تفضيل النظام الغذائي",
           "clientProgram": "برنامج العميل",
+          "clientCoach": "مدرب العميل",
           "joinedOn": "تاريخ الانضمام",
           "expiresOn": "ينتهي في",
           "pricePackage": "باقة السعر",
           "trainer": "المدرب",
           "visitProgram": "زيارة البرنامج",
+          "visitCoach": "زيارة المدرب",
           "notAssigned": "غير مُعين في أي برنامج",
+          "assignedToCoach": "مُعين لمدرب",
           "loading": "جار التحميل...",
           "na": "غير متوفر",
           "nonePaying": "غير مدفوع",
@@ -1108,14 +1131,22 @@
     "entitlements": {
       "modal": {
         "assignEntitlements": "تعيين الاستحقاقات",
+        "assignToCoach": "تعيين للمدرب",
+        "assignmentType": "نوع التعيين",
+        "assignToProgram": "تعيين للبرنامج",
+        "assignToCoachDirectly": "تعيين للمدرب مباشرة",
         "programToAssign": "البرنامج للتعيين",
         "chooseProgramPlaceholder": "اختر البرنامج من القائمة",
+        "coachToAssign": "المدرب للتعيين",
+        "chooseCoachPlaceholder": "اختر المدرب من القائمة",
         "assigneeEmailsLabel": "عناوين البريد الإلكتروني للمستفيدين:",
         "emailsPlaceholder": "افصل بين عناوين البريد الإلكتروني بفواصل",
         "assignButton": "تعيين",
         "programRequired": "يرجى اختيار برنامج.",
+        "coachRequired": "يرجى اختيار مدرب.",
         "emailsRequired": "يرجى إدخال بريد إلكتروني واحد على الأقل.",
-        "emailsCountExceeded": "لا يمكنك تعيين أكثر من {count} استحقاق."
+        "emailsCountExceeded": "لا يمكنك تعيين أكثر من {count} استحقاق.",
+        "assignmentTypeRequired": "يرجى اختيار نوع التعيين."
       },
       "list": {
         "client": "استحقاقات",

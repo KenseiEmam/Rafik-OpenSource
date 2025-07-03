@@ -31,16 +31,18 @@
             @click="updateFilter('Organization Trnr')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
             :class="
-              filters.roles.includes('Trainer') ? 'border-rafik gradient-bg text-rafik' : 'border'
+              filters.roles.includes('Organization Trnr')
+                ? 'border-rafik gradient-bg text-rafik'
+                : 'border'
             "
           >
             {{ t('dashboard.users.list.filters.trainer') }}
           </button>
           <button
-            @click="updateFilter('Trainee')"
+            @click="updateFilter('Organization Trnee')"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
             :class="
-              filters.roles.includes('Trainee') && !filters.enrolled
+              filters.roles.includes('Organization Trnee') && !filters.enrolled
                 ? 'border-rafik gradient-bg text-rafik'
                 : 'border'
             "
@@ -48,10 +50,10 @@
             {{ t('dashboard.users.list.filters.trainee') }}
           </button>
           <button
-            @click="updateFilter('Trainee', true)"
+            @click="updateFilter('Organization Trnee', true)"
             class="card border 2xl:text-base text-sm min-w-max uppercase"
             :class="
-              filters.roles.includes('Trainee') && filters.enrolled
+              filters.roles.includes('Organization Trnee') && filters.enrolled
                 ? 'border-rafik gradient-bg text-rafik'
                 : 'border'
             "
@@ -150,6 +152,15 @@
                   >
                     {{ t('dashboard.users.list.actions.viewUser') }}
                   </Router-link>
+                  <!-- Show assignment option for trainees who aren't assigned -->
+                  <button
+                    v-if="user.roles.includes('Organization Trnee') && !isUserAssigned(user)"
+                    @click="showAssignModalForUser(user)"
+                    class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext rounded"
+                  >
+                    {{ t('dashboard.users.list.actions.assign') }}
+                  </button>
+
                   <button
                     class="px-3 py-5 text-red-500 hover:bg-rafik-pribg dark:bg-rafik-darkpribg hover:text-red-300 rounded"
                   >
@@ -234,6 +245,14 @@
       @submit="onAssignModalSubmit"
       @close="showAssignEntitlementModal = false"
     />
+    <AssignUserModal
+      :user="selectedUserForAssignment"
+      :programs="programStore.All_Org_Programs || []"
+      :availableEntitlements="entitlementStore.unusedEntitlementCount"
+      :visible="showAssignUserModal"
+      @submit="onAssignUserModalSubmit"
+      @close="showAssignUserModal = false"
+    />
   </div>
 </template>
 <script lang="ts" setup>
@@ -243,6 +262,7 @@ import debounce from 'lodash/debounce';
 import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
 import AddUserModal from '@/components/UserTabs/AddUserModal.vue';
+import AssignUserModal from '@/components/UserTabs/AssignUserModal.vue';
 import { useProgramStore } from '@/stores/programstores';
 import { useEntitlementStore } from '@/stores/entitlementstores';
 import Swal from 'sweetalert2';
@@ -265,7 +285,7 @@ type Filter = {
   roles: string[];
   name: string;
   active: boolean;
-  enrolled:boolean;
+  enrolled: boolean;
 };
 const loading = ref(true);
 const userStore = useUserStore();
@@ -274,7 +294,7 @@ const totalCount = ref(0);
 const page = ref(1);
 const pageSize = ref(10);
 const holdQuery = ref('');
-const filters = ref<Filter>({ roles: [], name: '', active: true, enrolled:false });
+const filters = ref<Filter>({ roles: [], name: '', active: true, enrolled: false });
 
 const show_action = ref();
 // Store references
@@ -282,8 +302,10 @@ const entitlementStore = useEntitlementStore();
 const programStore = useProgramStore();
 // Local reactive states
 const showAssignEntitlementModal = ref(false);
+const showAssignUserModal = ref(false);
 const processing = ref(false);
 const showAddUserModal = ref(false);
+const selectedUserForAssignment = ref<any>(null);
 
 // Success and Error Alerts
 function showSuccess(messageKey: string) {
@@ -336,11 +358,56 @@ function handleLeave() {
   }, 500);
 }
 
-// Called when the AssignEntitlementsModal emits a "submit" event
-async function onAssignModalSubmit(payload: { programId: string; emails: string[] }) {
-  const { programId, emails } = payload;
-  await assignEntitlementsToUsers(programId, emails);
+// Check if a user is already assigned to a program or coach
+function isUserAssigned(user: any) {
+  // Check if user has a profile with a coach assigned
+  // We need to check if the user has a profile and if that profile has a coach
+  return user.profiles && (user.profiles.coach || user.profiles.user_program_id);
+}
+
+// Show assignment modal for a specific user
+function showAssignModalForUser(user: any) {
+  selectedUserForAssignment.value = user;
+  showAssignUserModal.value = true;
+  show_action.value = null;
+}
+
+// Called when the AssignEntitlementsModal emits a "submit" event (bulk assignment)
+async function onAssignModalSubmit(payload: {
+  type: string;
+  programId: string;
+  coachId: string;
+  emails: string[];
+}) {
+  const { type, programId, coachId, emails } = payload;
+
+  if (type === 'program') {
+    await assignEntitlementsToUsers(programId, emails);
+  } else if (type === 'coach') {
+    await assignUsersToCoach(coachId, emails);
+  }
+
   showAssignEntitlementModal.value = false;
+  selectedUserForAssignment.value = null;
+}
+
+// Called when the AssignUserModal emits a "submit" event (individual assignment)
+async function onAssignUserModalSubmit(payload: {
+  type: string;
+  programId: string;
+  coachId: string;
+  user: any;
+}) {
+  const { type, programId, coachId, user } = payload;
+
+  if (type === 'program') {
+    await assignEntitlementToUser(programId, user);
+  } else if (type === 'coach') {
+    await assignUserToCoach(coachId, user);
+  }
+
+  showAssignUserModal.value = false;
+  selectedUserForAssignment.value = null;
 }
 
 async function assignEntitlementsToUsers(programId: string, emails: string[]) {
@@ -451,6 +518,125 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
   }
 
   await Promise.all([entitlementStore.getEntitlements(), userStore.getEntitled()]);
+  processing.value = false;
+}
+
+// Function to assign users directly to a coach
+async function assignUsersToCoach(coachId: string, emails: string[]) {
+  processing.value = true;
+  const orgID = localStorage.getItem('OrgID');
+
+  const invalidEmails = [];
+  const validUsers = [];
+
+  for (const email of emails) {
+    const { data: user, error } = await supabase
+      .from('users')
+      .select()
+      .eq('email', email)
+      .eq('organization', orgID)
+      .maybeSingle();
+
+    if (error) {
+      invalidEmails.push(`Error checking user ${email}: ${error.message}`);
+      continue;
+    }
+
+    if (!user) {
+      invalidEmails.push(
+        `User with email ${email} does not exist or is not part of the organization.`
+      );
+      continue;
+    }
+
+    // Check if user is already assigned to a coach
+    const userAlreadyAssigned = user.profiles && user.profiles.coach;
+    if (userAlreadyAssigned) {
+      invalidEmails.push(`User with email ${email} is already assigned to a program/coach.`);
+      continue;
+    }
+
+    validUsers.push({ email, user });
+  }
+
+  if (invalidEmails.length > 0) {
+    showError(invalidEmails.join('\n'));
+  }
+
+
+  // Process valid users
+  for (const { email } of validUsers) {
+    try {
+      await userStore.assignUsersToCoach(coachId, email);
+    } catch (error) {
+      console.error(`Error assigning user ${email} to coach:`, error);
+      invalidEmails.push(`Failed to assign user ${email} to coach.`);
+    }
+  }
+
+  if (invalidEmails.length === 0) {
+    showSuccess('dashboard.users.list.assignUserModal.usersAssignedSuccessfully');
+  } else {
+    showSuccess('Assignment completed with Errors');
+  }
+
+  await loadUsers(); // Refresh the users list
+  processing.value = false;
+}
+
+// Function to assign a single user to a program
+async function assignEntitlementToUser(programId: string, user: any) {
+  processing.value = true;
+
+  const availableEntitlements = entitlementStore.entitlements.filter(
+    (e) => e.client_email === null
+  );
+
+  if (availableEntitlements.length === 0) {
+    showError('dashboard.users.list.assignUserModal.noEntitlementsAvailable');
+    processing.value = false;
+    return;
+  }
+
+  const program = programStore.All_Org_Programs?.find((p) => p.id === programId);
+  if (!program) {
+    showError('dashboard.entitlements.list.programNotFound');
+    processing.value = false;
+    return;
+  }
+
+  // Check if user already has an entitlement
+  const userAlreadyAssigned = entitlementStore.entitlements.find(
+    (entitlement) => entitlement.client_email === user.email
+  );
+
+  if (userAlreadyAssigned) {
+    showError(`User ${user.email} is already assigned an entitlement.`);
+    processing.value = false;
+    return;
+  }
+
+  // Assign the entitlement using the store
+  const entitlement = availableEntitlements[0];
+  await entitlementStore.assignEntitlement(entitlement.id, user.email, program);
+
+  showSuccess('dashboard.entitlements.list.emailsSentSuccessfully');
+  await Promise.all([entitlementStore.getEntitlements(), userStore.getEntitled(), loadUsers()]);
+  processing.value = false;
+}
+
+// Function to assign a single user directly to a coach
+async function assignUserToCoach(coachId: string, user: any) {
+  processing.value = true;
+
+  try {
+    await userStore.assignUsersToCoach(coachId, user.email);
+    await loadUsers(); // Refresh the users list
+  } catch (error) {
+    console.error('Error assigning user to coach:', error);
+    // Error is already handled in the store function
+  }
+
   processing.value = false;
 }
 
