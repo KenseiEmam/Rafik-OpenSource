@@ -266,11 +266,6 @@ const showAddProgramModal = ref(false);
 // Additional slots for placeholders
 const additionalSlots = computed(() => {
   const programsCount = programStore.ActivePrograms.length;
-  if(programStore.AllPrograms.length >= 6 )
-  {
-    return 0
-  }
-  else
   return Math.max(0, 6 - programsCount);
 });
 const additionalDrafs = computed(() => {
