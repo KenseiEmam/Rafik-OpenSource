@@ -21,7 +21,7 @@
           class="nav-btn"
           @click="setActiveTab('Active Program')"
         >
-          {{ t('dashboard.programs.list.activeProgramsTab') +' - '+programStore.ActivePrograms.length+'/3' }}
+          {{ t('dashboard.programs.list.activeProgramsTab')  }}
         </button>
         <button
           :class="
@@ -30,7 +30,7 @@
           class="nav-btn uppercase"
           @click="setActiveTab('Drafted Programs')"
         >
-          {{ t('dashboard.programs.list.draftedProgramsTab') +' - '+programStore.DraftedPrograms.length+ '/(' + (6-programStore.ActivePrograms.length) + ')' }}
+          {{ t('dashboard.programs.list.draftedProgramsTab') }}
         </button>
         <button
           :class="
@@ -47,7 +47,7 @@
       <transition name="slide-fade">
         <div
           v-if="activeTab === 'Active Program'"
-          class="grid md:grid-cols-3 gap-8 h-full align-stretch"
+          class="grid md:grid-cols-3 md:grid-rows-2 gap-8 h-full align-stretch"
         >
           <!-- Existing Programs -->
           <div
@@ -271,10 +271,10 @@ const additionalSlots = computed(() => {
     return 0
   }
   else
-  return Math.max(0, 3 - programsCount);
+  return Math.max(0, 6 - programsCount);
 });
 const additionalDrafs = computed(() => {
-  const programsCount = programStore.AllPrograms.length ;
+  const programsCount = programStore.DraftedPrograms.length ;
   return Math.max(0, 6 - programsCount);
 });
 

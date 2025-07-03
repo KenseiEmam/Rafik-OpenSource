@@ -209,7 +209,7 @@ function DraftProgram() {
 
 // Activate Program
 function ActiveProgram() {
-  if ( programStore.ActivePrograms.length < 3) {
+
     Swal.fire({
       title: t('dashboard.programs.details.activateConfirmTitle'),
       text: t('dashboard.programs.details.activateConfirmText'),
@@ -228,10 +228,7 @@ function ActiveProgram() {
         });
       }
     });
-  } else {
-    showError(t('dashboard.programs.details.cannotHaveMoreActive'));
 
-  }
 }
 
 // On mount, fetch the program

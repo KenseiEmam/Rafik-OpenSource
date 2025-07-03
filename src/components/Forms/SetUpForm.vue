@@ -107,7 +107,7 @@ if (
   localStorage.getItem('UserID') &&
   localStorage.getItem('LoggedInTrainer') == 'false'
 ) {
-  router.push('register-as-a-trainer');
+  router.push('rnot-a-member');
 } else if (
   localStorage.getItem('LoggedInUser') &&
   localStorage.getItem('UserID') &&

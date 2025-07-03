@@ -984,7 +984,8 @@ async function getChatClients() {
             type === 'trainer'
               ? ['Organization Trnr', 'Organization Trnee']
               : ['Organization Trnee'],
-          is_staff: true,
+          is_staff:   type === 'trainer'
+              ? true : false,
           organization: orgId
         };
 
