@@ -171,6 +171,21 @@
         </div>
       </div>
     </div>
+    <div class="card p-8 grid gap-6 grid-cols-3 items-center 2xl:min-h-96" v-else-if="props.client.coach_details">
+      <div class="col-span-2 space-y-4">
+        <h3 class="text-sm contentH-small 2xl:text-base">
+            {{ t('dashboard.tabs.user.trainee.assignedToCoach') }}
+        </h3>
+        <h2 class="header-medium font-black">
+          {{ props.client.coach_details.first_name + ' ' + props.client.coach_details.last_name || t('dashboard.tabs.user.trainee.loading') }}
+        </h2>
+        <p class="text-body">
+          {{ props.client.coach_details.email || t('dashboard.tabs.user.trainee.loading') }}
+        </p>
+      </div>
+      <div class="flex flex-col gap-3">
+      </div>
+    </div>
     <div class="card flex p-8 grid gap-6 justify-center items-center 2xl:min-h-96" v-else>
       <h3 class="header-medium">{{ t('dashboard.tabs.user.trainee.notAssigned') }}</h3>
     </div>
@@ -274,7 +289,7 @@ const fetchProgram = async (programId: number) => {
 // Fetch the weight when the component mounts
 onMounted(async () => {
   const weightId = props.client.profile.weight_id; // Get weight_id from client profile
-  const programId = props.client.program_details.program_id; // Get Program id from details
+  const programId = props.client?.program_details?.program_id; // Get Program id from details
 
   if (weightId) {
     const clientWeight = await fetchWeight(weightId);
