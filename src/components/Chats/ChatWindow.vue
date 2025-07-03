@@ -229,22 +229,22 @@ const formsMap = ref<Record<number, any>>({});
 const submitMessage = async () => {
   if (!sending.value.trim()) return; // Prevent empty messages
 
-  if (!props.Client?.program_details?.id) {
-    showError('Client program ID is missing.');
-    return;
-  }
   const UserID = localStorage.getItem('UserID');
   if (!UserID) {
     showError('No trainer user ID found in local storage!');
     return;
   }
 
+  // For trainees with programs, use user_program
+  // For trainees assigned directly to coaches, use null for user_program
+  const userProgramId = props.Client?.program_details?.id || null;
+
   const newMessage = {
     content: sending.value,
     sent_by: UserID,
-    user_program: props.Client.program_details.id,
+    user_program: userProgramId,
     created_at: new Date().toISOString(),
-    sent_to:props.Client.id,
+    sent_to: props.Client.id,
   };
 
   const { error } = await supabase.from('chat_messages').insert([newMessage]).select();
@@ -256,7 +256,7 @@ const submitMessage = async () => {
   }
   sending.value = '';
   scrollToBottom();
-  //props.Client.id
+  
   const { error: error2 } = await supabase.from('notifications').insert([
     {
       user_id: props.Client.id,
@@ -288,16 +288,24 @@ watch(
 // Build an array of form IDs to fetch
 const formIds: number[] = [];
 const tempMessages: any = {};
-// Fetch all messages for this user_program
+// Fetch all messages for this user_program or direct coach assignment
 async function fetchMessages() {
-  if (!props.Client?.program_details?.id) return;
   loading.value = true;
 
-  const { data, error } = await supabase
-    .from('chat_messages')
-    .select('*')
-    .eq('user_program', props.Client.program_details.id)
-    .order('created_at', { ascending: true });
+  // For trainees with programs, filter by user_program
+  // For trainees assigned directly to coaches, filter by sent_to (client ID)
+  const userProgramId = props.Client?.program_details?.id;
+  
+  let query = supabase.from('chat_messages').select('*');
+  
+  if (userProgramId) {
+    query = query.eq('user_program', userProgramId);
+  } else {
+    // For direct coach assignments, get messages where sent_to is the client
+    query = query.eq('sent_to', props.Client.id);
+  }
+  
+  const { data, error } = await query.order('created_at', { ascending: true });
 
   if (error) {
     console.error('Error fetching messages:', error);
@@ -344,21 +352,37 @@ async function fetchMessages() {
 
 // Subscribe real-time
 function subscribeToChat() {
-  if (!props.Client?.program_details?.id) return;
-
   if (chatSubscription.value) {
     chatSubscription.value.unsubscribe();
   }
 
+  const userProgramId = props.Client?.program_details?.id;
+  const channelName = userProgramId 
+    ? `chat_program_${userProgramId}` 
+    : `chat_direct_${props.Client.id}`;
+
   chatSubscription.value = supabase
-    .channel(`chat_program_${props.Client.program_details.id}`)
+    .channel(channelName)
     .on(
       'postgres_changes',
       { event: 'INSERT', schema: 'public', table: 'chat_messages' },
       (payload) => {
         const newMessage = payload.new as Message;
-        messages.value.push(newMessage);
-        scrollToBottom();
+        
+        // Only add message if it's for this specific client
+        if (userProgramId) {
+          // For program-based chats, check user_program
+          if (newMessage.user_program === userProgramId) {
+            messages.value.push(newMessage);
+            scrollToBottom();
+          }
+        } else {
+          // For direct coach assignments, check sent_to
+          if (newMessage.sent_to === props.Client.id) {
+            messages.value.push(newMessage);
+            scrollToBottom();
+          }
+        }
       }
     )
     .subscribe();
@@ -366,7 +390,6 @@ function subscribeToChat() {
 
 // Mark messages as seen if they were sent by the client and have no seen_at
 async function markMessagesAsSeen() {
-  if (!props.Client?.program_details?.id) return;
   // We only mark as seen the client's messages
   const unseenMessages = messages.value.filter((m) => !m.seen_at && m.sent_by == props.Client.id);
   if (unseenMessages.length === 0) return;
