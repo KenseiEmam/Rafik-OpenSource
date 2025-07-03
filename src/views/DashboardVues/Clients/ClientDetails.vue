@@ -235,16 +235,23 @@ async function updateIteration() {
     return;
   }
 
-  try {
-    await clientStore.updateClientProgram({
-      id: clientStore.Client.program_details.id,
-      workouts: clientStore.Client.program_details.workouts,
-    });
+  // Only update program if it exists
+  if (clientStore.Client.program_details) {
+    try {
+      await clientStore.updateClientProgram({
+        id: clientStore.Client.program_details.id,
+        workouts: clientStore.Client.program_details.workouts,
+      });
+      await clientStore.getClient(clientStore.Client.id);
+      showSuccess('dashboard.clients.details.updatedSuccessfully');
+    } catch (error) {
+      showError('dashboard.clients.details.failedToUpdateField');
+      console.error('Error updating workouts', error);
+    }
+  } else {
+    // Just refresh the client data
     await clientStore.getClient(clientStore.Client.id);
     showSuccess('dashboard.clients.details.updatedSuccessfully');
-  } catch (error) {
-    showError('dashboard.clients.details.failedToUpdateField');
-    console.error('Error updating workouts', error);
   }
 }
 
@@ -317,7 +324,7 @@ onBeforeUnmount(() => {
                 {{ t('dashboard.clients.details.statusLabel') }}
               </p>
               <p class="text-rafik-secondary">
-                {{ clientStore.Client.program_details?.status }}
+                {{ clientStore.Client.program_details?.status || (clientStore.Client.coach_details ? 'Assigned to Coach' : 'Not Assigned') }}
               </p>
             </div>
 
@@ -338,13 +345,15 @@ onBeforeUnmount(() => {
               </p>
               <p class="text-rafik-secondary">
                 {{
-                  Math.ceil(
-                    (clientStore.Client.program_details?.volume_progress +
-                      clientStore.Client.program_details?.intensity_progress) /
-                      2
-                  )
+                  clientStore.Client.program_details?.volume_progress && clientStore.Client.program_details?.intensity_progress
+                    ? Math.ceil(
+                        (clientStore.Client.program_details.volume_progress +
+                          clientStore.Client.program_details.intensity_progress) /
+                          2
+                      )
+                    : 'N/A'
                 }}
-                %
+                {{ clientStore.Client.program_details?.volume_progress && clientStore.Client.program_details?.intensity_progress ? '%' : '' }}
               </p>
             </div>
           </div>
@@ -353,7 +362,7 @@ onBeforeUnmount(() => {
               class="flex flex-col flex-1 gap-4 h-full border-rafik-sectext dark:border-rafik-darksectext text-left"
             >
 
-            <div class="uppercase text-sm">
+            <div class="uppercase text-sm" v-if="clientStore.Client.program_details">
               <p class="text-rafik-pritext dark:text-rafik-darkpritext">
                 {{ t('dashboard.clients.details.workoutIteration') }}
               </p>
@@ -365,14 +374,14 @@ onBeforeUnmount(() => {
             </div>
               <!-- If subscription is active -->
               <button
-                v-if="clientStore.Client.program_details.status === 'active'"
+                v-if="clientStore.Client.program_details?.status === 'active'"
                 @click="showAddProgramModal = true"
                 class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
               >
                 {{ t('dashboard.clients.details.changeProgram') }}
               </button>
               <button
-                v-if="clientStore.Client.program_details.status === 'active'"
+                v-if="clientStore.Client.program_details?.status === 'active'"
                 @click="showCancelModal = true"
                 class="text-body uppercase text-red-500 hover:text-red-400 text-left"
               >
@@ -380,14 +389,14 @@ onBeforeUnmount(() => {
               </button>
               <!-- If subscription is in review -->
               <button
-                v-else-if="clientStore.Client.program_details.status === 'review'"
+                v-else-if="clientStore.Client.program_details?.status === 'review'"
                 class="text-body uppercase text-rafik-secondary text-left cursor-default"
               >
                 {{ t('dashboard.clients.details.cancellationPending') }}
               </button>
               <!-- If subscription is cancelled -->
               <button
-                v-else-if="clientStore.Client.program_details.status === 'cancelled'"
+                v-else-if="clientStore.Client.program_details?.status === 'cancelled'"
                 class="text-body uppercase text-red-500 text-left cursor-default"
               >
                 {{ t('dashboard.clients.details.subscriptionCancelled') }}
@@ -426,6 +435,7 @@ onBeforeUnmount(() => {
           {{ t('dashboard.clients.details.detailsTab') }}
         </button>
         <button
+          v-if="clientStore.Client.program_details"
           class="nav-btn uppercase"
           :class="
             activeTab === 'Workout-Plan'
@@ -475,22 +485,22 @@ onBeforeUnmount(() => {
           <DetailsTab v-if="activeTab === 'Details'" :client="clientStore.Client" />
           <!-- Workout Plan Tab -->
           <WorkoutPlanner
-            v-else-if="activeTab === 'Workout-Plan'"
+            v-else-if="activeTab === 'Workout-Plan' && clientStore.Client.program_details"
             :program="clientStore.Client.program_details"
             :user="clientStore.Client?.id"
           />
           <div class="flex flex-1 gap-2 w-full " v-else-if="activeTab === 'Client-Logs'">
-            <div class="flex-1 card space-y-3">
+            <div class="flex-1 card space-y-3" v-if="clientStore.Client.program_details">
               <h3 class="subheader-small pl-6">Workout Log</h3>
               <WorkoutLogTab
 
-            :program="clientStore.Client.program_details"
-          />
+                :program="clientStore.Client.program_details"
+              />
             </div>
             <div class="flex-1 card space-y-3">
               <h3 class="subheader-small pl-6">Diet Log</h3>
               <!-- Diet Log Tab -->
-          <DietLogTab class="flex-1 card" :profile="clientStore.Client.profile" />
+              <DietLogTab class="flex-1 card" :profile="clientStore.Client.profile" />
             </div>
 
 
