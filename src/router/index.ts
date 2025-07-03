@@ -75,6 +75,14 @@ const router = createRouter({
     },
 
     {
+      path: '/no-record',
+      name: 'NoneRecord',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('@/views/NoRecord.vue')
+    },
+    {
       path: '/delete-account',
       name: 'delete',
       component: () => import('../views/DataDeletion.vue')
@@ -237,7 +245,7 @@ const router = createRouter({
         },
         {
           path: 'exercises', // Child route for /dashboard/exercise
-          meta: { requiresAnyTrainer: true },
+          meta: { requiresAuth: true },
           children: [
             {
               path: 'public/:id', // Default child route for /dashboard/exercise
@@ -347,7 +355,7 @@ router.beforeEach((to) => {
     localStorage.getItem('LoggedInTrainer') === 'false'
   ) {
     return {
-      path: '/register-as-a-trainer',
+      path: '/no-record',
       query: { redirect: to.fullPath }
     };
   }
