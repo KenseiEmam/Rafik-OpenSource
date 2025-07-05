@@ -55,6 +55,7 @@ interface UserInterface {
 }
 interface ClientInterface extends UserInterface {
   program_details?: any;
+  coach_details?: any;
   last_active?: Date;
   profile?: any;
 }
@@ -248,21 +249,20 @@ export const useUserStore = defineStore('User', () => {
       }
 
       // 3) If filters.enrolled is true, filter out users whose profile entry
-      //    has user_program_id != null
+      //    has coach != null (this covers both direct coach assignments and program assignments)
       if (filters.enrolled) {
-        // First, get all profile IDs whose user_program_id is not null
+        // Get profiles with coaches (this includes both direct coach assignments and program assignments)
         const { data: enrolledProfiles, error: profileError } = await supabase
           .from('profiles')
           .select('id')
-          .not('user_program_id', 'is', null);
+          .not('coach', 'is', null);
 
         if (profileError) {
-          throw new Error(`Error fetching profiles: ${profileError.message}`);
+          throw new Error(`Error fetching enrolled profiles: ${profileError.message}`);
         }
 
         // If there are no such profiles, we can force an empty result:
         if (!enrolledProfiles || enrolledProfiles.length === 0) {
-          // Force the query to return no users
           query = query.in('profile_id', [0]); // There's presumably no profile row with id=0
         } else {
           // Collect valid profile IDs and filter the user query on them
@@ -339,21 +339,20 @@ export const useUserStore = defineStore('User', () => {
       }
 
       // 3) If filters.enrolled is true, filter out users whose profile entry
-      //    has user_program_id != null
+      //    has coach != null (this covers both direct coach assignments and program assignments)
       if (filters.enrolled) {
-        // First, get all profile IDs whose user_program_id is not null
+        // Get profiles with coaches (this includes both direct coach assignments and program assignments)
         const { data: enrolledProfiles, error: profileError } = await supabase
           .from('profiles')
           .select('id')
-          .not('user_program_id', 'is', null);
+          .not('coach', 'is', null);
 
         if (profileError) {
-          throw new Error(`Error fetching profiles: ${profileError.message}`);
+          throw new Error(`Error fetching enrolled profiles: ${profileError.message}`);
         }
 
         // If there are no such profiles, we can force an empty result:
         if (!enrolledProfiles || enrolledProfiles.length === 0) {
-          // Force the query to return no users
           query = query.in('profile_id', [0]); // There's presumably no profile row with id=0
         } else {
           // Collect valid profile IDs and filter the user query on them
@@ -373,7 +372,31 @@ export const useUserStore = defineStore('User', () => {
         throw new Error(`Error fetching users: ${error?.message || 'Users not found'}`);
       }
 
-      All_Org_Users.value = data;
+      // Fetch profile data separately to avoid relationship conflicts
+      const profileIds = data.filter(user => user.profile_id).map(user => user.profile_id);
+      let profilesData: any = {};
+      
+      if (profileIds.length > 0) {
+        const { data: profiles, error: profilesError } = await supabase
+          .from('profiles')
+          .select('id, coach, user_program_id')
+          .in('id', profileIds);
+        
+        if (!profilesError && profiles) {
+          profilesData = profiles.reduce((acc, profile) => {
+            acc[profile.id] = profile;
+            return acc;
+          }, {} as Record<number, any>);
+        }
+      }
+
+      // Attach profile data to users
+      const usersWithProfiles = data.map(user => ({
+        ...user,
+        profiles: user.profile_id ? profilesData[user.profile_id] : null
+      }));
+      
+      All_Org_Users.value = usersWithProfiles;
       if (count) All_Org_count.value = count;
     } catch (error: any) {
       showError(error);
@@ -392,7 +415,7 @@ export const useUserStore = defineStore('User', () => {
         .from('trainer_profile')
         .select('*')
         .eq('user_id', id) // Match user_id, as we have the user id here
-        .single(); // Since we're looking for a single profile
+        .maybeSingle(); // Use maybeSingle to handle cases with no or multiple profiles
 
       if (profileError) {
         throw new Error(`Error fetching user profile: ${profileError.message}`);
@@ -487,7 +510,7 @@ export const useUserStore = defineStore('User', () => {
         .map((profile) => {
           const user = users.find((u) => u.id === profile.user_id);
           const programDetails = programs.filter((program) => program.client_id === profile.id);
-          return user
+          return (!!user && programDetails) //TODO: Temp
             ? {
                 id: user.id,
                 avatar: user.avatar,
@@ -586,13 +609,13 @@ async function getActiveClientsForTrainer(page: number, pageSize: number) {
     // Step 1: Get paginated profiles coached by this trainer
     const { data: profiles, error: profileError, count } = await supabase
       .from('profiles')
-      .select('id, user_id', { count: 'exact' }) // Get total count for pagination
+      .select('id, user_id, user_program_id', { count: 'exact' }) // Get total count for pagination
       .eq('coach', trainerId)
       .range((page - 1) * pageSize, page * pageSize - 1);
 
     if (profileError || !profiles) throw profileError;
 
-    const userIds = profiles.map(p => p.user_id);
+    const userIds = profiles.map(p => p.user_id).filter(p=>p.user_program_id !== null)
     const profileIds = profiles.map(p => p.id);
 
     // Step 2: Get users and their programs *only for these paginated profiles*
@@ -616,7 +639,7 @@ async function getActiveClientsForTrainer(page: number, pageSize: number) {
       .map(profile => {
         const user = users.find(u => u.id === profile.user_id);
         const programDetails = programs.find(p => p.client_id === profile.id);
-        return user
+        return (user && programDetails) //TODO: Temp
           ? {
               id: user.id,
               avatar: user.avatar,
@@ -682,7 +705,7 @@ async function getChatClients() {
      // Safely map users to clients
     const clients = profiles.map((profile) => {
       const user = users?.find(u => u.id === profile.user_id);
-      const programDetails = programs?.find(p => p.client_id === profile.id);
+      const programDetails = programs?.find(p => p.client_id === profile.id); //TODO: Temp
       if (!user) return null;
 
       return {
@@ -692,7 +715,7 @@ async function getChatClients() {
         first_name: user.first_name,
         last_name: user.last_name,
         last_active: user.last_active,
-        program_details: programDetails
+        program_details: programDetails || { id: null } // Create a dummy program_details for direct coach assignments
       } as ChatClient;
     }).filter((client): client is ChatClient => client !== null);
 
@@ -726,25 +749,55 @@ async function getChatClients() {
   // Fetch Singular Client
   async function getClient(id: number) {
     try {
+      console.log(`[getClient] Fetching client for user ID: ${id}`);
+      
       // Fetch the user profile based on the provided user ID (id)
-      const { data: userProfiles, error: profileError } = await supabase
+      let { data: userProfiles, error: profileError } = await supabase
         .from('profiles')
         .select('*')
         .eq('user_id', id) // Match user_id, as we have the user id here
-        .single(); // Since we're looking for a single profile
+        .maybeSingle(); // Use maybeSingle to handle cases with no or multiple profiles
 
+      console.log(`[getClient] Profile fetch result:`, { userProfiles, profileError });
+
+      // If there's a profileError, log it but don't throw - we'll handle missing profiles below
       if (profileError) {
-        throw new Error(`Error fetching user profile: ${profileError.message}`);
+        console.warn(`[getClient] Profile fetch warning:`, profileError);
       }
 
       if (!userProfiles) {
-        return null; // If no profile found for the given user ID, return null
+        console.log(`[getClient] No profile found for user ID: ${id}, creating minimal profile...`);
+        // Insert minimal profile (coach will be set later if needed)
+        const { data: newProfile, error: insertError } = await supabase
+          .from('profiles')
+          .insert({ user_id: id })
+          .select('*')
+          .maybeSingle();
+        if (insertError || !newProfile) {
+          showError(`Failed to create minimal profile: ${insertError?.message}`);
+          return null;
+        }
+        console.log(`[getClient] Minimal profile created:`, newProfile);
+        // Use the new profile for the rest of the function
+        userProfiles = newProfile;
+        // Update the user's profile_id field
+        const { error: updateUserError } = await supabase
+          .from('users')
+          .update({ profile_id: newProfile.id })
+          .eq('id', id);
+        if (updateUserError) {
+          showError(`Failed to update user with new profile_id: ${updateUserError.message}`);
+          return null;
+        }
       }
       const is_admin = localStorage.getItem('Roles')?.includes('Admin');
       const user_id = localStorage.getItem('UserID');
 
       let programs, programError; // Declare variables outside
+      let coachDetails = null;
 
+      // Try to fetch program first
+      console.log(`[getClient] Fetching program for profile ID: ${userProfiles.id}, trainer ID: ${user_id}`);
       ({ data: programs, error: programError } = await supabase
         .from('user_programs')
         .select('*')
@@ -753,9 +806,33 @@ async function getChatClients() {
         .neq('status', 'cancelled')
         .single());
 
+      console.log(`[getClient] Program fetch result:`, { programs, programError });
+
+      // If no program found, try to fetch coach details
+      if (programError && programError.code === 'PGRST116') {
+        console.log(`[getClient] No program found, checking for coach assignment`);
+        // No program found, check if user is assigned to a coach
+        if (userProfiles.coach) {
+          console.log(`[getClient] User has coach assignment: ${userProfiles.coach}`);
+          const { data: coach, error: coachError } = await supabase
+            .from('users')
+            .select('id, first_name, last_name, email, avatar')
+            .eq('id', userProfiles.coach)
+            .single();
+          
+          console.log(`[getClient] Coach fetch result:`, { coach, coachError });
+          
+          if (!coachError && coach) {
+            coachDetails = coach;
+          }
+        } else {
+          console.log(`[getClient] User has no coach assignment`);
+        }
+      }
+
       // Now, `programs` and `programError` are accessible here
-      if (programError) {
-        console.error('Error fetching program:', programError);
+      if (programError && programError.code !== 'PGRST116') {
+        console.error('[getClient] Error fetching program:', programError);
       }
       let promAssign = null;
       if (programs) {
@@ -775,7 +852,7 @@ async function getChatClients() {
         throw new Error(`Error fetching user details: ${userError.message}`);
       }
 
-      // Assign the client object with the user details and associated program
+      // Assign the client object with the user details and associated program/coach
       Client.value = {
         id: users.id,
         avatar: users.avatar,
@@ -788,13 +865,14 @@ async function getChatClients() {
         dob: users.dob,
         profile: userProfiles,
         program_details: promAssign,
+        coach_details: coachDetails,
         last_active: users.last_active // This includes the single program the client is associated with
       };
 
       return Client.value;
     } catch (error: any) {
-      console.error(error);
-      alert(`Failed to load client: ${error.message || 'Unknown error'}`);
+      console.error('[getClient] Unexpected error:', error);
+      showError(`Failed to load client: ${error.message || 'Unknown error'}`);
       return null;
     }
   }
@@ -806,7 +884,7 @@ async function getChatClients() {
         .from('profiles')
         .select('*')
         .eq('user_id', id) // Match user_id, as we have the user id here
-        .single(); // Since we're looking for a single profile
+        .maybeSingle(); // Use maybeSingle to handle cases with no or multiple profiles
 
       if (profileError) {
         throw new Error(`Error fetching user profile: ${profileError.message}`);
@@ -819,7 +897,9 @@ async function getChatClients() {
       const user_id = localStorage.getItem('UserID');
 
       let programs, programError; // Declare variables outside
+      let coachDetails = null;
 
+      // Try to fetch program first
       ({ data: programs, error: programError } = await supabase
         .from('user_programs')
         .select('*')
@@ -827,8 +907,24 @@ async function getChatClients() {
         .neq('status', 'cancelled')
         .single());
 
+      // If no program found, try to fetch coach details
+      if (programError && programError.code === 'PGRST116') {
+        // No program found, check if user is assigned to a coach
+        if (userProfiles.coach) {
+          const { data: coach, error: coachError } = await supabase
+            .from('users')
+            .select('id, first_name, last_name, email, avatar')
+            .eq('id', userProfiles.coach)
+            .single();
+          
+          if (!coachError && coach) {
+            coachDetails = coach;
+          }
+        }
+      }
+
       // Now, `programs` and `programError` are accessible here
-      if (programError) {
+      if (programError && programError.code !== 'PGRST116') {
         console.error('Error fetching program:', programError);
       }
       let promAssign = null;
@@ -849,7 +945,7 @@ async function getChatClients() {
         throw new Error(`Error fetching user details: ${userError.message}`);
       }
 
-      // Assign the client object with the user details and associated program
+      // Assign the client object with the user details and associated program/coach
       Client.value = {
         id: users.id,
         avatar: users.avatar,
@@ -862,6 +958,7 @@ async function getChatClients() {
         dob: users.dob,
         profile: userProfiles,
         program_details: promAssign,
+        coach_details: coachDetails,
         last_active: users.last_active // This includes the single program the client is associated with
       };
 
@@ -884,7 +981,7 @@ async function getChatClients() {
         .from('trainer_profile')
         .select('*')
         .eq('user_id', id) // Match user_id, as we have the user id here
-        .single(); // Since we're looking for a single profile
+        .maybeSingle(); // Use maybeSingle to handle cases with no or multiple profiles
 
       if (profileError) {
         throw new Error(`Error fetching user profile: ${profileError.message}`);
@@ -1074,6 +1171,65 @@ async function getChatClients() {
     UserDetail.value = {};
   }
 
+  // Assign user to coach
+  async function assignUsersToCoach(coachId: string, email: string) {
+    try {
+      const orgID = localStorage.getItem('OrgID');
+      if (!orgID) {
+        throw new Error('Organizational ID not Found');
+      }
+
+      // Get user by email
+      const { data: user, error: userError } = await supabase
+        .from('users')
+        .select('id, profile_id')
+        .eq('email', email)
+        .eq('organization', orgID)
+        .single();
+
+      if (userError) {
+        throw new Error(`User with email ${email} not found or not part of organization`);
+      }
+
+      if (user.profile_id) {
+        // User already has a profile, update the coach
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .update({ coach: coachId })
+          .eq('id', user.profile_id);
+
+        if (profileError) {
+          throw new Error(`Error updating profile for ${email}: ${profileError.message}`);
+        }
+      } else {
+        // User doesn't have a profile, create one
+        const { data: newProfile, error: profileError } = await supabase
+          .from('profiles')
+          .insert({ user_id: user.id, coach: coachId })
+          .select('id')
+          .single();
+
+        if (profileError) {
+          throw new Error(`Error creating profile for ${email}: ${profileError.message}`);
+        }
+
+        // Update user with the new profile_id
+        const { error: updateError } = await supabase
+          .from('users')
+          .update({ profile_id: newProfile.id })
+          .eq('id', user.id);
+
+        if (updateError) {
+          throw new Error(`Error updating user profile_id for ${email}: ${updateError.message}`);
+        }
+      }
+
+      showSuccess('User assigned to coach successfully');
+    } catch (error: any) {
+      showError(error.message);
+    }
+  }
+
   return {
     User,
     userProfile,
@@ -1106,6 +1262,7 @@ async function getChatClients() {
     fetchUser,
     fetchOrgUsers,
     getTrainer,
-    addOrgUser
+    addOrgUser,
+    assignUsersToCoach
   };
 });
