@@ -15,7 +15,7 @@
       <!-- Tabs Navigation -->
 
             <draggable
-        class="flex gap-4 mb-5"
+        class="flex gap-4 mb-5 flex-wrap"
         v-model="editedWorkouts"
         handle=".handle"
         @start="drag = true"
