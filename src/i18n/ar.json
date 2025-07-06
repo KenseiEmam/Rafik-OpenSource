@@ -413,7 +413,8 @@
         "dietLogTab": "سجل الوزن",
         "weightLogTab": "سجل النظام الغذائي",
         "trophyRoom":"غرفة الجوائز",
-        "statisticsTab": "الإحصائيات"
+        "statisticsTab": "الإحصائيات",
+        "mealsPlan": "خطة الوجبات"
       },
       "list": {
         "active": "صفحة",
