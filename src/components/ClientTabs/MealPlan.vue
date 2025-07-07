@@ -40,7 +40,7 @@
                 <p class="text-body text-xs mt-3"> Below are the food items suggested to the trainee when logging their breakfast. Click edit plan to add or remove any items. You cannot change serving amounts as of now.</p>
                 <p class="text-rafik-secondary mt-3" > Timing is: {{ editedDiet.timings.breakfast }} </p>
               </div>
-              <button class="btn-sm-outline" v-if="isEditing">ADD FOOD</button>
+              <button class="btn-sm-outline" @click="addingMeal = 'breakfast'" v-if="isEditing">ADD FOOD</button>
             </div>
             <div class="space-y-3 mt-4">
               <div class="card p-4 gradient-bg" v-for="food,index in editedDiet.suggested_meals.breakfast" >
@@ -48,6 +48,13 @@
                   <div>
                     <h4 class="text-rafik-pritext dark:text-rafik-darkpritext "> {{ food.food_name }}</h4>
                     <p class="text-body">{{food.serving_amount}} x {{ food.serving_name }}</p>
+                    <div  class="flex gap-3 items-center ">
+                      <p class="text-xs flex items-center text-rafik gap-1"> <span class="w-2 h-2 bg-rafik rounded-full content"></span>P:{{ food.protein }}g</p>
+                      <p class="text-xs flex items-center text-rafik-alternate gap-1"> <span class="w-2 h-2 bg-rafik-alternate rounded-full content"></span>C:{{ food.carbohydrate   }}g</p>
+                      <p class="text-xs flex items-center text-rafik-teritiary gap-1"> <span class="w-2 h-2 bg-rafik-teritiary rounded-full content"></span>F:{{ food.fat  }}g</p>
+                      <p class="header-small text-sm  ">{{ food.calories }} kcal</p>
+
+                    </div>
                   </div>
                   <button v-if="isEditing" class="btn-sm bg-red-500 hover:bg-red-400 border-red-500 mt-4 text-xs uppercase" @click="removeExercise('breakfast',index)">Remove</button>
                 </div>
@@ -62,7 +69,7 @@
                 <p class="text-body text-xs mt-3"> Below are the food items suggested to the trainee when logging their lunch. Click edit plan to add or remove any items. You cannot change serving amounts as of now.</p>
                 <p class="text-rafik-secondary mt-3" > Timing is: {{ editedDiet.timings.lunch }} </p>
               </div>
-              <button class="btn-sm-outline" v-if="isEditing">ADD FOOD</button>
+              <button class="btn-sm-outline" @click="addingMeal = 'lunch'" v-if="isEditing">ADD FOOD</button>
             </div>
             <div class="space-y-3 mt-4">
               <div class="card p-4 gradient-bg" v-for="food,index in editedDiet.suggested_meals.lunch">
@@ -70,6 +77,13 @@
                   <div>
                     <h4 class="text-rafik-pritext dark:text-rafik-darkpritext "> {{ food.food_name }}</h4>
                     <p class="text-body">{{food.serving_amount}} x {{ food.serving_name }}</p>
+                    <div  class="flex gap-3 items-center ">
+                      <p class="text-xs flex items-center text-rafik gap-1"> <span class="w-2 h-2 bg-rafik rounded-full content"></span>P:{{ food.protein }}g</p>
+                      <p class="text-xs flex items-center text-rafik-alternate gap-1"> <span class="w-2 h-2 bg-rafik-alternate rounded-full content"></span>C:{{ food.carbohydrate   }}g</p>
+                      <p class="text-xs flex items-center text-rafik-teritiary gap-1"> <span class="w-2 h-2 bg-rafik-teritiary rounded-full content"></span>F:{{ food.fat  }}g</p>
+                      <p class="header-small text-sm  ">{{ food.calories }} kcal</p>
+
+                    </div>
                   </div>
                   <button v-if="isEditing" class="btn-sm bg-red-500 hover:bg-red-400 border-red-500 mt-4 text-xs uppercase" @click="removeExercise('lunch',index)">Remove</button>
                 </div>
@@ -84,7 +98,7 @@
                 <p class="text-body text-xs mt-3"> Below are the food items suggested to the trainee when logging their dinner. Click edit plan to add or remove any items. You cannot change serving amounts as of now.</p>
                 <p class="text-rafik-secondary mt-3" > Timing is: {{ editedDiet.timings.dinner }} </p>
               </div>
-              <button class="btn-sm-outline" v-if="isEditing">ADD FOOD</button>
+              <button class="btn-sm-outline" @click="addingMeal = 'dinner'" v-if="isEditing">ADD FOOD</button>
             </div>
             <div class="space-y-3 mt-4">
               <div class="card p-4 gradient-bg" v-for="food,index in editedDiet.suggested_meals.dinner">
@@ -92,6 +106,13 @@
                   <div>
                     <h4 class="text-rafik-pritext dark:text-rafik-darkpritext "> {{ food.food_name }}</h4>
                     <p class="text-body">{{food.serving_amount}} x {{ food.serving_name }}</p>
+                    <div  class="flex gap-3 items-center ">
+                      <p class="text-xs flex items-center text-rafik gap-1"> <span class="w-2 h-2 bg-rafik rounded-full content"></span>P:{{ food.protein }}g</p>
+                      <p class="text-xs flex items-center text-rafik-alternate gap-1"> <span class="w-2 h-2 bg-rafik-alternate rounded-full content"></span>C:{{ food.carbohydrate   }}g</p>
+                      <p class="text-xs flex items-center text-rafik-teritiary gap-1"> <span class="w-2 h-2 bg-rafik-teritiary rounded-full content"></span>F:{{ food.fat  }}g</p>
+                      <p class="header-small text-sm  ">{{ food.calories }} kcal</p>
+
+                    </div>
                   </div>
                   <button v-if="isEditing" class="btn-sm bg-red-500 hover:bg-red-400 border-red-500 mt-4 text-xs uppercase" @click="removeExercise('dinner',index)">Remove</button>
                 </div>
@@ -106,7 +127,7 @@
                 <p class="text-body text-xs mt-3"> Below are the food items suggested to the trainee when logging their supper. Click edit plan to add or remove any items. You cannot change serving amounts as of now.</p>
                 <p class="text-rafik-secondary mt-3" > Timing is: {{ editedDiet.timings.supper }} </p>
               </div>
-              <button class="btn-sm-outline" v-if="isEditing">ADD FOOD</button>
+              <button class="btn-sm-outline" @click="addingMeal = 'supper'" v-if="isEditing">ADD FOOD</button>
             </div>
             <div class="space-y-3 mt-4">
               <div class="card p-4 gradient-bg" v-for="food,index in editedDiet.suggested_meals.supper">
@@ -114,6 +135,13 @@
                   <div>
                     <h4 class="text-rafik-pritext dark:text-rafik-darkpritext "> {{ food.food_name }}</h4>
                     <p class="text-body">{{food.serving_amount}} x {{ food.serving_name }}</p>
+                    <div  class="flex gap-3 items-center ">
+                      <p class="text-xs flex items-center text-rafik gap-1"> <span class="w-2 h-2 bg-rafik rounded-full content"></span>P:{{ food.protein }}g</p>
+                      <p class="text-xs flex items-center text-rafik-alternate gap-1"> <span class="w-2 h-2 bg-rafik-alternate rounded-full content"></span>C:{{ food.carbohydrate   }}g</p>
+                      <p class="text-xs flex items-center text-rafik-teritiary gap-1"> <span class="w-2 h-2 bg-rafik-teritiary rounded-full content"></span>F:{{ food.fat  }}g</p>
+                      <p class="header-small text-sm  ">{{ food.calories }} kcal</p>
+
+                    </div>
                   </div>
                   <button v-if="isEditing" class="btn-sm bg-red-500 hover:bg-red-400 border-red-500 mt-4 text-xs uppercase" @click="removeExercise('supper',index)">Remove</button>
                 </div>
@@ -124,7 +152,7 @@
         </div>
       </div>
      </div>
-
+<AddFoodModal :meal="addingMeal" @close="addingMeal =''" @submit="handleAdd" />
   </div>
 </template>
 
@@ -136,8 +164,10 @@ import { debounce } from 'lodash';
 import Swal from 'sweetalert2';
 import { useI18n } from 'vue-i18n';
 import { supabase } from '@/lib/supabaseClient';
+import AddFoodModal from './addFoodModal.vue';
 // Success and Error Alerts
 const { t , locale } = useI18n();
+const addingMeal = ref("")
 function showSuccess(message: string) {
   Swal.fire({
     title: 'Success!',
@@ -225,23 +255,11 @@ async function updateClientProgram(user: number) {
 
 }
 
-const handleAdd = (workoutIndex: number, list: any[]) => {
-  editedDiet.value[workoutIndex].exercises.push(
-    ...list.map((e) => ({
-      ...e,
-      sets: 3,
-      reps: 0,
-      intensity: 0,
-      rest:90,
-      true_sets: [
-        { reps: 0, intensity: 0, weight_done: 0, reps_done: 0 },
-        { reps: 0, intensity: 0, weight_done: 0, reps_done: 0 },
-        { reps: 0, intensity: 0, weight_done: 0, reps_done: 0 }
-      ],
-      intensity_mod: "Load(Kg)",
-      volume_mod: "Reps"
-    }))
+const handleAdd = (food: any) => {
+  editedDiet.value.suggested_meals[addingMeal.value].push(
+    food
   );
+  addingMeal.value=""
 };
 
 
