@@ -14,6 +14,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { useI18n } from 'vue-i18n';
 import WeightLog from '@/components/ClientTabs/WeightLog.vue';
 import TrophyRoom from '@/components/ClientTabs/TrophyRoom.vue';
+import MealPlan from '@/components/ClientTabs/MealPlan.vue';
 
 const { t , locale } = useI18n();
 
@@ -446,7 +447,13 @@ onBeforeUnmount(() => {
         >
           {{ t('dashboard.clients.details.workoutPlanTab') }}
         </button>
-
+        <button
+          class="nav-btn uppercase"
+          :class="activeTab === 'Meal-Plan' ? 'text-rafik-pritext dark:text-rafik-darkpritext cursor-default' : ' hover:opacity-70'"
+          @click="setActiveTab('Meal-Plan')"
+        >
+          {{ t('dashboard.clients.details.mealsPlan') }}
+        </button>
         <button
           class="nav-btn uppercase"
           :class="
@@ -466,7 +473,6 @@ onBeforeUnmount(() => {
         >
           {{ t('dashboard.clients.details.trophyRoom') }}
         </button>
-
         <!-- Placeholder if you want additional tabs:
         <button
           class="nav-btn uppercase"
@@ -507,6 +513,8 @@ onBeforeUnmount(() => {
           </div>
           <!-- Trophy Room Tab -->
            <TrophyRoom v-else-if="activeTab === 'Trophy-Room'" :client="clientStore.Client.profile" />
+          <!-- Meal Plan  Tab -->
+           <MealPlan v-else-if="activeTab === 'Meal-Plan'" :client="clientStore.Client.profile" />
         </transition>
       </div>
     </div>
