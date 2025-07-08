@@ -64,7 +64,7 @@
             <p
               class="text-sm text-body "
             >
-              {{ food.food_type }}
+              {{ food.food_type !== 'Brand' ? food.food_type : food.brand_name  }}
             </p>
             <p class="label text-xs">Click to this food</p>
           </div>
@@ -73,7 +73,7 @@
       <div class="flex justify-end mt-auto">
         <button
           type="button"
-          @click="$emit('close')"
+          @click="cancelAdd"
           class="btn-md bg-red-500 border-red-500 hover:bg-red-400 rounded mr-2"
         >
           {{ t('dashboard.tabs.clients.changeProgram.cancel') }}
@@ -86,7 +86,7 @@
       </h2>
       <p class="text-body">{{mainfood.food_type}}</p>
         <form class=" mx-auto w-full space-y-4 my-8">
-        <div class="relative">
+        <div v-if=" mainfood.servings.serving[0]" class="relative">
           <label for=""> Select Serving Size</label>
           <select class="rafik-text-input" name="" v-model="currentServing" id="">
             <option v-for="serving in mainfood.servings.serving" :value="serving">
@@ -94,6 +94,7 @@
             </option>
           </select>
         </div>
+        <p class="text-rafik-secondary">Serving is : {{mainfood.servings.serving.serving_description}}</p>
         <div class="relative">
           <label for=""> Select Amount</label>
           <input type="number" class="rafik-text-input" v-model.number="servingAmount">
@@ -140,6 +141,7 @@ import { supabase } from '@/lib/supabaseClient'; // Ensure Supabase is correctly
 import Swal from 'sweetalert2';
 import { useI18n } from 'vue-i18n';
 import { debounce } from 'lodash';
+import { emit } from 'process';
 const { t , locale } = useI18n();
 type Food = {
   food_id: number;
@@ -173,6 +175,11 @@ function handleSearch(event: Event) {
 function resetFood(){
   selectedFood.value = undefined
   mainfood.value = undefined
+}
+function cancelAdd(){
+  selectedFood.value = undefined
+  mainfood.value = undefined
+  emits('close')
 }
 const debouncedFetchExercises = debounce(async (query: string) => {
   if (!query) return;
@@ -216,7 +223,7 @@ function addFood() {
     text: "This food will be added to your meal and cannot be edited unless removed.",
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonText: t('dashboard.tabs.clients.changeProgram.confirmOverwrite'),
+    confirmButtonText: 'Add Item',
     confirmButtonColor: '#CB901C',
     cancelButtonColor: '#d33',
     background: '#081411',
@@ -235,6 +242,7 @@ function addFood() {
         fat: Number((currentServing.value.fat * servingAmount.value).toFixed(2)),
         carbohydrate: Number((currentServing.value.carbohydrate * servingAmount.value).toFixed(2)),
       };
+      resetFood()
       emits('submit', foodPayload);
     }
   });
@@ -270,7 +278,10 @@ watch(selectedFood, async (selectedFood:any) => {
     const result = await response.json();
     if (result?.food) {
       mainfood.value = result.food;
+      if (result.food.servings.serving[0])
       currentServing.value = result.food.servings.serving[0]
+      else
+      currentServing.value = result.food.servings.serving
     }
   } catch (error) {
     console.error('Failed to fetch main food details:', error);
