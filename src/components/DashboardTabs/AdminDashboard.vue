@@ -241,73 +241,41 @@
     </div>
   </div>
 
- <div class="card p-6">
-    <h3 class="2xl:contentH-small ">Top Trainers</h3>
-    <div class="flex flex-col  h-full justify-center">
-      <div class=" gradient-bg p-6 card">
-          <div  class="flex items-center border-rafik-pribg dark:border-rafik-darkpribg justify-between gap-4 mb-4">
-            <div class="flex items-center gap-3 ">
-              <img
-                :src="
-                  '/user-placeholder.jpg'
-                "
-                alt="Trainee Avatar"
-                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-rafik object-cover"
-              />
-              <div>
-                <h3 class="header-small">
-                  John Rafik
-                </h3>
-               <!-- Middle Section: Assessment Template Name and Date -->
-          <div class="flex-1 mb-4">
-            <h2 class="title-small text-sm mb-2">
-             #1 Top Trainer
-            </h2>
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
-              {{ formatDate(new Date().toString()) }}
-            </p>
-              </div>
-            </div>
 
-          </div>
-            <!-- Status Badge -->
-            <div class="mt-3">
-              <span
-                class="px-3 py-1 bg-green-200 text-green-700 rounded-full font-semibold uppercase"
+    <div v-if="programStore.All_Org_Programs"  class="card col-span-2  p-6">
+    <div class="flex gap-2 justify-between items-center">
 
-              >
-                Active
-              </span>
-            </div>
-          </div>
-      </div>
+      <h3 class="2xl:contentH-small " >Programs to Review</h3>
+      <router-link :to="{name:'org-programs-list' }" class="btn-sm-outline">All Programs</router-link>
     </div>
-  </div>
-    <div class="card  p-6">
-    <h3 class="2xl:contentH-small ">Top Athletes</h3>
         <div class="flex flex-col  h-full justify-center">
-      <div class="flex flex-col  h-full justify-center">
-      <div class=" gradient-bg p-6 card">
-          <div  class="flex items-center border-rafik-pribg dark:border-rafik-darkpribg justify-between gap-4 mb-4">
-            <div class="flex items-center gap-3 ">
-              <img
+      <div class="flex gap-6 items-center h-full justify-start">
+        <div class="m-auto" v-if="programStore.All_Org_Programs.length < 1">
+          <p class="text-body"> No Programs Currently in Review. </p>
+        </div>
+      <router-link :to="{name:'audit-program', params:{id:program.id} }" v-for="program in programStore.All_Org_Programs" class="  card overflow-hidden p-0 relative">
+        <img
                 :src="
-                  '/user-placeholder.jpg'
+                  program.program_photo
                 "
                 alt="Trainee Avatar"
-                class="w-14 h-14 2xl:w-24 2xl:h-24 rounded-full border-2 border-rafik object-cover"
+                class="w-full h-full object-cover grayscale absolute  "
               />
+              <div class="gradient-bg absolute w-full h-full opacity-80"></div>
+          <div  class="flex items-center relative p-6 border-rafik-pribg dark:border-rafik-darkpribg justify-between gap-4 mb-4">
+            <div class="flex items-center gap-3 w-1/2">
+
               <div>
                 <h3 class="header-small">
-                  Jill Rafik
+                  {{ program.program_name }}
                 </h3>
                <!-- Middle Section: Assessment Template Name and Date -->
-          <div class="flex-1 mb-4">
-            <h2 class="title-small text-sm mb-2">
-             #1 Top Athlete
+          <div class="flex-1 mb-4 ">
+            <h2 class="title-small text-sm mb-2 line-clamp-2">
+             {{ program.program_description }}
             </h2>
-            <p class="label text-rafik-pritext dark:text-rafik-darkpritext">
-              {{ formatDate(new Date().toString()) }}
+            <p v-if="program.created_at" class="label text-rafik-pritext dark:text-rafik-darkpritext">
+              {{ formatDate(program.created_at.toString()) }}
             </p>
               </div>
             </div>
@@ -319,11 +287,11 @@
                 class="px-3 py-1 bg-green-200 text-green-700 rounded-full font-semibold uppercase"
 
               >
-                Active
+               {{program.status}}
               </span>
             </div>
           </div>
-      </div>
+      </router-link>
     </div>
     </div>
   </div>
@@ -336,12 +304,14 @@ import { onMounted, ref } from 'vue';
 import { supabase } from '@/lib/supabaseClient'; // Ensure Supabase is correctly set up
 import { useI18n } from 'vue-i18n';
 import { useAssessmentStore, type Assessment } from '@/stores/assessmentstores';
-
+import { useProgramStore } from '@/stores/programstores';
+import router from '@/router';
 const { t, locale } = useI18n();
 
 const assessments = ref<Assessment[]>([])
 const loadAssessments = ref(false)
 const assessmentStore = useAssessmentStore()
+const programStore = useProgramStore()
 const props = defineProps({
   user: Object
 });
@@ -374,7 +344,7 @@ function getStatusClasses(status: string): string {
 
 onMounted(async () => {
   loadAssessments.value = true;
-
+programStore.fetchOrgAuditPrograms({status:['Review'], trainer:null, name:''}, 1,5)
   try {
     const result = await assessmentStore.getTodaysAssessments(props.user);
     assessments.value = result || []; // fallback to empty array
