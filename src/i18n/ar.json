@@ -823,7 +823,9 @@
           "noMedia": "لا وسائط",
           "addMultiSet": "أضف مجموعة متعددة",
           "supersetsCircuits": "السوبرسيت/الدورات",
-          "restAndRecover": "الراحة والتعافي"
+          "restAndRecover": "الراحة والتعافي",
+          "duplicateWorkout": "تكرار التمرين",
+          "workoutDuplicated": "تم تكرار التمرين بنجاح!"
         },
         "reviews": {
           "errorTitle": "خطأ!",

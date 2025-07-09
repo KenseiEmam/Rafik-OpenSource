@@ -23,22 +23,22 @@
         item-key="index"
       >
         <template #item="{ element, index }">
-          <button
-            @click="activeTab = index"
-            :class="activeTab === index ? 'border-rafik text-rafik-pritext dark:text-rafik-darkpritext' : 'text-rafik-sectext dark:text-rafik-darksectext border-transparent'"
-            class="px-4 py-2 min-w-max border-b-2 flex items-center gap-2"
-          >
-            <svg v-if="isEditing" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="h-5 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move">
-              <path d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 160c-22.1 0-40-17.9-40-40L0 72C0 49.9 17.9 32 40 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40z"/>
-            </svg>
-            {{
+                      <button
+              @click="activeTab = index"
+              :class="activeTab === index ? 'border-rafik text-rafik-pritext dark:text-rafik-darkpritext' : 'text-rafik-sectext dark:text-rafik-darksectext border-transparent'"
+              class="px-4 py-2 min-w-max border-b-2 flex items-center gap-2"
+            >
+              <svg v-if="isEditing" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" fill="currentColor" class="h-5 handle text-rafik-sectext dark:text-rafik-darksectext hover:cursor-move">
+                <path d="M40 352l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zm192 0l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 320c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 192l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40zM40 160c-22.1 0-40-17.9-40-40L0 72C0 49.9 17.9 32 40 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0zM232 32l48 0c22.1 0 40 17.9 40 40l0 48c0 22.1-17.9 40-40 40l-48 0c-22.1 0-40-17.9-40-40l0-48c0-22.1 17.9-40 40-40z"/>
+              </svg>
+              {{
           element.workout_name
             ? element.workout_name
             : element.rest_day
               ? t('dashboard.tabs.program.planner.restDay')
               : t('dashboard.tabs.program.planner.workout') + ' ' + (index + 1)
         }}
-          </button>
+            </button>
         </template>
       </draggable>
 
@@ -139,6 +139,20 @@
                 class="rafik-text-input border-0 bg-transparent text-rafik-sectext dark:text-rafik-darksectext mb-auto focus:ring-0 pb-1 border-b focus:border-rafik-alternate rounded-none"
                 :placeholder="t('dashboard.tabs.program.planner.completionTimePlaceholder')"
               />
+            </div>
+
+            <!-- Duplicate Workout Button -->
+            <div v-if="isEditing" class="flex justify-between text-rafik-pritext dark:text-rafik-darkpritext w-full">
+              <p>{{ t('dashboard.tabs.program.planner.duplicateWorkout') }}</p>
+              <button
+                @click="duplicateWorkout(activeTab)"
+                class="text-rafik-secondary hover:text-rafik-alternate transition-colors duration-200 flex items-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                  <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                </svg>
+                {{ t('dashboard.tabs.program.planner.duplicateWorkout') }}
+              </button>
             </div>
 
             <div
@@ -967,6 +981,29 @@ const removeExercise = (workoutIndex: number, exerciseIndex: number) => {
 };
 const removeEmbed = (exercise: any, exerciseIndex: number) => {
   exercise.embeds.splice(exerciseIndex, 1);
+};
+
+const duplicateWorkout = (workoutIndex: number) => {
+  const workoutToDuplicate = editedWorkouts.value[workoutIndex];
+  const duplicatedWorkout = JSON.parse(JSON.stringify(workoutToDuplicate));
+  
+  // Add "Copy" to the workout name if it exists
+  if (duplicatedWorkout.workout_name) {
+    duplicatedWorkout.workout_name = duplicatedWorkout.workout_name + ' (Copy)';
+  }
+  
+  // Insert the duplicated workout after the original
+  editedWorkouts.value.splice(workoutIndex + 1, 0, duplicatedWorkout);
+  
+  // Increment the day cycle by 1
+  if (props.program.weekly_cycle) {
+    props.program.weekly_cycle += 1;
+  }
+  
+  // Switch to the new duplicated workout
+  activeTab.value = workoutIndex + 1;
+  
+  showSuccess(t('dashboard.tabs.program.planner.workoutDuplicated'));
 };
 
 const handleAdd = (workoutIndex: number, list: any[]) => {
