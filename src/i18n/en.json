@@ -830,7 +830,12 @@
           "supersetsCircuits": "Supersets/Circuits",
           "restAndRecover": "Rest and Recover",
           "duplicateWorkout": "Duplicate Workout",
-          "workoutDuplicated": "Workout duplicated successfully!"
+          "workoutDuplicated": "Workout duplicated successfully!",
+          "deleteWorkout": "Delete Workout",
+          "deleteWorkoutConfirmTitle": "Delete Workout?",
+          "deleteWorkoutConfirmText": "This will permanently delete this workout and reduce the day cycle by 1. This action cannot be undone.",
+          "deleteWorkoutConfirmButton": "Yes, delete it!",
+          "workoutDeleted": "Workout deleted successfully!"
         },
         "reviews": {
           "errorTitle": "Error!",
