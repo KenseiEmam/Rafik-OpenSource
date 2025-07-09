@@ -94,6 +94,7 @@ async function handleDeleteSlot() {
       showDenyButton: true,
       showCancelButton: true,
       confirmButtonText: 'Just this occurrence',
+      confirmButtonColor: '#FF5733',
       denyButtonText: 'Entire series',
       cancelButtonText: 'Cancel',
       background: '#081411',
