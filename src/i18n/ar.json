@@ -825,7 +825,12 @@
           "supersetsCircuits": "السوبرسيت/الدورات",
           "restAndRecover": "الراحة والتعافي",
           "duplicateWorkout": "تكرار التمرين",
-          "workoutDuplicated": "تم تكرار التمرين بنجاح!"
+          "workoutDuplicated": "تم تكرار التمرين بنجاح!",
+          "deleteWorkout": "حذف التمرين",
+          "deleteWorkoutConfirmTitle": "حذف التمرين؟",
+          "deleteWorkoutConfirmText": "سيؤدي هذا إلى حذف هذا التمرين نهائيًا وتقليل دورة اليوم بمقدار 1. لا يمكن التراجع عن هذا الإجراء.",
+          "deleteWorkoutConfirmButton": "نعم، احذفه!",
+          "workoutDeleted": "تم حذف التمرين بنجاح!"
         },
         "reviews": {
           "errorTitle": "خطأ!",
