@@ -106,8 +106,9 @@
         <div
           class="flex justify-end rtl:justify-start gap-4 mt-8 wrap w-full"
         >
-                  <button
-            @click="emit('delete')" v-if="checkPermssion"
+          <button
+            @click="emit('delete')"
+            v-if="checkPermssion"
             class="btn-md bg-red-500 border-red-500 hover:bg-red-400 rounded disabled:bg-gray-400 disabled:text-gray-700 disabled:cursor-not-allowed"
           >
             Delete
@@ -123,14 +124,20 @@
             View Assessment
           </router-link>
         <!-- Reschedule button for assessment slots -->
-
         </div>
-        <div v-if="true || templateData.type === 'assessment' && templateData.status === 'scheduled' && canReschedule()" class="flex flex-1 items-center  w-full justify-between">
+        <div v-if="templateData.type === 'assessment' && templateData.status === 'scheduled' && canReschedule()" class="flex flex-1 items-center  w-full justify-between gap-2">
             <button
               @click="handleRescheduleClick"
-              class="btn-md w-full"
+              class="btn-md flex-1"
             >
-              Reschedule Assessment
+              {{ t('dashboard.settings.rescheduleThisAssessment') }}
+            </button>
+            <button
+              v-if="isRecurringAssessment"
+              @click="handleRescheduleSeriesClick"
+              class="btn-md flex-1 bg-rafik-secondary"
+            >
+              {{ t('dashboard.settings.rescheduleEntireSeries') }}
             </button>
           </div>
       </div>
@@ -195,37 +202,34 @@ interface myTemp {
 
 const props = defineProps({
   visible: Boolean,
-  assessment: {
-    type: Number,
-    default: null
-  },
   templateData: {
     type: Object,
     default: () => ({})
-  },
-  myTemplates: {
-    type: Array as PropType<myTemp[]>,
-    default: () => []
   }
 });
 
-const emit = defineEmits(['close', 'delete', 'rescheduled']);
+const emit = defineEmits(['close', 'delete', 'rescheduled', 'delete-occurrence', 'delete-series']);
 const users = ref<any[]>([]);
+
+// Check if this is part of a recurring assessment series
+const isRecurringAssessment = computed(() => {
+  if (!props.templateData || !props.templateData.assessment) return false;
+  
+  // Check if there are multiple slots with the same assessment template and trainees
+  // This is a simplified check - in a real implementation, you'd want to store recurring series info
+  return false; // For now, return false until we implement proper recurring series tracking
+});
 
 const filterAssessors = computed(() =>
   users.value.filter(u =>
-    assessmentStore.AssessmentItem?.assessors?.some(
-      (a: any) => a === u.id
-    )
+    props.templateData.assessment?.assessors?.some((a: any) => a === u.id)
   )
 );
 
 
 const filterTrainees = computed(() =>
   users.value.filter(u =>
-    assessmentStore.AssessmentItem?.trainees?.some(
-      (a: any) => a === u.id
-    )
+    props.templateData.assessment?.trainees?.some((a: any) => a === u.id)
   )
 );
 
@@ -257,64 +261,84 @@ const resetForm = () => {
   };
 };
 const formattedDay = computed(() => {
-  if (!props.templateData.time_start) return '';
-  return new Date(props.templateData.time_start).toLocaleDateString(locale.value, {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  if (props.templateData.occurrenceDate) {
+    return new Date(props.templateData.occurrenceDate).toLocaleDateString(locale.value, {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  }
+  if (props.templateData.slot?.time_start) {
+    return new Date(props.templateData.slot.time_start).toLocaleDateString(locale.value, {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  }
+  return '';
 });
 
 const formattedStart = computed(() => {
-  if (!props.templateData.time_start) return '';
-  return new Date(props.templateData.time_start).toLocaleTimeString(locale.value, {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  if (props.templateData.slot?.time_start) {
+    return new Date(props.templateData.slot.time_start).toLocaleTimeString(locale.value, {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
+  return '';
 });
 
 const formattedEnd = computed(() => {
-  if (!props.templateData.time_end) return '';
-  return new Date(props.templateData.time_end).toLocaleTimeString(locale.value, {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  if (props.templateData.slot?.time_end) {
+    return new Date(props.templateData.slot.time_end).toLocaleTimeString(locale.value, {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
+  return '';
 });
 
 watch(
   () => props.templateData,
   async (templateData) => {
-
+    // Debug print
+    console.log('ViewModal opened with templateData:', templateData);
+    if (templateData) {
+      console.log('slot:', templateData.slot);
+      console.log('assessment:', templateData.assessment);
+      console.log('occurrenceDate:', templateData.occurrenceDate);
+      if (templateData.slot) {
+        console.log('slot.recurrence_rule:', templateData.slot.recurrence_rule);
+      }
+    }
     if (!templateData || Object.keys(templateData).length === 0) return;
-
     loading.value = true;
- assessmentStore.clearAssessment
-    // Extract user IDs
-    const userIds = Array.isArray(templateData.users)
-      ? templateData.users.map((u: any) =>
-          typeof u === 'object' ? u.id : u
-        )
-      : [];
+    // Extract user IDs from assessment (preferred) or slot
+    let userIds: any[] = [];
+    if (templateData.assessment) {
+      userIds = [
+        ...(templateData.assessment.assessors || []),
+        ...(templateData.assessment.trainees || [])
+      ];
+    } else if (templateData.slot && Array.isArray(templateData.slot.users)) {
+      userIds = templateData.slot.users.map((u: any) => (typeof u === 'object' ? u.id : u));
+    }
     if (userIds.length > 0) {
       const { data, error } = await supabase
         .from('users')
         .select('*')
         .in('id', userIds);
-
       if (!error) {
         users.value = data ?? [];
       }
+    } else {
+      users.value = [];
     }
-
-    // Fetch assessment if it exists
-    if (templateData.assessment) {
-      await assessmentStore.getAssessment(templateData.assessment);
-    }
-
     loading.value = false;
   },
-  { immediate: true, deep: true } // fire once on mount and on deep prop changes
+  { immediate: true, deep: true }
 );
 
 
@@ -351,6 +375,20 @@ async function handleRescheduleClick() {
     showRescheduleModal.value = true;
   } catch (error) {
     console.error('Error preparing reschedule:', error);
+  }
+}
+
+// Handle reschedule entire series click
+async function handleRescheduleSeriesClick() {
+  try {
+    // For now, just show a message that this feature is coming soon
+    // In a full implementation, you would:
+    // 1. Find all slots in the same recurring series
+    // 2. Open a modal to edit the entire series
+    // 3. Update all slots in the series
+    alert(t('dashboard.settings.recurringSeriesComingSoon'));
+  } catch (error) {
+    console.error('Error preparing series reschedule:', error);
   }
 }
 
