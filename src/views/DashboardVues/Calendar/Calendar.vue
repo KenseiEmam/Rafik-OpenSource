@@ -34,6 +34,8 @@
           <span class="w-3 h-3 rounded-full bg-black"></span>
           <p class="text-sm "> Other</p>
         </div>
+
+
       </div>
         <FullCalendar  v-if="showCalendar"/>
       </div>
