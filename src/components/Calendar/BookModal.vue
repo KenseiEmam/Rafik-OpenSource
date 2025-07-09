@@ -770,6 +770,33 @@ function getUserNameById(id: number) {
   return '';
 }
 
+// Set default end date for recurring events to 6 months from the selected start date
+watch(
+  () => recurringSchedule.value.repeatType,
+  (newType) => {
+    if (newType !== 'none' && props.templateData.date) {
+      const startDate = new Date(props.templateData.date);
+      const endDate = new Date(startDate);
+      endDate.setMonth(endDate.getMonth() + 6);
+      recurringSchedule.value.endDate = endDate;
+    } else if (newType === 'none') {
+      recurringSchedule.value.endDate = null;
+    }
+  }
+);
+
+// Also set default end date when modal opens with a repeat type already selected
+watch(
+  () => props.visible,
+  (isVisible) => {
+    if (isVisible && recurringSchedule.value.repeatType !== 'none' && props.templateData.date && !recurringSchedule.value.endDate) {
+      const startDate = new Date(props.templateData.date);
+      const endDate = new Date(startDate);
+      endDate.setMonth(endDate.getMonth() + 6);
+      recurringSchedule.value.endDate = endDate;
+    }
+  }
+);
 
 </script>
 <style scoped>
