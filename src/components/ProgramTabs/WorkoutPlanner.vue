@@ -59,24 +59,52 @@
 
     <!-- Active Workout Content -->
     <div class="card p-0 flex flex-col" v-if="editedWorkouts.length">
-      <label
+      <div
         v-if="isEditing"
-        class="flex items-center w-full mr-4 space-x-2 cursor-pointer border-b border-rafik-sectext dark:border-rafik-darksectext bg-rafik-secbg dark:bg-rafik-darksecbg p-8 rounded-t-xl"
+        class="flex items-center justify-between w-full border-b border-rafik-sectext dark:border-rafik-darksectext bg-rafik-secbg dark:bg-rafik-darksecbg p-8 rounded-t-xl"
       >
-        <input type="checkbox" v-model="editedWorkouts[activeTab].rest_day" class="hidden" />
-        <div
-          class="w-12 h-6 flex items-center border-rafik-pritext dark:border-rafik-darkpritext border-2 rounded-full transition-all"
-          :class="{ 'bg-rafik': editedWorkouts[activeTab].rest_day }"
-        >
+        <!-- Rest Day Switch -->
+        <label class="flex items-center space-x-2 cursor-pointer">
+          <input type="checkbox" v-model="editedWorkouts[activeTab].rest_day" class="hidden" />
           <div
-            class="w-6 h-6 bg-rafik-pritext dark:bg-rafik-darkpritext rounded-full shadow-md transform transition-transform"
-            :class="{ 'translate-x-6': editedWorkouts[activeTab].rest_day }"
-          ></div>
+            class="w-12 h-6 flex items-center border-rafik-pritext dark:border-rafik-darkpritext border-2 rounded-full transition-all"
+            :class="{ 'bg-rafik': editedWorkouts[activeTab].rest_day }"
+          >
+            <div
+              class="w-6 h-6 bg-rafik-pritext dark:bg-rafik-darkpritext rounded-full shadow-md transform transition-transform"
+              :class="{ 'translate-x-6': editedWorkouts[activeTab].rest_day }"
+            ></div>
+          </div>
+          <p class="header-small text-sm">
+            {{ t('dashboard.tabs.program.planner.restDay') }}
+          </p>
+        </label>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center gap-4">
+          <!-- Duplicate Button -->
+          <button
+            @click="duplicateWorkout(activeTab)"
+            class="flex items-center gap-2 px-4 py-2 text-rafik-secondary hover:text-rafik-alternate transition-colors duration-200 border border-rafik-secondary hover:border-rafik-alternate rounded-md"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+            </svg>
+            {{ t('dashboard.tabs.program.planner.duplicateWorkout') }}
+          </button>
+
+          <!-- Delete Button -->
+          <button
+            @click="deleteWorkout(activeTab)"
+            class="flex items-center gap-2 px-4 py-2 text-red-500 hover:text-red-400 transition-colors duration-200 border border-red-500 hover:border-red-400 rounded-md"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+              <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+            </svg>
+            {{ t('dashboard.tabs.program.planner.deleteWorkout') }}
+          </button>
         </div>
-        <p class="header-small text-sm">
-          {{ t('dashboard.tabs.program.planner.restDay') }}
-        </p>
-      </label>
+      </div>
 
       <div class="p-8" v-if="!editedWorkouts[activeTab].rest_day">
         <!-- Editable Workout Fields -->
@@ -141,19 +169,7 @@
               />
             </div>
 
-            <!-- Duplicate Workout Button -->
-            <div v-if="isEditing" class="flex justify-between text-rafik-pritext dark:text-rafik-darkpritext w-full">
-              <p>{{ t('dashboard.tabs.program.planner.duplicateWorkout') }}</p>
-              <button
-                @click="duplicateWorkout(activeTab)"
-                class="text-rafik-secondary hover:text-rafik-alternate transition-colors duration-200 flex items-center gap-2"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-                  <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-                </svg>
-                {{ t('dashboard.tabs.program.planner.duplicateWorkout') }}
-              </button>
-            </div>
+
 
             <div
               v-if="!isEditing"
@@ -1004,6 +1020,39 @@ const duplicateWorkout = (workoutIndex: number) => {
   activeTab.value = workoutIndex + 1;
   
   showSuccess(t('dashboard.tabs.program.planner.workoutDuplicated'));
+};
+
+const deleteWorkout = async (workoutIndex: number) => {
+  // Confirm deletion
+  const result = await Swal.fire({
+    title: t('dashboard.tabs.program.planner.deleteWorkoutConfirmTitle'),
+    text: t('dashboard.tabs.program.planner.deleteWorkoutConfirmText'),
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: t('dashboard.tabs.program.planner.deleteWorkoutConfirmButton'),
+    cancelButtonText: t('dashboard.tabs.program.planner.cancel'),
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    background: '#081411',
+    color: '#E8F3ED'
+  });
+
+  if (!result.isConfirmed) return;
+
+  // Remove the workout
+  editedWorkouts.value.splice(workoutIndex, 1);
+  
+  // Decrement the day cycle by 1
+  if (props.program.weekly_cycle && props.program.weekly_cycle > 1) {
+    props.program.weekly_cycle -= 1;
+  }
+  
+  // Adjust active tab if necessary
+  if (activeTab.value >= editedWorkouts.value.length) {
+    activeTab.value = Math.max(0, editedWorkouts.value.length - 1);
+  }
+  
+  showSuccess(t('dashboard.tabs.program.planner.workoutDeleted'));
 };
 
 const handleAdd = (workoutIndex: number, list: any[]) => {

@@ -175,12 +175,16 @@ function DeleteProgram() {
     cancelButtonColor: '#d33',
     background: '#081411',
     color: '#E8F3ED'
-  }).then((result) => {
+  }).then(async (result) => {
     if (result.isConfirmed) {
-      updateProgramField('status', 'Deleted').then(() => {
+      try {
+        await updateProgramField('status', 'Deleted');
         showSuccess(t('dashboard.programs.details.programDeleted'));
-        refreshComponent();
-      });
+        // Navigate to programs listing page
+        router.push('/dashboard/programs');
+      } catch (error) {
+        console.error('Error deleting program:', error);
+      }
     }
   });
 }
@@ -337,6 +341,67 @@ async function uploadFileToBucket(): Promise<string | null> {
     console.error(err);
     showError(t('dashboard.programs.details.uploadFailed', { error: err.message }));
     return null;
+  }
+}
+
+// Duplicate Program
+async function duplicateProgram() {
+  if (!programStore.Program) {
+    showError(t('dashboard.programs.details.programNotFound'));
+    return;
+  }
+
+  try {
+    // Check current program counts
+    const { data: existingPrograms, error: countError } = await supabase
+      .from('programs')
+      .select('status')
+      .eq('trainer_id', programStore.Program.trainer_id);
+    
+    if (countError) throw countError;
+    
+    // Count programs by status
+    const draftCount = existingPrograms.filter(p => p.status === 'Draft').length;
+    const activeCount = existingPrograms.filter(p => p.status === 'Active').length;
+    
+    // Check if we can create another draft program
+    if (draftCount >= 6) {
+      showError(t('dashboard.programs.details.draftLimitReached'));
+      return;
+    }
+    
+    // Create a deep copy of the program
+    const programToDuplicate = JSON.parse(JSON.stringify(programStore.Program));
+    
+    // Remove the ID and set status to Draft
+    delete programToDuplicate.id;
+    programToDuplicate.status = 'Draft';
+    
+    // Add "(Copy)" to the program name
+    if (programToDuplicate.program_name) {
+      programToDuplicate.program_name = programToDuplicate.program_name + ' (Copy)';
+    }
+    
+    // Create the new program
+    const { data: newProgram, error } = await supabase
+      .from('programs')
+      .insert(programToDuplicate)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    
+    showSuccess(t('dashboard.programs.details.programDuplicated'));
+    
+    // Navigate to the new program and refresh the data
+    await router.push(`/dashboard/programs/${newProgram.id}`);
+    
+    // Refresh the program data to show the new duplicated program
+    await programStore.fetchProgram(newProgram.id);
+    
+  } catch (err: any) {
+    console.error('Error duplicating program:', err);
+    showError(t('dashboard.programs.details.programDuplicateFailed'));
   }
 }
 </script>
@@ -573,6 +638,15 @@ async function uploadFileToBucket(): Promise<string | null> {
               >
                 {{ t('dashboard.programs.details.underReview') }}
               </p>
+              <button
+                @click="duplicateProgram"
+                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext flex items-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                  <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                </svg>
+                {{ t('dashboard.programs.details.duplicateProgramButton') }}
+              </button>
               <button
                 @click="DeleteProgram"
                 class="uppercase text-red-500 hover:text-red-400 text-left"
