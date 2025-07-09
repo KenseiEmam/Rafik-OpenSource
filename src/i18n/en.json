@@ -828,7 +828,9 @@
           "noMedia": "No Media",
           "addMultiSet": "Add Multi-Set",
           "supersetsCircuits": "Supersets/Circuits",
-          "restAndRecover": "Rest and Recover"
+          "restAndRecover": "Rest and Recover",
+          "duplicateWorkout": "Duplicate Workout",
+          "workoutDuplicated": "Workout duplicated successfully!"
         },
         "reviews": {
           "errorTitle": "Error!",
