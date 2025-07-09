@@ -381,11 +381,11 @@
     },
     "clients": {
       "details": {
-        "clientIsOnline": "Client is online",
-        "clientIsOffline": "Client is offline",
+        "clientIsOnline": "Trainees online",
+        "clientIsOffline": "Trainees offline",
         "successTitle": "Success!",
         "errorTitle": "Error!",
-        "clientNotFound": "Client not found!",
+        "clientNotFound": "Traineenot found!",
         "failedToLoadClient": "Failed to load client details.",
         "changeSuccessful": "Change successful!",
         "failedToChange": "Failed to change. Please try again.",
@@ -414,10 +414,11 @@
         "detailsTab": "Details",
         "workoutPlanTab": "Workout-Plan",
         "workoutLogTab": "Workout-Log",
-        "dietLogTab": "Client Logs",
+        "dietLogTab": "Trainee Logs",
         "weightLogTab": "Weight-Log",
         "trophyRoom":"Trophy Room",
-        "statisticsTab": "Statistics"
+        "statisticsTab": "Statistics",
+        "mealsPlan": "Meal-Plan"
       },
       "list": {
         "active": "Active",
@@ -507,7 +508,7 @@
     "auditForms": {
       "list": {
         "pageTitle": {
-          "subheader": "Client ",
+          "subheader": "Trainee",
           "header": "Forms"
         },
         "statusPlaceholder": "Filter by Status ...",
@@ -523,7 +524,7 @@
         },
         "tableHeaders": {
           "created": "Created At",
-          "clientId": "Client ID",
+          "clientId": "TraineeID",
           "program": "Program",
           "status": "Status",
           "numberOfQuestions": "Number Of Questions"
@@ -592,7 +593,7 @@
           "viewProgram": "View Program"
         },
         "trainee": {
-          "clientMetrics": "Client Metrics",
+          "clientMetrics": "Trainee Metrics",
           "height": "Height",
           "weight": "Weight",
           "goalWeight": "Goal Weight",
@@ -601,8 +602,8 @@
           "fitnessGoal": "Fitness Goal",
           "sportsPlayed": "Sports Played",
           "dietPreference": "Diet Preference",
-          "clientProgram": "Client Program",
-          "clientCoach": "Client Coach",
+          "clientProgram": "Trainee Program",
+          "clientCoach": "Trainee Coach",
           "joinedOn": "Joined On",
           "expiresOn": "Expires On",
           "pricePackage": "Price Package",
@@ -722,7 +723,7 @@
           "revenueThisMonth": "Revenue this Month:",
           "totalRevenue": "Total Revenue:",
           "bestMonth": "Best Month:",
-          "clientRetention": "Client Retention:",
+          "clientRetention": "Trainee Retention:",
           "growthRate": "Growth Rate:",
           "trainerDetails": "Trainer Details",
           "viewTrainerProfile": "View Trainer Profile",
@@ -742,7 +743,7 @@
           "removeTagButton": "✕"
         },
         "docForms": {
-          "clientInductionForm": "Client Induction Form",
+          "clientInductionForm": "Trainee Induction Form",
           "clientInductionDescription": "The client induction form is sent to all trainees once they are subscribed to the program. It should usually include questions pertaining to client readiness and also about their goals for the specific program.",
           "addTextInduction": "+ Add Text",
           "addNumberInduction": "+ Add Number",
@@ -751,7 +752,7 @@
           "questionLabel": "{type} Question",
           "addNewQuestionPlaceholder": "Add a new {type} Question",
           "removeInduction": "X",
-          "clientFollowUpForm": "Client Follow-Up Form",
+          "clientFollowUpForm": "Trainee Follow-Up Form",
           "clientFollowUpDescription": "The follow-up form is sent automatically to trainees on a regular basis based on the interval set up in your settings. This form usually asks trainees about their progress and urges them to update their weight setting.",
           "addTextFollow": "+ Add Text",
           "addNumberFollow": "+ Add Number",
@@ -827,7 +828,9 @@
           "noMedia": "No Media",
           "addMultiSet": "Add Multi-Set",
           "supersetsCircuits": "Supersets/Circuits",
-          "restAndRecover": "Rest and Recover"
+          "restAndRecover": "Rest and Recover",
+          "duplicateWorkout": "Duplicate Workout",
+          "workoutDuplicated": "Workout duplicated successfully!"
         },
         "reviews": {
           "errorTitle": "Error!",
@@ -877,25 +880,25 @@
           "confirmOverwrite": "Yes, overwrite!"
         },
         "details": {
-          "profile": "Client Profile",
+          "profile": "Trainee Profile",
           "age": "Age",
           "gender": "Gender",
           "nationality": "Nationality",
           "phone": "Phone",
-          "metrics": "Client Metrics",
+          "metrics": "Trainee Metrics",
           "height": "Height",
           "cm": "cm",
           "weight": "Weight",
           "kg": "kg",
           "goalWeight": "Goal Weight",
           "bodyFatPercent": "Body Fat Percent",
-          "fitness": "Client Fitness",
+          "fitness": "Trainee Fitness",
           "experience": "Experience",
           "fitnessGoal": "Fitness Goal",
           "sportsPlayed": "Sports Played",
           "dietPreference": "Diet Preference",
           "NA": "N/A",
-          "program": "Client Program",
+          "program": "Trainee Program",
           "joinedOn": "Joined On",
           "expiresOn": "Expires On",
           "pricePackage": "Price Package",
@@ -1192,8 +1195,8 @@
         "noEntitledUsers": ":/ No Entitled Users Found. Assign some to see down here!",
         "successTitle": "Success!",
         "errorTitle": "Error!",
-        "autoRerollEnabled": "Client will now be resubscribed automatically!",
-        "autoRerollDisabled": "Client removed from reroll list and will not be resubscribed!",
+        "autoRerollEnabled": "Trainee will now be resubscribed automatically!",
+        "autoRerollDisabled": "Trainee removed from reroll list and will not be resubscribed!",
         "tooManyEntitlements": "You can only assign up to the available number of entitlements.",
         "alreadyAssigned": "A user with this email is already assigned to a program.",
         "programNotFound": "Program not found!",
