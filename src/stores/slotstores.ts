@@ -126,7 +126,7 @@ async function insertSlot(newSlot: Omit<Slot, 'id' | 'created_at'| 'date'>) {
     if (error) throw error;
     if (data) {
       AllSlots.value.push(data);
-      showSuccess('Slot created successfully!');
+
     }
     return data;
   } catch (error: any) {
@@ -144,12 +144,12 @@ async function insertAssessmentSlot(newSlot: Omit<Slot, 'id' | 'created_at'| 'da
     // Remove recurringSchedule property if it exists (it's not a database column)
     const { recurringSchedule: _, ...slotForDatabase } = newSlot;
     let asesid   = null;
-    
+
     // Insert Assessment if applicable
     if(newSlot.type === "assessment") {
       if(orgId)
         newAssessment.organization = orgId;
-      
+
       // Check if this is a recurring assessment
       if (newSlot.recurrence_rule && newSlot.recurrence_rule.repeatType !== 'none') {
         // For recurring assessments, we don't create the assessment here
@@ -171,7 +171,7 @@ async function insertAssessmentSlot(newSlot: Omit<Slot, 'id' | 'created_at'| 'da
         }
       }
     }
-    
+
     const { data, error } = await supabase
       .from('slots')
       .insert([slotForDatabase])
@@ -295,16 +295,16 @@ async function rescheduleSlot(slotId: number, newTimeStart: string, newTimeEnd: 
       for (const [key, slots] of assessmentGroups) {
         if (slots.length > 1) {
           // This is likely a recurring assessment, find the next date in the pattern
-          const sortedSlots = slots.sort((a: any, b: any) => 
+          const sortedSlots = slots.sort((a: any, b: any) =>
             new Date(a.time_start).getTime() - new Date(b.time_start).getTime()
           );
-          
+
           const lastSlot = sortedSlots[sortedSlots.length - 1];
           const nextDate = calculateNextRecurringDate(new Date(lastSlot.time_start));
-          
+
           if (nextDate) {
             // Reschedule the most recent missed slot to the next date
-            await rescheduleSlot(lastSlot.id, nextDate.toISOString(), 
+            await rescheduleSlot(lastSlot.id, nextDate.toISOString(),
               new Date(lastSlot.time_end).toISOString());
           }
         } else {
@@ -312,10 +312,10 @@ async function rescheduleSlot(slotId: number, newTimeStart: string, newTimeEnd: 
           const slot = slots[0];
           const nextDate = new Date(now);
           nextDate.setDate(nextDate.getDate() + 1);
-          nextDate.setHours(new Date(slot.time_start).getHours(), 
+          nextDate.setHours(new Date(slot.time_start).getHours(),
             new Date(slot.time_start).getMinutes());
-          
-          await rescheduleSlot(slot.id, nextDate.toISOString(), 
+
+          await rescheduleSlot(slot.id, nextDate.toISOString(),
             new Date(slot.time_end).toISOString());
         }
       }
@@ -331,13 +331,13 @@ async function rescheduleSlot(slotId: number, newTimeStart: string, newTimeEnd: 
   function calculateNextRecurringDate(lastDate: Date): Date | null {
     const now = new Date();
     const nextDate = new Date(lastDate);
-    
+
     // Try to find the next date that's in the future
     while (nextDate <= now) {
       // Add 7 days (weekly pattern) - you can make this more sophisticated
       nextDate.setDate(nextDate.getDate() + 7);
     }
-    
+
     return nextDate > now ? nextDate : null;
   }
 
@@ -390,7 +390,7 @@ async function rescheduleSlot(slotId: number, newTimeStart: string, newTimeEnd: 
             .eq('slot', slotId)
             .eq('occurrence_date', occurrenceDateStr)
             .maybeSingle();
-          
+
           if (existing) {
             return existing.id;
           }
@@ -449,9 +449,9 @@ async function rescheduleSlot(slotId: number, newTimeStart: string, newTimeEnd: 
 
       const { error: insertError } = await supabase
         .from('assessment')
-        .upsert(assessmentInstances, { 
+        .upsert(assessmentInstances, {
           onConflict: 'slot,occurrence_date',
-          ignoreDuplicates: true 
+          ignoreDuplicates: true
         });
 
       if (insertError) {

@@ -433,6 +433,7 @@ async function handleSubmit(slot: any, assessment: any) {
     await slotStore.insertSlot(slot);
   }
   await loadSlots().then(() => {
+    showSuccess('Slot created successfully!');
     showCalendar.value = true;
     showModal.value = false;
     templateData.value.date = null;
@@ -440,17 +441,75 @@ async function handleSubmit(slot: any, assessment: any) {
 }
 async function handleSubmitBulk(slot: any, assessment: any) {
   showCalendar.value = false;
-  if (slot.type === 'assessment') {
-    await slotStore.insertAssessmentSlot(slot, assessment);
+  console.log(slot)
+  const recurrence = slot.recurrence_rule;
+  const baseStart = new Date(slot.time_start);
+  const baseEnd = new Date(slot.time_end);
+
+  // Duration of the event
+  const duration = baseEnd.getTime() - baseStart.getTime();
+
+  if (recurrence && recurrence.startDate) {
+    const freqMap: { [key: string]: any } = {
+      daily: RRule.DAILY,
+      weekly: RRule.WEEKLY,
+      monthly: RRule.MONTHLY,
+      yearly: RRule.YEARLY,
+    };
+
+    const rruleOptions = {
+      freq: freqMap[recurrence.freq?.toLowerCase()] || RRule.WEEKLY,
+      interval: recurrence.customInterval || 1,
+      dtstart: new Date(recurrence.startDate),
+      until: recurrence.endDate ? new Date(recurrence.endDate) : undefined,
+      byweekday: recurrence.daysOff && recurrence.daysOff.length < 7
+        ? [0, 1, 2, 3, 4, 5, 6]
+            .filter(d => !recurrence.daysOff.includes(d))
+            .map(d => [RRule.SU, RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR, RRule.SA][d])
+        : undefined
+    };
+
+    const rule = new RRule(rruleOptions);
+    const occurrences = rule.all();
+
+    // Create and insert all recurring slots
+    for (const occ of occurrences) {
+      const start = new Date(occ);
+      const end = new Date(start.getTime() + duration);
+      console.log(start,start.getTime(), duration, end)
+      const newSlot = {
+        ...slot,
+        time_start: start,
+        time_end: end,
+        recurrence_rule: null // Only the first one keeps recurrence_rule
+      };
+
+      const newAssessment = assessment ? { ...assessment } : null;
+
+      if (slot.type === 'assessment') {
+        await slotStore.insertAssessmentSlot(newSlot, newAssessment);
+      } else {
+        await slotStore.insertSlot(newSlot);
+      }
+    }
+
+    showSuccess(`Scheduled ${occurrences.length} recurring ${slot.type}s.`);
   } else {
-    await slotStore.insertSlot(slot);
+    // fallback if no recurrence
+    if (slot.type === 'assessment') {
+      await slotStore.insertAssessmentSlot(slot, assessment);
+    } else {
+      await slotStore.insertSlot(slot);
+    }
   }
+
   await loadSlots().then(() => {
     showCalendar.value = true;
     showModal.value = false;
-    bulkBook.value =false;
+    bulkBook.value = false;
   });
 }
+
 function resetView(){
   viewSlot.value = null
 }
