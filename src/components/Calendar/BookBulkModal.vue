@@ -19,7 +19,6 @@
               <select
                 v-model="recurringSchedule.repeatType"
                 class="rafik-text-input w-full"
-                @change="onRepeatTypeChange"
               >
                 <option value="daily">{{ t('dashboard.settings.everyDay') }}</option>
                 <option value="weekly">{{ t('dashboard.settings.everyWeek') }}</option>
@@ -58,11 +57,25 @@
                 </div>
               </div>
             </div>
-
+              <!-- Start Date for Recurring Events (Optional) -->
+            <div v-if="recurringSchedule.repeatType !== 'none'">
+              <label class="block text-sm font-medium mb-2">
+                Start Date
+              </label>
+              <VueDatePicker
+                :dark="darkness === 'true'"
+                v-model="recurringSchedule.startDate"
+                :placeholder="'Select end date (optional)'"
+                :min-date="new Date()"
+                date-picker
+                :enable-time-picker="false"
+              />
+            <p class="text-xs text-gray-500 mt-1">Leave empty to start today</p>
+            </div>
             <!-- End Date for Recurring Events (Optional) -->
             <div v-if="recurringSchedule.repeatType !== 'none'">
               <label class="block text-sm font-medium mb-2">
-                {{ t('dashboard.settings.endDate') }} (Optional)
+                {{ t('dashboard.settings.endDate') }}
               </label>
               <VueDatePicker
                 :dark="darkness === 'true'"
@@ -72,7 +85,7 @@
                 date-picker
                 :enable-time-picker="false"
               />
-              <p class="text-xs text-gray-500 mt-1">Leave empty to continue indefinitely</p>
+<p class="text-xs text-gray-500 mt-1">Leave empty to end 6 months from now</p>
             </div>
 
             <!-- Days Off Selection -->
@@ -214,7 +227,7 @@
                 <label
                   class="block text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext mb-1"
                 >
-                  {{ t('dashboard.settings.selectTrainees') }}
+                  Select Trainee
                 </label>
                 <div class="relative">
                   <!-- Search Input -->
@@ -225,7 +238,7 @@
                     @input="fetchFilteredTrainees"
                     @blur="handleTraineeBlur"
                     class="w-full p-3 border rounded-md bg-rafik-secbg dark:bg-rafik-darksecbg text-rafik-sectext dark:text-rafik-darksectext focus:outline-none"
-                    :placeholder="t('dashboard.settings.searchAndSelectTrainees')"
+                    placeholder="Select Trainee"
                   />
                   <!-- Dropdown -->
                   <div
@@ -236,43 +249,17 @@
                       v-for="trainee in traineeOptions"
                       :key="trainee.id"
                       @click="selectTraineeOption(trainee)"
-                      :class="[
-                        'p-3 cursor-pointer',
-                        assessment.trainees.includes(trainee.id)
-                          ? 'bg-rafik-secondary text-rafik-pritext'
-                          : 'hover:bg-rafik-secondary hover:text-rafik-pritext'
-                      ]"
+                      class="p-3 hover:bg-rafik-secondary hover:text-rafik-pritext cursor-pointer"
                     >
                       {{ (trainee.first_name || 'no') + ' '+ (trainee.last_name || 'name')  }}
                       <span class="text-xs opacity-50"> {{ trainee.email }}</span>
-                      <span v-if="assessment.trainees.includes(trainee.id)" class="text-xs ml-2">✓ Selected</span>
                     </div>
                   </div>
                 </div>
               </div>
           </div>
 
-          <!-- Selected Trainees Display -->
-          <div v-if="assessment.trainees.length > 0" class="bg-rafik-secbg dark:bg-rafik-darksecbg p-3 rounded-lg">
-            <label class="block text-sm font-medium text-rafik-sectext dark:text-rafik-darksectext mb-2">
-              {{ t('dashboard.settings.selectedTrainees') }}
-            </label>
-            <div class="flex flex-wrap gap-2">
-              <div
-                v-for="traineeId in assessment.trainees"
-                :key="traineeId"
-                class="bg-rafik-pribg dark:bg-rafik-darkpribg px-3 py-1 rounded-full text-sm flex items-center gap-2"
-              >
-                <span>{{ getTraineeName(traineeId) }}</span>
-                <button
-                  @click="removeTrainee(traineeId)"
-                  class="text-red-500 hover:text-red-700"
-                >
-                  ×
-                </button>
-              </div>
-            </div>
-          </div>
+
 
           <div>
             <label class="block text-sm font-medium mb-2">
@@ -333,13 +320,14 @@ const userStore = useUserStore()
 const traineeOptions = ref<any[]>([]);
 const trainerOptions = ref<any[]>([]);
 const selectedTrainees = ref<any[]>([]);
-
+const today  = new Date
 // Recurring schedule configuration
 const recurringSchedule = ref({
-  repeatType: 'weekly',
+  repeatType: 'Weekly',
   customInterval: 1,
   customUnit: 'days',
-  endDate: null as Date | null,
+  startDate: new Date as Date | null,
+  endDate: new Date(today.setMonth(today.getMonth() + 6)) as Date | null,
   daysOff: [] as number[]
 });
 
@@ -534,13 +522,7 @@ function removeTrainee(traineeId: number) {
   }
 }
 
-// Handle repeat type change
-function onRepeatTypeChange() {
-  if (recurringSchedule.value.repeatType === 'none') {
-    recurringSchedule.value.endDate = null;
-    recurringSchedule.value.daysOff = [];
-  }
-}
+
 function handleBlur() {
   setTimeout(() => {
     dropdownVisible.value = false;
@@ -596,7 +578,7 @@ const props = defineProps({
 });
 const showDate = ref(null)
 const showendDate = ref(null)
-const emit = defineEmits(['close', 'submit']);
+const emit = defineEmits(['close', 'bulk-submit']);
 // Merge time into date from templateData.date
 function mergeDateAndTime(dateString: string, time: { hours: number, minutes: number, seconds?: number }): Date {
   const [year, month, day] = dateString.split('-').map(Number);
@@ -615,13 +597,14 @@ function mergeDateAndTime(dateString: string, time: { hours: number, minutes: nu
 
 
 function onTimeStartChange(time: any) {
-
-  template.value.time_start = mergeDateAndTime(props.templateData.date, time);
+ if(recurringSchedule.value.startDate)
+  template.value.time_start = mergeDateAndTime( recurringSchedule.value.startDate.toString(), time);
   console.log(template.value.time_start)
 }
 
 function onTimeEndChange(time: any) {
-  template.value.time_end = mergeDateAndTime(props.templateData.date, time);
+ if(recurringSchedule.value.endDate)
+  template.value.time_end = mergeDateAndTime( recurringSchedule.value.endDate.toString(), time);
   console.log(template.value.time_end)
 }
 const template = ref<{
@@ -661,14 +644,18 @@ const resetForm = () => {
   template:null,
   organization:null
 }
-  // Reset recurring schedule
-  recurringSchedule.value = {
-    repeatType: 'none',
-    customInterval: 1,
-    customUnit: 'days',
-    endDate: null,
-    daysOff: []
-  };
+  const start = new Date();
+const end = new Date(start);
+end.setMonth(start.getMonth() + 6);
+
+recurringSchedule.value = {
+  repeatType: 'weekly',
+  customInterval: 1,
+  customUnit: 'days',
+  startDate: start,
+  endDate: end,
+  daysOff: []
+};
   // Reset selected trainees
   selectedTrainees.value = [];
 }
@@ -678,37 +665,49 @@ const handleSubmit = () => {
     return;
   }
 
-  // Validation for assessment events
+  // Validate recurrence
+  if (recurringSchedule.value.repeatType === 'none') {
+    alert('Please choose a repeat type for bulk creation.');
+    return;
+  }
+
+  // Base validation (reuse logic or extract to shared function if needed)
   if (template.value.type === 'assessment') {
-    // Check if at least one trainer is selected
     if (assessment.value.assessors.length === 0) {
-      alert('Please select at least one trainer for the assessment.');
+      alert('Please select at least one trainer.');
       return;
     }
-
-    // Check if at least one trainee is selected
     if (assessment.value.trainees.length === 0) {
-      alert('Please select at least one trainee for the assessment.');
+      alert('Please select at least one trainee.');
       return;
     }
-
-    // Check if assessment template is selected
-    // if (!assessment.value.template) {
-    //   alert('Please select an assessment template.');
-    //   return;
-    // }
   }
+// Set default endDate if not selected: 6 months from startDate
+if (!recurringSchedule.value.endDate && recurringSchedule.value.startDate) {
+  const defaultEnd = new Date(recurringSchedule.value.startDate);
+  defaultEnd.setMonth(defaultEnd.getMonth() + 6);
+  recurringSchedule.value.endDate = defaultEnd;
+}
+  // Build recurrence rule
+  const recurrenceRule = {
+    freq: recurringSchedule.value.repeatType,
+    customInterval: recurringSchedule.value.customInterval,
+    customUnit: recurringSchedule.value.customUnit,
+    startDate: recurringSchedule.value.startDate,
+    endDate: recurringSchedule.value.endDate,
+    daysOff: recurringSchedule.value.daysOff
+  };
 
-  if(!userStore.userProfile?.roles?.includes('Organization Admin')) {
-    const uid = localStorage.getItem('UserID')
-    if(uid) {
-      if (template.value.type === 'assessment')
-        assessment.value.assessors.push(parseInt(uid))
-      else
-        template.value.users.push({id:parseInt(uid), name:'blade'})
-    }
-  }
+  template.value.recurrence_rule = recurrenceRule;
+
   if (template.value.type === 'assessment') {
+    template.value.assessment_data = {
+      assessors: assessment.value.assessors,
+      trainees: assessment.value.trainees,
+      template: assessment.value.template,
+      status: 'scheduled'
+    };
+
     const assessors = assessment.value.assessors.map(id => ({
       id,
       name: getUserNameById(id)
@@ -720,41 +719,16 @@ const handleSubmit = () => {
     template.value.users = [...assessors, ...trainees];
   }
 
-  // Safely convert user objects to IDs if necessary
   if (Array.isArray(template.value.users)) {
     template.value.users = template.value.users.map((u: any) =>
       typeof u === 'object' && u !== null && 'id' in u ? u.id : u
     );
   }
 
-  // Build recurrence rule JSON
-  let recurrenceRule = null;
-  if (recurringSchedule.value.repeatType !== 'none') {
-    recurrenceRule = {
-      freq: recurringSchedule.value.repeatType,
-      customInterval: recurringSchedule.value.customInterval,
-      customUnit: recurringSchedule.value.customUnit,
-      endDate: recurringSchedule.value.endDate,
-      daysOff: recurringSchedule.value.daysOff
-    };
-  }
-
-  // Add recurrence_rule to the template
-  template.value.recurrence_rule = recurrenceRule;
-
-  // For recurring assessments, store the assessment data in the slot for later use
-  if (template.value.type === 'assessment' && template.value.recurrence_rule && template.value.recurrence_rule.freq !== 'none') {
-    template.value.assessment_data = {
-      assessors: assessment.value.assessors,
-      trainees: assessment.value.trainees,
-      template: assessment.value.template,
-      status: 'scheduled'
-    };
-  }
-
-  emit('submit', template.value, assessment.value);
+  emit('bulk-submit', template.value, assessment.value);
   resetForm();
 };
+
 
 
 const handleClose = () => {
