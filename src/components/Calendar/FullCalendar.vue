@@ -8,14 +8,16 @@ import BookModal from './BookModal.vue';
 import { useTemplateStore } from '@/stores/templatestores';
 import { useSlotStore } from '@/stores/slotstores';
 import { useUserStore } from '@/stores/user';
+import BookBulkModal from './BookBulkModal.vue';
 const slotStore = useSlotStore();
 const templateStore = useTemplateStore();
 const userStore= useUserStore();
 import type { EventInput } from '@fullcalendar/core';
 import ViewModal from './ViewModal.vue';
 import { supabase } from '@/lib/supabaseClient';
+// @ts-ignore
 import { RRule, RRuleSet, rrulestr } from 'rrule';
-
+const bulkBook = ref(false)
 const calendarEvents = ref<EventInput[]>([]);
 
 function slotsToEvents(slots: any[]): EventInput[] {
@@ -196,7 +198,7 @@ async function loadSlots() {
   await slotStore.getAllSlots();
   const slots = slotStore.AllSlots;
   const events: EventInput[] = [];
-  
+
   // Use a generous range for recurring events (2 years forward, 1 month back)
   const now = new Date();
   const calendarStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
@@ -211,7 +213,7 @@ async function loadSlots() {
         'MONTHLY': RRule.MONTHLY,
         'YEARLY': RRule.YEARLY
       };
-      
+
       const ruleOptions = {
         freq: freqMap[slot.recurrence_rule.freq.toUpperCase()] || RRule.DAILY,
         dtstart: new Date(slot.time_start),
@@ -225,7 +227,7 @@ async function loadSlots() {
             })
           : undefined
       };
-      
+
       // Debug: Log the rule configuration
       if (slot.type === 'assessment') {
         console.log(`Slot ${slot.id} rule config:`, {
@@ -237,25 +239,25 @@ async function loadSlots() {
           end: slot.recurrence_rule.endDate
         });
       }
-      
+
       const rule = new RRule(ruleOptions);
       const occurrences = rule.between(calendarStart, calendarEnd, true);
-      
+
       // Debug: Log the rule and occurrences for troubleshooting
       if (slot.type === 'assessment' && occurrences.length > 0) {
         console.log(`Slot ${slot.id}: Generated ${occurrences.length} occurrences from ${occurrences[0]?.toISOString()} to ${occurrences[occurrences.length - 1]?.toISOString()}`);
       }
-      
+
       // For recurring assessments, batch generate instances for current month
       if (slot.type === 'assessment') {
         const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
         const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-        
+
         // Filter occurrences for current month only
-        const currentMonthOccurrences = occurrences.filter(occ => 
+        const currentMonthOccurrences = occurrences.filter((occ:any) =>
           occ >= currentMonth && occ <= nextMonth
         );
-        
+
         if (currentMonthOccurrences.length > 0) {
           try {
             const baseAssessment = slot.assessment_data || {
@@ -264,7 +266,7 @@ async function loadSlots() {
               template: null,
               status: 'scheduled'
             };
-            
+
             // Batch generate assessments for current month
             await slotStore.batchGenerateAssessmentInstances(slot.id, currentMonthOccurrences, baseAssessment);
           } catch (error) {
@@ -272,7 +274,7 @@ async function loadSlots() {
           }
         }
       }
-      
+
       // Add all occurrences to events (for display)
       const exceptions = Array.isArray(slot.exceptions) ? slot.exceptions : [];
       for (const occ of occurrences) {
@@ -375,7 +377,7 @@ const calendarOptions = ref<CalendarOptions>({
 // Function to generate assessments for a specific month range
 async function generateAssessmentsForMonth(start: Date, end: Date) {
   const slots = slotStore.AllSlots;
-  
+
   for (const slot of slots) {
     if (slot.type === 'assessment' && slot.recurrence_rule && slot.recurrence_rule.repeatType !== 'none') {
       const freqMap: { [key: string]: any } = {
@@ -384,7 +386,7 @@ async function generateAssessmentsForMonth(start: Date, end: Date) {
         'MONTHLY': RRule.MONTHLY,
         'YEARLY': RRule.YEARLY
       };
-      
+
       const ruleOptions = {
         freq: freqMap[slot.recurrence_rule.freq.toUpperCase()] || RRule.DAILY,
         dtstart: new Date(slot.time_start),
@@ -397,10 +399,10 @@ async function generateAssessmentsForMonth(start: Date, end: Date) {
             })
           : undefined
       };
-      
+
       const rule = new RRule(ruleOptions);
       const occurrences = rule.between(start, end, true);
-      
+
       if (occurrences.length > 0) {
         try {
           const baseAssessment = slot.assessment_data || {
@@ -409,7 +411,7 @@ async function generateAssessmentsForMonth(start: Date, end: Date) {
             template: null,
             status: 'scheduled'
           };
-          
+
           // Use batch generation instead of individual calls
           await slotStore.batchGenerateAssessmentInstances(slot.id, occurrences, baseAssessment);
         } catch (error) {
@@ -435,6 +437,19 @@ async function handleSubmit(slot: any, assessment: any) {
     templateData.value.date = null;
   });
 }
+async function handleSubmitBulk(slot: any, assessment: any) {
+  showCalendar.value = false;
+  if (slot.type === 'assessment') {
+    await slotStore.insertAssessmentSlot(slot, assessment);
+  } else {
+    await slotStore.insertSlot(slot);
+  }
+  await loadSlots().then(() => {
+    showCalendar.value = true;
+    showModal.value = false;
+    bulkBook.value =false;
+  });
+}
 function resetView(){
   viewSlot.value = null
 }
@@ -450,6 +465,7 @@ const showModal = ref(false);
 
 function closeModal() {
   templateData.value.date = null;
+  bulkBook.value =false;
 }
 
 onMounted(() => {
@@ -458,7 +474,7 @@ onMounted(() => {
       showCalendar.value = true;
     })
   });
-  
+
   // Auto-reschedule missed assessments on calendar load
   slotStore.autoRescheduleMissedAssessments();
 });
@@ -496,7 +512,16 @@ async function handleRescheduled() {
       @rescheduled="handleRescheduled"
       :templateData="viewSlot"
     />
+    <BookBulkModal
+      :visible="bulkBook"
+      @close="closeModal"
+      @submit="handleSubmitBulk"
+      :templateData="templateData"
+      :myTemplates="templateStore.AllTemplates"
+    />
+    <div class="flex py-6 w-full"><button @click="bulkBook = true" class="ms-auto btn-sm-outline">Book Weekly</button></div>
     <FullCalendar v-if="showCalendar" :options="calendarOptions" />
+
   </div>
 </template>
 
