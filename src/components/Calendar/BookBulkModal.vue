@@ -21,7 +21,7 @@
                 class="rafik-text-input w-full"
               >
                 <option value="daily">{{ t('dashboard.settings.everyDay') }}</option>
-                <option value="weekly">{{ t('dashboard.settings.everyWeek') }}</option>
+                <option selected value="weekly">{{ t('dashboard.settings.everyWeek') }}</option>
                 <option value="monthly">{{ t('dashboard.settings.everyMonth') }}</option>
                 <option value="custom">{{ t('dashboard.settings.custom') }}</option>
               </select>
@@ -323,7 +323,7 @@ const selectedTrainees = ref<any[]>([]);
 const today  = new Date
 // Recurring schedule configuration
 const recurringSchedule = ref({
-  repeatType: 'Weekly',
+  repeatType: 'weekly',
   customInterval: 1,
   customUnit: 'days',
   startDate: new Date as Date | null,
@@ -578,7 +578,7 @@ const props = defineProps({
 });
 const showDate = ref(null)
 const showendDate = ref(null)
-const emit = defineEmits(['close', 'bulk-submit']);
+const emit = defineEmits(['close', 'submit']);
 // Merge time into date from templateData.date
 function mergeDateAndTime(dateString: string, time: { hours: number, minutes: number, seconds?: number }): Date {
   const [year, month, day] = dateString.split('-').map(Number);
@@ -596,16 +596,20 @@ function mergeDateAndTime(dateString: string, time: { hours: number, minutes: nu
 }
 
 
-function onTimeStartChange(time: any) {
- if(recurringSchedule.value.startDate)
-  template.value.time_start = mergeDateAndTime( recurringSchedule.value.startDate.toString(), time);
-  console.log(template.value.time_start)
+function onTimeStartChange(time: { hours: number; minutes: number; seconds?: number }) {
+  if (recurringSchedule.value.startDate) {
+    const dateString = recurringSchedule.value.startDate.toISOString().split('T')[0]; // Safe YYYY-MM-DD
+    template.value.time_start = mergeDateAndTime(dateString, time);
+    // console.log(dateString, time, template.value.time_start);
+  }
 }
 
-function onTimeEndChange(time: any) {
- if(recurringSchedule.value.endDate)
-  template.value.time_end = mergeDateAndTime( recurringSchedule.value.endDate.toString(), time);
-  console.log(template.value.time_end)
+function onTimeEndChange(time: { hours: number; minutes: number; seconds?: number }) {
+  if (recurringSchedule.value.startDate) {
+    const dateString = recurringSchedule.value.startDate.toISOString().split('T')[0];
+    template.value.time_end = mergeDateAndTime(dateString, time);
+    // console.log(dateString, time, template.value.time_end);
+  }
 }
 const template = ref<{
   time_start: Date;
@@ -671,17 +675,39 @@ const handleSubmit = () => {
     return;
   }
 
-  // Base validation (reuse logic or extract to shared function if needed)
-  if (template.value.type === 'assessment') {
-    if (assessment.value.assessors.length === 0) {
-      alert('Please select at least one trainer.');
-      return;
-    }
-    if (assessment.value.trainees.length === 0) {
-      alert('Please select at least one trainee.');
-      return;
+  if(!userStore.userProfile?.roles?.includes('Organization Admin'))
+  {
+    const uid = localStorage.getItem('UserID')
+    if(uid)
+    {
+      if (template.value.type === 'assessment')
+      assessment.value.assessors.push(parseInt(uid))
+      else
+      template.value.users.push({id:parseInt(uid), name:'blade'})
     }
   }
+  if (template.value.type === 'assessment') {
+  const assessors = assessment.value.assessors.map(id => ({
+    id,
+    name: 'bongle' // You’ll need to implement or replace this
+  }));
+
+  const trainees = assessment.value.trainees.map(id => ({
+    id,
+    name: 'bingle'
+  }));
+
+  template.value.users = [...assessors, ...trainees];
+}
+
+
+  // Safely convert user objects to IDs if necessary
+  if (Array.isArray(template.value.users)) {
+    template.value.users = template.value.users.map((u: any) =>
+      typeof u === 'object' && u !== null && 'id' in u ? u.id : u
+    );
+  }
+
 // Set default endDate if not selected: 6 months from startDate
 if (!recurringSchedule.value.endDate && recurringSchedule.value.startDate) {
   const defaultEnd = new Date(recurringSchedule.value.startDate);
@@ -700,32 +726,9 @@ if (!recurringSchedule.value.endDate && recurringSchedule.value.startDate) {
 
   template.value.recurrence_rule = recurrenceRule;
 
-  if (template.value.type === 'assessment') {
-    template.value.assessment_data = {
-      assessors: assessment.value.assessors,
-      trainees: assessment.value.trainees,
-      template: assessment.value.template,
-      status: 'scheduled'
-    };
+  // console.log(template.value)
 
-    const assessors = assessment.value.assessors.map(id => ({
-      id,
-      name: getUserNameById(id)
-    }));
-    const trainees = assessment.value.trainees.map(id => ({
-      id,
-      name: getUserNameById(id)
-    }));
-    template.value.users = [...assessors, ...trainees];
-  }
-
-  if (Array.isArray(template.value.users)) {
-    template.value.users = template.value.users.map((u: any) =>
-      typeof u === 'object' && u !== null && 'id' in u ? u.id : u
-    );
-  }
-
-  emit('bulk-submit', template.value, assessment.value);
+  emit('submit', template.value, assessment.value);
   resetForm();
 };
 
