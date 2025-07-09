@@ -21,7 +21,6 @@
                 class="rafik-text-input w-full"
                 @change="onRepeatTypeChange"
               >
-                <option value="none">{{ t('dashboard.settings.noRepeat') }}</option>
                 <option value="daily">{{ t('dashboard.settings.everyDay') }}</option>
                 <option value="weekly">{{ t('dashboard.settings.everyWeek') }}</option>
                 <option value="monthly">{{ t('dashboard.settings.everyMonth') }}</option>
@@ -337,7 +336,7 @@ const selectedTrainees = ref<any[]>([]);
 
 // Recurring schedule configuration
 const recurringSchedule = ref({
-  repeatType: 'none',
+  repeatType: 'weekly',
   customInterval: 1,
   customUnit: 'days',
   endDate: null as Date | null,
