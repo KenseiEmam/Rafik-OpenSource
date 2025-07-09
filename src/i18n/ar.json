@@ -825,7 +825,12 @@
           "supersetsCircuits": "السوبرسيت/الدورات",
           "restAndRecover": "الراحة والتعافي",
           "duplicateWorkout": "تكرار التمرين",
-          "workoutDuplicated": "تم تكرار التمرين بنجاح!"
+          "workoutDuplicated": "تم تكرار التمرين بنجاح!",
+          "deleteWorkout": "حذف التمرين",
+          "deleteWorkoutConfirmTitle": "حذف التمرين؟",
+          "deleteWorkoutConfirmText": "سيؤدي هذا إلى حذف هذا التمرين نهائيًا وتقليل دورة اليوم بمقدار 1. لا يمكن التراجع عن هذا الإجراء.",
+          "deleteWorkoutConfirmButton": "نعم، احذفه!",
+          "workoutDeleted": "تم حذف التمرين بنجاح!"
         },
         "reviews": {
           "errorTitle": "خطأ!",
@@ -1365,6 +1370,10 @@
         "changePhotoButton": "تغيير الصورة",
         "underReview": "قيد المراجعة",
         "deleteProgramButton": "حذف البرنامج",
+        "duplicateProgramButton": "تكرار البرنامج",
+        "programDuplicated": "تم تكرار البرنامج بنجاح!",
+        "programDuplicateFailed": "فشل في تكرار البرنامج.",
+        "draftLimitReached": "لقد وصلت إلى الحد الأقصى من 6 برامج مسودة. يرجى حذف بعض برامج المسودة أو تفعيل البرامج الموجودة قبل إنشاء برنامج جديد.",
         "tabDetails": "التفاصيل",
         "tabWorkouts": "التمارين",
         "tabClients": "العملاء",
