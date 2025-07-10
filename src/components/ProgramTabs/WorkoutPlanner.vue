@@ -85,7 +85,7 @@
           <!-- Duplicate Button -->
           <button
             @click="duplicateWorkout(activeTab)"
-            class="flex items-center gap-2 px-4 py-2 text-rafik-secondary hover:text-rafik-alternate transition-colors duration-200 border border-rafik-secondary hover:border-rafik-alternate rounded-md"
+            class="flex items-center gap-2 px-4 py-2 text-rafik-secondary hover:text-rafik-secondary transition-colors duration-200 border border-rafik-secondary hover:border-rafik-secondary rounded-md"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
               <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
@@ -98,7 +98,7 @@
             @click="deleteWorkout(activeTab)"
             class="flex items-center gap-2 px-4 py-2 text-red-500 hover:text-red-400 transition-colors duration-200 border border-red-500 hover:border-red-400 rounded-md"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-red-500 hover:text-red-400">
               <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
             </svg>
             {{ t('dashboard.tabs.program.planner.deleteWorkout') }}
@@ -1002,23 +1002,23 @@ const removeEmbed = (exercise: any, exerciseIndex: number) => {
 const duplicateWorkout = (workoutIndex: number) => {
   const workoutToDuplicate = editedWorkouts.value[workoutIndex];
   const duplicatedWorkout = JSON.parse(JSON.stringify(workoutToDuplicate));
-  
+
   // Add "Copy" to the workout name if it exists
   if (duplicatedWorkout.workout_name) {
     duplicatedWorkout.workout_name = duplicatedWorkout.workout_name + ' (Copy)';
   }
-  
+
   // Insert the duplicated workout after the original
   editedWorkouts.value.splice(workoutIndex + 1, 0, duplicatedWorkout);
-  
+
   // Increment the day cycle by 1
   if (props.program.weekly_cycle) {
     props.program.weekly_cycle += 1;
   }
-  
+
   // Switch to the new duplicated workout
   activeTab.value = workoutIndex + 1;
-  
+
   showSuccess(t('dashboard.tabs.program.planner.workoutDuplicated'));
 };
 
@@ -1032,7 +1032,7 @@ const deleteWorkout = async (workoutIndex: number) => {
     confirmButtonText: t('dashboard.tabs.program.planner.deleteWorkoutConfirmButton'),
     cancelButtonText: t('dashboard.tabs.program.planner.cancel'),
     confirmButtonColor: '#d33',
-    cancelButtonColor: '#3085d6',
+    cancelButtonColor: '#CB901C',
     background: '#081411',
     color: '#E8F3ED'
   });
@@ -1041,17 +1041,17 @@ const deleteWorkout = async (workoutIndex: number) => {
 
   // Remove the workout
   editedWorkouts.value.splice(workoutIndex, 1);
-  
+
   // Decrement the day cycle by 1
   if (props.program.weekly_cycle && props.program.weekly_cycle > 1) {
     props.program.weekly_cycle -= 1;
   }
-  
+
   // Adjust active tab if necessary
   if (activeTab.value >= editedWorkouts.value.length) {
     activeTab.value = Math.max(0, editedWorkouts.value.length - 1);
   }
-  
+
   showSuccess(t('dashboard.tabs.program.planner.workoutDeleted'));
 };
 

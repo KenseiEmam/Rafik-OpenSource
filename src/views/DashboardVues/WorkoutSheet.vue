@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useWorkoutStore } from '@/stores/workoutstores';
 import Swal from 'sweetalert2';
@@ -7,6 +7,7 @@ import router from '@/router';
 import { supabase } from '@/lib/supabaseClient';
 import { useUserStore } from '@/stores/user';
 import { useI18n } from 'vue-i18n';
+import { isEqual } from 'lodash';
 
 const { t, tm, rt } = useI18n();
 
@@ -15,6 +16,7 @@ const route = useRoute();
 const workoutStore = useWorkoutStore();
 const clientStore = useUserStore();
 const loading = ref(false)
+const changing = ref()
 // Function to refresh the route/component
 function refreshComponent() {
   router.go(0); // This reloads the current route
@@ -23,6 +25,42 @@ interface BestPerf {
   exercise: string
   orm: number
 }
+function getRotation(exerciseId: string, name: string, workouts: any[]): any | null {
+  if (!Array.isArray(workouts)) return null;
+
+  const workout = workouts.find((w: any) => w.workout_name === name);
+  if (!workout) return null;
+
+  return workout.exercises?.find((e: any) => e.id === exerciseId) || null;
+}
+function toggleChanging(exerciseId: any, rotationSets: any) {
+  if (changing.value === exerciseId) {
+    if (!isEqual(tempSets.value, rotationSets)) {
+      // Deep update inside clientStore
+      const workouts = clientStore.Client?.program_details.workouts;
+      const workout = workouts?.find((w: any) => w.workout_name === workoutStore.Workout?.workout_name);
+
+      if (workout) {
+        const exercise = workout.exercises?.find((e: any) => e.id === exerciseId);
+        if (exercise) {
+          exercise.true_sets = tempSets.value.map(set => ({ ...set }));
+        }
+
+        // Optional: Persist to backend if needed
+        clientStore.updateClientProgram({id:clientStore.Client?.program_details.id,workouts:clientStore.Client?.program_details.workouts})
+      }
+
+      console.log('Changes saved');
+    }
+
+    changing.value = null;
+  } else {
+    // Clone the sets so that editing tempSets doesn't mutate original data
+    tempSets.value = rotationSets.map((set: any) => ({ ...set }));
+    changing.value = exerciseId;
+  }
+}
+
 function getBestPerf(exerciseId:any) {
 
   return workoutStore.Workout?.best_perf?.find(ex => ex.exercise == exerciseId);
@@ -66,6 +104,7 @@ function showError(message: string) {
     color: '#E8F3ED'
   });
 }
+const tempSets = ref<any[]>([])
 const difficulty = ref(['Too Hard', 'Challenging', 'Just Right', 'Easy', 'Too Easy']);
 const pumps = ref(['Not there', 'Temporary', 'Alright', 'Pumped', 'Insane pump']);
 const enjoyment = ref(['Hated', 'Poor', 'Ok', 'Nice', 'Loved']);
@@ -201,9 +240,10 @@ onMounted(() => {
           <h3 class="contentH-small mb-6">
             {{ t('dashboard.workoutSheet.setPerformance') }}
           </h3>
-          <ul class="flex gap-3 flex-col w-full pb-16 overflow-y-auto" style="max-height: 60vh">
+          <ul class="flex gap-3 flex-col w-full pb-16  overflow-y-auto" style="max-height: 60vh">
             <li
               v-for="exercise in workoutStore.Workout.exercises"
+
               :key="exercise.id"
               class="card p-8 2xl:py-12"
             >
@@ -213,100 +253,168 @@ onMounted(() => {
               <h3 class="subheader-small uppercase">
                 {{ exercise.type || t('dashboard.workoutSheet.olderVariableType') }}
               </h3>
-              <div v-if="workoutStore.Workout.best_perf" class="flex justify-between w-full my-3">
+              <div>
 
-                <p v-if="getBestPerf(exercise.id)" class="text-body">
-                  Estimated ORM : {{ getBestPerf(exercise.id)?.orm ?? 'N/A' }}
-                </p>
-                <p class="text-rafik"
-                v-if="
-                (clientStore.Client.profile.best_perf
-                  ?.find((ex: BestPerf) => ex.exercise === exercise.id)
-                  ?.orm ?? 0
-                ) <= (
-                  workoutStore.Workout.best_perf
+                <div v-if="workoutStore.Workout.best_perf" class="flex justify-between w-full my-3">
+
+                  <p v-if="getBestPerf(exercise.id)" class="text-body">
+                    Estimated ORM : {{ getBestPerf(exercise.id)?.orm ?? 'N/A' }}
+                  </p>
+                  <p class="text-rafik"
+                  v-if="
+                  (clientStore.Client.profile.best_perf
                     ?.find((ex: BestPerf) => ex.exercise === exercise.id)
                     ?.orm ?? 0
-                )
-              "
-              >
-               🏆 New Best!
-              </p>
-              </div>
-              <div v-if="exercise.type !== 'multi-set'" class="grid grid-cols-4">
-                <div class="col-span-3 flex-col flex gap-2">
-                  <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body opacity-0">
-                    {{ t('dashboard.workoutSheet.filler') }}
-                  </h4>
-                  <div
-                    v-for="(set, index) in exercise.true_sets"
-                    :key="set"
-                    class="flex gap-3 w-full items-center"
-                  >
-                    <p class="text-rafik-pritext dark:text-rafik-darkpritext min-w-max">
-                      {{ t('dashboard.workoutSheet.setLabel', { number: index + 1 }) }}
-                    </p>
-                    <hr class="border border-rafik-sectext dark:border-rafik-darksectext w-full" />
-                  </div>
+                  ) <= (
+                    workoutStore.Workout.best_perf
+                      ?.find((ex: BestPerf) => ex.exercise === exercise.id)
+                      ?.orm ?? 0
+                  )
+                "
+                >
+                 🏆 New Best!
+                </p>
 
                 </div>
+                 <div class="flex w-full py-2 pe-8" v-if="workoutStore.Workout.workout_name">
 
-                <div class="grid-cols-2 grid gap-3">
-                  <div class="flex-col flex gap-2 items-center min-w-max">
-                    <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
-                      {{ exercise.intensity_mod || 'Load(Kg)' }}
-                    </h4>
-                    <div
-                      v-for="(set, index) in exercise.true_sets"
-                      :key="set"
-
-                      :class="{
-                        'text-red-500': set.weight_done < set.intensity,
-                        'text-green-500': set.weight_done > set.intensity,
-                        'text-rafik-secondary': set.weight_done == set.intensity
-                      }"
-                    >
-                      {{ set.weight_done }}<span v-if="set.weight_done != set.intensity" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.intensity }})</span> {{ t('dashboard.workoutSheet.kg') }}
-                    </div>
-                  </div>
-                  <div  class="flex-col flex gap-2 items-center min-w-max">
-                    <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
-                      {{ exercise.volume_mod || 'Reps' }}
-                    </h4>
-                    <div
-                      v-for="(set, index) in exercise.true_sets"
-                      :key="set"
-
-                      :class="{
-                        'text-red-500': set.reps_done < set.reps,
-                        'text-green-500': set.reps_done > set.reps,
-                        'text-rafik-secondary': set.reps_done == set.reps
-                      }"
-                    >
-                      {{ set.reps_done }}<span v-if="set.reps_done != set.reps" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.reps }})</span>
-                    </div>
-                  </div>
-                </div>
+                <button @click="toggleChanging(exercise.id,getRotation(exercise.id, workoutStore.Workout.workout_name, clientStore.Client.program_details.workouts).true_sets )" v-if="getRotation(exercise.id, workoutStore.Workout.workout_name, clientStore.Client.program_details.workouts) " class="btn-sm-outline text-xs ms-auto"> Toggle Change Weights</button>
               </div>
-              <div v-else class="flex flex-col gap-4 ps-3 border-s border-rafik-sectext dark:border-rafik-darksectext">
-                   <!-- List of embeds -->
-                   <li
-                    v-for="embed in exercise.embeds"
-                    :key="embed.id"
-                  >
-                    <h3 class="header-small text-lg 2xl:text-2xl">
-                      {{ embed.exercise_name || t('dashboard.workoutSheet.olderVariableName') }}
-                    </h3>
-                    <h3 class="subheader-small uppercase">
-                      {{ embed.type || t('dashboard.workoutSheet.olderVariableType') }}
-                    </h3>
-                    <div  class="grid grid-cols-4">
+              </div>
+              <div  v-if="changing !== exercise.id" >
+                      <div v-if="exercise.type !== 'multi-set'" class="grid grid-cols-4">
                       <div class="col-span-3 flex-col flex gap-2">
                         <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body opacity-0">
                           {{ t('dashboard.workoutSheet.filler') }}
                         </h4>
                         <div
-                          v-for="(set, index) in embed.true_sets"
+                          v-for="(set, index) in exercise.true_sets"
+                          :key="set"
+                          class="flex gap-3 w-full items-center"
+                        >
+                          <p class="text-rafik-pritext dark:text-rafik-darkpritext min-w-max">
+                            {{ t('dashboard.workoutSheet.setLabel', { number: index + 1 }) }}
+                          </p>
+                          <hr class="border border-rafik-sectext dark:border-rafik-darksectext w-full" />
+                        </div>
+
+                      </div>
+
+                      <div  class="grid-cols-2 grid gap-3">
+                        <div class="flex-col flex gap-2 items-center min-w-max">
+                          <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
+                            {{ exercise.intensity_mod || 'Load(Kg)' }}
+                          </h4>
+                          <div
+                            v-for="(set, index) in exercise.true_sets"
+                            :key="set"
+                            :class="{
+                              'text-red-500': set.weight_done < set.intensity,
+                              'text-green-500': set.weight_done > set.intensity,
+                              'text-rafik-secondary': set.weight_done == set.intensity
+                            }"
+                          >{{ set.weight_done }}<span v-if="set.weight_done != set.intensity" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.intensity }})</span>
+                          </div>
+                        </div>
+                        <div  class="flex-col flex gap-2 items-center min-w-max">
+                          <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
+                            {{ exercise.volume_mod || 'Reps' }}
+                          </h4>
+                          <div
+                            v-for="(set, index) in exercise.true_sets"
+                            :key="set"
+
+                            :class="{
+                              'text-red-500': set.reps_done < set.reps,
+                              'text-green-500': set.reps_done > set.reps,
+                              'text-rafik-secondary': set.reps_done == set.reps
+                            }"
+                          >
+                            {{ set.reps_done }}<span v-if="set.reps_done != set.reps" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.reps }})</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-else class="flex flex-col gap-4 ps-3 border-s border-rafik-sectext dark:border-rafik-darksectext">
+                        <!-- List of embeds -->
+                        <li
+                          v-for="embed in exercise.embeds"
+                          :key="embed.id"
+                        >
+                          <h3 class="header-small text-lg 2xl:text-2xl">
+                            {{ embed.exercise_name || t('dashboard.workoutSheet.olderVariableName') }}
+                          </h3>
+                          <h3 class="subheader-small uppercase">
+                            {{ embed.type || t('dashboard.workoutSheet.olderVariableType') }}
+                          </h3>
+                          <div  class="grid grid-cols-4">
+                            <div class="col-span-3 flex-col flex gap-2">
+                              <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body opacity-0">
+                                {{ t('dashboard.workoutSheet.filler') }}
+                              </h4>
+                              <div
+                                v-for="(set, index) in embed.true_sets"
+                                :key="set"
+                                class="flex gap-3 w-full items-center"
+                              >
+                                <p class="text-rafik-pritext dark:text-rafik-darkpritext min-w-max">
+                                  {{ t('dashboard.workoutSheet.setLabel', { number: index + 1 }) }}
+                                </p>
+                                <hr class="border border-rafik-sectext dark:border-rafik-darksectext w-full" />
+                              </div>
+
+                            </div>
+
+                            <div class="grid-cols-2 grid gap-3">
+                              <div class="flex-col flex gap-2 items-center min-w-max">
+                                <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
+                                  {{ t('dashboard.workoutSheet.weight') }}
+                                </h4>
+                                <div
+                                  v-for="(set, index) in embed.true_sets"
+                                  :key="set"
+
+                                  :class="{
+                                    'text-red-500': set.weight_done < set.intensity,
+                                    'text-green-500': set.weight_done > set.intensity,
+                                    'text-rafik-secondary': set.weight_done == set.intensity
+                                  }"
+                                >
+                                  {{ set.weight_done }}<span v-if="set.weight_done != set.intensity" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.intensity }})</span> {{ t('dashboard.workoutSheet.kg') }}
+                                </div>
+                              </div>
+                              <div  class="flex-col flex gap-2 items-center min-w-max">
+                                <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
+                                  {{ t('dashboard.workoutSheet.reps') }}
+                                </h4>
+                                <div
+                                  v-for="(set, index) in embed.true_sets"
+                                  :key="set"
+
+                                  :class="{
+                                    'text-red-500': set.reps_done < set.reps,
+                                    'text-green-500': set.reps_done > set.reps,
+                                    'text-rafik-secondary': set.reps_done == set.reps
+                                  }"
+                                >
+                                  {{ set.reps_done }}<span v-if="set.reps_done != set.reps" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.reps }})</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <!-- End embeds -->
+                    </div>
+
+              </div>
+              <div  v-else-if="clientStore.Client.program_details.workouts" >
+                      <div v-if="exercise.type !== 'multi-set'" class="grid grid-cols-4">
+                      <div class="col-span-3 flex-col flex gap-2">
+                        <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body opacity-0">
+                          {{ t('dashboard.workoutSheet.filler') }}
+                        </h4>
+                        <div
+                          v-for="(set, index) in tempSets"
                           :key="set"
                           class="flex gap-3 w-full items-center"
                         >
@@ -321,42 +429,101 @@ onMounted(() => {
                       <div class="grid-cols-2 grid gap-3">
                         <div class="flex-col flex gap-2 items-center min-w-max">
                           <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
-                            {{ t('dashboard.workoutSheet.weight') }}
+                            {{ exercise.intensity_mod || 'Load(Kg)' }}
                           </h4>
                           <div
-                            v-for="(set, index) in embed.true_sets"
+                            v-for="(set, index) in tempSets"
                             :key="set"
 
-                            :class="{
-                              'text-red-500': set.weight_done < set.intensity,
-                              'text-green-500': set.weight_done > set.intensity,
-                              'text-rafik-secondary': set.weight_done == set.intensity
-                            }"
                           >
-                            {{ set.weight_done }}<span v-if="set.weight_done != set.intensity" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.intensity }})</span> {{ t('dashboard.workoutSheet.kg') }}
+                          <input v-if="workoutStore.Workout.workout_name" type="number" v-model="set.intensity" class="rafik-text-input w-16 text-xs p-1"  name="" id="">
                           </div>
                         </div>
                         <div  class="flex-col flex gap-2 items-center min-w-max">
                           <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
-                            {{ t('dashboard.workoutSheet.reps') }}
+                            {{ exercise.volume_mod || 'Reps' }}
                           </h4>
                           <div
-                            v-for="(set, index) in embed.true_sets"
+                            v-for="(set, index) in tempSets"
                             :key="set"
 
-                            :class="{
-                              'text-red-500': set.reps_done < set.reps,
-                              'text-green-500': set.reps_done > set.reps,
-                              'text-rafik-secondary': set.reps_done == set.reps
-                            }"
                           >
-                            {{ set.reps_done }}<span v-if="set.reps_done != set.reps" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.reps }})</span>
+                             <input v-if="workoutStore.Workout.workout_name" type="number" v-model="set.reps" class="rafik-text-input w-16 text-xs p-1"  name="" id="">
                           </div>
                         </div>
                       </div>
                     </div>
-                  </li>
-                  <!-- End embeds -->
+                    <div v-else class="flex flex-col gap-4 ps-3 border-s border-rafik-sectext dark:border-rafik-darksectext">
+                        <!-- List of embeds -->
+                        <li
+                          v-for="embed in exercise.embeds"
+                          :key="embed.id"
+                        >
+                          <h3 class="header-small text-lg 2xl:text-2xl">
+                            {{ embed.exercise_name || t('dashboard.workoutSheet.olderVariableName') }}
+                          </h3>
+                          <h3 class="subheader-small uppercase">
+                            {{ embed.type || t('dashboard.workoutSheet.olderVariableType') }}
+                          </h3>
+                          <div  class="grid grid-cols-4">
+                            <div class="col-span-3 flex-col flex gap-2">
+                              <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body opacity-0">
+                                {{ t('dashboard.workoutSheet.filler') }}
+                              </h4>
+                              <div
+                                v-for="(set, index) in embed.true_sets"
+                                :key="set"
+                                class="flex gap-3 w-full items-center"
+                              >
+                                <p class="text-rafik-pritext dark:text-rafik-darkpritext min-w-max">
+                                  {{ t('dashboard.workoutSheet.setLabel', { number: index + 1 }) }}
+                                </p>
+                                <hr class="border border-rafik-sectext dark:border-rafik-darksectext w-full" />
+                              </div>
+
+                            </div>
+
+                            <div class="grid-cols-2 grid gap-3">
+                              <div class="flex-col flex gap-2 items-center min-w-max">
+                                <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
+                                  {{ t('dashboard.workoutSheet.weight') }}
+                                </h4>
+                                <div
+                                  v-for="(set, index) in embed.true_sets"
+                                  :key="set"
+
+                                  :class="{
+                                    'text-red-500': set.weight_done < set.intensity,
+                                    'text-green-500': set.weight_done > set.intensity,
+                                    'text-rafik-secondary': set.weight_done == set.intensity
+                                  }"
+                                >
+                                  {{ set.weight_done }}<span v-if="set.weight_done != set.intensity" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.intensity }})</span> {{ t('dashboard.workoutSheet.kg') }}
+                                </div>
+                              </div>
+                              <div  class="flex-col flex gap-2 items-center min-w-max">
+                                <h4 class="text-rafik-pritext dark:text-rafik-darkpritext text-body">
+                                  {{ t('dashboard.workoutSheet.reps') }}
+                                </h4>
+                                <div
+                                  v-for="(set, index) in embed.true_sets"
+                                  :key="set"
+
+                                  :class="{
+                                    'text-red-500': set.reps_done < set.reps,
+                                    'text-green-500': set.reps_done > set.reps,
+                                    'text-rafik-secondary': set.reps_done == set.reps
+                                  }"
+                                >
+                                  {{ set.reps_done }}<span v-if="set.reps_done != set.reps" class="text-rafik-sectext dark:text-rafik-darksectext text-xs">({{ set.reps }})</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <!-- End embeds -->
+                    </div>
+
               </div>
 
 
@@ -364,6 +531,7 @@ onMounted(() => {
 
             </li>
           </ul>
+
         </div>
         <!-- Metrics -->
         <div>
