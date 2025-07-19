@@ -258,15 +258,9 @@ async function changeReroll(program: any) {
 }
 
 // Called when the AssignEntitlementsModal emits a "submit" event
-async function onAssignModalSubmit(payload: { type: string; programId: string; coachId: string; emails: string[] }) {
-  const { type, programId, coachId, emails } = payload;
-  
-  if (type === 'program') {
-    await assignEntitlementsToUsers(programId, emails);
-  } else if (type === 'coach') {
-    await assignUsersToCoach(coachId, emails);
-  }
-  
+async function onAssignModalSubmit(payload: { programId: string; emails: string[] }) {
+  const { programId, emails } = payload;
+  await assignEntitlementsToUsers(programId, emails);
   showAssignEntitlementModal.value = false;
 }
 
@@ -319,23 +313,6 @@ async function assignEntitlementsToUsers(programId: string, emails: string[]) {
 
   // Refresh entitlements and user data
   await Promise.all([entitlementStore.getEntitlements(), userStore.getEntitled()]);
-  processing.value = false;
-}
-
-// Function to assign users directly to a coach
-async function assignUsersToCoach(coachId: string, emails: string[]) {
-  processing.value = true;
-  
-  try {
-    for (const email of emails) {
-      await userStore.assignUsersToCoach(coachId, email);
-    }
-    await userStore.getEntitled();
-  } catch (error) {
-    console.error(`Error assigning users to coach:`, error);
-    showError('Failed to assign users to coach.');
-  }
-  
   processing.value = false;
 }
 </script>
