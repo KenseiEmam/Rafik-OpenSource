@@ -144,11 +144,36 @@
     "welcomeBack": "WELCOME BACK! TIME TO CATCH-UP",
     "notRegisteredYet": "Not Registered Yet?",
     "signUpNow": "Sign Up Now",
+    "forgotPassword": "Forgot your password?",
     "form": {
       "email": "Email Address",
       "password": "Password",
       "loading": "Loading",
       "access": "Access Dashboard"
+    }
+  },
+  "resetPassword": {
+    "header": "RESET YOUR PASSWORD",
+    "backToLogin": "Back to Login",
+    "notRegistered": "Not Registered Yet?",
+    "form": {
+      "email": "Email Address",
+      "loading": "Sending...",
+      "sendReset": "Send Reset Email",
+      "emailSent": "Password reset email sent! Check your inbox."
+    }
+  },
+  "changePassword": {
+    "header": "UPDATE YOUR PASSWORD",
+    "backToDashboard": "Back to Dashboard",
+    "form": {
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "loading": "Updating...",
+      "updatePassword": "Update Password",
+      "passwordMismatch": "Passwords do not match.",
+      "passwordTooShort": "Password must be at least 6 characters long.",
+      "passwordUpdated": "Password updated successfully!"
     }
   },
   "register": {
