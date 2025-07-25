@@ -25,6 +25,22 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/LoginVue.vue')
     },
+    {
+      path: '/reset-password',
+      name: 'reset-password',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/ResetPasswordVue.vue')
+    },
+    {
+      path: '/change-password',
+      name: 'change-password',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/ChangePasswordVue.vue')
+    },
      {
       path: '/download-app',
       name: 'application',

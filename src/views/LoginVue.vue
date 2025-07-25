@@ -17,6 +17,7 @@ const { t , locale } = useI18n();
           </h1>
           <LoginForm />
           <div class="flex flex-col gap-2">
+            <RouterLink to="reset-password" class="text-lg">--> {{ t('login.forgotPassword') }}</RouterLink>
             <RouterLink  to="register" class="text-lg">--> Just got invited by your admins?</RouterLink>
             <RouterLink to="request-demo" class="text-lg">--> Not a part of our team?</RouterLink>
           </div>
