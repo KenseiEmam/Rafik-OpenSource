@@ -35,7 +35,7 @@ const handleResetPassword = async (): Promise<void> => {
   try {
     loading.value = true;
     const { error } = await supabase.auth.resetPasswordForEmail(email.value, {
-      redirectTo: `${window.location.origin}/change-password`,
+      redirectTo: `${window.location.origin}`,
     });
     
     if (error) throw error;
