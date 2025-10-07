@@ -375,13 +375,13 @@ export const useUserStore = defineStore('User', () => {
       // Fetch profile data separately to avoid relationship conflicts
       const profileIds = data.filter(user => user.profile_id).map(user => user.profile_id);
       let profilesData: any = {};
-      
+
       if (profileIds.length > 0) {
         const { data: profiles, error: profilesError } = await supabase
           .from('profiles')
           .select('id, coach, user_program_id')
           .in('id', profileIds);
-        
+
         if (!profilesError && profiles) {
           profilesData = profiles.reduce((acc, profile) => {
             acc[profile.id] = profile;
@@ -395,7 +395,7 @@ export const useUserStore = defineStore('User', () => {
         ...user,
         profiles: user.profile_id ? profilesData[user.profile_id] : null
       }));
-      
+
       All_Org_Users.value = usersWithProfiles;
       if (count) All_Org_count.value = count;
     } catch (error: any) {
@@ -750,7 +750,7 @@ async function getChatClients() {
   async function getClient(id: number) {
     try {
       console.log(`[getClient] Fetching client for user ID: ${id}`);
-      
+
       // Fetch the user profile based on the provided user ID (id)
       let { data: userProfiles, error: profileError } = await supabase
         .from('profiles')
@@ -819,9 +819,9 @@ async function getChatClients() {
             .select('id, first_name, last_name, email, avatar')
             .eq('id', userProfiles.coach)
             .single();
-          
+
           console.log(`[getClient] Coach fetch result:`, { coach, coachError });
-          
+
           if (!coachError && coach) {
             coachDetails = coach;
           }
@@ -916,7 +916,7 @@ async function getChatClients() {
             .select('id, first_name, last_name, email, avatar')
             .eq('id', userProfiles.coach)
             .single();
-          
+
           if (!coachError && coach) {
             coachDetails = coach;
           }
@@ -1163,7 +1163,80 @@ async function getChatClients() {
       }
     }
   }
+  async function selfAddOrgUser(emails: string, token: any) {
+    const insertedEmails: string[] = [];
+    for (const email of emails) {
+      try {
 
+        const {data:orgData, error:orgError} = await supabase.from('organizations').select('*').eq('org_token', token).single();
+        if (orgError) throw new Error(orgError.message);
+        if (!orgData) throw new Error('Organization not found');
+
+
+        const newUser = {
+          email: email,
+          roles: ['Organization Trnee'],
+          is_staff: false,
+          organization: orgData.id,
+        };
+
+        // Bulk insert the new user.
+        const { data, error } = await supabase.from('users').insert(newUser).select().single();
+
+        if (error) throw new Error(error.message);
+        if (!data) throw new Error('User creation failed');
+
+        const userSettings = { user_id: data.id };
+
+        const { error: settingsError } = await supabase
+          .from('user_settings')
+          .insert(userSettings)
+          .select()
+          .single();
+
+        if (settingsError) throw new Error(settingsError.message);
+
+
+        const profileData = { user_id: data.id };
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .insert(profileData)
+          .select('id')
+          .single();
+        if (profileError) throw new Error(profileError.message);
+        const update: any = { profile_id: profile.id };
+
+        const { error: updateError } = await supabase
+          .from('users')
+          .update(update)
+          .eq('id', data.id);
+
+        if (updateError) throw new Error(updateError.message);
+
+        insertedEmails.push(email);
+
+      } catch (error) {
+        alert('Error creating user: ' + error);
+      }
+    }
+
+    // If at least one user was inserted, send the org join request emails.
+    if (insertedEmails.length > 0) {
+      try {
+        const { data, error } = await supabase.functions.invoke('smtp/org-join-request', {
+          method: 'POST',
+          body: insertedEmails // Passing the array of emails.
+        });
+        if (error) {
+          console.error('Error sending org join request emails:', error);
+        } else {
+          console.log('Org join request emails sent:', data);
+        }
+      } catch (error) {
+        console.error('Error invoking org join request function:', error);
+      }
+    }
+  }
   // Wipe out old date
   function wipeOut() {
     O_Trainer.value = null;
@@ -1263,6 +1336,7 @@ async function getChatClients() {
     fetchOrgUsers,
     getTrainer,
     addOrgUser,
+    selfAddOrgUser,
     assignUsersToCoach
   };
 });

@@ -22,7 +22,7 @@
     </div>
 
     <!-- Organization Form (split into 2 columns) -->
-    <div v-else class="grid 2xl:w-2/3 grid-cols-1 md:grid-cols-2 gap-6">
+    <div v-else class="grid 2xl:w-4/5 grid-cols-1 md:grid-cols-2 gap-6">
       <!-- LEFT COLUMN -->
       <div class="space-y-4 flex flex-col items-center md:items-stretch">
         <!-- Organization Logo -->
@@ -117,7 +117,42 @@
             :placeholder="t('dashboard.settings.orgDomainsPlaceholder')"
           ></textarea>
         </div>
+        <!-- Join URL (textarea) -->
+        <div class="form-control">
+          <label class="block text-sm font-medium">
+            Registration URL
+          </label>
+          <div class="flex gap-3">
+            <input
+            v-model="registrationString"
+            class="rafik-text-input flex-1"
+            disabled
+            placeholder="Click button to generate new URL."
+            >
+             <!-- Copy button with SVG -->
+            <button
+              class="btn-md flex cursor-pointer w-12 items-center justify-center"
+              v-if="registrationString"
+              @click="copyUrl"
+              title="Copy URL"
+            >
+              <!-- Copy SVG icon -->
+              <svg xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-4 12h6a2 2 0 002-2v-6a2 2 0
+                  00-2-2h-6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+              </svg>
+            </button>
+            <button class="btn-md-outline " @click="updateToken">Generate New URL</button>
+          </div>
 
+        </div>
         <!-- Trainer Assign (toggle) -->
         <div class="form-control flex flex-row items-center gap-3 switch-mt">
           <span class="text-lg font-medium">
@@ -363,7 +398,42 @@ const uploadInput = ref<HTMLInputElement | null>(null);
 const pic = ref<string>('');
 const result = reactive({ dataURL: '', blobURL: '' });
 const selectedFile = ref<File | null>(null);
+async function updateToken() {
+  // Use browser crypto API instead of Node.js crypto
+  if(orgData.value.token){
+    const result = await Swal.fire({
+    title: 'You Have a Live URL!',
+    text: 'This will refresh the URL and cause the old one to become null! ',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, do that!',
+    cancelButtonText: 'Cancel',
+    background: '#081411',
+    color: '#E8F3ED',
+  });
 
+  if (!result.isConfirmed) return;
+
+  }
+
+
+  const array = new Uint8Array(32);
+  crypto.getRandomValues(array);
+  const newToken = Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
+  orgData.value.token = newToken
+  updateOrganization()
+  console.log('Token:', newToken);
+}
+async function copyUrl() {
+  try {
+    await navigator.clipboard.writeText(registrationString.value)
+    showSuccess('Copied to clipboard!')
+  } catch (err) {
+    console.error('Failed to copy:', err)
+  }
+}
 function selectFile(e: Event) {
   pic.value = '';
   result.dataURL = '';
@@ -430,11 +500,12 @@ const orgData = ref<any>({
   logo: '',
   country: '',
   address: '',
-  trainer_assign: false
+  trainer_assign: false,
+  token:null,
 });
 
 const domainString = ref('');
-
+const registrationString = ref('');
 // On mount, if user is 'Organization Admin', fetch org data
 onMounted(async () => {
   if (userStore.userProfile?.roles?.includes('Organization Admin')) {
@@ -469,6 +540,9 @@ async function getOrganization() {
     if (Array.isArray(data.domains)) {
       domainString.value = data.domains.join(', ');
     }
+    if (data.token) {
+      registrationString.value = `https://rafikapp.ae/self-register?token=${data.token}`;
+    }
   } catch (err: any) {
     console.error('Error fetching organization data:', err);
     showError(
@@ -497,7 +571,8 @@ async function updateOrganization() {
         logo: orgData.value.logo,
         country: orgData.value.country,
         address: orgData.value.address,
-        trainer_assign: orgData.value.trainer_assign
+        trainer_assign: orgData.value.trainer_assign,
+        token:orgData.value.token
       })
       .eq('id', orgData.value.id);
 

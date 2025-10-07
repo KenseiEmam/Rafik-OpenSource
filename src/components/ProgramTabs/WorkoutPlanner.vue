@@ -950,15 +950,19 @@ const recalc = debounce(() => {
 const submitChanges = () => {
   isEditing.value = false;
   const workoutDays = editedWorkouts.value.filter((workout: any) => !workout.rest_day).length;
-  // Update avg_session_time
-  const completedSessions = editedWorkouts.value
-    .filter((workout: any) => workout.time_to_complete)
-    .map((workout: any) => parseInt(workout.time_to_complete, 10) || 0);
+
+  // Update avg_session_time, treating empty string as 0
+  const completedSessions = editedWorkouts.value.map((workout: any) => {
+    const time = workout.time_to_complete;
+    return time === '' ? 0 : parseInt(time, 10) || 0;
+  });
+
   let totalTime = 0;
   if (completedSessions.length > 0) {
     totalTime = completedSessions.reduce((sum: any, time: any) => sum + time, 0);
   }
-  if (!props.user)
+
+  if (!props.user) {
     programStore
       .updateProgram({
         ...props.program,
@@ -969,10 +973,11 @@ const submitChanges = () => {
       .then(() => {
         showSuccess('Workout Plan Updated Successfully');
       });
-  else {
+  } else {
     updateClientProgram(props.user);
   }
 };
+
 // Function to update client workout plan
 async function updateClientProgram(user: number) {
   if (!props.program.id) return;
@@ -1143,7 +1148,7 @@ watch(
           editedWorkouts.value.push({
             workout_name: '',
             workout_summary: '',
-            time_to_complete: '',
+            time_to_complete: 60,
             rest_day: false,
             exercises: [],
             sets_muscle:[],

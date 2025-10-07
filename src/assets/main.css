@@ -154,9 +154,7 @@ nav a {
   .contentH-small {
     @apply font-bold text-lg leading-none text-rafik-secondary uppercase;
   }
-  .subheader-large {
-    @apply font-semibold text-4xl leading-tight text-rafik-sectext dark:text-rafik-darksectext leading-snug;
-  }
+
   .subheader-medium {
     @apply font-semibold text-2xl leading-tight text-rafik-sectext dark:text-rafik-darksectext leading-snug;
   }
