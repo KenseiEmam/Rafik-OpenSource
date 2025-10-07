@@ -141,11 +141,36 @@
     "welcomeBack": "مرحبًا بعودتك! حان وقت المتابعة",
     "notRegisteredYet": "لم تقم بالتسجيل بعد؟",
     "signUpNow": "سجل الآن",
+    "forgotPassword": "نسيت كلمة المرور؟",
     "form": {
       "email": "البريد الإلكتروني",
       "password": "كلمة المرور",
       "loading": "جار التحميل",
       "access": "ادخل إلى لوحة التحكم"
+    }
+  },
+  "resetPassword": {
+    "header": "إعادة تعيين كلمة المرور",
+    "backToLogin": "العودة إلى تسجيل الدخول",
+    "notRegistered": "لم تقم بالتسجيل بعد؟",
+    "form": {
+      "email": "البريد الإلكتروني",
+      "loading": "جار الإرسال...",
+      "sendReset": "إرسال رابط إعادة التعيين",
+      "emailSent": "تم إرسال رابط إعادة تعيين كلمة المرور! تحقق من صندوق الوارد."
+    }
+  },
+  "changePassword": {
+    "header": "تحديث كلمة المرور",
+    "backToDashboard": "العودة إلى لوحة التحكم",
+    "form": {
+      "newPassword": "كلمة المرور الجديدة",
+      "confirmPassword": "تأكيد كلمة المرور الجديدة",
+      "loading": "جار التحديث...",
+      "updatePassword": "تحديث كلمة المرور",
+      "passwordMismatch": "كلمات المرور غير متطابقة.",
+      "passwordTooShort": "يجب أن تكون كلمة المرور 6 أحرف على الأقل.",
+      "passwordUpdated": "تم تحديث كلمة المرور بنجاح!"
     }
   },
   "register": {
