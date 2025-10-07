@@ -36,7 +36,7 @@ function selectFile(e: Event) {
 
 function ready() {
 
-  console.log('Cropper is ready.')
+  console.log('Cropper is ready!')
 }
 
 async function getResult() {
