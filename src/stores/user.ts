@@ -1163,18 +1163,20 @@ async function getChatClients() {
       }
     }
   }
-  async function selfAddOrgUser(emails: string, token: any) {
+  async function selfAddOrgUser(details: any, token: any) {
     const insertedEmails: string[] = [];
-    for (const email of emails) {
+
       try {
 
-        const {data:orgData, error:orgError} = await supabase.from('organizations').select('*').eq('org_token', token).single();
+        const {data:orgData, error:orgError} = await supabase.from('organizations').select('*').eq('token', token).single();
         if (orgError) throw new Error(orgError.message);
         if (!orgData) throw new Error('Organization not found');
 
 
         const newUser = {
-          email: email,
+          email: details.email,
+          first_name : details.first_name,
+          last_name : details.last_name,
           roles: ['Organization Trnee'],
           is_staff: false,
           organization: orgData.id,
@@ -1213,12 +1215,12 @@ async function getChatClients() {
 
         if (updateError) throw new Error(updateError.message);
 
-        insertedEmails.push(email);
+        insertedEmails.push(details.email);
 
       } catch (error) {
         alert('Error creating user: ' + error);
       }
-    }
+
 
     // If at least one user was inserted, send the org join request emails.
     if (insertedEmails.length > 0) {
@@ -1237,6 +1239,7 @@ async function getChatClients() {
       }
     }
   }
+
   // Wipe out old date
   function wipeOut() {
     O_Trainer.value = null;

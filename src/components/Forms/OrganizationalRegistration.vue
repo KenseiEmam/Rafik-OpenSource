@@ -1,6 +1,34 @@
 <template>
-  <div>
-    <form v-if="token" class="my-8 space-y-6" @submit.prevent="signUpNewUser">
+  <div v-if="token && !loadingOrg">
+    <h3 class="contentH-medium">Sign up with {{ orgData.name }}</h3>
+    <form  class="my-8 space-y-6 relative z-40" @submit.prevent="signUpNewUser">
+           <div class="form-control">
+                  <label class="block text-sm font-medium" for="first_name">
+                    {{ t('dashboard.profile.edit.firstNameLabel') }}
+                  </label>
+                  <input
+                    id="first_name"
+                    v-model="first_name"
+                    class="rafik-text-input w-full"
+                    type="text"
+                    required
+                    placeholder="John"
+                  />
+                </div>
+                <!-- Last Name -->
+                <div class="form-control">
+                  <label class="block text-sm font-medium" for="last_name">
+                    {{ t('dashboard.profile.edit.lastNameLabel') }}
+                  </label>
+                  <input
+                    id="last_name"
+                    v-model="last_name"
+                    class="rafik-text-input w-full"
+                    type="text"
+                    required
+                    placeholder="Doe"
+                  />
+                </div>
       <!-- Email Field -->
       <div class="form-control">
         <label for="email" class="block text-sm font-medium">
@@ -11,7 +39,7 @@
           v-model="email"
           class="rafik-text-input"
           type="email"
-          placeholder="rafik@example.ae"
+          :placeholder="'your_name@'+(orgData.domains[0]||'rafikapp.ae')"
           required
         />
       </div>
@@ -57,7 +85,9 @@
         {{ t('register.form.joinNowButton') }}
       </button>
     </form>
-    <div v-else>
+
+  </div>
+   <div v-else>
       <h1 class="title-large">
         Error!
       </h1>
@@ -65,11 +95,10 @@
         No Token found!
       </p>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { supabase } from '@/lib/supabaseClient';
 import router from '@/router';
 import Swal from 'sweetalert2';
@@ -110,6 +139,8 @@ function showError(message: string) {
 const userStore =useUserStore()
 const email = ref<string>('');
 const password = ref<string>('');
+const first_name = ref<string>('');
+const last_name = ref<string>('');
 const confirmPassword = ref<string>('');
 
 // Reactive validation states
@@ -137,7 +168,7 @@ async function signUpNewUser() {
       if (error) throw error;
 
       if (data && token)
-        userStore.selfAddOrgUser(email.value, token)
+        userStore.selfAddOrgUser({email:email.value, first_name:first_name.value, last_name:last_name.value}, token)
       else
         throw("token or email missing")
       // router.push({ name: 'login' });
@@ -153,6 +184,63 @@ async function signUpNewUser() {
     }
   } else {
     showError(t('register.form.requirementsError'));
+  }
+}
+
+
+const loadingOrg = ref(false);
+
+// We'll store all org data in orgData
+const orgData = ref<any>({
+  id: null,
+  created_at: null,
+  name: '',
+  domains: [],
+  description: '',
+  logo: '',
+  country: '',
+  address: '',
+  trainer_assign: false,
+  token:null,
+});
+// On mount, if user is 'Organization Admin', fetch org data
+onMounted(async () => {
+
+    loadingOrg.value = true;
+    await getOrganization();
+    loadingOrg.value = false;
+
+});
+
+// Fetching organization data based on user profile
+async function getOrganization() {
+  try {
+
+    if (!token) {
+      showError(t('dashboard.settings.orgNoOrgIdFound'));
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('organizations')
+      .select('*')
+      .eq('token', token)
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    // Initialize orgData
+    orgData.value = { ...data };
+
+  } catch (err: any) {
+    console.error('Error fetching organization data:', err);
+    showError(
+      t('dashboard.settings.orgFetchError', {
+        error: err.message || 'Unknown error'
+      })
+    );
   }
 }
 </script>

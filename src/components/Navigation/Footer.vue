@@ -1,8 +1,8 @@
 <template>
   <footer class=" text-white py-4 pb-16">
-    <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+    <div class="container mx-auto flex flex-col md:flex-row md:items-center justify-between">
       <!-- Left: Logo -->
-      <div class="mb-4 md:mb-0 flex-col items-center flex text-center">
+      <div class="mb-4 md:mb-0 md:flex-col items-center flex text-center">
         <!-- Replace with your logo image or component -->
         <img src="@/assets/rafik.png" alt="Logo" class="h-16 2xl:h-32" />
         <div class="md:flex gap-4">
@@ -12,7 +12,7 @@
 
       </div>
       <!-- Center: Navigation Links -->
-      <div class="flex flex-col md:flex-row items-center text-xs 2xl:text-base gap-2 md:gap-6 mb-4 md:mb-0">
+      <div class="flex flex-col md:flex-row md:items-center text-xs 2xl:text-base gap-2 md:gap-6 mb-4 md:mb-0">
         <a href="/organizations" class="hover:text-rafik-darkpritext text-rafik-darksectext">Organization</a>
         <a href="/coaches" class="hover:text-rafik-darkpritext text-rafik-darksectext">Coach</a>
         <a href="/athletes" class="hover:text-rafik-darkpritext text-rafik-darksectext">Athlete</a>

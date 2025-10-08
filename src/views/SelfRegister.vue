@@ -12,8 +12,8 @@ const { t , locale } = useI18n();
     <WebsiteHeader />
     <Transition name="slide-fade" appear>
       <div class="grid md:grid-cols-2 items-center min-h-64 flex-1 mb-16">
-        <div>
-          <h1 class="header-large mb-3">{{ t('register.header') }}</h1>
+        <div class="relative z-40">
+          <h1 class="header-large mb-3"> Kick Start your inner Champion</h1>
           <OrganizationalRegistration />
           <h3 class="text-body">
             {{ t('register.alreadyRegistered') }}
@@ -25,8 +25,8 @@ const { t , locale } = useI18n();
             class="w-96 h-96 rounded-full bottom-0 opacity-80 absolute right-16 bg-rafik content"
           ></div>
           <img
-            class="w-128 object-cover ms-auto relative grayscale"
-            src="https://static.vecteezy.com/system/resources/thumbnails/046/464/329/small_2x/smiling-man-holding-and-pointing-at-laptop-on-transparent-background-png.png"
+            class="2xl:h-128  w-128 object-cover ms-auto relative grayscale"
+            src="@/assets/athletesRegistration.png"
             alt=""
           />
         </div>
