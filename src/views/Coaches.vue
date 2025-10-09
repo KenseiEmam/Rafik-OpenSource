@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue';
-import ProgramCreation from '../components/ProgramCreation.vue';
-import ClientManagemet from '../components/ClientManagemet.vue';
+import ProgramCreation from '../components/BodySections/ProgramCreation.vue';
+import ClientManagemet from '../components/BodySections/ClientManagemet.vue';
 
 import Footer from '@/components/Navigation/Footer.vue';
-import Communications from '@/components/Communications.vue';
-import CoachHero from '@/components/CoachHero.vue';
+import Communications from '@/components/BodySections/Communications.vue';
+import CoachHero from '@/components/HeroSections/CoachHero.vue';
 </script>
 
 <template>

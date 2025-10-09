@@ -107,7 +107,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useGroupStore} from '@/stores/groupstores';
 import type { Group} from '@/stores/groupstores';
 import { useUserStore } from '@/stores/user';
-import MultiSelect from '@/components/MultiSelect.vue';
+import MultiSelect from '@/components/UXComponents/MultiSelect.vue';
 import { supabase } from '@/lib/supabaseClient';
 
 const { t } = useI18n();

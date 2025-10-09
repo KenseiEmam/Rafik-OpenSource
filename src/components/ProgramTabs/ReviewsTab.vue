@@ -3,7 +3,7 @@ import { ref, watch, nextTick, onMounted } from 'vue';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
 import { supabase } from '@/lib/supabaseClient';
-import ReviewStars from '../ReviewStars.vue';
+import ReviewStars from '../UXComponents/ReviewStars.vue';
 import Swal from 'sweetalert2';
 import router from '@/router';
 import ClientDetails from '@/views/DashboardVues/Clients/ClientDetails.vue';

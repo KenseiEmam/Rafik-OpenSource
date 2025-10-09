@@ -236,7 +236,7 @@ const assessment = ref<{
 import { supabase } from '@/lib/supabaseClient';
 
 import 'vue-multiselect/dist/vue-multiselect.css';
-import MultiSelect from '../MultiSelect.vue';
+import MultiSelect from '../UXComponents/MultiSelect.vue';
 interface Option {
   id: number;
   name: string;

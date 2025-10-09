@@ -1,15 +1,15 @@
 <script setup lang="ts">
 
 import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue';
-import ProgramCreation from '../components/ProgramCreation.vue';
-import ClientManagemet from '../components/ClientManagemet.vue';
+import ProgramCreation from '../components/BodySections/ProgramCreation.vue';
+import ClientManagemet from '../components/BodySections/ClientManagemet.vue';
 
 import Footer from '@/components/Navigation/Footer.vue';
-import Communications from '@/components/Communications.vue';
-import AthleteHero from '@/components/AthleteHero.vue';
-import SimpleAnalytics from '@/components/SimpleAnalytics.vue';
-import Customize from '@/components/Customize.vue';
-import MoreFeatures from '@/components/MoreFeatures.vue';
+import Communications from '@/components/BodySections/Communications.vue';
+import AthleteHero from '@/components/HeroSections/AthleteHero.vue';
+import SimpleAnalytics from '@/components/BodySections/SimpleAnalytics.vue';
+import Customize from '@/components/BodySections/Customize.vue';
+import MoreFeatures from '@/components/BodySections/MoreFeatures.vue';
 
 
 </script>

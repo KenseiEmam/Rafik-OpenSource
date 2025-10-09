@@ -23,9 +23,9 @@ import { ref, nextTick } from 'vue';
 import WebsiteHeader from '@/components/Navigation/WebsiteHeader.vue';
 import Footer from '@/components/Navigation/Footer.vue';
 
-import DemoHero from '@/components/DemoHero.vue';
+import DemoHero from '@/components/HeroSections/DemoHero.vue';
 /* ⬇️  Uncomment when tiers go live */
-import SubscriptionTiers from '@/components/SubscriptionTiers.vue';
+import SubscriptionTiers from '@/components/BodySections/SubscriptionTiers.vue';
 
 import DemoContactForm from '@/components/Forms/DemoContactForm.vue';
 

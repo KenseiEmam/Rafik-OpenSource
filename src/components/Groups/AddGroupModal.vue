@@ -152,7 +152,7 @@ import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useUserStore } from '@/stores/user';
 import { useGroupStore } from '@/stores/groupstores';
-import MultiSelect from '@/components/MultiSelect.vue';
+import MultiSelect from '@/components/UXComponents/MultiSelect.vue';
 import { supabase } from '@/lib/supabaseClient';
 import type { Group } from '@/stores/groupstores'; // ✅ Update path if different
 const { t, locale } = useI18n();

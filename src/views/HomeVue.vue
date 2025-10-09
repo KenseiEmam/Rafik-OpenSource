@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue';
+import TheWelcome from '../components/HeroSections/TheWelcome.vue';
 import WebsiteHeader from '../components/Navigation/WebsiteHeader.vue';
 import ContactVue from '../components/Forms/ContactVue.vue';
 import Footer from '@/components/Navigation/Footer.vue';
-import ForWho from '@/components/ForWho.vue';
-import WhyweDo from '@/components/WhyweDo.vue';
+import ForWho from '@/components/BodySections/ForWho.vue';
+import WhyweDo from '@/components/BodySections/WhyweDo.vue';
 </script>
 
 <template>

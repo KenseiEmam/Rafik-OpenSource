@@ -163,7 +163,7 @@ import router from '@/router';
 import { ref, watch } from 'vue';
 import debounce from 'lodash/debounce';
 import { useExerciseStore } from '@/stores/exercisestores';
-import AddExerciseModal from './ExerciseTabs/AddExerciseModal.vue';
+import AddExerciseModal from '../ExerciseTabs/AddExerciseModal.vue';
 import { useI18n } from 'vue-i18n';
 const { t , locale } = useI18n();
 const exerciseStore = useExerciseStore();

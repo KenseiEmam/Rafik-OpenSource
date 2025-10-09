@@ -250,7 +250,7 @@ import { useProgramStore } from '@/stores/programstores';
 import { useExerciseStore } from '@/stores/exercisestores';
 import router from '@/router';
 import AddProgramModal from '@/components/ProgramTabs/AddProgramModal.vue';
-import ExerciseList from '@/components/ExerciseList.vue';
+import ExerciseList from '@/components/UXComponents/ExerciseList.vue';
 import { useI18n } from 'vue-i18n';
 
 const { t , locale } = useI18n();

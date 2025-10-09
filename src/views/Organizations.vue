@@ -2,10 +2,10 @@
 import WebsiteHeader from '@/components/Navigation/WebsiteHeader.vue';
 import Footer from '@/components/Navigation/Footer.vue';
 
-import OrgHero from '@/components/OrgHero.vue';
-import OrgProgramOversight from '@/components/OrgProgramOversight.vue';
-import OrgTeamManagement from '@/components/OrgTeamManagement.vue';
-import OrgCommunications from '@/components/OrgCommunications.vue';
+import OrgHero from '@/components/HeroSections/OrgHero.vue';
+import OrgProgramOversight from '@/components/BodySections/OrgProgramOversight.vue';
+import OrgTeamManagement from '@/components/BodySections/OrgTeamManagement.vue';
+import OrgCommunications from '@/components/BodySections/OrgCommunications.vue';
 </script>
 
 <template>

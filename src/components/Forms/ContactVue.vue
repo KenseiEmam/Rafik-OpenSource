@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import SocialIcons from '@/components/SocialIcons.vue';
+import SocialIcons from '@/components/UXComponents/SocialIcons.vue';
 import Swal from 'sweetalert2';
 import { supabase } from '@/lib/supabaseClient';
 import { useI18n } from 'vue-i18n';
