@@ -173,6 +173,7 @@ async function signUpNewUser() {
         throw("token or email missing")
       // router.push({ name: 'login' });
       showSuccess(t('register.form.successMessage'));
+      router.push({name:"application"})
       // Reset form fields
       email.value = '';
       password.value = '';
