@@ -131,7 +131,7 @@ export const getFoodResponse = async (
         }
     ]);
 
-    return { answer: JSON.stringify(response, null, 2), context: [] };
+    return { answer: response, context: [] };
   } catch (e) {
     console.error(e);
     const answer =
