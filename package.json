@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "supabase": "^2.51.0",
     "zod": "^4.1.12"
   }
 }
