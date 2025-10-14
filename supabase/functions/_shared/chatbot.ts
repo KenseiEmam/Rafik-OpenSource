@@ -44,7 +44,7 @@ export const getChatbotResponse = async (
       const vectorStore = new SupabaseVectorStore(embeddings, {
       client: supabase,
       tableName: "ai_vectors",
-       queryName: "match_documents",
+      queryName: "match_documents",
     });
 
     const retriever = vectorStore.asRetriever({
@@ -109,7 +109,7 @@ export const getChatbotResponse = async (
       `You are a personal trainer's assistant assigned with the task of helping trainees navigate their program. 
       Details about the program are provided in the context.
       
-      You are to respond to only fitness related questions, any questions outside that context should be replied to with 'I am here to help you with your fitness goals and can't help much with that topic'.
+      You are to respond to only fitness and nutrition related questions, any questions outside that context should be replied to with 'I am here to help you with your fitness goals and can't help much with that topic'.
       
       You are also to refrain from creating your own guidelines, sticking to the ones provided in the context. If a fitness question is not included in the context please say ' It seems your trainer hasn't provided me with context to that regard, send them a quick message and I am sure they'll know better! '
 
