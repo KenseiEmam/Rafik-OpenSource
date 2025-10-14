@@ -22,7 +22,7 @@ router.options("/(.*)", (ctx) => {
   });
 });
 
-const endpoints = ["fat-secret", "ai-embed", "ai-chat"];
+const endpoints = ["fat-secret", "ai-embed", "ai-chat", "ai-food"];
 router
   .get("/api", (ctx) => {
     ctx.response.body = "Hello World";
