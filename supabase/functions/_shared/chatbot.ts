@@ -43,12 +43,13 @@ export const getChatbotResponse = async (
       const vectorStore = new SupabaseVectorStore(embeddings, {
       client: supabase,
       tableName: "ai_vectors",
+      vectorColumnName: "embedding",
     });
 
     const retriever = vectorStore.asRetriever({
       k: 5,
       searchType: "similarity",
-      filter: (rpc) => rpc.filter("metadata->>chatbot_id", "eq", chatbotId.toString()),
+      filter: (rpc:any) => rpc.filter("metadata->>chatbot_id", "eq", chatbotId.toString()),
     });
 
 
