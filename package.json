@@ -1,7 +1,7 @@
 {
   "dependencies": {
+    "@langchain/community": "^0.3.57",
     "@langchain/textsplitters": "^0.1.0",
-    "supabase": "^2.51.0",
-    "zod": "^4.1.12"
+    "supabase": "^2.51.0"
   }
 }
