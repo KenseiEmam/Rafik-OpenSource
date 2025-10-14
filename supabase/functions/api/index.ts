@@ -2,6 +2,7 @@ import { corsHeaders } from "../_shared/corsHeaders.ts";
 import { Application, Context, Router } from "@oak/oak";
 import { sendOAuthRequest } from "../_shared/fatSecret.ts";
 import { getChatbotResponse } from "../_shared/chatbot.ts";
+import { getFoodResponse } from "../_shared/foodAI.ts";
 
 // Helper function to set JSON and CORS headers.
 function setJsonCors(ctx: Context) {
@@ -147,6 +148,26 @@ router
             return;
           }
           const reply = await getChatbotResponse(chatbotId, userProgram);
+          ctx.response.status = 200;
+          setJsonCors(ctx);
+          ctx.response.body = {
+            success: true,
+            reply: reply.answer,
+            context: reply.context,
+          };
+          break;
+        }
+        case "ai-food": {
+          const { query } = rest || {};
+          if (!query) {
+            ctx.response.status = 400;
+            setJsonCors(ctx);
+            ctx.response.body = {
+              error: "Missing query!",
+            };
+            return;
+          }
+          const reply = await getFoodResponse(query);
           ctx.response.status = 200;
           setJsonCors(ctx);
           ctx.response.body = {
