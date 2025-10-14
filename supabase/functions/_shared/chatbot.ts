@@ -40,18 +40,17 @@ export const getChatbotResponse = async (
     };
   }
   try {
-    const vectorStore = new SupabaseVectorStore(embeddings, {
+      const vectorStore = new SupabaseVectorStore(embeddings, {
       client: supabase,
       tableName: "ai_vectors",
-      queryName: "search_ai_documents",
     });
 
     const retriever = vectorStore.asRetriever({
       k: 5,
       searchType: "similarity",
-      filter: (rpc) =>
-        rpc.filter("metadata->>chatbot_id", "eq", String(chatbotId)),
+      filter: (rpc) => rpc.filter("metadata->>chatbot_id", "eq", chatbotId.toString()),
     });
+
 
     const model = new ChatOpenAI({
       modelName: "gpt-4o-mini",
@@ -106,7 +105,7 @@ export const getChatbotResponse = async (
 
     let systemMessage =
       `You are a personal trainer's assistant assigned with the task of helping trainees navigate their program. 
-      Details about the program are provided in the context between the triple quotes (''').
+      Details about the program are provided in the context.
       
       You are to respond to only fitness related questions, any questions outside that context should be replied to with 'I am here to help you with your fitness goals and can't help much with that topic'.
       
@@ -126,8 +125,7 @@ export const getChatbotResponse = async (
       Answer 'It seems your trainer hasn't provided me with context to that regard, send them a quick message and I am sure they'll know better!' 
 
       \n\n
-      
-      '''{context}'''
+      <context>{context}</context>
       
       ` ;
     if (chatbot.system_prompt) {

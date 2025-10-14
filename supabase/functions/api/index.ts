@@ -3,6 +3,8 @@ import { Application, Context, Router } from "@oak/oak";
 import { sendOAuthRequest } from "../_shared/fatSecret.ts";
 import { getChatbotResponse } from "../_shared/chatbot.ts";
 import { getFoodResponse } from "../_shared/foodAI.ts";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
+
 
 // Helper function to set JSON and CORS headers.
 function setJsonCors(ctx: Context) {
@@ -90,6 +92,7 @@ router
             };
             return;
           }
+
           const res = await fetch(
             "https://faas-fra1-afec6ce7.doserverless.co/api/v1/web/fn-7f8e933c-192a-4815-a302-6365f2819ef6/embed-api/embed",
             {

@@ -9,6 +9,7 @@
     "@langchain/community": "npm:@langchain/community@^0.3.40",
     "@langchain/community/": "npm:/@langchain/community@^0.3.40/",
     "@langchain/openai": "npm:@langchain/openai@^0.5.5",
-    "zod": "https://deno.land/x/zod@v3.23.8/mod.ts"
+    "zod": "https://deno.land/x/zod@v3.23.8/mod.ts",
+    "@langchain/textsplitters":"npm:/@langchain/textsplitters@0.0.1/"
   }
 }
