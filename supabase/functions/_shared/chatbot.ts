@@ -44,7 +44,7 @@ export const getChatbotResponse = async (
       const vectorStore = new SupabaseVectorStore(embeddings, {
       client: supabase,
       tableName: "ai_vectors",
-      vectorColumnName: "embedding",
+       queryName: "match_documents",
     });
 
     const retriever = vectorStore.asRetriever({
