@@ -43,7 +43,7 @@ const ResponseFormatter =   z.object({
 });
 export const getFoodResponse = async (
  query:string,
-): Promise<{ answer: any; context: any[] ; cached: boolean}> => {
+): Promise<{ answer: any;  cached: boolean}> => {
  
   try {
         const normalize = (text: string) => {
@@ -65,7 +65,6 @@ export const getFoodResponse = async (
         console.log("✅ Cache hit:", cached[0].normalized_query);
         return {
           answer: cached[0].response,
-          context: [],
           cached: true, // ✅ Added
         };
       }
@@ -156,14 +155,12 @@ export const getFoodResponse = async (
 
     return {
       answer: response,
-      context: [],
       cached: false, // ✅ Added
     };
   } catch (e) {
     console.error("getFoodResponse error:", e);
     return {
       answer: "Sorry, I am not able to answer that right now.",
-      context: [],
       cached: false,
     };
   }

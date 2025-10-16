@@ -179,8 +179,7 @@ router
             ctx.response.body = {
               success: true,
               cached: reply.cached ?? false, // Add this flag to indicate cache hit
-              reply: reply.answer,
-              context: reply.context,
+              reply: reply.answer
             };
           } catch (error) {
             console.error("❌ ai-food error:", error);
