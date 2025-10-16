@@ -43,10 +43,26 @@ const ResponseFormatter =   z.object({
 });
 export const getFoodResponse = async (
  query:string,
-): Promise<{ answer: string; context: any[] }> => {
+): Promise<{ answer: any; context: any[] ; cached: boolean}> => {
  
   try {
+  const normalize = (text: string) =>
+        text.toLowerCase().replace(/[^\w\s]/g, "").trim();
+      const normalizedQuery = normalize(query);
 
+      // ✅ 1. Check for similar cached responses
+      const { data: cached } = await supabase.rpc("find_similar_food", {
+        input_query: normalizedQuery,
+      });
+
+      if (cached?.length) {
+        console.log("✅ Cache hit:", cached[0].normalized_query);
+        return {
+          answer: cached[0].response,
+          context: [],
+          cached: true, // ✅ Added
+        };
+      }
     const model = new ChatOpenAI({
       modelName: "gpt-4o-mini",
       apiKey: Deno.env.OPENAI_API_KEY,
@@ -121,24 +137,28 @@ export const getFoodResponse = async (
 
 
     const response = await modelWithStructure.invoke([
-       {
-            role: "system",
-            content:systemMessage,
-        },
-        {
-            role: "user",
-            content: query,
-        }
+      { role: "system", content: systemMessage },
+      { role: "user", content: query },
     ]);
 
-    return { answer: response, context: [] };
-  } catch (e) {
-    console.error(e);
-    const answer =
-      "Sorry, I am not able to answer that right now. Please try again later.\n" ;
+    // ✅ 3. Store in cache
+    await supabase.from("food_cache").insert({
+      query,
+      normalized_query: normalizedQuery,
+      response,
+    });
+
     return {
-      answer,
+      answer: response,
       context: [],
+      cached: false, // ✅ Added
+    };
+  } catch (e) {
+    console.error("getFoodResponse error:", e);
+    return {
+      answer: "Sorry, I am not able to answer that right now.",
+      context: [],
+      cached: false,
     };
   }
 };

@@ -17,7 +17,7 @@ function setJsonCors(ctx: Context) {
 const router = new Router();
 
 // Handle OPTIONS requests for all routes.
-router.options("/(.*)", (ctx) => {
+router.options("/(.*)", (ctx:any) => {
   ctx.response.status = 204; // No content
   Object.entries(corsHeaders).forEach(([key, value]) => {
     ctx.response.headers.set(key, value);
@@ -26,10 +26,10 @@ router.options("/(.*)", (ctx) => {
 
 const endpoints = ["fat-secret", "ai-embed", "ai-chat", "ai-food"];
 router
-  .get("/api", (ctx) => {
+  .get("/api", (ctx:any) => {
     ctx.response.body = "Hello World";
   })
-  .post("/api", async (ctx) => {
+  .post("/api", async (ctx:any) => {
     try {
       // Ensure the request has a JSON body.
       if (!ctx.request.hasBody) {
@@ -165,25 +165,40 @@ router
           if (!query) {
             ctx.response.status = 400;
             setJsonCors(ctx);
-            ctx.response.body = {
-              error: "Missing query!",
-            };
+            ctx.response.body = { error: "Missing query!" };
             return;
           }
-          const reply = await getFoodResponse(query);
-          ctx.response.status = 200;
-          setJsonCors(ctx);
-          ctx.response.body = {
-            success: true,
-            reply: reply.answer,
-            context: reply.context,
-          };
+
+          try {
+            // ✅ Call your caching + GPT logic
+            const reply = await getFoodResponse(query);
+
+            ctx.response.status = 200;
+            setJsonCors(ctx);
+
+            ctx.response.body = {
+              success: true,
+              cached: reply.cached ?? false, // Add this flag to indicate cache hit
+              reply: reply.answer,
+              context: reply.context,
+            };
+          } catch (error) {
+            console.error("❌ ai-food error:", error);
+            ctx.response.status = 500;
+            setJsonCors(ctx);
+            ctx.response.body = {
+              success: false,
+              error: "Internal Server Error",
+            };
+          }
+
           break;
         }
+
         default:
           break;
       }
-    } catch (error) {
+    } catch (error:any) {
       console.error("Error in POST / function:", error);
       ctx.response.status = 500;
       setJsonCors(ctx);
