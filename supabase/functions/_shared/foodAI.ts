@@ -46,8 +46,14 @@ export const getFoodResponse = async (
 ): Promise<{ answer: any; context: any[] ; cached: boolean}> => {
  
   try {
-  const normalize = (text: string) =>
-        text.toLowerCase().replace(/[^\w\s]/g, "").trim();
+        const normalize = (text: string) => {
+        return text
+          .toLowerCase()
+          .replace(/food\s*:\s*/g, "")
+          .replace(/quantity\s*:\s*/g, "")
+          .replace(/[^\w\s]/g, "")
+          .trim();
+      };
       const normalizedQuery = normalize(query);
 
       // ✅ 1. Check for similar cached responses
