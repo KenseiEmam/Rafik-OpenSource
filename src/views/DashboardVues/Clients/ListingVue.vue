@@ -110,7 +110,7 @@
               :key="client.id"
               class="rounded-xl p-4 w-full"
             >
-              <td
+              <td @click="$router.push({ name: 'client-details', params: { id: client.id } })"
               :class="locale === 'ar'? 'pr-3':'pl-3'"
                 class="flex gap-6  text-left items-center py-4  bg-rafik-secbg dark:bg-rafik-darksecbg"
               >
