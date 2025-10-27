@@ -252,25 +252,25 @@ watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitU
       >
         <button
           @click="addInduction('text')"
-          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
         >
           {{ t('dashboard.tabs.program.docForms.addTextInduction') }}
         </button>
         <button
           @click="addInduction('number')"
-          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
         >
           {{ t('dashboard.tabs.program.docForms.addNumberInduction') }}
         </button>
         <button
           @click="addInduction('boolean')"
-          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
         >
           {{ t('dashboard.tabs.program.docForms.addBooleanInduction') }}
         </button>
         <button
           @click="addInduction('upload')"
-          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
         >
           {{ t('dashboard.tabs.program.docForms.addMediaUploadInduction') }}
         </button>
@@ -349,25 +349,25 @@ watch(() => [...inductions.value, ...follow.value].map((q) => q.question), emitU
       >
         <button
           @click="addFollow('text')"
-          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
         >
           {{ t('dashboard.tabs.program.docForms.addTextFollow') }}
         </button>
         <button
           @click="addFollow('number')"
-          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
         >
           {{ t('dashboard.tabs.program.docForms.addNumberFollow') }}
         </button>
         <button
           @click="addFollow('boolean')"
-          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
         >
           {{ t('dashboard.tabs.program.docForms.addBooleanFollow') }}
         </button>
         <button
           @click="addFollow('upload')"
-          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+          class="pl-2 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
         >
           {{ t('dashboard.tabs.program.docForms.addMediaUploadFollow') }}
         </button>

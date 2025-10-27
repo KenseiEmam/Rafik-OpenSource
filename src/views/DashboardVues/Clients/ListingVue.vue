@@ -46,7 +46,7 @@
                   <button
                     v-if="page > 1"
                     @click="updatePage(page - 1)"
-                    class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+                    class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
                   >
                     {{ t('dashboard.clients.list.prev') }}
                   </button>
@@ -62,7 +62,7 @@
                       v-for="p in Math.ceil(userStore.client_count / numbers)"
                       :key="p"
                       @click="updatePage(p)"
-                      class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+                      class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
                       :class="{ 'text-rafik-pritext dark:text-rafik-darkpritext': p === page }"
                     >
                       {{ p }}

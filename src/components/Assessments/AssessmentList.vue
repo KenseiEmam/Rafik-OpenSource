@@ -168,7 +168,7 @@
           v-for="p in Math.ceil(props.count / 9)"
           :key="p"
           @click="updatePage(p)"
-          class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+          class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
           :class="{ 'text-rafik-pritext dark:text-rafik-darkpritext': p === page }"
         >
           {{ p }}
@@ -178,7 +178,7 @@
       <button
         v-if="props.page > 1"
         @click="updatePage(pageEdit - 1)"
-        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
       >
         {{ t('dashboard.assessments.list.previousPage') }}
       </button>
@@ -186,7 +186,7 @@
       <button
         v-if="props.page < Math.ceil(props.count / 9)"
         @click="updatePage(pageEdit + 1)"
-        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext"
+        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
       >
         {{ t('dashboard.assessments.list.nextPage') }}
       </button>
@@ -214,8 +214,6 @@ import { ref, watch } from 'vue';
 import { useAssessmentStore } from '@/stores/assessmentstores';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
-const assessmentStore = useAssessmentStore();
 
 // Define the Assessment type
 type Assessment = {
@@ -236,14 +234,18 @@ type Assessment = {
   template?: string | null;
   template_data?: any;
 };
-
 const props = defineProps<{
   assessments: Assessment[];
   page: number;
   count: number;
   filter: string;
 }>();
-
+const pageEdit = ref(props.page);
+const filterEdit = ref(props.filter);
+const showAddAssessmentModal = ref(false);
+const holdQuery = ref('');
+const { t } = useI18n();
+const assessmentStore = useAssessmentStore();
 const emits = defineEmits(['updatePage', 'updatePageSearch']);
 
 function formatDate(dateString: string): string {
@@ -256,8 +258,6 @@ function formatDate(dateString: string): string {
     hour12: true
   });
 }
-
-
 function getStatusClasses(status: string): string {
   switch (status.toLowerCase()) {
     case 'scheduled':
@@ -272,7 +272,6 @@ function getStatusClasses(status: string): string {
       return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
   }
 }
-
 // Handle input change
 function handleSearch(event: Event) {
   const target = event.target as HTMLInputElement;
@@ -286,25 +285,6 @@ function handleSearch(event: Event) {
   }
 }
 
-const pageEdit = ref(props.page);
-const filterEdit = ref(props.filter);
-const showAddAssessmentModal = ref(false);
-const holdQuery = ref('');
-
-watch(
-  () => props.page,
-  (newPage) => {
-    pageEdit.value = newPage;
-  }
-);
-
-watch(
-  () => props.filter,
-  (newfilter) => {
-    filterEdit.value = newfilter;
-  }
-);
-
 function updateFilter(value: string) {
   if (holdQuery.value) {
     emits('updatePageSearch', 1, holdQuery.value, value);
@@ -312,7 +292,6 @@ function updateFilter(value: string) {
     emits('updatePage', 1, value);
   }
 }
-
 function updatePage(page: number) {
   const maxPage = Math.ceil(props.count / 9);
   if (page < 1 || page > maxPage) {
@@ -323,8 +302,17 @@ function updatePage(page: number) {
     emits('updatePage', page, filterEdit.value);
   }
 }
+
+watch(
+  () => props.page,
+  (newPage) => {
+    pageEdit.value = newPage;
+  }
+);
+watch(
+  () => props.filter,
+  (newfilter) => {
+    filterEdit.value = newfilter;
+  }
+);
 </script>
-
-<style scoped>
-
-</style>

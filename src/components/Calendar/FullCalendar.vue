@@ -9,16 +9,42 @@ import { useTemplateStore } from '@/stores/templatestores';
 import { useSlotStore } from '@/stores/slotstores';
 import { useUserStore } from '@/stores/user';
 import BookBulkModal from './BookBulkModal.vue';
-const slotStore = useSlotStore();
-const templateStore = useTemplateStore();
-const userStore= useUserStore();
 import type { EventInput } from '@fullcalendar/core';
 import ViewModal from './ViewModal.vue';
 import { supabase } from '@/lib/supabaseClient';
 // @ts-ignore
 import { RRule, RRuleSet, rrulestr } from 'rrule';
+import Swal from 'sweetalert2';
+
+
+// Control flags for rendering
+const showCalendar = ref(false);
+const showModal = ref(false);
+const templateData = ref({ date: null });
 const bulkBook = ref(false)
 const calendarEvents = ref<EventInput[]>([]);
+const slotStore = useSlotStore();
+const templateStore = useTemplateStore();
+const userStore= useUserStore();
+const viewSlot = ref<any>(null)
+
+onMounted(() => {
+  loadSlots().then(() => {
+    templateStore.fetchTemplates(userStore.userProfile).then(()=>{
+      showCalendar.value = true;
+    })
+  });
+
+  // Auto-reschedule missed assessments on calendar load
+  slotStore.autoRescheduleMissedAssessments();
+});
+// Keep calendarOptions.events in sync with calendarEvents ref
+watch(calendarEvents, (newEvents) => {
+  calendarOptions.value = {
+    ...calendarOptions.value,
+    events: newEvents,
+  };
+});
 
 function slotsToEvents(slots: any[]): EventInput[] {
   return slots.map(slot => {
@@ -51,9 +77,6 @@ function slotsToEvents(slots: any[]): EventInput[] {
   }
    );
 }
-
-import Swal from 'sweetalert2';
-
 function showSuccess(message: string) {
   Swal.fire({
     title: 'Success!',
@@ -68,7 +91,6 @@ function showSuccess(message: string) {
     color: '#E8F3ED',
   });
 }
-
 function showError(message: string) {
   Swal.fire({
     title: 'Error!',
@@ -79,7 +101,6 @@ function showError(message: string) {
     color: '#E8F3ED',
   });
 }
-
 async function handleDeleteSlot() {
   if (!viewSlot.value) return;
 
@@ -164,7 +185,6 @@ async function handleDeleteSlot() {
     // Error handling is already done in the store
   }
 }
-
 async function handleDeleteOccurrence() {
   if (!viewSlot.value?.assessment?.id) return;
   try {
@@ -180,7 +200,6 @@ async function handleDeleteOccurrence() {
     Swal.fire('Error', 'Failed to delete occurrence.', 'error');
   }
 }
-
 async function handleDeleteSeries() {
   if (!viewSlot.value?.slot?.id) return;
   try {
@@ -192,8 +211,6 @@ async function handleDeleteSeries() {
     Swal.fire('Error', 'Failed to delete series.', 'error');
   }
 }
-
-const viewSlot = ref<any>(null)
 // Load slots and update calendar events
 async function loadSlots() {
   await slotStore.getAllSlots();
@@ -304,7 +321,6 @@ async function loadSlots() {
   }
   calendarEvents.value = events;
 }
-
 // FullCalendar options, events bound reactively
 const calendarOptions = ref<CalendarOptions>({
   plugins: [dayGridPlugin, interactionPlugin],
@@ -374,7 +390,6 @@ const calendarOptions = ref<CalendarOptions>({
     generateAssessmentsForMonth(info.start, info.end);
   },
 });
-
 // Function to generate assessments for a specific month range
 async function generateAssessmentsForMonth(start: Date, end: Date) {
   const slots = slotStore.AllSlots;
@@ -422,9 +437,6 @@ async function generateAssessmentsForMonth(start: Date, end: Date) {
     }
   }
 }
-
-const templateData = ref({ date: null });
-
 async function handleSubmit(slot: any, assessment: any) {
   showCalendar.value = false;
   if (slot.type === 'assessment') {
@@ -509,7 +521,6 @@ async function handleSubmitBulk(slot: any, assessment: any) {
     bulkBook.value = false;
   });
 }
-
 function resetView(){
   viewSlot.value = null
 }
@@ -518,35 +529,10 @@ function handleDateClick(event: any) {
   const dateOnly = event.dateStr.split('T')[0];
   templateData.value.date = dateOnly;
 }
-
-// Control flags for rendering
-const showCalendar = ref(false);
-const showModal = ref(false);
-
 function closeModal() {
   templateData.value.date = null;
   bulkBook.value =false;
 }
-
-onMounted(() => {
-  loadSlots().then(() => {
-    templateStore.fetchTemplates(userStore.userProfile).then(()=>{
-      showCalendar.value = true;
-    })
-  });
-
-  // Auto-reschedule missed assessments on calendar load
-  slotStore.autoRescheduleMissedAssessments();
-});
-
-// Keep calendarOptions.events in sync with calendarEvents ref
-watch(calendarEvents, (newEvents) => {
-  calendarOptions.value = {
-    ...calendarOptions.value,
-    events: newEvents,
-  };
-});
-
 async function handleRescheduled() {
   // Refresh slots and calendar when assessment is rescheduled
   resetView();

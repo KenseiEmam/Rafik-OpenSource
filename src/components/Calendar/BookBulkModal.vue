@@ -308,6 +308,41 @@
 import { ref, watch , onMounted, computed, type PropType } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useUserStore } from '@/stores/user';
+import { supabase } from '@/lib/supabaseClient';
+import 'vue-multiselect/dist/vue-multiselect.css';
+import MultiSelect from '../UXComponents/MultiSelect.vue';
+
+const props = defineProps({
+  visible: {
+    type: Boolean,
+    required: true
+  },
+  isEditing: {
+    type: Boolean,
+    default: false
+  },
+  templateData: {
+    type: Object,
+    default: () => ({})
+  },
+  myTemplates: {
+    type: Array as PropType<myTemp[]>,
+    default: () => []
+  }
+});
+interface Option {
+  id: number;
+  name: string;
+}
+interface myTemp {
+  id: string | number;
+  template_name: string;
+}
+
+
+const showDate = ref(null)
+const showendDate = ref(null)
+const emit = defineEmits(['close', 'submit']);
 const startTime = ref({ hours: 0, minutes: 0 });
 const searchQuery = ref('');
 const searchQuery2 = ref('');
@@ -321,7 +356,13 @@ const traineeOptions = ref<any[]>([]);
 const trainerOptions = ref<any[]>([]);
 const selectedTrainees = ref<any[]>([]);
 const today  = new Date
-// Recurring schedule configuration
+const availableUsers = ref<{ id: number; name: string }[]>([]);
+const selectedTrainer = ref(null);
+const selectedTrainee = ref(null);
+const isOrg = !!localStorage.getItem('OrgID');
+
+
+
 const recurringSchedule = ref({
   repeatType: 'weekly',
   customInterval: 1,
@@ -330,8 +371,6 @@ const recurringSchedule = ref({
   endDate: new Date(today.setMonth(today.getMonth() + 6)) as Date | null,
   daysOff: [] as number[]
 });
-
-// Week days for days off selection
 const weekDays = ref([
   { value: 0, label: 'Sunday' },
   { value: 1, label: 'Monday' },
@@ -341,7 +380,6 @@ const weekDays = ref([
   { value: 5, label: 'Friday' },
   { value: 6, label: 'Saturday' }
 ]);
-
 const assessment = ref<{
   assessors: number[],
   slot: any,
@@ -357,24 +395,155 @@ const assessment = ref<{
   template: null,
   organization: null
 });
-
-import { supabase } from '@/lib/supabaseClient';
-
-import 'vue-multiselect/dist/vue-multiselect.css';
-import MultiSelect from '../UXComponents/MultiSelect.vue';
-interface Option {
-  id: number;
-  name: string;
+const template = ref<{
+  time_start: Date;
+  time_end: Date;
+  users: Option[];
+  groups: number[];
+  type: string;
+  assessment: any | null;
+  recurringSchedule?: any;
+  recurrence_rule?: any; // Added for recurrence rule
+  assessment_data?: any; // Added for assessment data
+}>({
+  time_start: new Date(),
+  time_end: new Date(),
+  users: [],
+  groups: [],
+  type: 'meeting',
+  assessment: null,
+});
+const resetForm = () => {
+  template.value = {
+  time_start: new Date(),
+  time_end: new Date(),
+  users: [],      // Array of user IDs
+  groups: [],     // Array of group IDs
+  type: "meeting",
+  assessment: null, // Optional assessment relation
+  };
+  assessment.value={
+  assessors:[],
+  slot:null,
+  trainees:[],
+  status:'scheduled',
+  template:null,
+  organization:null
 }
-interface myTemp {
-  id: string | number;
-  template_name: string;
+  const start = new Date();
+const end = new Date(start);
+end.setMonth(start.getMonth() + 6);
+
+recurringSchedule.value = {
+  repeatType: 'weekly',
+  customInterval: 1,
+  customUnit: 'days',
+  startDate: start,
+  endDate: end,
+  daysOff: []
+};
+  // Reset selected trainees
+  selectedTrainees.value = [];
 }
-const availableUsers = ref<{ id: number; name: string }[]>([]);
-// The selected trainer (if needed for your filters)
-const selectedTrainer = ref(null);
-const selectedTrainee = ref(null);
-const isOrg = !!localStorage.getItem('OrgID');
+const handleSubmit = () => {
+  if (!template.value.time_start || !template.value.time_end) {
+    return;
+  }
+
+  // Validate recurrence
+  if (recurringSchedule.value.repeatType === 'none') {
+    alert('Please choose a repeat type for bulk creation.');
+    return;
+  }
+
+  if(!userStore.userProfile?.roles?.includes('Organization Admin'))
+  {
+    const uid = localStorage.getItem('UserID')
+    if(uid)
+    {
+      if (template.value.type === 'assessment')
+      assessment.value.assessors.push(parseInt(uid))
+      else
+      template.value.users.push({id:parseInt(uid), name:'blade'})
+    }
+  }
+  if (template.value.type === 'assessment') {
+  const assessors = assessment.value.assessors.map(id => ({
+    id,
+    name: 'bongle' // You’ll need to implement or replace this
+  }));
+
+  const trainees = assessment.value.trainees.map(id => ({
+    id,
+    name: 'bingle'
+  }));
+
+  template.value.users = [...assessors, ...trainees];
+}
+
+
+  // Safely convert user objects to IDs if necessary
+  if (Array.isArray(template.value.users)) {
+    template.value.users = template.value.users.map((u: any) =>
+      typeof u === 'object' && u !== null && 'id' in u ? u.id : u
+    );
+  }
+
+// Set default endDate if not selected: 6 months from startDate
+if (!recurringSchedule.value.endDate && recurringSchedule.value.startDate) {
+  const defaultEnd = new Date(recurringSchedule.value.startDate);
+  defaultEnd.setMonth(defaultEnd.getMonth() + 6);
+  recurringSchedule.value.endDate = defaultEnd;
+}
+  // Build recurrence rule
+  const recurrenceRule = {
+    freq: recurringSchedule.value.repeatType,
+    customInterval: recurringSchedule.value.customInterval,
+    customUnit: recurringSchedule.value.customUnit,
+    startDate: recurringSchedule.value.startDate,
+    endDate: recurringSchedule.value.endDate,
+    daysOff: recurringSchedule.value.daysOff
+  };
+
+  template.value.recurrence_rule = recurrenceRule;
+
+  // console.log(template.value)
+
+  emit('submit', template.value, assessment.value);
+  resetForm();
+};
+const handleClose = () => {
+  resetForm();
+  emit('close');
+};
+onMounted(async () => {
+  const orgId = userStore.userProfile?.organization;
+
+  if (orgId) {
+    const { data, error } = await supabase
+      .from('users')
+      .select('id, first_name, last_name')
+      .eq('organization', orgId);
+
+    if (!error && data) {
+      availableUsers.value = data
+        .filter(user => user.first_name || user.last_name) // Only users with both names
+        .map((user) => ({
+          id: user.id,
+          name: `${user.first_name} ${user.last_name}`,
+        }));
+
+      console.log(availableUsers.value);
+    }
+  }
+});
+watch(searchQuery, (newValue) => {
+  if (!newValue) resetFilter();
+})
+watch(searchQuery2, (newValue) => {
+  if (!newValue) resetTraineeFilter();
+})
+
 
 // Set the selected trainer and hide dropdown
 function selectOption(option: any) {
@@ -482,14 +651,6 @@ async function fetchFilteredTrainees() {
   traineeOptions.value = data;
 }
 }
-// Reset filter when search input is cleared (native clear button)
-watch(searchQuery, (newValue) => {
-  if (!newValue) resetFilter();
-});
-
-watch(searchQuery2, (newValue) => {
-  if (!newValue) resetTraineeFilter();
-});
 function resetFilter() {
   assessment.value.assessors = [];
   trainerOptions.value = [];
@@ -499,7 +660,6 @@ function resetTraineeFilter() {
   traineeOptions.value = [];
   dropdownVisible2.value = false;
 }
-
 // Get trainee name by ID
 function getTraineeName(traineeId: number): string {
   const trainee = selectedTrainees.value.find(t => t.id === traineeId);
@@ -508,7 +668,6 @@ function getTraineeName(traineeId: number): string {
   }
   return 'Unknown Trainee';
 }
-
 // Remove trainee from selection
 function removeTrainee(traineeId: number) {
   const index = assessment.value.trainees.indexOf(traineeId);
@@ -521,8 +680,6 @@ function removeTrainee(traineeId: number) {
     selectedTrainees.value.splice(traineeIndex, 1);
   }
 }
-
-
 function handleBlur() {
   setTimeout(() => {
     dropdownVisible.value = false;
@@ -533,52 +690,10 @@ function handleTraineeBlur() {
     dropdownVisible2.value = false;
   }, 200);
 }
-onMounted(async () => {
-  const orgId = userStore.userProfile?.organization;
-
-  if (orgId) {
-    const { data, error } = await supabase
-      .from('users')
-      .select('id, first_name, last_name')
-      .eq('organization', orgId);
-
-    if (!error && data) {
-      availableUsers.value = data
-        .filter(user => user.first_name || user.last_name) // Only users with both names
-        .map((user) => ({
-          id: user.id,
-          name: `${user.first_name} ${user.last_name}`,
-        }));
-
-      console.log(availableUsers.value);
-    }
-  }
-});
 function changeType(event:any){
   template.value.type = event.target.value
   template.value.users = []
 }
-const props = defineProps({
-  visible: {
-    type: Boolean,
-    required: true
-  },
-  isEditing: {
-    type: Boolean,
-    default: false
-  },
-  templateData: {
-    type: Object,
-    default: () => ({})
-  },
-  myTemplates: {
-    type: Array as PropType<myTemp[]>,
-    default: () => []
-  }
-});
-const showDate = ref(null)
-const showendDate = ref(null)
-const emit = defineEmits(['close', 'submit']);
 // Merge time into date from templateData.date
 function mergeDateAndTime(dateString: string, time: { hours: number, minutes: number, seconds?: number }): Date {
   const [year, month, day] = dateString.split('-').map(Number);
@@ -594,8 +709,6 @@ function mergeDateAndTime(dateString: string, time: { hours: number, minutes: nu
 
   return news
 }
-
-
 function onTimeStartChange(time: { hours: number; minutes: number; seconds?: number }) {
   if (recurringSchedule.value.startDate) {
     const dateString = recurringSchedule.value.startDate.toISOString().split('T')[0]; // Safe YYYY-MM-DD
@@ -603,7 +716,6 @@ function onTimeStartChange(time: { hours: number; minutes: number; seconds?: num
     // console.log(dateString, time, template.value.time_start);
   }
 }
-
 function onTimeEndChange(time: { hours: number; minutes: number; seconds?: number }) {
   if (recurringSchedule.value.startDate) {
     const dateString = recurringSchedule.value.startDate.toISOString().split('T')[0];
@@ -611,134 +723,6 @@ function onTimeEndChange(time: { hours: number; minutes: number; seconds?: numbe
     // console.log(dateString, time, template.value.time_end);
   }
 }
-const template = ref<{
-  time_start: Date;
-  time_end: Date;
-  users: Option[];
-  groups: number[];
-  type: string;
-  assessment: any | null;
-  recurringSchedule?: any;
-  recurrence_rule?: any; // Added for recurrence rule
-  assessment_data?: any; // Added for assessment data
-}>({
-  time_start: new Date(),
-  time_end: new Date(),
-  users: [],
-  groups: [],
-  type: 'meeting',
-  assessment: null,
-});
-
-
-const resetForm = () => {
-  template.value = {
-  time_start: new Date(),
-  time_end: new Date(),
-  users: [],      // Array of user IDs
-  groups: [],     // Array of group IDs
-  type: "meeting",
-  assessment: null, // Optional assessment relation
-  };
-  assessment.value={
-  assessors:[],
-  slot:null,
-  trainees:[],
-  status:'scheduled',
-  template:null,
-  organization:null
-}
-  const start = new Date();
-const end = new Date(start);
-end.setMonth(start.getMonth() + 6);
-
-recurringSchedule.value = {
-  repeatType: 'weekly',
-  customInterval: 1,
-  customUnit: 'days',
-  startDate: start,
-  endDate: end,
-  daysOff: []
-};
-  // Reset selected trainees
-  selectedTrainees.value = [];
-}
-
-const handleSubmit = () => {
-  if (!template.value.time_start || !template.value.time_end) {
-    return;
-  }
-
-  // Validate recurrence
-  if (recurringSchedule.value.repeatType === 'none') {
-    alert('Please choose a repeat type for bulk creation.');
-    return;
-  }
-
-  if(!userStore.userProfile?.roles?.includes('Organization Admin'))
-  {
-    const uid = localStorage.getItem('UserID')
-    if(uid)
-    {
-      if (template.value.type === 'assessment')
-      assessment.value.assessors.push(parseInt(uid))
-      else
-      template.value.users.push({id:parseInt(uid), name:'blade'})
-    }
-  }
-  if (template.value.type === 'assessment') {
-  const assessors = assessment.value.assessors.map(id => ({
-    id,
-    name: 'bongle' // You’ll need to implement or replace this
-  }));
-
-  const trainees = assessment.value.trainees.map(id => ({
-    id,
-    name: 'bingle'
-  }));
-
-  template.value.users = [...assessors, ...trainees];
-}
-
-
-  // Safely convert user objects to IDs if necessary
-  if (Array.isArray(template.value.users)) {
-    template.value.users = template.value.users.map((u: any) =>
-      typeof u === 'object' && u !== null && 'id' in u ? u.id : u
-    );
-  }
-
-// Set default endDate if not selected: 6 months from startDate
-if (!recurringSchedule.value.endDate && recurringSchedule.value.startDate) {
-  const defaultEnd = new Date(recurringSchedule.value.startDate);
-  defaultEnd.setMonth(defaultEnd.getMonth() + 6);
-  recurringSchedule.value.endDate = defaultEnd;
-}
-  // Build recurrence rule
-  const recurrenceRule = {
-    freq: recurringSchedule.value.repeatType,
-    customInterval: recurringSchedule.value.customInterval,
-    customUnit: recurringSchedule.value.customUnit,
-    startDate: recurringSchedule.value.startDate,
-    endDate: recurringSchedule.value.endDate,
-    daysOff: recurringSchedule.value.daysOff
-  };
-
-  template.value.recurrence_rule = recurrenceRule;
-
-  // console.log(template.value)
-
-  emit('submit', template.value, assessment.value);
-  resetForm();
-};
-
-
-
-const handleClose = () => {
-  resetForm();
-  emit('close');
-};
-
 function getUserNameById(id: number) {
   const trainee = selectedTrainees.value.find(u => u.id === id);
   if (trainee) return `${trainee.first_name || ''} ${trainee.last_name || ''}`.trim();
@@ -746,8 +730,6 @@ function getUserNameById(id: number) {
   if (trainer) return `${trainer.first_name || ''} ${trainer.last_name || ''}`.trim();
   return '';
 }
-
-
 </script>
 <style scoped>
 /* in your app.scss of laravel */

@@ -87,7 +87,7 @@
               @click="show_action = client.id"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
-              class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darkpritext cursor-pointer"
+              class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext cursor-pointer"
               viewBox="0 0 128 512"
             >
               <path

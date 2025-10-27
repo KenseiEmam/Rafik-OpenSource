@@ -201,11 +201,26 @@
     </div>
   </div>
 </template>
-
 <script setup lang="ts">
 import { ref, watch , onMounted, computed, type PropType } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useUserStore } from '@/stores/user';
+import { supabase } from '@/lib/supabaseClient';
+import 'vue-multiselect/dist/vue-multiselect.css';
+import MultiSelect from '../UXComponents/MultiSelect.vue';
+
+
+
+interface Option {
+  id: number;
+  name: string;
+}
+interface myTemp {
+  id: string | number;
+  template_name: string;
+}
+
+
 const startTime = ref({ hours: 0, minutes: 0 });
 const searchQuery = ref('');
 const searchQuery2 = ref('');
@@ -217,8 +232,7 @@ const darkness = localStorage.getItem('dark_mode');
 const userStore = useUserStore()
 const traineeOptions = ref<any[]>([]);
 const trainerOptions = ref<any[]>([]);
-const assessment = ref<{
-  assessors: number[],
+const assessment = ref<{assessors: number[],
   slot: any,
   trainees: number[],
   status: string,
@@ -232,25 +246,129 @@ const assessment = ref<{
   template: null,
   organization: null
 });
-
-import { supabase } from '@/lib/supabaseClient';
-
-import 'vue-multiselect/dist/vue-multiselect.css';
-import MultiSelect from '../UXComponents/MultiSelect.vue';
-interface Option {
-  id: number;
-  name: string;
-}
-interface myTemp {
-  id: string | number;
-  template_name: string;
-}
 const availableUsers = ref<{ id: number; name: string }[]>([]);
 // The selected trainer (if needed for your filters)
 const selectedTrainer = ref(null);
 const selectedTrainee = ref(null);
 const isOrg = !!localStorage.getItem('OrgID');
+const props = defineProps({
+  visible: {
+    type: Boolean,
+    required: true
+  },
+  isEditing: {
+    type: Boolean,
+    default: false
+  },
+  templateData: {
+    type: Object,
+    default: () => ({})
+  },
+  myTemplates: {
+    type: Array as PropType<myTemp[]>,
+    default: () => []
+  }
+});
+const showDate = ref(null)
+const showendDate = ref(null)
+const emit = defineEmits(['close', 'submit']);
+const template = ref<{
+  time_start: Date;
+  time_end: Date;
+  users: Option[];
+  groups: number[];
+  type: string;
+  assessment: any | null;
+}>({
+  time_start: new Date(),
+  time_end: new Date(),
+  users: [],
+  groups: [],
+  type: 'meeting',
+  assessment: null,
+});
 
+
+
+// Reset filter when search input is cleared (native clear button)
+watch(searchQuery, (newValue) => {
+  if (!newValue) resetFilter();
+});
+watch(searchQuery2, (newValue) => {
+  if (!newValue) resetTraineeFilter();
+});
+onMounted(async () => {
+  const orgId = userStore.userProfile?.organization;
+
+  if (orgId) {
+    const { data, error } = await supabase
+      .from('users')
+      .select('id, first_name, last_name')
+      .eq('organization', orgId);
+
+    if (!error && data) {
+      availableUsers.value = data
+        .filter(user => user.first_name || user.last_name) // Only users with both names
+        .map((user) => ({
+          id: user.id,
+          name: `${user.first_name} ${user.last_name}`,
+        }));
+
+      console.log(availableUsers.value);
+    }
+  }
+});
+
+
+
+function changeType(event:any){
+  template.value.type = event.target.value
+  template.value.users = []
+}
+// Merge time into date from templateData.date
+function mergeDateAndTime(dateString: string, time: { hours: number, minutes: number, seconds?: number }): Date {
+  const [year, month, day] = dateString.split('-').map(Number);
+
+  const news = new Date(
+    year,
+    month - 1, // JavaScript months are 0-based
+    day,
+    time.hours,
+    time.minutes,
+    time.seconds || 0
+  );
+
+  return news
+}
+function onTimeStartChange(time: any) {
+
+  template.value.time_start = mergeDateAndTime(props.templateData.date, time);
+  console.log(template.value.time_start)
+}
+function onTimeEndChange(time: any) {
+  template.value.time_end = mergeDateAndTime(props.templateData.date, time);
+  console.log(template.value.time_end)
+}
+function resetFilter() {
+  assessment.value.assessors = [];
+  trainerOptions.value = [];
+  dropdownVisible.value = false;
+}
+function resetTraineeFilter() {
+  assessment.value.trainees = [];
+  traineeOptions.value = [];
+  dropdownVisible2.value = false;
+}
+function handleBlur() {
+  setTimeout(() => {
+    dropdownVisible.value = false;
+  }, 200);
+}
+function handleTraineeBlur() {
+  setTimeout(() => {
+    dropdownVisible2.value = false;
+  }, 200);
+}
 // Set the selected trainer and hide dropdown
 function selectOption(option: any) {
   selectedTrainer.value = option;
@@ -269,20 +387,6 @@ function selectTraineeOption(option: any) {
   assessment.value.trainees.push(option.id);
 
 }
-// Optional: Hide the dropdown if clicking outside
-document.addEventListener('click', (e: any) => {
-  const el = document.querySelector('.relative');
-  if (el && !el.contains(e.target)) {
-    dropdownVisible.value = false;
-  }
-});
-// Optional: Hide the dropdown if clicking outside
-document.addEventListener('click', (e: any) => {
-  const el = document.querySelector('.relative');
-  if (el && !el.contains(e.target)) {
-    dropdownVisible2.value = false;
-  }
-});
 async function fetchFilteredTrainers() {
   dropdownVisible.value = true;
   if (!searchQuery.value) {
@@ -335,124 +439,6 @@ async function fetchFilteredTrainees() {
   traineeOptions.value = data;
 }
 }
-// Reset filter when search input is cleared (native clear button)
-watch(searchQuery, (newValue) => {
-  if (!newValue) resetFilter();
-});
-
-watch(searchQuery2, (newValue) => {
-  if (!newValue) resetTraineeFilter();
-});
-function resetFilter() {
-  assessment.value.assessors = [];
-  trainerOptions.value = [];
-  dropdownVisible.value = false;
-}
-function resetTraineeFilter() {
-  assessment.value.trainees = [];
-  traineeOptions.value = [];
-  dropdownVisible2.value = false;
-}
-function handleBlur() {
-  setTimeout(() => {
-    dropdownVisible.value = false;
-  }, 200);
-}
-function handleTraineeBlur() {
-  setTimeout(() => {
-    dropdownVisible2.value = false;
-  }, 200);
-}
-onMounted(async () => {
-  const orgId = userStore.userProfile?.organization;
-
-  if (orgId) {
-    const { data, error } = await supabase
-      .from('users')
-      .select('id, first_name, last_name')
-      .eq('organization', orgId);
-
-    if (!error && data) {
-      availableUsers.value = data
-        .filter(user => user.first_name || user.last_name) // Only users with both names
-        .map((user) => ({
-          id: user.id,
-          name: `${user.first_name} ${user.last_name}`,
-        }));
-
-      console.log(availableUsers.value);
-    }
-  }
-});
-function changeType(event:any){
-  template.value.type = event.target.value
-  template.value.users = []
-}
-const props = defineProps({
-  visible: {
-    type: Boolean,
-    required: true
-  },
-  isEditing: {
-    type: Boolean,
-    default: false
-  },
-  templateData: {
-    type: Object,
-    default: () => ({})
-  },
-  myTemplates: {
-    type: Array as PropType<myTemp[]>,
-    default: () => []
-  }
-});
-const showDate = ref(null)
-const showendDate = ref(null)
-const emit = defineEmits(['close', 'submit']);
-// Merge time into date from templateData.date
-function mergeDateAndTime(dateString: string, time: { hours: number, minutes: number, seconds?: number }): Date {
-  const [year, month, day] = dateString.split('-').map(Number);
-
-  const news = new Date(
-    year,
-    month - 1, // JavaScript months are 0-based
-    day,
-    time.hours,
-    time.minutes,
-    time.seconds || 0
-  );
-
-  return news
-}
-
-
-function onTimeStartChange(time: any) {
-
-  template.value.time_start = mergeDateAndTime(props.templateData.date, time);
-  console.log(template.value.time_start)
-}
-
-function onTimeEndChange(time: any) {
-  template.value.time_end = mergeDateAndTime(props.templateData.date, time);
-  console.log(template.value.time_end)
-}
-const template = ref<{
-  time_start: Date;
-  time_end: Date;
-  users: Option[];
-  groups: number[];
-  type: string;
-  assessment: any | null;
-}>({
-  time_start: new Date(),
-  time_end: new Date(),
-  users: [],
-  groups: [],
-  type: 'meeting',
-  assessment: null,
-});
-
-
 const resetForm = () => {
   template.value = {
   time_start: new Date(),
@@ -471,7 +457,6 @@ const resetForm = () => {
   organization:null
 }
 };
-
 const handleSubmit = () => {
   if (!template.value.time_start || !template.value.time_end) {
     return;
@@ -515,14 +500,27 @@ const handleSubmit = () => {
   emit('submit', template.value, assessment.value);
   resetForm();
 };
-
-
 const handleClose = () => {
   resetForm();
   emit('close');
 };
 
 
+
+// Optional: Hide the dropdown if clicking outside
+document.addEventListener('click', (e: any) => {
+  const el = document.querySelector('.relative');
+  if (el && !el.contains(e.target)) {
+    dropdownVisible.value = false;
+  }
+});
+// Optional: Hide the dropdown if clicking outside
+document.addEventListener('click', (e: any) => {
+  const el = document.querySelector('.relative');
+  if (el && !el.contains(e.target)) {
+    dropdownVisible2.value = false;
+  }
+});
 </script>
 <style scoped>
 /* in your app.scss of laravel */
