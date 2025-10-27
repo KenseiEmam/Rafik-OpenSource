@@ -46,7 +46,7 @@
                   <button
                     v-if="page > 1"
                     @click="updatePage(page - 1)"
-                    class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
+                    class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext "
                   >
                     {{ t('dashboard.clients.list.prev') }}
                   </button>
@@ -62,7 +62,7 @@
                       v-for="p in Math.ceil(userStore.client_count / numbers)"
                       :key="p"
                       @click="updatePage(p)"
-                      class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
+                      class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext "
                       :class="{ 'text-rafik-pritext dark:text-rafik-darkpritext': p === page }"
                     >
                       {{ p }}
@@ -176,12 +176,12 @@
                 >
                   <Router-link
                     :to="{ name: 'client-details', params: { id: client.id } }"
-                    class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext rounded"
+                    class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext  rounded"
                   >
                     {{ t('dashboard.clients.list.viewProgram') }}
                   </Router-link>
                   <!-- Future Feature (messaging):
-                  <button class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext rounded">
+                  <button class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext  rounded">
                     {{ t('dashboard.clients.list.messageClient') }}
                   </button> -->
                   <button

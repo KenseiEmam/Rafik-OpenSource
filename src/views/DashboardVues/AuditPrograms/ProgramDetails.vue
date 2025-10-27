@@ -144,7 +144,7 @@ function setActiveTab(tab: string) {
               class="flex flex-col flex-1 gap-4 border-rafik-sectext dark:border-rafik-darksectext text-left justify-center"
             >
               <button
-                class="uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
+                class="uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext "
                 v-if="programStore.Program.status == 'Review'"
               >
                 {{ t('dashboard.auditPrograms.single.actions.acceptPublish') }}

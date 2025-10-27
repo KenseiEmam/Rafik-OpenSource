@@ -166,7 +166,7 @@
                 >
                   <Router-link
                     :to="{ name: 'audit-program', params: { id: program.id } }"
-                    class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext rounded"
+                    class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext  rounded"
                   >
                     {{ t('dashboard.auditPrograms.list.actions.viewProgram') }}
                   </Router-link>

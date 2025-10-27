@@ -148,7 +148,7 @@
                 >
                   <Router-link
                     :to="{ name: 'single-user', params: { id: user.id } }"
-                    class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext rounded"
+                    class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext  rounded"
                   >
                     {{ t('dashboard.users.list.actions.viewUser') }}
                   </Router-link>
@@ -156,7 +156,7 @@
                   <button
                     v-if="user.roles.includes('Organization Trnee') && !isUserAssigned(user)"
                     @click="showAssignModalForUser(user)"
-                    class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext rounded"
+                    class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext  rounded"
                   >
                     {{ t('dashboard.users.list.actions.assign') }}
                   </button>

@@ -377,7 +377,7 @@ onBeforeUnmount(() => {
               <button
                 v-if="clientStore.Client.program_details?.status === 'active'"
                 @click="showAddProgramModal = true"
-                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
+                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext "
               >
                 {{ t('dashboard.clients.details.changeProgram') }}
               </button>

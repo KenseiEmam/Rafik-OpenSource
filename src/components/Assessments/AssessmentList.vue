@@ -168,7 +168,7 @@
           v-for="p in Math.ceil(props.count / 9)"
           :key="p"
           @click="updatePage(p)"
-          class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
+          class="hover:text-rafik-pritext dark:hover:text-rafik-darkpritext "
           :class="{ 'text-rafik-pritext dark:text-rafik-darkpritext': p === page }"
         >
           {{ p }}
@@ -178,7 +178,7 @@
       <button
         v-if="props.page > 1"
         @click="updatePage(pageEdit - 1)"
-        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
+        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext "
       >
         {{ t('dashboard.assessments.list.previousPage') }}
       </button>
@@ -186,7 +186,7 @@
       <button
         v-if="props.page < Math.ceil(props.count / 9)"
         @click="updatePage(pageEdit + 1)"
-        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
+        class="px-4 py-2 text-rafik-sectext dark:text-rafik-darksectext min-w-max hover:text-rafik-pritext dark:hover:text-rafik-darkpritext "
       >
         {{ t('dashboard.assessments.list.nextPage') }}
       </button>

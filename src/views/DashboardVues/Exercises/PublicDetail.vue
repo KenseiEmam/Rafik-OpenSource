@@ -130,7 +130,7 @@ onMounted(() => {
           >
             <button
               @click="DupeExercise"
-              class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
+              class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext "
             >
               {{ t('dashboard.exercises.public.duplicateExercise') }}
             </button>

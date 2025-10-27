@@ -64,7 +64,7 @@
                   class="absolute min-w-16 z-40 top-15 right-0 flex flex-col items-end text-sm rounded bg-rafik-secbg dark:bg-rafik-darksecbg shadow-lg divide-y divide-rafik-sectext dark:divide-rafik-darksectext"
                 >
                   <button
-                   @click="router.push({name:'assessment-template', params:{id:template.id}})"  class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext rounded"
+                   @click="router.push({name:'assessment-template', params:{id:template.id}})"  class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext  rounded"
                   >
                     View
                   </button>

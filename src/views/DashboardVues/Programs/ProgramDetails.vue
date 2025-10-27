@@ -357,48 +357,48 @@ async function duplicateProgram() {
       .from('programs')
       .select('status')
       .eq('trainer_id', programStore.Program.trainer_id);
-    
+
     if (countError) throw countError;
-    
+
     // Count programs by status
     const draftCount = existingPrograms.filter(p => p.status === 'Draft').length;
     const activeCount = existingPrograms.filter(p => p.status === 'Active').length;
-    
+
     // Check if we can create another draft program
     if (draftCount >= 6) {
       showError(t('dashboard.programs.details.draftLimitReached'));
       return;
     }
-    
+
     // Create a deep copy of the program
     const programToDuplicate = JSON.parse(JSON.stringify(programStore.Program));
-    
+
     // Remove the ID and set status to Draft
     delete programToDuplicate.id;
     programToDuplicate.status = 'Draft';
-    
+
     // Add "(Copy)" to the program name
     if (programToDuplicate.program_name) {
       programToDuplicate.program_name = programToDuplicate.program_name + ' (Copy)';
     }
-    
+
     // Create the new program
     const { data: newProgram, error } = await supabase
       .from('programs')
       .insert(programToDuplicate)
       .select()
       .single();
-    
+
     if (error) throw error;
-    
+
     showSuccess(t('dashboard.programs.details.programDuplicated'));
-    
+
     // Navigate to the new program and refresh the data
     await router.push(`/dashboard/programs/${newProgram.id}`);
-    
+
     // Refresh the program data to show the new duplicated program
     await programStore.fetchProgram(newProgram.id);
-    
+
   } catch (err: any) {
     console.error('Error duplicating program:', err);
     showError(t('dashboard.programs.details.programDuplicateFailed'));
@@ -600,14 +600,14 @@ async function duplicateProgram() {
             >
               <button
                 @click="DraftProgram"
-                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
+                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext "
                 v-if="programStore.Program.status == 'Active'"
               >
                 {{ t('dashboard.programs.details.changeToDraftButton') }}
               </button>
               <button
                 @click="ActiveProgram"
-                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
+                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext "
                 v-if="programStore.Program.status == 'Draft'"
               >
                 {{ t('dashboard.programs.details.publishToActiveButton') }}
@@ -623,7 +623,7 @@ async function duplicateProgram() {
               />
               <label
                 for="upload-photo"
-                class="text-body cursor-pointer uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext"
+                class="text-body cursor-pointer uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext "
               >
                 {{
                   loading
@@ -640,7 +640,7 @@ async function duplicateProgram() {
               </p>
               <button
                 @click="duplicateProgram"
-                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext flex items-center gap-2"
+                class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext  flex items-center gap-2"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
                   <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>

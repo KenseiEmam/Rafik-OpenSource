@@ -87,7 +87,7 @@
               @click="show_action = client.id"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
-              class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext cursor-pointer"
+              class="text-rafik-sectext dark:text-rafik-darksectext h-7 mx-7 hover:text-rafik-pritext dark:hover:text-rafik-darkpritext  cursor-pointer"
               viewBox="0 0 128 512"
             >
               <path
@@ -104,7 +104,7 @@
                   name: admin ? 'single-user' : 'client-details',
                   params: { id: client.id }
                 }"
-                class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext dark:text-rafik-darksectext rounded"
+                class="px-3 py-5 hover:bg-rafik-pribg w-full text-center dark:bg-rafik-darkpribg hover:text-rafik-pritext dark:hover:text-rafik-darkpritext  rounded"
               >
                 {{ t('dashboard.tabs.program.clients.viewClient') }}
               </Router-link>
