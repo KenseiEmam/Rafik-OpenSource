@@ -112,7 +112,7 @@
             >
               <td @click="$router.push({ name: 'client-details', params: { id: client.id } })"
               :class="locale === 'ar'? 'pr-3':'pl-3'"
-                class="flex gap-6  text-left items-center py-4  bg-rafik-secbg dark:bg-rafik-darksecbg"
+                class="flex gap-6  text-left items-center cursor-pointer py-4  bg-rafik-secbg dark:bg-rafik-darksecbg"
               >
                 <img
                   :src="
