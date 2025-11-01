@@ -416,10 +416,10 @@
                 </div>
         <!-- Certifications Tab -->
         <div
-          v-else-if="activeTab === 'certifications' && userStore.Trainer.certifications_links"
+          v-else-if="activeTab === 'certifications'"
           class="grid 2xl:w-2/3 grid-cols-1 md:grid-cols-2 gap-6"
         >
-          <Cetifications :certifications="userStore.Trainer.certifications_links" />
+          <Cetifications :certifications="userStore.Trainer.certifications_links || undefined" />
         </div>
       </template>
     </div>

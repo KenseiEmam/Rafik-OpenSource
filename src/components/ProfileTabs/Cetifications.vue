@@ -71,7 +71,7 @@ import { useI18n } from 'vue-i18n';
 const { t , locale } = useI18n();
 
 const props = defineProps<{
-  certifications: string[];
+  certifications?: string[];
   admin?: boolean;
 }>();
 
@@ -108,7 +108,9 @@ const showError = (messageKey: string, interpolation: Record<string, any> = {}) 
 // Fetch certification URLs
 const fetchCerts = async () => {
   try {
-    const fetchedCerts = props.certifications.map((cert) => {
+    let fetchedCerts = <any[]>([])
+    if(props.certifications)
+    fetchedCerts = props.certifications.map((cert) => {
       // Ensure we only pass the relative path, not a full URL
       const relativePath = cert.replace(
         /^https?:\/\/[^/]+\/storage\/v1\/object\/public\/storage\//,
