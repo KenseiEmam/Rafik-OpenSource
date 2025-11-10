@@ -43,6 +43,7 @@ const ResponseFormatter =   z.object({
 });
 export const getFoodResponse = async (
  query:string,
+ user_id?:number
 ): Promise<{ answer: any;  cached: boolean}> => {
  
   try {
@@ -106,6 +107,7 @@ export const getFoodResponse = async (
             Rules:
             - Always use valid JSON with double quotes for keys and string values.
             - If the food exists in USDA FoodData Central, use its official name and mark USDA:true.
+            - Keep to the brand described best as you can, even more than USDA.
             - If not, provide your best estimate and mark USDA:false.
             - If the input is unrelated to food or quantity, return: {"error": "Please enter valid food name and quantity for tracking."}
 
@@ -151,6 +153,7 @@ export const getFoodResponse = async (
       query,
       normalized_query: normalizedQuery,
       response,
+      user_id
     });
 
     return {

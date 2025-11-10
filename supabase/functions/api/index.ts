@@ -161,17 +161,18 @@ router
           break;
         }
         case "ai-food": {
-          const { query } = rest || {};
+          const { query , user_id} = rest || {};
+          
           if (!query) {
             ctx.response.status = 400;
             setJsonCors(ctx);
             ctx.response.body = { error: "Missing query!" };
             return;
           }
-
+          
           try {
             // ✅ Call your caching + GPT logic
-            const reply = await getFoodResponse(query);
+            const reply = await getFoodResponse(query,user_id);
 
             ctx.response.status = 200;
             setJsonCors(ctx);
