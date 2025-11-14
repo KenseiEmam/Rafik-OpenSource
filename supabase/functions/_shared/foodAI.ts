@@ -56,7 +56,33 @@ export const getFoodResponse = async (
           .trim();
       };
       const normalizedQuery = normalize(query);
+      let Examples = `
+       Input: "name: Chicken Shawarma quantity: big sandwich"
+            Output:
+            {
+            "name": "Chicken Shawarma Sandwich",
+            "calories": 700,
+            "protein": 40,
+            "carbohydrates": 70,
+            "fats": 30,
+            "quantity": 1,
+            "unit": "big sandwich",
+            "USDA": false
+            }
 
+            Input: "name: Chicken Breast Cooked quantity: 200g"
+            Output:
+            {
+            "name": "Chicken, broilers or fryers, breast, skinless, boneless, meat only, cooked, braised",
+            "calories": 316,
+            "protein": 64.2,
+            "carbohydrates": 0,
+            "fats": 6.4,
+            "quantity": 200,
+            "unit": "g",
+            "USDA": true
+            }
+            `
       // ✅ 1. Check for similar cached responses
       const { data: cached } = await supabase.rpc("find_similar_food", {
         input_query: normalizedQuery,
@@ -68,6 +94,22 @@ export const getFoodResponse = async (
           answer: cached[0].response,
           cached: true, // ✅ Added
         };
+      }
+      // ✅ 1.5 Check similar for examples
+      const { data: similar } = await supabase.rpc("find_kinda_similar_food", {
+        input_query: normalizedQuery,
+      });
+
+      if (similar?.length) {
+        Examples = ''
+       similar.forEach((s:any)=>{
+        let temp = `Input: "${s.query}"
+        Output:
+         ${s.response}
+        `
+        Examples += temp
+       })
+        
       }
     const model = new ChatOpenAI({
       modelName: "gpt-4o-mini",
@@ -113,31 +155,7 @@ export const getFoodResponse = async (
 
             Examples:
 
-            Input: "name: Chicken Shawarma quantity: big sandwich"
-            Output:
-            {
-            "name": "Chicken Shawarma Sandwich",
-            "calories": 700,
-            "protein": 40,
-            "carbohydrates": 70,
-            "fats": 30,
-            "quantity": 1,
-            "unit": "big sandwich",
-            "USDA": false
-            }
-
-            Input: "name: Chicken Breast Cooked quantity: 200g"
-            Output:
-            {
-            "name": "Chicken, broilers or fryers, breast, skinless, boneless, meat only, cooked, braised",
-            "calories": 316,
-            "protein": 64.2,
-            "carbohydrates": 0,
-            "fats": 6.4,
-            "quantity": 200,
-            "unit": "g",
-            "USDA": true
-            }
+           ${Examples}
       ` ;
     
 
