@@ -148,9 +148,10 @@ export const getFoodResponse = async (
 
             Rules:
             - Always use valid JSON with double quotes for keys and string values.
+            - Keep to the brand described best as you can, do not find a generic description unless no data is found for the brand.
             - If the food exists in USDA FoodData Central, use its official name and mark USDA:true.
-            - Keep to the brand described best as you can, even more than USDA.
             - If not, provide your best estimate and mark USDA:false.
+            - Do not ignore the quanitity provided and double check you are using the right quantity not just the single serving!
             - If the input is unrelated to food or quantity, return: {"error": "Please enter valid food name and quantity for tracking."}
 
             Examples:
