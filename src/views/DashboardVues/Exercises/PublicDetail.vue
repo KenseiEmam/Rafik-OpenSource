@@ -8,7 +8,7 @@ import TechTips from '@/components/ExerciseTabs/TechTips.vue';
 import EquipReq from '@/components/ExerciseTabs/EquipReq.vue';
 import ExerciseAlt from '@/components/ExerciseTabs/ExerciseAlt.vue';
 import { useI18n } from 'vue-i18n';
-
+import { useUserStore } from '@/stores/user';
 const { t , locale } = useI18n();
 
 // Tabs
@@ -19,7 +19,7 @@ function setActiveTab(tab: string) {
 
 const route = useRoute();
 const exerciseStore = useExerciseStore();
-
+const userStore= useUserStore();
 // Alerts
 function showSuccess(message: string) {
   Swal.fire({
@@ -133,6 +133,13 @@ onMounted(() => {
               class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext "
             >
               {{ t('dashboard.exercises.public.duplicateExercise') }}
+            </button>
+            <button v-if="userStore.userProfile?.roles &&
+          userStore.userProfile.roles.includes('Administrator')"
+              @click="$router.push({name:'personal-details', params:{id: exerciseStore.Exercise?.id}} )"
+              class="text-body uppercase text-left hover:text-rafik-pritext dark:hover:text-rafik-darkpritext "
+            >
+              Edit Exercise
             </button>
           </div>
         </div>

@@ -184,7 +184,7 @@
     <div class="card p-8 flex flex-col gap-3  items-center 2xl:min-h-96" v-else-if="props.client.coach_details">
       <div class="space-y-4">
         <h3 class="text-sm contentH-small 2xl:text-base">
-          {{ t('dashboard.tabs.clients.details.clientCoach') }}
+          {{ t('Coached By:') }}
         </h3>
         <h2 class="header-medium font-black">{{ props.client.coach_details.first_name + ' ' + props.client.coach_details.last_name || 'Loading...' }}</h2>
         <p class="text-body">{{ props.client.coach_details.email || 'Loading...' }}</p>
@@ -200,7 +200,7 @@
         </div>
         <div class="flex justify-center uppercase">
           <router-link
-            :to="{ name: 'user-details', params: { id: props.client.coach_details.id } }"
+            :to="{ name: 'single-user', params: { id: props.client.coach_details.id } }"
             class="font-semibold"
             >{{ t('dashboard.tabs.clients.details.visitCoach') }}</router-link
           >

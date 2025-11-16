@@ -152,18 +152,20 @@ async function getPageExercises(page: number, filter:string) {
   // Fetch a single personal exercise by ID
   async function fetchPersonalExercise(id: string) {
     const UserID = getUserID();
+    const isAdmin = localStorage.getItem("Roles")?.includes("Administrator")
+    let query = supabase.from("exercises").select().eq("id", id);
+
+    if (!isAdmin) {
+      query = query.eq("trainer_id", UserID);
+    }
+
     if (!UserID) {
       showError("No user ID found in localStorage.");
       return;
     }
     try {
 
-      const { data, error } = await supabase
-        .from("exercises")
-        .select()
-        .eq("id", id)
-        .eq("trainer_id",UserID)
-        .single();
+      const { data, error } = await query.single()
 
       if (error) throw error;
 
