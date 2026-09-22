@@ -17,16 +17,18 @@ export async function startWorkout(
   versionId: string,
   owner: string,
   assignmentId?: string,
+  scheduledDate?: string,
 ) {
   const existing = (await localSessions(owner)).find(
     (x) =>
       x.session.status === 'in_progress' &&
       x.session.version_id === versionId &&
       x.session.day_id === day.id &&
-      x.session.assignment_id === (assignmentId || null),
+      x.session.assignment_id === (assignmentId || null) &&
+      (!assignmentId || x.session.occurrence_key === `${assignmentId}:${scheduledDate}:${day.id}`),
   )
   if (existing) return existing
-  const startKey = `start:${owner}:${assignmentId || versionId}:${day.id}`
+  const startKey = `start:${owner}:${assignmentId || versionId}:${day.id}:${scheduledDate || 'flexible'}`
   const id = (await getDraft<string>(startKey)) || crypto.randomUUID()
   await storeDraft(startKey, id)
   let session: Session
@@ -64,6 +66,7 @@ export async function startWorkout(
       p_version_id: versionId,
       p_day_id: day.id,
       p_assignment_id: assignmentId || null,
+      p_scheduled_date: scheduledDate || null,
     })
   const current = await getLocalSession(session.id)
   if (current?.owner === owner) return current

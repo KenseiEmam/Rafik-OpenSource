@@ -14,8 +14,11 @@ export type Database = {
           client_id: string
           coach_id: string
           created_at: string
+          end_date: string | null
           id: string
           relationship_id: string
+          revision: number
+          schedule_mode: string
           start_date: string
           state: string
           version_id: string
@@ -24,8 +27,11 @@ export type Database = {
           client_id: string
           coach_id: string
           created_at?: string
+          end_date?: string | null
           id?: string
           relationship_id: string
+          revision?: number
+          schedule_mode?: string
           start_date?: string
           state?: string
           version_id: string
@@ -34,8 +40,11 @@ export type Database = {
           client_id?: string
           coach_id?: string
           created_at?: string
+          end_date?: string | null
           id?: string
           relationship_id?: string
+          revision?: number
+          schedule_mode?: string
           start_date?: string
           state?: string
           version_id?: string
@@ -67,6 +76,41 @@ export type Database = {
             columns: ["version_id"]
             isOneToOne: false
             referencedRelation: "plan_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      client_context: {
+        Row: {
+          constraints: string
+          goals: string
+          id: string
+          notes: string
+          revision: number
+          updated_at: string
+        }
+        Insert: {
+          constraints?: string
+          goals?: string
+          id: string
+          notes?: string
+          revision?: number
+          updated_at?: string
+        }
+        Update: {
+          constraints?: string
+          goals?: string
+          id?: string
+          notes?: string
+          revision?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_context_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "coach_clients"
             referencedColumns: ["id"]
           },
         ]
@@ -118,9 +162,13 @@ export type Database = {
           id: string
           instructions: string
           instructions_ar: string
+          kind: string
+          media_url: string
           movement: string
           name: string
           name_ar: string
+          owner_id: string | null
+          revision: number
         }
         Insert: {
           active?: boolean
@@ -129,9 +177,13 @@ export type Database = {
           id: string
           instructions: string
           instructions_ar: string
+          kind?: string
+          media_url?: string
           movement: string
           name: string
           name_ar: string
+          owner_id?: string | null
+          revision?: number
         }
         Update: {
           active?: boolean
@@ -140,11 +192,23 @@ export type Database = {
           id?: string
           instructions?: string
           instructions_ar?: string
+          kind?: string
+          media_url?: string
           movement?: string
           name?: string
           name_ar?: string
+          owner_id?: string | null
+          revision?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "exercises_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       invitations: {
         Row: {
@@ -333,6 +397,41 @@ export type Database = {
         }
         Relationships: []
       }
+      schedule_exceptions: {
+        Row: {
+          assignment_id: string
+          day_id: string
+          id: string
+          scheduled_date: string
+          state: string
+          target_date: string
+        }
+        Insert: {
+          assignment_id: string
+          day_id: string
+          id?: string
+          scheduled_date: string
+          state: string
+          target_date: string
+        }
+        Update: {
+          assignment_id?: string
+          day_id?: string
+          id?: string
+          scheduled_date?: string
+          state?: string
+          target_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "schedule_exceptions_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "assignments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       session_operations: {
         Row: {
           created_at: string
@@ -457,27 +556,36 @@ export type Database = {
       set_entries: {
         Row: {
           completed: boolean
+          effort: number | null
           exercise_key: string
           load: number
+          metres: number | null
           reps: number
+          seconds: number | null
           session_id: string
           set_index: number
           unit: string
         }
         Insert: {
           completed?: boolean
+          effort?: number | null
           exercise_key: string
           load: number
+          metres?: number | null
           reps: number
+          seconds?: number | null
           session_id: string
           set_index: number
           unit: string
         }
         Update: {
           completed?: boolean
+          effort?: number | null
           exercise_key?: string
           load?: number
+          metres?: number | null
           reps?: number
+          seconds?: number | null
           session_id?: string
           set_index?: number
           unit?: string
@@ -504,8 +612,54 @@ export type Database = {
           client_id: string
           coach_id: string
           created_at: string
+          end_date: string | null
           id: string
           relationship_id: string
+          revision: number
+          schedule_mode: string
+          start_date: string
+          state: string
+          version_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "assignments"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      assignment_schedule: {
+        Args: { p_from: string; p_id: string; p_to: string }
+        Returns: Json
+      }
+      change_scheduled_day: {
+        Args: {
+          p_date: string
+          p_day_id: string
+          p_id: string
+          p_state: string
+          p_target: string
+        }
+        Returns: undefined
+      }
+      configure_assignment: {
+        Args: {
+          p_end: string
+          p_id: string
+          p_mode: string
+          p_revision: number
+          p_start: string
+          p_version_id: string
+        }
+        Returns: {
+          client_id: string
+          coach_id: string
+          created_at: string
+          end_date: string | null
+          id: string
+          relationship_id: string
+          revision: number
+          schedule_mode: string
           start_date: string
           state: string
           version_id: string
@@ -566,6 +720,10 @@ export type Database = {
         }
       }
       get_invitation: { Args: { p_token: string }; Returns: Json }
+      previous_performance: {
+        Args: { p_before: string; p_exercises: string[] }
+        Returns: Json
+      }
       publish_plan: {
         Args: { p_expected_version: number; p_id: string }
         Returns: {
@@ -614,6 +772,53 @@ export type Database = {
         }
       }
       revoke_invitation: { Args: { p_id: string }; Returns: undefined }
+      save_client_context: {
+        Args: {
+          p_constraints: string
+          p_goals: string
+          p_id: string
+          p_notes: string
+          p_revision: number
+        }
+        Returns: {
+          constraints: string
+          goals: string
+          id: string
+          notes: string
+          revision: number
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "client_context"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      save_exercise: {
+        Args: { p_data: Json; p_id: string; p_revision: number }
+        Returns: {
+          active: boolean
+          equipment: string
+          equipment_ar: string
+          id: string
+          instructions: string
+          instructions_ar: string
+          kind: string
+          media_url: string
+          movement: string
+          name: string
+          name_ar: string
+          owner_id: string | null
+          revision: number
+        }
+        SetofOptions: {
+          from: "*"
+          to: "exercises"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       save_plan: {
         Args: {
           p_draft: Json
@@ -650,11 +855,33 @@ export type Database = {
         Returns: Json
       }
       session_document: { Args: { p_id: string }; Returns: Json }
+      set_client_state: {
+        Args: { p_id: string; p_state: string }
+        Returns: {
+          client_id: string
+          coach_id: string
+          created_at: string
+          id: string
+          state: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "coach_clients"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      set_exercise_active: {
+        Args: { p_active: boolean; p_id: string }
+        Returns: undefined
+      }
+      snapshot_prescription: { Args: { p: Json }; Returns: Json }
       start_session: {
         Args: {
           p_assignment_id?: string
           p_day_id: string
           p_id: string
+          p_scheduled_date?: string
           p_version_id: string
         }
         Returns: Json

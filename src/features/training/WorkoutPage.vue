@@ -25,6 +25,8 @@ import {
 import { editLocalSession, getLocalSession } from '../../lib/storage'
 import { rpc } from '../../lib/backend'
 import sample from '../../content/sample.json'
+import { exerciseInfo, exerciseName, targetLabel, actualLabel } from '../../lib/prescriptions'
+import type { Entry, PrescriptionExercise } from '../../lib/domain'
 const route = useRoute()
 const router = useRouter()
 const id = String(route.params.id)
@@ -47,7 +49,49 @@ onBeforeRouteLeave(async () => {
 const owner = computed(() => user.value?.id || 'guest')
 const session = computed(() => row.value?.session)
 const current = computed(() => session.value?.prescription.exercises[selected.value])
-const info = computed(() => sample.exercises.find((e) => e.id === current.value?.exerciseId))
+const groupBounds = computed(() => {
+  const list = session.value?.prescription.exercises || [],
+    label = current.value?.group
+  if (!label) return { start: selected.value, end: selected.value }
+  let start = selected.value,
+    end = selected.value
+  while (start > 0 && list[start - 1]?.group === label) start--
+  while (end < list.length - 1 && list[end + 1]?.group === label) end++
+  return { start, end }
+})
+const grouped = computed(() => groupBounds.value.end > groupBounds.value.start)
+const nextIndex = computed(() => {
+  if (grouped.value && selected.value === groupBounds.value.end) {
+    const list = session.value!.prescription.exercises
+    const firstIncomplete = list.findIndex(
+      (e, i) =>
+        i >= groupBounds.value.start &&
+        i <= groupBounds.value.end &&
+        session.value!.entries.some((a) => a.exercise_key === e.key && !a.completed),
+    )
+    if (firstIncomplete >= 0) return firstIncomplete
+  }
+  return selected.value + 1
+})
+const info = computed(() => (current.value ? exerciseInfo(current.value) : undefined))
+const firstField = computed(() =>
+  current.value?.kind === 'timed'
+    ? 'seconds'
+    : current.value?.kind === 'distance'
+      ? 'metres'
+      : 'load',
+)
+const secondField = computed(() => (firstField.value === 'load' ? 'reps' : 'effort'))
+const fieldLabel = (field: string) =>
+  field === 'seconds'
+    ? language('seconds', 'ثوانٍ')
+    : field === 'metres'
+      ? language('metres', 'أمتار')
+      : field === 'effort'
+        ? 'RPE'
+        : field === 'load'
+          ? language('load', 'وزن')
+          : language('reps', 'تكرارات')
 const entries = computed(
   () => session.value?.entries.filter((e) => e.exercise_key === current.value?.key) || [],
 )
@@ -82,7 +126,10 @@ async function load() {
       row.value = await getLocalSession(id)
       await router.replace(route.path)
     }
-    if (row.value?.owner !== 'guest') void sync()
+    if (row.value?.owner !== 'guest') {
+      void sync()
+      void getPrevious()
+    }
   } catch (e) {
     error.value = errorMessage(e)
   } finally {
@@ -118,10 +165,22 @@ const fieldDrafts = ref<Record<string, string>>({})
 const invalidFields = ref<Record<string, boolean>>({})
 const fieldKey = (index: number, field: string) => `${current.value!.key}:${index}:${field}`
 const hasInvalid = computed(() => Object.values(invalidFields.value).some(Boolean))
-function changeEntry(index: number, field: 'load' | 'reps', event: Event) {
+function changeEntry(
+  index: number,
+  field: 'load' | 'reps' | 'seconds' | 'metres' | 'effort',
+  event: Event,
+) {
   const input = event.target as HTMLInputElement
   const key = fieldKey(index, field)
   fieldDrafts.value[key] = input.value
+  if (field === 'effort' && input.value === '') {
+    invalidFields.value[key] = false
+    const exerciseKey = current.value!.key
+    void mutate((s) => {
+      s.entries.find((e) => e.exercise_key === exerciseKey && e.set_index === index)!.effort = null
+    })
+    return
+  }
   const valid = input.value !== '' && input.checkValidity() && Number.isFinite(Number(input.value))
   invalidFields.value[key] = !valid
   if (!valid) {
@@ -141,15 +200,25 @@ async function toggle(index: number) {
   if (hasInvalid.value) return
   const key = current.value!.key
   const entry = entries.value.find((e) => e.set_index === index)!
-  if (!entry.completed && entry.reps < 1) {
-    error.value = language('Add at least one repetition.', 'أضف تكراراً واحداً على الأقل.')
+  if (
+    !entry.completed &&
+    (current.value!.kind === 'timed'
+      ? (entry.seconds || 0) < 1
+      : current.value!.kind === 'distance'
+        ? (entry.metres || 0) < 1
+        : entry.reps < 1)
+  ) {
+    error.value = language(
+      'Record a positive result before completing this set.',
+      'سجّل نتيجة موجبة قبل إكمال المجموعة.',
+    )
     return
   }
   await mutate((s) => {
     const e = s.entries.find((e) => e.exercise_key === key && e.set_index === index)!
     e.completed = !e.completed
   })
-  if (!entry.completed) {
+  if (!entry.completed && (!grouped.value || selected.value === groupBounds.value.end)) {
     row.value = await editLocalSession(id, (r) => {
       r.restUntil = Date.now() + current.value!.rest * 1000
     })
@@ -246,35 +315,26 @@ function updateNote(event: Event) {
 }
 const previous = ref<Record<string, string>>({})
 async function getPrevious() {
-  if (!user.value) return
+  if (!user.value || !session.value) return
   try {
-    const { backend } = await import('../../lib/backend')
-    const { data } = await backend
-      .from('sessions')
-      .select('id')
-      .eq('client_id', user.value.id)
-      .eq('status', 'completed')
-      .neq('id', id)
-      .order('completed_at', { ascending: false })
-      .limit(1)
-    if (data?.[0]) {
-      const s = await rpc<Session>('session_document', { p_id: data[0].id })
-      s.entries
-        .filter((e) => e.completed)
-        .forEach((e) => {
-          previous.value[
-            s.prescription.exercises.find((x) => x.key === e.exercise_key)?.exerciseId ||
-              e.exercise_key
-          ] = `${e.load} ${t(e.unit)} × ${e.reps}`
-        })
-    }
+    const results = await rpc<
+      { exercise_id: string; prescription: PrescriptionExercise; entries: Entry[] }[]
+    >('previous_performance', {
+      p_exercises: session.value.prescription.exercises.map((e) => e.exerciseId),
+      p_before: session.value.started_at,
+    })
+    previous.value = Object.fromEntries(
+      results.map((r) => [
+        r.exercise_id,
+        r.entries.map((e) => actualLabel(e, r.prescription.kind)).join(' · '),
+      ]),
+    )
   } catch {
-    /* Previous results are optional; never invent a number on failure. */
+    /* Optional evidence: omit on failure rather than inventing an actual. */
   }
 }
 onMounted(() => {
   void load()
-  void getPrevious()
   clock = setInterval(() => {
     now.value = Date.now()
   }, 1000)
@@ -376,10 +436,7 @@ function correctSets() {
                     aria-hidden="true"
                   /><template v-else>{{ i + 1 }}</template></span
                 ><span
-                  >{{
-                    locale === 'ar'
-                      ? sample.exercises.find((x) => x.id === ex.exerciseId)?.name_ar
-                      : sample.exercises.find((x) => x.id === ex.exerciseId)?.name
+                  >{{ exerciseName(ex)
                   }}<small
                     >{{
                       session.entries.filter((e) => e.exercise_key === ex.key && e.completed).length
@@ -401,7 +458,7 @@ function correctSets() {
                     >
                   </p>
                 </div>
-                <label class="unit-control"
+                <label v-if="firstField === 'load'" class="unit-control"
                   ><span class="sr-only">{{ t('units') }}</span
                   ><select
                     :value="entries[0]?.unit || current.unit"
@@ -416,14 +473,48 @@ function correctSets() {
               <p class="instruction">
                 {{ locale === 'ar' ? info?.instructions_ar : info?.instructions }}
               </p>
+              <p v-if="current.group" class="tag">
+                {{ language('Group', 'المجموعة') }}: {{ current.group }}
+              </p>
+              <p v-if="grouped" class="small-print">
+                {{
+                  language(
+                    'Alternate the exercises in this group. Rest after the last exercise in each round.',
+                    'تناوب بين تمارين هذه المجموعة. استرح بعد آخر تمرين في كل جولة.',
+                  )
+                }}
+              </p>
+              <p class="prescription-line">
+                {{ language('Target', 'الهدف') }}: {{ targetLabel(current) }}
+              </p>
+              <a
+                v-if="info && 'media_url' in info && info.media_url"
+                :href="String(info.media_url)"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-link"
+                >{{ language('Open demonstration', 'فتح الشرح') }} ↗</a
+              >
               <p v-if="current.note" class="coach-prescription">{{ current.note }}</p>
               <p v-if="previous[current.exerciseId]" class="previous-result">
                 {{ t('previous') }}: <strong dir="ltr">{{ previous[current.exerciseId] }}</strong>
               </p>
+              <div v-if="current.targets" class="set-target-list">
+                <small v-for="(target, n) in current.targets" :key="n"
+                  >{{ language('Set', 'المجموعة') }} {{ n + 1 }}: {{ targetLabel(current, target)
+                  }}<br
+                /></small>
+              </div>
               <div class="set-grid set-head" aria-hidden="true">
                 <span>{{ language('Set', 'المجموعة') }}</span
-                ><span>{{ t('load') }} ({{ t(entries[0]?.unit || current.unit) }})</span
-                ><span>{{ t('reps') }}</span
+                ><span>{{
+                  firstField === 'load'
+                    ? t('load') + ' (' + t(entries[0]?.unit || current.unit) + ')'
+                    : fieldLabel(firstField)
+                }}</span
+                ><span>{{
+                  secondField === 'reps' ? t('reps') : language('RPE (optional)', 'RPE (اختياري)')
+                }}</span
                 ><span>{{ t('done') }}</span>
               </div>
               <div
@@ -437,32 +528,32 @@ function correctSets() {
                   type="number"
                   inputmode="decimal"
                   min="0"
-                  max="1000"
-                  step="0.01"
-                  :value="fieldDrafts[fieldKey(entry.set_index, 'load')] ?? entry.load"
+                  :max="firstField === 'load' ? 1000 : firstField === 'seconds' ? 86400 : 1000000"
+                  :step="firstField === 'seconds' ? 1 : 0.01"
+                  :value="fieldDrafts[fieldKey(entry.set_index, firstField)] ?? entry[firstField]"
                   :disabled="row.conflict"
                   :aria-label="
                     language(
-                      `Set ${entry.set_index + 1} load`,
+                      `Set ${entry.set_index + 1} ${fieldLabel(firstField)}`,
                       `وزن المجموعة ${entry.set_index + 1}`,
                     )
                   "
-                  @input="changeEntry(entry.set_index, 'load', $event)"
+                  @input="changeEntry(entry.set_index, firstField, $event)"
                 /><input
                   type="number"
                   inputmode="numeric"
-                  min="0"
-                  max="200"
-                  step="1"
-                  :value="fieldDrafts[fieldKey(entry.set_index, 'reps')] ?? entry.reps"
+                  :min="secondField === 'effort' ? 1 : 0"
+                  :max="secondField === 'effort' ? 10 : 200"
+                  :step="secondField === 'effort' ? 0.5 : 1"
+                  :value="fieldDrafts[fieldKey(entry.set_index, secondField)] ?? entry[secondField]"
                   :disabled="row.conflict"
                   :aria-label="
                     language(
-                      `Set ${entry.set_index + 1} reps`,
+                      `Set ${entry.set_index + 1} ${fieldLabel(secondField)}`,
                       `تكرارات المجموعة ${entry.set_index + 1}`,
                     )
                   "
-                  @input="changeEntry(entry.set_index, 'reps', $event)"
+                  @input="changeEntry(entry.set_index, secondField, $event)"
                 /><button
                   class="record-button"
                   :class="{ checked: entry.completed }"
@@ -479,6 +570,23 @@ function correctSets() {
                   <PhCheck :size="23" weight="bold" aria-hidden="true" />
                 </button>
               </div>
+              <details v-if="firstField === 'load'" class="advanced-prescription">
+                <summary>
+                  {{ language('Record effort (optional)', 'تسجيل الجهد (اختياري)') }}
+                </summary>
+                <div class="field-pair">
+                  <label v-for="entry in entries" :key="entry.set_index"
+                    >{{ language('Set', 'المجموعة') }} {{ entry.set_index + 1 }} · RPE<input
+                      type="number"
+                      min="1"
+                      max="10"
+                      step="0.5"
+                      :disabled="row.conflict"
+                      :value="fieldDrafts[fieldKey(entry.set_index, 'effort')] ?? entry.effort"
+                      @input="changeEntry(entry.set_index, 'effort', $event)"
+                  /></label>
+                </div>
+              </details>
               <div v-if="remaining > 0" class="rest-timer">
                 <PhClock :size="22" aria-hidden="true" />
                 <div>
@@ -493,14 +601,17 @@ function correctSets() {
               </div>
               <div class="logger-bottom">
                 <button
-                  v-if="selected < session.prescription.exercises.length - 1"
+                  v-if="nextIndex < session.prescription.exercises.length"
                   class="button secondary full"
-                  @click="selected++"
+                  @click="selected = nextIndex"
                 >
-                  {{ t('nextExercise')
+                  {{
+                    nextIndex <= selected
+                      ? language('Next round', 'الجولة التالية')
+                      : t('nextExercise')
                   }}<PhArrowRight :size="20" class="directional" aria-hidden="true" />
                 </button>
-                <p class="small-print">
+                <p v-if="firstField === 'load'" class="small-print">
                   {{
                     language(
                       'Record the weight for one dumbbell. For bodyweight exercises, leave the load at 0.',
@@ -577,11 +688,7 @@ function correctSets() {
             </button>
             <div class="summary-exercises">
               <div v-for="ex in session.prescription.exercises" :key="ex.key">
-                <span>{{
-                  locale === 'ar'
-                    ? sample.exercises.find((e) => e.id === ex.exerciseId)?.name_ar
-                    : sample.exercises.find((e) => e.id === ex.exerciseId)?.name
-                }}</span
+                <span>{{ exerciseName(ex) }}</span
                 ><strong
                   >{{
                     session.entries.filter((e) => e.exercise_key === ex.key && e.completed).length

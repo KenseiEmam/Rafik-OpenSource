@@ -8,13 +8,16 @@ import { clone, type Plan, type PlanVersion, type Prescription } from '../../lib
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { language, locale, t, errorMessage } from '../../lib/i18n'
 import sample from '../../content/sample.json'
+import PrescriptionFields from './PrescriptionFields.vue'
+import { upgradePrescription, targetLabel } from '../../lib/prescriptions'
+import type { Exercise } from '../../lib/domain'
 import PageState from '../../components/PageState.vue'
 const route = useRoute(),
   router = useRouter()
 const isNew = route.params.id === 'new'
 const id = ref(isNew ? crypto.randomUUID() : String(route.params.id))
 const title = ref(language('My training plan', 'خطتي التدريبية'))
-const draft = ref<Prescription>(clone(sample.prescription) as Prescription)
+const draft = ref<Prescription>(upgradePrescription(clone(sample.prescription) as Prescription))
 const version = ref<number | null>(null)
 const selected = ref(0)
 const loading = ref(true),
@@ -28,14 +31,45 @@ const form = ref<HTMLFormElement>()
 let initialized = false
 const key = `plan:${user.value!.id}:${route.params.id}`
 const day = computed(() => draft.value.days[selected.value]!)
-const name = (exerciseId: string) => {
-  const e = sample.exercises.find((e) => e.id === exerciseId)
-  return locale.value === 'ar' ? e?.name_ar : e?.name
+const catalog = ref<Exercise[]>([]),
+  exerciseSearch = ref('')
+const available = computed(() =>
+  catalog.value.filter(
+    (e) =>
+      e.active !== false &&
+      `${e.name} ${e.name_ar} ${e.equipment}`
+        .toLowerCase()
+        .includes(exerciseSearch.value.toLowerCase()),
+  ),
+)
+const name = (id: string) => {
+  const e = catalog.value.find((e) => e.id === id)
+  return (locale.value === 'ar' ? e?.name_ar : e?.name) || id
+}
+function selectExercise(index: number) {
+  const ex = day.value.exercises[index]!,
+    info = catalog.value.find((e) => e.id === ex.exerciseId)
+  ex.kind = info?.kind || 'strength'
+  ex.seconds ||= 30
+  ex.metres ||= 100
+  delete ex.info
+}
+function restDay() {
+  if (day.value.restDay) day.value.exercises = []
+  else addExercise()
+}
+function freeSlot() {
+  for (let week = 1; week <= (draft.value.cycleWeeks || 1); week++)
+    for (let weekday = 0; weekday < 7; weekday++)
+      if (!draft.value.days.some((d) => d.week === week && d.weekday === weekday))
+        return { week, weekday }
+  return null
 }
 async function load(recover = true) {
   loading.value = true
   error.value = ''
   try {
+    catalog.value = await rows<Exercise>('exercises')
     if (recover) {
       const local = await getDraft<{
         id: string
@@ -46,7 +80,7 @@ async function load(recover = true) {
       if (local) {
         id.value = local.id
         title.value = local.title
-        draft.value = local.draft
+        draft.value = upgradePrescription(local.draft)
         version.value = local.version
         restored.value = true
         initialized = true
@@ -57,7 +91,7 @@ async function load(recover = true) {
       const p = (await rows<Plan>('plans', 'id', id.value))[0]
       if (!p) throw Error('not_found')
       title.value = p.title
-      draft.value = clone(p.draft)
+      draft.value = upgradePrescription(clone(p.draft))
       version.value = p.draft_version
     }
     initialized = true
@@ -140,7 +174,10 @@ async function publish() {
 function addExercise() {
   day.value.exercises.push({
     key: crypto.randomUUID(),
-    exerciseId: 'goblet-squat',
+    exerciseId: available.value[0]?.id || 'goblet-squat',
+    kind: available.value[0]?.kind || 'strength',
+    seconds: 30,
+    metres: 100,
     sets: 3,
     reps: 10,
     load: 0,
@@ -150,13 +187,30 @@ function addExercise() {
   })
 }
 function addDay() {
-  const d = clone(draft.value.days[0]!)
+  const slot = freeSlot()
+  if (!slot) {
+    error.value = language(
+      'Add a cycle week before adding more days.',
+      'أضف أسبوعاً للدورة قبل إضافة أيام.',
+    )
+    return
+  }
+  const d = clone(
+    draft.value.days.find((d) => !d.restDay) || {
+      id: crypto.randomUUID(),
+      name: '',
+      minutes: 30,
+      exercises: [],
+    },
+  )
+  Object.assign(d, slot)
   d.id = crypto.randomUUID()
   d.name = language('New session', 'حصة جديدة')
   d.nameAr = ''
   d.exercises.forEach((e) => (e.key = crypto.randomUUID()))
   draft.value.days.push(d)
   selected.value = draft.value.days.length - 1
+  if (!d.exercises.length) addExercise()
 }
 function move(index: number, offset: number) {
   const ex = day.value.exercises.splice(index, 1)[0]!
@@ -169,7 +223,7 @@ async function discard() {
   selected.value = 0
   if (isNew) {
     title.value = language('My training plan', 'خطتي التدريبية')
-    draft.value = clone(sample.prescription) as Prescription
+    draft.value = upgradePrescription(clone(sample.prescription) as Prescription)
     version.value = null
     id.value = crypto.randomUUID()
     initialized = true
@@ -260,6 +314,31 @@ function removeDay() {
             </p>
           </div>
           <h2 v-else>{{ title }}</h2>
+          <div v-if="!preview" class="field-pair">
+            <label
+              >{{ language('Cycle length (weeks)', 'طول الدورة (أسابيع)')
+              }}<input
+                v-model.number="draft.cycleWeeks"
+                type="number"
+                min="1"
+                max="12"
+                required /></label
+            ><label
+              >{{ language('Find an exercise', 'البحث عن تمرين')
+              }}<input v-model="exerciseSearch" type="search"
+            /></label>
+          </div>
+          <p v-if="!preview" class="small-print">
+            {{
+              language(
+                'Day offsets start from the assignment date. Unfilled slots are recovery days.',
+                'تبدأ أيام الدورة من تاريخ تعيين الخطة. الأيام الفارغة للتعافي.',
+              )
+            }}
+            <RouterLink to="/coach/exercises" target="_blank"
+              >{{ language('Manage your exercise library', 'إدارة مكتبة التمارين') }} ↗</RouterLink
+            >
+          </p>
           <div class="day-tabs">
             <button
               v-for="(d, i) in draft.days"
@@ -268,8 +347,9 @@ function removeDay() {
               :class="{ selected: selected === i }"
               @click="selected = i"
             >
+              {{ language('W', 'أ') }}{{ d.week }} ·
               {{ locale === 'ar' ? d.nameAr || d.name : d.name }}</button
-            ><button v-if="!preview && draft.days.length < 7" type="button" @click="addDay">
+            ><button v-if="!preview && draft.days.length < 84" type="button" @click="addDay">
               <PhPlus :size="18" />{{ language('Add day', 'إضافة يوم') }}
             </button>
           </div>
@@ -299,14 +379,47 @@ function removeDay() {
                 <PhTrash :size="20" />
               </button>
             </div>
+            <div v-if="!preview" class="field-pair cycle-settings">
+              <label
+                >{{ language('Cycle week', 'أسبوع الدورة')
+                }}<input
+                  v-model.number="day.week"
+                  type="number"
+                  min="1"
+                  :max="draft.cycleWeeks"
+                  required /></label
+              ><label
+                >{{ language('Day of cycle week', 'اليوم في أسبوع الدورة')
+                }}<select v-model.number="day.weekday">
+                  <option v-for="n in 7" :key="n" :value="n - 1">
+                    {{ language('Day', 'اليوم') }} {{ n }}
+                  </option>
+                </select></label
+              ><label class="check-label"
+                ><input v-model="day.restDay" type="checkbox" @change="restDay" />{{
+                  language('Rest day', 'يوم راحة')
+                }}</label
+              >
+            </div>
+            <p v-if="day.restDay" class="notice">
+              {{
+                language('Recovery day. No workout to record.', 'يوم تعافٍ. لا يوجد تمرين للتسجيل.')
+              }}
+            </p>
             <article v-for="(ex, i) in day.exercises" :key="ex.key" class="editor-exercise">
               <div class="editor-exercise-top">
                 <span class="exercise-index">{{ String(i + 1).padStart(2, '0') }}</span>
                 <h3 v-if="preview">{{ name(ex.exerciseId) }}</h3>
                 <label v-else class="grow"
                   ><span class="sr-only">{{ language('Exercise', 'التمرين') }} {{ i + 1 }}</span
-                  ><select v-model="ex.exerciseId">
-                    <option v-for="e in sample.exercises" :key="e.id" :value="e.id">
+                  ><select v-model="ex.exerciseId" @change="selectExercise(i)">
+                    <option
+                      v-for="e in catalog.filter(
+                        (e) => e.id === ex.exerciseId || available.some((a) => a.id === e.id),
+                      )"
+                      :key="e.id"
+                      :value="e.id"
+                    >
                       {{ locale === 'ar' ? e.name_ar : e.name }}
                     </option>
                   </select></label
@@ -339,52 +452,21 @@ function removeDay() {
                   </button>
                 </div>
               </div>
-              <p v-if="preview" class="prescription-line">
-                {{ ex.sets }} {{ t('sets') }} × {{ ex.reps }} {{ t('reps') }} · {{ ex.load }}
-                {{ t(ex.unit) }} · {{ ex.rest }} {{ language('sec rest', 'ثانية راحة') }}
-              </p>
-              <div v-else class="exercise-fields">
-                <label
-                  >{{ t('sets')
-                  }}<input
-                    v-model.number="ex.sets"
-                    type="number"
-                    required
-                    min="1"
-                    max="10" /></label
-                ><label
-                  >{{ t('reps')
-                  }}<input
-                    v-model.number="ex.reps"
-                    type="number"
-                    required
-                    min="1"
-                    max="100" /></label
-                ><label
-                  >{{ t('load')
-                  }}<input
-                    v-model.number="ex.load"
-                    type="number"
-                    required
-                    min="0"
-                    max="1000"
-                    step="0.01" /></label
-                ><label
-                  >{{ t('units')
-                  }}<select v-model="ex.unit">
-                    <option value="kg">{{ t('kg') }}</option>
-                    <option value="lb">{{ t('lb') }}</option>
-                  </select></label
-                ><label
-                  >{{ language('Rest (seconds)', 'الراحة (ثانية)')
-                  }}<input v-model.number="ex.rest" type="number" required min="0" max="600"
-                /></label>
+              <div v-if="preview" class="prescription-line">
+                <p>
+                  {{ ex.group }} · {{ ex.sets }} {{ t('sets') }} · {{ targetLabel(ex) }} ·
+                  {{ ex.rest }} {{ language('sec rest', 'ثانية راحة') }}
+                </p>
+                <p v-for="(target, n) in ex.targets" :key="n">
+                  {{ n + 1 }}. {{ targetLabel(ex, target) }}
+                </p>
               </div>
+              <PrescriptionFields v-else v-model="day.exercises[i]!" />
               <p v-if="preview">
                 {{
                   locale === 'ar'
-                    ? sample.exercises.find((e) => e.id === ex.exerciseId)?.instructions_ar
-                    : sample.exercises.find((e) => e.id === ex.exerciseId)?.instructions
+                    ? catalog.find((e) => e.id === ex.exerciseId)?.instructions_ar
+                    : catalog.find((e) => e.id === ex.exerciseId)?.instructions
                 }}
               </p>
               <p v-if="preview && ex.note" class="coach-prescription">{{ ex.note }}</p>
@@ -397,7 +479,7 @@ function removeDay() {
               </details>
             </article>
             <button
-              v-if="!preview && day.exercises.length < 12"
+              v-if="!preview && !day.restDay && day.exercises.length < 12"
               type="button"
               class="button secondary full"
               @click="addExercise"

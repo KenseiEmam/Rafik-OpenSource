@@ -125,8 +125,12 @@ test('coach publishes and invites; verified client trains; coach replies', async
   await client.getByRole('heading', { name: 'Session complete.' }).click()
   await expect(client.getByRole('status')).toContainText('Synced with your account')
   await page.goto('/coach')
-  await page.getByRole('link').filter({ hasText: 'Last repetitions felt controlled.' }).click()
-  await expect(page.getByText('7 kg', { exact: true })).toBeVisible()
+  await page
+    .getByRole('link')
+    .filter({ hasText: 'Last repetitions felt controlled.' })
+    .filter({ hasText: email.split('@')[0] })
+    .click()
+  await expect(page.getByText('7 kg × 10', { exact: true })).toBeVisible()
   await page
     .getByLabel('Coach feedback')
     .fill('Keep the same load next time and focus on a steady pace.')

@@ -6,7 +6,7 @@ import { user } from '../../app/auth'
 import { rpc, rows } from '../../lib/backend'
 import type { Session, Profile } from '../../lib/domain'
 import { language, locale, t, errorMessage, dateLabel } from '../../lib/i18n'
-import sample from '../../content/sample.json'
+import { exerciseName, targetLabel, actualLabel } from '../../lib/prescriptions'
 import PageState from '../../components/PageState.vue'
 const id = String(useRoute().params.id)
 const session = ref<Session>(),
@@ -71,15 +71,10 @@ onMounted(load)
               class="review-exercise"
             >
               <h2>
-                {{
-                  locale === 'ar'
-                    ? sample.exercises.find((e) => e.id === ex.exerciseId)?.name_ar
-                    : sample.exercises.find((e) => e.id === ex.exerciseId)?.name
-                }}
+                {{ exerciseName(ex) }}
               </h2>
               <p class="subtle">
-                {{ language('Planned', 'المخطط') }}: {{ ex.sets }} × {{ ex.reps }} · {{ ex.load }}
-                {{ t(ex.unit) }}
+                {{ language('Planned', 'المخطط') }}: {{ ex.sets }} × {{ targetLabel(ex) }}
               </p>
               <table>
                 <caption class="sr-only">
@@ -90,8 +85,8 @@ onMounted(load)
                 <thead>
                   <tr>
                     <th>{{ language('Set', 'المجموعة') }}</th>
-                    <th>{{ t('load') }}</th>
-                    <th>{{ t('reps') }}</th>
+                    <th>{{ language('Actual', 'النتيجة') }}</th>
+                    <th>{{ language('Target', 'الهدف') }}</th>
                     <th>{{ language('Recorded', 'مسجلة') }}</th>
                   </tr>
                 </thead>
@@ -102,10 +97,9 @@ onMounted(load)
                   >
                     <td>{{ entry.set_index + 1 }}</td>
                     <td>
-                      {{ entry.completed ? entry.load : '–' }}
-                      {{ entry.completed ? t(entry.unit) : '' }}
+                      {{ entry.completed ? actualLabel(entry, ex.kind) : '–' }}
                     </td>
-                    <td>{{ entry.completed ? entry.reps : '–' }}</td>
+                    <td>{{ targetLabel(ex, ex.targets?.[entry.set_index] || ex) }}</td>
                     <td>{{ entry.completed ? language('Yes', 'نعم') : language('No', 'لا') }}</td>
                   </tr>
                 </tbody>
