@@ -4,7 +4,7 @@ import {resolve,dirname} from 'node:path'
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..')
 const content=JSON.parse(readFileSync(resolve(root,'content/starter.json'),'utf8'))
 const quoted=value=>"'"+String(value).replaceAll("'","''")+"'"
-const columns=['id','name','name_ar','equipment','equipment_ar','instructions','instructions_ar','movement']
+const columns=['id','name','name_ar','equipment','equipment_ar','instructions','instructions_ar','movement','kind']
 const ids=new Set(content.exercises.map(e=>e.id))
 if(ids.size!==content.exercises.length)throw Error('Duplicate exercise ID')
 for(const e of content.exercises)for(const column of columns)if(typeof e[column]!=='string'||!e[column])throw Error(`Missing ${column} in ${e.id}`)

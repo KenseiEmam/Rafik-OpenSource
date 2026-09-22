@@ -32,6 +32,7 @@ The initial migration may be rewritten while this is an unshipped local rebuild.
 ## Documentation
 
 - [Audit and revival analysis](docs/revival/README.md)
+- [Daily coaching contracts](docs/implementation/r1-contract.md)
 - [Execution status](docs/implementation/ledger.md)
 - [Architecture and command contract](docs/implementation/architecture.md)
 - [Local operation and release gates](docs/implementation/runbook.md)

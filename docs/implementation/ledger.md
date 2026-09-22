@@ -18,23 +18,41 @@ Updated 22 September 2026. **A working local web/backend foundation is implement
 | E12 Usefulness/business observations | Materials prepared; not claimed as completed research | Demo, observation scripts, outcome ledger and iteration rules in `pilot.md`; no outreach/payments sent |
 | Native app | Deferred as instructed | No application source changes |
 
+## R1 — Daily coaching expansion
+
+**Implemented locally. The complete revamp remains in progress; R2–R5 are not implemented.** The first checkpoint was committed as backend `dc60441` and frontend `a6afdc3`, both on `codex/revamp`. No push was made.
+
+- Client workspace with private goals/constraints/notes, revision conflict checks and device draft recovery; overview, current plan/schedule and training history.
+- Searchable active/archived roster and archive/reactivate commands. Archived relationships cannot start new assigned sessions; history and already started work remain usable.
+- Exercise library with equipment/movement filters, private custom exercises, editing/retirement, bilingual instructions and optional HTTPS demonstration links. Fourteen authored shared exercises now cover strength, timed and distance examples. No media-upload service yet.
+- Schema-2 plans: 1–12 cycle weeks, day offsets/rest days, exercise ordering, custom exercises, strength/time/distance prescriptions, optional RPE and per-set targets, and group labels. The logger guides consecutive groups and starts rest after the final exercise in a round. Publication captures exercise instructions.
+- Client-specific flexible/cycle assignment with start/end dates, a bounded three-week coach schedule and two-week client schedule, skip/move/restore, and immutable started occurrences. Dates follow the client's timezone.
+- Timed/distance actuals and effort extend the existing durable logger and correction/retry protocol. Previous performance is looked up per exercise. Coach review compares actuals with individual targets.
+- Export includes the newly owned catalog, coaching context and schedule data. No additional runtime service, hosted provider or native dependency.
+
+**Verification:** 51 rollback database assertions; both migrations + synthetic seed + both suites also pass in a disposable database without resetting the preview. Supabase schema lint passes. Twenty browser scenarios cover Chromium and phone-sized WebKit; 224 route/width/language/theme layouts have no overflow or page errors, with checked accessibility states passing. Build/type checks and five unit/data tests pass, including calendar-date and timezone boundary checks. See `verification.md` and the R1 evidence files for exact boundaries.
+
+**Still outside R1:** exercise-alternative management/client substitutions, richer progression analytics, check-ins/assessments, conversations, nutrition, appointment booking, file uploads, organizations/teams and billing. The current cycle is a repeating training prescription, not an appointment calendar. Group guidance is explicit round navigation, not an automatic workout-completion engine. These limits must not be represented as a finished full revamp.
+
+**Next:** R2 ongoing coaching, beginning with progress and check-ins, then assessments and communication. Keep the corrected coverage register; finish each feature's backend, UI and failure states together.
+
 ## What changed
 
 `RAFIK-FRONTEND` now contains the fresh Vue application, domain/persistence modules, generated API types, authored content, visual system, browser checks and production shell caching. Old source remains in Git at baseline `a0c723e`.
 
 `rafik-api` now contains the fresh Supabase configuration, one local baseline migration, explicit commands, fixtures, regression scenarios and implementation documentation. The audit and historical live-backend evidence remain under `docs/revival`; its old-source links refer to baseline `652e9ee`.
 
-`rafik-mobile` remains at its original application content. `rafik-worker` is unchanged apart from its pre-existing `.DS_Store` modification. All four branches are still `codex/revamp`. No commits or pushes have been made.
+`rafik-mobile` remains at its original application content. `rafik-worker` is unchanged apart from its pre-existing `.DS_Store` modification. All four branches remain `codex/revamp`. The active backend/frontend now have local commits; nothing has been pushed.
 
 ## Current architecture, not a final feature ceiling
 
-One responsive web application and one Supabase backend. No migration of old users, restored legacy database, custom role/workspace hierarchy, automatic progression, AI/nutrition integrations, credit system, notification pipeline or native compatibility adapter. The local product provides an immediate useful sample and a complete coach-delivered training loop.
+One responsive web application and one Supabase backend, now with twelve domain tables. No migration of old users, restored legacy database, custom role/workspace hierarchy, automatic progression, AI/nutrition integrations, credit system, notification pipeline or native compatibility adapter. The local product provides an immediate useful sample and a complete coach-delivered training loop.
 
 The earlier decision to treat the broad product inventory as merely optional was too restrictive. The corrected coverage register restores a broader execution backlog for clients, programming, progress, communication, nutrition, scheduling and teams. Simplify each useful job and its implementation; do not make its existence contingent on finding customers first. The initial manual plan-conversion pilot remains a service experiment; no automatic import is implemented.
 
 ## Next action for Codex
 
-1. Execute the corrected R1–R5 backlog in `revamp-coverage.md`. First specify client/resource ownership and the expanded prescription/schedule contract, then complete the client workspace, exercise library and realistic programming flows.
+1. Continue with R2 in `revamp-coverage.md`: define and implement progress/check-ins, assessments and communication on the R1 contracts. Do not restart the foundation or treat R1 as the whole revamp.
 2. Keep the visual direction the user likes. Extend real backend-backed tasks and recovery states, not just navigation or seeded screenshots. Record each capability as absent, partial, implemented or verified.
 3. Complete integrated product and physical-device checks before declaring release readiness. Business observations remain separate evidence, not a substitute for missing features.
 4. When moving beyond local-only work, follow the new-project hosted release gate. Never deploy synthetic Auth fixtures, reuse old credentials, or push main. Native stays deferred until the broader web/backend work is ready.

@@ -2,7 +2,7 @@
 
 Local revamp, 22 September 2026. This record describes the new implementation; `docs/revival` preserves the audit and rationale. It is not a compatibility plan for the retired backend.
 
-**Scope correction:** this describes the implemented foundation, not the final product architecture or feature ceiling. [Revamp coverage](revamp-coverage.md) governs the broader remaining work and identifies contracts to resolve before extending the schema. The ten-table count is not a design constraint.
+**Scope correction:** this describes the implemented foundation, not the final product architecture or feature ceiling. [Revamp coverage](revamp-coverage.md) governs the broader remaining work and identifies contracts to resolve before extending the schema. The original ten-table count is not a design constraint; R1 adds `client_context` and `schedule_exceptions`. See `r1-contract.md` for the new invariants.
 
 ## System boundary
 
@@ -15,7 +15,7 @@ There is no Edge Function, worker, Firebase dependency, external analytics servi
 | Record | Owner and meaning |
 |---|---|
 | `profiles` | Auth UUID, optional display name and locale/units/timezone preferences; one identity for either role |
-| `exercises` | Small shared bilingual catalog, source-controlled |
+| `exercises` | Shared source-controlled catalog plus coach-owned, revisioned private content; publication snapshots instructions/media links |
 | `plans` | Coach-owned editable draft and monotonic draft revision |
 | `plan_versions` | Immutable published prescription; public flag reserved for the starter fixture |
 | `coach_clients` | Explicit relationship between two people; no organization hierarchy |
@@ -24,10 +24,12 @@ There is no Edge Function, worker, Firebase dependency, external analytics servi
 | `sessions` | Client-owned occurrence and immutable day prescription snapshot, actual state, note and coach feedback |
 | `set_entries` | Actual values and units, completed flag, bounded by the session's prescribed set identities |
 | `session_operations` | Receipt for a stable save operation ID; same request replays the acknowledgment |
+| `client_context` | Relationship-scoped goals/constraints/notes; only the owning coach can read/write; revision checked |
+| `schedule_exceptions` | Move/skip overrides for an original assignment/day/date occurrence; no generated future sessions |
 
-An assignment occurrence is `(client, assignment, client-local date, prescribed day ID)`. Starting that same slot twice returns one session. Two different day slots can be performed on one day. Repeating the identical assigned slot twice on one date is not a separate supported occurrence. Public sample attempts use their own persistent start ID. Dates use the saved client timezone, detected from the browser on initial profile creation; the UI allows changing it in Settings. A missing display name defaults to the verified email local part and can be edited later, keeping new clients identifiable without adding a signup form.
+A flexible assignment occurrence is `(client, assignment, client-local date, prescribed day ID)`. A scheduled occurrence uses its original scheduled date, even when moved. The bounded schedule projection applies cycle offsets, assignment dates and explicit exceptions; the start command verifies that the occurrence is available on the client-local current date. Starting that same slot twice returns one session. Two different day slots can be performed on one day. Repeating the identical assigned slot twice on one date is not a separate supported occurrence. Public sample attempts use their own persistent start ID. Dates use the saved client timezone, detected from the browser on initial profile creation; the UI allows changing it in Settings. A missing display name defaults to the verified email local part and can be edited later, keeping new clients identifiable without adding a signup form.
 
-Exercise instructions are catalog content; prescribed sets, reps, loads and notes are captured in the session snapshot. Published versions and started prescriptions are immutable. Actual entries may be corrected after completion. A correction preserves the original completion time and does not trigger automatic progression.
+Exercise instructions are catalog content; prescribed sets, reps, loads and notes are captured in the session snapshot. Published versions and started prescriptions are immutable. Actual entries include strength reps/load, seconds or metres, and optional reported effort. Target effort is not prefilled as an actual. Actual entries may be corrected after completion. A correction preserves the original completion time and does not trigger automatic progression.
 
 ## Command contract
 
@@ -43,7 +45,12 @@ All ordinary writes go through explicit Postgres functions; no trigger orchestra
 | `get_invitation` | Token | Public response contains coach context/status, no email or private prescription |
 | `accept_invitation` | Token and verified current Auth identity | Intended email checked; relationship, assignment and acceptance commit together; retry returns the same assignment |
 | `revoke_invitation` | Owned pending invitation UUID | Stops future acceptance; does not send anything |
-| `assign_plan` | Owned relationship and published version | Changes future starts; existing sessions keep snapshots |
+| `assign_plan` | Owned relationship and published version | Changes future starts; clears schedule exceptions; existing sessions keep snapshots |
+| `save_client_context` / `set_client_state` | Owned relationship, bounded private text + expected revision / active or archived | Context replay/CAS; relationship lock serializes archive versus start |
+| `save_exercise` / `set_exercise_active` | Stable ID, owned bounded content + revision / active flag | CAS and stable-create replay; retire without mutating snapshots |
+| `configure_assignment` | Owned assignment, version, start/end, flexible/cycle, revision | CAS; clears exceptions on a changed schedule; no history regeneration |
+| `assignment_schedule` / `change_scheduled_day` | Bounded date range / original day/date and target/state | At most 42 queried days and 41-day move; started occurrences cannot move |
+| `previous_performance` | At most twelve exercise IDs and session start cutoff | Most recent completed actual per exercise; caller-owned results only |
 | `start_session` | Persistent attempt UUID, version, day, optional assignment | Server verifies access and selects the prescription; same assigned occurrence returns its canonical UUID |
 | `save_session` | Session, expected version, stable operation UUID, full bounded entries, note, completion flag | Transactional validation, compare-and-swap, receipt replay; conflict keeps the device draft |
 | `review_session` | Owned coached completed session, feedback | Stores feedback and reviewed time; does not alter client results or completion |
@@ -67,9 +74,9 @@ The browser must have successfully loaded the production shell once for a fully 
 
 - Keep two repositories. No monorepo migration, generic form builder, schema-driven UI engine or repository/service abstraction tree.
 - Feature folders match user tasks: public, account, training, coaching. Shared code handles Auth, persistence, synchronization, translation, types and API access.
-- One bilingual `content/starter.json` in the backend generates seed and public sample. Do not edit generated copies. The eight-exercise scope is intentional; extend the catalog only for observed needs.
+- One bilingual `content/starter.json` in the backend generates seed and public sample. Do not edit generated copies. The shared catalog now has fourteen entries; coaches create private exercises through the application. Keep IDs stable and publish new instructions into new versions.
 - CSS uses semantic light/dark tokens, logical properties for RTL, and named feature sections. Shared components stay few; `PageState` supplies common loading/error behavior.
-- Stable prescription JSON is bounded to seven days, twelve exercises per day and ten sets per exercise. New prescription fields require a documented schema/validation change and regression scenario.
+- Schema-1 prescriptions remain readable. Schema 2 supports 1–12 cycle weeks and up to 84 unique day slots, twelve exercises per training day and ten sets per exercise. It adds rest days, typed strength/time/distance results, per-set targets, effort and consecutive group labels. New prescription fields require a documented schema/validation change and regression scenario.
 - Runtime errors preserve work. Avoid swallowing failures that imply successful data persistence. Diagnostic events are bounded and local, without email or workout-note payloads.
 
 ## What is deliberately outside this build

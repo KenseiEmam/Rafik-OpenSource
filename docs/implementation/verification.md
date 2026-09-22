@@ -4,6 +4,29 @@
 
 **Coverage limitation:** these checks cover the initial training/coaching slice only. They do not establish that Rafik's full feature set has been revamped. Missing and partial capabilities and their next implementation waves are recorded in [revamp coverage](revamp-coverage.md).
 
+## R1 verification update
+
+The original results below remain the baseline record. The daily-coaching expansion adds these verified local results:
+
+| Check | Result and boundary |
+|---|---|
+| Database suites | 51 assertions: 27 core + 24 daily coaching; both run in rollback transactions |
+| Fresh schema/fixtures | `npm run test:fresh` passed in a disposable database using Auth schema only, both public migrations and synthetic fixtures; original preview records unchanged |
+| Schema lint | Pinned Supabase CLI reports no schema errors or warnings after explicit array initialization and loop-variable cleanup |
+| Browser journeys | 20 passed: 10 in Chromium, 10 in phone-sized WebKit; includes custom exercise, multiweek mixed plan, schedule, actual recording, group round/rest guidance, review, private notes and archive/reactivation |
+| Layout | 224 combinations: 14 routes × four widths × English/Arabic × light/dark; no overflow or page errors |
+| Accessibility | Checked client workspace (English and Arabic dark), catalog, editor and mixed logger report no Axe violations; Arabic dark editor matrix check also passes |
+| Build/units | TypeScript + production build passed; five unit/data tests passed, including calendar dates west of UTC and leap-day/timezone boundaries |
+| Preservation | No preview reset, hosted change, worker/native source change or remote push |
+
+The roster and mixed-plan tests use real local Auth, SQL and PostgREST. Database scenarios separately prove that two clients receive independent sessions from the same plan. Schedule exceptions and wrong-date rejection are exercised at the database layer; physical-device and real-person task validation remain unperformed.
+
+The initial browser run found outdated test selectors after the review table changed from separate load/reps columns to actual/target columns. Repeatability also required selecting the newly created test client explicitly, and waiting for durable completion feedback before a reload. SQL fixtures are isolated inside rollback transactions so preview activity no longer collides with test occurrences/context revisions. The initial layout accessibility check ran before the editor had mounted; it now waits for the actual editor field. These were corrected before the passing results above.
+
+Actual new screenshots in the frontend's ignored `artifacts/` folder include `r1-client-*`, `r1-client-ar-*`, `r1-library-*`, `r1-plan-*`, `r1-schedule-*`, `r1-distance-*` and `r1-review-*`. Desktop and phone renders were inspected. Disabling animations for captures avoids showing transitional theme colors; unfocused skip links are clipped to avoid a WebKit full-page capture artifact while preserving keyboard access.
+
+Sanitized command summaries are in `evidence/r1-database.txt`, `r1-browser.txt`, `r1-fresh.txt` and `r1-layout.json`. This verifies R1, not the remaining product families in R2–R5.
+
 ## Results
 
 | Check | Result | Evidence |

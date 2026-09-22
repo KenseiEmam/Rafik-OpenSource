@@ -1,4 +1,7 @@
 begin;
+-- Isolate today’s synthetic fixture occurrences inside this rollback transaction.
+-- Local preview activity is restored unchanged at the end of the suite.
+delete from public.sessions where client_id='10000000-0000-4000-8000-000000000002' and local_date=(select (now() at time zone timezone)::date from public.profiles where id='10000000-0000-4000-8000-000000000002');
 create function pg_temp.assert(ok boolean,label text) returns void language plpgsql as $$ begin if ok is distinct from true then raise exception 'FAIL: %',label; end if; raise notice 'PASS: %',label; end $$;
 set local role anon;
 select pg_temp.assert((select count(*) from public.plan_versions)=1,'public sample is readable without an account');

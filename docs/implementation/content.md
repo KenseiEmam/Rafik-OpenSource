@@ -1,8 +1,8 @@
 # Content and asset ownership
 
-The initial exercise catalog is eight authored English/Arabic entries, with two full-body starter sessions. Names, equipment, instructions, prescription values and stable IDs live in `content/starter.json`. They generate the local SQL seed and the web's public sample. This is intentionally a small useful starting set, not an exercise-library migration.
+The shared catalog now contains fourteen authored English/Arabic entries, with two full-body starter sessions. R1 adds plank, walking, cycling, incline push-up, step-up and band row; each has an explicit recording kind. Coaches can also create private exercises through the web library. Names, equipment, instructions, prescription values and stable IDs live in `content/starter.json`. They generate the local SQL seed and the web's public sample. This is intentionally a small useful starting set, not an exercise-library migration.
 
-`npm run content` regenerates both outputs. `npm run content:check` detects divergence. Validate the reset and inspect the affected exercise in the plan editor, sample and logger. Keep exercise IDs stable; a spelling/instruction change does not require a new ID. A materially different movement does.
+`npm run content` regenerates both outputs. `npm run content:check` detects divergence. Use `npm run test:fresh` to validate new migrations/fixtures without resetting the preview, and inspect the affected exercise in the plan editor, sample and logger. Keep exercise IDs stable; a spelling/instruction change does not require a new ID. A materially different movement does.
 
 The starter's loads are labelled sample values, editable in the logger. The source distinguishes per-dumbbell recording and bodyweight at zero. Preferred units convert the numerical value; recorded history retains its actual unit. A coach's published plan is a fixed prescription, and later edits do not modify a started session.
 

@@ -14,7 +14,8 @@
     "types": "node scripts/local.mjs types",
     "web-env": "node scripts/local.mjs web-env",
     "content": "node scripts/content.mjs",
-    "content:check": "node scripts/content.mjs --check"
+    "content:check": "node scripts/content.mjs --check",
+    "test:fresh": "node scripts/verify-fresh.mjs"
   },
   "devDependencies": {
     "supabase": "2.90.0"

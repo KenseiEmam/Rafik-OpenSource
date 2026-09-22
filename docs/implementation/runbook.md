@@ -24,11 +24,11 @@ npm run dev
 
 Visit `http://127.0.0.1:5173`. The footer's sample-account link signs into local synthetic accounts. The public sample works without an account. Codes sent from local sign-in appear only in `http://127.0.0.1:55324`; no live SMTP provider is connected.
 
-`npm run reset` intentionally discards local fixture changes. Close preview tabs or clear this app's site storage after a reset so old browser records do not refer to a freshly reset database. Keep the local database when inspecting a test-created result. `npm stop` stops only this Supabase project. It does not manage unrelated containers.
+`npm run reset` intentionally discards local fixture changes. Close preview tabs or clear this app's site storage after a reset so old browser records do not refer to a freshly reset database. Keep the local database when inspecting a test-created result. To apply a new migration without resetting records, use the pinned CLI: `npx supabase migration up --local`, then `npm run types`. Check the project guard and absence of linked metadata first. `npm stop` stops only this Supabase project. It does not manage unrelated containers.
 
 ## Verify a change
 
-Backend: `npm test` runs transaction, access and lifecycle scenarios in a rollback transaction. `npm run content:check` compares generated seed/web content against the canonical JSON, with both sibling checkouts present. `npm run types` refreshes web database types after a schema reset.
+Backend: `npm test` runs the core and daily-coaching suites (51 assertions) in rollback transactions. `npm run test:fresh` creates a disposable database inside the local Supabase container, applies both migrations and synthetic fixtures, runs both suites, and drops only that disposable database. It preserves the preview database. `npm run content:check` compares generated seed/web content against the canonical JSON, with both sibling checkouts present. `npm run types` refreshes web database types after a schema reset.
 
 Frontend: `npm test`, `npm run format:check`, `npm run build`. For full browser checks, keep the dev server running on 5173; build and run `npm run preview -- --port 5174 --strictPort` in another terminal. Install test browsers once with `npx playwright install chromium webkit`, then run `npm run test:e2e`. Account/invitation scenarios require the local backend and test inbox. The production-shell scenarios use port 5174.
 
@@ -71,3 +71,11 @@ CI definitions are included: backend local reset/SQL checks, and frontend type/b
 ## Later scope decisions
 
 Physical-device verification and real-person task observation remain separate gates; desktop WebKit emulation cannot certify those. The current foundation is not the complete revamp. Execute the broader product work in [revamp coverage](revamp-coverage.md), including client management and a usable exercise/programming library, without waiting for customer recruitment. Business experiments guide positioning and unresolved extensions, not whether established missing coaching tasks get implemented. The local core includes no payment collection or claim of validated demand. Native remains deferred until the broader web/backend is ready.
+
+## R1 daily coaching
+
+Open `/coach/clients` and choose a client for notes, plan/schedule and history. Use `/coach/exercises` to create or edit private catalog content. Shared authored content remains in `content/starter.json`; custom content does not require source edits. Existing published instructions are snapshots.
+
+An assignment's cycle day 1 is its start date. Empty slots are recovery days. Moving one scheduled session preserves its original occurrence date and leaves the rest of the cycle unchanged. Changing the assignment configuration clears exceptions for future starts. Archive pauses new assigned starts, not in-progress logging or history.
+
+`supabase/migrations/202609220002_daily_coaching.sql` defines the expansion; `r1-contract.md` records ownership and lifecycle rules. New prescription work should update validation, snapshot/start/save commands, the small prescription helpers, editor and logger together. Do not create another planner service or client-only business-rule authority.

@@ -2,6 +2,8 @@
 
 22 September 2026. Execution owner: Codex. This document supersedes the earlier assumption that delivering the small training loop completes the Rafik revamp. The user likes the visual direction but correctly identifies that the implementation lacks much of the original product's capability.
 
+**Implementation update:** R1 daily-coaching expansion is now implemented locally; see `ledger.md` for its exact scope and `verification.md` for evidence. The comparison below records the gaps that prompted this correction. R2–R5 remain open.
+
 ## Status and mistake
 
 The current application is a functioning, tested **foundation**, not the complete revamped product. Its server operations are real, but the small content set, narrow prescription model and missing coaching tools make the demonstration much narrower than Rafik. Local test success establishes correctness for implemented paths, not product completeness.
@@ -91,4 +93,4 @@ The revamp is complete only when the documented retained product capabilities wo
 
 Commercial success still requires evidence from real use, and not all original ideas deserve restoration. That uncertainty does not justify calling a basic slice the entire revamp. Tests for the current foundation stay valid within their recorded scope; broader product completeness remains open.
 
-**Next implementation action:** specify R1 client/resource ownership and expanded prescription/schedule contracts, then build the client workspace and exercise/programming flows against them. No redesign of the accepted visual identity, old-data restoration, production changes or mobile work is needed to begin.
+**Next implementation action:** continue R2 progress/check-ins, assessments and communication; R1 contracts and local implementation are recorded in the ledger. No redesign of the accepted visual identity, old-data restoration, production changes or mobile work is needed to begin.

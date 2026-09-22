@@ -166,4 +166,4 @@ At the end of each unit I will record its status, changed files, tests, any envi
 
 **Current status:** the clean web/backend implementation is now built locally on `codex/revamp`. Its source, command contract, checks, known limits and next actions are tracked in the [implementation ledger](../implementation/ledger.md). The audit above remains historical evidence. No hosted project, main push, native-app change or real outreach was performed.
 
-**Next action:** execute R1 in the corrected coverage register: specify client/resource ownership and expanded prescription/schedule contracts, then build the client workspace and exercise/programming flows. The current build is a foundation, not a finished revamp. No legacy migration, hosting or native work is required to continue.
+**Next action:** R1 has now been implemented locally; continue R2 in the corrected coverage register, starting with progress and check-ins. The current build is a foundation, not a finished revamp. No legacy migration, hosting or native work is required to continue.
