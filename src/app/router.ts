@@ -101,6 +101,46 @@ const router = createRouter({
       component: () => import('../features/ongoing/MessagesPage.vue'),
       meta: { private: true },
     },
+    {
+      path: '/more',
+      component: () => import('../features/services/MorePage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/nutrition',
+      component: () => import('../features/nutrition/NutritionPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/appointments',
+      component: () => import('../features/appointments/CalendarPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/resources',
+      component: () => import('../features/resources/ResourcesPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/coach/more',
+      component: () => import('../features/services/MorePage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/coach/nutrition',
+      component: () => import('../features/nutrition/NutritionPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/coach/appointments',
+      component: () => import('../features/appointments/CalendarPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/coach/resources',
+      component: () => import('../features/resources/ResourcesPage.vue'),
+      meta: { private: true },
+    },
     { path: '/local-preview', component: () => import('../features/account/LocalPreview.vue') },
     { path: '/help', component: () => import('../features/account/HelpPage.vue') },
     { path: '/privacy', component: () => import('../features/public/PrivacyPage.vue') },
@@ -126,8 +166,8 @@ export const safeNext = (value: unknown, fallback = '/today') =>
   !value.includes('\\')
     ? value
     : fallback
-router.afterEach((_to, from) => {
-  if (from.matched.length)
+router.afterEach((to, from) => {
+  if (from.matched.length && to.path !== from.path)
     void nextTick(() => document.querySelector<HTMLElement>('main')?.focus({ preventScroll: true }))
 })
 export default router

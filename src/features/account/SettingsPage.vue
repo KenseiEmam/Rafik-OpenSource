@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { cleanupAccountResources } from '../resources/files'
 import { useRouter } from 'vue-router'
 import { user, profile, refreshProfile, logout } from '../../app/auth'
 import { rpc, rows } from '../../lib/backend'
@@ -70,6 +71,13 @@ async function exportData() {
         measurements: await rows('measurements'),
         messages: await rows('messages'),
         conversationReads: await rows('conversation_reads'),
+        nutritionGuidance: await rows('nutrition_guidance'),
+        savedFoods: await rows('saved_foods'),
+        mealEntries: await rows('meal_entries'),
+        appointmentSlots: await rows('appointment_slots'),
+        appointments: await rows('appointments'),
+        resources: await rows('resources'),
+        resourceShares: await rows('resource_shares'),
       },
       'rafik-data.json',
     )
@@ -92,10 +100,12 @@ async function signout() {
   }
 }
 async function deleteAccount() {
+  if (confirmation.value !== 'DELETE') return
   busy.value = true
   error.value = ''
   const id = user.value!.id
   try {
+    await cleanupAccountResources(id)
     await rpc('delete_my_account', { p_confirmation: confirmation.value })
     await removeAccountLocalData(id)
     await logout()
@@ -232,8 +242,8 @@ function cancelDelete() {
           <p>
             {{
               language(
-                'Permanently remove your account, your plans, and your own training results. Clients keep their own completed session snapshots.',
-                'حذف حسابك وخططك ونتائج تدريبك نهائياً. يحتفظ المتدربون بنسخ حصصهم المكتملة.',
+                'Permanently remove your account, your plans, your uploaded files, and your own training results. Clients keep their own completed session snapshots.',
+                'حذف حسابك وخططك وملفاتك المرفوعة ونتائج تدريبك نهائياً. يحتفظ المتدربون بنسخ حصصهم المكتملة.',
               )
             }}
           </p>
