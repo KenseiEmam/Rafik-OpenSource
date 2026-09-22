@@ -119,6 +119,23 @@ export function errorMessage(error: unknown): string {
       : typeof error === 'object' && error && 'message' in error
         ? String(error.message)
         : String(error)
+  if (raw.includes('required_answer'))
+    return language(
+      'Complete the required questions before submitting.',
+      'أكمل الأسئلة المطلوبة قبل الإرسال.',
+    )
+  if (raw.includes('invalid_window'))
+    return language('Choose a date range of one year or less.', 'اختر فترة لا تتجاوز سنة واحدة.')
+  if (raw.includes('relationship_archived') || raw.includes('request_unavailable'))
+    return language(
+      'This coaching relationship or request is no longer active. Your history is still available.',
+      'علاقة التدريب أو الطلب لم يعد نشطاً. يبقى سجلك متاحاً.',
+    )
+  if (raw.includes('already_submitted'))
+    return language(
+      'Your client has already submitted this response. Refresh to review it.',
+      'أرسل المتدرب هذه الإجابة بالفعل. حدّث الصفحة لمراجعتها.',
+    )
   if (raw.includes('wrong_email'))
     return language(
       'This invitation belongs to a different email. Sign in with the address your coach invited.',

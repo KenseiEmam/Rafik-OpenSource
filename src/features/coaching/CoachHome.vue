@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CoachingActivity from '../ongoing/CoachingActivity.vue'
 import { computed, onMounted, ref } from 'vue'
 import { PhArrowRight, PhCheckCircle, PhPlus, PhNotebook } from '@phosphor-icons/vue'
 import { user, profile } from '../../app/auth'
@@ -73,6 +74,7 @@ onMounted(load)
           ><strong>{{ awaiting.length }}</strong>
         </div>
       </div>
+      <CoachingActivity coach />
       <div class="coach-home-layout">
         <section class="review-section">
           <div class="section-title">

@@ -154,6 +154,152 @@ export type Database = {
           },
         ]
       }
+      coaching_forms: {
+        Row: {
+          coach_id: string
+          fields: Json
+          id: string
+          kind: string
+          revision: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          coach_id: string
+          fields: Json
+          id: string
+          kind: string
+          revision?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          coach_id?: string
+          fields?: Json
+          id?: string
+          kind?: string
+          revision?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coaching_forms_coach_id_fkey"
+            columns: ["coach_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      coaching_requests: {
+        Row: {
+          answers: Json
+          cancelled: boolean
+          due_date: string
+          feedback: string
+          fields: Json
+          form_id: string | null
+          form_revision: number
+          id: string
+          kind: string
+          relationship_id: string
+          reviewed_at: string | null
+          revision: number
+          series_id: string
+          submitted_at: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          answers?: Json
+          cancelled?: boolean
+          due_date: string
+          feedback?: string
+          fields: Json
+          form_id?: string | null
+          form_revision: number
+          id?: string
+          kind: string
+          relationship_id: string
+          reviewed_at?: string | null
+          revision?: number
+          series_id: string
+          submitted_at?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          answers?: Json
+          cancelled?: boolean
+          due_date?: string
+          feedback?: string
+          fields?: Json
+          form_id?: string | null
+          form_revision?: number
+          id?: string
+          kind?: string
+          relationship_id?: string
+          reviewed_at?: string | null
+          revision?: number
+          series_id?: string
+          submitted_at?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coaching_requests_form_id_fkey"
+            columns: ["form_id"]
+            isOneToOne: false
+            referencedRelation: "coaching_forms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coaching_requests_relationship_id_fkey"
+            columns: ["relationship_id"]
+            isOneToOne: false
+            referencedRelation: "coach_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversation_reads: {
+        Row: {
+          id: string
+          last_sequence: number
+          relationship_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          last_sequence?: number
+          relationship_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          last_sequence?: number
+          relationship_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_reads_relationship_id_fkey"
+            columns: ["relationship_id"]
+            isOneToOne: false
+            referencedRelation: "coach_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversation_reads_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exercises: {
         Row: {
           active: boolean
@@ -277,6 +423,116 @@ export type Database = {
             columns: ["version_id"]
             isOneToOne: false
             referencedRelation: "plan_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      measurements: {
+        Row: {
+          client_id: string
+          id: string
+          measured_on: string
+          metric: string
+          relationship_id: string | null
+          revision: number
+          unit: string
+          value: number
+        }
+        Insert: {
+          client_id: string
+          id: string
+          measured_on: string
+          metric: string
+          relationship_id?: string | null
+          revision?: number
+          unit: string
+          value: number
+        }
+        Update: {
+          client_id?: string
+          id?: string
+          measured_on?: string
+          metric?: string
+          relationship_id?: string | null
+          revision?: number
+          unit?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "measurements_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "measurements_relationship_id_fkey"
+            columns: ["relationship_id"]
+            isOneToOne: false
+            referencedRelation: "coach_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          relationship_id: string
+          request_id: string | null
+          sender_id: string
+          sequence: number
+          session_id: string | null
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id: string
+          relationship_id: string
+          request_id?: string | null
+          sender_id: string
+          sequence?: never
+          session_id?: string | null
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          relationship_id?: string
+          request_id?: string | null
+          sender_id?: string
+          sequence?: never
+          session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_relationship_id_fkey"
+            columns: ["relationship_id"]
+            isOneToOne: false
+            referencedRelation: "coach_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "coaching_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "sessions"
             referencedColumns: ["id"]
           },
         ]
@@ -606,6 +862,41 @@ export type Database = {
     }
     Functions: {
       accept_invitation: { Args: { p_token: string }; Returns: string }
+      assign_coaching_form: {
+        Args: {
+          p_count: number
+          p_due: string
+          p_form: string
+          p_interval: number
+          p_relationship: string
+          p_revision: number
+          p_series: string
+        }
+        Returns: {
+          answers: Json
+          cancelled: boolean
+          due_date: string
+          feedback: string
+          fields: Json
+          form_id: string | null
+          form_revision: number
+          id: string
+          kind: string
+          relationship_id: string
+          reviewed_at: string | null
+          revision: number
+          series_id: string
+          submitted_at: string | null
+          title: string
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "coaching_requests"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       assign_plan: {
         Args: { p_relationship_id: string; p_version_id: string }
         Returns: {
@@ -631,6 +922,10 @@ export type Database = {
       assignment_schedule: {
         Args: { p_from: string; p_id: string; p_to: string }
         Returns: Json
+      }
+      cancel_coaching_request: {
+        Args: { p_id: string; p_revision: number }
+        Returns: undefined
       }
       change_scheduled_day: {
         Args: {
@@ -671,6 +966,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      conversation_inbox: { Args: never; Returns: Json }
       create_invitation: {
         Args: {
           p_email: string
@@ -720,6 +1016,10 @@ export type Database = {
         }
       }
       get_invitation: { Args: { p_token: string }; Returns: Json }
+      mark_conversation_read: {
+        Args: { p_relationship: string; p_sequence: number }
+        Returns: undefined
+      }
       previous_performance: {
         Args: { p_before: string; p_exercises: string[] }
         Returns: Json
@@ -739,6 +1039,37 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "plan_versions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      remove_measurement: {
+        Args: { p_id: string; p_revision: number }
+        Returns: undefined
+      }
+      review_coaching_response: {
+        Args: { p_feedback: string; p_id: string; p_revision: number }
+        Returns: {
+          answers: Json
+          cancelled: boolean
+          due_date: string
+          feedback: string
+          fields: Json
+          form_id: string | null
+          form_revision: number
+          id: string
+          kind: string
+          relationship_id: string
+          reviewed_at: string | null
+          revision: number
+          series_id: string
+          submitted_at: string | null
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "coaching_requests"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -795,6 +1126,62 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      save_coaching_form: {
+        Args: {
+          p_fields: Json
+          p_id: string
+          p_kind: string
+          p_revision: number
+          p_title: string
+        }
+        Returns: {
+          coach_id: string
+          fields: Json
+          id: string
+          kind: string
+          revision: number
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "coaching_forms"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      save_coaching_response: {
+        Args: {
+          p_answers: Json
+          p_id: string
+          p_revision: number
+          p_submit: boolean
+        }
+        Returns: {
+          answers: Json
+          cancelled: boolean
+          due_date: string
+          feedback: string
+          fields: Json
+          form_id: string | null
+          form_revision: number
+          id: string
+          kind: string
+          relationship_id: string
+          reviewed_at: string | null
+          revision: number
+          series_id: string
+          submitted_at: string | null
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "coaching_requests"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       save_exercise: {
         Args: { p_data: Json; p_id: string; p_revision: number }
         Returns: {
@@ -815,6 +1202,33 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "exercises"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      save_measurement: {
+        Args: {
+          p_date: string
+          p_id: string
+          p_metric: string
+          p_relationship: string
+          p_revision: number
+          p_unit: string
+          p_value: number
+        }
+        Returns: {
+          client_id: string
+          id: string
+          measured_on: string
+          metric: string
+          relationship_id: string | null
+          revision: number
+          unit: string
+          value: number
+        }
+        SetofOptions: {
+          from: "*"
+          to: "measurements"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -854,6 +1268,31 @@ export type Database = {
         }
         Returns: Json
       }
+      send_message: {
+        Args: {
+          p_body: string
+          p_id: string
+          p_relationship: string
+          p_request?: string
+          p_session?: string
+        }
+        Returns: {
+          body: string
+          created_at: string
+          id: string
+          relationship_id: string
+          request_id: string | null
+          sender_id: string
+          sequence: number
+          session_id: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "messages"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       session_document: { Args: { p_id: string }; Returns: Json }
       set_client_state: {
         Args: { p_id: string; p_state: string }
@@ -886,6 +1325,10 @@ export type Database = {
         }
         Returns: Json
       }
+      training_progress: {
+        Args: { p_from: string; p_relationship: string; p_to: string }
+        Returns: Json
+      }
       update_profile: {
         Args: {
           p_locale: string
@@ -908,6 +1351,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      validate_coaching_fields: { Args: { p: Json }; Returns: undefined }
       validate_prescription: { Args: { p: Json }; Returns: undefined }
     }
     Enums: {
