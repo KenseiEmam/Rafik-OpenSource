@@ -103,12 +103,31 @@ onUnmounted(() => window.removeEventListener('online', online))
           to="/coach/exercises"
           :class="{ selected: route.path.startsWith('/coach/exercises') }"
           >{{ language('Exercises', 'التمارين') }}</RouterLink
+        ><RouterLink
+          to="/coach/checkins"
+          :class="{
+            selected:
+              route.path.startsWith('/coach/checkins') || route.path.startsWith('/coach/forms'),
+          }"
+          >{{ language('Check-ins', 'المتابعات') }}</RouterLink
+        ><RouterLink
+          to="/coach/messages"
+          :class="{ selected: route.path.startsWith('/coach/messages') }"
+          >{{ language('Messages', 'الرسائل') }}</RouterLink
         ></template
       >
       <template v-else
         ><RouterLink to="/today" active-class="selected">{{ t('today') }}</RouterLink
         ><RouterLink to="/history" active-class="selected">{{ t('history') }}</RouterLink
-        ><RouterLink to="/routine" active-class="selected">{{ t('sample') }}</RouterLink></template
+        ><RouterLink to="/progress" active-class="selected">{{
+          language('Progress', 'التقدم')
+        }}</RouterLink
+        ><RouterLink to="/checkins" active-class="selected">{{
+          language('Check-ins', 'المتابعات')
+        }}</RouterLink
+        ><RouterLink to="/messages" active-class="selected">{{
+          language('Messages', 'الرسائل')
+        }}</RouterLink></template
       >
       <span v-if="localPreview && user?.email?.endsWith('@rafik.test')" class="sample-label">{{
         t('sampleAccount')

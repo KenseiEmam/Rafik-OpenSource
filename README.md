@@ -1,8 +1,16 @@
 # Rafik web revamp
 
-A responsive Vue 3/TypeScript application for simple plan delivery and dependable workout recording. English/Arabic, light/dark themes, public sample workouts, email-code entry, coach plans/invitations/review, and recoverable local drafts.
+A responsive Vue 3/TypeScript application for training and ongoing coaching: programming, client management, progress, check-ins, assessments and direct conversation. R2 is implemented locally; the broader revamp remains in progress. English/Arabic, light/dark themes, public sample workouts, email-code entry, coach plans/invitations/review, and recoverable local drafts.
 
 Work belongs on `codex/revamp`. The old application is preserved in Git history. No native app or legacy backend is required.
+
+## Start here
+
+- [Developer and architecture guide](../rafik-api/docs/implementation/maintainer-guide.md): complete file map, responsibilities, data flow, routes, local tour and change recipes for both repositories.
+- [CHANGELOG.md](CHANGELOG.md): exactly what changed in each implementation phase.
+- [Current status and remaining scope](../rafik-api/docs/implementation/ledger.md): distinguish implemented work from the rest of the revamp.
+
+Future work must update these records and the relevant architecture/runbook/verification docs in the same change. The requirement is recorded in both repositories' `AGENTS.md`.
 
 ## Run locally
 
@@ -40,7 +48,8 @@ Tests use only synthetic local identities. Chromium and phone-sized WebKit are c
 
 - `src/features/public`: offer, local privacy summary and fallback page.
 - `src/features/training`: preview, workout logger, Today and history.
-- `src/features/coaching`: plan editor, clients/invitations and review.
+- `src/features/coaching`: plans, roster/client workspace, library, assignment schedule and session review.
+- `src/features/ongoing`: templates, requests/responses, assessments, progress/measurements, conversations and Today activity. Each page owns a user task; `types.ts` contains question/answer contracts and `helpers.ts` holds pure calculations.
 - `src/features/account`: email entry, invitation acceptance, profile/help/export/deletion.
 - `src/lib/training.ts`: start/adoption, durable edits, retry and conflict handling.
 - `src/lib/storage.ts`: bounded IndexedDB access; no server behavior hidden here.
@@ -58,3 +67,16 @@ The current privacy page, sample version IDs, test mail settings and synthetic s
 After signing in through `/local-preview`, open **Clients** for each client's overview, private notes, plan/schedule and history. **Exercises** contains the shared catalog and your editable private exercises. **Plans** now supports cycle weeks, rest days, per-set targets, timed/distance work and consecutive exercise groups. Published instructions and started workout prescriptions remain fixed.
 
 The wider revamp remains in progress. Current coverage and the next phase are in the backend's `docs/implementation/ledger.md`. Full browser checks now include `tests/daily-coaching.e2e.ts`; run both repositories' checks before changing prescription or scheduling rules.
+
+## R2 test tour
+
+Open `/local-preview` and choose Laila (coach) or Amir (client). Buttons use real local Auth; you do not need an email code. Seeded reflection/assessment examples make the new paths immediately usable.
+
+- Coach **Check-ins**: create/edit a template, assign a client with bounded recurrence, review submitted responses or cancel unsubmitted occurrences.
+- Client **Check-ins**: save draft, submit, read feedback and correct results. **Discuss this response** adds verified context to a message. Assessments show earlier compatible results.
+- **Messages**: choose the relationship, send/retry, refresh or load older records. New messages appear through foreground polling; there is no email/push delivery.
+- **Progress**: inspect completed actuals and current schedule counts. Clients can add private/shared measurements and correct/remove them; coach progress is linked from the client workspace.
+
+The client workspace and conversation routes use a **relationship ID**. The Laila–Amir fixture relationship is `40000000-0000-4000-8000-000000000001`.
+
+`tests/ongoing.e2e.ts` verifies the R2 lifecycles; `tests/ongoing.test.ts` checks unit-aware trends and response states. `node scripts/r2-visual-check.mjs` checks populated R2 screens across widths/languages/themes. Run the companion SQL suites after changing response, progress or conversation contracts. This is still local verification, not a physical-device or hosted-release claim.

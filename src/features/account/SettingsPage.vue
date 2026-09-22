@@ -65,6 +65,11 @@ async function exportData() {
         relationships: await rows('coach_clients'),
         assignments: await rows('assignments'),
         scheduleExceptions: await rows('schedule_exceptions'),
+        coachingForms: await rows('coaching_forms'),
+        coachingRequests: await rows('coaching_requests'),
+        measurements: await rows('measurements'),
+        messages: await rows('messages'),
+        conversationReads: await rows('conversation_reads'),
       },
       'rafik-data.json',
     )

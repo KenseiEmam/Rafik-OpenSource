@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CoachingActivity from '../ongoing/CoachingActivity.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { PhArrowRight, PhBarbell, PhClock, PhCheckCircle } from '@phosphor-icons/vue'
@@ -126,6 +127,7 @@ onMounted(load)
           >{{ t('resume') }}<PhArrowRight :size="18" class="directional" aria-hidden="true"
         /></RouterLink>
       </div>
+      <CoachingActivity />
       <div v-if="active.length" class="today-layout">
         <section>
           <article v-for="a in active" :key="a.id" class="assigned-plan">

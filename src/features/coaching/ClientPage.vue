@@ -267,6 +267,15 @@ onMounted(load)
           >
             {{ language(item[1]!, item[2]!) }}
           </button>
+          <RouterLink :to="'/coach/clients/' + id + '/progress'">{{
+            language('Progress', 'التقدم')
+          }}</RouterLink
+          ><RouterLink :to="'/coach/checkins?client=' + id">{{
+            language('Check-ins', 'المتابعات')
+          }}</RouterLink
+          ><RouterLink :to="'/coach/messages/' + id">{{
+            language('Messages', 'الرسائل')
+          }}</RouterLink>
         </nav>
         <div v-if="tab === 'overview'" class="client-workspace">
           <section>

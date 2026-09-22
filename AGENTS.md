@@ -9,3 +9,5 @@
 - Typed input, durable device storage and acknowledged server state are separate. Never let a delayed read overwrite newer local work, adopt another account's pending records, or report cloud success before acknowledgment.
 - Use real rendered browser checks for English/Arabic, light/dark and phone layouts. Distinguish browser emulation from physical hardware and human usability observation.
 - No old hosted credentials or project configuration may enter this runtime. Local sample identities and privacy copy are not deployable production configuration.
+
+- Every further change must update root `CHANGELOG.md` and the companion implementation ledger. Update the READMEs and `../rafik-api/docs/implementation/maintainer-guide.md` when files/workflows change, `architecture.md` for data/API/lifecycle changes, `runbook.md` for operations and `verification.md` for actual checks/limits. Commit matching code and docs together; do not leave stale phase status.

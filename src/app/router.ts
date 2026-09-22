@@ -56,6 +56,51 @@ const router = createRouter({
       component: () => import('../features/account/SettingsPage.vue'),
       meta: { private: true },
     },
+    {
+      path: '/progress',
+      component: () => import('../features/ongoing/ProgressPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/coach/clients/:id/progress',
+      component: () => import('../features/ongoing/ProgressPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/checkins',
+      component: () => import('../features/ongoing/RequestsPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/coach/checkins',
+      component: () => import('../features/ongoing/RequestsPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/checkins/:id',
+      component: () => import('../features/ongoing/ResponsePage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/coach/checkins/:id',
+      component: () => import('../features/ongoing/ResponsePage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/coach/forms/:id',
+      component: () => import('../features/ongoing/FormEditor.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/messages/:id?',
+      component: () => import('../features/ongoing/MessagesPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/coach/messages/:id?',
+      component: () => import('../features/ongoing/MessagesPage.vue'),
+      meta: { private: true },
+    },
     { path: '/local-preview', component: () => import('../features/account/LocalPreview.vue') },
     { path: '/help', component: () => import('../features/account/HelpPage.vue') },
     { path: '/privacy', component: () => import('../features/public/PrivacyPage.vue') },

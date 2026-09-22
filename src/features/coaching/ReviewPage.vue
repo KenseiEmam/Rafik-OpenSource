@@ -4,13 +4,14 @@ import { useRoute } from 'vue-router'
 import { PhArrowLeft, PhCheckCircle } from '@phosphor-icons/vue'
 import { user } from '../../app/auth'
 import { rpc, rows } from '../../lib/backend'
-import type { Session, Profile } from '../../lib/domain'
+import type { Session, Profile, Relationship } from '../../lib/domain'
 import { language, locale, t, errorMessage, dateLabel } from '../../lib/i18n'
 import { exerciseName, targetLabel, actualLabel } from '../../lib/prescriptions'
 import PageState from '../../components/PageState.vue'
 const id = String(useRoute().params.id)
 const session = ref<Session>(),
   person = ref<Profile>()
+const relationship = ref('')
 const note = ref(''),
   error = ref(''),
   message = ref('')
@@ -23,6 +24,10 @@ async function load() {
     const s = await rpc<Session>('session_document', { p_id: id })
     if (!s || s.coach_id !== user.value!.id) throw Error('forbidden')
     session.value = s
+    relationship.value =
+      (await rows<Relationship>('coach_clients', 'client_id', s.client_id)).find(
+        (r) => r.coach_id === user.value!.id,
+      )?.id || ''
     note.value = s.coach_note
     person.value = (await rows<Profile>('profiles', 'id', s.client_id))[0]
   } catch (e) {
@@ -107,6 +112,12 @@ onMounted(load)
             </article>
           </section>
           <aside>
+            <RouterLink
+              v-if="relationship"
+              class="button secondary full"
+              :to="'/coach/messages/' + relationship + '?session=' + id"
+              >{{ language('Discuss this workout', 'مناقشة هذه الحصة') }}</RouterLink
+            >
             <section v-if="session.note" class="panel">
               <h2>{{ language('Client note', 'ملاحظة المتدرب') }}</h2>
               <p class="preserve-lines">{{ session.note }}</p>
