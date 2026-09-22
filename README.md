@@ -1,6 +1,6 @@
 # Rafik web revamp
 
-A responsive Vue 3/TypeScript application for training and ongoing coaching: programming, client management, progress, check-ins, assessments and direct conversation. R2 is implemented locally; the broader revamp remains in progress. English/Arabic, light/dark themes, public sample workouts, email-code entry, coach plans/invitations/review, and recoverable local drafts.
+A responsive Vue 3/TypeScript application for training and ongoing coaching: programming, client management, progress, check-ins, assessments, conversation, optional nutrition, appointments and private files. R3 is implemented locally; the broader revamp remains in progress. English/Arabic, light/dark themes, public sample workouts, email-code entry, coach plans/invitations/review, and recoverable local drafts.
 
 Work belongs on `codex/revamp`. The old application is preserved in Git history. No native app or legacy backend is required.
 
@@ -23,6 +23,12 @@ npm run dev
 ```
 
 Open `http://127.0.0.1:5173`. Start with **Try a workout**, or use **Explore sample accounts** in the footer to inspect both sides of the local workflow. Sample accounts use real local Auth and database calls. Sign-in email stays in the backend's test inbox at `http://127.0.0.1:55324`.
+
+## Explore R3
+
+Sign into Laila or Amir at `/local-preview`, then choose **More** in the workspace navigation. Nutrition supports guidance and actual meal records; Appointments supports availability and booking; Resources supports real private upload and explicit sharing. Shared files can be attached to Messages. Upcoming appointments appear on Today when there are bookings in the next week. No extra signup fields are required.
+
+See the [R3 contract](../rafik-api/docs/implementation/r3-contract.md) for units, timezones, retries and file lifecycle. New modules are `src/features/nutrition`, `appointments`, `resources` and `services`; there is no new global state layer.
 
 ## Check and build
 

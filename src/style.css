@@ -3259,3 +3259,191 @@ h3 {
     min-width: 0;
   }
 }
+
+/* Optional service tools share the established workspace layout and tokens. */
+.more-page {
+  max-width: 920px;
+}
+.service-links {
+  border-top: 1px solid var(--line);
+  margin-block: 2rem;
+}
+.service-links > a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.8rem 0.25rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  text-decoration: none;
+}
+.service-links > a:hover {
+  background: var(--surface-soft);
+}
+.service-links strong {
+  display: block;
+  font-size: 1.35rem;
+  margin-bottom: 0.45rem;
+}
+.service-links a > span > span {
+  color: var(--muted);
+  line-height: 1.6;
+}
+.nutrient-fields,
+.nutrition-totals {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.nutrition-totals {
+  margin-block: 1rem;
+}
+.nutrition-totals > div {
+  padding: 0.8rem;
+  background: var(--surface-soft);
+  border-radius: 0.5rem;
+}
+.nutrition-totals strong {
+  display: block;
+  font-size: 1.3rem;
+}
+.nutrition-totals small {
+  display: block;
+  color: var(--muted);
+}
+.meal-row,
+.appointment-row {
+  padding-block: 1.25rem;
+  border-bottom: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+.meal-row:last-child,
+.appointment-row:last-child {
+  border-bottom: 0;
+}
+.resource-row h2,
+.resource-row p,
+.resource-share {
+  overflow-wrap: anywhere;
+}
+.resource-row + .resource-row {
+  margin-top: 1rem;
+}
+.share-resource,
+.resource-share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+.share-resource label {
+  flex: 1 1 12rem;
+  min-width: 0;
+}
+.resource-share {
+  align-items: center;
+  border-top: 1px solid var(--line);
+  padding-top: 0.75rem;
+}
+.resource-share > span {
+  flex: 1 1 100%;
+}
+.attachment-link {
+  display: block;
+  margin-block: 0.75rem;
+  overflow-wrap: anywhere;
+  text-align: start;
+}
+.upcoming-appointments {
+  margin-block: 1.5rem;
+}
+.upcoming-appointments a {
+  display: block;
+  padding-block: 0.8rem;
+  border-bottom: 1px solid var(--line);
+}
+@media (max-width: 600px) {
+  .nutrient-fields {
+    gap: 0.75rem;
+  }
+  .share-resource .button {
+    width: 100%;
+  }
+}
+.meal-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.slot-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+.slot-row > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .slot-row {
+    align-items: start;
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 900px) {
+  .nutrition-totals {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Native Safari menus need appearance reset to honor the existing touch-sized controls. */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 50%,
+    calc(100% - 13px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+[dir='rtl'] select {
+  background-position:
+    13px 50%,
+    18px 50%;
+}
+.page-heading > .button {
+  margin-top: 1rem;
+}
+#meal-editor,
+#resource-upload,
+#availability-editor {
+  scroll-margin-top: 2rem;
+}
+@media (max-width: 600px) {
+  .product-nav {
+    flex-wrap: wrap;
+    gap: 0 20px;
+    overflow: visible;
+    padding-block: 0.3rem;
+  }
+  .product-nav a {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding-block: 12px;
+  }
+  .sample-label {
+    margin-inline-start: 0;
+    padding-block: 0.5rem;
+  }
+}

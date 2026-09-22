@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import UpcomingAppointments from '../appointments/UpcomingAppointments.vue'
 import CoachingActivity from '../ongoing/CoachingActivity.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -128,6 +129,7 @@ onMounted(load)
         /></RouterLink>
       </div>
       <CoachingActivity />
+      <UpcomingAppointments />
       <div v-if="active.length" class="today-layout">
         <section>
           <article v-for="a in active" :key="a.id" class="assigned-plan">

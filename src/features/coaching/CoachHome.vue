@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import UpcomingAppointments from '../appointments/UpcomingAppointments.vue'
 import CoachingActivity from '../ongoing/CoachingActivity.vue'
 import { computed, onMounted, ref } from 'vue'
 import { PhArrowRight, PhCheckCircle, PhPlus, PhNotebook } from '@phosphor-icons/vue'
@@ -75,6 +76,7 @@ onMounted(load)
         </div>
       </div>
       <CoachingActivity coach />
+      <UpcomingAppointments coach />
       <div class="coach-home-layout">
         <section class="review-section">
           <div class="section-title">

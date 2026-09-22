@@ -119,6 +119,56 @@ export function errorMessage(error: unknown): string {
       : typeof error === 'object' && error && 'message' in error
         ? String(error.message)
         : String(error)
+  if (raw.includes('time_unavailable'))
+    return language(
+      'That time is no longer available. Refresh and choose another.',
+      'لم يعد هذا الوقت متاحاً. حدّث الصفحة واختر وقتاً آخر.',
+    )
+  if (raw.includes('slot_booked'))
+    return language(
+      'This time is booked. Cancel or reschedule the appointment first.',
+      'هذا الوقت محجوز. ألغِ الموعد أو غيّره أولاً.',
+    )
+  if (raw.includes('invalid_local_time'))
+    return language(
+      'This local time does not exist because clocks change. Choose another time.',
+      'هذا الوقت المحلي غير موجود بسبب تغيير الساعة. اختر وقتاً آخر.',
+    )
+  if (raw.includes('invalid_availability'))
+    return language(
+      'Check the timezone and dates. Offer up to eight future times within one year.',
+      'تحقق من التوقيت والتواريخ. أتح حتى ثمانية أوقات مستقبلية خلال سنة.',
+    )
+  if (raw.includes('appointment_unavailable'))
+    return language(
+      'This appointment can no longer be changed this way. Refresh its status.',
+      'لم يعد تعديل هذا الموعد بهذه الطريقة متاحاً. حدّث حالته.',
+    )
+  if (raw.includes('upload_incomplete'))
+    return language(
+      'Upload has not finished. Select the original file to resume.',
+      'لم يكتمل الرفع. اختر الملف الأصلي للمتابعة.',
+    )
+  if (raw.includes('file_cleanup_required'))
+    return language(
+      'File removal is incomplete. Retry removal before deleting the account.',
+      'حذف الملف غير مكتمل. أعد محاولة الحذف قبل حذف الحساب.',
+    )
+  if (raw.includes('invalid_file'))
+    return language(
+      'Choose a nonempty PDF, text, JPEG, PNG or WebP file up to 10 MB.',
+      'اختر ملف PDF أو نص أو JPEG أو PNG أو WebP غير فارغ بحجم حتى ١٠ ميغابايت.',
+    )
+  if (raw.includes('file_mismatch'))
+    return language(
+      'Choose the same original file, or start another upload.',
+      'اختر الملف الأصلي نفسه أو ابدأ رفعاً آخر.',
+    )
+  if (raw.includes('resource_unavailable'))
+    return language(
+      'This resource is no longer available for this conversation. Check sharing first.',
+      'لم يعد هذا المورد متاحاً لهذه المحادثة. تحقق من المشاركة أولاً.',
+    )
   if (raw.includes('required_answer'))
     return language(
       'Complete the required questions before submitting.',

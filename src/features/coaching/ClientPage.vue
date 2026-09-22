@@ -279,6 +279,17 @@ onMounted(load)
         </nav>
         <div v-if="tab === 'overview'" class="client-workspace">
           <section>
+            <div class="actions">
+              <RouterLink class="text-link" :to="'/coach/nutrition?client=' + id">{{
+                language('Nutrition guidance', 'إرشادات التغذية')
+              }}</RouterLink
+              ><RouterLink class="text-link" :to="'/coach/appointments?client=' + id">{{
+                language('Appointments', 'المواعيد')
+              }}</RouterLink
+              ><RouterLink class="text-link" to="/coach/resources">{{
+                language('Resources', 'الملفات')
+              }}</RouterLink>
+            </div>
             <div class="workspace-facts">
               <div>
                 <strong>{{ completed.length }}</strong

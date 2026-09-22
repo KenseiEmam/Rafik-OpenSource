@@ -129,6 +129,11 @@ onUnmounted(() => window.removeEventListener('online', online))
           language('Messages', 'الرسائل')
         }}</RouterLink></template
       >
+      <RouterLink
+        :to="coaching ? '/coach/more' : '/more'"
+        :class="{ selected: /\/(more|nutrition|appointments|resources)$/.test(route.path) }"
+        >{{ language('More', 'المزيد') }}</RouterLink
+      >
       <span v-if="localPreview && user?.email?.endsWith('@rafik.test')" class="sample-label">{{
         t('sampleAccount')
       }}</span>

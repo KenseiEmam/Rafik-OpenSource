@@ -9,6 +9,116 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      appointment_slots: {
+        Row: {
+          coach_id: string
+          ends_at: string
+          id: string
+          local_start: string
+          location: string
+          series_id: string
+          starts_at: string
+          state: string
+          timezone: string
+          title: string
+        }
+        Insert: {
+          coach_id: string
+          ends_at: string
+          id?: string
+          local_start: string
+          location: string
+          series_id: string
+          starts_at: string
+          state?: string
+          timezone: string
+          title: string
+        }
+        Update: {
+          coach_id?: string
+          ends_at?: string
+          id?: string
+          local_start?: string
+          location?: string
+          series_id?: string
+          starts_at?: string
+          state?: string
+          timezone?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointment_slots_coach_id_fkey"
+            columns: ["coach_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      appointments: {
+        Row: {
+          created_at: string
+          ends_at: string
+          id: string
+          location: string
+          note: string
+          relationship_id: string
+          revision: number
+          slot_id: string
+          starts_at: string
+          state: string
+          timezone: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          ends_at: string
+          id: string
+          location: string
+          note?: string
+          relationship_id: string
+          revision?: number
+          slot_id: string
+          starts_at: string
+          state?: string
+          timezone: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          ends_at?: string
+          id?: string
+          location?: string
+          note?: string
+          relationship_id?: string
+          revision?: number
+          slot_id?: string
+          starts_at?: string
+          state?: string
+          timezone?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_relationship_id_fkey"
+            columns: ["relationship_id"]
+            isOneToOne: false
+            referencedRelation: "coach_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_slot_id_fkey"
+            columns: ["slot_id"]
+            isOneToOne: false
+            referencedRelation: "appointment_slots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assignments: {
         Row: {
           client_id: string
@@ -427,6 +537,82 @@ export type Database = {
           },
         ]
       }
+      meal_entries: {
+        Row: {
+          basis: number
+          client_id: string
+          created_at: string
+          food_id: string | null
+          id: string
+          logged_on: string
+          meal: string
+          name: string
+          note: string
+          nutrients: Json
+          quantity: number
+          relationship_id: string | null
+          revision: number
+          source: string
+          unit: string
+        }
+        Insert: {
+          basis: number
+          client_id: string
+          created_at?: string
+          food_id?: string | null
+          id: string
+          logged_on: string
+          meal: string
+          name: string
+          note?: string
+          nutrients: Json
+          quantity: number
+          relationship_id?: string | null
+          revision?: number
+          source: string
+          unit: string
+        }
+        Update: {
+          basis?: number
+          client_id?: string
+          created_at?: string
+          food_id?: string | null
+          id?: string
+          logged_on?: string
+          meal?: string
+          name?: string
+          note?: string
+          nutrients?: Json
+          quantity?: number
+          relationship_id?: string | null
+          revision?: number
+          source?: string
+          unit?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meal_entries_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "meal_entries_food_id_fkey"
+            columns: ["food_id"]
+            isOneToOne: false
+            referencedRelation: "saved_foods"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "meal_entries_relationship_id_fkey"
+            columns: ["relationship_id"]
+            isOneToOne: false
+            referencedRelation: "coach_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       measurements: {
         Row: {
           client_id: string
@@ -482,6 +668,7 @@ export type Database = {
           id: string
           relationship_id: string
           request_id: string | null
+          resource_id: string | null
           sender_id: string
           sequence: number
           session_id: string | null
@@ -492,6 +679,7 @@ export type Database = {
           id: string
           relationship_id: string
           request_id?: string | null
+          resource_id?: string | null
           sender_id: string
           sequence?: never
           session_id?: string | null
@@ -502,6 +690,7 @@ export type Database = {
           id?: string
           relationship_id?: string
           request_id?: string | null
+          resource_id?: string | null
           sender_id?: string
           sequence?: never
           session_id?: string | null
@@ -522,6 +711,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "messages_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "messages_sender_id_fkey"
             columns: ["sender_id"]
             isOneToOne: false
@@ -533,6 +729,44 @@ export type Database = {
             columns: ["session_id"]
             isOneToOne: false
             referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      nutrition_guidance: {
+        Row: {
+          created_at: string
+          effective_on: string
+          guidance: string
+          id: string
+          relationship_id: string
+          revision: number
+          targets: Json
+        }
+        Insert: {
+          created_at?: string
+          effective_on: string
+          guidance: string
+          id: string
+          relationship_id: string
+          revision: number
+          targets: Json
+        }
+        Update: {
+          created_at?: string
+          effective_on?: string
+          guidance?: string
+          id?: string
+          relationship_id?: string
+          revision?: number
+          targets?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nutrition_guidance_relationship_id_fkey"
+            columns: ["relationship_id"]
+            isOneToOne: false
+            referencedRelation: "coach_clients"
             referencedColumns: ["id"]
           },
         ]
@@ -652,6 +886,133 @@ export type Database = {
           units?: string
         }
         Relationships: []
+      }
+      resource_shares: {
+        Row: {
+          created_at: string
+          id: string
+          relationship_id: string
+          resource_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          relationship_id: string
+          resource_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          relationship_id?: string
+          resource_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resource_shares_relationship_id_fkey"
+            columns: ["relationship_id"]
+            isOneToOne: false
+            referencedRelation: "coach_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resource_shares_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resources: {
+        Row: {
+          bytes: number
+          created_at: string
+          filename: string
+          id: string
+          media_type: string
+          object_path: string
+          owner_id: string
+          revision: number
+          state: string
+          title: string
+        }
+        Insert: {
+          bytes: number
+          created_at?: string
+          filename: string
+          id: string
+          media_type: string
+          object_path: string
+          owner_id: string
+          revision?: number
+          state?: string
+          title: string
+        }
+        Update: {
+          bytes?: number
+          created_at?: string
+          filename?: string
+          id?: string
+          media_type?: string
+          object_path?: string
+          owner_id?: string
+          revision?: number
+          state?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resources_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saved_foods: {
+        Row: {
+          archived: boolean
+          basis: number
+          id: string
+          name: string
+          nutrients: Json
+          owner_id: string
+          revision: number
+          source: string
+          unit: string
+        }
+        Insert: {
+          archived?: boolean
+          basis: number
+          id: string
+          name: string
+          nutrients: Json
+          owner_id: string
+          revision?: number
+          source: string
+          unit: string
+        }
+        Update: {
+          archived?: boolean
+          basis?: number
+          id?: string
+          name?: string
+          nutrients?: Json
+          owner_id?: string
+          revision?: number
+          source?: string
+          unit?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_foods_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       schedule_exceptions: {
         Row: {
@@ -862,6 +1223,10 @@ export type Database = {
     }
     Functions: {
       accept_invitation: { Args: { p_token: string }; Returns: string }
+      archive_food: {
+        Args: { p_id: string; p_revision: number }
+        Returns: undefined
+      }
       assign_coaching_form: {
         Args: {
           p_count: number
@@ -923,9 +1288,75 @@ export type Database = {
         Args: { p_from: string; p_id: string; p_to: string }
         Returns: Json
       }
+      availability_preview: {
+        Args: {
+          p_count: number
+          p_every: number
+          p_local: string
+          p_minutes: number
+          p_zone: string
+        }
+        Returns: Json
+      }
+      book_appointment: {
+        Args: { p_id: string; p_relationship: string; p_slot: string }
+        Returns: {
+          created_at: string
+          ends_at: string
+          id: string
+          location: string
+          note: string
+          relationship_id: string
+          revision: number
+          slot_id: string
+          starts_at: string
+          state: string
+          timezone: string
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "appointments"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      can_read_resource: { Args: { p_id: string }; Returns: boolean }
+      can_upload_resource: { Args: { p_path: string }; Returns: boolean }
       cancel_coaching_request: {
         Args: { p_id: string; p_revision: number }
         Returns: undefined
+      }
+      change_appointment: {
+        Args: {
+          p_action: string
+          p_id: string
+          p_note?: string
+          p_revision: number
+          p_slot?: string
+        }
+        Returns: {
+          created_at: string
+          ends_at: string
+          id: string
+          location: string
+          note: string
+          relationship_id: string
+          revision: number
+          slot_id: string
+          starts_at: string
+          state: string
+          timezone: string
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "appointments"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       change_scheduled_day: {
         Args: {
@@ -1015,6 +1446,27 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      finish_resource: {
+        Args: { p_id: string }
+        Returns: {
+          bytes: number
+          created_at: string
+          filename: string
+          id: string
+          media_type: string
+          object_path: string
+          owner_id: string
+          revision: number
+          state: string
+          title: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "resources"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       get_invitation: { Args: { p_token: string }; Returns: Json }
       mark_conversation_read: {
         Args: { p_relationship: string; p_sequence: number }
@@ -1023,6 +1475,36 @@ export type Database = {
       previous_performance: {
         Args: { p_before: string; p_exercises: string[] }
         Returns: Json
+      }
+      publish_availability: {
+        Args: {
+          p_count: number
+          p_every: number
+          p_local: string
+          p_location: string
+          p_minutes: number
+          p_series: string
+          p_title: string
+          p_zone: string
+        }
+        Returns: {
+          coach_id: string
+          ends_at: string
+          id: string
+          local_start: string
+          location: string
+          series_id: string
+          starts_at: string
+          state: string
+          timezone: string
+          title: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "appointment_slots"
+          isOneToOne: false
+          isSetofReturn: true
+        }
       }
       publish_plan: {
         Args: { p_expected_version: number; p_id: string }
@@ -1043,9 +1525,62 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      register_resource: {
+        Args: {
+          p_bytes: number
+          p_filename: string
+          p_id: string
+          p_title: string
+          p_type: string
+        }
+        Returns: {
+          bytes: number
+          created_at: string
+          filename: string
+          id: string
+          media_type: string
+          object_path: string
+          owner_id: string
+          revision: number
+          state: string
+          title: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "resources"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      remove_meal: {
+        Args: { p_id: string; p_revision: number }
+        Returns: undefined
+      }
       remove_measurement: {
         Args: { p_id: string; p_revision: number }
         Returns: undefined
+      }
+      remove_resource_record: { Args: { p_id: string }; Returns: undefined }
+      retire_resource: {
+        Args: { p_id: string; p_revision: number }
+        Returns: {
+          bytes: number
+          created_at: string
+          filename: string
+          id: string
+          media_type: string
+          object_path: string
+          owner_id: string
+          revision: number
+          state: string
+          title: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "resources"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       review_coaching_response: {
         Args: { p_feedback: string; p_id: string; p_revision: number }
@@ -1206,6 +1741,67 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      save_food: {
+        Args: {
+          p_basis: number
+          p_id: string
+          p_name: string
+          p_nutrients: Json
+          p_revision: number
+          p_source: string
+          p_unit: string
+        }
+        Returns: {
+          archived: boolean
+          basis: number
+          id: string
+          name: string
+          nutrients: Json
+          owner_id: string
+          revision: number
+          source: string
+          unit: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "saved_foods"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      save_meal: {
+        Args: {
+          p_data: Json
+          p_date: string
+          p_id: string
+          p_meal: string
+          p_relationship: string
+          p_revision: number
+        }
+        Returns: {
+          basis: number
+          client_id: string
+          created_at: string
+          food_id: string | null
+          id: string
+          logged_on: string
+          meal: string
+          name: string
+          note: string
+          nutrients: Json
+          quantity: number
+          relationship_id: string | null
+          revision: number
+          source: string
+          unit: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "meal_entries"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       save_measurement: {
         Args: {
           p_date: string
@@ -1229,6 +1825,31 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "measurements"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      save_nutrition_guidance: {
+        Args: {
+          p_effective: string
+          p_guidance: string
+          p_id: string
+          p_relationship: string
+          p_revision: number
+          p_targets: Json
+        }
+        Returns: {
+          created_at: string
+          effective_on: string
+          guidance: string
+          id: string
+          relationship_id: string
+          revision: number
+          targets: Json
+        }
+        SetofOptions: {
+          from: "*"
+          to: "nutrition_guidance"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -1274,6 +1895,7 @@ export type Database = {
           p_id: string
           p_relationship: string
           p_request?: string
+          p_resource?: string
           p_session?: string
         }
         Returns: {
@@ -1282,6 +1904,7 @@ export type Database = {
           id: string
           relationship_id: string
           request_id: string | null
+          resource_id: string | null
           sender_id: string
           sequence: number
           session_id: string | null
@@ -1312,6 +1935,10 @@ export type Database = {
       }
       set_exercise_active: {
         Args: { p_active: boolean; p_id: string }
+        Returns: undefined
+      }
+      share_resource: {
+        Args: { p_id: string; p_relationship: string; p_shared: boolean }
         Returns: undefined
       }
       snapshot_prescription: { Args: { p: Json }; Returns: Json }
@@ -1352,7 +1979,9 @@ export type Database = {
         }
       }
       validate_coaching_fields: { Args: { p: Json }; Returns: undefined }
+      validate_nutrients: { Args: { p: Json }; Returns: undefined }
       validate_prescription: { Args: { p: Json }; Returns: undefined }
+      withdraw_availability: { Args: { p_id: string }; Returns: undefined }
     }
     Enums: {
       [_ in never]: never

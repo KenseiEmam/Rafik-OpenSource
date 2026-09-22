@@ -2,7 +2,8 @@
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { user } from '../../app/auth'
-import { backend, rpc } from '../../lib/backend'
+import { downloadResource, type Resource, type Share } from '../resources/files'
+import { backend, rpc, rows } from '../../lib/backend'
 import { language as l, errorMessage, dateLabel } from '../../lib/i18n'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { commandRejected } from './helpers'
@@ -18,15 +19,40 @@ const scrollEnd = async () => {
   await nextTick()
   if (log.value) log.value.scrollTop = log.value.scrollHeight
 }
-type Pending = { id: string; body: string; session: string | null; request: string | null }
+type Pending = {
+  id: string
+  body: string
+  session: string | null
+  request: string | null
+  resource: string | null
+}
 const conversations = ref<Conversation[]>([]),
   messages = ref<Message[]>([]),
   text = ref(''),
   pending = ref<Pending>(),
   context = ref({
+    resource: typeof route.query.resource === 'string' ? route.query.resource : null,
     session: typeof route.query.session === 'string' ? route.query.session : null,
     request: typeof route.query.request === 'string' ? route.query.request : null,
   })
+const resources = ref<Resource[]>([]),
+  shares = ref<Share[]>([])
+const attachments = computed(() =>
+  resources.value.filter(
+    (r) =>
+      r.state === 'ready' &&
+      shares.value.some((s) => s.resource_id === r.id && s.relationship_id === id),
+  ),
+)
+async function openResource(resource: string) {
+  try {
+    const r = resources.value.find((r) => r.id === resource)
+    if (!r) throw Error('resource_unavailable')
+    await downloadResource(r)
+  } catch (e) {
+    error.value = errorMessage(e)
+  }
+}
 const loading = ref(true),
   busy = ref(false),
   error = ref(''),
@@ -80,7 +106,13 @@ async function refresh() {
         !messages.value.length ||
         !log.value ||
         log.value.scrollHeight - log.value.scrollTop - log.value.clientHeight < 80
-      const latest = await pageMessages()
+      const [latest, files, shared] = await Promise.all([
+        pageMessages(),
+        rows<Resource>('resources'),
+        rows<Share>('resource_shares'),
+      ])
+      resources.value = files
+      shares.value = shared
       older.value = messages.value.length ? older.value : latest.length === 50
       // If more than one page arrived between polls, replace the window rather than hiding a gap.
       const lastKnown = messages.value.at(-1)?.sequence
@@ -134,11 +166,12 @@ async function send() {
       p_body: p.body,
       p_session: p.session,
       p_request: p.request,
+      p_resource: p.resource || null,
     })
     ready = false
     pending.value = undefined
     text.value = ''
-    context.value = { session: null, request: null }
+    context.value = { session: null, request: null, resource: null }
     await removeDraft(key)
     ready = true
     await refresh()
@@ -174,7 +207,7 @@ onMounted(async () => {
       if (d) {
         text.value = d.text
         pending.value = d.pending
-        context.value = d.context
+        context.value = { ...d.context, resource: d.context.resource || null }
       }
     }
   } catch (e) {
@@ -288,6 +321,18 @@ onUnmounted(() => {
                 ↗</RouterLink
               >
               <p dir="auto">{{ m.body }}</p>
+              <button
+                v-if="m.resource_id"
+                class="text-link attachment-link"
+                :disabled="!resources.some((r) => r.id === m.resource_id && r.state === 'ready')"
+                @click="openResource(m.resource_id)"
+              >
+                {{
+                  resources.find((r) => r.id === m.resource_id && r.state === 'ready')?.title ||
+                  l('File no longer shared', 'لم يعد الملف مشاركاً')
+                }}
+                ↓
+              </button>
               <time :datetime="m.created_at"
                 >{{ dateLabel(m.created_at) }} ·
                 {{
@@ -313,7 +358,7 @@ onUnmounted(() => {
                 v-if="!pending"
                 type="button"
                 class="text-link"
-                @click="context = { session: null, request: null }"
+                @click="context = { session: null, request: null, resource: null }"
               >
                 {{ l('Remove link', 'إزالة الرابط') }}
               </button>
@@ -328,6 +373,16 @@ onUnmounted(() => {
                 required
               ></textarea>
             </label>
+            <label
+              >{{ l('Attach a shared file', 'إرفاق ملف مشارك')
+              }}<select v-model="context.resource" :disabled="busy || !!pending">
+                <option :value="null">{{ l('No attachment', 'بدون مرفق') }}</option>
+                <option v-for="r in attachments" :key="r.id" :value="r.id">{{ r.title }}</option>
+              </select></label
+            >
+            <RouterLink class="text-link" :to="coach ? '/coach/resources' : '/resources'">{{
+              l('Upload or share a file', 'رفع ملف أو مشاركته')
+            }}</RouterLink>
             <p v-if="pending && !busy" class="notice">
               {{
                 l(
