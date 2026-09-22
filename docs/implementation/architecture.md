@@ -2,11 +2,11 @@
 
 Local revamp, 22 September 2026. This record describes the new implementation; `docs/revival` preserves the audit and rationale. It is not a compatibility plan for the retired backend.
 
-**Scope correction:** this describes the implemented foundation, not the final product architecture or feature ceiling. [Revamp coverage](revamp-coverage.md) governs the broader remaining work and identifies contracts to resolve before extending the schema. The original ten-table count is not a design constraint; R1 adds `client_context` and `schedule_exceptions`. R2 adds five ongoing-coaching tables, bringing the public domain to seventeen. See `r1-contract.md` and `r2-contract.md` for the phase invariants, and [maintainer guide](maintainer-guide.md) for the file map and change recipes.
+**Scope correction:** this describes the implemented foundation, not the final product architecture or feature ceiling. [Revamp coverage](revamp-coverage.md) governs the broader remaining work and identifies contracts to resolve before extending the schema. The original ten-table count is not a design constraint; R1 adds `client_context` and `schedule_exceptions`. R2 adds five ongoing-coaching tables, bringing the public domain to seventeen. R3 adds seven nutrition/appointment/resource tables, for 24 total. See `r1-contract.md`, `r2-contract.md` and `r3-contract.md` for the phase invariants, and [maintainer guide](maintainer-guide.md) for the file map and change recipes.
 
 ## System boundary
 
-One Vue application communicates with one Supabase project: Auth, Postgres, and PostgREST. Static assets and self-hosted fonts belong to the web build. IndexedDB stores resumable workout records, pending commands, recoverable editor drafts and a bounded local diagnostic log. A small production service worker caches application code and public assets for reloads during a workout; it never caches API responses or access tokens.
+One Vue application communicates with one Supabase project: Auth, Postgres, PostgREST and private Storage. Static assets and self-hosted fonts belong to the web build. IndexedDB stores resumable workout records, pending commands, recoverable editor drafts and a bounded local diagnostic log. A small production service worker caches application code and public assets for reloads during a workout; it never caches API responses or access tokens.
 
 There is no Edge Function, worker, Firebase dependency, external analytics service, AI service, billing service, or scheduled notification system in the new runtime. Mail is intercepted locally by Mailpit. Coaches share invitation links using their existing channel. Contextual feedback appears with the session and on Today; the UI does not claim it sent a notification.
 
@@ -29,7 +29,14 @@ There is no Edge Function, worker, Firebase dependency, external analytics servi
 | `coaching_forms` | Coach-owned reusable title/purpose and 1–10 typed questions, revisioned on edit |
 | `coaching_requests` | Assigned title/question/unit/revision snapshot, due date, answers, original submission/review timestamps; participant access |
 | `measurements` | Client-owned weight/waist values, explicit units/date, optional sharing with one relationship, CAS revision |
-| `messages` | Immutable participant text and optional verified workout/request context; stable caller UUID and server sequence |
+| `messages` | Immutable participant text and optional verified workout/request/resource context; stable caller UUID and server sequence |
+| `nutrition_guidance` | Immutable coach-authored effective-date targets/text per relationship and revision |
+| `saved_foods` | Person-owned reusable portion/nutrient/source definitions; editable/retirable |
+| `meal_entries` | Client-owned date/meal/quantity with nutrient/source snapshot and optional relationship visibility |
+| `appointment_slots` | Coach-owned concrete UTC intervals, original local time/timezone, bounded series and availability state |
+| `appointments` | Participant booking snapshots with revision, cancellation/rescheduling and attendance state |
+| `resources` | Person-owned immutable file registration/path/type/size and pending/ready/retired lifecycle |
+| `resource_shares` | Explicit permission from resource owner to a coaching relationship |
 | `conversation_reads` | Current user's monotonic observed sequence per relationship; no public read receipts |
 
 A flexible assignment occurrence is `(client, assignment, client-local date, prescribed day ID)`. A scheduled occurrence uses its original scheduled date, even when moved. The bounded schedule projection applies cycle offsets, assignment dates and explicit exceptions; the start command verifies that the occurrence is available on the client-local current date. Starting that same slot twice returns one session. Two different day slots can be performed on one day. Repeating the identical assigned slot twice on one date is not a separate supported occurrence. Public sample attempts use their own persistent start ID. Dates use the saved client timezone, detected from the browser on initial profile creation; the UI allows changing it in Settings. A missing display name defaults to the verified email local part and can be edited later, keeping new clients identifiable without adding a signup form.
@@ -109,3 +116,15 @@ The browser must have successfully loaded the production shell once for a fully 
 ## What is deliberately outside this build
 
 There is currently no automatic spreadsheet import, external reminder delivery, nutrition, appointment booking, file attachments, billing subscription, organization administration, or native application. Direct text conversations, progress and check-ins/assessments are implemented locally in R2. The starter and duplicate/edit workflow cover initial plan preparation only. Manual conversion of a coach's current plan is a pilot service to measure, not a hidden import feature. These describe current gaps; the corrected coverage register governs remaining web/backend scope. Native work remains deferred by user instruction.
+
+## R3 service delivery boundaries
+
+Nutrition guidance is a prescription, and meal entries are actual records. They never share a mutable JSON document. Each meal copies explicit nutrient values, amount, basis, unit and source; changing a saved food leaves historical meals intact. Known totals sum `value × amount / basis` and retain a missing-value count. An empty day is not zero intake. Guidance versions are append-only, selected by effective date and revision. No medical or energy-needs calculation is implemented.
+
+Availability is a concrete UTC interval with its originating IANA timezone and local timestamp. Recurrences are expanded transactionally for at most eight occurrences; no background scheduler or unbounded recurring rule. A nonexistent DST local time is rejected; repeated hours use standard time and are previewed. Booking and rescheduling lock the relationship plus both participant profiles in UUID order; a partial unique slot index is an additional guard. Conflict queries account for both roles. Cancellation reopens the slot. Attendance requires the coach and an ended appointment; it never creates a session or modifies training progress. See the R3 contract for command names/payloads.
+
+Private Storage is the one new service. Resource registration must precede upload. Its path is `owner UUID/resource UUID`; MIME and size are bounded. Upload authorization takes a share lock on the pending resource row for the Storage metadata transaction, preventing retirement from racing an already-authorized insertion. Finalization verifies size/type metadata before the resource becomes shareable. Updates/overwrites are not granted. Sharing is a separate idempotent relationship command, and attachments require a ready resource shared to that conversation.
+
+Downloads use authenticated Storage requests with browser cache disabled, not signed URLs that remain usable after revocation. A revoked recipient loses future authorized downloads; previously downloaded bytes cannot be recalled. Removal marks the resource retired, calls the Storage API to remove bytes, then removes metadata only after the object record is absent. A partially completed removal stays visible for retry. Registration and account deletion lock the same profile; account deletion refuses while any owned resource remains. The Settings UI cleans resources before deleting the account. It also releases future booked slots when deleting a client. Do not bypass this lifecycle by deleting `storage.objects` with SQL.
+
+R3 has no upload worker, image transformation service, external food provider, calendar integration or delivery outbox. File bytes are not stored in IndexedDB; an interrupted upload may require the user to reselect the original file. Nutrition editors keep device drafts; calendar mutations keep the exact pending command. Only the workout flow promises offline recording. All new feature writes still require server acknowledgement.

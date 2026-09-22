@@ -1,5 +1,27 @@
 # Local verification record
 
+## R3 verification — 22 September 2026
+
+Executed against `rafik-revamp-local` with Node 22.16.0, CLI 2.90.0 and local Storage enabled. Existing preview data was preserved; no hosted stack or native device was used.
+
+| Check | Actual result / boundary |
+|---|---|
+| Backend `npm test` | **135** rollback assertions pass: 27 foundation + 24 R1 + 42 R2 + 42 R3. R3 covers nutrition snapshots/unknowns/corrections, bounded/DST availability, booking/rescheduling/cancellation/attendance, permissions and resource metadata lifecycle. |
+| `npm run test:fresh` | All **six** migrations, generated fixtures and four SQL suites pass in a disposable database. Auth/Storage managed schemas are bootstrapped locally; preview rows are not copied/reset. |
+| `npm run test:services` | Real Auth/REST/Storage requests pass: two simultaneous clients yield exactly one booking; dual coach/client role conflicts are blocked; uploads require registration, overwrites are rejected, shared bytes match, revocation blocks subsequent download, deletion removes bytes before metadata, client deletion reopens future availability, coach deletion handles remaining bookings. Three temporary identities are removed afterward. |
+| Supabase schema lint | No schema errors/warnings in application functions after final changes. |
+| Web unit/data tests | **10** tests pass, including portion scaling, unknown versus zero nutrition values and existing calendar/progress/prescription checks. |
+| Browser regression suite | **36/36** pass on Chromium and phone-sized WebKit, including all prior-phase scenarios. The six R3 scenarios cover guidance/food reuse/meal correction/reload; booking/rescheduling/cancellation plus a lost booking acknowledgement; real private file download/attachment/revocation/removal plus a lost finalization acknowledgement. |
+| Final affected-flow rerun | **6/6** R3 scenarios pass after final UI adjustments; final SQL and HTTP tests pass after retry/lock hardening. |
+| R3 visual matrix | **128** combinations: eight role/routes × widths 320/390/768/1440 × English/Arabic × light/dark. Zero document overflow, zero page errors. The 32 states at 390px have zero reported Axe violations. |
+| Build and formatting | Production build/type check and Prettier check pass. Generated schema types match the final local schema. |
+
+Repeatable sources: `supabase/tests/service_delivery.sql`, `scripts/verify-services.mjs`; frontend `tests/service-delivery.e2e.ts`, `tests/nutrition.test.ts`, `scripts/r3-visual-check.mjs`. Local render evidence is in frontend `artifacts/r3-*.png` and `r3-visual-matrix.json`. Representative populated nutrition, booked appointment and shared-resource captures were inspected, alongside desktop English and Arabic dark phone states. During inspection, unused empty nutrient summaries were removed, query-only navigation was corrected to preserve input focus, phone workspace tabs were made to wrap so More stays visible, native Safari selects were styled at touch size, and direct entry-form links were added. The full 36-scenario suite and the matrix were rerun after the shared navigation/control refinements.
+
+Database assertions use synthetic storage metadata inside rolled-back transactions; **only the HTTP/browser checks establish real byte behavior**. Browser fault injection commits selected requests and drops the acknowledgement to exercise retry, rather than merely mocking a success response. Whole-product release readiness, real people/retention/payments, physical phones, remote CI, hosted Storage, outbound notifications and external calendar delivery remain unverified or unimplemented. No claim of malware scanning, file recall after download, all-feature offline support or production-scale performance is made.
+
+
+
 ## R2 ongoing coaching — 22 September 2026
 
 | Check | Result and exact boundary |

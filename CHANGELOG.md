@@ -2,6 +2,15 @@
 
 Record concrete implemented changes here with every further backend phase or material fix. Pair changes with current architecture, runbook and verification records; do not use this file as a speculative backlog.
 
+## R3 — Broader service delivery · 22 September 2026
+
+- Added migrations `202609220004_nutrition.sql`, `202609220005_appointments.sql`, and `202609220006_resources.sql`. Seven new public tables bring the domain total to 24; generated web types were refreshed.
+- Nutrition: immutable effective-date guidance, coach-entered optional targets, client-owned reusable foods and explicitly shared/private meal snapshots. Quantities have an explicit unit and nutrient basis; missing values remain unknown. Corrections are revision checked, and editing food definitions does not rewrite meals.
+- Appointments: bounded concrete availability series, IANA timezones/DST validation, participant booking, rescheduling, cancellation and coach attendance. Participant locks and a unique active booking index prevent conflicts, including a person acting in both roles. No workout completion side effects.
+- Resources: enabled local Supabase Storage with a private 10 MiB bucket and a MIME allowlist. Added register/upload/finalize, relationship sharing/revocation, attachment validation, and retire/delete-bytes/delete-metadata lifecycle. Upload authorization holds the registration row until Storage metadata insertion completes; registration and account deletion share a profile lock. Account deletion requires file cleanup first and restores a deleted client's future availability.
+- Extended `send_message` with optional resource context while retaining the previous five-argument calls through a default. Added Storage API lifecycle and simultaneous-booking verification, 42 rollback SQL assertions, and Storage-aware disposable database bootstrap. CI now includes the service integration command; remote CI has not been run here.
+- Applied additive migrations to the existing local preview and restarted only this local stack to enable Storage. No reset, hosted mutation, real notification, native app change or push.
+
 ## R2 — Ongoing coaching · 22 September 2026
 
 - Added `202609220003_ongoing_coaching.sql`: five tables (`coaching_forms`, `coaching_requests`, `measurements`, `messages`, `conversation_reads`) and explicit validated commands. The public domain now has seventeen tables.

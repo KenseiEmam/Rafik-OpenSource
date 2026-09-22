@@ -13,5 +13,6 @@ jobs:
       - run: npm start
       - run: npm run reset
       - run: npm test
+      - run: npm run test:services
       - run: npm stop
         if: always()

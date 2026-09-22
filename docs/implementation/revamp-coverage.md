@@ -2,7 +2,7 @@
 
 22 September 2026. Execution owner: Codex. This document supersedes the earlier assumption that delivering the small training loop completes the Rafik revamp. The user likes the visual direction but correctly identifies that the implementation lacks much of the original product's capability.
 
-**Implementation update:** R1 daily-coaching and R2 ongoing-coaching expansions are now implemented locally; see `ledger.md` for its exact scope and `verification.md` for evidence. The comparison below records the gaps that prompted this correction. R3–R5 remain open.
+**Implementation update:** R1 daily-coaching, R2 ongoing-coaching and R3 service-delivery expansions are now implemented locally; see `ledger.md` for its exact scope and `verification.md` for evidence. The comparison below records the gaps that prompted this correction. R4–R5 remain open.
 
 ## Status and mistake
 
@@ -67,7 +67,7 @@ Resolve these cross-feature contracts before adding screens:
 4. **Progress:** derive from acknowledged records with documented units and denominators. Missing, skipped, rest and completed are different. Corrections recompute affected summaries without emitting a second completion.
 5. **Check-ins/assessments:** definitions are versioned; submissions snapshot questions and units. Completion/review is explicit. Start with a small field vocabulary, not nested conditional form programming.
 6. **Communication and delivery:** message persistence is independent of notification delivery. Provider retries cannot duplicate messages or roll back a workout. Add a bounded outbox when delivery is implemented; keep local effects intercepted.
-7. **Files:** introduce private storage with domain-linked metadata and scoped signed access, not public user uploads. A media outage must not prevent text instructions or recording.
+7. **Files:** introduce private storage with domain-linked metadata and scoped authenticated access (R3 uses authenticated downloads to enforce revocation), not public user uploads. A media outage must not prevent text instructions or recording.
 8. **Nutrition:** explicit portions and units, provenance for nutrition values, manual correction and separate plan/actual data. External lookup is an adapter rather than the owner of the meal log.
 9. **Billing:** commercial subscription state stays separate from training history; payment callbacks are idempotent and cannot rewrite assignments or session outcomes. Model/test locally; no real charge or outbound action during this phase.
 
@@ -80,7 +80,7 @@ Write exact schema, command payloads, errors, invariants and interaction states 
 | R0 — Correct scope | This coverage register and truthful project status | Every original feature family has a disposition; deferred features cannot disappear from the ledger |
 | R1 — Complete daily coaching | Client detail workspace, roster lifecycle, exercise library/custom content, richer programming, assignment schedule and prior performance | Coach creates a realistic multiweek plan with custom/timed/grouped exercises, assigns two different clients, adapts future work and reviews results; client can train without the coach editing SQL/content files |
 | R2 — Ongoing coaching (implemented locally) | Progress, check-ins, assessments, direct communication and contextual activity | Client submits/revises relevant data, coach reviews/responds, both can find history and understand next steps; retry/correction/access tests cover each lifecycle |
-| R3 — Broader service delivery | Optional nutrition, calendar/booking and resources | Real local data flows for planning, logging, booking/rescheduling and resource access; optional features do not add required signup fields or overwhelm Today |
+| R3 — Broader service delivery (implemented locally) | Optional nutrition, calendar/booking and resources | Real local data flows for planning, logging, booking/rescheduling and resource access; optional features do not add required signup fields or overwhelm Today |
 | R4 — Team and business operations | Team roles/groups, shared plans/client assignment, simple commercial/support states | Solo flow remains simple; team role changes and reassignment preserve ownership/history; provider behavior verified through local simulations |
 | R5 — Integrated product readiness | Whole-product navigation, content, accessibility, lifecycle/permission/failure coverage, release runbook | Complete recurring coach/client/team tasks using fresh accounts, not only seeded happy paths; no advertised destination is an empty placeholder |
 | Later release/native | New hosted backend, controlled real delivery/device checks, then native decision | Existing local-only/mobile constraints remain; no remote readiness claims from local tests |
@@ -93,4 +93,4 @@ The revamp is complete only when the documented retained product capabilities wo
 
 Commercial success still requires evidence from real use, and not all original ideas deserve restoration. That uncertainty does not justify calling a basic slice the entire revamp. Tests for the current foundation stay valid within their recorded scope; broader product completeness remains open.
 
-**Next implementation action:** continue R3 optional nutrition, booking and private resources; R1/R2 contracts and implementation are recorded in the ledger. Direct text conversation is implemented; attachments remain R3. R1 exercise alternatives/client substitutions remain explicitly outstanding for integrated readiness. No redesign of the accepted visual identity, old-data restoration, production changes or mobile work is needed to begin.
+**Next implementation action:** R4 team and business operations. R1/R2/R3 contracts and implementation are recorded in the ledger. Nutrition, booking, private resources and conversation attachments are implemented locally; notification delivery, team/group ownership and commercial/support states remain to be built. R1 exercise alternatives/client substitutions remain explicitly outstanding for integrated readiness. No redesign of the accepted visual identity, old-data restoration, production changes or mobile work is needed to begin.

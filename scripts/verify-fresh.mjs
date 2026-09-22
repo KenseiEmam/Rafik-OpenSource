@@ -11,10 +11,11 @@ const sql=(db,input)=>run(['psql','-U','postgres','-d',db,'-v','ON_ERROR_STOP=1'
 let created=false
 try {
  sql('postgres',`create database ${database};`);created=true
- const auth=run(['pg_dump','-U','postgres','--schema-only','--no-owner','--no-acl','--schema=auth','--schema=extensions','postgres'])
- sql(database,auth+'\ngrant usage on schema auth to authenticated, anon;')
+ const auth=run(['pg_dump','-U','postgres','--schema-only','--no-owner','--no-acl','--schema=auth','--schema=storage','--schema=extensions','postgres'])
+ const bootstrap=auth.replace(/CREATE POLICY rafik_resource_[\s\S]*?;/g,'')
+ sql(database,bootstrap+'\ngrant usage on schema auth, storage to authenticated, anon; grant select, insert, delete on storage.objects to authenticated;')
  const migrations=readdirSync(resolve(root,'supabase/migrations')).filter(f=>f.endsWith('.sql')).sort().map(f=>readFileSync(resolve(root,'supabase/migrations',f),'utf8')).join('\n')
  sql(database,migrations+'\n'+readFileSync(resolve(root,'supabase/seed.sql'),'utf8'))
- sql(database,['core.sql','daily_coaching.sql','ongoing_coaching.sql'].map(f=>readFileSync(resolve(root,'supabase/tests',f),'utf8')).join('\n'))
+ sql(database,['core.sql','daily_coaching.sql','ongoing_coaching.sql','service_delivery.sql'].map(f=>readFileSync(resolve(root,'supabase/tests',f),'utf8')).join('\n'))
  console.log('Fresh migrations, synthetic fixtures and all database suites passed in an isolated database. Preview records unchanged.')
 }finally{if(created)sql('postgres',`drop database ${database} with (force);`)}

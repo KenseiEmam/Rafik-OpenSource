@@ -20,7 +20,7 @@ Updated 22 September 2026. **A working local web/backend foundation is implement
 
 ## R1 — Daily coaching expansion
 
-**Implemented locally. The complete revamp remains in progress; R2 ongoing coaching is also implemented locally (below); R3–R5 remain open.** The first checkpoint was committed as backend `dc60441` and frontend `a6afdc3`, both on `codex/revamp`. No push was made.
+**Implemented locally. The complete revamp remains in progress; R2 ongoing coaching is also implemented locally (below); R3 is implemented locally; R4–R5 remain open.** The first checkpoint was committed as backend `dc60441` and frontend `a6afdc3`, both on `codex/revamp`. No push was made.
 
 - Client workspace with private goals/constraints/notes, revision conflict checks and device draft recovery; overview, current plan/schedule and training history.
 - Searchable active/archived roster and archive/reactivate commands. Archived relationships cannot start new assigned sessions; history and already started work remain usable.
@@ -38,7 +38,7 @@ Updated 22 September 2026. **A working local web/backend foundation is implement
 
 ## R2 — Ongoing coaching
 
-**Implemented locally; the full revamp remains in progress.** R3 nutrition/booking/resources, R4 team/business operations and R5 integrated readiness remain open. No hosting or native work was performed.
+**Implemented locally; the full revamp remains in progress.** R3 nutrition/booking/resources is implemented below; R4 team/business operations and R5 integrated readiness remain open. No hosting or native work was performed.
 
 - Coach/client progress pages read completed actual sets, with date filters, explicitly separated strength/time/distance trends, normalized kg display and exact result lists. Single records are shown as first results, not artificial trends. Current-cycle schedule counts distinguish completed/in-progress/skipped/rest/outstanding; they are labelled as the current configuration, not a historical adherence claim.
 - Optional client-owned weight/waist measurements support explicit units, personal or per-relationship sharing, correction and removal. Coach views expose only explicitly shared records.
@@ -52,7 +52,7 @@ Updated 22 September 2026. **A working local web/backend foundation is implement
 
 **Boundaries:** direct text conversation is implemented; file attachments and external notification delivery are not. Body measurements are optional, not health assessments or automatic advice. Assessment comparisons deliberately separate edited definitions. Forms/messages are recoverable drafts/commands, not a universal offline application. Hosting, physical-device behavior, real retention/payment and remote CI remain unverified.
 
-**Next:** implement R3 optional nutrition, appointment availability/booking/rescheduling and private resources. Define their ownership/unit/timezone/file lifecycle contracts first; extend the current web/backend modules without changing the accepted design or adding required signup complexity. Keep outstanding R1 alternative/substitution work visible in the coverage register and carry it into integrated readiness; do not silently label it shipped.
+**Next after R2:** R3 service delivery, now implemented below. R1 exercise alternatives/client substitutions remain explicitly outstanding for integrated readiness.
 
 ## What changed
 
@@ -64,15 +64,29 @@ Updated 22 September 2026. **A working local web/backend foundation is implement
 
 ## Current architecture, not a final feature ceiling
 
-One responsive web application and one Supabase backend, now with seventeen domain tables. No migration of old users, restored legacy database, custom role/workspace hierarchy, automatic progression, AI/nutrition integrations, credit system, notification pipeline or native compatibility adapter. The local product provides an immediate useful sample and a complete coach-delivered training loop.
+One responsive web application and one Supabase backend, now with 24 domain tables and private Storage. No migration of old users, restored legacy database, custom role/workspace hierarchy, automatic progression, AI/nutrition integrations, credit system, notification pipeline or native compatibility adapter. The local product provides an immediate useful sample and a complete coach-delivered training loop.
 
 The earlier decision to treat the broad product inventory as merely optional was too restrictive. The corrected coverage register restores a broader execution backlog for clients, programming, progress, communication, nutrition, scheduling and teams. Simplify each useful job and its implementation; do not make its existence contingent on finding customers first. The initial manual plan-conversion pilot remains a service experiment; no automatic import is implemented.
 
 ## Next action for Codex
 
-1. Continue with R3 in `revamp-coverage.md`: optional nutrition, booking and resources. Read the R1/R2 contracts and maintainer guide; do not restart the foundation or treat R2 as the full revamp.
+1. Continue with R4 in `revamp-coverage.md`: optional teams/groups, fixed roles, shared plans/client assignment and local commercial/support states. Read the R1/R2/R3 contracts and maintainer guide; design ownership/reassignment/provider-simulation contracts before adding screens. Do not treat R3 as the full revamp.
 2. Keep the visual direction the user likes. Extend real backend-backed tasks and recovery states, not just navigation or seeded screenshots. Record each capability as absent, partial, implemented or verified.
 3. Complete integrated product and physical-device checks before declaring release readiness. Business observations remain separate evidence, not a substitute for missing features.
 4. When moving beyond local-only work, follow the new-project hosted release gate. Never deploy synthetic Auth fixtures, reuse old credentials, or push main. Native stays deferred until the broader web/backend work is ready.
 
 Detailed source/operation contracts are in `architecture.md`, local/deployment instructions in `runbook.md`, content provenance in `content.md`, and business observation materials in `pilot.md`.
+
+## R3 — Broader service delivery
+
+**Implemented locally; the complete revamp remains in progress. Next is R4 team/business operations, followed by R5 integrated readiness.** No hosting, native work or remote push was performed. Earlier R1 exercise alternatives/client substitutions remain explicitly outstanding.
+
+- Optional nutrition: immutable coach guidance with effective dates and optional targets; reusable private foods; manual portion-based meal actuals, explicit personal/coach visibility, correction/removal and known-value summaries. No mandatory nutrition onboarding, food lookup provider, AI estimate or automatic prescription.
+- Appointment delivery: up to eight concrete weekly/fortnightly availability slots, timezone preview and DST rules; client booking, participant rescheduling/cancellation, history and coach attendance. Locks protect both people across coach/client roles. Appointment attendance never completes a workout. Exact pending commands can be retried after a lost acknowledgement and reload.
+- Private resources: real local Storage bytes, explicit shares, authenticated downloads, conversation attachments and revoked/unavailable states. Interrupted uploads and removals have visible recovery. No public upload URLs, expiring-link cache or orphan-prone SQL byte deletion. Files allow PDF/plain text/JPEG/PNG/WebP up to 10 MiB. Account export includes metadata; account deletion cleans owned bytes before Auth removal.
+- More hub keeps optional tools out of the primary daily workflow. Both Today pages show real near-term appointments, and client workspaces link to relevant tools. English/Arabic, light/dark and responsive layouts retain the accepted design.
+- Architecture remains one Vue app and one Supabase project; Storage is the only added local runtime service. Seven focused tables, explicit commands and small feature modules. Existing preview records were preserved. The [R3 contract](r3-contract.md), READMEs, changelogs and maintainer guide document the changes and recovery paths.
+
+**Verification:** 135 rollback SQL assertions (42 new); all six migrations plus fixtures/suites pass in a disposable database. Real HTTP checks verify competing bookings, cross-role conflicts, private Storage access/overwrite protection/revocation/byte deletion and temporary-account cleanup. Thirty-six full browser scenarios pass across Chromium and phone-sized WebKit, including earlier phases; the six R3 scenarios were rerun after final UI adjustments. Ten unit/data tests, build/type checks, formatting and SQL lint pass. The 128-layout R3 matrix reports zero overflow/page errors and no accessibility violations in its 390px checks. See `verification.md` for files, exact scope and limits.
+
+**Boundaries:** notification/reminder delivery, external calendar synchronization, payment collection, organization/group ownership, automatic food estimates and native devices are not part of R3. Resource records are currently person-owned; team ownership must be designed in R4. JSON export includes resource metadata; individual file downloads provide the bytes. There is no bundled account-file ZIP, malware scanner, resumable multipart upload or remote Storage deployment. Local browser success is not evidence of real retention, payments or physical-device readiness.

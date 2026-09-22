@@ -1,6 +1,6 @@
 # Working on the Rafik revamp
 
-Last updated: 22 September 2026, R2 ongoing coaching. This is the practical entry point for developers and future Codex work. Update it when responsibilities, files or workflows change. The [ledger](ledger.md) records what is actually implemented; [architecture](architecture.md) specifies behavior; [verification](verification.md) records evidence and limits. The full product is still being rebuilt: R3–R5 remain open in [coverage](revamp-coverage.md).
+Last updated: 22 September 2026, R3 broader service delivery. This is the practical entry point for developers and future Codex work. Update it when responsibilities, files or workflows change. The [ledger](ledger.md) records what is actually implemented; [architecture](architecture.md) specifies behavior; [verification](verification.md) records evidence and limits. The full product is still being rebuilt: R4–R5 remain open in [coverage](revamp-coverage.md).
 
 ## What changed from the retired product
 
@@ -8,7 +8,7 @@ The old four-repository platform is preserved in Git history and audited in `doc
 
 Backend baseline before revamp: `652e9ee`; frontend baseline: `a0c723e`. Foundation checkpoints: backend `dc60441`, frontend `a6afdc3`. R1 checkpoints: backend `31084bb`, frontend `8097f0d`. Root `CHANGELOG.md` files describe subsequent phases. Do not use old source links in the audit as current implementation instructions.
 
-The new application has one person identity who may train, coach, or do both. A direct coach–client relationship grants access. Plans publish immutable versions; sessions copy the prescription and save actual results through explicit commands. R1 adds client context, private exercise content and richer cycles. R2 adds ongoing coaching through versioned question snapshots, measurements and conversations. Old trigger-driven orchestration, organization setup requirements, credits, provider chains and global store complexity have not been restored.
+The new application has one person identity who may train, coach, or do both. A direct coach–client relationship grants access. Plans publish immutable versions; sessions copy the prescription and save actual results through explicit commands. R1 adds client context, private exercise content and richer cycles. R2 adds ongoing coaching through versioned question snapshots, measurements and conversations. R3 adds optional nutrition, concrete appointment booking and private files. Old trigger-driven orchestration, organization setup requirements, credits, provider chains and global store complexity have not been restored.
 
 ## Runtime and responsibilities
 
@@ -20,6 +20,8 @@ flowchart LR
   Web --> Commands[Explicit Postgres RPC commands]
   Read --> DB[(Postgres)]
   Commands --> DB
+  Web --> Storage[Private Supabase Storage]
+  Storage --> DB
   Web <--> Device[(IndexedDB drafts and workout queue)]
   Auth --> Mail[Local Mailpit inbox]
 ```
@@ -42,6 +44,9 @@ supabase/migrations/
   202609220001_core.sql            identity, relationships, plans, workouts, core commands
   202609220002_daily_coaching.sql  client notes, custom catalog, cycle scheduling, rich results
   202609220003_ongoing_coaching.sql forms/requests, measurements, messages/cursors, progress
+  202609220004_nutrition.sql       immutable guidance, saved foods, meal snapshots
+  202609220005_appointments.sql    concrete slots, conflict-safe booking and attendance
+  202609220006_resources.sql       private file lifecycle, sharing and message attachments
 supabase/fixtures-users.sql        synthetic local Auth identities
 supabase/fixtures-history.sql      synthetic training history
 supabase/fixtures-coaching.sql     synthetic forms, requests and example conversation
@@ -50,6 +55,8 @@ supabase/tests/
   core.sql                        foundation invariants and account lifecycle
   daily_coaching.sql              R1 domain/ownership/retry/snapshot scenarios
   ongoing_coaching.sql            R2 response/measurement/message lifecycle scenarios
+  service_delivery.sql            R3 nutrition/booking/resource lifecycle and access scenarios
+scripts/verify-services.mjs        real local HTTP booking race, Storage and account cleanup
 scripts/local.mjs                 guarded start/stop/reset/types/env/test commands
 scripts/content.mjs               generates seed and sibling web sample from canonical content
 scripts/verify-fresh.mjs          isolated clean-schema verification; preserves preview records
@@ -78,6 +85,18 @@ src/features/ongoing/
   CoachingActivity.vue            actual due/review/unread links on both Today pages
   types.ts                       module data contracts (JSON question/answer shape included)
   helpers.ts                     pure response-state and unit-aware trend calculations
+src/features/services/MorePage.vue optional-tool navigation for both workspaces
+src/features/nutrition/
+  NutritionPage.vue               role-aware guidance, food diary and saved foods
+  NutrientFields.vue              optional numeric input with unknown/zero distinction
+  model.ts                       typed snapshots and portion-scaled totals
+src/features/appointments/
+  CalendarPage.vue                offer preview, booking/history, durable command retry
+  UpcomingAppointments.vue        next-week read summary on Today
+  model.ts                       slot/appointment types and timezone formatting
+src/features/resources/
+  ResourcesPage.vue              upload/share/download/delete and recovery UI
+  files.ts                       authenticated download, byte cleanup and account cleanup
 src/components/PageState.vue      common loading/error rendering
 src/lib/backend.ts                typed table/RPC entry point, paged record reads, old-host guard
 src/lib/database.types.ts         GENERATED SQL schema types
@@ -138,7 +157,7 @@ Schema changes go into the next migration. Existing uncommitted local migration 
 
 **Progress metric:** start from acknowledged `set_entries`, include its unit and meaningful denominator, update `training_progress` plus `helpers.ts` and its pure tests. Never convert a missing value into a reported zero or blend strength/time/distance into one score. Current schedule counts describe the current assignment configuration, not historical adherence after arbitrary schedule edits.
 
-**New message feature:** keep send UUID/payload persistence and context ownership checks. Notification delivery is a future adapter; failures there must not roll back or duplicate a message. New attachments require a private storage contract in R3, not arbitrary public URLs in message JSON.
+**New message feature:** keep send UUID/payload persistence and context ownership checks. Notification delivery is a future adapter; failures there must not roll back or duplicate a message. Attachments use the implemented R3 resource/share contract and authenticated downloads; do not embed arbitrary public upload URLs in message JSON.
 
 **Shared content:** edit `content/starter.json`; run `npm run content` and `content:check`. Generated files are not independent sources. Synthetic R2 examples live in `fixtures-coaching.sql`; keep them out of production data provisioning.
 
@@ -152,3 +171,17 @@ Schema changes go into the next migration. Existing uncommitted local migration 
 - Record executed verification and its limitations in `verification.md`. Do not copy a previous test count as evidence for new code. Preserve evidence under `docs/implementation/evidence/` without secrets or user messages.
 - Run the checks appropriate to the change and inspect affected rendered screens in both languages and phone/desktop layouts. Keep native and hosting deferred until the user changes that scope.
 - Commit code and matching documentation together on `codex/revamp`. Never label the whole revamp complete just because one phase passes local tests.
+
+## Working on R3
+
+The coach routes are `/coach/more`, `/coach/nutrition`, `/coach/appointments` and `/coach/resources`; clients use the same paths without `/coach`. The nutrition/calendar components share presentation where the task overlaps, with role-specific commands. Authorization always lives in SQL, not route names. `/coach/nutrition?client=<relationship UUID>` and `/coach/appointments?client=<relationship UUID>` provide client context. There are no duplicate coach/client stores.
+
+To change nutrition fields, update migration validation and `nutrition/model.ts`, then the small `NutrientFields.vue` component. Preserve nullable unknown values, explicit basis/units/source and immutable meal snapshots. Do not infer targets or import a provider response directly into a client's history. Adding a food lookup later should fill an editable draft through an adapter.
+
+To change scheduling, start with `r3-contract.md` and `appointments.sql`. Keep UTC instants separate from local date/time inputs, preview DST effects and preserve the sorted participant locks. The calendar's persisted pending command must remain unchanged until acknowledged or definitively rejected. Test two concurrent clients and dual-role participants through `npm run test:services`.
+
+To add a file type or change limits, update the private bucket configuration, registration validation, frontend `fileTypes`, accepted input/help copy and service tests together. A resource is usable only after finalization. Never add an overwrite API to change bytes under existing message attachments. Upload a new resource instead. Keep deletion in `files.ts` as retire → Storage remove → metadata remove. Account deletion reuses that function. Exported JSON contains metadata; downloads are separate authenticated byte requests.
+
+Run `npm run test:services` from the backend for real Auth/REST/Storage integration; it creates and deletes only temporary synthetic accounts. The disposable database test now bootstraps the local managed Auth/Storage schemas, strips Rafik's Storage policies from that bootstrap and reapplies them through migrations. It does not copy preview records or physical file bytes. `scripts/r3-visual-check.mjs` in the frontend checks eight role/routes × four widths × two languages × two themes and saves local artifacts. Screenshots and local test logs are ignored, while repeatable checks and results are documented.
+
+Current R3 gaps belong in the ledger: no team ownership, real calendar/reminder provider, large/multipart upload, file scanning or hosted deployment. R4 should extend explicit person/relationship ownership deliberately; it must not expose every private client record just because two coaches join a team.

@@ -10,11 +10,11 @@ if (!config.includes('project_id = "rafik-revamp-local"') || existsSync(resolve(
 const cli = existsSync(resolve(root,'node_modules/.bin/supabase')) ? resolve(root,'node_modules/.bin/supabase') : 'supabase'
 const command=process.argv[2]
 const run=(args)=> { const r=spawnSync(cli,args,{cwd:root,stdio:'inherit'}); if(r.status!==0)process.exit(r.status||1) }
-if(command==='start')run(['start','-x','realtime,storage-api,imgproxy,postgres-meta,studio,edge-runtime,logflare,vector,supavisor'])
+if(command==='start')run(['start','-x','realtime,imgproxy,postgres-meta,studio,edge-runtime,logflare,vector,supavisor'])
 else if(command==='stop')run(['stop'])
 else if(command==='reset')run(['db','reset','--local'])
 else if(command==='test') {
-  const r=spawnSync('docker',['exec','-i','supabase_db_rafik-revamp-local','psql','-U','postgres','-d','postgres','-v','ON_ERROR_STOP=1'],{cwd:root,input:['core.sql','daily_coaching.sql','ongoing_coaching.sql'].map(name=>readFileSync(resolve(root,'supabase/tests',name),'utf8')).join('\n'),encoding:'utf8'})
+  const r=spawnSync('docker',['exec','-i','supabase_db_rafik-revamp-local','psql','-U','postgres','-d','postgres','-v','ON_ERROR_STOP=1'],{cwd:root,input:['core.sql','daily_coaching.sql','ongoing_coaching.sql','service_delivery.sql'].map(name=>readFileSync(resolve(root,'supabase/tests',name),'utf8')).join('\n'),encoding:'utf8'})
   process.stdout.write(r.stdout||''); process.stderr.write(r.stderr||'');process.exit(r.status??1)
 } else if(command==='types') {
   const types=execFileSync(cli,['gen','types','typescript','--local','--schema','public'],{cwd:root,encoding:'utf8'})

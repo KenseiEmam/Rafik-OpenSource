@@ -31,7 +31,8 @@ enabled = true
 port = 55324
 
 [storage]
-enabled = false
+enabled = true
+file_size_limit = "10MiB"
 
 [auth]
 enabled = true
