@@ -1,0 +1,8 @@
+node_modules
+dist
+artifacts
+playwright-report
+test-results
+src/lib/database.types.ts
+src/content/sample.json
+package-lock.json

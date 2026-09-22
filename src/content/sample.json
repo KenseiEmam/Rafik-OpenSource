@@ -1,0 +1,190 @@
+{
+  "versionId": "30000000-0000-4000-8000-000000000001",
+  "title": "Build your base",
+  "titleAr": "ابنِ أساسك",
+  "prescription": {
+    "schema": 1,
+    "description": "Two full-body sessions built around simple, repeatable movements.",
+    "descriptionAr": "حصتان لكامل الجسم بحركات بسيطة وقابلة للتكرار.",
+    "days": [
+      {
+        "id": "foundation-a",
+        "name": "Full body A",
+        "nameAr": "كامل الجسم أ",
+        "minutes": 35,
+        "exercises": [
+          {
+            "key": "squat",
+            "exerciseId": "goblet-squat",
+            "sets": 3,
+            "reps": 10,
+            "load": 8,
+            "unit": "kg",
+            "rest": 75,
+            "note": ""
+          },
+          {
+            "key": "row",
+            "exerciseId": "dumbbell-row",
+            "sets": 3,
+            "reps": 10,
+            "load": 8,
+            "unit": "kg",
+            "rest": 75,
+            "note": ""
+          },
+          {
+            "key": "press",
+            "exerciseId": "floor-press",
+            "sets": 3,
+            "reps": 10,
+            "load": 6,
+            "unit": "kg",
+            "rest": 75,
+            "note": ""
+          },
+          {
+            "key": "hinge",
+            "exerciseId": "romanian-deadlift",
+            "sets": 3,
+            "reps": 12,
+            "load": 8,
+            "unit": "kg",
+            "rest": 75,
+            "note": ""
+          }
+        ]
+      },
+      {
+        "id": "foundation-b",
+        "name": "Full body B",
+        "nameAr": "كامل الجسم ب",
+        "minutes": 30,
+        "exercises": [
+          {
+            "key": "split",
+            "exerciseId": "split-squat",
+            "sets": 3,
+            "reps": 8,
+            "load": 0,
+            "unit": "kg",
+            "rest": 60,
+            "note": ""
+          },
+          {
+            "key": "bridge",
+            "exerciseId": "glute-bridge",
+            "sets": 3,
+            "reps": 12,
+            "load": 0,
+            "unit": "kg",
+            "rest": 60,
+            "note": ""
+          },
+          {
+            "key": "shoulder",
+            "exerciseId": "overhead-press",
+            "sets": 3,
+            "reps": 10,
+            "load": 4,
+            "unit": "kg",
+            "rest": 60,
+            "note": ""
+          },
+          {
+            "key": "core",
+            "exerciseId": "dead-bug",
+            "sets": 3,
+            "reps": 8,
+            "load": 0,
+            "unit": "kg",
+            "rest": 60,
+            "note": ""
+          }
+        ]
+      }
+    ]
+  },
+  "exercises": [
+    {
+      "id": "goblet-squat",
+      "name": "Goblet squat",
+      "name_ar": "سكوات بالدمبل",
+      "equipment": "Dumbbell",
+      "equipment_ar": "دمبل",
+      "instructions": "Hold the weight close to your chest. Sit down between your hips, then stand tall. Choose a comfortable depth.",
+      "instructions_ar": "أمسك الدمبل قريباً من صدرك. انزل بثني الركبتين والوركين ثم قف باعتدال. اختر عمقاً مريحاً.",
+      "movement": "squat"
+    },
+    {
+      "id": "dumbbell-row",
+      "name": "Single-arm row",
+      "name_ar": "تجديف بذراع واحدة",
+      "equipment": "Dumbbell and bench",
+      "equipment_ar": "دمبل ومقعد",
+      "instructions": "Support one hand on a stable bench. Pull the weight toward your hip and lower with control. Repeat on both sides.",
+      "instructions_ar": "اسند يدك على مقعد ثابت. اسحب الدمبل نحو وركك وأنزله بتحكم. كرر على الجانبين.",
+      "movement": "pull"
+    },
+    {
+      "id": "floor-press",
+      "name": "Dumbbell floor press",
+      "name_ar": "ضغط دمبل على الأرض",
+      "equipment": "Dumbbells and mat",
+      "equipment_ar": "دمبل وحصيرة",
+      "instructions": "Lie on the floor with knees bent. Press the dumbbells up, then lower until your upper arms gently touch the floor.",
+      "instructions_ar": "استلقِ على الأرض مع ثني الركبتين. ادفع الدمبل للأعلى ثم أنزله حتى يلامس أعلى الذراعين الأرض برفق.",
+      "movement": "push"
+    },
+    {
+      "id": "romanian-deadlift",
+      "name": "Romanian deadlift",
+      "name_ar": "رفعة رومانية",
+      "equipment": "Dumbbells",
+      "equipment_ar": "دمبل",
+      "instructions": "Keep a soft bend in your knees. Move your hips back with the weights close to your legs, then stand tall.",
+      "instructions_ar": "اثنِ ركبتيك قليلاً. ادفع الوركين للخلف والدمبل قريب من ساقيك، ثم قف باعتدال.",
+      "movement": "hinge"
+    },
+    {
+      "id": "split-squat",
+      "name": "Split squat",
+      "name_ar": "سكوات متباعد",
+      "equipment": "Bodyweight or dumbbells",
+      "equipment_ar": "وزن الجسم أو دمبل",
+      "instructions": "Take a split stance. Lower straight down with control and push through the front foot to stand. Repeat both sides.",
+      "instructions_ar": "قف بقدم أمام الأخرى. انزل بتحكم وادفع بالقدم الأمامية للوقوف. كرر على الجانبين.",
+      "movement": "squat"
+    },
+    {
+      "id": "glute-bridge",
+      "name": "Glute bridge",
+      "name_ar": "رفع الحوض",
+      "equipment": "Mat",
+      "equipment_ar": "حصيرة",
+      "instructions": "Lie with feet flat and knees bent. Lift your hips, pause briefly, then lower slowly.",
+      "instructions_ar": "استلقِ مع ثني الركبتين ووضع القدمين على الأرض. ارفع الحوض، توقف قليلاً ثم انزل ببطء.",
+      "movement": "hinge"
+    },
+    {
+      "id": "overhead-press",
+      "name": "Seated shoulder press",
+      "name_ar": "ضغط الكتف جلوساً",
+      "equipment": "Dumbbells and bench",
+      "equipment_ar": "دمبل ومقعد",
+      "instructions": "Sit tall with dumbbells at shoulder height. Press up in a comfortable range, then lower with control.",
+      "instructions_ar": "اجلس باعتدال والدمبل عند مستوى الكتفين. ادفعه للأعلى ضمن مدى مريح ثم أنزله بتحكم.",
+      "movement": "push"
+    },
+    {
+      "id": "dead-bug",
+      "name": "Dead bug",
+      "name_ar": "تمرين الحشرة الميتة",
+      "equipment": "Mat",
+      "equipment_ar": "حصيرة",
+      "instructions": "Lie on your back with arms raised and knees bent. Slowly extend the opposite arm and leg, then alternate sides.",
+      "instructions_ar": "استلقِ على ظهرك مع رفع الذراعين وثني الركبتين. مد الذراع والساق المقابلة ببطء ثم بدّل الجانبين.",
+      "movement": "core"
+    }
+  ]
+}
