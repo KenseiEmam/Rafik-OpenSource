@@ -52,3 +52,9 @@ Tests use only synthetic local identities. Chromium and phone-sized WebKit are c
 See the companion [execution ledger](../rafik-api/docs/implementation/ledger.md), [architecture](../rafik-api/docs/implementation/architecture.md), [runbook](../rafik-api/docs/implementation/runbook.md) and [verification record](../rafik-api/docs/implementation/verification.md).
 
 The current privacy page, sample version IDs, test mail settings and synthetic seed are local-preview material. Follow the hosted-release gate before any deployment. No remote deployment, main push, live outreach or payment action is part of this build.
+
+## Daily coaching expansion
+
+After signing in through `/local-preview`, open **Clients** for each client's overview, private notes, plan/schedule and history. **Exercises** contains the shared catalog and your editable private exercises. **Plans** now supports cycle weeks, rest days, per-set targets, timed/distance work and consecutive exercise groups. Published instructions and started workout prescriptions remain fixed.
+
+The wider revamp remains in progress. Current coverage and the next phase are in the backend's `docs/implementation/ledger.md`. Full browser checks now include `tests/daily-coaching.e2e.ts`; run both repositories' checks before changing prescription or scheduling rules.

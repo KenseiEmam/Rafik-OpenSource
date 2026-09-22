@@ -99,6 +99,10 @@ onUnmounted(() => window.removeEventListener('online', online))
           to="/coach/plans"
           :class="{ selected: route.path.startsWith('/coach/plans') }"
           >{{ t('plans') }}</RouterLink
+        ><RouterLink
+          to="/coach/exercises"
+          :class="{ selected: route.path.startsWith('/coach/exercises') }"
+          >{{ language('Exercises', 'التمارين') }}</RouterLink
         ></template
       >
       <template v-else

@@ -3,9 +3,11 @@ import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { PhArrowRight, PhBarbell, PhClock, PhCheckCircle } from '@phosphor-icons/vue'
 import { user, profile } from '../../app/auth'
-import { rows } from '../../lib/backend'
+import { rows, rpc } from '../../lib/backend'
 import {
   type Assignment,
+  type Relationship,
+  type ScheduledDay,
   type PlanVersion,
   type PlanDay,
   type Profile,
@@ -15,6 +17,7 @@ import {
 import { language, locale, t, errorMessage, dateLabel } from '../../lib/i18n'
 import { localSessions } from '../../lib/storage'
 import { startWorkout } from '../../lib/training'
+import { localDate, addDays } from '../../lib/dates'
 import PageState from '../../components/PageState.vue'
 const router = useRouter()
 const loading = ref(true)
@@ -25,7 +28,16 @@ const versions = ref<PlanVersion[]>([])
 const people = ref<Profile[]>([])
 const history = ref<Session[]>([])
 const local = ref<LocalSession[]>([])
-const active = computed(() => assignments.value.filter((a) => a.state === 'active'))
+const schedules = ref<Record<string, ScheduledDay[]>>({})
+const today = computed(() => localDate(profile.value?.timezone || 'UTC'))
+const relationships = ref<Relationship[]>([])
+const active = computed(() =>
+  assignments.value.filter(
+    (a) =>
+      a.state === 'active' &&
+      relationships.value.some((r) => r.id === a.relationship_id && r.state === 'active'),
+  ),
+)
 const open = computed(() => local.value.filter((x) => x.session.status === 'in_progress'))
 const latestFeedback = computed(
   () =>
@@ -39,6 +51,7 @@ async function load() {
   error.value = ''
   try {
     const id = user.value!.id
+    relationships.value = await rows<Relationship>('coach_clients', 'client_id', id)
     ;[assignments.value, versions.value, people.value, history.value, local.value] =
       await Promise.all([
         rows<Assignment>('assignments', 'client_id', id),
@@ -47,18 +60,32 @@ async function load() {
         rows<Session>('sessions', 'client_id', id),
         localSessions(id),
       ])
+    for (const a of active.value)
+      if (a.schedule_mode === 'cycle')
+        schedules.value[a.id] = await rpc<ScheduledDay[]>('assignment_schedule', {
+          p_id: a.id,
+          p_from: today.value,
+          p_to: addDays(today.value, 13),
+        })
   } catch (e) {
     error.value = errorMessage(e)
   } finally {
     loading.value = false
   }
 }
-async function start(a: Assignment, d: PlanDay) {
+async function start(a: Assignment, d: PlanDay, scheduledDate?: string) {
   busy.value = a.id + d.id
   error.value = ''
   try {
     const p = plan(a.version_id)!
-    const r = await startWorkout(d, p.title, p.id, user.value!.id, a.id)
+    const r = await startWorkout(
+      d,
+      p.title,
+      p.id,
+      user.value!.id,
+      a.id,
+      scheduledDate || today.value,
+    )
     await router.push('/workout/' + r.id)
   } catch (e) {
     error.value = errorMessage(e)
@@ -113,8 +140,48 @@ onMounted(load)
               </div>
               <PhBarbell :size="32" class="accent-icon" aria-hidden="true" />
             </div>
+            <template v-if="a.schedule_mode === 'cycle'"
+              ><p v-if="!schedules[a.id]?.length">
+                {{
+                  language(
+                    'No scheduled workouts in the next two weeks.',
+                    'لا توجد حصص مجدولة في الأسبوعين القادمين.',
+                  )
+                }}
+              </p>
+              <div
+                v-for="s in schedules[a.id]"
+                :key="s.scheduled_date + s.day.id"
+                class="day-choice"
+              >
+                <div class="grow">
+                  <span class="overline">{{ dateLabel(s.date) }}</span>
+                  <h3>{{ locale === 'ar' ? s.day.nameAr || s.day.name : s.day.name }}</h3>
+                  <p v-if="s.state === 'rest'">{{ language('Rest day', 'يوم راحة') }}</p>
+                  <p v-else-if="s.state === 'skipped'">
+                    {{ language('Skipped by your coach', 'تجاوزها مدربك') }}
+                  </p>
+                  <p v-else>{{ s.day.exercises.length }} {{ t('exercises') }}</p>
+                </div>
+                <RouterLink
+                  v-if="s.session_id"
+                  class="button small secondary"
+                  :to="'/workout/' + s.session_id"
+                  >{{ s.state === 'completed' ? t('view') : t('resume') }}</RouterLink
+                ><button
+                  v-else-if="s.state !== 'skipped' && s.state !== 'rest' && s.date === today"
+                  class="button small"
+                  :disabled="!!busy"
+                  @click="start(a, s.day, s.scheduled_date)"
+                >
+                  {{ t('start') }}
+                </button>
+              </div></template
+            >
             <div
-              v-for="(d, index) in plan(a.version_id)?.prescription.days"
+              v-for="(d, index) in a.schedule_mode === 'cycle'
+                ? []
+                : plan(a.version_id)?.prescription.days.filter((d) => !d.restDay)"
               :key="d.id"
               class="day-choice"
             >
@@ -162,6 +229,14 @@ onMounted(load)
         </aside>
       </div>
       <section v-else class="empty-state panel">
+        <p v-if="relationships.some((r) => r.state === 'archived')" class="notice">
+          {{
+            language(
+              'Your coaching relationship is paused. Your training history is still available.',
+              'علاقتك التدريبية متوقفة مؤقتاً. سجل تدريبك ما زال متاحاً.',
+            )
+          }}
+        </p>
         <PhBarbell :size="40" weight="light" aria-hidden="true" />
         <h2>{{ language('Your next workout starts here.', 'تمرينك القادم يبدأ هنا.') }}</h2>
         <p>

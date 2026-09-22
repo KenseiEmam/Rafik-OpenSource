@@ -60,6 +60,11 @@ async function exportData() {
         sessions: records,
         localDrafts: await localSessions(user.value!.id),
         plans: await rows('plans', 'coach_id', user.value!.id),
+        exercises: await rows('exercises', 'owner_id', user.value!.id),
+        coachingContext: await rows('client_context'),
+        relationships: await rows('coach_clients'),
+        assignments: await rows('assignments'),
+        scheduleExceptions: await rows('schedule_exceptions'),
       },
       'rafik-data.json',
     )

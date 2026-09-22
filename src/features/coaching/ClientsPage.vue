@@ -28,6 +28,17 @@ const latest = computed(() =>
       !versions.value.some((other) => other.plan_id === v.plan_id && other.revision > v.revision),
   ),
 )
+const search = ref(''),
+  rosterState = ref('active')
+const filteredClients = computed(() =>
+  clients.value.filter(
+    (c) =>
+      c.state === rosterState.value &&
+      (people.value.find((p) => p.id === c.client_id)?.display_name || '')
+        .toLowerCase()
+        .includes(search.value.toLowerCase()),
+  ),
+)
 const pendingInvites = computed(() => invites.value.filter((i) => i.status === 'pending'))
 async function load() {
   loading.value = true
@@ -155,6 +166,21 @@ onMounted(load)
       ><div class="clients-layout">
         <section>
           <h2>{{ t('clients') }}</h2>
+          <div class="roster-tools">
+            <label
+              >{{ language('Search clients', 'البحث عن متدرب')
+              }}<input v-model="search" type="search" /></label
+            ><label
+              >{{ language('Status', 'الحالة')
+              }}<select v-model="rosterState">
+                <option value="active">{{ t('active') }}</option>
+                <option value="archived">{{ language('Archived', 'مؤرشف') }}</option>
+              </select></label
+            >
+          </div>
+          <p v-if="clients.length && !filteredClients.length">
+            {{ language('No clients match this view.', 'لا يوجد متدربون مطابقون.') }}
+          </p>
           <div v-if="!clients.length" class="empty-review">
             <h3>
               {{ language('Invite someone you already coach.', 'ادعُ شخصاً تدرّبه بالفعل.') }}
@@ -168,40 +194,46 @@ onMounted(load)
               }}
             </p>
           </div>
-          <article v-for="c in clients" :key="c.id" class="client-row">
+          <article v-for="c in filteredClients" :key="c.id" class="client-row">
             <div class="client-heading">
               <span class="avatar">{{
                 people.find((p) => p.id === c.client_id)?.display_name.slice(0, 1)
               }}</span>
-              <h3>{{ people.find((p) => p.id === c.client_id)?.display_name }}</h3>
+              <h3>
+                <RouterLink :to="'/coach/clients/' + c.id"
+                  >{{ people.find((p) => p.id === c.client_id)?.display_name }} →</RouterLink
+                >
+              </h3>
             </div>
-            <label :for="'assignment-' + c.id">{{
-              language('Assigned plan', 'الخطة المعينة')
-            }}</label>
-            <div class="inline-form">
-              <select :id="'assignment-' + c.id" v-model="choices[c.id]">
-                <option v-for="v in versions" :key="v.id" :value="v.id">
-                  {{ v.title }} · {{ language('version', 'نسخة') }} {{ v.revision }}
-                </option></select
-              ><button
-                class="button small secondary"
-                :disabled="
-                  busy ||
-                  choices[c.id] ===
-                    assignments.find((a) => a.relationship_id === c.id && a.state === 'active')
-                      ?.version_id
-                "
-                @click="assign(c.id)"
-              >
-                {{ language('Apply', 'تطبيق') }}
-              </button>
-            </div>
-            <small>{{
-              language(
-                'Applies to future sessions. Training history stays intact.',
-                'يُطبّق على الحصص القادمة. يبقى سجل التدريب كما هو.',
-              )
-            }}</small>
+            <template v-if="c.state === 'active'"
+              ><label :for="'assignment-' + c.id">{{
+                language('Assigned plan', 'الخطة المعينة')
+              }}</label>
+              <div class="inline-form">
+                <select :id="'assignment-' + c.id" v-model="choices[c.id]">
+                  <option v-for="v in versions" :key="v.id" :value="v.id">
+                    {{ v.title }} · {{ language('version', 'نسخة') }} {{ v.revision }}
+                  </option></select
+                ><button
+                  class="button small secondary"
+                  :disabled="
+                    busy ||
+                    choices[c.id] ===
+                      assignments.find((a) => a.relationship_id === c.id && a.state === 'active')
+                        ?.version_id
+                  "
+                  @click="assign(c.id)"
+                >
+                  {{ language('Apply', 'تطبيق') }}
+                </button>
+              </div>
+              <small>{{
+                language(
+                  'Applies to future sessions. Training history stays intact.',
+                  'يُطبّق على الحصص القادمة. يبقى سجل التدريب كما هو.',
+                )
+              }}</small>
+            </template>
           </article>
           <section v-if="pendingInvites.length" class="pending-invites">
             <h2>{{ language('Pending invitations', 'الدعوات المعلقة') }}</h2>

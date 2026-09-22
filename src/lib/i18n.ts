@@ -1,4 +1,5 @@
 import { ref, watch } from 'vue'
+import { formatDate } from './dates'
 export const locale = ref<'en' | 'ar'>(localStorage.getItem('rafik.locale') === 'ar' ? 'ar' : 'en')
 export const language = (en: string, ar: string) => (locale.value === 'ar' ? ar : en)
 export const words = {
@@ -110,12 +111,7 @@ watch(
   },
   { immediate: true },
 )
-export function dateLabel(value: string) {
-  return new Intl.DateTimeFormat(locale.value === 'ar' ? 'ar-AE' : 'en-GB', {
-    day: 'numeric',
-    month: 'short',
-  }).format(new Date(value))
-}
+export const dateLabel = (value: string) => formatDate(value, locale.value)
 export function errorMessage(error: unknown): string {
   const raw =
     error instanceof Error
@@ -138,6 +134,16 @@ export function errorMessage(error: unknown): string {
       'Your coach updated this plan. Return to Today to open the latest version.',
       'حدّث مدربك الخطة. عد إلى اليوم لفتح أحدث نسخة.',
     )
+  if (raw.includes('assignment_unavailable'))
+    return language(
+      'This workout is not available today. Return to Today to check the current schedule or contact your coach.',
+      'هذا التمرين غير متاح اليوم. عد إلى اليوم للتحقق من الجدول أو تواصل مع مدربك.',
+    )
+  if (raw.includes('session_started'))
+    return language(
+      'This workout has already started. Its scheduled occurrence cannot be moved.',
+      'بدأ هذا التمرين بالفعل ولا يمكن نقل موعده.',
+    )
   if (raw.includes('expired') || raw.includes('invitation_unavailable'))
     return language(
       'This link has expired or was canceled. Ask your coach for a new invitation.',
@@ -155,8 +161,8 @@ export function errorMessage(error: unknown): string {
     )
   if (raw.includes('invalid') || raw.includes('check constraint'))
     return language(
-      'Check the values and try again. Reps, sets and weights must be within the supported range.',
-      'تحقق من القيم وحاول مجدداً. يجب أن تكون التكرارات والمجموعات والأوزان ضمن النطاق المسموح.',
+      'Check the values and try again. Use the supported ranges for sets, results and schedule dates.',
+      'تحقق من القيم وحاول مجدداً. استخدم النطاقات المسموحة للمجموعات والنتائج والتواريخ.',
     )
   if (raw.includes('rate') || raw.includes('too many'))
     return language(

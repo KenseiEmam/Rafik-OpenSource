@@ -2700,3 +2700,210 @@ h3 {
     padding: 12px 0;
   }
 }
+
+/* Daily coaching: task-focused extensions of the existing Rafik visual system. */
+.workspace-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  border-bottom: 1px solid var(--line);
+  margin-block: 1.5rem 2rem;
+}
+.workspace-tabs button {
+  padding: 1rem 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+}
+.workspace-tabs .selected {
+  border-bottom-color: var(--accent);
+  color: var(--ink);
+}
+.client-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: start;
+}
+.workspace-facts {
+  display: flex;
+  gap: 3rem;
+  margin-block-end: 2rem;
+}
+.workspace-facts strong,
+.workspace-facts span {
+  display: block;
+}
+.workspace-facts strong {
+  font-size: 1.8rem;
+  font-variant-numeric: tabular-nums;
+}
+.context-form {
+  display: grid;
+  gap: 1.25rem;
+}
+.context-form fieldset {
+  display: grid;
+  gap: 1.25rem;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+}
+.context-form label,
+.library-tools label,
+.roster-tools label,
+.field-pair label {
+  display: grid;
+  gap: 0.5rem;
+}
+.field-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.workspace-row,
+.library-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 1.5rem;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+}
+.workspace-row p,
+.schedule-row p {
+  margin-block: 0.35rem 0;
+}
+.roster-tools,
+.library-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-block: 1.5rem;
+  align-items: end;
+}
+.library-tools label {
+  min-width: 0;
+  flex: 1;
+}
+.library-tools .grow {
+  flex: 2;
+}
+.exercise-editor {
+  margin-bottom: 2rem;
+  max-width: 58rem;
+}
+.library-row h2 {
+  font-size: 1.4rem;
+  margin-block: 0.3rem;
+}
+.library-row details {
+  max-width: 45rem;
+}
+.schedule-row {
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+.schedule-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  margin-block-start: 0.7rem;
+}
+.schedule-actions input {
+  max-width: 12rem;
+}
+.advanced-prescription {
+  margin-block: 1rem;
+}
+.advanced-prescription > div {
+  padding-block: 1rem;
+}
+.per-set-target {
+  display: grid;
+  grid-template-columns: 2rem repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  align-items: end;
+  margin-block: 0.75rem;
+}
+.per-set-target label {
+  display: grid;
+  gap: 0.4rem;
+}
+.library-search {
+  margin-block: 1rem;
+}
+.product-nav {
+  overflow-x: auto;
+}
+@media (max-width: 760px) {
+  .client-workspace {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .library-tools {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .library-tools .grow {
+    grid-column: 1/-1;
+  }
+  .library-row {
+    align-items: start;
+    flex-direction: column;
+  }
+  .field-pair {
+    grid-template-columns: 1fr 1fr;
+  }
+  .workspace-tabs {
+    gap: 1rem;
+  }
+  .workspace-facts {
+    gap: 1.5rem;
+  }
+  .per-set-target {
+    grid-template-columns: 1.5rem repeat(3, minmax(0, 1fr));
+    gap: 0.4rem;
+  }
+  .schedule-actions {
+    gap: 0.75rem;
+  }
+  .workspace-row {
+    align-items: start;
+  }
+  .workspace-row > span {
+    flex-shrink: 0;
+  }
+  .roster-tools {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 8rem;
+  }
+}
+
+.check-label {
+  display: flex !important;
+  align-items: center;
+  gap: 0.65rem;
+}
+.check-label input {
+  width: 1.15rem;
+  min-height: 1.15rem;
+}
+.cycle-settings {
+  margin-block: 1.5rem;
+}
+
+/* Keep an unfocused skip link out of full-page Safari captures as well as the viewport. */
+.skip-link:not(:focus) {
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 0;
+}

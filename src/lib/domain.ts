@@ -1,4 +1,12 @@
 export type Unit = 'kg' | 'lb'
+export type ExerciseKind = 'strength' | 'timed' | 'distance'
+export interface Target {
+  reps: number
+  load: number
+  seconds?: number | null
+  metres?: number | null
+  effort?: number | null
+}
 export interface Exercise {
   id: string
   name: string
@@ -8,10 +16,22 @@ export interface Exercise {
   instructions: string
   instructions_ar: string
   movement: string
+  owner_id?: string | null
+  active?: boolean
+  revision?: number
+  kind?: ExerciseKind
+  media_url?: string
 }
 export interface PrescriptionExercise {
   key: string
   exerciseId: string
+  kind?: ExerciseKind
+  group?: string
+  seconds?: number
+  metres?: number
+  effort?: number | null
+  targets?: Target[]
+  info?: Exercise
   sets: number
   reps: number
   load: number
@@ -24,10 +44,14 @@ export interface PlanDay {
   name: string
   nameAr?: string
   minutes: number
+  week?: number
+  weekday?: number
+  restDay?: boolean
   exercises: PrescriptionExercise[]
 }
 export interface Prescription {
   schema: number
+  cycleWeeks?: number
   description?: string
   descriptionAr?: string
   days: PlanDay[]
@@ -64,6 +88,9 @@ export interface Assignment {
   coach_id: string
   version_id: string
   start_date: string
+  end_date?: string | null
+  schedule_mode?: 'flexible' | 'cycle'
+  revision?: number
   state: string
 }
 export interface Relationship {
@@ -87,6 +114,9 @@ export interface Entry {
   load: number
   unit: Unit
   completed: boolean
+  seconds?: number | null
+  metres?: number | null
+  effort?: number | null
 }
 export interface Session {
   id: string
@@ -95,6 +125,8 @@ export interface Session {
   assignment_id: string | null
   version_id: string | null
   day_id: string
+  occurrence_key?: string
+  local_date?: string
   title: string
   prescription: PlanDay
   status: 'in_progress' | 'completed'
@@ -131,3 +163,18 @@ export const convertLoad = (value: number, from: Unit, to: Unit) =>
   from === to
     ? value
     : Math.round((from === 'kg' ? value * 2.2046226218 : value / 2.2046226218) * 100) / 100
+
+export interface ClientContext {
+  id: string
+  goals: string
+  constraints: string
+  notes: string
+  revision: number
+}
+export interface ScheduledDay {
+  date: string
+  scheduled_date: string
+  day: PlanDay
+  state: string
+  session_id: string | null
+}

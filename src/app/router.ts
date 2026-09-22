@@ -37,6 +37,16 @@ const router = createRouter({
       meta: { private: true },
     },
     {
+      path: '/coach/clients/:id',
+      component: () => import('../features/coaching/ClientPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/coach/exercises',
+      component: () => import('../features/coaching/ExercisesPage.vue'),
+      meta: { private: true },
+    },
+    {
       path: '/coach/review/:id',
       component: () => import('../features/coaching/ReviewPage.vue'),
       meta: { private: true },
