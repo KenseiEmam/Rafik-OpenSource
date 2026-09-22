@@ -28,7 +28,7 @@ Visit `http://127.0.0.1:5173`. The footer's sample-account link signs into local
 
 ## Verify a change
 
-Backend: `npm test` runs the core and daily-coaching suites (51 assertions) in rollback transactions. `npm run test:fresh` creates a disposable database inside the local Supabase container, applies both migrations and synthetic fixtures, runs both suites, and drops only that disposable database. It preserves the preview database. `npm run content:check` compares generated seed/web content against the canonical JSON, with both sibling checkouts present. `npm run types` refreshes web database types after a schema reset.
+Backend: `npm test` runs the core, daily-coaching and ongoing-coaching suites (93 assertions) in rollback transactions. `npm run test:fresh` creates a disposable database inside the local Supabase container, applies all three migrations and synthetic fixtures, runs all three suites, and drops only that disposable database. It preserves the preview database. `npm run content:check` compares generated seed/web content against the canonical JSON, with both sibling checkouts present. `npm run types` refreshes web database types after a schema reset.
 
 Frontend: `npm test`, `npm run format:check`, `npm run build`. For full browser checks, keep the dev server running on 5173; build and run `npm run preview -- --port 5174 --strictPort` in another terminal. Install test browsers once with `npx playwright install chromium webkit`, then run `npm run test:e2e`. Account/invitation scenarios require the local backend and test inbox. The production-shell scenarios use port 5174.
 
@@ -79,3 +79,15 @@ Open `/coach/clients` and choose a client for notes, plan/schedule and history. 
 An assignment's cycle day 1 is its start date. Empty slots are recovery days. Moving one scheduled session preserves its original occurrence date and leaves the rest of the cycle unchanged. Changing the assignment configuration clears exceptions for future starts. Archive pauses new assigned starts, not in-progress logging or history.
 
 `supabase/migrations/202609220002_daily_coaching.sql` defines the expansion; `r1-contract.md` records ownership and lifecycle rules. New prescription work should update validation, snapshot/start/save commands, the small prescription helpers, editor and logger together. Do not create another planner service or client-only business-rule authority.
+
+## R2 ongoing coaching and maintenance records
+
+See [maintainer guide](maintainer-guide.md) for the complete source tree and task tour. New fixture examples are sourced from `supabase/fixtures-coaching.sql` and composed into the generated seed by `npm run content`. They are synthetic local-only data. Do not reset a working preview merely to get these examples; during R2 the additive fixture file was applied once with fixed IDs and conflict-safe inserts.
+
+Coach: open **Check-ins**, create a template or edit an existing one, choose a client and due date, then assign one or up to twelve weekly/fortnightly occurrences. After submission, review from Today or the request list. Client: open Check-ins, save a draft or submit, find feedback in the same response, and correct if needed. **Discuss this response** opens a conversation with context. The workout review also links to a contextual conversation. Both roles can open Messages from navigation.
+
+Progress is in client navigation and each coach client workspace. Only acknowledged completed results appear. Client measurements default to private and explicitly select a coach when shared. Coaches only see shared records. No target result is silently used as an actual.
+
+A message with unknown delivery retains its exact saved payload and offers **Retry send** after reload. Changing that payload is blocked until delivery is resolved. Unknown assignment delivery similarly retains a series command; retrying it cannot duplicate the scheduled series. Form corrections can conflict after review from another tab; preserve/read the local draft and explicitly load the latest response before editing again. New form submissions need a connection; durable workout offline behavior remains a separate feature.
+
+For every further change, update root `CHANGELOG.md`, the ledger and the affected architecture/maintenance/runbook docs in the same commit. Update verification only with checks actually run. Both repositories' `AGENTS.md` enforce this continuing requirement.

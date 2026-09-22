@@ -2,7 +2,7 @@
 
 22 September 2026. Execution owner: Codex. This document supersedes the earlier assumption that delivering the small training loop completes the Rafik revamp. The user likes the visual direction but correctly identifies that the implementation lacks much of the original product's capability.
 
-**Implementation update:** R1 daily-coaching expansion is now implemented locally; see `ledger.md` for its exact scope and `verification.md` for evidence. The comparison below records the gaps that prompted this correction. R2–R5 remain open.
+**Implementation update:** R1 daily-coaching and R2 ongoing-coaching expansions are now implemented locally; see `ledger.md` for its exact scope and `verification.md` for evidence. The comparison below records the gaps that prompted this correction. R3–R5 remain open.
 
 ## Status and mistake
 
@@ -55,7 +55,7 @@ Relevant baseline evidence, accessible with `git show a0c723e:<path>` in the fro
 
 ## Architecture before broader implementation
 
-The present ten-table schema is not a constraint on the final product. Fewer tables do not necessarily mean easier maintenance. Add domain records where they make ownership and lifecycle explicit; do not squeeze nutrition, chat and assessments into session JSON or one generic event/entity table.
+The foundation's original ten-table schema is not a constraint on the final product. Fewer tables do not necessarily mean easier maintenance. Add domain records where they make ownership and lifecycle explicit; do not squeeze nutrition, chat and assessments into session JSON or one generic event/entity table.
 
 Keep one web application and one Supabase backend. Organize code around coaching/clients, training/programming, progress/check-ins, communication, nutrition, scheduling and optional team administration. These are modules, not microservices. Add server-side provider code only when a concrete feature requires privileged integration.
 
@@ -79,7 +79,7 @@ Write exact schema, command payloads, errors, invariants and interaction states 
 |---|---|---|
 | R0 — Correct scope | This coverage register and truthful project status | Every original feature family has a disposition; deferred features cannot disappear from the ledger |
 | R1 — Complete daily coaching | Client detail workspace, roster lifecycle, exercise library/custom content, richer programming, assignment schedule and prior performance | Coach creates a realistic multiweek plan with custom/timed/grouped exercises, assigns two different clients, adapts future work and reviews results; client can train without the coach editing SQL/content files |
-| R2 — Ongoing coaching | Progress, check-ins, assessments, direct communication and contextual activity | Client submits/revises relevant data, coach reviews/responds, both can find history and understand next steps; retry/correction/access tests cover each lifecycle |
+| R2 — Ongoing coaching (implemented locally) | Progress, check-ins, assessments, direct communication and contextual activity | Client submits/revises relevant data, coach reviews/responds, both can find history and understand next steps; retry/correction/access tests cover each lifecycle |
 | R3 — Broader service delivery | Optional nutrition, calendar/booking and resources | Real local data flows for planning, logging, booking/rescheduling and resource access; optional features do not add required signup fields or overwhelm Today |
 | R4 — Team and business operations | Team roles/groups, shared plans/client assignment, simple commercial/support states | Solo flow remains simple; team role changes and reassignment preserve ownership/history; provider behavior verified through local simulations |
 | R5 — Integrated product readiness | Whole-product navigation, content, accessibility, lifecycle/permission/failure coverage, release runbook | Complete recurring coach/client/team tasks using fresh accounts, not only seeded happy paths; no advertised destination is an empty placeholder |
@@ -93,4 +93,4 @@ The revamp is complete only when the documented retained product capabilities wo
 
 Commercial success still requires evidence from real use, and not all original ideas deserve restoration. That uncertainty does not justify calling a basic slice the entire revamp. Tests for the current foundation stay valid within their recorded scope; broader product completeness remains open.
 
-**Next implementation action:** continue R2 progress/check-ins, assessments and communication; R1 contracts and local implementation are recorded in the ledger. No redesign of the accepted visual identity, old-data restoration, production changes or mobile work is needed to begin.
+**Next implementation action:** continue R3 optional nutrition, booking and private resources; R1/R2 contracts and implementation are recorded in the ledger. Direct text conversation is implemented; attachments remain R3. R1 exercise alternatives/client substitutions remain explicitly outstanding for integrated readiness. No redesign of the accepted visual identity, old-data restoration, production changes or mobile work is needed to begin.

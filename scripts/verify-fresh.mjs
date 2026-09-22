@@ -15,6 +15,6 @@ try {
  sql(database,auth+'\ngrant usage on schema auth to authenticated, anon;')
  const migrations=readdirSync(resolve(root,'supabase/migrations')).filter(f=>f.endsWith('.sql')).sort().map(f=>readFileSync(resolve(root,'supabase/migrations',f),'utf8')).join('\n')
  sql(database,migrations+'\n'+readFileSync(resolve(root,'supabase/seed.sql'),'utf8'))
- sql(database,['core.sql','daily_coaching.sql'].map(f=>readFileSync(resolve(root,'supabase/tests',f),'utf8')).join('\n'))
- console.log('Fresh migrations, synthetic fixtures and both database suites passed in an isolated database. Preview records unchanged.')
+ sql(database,['core.sql','daily_coaching.sql','ongoing_coaching.sql'].map(f=>readFileSync(resolve(root,'supabase/tests',f),'utf8')).join('\n'))
+ console.log('Fresh migrations, synthetic fixtures and all database suites passed in an isolated database. Preview records unchanged.')
 }finally{if(created)sql('postgres',`drop database ${database} with (force);`)}

@@ -8,3 +8,5 @@
 - Edit content in `content/starter.json`, then `npm run content`. Generate web types with `npm run types` after a schema reset.
 - Keep writes as explicit bounded commands. Published versions and started prescriptions are immutable. Completion retries and note/set corrections must not create another completion or progression.
 - Do not mark physical-device use, real retention/payment, remote CI or hosting verified from local automated tests. Record concrete results and limits in the implementation ledger.
+
+- Documentation is part of every change: update `CHANGELOG.md` and `docs/implementation/ledger.md`; update `architecture.md` for schema/API/lifecycle changes, `maintainer-guide.md` and README for file/workflow changes, `runbook.md` for operations, and `verification.md` with actual checks and limits. Commit matching code and docs together. Do not leave stale phase status or treat an old test result as verification of new code.

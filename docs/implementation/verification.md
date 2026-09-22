@@ -1,5 +1,35 @@
 # Local verification record
 
+## R2 ongoing coaching — 22 September 2026
+
+| Check | Result and exact boundary |
+|---|---|
+| Database lifecycle suites | **93 assertions passed**: 27 foundation, 24 daily coaching, 42 ongoing coaching; all rollback transactions |
+| Clean install | All three migrations + generated synthetic seed + all suites pass in a disposable database; working preview preserved |
+| Schema lint | No schema errors reported by the pinned local Supabase CLI |
+| Type/build and formatting | Production build includes `vue-tsc`; Prettier and diff whitespace checks pass |
+| Unit/data checks | **8 passed**, including unit-aware mixed-result trends, response states and distinguishing rejected commands from ambiguous delivery |
+| Browser regression | Final full suite: **30 scenarios passed** across Chromium and phone-sized WebKit (20 foundation/R1 regression cases and 10 R2 cases), including assignment retry and rejected-message recovery |
+| Existing-layout regression | 224 route × width × language × theme combinations plus Arabic dark editor accessibility; no overflow/page errors |
+| Populated R2 matrix | 11 role-specific routes × 4 widths × 2 languages × 2 themes = **176** combinations; 44 phone accessibility states checked; no overflow, page errors or checked Axe violations |
+| Local preservation | Additive R2 migration and new synthetic fixture rows only; no preview reset, retired-backend change, native/worker source change, hosting or push |
+
+R2 browser paths cover template creation, assignment, draft persistence after reload, client submission, coach review, client correction clearing old feedback, contextual message/reply and unread activity; repeated numeric assessments with compatible-history comparison and cancellation; real progress and shared measurement correction/removal; lost message acknowledgement with reload/retry producing one message; lost assignment acknowledgement with reload/retry producing one occurrence; and a confirmed invalid message context remaining editable for correction.
+
+SQL coverage adds definition/snapshot stability, recurrence bounds and replay mismatch, required/type/range validation, coach/client ownership, stale review/response correction, original submission preservation, private/shared measurement reads, revision/units, message UUID/context isolation, forward-only/non-future cursor, archive behavior and unrelated participant rejection. Two additional progress assertions prove completed actual values (excluding incomplete sets/targets) and recomputation after a correction without another completion.
+
+Verification found and corrected an ambiguous SQL field alias. Browser tests initially used an implicit-label selector on selects; they now target accessible combobox names. A theme-switch accessibility check sampled intermediate transition colors; it now waits for fonts and active animations to settle. Visual inspection prompted phone conversation-name truncation, automatic text direction for messages, friendly-name fallback for older snapshots, and a first-result state instead of a one-point chart. Trend positions follow calendar spacing rather than pretending all sessions occurred at equal intervals.
+
+Captures were inspected from actual browser renders, including desktop progress, the form editor and Arabic dark phone conversation/response views. Regenerate with `node scripts/r2-visual-check.mjs`. Selected local captures:
+
+- [Client progress](../../../RAFIK-FRONTEND/artifacts/r2-matrix-client--progress-1440-en.png)
+- [Arabic phone conversation](../../../RAFIK-FRONTEND/artifacts/r2-matrix-coach--coach-messages-40000000-0000-4000-8000-000000000001-390-ar.png)
+- [Arabic phone response](../../../RAFIK-FRONTEND/artifacts/r2-matrix-client--checkins-73000000-0000-4000-8000-000000000001-390-ar.png)
+- [Assessment review](../../../RAFIK-FRONTEND/artifacts/r2-assessment-webkit-phone.png)
+
+Sanitized results are stored in `evidence/r2-*`. The test pages use synthetic local accounts and actual SQL/PostgREST; only delivery-failure tests intercept acknowledgements. No real email/message recipient or external provider was contacted. No claim is made about physical devices, hosting, remote CI, production-scale performance, retention or willingness to pay. Direct conversation attachments and nutrition/booking/resources remain subsequent work.
+
+
 22 September 2026. Scope: the newly rebuilt web application and local Supabase backend. Browser-generated activity is synthetic and is not customer validation. All commands ran on `codex/revamp`; no remote CI, deployment, push or live outbound message was performed.
 
 **Coverage limitation:** these checks cover the initial training/coaching slice only. They do not establish that Rafik's full feature set has been revamped. Missing and partial capabilities and their next implementation waves are recorded in [revamp coverage](revamp-coverage.md).

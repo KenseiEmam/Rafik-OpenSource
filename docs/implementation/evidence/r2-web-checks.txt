@@ -1,0 +1,5 @@
+Commands: npm run build; npm test; npm run format:check
+Production build and vue-tsc passed.
+8 unit/data tests passed.
+All matched files use Prettier code style.
+Documentation links checked: no missing README/maintainer/changelog local targets.
