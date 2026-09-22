@@ -1,56 +1,17 @@
-import './assets/main.css';
+import { createApp } from 'vue'
+import '@fontsource-variable/manrope'
+import '@fontsource/noto-sans-arabic/arabic-400.css'
+import '@fontsource/noto-sans-arabic/arabic-600.css'
+import './style.css'
+import App from './App.vue'
+import router from './app/router'
+createApp(App).use(router).mount('#app')
 
-import { createApp, type App as Application } from 'vue';
-import { createI18n } from 'vue-i18n';
-import * as EN from '@/i18n/en.json';
-import * as AR from '@/i18n/ar.json';
-import { createPinia } from 'pinia';
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css';
-import App from './App.vue';
-import router from './router';
-/* import the fontawesome core */
-import { library } from '@fortawesome/fontawesome-svg-core';
-
-/* import font awesome icon component */
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-
-/* import specific icons */
-import { faUserSecret } from '@fortawesome/free-solid-svg-icons';
-
-import VueSweetalert2 from 'vue-sweetalert2';
-import 'sweetalert2/dist/sweetalert2.min.css';
-
-// @ts-ignore
-import VueTelInput from 'vue3-tel-input'
-import 'vue3-tel-input/dist/vue3-tel-input.css'
-
-/* add icons to the library */
-library.add(faUserSecret);
-type MessageSchema = typeof EN;
-const i18n = createI18n<MessageSchema, 'en' | 'ar'>({
-  locale: 'en',
-  fallbackLocale: 'en',
-  messages: {
-    en: {
-      ...EN
-    },
-    ar: {
-      ...AR
-    }
-  }
-});
-
-const app = createApp(App);
-
-
-
-app.use(createPinia());
-app.use(VueSweetalert2);
-app.use(router);
-app.use(VueTelInput);
-app.component('font-awesome-icon', FontAwesomeIcon);
-app.component('VueDatePicker', VueDatePicker);
-app.use(i18n);
-
-app.mount('#app');
+// Cache only the public application shell. Auth and workout responses are never cached.
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    void navigator.serviceWorker.register('/sw.js').catch(() => {
+      /* Local records remain available if shell caching is unsupported. */
+    })
+  })
+}
