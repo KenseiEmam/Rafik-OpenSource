@@ -1,0 +1,97 @@
+{
+  "project_ref": "pexviywnztvqomfosvho",
+  "captured_at": "2026-09-22T00:24:25.476904+00:00",
+  "method": "Supabase CLI linked SELECT metadata and aggregate counts; no individual application records",
+  "query": "05-aggregate-usage.sql",
+  "redactions": 0,
+  "rows": [
+    {
+      "aggregates": {
+        "application_users": 92,
+        "assignments": [
+          {
+            "count": 18,
+            "past_expiry": 14,
+            "status": "active"
+          },
+          {
+            "count": 1,
+            "past_expiry": 1,
+            "status": "expired"
+          }
+        ],
+        "auth": {
+          "email_confirmed": 57,
+          "latest_sign_in": "2026-09-22T00:02:27.121597+00:00",
+          "signed_in_last_30_days": 1,
+          "signed_in_last_90_days": 1,
+          "users": 57
+        },
+        "chat": {
+          "form_linked": 2182,
+          "latest_created": "2026-09-22T00:00:23.5585+00:00",
+          "total": 2213
+        },
+        "duplicate_workout_dates": 49,
+        "entitlements": [
+          {
+            "count": 106,
+            "status": "available"
+          },
+          {
+            "count": 11,
+            "status": "active"
+          }
+        ],
+        "forms": [
+          {
+            "count": 2182,
+            "status": "pending",
+            "type": "follow"
+          }
+        ],
+        "nutrition": {
+          "latest_created": "2026-03-12T14:42:39.083776+00:00",
+          "latest_date_logged": "2026-03-12",
+          "total": 458
+        },
+        "profile_users_with_multiple_profiles": 4,
+        "profiles": {
+          "assigned": 18,
+          "count": 87,
+          "without_user": 1
+        },
+        "programs": [
+          {
+            "count": 17,
+            "status": "Active"
+          },
+          {
+            "count": 2,
+            "status": "Deleted"
+          },
+          {
+            "count": 9,
+            "status": "Draft"
+          }
+        ],
+        "snapshot_date": "2026-09-22",
+        "user_identity_match": {
+          "matched_auth_email": 51,
+          "without_auth_email_match": 41
+        },
+        "workouts": {
+          "clients_with_done_non_rest": 11,
+          "completed_last_30_days": 0,
+          "dated_completed": 178,
+          "done": 197,
+          "done_non_rest": 141,
+          "latest_completed": "2026-02-03T10:25:43.13962+00:00",
+          "latest_created": "2026-02-03T06:25:47.963893+00:00",
+          "rest": 56,
+          "total": 209
+        }
+      }
+    }
+  ]
+}

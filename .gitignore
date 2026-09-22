@@ -1,3 +1,8 @@
+node_modules/
 .DS_Store
-node_modules
-.env.local
+.env
+.env.*
+!.env.example
+supabase/.temp/
+supabase/.branches/
+coverage/

@@ -1,0 +1,68 @@
+project_id = "rafik-revamp-local"
+
+[api]
+enabled = true
+port = 55321
+schemas = ["public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 500
+
+[db]
+port = 55322
+shadow_port = 55320
+major_version = 17
+health_timeout = "3m"
+
+[db.migrations]
+enabled = true
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[realtime]
+enabled = false
+
+[studio]
+enabled = false
+
+[inbucket]
+enabled = true
+port = 55324
+
+[storage]
+enabled = false
+
+[auth]
+enabled = true
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["http://localhost:5173/auth/callback", "http://127.0.0.1:5173/auth/callback"]
+enable_signup = true
+enable_anonymous_sign_ins = false
+minimum_password_length = 12
+
+[auth.email]
+enable_signup = true
+enable_confirmations = true
+max_frequency = "1s"
+otp_length = 6
+otp_expiry = 600
+
+[auth.email.template.magic_link]
+subject = "Your Rafik sign-in code"
+content_path = "./supabase/templates/code.html"
+
+[auth.email.template.confirmation]
+subject = "Your Rafik sign-in code"
+content_path = "./supabase/templates/code.html"
+
+[auth.rate_limit]
+email_sent = 100
+sign_in_sign_ups = 100
+token_verifications = 100
+
+[edge_runtime]
+enabled = false
+
+[analytics]
+enabled = false

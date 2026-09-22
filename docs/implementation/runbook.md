@@ -1,0 +1,73 @@
+# Local operation and next-release runbook
+
+## Environment
+
+Use the `codex/revamp` branches in `rafik-api` and `RAFIK-FRONTEND`. The native app and worker are parked; preserve the worker's pre-existing `.DS_Store` change. Never push `main`. No commit or remote push is needed to inspect this build.
+
+Node is pinned to 22.16.0. The backend pins Supabase CLI 2.90.0 and a patched `tar` transitive dependency. Docker must be running. The local project is `rafik-revamp-local`, with API 55321, database 55322 and test inbox 55324; it has no remote link. Do not reuse the retired project's environment files.
+
+```sh
+# Backend, from rafik-api
+nvm use
+npm ci
+npm start
+npm run reset
+npm run web-env
+npm run types
+npm test
+
+# Frontend, from RAFIK-FRONTEND
+nvm use
+npm ci
+npm run dev
+```
+
+Visit `http://127.0.0.1:5173`. The footer's sample-account link signs into local synthetic accounts. The public sample works without an account. Codes sent from local sign-in appear only in `http://127.0.0.1:55324`; no live SMTP provider is connected.
+
+`npm run reset` intentionally discards local fixture changes. Close preview tabs or clear this app's site storage after a reset so old browser records do not refer to a freshly reset database. Keep the local database when inspecting a test-created result. `npm stop` stops only this Supabase project. It does not manage unrelated containers.
+
+## Verify a change
+
+Backend: `npm test` runs transaction, access and lifecycle scenarios in a rollback transaction. `npm run content:check` compares generated seed/web content against the canonical JSON, with both sibling checkouts present. `npm run types` refreshes web database types after a schema reset.
+
+Frontend: `npm test`, `npm run format:check`, `npm run build`. For full browser checks, keep the dev server running on 5173; build and run `npm run preview -- --port 5174 --strictPort` in another terminal. Install test browsers once with `npx playwright install chromium webkit`, then run `npm run test:e2e`. Account/invitation scenarios require the local backend and test inbox. The production-shell scenarios use port 5174.
+
+Browser outputs are local under `RAFIK-FRONTEND/artifacts/`, `test-results/` and `playwright-report/`. They are ignored by Git because they can contain test-session URLs and synthetic account data. Useful screenshots are linked in the verification record. Never run this suite against a hosted project or real email recipients.
+
+CI definitions are included: backend local reset/SQL checks, and frontend type/build/unit/public-browser checks. Full cross-repository account scenarios run through the local runbook; CI has not been run remotely because nothing has been pushed.
+
+## Normal updates
+
+**Copy or Arabic wording:** edit the bilingual pair in its feature or shared vocabulary. Check the affected screen at a phone width in both directions. User-authored plan titles and names remain user content; exercise/day defaults come from the bilingual catalog.
+
+**Exercise or starter prescription:** edit `rafik-api/content/starter.json`, run `npm run content`, then reset the local backend. Inspect the preview and logger. A changed prescription for real hosted users will be a new published plan version, not an update to already started sessions.
+
+**New prescription field:** define its semantics and bounds in `validate_prescription`; update the domain interface, editor and logger that actually use it. Add a scenario showing what happens to an old session and a new assignment. Do not add a generic metadata/configuration framework for one field.
+
+**Review behavior:** change `review_session` and the review screen. If introducing a new completion/review transition, test note corrections and retries. A review update must never regenerate the plan or create another completion.
+
+**Schema change after shipping:** add a new migration. Test a clean reset and the migration path from the last hosted release. The current local-only initial migration is intentionally a clean baseline, not a legacy patch chain.
+
+## Support and recovery
+
+- Open a workout to inspect its device/server save status. Reconnect or retry while using the same account.
+- A conflict does not auto-merge completed sets. Download the local draft, then deliberately load the server version. A local backup is retained under the account-scoped draft key.
+- Settings provides data export and local diagnostic events. Events contain a name/time, not email, notes or invitation tokens. Treat voluntarily exported workout files as private user data.
+- An expired invitation needs a new link. Revoke a misplaced pending invitation and recreate it. There is no automatic invitation email to trace.
+- A lost guest browser database cannot be recovered from the backend. The UI explicitly distinguishes local storage from account backup.
+- The production service worker caches static application files only. A new release activates after older tabs close; do not force-reload an in-progress workout to apply an update.
+
+## Hosted-release gate (deferred under local-only instruction)
+
+1. Use a **new** Supabase project. Keep the old backend unchanged until retirement is separately scheduled.
+2. Apply schema migrations only; never publish the synthetic Auth fixtures or their shared local password. Create a production-owned public starter and record its stable version ID through the content pipeline. The current static sample points to the local fixture version.
+3. Configure real Auth mail, allowed origins and site URL. Test verification, expiry, resend and wrong-account recovery with controlled recipients. Keep rate limits appropriate for a real deployment; current mail limits support local testing.
+4. Publish operator/contact details and an accurate hosted privacy/retention policy. The current privacy page intentionally describes a local preview.
+5. Supply the new public API URL/key through build configuration. Service-role credentials must never enter frontend code. Restrict the operator access path separately.
+6. Deploy the SPA with route fallback and HTTPS; serve the service worker and HTML without immutable cache headers, and hashed assets with long cache headers.
+7. Run the critical browser suite against controlled hosted test identities, verify physical iPhone/Android interruption and keyboard behavior, and perform backup/restore and rollback drills.
+8. Push only to `codex/revamp` if a remote branch is needed. Review diff, configuration and checks before opening the first hosted release. No main push, domain change, live message or payment action has been performed here.
+
+## Later scope decisions
+
+Physical-device verification and real-person task observation remain separate gates; desktop WebKit emulation cannot certify those. The current foundation is not the complete revamp. Execute the broader product work in [revamp coverage](revamp-coverage.md), including client management and a usable exercise/programming library, without waiting for customer recruitment. Business experiments guide positioning and unresolved extensions, not whether established missing coaching tasks get implemented. The local core includes no payment collection or claim of validated demand. Native remains deferred until the broader web/backend is ready.

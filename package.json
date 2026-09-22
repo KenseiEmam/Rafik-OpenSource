@@ -1,7 +1,25 @@
 {
-  "dependencies": {
-    "@langchain/community": "^0.3.57",
-    "@langchain/textsplitters": "^0.1.0",
-    "supabase": "^2.51.0"
+  "name": "rafik-backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.16.0 <23"
+  },
+  "scripts": {
+    "start": "node scripts/local.mjs start",
+    "stop": "node scripts/local.mjs stop",
+    "reset": "node scripts/local.mjs reset",
+    "test": "node scripts/local.mjs test",
+    "types": "node scripts/local.mjs types",
+    "web-env": "node scripts/local.mjs web-env",
+    "content": "node scripts/content.mjs",
+    "content:check": "node scripts/content.mjs --check"
+  },
+  "devDependencies": {
+    "supabase": "2.90.0"
+  },
+  "overrides": {
+    "tar": "7.5.22"
   }
 }

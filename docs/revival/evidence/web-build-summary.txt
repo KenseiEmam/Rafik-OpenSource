@@ -1,0 +1,8 @@
+Selected lines from the observed Node 23.11.0 Vite build (full build succeeded).
+vite v5.4.18 building for production...
+✓ 1215 modules transformed.
+dist/assets/Calendar-xI_GJlpp.css                                                        12.88 kB │ gzip:   2.42 kB
+dist/assets/Calendar-Dl-gMgPg.js                                                        316.41 kB │ gzip:  92.61 kB
+dist/assets/index-BMYdOZeY.js                                                         1,277.82 kB │ gzip: 400.35 kB
+(!) Some chunks are larger than 500 kB after minification. Consider:
+✓ built in 4.53s

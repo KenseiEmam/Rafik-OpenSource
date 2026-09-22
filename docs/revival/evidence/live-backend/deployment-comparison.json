@@ -1,0 +1,182 @@
+{
+  "captured_at": "2026-09-22T00:25:28.524152+00:00",
+  "project_ref": "pexviywnztvqomfosvho",
+  "method": "Supabase functions download --use-api into private temp directory; source snapshots redacted, never deployed",
+  "files": [
+    {
+      "path": "service-account.json",
+      "local_exists": true,
+      "sha256": "cd849326e395739598dfb0066912fb4b658116b75845d35c9cf9b657a85d7d99",
+      "identical_to_local": true,
+      "contains_private_key": true,
+      "exported": false
+    },
+    {
+      "path": "embed/deno.json",
+      "local_exists": false,
+      "sha256": "ca6ffc0960a76c72016756b4e676f90c28cc3e17e347022871300d64c5b206d0",
+      "identical_to_local": false,
+      "redactions": 0,
+      "exported": true
+    },
+    {
+      "path": "embed/util.ts",
+      "local_exists": false,
+      "sha256": "c2807ecff7244f2e8b99d53b257c6759facedfa62dd55128c316b1dd4d7e76a9",
+      "identical_to_local": false,
+      "redactions": 0,
+      "exported": true
+    },
+    {
+      "path": "embed/index.ts",
+      "local_exists": false,
+      "sha256": "cd4a378aa0d503b0e71f45602ade326e918f71082404cd1f7b2a24c11c0e72fa",
+      "identical_to_local": false,
+      "redactions": 0,
+      "exported": true
+    },
+    {
+      "path": "push/deno.json",
+      "local_exists": true,
+      "sha256": "379c26f8f71dd6c98d6b2cbaac627c9edf99ce166f0fb06a8dc47ebf09ca4ce3",
+      "identical_to_local": false,
+      "redactions": 0,
+      "exported": true,
+      "equal_after_newline_normalization": false
+    },
+    {
+      "path": "push/index.ts",
+      "local_exists": true,
+      "sha256": "1154a0048abe355fa1119dd498d0e9780dc7347062a67a9f87503ef0db9ee7c9",
+      "identical_to_local": true,
+      "redactions": 0,
+      "exported": true,
+      "equal_after_newline_normalization": true
+    },
+    {
+      "path": "smtp/deno.json",
+      "local_exists": true,
+      "sha256": "e86d576ea715f25f217fb9a4c7c35c9de085ca98c9c64260f42d3a7aebfe573c",
+      "identical_to_local": true,
+      "redactions": 0,
+      "exported": true,
+      "equal_after_newline_normalization": true
+    },
+    {
+      "path": "smtp/index.ts",
+      "local_exists": true,
+      "sha256": "bff33d822260fa6a5fd36567eec92a0bb2944f72a35a2857c8ae2225f20a7af7",
+      "identical_to_local": true,
+      "redactions": 4,
+      "exported": true
+    },
+    {
+      "path": "api/index.ts",
+      "local_exists": true,
+      "sha256": "451a2c82ed713a6081cecdcced0732a416fc1ff71c491f6da92a172bca2025dc",
+      "identical_to_local": false,
+      "redactions": 0,
+      "exported": true,
+      "equal_after_newline_normalization": true
+    },
+    {
+      "path": "_shared/foodAI.ts",
+      "local_exists": true,
+      "sha256": "6f86ea572d7f0fa2db79ab88549b496d15929cae54752f793dc71ecf00b77516",
+      "identical_to_local": false,
+      "redactions": 0,
+      "exported": true,
+      "equal_after_newline_normalization": true
+    },
+    {
+      "path": "_shared/fatSecret.ts",
+      "local_exists": true,
+      "sha256": "8cf87aa21ee20577497764dc052998d0dd54373e60473879c7ba362f50a5448b",
+      "identical_to_local": false,
+      "redactions": 0,
+      "exported": true,
+      "equal_after_newline_normalization": true
+    },
+    {
+      "path": "_shared/chatbot.ts",
+      "local_exists": true,
+      "sha256": "b014cb8067f12b81008d37713849ddde52cf402259c784c49af1f85d8d39d9c7",
+      "identical_to_local": false,
+      "redactions": 0,
+      "exported": true,
+      "equal_after_newline_normalization": true
+    },
+    {
+      "path": "_shared/template.ts",
+      "local_exists": true,
+      "sha256": "2036afc5f99ad07527b72bf0a74a40a7edfd2b2b4f2f8b89d1930e87549e0dd1",
+      "identical_to_local": true,
+      "redactions": 0,
+      "exported": true,
+      "equal_after_newline_normalization": true
+    },
+    {
+      "path": "_shared/corsHeaders.ts",
+      "local_exists": true,
+      "sha256": "d6f139d80b5852b7712ab9eda9d0da5e1a5f30092c2594426b51591b82f64c49",
+      "identical_to_local": true,
+      "redactions": 0,
+      "exported": true,
+      "equal_after_newline_normalization": true
+    },
+    {
+      "path": "_shared/orgTemplate.ts",
+      "local_exists": true,
+      "sha256": "04ce27db03a0483b4fa964831e43b20a77e5e7870fe864dd3218734f09c309e4",
+      "identical_to_local": true,
+      "redactions": 0,
+      "exported": true,
+      "equal_after_newline_normalization": true
+    },
+    {
+      "path": "hello/index.ts",
+      "local_exists": true,
+      "sha256": "c2586c3fc503fdab66310c8d9525c5f4cf730642961397ddea23e70bef86022d",
+      "identical_to_local": false,
+      "redactions": 1,
+      "exported": true
+    },
+    {
+      "path": "org-push/deno.json",
+      "local_exists": true,
+      "sha256": "379c26f8f71dd6c98d6b2cbaac627c9edf99ce166f0fb06a8dc47ebf09ca4ce3",
+      "identical_to_local": true,
+      "redactions": 0,
+      "exported": true,
+      "equal_after_newline_normalization": true
+    },
+    {
+      "path": "org-push/index.ts",
+      "local_exists": true,
+      "sha256": "2290f33e257ab4260f54d201d6787b61a698a215186369883025c3c5420ec25e",
+      "identical_to_local": true,
+      "redactions": 0,
+      "exported": true,
+      "equal_after_newline_normalization": true
+    },
+    {
+      "path": "fat-secret/index.ts",
+      "local_exists": true,
+      "sha256": "2443180b0b2cb57d83ce381eaf584a51a89972c2d95539be00c0c6572aed59a9",
+      "identical_to_local": false,
+      "redactions": 0,
+      "exported": true,
+      "equal_after_newline_normalization": false
+    },
+    {
+      "path": "delete-user/index.ts",
+      "local_exists": true,
+      "sha256": "6e07a011daa3d4ff4f24b50f6808c9c41feff3d477df8319080aaf04c1102cae",
+      "identical_to_local": false,
+      "redactions": 0,
+      "exported": true,
+      "equal_after_newline_normalization": false
+    }
+  ],
+  "comparison_note": "Byte hashes reflect raw downloaded source. Newline-normalized comparisons use non-redacted text only; private material is excluded from saved source."
+}

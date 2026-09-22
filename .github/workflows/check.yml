@@ -1,0 +1,17 @@
+name: Local backend checks
+on: [push, pull_request]
+jobs:
+  database:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm start
+      - run: npm run reset
+      - run: npm test
+      - run: npm stop
+        if: always()
