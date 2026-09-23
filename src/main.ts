@@ -7,11 +7,5 @@ import App from './App.vue'
 import router from './app/router'
 createApp(App).use(router).mount('#app')
 
-// Cache only the public application shell. Auth and workout responses are never cached.
-if (import.meta.env.PROD && 'serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    void navigator.serviceWorker.register('/sw.js').catch(() => {
-      /* Local records remain available if shell caching is unsupported. */
-    })
-  })
-}
+import { registerAppUpdates } from './app/updates'
+registerAppUpdates()

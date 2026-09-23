@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppUpdates from '../../components/AppUpdates.vue'
 import { language, t } from '../../lib/i18n'
 </script>
 <template>
@@ -69,5 +70,6 @@ import { language, t } from '../../lib/i18n'
         }}
       </p>
     </section>
+    <AppUpdates />
   </div>
 </template>

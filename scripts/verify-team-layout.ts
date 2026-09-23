@@ -1,9 +1,13 @@
-import { chromium } from '@playwright/test'
+import { chromium, webkit } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 import { writeFileSync, mkdirSync } from 'node:fs'
+import { layoutIssues } from '../tests/layout-contract.ts'
 import { teamFixture } from '../tests/team-fixture.ts'
+const engine = process.argv.includes('--webkit') ? webkit : chromium
+const artifactDir =
+  engine.name() === 'chromium' ? 'artifacts/r4-layout' : 'artifacts/r6-team-webkit'
 const f = await teamFixture(),
-  browser = await chromium.launch(),
+  browser = await engine.launch(),
   context = await browser.newContext({ baseURL: 'http://127.0.0.1:5173' }),
   page = await context.newPage()
 const results: object[] = [],
@@ -72,13 +76,15 @@ try {
     { name: 'support-client', path: '/support', client: true },
     { name: 'invitation', path: '/team-invite/' + token },
   ]
-  mkdirSync('artifacts/r4-layout', { recursive: true })
+  mkdirSync(artifactDir, { recursive: true })
   for (const width of [320, 390, 768, 1440])
     for (const lang of ['en', 'ar'])
       for (const theme of ['light', 'dark']) {
-        await page.setViewportSize({ width, height: 1000 })
+        await page.setViewportSize({ width, height: width <= 390 ? 664 : 1000 })
         for (const r of routes) {
           await page.goto('/login')
+          // Wait for Auth bootstrap before replacing the synthetic session/navigation.
+          await page.locator('main h1').waitFor()
           await page.evaluate(
             ({ session, lang, theme }) => {
               localStorage.setItem('rafik-revamp-auth', JSON.stringify(session))
@@ -107,9 +113,8 @@ try {
             await document.fonts.ready
             await Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {})))
           })
-          const overflow = await page.evaluate(
-            () => document.documentElement.scrollWidth > innerWidth,
-          )
+          const issues = await layoutIssues(page)
+          const overflow = issues.length > 0
           const axe =
             width === 390
               ? (await new AxeBuilder({ page }).analyze()).violations.map((v) => ({
@@ -117,14 +122,14 @@ try {
                   nodes: v.nodes.map((n) => n.target),
                 }))
               : []
-          results.push({ route: r.name, width, lang, theme, overflow, violations: axe })
+          results.push({ route: r.name, width, lang, theme, overflow, issues, violations: axe })
           if (overflow || axe.length) console.log('ISSUE', JSON.stringify(results.at(-1)))
           if (
             (width === 390 && lang === 'ar' && theme === 'dark') ||
             (width === 1440 && lang === 'en' && theme === 'light')
           )
             await page.screenshot({
-              path: `artifacts/r4-layout/${r.name}-${width}-${lang}-${theme}.png`,
+              path: `${artifactDir}/${r.name}-${width}-${lang}-${theme}.png`,
               fullPage: true,
               animations: 'disabled',
             })
@@ -132,8 +137,8 @@ try {
         console.log(`Checked ${width}px ${lang} ${theme}`)
       }
   writeFileSync(
-    'artifacts/r4-layout.json',
-    JSON.stringify({ checks: results.length, errors, results }, null, 2),
+    artifactDir + '.json',
+    JSON.stringify({ engine: engine.name(), checks: results.length, errors, results }, null, 2),
   )
   if (
     errors.length ||

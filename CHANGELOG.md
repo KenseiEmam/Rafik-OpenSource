@@ -1,5 +1,16 @@
 # Rafik web change history
 
+## R6 — Responsive maintenance and local release hardening · 23 September 2026
+
+- Fixed mobile inbox 250px rows and hidden width overflow by removing obsolete horizontal-list CSS, constraining intrinsic widths and keeping list scrolling bounded. Restored wrapping workspace navigation; fixed WebKit long select/Arabic resource filter overflow.
+- Removed foreground/background theme interpolation that briefly reduced button contrast.
+- Bounded the client roster to twelve visible rows with load-more and whole-roster search; successful reload clears old read errors.
+- Added multi-contact/long-label/resizing/short-height regression coverage and a broad two-engine audit that checks internal clipping. Recorded the missed-state root cause and durable quality rules; corrected stale runbook instructions.
+- Added content-versioned offline shells and non-interrupting update checks in Help/Settings. Failed first installs can retry without a reload; failed updates preserve the current version; waiting updates activate after old tabs close, retaining device work.
+- Fixed the SQL launcher to drain piped output before exiting, retaining all assertion/rollback evidence.
+- Added a guarded, serial local release verification command with per-step reports/logs and explicit unverified release boundaries. No migration, reset, deployment, external provider, native change or push.
+
+
 ## R5 — 23 September 2026
 
 - Reorganized engineering handoff around a docs index, CONTRIBUTING/definition of done, ADRs, API conventions and release gates; added local documentation-link checks and durable rules in both AGENTS files.
