@@ -591,25 +591,7 @@ td:first-child {
   align-items: center;
   font-size: 0.8rem;
 }
-.product-nav-wrap {
-  border-bottom: 1px solid var(--line);
-}
-.product-nav {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  min-height: 58px;
-  font-size: 0.83rem;
-}
-.product-nav a {
-  padding-block: 18px;
-  border-bottom: 2px solid transparent;
-}
-.product-nav a.selected {
-  border-color: var(--accent);
-  color: var(--accent);
-  font-weight: 700;
-}
+
 .sample-label {
   margin-inline-start: auto;
   font-size: 0.7rem;
@@ -2025,14 +2007,7 @@ progress::-moz-progress-bar {
     flex-direction: column;
     gap: 20px;
   }
-  .product-nav {
-    gap: 26px;
-    min-height: 53px;
-    font-size: 0.79rem;
-  }
-  .product-nav a {
-    padding-block: 16px;
-  }
+
   .sample-label {
     font-size: 0.63rem;
   }
@@ -2683,26 +2658,6 @@ h3 {
 }
 
 @media (max-width: 760px) {
-  .site-header.has-account {
-    height: auto;
-    min-height: 116px;
-  }
-  .has-account .header-inner {
-    flex-wrap: wrap;
-    gap: 4px 15px;
-    padding-top: 12px;
-  }
-  .main-nav.authenticated {
-    display: flex;
-    order: 3;
-    flex-basis: 100%;
-    margin: 0;
-    gap: 25px;
-    font-size: 0.77rem;
-  }
-  .main-nav.authenticated a {
-    padding: 12px 0;
-  }
 }
 
 /* Daily coaching: task-focused extensions of the existing Rafik visual system. */
@@ -2842,9 +2797,7 @@ h3 {
 .library-search {
   margin-block: 1rem;
 }
-.product-nav {
-  overflow-x: auto;
-}
+
 @media (max-width: 760px) {
   .client-workspace {
     grid-template-columns: 1fr;
@@ -3418,17 +3371,6 @@ select {
   scroll-margin-top: 2rem;
 }
 @media (max-width: 600px) {
-  .product-nav {
-    flex-wrap: wrap;
-    gap: 0 20px;
-    overflow: visible;
-    padding-block: 0.3rem;
-  }
-  .product-nav a {
-    flex-shrink: 0;
-    white-space: nowrap;
-    padding-block: 12px;
-  }
   .sample-label {
     margin-inline-start: 0;
     padding-block: 0.5rem;

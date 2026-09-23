@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { user } from '../../app/auth'
 import { rows, rpc } from '../../lib/backend'
 import type {
@@ -16,7 +16,13 @@ import { language, dateLabel, errorMessage, t, locale } from '../../lib/i18n'
 import { addDays, localDate } from '../../lib/dates'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import PageState from '../../components/PageState.vue'
-const id = String(useRoute().params.id),
+const route = useRoute(),
+  router = useRouter()
+const rosterBack = {
+  path: '/coach/clients',
+  query: { search: route.query.search, state: route.query.state },
+}
+const id = String(route.params.id),
   draftKey = `client-context:${user.value!.id}:${id}`
 const person = ref<Profile>(),
   relationship = ref<Relationship>(),
@@ -25,7 +31,11 @@ const versions = ref<PlanVersion[]>([]),
   history = ref<Session[]>([]),
   schedule = ref<ScheduledDay[]>([])
 const context = ref<ClientContext>({ id, goals: '', constraints: '', notes: '', revision: 0 })
-const tab = ref('overview'),
+const tab = ref(
+    ['overview', 'plan', 'history'].includes(String(route.query.tab))
+      ? String(route.query.tab)
+      : 'overview',
+  ),
   loading = ref(true),
   busy = ref(false),
   confirmArchive = ref(false),
@@ -40,6 +50,9 @@ const moves = ref<Record<string, string>>({})
 watch(locale, () => {
   message.value = ''
   error.value = ''
+})
+watch(tab, (value) => {
+  void router.replace({ query: { ...route.query, tab: value } })
 })
 let ready = false
 const today = computed(() => localDate(person.value?.timezone || 'UTC'))
@@ -212,7 +225,7 @@ onMounted(load)
 </script>
 <template>
   <div class="container page">
-    <RouterLink class="back-link" to="/coach/clients">← {{ t('clients') }}</RouterLink>
+    <RouterLink class="back-link" :to="rosterBack">← {{ t('clients') }}</RouterLink>
     <PageState :loading="loading" :error="!relationship ? error : ''" @retry="load">
       <template v-if="relationship && person">
         <header class="page-heading heading-actions">

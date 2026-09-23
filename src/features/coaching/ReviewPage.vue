@@ -8,7 +8,12 @@ import type { Session, Profile, Relationship } from '../../lib/domain'
 import { language, locale, t, errorMessage, dateLabel } from '../../lib/i18n'
 import { exerciseName, targetLabel, actualLabel, performedExercise } from '../../lib/prescriptions'
 import PageState from '../../components/PageState.vue'
-const id = String(useRoute().params.id)
+const route = useRoute()
+const id = String(route.params.id)
+const back = {
+  path: '/coach',
+  query: { view: String(route.query.view || 'all'), search: route.query.search },
+}
 const session = ref<Session>(),
   person = ref<Profile>()
 const relationship = ref('')
@@ -54,7 +59,7 @@ onMounted(load)
 </script>
 <template>
   <div class="container page">
-    <RouterLink to="/coach" class="back-link"
+    <RouterLink :to="back" class="back-link"
       ><PhArrowLeft :size="18" class="directional" />{{
         language('Review list', 'قائمة المراجعة')
       }}</RouterLink
@@ -142,6 +147,9 @@ onMounted(load)
                 }}
               </button>
               <p v-if="message" class="notice success" role="status">{{ message }}</p>
+              <RouterLink v-if="message" class="button secondary full" :to="back"
+                >{{ language('Continue reviewing', 'متابعة المراجعات') }} →</RouterLink
+              >
               <p v-if="error" class="notice error" role="alert">{{ error }}</p>
             </form>
           </aside>

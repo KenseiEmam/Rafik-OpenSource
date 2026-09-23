@@ -1,12 +1,30 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import WorkspaceNav from './features/workspace/WorkspaceNav.vue'
 import { PhArrowUpRight, PhTranslate, PhCaretDown } from '@phosphor-icons/vue'
 import { user, profile, ready } from './app/auth'
 import { language, locale, t } from './lib/i18n'
 import { localPreview } from './lib/backend'
 import { syncPending } from './lib/training'
 const route = useRoute()
+const router = useRouter()
+watch(
+  () => route.path,
+  (path) => {
+    if (
+      user.value &&
+      (path.startsWith('/coach') ||
+        ['/today', '/history', '/progress', '/messages', '/checkins', '/more'].some((p) =>
+          path.startsWith(p),
+        ))
+    )
+      localStorage.setItem(
+        'rafik.workspace:' + user.value.id,
+        path.startsWith('/coach') ? '/coach' : '/today',
+      )
+  },
+)
 const coaching = computed(() => route.path.startsWith('/coach'))
 const messaging = computed(() => /^(\/coach)?\/messages(\/|$)/.test(route.path))
 const focused = computed(() => route.path.startsWith('/workout/'))
@@ -35,29 +53,34 @@ onUnmounted(() => window.removeEventListener('online', online))
 </script>
 <template>
   <a class="skip-link" href="#main">{{ language('Skip to content', 'انتقل إلى المحتوى') }}</a>
-  <header class="site-header" :class="{ compact: focused, 'has-account': user && !focused }">
+  <header class="site-header" :class="{ compact: focused, 'workspace-header': user && !focused }">
     <div class="header-inner">
-      <RouterLink class="brand" to="/" aria-label="Rafik home"
+      <RouterLink
+        class="brand"
+        :to="user ? (coaching ? '/coach' : '/today') : '/'"
+        aria-label="Rafik home"
         ><img src="/brand/rafik.png" alt="" width="38" height="38" /><span
           >rafik<span class="brand-period">.</span></span
         ></RouterLink
       >
+      <label v-if="user && !focused" class="workspace-switch"
+        ><span class="sr-only">{{ language('Workspace', 'مساحة العمل') }}</span
+        ><select
+          :aria-label="language('Workspace', 'مساحة العمل')"
+          :value="coaching ? '/coach' : '/today'"
+          @change="router.push(($event.target as HTMLSelectElement).value)"
+        >
+          <option value="/today">{{ t('training') }}</option>
+          <option value="/coach">{{ t('coaching') }}</option>
+        </select></label
+      >
       <nav
-        v-if="!focused"
+        v-else-if="!focused"
         class="main-nav"
-        :class="{ authenticated: !!user }"
         :aria-label="language('Main navigation', 'التنقل الرئيسي')"
       >
-        <template v-if="user"
-          ><RouterLink to="/today">{{ t('training') }}</RouterLink
-          ><RouterLink to="/coach">{{ t('coaching') }}</RouterLink></template
-        >
-        <template v-else
-          ><RouterLink to="/routine">{{ language('Try a workout', 'جرّب تمريناً') }}</RouterLink
-          ><RouterLink to="/#how-it-works">{{
-            language('How it works', 'كيف يعمل')
-          }}</RouterLink></template
-        >
+        <RouterLink to="/routine">{{ language('Try a workout', 'جرّب تمريناً') }}</RouterLink
+        ><RouterLink to="/#how-it-works">{{ language('How it works', 'كيف يعمل') }}</RouterLink>
       </nav>
       <div class="header-actions">
         <button
@@ -82,69 +105,7 @@ onUnmounted(() => window.removeEventListener('online', online))
       </div>
     </div>
   </header>
-  <div v-if="product && !focused" class="product-nav-wrap">
-    <nav
-      class="product-nav container"
-      :aria-label="language('Workspace navigation', 'تنقل مساحة العمل')"
-    >
-      <template v-if="coaching"
-        ><RouterLink
-          to="/coach"
-          exact-active-class="selected"
-          :class="{ selected: route.path === '/coach' }"
-          >{{ t('today') }}</RouterLink
-        ><RouterLink
-          to="/coach/clients"
-          :class="{ selected: route.path.startsWith('/coach/clients') }"
-          >{{ t('clients') }}</RouterLink
-        ><RouterLink
-          to="/coach/plans"
-          :class="{ selected: route.path.startsWith('/coach/plans') }"
-          >{{ t('plans') }}</RouterLink
-        ><RouterLink
-          to="/coach/exercises"
-          :class="{ selected: route.path.startsWith('/coach/exercises') }"
-          >{{ language('Exercises', 'التمارين') }}</RouterLink
-        ><RouterLink
-          to="/coach/checkins"
-          :class="{
-            selected:
-              route.path.startsWith('/coach/checkins') || route.path.startsWith('/coach/forms'),
-          }"
-          >{{ language('Check-ins', 'المتابعات') }}</RouterLink
-        ><RouterLink
-          to="/coach/messages"
-          :class="{ selected: route.path.startsWith('/coach/messages') }"
-          >{{ language('Messages', 'الرسائل') }}</RouterLink
-        ></template
-      >
-      <template v-else
-        ><RouterLink to="/today" active-class="selected">{{ t('today') }}</RouterLink
-        ><RouterLink to="/history" active-class="selected">{{ t('history') }}</RouterLink
-        ><RouterLink to="/progress" active-class="selected">{{
-          language('Progress', 'التقدم')
-        }}</RouterLink
-        ><RouterLink to="/checkins" active-class="selected">{{
-          language('Check-ins', 'المتابعات')
-        }}</RouterLink
-        ><RouterLink to="/messages" active-class="selected">{{
-          language('Messages', 'الرسائل')
-        }}</RouterLink></template
-      >
-      <RouterLink
-        :to="coaching ? '/coach/more' : '/more'"
-        :class="{
-          selected: /\/(more|nutrition|appointments|resources|teams|business|support)(\/|$)/.test(
-            route.path,
-          ),
-        }"
-        >{{ language('More', 'المزيد') }}</RouterLink
-      >
-      <span v-if="localPreview && user?.email?.endsWith('@rafik.test')" class="sample-label">{{
-        t('sampleAccount')
-      }}</span>
-    </nav>
-  </div>
+  <WorkspaceNav v-if="product && !focused" />
   <main id="main" :class="{ 'messages-main': messaging }" tabindex="-1">
     <RouterView :key="route.path" />
   </main>

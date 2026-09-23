@@ -125,6 +125,7 @@ test('coach publishes and invites; verified client trains; coach replies', async
   await client.getByRole('heading', { name: 'Session complete.' }).click()
   await expect(client.getByRole('status')).toContainText('Synced with your account')
   await page.goto('/coach')
+  await page.getByRole('searchbox', { name: 'Find a client or update' }).fill(email.split('@')[0]!)
   await page
     .getByRole('link')
     .filter({ hasText: 'Last repetitions felt controlled.' })

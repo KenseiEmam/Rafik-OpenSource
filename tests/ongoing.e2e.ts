@@ -76,7 +76,8 @@ test('check-in moves through draft, submission, review, correction and contextua
   await client.getByRole('button', { name: 'Send message', exact: true }).click()
   await expect(client.getByRole('status')).toContainText('Message sent.')
   await page.goto('/coach')
-  await expect(page.locator('.coaching-activity')).toContainText('unread messages')
+  await page.getByRole('combobox', { name: 'Show', exact: true }).selectOption('message')
+  await expect(page.locator('.attention-panel')).toContainText('Unread messages')
   await page.goto('/coach/messages/' + relationship)
   await expect(page.locator('.message-log')).toContainText('Could we move the second workout?')
   await page
