@@ -414,7 +414,7 @@ onMounted(async () => {
             >
           </div>
           <div class="organization-people">
-            <section>
+            <section tabindex="0" :aria-label="l('People', 'الأشخاص')">
               <p class="muted">{{ peopleTotal }} {{ l('people', 'أشخاص') }}</p>
               <p v-if="peopleLoading" class="small-print" role="status">
                 {{ l('Finding people…', 'جارٍ البحث عن الأشخاص…') }}

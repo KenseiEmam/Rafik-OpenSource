@@ -183,7 +183,7 @@ onMounted(load)
       <p class="overline">
         {{ coach ? person?.display_name : l('Your training over time', 'تدريبك مع الوقت') }}
       </p>
-      <h1>{{ l('Progress you can see', 'تقدم يمكنك رؤيته') }}</h1>
+      <h1>{{ l('Progress', 'التقدم') }}</h1>
       <p>
         {{
           l(

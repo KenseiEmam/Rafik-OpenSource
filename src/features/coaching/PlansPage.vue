@@ -70,7 +70,7 @@ onMounted(() => load())
     <div class="page-heading heading-actions">
       <div>
         <p class="overline">{{ t('coaching') }}</p>
-        <h1>{{ language('Plans with a clear purpose.', 'خطط بهدف واضح.') }}</h1>
+        <h1>{{ language('Plans', 'الخطط') }}</h1>
         <p>
           {{
             language(

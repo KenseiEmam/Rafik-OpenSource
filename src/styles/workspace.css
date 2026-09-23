@@ -85,7 +85,7 @@
   border-bottom: 1px solid var(--line);
 }
 .attention-row:hover {
-  background: var(--wash);
+  background: var(--tint);
 }
 .attention-row .grow {
   min-width: 0;
@@ -132,7 +132,7 @@
 .workspace-shortcut {
   display: grid;
   gap: 12px;
-  background: var(--wash);
+  background: var(--tint);
   padding: 24px;
   border-radius: 12px;
 }

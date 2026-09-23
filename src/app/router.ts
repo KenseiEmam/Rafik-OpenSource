@@ -1,6 +1,38 @@
 import { nextTick } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { ready, user, contexts, refreshContexts } from './auth'
+const workspaceScroll = new Map<string, number>()
+let cancelScrollRestore = () => {}
+// Returning routes load asynchronously: don't clamp a saved position to the loading skeleton.
+function restoreWorkspaceScroll(main: HTMLElement, top: number) {
+  cancelScrollRestore()
+  if (!top) {
+    main.scrollTop = 0
+    return
+  }
+  const controller = new AbortController()
+  const observer = new MutationObserver(restore)
+  const timeout = window.setTimeout(() => {
+    main.scrollTop = top
+    cancel()
+  }, 10000)
+  function cancel() {
+    observer.disconnect()
+    window.clearTimeout(timeout)
+    controller.abort()
+  }
+  function restore() {
+    if (main.scrollHeight - main.clientHeight >= top) {
+      main.scrollTop = top
+      cancel()
+    }
+  }
+  cancelScrollRestore = cancel
+  for (const event of ['wheel', 'pointerdown', 'keydown'])
+    window.addEventListener(event, cancel, { once: true, passive: true, signal: controller.signal })
+  observer.observe(main, { childList: true, subtree: true, characterData: true })
+  restore()
+}
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -286,14 +318,28 @@ const router = createRouter({
     { path: '/privacy_policy', redirect: '/privacy' },
     { path: '/:pathMatch(.*)*', component: () => import('../features/public/NotFound.vue') },
   ],
-  scrollBehavior(to, from, saved) {
+  async scrollBehavior(to, from, saved) {
+    await nextTick()
+    const main = document.querySelector<HTMLElement>('.dashboard-frame > main')
+    if (main && window.matchMedia('(min-width: 1024px)').matches) {
+      if (to.hash) document.getElementById(to.hash.slice(1))?.scrollIntoView({ block: 'start' })
+      else if (to.path !== from.path)
+        restoreWorkspaceScroll(main, saved ? workspaceScroll.get(to.fullPath) || 0 : 0)
+      return false
+    }
     if (saved) return saved
     if (to.hash) return { el: to.hash, top: 100 }
     if (to.path === from.path) return
     return { top: 0 }
   },
 })
-router.beforeEach(async (to) => {
+router.beforeEach(async (to, from) => {
+  cancelScrollRestore()
+  const main = document.querySelector<HTMLElement>('.dashboard-frame > main')
+  if (main) {
+    workspaceScroll.set(from.fullPath, main.scrollTop)
+    if (workspaceScroll.size > 100) workspaceScroll.delete(workspaceScroll.keys().next().value!)
+  }
   await ready()
   if (to.meta.private && !user.value) return { path: '/login', query: { next: to.fullPath } }
   if (user.value && (to.path.startsWith('/coach') || to.path.startsWith('/organization/'))) {

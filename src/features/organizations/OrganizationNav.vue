@@ -127,6 +127,6 @@ const current = computed(
   border: 0;
 }
 .organization-tools a:hover {
-  background: var(--wash);
+  background: var(--tint);
 }
 </style>

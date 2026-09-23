@@ -1,0 +1,259 @@
+/* Dashboard chrome owns viewport scrolling; feature panes own only bounded collections. */
+.app-frame {
+  min-height: 100dvh;
+}
+.conversation-frame {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+.dashboard-menu-trigger {
+  display: none;
+}
+.dashboard-sidebar {
+  display: none;
+}
+.dashboard-frame .organization-nav {
+  display: none;
+}
+.dashboard-frame .container {
+  width: 100%;
+  max-width: 1500px;
+  padding-inline: 28px;
+}
+.dashboard-frame .page {
+  min-height: 0;
+  padding-block: 24px 32px;
+}
+.dashboard-frame .work-heading,
+.dashboard-frame .page-heading {
+  margin-bottom: 22px;
+  max-width: none;
+}
+.dashboard-frame .work-heading h1,
+.dashboard-frame .page-heading h1 {
+  font-size: 1.65rem;
+  line-height: 1.3;
+  margin: 0 0 8px;
+}
+.dashboard-frame .work-heading .overline,
+.dashboard-frame .page-heading .overline {
+  display: none;
+}
+.dashboard-frame .page-heading p,
+.dashboard-frame .work-heading p {
+  font-size: 0.85rem;
+  margin: 0;
+}
+.dashboard-frame .page-heading > p:last-child {
+  margin-top: 8px;
+}
+.dashboard-frame .panel {
+  padding: 22px;
+}
+.dashboard-frame .organization-summary {
+  margin-block: 18px 24px;
+}
+.dashboard-frame .organization-summary a {
+  padding: 18px 16px;
+}
+.dashboard-frame .organization-person {
+  padding-block: 14px;
+}
+.dashboard-frame .daily-grid {
+  gap: 28px;
+}
+.dashboard-frame .attention-row {
+  padding-block: 14px;
+}
+.dashboard-frame .daily-aside {
+  gap: 18px;
+}
+.dashboard-frame .workspace-shortcut {
+  padding: 18px;
+}
+.dashboard-frame .section-title {
+  margin-bottom: 16px;
+}
+.dashboard-frame .section-title h2 {
+  font-size: 1.1rem;
+}
+.dashboard-frame .organization-nav + .page {
+  flex: 1;
+}
+.dashboard-overlay {
+  position: fixed;
+  inset: 0;
+  background: #101a1580;
+  z-index: 70;
+}
+.dashboard-drawer {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: min(300px, 88vw);
+  z-index: 71;
+  background: var(--surface);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.drawer-heading {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.drawer-heading h2 {
+  font-size: 1rem;
+  margin: 0;
+}
+@media (min-width: 1024px) {
+  #app:has(.dashboard-frame) {
+    height: 100dvh;
+    min-height: 0;
+    display: block;
+  }
+  .dashboard-frame {
+    height: 100dvh;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 216px minmax(0, 1fr);
+    grid-template-rows: 64px minmax(0, 1fr);
+    overflow: hidden;
+  }
+  .dashboard-frame > .site-header {
+    grid-column: 1/-1;
+    height: 64px;
+    min-height: 0;
+  }
+  .dashboard-frame .header-inner {
+    max-width: none;
+    width: 100%;
+    padding-inline: 24px;
+    height: 64px;
+  }
+  .dashboard-frame .brand {
+    width: 168px;
+  }
+  .dashboard-frame .brand > span {
+    font-size: 1.7rem;
+  }
+  .dashboard-frame .brand img {
+    width: 28px;
+    height: 28px;
+  }
+  .dashboard-sidebar {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    grid-row: 2;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--surface);
+    border-inline-end: 1px solid var(--line);
+  }
+  .dashboard-utilities {
+    display: grid;
+    gap: 10px;
+    border-top: 1px solid var(--line);
+    padding: 18px 24px;
+    margin-top: auto;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .dashboard-utilities select {
+    margin: 0;
+    padding: 8px;
+    min-height: 36px;
+    font-size: 0.75rem;
+  }
+  .dashboard-frame > main {
+    position: relative;
+    grid-column: 2;
+    grid-row: 2;
+    min-height: 0;
+    min-width: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    scroll-padding-top: 20px;
+  }
+  .dashboard-frame > .messages-main {
+    overflow: hidden;
+  }
+  .dashboard-frame > main:has(.organization-messages.is-creating) {
+    overflow: auto;
+  }
+  .dashboard-frame .organization-people > section:first-child {
+    max-height: calc(100dvh - 330px);
+    min-height: 220px;
+    overflow-y: auto;
+    padding-inline-end: 12px;
+  }
+  .dashboard-frame .organization-people aside {
+    max-height: calc(100dvh - 180px);
+    overflow-y: auto;
+  }
+}
+@media (max-width: 1023px) {
+  .dashboard-menu-trigger {
+    display: grid;
+  }
+  .dashboard-frame .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: var(--page);
+  }
+  .dashboard-frame .header-inner {
+    gap: 6px;
+  }
+  .dashboard-frame .container {
+    padding-inline: 18px;
+  }
+  .dashboard-frame .page {
+    padding-top: 20px;
+  }
+  .dashboard-frame .brand img {
+    display: none;
+  }
+  .dashboard-frame .brand > span {
+    font-size: 1.35rem;
+  }
+  .dashboard-frame .workspace-switch {
+    max-width: calc(100% - 160px);
+  }
+  .dashboard-frame .header-actions {
+    margin-inline-start: auto;
+  }
+  .dashboard-frame .account-name {
+    display: none;
+  }
+  .dashboard-frame .work-heading h1,
+  .dashboard-frame .page-heading h1 {
+    font-size: 1.5rem;
+  }
+}
+
+.dashboard-drawer .dashboard-utilities {
+  display: grid;
+  gap: 14px;
+  padding: 20px 24px;
+  border-top: 1px solid var(--line);
+  font-size: 0.85rem;
+}
+@media (min-width: 1024px) {
+  #app:has(.dashboard-frame):has(.organization-messages) {
+    height: 100dvh;
+    min-height: 0;
+  }
+  .dashboard-frame .attention-items {
+    max-height: max(240px, calc(100dvh - 410px));
+    overflow-y: auto;
+    padding-inline-end: 10px;
+  }
+}

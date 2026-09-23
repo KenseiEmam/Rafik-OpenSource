@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import TimezonePicker from '../../components/TimezonePicker.vue'
 import AppUpdates from '../../components/AppUpdates.vue'
 import { onMounted, ref } from 'vue'
 import { cleanupAccountResources } from '../resources/files'
@@ -148,7 +149,7 @@ function cancelDelete() {
   <div class="container page settings-page">
     <div class="page-heading">
       <p class="overline">{{ t('settings') }}</p>
-      <h1>{{ language('Just the details that help.', 'التفاصيل المفيدة فقط.') }}</h1>
+      <h1>{{ language('Settings', 'الإعدادات') }}</h1>
     </div>
     <p v-if="error" class="notice error" role="alert">{{ error }}</p>
     <p v-if="message" class="notice success" role="status">{{ message }}</p>
@@ -179,17 +180,7 @@ function cancelDelete() {
             )
           }}
         </p>
-        <label for="timezone">{{ t('timezone') }}</label
-        ><input id="timezone" v-model="zone" required list="common-timezones" /><datalist
-          id="common-timezones"
-        >
-          <option>Asia/Dubai</option>
-          <option>Asia/Riyadh</option>
-          <option>Asia/Amman</option>
-          <option>Europe/London</option>
-          <option>America/New_York</option>
-          <option>UTC</option>
-        </datalist>
+        <TimezonePicker id="timezone" v-model="zone" :label="t('timezone')" :disabled="busy" />
         <p class="small-print">
           {{ language('Used to keep workout dates consistent.', 'لتوحيد تواريخ حصصك.') }}
         </p>

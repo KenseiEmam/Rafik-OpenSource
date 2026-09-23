@@ -44,7 +44,11 @@ test('coach manages a client workspace and restores an archived relationship', a
   await page.getByRole('button', { name: 'Reactivate client', exact: true }).click()
   await expect(page.getByRole('button', { name: 'Archive client', exact: true })).toBeVisible()
   await page.getByRole('button', { name: 'Switch to Arabic' }).click()
+  const mobileNavigation = page.getByRole('button', { name: 'فتح التنقل', exact: true })
+  if (await mobileNavigation.isVisible()) await mobileNavigation.click()
   await page.getByRole('combobox', { name: 'المظهر' }).selectOption('dark')
+  if (await page.getByRole('dialog').isVisible())
+    await page.getByRole('button', { name: 'إغلاق التنقل', exact: true }).click()
   await page.screenshot({
     path: `artifacts/r1-client-ar-${info.project.name}.png`,
     fullPage: true,

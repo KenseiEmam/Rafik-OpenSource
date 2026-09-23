@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { profile } from '../../app/auth'
 import { request } from '../../lib/backend'
@@ -44,20 +44,24 @@ const time = (value: string) =>
   }).format(new Date(value))
 const missingStaff = (e: CalendarEvent) =>
   !e.people?.some((p) => p.duty === 'staff' && p.active && p.roles.includes('trainer'))
+let generation = 0
+onUnmounted(() => generation++)
 async function load(append = false) {
+  const current = ++generation
   loading.value = true
   error.value = ''
   try {
     const result = await request<{ items: CalendarEvent[]; next: number | null }>(
       `/v1/workspaces/${id}/calendar?view=${view}&from=${start.value}&to=${end.value}&zone=${encodeURIComponent(zone)}&offset=${append ? next.value || 0 : 0}`,
     )
+    if (current !== generation) return
     items.value = append ? [...items.value, ...result.items] : result.items
     next.value = result.next
     await router.replace({ query: { from: start.value } })
   } catch (e) {
-    error.value = errorMessage(e)
+    if (current === generation) error.value = errorMessage(e)
   } finally {
-    loading.value = false
+    if (current === generation) loading.value = false
   }
 }
 function move(days: number) {
@@ -154,7 +158,7 @@ onMounted(() => load())
           >
         </li>
       </ol>
-      <button v-if="next !== null" class="button secondary" @click="load(true)">
+      <button v-if="next !== null" class="button secondary" :disabled="loading" @click="load(true)">
         {{ l('Load more events', 'تحميل مواعيد أخرى') }}
       </button></PageState
     >

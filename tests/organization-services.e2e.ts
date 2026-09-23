@@ -90,7 +90,9 @@ test('organization staff schedule a group assessment, recover a result, correct 
         .getByRole('combobox', { name: 'Assessment template', exact: true })
         .locator('option:checked'),
     ).toHaveText('Movement baseline')
+    await page.getByLabel('Timezone', { exact: true }).click()
     await page.getByLabel('Timezone', { exact: true }).fill('UTC')
+    await page.getByRole('option', { name: 'UTC · UTC', exact: true }).click()
     await page.getByRole('button', { name: 'Choose people', exact: true }).click()
     await expect(page.locator('section[aria-label="Choose people"]')).toBeFocused()
     await page.getByRole('checkbox', { name: 'R4 Coach', exact: true }).check()
@@ -188,6 +190,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
     await expect(client.getByText('14 reps', { exact: true })).toBeVisible()
     await expect(client.getByText('19 reps', { exact: true })).toHaveCount(0)
     await page.goto(base + '/analytics')
+    await page.getByRole('tab', { name: 'Delivery & capacity', exact: true }).click()
     await expect(
       page.getByRole('heading', { name: 'Trainer responsibility', exact: true }),
     ).toBeVisible()
@@ -198,6 +201,45 @@ test('organization staff schedule a group assessment, recover a result, correct 
       path: `artifacts/r9-admin-analytics-${info.project.name}.png`,
       fullPage: true,
     })
+    // A late calendar read must not overwrite the URL filters of the page we navigate to.
+    let releaseCalendar!: () => void
+    let calendarStarted!: () => void
+    const pendingCalendar = new Promise<void>((resolve) => {
+      releaseCalendar = resolve
+    })
+    const calendarRequest = new Promise<void>((resolve) => {
+      calendarStarted = resolve
+    })
+    await page.route(`**/v1/workspaces/${id}/calendar?**`, async (r) => {
+      const response = await r.fetch()
+      calendarStarted()
+      await pendingCalendar
+      await r.fulfill({ response })
+    })
+    await page.goto(base + '/calendar')
+    await calendarRequest
+    const navigation = page.getByRole('button', { name: 'Open navigation', exact: true })
+    if (await navigation.isVisible()) await navigation.click()
+    await page
+      .getByRole('navigation', { name: 'Workspace navigation' })
+      .getByRole('link', { name: 'Analytics', exact: true })
+      .click()
+    await expect(
+      page.getByRole('heading', { name: 'Organization analytics', exact: true }),
+    ).toBeVisible()
+    const calendarResponse = page.waitForResponse((r) =>
+      r.url().includes(`/v1/workspaces/${id}/calendar?`),
+    )
+    releaseCalendar()
+    await (await calendarResponse).finished()
+    await page.evaluate(
+      () =>
+        new Promise<void>((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+        ),
+    )
+    await expect(page).toHaveURL(base + '/analytics')
+    await page.unroute(`**/v1/workspaces/${id}/calendar?**`)
     await f.login(page, f.coach, `/organization/${id}/trainer/analytics`)
     await expect(
       page.getByRole('heading', { name: 'Coaching analytics', exact: true }),
@@ -208,6 +250,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
     await page.goto(`/organization/${id}/trainer/assessments/${trainee.id}`)
     await expect(page.getByRole('definition').filter({ hasText: '14 reps' })).toBeVisible()
     await page.goto('/coach/analytics')
+    await page.getByRole('tab', { name: 'Follow-up', exact: true }).click()
     await expect(
       page.getByRole('heading', { name: 'Check-in response', exact: true }),
     ).toBeVisible()

@@ -28,10 +28,17 @@ test('daily workspace connects named attention, filters and complete mobile navi
     await expect(page).toHaveURL(/view=message/)
     await page.locator('.attention-row').click()
     await expect(page.getByRole('textbox', { name: 'Message', exact: true })).toBeVisible()
-    await page.getByRole('link', { name: 'Today', exact: true }).click()
+    await page.getByRole('button', { name: 'Open navigation', exact: true }).click()
+    await page.getByRole('dialog').getByRole('link', { name: 'Today', exact: true }).click()
     await expect(page.locator('.attention-row')).toHaveCount(0)
-    await page.getByRole('link', { name: 'More', exact: true }).click()
-    await expect(page.getByRole('link', { name: 'Plans', exact: false })).toBeVisible()
+    await page.getByRole('button', { name: 'Open navigation', exact: true }).click()
+    await expect(
+      page.getByRole('dialog').getByRole('link', { name: 'Plans', exact: true }),
+    ).toBeVisible()
+    await page
+      .getByRole('dialog')
+      .getByRole('button', { name: 'Close navigation', exact: true })
+      .click()
     await page.getByLabel('Workspace', { exact: true }).selectOption('/today')
     await expect(page).toHaveURL(/\/today$/)
     await page.evaluate(() => {

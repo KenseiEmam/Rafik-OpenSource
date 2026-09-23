@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { profile } from '../../app/auth'
 import { request } from '../../lib/backend'
@@ -8,6 +8,7 @@ import { localDate, addDays } from '../../lib/dates'
 import PageState from '../../components/PageState.vue'
 import OrganizationNav from '../organizations/OrganizationNav.vue'
 import MetricChart from './MetricChart.vue'
+import { TabsRoot, TabsList, TabsTrigger, TabsContent } from 'reka-ui'
 const route = useRoute(),
   workspace = String(route.params.workspace || ''),
   view = String(route.params.view || 'coach'),
@@ -30,7 +31,28 @@ type Report = {
   programs: { id: string; label: string; value: number }[]
 }
 const data = ref<Report>()
+const period = ref('28')
+function setPeriod() {
+  if (period.value !== 'custom') {
+    to.value = localDate(profile.value?.timezone || 'UTC')
+    from.value = addDays(to.value, 1 - Number(period.value))
+    void load()
+  }
+}
+const selectedPerson = ref<{ id: string; name: string }>()
+const people = computed(() => [
+  ...new Map(
+    [...(data.value?.people || []), ...(selectedPerson.value ? [selectedPerson.value] : [])].map(
+      (p) => [p.id, p],
+    ),
+  ).values(),
+])
+function selectPerson() {
+  selectedPerson.value = people.value.find((p) => p.id === selected.value)
+  void load()
+}
 let generation = 0
+onUnmounted(() => generation++)
 async function load(part?: 'workload' | 'program') {
   const current = ++generation
   loading.value = true
@@ -52,7 +74,7 @@ async function load(part?: 'workload' | 'program') {
   } catch (e) {
     if (current !== generation) return
     error.value = errorMessage(e)
-    data.value = undefined
+    // Keep the last successful report visible with an explicit refresh error.
   } finally {
     if (current === generation) loading.value = false
   }
@@ -106,7 +128,6 @@ onMounted(() => load())
   <div class="container page analytics-page">
     <header class="work-heading">
       <div>
-        <p class="overline">{{ l('Understand the work', 'فهم العمل') }}</p>
         <h1>
           {{
             view === 'admin'
@@ -117,201 +138,263 @@ onMounted(() => load())
         <p>
           {{
             view === 'admin'
-              ? l(
-                  'Find gaps in delivery and see how your organization participates.',
-                  'تعرّف على فجوات التدريب ومشاركة مؤسستك.',
-                )
+              ? l('Participation, delivery and team capacity.', 'المشاركة والتدريب وقدرة الفريق.')
               : l(
-                  'See participation and follow-up for the people you coach.',
-                  'تابع مشاركة من تدربهم وما يحتاج المتابعة.',
+                  'Training activity and the people who need your attention.',
+                  'النشاط التدريبي والأشخاص الذين يحتاجون متابعتك.',
                 )
           }}
         </p>
       </div>
+      <label class="period-picker"
+        ><span class="sr-only">{{ l('Reporting period', 'فترة التقرير') }}</span
+        ><select v-model="period" @change="setPeriod">
+          <option value="7">{{ l('Last 7 days', 'آخر 7 أيام') }}</option>
+          <option value="28">{{ l('Last 28 days', 'آخر 28 يوماً') }}</option>
+          <option value="90">{{ l('Last 90 days', 'آخر 90 يوماً') }}</option>
+          <option value="custom">{{ l('Custom dates', 'تواريخ مخصصة') }}</option>
+        </select></label
+      >
     </header>
-    <details class="analytics-person-filter">
-      <summary>{{ l('Focus on one trainee', 'التركيز على متدرب واحد') }}</summary>
-      <form class="analytics-filters" @submit.prevent="load()">
-        <label
-          >{{ l('Find a trainee', 'البحث عن متدرب')
-          }}<input type="search" v-model="search" maxlength="100"
-        /></label>
-        <button class="button secondary" :disabled="loading">{{ l('Find', 'بحث') }}</button>
-        <label
-          >{{ l('Trainee', 'المتدرب')
-          }}<select v-model="selected" @change="load()">
-            <option value="">{{ l('Everyone in this scope', 'الجميع في هذا النطاق') }}</option>
-            <option v-for="person in data?.people || []" :key="person.id" :value="person.id">
-              {{ person.name }}
-            </option>
-          </select></label
-        >
-      </form>
-      <p class="small-print">
+    <div class="analytics-toolbar">
+      <p class="report-scope">
         {{
-          l(
-            'Up to 25 matching people. Search by name to narrow the list. Trainer workload always describes the whole organization.',
-            'حتى 25 شخصاً مطابقاً. ابحث بالاسم لتقليل النتائج. حجم عمل المدربين يصف المؤسسة كاملة دائماً.',
-          )
-        }}
+          view === 'admin'
+            ? l('Organization overview', 'نظرة عامة على المؤسسة')
+            : l('Your current roster', 'قائمتك الحالية')
+        }}<span v-if="data">
+          · {{ data.window.from }} – {{ data.window.to }} · {{ data.window.zone }}</span
+        >
       </p>
-    </details>
-    <form class="analytics-filters" @submit.prevent="load()">
+      <details class="analytics-person-filter">
+        <summary>{{ selectedPerson?.name || l('Filter by trainee', 'تصفية حسب المتدرب') }}</summary>
+        <div class="person-filter-panel">
+          <form @submit.prevent="load()">
+            <label
+              >{{ l('Find a trainee', 'البحث عن متدرب')
+              }}<input type="search" v-model="search" maxlength="100" /></label
+            ><button class="button small secondary" :disabled="loading">
+              {{ l('Find', 'بحث') }}
+            </button>
+          </form>
+          <label
+            >{{ l('Trainee', 'المتدرب')
+            }}<select v-model="selected" @change="selectPerson">
+              <option value="">{{ l('Everyone in this scope', 'الجميع في هذا النطاق') }}</option>
+              <option v-for="person in people" :key="person.id" :value="person.id">
+                {{ person.name }}
+              </option>
+            </select></label
+          >
+          <p class="small-print">
+            {{
+              l(
+                'Search the full roster; up to 25 matching people are shown.',
+                'ابحث في القائمة الكاملة؛ يعرض حتى 25 شخصاً مطابقاً.',
+              )
+            }}
+          </p>
+        </div>
+      </details>
+    </div>
+    <form v-if="period === 'custom'" class="analytics-filters" @submit.prevent="load()">
       <label>{{ l('From', 'من') }}<input type="date" v-model="from" :max="to" required /></label
       ><label
         >{{ l('Through', 'حتى') }}<input type="date" v-model="to" :min="from" required /></label
-      ><button class="button secondary" :disabled="loading">
+      ><button class="button small secondary" :disabled="loading">
         {{ l('Update view', 'تحديث العرض') }}
       </button>
     </form>
-    <PageState :loading="loading" :error="error" @retry="load()">
+    <p v-if="loading && data" class="small-print" role="status">
+      {{ l('Updating report…', 'جارٍ تحديث التقرير…') }}
+    </p>
+    <div v-if="error && data" class="notice error" role="alert">
+      {{ error }} {{ l('Showing the last successful report.', 'نعرض آخر تقرير ناجح.') }}
+      <button class="text-link" @click="load()">{{ l('Try again', 'حاول مجدداً') }}</button>
+    </div>
+    <PageState :loading="loading && !data" :error="!data ? error : ''" @retry="load()">
       <template v-if="data">
-        <p class="small-print">
-          {{ data.window.from }} — {{ data.window.to }} · {{ data.window.zone }}.
-          {{
-            l(
-              'Each completion is counted once. Corrections do not add another session.',
-              'تحتسب كل حصة مرة واحدة؛ التصحيحات لا تضيف حصة أخرى.',
-            )
-          }}
-        </p>
         <div class="analytics-numbers">
-          <RouterLink :to="base + '/people'" v-if="workspace"
+          <RouterLink :to="base + (workspace ? '/people' : '/clients')"
+            ><span>{{
+              workspace
+                ? l('Active trainees now', 'المتدربون النشطون الآن')
+                : l('Active clients now', 'المتدربون النشطون الآن')
+            }}</span
             ><strong>{{ data.summary.active }}</strong
-            ><span>{{ l('Active trainees now', 'المتدربون النشطون الآن') }}</span></RouterLink
-          >
-          <RouterLink :to="base + '/clients'" v-else
-            ><strong>{{ data.summary.active }}</strong
-            ><span>{{ l('Active clients now', 'المتدربون النشطون الآن') }}</span></RouterLink
+            ><small>{{ l('View roster', 'عرض القائمة') }} ↗</small></RouterLink
           >
           <RouterLink :to="base + (workspace ? '/training' : '/clients')"
+            ><span>{{ l('Completed sessions', 'الحصص المكتملة') }}</span
             ><strong>{{ data.summary.completed }}</strong
-            ><span>{{ l('Completed sessions', 'الحصص المكتملة') }}</span></RouterLink
+            ><small>{{ l('In this period', 'خلال الفترة') }}</small></RouterLink
           >
           <div>
-            <strong dir="ltr"
+            <span>{{ l('Current trainees who trained', 'متدربون حاليون تدربوا') }}</span
+            ><strong dir="ltr"
               >{{ data.summary.participating }}<small> / {{ data.summary.active }}</small></strong
-            ><span>{{ l('Current trainees who trained', 'متدربون حاليون تدربوا') }}</span>
+            ><small>{{ l('From the active roster', 'من القائمة النشطة') }}</small>
           </div>
           <RouterLink :to="base + (workspace ? '/training' : '/clients')"
+            ><span>{{ l('Session reviews outstanding', 'حصص بانتظار المراجعة') }}</span
             ><strong>{{ data.summary.pending_review }}</strong
-            ><span>{{ l('Session reviews outstanding', 'حصص بانتظار المراجعة') }}</span></RouterLink
+            ><small>{{ l('Review training', 'مراجعة التدريب') }} ↗</small></RouterLink
           >
         </div>
-        <section
-          class="analytics-attention"
-          v-if="data.summary.without_program || data.summary.unassigned"
-        >
-          <h2>{{ l('Where to follow up', 'ما يحتاج المتابعة') }}</h2>
-          <RouterLink v-if="data.summary.unassigned" :to="base + '/people'" class="text-link"
-            >{{ data.summary.unassigned }}
-            {{
-              l('trainees need a responsible trainer', 'متدربين يحتاجون مدرباً مسؤولاً')
-            }}</RouterLink
-          ><RouterLink
-            v-if="data.summary.without_program"
-            :to="base + (workspace ? '/training' : '/clients')"
-            class="text-link"
-            >{{ data.summary.without_program }}
-            {{
-              l('active trainees have no current program', 'متدربين نشطين بلا برنامج حالي')
-            }}</RouterLink
+        <TabsRoot default-value="activity" class="analytics-sections">
+          <TabsList class="report-tabs" :aria-label="l('Analytics views', 'عروض التحليلات')"
+            ><TabsTrigger value="activity">{{
+              l('Training activity', 'النشاط التدريبي')
+            }}</TabsTrigger
+            ><TabsTrigger value="delivery">{{
+              workspace
+                ? l('Delivery & capacity', 'التدريب وقدرة الفريق')
+                : l('Follow-up', 'المتابعة')
+            }}</TabsTrigger></TabsList
           >
-        </section>
-        <div class="analytics-charts">
-          <MetricChart
-            class="wide-chart"
-            :title="l('Training over time', 'التدريب عبر الوقت')"
-            :description="
-              l(
-                'Completed sessions in the selected period, including retained history. Participation above uses the current active roster; it is not an adherence score.',
-                'الحصص المكتملة في الفترة، بما فيها السجل المحفوظ. المشاركة أعلاه تخص القائمة النشطة الحالية وليست درجة التزام.',
-              )
-            "
-            :items="trend"
-            timeline
-          />
-          <MetricChart
-            :title="l('Attendance', 'الحضور')"
-            :description="
-              l(
-                'Participant records for events that have started. Cancelled events are excluded; unrecorded attendance is not absence.',
-                'سجلات المشاركين للمواعيد التي بدأت. المواعيد الملغاة مستبعدة وعدم التسجيل لا يعني الغياب.',
-              )
-            "
-            :items="attendance"
-          />
-          <div v-if="view === 'admin'" class="chart-page">
+          <TabsContent value="activity" class="analytics-charts" tabindex="0">
             <MetricChart
-              :title="l('Trainer responsibility', 'مسؤولية المدربين')"
+              counts
+              :title="l('Training over time', 'التدريب عبر الوقت')"
               :description="
                 l(
-                  'Current active trainees by responsible trainer. This shows workload, not trainer quality.',
-                  'المتدربون النشطون حالياً لكل مدرب مسؤول. هذا حجم العمل وليس جودة المدرب.',
+                  'Completed sessions per day. Each completion is counted once.',
+                  'الحصص المكتملة يومياً. تحتسب كل حصة مرة واحدة.',
                 )
               "
-              :items="data.workload.map((x) => ({ ...x, href: base + '/people' }))"
-            /><button
-              v-if="data.workloadNext != null"
-              :disabled="loading"
-              class="text-link"
-              @click="load('workload')"
-            >
-              {{ l('Load more trainers', 'تحميل المزيد من المدربين') }}
-            </button>
-          </div>
-          <div v-if="workspace" class="chart-page">
+              :items="trend"
+              :unit="l('sessions', 'حصة')"
+              timeline
+            />
             <MetricChart
-              :title="l('Programs in use', 'البرامج المستخدمة')"
+              counts
+              :title="l('Attendance', 'الحضور')"
               :description="
                 l(
-                  'Current active assignments by program version title. Historical assignments are excluded.',
-                  'التعيينات النشطة الحالية حسب عنوان نسخة البرنامج؛ التعيينات السابقة مستبعدة.',
+                  'Events that have started. Not recorded does not mean absent.',
+                  'المواعيد التي بدأت. عدم التسجيل لا يعني الغياب.',
                 )
               "
-              :items="data.programs.map((x) => ({ ...x, href: base + '/training' }))"
-            /><button
-              v-if="data.programNext != null"
-              :disabled="loading"
-              class="text-link"
-              @click="load('program')"
+              :items="attendance"
+              donut
+            />
+          </TabsContent>
+          <TabsContent value="delivery" class="delivery-section" tabindex="0">
+            <section
+              class="analytics-attention"
+              v-if="data.summary.without_program || data.summary.unassigned"
             >
-              {{ l('Load more programs', 'تحميل المزيد من البرامج') }}
-            </button>
-          </div>
-          <section v-else class="metric-chart checkin-summary">
-            <h2>{{ l('Check-in response', 'الرد على المتابعات') }}</h2>
-            <p class="response-number" dir="ltr">
-              {{ data.summary.submitted }} / {{ data.summary.requests }}
-            </p>
-            <p>
-              {{
-                l(
-                  'Submitted out of non-cancelled requests due in the selected period. Late submissions count; drafts do not.',
-                  'الردود المقدمة من الطلبات غير الملغاة المستحقة في الفترة. تحتسب الردود المتأخرة ولا تحتسب المسودات.',
-                )
-              }}
-            </p>
-            <RouterLink :to="base + '/checkins'" class="text-link">{{
-              l('Open check-ins', 'فتح المتابعات')
-            }}</RouterLink>
-          </section>
-        </div>
+              <h2>{{ l('Where to follow up', 'ما يحتاج المتابعة') }}</h2>
+              <RouterLink v-if="data.summary.unassigned" :to="base + '/people'" class="text-link"
+                >{{ data.summary.unassigned }}
+                {{ l('trainees need a responsible trainer', 'متدربين يحتاجون مدرباً مسؤولاً') }}
+                ↗</RouterLink
+              ><RouterLink
+                v-if="data.summary.without_program"
+                :to="base + (workspace ? '/training' : '/clients')"
+                class="text-link"
+                >{{ data.summary.without_program }}
+                {{ l('active trainees have no current program', 'متدربين نشطين بلا برنامج حالي') }}
+                ↗</RouterLink
+              >
+            </section>
+            <div class="analytics-charts">
+              <div v-if="view === 'admin'" class="chart-page">
+                <MetricChart
+                  counts
+                  :title="l('Trainer responsibility', 'مسؤولية المدربين')"
+                  :description="
+                    l(
+                      'Current active trainees per trainer, across the organization. This is workload, not quality.',
+                      'المتدربون النشطون لكل مدرب في المؤسسة كاملة. هذا حجم العمل وليس الجودة.',
+                    )
+                  "
+                  :items="data.workload.map((x) => ({ ...x, href: base + '/people' }))"
+                /><button
+                  v-if="data.workloadNext != null"
+                  :disabled="loading"
+                  class="text-link"
+                  @click="load('workload')"
+                >
+                  {{ l('Load more trainers', 'تحميل المزيد من المدربين') }}
+                </button>
+              </div>
+              <div v-if="workspace" class="chart-page">
+                <MetricChart
+                  counts
+                  :title="l('Programs in use', 'البرامج المستخدمة')"
+                  :description="
+                    l(
+                      'Current active assignments by published program.',
+                      'التعيينات النشطة الحالية حسب البرنامج المنشور.',
+                    )
+                  "
+                  :items="data.programs.map((x) => ({ ...x, href: base + '/training' }))"
+                /><button
+                  v-if="data.programNext != null"
+                  :disabled="loading"
+                  class="text-link"
+                  @click="load('program')"
+                >
+                  {{ l('Load more programs', 'تحميل المزيد من البرامج') }}
+                </button>
+              </div>
+              <template v-else
+                ><MetricChart
+                  counts
+                  :title="l('Check-in response', 'الرد على المتابعات')"
+                  :description="
+                    l(
+                      'Requests due in this period. Late submissions count; cancelled requests do not.',
+                      'الطلبات المستحقة في الفترة. تحتسب الردود المتأخرة وتستبعد الطلبات الملغاة.',
+                    )
+                  "
+                  :items="
+                    data.summary.requests
+                      ? [
+                          { label: l('Submitted', 'تم التقديم'), value: data.summary.submitted },
+                          {
+                            label: l('Awaiting response', 'بانتظار الرد'),
+                            value: Math.max(0, data.summary.requests - data.summary.submitted),
+                          },
+                        ]
+                      : []
+                  "
+                  donut
+                />
+                <div class="report-next">
+                  <h2>{{ l('Turn insight into follow-up', 'حوّل المعرفة إلى متابعة') }}</h2>
+                  <p>
+                    {{
+                      l(
+                        'Read responses, review completed work, and reply in context.',
+                        'اقرأ الردود وراجع الحصص المكتملة وردّ في سياقها.',
+                      )
+                    }}
+                  </p>
+                  <RouterLink :to="base + '/checkins'" class="button secondary">{{
+                    l('Open check-ins', 'فتح المتابعات')
+                  }}</RouterLink>
+                </div></template
+              >
+            </div>
+          </TabsContent>
+        </TabsRoot>
         <details class="analytics-method">
           <summary>{{ l('How to read these numbers', 'كيفية قراءة الأرقام') }}</summary>
           <p>
             {{
               l(
-                'The date window uses your account timezone. Organization trainer reports use current responsibility; administrators see the organization. Reassigning a trainee changes the trainer’s scope, not the organization’s history. Archived memberships remain in authorized history.',
-                'تستخدم الفترة المنطقة الزمنية لحسابك. تقارير المدرب بحسب مسؤوليته الحالية، والمسؤول يرى المؤسسة. إعادة تعيين المتدرب تغيّر نطاق المدرب ولا تغيّر تاريخ المؤسسة. تبقى العضويات المؤرشفة ضمن السجل المصرح.',
+                'The date window uses your account timezone. Participation uses the active roster; completed sessions include retained history. Corrections do not count as new sessions. Cancelled events are excluded from attendance.',
+                'تستخدم الفترة توقيت حسابك. المشاركة للقائمة النشطة والحصص المكتملة تشمل السجل المحفوظ. التصحيحات لا تضيف حصصاً جديدة والمواعيد الملغاة مستبعدة من الحضور.',
               )
             }}
           </p>
           <p>
             {{
               l(
-                'These are operational counts, not health outcomes, retention rates, or revenue. A sparse chart means limited evidence. Open Training or Clients to review the underlying work.',
-                'هذه أعداد تشغيلية وليست نتائج صحية أو نسب احتفاظ أو إيرادات. قلة البيانات تعني أدلة محدودة. افتح التدريب أو المتدربين لمراجعة العمل الأصلي.',
+                'Trainer reports use current responsibility. Admins see their organization, including history preserved after reassignment. Workload always covers the whole organization, regardless of trainee filter. These counts are not adherence, health, retention or revenue scores.',
+                'تقارير المدرب بحسب مسؤوليته الحالية والمسؤول يرى مؤسسته وسجلها المحفوظ بعد إعادة التعيين. حجم عمل المدربين يشمل المؤسسة كاملة بغض النظر عن مرشح المتدرب. هذه ليست درجات التزام أو صحة أو احتفاظ أو إيرادات.',
               )
             }}
           </p>
@@ -321,117 +404,215 @@ onMounted(() => load())
   </div>
 </template>
 <style scoped>
-.chart-page {
-  min-width: 0;
-  display: grid;
-  gap: 12px;
-  align-content: start;
-}
-.chart-page > button {
-  justify-self: start;
-}
 .analytics-page {
-  max-width: 1180px;
+  max-width: 1440px;
+}
+.work-heading {
+  margin-bottom: 16px;
+}
+.period-picker {
+  margin: 0;
+  flex-shrink: 0;
+}
+.period-picker select {
+  margin: 0;
+  min-width: 160px;
+}
+.analytics-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.report-scope {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+.report-scope span {
+  color: var(--muted);
+  font-weight: 400;
+}
+.analytics-person-filter {
+  position: relative;
+  font-size: 0.8rem;
+}
+.analytics-person-filter summary {
+  cursor: pointer;
+  color: var(--accent);
+  padding: 8px 0;
+}
+.person-filter-panel {
+  position: absolute;
+  z-index: 15;
+  inset-inline-end: 0;
+  top: 100%;
+  width: min(340px, calc(100vw - 48px));
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+.person-filter-panel form {
+  display: flex;
+  gap: 8px;
+  align-items: end;
+  margin-bottom: 12px;
+}
+.person-filter-panel label {
+  flex: 1;
+  min-width: 0;
 }
 .analytics-filters {
   display: flex;
+  gap: 12px;
   align-items: end;
+  margin-top: 16px;
   flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 24px;
 }
 .analytics-filters label {
-  flex: 1;
-  max-width: 240px;
+  max-width: 200px;
   min-width: 0;
 }
 .analytics-numbers {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin-block: 24px 32px;
-  border-block: 1px solid var(--line);
+  gap: 14px;
+  margin: 20px 0 24px;
 }
-.analytics-numbers > a,
-.analytics-numbers > div {
-  padding: 24px 12px;
+.analytics-numbers > * {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   min-width: 0;
 }
+.analytics-numbers > a:hover {
+  border-color: var(--accent);
+}
+.analytics-numbers span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
 .analytics-numbers strong {
-  font-size: 2.3rem;
+  font-size: 2rem;
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
 }
 .analytics-numbers small {
-  font-size: 1rem;
+  font-size: 0.75rem;
   color: var(--muted);
+  font-weight: 400;
 }
-.analytics-numbers span {
-  font-size: 0.85rem;
+.analytics-numbers strong small {
+  font-size: 1.1rem;
+}
+.report-tabs {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 20px;
+}
+.report-tabs button {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
   color: var(--muted);
+  padding: 12px 0;
+  font-size: 0.85rem;
+}
+.report-tabs button[data-state='active'] {
+  color: var(--accent);
+  border-color: var(--accent);
+  font-weight: 750;
 }
 .analytics-charts {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px 40px;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: stretch;
 }
-.wide-chart {
-  grid-column: 1/-1;
+.analytics-charts[data-state='inactive'] {
+  display: none;
+}
+.chart-page {
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+}
+.chart-page > button {
+  justify-self: start;
 }
 .analytics-attention {
-  padding: 20px;
-  border-inline-start: 3px solid var(--accent);
-  background: var(--surface);
-  margin-bottom: 24px;
-  display: grid;
-  gap: 10px;
+  background: var(--tint);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  align-items: center;
+  font-size: 0.85rem;
 }
-.analytics-attention h2,
-.checkin-summary h2 {
-  font-size: 1.05rem;
-}
-.checkin-summary {
-  border-top: 1px solid var(--line);
-  padding-block: 24px;
-}
-.response-number {
-  font-size: 2rem;
+.analytics-attention h2 {
+  font-size: 0.9rem;
+  margin: 0;
 }
 .analytics-method {
-  border-top: 1px solid var(--line);
-  padding-top: 24px;
-  margin-top: 24px;
+  padding-block: 18px;
+  color: var(--muted);
+  font-size: 0.78rem;
 }
-@media (max-width: 650px) {
-  .analytics-filters {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .analytics-filters label {
-    max-width: none;
-  }
-  .analytics-filters button {
-    grid-column: 1/-1;
-  }
+.analytics-method summary {
+  cursor: pointer;
+}
+.analytics-method p {
+  max-width: 100ch;
+  line-height: 1.7;
+}
+.report-next {
+  padding: 24px;
+}
+.report-next h2 {
+  font-size: 1.15rem;
+}
+@media (max-width: 1100px) {
   .analytics-charts {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+@media (max-width: 650px) {
   .analytics-numbers {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .analytics-numbers > * {
+    padding: 14px;
   }
   .analytics-numbers strong {
-    font-size: 1.8rem;
+    font-size: 1.7rem;
   }
-}
-@media (max-width: 380px) {
   .analytics-filters {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
   }
   .analytics-filters label {
     max-width: none;
+  }
+  .report-scope span {
+    display: block;
+    margin-top: 6px;
+  }
+  .person-filter-panel {
+    inset-inline-start: 0;
+    inset-inline-end: auto;
   }
 }
 </style>

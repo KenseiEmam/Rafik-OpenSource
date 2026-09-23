@@ -1,5 +1,13 @@
 # Rafik web change history
 
+## R13 — Staff dashboard and control quality · 23 September 2026
+
+- Persistent coach/organization sidebar, compact task headings, mobile navigation drawer and bounded desktop workspace/collection scrolling.
+- Unovis analytics with axes, tooltips, integer count ticks, keyboard/table equivalents, category pages, clear activity/delivery tabs and retained reports during refresh failure.
+- Shared searchable Reka timezone picker on all five editing/viewing surfaces, full IANA catalog, UTC, persisted aliases, current offsets and common city-name aliases.
+- Stale calendar-response guard, selected-filter retention, repaired undefined semantic colors, coherent Help/navigation documentation and durable quality rules. ADR0009 documents the dependency/scrolling decisions.
+- Final serial acceptance passed all 26 gates: 76 browser journeys, 1,120 rendered states, 14 web units and all backend/build/maintenance checks. The R13 audit records discovered/fixed integration defects and local evidence limits.
+
 ## R12 — Connected entry and product refinement · 23 September 2026
 
 - Coach/organization public entry, preserved immediate workout, grouped sample roles and role-specific Help; workspace intent retained through sign-in.
@@ -22,7 +30,6 @@ Organization channels with visible membership, compact responsive list/detail, d
 
 Added organization groups, assessment templates, reviewed recurring scheduling, explicit assessors, cross-context booking conflict checks, per-trainee attendance/results and retained corrections. Added distinct independent coach, organization trainer and administrator analytics with date/trainee filters, source links, chart tables and explicit definitions. Focused result editing, device drafts and exact interrupted-command retry preserve work. Consolidated secondary organization navigation. Added fixture, HTTP, browser and responsive acceptance coverage plus maintained API/source/operations documentation. External reminders follow in R10.
 
-
 ## R8 — Scoped programming and reviewed delivery · 23 September 2026
 
 Added organization-owned exercise/program catalogs, immutable publication, private optional covers, reviewed atomic assignments, trainee training/history and coach review. Shared independent/organization editing supports session/week reuse, scoped draft/retry recovery and individual adaptation without changing other recipients or started work. Preserved one workout persistence queue. Added source/lifecycle documentation and HTTP, unit and browser regression coverage. R9 organization services and analytics remain subsequent work.
@@ -31,11 +38,9 @@ Added organization-owned exercise/program catalogs, immutable publication, priva
 
 Added separate organizations, combined admin/trainer/trainee memberships, verified invitations, internal trainer responsibility, role-derived navigation and explicit independent-practice activation. Membership revision checks, exact receipts, last-admin protection, departure/closure and account deletion preserve scope and ownership. Recoverable setup/invitation drafts and shared truthful sending/retry states support the UI. Added isolated HTTP/browser regression coverage and maintained contracts/source-map documentation. Organization programs/history/services follow in R8/R9; this checkpoint is not the whole organization product.
 
-
 ## R7A1 — Prisma/PostgreSQL API transition · 23 September 2026
 
 Replaced the Supabase browser SDK with the owned HTTP API for identity, commands, reads and private files. Cookie sessions replace JavaScript-held access tokens. Preserved durable drafts/retries and fixed confirmed-rejection handling. Updated actual browser/fixture/layout tests and engineering docs; 54 browser journeys pass across both engines. Organization ownership follows in R7A2.
-
 
 ## Original-role audit and corrected architecture order · 23 September 2026
 
@@ -44,14 +49,12 @@ Replaced the Supabase browser SDK with the owned HTTP API for identity, commands
 - Added ADR 0005 and R7A ahead of R8: scoped organization ownership and the Prisma/PostgreSQL API transition, with role-specific navigation and acceptance. Coach/admin analytics now depend on this foundation. These are documented decisions, not implemented organizational features.
 - Set aside unshipped personal-only R8 delivery drafts; no draft migration was applied. Added durable requirements-tracing rules and updated engineering entry points.
 
-
 ## R7 — Daily workspace
 
 - Compact four-destination phone navigation and explicit workspace switching; full tools remain discoverable through More and desktop navigation.
 - Unified named coach attention queue with filters, next-review return, Today-first client schedule and focused reads.
 - Server-paginated roster search, URL-backed filters/client tabs, extracted workspace styles and removed obsolete navigation CSS.
 - Added disposable-fixture browser checks for attention, mobile navigation, RTL and nested layout; backend contract and maintained documentation explain boundaries.
-
 
 ## R6 — Responsive maintenance and local release hardening · 23 September 2026
 
@@ -63,7 +66,6 @@ Replaced the Supabase browser SDK with the owned HTTP API for identity, commands
 - Fixed the SQL launcher to drain piped output before exiting, retaining all assertion/rollback evidence.
 - Added a guarded, serial local release verification command with per-step reports/logs and explicit unverified release boundaries. No migration, reset, deployment, external provider, native change or push.
 
-
 ## R5 — 23 September 2026
 
 - Reorganized engineering handoff around a docs index, CONTRIBUTING/definition of done, ADRs, API conventions and release gates; added local documentation-link checks and durable rules in both AGENTS files.
@@ -71,7 +73,6 @@ Replaced the Supabase browser SDK with the owned HTTP API for identity, commands
 - Improved Today task priority, searched/bounded check-in/template/plan/review collections, direct post-assignment navigation, nutrition/resource empty states and team-invitation shell.
 - Added frozen coach-approved exercise alternatives and actual client choices, using existing durable workout commands, plus correct review/previous-performance/progress and independently owned shared-plan/handoff copies. Additive migration 009; no data reset or new service.
 - Added rollback and real-browser quality regressions; see the companion verification record for actual final results and limitations. Hosting, external providers and native work remain deferred.
-
 
 Update this file whenever further implementation changes land. Keep the companion backend ledger, architecture and verification records consistent. This is implemented change history, not the remaining-product backlog.
 

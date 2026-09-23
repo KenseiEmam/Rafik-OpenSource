@@ -222,7 +222,7 @@ onUnmounted(() => {
   align-items: center;
   gap: 8px;
   padding: 4px 10px;
-  background: var(--soft);
+  background: var(--surface-soft);
   border: 1px solid var(--line);
   border-radius: 8px;
   max-width: 100%;
