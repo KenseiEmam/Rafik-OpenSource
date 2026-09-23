@@ -36,6 +36,10 @@ export async function layoutIssues(page: Page) {
         }
       }
     }
+    const layout = document.querySelector('.conversation-layout')?.getBoundingClientRect()
+    const footer = document.querySelector('.footer')?.getBoundingClientRect()
+    if (layout && footer && layout.bottom > footer.top + 2)
+      issues.push('conversation overlaps footer')
     return [...new Set(issues)]
   })
 }
