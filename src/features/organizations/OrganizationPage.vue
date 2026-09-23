@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, nextTick, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { user, refreshContexts, contexts } from '../../app/auth'
 import { request } from '../../lib/backend'
@@ -19,6 +19,8 @@ const route = useRoute(),
   view = String(route.params.view) as Role,
   base = `/organization/${id}/${view}`,
   section = computed(() => String(route.params.section || 'overview'))
+const peopleLoading = ref(false),
+  extraLoading = ref(false)
 const nextPeople = ref<number | null>(null),
   peopleTotal = ref(0)
 const data = ref<Organization>(),
@@ -26,7 +28,6 @@ const data = ref<Organization>(),
   error = ref(''),
   search = ref(''),
   filter = ref(String(route.query.filter || 'all')),
-  limit = ref(20),
   selected = ref<Member>(),
   editRoles = ref<Role[]>([]),
   active = ref(true),
@@ -89,7 +90,8 @@ async function load() {
   }
 }
 async function loadExtra(kind: 'invitations' | 'events') {
-  if (!data.value) return
+  if (!data.value || extraLoading.value) return
+  extraLoading.value = true
   try {
     const result = await request<Organization>(
       `/v1/workspaces/${id}?view=${view}&summary=true&${kind === 'events' ? 'eventOffset' : 'invitationOffset'}=${kind === 'events' ? data.value.eventsNext : data.value.invitationsNext}`,
@@ -103,12 +105,15 @@ async function loadExtra(kind: 'invitations' | 'events') {
     }
   } catch (e) {
     error.value = errorMessage(e)
+  } finally {
+    extraLoading.value = false
   }
 }
 let rosterGeneration = 0,
   rosterTimer: ReturnType<typeof setTimeout>
 async function loadPeople(append = false) {
   const current = ++rosterGeneration
+  peopleLoading.value = true
   try {
     const q = new URLSearchParams({
       view,
@@ -131,10 +136,18 @@ async function loadPeople(append = false) {
     nextPeople.value = page.next
     peopleTotal.value = page.total
   } catch (e) {
-    error.value = errorMessage(e)
+    if (current === rosterGeneration) error.value = errorMessage(e)
+  } finally {
+    if (current === rosterGeneration) peopleLoading.value = false
   }
 }
+onUnmounted(() => {
+  clearTimeout(rosterTimer)
+  rosterGeneration++
+})
 watch([search, filter], () => {
+  rosterGeneration++
+  peopleLoading.value = true
   clearTimeout(rosterTimer)
   rosterTimer = setTimeout(() => void loadPeople(), 180)
 })
@@ -384,10 +397,10 @@ onMounted(async () => {
           <div class="organization-toolbar">
             <label
               >{{ l('Find a person', 'البحث عن شخص')
-              }}<input type="search" v-model="search" @input="limit = 20" /></label
+              }}<input type="search" v-model="search" /></label
             ><label
               >{{ l('Show people', 'عرض الأشخاص')
-              }}<select v-model="filter" @change="limit = 20">
+              }}<select v-model="filter">
                 <option value="all">{{ l('Active people', 'الأشخاص النشطون') }}</option>
                 <option
                   v-for="role in ['admin', 'trainer', 'trainee'] as Role[]"
@@ -403,7 +416,10 @@ onMounted(async () => {
           <div class="organization-people">
             <section>
               <p class="muted">{{ peopleTotal }} {{ l('people', 'أشخاص') }}</p>
-              <p v-if="!visible.length" class="empty-state">
+              <p v-if="peopleLoading" class="small-print" role="status">
+                {{ l('Finding people…', 'جارٍ البحث عن الأشخاص…') }}
+              </p>
+              <p v-if="!visible.length && !peopleLoading" class="empty-state">
                 {{ l('No people match this view.', 'لا أشخاص يطابقون هذا العرض.') }}
               </p>
               <article v-for="member in visible" :key="member.id" class="organization-person">
@@ -420,6 +436,7 @@ onMounted(async () => {
                 <button
                   v-if="view === 'admin'"
                   class="button small secondary"
+                  :disabled="peopleLoading"
                   @click="select(member)"
                   :data-member="member.id"
                   :aria-label="l('Manage ', 'إدارة ') + member.name"
@@ -427,7 +444,12 @@ onMounted(async () => {
                   {{ l('Manage', 'إدارة') }}
                 </button>
               </article>
-              <button v-if="nextPeople !== null" class="button secondary" @click="loadPeople(true)">
+              <button
+                v-if="nextPeople !== null"
+                class="button secondary"
+                :disabled="peopleLoading"
+                @click="loadPeople(true)"
+              >
                 {{ l('Show more people', 'عرض المزيد') }}
               </button>
             </section>
@@ -537,6 +559,7 @@ onMounted(async () => {
               v-if="data.invitationsNext !== null"
               type="button"
               class="text-link"
+              :disabled="extraLoading"
               @click="loadExtra('invitations')"
             >
               {{ l('More pending invitations', 'المزيد من الدعوات المعلقة') }}
@@ -586,6 +609,7 @@ onMounted(async () => {
             v-if="data.eventsNext !== null"
             type="button"
             class="text-link"
+            :disabled="extraLoading"
             @click="loadExtra('events')"
           >
             {{ l('Earlier activity', 'نشاط أقدم') }}

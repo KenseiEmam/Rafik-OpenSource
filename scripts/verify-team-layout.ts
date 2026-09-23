@@ -97,13 +97,21 @@ try {
           )
           await f.login(page, 'client' in r && r.client ? f.client : f.owner, r.path)
           await page.locator('main h1').waitFor()
+          await page.locator('.loading-state').waitFor({ state: 'hidden' })
+          await page.waitForLoadState('networkidle')
           if ('tab' in r) {
             await page
               .locator('.workspace-tabs button')
               .nth(['Clients', 'Staff', 'Groups', 'Shared library', 'Activity'].indexOf(r.tab))
               .click()
           }
-          if (r.name === 'team-2') await page.locator('select').first().selectOption(group)
+          if (r.name === 'team-2')
+            await page
+              .getByRole('combobox', {
+                name: lang === 'en' ? 'Selected group' : 'المجموعة المحددة',
+                exact: true,
+              })
+              .selectOption(group)
           if (r.name === 'business') await page.locator('details summary').click()
           if (r.name.startsWith('support'))
             await page.locator('.support-list button').first().click()

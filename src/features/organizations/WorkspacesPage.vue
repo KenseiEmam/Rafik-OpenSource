@@ -23,7 +23,7 @@ onMounted(async () => {
     if (draft) {
       kind.value = draft.kind
       name.value = draft.name
-      adding.value = !!draft.name
+      adding.value = !!route.query.start || !!draft.name
     }
   } catch {
     draftError.value = l('Could not restore your device draft.', 'تعذّر استعادة مسودة الجهاز.')

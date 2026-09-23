@@ -76,7 +76,12 @@ test('organization trainer can create a conversation with their assigned trainee
       trainer: coach.id,
     })
     await f.login(page, f.coach, `/organization/${id}/trainer/messages`)
+    await page.setViewportSize({ width: 320, height: 568 })
     await page.getByRole('button', { name: 'New conversation', exact: true }).click()
+    const editorSize = await page
+      .locator('.channel-editor')
+      .evaluate((el) => ({ scroll: el.scrollHeight, box: el.clientHeight }))
+    expect(editorSize.scroll).toBeLessThanOrEqual(editorSize.box + 2)
     await page.getByLabel('Conversation name', { exact: true }).fill('Weekly training questions')
     await page.getByRole('checkbox', { name: 'R4 Client', exact: true }).check()
     await page.getByRole('button', { name: 'Create conversation', exact: true }).click()
@@ -138,6 +143,14 @@ test('large member selection searches the full roster and keeps reviewed choices
     const picker = page.locator('.member-picker')
     await expect(picker.getByRole('checkbox')).toHaveCount(25)
     await picker.getByRole('checkbox', { name: people[0]!.name, exact: true }).check()
+    await picker.getByRole('button', { name: 'Load more people', exact: true }).click()
+    await expect(picker.getByRole('checkbox')).toHaveCount(50)
+    await picker.getByRole('checkbox', { name: people[49]!.name, exact: true }).check()
+    await expect(picker.locator('.chosen-members')).toContainText(people[49]!.name)
+    await expect(picker.getByRole('checkbox')).toHaveCount(50)
+    await expect(
+      picker.getByRole('checkbox', { name: people[49]!.name, exact: true }),
+    ).toBeChecked()
     await picker.getByRole('searchbox').fill('060')
     await picker.getByRole('button', { name: 'Search people', exact: true }).click()
     await picker.getByRole('checkbox', { name: people[60]!.name, exact: true }).check()

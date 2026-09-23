@@ -1,4 +1,4 @@
-import { testApi, testDatabase, testFiles } from './local-config'
+import { testApi, testDatabase, testFiles } from './local-config.ts'
 import { execFileSync } from 'node:child_process'
 import { readFileSync, unlinkSync } from 'node:fs'
 import { resolve } from 'node:path'
