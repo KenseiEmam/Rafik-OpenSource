@@ -74,3 +74,9 @@ Local preview includes **Rania Mansour** (Madar administrator), **Kareem Nasser*
 ## R8 local maintenance
 
 Apply forward migrations with `npm run db:migrate`, regenerate Prisma with `npm run db:generate`, then `npm run types`. `npm run test:programming` runs isolated organization delivery/history and private-cover HTTP checks. The content generator appends `prisma/fixtures/programming.sql` to the empty-database seed; do not reseed a populated preview. R8's Madar sample program was applied additively. Cover bytes share ignored `.local/files` with resources; metadata and immutable digest ownership are in `program_media`. R11 owns orphan-byte retention/cleanup; deleting a cover reference never deletes a historical publication.
+
+## Organization services
+
+Apply forward migrations 240/250 using the normal migration command, then regenerate Prisma/types. `npm run test:organization-services` creates/cleans isolated identities and verifies scope, immutable definitions, corrections, exact retries, collisions and DST. `prisma/fixtures/organization-services.sql` is included in the empty-only seed; its synthetic Madar examples were added without resetting the preview. Do not treat their counts as real adoption.
+
+For a stale result revision, reload the current participant result and deliberately reapply the correction; the prior device draft remains available. Do not delete result history to repair a current value. If a staff member leaves, an admin explicitly replaces event staff; scheduling does not silently recruit a new assessor.

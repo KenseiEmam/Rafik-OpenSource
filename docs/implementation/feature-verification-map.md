@@ -31,3 +31,13 @@ The broad matrix uses current synthetic preview records; isolated scenario tests
 ## Remaining boundaries
 
 No matrix establishes every possible record count, translation, device size, keyboard state or race. Phone-sized WebKit is not a physical iPhone. Physical keyboard/touch/suspension, assistive technology, hosted email/Storage/backup/CDN behavior, remote CI, actual notification/calendar/payment providers and human task success/retention remain separate gates. In-app Today activity is implemented; notification preferences and local delivery/outbox are not yet implemented. Marketplace/AI/rankings/native remain explicitly deferred decisions.
+
+## Organization services (R9)
+
+| User task | Evidence | Remaining evidence |
+|---|---|---|
+| Admin schedules a reviewed group assessment; designated assessor records separate trainee values and correction | `tests/organization-services.test.ts`, web `tests/organization-services.e2e.ts` | Physical keyboard/touch and unaided human task observation |
+| Trainer reassignment changes roster analytics/history access while an event-specific assessor grant stays narrow | HTTP reassignment/revocation/export assertions | Hosted environment acceptance |
+| Admin and independent/organization coach interpret real operational diagrams | Report filters/definitions, chart tables, browser role checks and 104-state service audit | Real workload scale/retention evidence, R11 pagination |
+
+Rendered chart label readability was checked after the automated matrix; see product quality review.

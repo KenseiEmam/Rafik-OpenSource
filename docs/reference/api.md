@@ -42,3 +42,13 @@ See [membership contract](../implementation/r7a2-contract.md). These Prisma-inte
 `GET /delivery` returns authorized recipients/assignments and 50 sessions (`before` is the verified session UUID cursor; `history=true` includes former trainees with retained history). `POST /delivery` atomically assigns a fixed version to 1–50 reviewed recipients with member and current-assignment revisions. Independent `deliver_plan` provides the equivalent command within independent relationships.
 
 `POST /sessions` starts/saves/reviews organization workouts; `/v1/organization-sessions/:id` and `/previous` supply authorized record/actual references. Publication/started snapshots and first completion time are retained. Current responsibility is checked before receipt replay. `PUT /v1/program-media/:id?workspace=:id` accepts at most 2 MiB PNG/JPEG/WebP; the authenticated GET rechecks publication/assignment/member access. `/v1/account/organizations` exports only the authenticated subject's organization records.
+
+## Organization services and analytics
+
+- `GET /v1/workspaces/:id/services?view=&kind=templates|groups&search=&offset=&archived=`: 25-row catalog. POST explicit `template`/`group` commands, stable operation UUID and revision. Groups contain at most 100 eligible trainee memberships; templates have 1–12 typed drills.
+- `POST /calendar-preview`: local timestamp, IANA zone, integer minutes/count/every; returns actual UTC intervals. `POST /calendar` supports create, one-occurrence reschedule, admin staff replacement, cancellation, attendance, result and finish. Creation is atomic for at most eight occurrences; selected recipients are fixed.
+- `GET /calendar?view=&from=&to=&zone=&offset=`: at most 31-day window, 50 rows. `id=` returns one authorized detail with latest 100 correction entries, explicitly labelled by the UI. Trainee projections hide other trainees.
+- `GET /analytics?view=&from=&to=&member=&search=` and `/v1/coach/analytics?from=&to=&client=&search=`: separate authorized reports, date window at most 366 days, 25 matching filter subjects. Workload remains organization-wide.
+- `GET /assessment-history?view=&member=&from=&to=&offset=`: 50 authorized results and subject name. Same-definition comparisons use immutable definition/template revision; absent/excused rows remain historical records but do not enter the performance line.
+
+All mutations validate current role/resource before exact receipt replay; revisions conflict explicitly. Date parameters are calendar dates in the viewer's profile timezone. No external scheduling/reminder provider is connected.

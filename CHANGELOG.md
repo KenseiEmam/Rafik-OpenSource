@@ -1,5 +1,10 @@
 # Rafik backend change history
 
+## R9 — Organization services and informative analytics · 23 September 2026
+
+Added organization groups, assessment templates, reviewed recurring scheduling, explicit assessors, cross-context booking conflict checks, per-trainee attendance/results and retained corrections. Added distinct independent coach, organization trainer and administrator analytics with date/trainee filters, source links, chart tables and explicit definitions. Focused result editing, device drafts and exact interrupted-command retry preserve work. Consolidated secondary organization navigation. Added fixture, HTTP, browser and responsive acceptance coverage plus maintained API/source/operations documentation. External reminders follow in R10.
+
+
 ## R8 — Scoped programming and reviewed delivery · 23 September 2026
 
 Added organization-owned exercise/program catalogs, immutable publication, private optional covers, reviewed atomic assignments, trainee training/history and coach review. Shared independent/organization editing supports session/week reuse, scoped draft/retry recovery and individual adaptation without changing other recipients or started work. Preserved one workout persistence queue. Added source/lifecycle documentation and HTTP, unit and browser regression coverage. R9 organization services and analytics remain subsequent work.

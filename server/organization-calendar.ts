@@ -1,0 +1,557 @@
+import { ApiError, type Actor } from "./db.ts";
+import {
+  scoped,
+  mutation,
+  event,
+  uuid,
+  textValue,
+  type Tx,
+  type Role,
+  access,
+} from "./workspaces.ts";
+import { role, recipient } from "./programming.ts";
+import {
+  definition,
+  assessmentValues,
+  ids,
+  calendarDate,
+  pageOffset,
+  type Drill,
+} from "./service-definitions.ts";
+import type { Prisma } from "./generated/prisma/client.ts";
+type Input = Record<string, unknown>;
+type Self = Awaited<ReturnType<typeof access>>;
+const json = (v: unknown) => v as Prisma.InputJsonValue;
+export async function eventAccess(
+  tx: Tx,
+  id: string,
+  self: Self,
+  view: Role,
+  key: string,
+) {
+  const item = await tx.organization_events.findUnique({
+    where: { id: uuid(key) },
+    include: {
+      organization_event_people: {
+        include: {
+          workspace_members: {
+            select: {
+              id: true,
+              name: true,
+              active: true,
+              roles: true,
+              user_id: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  if (
+    !item ||
+    item.workspace_id !== id ||
+    (view !== "admin" &&
+      !item.organization_event_people.some(
+        (p) =>
+          p.member_id === self.id &&
+          p.duty === (view === "trainer" ? "staff" : "trainee"),
+      ))
+  )
+    throw new ApiError(403, "event_unavailable");
+  return item;
+}
+export async function calendar(actor: Actor, id: string, q: URLSearchParams) {
+  const view = role(q.get("view"));
+  return scoped(actor, id, [view], async (tx, self) => {
+    if (q.get("id")) {
+      const item = await eventAccess(tx, id, self, view, q.get("id")!);
+      const people = item.organization_event_people.filter(
+        (p) =>
+          view !== "trainee" || p.duty === "staff" || p.member_id === self.id,
+      );
+      const where = {
+        event_id: item.id,
+        ...(view === "trainee" ? { member_id: self.id } : {}),
+      };
+      return {
+        event: { ...item, organization_event_people: undefined },
+        people: people.map((p) => ({
+          ...p,
+          workspace_members: undefined,
+          name: p.workspace_members.name,
+          active: p.workspace_members.active,
+          roles: p.workspace_members.roles,
+        })),
+        results: await tx.assessment_results.findMany({ where }),
+        history: await tx.assessment_result_history.findMany({
+          where,
+          orderBy: { recorded_at: "desc" },
+          take: 100,
+        }),
+      };
+    }
+    const from = calendarDate(q.get("from")),
+      to = calendarDate(q.get("to"));
+    if (to < from || Date.parse(to) - Date.parse(from) > 31 * 86400000)
+      throw new ApiError(400, "invalid_date");
+    const zone = String(q.get("zone") || "UTC");
+    const bounds = await tx.$queryRaw<
+      { start: Date; end: Date }[]
+    >`SELECT ${from}::date::timestamp AT TIME ZONE ${zone} AS start,(${to}::date+1)::timestamp AT TIME ZONE ${zone} AS end`;
+    const where = {
+      workspace_id: id,
+      starts_at: { lt: bounds[0].end },
+      ends_at: { gt: bounds[0].start },
+      ...(view !== "admin"
+        ? {
+            organization_event_people: {
+              some: {
+                member_id: self.id,
+                duty: view === "trainer" ? "staff" : "trainee",
+              },
+            },
+          }
+        : {}),
+    };
+    const offset = pageOffset(q.get("offset"));
+    const [items, total] = await Promise.all([
+      tx.organization_events.findMany({
+        where,
+        orderBy: [{ starts_at: "asc" }, { id: "asc" }],
+        skip: offset,
+        take: 50,
+        include: {
+          organization_event_people: {
+            select: {
+              member_id: true,
+              duty: true,
+              attendance: true,
+              workspace_members: {
+                select: { name: true, active: true, roles: true },
+              },
+            },
+          },
+        },
+      }),
+      tx.organization_events.count({ where }),
+    ]);
+    return {
+      items: items.map((e) => ({
+        ...e,
+        definition: undefined,
+        organization_event_people: undefined,
+        people: e.organization_event_people
+          .filter(
+            (p) =>
+              view !== "trainee" ||
+              p.duty === "staff" ||
+              p.member_id === self.id,
+          )
+          .map((p) => ({
+            ...p,
+            workspace_members: undefined,
+            name: p.workspace_members.name,
+            active: p.workspace_members.active,
+            roles: p.workspace_members.roles,
+          })),
+      })),
+      next: offset + 50 < total ? offset + 50 : null,
+    };
+  });
+}
+export async function calendarPreview(actor: Actor, id: string, input: Input) {
+  const view = role(input.view);
+  if (view === "trainee") throw new ApiError(403, "forbidden");
+  return scoped(actor, id, [view], async (tx) => preview(tx, input));
+}
+async function preview(tx: Tx, input: Input) {
+  if (
+    typeof input.local !== "string" ||
+    !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(input.local) ||
+    typeof input.zone !== "string"
+  )
+    throw new ApiError(400, "invalid_availability");
+  for (const field of ["minutes", "count", "every"])
+    if (typeof input[field] !== "number" || !Number.isSafeInteger(input[field]))
+      throw new ApiError(400, "invalid_availability");
+  const result = await tx.$queryRaw<
+    { value: { starts_at: string; ends_at: string; local_start: string }[] }[]
+  >`SELECT public.availability_preview(${input.local}::timestamp,${input.zone}::text,${Number(input.minutes)}::int,${Number(input.count)}::int,${Number(input.every)}::int) value`;
+  return result[0].value;
+}
+async function eventPeople(
+  tx: Tx,
+  id: string,
+  self: Self,
+  view: Role,
+  input: Input,
+) {
+  const staff = ids(input.staff, 8),
+    participants = ids(input.participants, 100);
+  if (staff.some((x) => participants.includes(x)))
+    throw new ApiError(400, "invalid_recipients");
+  if (view === "trainer" && (staff.length !== 1 || staff[0] !== self.id))
+    throw new ApiError(403, "forbidden");
+  const members = [];
+  for (const key of staff) {
+    const m = await tx.workspace_members.findUnique({ where: { id: key } });
+    if (
+      !m ||
+      m.workspace_id !== id ||
+      !m.active ||
+      !m.roles.includes("trainer")
+    )
+      throw new ApiError(403, "trainer_unavailable");
+    members.push(m);
+  }
+  for (const key of participants)
+    members.push(await recipient(tx, id, self, view, key, true));
+  return { staff, participants, members };
+}
+export async function calendarCommand(actor: Actor, id: string, input: Input) {
+  const view = role(input.view),
+    key = uuid(input.id),
+    action = String(input.action);
+  if (view === "trainee") throw new ApiError(403, "forbidden");
+  const authorize = async (tx: Tx, self: Self) => {
+    if (action === "create") {
+      await eventPeople(tx, id, self, view, input);
+      const existing = await tx.organization_events.findUnique({
+        where: { id: key },
+      });
+      if (existing && existing.workspace_id !== id)
+        throw new ApiError(403, "forbidden");
+    } else await eventAccess(tx, id, self, view, key);
+  };
+  return mutation(
+    actor,
+    id,
+    [view],
+    input,
+    async (tx, self) => {
+      if (action === "create") {
+        const { staff, participants, members } = await eventPeople(
+            tx,
+            id,
+            self,
+            view,
+            input,
+          ),
+          times = await preview(tx, input);
+        const title = textValue(input.title),
+          location =
+            typeof input.location === "string" ? input.location.trim() : "";
+        if (
+          location.length > 500 ||
+          !["training", "assessment"].includes(String(input.kind))
+        )
+          throw new ApiError(400, "invalid_request");
+        let template = null;
+        if (input.kind === "assessment") {
+          template = await tx.assessment_templates.findUnique({
+            where: { id: uuid(input.template) },
+          });
+          if (
+            !template ||
+            template.workspace_id !== id ||
+            template.archived ||
+            (view === "trainer" && template.created_by !== self.id)
+          )
+            throw new ApiError(403, "template_unavailable");
+          if (template.revision !== input.template_revision)
+            throw new ApiError(409, "conflict");
+        }
+        const list = [];
+        for (let i = 0; i < times.length; i++) {
+          const start = new Date(times[i].starts_at),
+            end = new Date(times[i].ends_at);
+          if (
+            start <= new Date() ||
+            start.getTime() > Date.now() + 366 * 86400000
+          )
+            throw new ApiError(400, "invalid_availability");
+          await tx.$queryRaw`SELECT public.validate_calendar_collision(${members.map((m) => m.user_id).filter(Boolean)}::uuid[],${start},${end},NULL::uuid)::text`;
+          const item = await tx.organization_events.create({
+            data: {
+              ...(i === 0 ? { id: key } : {}),
+              workspace_id: id,
+              created_by: self.id,
+              series_id: key,
+              title,
+              location,
+              starts_at: start,
+              ends_at: end,
+              timezone: String(input.zone),
+              kind: String(input.kind),
+              ...(template
+                ? {
+                    template_id: template.id,
+                    template_revision: template.revision,
+                    definition: json(template.definition),
+                  }
+                : {}),
+            },
+          });
+          await tx.organization_event_people.createMany({
+            data: [
+              ...staff.map((member_id) => ({
+                workspace_id: id,
+                event_id: item.id,
+                member_id,
+                duty: "staff",
+              })),
+              ...participants.map((member_id) => ({
+                workspace_id: id,
+                event_id: item.id,
+                member_id,
+                duty: "trainee",
+              })),
+            ],
+          });
+          list.push(item);
+        }
+        await event(tx, actor, id, "calendar_scheduled", key, {
+          count: list.length,
+        });
+        return list;
+      }
+      const item = await eventAccess(tx, id, self, view, key);
+      if (
+        action !== "result" &&
+        action !== "attendance" &&
+        item.revision !== input.revision
+      )
+        throw new ApiError(409, "conflict");
+      if (action === "reschedule") {
+        if (item.state !== "scheduled" || item.starts_at <= new Date())
+          throw new ApiError(400, "event_unavailable");
+        const times = await preview(tx, { ...input, count: 1, every: 7 }),
+          start = new Date(times[0].starts_at),
+          end = new Date(times[0].ends_at);
+        if (
+          start <= new Date() ||
+          start.getTime() > Date.now() + 366 * 86400000
+        )
+          throw new ApiError(400, "invalid_availability");
+        const inactive = item.organization_event_people.some(
+          (p) =>
+            !p.workspace_members.active ||
+            !p.workspace_members.roles.includes(
+              p.duty === "staff" ? "trainer" : "trainee",
+            ),
+        );
+        if (inactive) throw new ApiError(400, "inactive_participant");
+        await tx.$queryRaw`SELECT public.validate_calendar_collision(${item.organization_event_people.map((p) => p.workspace_members.user_id).filter(Boolean)}::uuid[],${start},${end},${key}::uuid)::text`;
+        const changed = await tx.organization_events.update({
+          where: { id: key },
+          data: {
+            starts_at: start,
+            ends_at: end,
+            timezone: String(input.zone),
+            revision: { increment: 1 },
+          },
+        });
+        await event(tx, actor, id, "calendar_rescheduled", key);
+        return changed;
+      }
+      if (action === "staff") {
+        if (view !== "admin" || item.state !== "scheduled")
+          throw new ApiError(403, "forbidden");
+        const staff = ids(input.staff, 8),
+          trainees = item.organization_event_people.filter(
+            (p) => p.duty === "trainee",
+          );
+        const members = await tx.workspace_members.findMany({
+          where: {
+            id: { in: staff },
+            workspace_id: id,
+            active: true,
+            roles: { has: "trainer" },
+          },
+        });
+        if (
+          members.length !== staff.length ||
+          trainees.some((p) => staff.includes(p.member_id))
+        )
+          throw new ApiError(400, "invalid_recipients");
+        await tx.$queryRaw`SELECT public.validate_calendar_collision(${members.map((m) => m.user_id).filter(Boolean)}::uuid[],${item.starts_at},${item.ends_at},${key}::uuid)::text`;
+        await tx.organization_event_people.deleteMany({
+          where: { event_id: key, duty: "staff" },
+        });
+        await tx.organization_event_people.createMany({
+          data: staff.map((member_id) => ({
+            workspace_id: id,
+            event_id: key,
+            member_id,
+            duty: "staff",
+          })),
+        });
+        await event(tx, actor, id, "calendar_staff_reassigned", key);
+        return tx.organization_events.update({
+          where: { id: key },
+          data: { revision: { increment: 1 } },
+        });
+      }
+      if (action === "cancel") {
+        if (
+          item.state === "completed" ||
+          (await tx.assessment_results.count({ where: { event_id: key } }))
+        )
+          throw new ApiError(400, "event_has_results");
+        const targets =
+          input.future_series === true
+            ? await tx.organization_events.findMany({
+                where: {
+                  workspace_id: id,
+                  series_id: item.series_id,
+                  starts_at: { gte: item.starts_at },
+                  state: "scheduled",
+                },
+              })
+            : [item];
+        if (
+          input.future_series === true &&
+          (item.starts_at <= new Date() || targets.length > 8)
+        )
+          throw new ApiError(400, "event_unavailable");
+        for (const target of targets) {
+          await eventAccess(tx, id, self, view, target.id);
+          if (
+            await tx.assessment_results.count({
+              where: { event_id: target.id },
+            })
+          )
+            throw new ApiError(400, "event_has_results");
+        }
+        await tx.organization_events.updateMany({
+          where: { id: { in: targets.map((e) => e.id) } },
+          data: { state: "cancelled", revision: { increment: 1 } },
+        });
+        await event(tx, actor, id, "calendar_cancelled", key, {
+          count: targets.length,
+        });
+        return { cancelled: targets.length };
+      }
+      if (item.state === "cancelled" || item.starts_at > new Date())
+        throw new ApiError(400, "event_not_started");
+      if (action === "attendance") {
+        const member = uuid(input.member),
+          person = item.organization_event_people.find(
+            (p) => p.member_id === member && p.duty === "trainee",
+          );
+        if (
+          !person ||
+          !["unmarked", "present", "absent", "excused"].includes(
+            String(input.attendance),
+          )
+        )
+          throw new ApiError(400, "invalid_request");
+        if (person.revision !== input.revision)
+          throw new ApiError(409, "conflict");
+        if (
+          item.state === "completed" &&
+          (input.attendance === "unmarked" ||
+            (item.kind === "assessment" &&
+              input.attendance === "present" &&
+              !(await tx.assessment_results.findUnique({
+                where: {
+                  event_id_member_id: { event_id: key, member_id: member },
+                },
+              }))))
+        )
+          throw new ApiError(400, "results_required");
+        const result = await tx.organization_event_people.update({
+          where: { event_id_member_id: { event_id: key, member_id: member } },
+          data: {
+            attendance: String(input.attendance),
+            revision: { increment: 1 },
+          },
+        });
+        await event(tx, actor, id, "attendance_recorded", key, {
+          member,
+          attendance: String(input.attendance),
+        });
+        return result;
+      }
+      if (action === "result") {
+        if (item.kind !== "assessment")
+          throw new ApiError(400, "invalid_assessment");
+        const member = uuid(input.member),
+          person = item.organization_event_people.find(
+            (p) => p.member_id === member && p.duty === "trainee",
+          );
+        if (!person || person.attendance !== "present")
+          throw new ApiError(400, "attendance_required");
+        const old = await tx.assessment_results.findUnique({
+          where: { event_id_member_id: { event_id: key, member_id: member } },
+        });
+        if ((old?.revision || 0) !== input.revision)
+          throw new ApiError(409, "conflict");
+        const note = typeof input.note === "string" ? input.note.trim() : "";
+        if (note.length > 2000) throw new ApiError(400, "invalid_results");
+        const data = {
+          values: assessmentValues(definition(item.definition), input.values),
+          note,
+          recorded_by: self.id,
+          recorded_at: new Date(),
+        };
+        const result = old
+          ? await tx.assessment_results.update({
+              where: {
+                event_id_member_id: { event_id: key, member_id: member },
+              },
+              data: { ...data, revision: { increment: 1 } },
+            })
+          : await tx.assessment_results.create({
+              data: {
+                ...data,
+                workspace_id: id,
+                event_id: key,
+                member_id: member,
+              },
+            });
+        await tx.assessment_result_history.create({
+          data: {
+            workspace_id: id,
+            event_id: key,
+            member_id: member,
+            revision: result.revision,
+            document: json(data),
+            recorded_by: self.id,
+          },
+        });
+        await event(tx, actor, id, "assessment_result_recorded", key, {
+          member,
+          revision: result.revision,
+        });
+        return result;
+      }
+      if (action === "finish") {
+        const participants = item.organization_event_people.filter(
+          (p) => p.duty === "trainee",
+        );
+        if (participants.some((p) => p.attendance === "unmarked"))
+          throw new ApiError(400, "attendance_required");
+        if (item.kind === "assessment")
+          for (const p of participants.filter(
+            (p) => p.attendance === "present",
+          ))
+            if (
+              !(await tx.assessment_results.findUnique({
+                where: {
+                  event_id_member_id: { event_id: key, member_id: p.member_id },
+                },
+              }))
+            )
+              throw new ApiError(400, "results_required");
+        await event(tx, actor, id, "calendar_completed", key);
+        return tx.organization_events.update({
+          where: { id: key },
+          data: { state: "completed", revision: { increment: 1 } },
+        });
+      }
+      throw new ApiError(400, "invalid_request");
+    },
+    authorize,
+  );
+}

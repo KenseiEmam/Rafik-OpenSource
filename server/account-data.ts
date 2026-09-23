@@ -14,18 +14,31 @@ export async function organizationAccountData(actor: Actor) {
     },
   });
   const ids = memberships.map((m) => m.id);
-  const [assignments, sessions] = await Promise.all([
-    db.organization_assignments.findMany({
-      where: { member_id: { in: ids } },
-      include: { organization_versions: true },
-      orderBy: { created_at: "asc" },
-    }),
-    db.organization_sessions.findMany({
-      where: { member_id: { in: ids } },
-      orderBy: { started_at: "asc" },
-    }),
-  ]);
+  const [assignments, sessions, calendar, results, corrections] =
+    await Promise.all([
+      db.organization_assignments.findMany({
+        where: { member_id: { in: ids } },
+        include: { organization_versions: true },
+        orderBy: { created_at: "asc" },
+      }),
+      db.organization_sessions.findMany({
+        where: { member_id: { in: ids } },
+        orderBy: { started_at: "asc" },
+      }),
+      db.organization_event_people.findMany({
+        where: { member_id: { in: ids } },
+        include: { organization_events: true },
+      }),
+      db.assessment_results.findMany({ where: { member_id: { in: ids } } }),
+      db.assessment_result_history.findMany({
+        where: { member_id: { in: ids } },
+        orderBy: { recorded_at: "asc" },
+      }),
+    ]);
   return {
+    calendar,
+    results,
+    corrections,
     memberships,
     assignments,
     sessions: sessions.map((s) => s.document),

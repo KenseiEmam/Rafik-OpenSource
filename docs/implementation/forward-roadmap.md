@@ -1,6 +1,6 @@
 # Forward implementation roadmap after R6
 
-Owner: Codex. Reviewed 23 September 2026 against backend `7ae6691`, frontend `ff1f4ce`, current source and recorded R6 rendered evidence. R7, R7A1 API transition and R7A2 membership/context foundation have local checkpoints; R8 organization-owned programming/history has a local checkpoint; R9–R12 follow. The original review was documentation-only; subsequent R7 checks are recorded in the ledger and verification record.
+Owner: Codex. Reviewed 23 September 2026 against backend `7ae6691`, frontend `ff1f4ce`, current source and recorded R6 rendered evidence. R7, R7A1 API transition and R7A2 membership/context foundation have local checkpoints; R8 organization-owned programming/history has a local checkpoint; R9 organization services/analytics has a local checkpoint; R10–R12 follow. The original review was documentation-only; subsequent R7 checks are recorded in the ledger and verification record.
 
 This is the execution plan for subsequent work, with dependencies and acceptance gates. It supersedes the next-action ordering in historical phase notes. The [ledger](ledger.md) records implementation status; [architecture](architecture.md) describes what exists; [verification](verification.md) records actual evidence. The initial revival audit remains historical rationale, not a ceiling on the broader scope the user subsequently requested.
 

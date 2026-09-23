@@ -30,7 +30,8 @@
     "seed:local": "node scripts/prisma/local.mjs seed",
     "test:api": "tsx --test tests/api.test.ts",
     "test:organizations": "tsx --test tests/workspaces.test.ts",
-    "test:programming": "tsx --test tests/programming.test.ts tests/program-media.test.ts"
+    "test:programming": "tsx --test tests/programming.test.ts tests/program-media.test.ts",
+    "test:organization-services": "tsx --test tests/organization-services.test.ts"
   },
   "devDependencies": {
     "@types/node": "22.19.0",

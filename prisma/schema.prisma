@@ -882,25 +882,32 @@ model workspace_invitations {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model workspace_members {
-  id                                                                                           String                     @id @db.Uuid
-  workspace_id                                                                                 String                     @db.Uuid
-  user_id                                                                                      String?                    @db.Uuid
+  id                                                                                           String                       @id @db.Uuid
+  workspace_id                                                                                 String                       @db.Uuid
+  user_id                                                                                      String?                      @db.Uuid
   roles                                                                                        String[]
-  active                                                                                       Boolean                    @default(true)
-  revision                                                                                     Int                        @default(1)
-  trainer_id                                                                                   String?                    @db.Uuid
-  joined_at                                                                                    DateTime                   @default(now()) @db.Timestamptz(6)
-  name                                                                                         String                     @default("Former member")
-  organization_assignments_organization_assignments_workspace_id_created_byToworkspace_members organization_assignments[] @relation("organization_assignments_workspace_id_created_byToworkspace_members")
-  organization_assignments_organization_assignments_workspace_id_member_idToworkspace_members  organization_assignments?  @relation("organization_assignments_workspace_id_member_idToworkspace_members")
+  active                                                                                       Boolean                      @default(true)
+  revision                                                                                     Int                          @default(1)
+  trainer_id                                                                                   String?                      @db.Uuid
+  joined_at                                                                                    DateTime                     @default(now()) @db.Timestamptz(6)
+  name                                                                                         String                       @default("Former member")
+  assessment_result_history                                                                    assessment_result_history[]
+  assessment_results                                                                           assessment_results[]
+  assessment_templates                                                                         assessment_templates[]
+  organization_assignments_organization_assignments_workspace_id_created_byToworkspace_members organization_assignments[]   @relation("organization_assignments_workspace_id_created_byToworkspace_members")
+  organization_assignments_organization_assignments_workspace_id_member_idToworkspace_members  organization_assignments?    @relation("organization_assignments_workspace_id_member_idToworkspace_members")
+  organization_event_people                                                                    organization_event_people[]
+  organization_events                                                                          organization_events[]
   organization_exercises                                                                       organization_exercises[]
+  organization_group_members                                                                   organization_group_members[]
+  organization_groups                                                                          organization_groups[]
   organization_programs                                                                        organization_programs[]
   organization_sessions                                                                        organization_sessions[]
   organization_versions                                                                        organization_versions[]
-  users                                                                                        users?                     @relation(fields: [user_id], references: [id], onUpdate: NoAction)
-  workspaces                                                                                   workspaces                 @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  workspace_members                                                                            workspace_members?         @relation("workspace_membersToworkspace_members", fields: [workspace_id, trainer_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
-  other_workspace_members                                                                      workspace_members[]        @relation("workspace_membersToworkspace_members")
+  users                                                                                        users?                       @relation(fields: [user_id], references: [id], onUpdate: NoAction)
+  workspaces                                                                                   workspaces                   @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  workspace_members                                                                            workspace_members?           @relation("workspace_membersToworkspace_members", fields: [workspace_id, trainer_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+  other_workspace_members                                                                      workspace_members[]          @relation("workspace_membersToworkspace_members")
 
   @@unique([workspace_id, id])
   @@unique([workspace_id, user_id])
@@ -924,23 +931,30 @@ model workspace_operations {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model workspaces {
-  id                       String                     @id @db.Uuid
-  kind                     String
-  name                     String
-  created_by               String?                    @db.Uuid
-  archived                 Boolean                    @default(false)
-  revision                 Int                        @default(1)
-  created_at               DateTime                   @default(now()) @db.Timestamptz(6)
-  organization_assignments organization_assignments[]
-  organization_exercises   organization_exercises[]
-  organization_programs    organization_programs[]
-  organization_sessions    organization_sessions[]
-  program_media            program_media[]
-  workspace_events         workspace_events[]
-  workspace_invitations    workspace_invitations[]
-  workspace_members        workspace_members[]
-  workspace_operations     workspace_operations[]
-  users                    users?                     @relation(fields: [created_by], references: [id], onUpdate: NoAction)
+  id                         String                       @id @db.Uuid
+  kind                       String
+  name                       String
+  created_by                 String?                      @db.Uuid
+  archived                   Boolean                      @default(false)
+  revision                   Int                          @default(1)
+  created_at                 DateTime                     @default(now()) @db.Timestamptz(6)
+  assessment_result_history  assessment_result_history[]
+  assessment_results         assessment_results[]
+  assessment_templates       assessment_templates[]
+  organization_assignments   organization_assignments[]
+  organization_event_people  organization_event_people[]
+  organization_events        organization_events[]
+  organization_exercises     organization_exercises[]
+  organization_group_members organization_group_members[]
+  organization_groups        organization_groups[]
+  organization_programs      organization_programs[]
+  organization_sessions      organization_sessions[]
+  program_media              program_media[]
+  workspace_events           workspace_events[]
+  workspace_invitations      workspace_invitations[]
+  workspace_members          workspace_members[]
+  workspace_operations       workspace_operations[]
+  users                      users?                       @relation(fields: [created_by], references: [id], onUpdate: NoAction)
 
   @@schema("public")
 }
@@ -1066,5 +1080,141 @@ model program_media {
   users        users?     @relation(fields: [created_by], references: [id], onUpdate: NoAction)
   workspaces   workspaces @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
+  @@schema("public")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model assessment_result_history {
+  id                 String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  workspace_id       String             @db.Uuid
+  event_id           String             @db.Uuid
+  member_id          String             @db.Uuid
+  revision           Int
+  document           Json
+  recorded_by        String             @db.Uuid
+  recorded_at        DateTime           @default(now()) @db.Timestamptz(6)
+  assessment_results assessment_results @relation(fields: [event_id, member_id], references: [event_id, member_id], onDelete: Cascade, onUpdate: NoAction)
+  workspaces         workspaces         @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  workspace_members  workspace_members  @relation(fields: [workspace_id, recorded_by], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([event_id, member_id, revision])
+  @@schema("public")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model assessment_results {
+  workspace_id              String                      @db.Uuid
+  event_id                  String                      @db.Uuid
+  member_id                 String                      @db.Uuid
+  values                    Json
+  note                      String                      @default("")
+  revision                  Int                         @default(1)
+  recorded_by               String                      @db.Uuid
+  recorded_at               DateTime                    @default(now()) @db.Timestamptz(6)
+  assessment_result_history assessment_result_history[]
+  organization_event_people organization_event_people   @relation(fields: [event_id, member_id], references: [event_id, member_id], onDelete: Cascade, onUpdate: NoAction)
+  organization_events       organization_events         @relation(fields: [workspace_id, event_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
+  workspaces                workspaces                  @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  workspace_members         workspace_members           @relation(fields: [workspace_id, recorded_by], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([event_id, member_id])
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model assessment_templates {
+  id                  String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  workspace_id        String                @db.Uuid
+  created_by          String                @db.Uuid
+  title               String
+  definition          Json
+  revision            Int                   @default(1)
+  archived            Boolean               @default(false)
+  workspace_members   workspace_members     @relation(fields: [workspace_id, created_by], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+  workspaces          workspaces            @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  organization_events organization_events[]
+
+  @@unique([workspace_id, id])
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model organization_event_people {
+  workspace_id        String              @db.Uuid
+  event_id            String              @db.Uuid
+  member_id           String              @db.Uuid
+  duty                String
+  attendance          String              @default("unmarked")
+  revision            Int                 @default(1)
+  assessment_results  assessment_results?
+  organization_events organization_events @relation(fields: [workspace_id, event_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
+  workspaces          workspaces          @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  workspace_members   workspace_members   @relation(fields: [workspace_id, member_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([event_id, member_id])
+  @@index([workspace_id, member_id, event_id], map: "organization_person_agenda")
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model organization_events {
+  id                        String                      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  workspace_id              String                      @db.Uuid
+  created_by                String                      @db.Uuid
+  series_id                 String                      @db.Uuid
+  title                     String
+  starts_at                 DateTime                    @db.Timestamptz(6)
+  ends_at                   DateTime                    @db.Timestamptz(6)
+  timezone                  String
+  location                  String                      @default("")
+  kind                      String
+  definition                Json?
+  template_id               String?                     @db.Uuid
+  template_revision         Int?
+  state                     String                      @default("scheduled")
+  revision                  Int                         @default(1)
+  created_at                DateTime                    @default(now()) @db.Timestamptz(6)
+  assessment_results        assessment_results[]
+  organization_event_people organization_event_people[]
+  workspace_members         workspace_members           @relation(fields: [workspace_id, created_by], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+  workspaces                workspaces                  @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  assessment_templates      assessment_templates?       @relation(fields: [workspace_id, template_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([workspace_id, id])
+  @@index([workspace_id, starts_at, id], map: "organization_event_agenda")
+  @@index([workspace_id, series_id, starts_at], map: "organization_event_series")
+  @@schema("public")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model organization_group_members {
+  workspace_id        String              @db.Uuid
+  group_id            String              @db.Uuid
+  member_id           String              @db.Uuid
+  workspaces          workspaces          @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  organization_groups organization_groups @relation(fields: [workspace_id, group_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
+  workspace_members   workspace_members   @relation(fields: [workspace_id, member_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([group_id, member_id])
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model organization_groups {
+  id                         String                       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  workspace_id               String                       @db.Uuid
+  name                       String
+  created_by                 String                       @db.Uuid
+  archived                   Boolean                      @default(false)
+  revision                   Int                          @default(1)
+  organization_group_members organization_group_members[]
+  workspace_members          workspace_members            @relation(fields: [workspace_id, created_by], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+  workspaces                 workspaces                   @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([workspace_id, id])
   @@schema("public")
 }

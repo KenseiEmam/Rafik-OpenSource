@@ -2,7 +2,7 @@
 
 R7A1 replaces the transitional backend with **one Node/TypeScript API, Prisma and PostgreSQL**. The Vue application retains its accepted interaction design and durable IndexedDB queue. [ADR 0006](../decisions/0006-prisma-api-transition.md) records the transition; [API conventions](../reference/api.md) and the [maintainer guide](maintainer-guide.md) specify its boundaries.
 
-**Organizational correction:** [ADR 0005](../decisions/0005-organization-and-independent-scopes.md) defines the separate independent/organization scopes partly implemented in R7A2 membership/context/responsibility; organization-owned programming/history is implemented in R8; services follow in R9. The R4 team overlay remains an independent-coach collaboration feature, not the required organization model. Read the [role audit](role-scope-audit.md) before changing ownership.
+**Organizational correction:** [ADR 0005](../decisions/0005-organization-and-independent-scopes.md) defines the separate independent/organization scopes partly implemented in R7A2 membership/context/responsibility; organization-owned programming/history is implemented in R8; services/calendar/assessor-led results and analytics are implemented in R9. The R4 team overlay remains an independent-coach collaboration feature, not the required organization model. Read the [role audit](role-scope-audit.md) before changing ownership.
 
 ## System boundary
 
@@ -209,3 +209,11 @@ Account deletion retains a deactivated, anonymized organization membership shell
 The shared PostgreSQL `validate_prescription_catalog` and `validate_session_actuals` functions hold prescription/actual bounds. Independent wrappers supply the actor's authorized catalog; the API supplies the organization/shared catalog. Organization publications embed instruction snapshots. `organization_sessions.document` uses the existing logger transport shape, while indexed membership/assignment/date/version columns provide ownership and concurrency. Completion corrections preserve first completion time; corrected organizational records require fresh review.
 
 The web's `program-context.ts` supplies explicit adapters to the existing editor/library. `training.ts` keeps one IndexedDB queue and switches only the server transport for sessions with `workspace_id`. It never impersonates another identity. `DeliverPlan.vue` reviews the exact recipients and future schedule before an atomic command. Independent delivery uses `deliver_plan`; organizations use `/v1/workspaces/:id/delivery`. Both reject stale or invalid recipients as one unit.
+
+## Organization calendar and results (R9)
+
+API-only `organization_groups`/members, `assessment_templates`, `organization_events`/people, `assessment_results` and append-only `assessment_result_history` retain organization ownership. Group changes never rewrite scheduled people; template changes never rewrite a scheduled definition. An event grants listed assessors access to that event's participants; this does not grant access to their unrelated training or personal records. Trainees receive only their own results and attendance. Current membership is checked before receipt replay.
+
+Scheduling uses bounded concrete occurrences and sorted profile locks shared with independent bookings; conflict errors disclose no other context. Attendance starts at the event start. Finishing requires every attendance decision and a result for each present assessment participant. Correction preserves separate participant revisions and audit history. A completed event no longer reserves future time; finishing records the staff decision that delivery has ended.
+
+`server/analytics.ts` counts first completion once, uses viewer-local inclusive calendar windows, excludes cancelled attendance and distinguishes active current responsibility from retained history. Drill comparisons require identical snapshots/units. Charts expose tables; absence of data is explicit. Admin workload reports up to 100 trainers and program distribution up to 30 rows (scale/paging maintenance is R11). No retention, health or revenue claims are derived from these operational counts.

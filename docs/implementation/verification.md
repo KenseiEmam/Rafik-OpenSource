@@ -1,5 +1,15 @@
 # Verification record
 
+## R9 — Organization services and analytics · 23 September 2026
+
+- `npm run test:organization-services`: two isolated HTTP groups cover two organizations, immutable assessment snapshots, two distinct results, correction history, trainee-only export, reassigned trainer/history scope, designated assessor exception, revoked replay, reschedule/cancellation receipts, concurrent cross-organization collisions, malformed paging/dates and DST. Five existing `test:services` groups also pass after the collision hook.
+- Existing rollback SQL: 239 assertions; fresh install: sixteen forward migrations, generated fixtures and seven rollback suites. No preview reset. Twelve web unit checks, TypeScript/build, content and documentation checks pass.
+- Full web regression: **62/62** Chromium/phone-WebKit journeys. Final chart label/reschedule preview refinement: **2/2** affected organization service journeys pass. Initial failures were a polluted accessible timezone label (fixed markup) and a test selector matching both chart and detail value (scoped to the result definition).
+- `scripts/audit-services.ts`: **104 states**, admin/trainer/trainee routes, 320/390/768/1440 widths, paired English/light, Arabic/dark, Arabic/light and English/dark configurations in Chromium/WebKit. No reported document/internal overflow, alerts, page errors or checked Axe failures. Screenshots of the initial phone scheduling form, populated Arabic results and comparison chart were actually inspected; undersized SVG text was fixed and the matrix rerun.
+
+See `evidence/r9-layout.json` and `evidence/r9-verification.txt`. These tests do not establish physical-device behavior, human usability/retention, remote CI or real provider delivery. The matrix is the listed paired configurations, not every possible combination. Dedicated organization offline fault acceptance and large-roster/read/fixture maintenance remain R11.
+
+
 ## R8 — 23 September 2026
 
 - Backend: 239 rollback SQL assertions, fourteen fresh forward migrations/generated fixtures/seven SQL suites, 4 identity/API tests, 5 service groups, 9 team/business groups, 5 membership groups and 3 organization programming/media groups pass. Previous actuals, first completion preservation, current responsibility before replay, atomic foreign-recipient rejection and private cover/revocation are explicitly checked.

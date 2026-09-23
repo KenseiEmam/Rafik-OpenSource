@@ -1,4 +1,18 @@
 import {
+  serviceCatalog,
+  serviceCatalogCommand,
+} from "./organization-catalog.ts";
+import {
+  calendar,
+  calendarPreview,
+  calendarCommand,
+} from "./organization-calendar.ts";
+import {
+  organizationAnalytics,
+  independentAnalytics,
+  assessmentHistory,
+} from "./analytics.ts";
+import {
   createServer,
   type IncomingMessage,
   type ServerResponse,
@@ -219,6 +233,53 @@ const server = createServer(async (req, res) => {
     if (path === "/v1/workspaces" && req.method === "POST") {
       send(res, 200, await createWorkspace(requireActor(actor), input));
       return;
+    }
+    if (path === "/v1/coach/analytics" && req.method === "GET") {
+      send(
+        res,
+        200,
+        await independentAnalytics(requireActor(actor), url.searchParams),
+      );
+      return;
+    }
+    const serviceMatch = path.match(
+      /^\/v1\/workspaces\/([a-f0-9-]{36})\/(services|calendar|calendar-preview|analytics|assessment-history)$/,
+    );
+    if (serviceMatch) {
+      const who = requireActor(actor),
+        id = serviceMatch[1],
+        domain = serviceMatch[2];
+      if (req.method === "GET") {
+        const result =
+          domain === "services"
+            ? await serviceCatalog(who, id, url.searchParams)
+            : domain === "calendar"
+              ? await calendar(who, id, url.searchParams)
+              : domain === "analytics"
+                ? await organizationAnalytics(who, id, url.searchParams)
+                : domain === "assessment-history"
+                  ? await assessmentHistory(who, id, url.searchParams)
+                  : null;
+        if (result === null) throw new ApiError(405, "method_not_allowed");
+        send(res, 200, result);
+        return;
+      }
+      if (
+        req.method === "POST" &&
+        ["services", "calendar", "calendar-preview"].includes(domain)
+      ) {
+        send(
+          res,
+          200,
+          await (domain === "services"
+            ? serviceCatalogCommand(who, id, input)
+            : domain === "calendar-preview"
+              ? calendarPreview(who, id, input)
+              : calendarCommand(who, id, input)),
+        );
+        return;
+      }
+      throw new ApiError(405, "method_not_allowed");
     }
     const programMatch = path.match(
       /^\/v1\/workspaces\/([a-f0-9-]{36})\/(programs|catalog|delivery|sessions)$/,

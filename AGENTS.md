@@ -43,3 +43,5 @@
 - Recovery UI must distinguish actively persisting/sending from an uncertain result. Offer retry only after the request is durably stored and dispatch has settled; reload/fault tests must exercise that real user-visible state. Await completed route navigation and loaded records before measuring layout.
 
 - Verify every step of a multistep flow, especially initial selection and empty states, not only the final review/confirmation. Include native date/select controls at 320px. Optional Vue boolean props need explicit defaults when absence should mean true; shared feedback changes require regression of existing consumers.
+
+- Responsive charts need readable labels at actual rendered size, not just SVG source font size. Keep textual axes/units legible on narrow screens and provide table equivalents. Keep datalist suggestions outside labels so the input's accessible name stays concise. Verify participant filters and permission changes against the original role contract.

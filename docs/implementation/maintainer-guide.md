@@ -224,3 +224,11 @@ Web views/types/styles live in `src/features/organizations/`. `auth.ts` fetches 
 - Reviewed delivery: `DeliverPlan.vue`; its pending command contains the confirmed recipient IDs/revisions and schedule. A refresh must not replace that pending payload with a newly loaded selection.
 - Organization navigation/training: `OrganizationNav.vue`, `OrganizationTraining.vue`; existing `PlanEditor`, `ExercisesPage`, `ReviewPage` and the durable workout logger are reused. Every draft/command includes account/context.
 - Server: `server/programming.ts`, organization models/migrations, `tests/programming.test.ts`. Before adding a mutation, define both current-role and subject authorization, including before receipt replay after a staff change. Extend `tests/programming.e2e.ts` for the complete human-visible flow.
+
+## Calendar, assessments and analytics changes (R9)
+
+`server/organization-catalog.ts` owns reusable group/template writes; `organization-calendar.ts` owns agenda/attendance/results; `service-definitions.ts` validates bounded drills and numeric values; `analytics.ts` owns role-specific projections. Migrations 240/250 define service tables, profile-lock collision checks and the explicit API preview grant. Keep API-only tables out of generic browser row grants. Subject export lives in `account-data.ts`.
+
+Web `ServiceCatalog`, `EventComposer`, `OrganizationCalendar`, `EventDetail`, `AssessmentHistory` and `OrganizationUpcoming` form the complete workflow. `analytics/AnalyticsPage` and `MetricChart` share truthful charts and table equivalents. For a new drill kind, update validation, immutable snapshot, result editor, correction/history, comparison compatibility and tests together. Never combine incompatible units/definitions into one line. Add acceptance to `test:organization-services` and `organization-services.e2e.ts`; `audit-services.ts` checks rendered roles/states.
+
+Local tour: Rania → Calendar → Schedule; More → Assessment templates or Groups. Kareem → Calendar → completed Movement baseline → review Sara's distinct result; Training → Assessment history shows synthetic 10/12 repetition examples. Rania Analytics shows organization responsibility/attendance; Kareem Analytics contains only current assigned-trainee scope. A designated assessor can record an event even when another trainer normally owns responsibility.

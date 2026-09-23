@@ -1,6 +1,14 @@
 # Revamp execution ledger
 
-Updated 23 September 2026. **The full revamp remains in progress. R8 scoped programming/delivery is implemented locally.** R9 organization services and analytics starts immediately, followed by R10–R12 under the user's standing authorization. Use current architecture/runbook for setup; earlier checkpoints below are historical.
+Updated 23 September 2026. **R9 organization services and analytics is implemented locally; the full revamp remains in progress.** Continue R10 communication/notifications, R11 local operations/scale and R12 available refinement under standing authorization. Current architecture/runbook are authoritative; older checkpoints below are history.
+
+## R9 — Organization services and distinct analytics
+
+Organization calendar/groups, immutable assessment definitions, reviewed concrete recurrence, explicit assessors, per-trainee attendance/results and correction history are implemented. Profile locks prevent cross-context scheduling collisions. New charts distinguish independent coaching, current organization trainer responsibility and organization administration; date/trainee filters, table equivalents and metric definitions keep them interpretable. Subject export includes own calendar/results without other trainees. The compact organization navigation retains primary operational work and puts reusable setup under More.
+
+Verification: 62/62 full Chromium/phone-WebKit journeys, followed by 2/2 affected journeys after final chart/reschedule-preview refinement; 104 rendered service states, two HTTP lifecycle/concurrency groups, five existing booking/file groups, 239 SQL assertions, sixteen-migration disposable install, 12 web unit checks and build/type/content/docs checks. See verification for exact evidence and limits. Actual captures exposed undersized SVG labels despite passing layout checks; labels now retain readable HTML sizing. Fixed timezone accessible naming, unavailable participant removal and exact participant-draft cleanup after uncertain acknowledgment.
+
+**Next:** R10 organization communication and optional notification preferences/inbox with local interception, then R11 and available R12. Physical devices, human usability/retention, hosting/providers, remote CI and native remain separate unverified gates. No push or external delivery.
 
 ## R8 — Scoped programming, reusable editing and reviewed delivery
 
