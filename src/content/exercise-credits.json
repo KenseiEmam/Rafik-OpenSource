@@ -1,0 +1,324 @@
+{
+  "wger-12": {
+    "author": "flori",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/12/",
+    "adapted": true
+  },
+  "wger-46": {
+    "author": "Mikko Ruohola",
+    "license": "CC-BY-SA 4",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/46/",
+    "adapted": false
+  },
+  "wger-73": {
+    "author": "sistab2",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/73/",
+    "adapted": false
+  },
+  "wger-75": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/75/",
+    "adapted": true
+  },
+  "wger-82": {
+    "author": "apeschel",
+    "license": "CC-BY-SA 4",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/82/",
+    "adapted": false
+  },
+  "wger-91": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/91/",
+    "adapted": false
+  },
+  "wger-92": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/92/",
+    "adapted": false
+  },
+  "wger-95": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/95/",
+    "adapted": false
+  },
+  "wger-194": {
+    "author": "BFad07",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/194/",
+    "adapted": true
+  },
+  "wger-205": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/205/",
+    "adapted": true
+  },
+  "wger-206": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/206/",
+    "adapted": false
+  },
+  "wger-211": {
+    "author": "tuninx",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/211/",
+    "adapted": false
+  },
+  "wger-222": {
+    "author": "abeworld",
+    "license": "CC-BY-SA 4",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/222/",
+    "adapted": false
+  },
+  "wger-245": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/245/",
+    "adapted": false
+  },
+  "wger-246": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/246/",
+    "adapted": false
+  },
+  "wger-257": {
+    "author": "sistab2",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/257/",
+    "adapted": true
+  },
+  "wger-272": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/272/",
+    "adapted": false
+  },
+  "wger-275": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/275/",
+    "adapted": false
+  },
+  "wger-294": {
+    "author": "Bret Contreras",
+    "license": "CC-BY-SA 4",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/294/",
+    "adapted": false
+  },
+  "wger-341": {
+    "author": "Rafik",
+    "license": "CC-BY-SA 4",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/341/",
+    "adapted": true
+  },
+  "wger-348": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/348/",
+    "adapted": false
+  },
+  "wger-349": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/349/",
+    "adapted": true
+  },
+  "wger-365": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/365/",
+    "adapted": false
+  },
+  "wger-366": {
+    "author": "admin",
+    "license": "CC-BY-SA 4",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/366/",
+    "adapted": true
+  },
+  "wger-367": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/367/",
+    "adapted": true
+  },
+  "wger-371": {
+    "author": "BFad07",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/371/",
+    "adapted": true
+  },
+  "wger-374": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/374/",
+    "adapted": false
+  },
+  "wger-375": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/375/",
+    "adapted": true
+  },
+  "wger-465": {
+    "author": "cgoob883",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/465/",
+    "adapted": false
+  },
+  "wger-475": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/475/",
+    "adapted": false
+  },
+  "wger-477": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/477/",
+    "adapted": true
+  },
+  "wger-507": {
+    "author": "pjwirth",
+    "license": "CC-BY-SA 4",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/507/",
+    "adapted": true
+  },
+  "wger-512": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/512/",
+    "adapted": true
+  },
+  "wger-537": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/537/",
+    "adapted": false
+  },
+  "wger-538": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/538/",
+    "adapted": true
+  },
+  "wger-543": {
+    "author": "Tierrasverdes",
+    "license": "CC-BY-SA 4",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/543/",
+    "adapted": true
+  },
+  "wger-567": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/567/",
+    "adapted": false
+  },
+  "wger-570": {
+    "author": "BFad07",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/570/",
+    "adapted": true
+  },
+  "wger-575": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/575/",
+    "adapted": true
+  },
+  "wger-584": {
+    "author": "tuckerm",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/584/",
+    "adapted": false
+  },
+  "wger-590": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/590/",
+    "adapted": false
+  },
+  "wger-622": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/622/",
+    "adapted": true
+  },
+  "wger-655": {
+    "author": "http://www.bodybuilding.com/",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/655/",
+    "adapted": false
+  },
+  "wger-659": {
+    "author": "wger.de",
+    "license": "CC-BY-SA 3",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/659/",
+    "adapted": true
+  },
+  "wger-802": {
+    "author": "wgerjhn",
+    "license": "CC-BY-SA 4",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/802/",
+    "adapted": true
+  },
+  "wger-803": {
+    "author": null,
+    "license": "CC-BY-SA 4",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+    "sourceUrl": "https://wger.de/api/v2/exerciseinfo/803/",
+    "adapted": true
+  }
+}

@@ -191,8 +191,8 @@ test('nutrition helpers and exercise viewer remain usable in English/Arabic and 
           .getByLabel(lang === 'en' ? 'Search exercises' : 'البحث عن تمرين', { exact: true })
           .fill('Goblet')
         const demo = page.locator('.exercise-demo').first()
-        await demo.locator('summary').click()
-        await expect(demo.locator('.demo-stage img')).toBeVisible()
+        await page.locator('#exercise-choice-goblet-squat').click()
+        await expect(demo.locator('.demo-positions img').first()).toBeVisible()
         await expect.poll(() => layoutIssues(page)).toEqual([])
         expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
         await page.screenshot({

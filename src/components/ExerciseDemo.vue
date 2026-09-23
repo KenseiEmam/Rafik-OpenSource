@@ -1,175 +1,76 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
+import ExerciseVideo from './ExerciseVideo.vue'
+import { videoForExercise } from '../lib/exercise-media'
+import credits from '../content/exercise-credits.json'
 import { language as l, locale } from '../lib/i18n'
 import type { Exercise } from '../lib/domain'
 import media from '../content/exercise-media.json'
 const props = defineProps<{
   exercise?: Omit<Exercise, 'kind'> & { kind?: string }
   thumbnail?: boolean
+  expanded?: boolean
 }>()
+const sourceRef = computed(
+  () =>
+    props.exercise?.source_ref ||
+    (!props.exercise?.owner_id && !props.exercise?.workspace_id ? props.exercise?.id : undefined),
+)
+const credit = computed(() => credits[sourceRef.value as keyof typeof credits])
+const motion = computed(() => videoForExercise(props.exercise))
 const pack = computed(() => {
   const e = props.exercise
   if (!e || e.media_url) return undefined
-  // Older starter snapshots have no media field; only the fixed, reviewed starter mappings qualify.
   return media.items.find((item) =>
     e.media_ref
       ? item.id === e.media_ref
       : !e.owner_id && !e.workspace_id && item.exerciseId === e.id,
   )
 })
-const frame = ref(0),
-  open = ref(false),
-  playing = ref(false),
-  failed = ref(false)
-const name = computed(() =>
-  locale.value === 'ar' ? props.exercise?.name_ar || props.exercise?.name : props.exercise?.name,
-)
-const asset = computed(() => pack.value?.frames[frame.value])
-const apiUrl = import.meta.env.VITE_API_URL || 'http://127.0.0.1:55331'
-const reduced =
-  typeof matchMedia !== 'undefined' ? matchMedia('(prefers-reduced-motion: reduce)') : null
-let timer: ReturnType<typeof setInterval> | undefined
-function imageFailed() {
-  failed.value = true
-  stop()
-}
-function stop() {
-  if (timer) clearInterval(timer)
-  timer = undefined
-  playing.value = false
-}
-function step(value: number) {
-  stop()
-  frame.value = (value + 3) % 3
-  failed.value = false
-}
-function togglePlay() {
-  if (playing.value) {
-    stop()
-    return
-  }
-  playing.value = true
-  timer = setInterval(() => {
-    frame.value = (frame.value + 1) % 3
-  }, 900)
-}
-function toggle(e: Event) {
-  open.value = (e.target as HTMLDetailsElement).open
-  if (!open.value) stop()
-}
-function hidden() {
-  if (document.hidden) stop()
-}
-function motionChanged() {
-  if (reduced?.matches) stop()
-}
-document.addEventListener('visibilitychange', hidden)
-reduced?.addEventListener('change', motionChanged)
+const failedFrames = ref<string[]>([])
 watch(
   () => props.exercise?.id,
   () => {
-    stop()
-    frame.value = 0
-    failed.value = false
+    failedFrames.value = []
   },
 )
-onBeforeUnmount(() => {
-  stop()
-  document.removeEventListener('visibilitychange', hidden)
-  reduced?.removeEventListener('change', motionChanged)
-})
+const name = computed(() =>
+  locale.value === 'ar' ? props.exercise?.name_ar || props.exercise?.name : props.exercise?.name,
+)
 </script>
 <template>
-  <details
-    v-if="pack"
+  <ExerciseVideo v-if="motion" :key="motion.id" :item="motion" :name="name" />
+  <section
+    v-else-if="pack"
     class="exercise-demo"
-    :class="{ 'demo-with-thumbnail': thumbnail }"
-    @toggle="toggle"
+    :aria-label="l('Technique illustrations', 'رسومات التقنية')"
   >
-    <summary>
-      <img
-        v-if="thumbnail"
-        :src="pack.frames[0]!.path.replace('/v1/catalog', '')"
-        width="56"
-        height="56"
-        alt=""
-        loading="lazy"
-        @error="($event.target as HTMLImageElement).hidden = true"
-      />
-      <span>{{ l('See movement', 'شاهد الحركة') }}</span>
-    </summary>
-    <div v-if="open" class="demo-content">
-      <div class="demo-stage">
+    <div class="demo-positions">
+      <figure v-for="(frame, index) in pack.frames" :key="frame.path">
         <img
-          v-if="!failed && asset"
-          :src="asset.path.replace('/v1/catalog', '')"
-          :alt="`${name} · ${l('Position', 'الوضعية')} ${frame + 1} / 3`"
+          v-if="!failedFrames.includes(frame.path)"
+          @error="failedFrames.push(frame.path)"
+          :src="frame.path.replace('/v1/catalog', '')"
+          :alt="`${name} · ${l('Position', 'الوضعية')} ${index + 1}`"
           width="512"
           height="512"
-          @error="imageFailed"
+          loading="lazy"
         />
-        <p v-else role="status">
-          {{
-            l(
-              'Illustration unavailable. You can continue with the written instructions.',
-              'الرسم غير متاح. يمكنك المتابعة بالتعليمات المكتوبة.',
-            )
-          }}
-        </p>
-      </div>
-      <div class="demo-controls">
-        <button
-          type="button"
-          class="button small secondary"
-          @click="step(frame - 1)"
-          :aria-label="l('Previous position', 'الوضعية السابقة')"
-        >
-          {{ l('Previous', 'السابق') }}
-        </button>
-        <span>{{ frame + 1 }} / 3</span>
-        <button
-          type="button"
-          class="button small secondary"
-          @click="step(frame + 1)"
-          :aria-label="l('Next position', 'الوضعية التالية')"
-        >
-          {{ l('Next', 'التالي') }}
-        </button>
-        <button
-          v-if="!failed"
-          type="button"
-          class="text-link"
-          :aria-pressed="playing"
-          @click="togglePlay"
-        >
-          {{ playing ? l('Pause', 'إيقاف مؤقت') : l('Play steps', 'تشغيل الخطوات') }}
-        </button>
-        <button v-else type="button" class="text-link" @click="failed = false">
-          {{ l('Try image again', 'أعد تحميل الرسم') }}
-        </button>
-      </div>
-      <p class="demo-caption">
-        {{
-          l(
-            'Three reference positions, not a guide to movement speed. Follow your coach’s instructions.',
-            'ثلاث وضعيات توضيحية، وليست دليلاً لسرعة الحركة. اتبع تعليمات مدربك.',
-          )
-        }}
-      </p>
-      <p class="demo-credit">
-        <a href="https://github.com/bryllim/workout-guide" target="_blank" rel="noopener noreferrer"
-          >Bryl Lim / Workout Guide</a
-        ><span v-if="'source' in pack.attribution"> · Everkinetic</span> ·
-        <a :href="media.licenseUrl" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a> ·
-        <a
-          :href="apiUrl + '/v1/catalog/exercise-media'"
-          target="_blank"
-          rel="noopener noreferrer"
-          >{{ l('Source & credits', 'المصدر والحقوق') }}</a
-        >
-      </p>
+        <p v-else class="demo-frame-error">{{ l('Image unavailable', 'الرسم غير متاح') }}</p>
+        <figcaption>{{ l('Position', 'الوضعية') }} {{ index + 1 }}</figcaption>
+      </figure>
     </div>
-  </details>
+    <button v-if="failedFrames.length" type="button" class="text-link" @click="failedFrames = []">
+      {{ l('Retry images', 'إعادة تحميل الرسومات') }}
+    </button>
+    <p class="demo-caption">
+      {{ l('Reference positions', 'وضعيات توضيحية') }} ·
+      <a href="https://github.com/bryllim/workout-guide" target="_blank" rel="noopener noreferrer"
+        >Bryl Lim<span v-if="'source' in pack.attribution"> / Everkinetic</span></a
+      >
+      · <a :href="media.licenseUrl" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>
+    </p>
+  </section>
   <a
     v-else-if="exercise?.media_url"
     :href="exercise.media_url"
@@ -178,68 +79,89 @@ onBeforeUnmount(() => {
     class="text-link"
     >{{ l('Open demonstration', 'فتح الشرح') }} ↗</a
   >
+  <p v-else-if="expanded" class="demo-unavailable">
+    {{
+      l(
+        'Written guide · no video available for this exercise yet.',
+        'دليل مكتوب · لا يتوفر فيديو لهذا التمرين بعد.',
+      )
+    }}
+  </p>
+  <p v-if="credit" class="instruction-credit">
+    {{ l('Instruction source', 'مصدر التعليمات') }}:
+    <a :href="credit.sourceUrl" target="_blank" rel="noopener noreferrer"
+      >{{ credit.author }} / wger</a
+    >
+    · <a :href="credit.licenseUrl" target="_blank" rel="noopener noreferrer">{{ credit.license }}</a
+    ><span v-if="credit.adapted"> · {{ l('Adapted by Rafik', 'بتصرف من رفيق') }}</span>
+  </p>
+  <p v-else-if="sourceRef?.startsWith('dataset-')" class="instruction-credit">
+    {{ l('Instruction source', 'مصدر التعليمات') }}:
+    <a
+      href="https://github.com/hasaneyldrm/exercises-dataset/tree/7455efae41b330c265e7cd4b78dfa848e7ce5ebd"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Exercises Dataset · MIT</a
+    >
+  </p>
 </template>
 <style scoped>
+.instruction-credit {
+  font-size: 0.7rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
 .exercise-demo {
-  margin-block: 0.75rem;
+  margin-block: 1.5rem;
   max-width: 100%;
 }
-.exercise-demo summary {
-  color: var(--accent);
-  font-weight: 600;
-  cursor: pointer;
+.demo-positions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  max-width: 600px;
 }
-.demo-with-thumbnail summary {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+.demo-positions figure {
+  margin: 0;
+  min-width: 0;
 }
-.demo-with-thumbnail summary img {
+.demo-positions img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 10px;
   background: #1c2924;
-  border-radius: 0.5rem;
-  flex-shrink: 0;
+  padding: 8px;
 }
-.demo-content {
-  max-width: 25rem;
-  margin-top: 0.75rem;
+.demo-positions figcaption {
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 6px;
 }
-.demo-stage {
+.demo-frame-error {
+  aspect-ratio: 1;
   display: grid;
   place-items: center;
-  aspect-ratio: 1;
-  width: 100%;
-  max-width: 22rem;
-  background: #1c2924;
-  color: #fff;
-  border-radius: 0.75rem;
-  padding: 1rem;
-}
-.demo-stage img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-.demo-stage p {
-  color: #fff;
-  padding: 1rem;
-}
-.demo-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  max-width: 22rem;
-  margin-top: 0.75rem;
-}
-.demo-caption,
-.demo-credit {
-  color: var(--muted);
+  text-align: center;
   font-size: 0.75rem;
-  line-height: 1.6;
-  margin-top: 0.6rem;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 10px;
 }
-.demo-credit a {
-  color: inherit;
+.demo-caption {
+  font-size: 0.7rem;
+  line-height: 1.7;
+  color: var(--muted);
+  margin-top: 10px;
+}
+.demo-unavailable {
+  font-size: 0.8rem;
+  color: var(--muted);
+  padding-block: 1rem;
+  border-block: 1px solid var(--line);
+  margin-block: 1.5rem;
 }
 </style>

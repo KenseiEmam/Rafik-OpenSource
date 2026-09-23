@@ -65,3 +65,11 @@
 - Imported numeric precision must remain valid in real forms. Test source-backed values through actual submission (including controls inside collapsed details); a calculated preview alone does not prove the record can be saved.
 
 - Async navigation guards apply to initialization and successful write callbacks as well as read responses. Persist/acknowledge the original command, but never rewrite route/query state after its screen unmounts. Add an in-flight SPA navigation test that waits for durable acknowledgement before checking the destination; sequential save-then-navigate journeys miss this race.
+
+- Content integration acceptance must measure the requested corpus and the usable media coverage separately. Do not quietly reduce a broad-library request to fixture matches. Verify discovery with compound categories and later-page selections, plus the real authoring/consumption workflow. Still positions must not be represented as continuous movement; previews should not require manual frame-stepping. Native and offline media claims require their own evidence.
+
+- Exercise discovery acceptance must inspect the initial phone list before opening details: at least one result should be visible without expanding filters. Test compound equipment membership (for example barbell plus bench), combined filters, a later-page selection and query entry after Escape. Use the control’s accessible role/name in browser checks; label-container text can include option text.
+- For scoped Vue RTL rules, keep the full target selector scoped (for example `.arrow:dir(rtl)`); never put a global ancestor in a selector that can compile to the ancestor alone. Inspect emitted CSS and an actual Arabic screenshot. Geometry/Axe scans cannot prove correct orientation.
+- Picker acceptance must verify that an option is visibly inside the popup and viewport, not merely mounted or selectable by keyboard. Prefer one scroll owner; avoid fixed height subtraction when filter controls can wrap. Capture viewport images with browser-specific names so phone runs cannot overwrite desktop evidence.
+
+- Portaled Reka popups need their own locale direction (or a verified global ConfigProvider); Root direction does not establish Popper Content direction. Assert the open popup’s computed direction and inspect mixed Arabic/English labels; use auto direction for untranslated names.

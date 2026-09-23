@@ -48,6 +48,7 @@ const options = computed(() =>
       <ComboboxPortal
         ><section role="region" :aria-label="label + ' · ' + l('Options', 'الخيارات')">
           <ComboboxContent
+            :dir="locale === 'ar' ? 'rtl' : 'ltr'"
             class="timezone-options"
             position="popper"
             :side-offset="6"
