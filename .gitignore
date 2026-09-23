@@ -6,3 +6,4 @@ node_modules/
 supabase/.temp/
 supabase/.branches/
 coverage/
+artifacts/

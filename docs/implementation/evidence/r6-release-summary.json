@@ -1,0 +1,100 @@
+{
+  "date": "2026-09-23",
+  "scope": "local only",
+  "acceptance": "passed across recorded checks",
+  "basis": "Full serial run plus the corrected team-harness rerun and SQL log-draining rerun. Not one uninterrupted green command.",
+  "originalRun": {
+    "path": "artifacts/release/2026-09-23T05-02-05.650Z/report.json",
+    "status": "failed",
+    "sha256": "4c4cf90fcd362f18f7df480688d77926e282d57a5cde04ac1f6e76e5348a0c06"
+  },
+  "checks": [
+    {
+      "name": "prerequisites",
+      "status": "passed"
+    },
+    {
+      "name": "backend-test-release",
+      "status": "passed"
+    },
+    {
+      "name": "backend-test",
+      "status": "passed"
+    },
+    {
+      "name": "backend-test-fresh",
+      "status": "passed"
+    },
+    {
+      "name": "backend-test-services",
+      "status": "passed"
+    },
+    {
+      "name": "backend-test-teams",
+      "status": "passed"
+    },
+    {
+      "name": "backend-content-check",
+      "status": "passed"
+    },
+    {
+      "name": "backend-test-docs",
+      "status": "passed"
+    },
+    {
+      "name": "schema-lint",
+      "status": "passed"
+    },
+    {
+      "name": "web-test",
+      "status": "passed"
+    },
+    {
+      "name": "web-format-check",
+      "status": "passed"
+    },
+    {
+      "name": "web-build",
+      "status": "passed"
+    },
+    {
+      "name": "web-test-build",
+      "status": "passed"
+    },
+    {
+      "name": "web-test-e2e",
+      "status": "passed"
+    },
+    {
+      "name": "web-test-quality-layout",
+      "status": "passed"
+    },
+    {
+      "name": "web-test-product-layout",
+      "status": "passed"
+    },
+    {
+      "name": "web-test-teams-layout",
+      "status": "passed",
+      "basis": "independent corrected rerun of both engines, /tmp/rafik-r6-team-final.log; geometry and page-error assertions retained"
+    }
+  ],
+  "supplemental": {
+    "sqlPipe": "229 PASS notices, six ROLLBACKs, exit 0 after log-draining fix",
+    "browserScenarios": 52,
+    "unitTests": 11,
+    "releaseGuardTests": 7,
+    "realBuildArtifactCheck": "two emitted builds and HTML-only version change passed",
+    "dependencyAudit": {
+      "backend": 0,
+      "web": 0
+    }
+  },
+  "unverified": [
+    "hosted operations",
+    "remote CI",
+    "physical devices and assistive technology",
+    "human usability and retention",
+    "external delivery and payments"
+  ]
+}

@@ -1,6 +1,6 @@
 # Revamp execution ledger
 
-Updated 23 September 2026. **A working local web/backend foundation is implemented on `codex/revamp`; the full Rafik revamp is incomplete.** The user correctly rejected the narrow core as a complete replacement. R5 implementation and the latest verification appear below. Earlier phase entries retain their checkpoint context; use the current next action and R5 section for ongoing work. Read [revamp coverage and corrected execution scope](revamp-coverage.md) before continuing. The E01–E12 statuses below describe only the initial slice, not whole-product completion.
+Updated 23 September 2026. **A working local web/backend foundation is implemented on `codex/revamp`; the full Rafik revamp is incomplete.** The user correctly rejected the narrow core as a complete replacement. R6 responsive maintenance and local release hardening are implemented below; listed local acceptance checks pass. The user-reported inbox regression reopened R5 local quality acceptance. Earlier phase entries retain their checkpoint context; use the current next action and R5 section for ongoing work. Read [revamp coverage and corrected execution scope](revamp-coverage.md) before continuing. The E01–E12 statuses below describe only the initial slice, not whole-product completion.
 
 | Unit | Status | Evidence / boundary |
 |---|---|---|
@@ -70,10 +70,10 @@ The earlier decision to treat the broad product inventory as merely optional was
 
 ## Current next action for Codex
 
-1. R5 local implementation acceptance is complete: 46/46 final browser scenarios, 229 SQL assertions, fresh-install/HTTP/build/format/doc checks and the focused render review pass. Use the release checklist for the next stage; preserve all recorded local constraints.
-2. Follow the shared contribution definition of done and quality rules in both AGENTS files. Preserve the accepted visual identity and explicit domain/state boundaries. Do not equate automated counts with human usability.
-3. After local implementation acceptance, use the release checklist for physical-device/assistive-technology and new-project hosted operations. External notification/payment/calendar adapters require separate contracts and evidence. Native remains deferred.
-4. Continue to update matching current documentation and historical evidence; never reuse the retired hosted backend, deploy synthetic fixtures, or push main.
+1. R6 local checks pass: 52 browser scenarios, 800 layout states/202 Axe scans, 229 SQL assertions, 11 unit tests, real service/fresh/build checks and release-guard/doc checks. Use the recorded evidence below. Earlier R5 test counts did not establish mobile-inbox usability; the defect and prevention rules are documented in the product quality review.
+2. Use the feature verification map, shared contribution definition of done and AGENTS rules for all later work. Verify list/detail/back/error states, nested clipping and real content, not just routes or document width. Keep the accepted visual identity and simple runtime boundaries.
+3. Carry forward the original notification-preference/intercepted-delivery gap explicitly: Today activity exists, but preferences, a bounded local delivery/outbox contract and provider adapter acceptance are not implemented. Resolve that local product contract before claiming the complete retained feature inventory is finished.
+4. Physical devices/assistive technology, new hosted-project operations, actual external providers and human usefulness/retention evidence remain release gates. Native remains deferred. Do not deploy, reuse retired credentials, seed hosting or push main without a scope change.
 
 Detailed source/operation contracts are in `architecture.md`, local/deployment instructions in `runbook.md`, content provenance in `content.md`, and business observation materials in `pilot.md`.
 
@@ -117,3 +117,17 @@ Detailed source/operation contracts are in `architecture.md`, local/deployment i
 - Additive migration 009 and 20 new rollback assertions; fresh-account browser coverage for long conversations, visible read cursors/drafts/focus, blocked-save alternative recovery and growing check-in lists. Full regression evidence and development failures are recorded honestly in verification.
 
 **Remaining gates:** physical-device keyboard/touch/suspension and assistive technology; new hosted project's Auth/email/Storage/backup/CI operations; real external adapters if enabled; observed unaided user tasks and repeat use. Lists use complete authorized reads with bounded rendering, not server-side large-scale query pagination. Same-kind alternatives inherit targets and are explicit coach choices, not automatic recommendations.
+
+## R6 — Responsive maintenance and local release hardening
+
+**Implemented and verified locally for the recorded scope: 52 browser scenarios, 800 layout states, 202 Axe scans, 229 SQL assertions, 11 unit tests and seven release guards, plus real fresh/service/build checks.** Both active repositories remain on `codex/revamp`. No database migration or preview reset was needed.
+
+- Reproduced the reported phone inbox defect: inherited 250px flex basis became row height; intrinsic minimum width expanded the inbox behind an overflow-clipping container. Removed obsolete horizontal-list CSS, constrained grid/inbox widths, restored normal row sizing and wrapping workspace navigation.
+- Added state-based checks for multi-contact long names, compact rows, internal control containment, short/tall/landscape/resized viewports, search/back/no-match and both engines. Broad feature audit found/fixed WebKit native select overflow in the roster and Arabic resource filter. The roster now loads twelve visible rows at a time; search still covers all authorized loaded clients. Removed theme colour interpolation that caused transient low button contrast.
+- Updated durable quality rules, current runbook instructions and a feature verification map. The product quality review explicitly records the previous QA miss; generated captures and document-level metrics are not treated as visual acceptance.
+- Completed the next local implementation phase: final-file-versioned offline shells, safe waiting updates, Help/Settings update controls, failed-install recovery and preserved workout records across update/offline reopen. No forced reload or second persistence layer. ADR 0003 records rollout compatibility and multi-tab tradeoffs.
+- Added guarded serial local release verification with per-step logs/reports, seven negative/positive guard tests, real HTML-only build checks and production browser failure/update tests. No runtime service or dependency was added.
+
+Evidence is composed from the final full browser/check run plus a corrected team-layout harness rerun and a SQL log-draining rerun; see the release summary for exact provenance.
+
+See [verification](verification.md), [feature coverage](feature-verification-map.md) and [R6 contract](r6-contract.md) for scope, concrete results and remaining boundaries. This is local implementation evidence, not hosted, physical-device or business success certification.

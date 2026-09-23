@@ -1,5 +1,28 @@
 # Local verification record
 
+## R6 verification — 23 September 2026
+
+The user's mobile-inbox report reopened the previous local quality acceptance. Read the [root-cause review](product-quality-review.md) and [feature verification map](feature-verification-map.md). The following checks pass on the current local implementation; they do not establish every possible state or hardware behavior.
+
+| Check | Actual result / boundary |
+|---|---|
+| Full browser journeys | **52/52** across Chromium and phone-sized WebKit, serial, no configured retries. Includes failed first install/retry, failed update, waiting version with two tabs, retained workout after activation and offline reload; populated responsive inbox and long native selections. |
+| Broad product rendering | **320 states**: 296 client/coach route states across both engines plus 24 production Help/update states. No document/internal clipping failures, alerts or page errors; **82** Axe scans pass. |
+| Focused conversations | **128** language/theme/width states and **32** Axe scans pass, including composer reachability. New deterministic row geometry/state tests separately cover 320×568, 390×664, 444×1043, 844×390 and desktop, long-name search/back and no-match. |
+| Populated teams | **352** states across Chromium and WebKit, both languages/themes and four widths; **88** Axe scans pass. Final rerun waits for Auth route readiness before replacing test identities; zero page errors, with the error assertion retained. |
+| Database/fresh/services | **229** assertions across six rollback suites; nine-migration disposable fresh database; five service and nine team HTTP groups pass. No preview reset. Schema lint/content checks pass. A piped SQL rerun confirms all 229 notices and six rollback completions after fixing log drainage. |
+| Unit/build/release guard | **11** frontend unit tests, **7** local release-guard tests, type/build/format checks pass. Two real generated builds prove HTML-only releases have different identities and hashes match final output bytes. |
+| Maintenance | Both dependency audits report zero known vulnerabilities at this check. Documentation links and Git whitespace checks pass. No dependency/runtime service added. |
+
+Total layout checks: **800**, including **202** automated accessibility scans. Actual inspected renders and coverage limits are listed in [R6 evidence](evidence/r6-local-checks.md); these counts do not claim manual inspection of every screenshot or an accessibility certification. [Layout summary](evidence/r6-layout-summary.json) records artifact hashes/counts. [Release summary](evidence/r6-release-summary.json) records per-gate provenance.
+
+Reproduce with backend `npm run verify:release -- --check` then `npm run verify:release -- --full` (local stack and both web servers required). Individual web commands include `test:e2e`, `test:build`, `test:quality:layout`, `test:product:layout` and `test:teams:layout`. Never run separate Playwright suites into the same report directory concurrently.
+
+Acceptance is **composed**, not one uninterrupted green command: the full browser run and earlier gates passed; the final extended WebKit team check exposed test-setup navigation during Auth bootstrap. After adding an explicit route-ready wait, both complete team matrices passed independently. A separate piped SQL rerun verifies the output-drain-only maintenance fix. Earlier runs also caught transient theme contrast, initial-install recovery and pre-final-bundle hashing problems; they are recorded as development failures, not hidden or counted as acceptance.
+
+Physical mobile keyboard/touch/suspension, assistive technology, hosted Auth/email/Storage/CDN/backups, remote CI and human usefulness/retention remain unverified. Notification preferences/intercepted delivery and real external providers remain explicit future contracts. Native work remains deferred.
+
+
 ## R5 verification — 23 September 2026
 
 Executed locally on Node 22.16.0, Supabase CLI 2.90.0 and `rafik-revamp-local`. Migration 009 was applied additively; the existing preview was retained. No hosted project, external provider, remote CI run, native change or push is implied.

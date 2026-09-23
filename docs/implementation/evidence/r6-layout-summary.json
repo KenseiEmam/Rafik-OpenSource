@@ -1,0 +1,54 @@
+{
+  "date": "2026-09-23",
+  "scope": "local browser rendering; not physical devices",
+  "reports": [
+    {
+      "source": "artifacts/r5-quality-layout.json",
+      "sha256": "18852c8cbe27d1d52ddc70e44af8a4fb43985cc130d2c7b6885179ff31367106",
+      "states": 128,
+      "accessibilityChecks": 32,
+      "engines": {
+        "chromium": 128
+      },
+      "failures": 0,
+      "pageErrors": 0
+    },
+    {
+      "source": "artifacts/product-audit/results.json",
+      "sha256": "b5168f4b9d1ca174c94481e267c113aba91540af2dbc96e882064d42444af3b5",
+      "states": 320,
+      "accessibilityChecks": 82,
+      "engines": {
+        "chromium": 160,
+        "webkit": 160
+      },
+      "failures": 0,
+      "pageErrors": 0
+    },
+    {
+      "source": "artifacts/r4-layout.json",
+      "sha256": "1648d06d8e97504e921cf0df579ce8cc9600ad67995dbb5de11a476c7476540f",
+      "states": 176,
+      "accessibilityChecks": 44,
+      "engines": {
+        "chromium": 176
+      },
+      "failures": 0,
+      "pageErrors": 0
+    },
+    {
+      "source": "artifacts/r6-team-webkit.json",
+      "sha256": "5aea7ec3ec96e599b83072df9649c4b6c33bbee837cfd54af0a98f0204f411c6",
+      "states": 176,
+      "accessibilityChecks": 44,
+      "engines": {
+        "webkit": 176
+      },
+      "failures": 0,
+      "pageErrors": 0
+    }
+  ],
+  "states": 800,
+  "accessibilityChecks": 202,
+  "manualReview": "See r6-local-checks.md for actually inspected states and limits."
+}

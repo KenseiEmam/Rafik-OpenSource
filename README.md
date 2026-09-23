@@ -68,3 +68,7 @@ For existing local installs, after applying migration 008, enable the simulator 
 Messages now keeps history and composing in a bounded workspace, with a searchable inbox and phone back flow. Today prioritizes training; check-ins/plans/reviews handle growing lists. Coaches can offer up to three same-kind exercise alternatives in the plan editor; publish and assign the version, then the client chooses within the workout. Recorded choices flow through offline recovery, coach review and progress while original targets remain unchanged.
 
 Read the [product quality review](docs/implementation/product-quality-review.md), [R5 contract](docs/implementation/r5-contract.md) and [release checklist](docs/implementation/release-checklist.md). The contribution rules require real user-task inspection, complete lifecycle implementation and matching docs for future work.
+
+## Local release verification
+
+With the local stack and both web servers running, `npm run verify:release -- --check` validates prerequisites and `npm run verify:release -- --full` executes the complete local gate serially. Reports are under ignored `artifacts/release/`; the runner never resets, deploys or pushes. See [R6 contract](docs/implementation/r6-contract.md) and [runbook](docs/implementation/runbook.md). Device/hosted/business gates remain separate.

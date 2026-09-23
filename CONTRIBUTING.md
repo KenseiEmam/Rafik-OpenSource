@@ -18,7 +18,7 @@ Use Node 22.16.0, Docker and adjacent `rafik-api` / `RAFIK-FRONTEND` checkouts. 
 A feature is complete only when an intended user can discover it, understand it, finish their task and recover from a realistic failure without knowing the implementation. A route that renders, a populated screenshot, a passing Axe scan or a large test count is insufficient.
 
 - Primary action is reachable on phone and desktop, including long lists/history and open optional controls.
-- Navigation, back behavior, keyboard focus, labels, RTL, themes and realistic content have been inspected.
+- Navigation, back behavior, keyboard focus, labels, RTL, themes and realistic content have been inspected. Check list/detail/back/no-match/error states with multiple records and long labels at short/tall phone heights and landscape in both Chromium and WebKit. Inspect internal clipping and control containment, not only document overflow. Remove obsolete breakpoint rules when changing layout direction. Record which rendered states were actually inspected.
 - Required work is minimal; optional fields/tools are progressively disclosed. Public-facing copy describes the user's action rather than database or implementation terminology.
 - The server owns permissions, limits and concurrency. Immutable prescriptions and published definitions stay immutable; retries/corrections do not double-apply outcomes.
 - Regression tests verify observable behavior and important boundaries. Fix discovered failures; do not weaken tests to make the change green.

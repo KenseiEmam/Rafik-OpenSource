@@ -28,7 +28,7 @@ Visit `http://127.0.0.1:5173`. The footer's sample-account link signs into local
 
 ## Verify a change
 
-Backend: `npm test` runs the core, daily-coaching and ongoing-coaching suites (93 assertions) in rollback transactions. `npm run test:fresh` creates a disposable database inside the local Supabase container, applies all three migrations and synthetic fixtures, runs all three suites, and drops only that disposable database. It preserves the preview database. `npm run content:check` compares generated seed/web content against the canonical JSON, with both sibling checkouts present. `npm run types` refreshes web database types after a schema reset.
+Backend: `npm test` runs all six SQL suites (229 assertions) in rollback transactions. `npm run test:fresh` creates a disposable database inside the local Supabase container, applies all nine migrations and synthetic fixtures, runs all six suites, and drops only that disposable database. It preserves the preview database. `npm run content:check` compares generated seed/web content against the canonical JSON, with both sibling checkouts present. `npm run types` refreshes web database types after a schema reset.
 
 Frontend: `npm test`, `npm run format:check`, `npm run build`. For full browser checks, keep the dev server running on 5173; build and run `npm run preview -- --port 5174 --strictPort` in another terminal. Install test browsers once with `npx playwright install chromium webkit`, then run `npm run test:e2e`. Account/invitation scenarios require the local backend and test inbox. The production-shell scenarios use port 5174.
 
@@ -152,3 +152,19 @@ Run `npm run test:docs` for maintained engineering links, `npm test` for all rol
 Try alternatives: local coach → Plans → edit an exercise → Offer an alternative → select up to three → save/publish/assign. Local client → start that newly assigned session → Choose an alternative. Record results; coach review and Progress identify the actual exercise while preserving original targets. Starting a session before reassignment intentionally retains its old snapshot.
 
 Try Messages on phone width: open an inbox contact, scroll history independently, compose at the bottom, use Back to conversations; Attach a file reveals optional shared-file tools. Theme/help remain in the footer. The app does not claim external message delivery.
+
+## R6 local release gate and application updates
+
+No new database migration is required for R6. Keep both local web servers running (5173 dev, 5174 production preview), the local backend up, pinned dependencies installed and both branches on `codex/revamp`.
+
+```sh
+# From rafik-api; never resets the existing preview
+npm run verify:release -- --check
+npm run verify:release -- --full
+```
+
+The full command runs guard tests, SQL/fresh/service/team checks, content/docs/lint, frontend unit/format/build and real build-artifact checks, full serial browser journeys and focused/broad/team layout matrices. It stops on the first failure and writes `artifacts/release/<timestamp>/report.json` plus numbered logs. A prerequisites-only pass is not full acceptance. Reports explicitly leave hosted/device/remote-CI/business gates unverified. The full browser suite still creates some historical sample-coach records; new R4–R6 fixtures clean up only their own temporary records. Do not reset or delete preview data to make a check pass.
+
+A lock prevents overlapping release runners. If the process is forcibly terminated, confirm no verification process is running before deleting `artifacts/release/running.lock`; rerun the failed command after fixing its cause. Never run a separate Playwright suite against the same report directory concurrently.
+
+Production update test: build, open port 5174 → Help → App updates. Settings has the same controls after sign-in. The dev server intentionally does not register a worker or show app-update UI. A ready update activates when all old Rafik tabs close; do not clear browser data. A failed download keeps the active version and offers another check. The backend must continue accepting old open clients during rollout. Hosting, CDN cache headers and physical device behavior remain release gates.

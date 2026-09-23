@@ -5,8 +5,10 @@ This checklist is a gate, not evidence that a release has happened. Record links
 ## Local implementation gate
 
 - Fresh install and upgrade from the current preview both pass; generated types/content match.
+- Run the guarded `npm run verify:release -- --full` command locally and inspect its per-step report; a prerequisites-only check is insufficient.
 - Existing regression suites pass alongside meaningful new lifecycle/failure tests.
 - New client accepts a plan, trains, resumes after interruption, completes/corrects and sees coach feedback; coach can author, assign, review and follow up.
+- Check the [feature verification map](feature-verification-map.md), including inbox/list/detail/back/no-match/error states, internal clipping, short phone heights and both browser engines.
 - Long conversations, roster/history, plans and optional tools work at phone and desktop sizes in English/Arabic, light/dark; inspect screenshots and actual interactions, keyboard and focus.
 - Team consent, departure/handoff and resource revocation preserve correct access and history.
 - Maintained docs describe current architecture/workflow with no contradictory scope claims.

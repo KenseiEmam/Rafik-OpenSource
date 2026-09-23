@@ -4,7 +4,7 @@ Start with the [documentation index](../README.md), [ADRs](../decisions/README.m
 
 Local revamp, 23 September 2026. This record describes the new implementation; `docs/revival` preserves the audit and rationale. It is not a compatibility plan for the retired backend.
 
-**Current scope:** one web application and one Supabase project, with 37 domain tables and one internal runtime-setting table. Domain contracts cover training/daily coaching, ongoing coaching, service delivery and optional teams/commercial/support. The [coverage register](revamp-coverage.md) tracks capability/release boundaries; [ADRs](../decisions/README.md) explain durable decisions. The numbered R1–R5 contract documents record feature invariants; the [maintainer guide](maintainer-guide.md) maps current files and change recipes.
+**Current scope:** one web application and one Supabase project, with 37 domain tables and one internal runtime-setting table. Domain contracts cover training/daily coaching, ongoing coaching, service delivery and optional teams/commercial/support. The [coverage register](revamp-coverage.md) tracks capability/release boundaries; [ADRs](../decisions/README.md) explain durable decisions. The numbered R1–R6 contract documents record feature invariants; the [maintainer guide](maintainer-guide.md) maps current files and change recipes.
 
 ## System boundary
 
@@ -179,3 +179,11 @@ Migration `202609230009_exercise_choices.sql` adds nullable `set_entries.exercis
 Messages uses a bounded history viewport, desktop inbox/thread and phone inbox/back flow. Foreground refresh merges immutable messages by ID; read cursors advance only at the viewed end. Optional attachments do not occupy the default composer. Check-in lists are filtered/paged in the presentation layer over the existing complete authorized read; this bounds rendered interaction, not database query volume. The client Today prioritizes training before optional coaching updates.
 
 See [R5 contract](r5-contract.md), [quality review](product-quality-review.md), [contribution workflow](../../CONTRIBUTING.md) and [release checklist](release-checklist.md).
+
+## Application release lifecycle
+
+The production shell pins each controlled tab to one complete cached version. Cache identities hash bundle contents, HTML and the brand asset, rather than filenames alone. A new worker installs in the background and waits; it never forces activation or reload. Settings/Help expose update check, ready and failure states. Finish work, close all Rafik tabs and reopen to adopt the waiting release. IndexedDB and Auth storage are untouched. See [ADR 0003](../decisions/0003-application-updates.md).
+
+`build/offline-shell.ts` owns worker generation; `src/app/updates.ts` owns only registration/update status; `AppUpdates.vue` renders that status in existing pages. No backend table/command or new runtime service is added. Keep future backend migrations compatible with older open clients.
+
+Backend `scripts/verify-release.mjs` runs the local acceptance commands sequentially after `release-guard.mjs` checks the pinned runtime, branches, project identity and exact API target. Reports/logs stay in ignored `artifacts/release/`. It checks, but does not deploy/reset/push. Feature-state layout checks supplement domain/lifecycle tests; they do not certify hardware or human usability.
