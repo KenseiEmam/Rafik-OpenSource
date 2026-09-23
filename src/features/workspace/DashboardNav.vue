@@ -31,6 +31,7 @@ const groups = computed(() =>
             ['', l('Overview', 'نظرة عامة'), PhHouse],
             ['/people', l('People', 'الأشخاص'), PhUsers],
             ['/training', l('Training', 'التدريب'), PhBarbell],
+            ['/nutrition', l('Nutrition', 'التغذية'), PhBowlFood],
             ['/calendar', l('Calendar', 'التقويم'), PhCalendarBlank],
             ['/messages', l('Messages', 'الرسائل'), PhChatCircle],
             ['/analytics', l('Analytics', 'التحليلات'), PhChartLine],

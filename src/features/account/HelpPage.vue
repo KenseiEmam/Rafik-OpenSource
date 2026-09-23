@@ -149,8 +149,8 @@ import { language, t } from '../../lib/i18n'
       <p>
         {{
           language(
-            'The food library starts with 15 sourced USDA staples. Use a label or a saved food for other choices; check the nutrient basis before changing portions. Organization nutrition is not available yet.',
-            'تبدأ مكتبة الطعام بخمسة عشر طعاماً موثقاً من وزارة الزراعة الأمريكية. استخدم الملصق أو طعاماً محفوظاً للخيارات الأخرى وراجع أساس القيم قبل تعديل الكميات. تغذية المؤسسات غير متاحة بعد.',
+            'The food library starts with 15 sourced USDA staples. Use a label or a saved food for other choices; check the nutrient basis before changing portions. Organization admins and assigned trainers can publish scoped plans in Nutrition. Trainees decide whether to share their organization diary; personal records remain separate.',
+            'تبدأ مكتبة الطعام بخمسة عشر طعاماً موثقاً من وزارة الزراعة الأمريكية. استخدم الملصق أو طعاماً محفوظاً للخيارات الأخرى وراجع أساس القيم قبل تعديل الكميات. يمكن لمسؤولي المؤسسة والمدربين المسند إليهم المتدربون نشر خطط في التغذية. يقرر المتدرب مشاركة سجل المؤسسة، وتبقى السجلات الشخصية منفصلة.',
           )
         }}
       </p>

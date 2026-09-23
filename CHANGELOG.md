@@ -1,5 +1,12 @@
 # Rafik web change history
 
+## R16 — Organization nutrition and shared follow-up · 23 September 2026
+
+- Organization-owned dated calorie/macro plans and example meals, immutable versions, expiry and current-trainer/admin authority.
+- Explicit trainee diary sharing, actual portion/source snapshots, corrections/removal history and subject export; personal nutrition stays separate.
+- Plan / Food diary / History workspace, searchable trainee selection, roster links, publish review and scoped durable drafts/retries. Closed editors resume unfinished drafts; latest-write acknowledgement governs save feedback.
+- Updated architecture/API/maintenance/Help, forward migrations and cross-role/workflow acceptance. Local only; hosting and native remain deferred.
+
 ## R15 — Broad exercise library, categories and real motion · 23 September 2026
 
 - Imported 1,324 metadata/instruction entries and 46 separately licensed wger entries; retained starter identities and immutable history. Categories, source references, correct timed/rep recording and copied-content attribution are explicit.

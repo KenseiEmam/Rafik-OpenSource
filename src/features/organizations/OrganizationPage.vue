@@ -433,6 +433,12 @@ onMounted(async () => {
                     </p>
                   </div>
                 </div>
+                <RouterLink
+                  v-if="member.roles.includes('trainee') && view !== 'trainee'"
+                  class="text-link"
+                  :to="base + '/nutrition?member=' + member.id"
+                  >{{ l('Nutrition', 'التغذية') }}</RouterLink
+                >
                 <button
                   v-if="view === 'admin'"
                   class="button small secondary"
@@ -584,6 +590,8 @@ onMounted(async () => {
                     member_removed: 'Membership deactivated',
                     organization_created: 'Organization created',
                     organization_renamed: 'Organization renamed',
+                    nutrition_plan_published: 'Nutrition plan published',
+                    nutrition_sharing_changed: 'Nutrition sharing changed',
                   }[event.kind] || 'Organization updated',
                   {
                     member_invited: 'إنشاء دعوة',
@@ -594,6 +602,8 @@ onMounted(async () => {
                     member_removed: 'إلغاء تنشيط عضوية',
                     organization_created: 'إنشاء المؤسسة',
                     organization_renamed: 'تغيير اسم المؤسسة',
+                    nutrition_plan_published: 'نشر خطة التغذية',
+                    nutrition_sharing_changed: 'تغيير مشاركة التغذية',
                   }[event.kind] || 'تحديث المؤسسة',
                 )
               }}</strong

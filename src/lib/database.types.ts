@@ -332,6 +332,26 @@ export type Database = { public: { Tables: {
         archived: boolean
         revision: number
     } }
+    organization_meal_history: { Row: {
+        id: string
+        workspace_id: string
+        meal_id: string
+        revision: number
+        document: Json
+        recorded_at: string
+    } }
+    organization_meals: { Row: {
+        id: string
+        workspace_id: string
+        member_id: string
+        logged_on: string
+        food: Json
+        note: string
+        revision: number
+        removed: boolean
+        created_at: string
+        updated_at: string
+    } }
     organization_messages: { Row: {
         id: string
         sequence: number
@@ -340,6 +360,26 @@ export type Database = { public: { Tables: {
         sender_id: string
         body: string
         created_at: string
+    } }
+    organization_nutrition_plans: { Row: {
+        id: string
+        workspace_id: string
+        member_id: string
+        author_id: string
+        revision: number
+        effective_on: string
+        expires_on: string | null
+        targets: Json
+        meals: Json
+        guidance: string
+        created_at: string
+    } }
+    organization_nutrition_sharing: { Row: {
+        workspace_id: string
+        member_id: string
+        enabled: boolean
+        revision: number
+        updated_at: string
     } }
     organization_programs: { Row: {
         id: string
