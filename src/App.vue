@@ -3,7 +3,7 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import WorkspaceNav from './features/workspace/WorkspaceNav.vue'
 import { PhArrowUpRight, PhTranslate, PhCaretDown } from '@phosphor-icons/vue'
-import { user, profile, ready } from './app/auth'
+import { user, profile, ready, contexts } from './app/auth'
 import { language, locale, t } from './lib/i18n'
 import { localPreview } from './lib/backend'
 import { syncPending } from './lib/training'
@@ -14,16 +14,31 @@ watch(
   (path) => {
     if (
       user.value &&
-      (path.startsWith('/coach') ||
+      (path.startsWith('/organization/') ||
+        path.startsWith('/coach') ||
         ['/today', '/history', '/progress', '/messages', '/checkins', '/more'].some((p) =>
           path.startsWith(p),
         ))
     )
       localStorage.setItem(
         'rafik.workspace:' + user.value.id,
-        path.startsWith('/coach') ? '/coach' : '/today',
+        path.startsWith('/organization/')
+          ? path.split('/').slice(0, 4).join('/')
+          : path.startsWith('/coach')
+            ? '/coach'
+            : '/today',
       )
   },
+)
+const currentContext = computed(
+  () =>
+    [...contexts.value]
+      .sort((a, b) => b.path.length - a.path.length)
+      .find((c) => route.path === c.path || route.path.startsWith(c.path + '/')) ||
+    contexts.value.find(
+      (c) => c.path === localStorage.getItem('rafik.workspace:' + user.value?.id),
+    ) ||
+    contexts.value[0],
 )
 const coaching = computed(() => route.path.startsWith('/coach'))
 const messaging = computed(() => /^(\/coach)?\/messages(\/|$)/.test(route.path))
@@ -33,7 +48,8 @@ const product = computed(
     user.value &&
     !['/', '/login', '/routine', '/privacy', '/help', '/local-preview'].includes(route.path) &&
     !route.path.startsWith('/invite/') &&
-    !route.path.startsWith('/team-invite/'),
+    !route.path.startsWith('/team-invite/') &&
+    !route.path.startsWith('/organization-invite/'),
 )
 const theme = ref(localStorage.getItem('rafik.theme') || 'system')
 function setTheme() {
@@ -57,7 +73,7 @@ onUnmounted(() => window.removeEventListener('online', online))
     <div class="header-inner">
       <RouterLink
         class="brand"
-        :to="user ? (coaching ? '/coach' : '/today') : '/'"
+        :to="user ? currentContext?.path || '/today' : '/'"
         aria-label="Rafik home"
         ><img src="/brand/rafik.png" alt="" width="38" height="38" /><span
           >rafik<span class="brand-period">.</span></span
@@ -67,11 +83,28 @@ onUnmounted(() => window.removeEventListener('online', online))
         ><span class="sr-only">{{ language('Workspace', 'مساحة العمل') }}</span
         ><select
           :aria-label="language('Workspace', 'مساحة العمل')"
-          :value="coaching ? '/coach' : '/today'"
+          :value="route.path === '/workspaces' ? '/workspaces' : currentContext?.path"
           @change="router.push(($event.target as HTMLSelectElement).value)"
         >
-          <option value="/today">{{ t('training') }}</option>
-          <option value="/coach">{{ t('coaching') }}</option>
+          <option v-for="context in contexts" :key="context.id" :value="context.path">
+            {{
+              context.kind === 'personal'
+                ? t('training')
+                : context.kind === 'independent'
+                  ? t('coaching')
+                  : context.name +
+                    ' · ' +
+                    language(
+                      { admin: 'Administration', trainer: 'Coaching', trainee: 'My training' }[
+                        context.role
+                      ],
+                      { admin: 'الإدارة', trainer: 'التدريب', trainee: 'تدريبي' }[context.role],
+                    )
+            }}
+          </option>
+          <option value="/workspaces">
+            {{ language('Manage workspaces', 'إدارة مساحات العمل') }}
+          </option>
         </select></label
       >
       <nav
@@ -105,7 +138,14 @@ onUnmounted(() => window.removeEventListener('online', online))
       </div>
     </div>
   </header>
-  <WorkspaceNav v-if="product && !focused" />
+  <WorkspaceNav
+    v-if="
+      product &&
+      !focused &&
+      !route.path.startsWith('/organization/') &&
+      route.path !== '/workspaces'
+    "
+  />
   <main id="main" :class="{ 'messages-main': messaging }" tabindex="-1">
     <RouterView :key="route.path" />
   </main>

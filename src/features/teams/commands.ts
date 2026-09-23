@@ -1,4 +1,4 @@
-import { onMounted, reactive } from 'vue'
+import { onMounted, shallowReactive } from 'vue'
 import { user } from '../../app/auth'
 import { rpc } from '../../lib/backend'
 import type { Database } from '../../lib/database.types'
@@ -6,41 +6,43 @@ import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { errorMessage, language as l } from '../../lib/i18n'
 import { commandRejected } from '../ongoing/helpers'
 type Name = keyof Database['public']['Functions']
-type Pending = { name: Name; args: Record<string, unknown> }
+type Pending<N extends string> = { name: N; args: Record<string, unknown> }
 // One explicit user command, persisted before dispatch. This is not a background queue.
-export function useCommand(
+export function useCommand<N extends string = Name>(
   scope: string,
-  after: (name: Name, result: unknown, args: Record<string, unknown>) => Promise<void>,
+  after: (name: N, result: unknown, args: Record<string, unknown>) => Promise<void>,
+  dispatch: (name: N, args: Record<string, unknown>) => Promise<unknown> = (name, args) =>
+    rpc(name as Name, args),
 ) {
   const key = `r4-command:${user.value!.id}:${scope}`
-  const state = reactive({
+  const state = shallowReactive({
     ready: false,
     busy: false,
-    pending: null as Pending | null,
+    pending: null as Pending<N> | null,
     error: '',
     notice: '',
   })
   onMounted(async () => {
     try {
-      state.pending = (await getDraft<Pending>(key)) || null
+      state.pending = (await getDraft<Pending<N>>(key)) || null
     } catch (e) {
       state.error = errorMessage(e)
     } finally {
       state.ready = true
     }
   })
-  async function run(name?: Name, args: Record<string, unknown> = {}) {
+  async function run(name?: N, args: Record<string, unknown> = {}) {
     if (state.busy || !state.ready) return
     state.busy = true
     state.error = ''
     state.notice = ''
     try {
       if (!state.pending && name)
-        state.pending = JSON.parse(JSON.stringify({ name, args })) as Pending
+        state.pending = JSON.parse(JSON.stringify({ name, args })) as Pending<N>
       if (!state.pending) return
       await storeDraft(key, state.pending)
       const pending = state.pending
-      const result = await rpc(pending.name, pending.args)
+      const result = await dispatch(pending.name, pending.args)
       await after(pending.name, result, pending.args)
       await removeDraft(key)
       state.pending = null

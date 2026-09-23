@@ -120,6 +120,39 @@ export function errorMessage(error: unknown): string {
         ? String(error.message)
         : String(error)
   const teamErrors: Record<string, [string, string]> = {
+    workspace_unavailable: [
+      'Your access to this organization or view is no longer available. Choose another workspace or contact an administrator.',
+      'لم يعد الوصول إلى هذه المؤسسة أو هذا العرض متاحاً. اختر مساحة أخرى أو تواصل مع المسؤول.',
+    ],
+    coaching_not_enabled: [
+      'Set up your independent coaching workspace first.',
+      'أعدّ مساحة التدريب المستقل أولاً.',
+    ],
+    last_admin: [
+      'Add another active administrator before removing this administrator or deleting the account.',
+      'أضف مسؤولاً نشطاً آخر قبل إزالة هذا المسؤول أو حذف الحساب.',
+    ],
+    invalid_roles: [
+      'Choose at least one organization role.',
+      'اختر دوراً واحداً على الأقل داخل المؤسسة.',
+    ],
+    invalid_trainer: [
+      'Choose an active trainer from this organization. A person cannot be their own trainer.',
+      'اختر مدرباً نشطاً من هذه المؤسسة. لا يمكن للشخص أن يكون مدرب نفسه.',
+    ],
+    invitation_pending: [
+      'There is already an active invitation for this email. Revoke it before creating another.',
+      'توجد دعوة نشطة لهذا البريد. ألغها قبل إنشاء دعوة أخرى.',
+    ],
+    already_member: [
+      'This person is already an active member. Review their existing membership.',
+      'هذا الشخص عضو نشط بالفعل. راجع عضويته الحالية.',
+    ],
+    practice_exists: [
+      'Your independent coaching workspace is already available in the workspace menu.',
+      'مساحة تدريبك المستقل متاحة بالفعل في قائمة مساحات العمل.',
+    ],
+
     invalid_context: [
       'The linked workout, response or file is unavailable. Remove the link or choose another.',
       'الحصة أو الإجابة أو الملف المرتبط غير متاح. أزل الرابط أو اختر غيره.',
@@ -168,7 +201,6 @@ export function errorMessage(error: unknown): string {
       'The team has reached its client admission limit.',
       'وصل الفريق إلى حد انضمام المتدربين.',
     ],
-    already_member: ['This person already belongs to the team.', 'هذا الشخص عضو في الفريق بالفعل.'],
     relationship_already_enrolled: [
       'This coaching relationship already belongs to a team. Close that enrollment first.',
       'هذه العلاقة التدريبية منضمة لفريق بالفعل. أغلق ذلك الانضمام أولاً.',

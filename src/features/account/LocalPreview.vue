@@ -8,13 +8,32 @@ import { language, t, errorMessage } from '../../lib/i18n'
 const busy = ref('')
 const error = ref('')
 const router = useRouter()
-async function enter(role: 'coach' | 'client' | 'coach2' | 'other') {
+async function enter(
+  role:
+    | 'coach'
+    | 'client'
+    | 'coach2'
+    | 'other'
+    | 'orgadmin'
+    | 'orgtrainer'
+    | 'orgtrainee'
+    | 'orgadmin2',
+) {
   busy.value = role
   error.value = ''
   try {
     user.value = await api.preview(role + '@rafik.test')
     await refreshProfile()
-    await router.push(role.startsWith('coach') ? '/coach' : '/today')
+    await router.push(
+      role.startsWith('org')
+        ? '/organization/12000000-0000-4000-8000-00000000000' +
+            (role === 'orgadmin2' ? '2' : '1') +
+            '/' +
+            (role === 'orgadmin2' ? 'admin' : role.slice(3))
+        : role.startsWith('coach')
+          ? '/coach'
+          : '/today',
+    )
   } catch (e) {
     error.value = errorMessage(e)
   } finally {
@@ -74,6 +93,46 @@ async function enter(role: 'coach' | 'client' | 'coach2' | 'other') {
             ><small>{{
               language('Second client: independent access', 'متدربة أخرى: وصول مستقل')
             }}</small></span
+          ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
+        </button>
+        <button
+          v-for="account in [
+            {
+              role: 'orgadmin' as const,
+              name: 'Rania Mansour',
+              description: language('Madar Training · Administrator', 'مدار للتدريب · مسؤولة'),
+            },
+            {
+              role: 'orgtrainer' as const,
+              name: 'Kareem Nasser',
+              description: language(
+                'Madar Training · Trainer and trainee',
+                'مدار للتدريب · مدرب ومتدرب',
+              ),
+            },
+            {
+              role: 'orgtrainee' as const,
+              name: 'Sara Khalil',
+              description: language('Madar Training · Trainee', 'مدار للتدريب · متدربة'),
+            },
+            {
+              role: 'orgadmin2' as const,
+              name: 'Omar Saleh',
+              description: language(
+                'Athar Academy · Separate organization',
+                'أكاديمية أثر · مؤسسة منفصلة',
+              ),
+            },
+          ]"
+          :key="account.role"
+          class="preview-account panel"
+          :disabled="!!busy"
+          @click="enter(account.role)"
+        >
+          <span class="avatar">{{ account.name[0] }}</span
+          ><span
+            ><strong>{{ account.name }}</strong
+            ><small>{{ account.description }}</small></span
           ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
         </button>
       </div>

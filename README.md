@@ -6,7 +6,7 @@ A responsive Vue 3/TypeScript application for training and ongoing coaching: pro
 
 Work belongs on `codex/revamp`. The old application is preserved in Git history. No native app or legacy backend is required.
 
-**Current direction:** web development prioritizes coaches and organization staff. The local runtime is Prisma/PostgreSQL behind one TypeScript API; identity and private files use that API. The [role-scope audit](../rafik-api/docs/implementation/role-scope-audit.md) documents the original six roles and the current organization gaps. R7A corrects organizational membership/ownership and the backend boundary before further programming/analytics expansion. Current teams are not a complete organizational implementation.
+**Current direction:** web development prioritizes coaches and organization staff. The local runtime is Prisma/PostgreSQL behind one TypeScript API; identity and private files use that API. The [role-scope audit](../rafik-api/docs/implementation/role-scope-audit.md) documents the original six roles and the current organization gaps. R7A1/R7A2 implement the API transition and separate organizational memberships, invitations, role views and trainer responsibility; organization-owned program/history/services follow in R8/R9. Current teams are not a complete organizational implementation.
 
 ## Start here
 
@@ -114,3 +114,7 @@ Read the [product quality review](../rafik-api/docs/implementation/product-quali
 Production Help/Settings includes **App updates**. A downloaded release waits for old tabs to close; no automatic reload or data clearing occurs. `build/offline-shell.ts` owns versioned worker generation, `src/app/updates.ts` its status, and `AppUpdates.vue` its UI. `tests/app-updates.e2e.ts` checks failed installs, waiting releases, preserved workouts and offline reopening on both engines. `npm run test:build` verifies the emitted files and HTML-only release identities. The dev server does not register a worker.
 
 Run the companion backend's `npm run verify:release -- --full` for one guarded serial verification chain across both repositories. See the [runbook](../rafik-api/docs/implementation/runbook.md) and [ADR 0003](../rafik-api/docs/decisions/0003-application-updates.md). This remains local preparation, not a hosted release.
+
+## Organization workspaces
+
+Use **Manage workspaces** to explicitly create an organization or activate independent coaching. Sample Rania administers Madar; Kareem has separate trainer and trainee views; Sara sees her own organizational membership; Omar belongs to Athar. `src/features/organizations/` owns these routes and context-scoped drafts; `tests/organizations.e2e.ts` verifies invitations, role changes, responsibility and uncertain-request recovery.
