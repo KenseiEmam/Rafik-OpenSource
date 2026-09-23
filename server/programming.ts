@@ -1,4 +1,5 @@
 import media from "../content/exercise-media.json" with { type: "json" };
+import videos from "../content/exercise-videos.json" with { type: "json" };
 import { isDeepStrictEqual } from "node:util";
 import { ApiError, db, asActor, type Actor } from "./db.ts";
 import {
@@ -15,6 +16,18 @@ import type { Prisma } from "./generated/prisma/client.ts";
 type Member = Awaited<ReturnType<typeof access>>;
 type Input = Record<string, unknown>;
 const json = (v: unknown) => v as Prisma.InputJsonValue;
+const bodyAreas = new Set([
+  "waist",
+  "upper legs",
+  "back",
+  "lower legs",
+  "chest",
+  "upper arms",
+  "cardio",
+  "shoulders",
+  "lower arms",
+  "neck",
+]);
 export const role = (v: unknown): Role => {
   if (!["admin", "trainer", "trainee"].includes(String(v)))
     throw new ApiError(400, "invalid_roles");
@@ -256,6 +269,21 @@ export async function programCommand(actor: Actor, id: string, input: Input) {
             if (v.length > max) throw new ApiError(400, "invalid_exercise");
             data[key] = v;
           }
+          for (const key of ["category", "body_part", "target_muscle"]) {
+            if (x[key] !== undefined && typeof x[key] !== "string")
+              throw new ApiError(400, "invalid_exercise");
+            data[key] = String(x[key] || "").trim();
+          }
+          if (
+            String(data.target_muscle).length > 100 ||
+            (data.category && !bodyAreas.has(String(data.category))) ||
+            (data.body_part && !bodyAreas.has(String(data.body_part)))
+          )
+            throw new ApiError(400, "invalid_exercise");
+          data.category ||= data.body_part;
+          data.body_part ||= data.category;
+          if (data.category !== data.body_part)
+            throw new ApiError(400, "invalid_exercise");
           if (
             !data.name ||
             !data.instructions ||
@@ -266,7 +294,8 @@ export async function programCommand(actor: Actor, id: string, input: Input) {
             throw new ApiError(400, "invalid_exercise");
           if (
             data.media_ref &&
-            !media.items.some((item) => item.id === data.media_ref)
+            !media.items.some((item) => item.id === data.media_ref) &&
+            !videos.items.some((item) => item.id === data.media_ref)
           )
             throw new ApiError(400, "invalid_exercise");
           data.kind = x.kind;

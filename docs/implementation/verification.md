@@ -1,5 +1,15 @@
 # Verification record
 
+## R15 — Exercise coverage, categories and continuous motion (23 September 2026)
+
+This correction has focused acceptance; **the entire release chain was not rerun**. R14's full result remains historical. The [R15 receipt](evidence/r15-verification.txt) records its own commands, source snapshot, failures corrected and remaining limits. **34/34 combined browser cases passed**, followed by **6/6 focused final cases** after the exercise/timezone popup direction correction, across Chromium and phone WebKit. Final type/build, 27 units, two build/cache contracts and formatting pass.
+
+Backend verification passes: a disposable installation of **30 migrations/eight SQL suites**, six catalog/media tests, three programming/private-media lifecycle tests, seven release guards, TypeScript, generated-content drift, pinned corpus/editorial checks and all 90 video/poster hashes. Source imports and the editorial forward correction were applied to preview without reset or synthetic reseeding. Web production build and **27 unit tests** pass.
+
+Rendered review covered the actual desktop split library, combined body/equipment filters, later-page selection and phone list/detail/back in English and Arabic. It found phone filter density, compound-equipment loss, source footer text and the RTL root-rotation defect beyond the initial test assertions. All were corrected; explicit entry/orientation checks supplement overflow/Axe tests. The program picker has separate query-after-Escape, exact-match and same-kind-alternative coverage.
+
+Motion coverage is 45 of 1,384 shared source entries, with ten additional static starter reference sets. The requested corpus's text/metadata is complete; its restricted GIFs are excluded. Imported instructions are not fully translated or professionally certified. Native playback/downloads, physical devices, human usability/retention/payment, hosting and remote CI remain unverified. Large videos are fetched on demand and are not part of offline precaching.
+
 ## R14 — Useful nutrition and exercise reference content (23 September 2026)
 
 Acceptance combines the **28/28 full serial release gates** with a final **22/22 focused browser rerun** after editorial/CI hardening and the nutrition navigation guard. [Full report](evidence/r14-release.json), [follow-up record](evidence/r14-followup.json) and [detailed receipt](evidence/r14-verification.txt) identify the exact delta; the earlier full report is not presented as testing later code.

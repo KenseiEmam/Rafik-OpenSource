@@ -68,6 +68,7 @@ else if (command === "seed") {
     "team_business",
     "exercise_choices",
     "daily_workspace",
+    "exercise_catalog",
   ]
     .map((n) => readFileSync(resolve(root, `tests/sql/${n}.sql`), "utf8"))
     .join("\n");

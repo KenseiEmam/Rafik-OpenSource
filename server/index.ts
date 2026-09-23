@@ -66,8 +66,13 @@ import { organizationAccountData } from "./account-data.ts";
 import { getProgramMedia, putProgramMedia } from "./program-media.ts";
 import {
   foodCatalog,
+  exerciseDatasetCatalog,
+  wgerExerciseCatalog,
   exerciseMediaCatalog,
   exerciseMediaAsset,
+  exerciseVideoCatalog,
+  exerciseVideoAsset,
+  videoRange,
 } from "./public-catalog.ts";
 import { localInbox } from "./local-inbox.ts";
 const origins = new Set([
@@ -158,6 +163,14 @@ const server = createServer(async (req, res) => {
       send(res, 200, await foodCatalog());
       return;
     }
+    if (req.method === "GET" && path === "/v1/catalog/exercises") {
+      send(res, 200, await exerciseDatasetCatalog());
+      return;
+    }
+    if (req.method === "GET" && path === "/v1/catalog/wger-exercises") {
+      send(res, 200, await wgerExerciseCatalog());
+      return;
+    }
     if (req.method === "GET" && path === "/v1/catalog/exercise-media") {
       send(res, 200, await exerciseMediaCatalog());
       return;
@@ -180,6 +193,52 @@ const server = createServer(async (req, res) => {
         "Content-Length": asset.bytes.length,
       });
       res.end(asset.bytes);
+      return;
+    }
+    if (req.method === "GET" && path === "/v1/catalog/exercise-videos") {
+      send(res, 200, await exerciseVideoCatalog());
+      return;
+    }
+    const exerciseVideo = path.match(
+      /^\/v1\/catalog\/exercise-videos\/([a-z0-9-]+)\.(mp4|webp)$/,
+    );
+    if (["GET", "HEAD"].includes(req.method || "") && exerciseVideo) {
+      const asset = await exerciseVideoAsset(
+        exerciseVideo[1],
+        exerciseVideo[2],
+      );
+      let range;
+      try {
+        range = videoRange(req.headers.range, asset.bytes.length);
+      } catch {
+        res.writeHead(416, {
+          "Content-Range": `bytes */${asset.bytes.length}`,
+        });
+        res.end();
+        return;
+      }
+      res.writeHead(range ? 206 : 200, {
+        "Content-Type": asset.mime,
+        "Cache-Control": "public, max-age=31536000, immutable",
+        ETag: `"${asset.digest}"`,
+        "X-Content-Type-Options": "nosniff",
+        "Accept-Ranges": "bytes",
+        ...(range
+          ? {
+              "Content-Range": `bytes ${range.start}-${range.end}/${asset.bytes.length}`,
+            }
+          : {}),
+        "Content-Length": range
+          ? range.end - range.start + 1
+          : asset.bytes.length,
+      });
+      res.end(
+        req.method === "HEAD"
+          ? undefined
+          : range
+            ? asset.bytes.subarray(range.start, range.end + 1)
+            : asset.bytes,
+      );
       return;
     }
     const actor = await identify(req);

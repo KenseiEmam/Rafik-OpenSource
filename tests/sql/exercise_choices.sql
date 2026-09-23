@@ -65,6 +65,7 @@ do $$ declare p public.plans; snapshot jsonb; copied text; begin
  p:=public.copy_snapshot_plan(gen_random_uuid(),'10000000-0000-4000-8000-000000000004','Independent choice',snapshot);
  copied:=p.draft#>>'{days,0,exercises,0,alternatives,0,exerciseId}';
  perform pg_temp.assert(copied<>'split-squat' and exists(select 1 from public.exercises where id=copied and owner_id='10000000-0000-4000-8000-000000000004'),'shared/handoff snapshot copy independently owns alternatives');
+ perform pg_temp.assert((select category='upper legs' and body_part='upper legs' and target_muscle='quadriceps' from public.exercises where id=copied),'shared snapshot copies preserve filter facets for subsequent custom edits');
  perform set_config('rafik.claims','{"sub":"10000000-0000-4000-8000-000000000004","role":"rafik_user"}',true);
  perform public.validate_prescription(p.draft);
  perform pg_temp.assert(true,'imported alternative can be edited and republished by receiving coach');

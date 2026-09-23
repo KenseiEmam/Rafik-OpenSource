@@ -39,4 +39,4 @@ Evaluate exercise datasets, media provenance, licensing, quality, and mobile-com
 - None.
 
 ## Notes
-Completed 23 September 2026. The report compares six sources, recommends an 11-exercise CC BY-SA 4.0 allowlist from a pinned `workout-guide` commit, records exact source paths and hashes, excludes three mismatched visuals, and defines provenance, offline/mobile and immutable-snapshot requirements. Root owns reconciliation, implementation and coach/content acceptance.
+Completed 23 September 2026, with a same-day continuous-motion follow-up. The report compares open and commercial motion sources, supplies dated wger video and exercise snapshots for 46 distinct CC BY-SA exercises, documents the exact MIT metadata/text boundary for the 1,324-record `hasaneyldrm` catalog, and recommends MoveKit for reviewed hundreds-scale procurement. The original 11-exercise `workout-guide` selection remains a still/poster fallback only. Root owns reconciliation, implementation, procurement and coach/content acceptance.

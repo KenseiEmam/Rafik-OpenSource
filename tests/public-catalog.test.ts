@@ -5,6 +5,8 @@ import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import {
   foodCatalog,
+  exerciseDatasetCatalog,
+  wgerExerciseCatalog,
   exerciseMediaCatalog,
   exerciseMediaAsset,
 } from "../server/public-catalog.ts";
@@ -40,6 +42,142 @@ test("curated nutrition preserves source energy, macro units, portions and prove
   const response = await fetch("http://127.0.0.1:55331/v1/catalog/foods");
   assert.equal(response.status, 200);
   assert.equal((await response.json()).version, data.version);
+});
+test("shared exercise dataset keeps its pinned MIT provenance, usable filter facets and no source media", async () => {
+  const data = await exerciseDatasetCatalog();
+  assert.equal(data.schema, 1);
+  assert.equal(data.source.repository, "hasaneyldrm/exercises-dataset");
+  assert.equal(data.source.commit, "7455efae41b330c265e7cd4b78dfa848e7ce5ebd");
+  assert.equal(data.source.license, "MIT");
+  assert.equal(data.source.rawRecordCount, 1324);
+  assert.equal(data.exercises.length, 1324);
+  assert.equal(
+    data.recordsSha256,
+    "0527c31566a056b6405f0c25c10ca6dbc330885bcf2dba8947760a350754ae62",
+  );
+  assert.equal(
+    new Set(data.exercises.map((e: { id: string }) => e.id)).size,
+    1324,
+  );
+  assert.deepEqual(data.exercises[0], {
+    id: "dataset-0001",
+    sourceId: "0001",
+    name: "3/4 sit-up",
+    nameAr: null,
+    category: "waist",
+    categoryAr: "الخصر",
+    bodyPart: "waist",
+    targetMuscle: "abs",
+    equipment: "Bodyweight",
+    equipmentKey: "body weight",
+    equipmentAr: "وزن الجسم",
+    instructions: data.exercises[0].instructions,
+    instructionsAr: null,
+    movement: "waist",
+    kind: "strength",
+  });
+  assert.match(data.exercises[0].instructions, /Lie flat on your back/);
+  assert.ok(
+    data.exercises.some(
+      (e: { id: string; kind: string }) =>
+        e.id === "dataset-3220" && e.kind === "timed",
+    ),
+  );
+  assert.ok(
+    data.exercises.some(
+      (e: { id: string; kind: string }) =>
+        e.id === "dataset-1512" && e.kind === "timed",
+    ),
+  );
+  assert.ok(
+    data.exercises.some(
+      (e: { id: string; kind: string }) =>
+        e.id === "dataset-2135" && e.kind === "timed",
+    ),
+  );
+  assert.ok(
+    data.exercises.some(
+      (e: { id: string; kind: string }) =>
+        e.id === "dataset-3664" && e.kind === "strength",
+    ),
+  );
+  for (const exercise of data.exercises) {
+    assert.match(exercise.id, /^dataset-\d{4}$/);
+    assert.equal(exercise.nameAr, null);
+    assert.equal(exercise.instructionsAr, null);
+    assert.ok(exercise.category && exercise.bodyPart && exercise.targetMuscle);
+    assert.ok(
+      exercise.equipment && exercise.equipmentAr && exercise.instructions,
+    );
+    for (const excluded of [
+      "image",
+      "gif_url",
+      "media_id",
+      "instruction_steps",
+    ])
+      assert.equal(excluded in exercise, false);
+  }
+  for (const excluded of ["image", "gif_url", "media_id", "instruction_steps"])
+    assert.ok(data.source.excludedFields.includes(excluded));
+});
+test("WGER additions retain separate per-record licences and disclose unavailable source instructions", async () => {
+  const data = await wgerExerciseCatalog();
+  assert.equal(data.source.project, "wger-project/wger");
+  assert.equal(data.source.recordCount, 46);
+  assert.equal(data.records.length, 46);
+  assert.equal(
+    data.recordsSha256,
+    "19c41f18aafff7e37d6bd31925ed0b71665881e6e059cf6b090a5f30a111db04",
+  );
+  assert.equal(new Set(data.records.map((r: { id: string }) => r.id)).size, 46);
+  assert.equal(
+    data.records.filter(
+      (r: { instructionStatus: string }) => r.instructionStatus === "source",
+    ).length,
+    24,
+  );
+  assert.equal(
+    data.records.filter(
+      (r: { instructionStatus: string }) =>
+        r.instructionStatus === "translated_from_upstream",
+    ).length,
+    7,
+  );
+  assert.equal(
+    data.records.filter(
+      (r: { instructionStatus: string }) =>
+        r.instructionStatus === "rafik_editorial_overlay",
+    ).length,
+    14,
+  );
+  assert.equal(
+    data.records.find((r: { id: string }) => r.id === "wger-341")
+      .instructionStatus,
+    "rafik_authored",
+  );
+  assert.equal(
+    data.records.find((r: { id: string }) => r.id === "wger-12").targetMuscle,
+    "unspecified",
+  );
+  assert.doesNotMatch(
+    data.records.find((r: { id: string }) => r.id === "wger-75").instructions,
+    /Translated with DeepL/i,
+  );
+  for (const record of data.records) {
+    assert.match(record.id, /^wger-\d+$/);
+    assert.equal(record.nameAr, null);
+    assert.equal(record.instructionsAr, null);
+    assert.ok(record.instructions);
+    assert.equal(record.kind, "strength");
+    assert.equal(
+      record.exerciseLicense.short_name.startsWith("CC-") ||
+        record.exerciseLicense.short_name === "CC0",
+      true,
+    );
+    assert.ok(Number.isInteger(record.translationLicense.id));
+    assert.equal("media_ref" in record, false);
+    assert.equal("image_url_main" in record, false);
+  }
 });
 test("all reviewed illustrations have immutable URLs, safe vectors, hashes and retained attribution", async () => {
   const manifest = await exerciseMediaCatalog();

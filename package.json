@@ -37,8 +37,13 @@
     "test:operations": "tsx --test tests/platform.test.ts tests/scale.test.ts tests/maintenance.test.ts tests/local-boundary.test.ts",
     "recovery:local": "node scripts/prisma/recovery.mjs",
     "files:maintenance": "node scripts/prisma/cleanup-private.mjs",
-    "test:catalog": "tsx --test tests/public-catalog.test.ts",
-    "content:media": "node scripts/content/exercise-media.mjs"
+    "test:catalog": "tsx --test tests/public-catalog.test.ts tests/exercise-video.test.ts",
+    "content:media": "node scripts/content/exercise-media.mjs",
+    "content:exercise-dataset": "node scripts/content/exercise-dataset.mjs",
+    "content:exercise-dataset:check": "node scripts/content/exercise-dataset.mjs --check",
+    "content:wger-exercises": "node scripts/content/wger-exercises.mjs --from-review",
+    "content:wger-exercises:check": "node scripts/content/wger-exercises.mjs --check",
+    "content:videos": "node scripts/content/exercise-videos.mjs"
   },
   "devDependencies": {
     "@types/node": "22.19.0",

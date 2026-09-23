@@ -85,3 +85,13 @@ These endpoints are unauthenticated and contain no user or workspace data:
 `save_nutrition_guidance` accepts optional `p_meals` (default `[]`), up to 20 suggestions / 32 KiB. Each contains name, meal, positive quantity/basis (max 10000), unit, nutrient object and source. Existing participant/revision checks and immutable receipts apply to all fields; a changed payload with the same receipt is rejected. A suggestion is not consumption; trainee `save_meal` explicitly snapshots actual values.
 
 Independent and organization exercise authoring accept `media_ref` from the reviewed catalog or null. Existing `media_url` remains optional HTTPS. Publication and copied prescriptions preserve the chosen key. Public catalog access does not grant access to private exercises, client records or organizational data.
+
+
+### Expanded reference catalog and video assets (R15)
+
+- `GET /v1/catalog/exercises`: pinned MIT metadata/text export and provenance; no restricted source GIF/image URLs.
+- `GET /v1/catalog/wger-exercises`: dated wger metadata, instruction license/author and translated/editorial provenance.
+- `GET /v1/catalog/exercise-videos`: 45 immutable motion references, source IDs, MIME types, byte sizes, hashes and credits. Exact IDs join the shared `wger-*` records; they do not claim equivalence to similarly named exercises.
+- `GET|HEAD /v1/catalog/exercise-videos/:key.mp4` or `:key.webp`: allowlisted public asset. Supports a single `Range: bytes=...` request (206 with Content-Range); malformed/unsatisfiable ranges return 416. Unknown asset/type is 404; integrity mismatch is 503. Cache is public/immutable; video variants are H.264 MP4 with no audio. Full downloads remain available under the asset license.
+
+Shared exercise records additionally contain nullable `category`, `body_part`, `target_muscle` and immutable `source_ref`. Custom authoring may set the facets; clients cannot forge the source reference. Existing prescription snapshots and media keys remain valid.

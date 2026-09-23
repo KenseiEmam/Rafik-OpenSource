@@ -1,6 +1,18 @@
 # Revamp execution ledger
 
-Updated 23 September 2026. **R14 actionable nutrition and exercise reference content is implemented and verified locally.** Phase commits remain on `codex/revamp`. Hosting, native, real providers, physical devices and observed human/business outcomes remain separate gates.
+Updated 23 September 2026. **R15 broad exercise library, categorized selection and continuous motion are implemented locally.** Phase commits remain on `codex/revamp`. Hosting, native, real providers, physical devices and observed human/business outcomes remain separate gates.
+
+## R15 — Exercise coverage and interaction correction
+
+The founder rejected the small catalog/manual-step preview. This correction imports all 1,324 licensed metadata/instruction entries from the requested dataset, 46 separately sourced wger entries and retains the 14 starters: 1,384 shared source entries before owned additions. There are 45 licensed, reviewed video previews and ten static illustration sets; the full corpus does not have video. The requested dataset's restricted GIFs are not redistributed. [ADR0011](../decisions/0011-exercise-catalog-and-motion.md), [correction record](r15-exercise-correction.md) and [content maintenance](content.md) explain provenance, scope and upkeep.
+
+The library has bounded results/detail panes and combined body-area, equipment, recording, scope and media filters. Phone entry exposes results before optional filters; selected details remove that clutter and return focus to the chosen result. Primary and alternative pickers search the full authorized corpus with bounded options and shared category normalization. Actual video loops on visibility with pause, reduced-motion and recovery controls; all static poses appear together. H.264/MP4 plus WebP/byte-range contracts prepare later native consumption without doing native work. Large videos are fetched on demand, not precached.
+
+Five forward migrations add reference content/facets/provenance and a small editorial correction without reseeding. Published/copied source and media references remain immutable. Actual review caught lossy compound equipment, picker query/reset ordering, phone filter density, a source translation footer and a globally compiled RTL arrow selector. Completion rules now require coverage evidence, entry/detail review, real query/selection workflows and compiled/visual RTL checks; test counts alone cannot establish usability.
+
+Acceptance: **34/34 combined browser cases**, then **6/6 final picker/dashboard cases** after the popup-direction correction; 27 web units, production/type/cache/format checks, 30-migration/eight-suite fresh installation, six catalog/media tests, three programming/media lifecycles and seven release guards pass. Exact commands and limits are in the [R15 receipt](evidence/r15-verification.txt) and [verification record](verification.md). The full release chain was not rerun. Existing preview data is preserved. No push, deployment, native work, outreach or paid provider occurred.
+
+Web implementation commit: `6c6e64c` on `codex/revamp`. This backend checkpoint contains the paired catalogs, licensed motion pack, migrations, maintenance tools and acceptance receipt.
 
 ## R14 — Actionable nutrition and exercise reference content
 

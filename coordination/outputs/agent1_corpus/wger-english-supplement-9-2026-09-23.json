@@ -1,0 +1,309 @@
+{
+  "schemaVersion": 1,
+  "snapshotDate": "2026-09-23",
+  "generatedAtUtc": "2026-09-23T15:16:52.654041+00:00",
+  "purpose": "Fill the nine blank English wger descriptions in the 46-exercise video pack while retaining source-language translation and license provenance.",
+  "editorialBoundary": "These are plain-language movement instructions for catalog use. They have not been professionally technique-certified. Keep the source credit/license fields and subject them to Rafik content review like all exercise instructions.",
+  "records": [
+    {
+      "exerciseId": 341,
+      "exerciseUuid": "316aca47-6f5b-40b7-b04f-f69e68387354",
+      "englishName": "Squats on Multipress",
+      "mode": "rafik-authored",
+      "englishDescription": "Set the bar around shoulder height and position it across your upper back. Stand about shoulder-width apart with your toes slightly outward. Unrack the bar, brace your torso, and bend your hips and knees to lower under control to a comfortable depth. Drive through your feet to stand, stopping short of forcefully locking your knees. Keep your knees tracking in the same direction as your toes.",
+      "provenance": "Rafik-authored English guidance because every available upstream description was blank or unusable. It is based on the named Smith-machine squat movement and linked wger media identity; it is not presented as an upstream translation or professional technique certification.",
+      "source": {
+        "exerciseUuid": "316aca47-6f5b-40b7-b04f-f69e68387354",
+        "englishTranslationUuid": "9a427e41-a28b-40b5-ab44-d35f8071ecd9",
+        "upstreamEnglishDescriptionWasBlank": true,
+        "videoUuid": "0cbfeace-dda9-4166-8424-f51358e88a4f",
+        "videoLicense": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        }
+      }
+    },
+    {
+      "exerciseId": 366,
+      "exerciseUuid": "440a5184-de58-4a86-a7ba-76ddeafaa855",
+      "englishName": "Leg Curls (sitting)",
+      "mode": "translated-from-upstream",
+      "englishDescription": "Adjust the machine lever to suit your height. Sit with your back against the back pad, place your ankles against the roller pads, and secure your thighs beneath the restraint just above your knees. Hold the handles. Bend your knees while keeping your back and hips still. Pause briefly in the contracted position, then return slowly to the starting position.",
+      "provenance": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+      "source": {
+        "language": {
+          "id": 4,
+          "short_name": "es",
+          "full_name": "Español",
+          "full_name_en": "Spanish"
+        },
+        "translationId": 2637,
+        "translationUuid": "bb9e846b-80d1-418e-902d-c59f19f2d28a",
+        "name": "Curl femoral sentado",
+        "descriptionText": "Ajusta la palanca de la máquina para adaptarla a tu altura y siéntate en la máquina con la espalda contra la almohadilla de respaldo. Coloca los tobillos sobre los cojines , los muslos debajo del cojinete de sujeción justo por encima de las rodillas y las manos en los agarres.Al inspirar realiza una flexión de las rodillas. Mantener la espalda inmóvil en todo momento únicamente solo debe movilizarse los pies por la flexión de rodilla. Mantén la posición contraída por un segundo. Lentamente regresa a la posición inicial. Espirar al final del movimiento.",
+        "descriptionSource": "Ajusta la palanca de la máquina para adaptarla a tu altura y siéntate en la máquina con la espalda contra la almohadilla de respaldo. Coloca los tobillos sobre los cojines , los muslos debajo del cojinete de sujeción justo por encima de las rodillas y las manos en los agarres.Al inspirar realiza una flexión de las rodillas. Mantener la espalda inmóvil en todo momento únicamente solo debe movilizarse  los pies por la flexión de rodilla. Mantén la posición contraída por un segundo. Lentamente regresa a la posición inicial. Espirar al final del movimiento.",
+        "license": {
+          "id": 2,
+          "full_name": "Creative Commons Attribution Share Alike 4",
+          "short_name": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+        },
+        "licenseAuthor": "admin",
+        "licenseAuthorUrl": null,
+        "licenseObjectUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "admin"
+        ]
+      }
+    },
+    {
+      "exerciseId": 367,
+      "exerciseUuid": "49189e88-40b6-4c0d-a784-0cc3abbb8e75",
+      "englishName": "Leg Curls (standing)",
+      "mode": "translated-from-upstream",
+      "englishDescription": "Work one leg at a time. Stand at the machine with the pad positioned against your lower leg just below the calf. Bend your knee until it reaches roughly a right angle, then lower the weight slowly and under control.",
+      "provenance": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+      "source": {
+        "language": {
+          "id": 1,
+          "short_name": "de",
+          "full_name": "Deutsch",
+          "full_name_en": "German"
+        },
+        "translationId": 72,
+        "translationUuid": "9075241c-0493-4f2a-a399-a57e3634093e",
+        "name": "Beinbeuger Stehend",
+        "descriptionText": "Diese Übung wird jeweils mit einem Bein durchgeführt. Stelle dich vor der Maschine und stelle deine Waden hinter dem Polster (setzte die Höhe so ein, dass es knapp unter den Waden ansetzt). Beuge nun das Bein bis dein Knie einen rechten Winkel einnimmt, bringe das Gewicht nun langsam und kontrolliert wieder nach unten.",
+        "descriptionSource": "Diese Übung wird jeweils mit einem Bein durchgeführt.\n\nStelle dich vor der Maschine und stelle deine Waden hinter dem Polster (setzte die Höhe so ein, dass es knapp unter den Waden ansetzt). Beuge nun das Bein bis dein Knie einen rechten Winkel einnimmt, bringe das Gewicht nun langsam und kontrolliert wieder nach unten.",
+        "license": {
+          "id": 1,
+          "full_name": " Creative Commons Attribution Share Alike 3",
+          "short_name": "CC-BY-SA 3",
+          "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+        },
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseObjectUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      }
+    },
+    {
+      "exerciseId": 375,
+      "exerciseUuid": "18104387-4567-4c1e-8d03-db0b274646dd",
+      "englishName": "Leg Press on Hackenschmidt Machine",
+      "mode": "translated-from-upstream",
+      "englishDescription": "Position yourself in the Hackenschmidt machine with your shoulders against the pads. Place your feet about shoulder-width apart with your toes slightly outward. Bend your knees and lower under control until they form an angle of about 90 degrees. Press back up and repeat, without forcefully locking your knees.",
+      "provenance": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+      "source": {
+        "language": {
+          "id": 1,
+          "short_name": "de",
+          "full_name": "Deutsch",
+          "full_name_en": "German"
+        },
+        "translationId": 402,
+        "translationUuid": "634dcf89-c346-4af8-8b09-61f238798877",
+        "name": "Kniebeuge an Hackenschmidtmaschine",
+        "descriptionText": "Setze dich in die Maschine und drücke deine Schultern auf das Polster. Deine Füße sind etwa Schulterbreit auseinander und zeigen leicht nach außen. Gehe nun langsam nach unten in die Knie bis sich, wie bei der regulären Kniebeuge, einen Winken von ca. 90° ergibt. Drücke dich wieder nach oben und wiederhole die Bewegung. Wichtig ist hier, dass du die Knie nicht ganz ausstreckst.",
+        "descriptionSource": "Setze dich in die Maschine und drücke deine Schultern auf das Polster. Deine Füße sind etwa Schulterbreit auseinander und zeigen leicht nach außen. Gehe nun langsam nach unten in die Knie bis sich, wie bei der regulären Kniebeuge, einen Winken von ca. 90° ergibt. Drücke dich wieder nach oben und wiederhole die Bewegung. Wichtig ist hier, dass du die Knie nicht ganz ausstreckst.",
+        "license": {
+          "id": 1,
+          "full_name": " Creative Commons Attribution Share Alike 3",
+          "short_name": "CC-BY-SA 3",
+          "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+        },
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseObjectUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      }
+    },
+    {
+      "exerciseId": 477,
+      "exerciseUuid": "7f834f07-fa7b-46b6-8ffa-45930b0602db",
+      "englishName": "Pull Ups on Machine",
+      "mode": "translated-from-upstream",
+      "englishDescription": "Set the machine to the assistance you need. Position yourself on the platform or knee pad and grip the handles about shoulder-width apart with your arms extended. Bend your elbows and pull your body upward until your chin passes the handles or bar. Lower under control until your arms are extended again. Reduce the assistance gradually as your strength improves.",
+      "provenance": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+      "source": {
+        "language": {
+          "id": 7,
+          "short_name": "pt",
+          "full_name": "Português",
+          "full_name_en": "Portuguese"
+        },
+        "translationId": 2136,
+        "translationUuid": "743f7b44-541d-4d8c-955d-a1e44635aabe",
+        "name": "Pull Ups na máquina",
+        "descriptionText": "Os pull-ups da máquina são uma variação assistida do exercício pull-up tradicional. Eles são projetados para ajudar as pessoas que estão desenvolvendo a força necessária para realizar o movimento completo. A máquina permite ajustar o peso para fornecer suporte adequado durante o exercício. Para realizar flexões na máquina, siga os seguintes passos: posicione-se corretamente, ajuste o peso para o suporte desejado, segure a barra com as mãos alinhadas com os ombros, mantenha os braços retos e a postura ereta. Inicie o movimento flexionando os cotovelos e puxando o corpo em direção à barra. Suba até que seu queixo esteja acima da barra e seus ombros estejam firmes. A descida deve ser feita de forma controlada, estendendo totalmente os braços. Realize o número desejado de repetições, adaptando-o à sua habilidade. Lembre-se de respirar corretamente durante o exercício, inspirando na fase descendente e expirando ao puxar o corpo para cima. A prática regular de flexões na máquina fortalecerá os músculos das costas, ombros e braços, ajudando a melhorar a postura e a força geral. À medida que você ganha mais força, pode reduzir gradualmente a assistência fornecida pela máquina e progredir para a tradicional flexão sem ajuda. Essa variação do exercício é uma opção acessível para iniciantes ou pessoas que lutam para realizar flexões completas. Lembre-se de adaptar o peso e o número de repetições de acordo com seu nível de força e capacidade. A prática regular e a progressão gradual ajudarão a melhorar sua forma e progredir em direção a flexões completas.",
+        "descriptionSource": "Os pull-ups da máquina são uma variação assistida do exercício pull-up tradicional. Eles são projetados para ajudar as pessoas que estão desenvolvendo a força necessária para realizar o movimento completo. A máquina permite ajustar o peso para fornecer suporte adequado durante o exercício.\nPara realizar flexões na máquina, siga os seguintes passos: posicione-se corretamente, ajuste o peso para o suporte desejado, segure a barra com as mãos alinhadas com os ombros, mantenha os braços retos e a postura ereta. Inicie o movimento flexionando os cotovelos e puxando o corpo em direção à barra. Suba até que seu queixo esteja acima da barra e seus ombros estejam firmes.\nA descida deve ser feita de forma controlada, estendendo totalmente os braços. Realize o número desejado de repetições, adaptando-o à sua habilidade. Lembre-se de respirar corretamente durante o exercício, inspirando na fase descendente e expirando ao puxar o corpo para cima.\nA prática regular de flexões na máquina fortalecerá os músculos das costas, ombros e braços, ajudando a melhorar a postura e a força geral. À medida que você ganha mais força, pode reduzir gradualmente a assistência fornecida pela máquina e progredir para a tradicional flexão sem ajuda.\nEssa variação do exercício é uma opção acessível para iniciantes ou pessoas que lutam para realizar flexões completas. Lembre-se de adaptar o peso e o número de repetições de acordo com seu nível de força e capacidade. A prática regular e a progressão gradual ajudarão a melhorar sua forma e progredir em direção a flexões completas.",
+        "license": {
+          "id": 1,
+          "full_name": " Creative Commons Attribution Share Alike 3",
+          "short_name": "CC-BY-SA 3",
+          "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+        },
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseObjectUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "bruunomooura",
+          "wger.de"
+        ]
+      }
+    },
+    {
+      "exerciseId": 543,
+      "exerciseUuid": "5912d7ed-6a0e-4b4c-b30a-fc9f3f890fc1",
+      "englishName": "Shoulder Press, on Machine",
+      "mode": "translated-from-upstream",
+      "englishDescription": "Sit in the machine with your feet about shoulder-width apart and your back upright against the support. Grip the handles or bar at shoulder height. Press upward until your arms are extended, then lower slowly to the starting position and repeat.",
+      "provenance": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+      "source": {
+        "language": {
+          "id": 4,
+          "short_name": "es",
+          "full_name": "Español",
+          "full_name_en": "Spanish"
+        },
+        "translationId": 2596,
+        "translationUuid": "127ce93b-bdea-4e71-bcf1-b936466cc07c",
+        "name": "Press de hombro con maquina",
+        "descriptionText": "Sentarse en la máquina con las piernas separadas a la anchura de los hombros. Mantener la espalda erguida y también los brazos flexionados para tomar la barra a la altura de los hombro, alzar la barra lo mas alto que se pueda con los brazos extendidos. Bajar lentamente y repetir.",
+        "descriptionSource": "Sentarse en la máquina con las piernas separadas a la anchura de los hombros.\nMantener  la espalda erguida y también los brazos flexionados para tomar la barra a la altura de los hombro, alzar la barra lo mas alto que se pueda con los brazos extendidos.\nBajar lentamente y repetir.",
+        "license": {
+          "id": 2,
+          "full_name": "Creative Commons Attribution Share Alike 4",
+          "short_name": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+        },
+        "licenseAuthor": "Tierrasverdes",
+        "licenseAuthorUrl": null,
+        "licenseObjectUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "Tierrasverdes"
+        ]
+      }
+    },
+    {
+      "exerciseId": 575,
+      "exerciseUuid": "6199b3c7-3ccb-47fa-89bb-ef7fef12c0e3",
+      "englishName": "Shrugs on Multipress",
+      "mode": "translated-from-upstream",
+      "englishDescription": "Grip the Smith machine bar and stand about shoulder-width apart with your knees slightly bent and your gaze forward. Keep your arms straight at your sides. Raise the weight by lifting your shoulders without bending your elbows. Pause at the top for one or two seconds, then lower your shoulders slowly.",
+      "provenance": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+      "source": {
+        "language": {
+          "id": 1,
+          "short_name": "de",
+          "full_name": "Deutsch",
+          "full_name_en": "German"
+        },
+        "translationId": 67,
+        "translationUuid": "475a9665-2044-4c76-be29-cabbbef126bd",
+        "name": "Shrugs an der MP",
+        "descriptionText": "Greife die Stange der Multipresse, stelle dich mit Schulterbreitem Stand und sehr leicht gebeugte Beine auf und lasse den Blick nach vorn. Die Arme hängen am Körper. Aus dieser Position hebst du nun das Gewicht, indem du die Schultern nach oben ziehst. Beuge dabei die Arme nicht. Auf dem höchsten Punkt kannst du 1 oder 2 Sekunden ausharren, bringe dann die Schultern langsam nach unten.",
+        "descriptionSource": "Greife die Stange der Multipresse, stelle dich mit Schulterbreitem Stand und sehr leicht gebeugte Beine auf und lasse den Blick nach vorn. Die Arme hängen am Körper. Aus dieser Position hebst du nun das Gewicht, indem du die Schultern nach oben ziehst. Beuge dabei die Arme nicht. Auf dem höchsten Punkt kannst du 1 oder 2 Sekunden ausharren, bringe dann die Schultern langsam nach unten.",
+        "license": {
+          "id": 1,
+          "full_name": " Creative Commons Attribution Share Alike 3",
+          "short_name": "CC-BY-SA 3",
+          "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+        },
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseObjectUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      }
+    },
+    {
+      "exerciseId": 802,
+      "exerciseUuid": "072a9fa8-1028-47b3-b958-d8052c6b8661",
+      "englishName": "Barbell Lunges Walking",
+      "mode": "translated-from-upstream",
+      "englishDescription": "Place the bar across your upper back and stand with your feet about hip-width apart, leaving a clear path ahead. Take a long step forward and lower your hips under control until the rear knee is close to the floor and the front knee is near 90 degrees. Drive through the front heel and bring the rear leg forward into the next lunge. Continue alternating legs while keeping your torso upright and your abdomen braced.",
+      "provenance": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+      "source": {
+        "language": {
+          "id": 4,
+          "short_name": "es",
+          "full_name": "Español",
+          "full_name_en": "Spanish"
+        },
+        "translationId": 2567,
+        "translationUuid": "970504ab-4130-45d1-b22b-3eddb764f318",
+        "name": "Zancadas Caminando con Barra",
+        "descriptionText": "Cómo realizarlo: Preparación: Coloca una barra sobre la parte alta de tu espalda (trapecios), igual que lo harías para una sentadilla. Párate derecho con los pies al ancho de las caderas, asegurándote de tener un pasillo o espacio libre por delante. Ejecución: Da un paso largo hacia adelante con una pierna. Baja la cadera de forma controlada hasta que la rodilla de la pierna de atrás quede muy cerca del suelo. La pierna delantera debe formar un ángulo de 90 grados. El Avance: En lugar de empujar hacia atrás para volver al inicio, impúlsate hacia adelante. Presiona con el talón de la pierna delantera y lleva la pierna de atrás hacia el frente para iniciar inmediatamente la siguiente zancada con esa pierna. Continuación: Sigue alternando las piernas, \"caminando\" hacia adelante con cada zancada de manera fluida pero controlada. Mantén siempre el torso erguido y el abdomen contraído para no perder el equilibrio.",
+        "descriptionSource": "**Cómo realizarlo:**\n\n1. **Preparación:** Coloca una barra sobre la parte alta de tu espalda (trapecios), igual que lo harías para una sentadilla. Párate derecho con los pies al ancho de las caderas, asegurándote de tener un pasillo o espacio libre por delante.\n2. **Ejecución:** Da un paso largo hacia adelante con una pierna. Baja la cadera de forma controlada hasta que la rodilla de la pierna de atrás quede muy cerca del suelo. La pierna delantera debe formar un ángulo de 90 grados.\n3. **El Avance:** En lugar de empujar hacia atrás para volver al inicio, impúlsate hacia adelante. Presiona con el talón de la pierna delantera y lleva la pierna de atrás hacia el frente para iniciar inmediatamente la siguiente zancada con esa pierna.\n4. **Continuación:** Sigue alternando las piernas, \"caminando\" hacia adelante con cada zancada de manera fluida pero controlada. Mantén siempre el torso erguido y el abdomen contraído para no perder el equilibrio.",
+        "license": {
+          "id": 2,
+          "full_name": "Creative Commons Attribution Share Alike 4",
+          "short_name": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+        },
+        "licenseAuthor": "wgerjhn",
+        "licenseAuthorUrl": null,
+        "licenseObjectUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wgerjhn"
+        ]
+      }
+    },
+    {
+      "exerciseId": 803,
+      "exerciseUuid": "f8d69dd4-3c35-49c7-8cbe-f0132eca4c52",
+      "englishName": "One Arm Triceps Extensions on Cable",
+      "mode": "translated-from-upstream",
+      "englishDescription": "Set the pulley high and attach a single handle. Stand with your working elbow close to your side and keep it fixed throughout the movement. Extend your arm downward until the elbow is straight and the triceps is contracted. Pause briefly, then return slowly and under control to the starting position.",
+      "provenance": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+      "source": {
+        "language": {
+          "id": 4,
+          "short_name": "es",
+          "full_name": "Español",
+          "full_name_en": "Spanish"
+        },
+        "translationId": 2673,
+        "translationUuid": "6fae30d4-9665-4278-80ff-7b9c0d0d24bd",
+        "name": "Extensión de Tríceps a una Mano en Polea",
+        "descriptionText": "Este ejercicio es ideal para aislar y concentrarse en cada cabeza del tríceps de forma individual. Descripción: Coloca la polea en una posición alta y utiliza un agarre individual (maneral). De pie, mantén tu codo pegado al costado del cuerpo; este debe actuar como una bisagra y permanecer fijo durante todo el movimiento. Extiende el brazo completamente hacia abajo hasta sentir una fuerte contracción en el tríceps. Haz una breve pausa y regresa de forma lenta y controlada a la posición inicial.",
+        "descriptionSource": "Este ejercicio es ideal para aislar y concentrarse en cada cabeza del tríceps de forma individual.\n\n**Descripción:**\n\nColoca la polea en una posición alta y utiliza un agarre individual (maneral). De pie, mantén tu codo pegado al costado del cuerpo; este debe actuar como una bisagra y permanecer fijo durante todo el movimiento.\n\nExtiende el brazo completamente hacia abajo hasta sentir una fuerte contracción en el tríceps. Haz una breve pausa y regresa de forma lenta y controlada a la posición inicial.",
+        "license": {
+          "id": 2,
+          "full_name": "Creative Commons Attribution Share Alike 4",
+          "short_name": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+        },
+        "licenseAuthor": "wgerjhn",
+        "licenseAuthorUrl": null,
+        "licenseObjectUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wgerjhn"
+        ]
+      }
+    }
+  ]
+}

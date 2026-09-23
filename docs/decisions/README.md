@@ -18,3 +18,5 @@ For a new decision, add the next number with Context, Decision, Consequences and
 - [0009: Dashboard components with Unovis and Reka UI](0009-dashboard-components.md).
 
 - [0010: Owned reference content and actionable nutrition](0010-reference-content-and-nutrition.md).
+
+- [0011: Broad exercise catalog and genuine motion previews](0011-exercise-catalog-and-motion.md).

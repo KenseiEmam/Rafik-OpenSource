@@ -1,0 +1,3292 @@
+{
+  "schema": 1,
+  "version": "wger-20260923-v1",
+  "source": "https://wger.de/api/v2/",
+  "items": [
+    {
+      "id": "wger-5148c579-5df2-4618-9a7b-a2e29ac4dd7d-9ea2e872-r1",
+      "exerciseId": "wger-12",
+      "name": "Seated Hip Adduction",
+      "source": {
+        "videoId": 74,
+        "videoUuid": "5148c579-5df2-4618-9a7b-a2e29ac4dd7d",
+        "exerciseId": 12,
+        "exerciseUuid": "53906cd1-61f1-4d56-ac60-e4fcc5824861",
+        "englishName": "Seated Hip Adduction",
+        "englishTranslationUuid": "4b3025a9-b717-4577-9e92-b1c200fe5f1c",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/12/5148c579-5df2-4618-9a7b-a2e29ac4dd7d.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/74/",
+        "bytes": 60138928,
+        "durationSeconds": 20.86,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 60138928,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "9ea2e87291d7445c801f058a13f4c2c62a14c34869577a1ae1601824778e0f66",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-5148c579-5df2-4618-9a7b-a2e29ac4dd7d-9ea2e872-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "816b098f1855d29d23331753fb684ea7d38f89ca2e8524adec5727a48b57900a",
+        "bytes": 1142281
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-5148c579-5df2-4618-9a7b-a2e29ac4dd7d-9ea2e872-r1.webp",
+        "mime": "image/webp",
+        "sha256": "57619b9edf113f946922a7b452142b8c276b7cc885dd096d570fd1c4a9975d23",
+        "bytes": 19950
+      }
+    },
+    {
+      "id": "wger-d45df7af-586b-42d0-bc56-d1e028812f12-4246d6c1-r1",
+      "exerciseId": "wger-46",
+      "name": "Barbell Lunges Standing",
+      "source": {
+        "videoId": 30,
+        "videoUuid": "d45df7af-586b-42d0-bc56-d1e028812f12",
+        "exerciseId": 46,
+        "exerciseUuid": "04e7d7e4-f8d2-406d-97df-3df3bceec22c",
+        "englishName": "Barbell Lunges Standing",
+        "englishTranslationUuid": "ae6a6c23-4616-49b7-a152-49d7461c2b7f",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/46/d45df7af-586b-42d0-bc56-d1e028812f12.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/30/",
+        "bytes": 23571954,
+        "durationSeconds": 8.09,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 23571954,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "4246d6c1973de9cd0b56b0ff03ac75e759a5f27d68235be6748848de3d2e1d15",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-d45df7af-586b-42d0-bc56-d1e028812f12-4246d6c1-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "9ca06e584424ed1998e84175d50770e6029872b0e838f1cc1e12d859072be46c",
+        "bytes": 379567
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-d45df7af-586b-42d0-bc56-d1e028812f12-4246d6c1-r1.webp",
+        "mime": "image/webp",
+        "sha256": "9753cb01420a7f6d31e681cd4ab922e020f03d5b5dbf8b766d81557083cb5371",
+        "bytes": 14658
+      }
+    },
+    {
+      "id": "wger-2bdb390c-312c-4497-a722-5eed2c823e5a-f7ef457d-r1",
+      "exerciseId": "wger-73",
+      "name": "Bench Press",
+      "source": {
+        "videoId": 21,
+        "videoUuid": "2bdb390c-312c-4497-a722-5eed2c823e5a",
+        "exerciseId": 73,
+        "exerciseUuid": "3717d144-7815-4a97-9a56-956fb889c996",
+        "englishName": "Bench Press",
+        "englishTranslationUuid": "5da6340b-22ec-4c1b-a443-eef2f59f92f0",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/73/2bdb390c-312c-4497-a722-5eed2c823e5a.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/21/",
+        "bytes": 1108545,
+        "durationSeconds": 15.93,
+        "width": 640,
+        "height": 352,
+        "container": "mov",
+        "codec": "h264",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 1108545,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "f7ef457d364ed24fc1dff86a4c40f9801f42213300e9904b442d96430b869ecc",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 2 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 2,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-2bdb390c-312c-4497-a722-5eed2c823e5a-f7ef457d-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "4c15836eda8a3eb07827817f4688040561abdf9638f0d4a265f33fcbe6864b91",
+        "bytes": 974171
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-2bdb390c-312c-4497-a722-5eed2c823e5a-f7ef457d-r1.webp",
+        "mime": "image/webp",
+        "sha256": "1e5836632e4114bc8cebf85ecb91f13ebd53420de59135b654d3a307375253b4",
+        "bytes": 10828
+      }
+    },
+    {
+      "id": "wger-080c799b-8afd-4130-8d72-9cef0cd79f54-d96fa783-r1",
+      "exerciseId": "wger-75",
+      "name": "Benchpress Dumbbells",
+      "source": {
+        "videoId": 17,
+        "videoUuid": "080c799b-8afd-4130-8d72-9cef0cd79f54",
+        "exerciseId": 75,
+        "exerciseUuid": "28321cf3-70e6-48a4-ade1-d11382180cb3",
+        "englishName": "Benchpress Dumbbells",
+        "englishTranslationUuid": "0ec76f5d-1311-4d6d-bf79-00fa17c3061a",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/75/080c799b-8afd-4130-8d72-9cef0cd79f54.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/17/",
+        "bytes": 4543158,
+        "durationSeconds": 14.16,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "h264",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 4543158,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "d96fa783d10b476965e926a2c88f4b6d69da5f9e91cd7656fbafadb001981afa",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-080c799b-8afd-4130-8d72-9cef0cd79f54-d96fa783-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "1eb33d550f04b0392a173a60763568d16dd10956acb67efdec6ff8cb179c93fd",
+        "bytes": 866735
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-080c799b-8afd-4130-8d72-9cef0cd79f54-d96fa783-r1.webp",
+        "mime": "image/webp",
+        "sha256": "cf4e220d1e90c5c6babe8f2070b97f1e1db8ef3c846b204299cc61fe66b8ff48",
+        "bytes": 17210
+      }
+    },
+    {
+      "id": "wger-28b53647-27e7-47cf-8852-2ee666c8b628-e0a0b552-r1",
+      "exerciseId": "wger-82",
+      "name": "Bent-over Lateral Raises",
+      "source": {
+        "videoId": 7,
+        "videoUuid": "28b53647-27e7-47cf-8852-2ee666c8b628",
+        "exerciseId": 82,
+        "exerciseUuid": "6f79b381-98a4-40d5-8a45-3bb0558be6fe",
+        "englishName": "Bent-over Lateral Raises",
+        "englishTranslationUuid": "170cc52f-345f-41b3-bdae-8a5e0c9aa449",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/82/28b53647-27e7-47cf-8852-2ee666c8b628.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/7/",
+        "bytes": 13386307,
+        "durationSeconds": 7.6,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 13386307,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "e0a0b55272b6ba9ccf30238802d65c1baf5d6526dbf23dbd940354bf42b73f05",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-28b53647-27e7-47cf-8852-2ee666c8b628-e0a0b552-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "7c31036e4a8026f294ed3f2b14349a535d37273ba41df6dc3b92cee40b00cdfe",
+        "bytes": 723679
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-28b53647-27e7-47cf-8852-2ee666c8b628-e0a0b552-r1.webp",
+        "mime": "image/webp",
+        "sha256": "9dc9243dc6dd6d825dbbb3943e064bfd33a8d79b4f73e561e6ba9c24a15f3925",
+        "bytes": 26304
+      }
+    },
+    {
+      "id": "wger-483f4bff-e108-41f1-8e7b-0caf24952552-2b75ac78-r1",
+      "exerciseId": "wger-91",
+      "name": "Biceps Curls With Barbell",
+      "source": {
+        "videoId": 49,
+        "videoUuid": "483f4bff-e108-41f1-8e7b-0caf24952552",
+        "exerciseId": 91,
+        "exerciseUuid": "7b99a081-6b1a-4aa5-b86a-5a935d083a35",
+        "englishName": "Biceps Curls With Barbell",
+        "englishTranslationUuid": "c56078d2-ae85-4524-a467-d1e143b6df1a",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/91/483f4bff-e108-41f1-8e7b-0caf24952552.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/49/",
+        "bytes": 22680665,
+        "durationSeconds": 12.34,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 22680665,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "2b75ac783df5a9557e280385f6b1181227c613f4ee1a5427a8a3477736b14a49",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-483f4bff-e108-41f1-8e7b-0caf24952552-2b75ac78-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "ea810a880e809346fa4f0c4448e1b92f3062d3ba0d2f28b31c8f1225c63e03b3",
+        "bytes": 834655
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-483f4bff-e108-41f1-8e7b-0caf24952552-2b75ac78-r1.webp",
+        "mime": "image/webp",
+        "sha256": "18fa059eb13d7cd296b2fc82d5e2d6b6c08dd490c5bbd77879ace121e7d8c88c",
+        "bytes": 20998
+      }
+    },
+    {
+      "id": "wger-8bfb917c-3d0d-49b9-8073-5d7e01c1b894-4e5e4bbb-r1",
+      "exerciseId": "wger-92",
+      "name": "Biceps Curls With Dumbbell",
+      "source": {
+        "videoId": 48,
+        "videoUuid": "8bfb917c-3d0d-49b9-8073-5d7e01c1b894",
+        "exerciseId": 92,
+        "exerciseUuid": "1ae6a28d-10e7-4ecf-af4f-905f8193e2c6",
+        "englishName": "Biceps Curls With Dumbbell",
+        "englishTranslationUuid": "48a59aa8-4568-409c-8afe-f8cb99c558ea",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/92/8bfb917c-3d0d-49b9-8073-5d7e01c1b894.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/48/",
+        "bytes": 31753930,
+        "durationSeconds": 10.94,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 31753930,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "4e5e4bbbf24385e8bbed16b7fb2905243041646f56031c3c3515073d6b9ace75",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-8bfb917c-3d0d-49b9-8073-5d7e01c1b894-4e5e4bbb-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "55fe9a305d5858c13230d9c3632c58ba86f1aaa41822a44d7bcb0348181a1157",
+        "bytes": 529580
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-8bfb917c-3d0d-49b9-8073-5d7e01c1b894-4e5e4bbb-r1.webp",
+        "mime": "image/webp",
+        "sha256": "a16cca6c53a4d8213841c414d3593257318a6bfe76b5cd301207d2127705738d",
+        "bytes": 20680
+      }
+    },
+    {
+      "id": "wger-ab770931-47d3-44fd-aef0-ac7a64c3b794-4a7f9954-r1",
+      "exerciseId": "wger-95",
+      "name": "Biceps Curl With Cable",
+      "source": {
+        "videoId": 50,
+        "videoUuid": "ab770931-47d3-44fd-aef0-ac7a64c3b794",
+        "exerciseId": 95,
+        "exerciseUuid": "bcb7020c-8678-496d-8f4d-aad0e233a5bd",
+        "englishName": "Biceps Curl With Cable",
+        "englishTranslationUuid": "8c6c1544-cbf8-403c-ae12-b27b392702f8",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/95/ab770931-47d3-44fd-aef0-ac7a64c3b794.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/50/",
+        "bytes": 34233084,
+        "durationSeconds": 10.45,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 34233084,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "4a7f995405ea08af81ede59bc07ed05458596b420a7ca596a154f9e27a24c2cb",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-ab770931-47d3-44fd-aef0-ac7a64c3b794-4a7f9954-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "1d40d11cbe7e3315821a2662becd49f3808eae846ced1bf91344f16be8fa5749",
+        "bytes": 636102
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-ab770931-47d3-44fd-aef0-ac7a64c3b794-4a7f9954-r1.webp",
+        "mime": "image/webp",
+        "sha256": "ffeb6878159f4225bbd7f6839895c648acf1cea780a514a9a216aebac9e10a5f",
+        "bytes": 21314
+      }
+    },
+    {
+      "id": "wger-dd9a663f-d8ba-4621-823b-13788ccb66bc-faeefaad-r1",
+      "exerciseId": "wger-194",
+      "name": "Dips",
+      "source": {
+        "videoId": 66,
+        "videoUuid": "dd9a663f-d8ba-4621-823b-13788ccb66bc",
+        "exerciseId": 194,
+        "exerciseUuid": "09dd3e3c-e53a-4e2c-a2e3-645d334f53e2",
+        "englishName": "Dips",
+        "englishTranslationUuid": "7191e015-0c60-4376-9be0-733b9754b7f8",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/194/dd9a663f-d8ba-4621-823b-13788ccb66bc.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/66/",
+        "bytes": 4418928,
+        "durationSeconds": 10.17,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "h264",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 4418928,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "faeefaad3f10f5dfeb95648e4e7bb494b64e0b2efb7085f3793fac00883d5d55",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-dd9a663f-d8ba-4621-823b-13788ccb66bc-faeefaad-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "dca6be318d553e7b70c6668a87b47d8ec6e61b1ec4f714586315f8873f3606c6",
+        "bytes": 818488
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-dd9a663f-d8ba-4621-823b-13788ccb66bc-faeefaad-r1.webp",
+        "mime": "image/webp",
+        "sha256": "eb976c8b34f1dec3b9144a8547c1a58878f040833607ad5e3b90441856891939",
+        "bytes": 28584
+      }
+    },
+    {
+      "id": "wger-c167ac34-ddbc-4e1b-8edf-1192e9d00e22-6fc1b296-r1",
+      "exerciseId": "wger-205",
+      "name": "Dumbbell Lunges Standing",
+      "source": {
+        "videoId": 31,
+        "videoUuid": "c167ac34-ddbc-4e1b-8edf-1192e9d00e22",
+        "exerciseId": 205,
+        "exerciseUuid": "2f1a2707-e7ff-46ac-9112-3e31e6e961ee",
+        "englishName": "Dumbbell Lunges Standing",
+        "englishTranslationUuid": "587c0052-f2bc-48ca-8af9-415175308901",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/205/c167ac34-ddbc-4e1b-8edf-1192e9d00e22.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/31/",
+        "bytes": 49889363,
+        "durationSeconds": 17.09,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 49889363,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "6fc1b2969a40253e8f27eebee8d150efaec8dbe8bc668a348ad8562feee013a5",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-c167ac34-ddbc-4e1b-8edf-1192e9d00e22-6fc1b296-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "a1aa0c4bf09abcfa213d5d76392af6acba7c003ce07c18ad9315091e0426c05d",
+        "bytes": 1043507
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-c167ac34-ddbc-4e1b-8edf-1192e9d00e22-6fc1b296-r1.webp",
+        "mime": "image/webp",
+        "sha256": "322ddf013c64f5f0a8c46fe68ddbc9b132482f0141feffe06da078024e0f4022",
+        "bytes": 25082
+      }
+    },
+    {
+      "id": "wger-47a65c45-6fd1-4181-b71a-3a6c882e516b-3d83e213-r1",
+      "exerciseId": "wger-206",
+      "name": "Dumbbell Lunges Walking",
+      "source": {
+        "videoId": 33,
+        "videoUuid": "47a65c45-6fd1-4181-b71a-3a6c882e516b",
+        "exerciseId": 206,
+        "exerciseUuid": "dcc6e237-a8bb-4eca-bbc5-7fb852636f6a",
+        "englishName": "Dumbbell Lunges Walking",
+        "englishTranslationUuid": "ffd4ce7e-e14f-49d4-9dc9-dc1362631382",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/206/47a65c45-6fd1-4181-b71a-3a6c882e516b.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/33/",
+        "bytes": 23850769,
+        "durationSeconds": 14.31,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 23850769,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "3d83e21334e0119fc831609c7581af02ec30642f1ebedf514d951ca25fd4d154",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-47a65c45-6fd1-4181-b71a-3a6c882e516b-3d83e213-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "99cd300c42416c7be9f55c41e89afd83bf9b4a95230df9b47dfc2c1b6ec16e90",
+        "bytes": 1091926
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-47a65c45-6fd1-4181-b71a-3a6c882e516b-3d83e213-r1.webp",
+        "mime": "image/webp",
+        "sha256": "7dc559e20da5677fea5de57cbb55c599ff8d20b5d2b83780b69ca77f0e050f6a",
+        "bytes": 20862
+      }
+    },
+    {
+      "id": "wger-85f6eb25-a76c-409e-9af9-497794ac0dfb-3ca3071c-r1",
+      "exerciseId": "wger-211",
+      "name": "Dumbbell Triceps Extension",
+      "source": {
+        "videoId": 57,
+        "videoUuid": "85f6eb25-a76c-409e-9af9-497794ac0dfb",
+        "exerciseId": 211,
+        "exerciseUuid": "d8bddb58-91b0-4d7b-8ec1-cd742584b607",
+        "englishName": "Dumbbell Triceps Extension",
+        "englishTranslationUuid": "3f7b893e-a089-450f-b8cc-ec3ec17d3bf3",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/211/85f6eb25-a76c-409e-9af9-497794ac0dfb.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/57/",
+        "bytes": 11837332,
+        "durationSeconds": 32.02,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "h264",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 11837332,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "3ca3071ca6e4d19e6aac1197b22977932d527c7661a2cacb0652b6d976bc80ff",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-85f6eb25-a76c-409e-9af9-497794ac0dfb-3ca3071c-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "a9343155dfc5177d89caee299eb631bca20a038b488c22fcb7919c8a936d3d5f",
+        "bytes": 2346255
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-85f6eb25-a76c-409e-9af9-497794ac0dfb-3ca3071c-r1.webp",
+        "mime": "image/webp",
+        "sha256": "5c9aab3a090d1cbe8b56a58764f7ba1d728aa564d485440629cfb29466baedde",
+        "bytes": 25768
+      }
+    },
+    {
+      "id": "wger-eea93fcc-6a3c-4783-8f70-0234c791a001-88092b7f-r1",
+      "exerciseId": "wger-222",
+      "name": "Facepull",
+      "source": {
+        "videoId": 79,
+        "videoUuid": "eea93fcc-6a3c-4783-8f70-0234c791a001",
+        "exerciseId": 222,
+        "exerciseUuid": "d7a418d4-d0cb-4f85-8a7c-1e9d97152cbd",
+        "englishName": "Facepull",
+        "englishTranslationUuid": "659f3fb9-2370-42fb-9c29-9aaf65c7a7de",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/222/eea93fcc-6a3c-4783-8f70-0234c791a001.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/79/",
+        "bytes": 20624981,
+        "durationSeconds": 8.57,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 20624981,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "88092b7fb9e905e706267d0c86a44c946ca261875640302e1b6956f12f262864",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-eea93fcc-6a3c-4783-8f70-0234c791a001-88092b7f-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "d31925640a1adcd49baf8fe7e725ef51390d7a4ff1c61042cca9495caa964a2c",
+        "bytes": 718575
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-eea93fcc-6a3c-4783-8f70-0234c791a001-88092b7f-r1.webp",
+        "mime": "image/webp",
+        "sha256": "a23fe3d192dd3e2f5f7ba6bdd6576d431014d85f31603afba748a95e92e4f371",
+        "bytes": 28556
+      }
+    },
+    {
+      "id": "wger-c253303e-9160-4f1f-b4fe-daf1e6c8661d-ea90aab3-r1",
+      "exerciseId": "wger-245",
+      "name": "Skullcrusher Dumbbells",
+      "source": {
+        "videoId": 60,
+        "videoUuid": "c253303e-9160-4f1f-b4fe-daf1e6c8661d",
+        "exerciseId": 245,
+        "exerciseUuid": "893c07ea-2e24-49b6-92e4-d0033eedec62",
+        "englishName": "Skullcrusher Dumbbells",
+        "englishTranslationUuid": "ee00d53e-4482-44aa-b780-bbc570061841",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/245/c253303e-9160-4f1f-b4fe-daf1e6c8661d.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/60/",
+        "bytes": 5813842,
+        "durationSeconds": 18.72,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "h264",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 5813842,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "ea90aab3561008a60ae462277b49332be8d76567713fc90abe2ee4a047753f09",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-c253303e-9160-4f1f-b4fe-daf1e6c8661d-ea90aab3-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "4cc9e5337b8fffdbc2169de366638cd6cd255d0e8ede9fe6c4a2a288ec566ae5",
+        "bytes": 1174875
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-c253303e-9160-4f1f-b4fe-daf1e6c8661d-ea90aab3-r1.webp",
+        "mime": "image/webp",
+        "sha256": "c689369e4a411a85717f446da68f45fc66cdb105754756665b4e08c6414e8170",
+        "bytes": 14622
+      }
+    },
+    {
+      "id": "wger-2a194d11-ff5d-4bdf-849e-1c441cf7b0b1-9afeeb32-r1",
+      "exerciseId": "wger-246",
+      "name": "Skullcrusher SZ-bar",
+      "source": {
+        "videoId": 63,
+        "videoUuid": "2a194d11-ff5d-4bdf-849e-1c441cf7b0b1",
+        "exerciseId": 246,
+        "exerciseUuid": "95a7e546-e8f8-4521-a76b-983d94161b25",
+        "englishName": "Skullcrusher SZ-bar",
+        "englishTranslationUuid": "ee4a350b-c681-407f-a414-6ec243809ec7",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/246/2a194d11-ff5d-4bdf-849e-1c441cf7b0b1.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/63/",
+        "bytes": 3211377,
+        "durationSeconds": 10.91,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "h264",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 3211377,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "9afeeb3281e3eded5e7bcad08f38c31b151d0a42d4bc5638346b8f05cbaa5177",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-2a194d11-ff5d-4bdf-849e-1c441cf7b0b1-9afeeb32-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "a950e886b0e54c0ce0c4f842e0b2cabef17982bb7876aa8bbb1b3a3931ae27d8",
+        "bytes": 603230
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-2a194d11-ff5d-4bdf-849e-1c441cf7b0b1-9afeeb32-r1.webp",
+        "mime": "image/webp",
+        "sha256": "6ed6d1cdc23994ab761a2d290f87f7e8af078e554b335e5a08dd456d87277206",
+        "bytes": 14646
+      }
+    },
+    {
+      "id": "wger-93145935-29db-4e52-9d2d-174b1c30c098-0b3224e0-r1",
+      "exerciseId": "wger-257",
+      "name": "Front Squats",
+      "source": {
+        "videoId": 27,
+        "videoUuid": "93145935-29db-4e52-9d2d-174b1c30c098",
+        "exerciseId": 257,
+        "exerciseUuid": "d677de4c-5bd9-412a-91f1-857116a666a2",
+        "englishName": "Front Squats",
+        "englishTranslationUuid": "f2e563d2-507b-4586-88c8-77652cd19648",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/257/93145935-29db-4e52-9d2d-174b1c30c098.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/27/",
+        "bytes": 27090822,
+        "durationSeconds": 8.25,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 27090822,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "0b3224e065a0be689366b0f4416ed49a4a89f36e4aaf68d238d705a5bf165a8b",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-93145935-29db-4e52-9d2d-174b1c30c098-0b3224e0-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "dbf7e5f8a94908c881345474395be81a3747992d9272cad90ad3052b7120bd2b",
+        "bytes": 417770
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-93145935-29db-4e52-9d2d-174b1c30c098-0b3224e0-r1.webp",
+        "mime": "image/webp",
+        "sha256": "f9211112b10787653076ee9a33f1b1612e01f84a3a25c77de426d44255739984",
+        "bytes": 18058
+      }
+    },
+    {
+      "id": "wger-df069052-2173-4f24-855f-a0eebe729f24-1bb9997d-r1",
+      "exerciseId": "wger-272",
+      "name": "Hammer Curls",
+      "source": {
+        "videoId": 51,
+        "videoUuid": "df069052-2173-4f24-855f-a0eebe729f24",
+        "exerciseId": 272,
+        "exerciseUuid": "c0d9fe98-f4fe-49f3-8037-05e1984e7d2d",
+        "englishName": "Hammer Curls",
+        "englishTranslationUuid": "6dcc9adb-939c-4581-9e44-d0d73753997b",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/272/df069052-2173-4f24-855f-a0eebe729f24.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/51/",
+        "bytes": 30154182,
+        "durationSeconds": 10.37,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 30154182,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "1bb9997de44f2c7b1ff182001c988ae1245006458a3a6e1bc85db52dcb1a4e38",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-df069052-2173-4f24-855f-a0eebe729f24-1bb9997d-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "854e51427d7d5e755cf38b7768ec1fd10098f06c157d7ccc917d5982c7ea1fa1",
+        "bytes": 491672
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-df069052-2173-4f24-855f-a0eebe729f24-1bb9997d-r1.webp",
+        "mime": "image/webp",
+        "sha256": "297cc54c6dea2d143c3c0cd9dce9749346b79a76fea98db3a86a62982fb17811",
+        "bytes": 20152
+      }
+    },
+    {
+      "id": "wger-af1fff93-eb58-4ba7-97a4-b38ee67853b4-3306077e-r1",
+      "exerciseId": "wger-275",
+      "name": "Hammercurls on Cable",
+      "source": {
+        "videoId": 47,
+        "videoUuid": "af1fff93-eb58-4ba7-97a4-b38ee67853b4",
+        "exerciseId": 275,
+        "exerciseUuid": "04365177-e078-489b-983a-8ac61b7346f1",
+        "englishName": "Hammercurls on Cable",
+        "englishTranslationUuid": "5baf40e5-ea3c-4f8d-b60a-d294ee2de55b",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/275/af1fff93-eb58-4ba7-97a4-b38ee67853b4.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/47/",
+        "bytes": 38048587,
+        "durationSeconds": 11.85,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 38048587,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "3306077ea6ba80601490e4de5e37c31eafdb0af7457be1f7e2b877d481130dd8",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-af1fff93-eb58-4ba7-97a4-b38ee67853b4-3306077e-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "23eb0c7c5a7c2a8b0c787609921546b6d0d57e9b4430b8f1414334c6e8f9d8e3",
+        "bytes": 836155
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-af1fff93-eb58-4ba7-97a4-b38ee67853b4-3306077e-r1.webp",
+        "mime": "image/webp",
+        "sha256": "ade9ff39c1450be185e3fd84720804bc70030919ff4644757465335ed6e89131",
+        "bytes": 19694
+      }
+    },
+    {
+      "id": "wger-45bacf4b-1bb6-4d47-8bd1-9f00eddd4019-2d9af345-r1",
+      "exerciseId": "wger-294",
+      "name": "Hip Thrust",
+      "source": {
+        "videoId": 72,
+        "videoUuid": "45bacf4b-1bb6-4d47-8bd1-9f00eddd4019",
+        "exerciseId": 294,
+        "exerciseUuid": "19a289c0-33af-4055-bb34-3570c2975d3d",
+        "englishName": "Hip Thrust",
+        "englishTranslationUuid": "37097633-de80-4271-9b7c-291f359e0ef4",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/294/45bacf4b-1bb6-4d47-8bd1-9f00eddd4019.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/72/",
+        "bytes": 87548125,
+        "durationSeconds": 30.19,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 87548125,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "2d9af3456d9bf47f6f52ee31c8da2af883b58acdd02b161e32d23d90ab87a26b",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-45bacf4b-1bb6-4d47-8bd1-9f00eddd4019-2d9af345-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "57fa04845ad400c2024204e68b7550c9e997e56e99eefd41106bb84b4ec1a426",
+        "bytes": 1565204
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-45bacf4b-1bb6-4d47-8bd1-9f00eddd4019-2d9af345-r1.webp",
+        "mime": "image/webp",
+        "sha256": "b7f4dfa5eebed862fc855cc0211b6eb037c69cd150360e78b146f3e91c4b4f06",
+        "bytes": 15842
+      }
+    },
+    {
+      "id": "wger-0cbfeace-dda9-4166-8424-f51358e88a4f-41bc3318-r1",
+      "exerciseId": "wger-341",
+      "name": "Squats on Multipress",
+      "source": {
+        "videoId": 42,
+        "videoUuid": "0cbfeace-dda9-4166-8424-f51358e88a4f",
+        "exerciseId": 341,
+        "exerciseUuid": "316aca47-6f5b-40b7-b04f-f69e68387354",
+        "englishName": "Squats on Multipress",
+        "englishTranslationUuid": "9a427e41-a28b-40b5-ab44-d35f8071ecd9",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/341/0cbfeace-dda9-4166-8424-f51358e88a4f.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/42/",
+        "bytes": 34036878,
+        "durationSeconds": 11.96,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 34036878,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "41bc3318429e26325e3ece262250dd82d1de80345714ae20929db78d20607180",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-0cbfeace-dda9-4166-8424-f51358e88a4f-41bc3318-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "5f8a6148da5087edf1f86a57fbcbb57cdcd757ea9e9c8545be0f7ad3b5c8fd89",
+        "bytes": 755702
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-0cbfeace-dda9-4166-8424-f51358e88a4f-41bc3318-r1.webp",
+        "mime": "image/webp",
+        "sha256": "9a008aa3162f613ba5e9aff91eaacd745e633632a3e52fedd4c85886e50adfd0",
+        "bytes": 26986
+      }
+    },
+    {
+      "id": "wger-de69928a-8a35-4096-821c-1f46de5e0e03-41c47c5e-r1",
+      "exerciseId": "wger-348",
+      "name": "Lateral Raises",
+      "source": {
+        "videoId": 6,
+        "videoUuid": "de69928a-8a35-4096-821c-1f46de5e0e03",
+        "exerciseId": 348,
+        "exerciseUuid": "63375f5b-2d81-471c-bea4-fc3d207e96cb",
+        "englishName": "Lateral Raises",
+        "englishTranslationUuid": "5345766a-c092-457a-aa21-8ee6ffa855d4",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/348/de69928a-8a35-4096-821c-1f46de5e0e03.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/6/",
+        "bytes": 43874331,
+        "durationSeconds": 18.26,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 43874331,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "41c47c5efd245d0dfbcd25e4c1e6a4f46f2093281871df3503278ea9e5444d7f",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-de69928a-8a35-4096-821c-1f46de5e0e03-41c47c5e-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "48bb41c3007e678b86fef8b127499896aa4ad3792595ef979e2846ba951efa2c",
+        "bytes": 2010430
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-de69928a-8a35-4096-821c-1f46de5e0e03-41c47c5e-r1.webp",
+        "mime": "image/webp",
+        "sha256": "c86666426fc1dd836b52984535504222dc1bf0865d36fa448d163d290a2556cc",
+        "bytes": 29310
+      }
+    },
+    {
+      "id": "wger-9896d82e-d8b6-48af-bdd5-b8545dc523e9-14b3c3fc-r1",
+      "exerciseId": "wger-349",
+      "name": "Lateral Rows on Cable, One Armed",
+      "source": {
+        "videoId": 5,
+        "videoUuid": "9896d82e-d8b6-48af-bdd5-b8545dc523e9",
+        "exerciseId": 349,
+        "exerciseUuid": "57263316-6f34-4539-952b-b07e09bac3ba",
+        "englishName": "Lateral Rows on Cable, One Armed",
+        "englishTranslationUuid": "79a3a34c-262f-4cae-b827-b5a85b11b860",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/349/9896d82e-d8b6-48af-bdd5-b8545dc523e9.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/5/",
+        "bytes": 33127028,
+        "durationSeconds": 13.22,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 33127028,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "14b3c3fc75f882edd98b0af2f685441753349f239aeb5f4cb09c54a4809a7f58",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-9896d82e-d8b6-48af-bdd5-b8545dc523e9-14b3c3fc-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "1149cd2e6452cce65d2cc7402ed45d13ce615f9fcb3666d8645b75520269cdb7",
+        "bytes": 1149339
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-9896d82e-d8b6-48af-bdd5-b8545dc523e9-14b3c3fc-r1.webp",
+        "mime": "image/webp",
+        "sha256": "2c5ed223573323caef0590ae54548d4856f78135266436896c23c261d66d73fe",
+        "bytes": 26180
+      }
+    },
+    {
+      "id": "wger-becaf013-5044-40d0-bae9-7ed60c973737-77d70320-r1",
+      "exerciseId": "wger-365",
+      "name": "Leg Curls (laying)",
+      "source": {
+        "videoId": 35,
+        "videoUuid": "becaf013-5044-40d0-bae9-7ed60c973737",
+        "exerciseId": 365,
+        "exerciseUuid": "3bc8b411-a28d-4e1c-a6d1-769e18fe9881",
+        "englishName": "Leg Curls (laying)",
+        "englishTranslationUuid": "cd4fac32-48fb-4237-a263-a44c5108790a",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/365/becaf013-5044-40d0-bae9-7ed60c973737.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/35/",
+        "bytes": 31825446,
+        "durationSeconds": 15.06,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 31825446,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "77d70320a6d87af02532379039874eaf805d569462cc540060b04da915fcecb3",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-becaf013-5044-40d0-bae9-7ed60c973737-77d70320-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "5f512252a663072964e1c05733db0de7c640e01717ce2b187a5ae6a4278cca38",
+        "bytes": 1182686
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-becaf013-5044-40d0-bae9-7ed60c973737-77d70320-r1.webp",
+        "mime": "image/webp",
+        "sha256": "ccd9f6248d6752d01c6bdb5e7ac156daf6b264e298141a4c96c2174a50fd4b24",
+        "bytes": 24312
+      }
+    },
+    {
+      "id": "wger-43df4b79-d4c3-4fbf-bcb5-e0d825b84120-87d8c5fb-r1",
+      "exerciseId": "wger-366",
+      "name": "Leg Curls (sitting)",
+      "source": {
+        "videoId": 37,
+        "videoUuid": "43df4b79-d4c3-4fbf-bcb5-e0d825b84120",
+        "exerciseId": 366,
+        "exerciseUuid": "440a5184-de58-4a86-a7ba-76ddeafaa855",
+        "englishName": "Leg Curls (sitting)",
+        "englishTranslationUuid": "61950a59-be4e-43cc-abc1-cb52abd15354",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/366/43df4b79-d4c3-4fbf-bcb5-e0d825b84120.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/37/",
+        "bytes": 72266814,
+        "durationSeconds": 24.89,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 72266814,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "87d8c5fb1787d11942b20182fd08c0324288f9ab7a6665d949de8afa5048d244",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-43df4b79-d4c3-4fbf-bcb5-e0d825b84120-87d8c5fb-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "b37b11e67bc7d295cacc7ff67dbb03c42fee9fe902fb83f0d8733945f56c1d0d",
+        "bytes": 1818238
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-43df4b79-d4c3-4fbf-bcb5-e0d825b84120-87d8c5fb-r1.webp",
+        "mime": "image/webp",
+        "sha256": "f27894354ffeba33b4f29c886c0effb8161b2aea28b9194114b856a1fe1b1153",
+        "bytes": 21002
+      }
+    },
+    {
+      "id": "wger-e8113ae4-a0b4-42a2-8eaa-3263de64622e-8c9b3984-r1",
+      "exerciseId": "wger-367",
+      "name": "Leg Curls (standing)",
+      "source": {
+        "videoId": 39,
+        "videoUuid": "e8113ae4-a0b4-42a2-8eaa-3263de64622e",
+        "exerciseId": 367,
+        "exerciseUuid": "49189e88-40b6-4c0d-a784-0cc3abbb8e75",
+        "englishName": "Leg Curls (standing)",
+        "englishTranslationUuid": "89c98117-dd53-4334-bfa6-72a96525629a",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/367/e8113ae4-a0b4-42a2-8eaa-3263de64622e.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/39/",
+        "bytes": 41674596,
+        "durationSeconds": 14.89,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 41674596,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "8c9b3984d48599289589e7e7ce9209e395ae8f1a93b5bb0d7511153f5ca8d7d8",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-e8113ae4-a0b4-42a2-8eaa-3263de64622e-8c9b3984-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "466d74f83ffe31c94262fac6fd625a02373e0e65afdb20550920c244547b51a9",
+        "bytes": 1380627
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-e8113ae4-a0b4-42a2-8eaa-3263de64622e-8c9b3984-r1.webp",
+        "mime": "image/webp",
+        "sha256": "817469086a61c1e2db9e0c7d883c618fab3045a9c5bc8ce03f428246f3bda31a",
+        "bytes": 25132
+      }
+    },
+    {
+      "id": "wger-6aae16b4-01b9-4eb4-935c-3250f84d2c59-a92f5677-r1",
+      "exerciseId": "wger-371",
+      "name": "Leg Press",
+      "source": {
+        "videoId": 44,
+        "videoUuid": "6aae16b4-01b9-4eb4-935c-3250f84d2c59",
+        "exerciseId": 371,
+        "exerciseUuid": "66a42396-c207-44da-bc75-758a89d32404",
+        "englishName": "Leg Press",
+        "englishTranslationUuid": "6c8e863c-f6c2-4ad0-a0e9-5e6d9e6a928b",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/371/6aae16b4-01b9-4eb4-935c-3250f84d2c59.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/44/",
+        "bytes": 57665329,
+        "durationSeconds": 34.69,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 57665329,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "a92f5677ce005b10385668c88e5cce77c57658b63f8808b8684be0a5abeaa2ef",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-6aae16b4-01b9-4eb4-935c-3250f84d2c59-a92f5677-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "d0a772b95593049eebd7b67ab3c53e39200bdc4031bc2bf143b82cd231f4674a",
+        "bytes": 2966564
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-6aae16b4-01b9-4eb4-935c-3250f84d2c59-a92f5677-r1.webp",
+        "mime": "image/webp",
+        "sha256": "a6bf74910d99abc1994dfb5c47560e63ec97d1d755bfbd2da3fc670afe0574fa",
+        "bytes": 27474
+      }
+    },
+    {
+      "id": "wger-5336822a-7803-45b3-a880-f2bbf37a28f2-63121820-r1",
+      "exerciseId": "wger-374",
+      "name": "Leg Presses (wide)",
+      "source": {
+        "videoId": 43,
+        "videoUuid": "5336822a-7803-45b3-a880-f2bbf37a28f2",
+        "exerciseId": 374,
+        "exerciseUuid": "661287d4-d1dc-485c-896b-73f90b000536",
+        "englishName": "Leg Presses (wide)",
+        "englishTranslationUuid": "3caed096-c65e-434d-9792-33db636743e7",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/374/5336822a-7803-45b3-a880-f2bbf37a28f2.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/43/",
+        "bytes": 45597793,
+        "durationSeconds": 21.51,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 45597793,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "631218201fd7ec1b30312be5d06ff196c904c3be8d6cd8f837fbfe53fc6ca13a",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-5336822a-7803-45b3-a880-f2bbf37a28f2-63121820-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "9e043e73979c309df244557836393cec497808573b785f165e0cb5248b1272e7",
+        "bytes": 1761621
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-5336822a-7803-45b3-a880-f2bbf37a28f2-63121820-r1.webp",
+        "mime": "image/webp",
+        "sha256": "33ee07234e3babb1b28fe7dd8d139226035ed6ea4cb75004c90c1343cb782da0",
+        "bytes": 24158
+      }
+    },
+    {
+      "id": "wger-effa7a81-dbdd-4014-83ee-ddf0fd835301-0b59e2f2-r1",
+      "exerciseId": "wger-375",
+      "name": "Leg Press on Hackenschmidt Machine",
+      "source": {
+        "videoId": 40,
+        "videoUuid": "effa7a81-dbdd-4014-83ee-ddf0fd835301",
+        "exerciseId": 375,
+        "exerciseUuid": "18104387-4567-4c1e-8d03-db0b274646dd",
+        "englishName": "Leg Press on Hackenschmidt Machine",
+        "englishTranslationUuid": "2966e4a2-4306-4cb5-a2dc-8951cd192555",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/375/effa7a81-dbdd-4014-83ee-ddf0fd835301.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/40/",
+        "bytes": 80419952,
+        "durationSeconds": 32.11,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 80419952,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "0b59e2f24a6ba1892ab1f136a1ef0b41aa8f5ded0f62a6fe38488d757095bfa1",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-effa7a81-dbdd-4014-83ee-ddf0fd835301-0b59e2f2-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "900d8ac625e571ab844a65cecf84389176cb915121d3f2f42131fd388049f528",
+        "bytes": 2303592
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-effa7a81-dbdd-4014-83ee-ddf0fd835301-0b59e2f2-r1.webp",
+        "mime": "image/webp",
+        "sha256": "0300c71f01436d2fe9c271e21a151923c7ecf17196df63660c08d52357d0dd36",
+        "bytes": 17912
+      }
+    },
+    {
+      "id": "wger-5d2339a4-815f-46ba-aa19-8a763cfdeba0-7d021934-r1",
+      "exerciseId": "wger-465",
+      "name": "Preacher Curls",
+      "source": {
+        "videoId": 54,
+        "videoUuid": "5d2339a4-815f-46ba-aa19-8a763cfdeba0",
+        "exerciseId": 465,
+        "exerciseUuid": "dd52fb99-9426-4a78-b446-20a8e3e4ec47",
+        "englishName": "Preacher Curls",
+        "englishTranslationUuid": "84b4e711-8b29-4541-ad58-dad967f82390",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/465/5d2339a4-815f-46ba-aa19-8a763cfdeba0.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/54/",
+        "bytes": 46887882,
+        "durationSeconds": 14.32,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 46887882,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "7d02193438479b9322c92b6aa63db92424d3724abecd923212d3ceb5ce428948",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-5d2339a4-815f-46ba-aa19-8a763cfdeba0-7d021934-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "bebfbded5de09114b9588fae6afbe3ebe0cf6a78aac67adf2d46550411fadeed",
+        "bytes": 915875
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-5d2339a4-815f-46ba-aa19-8a763cfdeba0-7d021934-r1.webp",
+        "mime": "image/webp",
+        "sha256": "a3b39b674aae930f0de71b5b5e807efb91b59c92f68ff868b392720b077bd971",
+        "bytes": 21850
+      }
+    },
+    {
+      "id": "wger-83067ffe-ccb9-4e22-8507-5131b211ce74-4c459f32-r1",
+      "exerciseId": "wger-475",
+      "name": "Pull-ups",
+      "source": {
+        "videoId": 71,
+        "videoUuid": "83067ffe-ccb9-4e22-8507-5131b211ce74",
+        "exerciseId": 475,
+        "exerciseUuid": "8e420408-0682-4ab6-89f5-2681e54c7ce0",
+        "englishName": "Pull-ups",
+        "englishTranslationUuid": "7ce6b090-5099-4cd0-83ae-1a02725c868b",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/475/83067ffe-ccb9-4e22-8507-5131b211ce74.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/71/",
+        "bytes": 57098527,
+        "durationSeconds": 18.77,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 57098527,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "4c459f322f506eb7bd0b51e7efd81aaf6bd1e10fc0569e182a4815dee325f1b8",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-83067ffe-ccb9-4e22-8507-5131b211ce74-4c459f32-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "a47cd0cc76d6f33b89141f574a8b79c39ef6543210c0ccc4e9f6b913ce32ed47",
+        "bytes": 959070
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-83067ffe-ccb9-4e22-8507-5131b211ce74-4c459f32-r1.webp",
+        "mime": "image/webp",
+        "sha256": "ba97c9dc5395519a5e213c74c05b55d689601371779a82f7db74107ef9d10eff",
+        "bytes": 25898
+      }
+    },
+    {
+      "id": "wger-307e7276-a14d-4ea0-b579-f5b0dbc6f5af-0526207c-r1",
+      "exerciseId": "wger-507",
+      "name": "Romanian Deadlift",
+      "source": {
+        "videoId": 2,
+        "videoUuid": "307e7276-a14d-4ea0-b579-f5b0dbc6f5af",
+        "exerciseId": 507,
+        "exerciseUuid": "2e7ffff9-e603-4b28-98c8-31d1a6ce8cd9",
+        "englishName": "Romanian Deadlift",
+        "englishTranslationUuid": "e35528f9-1785-41b5-860a-3408a6c02b2d",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/507/307e7276-a14d-4ea0-b579-f5b0dbc6f5af.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/2/",
+        "bytes": 38136083,
+        "durationSeconds": 13.0,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 38136083,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "0526207ce774dd9e15c5be5198c3bd5233e2d434fcabe3db67f1060af51c5d84",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-307e7276-a14d-4ea0-b579-f5b0dbc6f5af-0526207c-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "d2f40ef7af45024aab5968d5f3e85bfaffd266574be0c9abe94bfcbb3ba6e2f4",
+        "bytes": 706935
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-307e7276-a14d-4ea0-b579-f5b0dbc6f5af-0526207c-r1.webp",
+        "mime": "image/webp",
+        "sha256": "25f334fedc9e279a379e96c9f1dc940dad6c3f8219db6d565b805b8b22a63b30",
+        "bytes": 23100
+      }
+    },
+    {
+      "id": "wger-fff4c294-93f0-4926-b3a2-bf59ad4afaa5-623708fc-r1",
+      "exerciseId": "wger-512",
+      "name": "Rowing seated, narrow grip",
+      "source": {
+        "videoId": 1,
+        "videoUuid": "fff4c294-93f0-4926-b3a2-bf59ad4afaa5",
+        "exerciseId": 512,
+        "exerciseUuid": "00fcf603-b0d0-48d2-9b5e-c7f0d510d46c",
+        "englishName": "Rowing seated, narrow grip",
+        "englishTranslationUuid": "57747eb3-411a-4efd-8842-a45e562320ee",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/512/fff4c294-93f0-4926-b3a2-bf59ad4afaa5.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/1/",
+        "bytes": 34332925,
+        "durationSeconds": 10.49,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 34332925,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "623708fc1e5b1fb1be2b1647a0fa044d0208b2ebea2a5ed6bf1a77e9c1e21b90",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-fff4c294-93f0-4926-b3a2-bf59ad4afaa5-623708fc-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "9c3e69d817a6820917d1942fba19c5e000508241380c7ee070dc2dbd77354eaa",
+        "bytes": 636805
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-fff4c294-93f0-4926-b3a2-bf59ad4afaa5-623708fc-r1.webp",
+        "mime": "image/webp",
+        "sha256": "15f51fbdb47b7857a678c2b3021886526e446c291db8493db6d55c7bdcec424a",
+        "bytes": 21518
+      }
+    },
+    {
+      "id": "wger-b9c937e9-daeb-42a9-be8e-7a77e368478c-4861d899-r1",
+      "exerciseId": "wger-537",
+      "name": "Incline Bench Press - Dumbbell",
+      "source": {
+        "videoId": 24,
+        "videoUuid": "b9c937e9-daeb-42a9-be8e-7a77e368478c",
+        "exerciseId": 537,
+        "exerciseUuid": "57e17672-52b9-43cf-8d0d-4b3f06a0c0d0",
+        "englishName": "Incline Bench Press - Dumbbell",
+        "englishTranslationUuid": "15c5dfa0-4103-4515-979d-807eee8faa53",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/537/b9c937e9-daeb-42a9-be8e-7a77e368478c.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/24/",
+        "bytes": 10602354,
+        "durationSeconds": 27.49,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "h264",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 10602354,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "4861d89988c8e8886435e62064aedd68c04484f0c4646270d182307025c3a162",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-b9c937e9-daeb-42a9-be8e-7a77e368478c-4861d899-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "0f4f6901c97c8aa3a451f105d8a5272eb7048c72ecd90be358326e0b35126994",
+        "bytes": 2192654
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-b9c937e9-daeb-42a9-be8e-7a77e368478c-4861d899-r1.webp",
+        "mime": "image/webp",
+        "sha256": "9b5cc5a3a1e69e4e2a8d258afedfe2b5b01c7ea054fccfc0984b3ef204abee8f",
+        "bytes": 23938
+      }
+    },
+    {
+      "id": "wger-4349a6f6-4cee-4c09-828b-c5e7fc2c1ff1-d7510c0a-r1",
+      "exerciseId": "wger-538",
+      "name": "Incline Bench Press - Barbell",
+      "source": {
+        "videoId": 16,
+        "videoUuid": "4349a6f6-4cee-4c09-828b-c5e7fc2c1ff1",
+        "exerciseId": 538,
+        "exerciseUuid": "275fb49f-975c-4d6e-9d63-2c86ed740f40",
+        "englishName": "Incline Bench Press - Barbell",
+        "englishTranslationUuid": "6cfd927c-8009-4cc2-9501-acb3db417396",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/538/4349a6f6-4cee-4c09-828b-c5e7fc2c1ff1.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/16/",
+        "bytes": 6205424,
+        "durationSeconds": 19.92,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "h264",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 6205424,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "d7510c0a6a2bb7bd88bc89c0f5e1a7bbd1297794217c08e841140bcd75bb65fa",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 5 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 5,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-4349a6f6-4cee-4c09-828b-c5e7fc2c1ff1-d7510c0a-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "774be0b77c439ca67a964f412f8ddb865e57109ce95129a135fbc4ac1f32e4da",
+        "bytes": 802420
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-4349a6f6-4cee-4c09-828b-c5e7fc2c1ff1-d7510c0a-r1.webp",
+        "mime": "image/webp",
+        "sha256": "ef90b2db2809a299009015acd696bf62c2dd6c3143ba91b432f7069d4bfc043c",
+        "bytes": 17054
+      }
+    },
+    {
+      "id": "wger-dbfd396b-1aab-4a64-a50b-2c31ff0a2cf7-1b3f5619-r1",
+      "exerciseId": "wger-543",
+      "name": "Shoulder Press, on Machine",
+      "source": {
+        "videoId": 11,
+        "videoUuid": "dbfd396b-1aab-4a64-a50b-2c31ff0a2cf7",
+        "exerciseId": 543,
+        "exerciseUuid": "5912d7ed-6a0e-4b4c-b30a-fc9f3f890fc1",
+        "englishName": "Shoulder Press, on Machine",
+        "englishTranslationUuid": "7389be43-215b-4db8-8b69-75dc77004d74",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/543/dbfd396b-1aab-4a64-a50b-2c31ff0a2cf7.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/11/",
+        "bytes": 23511495,
+        "durationSeconds": 12.27,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 23511495,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "1b3f5619a871ea77871a17b777c606e793f1d728a8253bad45c13f3877e999d6",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-dbfd396b-1aab-4a64-a50b-2c31ff0a2cf7-1b3f5619-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "661904fbf01c638f8f1f118c676f0af022b0d97d2dd44a1ed738c4af8ff32f37",
+        "bytes": 760459
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-dbfd396b-1aab-4a64-a50b-2c31ff0a2cf7-1b3f5619-r1.webp",
+        "mime": "image/webp",
+        "sha256": "6f5eec39a7fe346bc82b4c240e73ea86d151a232856fb74755c5eae844459de8",
+        "bytes": 14936
+      }
+    },
+    {
+      "id": "wger-64f33c19-1d96-4b7c-af17-6c6a4941c614-0151a7cd-r1",
+      "exerciseId": "wger-567",
+      "name": "Shoulder Press, Dumbbells",
+      "source": {
+        "videoId": 12,
+        "videoUuid": "64f33c19-1d96-4b7c-af17-6c6a4941c614",
+        "exerciseId": 567,
+        "exerciseUuid": "87affa4b-395b-437c-9581-2bd20ea5aa7c",
+        "englishName": "Shoulder Press, Dumbbells",
+        "englishTranslationUuid": "1df6a1b5-7bd2-402f-9d5e-94f9ed6d8b54",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/567/64f33c19-1d96-4b7c-af17-6c6a4941c614.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/12/",
+        "bytes": 62860017,
+        "durationSeconds": 23.13,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 62860017,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "0151a7cd43894d60c1fe1ffb34f4f4b709fc17aa6a5913c7edea4a14c9113985",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-64f33c19-1d96-4b7c-af17-6c6a4941c614-0151a7cd-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "abcf6dc7a60291158d4cc0941e3dfd4a0ec1356d653d6aae982d808584508f75",
+        "bytes": 2107546
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-64f33c19-1d96-4b7c-af17-6c6a4941c614-0151a7cd-r1.webp",
+        "mime": "image/webp",
+        "sha256": "a1e9731fe560f15ec8998e429ae5fd184f244ca8642fd0d781c75e69967b26e0",
+        "bytes": 25474
+      }
+    },
+    {
+      "id": "wger-bd1f14a3-9d2b-4ec0-b6b9-e82d739f7e60-57211567-r1",
+      "exerciseId": "wger-570",
+      "name": "Shoulder Shrug",
+      "source": {
+        "videoId": 69,
+        "videoUuid": "bd1f14a3-9d2b-4ec0-b6b9-e82d739f7e60",
+        "exerciseId": 570,
+        "exerciseUuid": "f956977e-cc05-4db2-a387-ba6140b1ef34",
+        "englishName": "Shoulder Shrug",
+        "englishTranslationUuid": "4f7900d8-3cd8-41ae-8eec-a3e540c5b3ea",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/570/bd1f14a3-9d2b-4ec0-b6b9-e82d739f7e60.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/69/",
+        "bytes": 31195824,
+        "durationSeconds": 10.74,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 31195824,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "572115679d3f255ac7343fdff31837dbb2368a1222b97a857dcd2945209c5d41",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-bd1f14a3-9d2b-4ec0-b6b9-e82d739f7e60-57211567-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "1558b3583a412779cc98b832765b5b4649f33c0885c92c0bba8ca5e2f4404f5b",
+        "bytes": 748701
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-bd1f14a3-9d2b-4ec0-b6b9-e82d739f7e60-57211567-r1.webp",
+        "mime": "image/webp",
+        "sha256": "cc246a0aea679184e9f68220f4743e4127ca37dbfa25121761883add5942ee9b",
+        "bytes": 24958
+      }
+    },
+    {
+      "id": "wger-a7d99f2b-86fc-433a-8ab1-83144c802296-0b5358cf-r1",
+      "exerciseId": "wger-575",
+      "name": "Shrugs on Multipress",
+      "source": {
+        "videoId": 68,
+        "videoUuid": "a7d99f2b-86fc-433a-8ab1-83144c802296",
+        "exerciseId": 575,
+        "exerciseUuid": "6199b3c7-3ccb-47fa-89bb-ef7fef12c0e3",
+        "englishName": "Shrugs on Multipress",
+        "englishTranslationUuid": "c7f7aa80-f9ae-4aad-ac9b-76b70e60cf8f",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/575/a7d99f2b-86fc-433a-8ab1-83144c802296.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/68/",
+        "bytes": 35270778,
+        "durationSeconds": 11.01,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 35270778,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "0b5358cfd02191cd1bd28fc6cccddc463262b24ea2d5833a556254de7e2cba25",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-a7d99f2b-86fc-433a-8ab1-83144c802296-0b5358cf-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "6f87a5868916b4c53a5dcc4091b2aa1fd20135b585369713dbf8dc03516479a3",
+        "bytes": 716611
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-a7d99f2b-86fc-433a-8ab1-83144c802296-0b5358cf-r1.webp",
+        "mime": "image/webp",
+        "sha256": "1de5e4eac7b55d38ce82284ce890328d998bc03823d94649a12c8510089778c3",
+        "bytes": 26736
+      }
+    },
+    {
+      "id": "wger-109e8d5d-62a4-40ad-8813-2ccef5bc751f-b7f875ef-r1",
+      "exerciseId": "wger-584",
+      "name": "Single-arm Preacher Curl",
+      "source": {
+        "videoId": 52,
+        "videoUuid": "109e8d5d-62a4-40ad-8813-2ccef5bc751f",
+        "exerciseId": 584,
+        "exerciseUuid": "c85e6137-2577-4e28-82c2-427407d534eb",
+        "englishName": "Single-arm Preacher Curl",
+        "englishTranslationUuid": "83e079a9-b61c-413b-b055-f9cf515904f1",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/584/109e8d5d-62a4-40ad-8813-2ccef5bc751f.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/52/",
+        "bytes": 30869204,
+        "durationSeconds": 13.02,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 30869204,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "b7f875efa49f4adc26331f9da7fce4b6db10bc8d346712256cdc5714ae89d3c4",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-109e8d5d-62a4-40ad-8813-2ccef5bc751f-b7f875ef-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "3e25242519ad68e5bcc76e0c9f56c24d9a3381725b47cf46f1ab8ebef42ef99b",
+        "bytes": 1125807
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-109e8d5d-62a4-40ad-8813-2ccef5bc751f-b7f875ef-r1.webp",
+        "mime": "image/webp",
+        "sha256": "c1d721aa47e40707c0da9b81e5d36e0dcc75eef77b3ee4522790065e2470f459",
+        "bytes": 26182
+      }
+    },
+    {
+      "id": "wger-a325ae2e-686b-4a1f-aff2-ba37fa3fa157-81156e03-r1",
+      "exerciseId": "wger-590",
+      "name": "Sitting Calf Raises",
+      "source": {
+        "videoId": 13,
+        "videoUuid": "a325ae2e-686b-4a1f-aff2-ba37fa3fa157",
+        "exerciseId": 590,
+        "exerciseUuid": "6e46833d-fd83-4c1a-90af-eb3f3a917199",
+        "englishName": "Sitting Calf Raises",
+        "englishTranslationUuid": "399666e7-30a7-4b86-833d-4422e4c72b61",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/590/a325ae2e-686b-4a1f-aff2-ba37fa3fa157.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/13/",
+        "bytes": 27735168,
+        "durationSeconds": 20.71,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 27735168,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "81156e03df81f84c2ceef9f15ba5d4f55042600f6966365916cf5a3a20e7b65b",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-a325ae2e-686b-4a1f-aff2-ba37fa3fa157-81156e03-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "d32942241f629a0bdb8212448d177a2f082e28918ffb02bdc2fbd322f0c1f2f2",
+        "bytes": 1039409
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-a325ae2e-686b-4a1f-aff2-ba37fa3fa157-81156e03-r1.webp",
+        "mime": "image/webp",
+        "sha256": "d1acbb80b45a5b0af54f1318c32d6c8e025eb55af28e12ff4e543ddc939e1456",
+        "bytes": 23608
+      }
+    },
+    {
+      "id": "wger-461171e5-2b16-407d-bf27-27aeef43f105-fe75fcc7-r1",
+      "exerciseId": "wger-622",
+      "name": "Standing Calf Raises",
+      "source": {
+        "videoId": 15,
+        "videoUuid": "461171e5-2b16-407d-bf27-27aeef43f105",
+        "exerciseId": 622,
+        "exerciseUuid": "7ce443b6-eb84-4f65-b05f-461c1cc8bcc0",
+        "englishName": "Standing Calf Raises",
+        "englishTranslationUuid": "abc4c62e-27b2-4c31-8766-40f8dca84cab",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/622/461171e5-2b16-407d-bf27-27aeef43f105.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/15/",
+        "bytes": 27311167,
+        "durationSeconds": 16.43,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 27311167,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "fe75fcc7d54693a0637624e048b32d64623d134358f1e5985ae9740ee3a68e49",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-461171e5-2b16-407d-bf27-27aeef43f105-fe75fcc7-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "a72f4a52d3c68add39de93960531b1bc7c7c6e2fa3a89ddf11e6e948d4d5e832",
+        "bytes": 893194
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-461171e5-2b16-407d-bf27-27aeef43f105-fe75fcc7-r1.webp",
+        "mime": "image/webp",
+        "sha256": "9be55c7a3d93eecfa28ea70e8daf80aeeb20b70d99bf4e5a28545f58edb3b5db",
+        "bytes": 19028
+      }
+    },
+    {
+      "id": "wger-2d88a05b-bde3-4026-bfbf-524c11068dc5-049c503e-r1",
+      "exerciseId": "wger-655",
+      "name": "Tricep Dumbbell Kickback",
+      "source": {
+        "videoId": 76,
+        "videoUuid": "2d88a05b-bde3-4026-bfbf-524c11068dc5",
+        "exerciseId": 655,
+        "exerciseUuid": "5915fabe-c941-4dac-b196-bc4e8c7ce57b",
+        "englishName": "Tricep Dumbbell Kickback",
+        "englishTranslationUuid": "88568115-5e88-4afc-b005-e2f7d453ac13",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/655/2d88a05b-bde3-4026-bfbf-524c11068dc5.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/76/",
+        "bytes": 3407290,
+        "durationSeconds": 10.26,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "h264",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 3407290,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "049c503eaaa174a957baade1b3b9a66fd63b414f00728a11c069742f1bd74ad3",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-2d88a05b-bde3-4026-bfbf-524c11068dc5-049c503e-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "625d03a65111c47cd09d30ba9d4f1630a8ef6ce557e9884d0a664af14940f18e",
+        "bytes": 700232
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-2d88a05b-bde3-4026-bfbf-524c11068dc5-049c503e-r1.webp",
+        "mime": "image/webp",
+        "sha256": "c1bdd09a4d08aa7441bf2034779ff964691f2f7c251f871431cf1abb2a643350",
+        "bytes": 20326
+      }
+    },
+    {
+      "id": "wger-1f2eb3b6-3185-429f-8330-26dc88f39aff-2b1cb2e4-r1",
+      "exerciseId": "wger-659",
+      "name": "Triceps Extensions on Cable",
+      "source": {
+        "videoId": 55,
+        "videoUuid": "1f2eb3b6-3185-429f-8330-26dc88f39aff",
+        "exerciseId": 659,
+        "exerciseUuid": "3188868c-84e2-4a3b-b7dc-f79d8650988d",
+        "englishName": "Triceps Extensions on Cable",
+        "englishTranslationUuid": "f1b5e525-6232-4d60-a243-9b2cd6c55298",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/659/1f2eb3b6-3185-429f-8330-26dc88f39aff.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/55/",
+        "bytes": 7557215,
+        "durationSeconds": 15.09,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "h264",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 7557215,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "2b1cb2e47da66abd03bba3ef51ff83f5aebb84e3ac31cbad2435db91417fdf0e",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-1f2eb3b6-3185-429f-8330-26dc88f39aff-2b1cb2e4-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "5ebd1d193134a1170bb5a1ead7cab6eaaeddc41a9f558e59090c6be17ea7c4c4",
+        "bytes": 1481783
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-1f2eb3b6-3185-429f-8330-26dc88f39aff-2b1cb2e4-r1.webp",
+        "mime": "image/webp",
+        "sha256": "08fb37086b245db796726079ce19a6c066285e22a8dd67ef693cb7d9b56f93b9",
+        "bytes": 27950
+      }
+    },
+    {
+      "id": "wger-85d1d7f8-c3c5-47e8-9b26-56896919e6e7-cc6cbe62-r1",
+      "exerciseId": "wger-802",
+      "name": "Barbell Lunges Walking",
+      "source": {
+        "videoId": 34,
+        "videoUuid": "85d1d7f8-c3c5-47e8-9b26-56896919e6e7",
+        "exerciseId": 802,
+        "exerciseUuid": "072a9fa8-1028-47b3-b958-d8052c6b8661",
+        "englishName": "Barbell Lunges Walking",
+        "englishTranslationUuid": "b368663d-f71f-4689-b462-76ac86a06362",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/802/85d1d7f8-c3c5-47e8-9b26-56896919e6e7.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/34/",
+        "bytes": 23668353,
+        "durationSeconds": 12.72,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "hevc",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 23668353,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "cc6cbe62cba5d51921ffea9601d56c32a8f3ecc0ec06d8dade67554fe82cf87b",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-85d1d7f8-c3c5-47e8-9b26-56896919e6e7-cc6cbe62-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "9e77561b59f10cbd577da48f03e840956597edbb98995f76dab42740a34196b1",
+        "bytes": 767462
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-85d1d7f8-c3c5-47e8-9b26-56896919e6e7-cc6cbe62-r1.webp",
+        "mime": "image/webp",
+        "sha256": "ca798a54d4f4fd578b16ed9482905e6d0b0ad7a904201879bc1e0c59955b6e7c",
+        "bytes": 17538
+      }
+    },
+    {
+      "id": "wger-99e0001f-217a-4b11-823c-014d24a5415e-0fcf6f0b-r1",
+      "exerciseId": "wger-803",
+      "name": "One Arm Triceps Extensions on Cable",
+      "source": {
+        "videoId": 58,
+        "videoUuid": "99e0001f-217a-4b11-823c-014d24a5415e",
+        "exerciseId": 803,
+        "exerciseUuid": "f8d69dd4-3c35-49c7-8cbe-f0132eca4c52",
+        "englishName": "One Arm Triceps Extensions on Cable",
+        "englishTranslationUuid": "e6dab89e-e3d8-4bd8-8993-b5f52462cbde",
+        "sourceMediaUrl": "https://wger.de/media/exercise-video/803/99e0001f-217a-4b11-823c-014d24a5415e.MOV",
+        "apiRecordUrl": "https://wger.de/api/v2/video/58/",
+        "bytes": 4296447,
+        "durationSeconds": 9.36,
+        "width": 1920,
+        "height": 1080,
+        "container": "mov",
+        "codec": "h264",
+        "isMain": false,
+        "license": {
+          "id": 2,
+          "name": "Creative Commons Attribution Share Alike 4",
+          "shortName": "CC-BY-SA 4",
+          "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+          "author": "Goulart",
+          "authorUrl": null,
+          "objectUrl": null,
+          "derivativeSourceUrl": null,
+          "authorHistory": [
+            "Goulart"
+          ]
+        },
+        "audit": {
+          "hasMediaLicense": true,
+          "hasMediaAuthor": true,
+          "hasEnglishName": true,
+          "hasExternalObjectSource": false,
+          "directWebCandidate": false,
+          "requiresTranscodeToMp4H264": true
+        },
+        "selection": {
+          "reason": "Smallest published source object for this exercise UUID in the dated live API snapshot.",
+          "coachReviewRequired": true,
+          "rafikStarterMapping": null,
+          "mappingNote": "Keep this wger exercise as its own candidate until a coach verifies exact movement, equipment, setup, and range of motion; the English name alone is not a Rafik mapping."
+        },
+        "sourceHeadCheck": {
+          "status": 200,
+          "contentLength": 4296447,
+          "contentType": "video/quicktime"
+        }
+      },
+      "sourceSha256": "0fcf6f0bbab8987256d6799e6e4c665a9b4122f4497f41a38d0007452b45aea5",
+      "license": "CC-BY-SA-4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "creator": "Goulart",
+      "modified": true,
+      "changes": "Converted to H.264 MP4, maximum 640px, muted. Leading 0 seconds of camera setup removed. Midpoint WebP poster extracted; no synthesized motion.",
+      "trimStartSeconds": 0,
+      "video": {
+        "path": "/v1/catalog/exercise-videos/wger-99e0001f-217a-4b11-823c-014d24a5415e-0fcf6f0b-r1.mp4",
+        "mime": "video/mp4",
+        "sha256": "0283a045109ead154de9a1cf47ffefb22b3176d4cb288dfcf8afe0ae57cb2368",
+        "bytes": 886602
+      },
+      "poster": {
+        "path": "/v1/catalog/exercise-videos/wger-99e0001f-217a-4b11-823c-014d24a5415e-0fcf6f0b-r1.webp",
+        "mime": "image/webp",
+        "sha256": "c98fd80d4bbe91bdd32ad081fdaf20ca347baf7867bb0b01427f79dcd0a86aa9",
+        "bytes": 27244
+      }
+    }
+  ]
+}

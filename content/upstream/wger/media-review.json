@@ -1,0 +1,7 @@
+{
+  "reviewDate": "2026-09-23",
+  "excluded": {"477": "Identical source bytes to unassisted pull-ups (475); assistance/platform setup cannot be established from the footage."},
+  "trimStartSeconds": {"73": 2, "538": 5},
+  "poster": "Midpoint of the retained continuous clip, avoiding incidental camera setup in the first frame.",
+  "evidence": "Root inspected all 46 midpoint frames and the full contact sheet, with additional early/midpoint frames for bench-press intros and the duplicate pull-up footage. This is a source/setup/legibility review, not professional technique certification."
+}

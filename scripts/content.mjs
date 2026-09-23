@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { resolve, dirname } from "node:path";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -18,6 +18,9 @@ const columns = [
   "movement",
   "kind",
   "media_ref",
+  "category",
+  "body_part",
+  "target_muscle",
 ];
 const ids = new Set(content.exercises.map((e) => e.id));
 if (ids.size !== content.exercises.length) throw Error("Duplicate exercise ID");
@@ -90,13 +93,53 @@ outputs.push([
       "utf8",
     ),
 ]);
+const videos = readFileSync(
+  resolve(root, "content/exercise-videos.json"),
+  "utf8",
+);
+outputs.push([
+  resolve(root, "../RAFIK-FRONTEND/src/content/exercise-videos.json"),
+  videos,
+]);
+const wger = JSON.parse(
+  readFileSync(
+    resolve(root, "content/upstream/wger/exercise-snapshot.json"),
+    "utf8",
+  ),
+);
+const credits = Object.fromEntries(
+  wger.records.map((record) => {
+    const provenance = record.instructionProvenance;
+    const source = provenance.source;
+    const license = source?.license || record.exerciseLicense;
+    return [
+      record.id,
+      {
+        author:
+          source?.licenseAuthor ||
+          (provenance.mode === "rafik-authored"
+            ? "Rafik"
+            : record.exerciseLicenseAuthor),
+        license: license.short_name || license.shortName,
+        licenseUrl: license.url,
+        sourceUrl: record.sourceUrl,
+        adapted: record.instructionStatus !== "source",
+      },
+    ];
+  }),
+);
+outputs.push([
+  resolve(root, "../RAFIK-FRONTEND/src/content/exercise-credits.json"),
+  JSON.stringify(credits, null, 2) + "\n",
+]);
 for (const [path, data] of outputs) {
   if (process.argv.includes("--check")) {
     if (readFileSync(path, "utf8") !== data)
       throw Error(`Regenerate content: ${path}`);
   } else {
     mkdirSync(dirname(path), { recursive: true });
-    writeFileSync(path, data);
+    if (!existsSync(path) || readFileSync(path, "utf8") !== data)
+      writeFileSync(path, data);
   }
 }
 console.log(

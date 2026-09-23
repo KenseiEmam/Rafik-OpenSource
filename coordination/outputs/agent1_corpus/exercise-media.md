@@ -4,6 +4,65 @@ Checked 23 September 2026. This is a source and integration assessment, not an i
 
 ## Decision
 
+### Continuous-motion follow-up — supersedes the still-frame choice for demonstration UI
+
+The three-frame `workout-guide` pack below remains a lawful still-image fallback, but it does **not** satisfy Rafik's continuous-motion requirement. Do not cycle its frames as a substitute for an exercise video.
+
+For an immediate open-licensed motion pilot, use the dated 46-exercise wger snapshot in [`wger-video-pack-46-2026-09-23.json`](./wger-video-pack-46-2026-09-23.json), paired with [`wger-exercise-records-46-2026-09-23.json`](./wger-exercise-records-46-2026-09-23.json). It selects one smallest video for every distinct wger exercise that had live video on 23 September 2026. All 46 video objects identify `Goulart` as author and use CC BY-SA 4.0; all source URLs returned HTTP 200 and their `Content-Length` exactly matched the API byte count. The pack is real motion, but it is only 46 exercises and 1,462,437,726 source bytes. Thirty-five files are HEVC/MOV and eleven are H.264/MOV, so every chosen source should be converted to a muted, fast-start MP4/H.264 derivative capped for the product surface. Record the conversion as a modification and keep the derivative under CC BY-SA 4.0.
+
+For broad production coverage in the hundreds, the most concrete reviewed option is commercial procurement, not another GitHub GIF fork. **MoveKit Complete** currently documents 412 high-resolution, loopable MP4 exercises and a binding [License Agreement v1.0](https://movekit.com/license) that expressly permits commercial mobile/web/coaching use and editing. It warrants that the content was created by or for the licensor and that the licensor holds the necessary rights. Its [two-clip free sample](https://movekit.com/free-sample) uses full-resolution H.264 MP4 and the same 18-field schema as paid packs, so Rafik can validate playback, mapping and quality before purchase. The license permits display and streaming to end users but prohibits public raw-file URLs and extractable/downloadable raw assets; this means paid files must stay out of Rafik's public source repository and be delivered through controlled product storage. Confirm the intended native-offline packaging pattern with the licensor before relying on an extractable app bundle.
+
+The practical sequence is therefore:
+
+1. ship the 46 distinct wger exercises as a clearly attributed open pilot after transcode, hash capture and normal editorial checks;
+2. keep each as its own `wger-*` Rafik exercise rather than inferring an exact existing-catalog match from its label;
+3. validate MoveKit's free sample in the real web/native player and inspect the complete pack's exercise list for Rafik coverage;
+4. procure a broad pack only after the licensee entity and controlled-delivery design are settled.
+
+The reviewed alternatives did not produce a free, open, rights-traceable continuous-motion library with hundreds of app-ready exercises. wger is open but small. The 1,324 Gym visual GIFs are broad but not sublicensed by the repository. Other GitHub forks repeat those same files or apply a software license without proving authority over the media.
+
+### Wger motion evidence
+
+- Live endpoints checked: [`video`](https://wger.de/api/v2/video/), [`exerciseinfo`](https://wger.de/api/v2/exerciseinfo/) and [`license`](https://wger.de/api/v2/license/). The API implementation is separately pinned to [`80d4a989cf7b0e98eb8817e1b725161857980803`](https://github.com/wger-project/wger/tree/80d4a989cf7b0e98eb8817e1b725161857980803); the local JSON files are the dated catalog snapshot because the live database can change independently of that source commit.
+- The live set contained 78 video objects across 46 exercise UUIDs: all 78 video records were license ID 2 (`CC-BY-SA 4`) with author `Goulart`. wger's own [changelog](https://github.com/wger-project/docs/blob/master/docs/changelog.rst) also credits Goulart with contributing exercise videos under CC BY-SA.
+- The complete set was 3,570,623,823 bytes: 54 HEVC and 24 H.264 objects; 75 MOV and three MP4. Only three objects were already MP4/H.264, spanning three exercises. Format labels, durations, dimensions and sizes came from the API, not filename inference.
+- The 46-item selection always chooses the smallest source object for each exercise UUID. It totals 1,462,437,726 bytes before conversion. The source URLs and exact API metadata are in the manifest; SHA-256 values must be added during acquisition because this research pass intentionally did not download 1.46 GB of video.
+- The media records have a usable license, named author, UUID and wger-hosted object URL. Their optional `license_object_url`, `license_author_url` and `license_derivative_source_url` fields are empty. Preserve that limitation instead of inventing external provenance.
+- All selected records have an English name. The companion exercise snapshot preserves the full English translation record, exercise-level and translation-level licenses/authors, category, equipment, primary/secondary muscles, variation UUID and update timestamps. Nine of the 46 English descriptions are empty; Rafik supplies traced translations or clearly labeled Rafik-authored wording without claiming professional technique certification.
+- The exercise/translation text licenses are separate from the video license and span CC BY-SA 3.0, CC BY-SA 4.0 and CC0. Preserve the exact per-record license and author instead of applying the videos' CC BY-SA 4.0 label to every text field. [`wger-english-supplement-9-2026-09-23.json`](./wger-english-supplement-9-2026-09-23.json) supplies eight traced English translations from non-English wger records and one clearly marked Rafik-authored description where upstream text was blank/unusable.
+- CC BY-SA requires attribution, a license link, modification notice and ShareAlike for derivatives. It also disallows added effective technological measures that restrict recipients' licensed rights. Keep an unencumbered copy of each included source/derivative available with its credit and license information when distributing an app build that may apply platform DRM.
+
+### `hasaneyldrm` metadata/text import boundary
+
+The repository's [`LICENSE`](https://github.com/hasaneyldrm/exercises-dataset/blob/7455efae41b330c265e7cd4b78dfa848e7ce5ebd/LICENSE) expressly applies MIT to code, tooling, dataset structure and instruction text/translations while excluding `images/` and `videos/`. Its [`NOTICE.md`](https://github.com/hasaneyldrm/exercises-dataset/blob/7455efae41b330c265e7cd4b78dfa848e7ce5ebd/NOTICE.md) says the visual media remains Gym visual property, was included through separate written permission, and gives downstream users no media license. A lawful metadata-only import must therefore omit `image`, `gif_url` and `attribution` as usable assets; `media_id` may be retained only as source lineage, not as permission or a runtime media locator.
+
+At pinned commit [`7455efae41b330c265e7cd4b78dfa848e7ce5ebd`](https://github.com/hasaneyldrm/exercises-dataset/tree/7455efae41b330c265e7cd4b78dfa848e7ce5ebd), [`data/exercises.json`](https://github.com/hasaneyldrm/exercises-dataset/blob/7455efae41b330c265e7cd4b78dfa848e7ce5ebd/data/exercises.json) is an array of 1,324 records. The exact contract in [`data/exercises.schema.json`](https://github.com/hasaneyldrm/exercises-dataset/blob/7455efae41b330c265e7cd4b78dfa848e7ce5ebd/data/exercises.schema.json) is:
+
+- `id`: four-digit string, `^[0-9]{4}$`; source identity only, so namespace it rather than replacing Rafik IDs;
+- `name`, `category`, `body_part`, `equipment`, `muscle_group`, `target`: strings; `category` mirrors `body_part`;
+- `secondary_muscles`: string array;
+- `instructions`: strings keyed by `en`, `es`, `it`, `tr`, `ru`, `zh`, `hi`, `pl`, `ko`, `fr`;
+- `instruction_steps`: ordered string arrays under the same ten language keys;
+- `media_id`, `image`, `gif_url`, `attribution`: media reference/notice fields that must not cause media acquisition;
+- `created_at`: ISO 8601 timestamp;
+- no additional properties are allowed by the upstream schema.
+
+Importing those MIT-covered text/data fields is legally distinct from using the GIFs. It still requires editorial review: MIT permission does not certify biomechanical accuracy, translation quality, duplicates or suitability for a prescribed movement. Store the upstream commit and source ID; normalize into Rafik's taxonomy; keep published prescriptions immutable; and do not let later upstream corrections silently change historical snapshots.
+
+There is also an upstream-provenance qualification: [issue #5](https://github.com/hasaneyldrm/exercises-dataset/issues/5), opened by an AscendAPI/ExerciseDB representative, identifies the v1 IDs, media and base instruction structure as ExerciseDB-derived. The representative said building on the v1 dataset was acceptable and asked for attribution, but that issue comment is not a complete standalone license instrument. Preserve attribution to both `hasaneyldrm/exercises-dataset` and ExerciseDB/AscendAPI, and treat the repository's explicit MIT grant as the stated permission for the checked revision rather than proof that every upstream contributor's chain of title was independently audited.
+
+### Other motion options checked
+
+| Source | Motion/coverage | Rights finding | Decision |
+|---|---|---|---|
+| [MoveKit](https://movekit.com/packs) | 104 / 220 / 288 / 412 high-resolution loopable MP4 packs; sample documents H.264 MP4 and an 18-field JSON/CSV schema. | [Binding license](https://movekit.com/license) permits commercial applications, editing and end-user display/streaming; warrants original/licensable work. Raw public downloads, extraction and standalone redistribution are prohibited. | **Best reviewed broad procurement candidate.** Validate sample, exact exercise list and native offline delivery before purchase. |
+| [Vital Animations](https://vitalanimations.com/terms) | Advertises 400 / 800+ / 1,500+ 1080p MP4 exercises and self-hosting for paid apps. | Published terms permit app/SaaS/web use and prohibit raw-dataset redistribution. The GitHub pin still did not expose the promised sample assets or a complete downloadable EULA for independent inspection. | Lower-cost procurement lead, but obtain the checkout EULA, sample archive and licensor warranty before choosing it over MoveKit. |
+| [RepDB](https://repdb.co/license/) | Commercial site advertises a 608-exercise Standard bundle with animations; the free GitHub dataset contains still WebP only. | License v1.2 clearly permits in-product image delivery and restricts bulk redistribution, but the displayed Standard license scope names WebP image assets while the separate media addendum mentions animation clips. | Do not assume animation-app rights from the marketing page. Obtain written clarification and the exact animation license delivered at checkout. |
+| [wger](https://wger.de/api/v2/) | 78 current objects / 46 exercises; continuous video but inconsistent containers/codecs and large sources. | Every current video object is CC BY-SA 4 with author Goulart. Attribution/source-detail fields beyond the author are sparse. | Use as the open pilot, not the hundreds-scale library. |
+| `hasaneyldrm` and its GIF forks | 1,324 180×180 looping GIFs. | Repository MIT grant expressly excludes the Gym visual media; the repository's private redistribution permission is not sublicensed. Forks cannot repair that rights gap by adding MIT/AGPL labels. | **Reject all copied GIFs.** Metadata/text only under the explicit MIT boundary. |
+
+### Prior still-image fallback
+
 Use a **small, locally vendored pack from `bryllim/workout-guide`**, pinned to commit [`aac599224bb9780305239607ef98540b7e0ce389`](https://github.com/bryllim/workout-guide/commit/aac599224bb9780305239607ef98540b7e0ce389), for the 11 starter exercises that have an honest movement/equipment match. Keep Rafik's own exercise IDs and content. Record the upstream ID, commit, asset path, SHA-256, creator, source lineage and CC BY-SA 4.0 obligations in a versioned manifest.
 
 Do not hotlink the upstream files. Vendor the selected assets into Rafik-controlled, versioned storage/build output. The selected pack is 33 frames: 798,756 bytes of SVG or 1,129,600 bytes of the upstream 512px PNG equivalents. Both formats together are about 1.84 MiB before repository/build compression.

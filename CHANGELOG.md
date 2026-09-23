@@ -1,5 +1,13 @@
 # Rafik backend change history
 
+## R15 — Broad exercise library, categories and real motion · 23 September 2026
+
+- Imported 1,324 metadata/instruction entries and 46 separately licensed wger entries; retained starter identities and immutable history. Categories, source references, correct timed/rep recording and copied-content attribution are explicit.
+- Added 45 continuous-motion previews with visible autoplay, pause, reduced-motion handling and recovery; removed manual illustration stepping. Excluded an ambiguous duplicate and trimmed two camera introductions.
+- Rebuilt exercise browsing as bounded results/detail panes with category/equipment/type/media filters and phone back navigation. Searchable program pickers mount at most 40 results and preserve selections/alternative chips.
+- Corrected Arabic direction in portaled exercise/timezone pickers; compact phone exercise rows and optional filter disclosure keep results reachable.
+- Updated content provenance, generation/maintenance instructions, quality rules and verification. The requested GIF rights remain separate; video coverage is 45 entries, not the complete catalog.
+
 ## R14 — Useful nutrition and exercise reference content · 23 September 2026
 
 - Immutable structured nutrition suggestions, explicit calorie/macro targets and source-backed food/portion calculation; separate suggestions from actual diary snapshots.

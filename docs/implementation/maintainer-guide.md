@@ -292,3 +292,13 @@ Workspace Back restoration waits for asynchronous content to support the saved o
 | Acceptance | backend `tests/public-catalog.test.ts`, SQL service/exercise suites; web `tests/nutrition-planning.e2e.ts`, `tests/exercise-media.e2e.ts`, nutrient units |
 
 Food lookup is now a small local source-backed catalog. Expand it through the content guide, not by embedding provider calls in components. Adding organization nutrition requires separate ownership, assignment and sharing contracts first. To change portion math, cover unknown versus zero, source calorie differences and independent suggestion/actual snapshots. To change helper forms, test abandoned invalid helper values while saving a valid parent plan. To change drafts, test client/date/visibility switches and uncertain responses after reload.
+
+### Exercise catalog workflow (R15)
+
+Read the [content guide](content.md) and [ADR0011](../decisions/0011-exercise-catalog-and-motion.md) before changing imported content. `source_ref` is server-owned provenance; copy functions must retain it for both primary exercises and alternatives. `media_ref` is a separate immutable asset key. Do not infer a video mapping from similar names or copy source text without its own license.
+
+The web library lives in `features/coaching/ExercisesPage.vue`. It filters the authorized corpus, renders 24 results per page, and opens one detail view; mobile returns focus to the selected result. `components/ExercisePicker.vue` renders at most 40 matches and is used for primary and alternative selection. Do not replace it with thousands of native options/checklists. `ExerciseDemo.vue` resolves source credits and the available media type; `ExerciseVideo.vue` owns visible playback/reduced-motion/error lifecycle. `lib/exercise-catalog.ts` holds bilingual facet labels and equipment aliases. Update these together when introducing a facet or media type.
+
+Acceptance includes later-page search and selection, compound category filters, newly saved custom categories, selected-value retention, same-kind alternatives, immutable published/copied references, actual video playback, 206/416 ranges, failure/retry, phone list/back navigation, RTL/themes and both browser engines. Inspect captures; content volume and a green test count do not establish useful movement guidance.
+
+Portaled Reka content must receive locale direction explicitly unless a verified global ConfigProvider supplies it. `ComboboxRoot` direction alone does not set Popper Content direction. Check the open popup’s computed direction, visible option bounds and mixed-language text in a viewport screenshot. Keep optional filters collapsed initially and give the popup one scroll owner.

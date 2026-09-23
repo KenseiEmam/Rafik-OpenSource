@@ -127,6 +127,9 @@ try {
       "test:operations",
       "content:check",
       "content:media",
+      "content:videos",
+      "content:exercise-dataset:check",
+      "content:wger-exercises:check",
       "test:catalog",
       "test:docs",
     ])

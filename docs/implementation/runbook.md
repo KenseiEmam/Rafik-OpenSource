@@ -109,7 +109,7 @@ Use the persistent sidebar as staff on desktop, or **Open navigation** on a phon
 
 ## R14 content and forward rollout
 
-On an existing local preview use `npm run db:migrate`, `npm run db:generate`, `npm run types`, then restart the API. The three R14 migrations add structured suggestions and exercise media references without reseeding. A fresh install includes 25 migrations. Never edit an already-applied migration; repair through another forward migration.
+On an existing local preview use `npm run db:migrate`, `npm run db:generate`, `npm run types`, then restart the API. The three R14 migrations add structured suggestions and exercise media references without reseeding. That R14 checkpoint had 25 migrations; R15 adds five more. Never edit an already-applied migration; repair through another forward migration.
 
 Before content changes run `content:media`, `content:check` and `test:catalog`. After canonical edits run `content`, inspect generated changes and rerun those gates. Keep all previously published media keys/bytes available. A new web shell version includes the reviewed reference pack (about 573 KiB of SVGs); normal waiting-update behavior preserves active work. Food lookup requires the API and provides manual entry when unavailable; it is not claimed as an offline food catalog.
 
@@ -118,3 +118,9 @@ No upstream provider API keys are needed. All third-party network access is main
 R14 deliberately does not auto-adopt the old single nutrition browser-draft key: that key could combine values from different selected clients. It leaves that local record untouched and starts context-specific drafts. Previously saved server guidance, saved foods and actual meals remain intact. Open old nutrition work should be resolved before a future hosted rollout; local browser success does not establish a cross-version hosted migration.
 
 Backend CI now declares `content:media` and `test:catalog` after API startup. Catalog tests validate all canonical source bytes and values in a backend-only checkout; generated web-byte parity is additionally asserted when the companion checkout exists. The local full release gate always includes both repositories and generation-drift checks. Remote CI has not been executed from this local phase.
+
+## Exercise catalog and motion update (R15)
+
+This phase adds five forward migrations (30 total). On an existing preview, apply migrations and regenerate Prisma/types; **do not seed or reset**. Source catalog imports are reference records, separate from synthetic user fixtures. Restart a stable API after code changes, then reload the web library. Sample accounts can immediately browse the expanded corpus.
+
+Run `content:exercise-dataset -- --check`, `content:wger-exercises -- --check`, `content:videos`, `content:check` and `test:catalog`. Content acquisition/transcoding is an explicit maintenance step described in the content guide; no provider account or FFmpeg process is needed at runtime. Keep all referenced old media versions available. Missing/corrupt media yields a readable fallback and retry; investigate hashes before regenerating. Do not rewrite published media bytes under an existing key.

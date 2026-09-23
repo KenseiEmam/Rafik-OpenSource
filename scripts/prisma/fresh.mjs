@@ -59,10 +59,11 @@ try {
     "team_business",
     "exercise_choices",
     "daily_workspace",
+    "exercise_catalog",
   ])
     sql(name, readFileSync(resolve(root, `tests/sql/${suite}.sql`), "utf8"));
   console.log(
-    "Fresh Prisma migrations, fixtures and seven SQL suites pass. Preview database unchanged.",
+    "Fresh Prisma migrations, fixtures and eight SQL suites pass. Preview database unchanged.",
   );
 } finally {
   if (created) sql("rafik", `drop database ${name} with (force);`);

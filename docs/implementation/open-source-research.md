@@ -1,5 +1,7 @@
 # Open-source research and product decisions
 
+**R15 correction:** the founder rejected the small exercise scope and manual frame player below. The requested MIT data is now imported in full, with a separately sourced 45-video continuous-motion pack and a rebuilt library/picker. See [ADR0011](../decisions/0011-exercise-catalog-and-motion.md) and the [correction record](r15-exercise-correction.md). R14 findings remain as decision history; its exercise scope is superseded.
+
 Research completed 23 September 2026 using three bounded workers: GPT-5.6 Sol for exercise media, GPT-5.6 Sol for nutrition, GPT-5.6 Terra for coaching workflows. The primary agent audited Rafik, checked key source evidence and owns integration/acceptance. This is source research and developer workflow review, not customer validation or medical advice.
 
 ## What the current experience got wrong

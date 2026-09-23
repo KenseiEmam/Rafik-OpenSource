@@ -339,6 +339,93 @@ test("bulk delivery is atomic; internal catalog never grants edit or personal ex
     );
     assert.equal(catalog.status, 200);
     assert.ok(catalog.data.every((x: any) => !x.owner_id));
+    assert.ok(
+      catalog.data.length > 500,
+      "organization catalog returns the full shared catalog in one authorized response",
+    );
+    assert.equal(
+      catalog.data.filter((x: any) => String(x.id).startsWith("dataset-"))
+        .length,
+      1324,
+    );
+    assert.equal(
+      catalog.data.filter((x: any) => String(x.id).startsWith("wger-")).length,
+      46,
+    );
+    assert.ok(
+      catalog.data
+        .filter((x: any) => /^(dataset|wger)-/.test(x.id))
+        .every((x: any) => x.category && x.body_part && x.target_muscle),
+    );
+    const customId = `org-${randomUUID()}`;
+    const custom = await call(
+      trainer,
+      `/v1/workspaces/${id}/catalog`,
+      operation("exercise", {
+        view: "trainer",
+        id: customId,
+        revision: 0,
+        data: {
+          name: "Faceted organization exercise",
+          name_ar: "",
+          instructions: "Move with control.",
+          instructions_ar: "",
+          equipment: "",
+          equipment_ar: "",
+          movement: "push",
+          kind: "strength",
+          media_url: "",
+          media_ref: "",
+          category: "chest",
+          body_part: "chest",
+          target_muscle: "pectorals",
+        },
+      }),
+    );
+    assert.equal(custom.status, 200, JSON.stringify(custom));
+    assert.deepEqual(
+      custom.data.data.category && [
+        custom.data.data.category,
+        custom.data.data.body_part,
+        custom.data.data.target_muscle,
+      ],
+      ["chest", "chest", "pectorals"],
+    );
+    const invalidFacet = await call(
+      trainer,
+      `/v1/workspaces/${id}/catalog`,
+      operation("exercise", {
+        view: "trainer",
+        id: `org-${randomUUID()}`,
+        revision: 0,
+        data: {
+          name: "Invalid",
+          instructions: "Move with control.",
+          kind: "strength",
+          category: "unbounded",
+        },
+      }),
+    );
+    assert.equal(invalidFacet.status, 400);
+    const licensedDraft = draft();
+    licensedDraft.days[0].exercises[0].exerciseId = "dataset-0001";
+    const licensedProgram = await call(
+      admin,
+      `/v1/workspaces/${id}/programs`,
+      operation("publish", {
+        view: "admin",
+        id: randomUUID(),
+        title: "Licensed source snapshot",
+        draft: licensedDraft,
+        revision: null,
+      }),
+    );
+    assert.equal(licensedProgram.status, 200, JSON.stringify(licensedProgram));
+    assert.equal(
+      licensedProgram.data.version.prescription.days[0].exercises[0].info
+        .source_ref,
+      "dataset-0001",
+    );
     const invalid = draft();
     invalid.days[0].exercises[0].sets = 50;
     assert.equal(

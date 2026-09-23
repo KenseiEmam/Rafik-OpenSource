@@ -74,5 +74,13 @@ Rendered chart label readability was checked after the automated matrix; see pro
 |---|---|---|
 | Coach turns calorie/macronutrient targets into a suggested day | Nutrition planning journey, SQL immutable versions/replay/bounds; optional helper, context-switch and held-response navigation regressions | Independent coaching only; no inferred calorie recommendation |
 | Trainee records actual source-backed portions and recovers an uncertain save | Sourced rice quantities/precision, lost acknowledgment/reload/exact replay, source kcal and unknown-value units, food lookup failure/manual fallback | Fifteen starter foods; no offline/barcode/regional completeness claim |
-| Coach/client reads an exercise demonstration without leaving the task | Independent/organization library, public routine, editor/logger component integration; SVG failure/retry/steps/play/pause and cache contract | Ten exact references, no cadence/technique certification or native renderer |
+| Coach/client reads an exercise demonstration without leaving the task | Independent/organization library, public routine, editor/logger component integration; continuous video/autoplay/reduced motion/ranges/retry, simultaneous SVG reference positions and cache contract | R15: 45 videos plus ten static reference sets; no full-catalog motion coverage or native renderer |
 | Maintainer expands content without runtime dependence | Catalog/provenance/hash tests, generator drift check, retained licenses and immutable keys | Each new movement/source still requires explicit review |
+
+## Exercise discovery correction (R15)
+
+- `exercise-media.e2e.ts`: full corpus count, 24-row paging/later selection, staff scopes, compound filters, video playback/retry/ranges, phone entry/detail/back, root orientation and EN/AR/themes in both engines.
+- `exercise-picker.e2e.ts`: full-source search, bounded options, category filters, query-after-Escape, persisted choices, same-kind alternatives and RTL containment.
+- `exercise-catalog.test.ts`: compound equipment membership, aliases and Arabic facet labels.
+- `exercise_catalog.sql`, `exercise_choices.sql` and programming tests: imported categories, custom validation/retry, immutable source and media references through publication/copy, own-scope authority.
+- Content checks verify pinned corpus, immutable first-import SQL, reviewed wger editorial snapshot and all committed media hashes. Fresh-install results and actual browser counts belong in the verification record.

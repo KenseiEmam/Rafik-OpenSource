@@ -253,3 +253,12 @@ The coach/organization entry and role-specific Help use the existing server cont
 Web nutrition uses the existing persisted command mechanism, one pending exact request per actor/role. Draft keys additionally include relationship/visibility and (for actual meals) date. A pending response locks editing until resolved. Context changes restore only that context's draft. Independent nutrition relationship authorization is unchanged; organization nutrition is not modeled by repurposing those relationships.
 
 Nutrition acknowledgement cleanup can finish after navigation, but its route/query updates are guarded by screen lifetime. Initial loads and draft-context selection use the same disposal boundary. The durable command receipt is still resolved; ignoring a stale screen does not mean abandoning the user’s acknowledged write.
+
+
+## Exercise catalog, facets and motion (R15)
+
+The shared PostgreSQL `exercises` catalog contains 1,384 source entries before owned additions. It is distinct from the small synthetic starter plan. `category`/`body_part` use ten controlled body-area values; `target_muscle` preserves source detail; `kind` is an explicit Rafik recording choice (including timed stretches and static holds). `source_ref` is immutable provenance, retained by publication and primary/alternative copies. Custom commands may edit facets but cannot assign or erase source attribution.
+
+The requested dataset is MIT data/text with excluded third-party media. Wger text has per-record licenses and translated/editorial provenance; videos have separate CC BY-SA 4.0 attribution. `media_ref` resolves either the existing illustration manifest or the new motion manifest. Forty-five muted 640px H.264 clips and WebP posters are public, hashed assets with byte-range support. One ambiguous assisted-pull-up pairing is excluded. Their compact manifest/credits can be consumed by later mobile clients without a Vue-specific contract.
+
+Library filtering covers the full authorized catalog; only 24 list rows or 40 picker results mount at once. Organization/shared reads preserve existing authorization scopes. The catalog is currently read in full (independent queries follow 500-row pages); this is a bounded ~1,400-entry reference corpus, not a server-side infinite search service. Motion loads on visibility, pauses out of view/background and is not in the precached offline shell. Written snapshots remain the offline fallback. See ADR0011 and the content guide for immutable update rules.

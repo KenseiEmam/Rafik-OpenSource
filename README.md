@@ -1,5 +1,7 @@
 # Rafik backend
 
+The exercise library now imports 1,324 requested-source entries plus 46 wger entries alongside the 14 starters. There are 45 continuous-motion previews, category filters and immutable source credits. See [exercise correction](docs/implementation/r15-exercise-correction.md), [content maintenance](docs/implementation/content.md) and [ADR0011](docs/decisions/0011-exercise-catalog-and-motion.md).
+
 Rafik's local revamp uses a Vue web application, one Node/TypeScript API, Prisma and PostgreSQL. Authentication and private files go through the API; there is no Supabase runtime dependency. Coach and organization web work comes first; native and hosting remain deferred.
 
 Work on `codex/revamp`; never push main. Read the [engineering index](docs/README.md), [ledger](docs/implementation/ledger.md), [architecture](docs/implementation/architecture.md) and [contribution guide](CONTRIBUTING.md). Organizations now have their own memberships, admin/trainer/trainee views and responsibility lifecycle. Organization-owned programs, delivery and training history are implemented; organization calendar, groups, assessor-led results and role-specific analytics are implemented locally; independent-coach teams remain a separate collaboration feature.
