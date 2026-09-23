@@ -4,9 +4,11 @@ import { user, profile } from '../../app/auth'
 import { rows, rpc } from '../../lib/backend'
 import { language as l, dateLabel, errorMessage } from '../../lib/i18n'
 import { localDate } from '../../lib/dates'
+import type { Enrollment } from '../teams/types'
 import type { CoachingRequest, Conversation } from './types'
 const props = defineProps<{ coach?: boolean }>()
-const requests = ref<CoachingRequest[]>([]),
+const enrollments = ref<Enrollment[]>([]),
+  requests = ref<CoachingRequest[]>([]),
   inbox = ref<Conversation[]>([]),
   error = ref('')
 let timer: ReturnType<typeof setInterval> | undefined,
@@ -15,6 +17,10 @@ async function load() {
   if (running || document.hidden) return
   running = true
   try {
+    if (!props.coach)
+      enrollments.value = (await rpc<Enrollment[]>('my_team_enrollments')).filter(
+        (e) => e.state === 'pending' || e.pending_coach_id,
+      )
     const all = await rpc<Conversation[]>('conversation_inbox')
     const relations = all.filter((c) => (props.coach ? c.coach_id : c.client_id) === user.value!.id)
     const ids = new Set(relations.map((r) => r.id))
@@ -46,7 +52,7 @@ onUnmounted(() => clearInterval(timer))
 </script>
 <template>
   <section
-    v-if="requests.length || inbox.length || error"
+    v-if="requests.length || inbox.length || enrollments.length || error"
     class="coaching-activity"
     :aria-label="l('Coaching updates', 'مستجدات التدريب')"
   >
@@ -65,6 +71,19 @@ onUnmounted(() => clearInterval(timer))
         {{ l('Retry updates', 'إعادة تحميل المستجدات') }}
       </button>
     </p>
+    <RouterLink v-for="e in enrollments" :key="e.id" class="activity-row" to="/teams">
+      <div>
+        <strong>{{ e.team_name }}</strong>
+        <p>
+          {{
+            e.pending_coach_id
+              ? l('Review a proposed coach change', 'راجع تغيير المدرب المقترح')
+              : l('Review your team invitation', 'راجع دعوة الفريق')
+          }}
+        </p>
+      </div>
+      <span aria-hidden="true">↗</span>
+    </RouterLink>
     <RouterLink
       v-for="q in requests.slice(0, 5)"
       :key="q.id"

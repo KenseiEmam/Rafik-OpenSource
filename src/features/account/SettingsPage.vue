@@ -78,6 +78,18 @@ async function exportData() {
         appointments: await rows('appointments'),
         resources: await rows('resources'),
         resourceShares: await rows('resource_shares'),
+        teams: await rows('teams'),
+        teamMembers: await rows('team_members'),
+        teamClients: await rows('team_clients'),
+        teamGroups: await rows('team_groups'),
+        teamGroupMembers: await rows('team_group_members'),
+        teamPlans: await rows('team_plans'),
+        teamResourceShares: await rows('team_resource_shares'),
+        teamAssignments: await rows('team_assignments'),
+        teamActivity: await rows('team_activity'),
+        businessAccounts: await rows('business_accounts'),
+        businessEvents: await rows('business_events'),
+        supportCases: await rows('support_cases'),
       },
       'rafik-data.json',
     )
@@ -105,6 +117,7 @@ async function deleteAccount() {
   error.value = ''
   const id = user.value!.id
   try {
+    await rpc('account_deletion_ready')
     await cleanupAccountResources(id)
     await rpc('delete_my_account', { p_confirmation: confirmation.value })
     await removeAccountLocalData(id)

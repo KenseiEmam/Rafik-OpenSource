@@ -119,6 +119,59 @@ export function errorMessage(error: unknown): string {
       : typeof error === 'object' && error && 'message' in error
         ? String(error.message)
         : String(error)
+  const teamErrors: Record<string, [string, string]> = {
+    group_unavailable: [
+      'This group was archived. Choose another active group.',
+      'أُرشفت هذه المجموعة. اختر مجموعة نشطة أخرى.',
+    ],
+    transfer_owner_first: [
+      'Transfer team ownership or close the team first.',
+      'انقل ملكية الفريق أو أغلق الفريق أولاً.',
+    ],
+    reassign_clients_first: [
+      'Finish client handoffs or close their team enrollments first.',
+      'أكمل نقل المتدربين أو أغلق انضمامهم للفريق أولاً.',
+    ],
+    close_enrollments_first: [
+      'Close all client enrollments before closing the team.',
+      'أغلق جميع انضمامات المتدربين قبل إغلاق الفريق.',
+    ],
+    commercial_restricted: [
+      'New team activity is paused. Review the team subscription; existing coaching remains available.',
+      'نشاط الفريق الجديد متوقف. راجع اشتراك الفريق؛ التدريب الحالي ما زال متاحاً.',
+    ],
+    staff_limit: [
+      'The team has reached its staff limit, including pending invitations.',
+      'وصل الفريق إلى حد الموظفين، بما في ذلك الدعوات المعلقة.',
+    ],
+    client_limit: [
+      'The team has reached its client admission limit.',
+      'وصل الفريق إلى حد انضمام المتدربين.',
+    ],
+    already_member: ['This person already belongs to the team.', 'هذا الشخص عضو في الفريق بالفعل.'],
+    relationship_already_enrolled: [
+      'This coaching relationship already belongs to a team. Close that enrollment first.',
+      'هذه العلاقة التدريبية منضمة لفريق بالفعل. أغلق ذلك الانضمام أولاً.',
+    ],
+    enrollment_unavailable: [
+      'This enrollment has changed. Refresh before continuing.',
+      'تغير هذا الانضمام. حدّث الصفحة قبل المتابعة.',
+    ],
+    invalid_coach: [
+      'Choose a current team coach other than the client or their current coach.',
+      'اختر مدرباً حالياً في الفريق غير المتدرب ومدربه الحالي.',
+    ],
+    simulation_disabled: [
+      'Local simulation is disabled on this backend.',
+      'المحاكاة المحلية معطلة في هذا الخادم.',
+    ],
+    invalid_group_assignment: [
+      'Select up to 50 of your active clients in this group.',
+      'اختر حتى ٥٠ من متدربيك النشطين في هذه المجموعة.',
+    ],
+  }
+  const known = Object.keys(teamErrors).find((key) => raw.includes(key))
+  if (known) return language(...teamErrors[known]!)
   if (raw.includes('time_unavailable'))
     return language(
       'That time is no longer available. Refresh and choose another.',

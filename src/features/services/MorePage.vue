@@ -56,6 +56,38 @@ const coach = useRoute().path.startsWith('/coach'),
           }}</span></span
         ><span aria-hidden="true">↗</span></RouterLink
       >
+      <RouterLink :to="coach ? '/coach/teams' : '/teams'"
+        ><span
+          ><strong>{{ l('Teams', 'الفرق') }}</strong
+          ><span>{{
+            coach
+              ? l(
+                  'Coordinate staff, clients and shared material.',
+                  'نسّق الموظفين والمتدربين والمواد المشتركة.',
+                )
+              : l(
+                  'Review team invitations and proposed coach changes.',
+                  'راجع دعوات الفرق وتغييرات المدرب المقترحة.',
+                )
+          }}</span></span
+        ><span aria-hidden="true">↗</span></RouterLink
+      >
+      <RouterLink v-if="coach" to="/coach/business"
+        ><span
+          ><strong>{{ l('Business account', 'حساب العمل') }}</strong
+          ><span>{{
+            l('Account status and subscription operations.', 'حالة الحساب وعمليات الاشتراك.')
+          }}</span></span
+        ><span aria-hidden="true">↗</span></RouterLink
+      >
+      <RouterLink :to="coach ? '/coach/support' : '/support'"
+        ><span
+          ><strong>{{ l('Support', 'الدعم') }}</strong
+          ><span>{{
+            l('Keep requests and responses in one place.', 'احتفظ بالطلبات والردود في مكان واحد.')
+          }}</span></span
+        ><span aria-hidden="true">↗</span></RouterLink
+      >
     </nav>
   </div>
 </template>

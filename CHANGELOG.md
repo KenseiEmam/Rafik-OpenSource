@@ -2,6 +2,15 @@
 
 Update this file whenever further implementation changes land. Keep the companion backend ledger, architecture and verification records consistent. This is implemented change history, not the remaining-product backlog.
 
+## R4 — Team and business operations · 23 September 2026
+
+- Added optional Teams, Business and Support destinations under More. Solo entry/Today do not require team or commercial setup. Client Today surfaces pending enrollment/handoff decisions.
+- Added real team creation/rename/closure, staff invitation/acceptance/role change/ownership transfer/removal, scoped roster, client consent/handoff, group create/rename/archive and reviewed bulk assignment. Shared plan import opens an independently editable plan; staff file access uses existing private Storage/downloads.
+- Added `teams/commands.ts` and `CommandStatus.vue`: one account/screen-scoped exact command persisted before dispatch, visible retry after a lost acknowledgement, confirmed rejection releases the form. Team invite links are recovered from acknowledged command payloads and retained only on the initiating device.
+- Added account state/event history and explicitly local owner-only provider simulation. Support cases include team/private audience selection, typed draft recovery, team-admin response and resolve/reopen. Added file-owner visibility/revocation of team grants, deletion preflight and R4 export data.
+- Preserved existing Vue modules/design/language/theme conventions; added responsive team rows and controls, contextual errors and local preview buttons for Nour/Dalia. Generated database types updated from the new local schema.
+- Added isolated fresh-identity browser fixtures, R4 workflow/failure checks and a reproducible 176-layout matrix. Architecture and maintenance instructions updated with the corresponding backend phase. The full revamp still requires R5 integrated readiness and later release/native gates.
+
 ## R3 — Broader service delivery · 22 September 2026
 
 - Added the optional More hub and coach/client nutrition, appointment and resource routes. Preserved the existing visual system and primary training/coaching navigation. Client workspaces link to nutrition/appointments/resources; Today shows real bookings in the next seven days.

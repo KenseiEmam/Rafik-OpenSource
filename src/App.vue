@@ -131,7 +131,11 @@ onUnmounted(() => window.removeEventListener('online', online))
       >
       <RouterLink
         :to="coaching ? '/coach/more' : '/more'"
-        :class="{ selected: /\/(more|nutrition|appointments|resources)$/.test(route.path) }"
+        :class="{
+          selected: /\/(more|nutrition|appointments|resources|teams|business|support)(\/|$)/.test(
+            route.path,
+          ),
+        }"
         >{{ language('More', 'المزيد') }}</RouterLink
       >
       <span v-if="localPreview && user?.email?.endsWith('@rafik.test')" class="sample-label">{{

@@ -10,7 +10,9 @@ import { downloadResource, deleteResource, fileTypes, type Resource, type Share 
 import PageState from '../../components/PageState.vue'
 const coach = useRoute().path.startsWith('/coach'),
   key = `resource-upload:${user.value!.id}`
-const resources = ref<Resource[]>([]),
+type TeamShare = { resource_id: string; team_id: string; team_name: string; archived: boolean }
+const teamShares = ref<TeamShare[]>([]),
+  resources = ref<Resource[]>([]),
   shares = ref<Share[]>([]),
   people = ref<Profile[]>([]),
   relationships = ref<Relationship[]>([])
@@ -46,12 +48,14 @@ async function load() {
   loading.value = true
   error.value = ''
   try {
-    ;[resources.value, shares.value, people.value, relationships.value] = await Promise.all([
-      rows<Resource>('resources'),
-      rows<Share>('resource_shares'),
-      rows<Profile>('profiles'),
-      rows<Relationship>('coach_clients'),
-    ])
+    ;[resources.value, shares.value, people.value, relationships.value, teamShares.value] =
+      await Promise.all([
+        rows<Resource>('resources'),
+        rows<Share>('resource_shares'),
+        rows<Profile>('profiles'),
+        rows<Relationship>('coach_clients'),
+        rpc<TeamShare[]>('my_resource_teams'),
+      ])
   } catch (e) {
     error.value = errorMessage(e)
   } finally {
@@ -128,6 +132,23 @@ async function finish(r: Resource) {
       startAnother()
     }
     notice.value = l('Upload completed.', 'اكتمل الرفع.')
+  } catch (e) {
+    error.value = errorMessage(e)
+  } finally {
+    busy.value = false
+  }
+}
+async function revokeTeam(s: TeamShare) {
+  busy.value = true
+  error.value = ''
+  try {
+    await rpc('share_team_resource', {
+      p_team: s.team_id,
+      p_resource: s.resource_id,
+      p_shared: false,
+    })
+    await load()
+    notice.value = l('Team access revoked.', 'أُلغي وصول الفريق.')
   } catch (e) {
     error.value = errorMessage(e)
   } finally {
@@ -338,6 +359,21 @@ onMounted(async () => {
                   {{ l('Share resource', 'مشاركة المورد') }}
                 </button>
               </form>
+              <div
+                v-for="s in teamShares.filter((s) => s.resource_id === r.id)"
+                :key="s.team_id"
+                class="resource-share"
+              >
+                <span
+                  >{{ s.team_name }} ·
+                  {{
+                    s.archived ? l('Closed team', 'فريق مغلق') : l('Team access', 'وصول الفريق')
+                  }}</span
+                >
+                <button class="text-link" :disabled="busy" @click="revokeTeam(s)">
+                  {{ l('Revoke team access', 'إلغاء وصول الفريق') }}
+                </button>
+              </div>
               <div
                 v-for="s in shares.filter((s) => s.resource_id === r.id)"
                 :key="s.id"
