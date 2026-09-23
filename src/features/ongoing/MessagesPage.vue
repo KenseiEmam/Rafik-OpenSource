@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { onBeforeRouteLeave, useRoute } from 'vue-router'
+import { PhArrowLeft, PhPaperclip, PhPaperPlaneTilt, PhArrowClockwise } from '@phosphor-icons/vue'
 import { user } from '../../app/auth'
 import { downloadResource, type Resource, type Share } from '../resources/files'
 import { backend, rpc, rows } from '../../lib/backend'
@@ -15,9 +16,35 @@ const route = useRoute(),
   id = String(route.params.id || '')
 const key = `message:${user.value!.id}:${id}`
 const log = ref<HTMLElement>()
+const composer = ref<HTMLTextAreaElement>()
+const search = ref('')
+const attachmentOpen = ref(false)
+const newMessages = ref(false)
+const visibleConversations = computed(() =>
+  conversations.value.filter((c) =>
+    c.name.toLocaleLowerCase().includes(search.value.trim().toLocaleLowerCase()),
+  ),
+)
+let disposed = false
+async function observeLatest() {
+  const el = log.value
+  if (!el || el.scrollHeight - el.scrollTop - el.clientHeight > 80 || document.hidden || disposed)
+    return
+  newMessages.value = false
+  const last = messages.value.at(-1)
+  if (last && current.value?.unread) {
+    try {
+      await rpc('mark_conversation_read', { p_relationship: id, p_sequence: last.sequence })
+      if (current.value) current.value.unread = 0
+    } catch {
+      /* A later visible refresh retries the read cursor. */
+    }
+  }
+}
 const scrollEnd = async () => {
   await nextTick()
   if (log.value) log.value.scrollTop = log.value.scrollHeight
+  await observeLatest()
 }
 type Pending = {
   id: string
@@ -26,15 +53,23 @@ type Pending = {
   request: string | null
   resource: string | null
 }
+const requestedContext = () => ({
+  resource: typeof route.query.resource === 'string' ? route.query.resource : null,
+  session: typeof route.query.session === 'string' ? route.query.session : null,
+  request: typeof route.query.request === 'string' ? route.query.request : null,
+})
 const conversations = ref<Conversation[]>([]),
   messages = ref<Message[]>([]),
   text = ref(''),
   pending = ref<Pending>(),
-  context = ref({
-    resource: typeof route.query.resource === 'string' ? route.query.resource : null,
-    session: typeof route.query.session === 'string' ? route.query.session : null,
-    request: typeof route.query.request === 'string' ? route.query.request : null,
-  })
+  context = ref(requestedContext())
+watch(
+  () => route.query,
+  () => {
+    const next = requestedContext()
+    if (!pending.value && Object.values(next).some(Boolean)) context.value = next
+  },
+)
 const resources = ref<Resource[]>([]),
   shares = ref<Share[]>([])
 const attachments = computed(() =>
@@ -93,10 +128,11 @@ async function pageMessages(before?: number) {
   return result.data as Message[]
 }
 async function refresh() {
-  if (refreshing || document.hidden) return
+  if (refreshing || document.hidden || disposed) return
   refreshing = true
   try {
     const inbox = await rpc<Conversation[]>('conversation_inbox')
+    if (disposed) return
     conversations.value = inbox
       .filter((c) => (coach ? c.coach_id : c.client_id) === user.value!.id)
       .sort((a, b) => (b.updated_at || '').localeCompare(a.updated_at || ''))
@@ -111,6 +147,7 @@ async function refresh() {
         rows<Resource>('resources'),
         rows<Share>('resource_shares'),
       ])
+      if (disposed) return
       resources.value = files
       shares.value = shared
       older.value = messages.value.length ? older.value : latest.length === 50
@@ -122,11 +159,8 @@ async function refresh() {
       const merged = new Map([...(gap ? [] : messages.value), ...latest].map((m) => [m.id, m]))
       messages.value = [...merged.values()].sort((a, b) => a.sequence - b.sequence)
       if (follow) await scrollEnd()
-      const last = latest[0]
-      if (last && !document.hidden) {
-        await rpc('mark_conversation_read', { p_relationship: id, p_sequence: last.sequence })
-        current.value.unread = 0
-      }
+      else if (latest.some((m) => m.sequence > (lastKnown || 0) && m.sender_id !== user.value!.id))
+        newMessages.value = true
     }
   } catch (e) {
     error.value = errorMessage(e)
@@ -157,10 +191,10 @@ async function send() {
     if (!pending.value) {
       if (!text.value.trim()) return
       pending.value = { id: crypto.randomUUID(), body: text.value, ...context.value }
-      await persist()
     }
+    await persist()
     const p = pending.value
-    await rpc<Message>('send_message', {
+    const delivered = await rpc<Message>('send_message', {
       p_id: p.id,
       p_relationship: id,
       p_body: p.body,
@@ -168,14 +202,26 @@ async function send() {
       p_request: p.request,
       p_resource: p.resource || null,
     })
+    messages.value = [
+      ...new Map([...messages.value, delivered].map((m) => [m.id, m])).values(),
+    ].sort((a, b) => a.sequence - b.sequence)
     ready = false
     pending.value = undefined
     text.value = ''
     context.value = { session: null, request: null, resource: null }
-    await removeDraft(key)
+    await removeDraft(key).catch(() => {
+      error.value = l(
+        'Message sent, but this device could not clear its saved draft.',
+        'أُرسلت الرسالة، لكن تعذّر حذف مسودتها من هذا الجهاز.',
+      )
+    })
     ready = true
     await refresh()
     await scrollEnd()
+    attachmentOpen.value = false
+    busy.value = false
+    await nextTick()
+    composer.value?.focus({ preventScroll: true })
     notice.value = l('Message sent.', 'أُرسلت الرسالة.')
   } catch (e) {
     if (commandRejected(e)) {
@@ -207,7 +253,10 @@ onMounted(async () => {
       if (d) {
         text.value = d.text
         pending.value = d.pending
-        context.value = { ...d.context, resource: d.context.resource || null }
+        context.value =
+          !d.pending && Object.values(requestedContext()).some(Boolean)
+            ? requestedContext()
+            : { ...d.context, resource: d.context.resource || null }
       }
     }
   } catch (e) {
@@ -217,81 +266,121 @@ onMounted(async () => {
     loading.value = false
     await scrollEnd()
   }
+  if (disposed) return
   timer = setInterval(() => void refresh(), 20000)
   window.addEventListener('focus', focus)
   document.addEventListener('visibilitychange', focus)
 })
+onBeforeRouteLeave(async () => {
+  if (ready && id) await persist()
+})
 onUnmounted(() => {
+  disposed = true
   clearInterval(timer)
   window.removeEventListener('focus', focus)
   document.removeEventListener('visibilitychange', focus)
 })
 </script>
 <template>
-  <div class="container page">
-    <header class="page-heading heading-actions">
-      <div>
-        <p class="overline">{{ l('Keep the conversation going', 'تابع الحوار') }}</p>
-        <h1>{{ l('Messages', 'الرسائل') }}</h1>
-        <p>
-          {{ l('One place for the details between sessions.', 'مكان واحد للتفاصيل بين الحصص.') }}
-        </p>
-      </div>
-      <button class="button secondary small" @click="refreshMessages">
-        {{ l('Refresh messages', 'تحديث الرسائل') }}
+  <div class="container page messages-page" :class="{ 'has-thread': !!id }">
+    <header class="messages-heading">
+      <h1>{{ l('Messages', 'الرسائل') }}</h1>
+      <button class="text-link message-refresh" @click="refreshMessages">
+        <PhArrowClockwise :size="18" aria-hidden="true" />{{
+          l('Refresh messages', 'تحديث الرسائل')
+        }}
       </button>
     </header>
-    <PageState :loading="loading" :error="!conversations.length ? error : ''" @retry="refresh"
+    <PageState
+      :loading="loading"
+      :error="!conversations.length || (id && !current) ? error : ''"
+      @retry="refresh"
       ><div class="conversation-layout">
-        <nav class="conversation-list" :aria-label="l('Conversations', 'المحادثات')">
-          <p v-if="!conversations.length" class="notice">
-            {{
-              l(
-                'Conversations appear when a coaching relationship is connected.',
-                'تظهر المحادثات عند ربط علاقة تدريب.',
-              )
-            }}
-          </p>
-          <RouterLink
-            v-for="c in conversations"
-            :key="c.id"
-            :to="base + '/' + c.id"
-            class="conversation-person"
-            :class="{ selected: c.id === id }"
-            :aria-current="c.id === id ? 'page' : undefined"
-            ><span class="avatar">{{ c.name.slice(0, 1) }}</span>
-            <div class="grow">
-              <strong dir="auto">{{ c.name }}</strong>
-              <p>{{ c.latest || l('Start a conversation', 'ابدأ محادثة') }}</p>
-              <small v-if="c.state === 'archived'">{{ l('Archived', 'مؤرشف') }}</small>
-            </div>
-            <span
-              v-if="c.unread"
-              class="count"
-              :aria-label="c.unread + ' ' + l('unread messages', 'رسائل غير مقروءة')"
-              >{{ c.unread }}</span
-            ></RouterLink
-          >
-        </nav>
+        <aside class="conversation-inbox">
+          <label class="conversation-search"
+            >{{ l('Find a conversation', 'ابحث عن محادثة')
+            }}<input
+              v-model="search"
+              type="search"
+              :placeholder="l('Search by name', 'ابحث بالاسم')"
+          /></label>
+          <nav class="conversation-list" :aria-label="l('Conversations', 'المحادثات')">
+            <p v-if="!conversations.length" class="notice">
+              {{
+                l(
+                  'Conversations appear when a coaching relationship is connected.',
+                  'تظهر المحادثات عند ربط علاقة تدريب.',
+                )
+              }}
+            </p>
+            <RouterLink
+              v-for="c in visibleConversations"
+              :key="c.id"
+              :to="base + '/' + c.id"
+              class="conversation-person"
+              :class="{ selected: c.id === id }"
+              :aria-current="c.id === id ? 'page' : undefined"
+              ><span class="avatar">{{ c.name.slice(0, 1) }}</span>
+              <div class="grow">
+                <strong dir="auto">{{ c.name }}</strong>
+                <p>{{ c.latest || l('Start a conversation', 'ابدأ محادثة') }}</p>
+                <small v-if="c.state === 'archived'">{{ l('Archived', 'مؤرشف') }}</small>
+              </div>
+              <span
+                v-if="c.unread"
+                class="count"
+                :aria-label="c.unread + ' ' + l('unread messages', 'رسائل غير مقروءة')"
+                >{{ c.unread }}</span
+              ></RouterLink
+            >
+            <p v-if="conversations.length && !visibleConversations.length" class="notice">
+              {{ l('No matching conversations.', 'لا توجد محادثات مطابقة.') }}
+            </p>
+          </nav>
+        </aside>
         <section v-if="current" class="conversation-thread" :aria-label="current.name">
           <header class="thread-heading">
-            <h2>{{ current.name }}</h2>
+            <div class="thread-person">
+              <RouterLink
+                :to="base"
+                class="icon-button conversation-back"
+                :aria-label="l('Back to conversations', 'العودة إلى المحادثات')"
+                ><PhArrowLeft :size="22" aria-hidden="true" /></RouterLink
+              ><span class="avatar small">{{ current.name.slice(0, 1) }}</span>
+              <h2 dir="auto">{{ current.name }}</h2>
+            </div>
             <RouterLink v-if="coach" :to="'/coach/clients/' + id" class="text-link">{{
               l('Client workspace', 'مساحة المتدرب')
             }}</RouterLink>
           </header>
-          <p v-if="error" class="notice error" role="alert">{{ error }}</p>
+          <p
+            v-if="error && current.state !== 'active' && !pending"
+            class="notice error"
+            role="alert"
+          >
+            {{ error }}
+          </p>
           <p v-if="notice" class="sr-only" role="status">{{ notice }}</p>
-          <button v-if="older" class="text-link" :disabled="olderBusy" @click="loadOlder">
-            {{ l('Load earlier messages', 'تحميل رسائل أقدم') }}
-          </button>
           <div
             ref="log"
             class="message-log"
+            @scroll="observeLatest"
             tabindex="0"
             role="log"
             :aria-label="l('Conversation history', 'سجل المحادثة')"
           >
+            <button
+              v-if="older"
+              class="text-link earlier-messages"
+              :disabled="olderBusy"
+              @click="loadOlder"
+            >
+              {{
+                olderBusy
+                  ? l('Loading…', 'جارٍ التحميل…')
+                  : l('Load earlier messages', 'تحميل رسائل أقدم')
+              }}
+            </button>
             <p v-if="!messages.length" class="empty-review">
               {{
                 l(
@@ -336,7 +425,7 @@ onUnmounted(() => {
               <time :datetime="m.created_at"
                 >{{ dateLabel(m.created_at) }} ·
                 {{
-                  new Date(m.created_at).toLocaleTimeString([], {
+                  new Date(m.created_at).toLocaleTimeString(l('en', 'ar'), {
                     hour: '2-digit',
                     minute: '2-digit',
                   })
@@ -344,11 +433,15 @@ onUnmounted(() => {
               >
             </article>
           </div>
+          <button v-if="newMessages" class="new-messages text-link" @click="scrollEnd">
+            {{ l('New messages ↓', 'رسائل جديدة ↓') }}
+          </button>
           <form
             v-if="current.state === 'active' || pending"
             class="message-compose"
             @submit.prevent="send"
           >
+            <p v-if="error" class="notice error" role="alert">{{ error }}</p>
             <p v-if="context.session || context.request" class="context-chip">
               {{
                 context.request
@@ -364,25 +457,29 @@ onUnmounted(() => {
               </button>
             </p>
             <label
-              >{{ l('Message', 'الرسالة')
-              }}<textarea
+              ><span class="sr-only">{{ l('Message', 'الرسالة') }}</span
+              ><textarea
+                ref="composer"
+                :placeholder="l('Write a message…', 'اكتب رسالة…')"
                 v-model="text"
                 :disabled="busy || !!pending"
-                rows="3"
+                rows="2"
                 maxlength="4000"
                 required
               ></textarea>
             </label>
-            <label
-              >{{ l('Attach a shared file', 'إرفاق ملف مشارك')
-              }}<select v-model="context.resource" :disabled="busy || !!pending">
-                <option :value="null">{{ l('No attachment', 'بدون مرفق') }}</option>
-                <option v-for="r in attachments" :key="r.id" :value="r.id">{{ r.title }}</option>
-              </select></label
-            >
-            <RouterLink class="text-link" :to="coach ? '/coach/resources' : '/resources'">{{
-              l('Upload or share a file', 'رفع ملف أو مشاركته')
-            }}</RouterLink>
+            <div v-if="attachmentOpen || context.resource" class="message-attachments">
+              <label
+                >{{ l('Attach a shared file', 'إرفاق ملف مشارك')
+                }}<select v-model="context.resource" :disabled="busy || !!pending">
+                  <option :value="null">{{ l('No attachment', 'بدون مرفق') }}</option>
+                  <option v-for="r in attachments" :key="r.id" :value="r.id">{{ r.title }}</option>
+                </select></label
+              >
+              <RouterLink class="text-link" :to="coach ? '/coach/resources' : '/resources'">{{
+                l('Upload or share a file', 'رفع ملف أو مشاركته')
+              }}</RouterLink>
+            </div>
             <p v-if="pending && !busy" class="notice">
               {{
                 l(
@@ -391,15 +488,27 @@ onUnmounted(() => {
                 )
               }}
             </p>
-            <button class="button" :disabled="busy || (!text.trim() && !pending)">
-              {{
-                busy
-                  ? l('Sending…', 'جارٍ الإرسال…')
-                  : pending
-                    ? l('Retry send', 'إعادة محاولة الإرسال')
-                    : l('Send message', 'إرسال الرسالة')
-              }}
-            </button>
+            <div class="composer-actions">
+              <button
+                type="button"
+                class="text-link attach-toggle"
+                :aria-expanded="attachmentOpen"
+                :disabled="busy || !!pending"
+                @click="attachmentOpen = !attachmentOpen"
+              >
+                <PhPaperclip :size="20" aria-hidden="true" />{{ l('Attach a file', 'إرفاق ملف') }}
+              </button>
+              <button class="button small" :disabled="busy || (!text.trim() && !pending)">
+                <PhPaperPlaneTilt :size="18" aria-hidden="true" />
+                {{
+                  busy
+                    ? l('Sending…', 'جارٍ الإرسال…')
+                    : pending
+                      ? l('Retry send', 'إعادة محاولة الإرسال')
+                      : l('Send message', 'إرسال الرسالة')
+                }}
+              </button>
+            </div>
           </form>
           <p v-else class="notice">
             {{
@@ -410,7 +519,7 @@ onUnmounted(() => {
             }}
           </p>
         </section>
-        <section v-else-if="!id" class="empty-review">
+        <section v-else-if="!id" class="empty-review conversation-placeholder">
           <h2>{{ l('Choose a conversation', 'اختر محادثة') }}</h2>
           <p>
             {{

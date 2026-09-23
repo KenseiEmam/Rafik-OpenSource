@@ -128,7 +128,6 @@ onMounted(load)
           >{{ t('resume') }}<PhArrowRight :size="18" class="directional" aria-hidden="true"
         /></RouterLink>
       </div>
-      <CoachingActivity />
       <UpcomingAppointments />
       <div v-if="active.length" class="today-layout">
         <section>
@@ -253,7 +252,9 @@ onMounted(load)
         </p>
         <RouterLink class="button" to="/routine"
           >{{ t('sample') }}<PhArrowRight :size="20" class="directional" aria-hidden="true"
-        /></RouterLink></section
-    ></PageState>
+        /></RouterLink>
+      </section>
+      <CoachingActivity
+    /></PageState>
   </div>
 </template>

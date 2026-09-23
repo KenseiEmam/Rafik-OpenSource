@@ -23,6 +23,7 @@ export interface Exercise {
   media_url?: string
 }
 export interface PrescriptionExercise {
+  alternatives?: { exerciseId: string; info?: Exercise }[]
   key: string
   exerciseId: string
   kind?: ExerciseKind
@@ -108,6 +109,7 @@ export interface Invitation {
   created_at: string
 }
 export interface Entry {
+  exercise_id?: string | null
   exercise_key: string
   set_index: number
   reps: number

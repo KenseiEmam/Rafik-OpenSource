@@ -6,7 +6,7 @@ import { user } from '../../app/auth'
 import { rpc, rows } from '../../lib/backend'
 import type { Session, Profile, Relationship } from '../../lib/domain'
 import { language, locale, t, errorMessage, dateLabel } from '../../lib/i18n'
-import { exerciseName, targetLabel, actualLabel } from '../../lib/prescriptions'
+import { exerciseName, targetLabel, actualLabel, performedExercise } from '../../lib/prescriptions'
 import PageState from '../../components/PageState.vue'
 const id = String(useRoute().params.id)
 const session = ref<Session>(),
@@ -76,10 +76,11 @@ onMounted(load)
               class="review-exercise"
             >
               <h2>
-                {{ exerciseName(ex) }}
+                {{ exerciseName(performedExercise(ex, session.entries)) }}
               </h2>
               <p class="subtle">
-                {{ language('Planned', 'المخطط') }}: {{ ex.sets }} × {{ targetLabel(ex) }}
+                {{ language('Planned', 'المخطط') }}: {{ exerciseName(ex) }} · {{ ex.sets }} ×
+                {{ targetLabel(ex) }}
               </p>
               <table>
                 <caption class="sr-only">

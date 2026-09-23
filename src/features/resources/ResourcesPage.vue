@@ -273,10 +273,15 @@ onMounted(async () => {
           </div>
           <p v-if="!visible.length" class="empty-review">
             {{
-              l(
-                'No resources here yet. Upload a useful file or find what your coach shares.',
-                'لا توجد موارد هنا بعد. ارفع ملفاً مفيداً أو ابحث عما يشاركه مدربك.',
-              )
+              coach
+                ? l(
+                    'No resources here yet. Upload a file to share with your clients or team.',
+                    'لا توجد ملفات هنا بعد. ارفع ملفاً لمشاركته مع متدربيك أو فريقك.',
+                  )
+                : l(
+                    'No resources here yet. Upload a useful file or find what your coach shares.',
+                    'لا توجد موارد هنا بعد. ارفع ملفاً مفيداً أو ابحث عما يشاركه مدربك.',
+                  )
             }}
           </p>
           <article v-for="r in visible" :key="r.id" class="panel resource-row">

@@ -1,11 +1,21 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { PhPlus, PhArrowRight, PhBarbell } from '@phosphor-icons/vue'
 import { user } from '../../app/auth'
 import { rows } from '../../lib/backend'
 import type { Plan, PlanVersion } from '../../lib/domain'
 import { language, t, errorMessage, dateLabel } from '../../lib/i18n'
 import PageState from '../../components/PageState.vue'
+const search = ref(''),
+  limit = ref(12)
+watch(search, () => {
+  limit.value = 12
+})
+const filtered = computed(() =>
+  plans.value.filter(
+    (p) => !p.archived && p.title.toLocaleLowerCase().includes(search.value.toLocaleLowerCase()),
+  ),
+)
 const plans = ref<Plan[]>([])
 const versions = ref<PlanVersion[]>([])
 const loading = ref(true)
@@ -47,9 +57,21 @@ onMounted(load)
       >
     </div>
     <PageState :loading="loading" :error="error" @retry="load"
-      ><div v-if="plans.length" class="plans-grid">
+      ><label v-if="plans.some((p) => !p.archived)" class="plan-search"
+        >{{ language('Find a plan', 'ابحث عن خطة')
+        }}<input
+          v-model="search"
+          type="search"
+          :placeholder="language('Search by title', 'ابحث بالعنوان')"
+      /></label>
+      <p v-if="search && !filtered.length" class="notice">
+        {{
+          language('No matching plans. Try another title.', 'لا توجد خطط مطابقة. جرّب عنواناً آخر.')
+        }}
+      </p>
+      <div v-if="filtered.length" class="plans-grid">
         <RouterLink
-          v-for="p in plans.filter((p) => !p.archived)"
+          v-for="p in filtered.slice(0, limit)"
           :key="p.id"
           :to="'/coach/plans/' + p.id"
           class="plan-card panel"
@@ -73,7 +95,7 @@ onMounted(load)
             ><PhArrowRight :size="22" class="directional" aria-hidden="true" /></div
         ></RouterLink>
       </div>
-      <section v-else class="empty-state panel">
+      <section v-else-if="!search" class="empty-state panel">
         <PhBarbell :size="40" aria-hidden="true" />
         <h2>
           {{
@@ -89,7 +111,10 @@ onMounted(load)
           }}
         </p>
         <RouterLink class="button" to="/coach/plans/new">{{ t('newPlan') }}</RouterLink>
-      </section></PageState
+      </section>
+      <button v-if="filtered.length > limit" class="button secondary" @click="limit += 12">
+        {{ language('Show more plans', 'عرض خطط أخرى') }}
+      </button></PageState
     >
   </div>
 </template>

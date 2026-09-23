@@ -42,3 +42,15 @@ export function upgradePrescription(p: Prescription): Prescription {
   })
   return p
 }
+
+/** Project actual identity without changing the immutable prescribed targets. */
+export function performedExercise(
+  exercise: PrescriptionExercise,
+  entries: Entry[],
+): PrescriptionExercise {
+  const id = entries.find((e) => e.exercise_key === exercise.key)?.exercise_id
+  const alternative = exercise.alternatives?.find((a) => a.exerciseId === id)
+  return alternative
+    ? { ...exercise, exerciseId: alternative.exerciseId, info: alternative.info }
+    : exercise
+}

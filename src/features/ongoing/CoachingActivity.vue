@@ -85,7 +85,7 @@ onUnmounted(() => clearInterval(timer))
       <span aria-hidden="true">↗</span>
     </RouterLink>
     <RouterLink
-      v-for="q in requests.slice(0, 5)"
+      v-for="q in requests.slice(0, props.coach ? 5 : 2)"
       :key="q.id"
       class="activity-row"
       :to="(props.coach ? '/coach/checkins/' : '/checkins/') + q.id"
@@ -101,7 +101,7 @@ onUnmounted(() => clearInterval(timer))
       </div>
       <span>↗</span></RouterLink
     ><RouterLink
-      v-if="requests.length > 5"
+      v-if="requests.length > (props.coach ? 5 : 2)"
       class="text-link"
       :to="props.coach ? '/coach/checkins' : '/checkins'"
       >{{ l('View all requests', 'عرض كل الطلبات') }} ({{ requests.length }})</RouterLink

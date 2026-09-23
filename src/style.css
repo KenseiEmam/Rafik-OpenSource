@@ -3535,3 +3535,290 @@ select {
 .support-list button.selected {
   border-color: var(--accent);
 }
+
+/* Conversations are a workspace: history scrolls, composing stays within reach. */
+#app:has(.messages-main) {
+  height: 100dvh;
+  min-height: 36rem;
+  display: flex;
+  flex-direction: column;
+}
+.messages-main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.messages-page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding-block: 1rem;
+}
+.messages-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.messages-heading h1 {
+  font-size: 1.75rem;
+  margin: 0;
+}
+.message-refresh,
+.attach-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.messages-page .conversation-layout {
+  flex: 1;
+  min-height: 0;
+  gap: 0;
+  grid-template-columns: minmax(230px, 0.7fr) minmax(0, 2fr);
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  overflow: hidden;
+  background: var(--surface);
+  align-items: stretch;
+}
+.conversation-inbox {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-inline-end: 1px solid var(--line);
+}
+.conversation-search {
+  padding: 1rem;
+  font-size: 0.8rem;
+}
+.messages-page .conversation-list {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  gap: 0.25rem;
+  padding: 0.5rem;
+}
+.messages-page .conversation-person {
+  min-width: 0;
+  flex-shrink: 0;
+}
+.messages-page .conversation-person p {
+  max-width: none;
+}
+.messages-page .conversation-thread {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+}
+.messages-page .thread-heading {
+  flex-shrink: 0;
+  padding: 0.85rem 1.25rem;
+}
+.thread-person {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+  min-width: 0;
+}
+.thread-person h2 {
+  font-size: 1.05rem;
+  overflow-wrap: anywhere;
+}
+.conversation-back {
+  display: none;
+}
+.messages-page .message-log {
+  flex: 1;
+  min-height: 4rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.25rem;
+  gap: 0.8rem;
+}
+.message-log > * {
+  flex-shrink: 0;
+}
+.earlier-messages {
+  align-self: center;
+}
+.messages-page .message-bubble {
+  padding: 0.6rem 0.9rem;
+}
+.messages-page .message-bubble .overline {
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+}
+.messages-page .message-bubble p {
+  margin: 0.3rem 0;
+}
+.messages-page .message-compose {
+  flex-shrink: 0;
+  padding: 0.8rem 1.25rem;
+  gap: 0.6rem;
+  max-height: 60%;
+  overflow-y: auto;
+}
+.message-compose textarea {
+  resize: vertical;
+  min-height: 3rem;
+  max-height: 8rem;
+}
+.composer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+.message-attachments {
+  display: grid;
+  gap: 0.5rem;
+}
+.message-compose .context-chip,
+.message-compose .notice {
+  margin: 0;
+}
+.conversation-thread > .notice {
+  margin: 0.5rem 1rem;
+}
+.new-messages {
+  align-self: center;
+  padding: 0.4rem;
+}
+.conversation-placeholder {
+  align-self: center;
+  padding: 2rem;
+}
+#app:has(.messages-main) .footer {
+  margin-block: 0;
+  padding-block: 0.5rem;
+  flex-shrink: 0;
+}
+#app:has(.messages-main) .footer-brand {
+  display: none;
+}
+@media (max-width: 850px) {
+  .messages-page .conversation-layout {
+    grid-template-columns: 1fr;
+  }
+  .messages-page.has-thread .conversation-inbox,
+  .messages-page .conversation-placeholder {
+    display: none;
+  }
+  .conversation-back {
+    display: inline-flex;
+  }
+  [dir='rtl'] .conversation-back svg {
+    transform: rotate(180deg);
+  }
+  .conversation-inbox {
+    border-inline-end: 0;
+  }
+  .messages-page .conversation-person p {
+    max-width: 65vw;
+  }
+}
+@media (max-width: 600px) {
+  #app:has(.messages-main) .product-nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  #app:has(.messages-main) .sample-label {
+    display: none;
+  }
+  .messages-page {
+    padding-block: 0.5rem;
+  }
+  .messages-heading {
+    margin-bottom: 0.5rem;
+  }
+  .messages-heading h1 {
+    font-size: 1.4rem;
+  }
+  .message-refresh {
+    font-size: 0.8rem;
+  }
+  .messages-page .thread-heading {
+    padding: 0.6rem;
+  }
+  .messages-page .thread-heading > .text-link {
+    font-size: 0.75rem;
+  }
+  .messages-page .message-log {
+    padding: 0.75rem;
+  }
+  .messages-page .message-compose {
+    padding: 0.6rem;
+  }
+  .messages-page .message-bubble {
+    max-width: 92%;
+  }
+  #app:has(.messages-main) .footer {
+    font-size: 0.7rem;
+    gap: 0.5rem;
+  }
+  #app:has(.messages-main) .footer nav {
+    gap: 0.75rem;
+  }
+}
+
+.list-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-block: 1.5rem;
+}
+#schedule-checkin {
+  scroll-margin-top: 1rem;
+}
+
+.exercise-alternatives fieldset {
+  max-height: 15rem;
+  overflow-y: auto;
+  margin: 0.75rem 0;
+}
+.choice-label {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-block: 0.6rem;
+}
+.choice-label input {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+.workout-alternatives {
+  margin-block: 0.75rem;
+}
+.workout-alternatives label {
+  margin-top: 0.75rem;
+}
+
+.plan-search {
+  max-width: 28rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Validation and retry copy stays in the composer's own bounded scroll area. */
+.messages-page .message-compose .notice {
+  padding: 0.65rem;
+  font-size: 0.85rem;
+}
+.messages-page .message-log {
+  min-height: 0;
+}
+
+.messages-page .composer-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  background: var(--surface);
+  padding-block: 0.4rem;
+}

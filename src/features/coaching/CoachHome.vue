@@ -14,6 +14,7 @@ const relationships = ref<Relationship[]>([])
 const plans = ref<Plan[]>([])
 const loading = ref(true)
 const error = ref('')
+const reviewLimit = ref(8)
 const awaiting = computed(() =>
   sessions.value
     .filter((s) => s.status === 'completed' && !s.reviewed_at)
@@ -85,7 +86,7 @@ onMounted(load)
           </div>
           <div v-if="awaiting.length" class="review-list">
             <RouterLink
-              v-for="s in awaiting"
+              v-for="s in awaiting.slice(0, reviewLimit)"
               :key="s.id"
               class="review-row"
               :to="'/coach/review/' + s.id"
@@ -124,6 +125,13 @@ onMounted(load)
               }}
             </p>
           </div>
+          <button
+            v-if="awaiting.length > reviewLimit"
+            class="button secondary"
+            @click="reviewLimit += 8"
+          >
+            {{ language('Show more sessions', 'عرض حصص أخرى') }}
+          </button>
         </section>
         <aside class="panel coach-next">
           <PhNotebook :size="30" class="accent-icon" aria-hidden="true" />
