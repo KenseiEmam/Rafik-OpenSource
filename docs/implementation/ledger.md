@@ -1,6 +1,14 @@
 # Revamp execution ledger
 
-Updated 23 September 2026. **All planned local web/backend phases through R12 are implemented and verified.** Final serial release acceptance passed; phase commits remain on `codex/revamp`. Hosting, native, real providers, physical devices and observed human/business outcomes remain separate gates.
+Updated 23 September 2026. **R13 staff dashboard and control-quality correction is implemented and verified locally.** Final serial release acceptance passed; phase commits remain on `codex/revamp`. Hosting, native, real providers, physical devices and observed human/business outcomes remain separate gates.
+
+## R13 — Staff dashboard and usable controls
+
+The founder review correctly identified experience gaps not captured by prior journey/layout counts. Added persistent staff navigation and workspace scrolling, compact semantic headings, Unovis charts with clear reporting tabs and definitions on demand, and a full-catalog shared Reka timezone picker. The audit also repairs stale calendar reads, lost report display during refresh, undefined theme tokens and inconsistent navigation guidance. See [dashboard quality audit](dashboard-quality-audit.md) and [ADR0009](../decisions/0009-dashboard-components.md).
+
+**Verified:** the uninterrupted final release chain passed all 26 gates: 76 browser journeys, 1,120 rendered states, 239 named SQL assertions, 22-migration fresh installation/seven suites, all domain/operations checks, 14 web units and type/build/format/content/docs checks. [Persisted report](evidence/r13-release.json) and [verification receipt](evidence/r13-verification.txt) distinguish real lifecycle checks, mocked UI data and actual inspected views. Earlier failures and fixes remain recorded. Scope is local web/backend; preview was preserved, with no deployment/push/native work.
+
+Web implementation commit: `71a03de` on `codex/revamp`. This repository records the architecture, audit, release gate and accepted evidence for the same checkpoint.
 
 ## R12 — Connected experience and release handoff
 

@@ -1,5 +1,17 @@
 # Verification record
 
+## R13 — Staff dashboard and usable controls (23 September 2026)
+
+The final uninterrupted `npm run verify:release -- --full` passed **26/26 gates** on stable implementation sources. [Release report](evidence/r13-release.json), [detailed receipt](evidence/r13-verification.txt) and the `r13-*-layout.json` files persist this checkpoint.
+
+- **76/76 browser journeys:** both-engine existing feature lifecycles plus full timezone catalog/search/keyboard/save/reload/escape, mobile drawer focus, analytics tabs/presets/table/failed-refresh retention, desktop scroll ownership and Back restoration. Organization-service coverage also holds a real calendar response across navigation and verifies that it cannot overwrite the destination's query.
+- **1,120 rendered states:** quality 128, product 320, team Chromium 176, team WebKit 176, operations 104, cohesion 24 and dashboard 192. No reported geometry/alert/page errors or violations in checked Axe states. These are the scripts' declared matrices; the dashboard matrix checks every state with Axe. Selected actual captures and interactions were inspected, including custom dates and trainee filtering at 320px, visible timezone popup, role-specific diagrams, drawer and messaging.
+- **Backend/engineering:** all 239 named rollback assertions, 22 fresh migrations/fixtures/seven suites, HTTP/domain/operations groups, 14 web units, 7 release guards and type/build/format/content/docs checks pass. Backend domain contracts did not change in this UI phase.
+
+Earlier attempts caught and corrected portal/sidebar landmarks, browser aliases/UTC labels, hidden-label document overflow, premature Back restoration and outdated mobile theme locators. The calendar navigation race was reproduced in a failing regression before the fix. Breakpoint checks await observer-driven chart resizing; scheduling tests focus the field before using an open picker. None of those failed/interrupted attempts is presented as acceptance.
+
+The dashboard's populated-report mock proves presentation/recovery; persisted organization-service tests separately prove actual reporting. This remains local browser emulation and developer review, not physical-device, assistive-technology or human-outcome evidence. Full per-step logs are in `artifacts/release/2026-09-23T13-04-15.904Z/`; raw screenshots remain in the web artifacts directories. Preview data was not reset.
+
 ## R12 — Connected experience and final local acceptance · 23 September 2026
 
 The uninterrupted final `npm run verify:release -- --full` passed **all 25 recorded steps**, including prerequisites. [Persisted report](evidence/r12-release.json), [execution summary](evidence/r12-verification.txt). Full local logs: `artifacts/release/2026-09-23T11-35-27.532Z/`. Application/runtime source was stable; the team harness correction was completed before its gate ran. Subsequent edits finalized documentation/evidence only.

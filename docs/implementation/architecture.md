@@ -4,6 +4,10 @@ R7A1 replaces the transitional backend with **one Node/TypeScript API, Prisma an
 
 **Organizational correction:** [ADR 0005](../decisions/0005-organization-and-independent-scopes.md) defines the separate independent/organization scopes partly implemented in R7A2 membership/context/responsibility; organization-owned programming/history is implemented in R8; services/calendar/assessor-led results and analytics are implemented in R9. The R4 team overlay remains an independent-coach collaboration feature, not the required organization model. Read the [role audit](role-scope-audit.md) before changing ownership.
 
+## Dashboard presentation
+
+[ADR 0009](../decisions/0009-dashboard-components.md) describes owned Unovis chart and Reka UI control wrappers. `App.vue` selects a staff dashboard shell from authorized context; `DashboardNav.vue` owns grouped links, `dashboard.css` owns viewport/section scrolling, and the router restores main-workspace scroll on back navigation. `TimezonePicker.vue` supplies the complete browser IANA catalog everywhere a timezone is editable. `MetricChart.vue` owns interactive plots, keyboard readouts, bounded category pages and table equivalents; analytics transport and authority remain in the API. Public/trainee pages and focused workout behavior remain distinct. The [R13 audit](dashboard-quality-audit.md) records the earlier acceptance blind spots.
+
 ## System boundary
 
 Vue calls the explicit HTTP API for identity, bounded commands/reads and private files. Prisma owns model generation/migration execution and database access. Existing domain transactions remain PostgreSQL functions, preserving tested snapshots, locking, RLS and replay semantics. Authentication uses Rafik-owned identity tables, hashed opaque sessions and HttpOnly cookies. Local code delivery uses an intercepted database inbox; no mail provider is connected.

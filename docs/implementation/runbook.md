@@ -100,3 +100,9 @@ If forcibly terminated, inspect the timestamped service logs and processes befor
 ## Final connected review (R12)
 
 Open the homepage to choose the workspace flow or immediate workout. `/local-preview` groups independent, organization and operator accounts; `/help` explains role boundaries and task paths. Web `test:cohesion:layout` renders public entry/help/sample-role selection; `test:operations:layout` includes organization setup states. The serial release runner includes both alongside the full regression chain. Current decisions and genuinely outstanding hosting/device/human evidence are in [release evidence](release-evidence.md). Do not substitute test identities for participant observations.
+
+## Dashboard acceptance (R13)
+
+Use the persistent sidebar as staff on desktop, or **Open navigation** on a phone. Analytics exposes reporting presets, activity and delivery/follow-up tabs. Timezone fields search all available IANA entries; type a city and select a result. The displayed offset is current; schedule previews remain authoritative for the selected future date.
+
+`npm run test:dashboard:layout` in the web checkout reads the running preview and captures 192 paired role/viewport/language/theme states under `artifacts/dashboard-audit/`. It must not seed or reset preview data. `tests/dashboard.e2e.ts` runs through the disposable acceptance wrapper and uses an explicitly mocked populated analytics response for UI/fault behavior; organization-service lifecycle tests independently verify real persisted reporting. Empty preview charts are legitimate, not grounds for invented activity.

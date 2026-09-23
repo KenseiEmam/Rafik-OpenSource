@@ -14,3 +14,5 @@ For a new decision, add the next number with Context, Decision, Consequences and
 
 - [0007: Transactional notification intent capture](0007-notification-intents.md).
 - [0008: Local operations and bounded reads](0008-local-operations-and-bounded-reads.md).
+
+- [0009: Dashboard components with Unovis and Reka UI](0009-dashboard-components.md).

@@ -47,7 +47,12 @@ The database owns transactional domain invariants, revisions, permissions and im
 ## Frontend file map (`RAFIK-FRONTEND`)
 
 ```text
-src/App.vue                       shared shell, workspace navigation, language/theme controls
+src/App.vue                       authorized staff dashboard/public shell, language/theme controls
+src/features/workspace/DashboardNav.vue grouped staff links
+src/styles/dashboard.css          desktop workspace/section scrolling and mobile drawer
+src/components/TimezonePicker.vue shared Reka searchable IANA picker
+src/lib/timezones.ts              catalog, current offsets and city search aliases
+src/features/analytics/MetricChart.vue Unovis plots, keyboard/table equivalents
 src/app/router.ts                 public/private routes and safe return paths
 src/app/auth.ts                   Auth identity and profile loading
 src/features/public/             landing, local privacy and not-found page
@@ -63,7 +68,7 @@ src/features/ongoing/
   CoachingActivity.vue            actual due/review/unread links on both Today pages
   types.ts                       module data contracts (JSON question/answer shape included)
   helpers.ts                     pure response-state and unit-aware trend calculations
-src/features/services/MorePage.vue optional-tool navigation for both workspaces
+src/features/services/MorePage.vue trainee secondary navigation and retained staff compatibility routes
 src/features/nutrition/
   NutritionPage.vue               role-aware guidance, food diary and saved foods
   NutrientFields.vue              optional numeric input with unknown/zero distinction
@@ -182,7 +187,7 @@ Current R3 gaps belong in the ledger: no team ownership, real calendar/reminder 
 
 ### R4 manual tour
 
-Use separate browser profiles for Laila, Nour and Amir. At `/local-preview`, choose Laila → More → Teams → create team → Staff → invite `coach2@rafik.test`. Open the link in Nour's profile and accept. As Laila, Clients → choose Amir → request enrollment; Amir sees a Today link and approves in `/teams`. Laila creates a group, adds Amir, selects Amir explicitly, selects a published version and reviews/confirms assignment. Shared library → share a published plan; Nour copies it and can edit/publish independently. Upload files in Resources, then explicitly share them in the team library.
+Use separate browser profiles for Laila, Nour and Amir. At `/local-preview`, choose Laila → Teams → create team → Staff → invite `coach2@rafik.test`. Open the link in Nour's profile and accept. As Laila, Clients → choose Amir → request enrollment; Amir sees a Today link and approves in `/teams`. Laila creates a group, adds Amir, selects Amir explicitly, selects a published version and reviews/confirms assignment. Shared library → share a published plan; Nour copies it and can edit/publish independently. Upload files in Resources, then explicitly share them in the team library.
 
 Laila proposes Nour as Amir's new coach; Amir approves with the consequences displayed. Nour can now open the direct coaching workspace. Laila retains her original participant history; Nour cannot read that private history. Team subscription → Local provider simulation can set past due and restore active. Existing workouts stay available. Client Support → choose team → submit a request; team owner/admin responds in Support. Platform support response has separate operator authority through Platform Operations; the guarded local CLI is also documented in the runbook.
 
@@ -209,7 +214,7 @@ Messages layout rules are scoped in `style.css`; changing shared shell sizing re
 
 ## Daily workspace maintenance (R7)
 
-`src/features/workspace/WorkspaceNav.vue` owns role-specific primary/secondary links, `types.ts` describes attention rows, and `src/styles/workspace.css` owns the compact shell and daily layouts. `CoachHome.vue` composes the attention projection and upcoming appointments; `TodayPage.vue` uses `client_today`; `ClientsPage.vue` uses cursor-based `coach_roster`. Extend these read contracts through a new forward migration (migration 010 records the original contract), regenerate types, and run `daily_workspace.sql` plus `tests/workspace.e2e.ts`. Keep More and desktop navigation aligned so phone secondary tools remain discoverable.
+`src/features/workspace/WorkspaceNav.vue` owns role-specific primary/secondary links, `types.ts` describes attention rows, and `src/styles/workspace.css` owns the compact shell and daily layouts. `CoachHome.vue` composes the attention projection and upcoming appointments; `TodayPage.vue` uses `client_today`; `ClientsPage.vue` uses cursor-based `coach_roster`. Extend these read contracts through a new forward migration (migration 010 records the original contract), regenerate types, and run `daily_workspace.sql` plus `tests/workspace.e2e.ts`. Staff use DashboardNav on desktop and in the phone drawer; keep WorkspaceNav/More aligned for trainee routes.
 
 ## Working on organization contexts
 
@@ -231,7 +236,7 @@ Web views/types/styles live in `src/features/organizations/`. `auth.ts` fetches 
 
 Web `ServiceCatalog`, `EventComposer`, `OrganizationCalendar`, `EventDetail`, `AssessmentHistory` and `OrganizationUpcoming` form the complete workflow. `analytics/AnalyticsPage` and `MetricChart` share truthful charts and table equivalents. For a new drill kind, update validation, immutable snapshot, result editor, correction/history, comparison compatibility and tests together. Never combine incompatible units/definitions into one line. Add acceptance to `test:organization-services` and `organization-services.e2e.ts`; `audit-services.ts` checks rendered roles/states.
 
-Local tour: Rania → Calendar → Schedule; More → Assessment templates or Groups. Kareem → Calendar → completed Movement baseline → review Sara's distinct result; Training → Assessment history shows synthetic 10/12 repetition examples. Rania Analytics shows organization responsibility/attendance; Kareem Analytics contains only current assigned-trainee scope. A designated assessor can record an event even when another trainer normally owns responsibility.
+Local tour: Rania → Calendar → Schedule; Library → Assessment templates or Groups. Kareem → Calendar → completed Movement baseline → review Sara's distinct result; Training → Assessment history shows synthetic 10/12 repetition examples. Rania Analytics shows organization responsibility/attendance; Kareem Analytics contains only current assigned-trainee scope. A designated assessor can record an event even when another trainer normally owns responsibility.
 
 ## Communication ownership
 
@@ -262,3 +267,13 @@ Before reordering landing sections, inspect spacing that formerly came from adja
 Selecting an already loaded member is a local selection change: keep the current result page and resolve its name from authorized loaded rows. Fetch separately only when a restored/bulk selection includes unknown IDs. The server still rechecks authority/revisions at commit. Deduplicate appended catalogs by stable ID. The large-member browser scenario now verifies that selecting row50 keeps all50 loaded choices before search/reload.
 
 Shared test helpers that run under both Playwright and direct Node type stripping use explicit local `.ts` imports. The web compiler allows those imports under `noEmit`; Vite's config follows the same convention. Verify direct script entry points as well as transformed test imports. Do not resolve a module failure by skipping the layout gate.
+
+## Dashboard component changes (R13)
+
+Keep shell geometry in `dashboard.css` and feature layout in its own component. Staff links belong in `DashboardNav.vue`; `WorkspaceNav`/`OrganizationNav` remain for trainee/public-compatible surfaces. Do not add dashboard links to an invisible legacy navigation component. Verify the authorized context and selected state on deep links, Settings/Notifications, back navigation and workspace changes.
+
+Reuse `TimezonePicker` for every timezone editor: `v-model` is the selected IANA value, `label` supplies its accessible name, and `disabled` must follow the command/editor lock. Search text is temporary and must never become a saved value. Do not reintroduce a short datalist or free-text timezone field. `MetricChart` accepts semantic items and an optional timeline/donut/counts mode; `counts` is appropriate for session/people counts, not general assessment measurements. Category pagination is presentational; server read cursors remain owned by AnalyticsPage.
+
+Run `tests/dashboard.e2e.ts` for saved selection, keyboard/escape, drawer focus, chart tabs/filters/failure retention and viewport scrolling, then `npm run test:dashboard:layout` for role/theme/language/breakpoint renders. The latter reads local sample accounts without synthetic writes. Final release includes both this matrix and the existing journey/layout suites. Dependency upgrades must inspect open portals and all chart variants, not just compile the wrappers.
+
+Workspace Back restoration waits for asynchronous content to support the saved offset and cancels on new navigation or user input. Keep this behavior covered when changing loading states or page structure.

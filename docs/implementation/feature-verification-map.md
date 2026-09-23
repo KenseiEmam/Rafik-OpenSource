@@ -58,3 +58,12 @@ Rendered chart label readability was checked after the automated matrix; see pro
 | Restore registered bytes and clean old orphans | `tests/maintenance.test.ts`, recovery/maintenance scripts | Local coordinated-hosting snapshot still required |
 | Choose the right workspace and understand the role | `cohesion.e2e.ts`, role-specific Help, rendered entry/help sweep | Developer walkthrough, not unaided human observation |
 | Schedule while keeping selected template/people | `organization-services.e2e.ts`, HTTP per-participant history tests | Real touch/keyboard and user comprehension still require observation |
+
+## Staff dashboard quality (R13)
+
+| User job | Evidence | Limit |
+|---|---|---|
+| Choose any available timezone without memorizing IANA strings | `design-controls.test.ts`, `dashboard.e2e.ts`, scheduling/booking journeys; full browser catalog, city aliases, UTC, fractional/DST labels, keyboard/save/reload/escape | Browser ICU catalog; current label offset does not replace server validation of the event date |
+| Read activity and delivery at a glance, recover a failed refresh | Unovis axes/count ticks, tabs/presets, keyboard readout, table equivalents; dashboard mock/fault journey plus real organization-service lifecycle | UI mock is not database evidence; no invented customer/quality metrics |
+| Keep context while navigating a working dashboard | Dashboard journey covers stable sidebar, main scrolling, Back restoration, phone drawer focus; product/team/operations/cohesion audits retain existing coverage | Physical-device and unaided first-use observation remain separate |
+| Read the UI across role/locale/theme/breakpoints | `audit-dashboard.ts`: 192 paired states across independent/admin/trainer roles and both engines; all states include Axe and geometry checks | Paired combinations, not every possible cross-product or arbitrary data set |

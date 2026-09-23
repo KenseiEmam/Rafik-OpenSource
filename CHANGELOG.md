@@ -1,5 +1,13 @@
 # Rafik backend change history
 
+## R13 — Staff dashboard and control quality · 23 September 2026
+
+- Persistent coach/organization sidebar, compact task headings, mobile navigation drawer and bounded desktop workspace/collection scrolling.
+- Unovis analytics with axes, tooltips, integer count ticks, keyboard/table equivalents, category pages, clear activity/delivery tabs and retained reports during refresh failure.
+- Shared searchable Reka timezone picker on all five editing/viewing surfaces, full IANA catalog, UTC, persisted aliases, current offsets and common city-name aliases.
+- Stale calendar-response guard, selected-filter retention, repaired undefined semantic colors, coherent Help/navigation documentation and durable quality rules. ADR0009 documents the dependency/scrolling decisions.
+- Final serial acceptance passed all 26 gates: 76 browser journeys, 1,120 rendered states, 14 web units and all backend/build/maintenance checks. The R13 audit records discovered/fixed integration defects and local evidence limits.
+
 ## R12 — Connected entry and product refinement · 23 September 2026
 
 - Coach/organization public entry, preserved immediate workout, grouped sample roles and role-specific Help; workspace intent retained through sign-in.

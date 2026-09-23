@@ -41,7 +41,7 @@ Madar has a synthetic foundation program. As Rania, open Programs, edit or dupli
 
 ## Calendar, assessments and analytics
 
-Rania's Calendar shows Madar's week agenda. More contains reusable groups and assessment templates; Schedule follows Details → People → Review. Kareem sees only assigned events, and each trainee has separate attendance/results. Results can be corrected with preserved history. Analytics distinguishes organization workload/delivery from a trainer's assigned roster; Laila has separate independent coaching analytics. Sample assessment results are explicitly synthetic. See the [service contract](docs/implementation/r9-contract.md).
+Rania's Calendar shows Madar's week agenda. The Library navigation contains reusable groups and assessment templates; Schedule follows Details → People → Review. Kareem sees only assigned events, and each trainee has separate attendance/results. Results can be corrected with preserved history. Analytics distinguishes organization workload/delivery from a trainer's assigned roster; Laila has separate independent coaching analytics. Sample assessment results are explicitly synthetic. See the [service contract](docs/implementation/r9-contract.md).
 
 R10 adds organization conversations and the global notification inbox/preferences. The local dispatcher intercepts optional generic previews; no email/push is sent. See the backend implementation ledger, ADR 0007 and runbook for authority, retry and maintenance contracts.
 
@@ -52,3 +52,7 @@ Platform operations are available through Amina in the local sample switcher, wi
 ## Connected experience and release handoff (R12)
 
 The homepage now leads coaches and organizations into the appropriate workspace while retaining the immediate workout sample. Sample accounts are grouped by scope; Help explains admin/trainer/independent tasks. Conversation creation scrolls naturally, scheduling preserves selections through catalog searches and focuses each step, and optional setup stays behind disclosure. Current engineering coverage and release evidence distinguish local verification from hosting, physical-device and human outcome gates. Continue maintaining the companion implementation ledger, verification and maintainer guide with every change.
+
+## Staff dashboard (R13)
+
+The web now has a persistent staff sidebar and independently scrolling desktop workspace. Analytics uses Unovis charts with activity/delivery tabs, reporting presets and accessible data views; timezone editors use the shared full-catalog searchable picker. [ADR0009](docs/decisions/0009-dashboard-components.md) and the [dashboard audit](docs/implementation/dashboard-quality-audit.md) explain architecture, findings and acceptance. API/Prisma ownership and runtime boundaries are unchanged.

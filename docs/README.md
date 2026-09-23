@@ -15,6 +15,7 @@ This is the maintained entry point for engineers working on the Rafik web/backen
 
 - [Runbook](implementation/runbook.md): local setup, recovery, support and hosted release procedure.
 - [Verification](implementation/verification.md): reproducible commands, actual results and limits.
+- [Dashboard quality correction](implementation/dashboard-quality-audit.md): R13 hierarchy, real controls, scrolling and acceptance blind spots.
 - [Product quality review](implementation/product-quality-review.md): user tasks, findings, fixes and remaining gates.
 - [Feature verification map](implementation/feature-verification-map.md): user jobs, lifecycle/state checks and remaining coverage limits.
 - [Provider boundaries](implementation/provider-readiness.md): concrete local owners and external acceptance still required.

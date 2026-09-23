@@ -13,3 +13,5 @@ Node 22.16.0, Playwright 1.63.0, Vue 3.5.43, Vite 8.3.0, Supabase CLI 2.90.0. Ex
 R1 expansion: `r1-database.txt` (51 assertions), `r1-browser.txt` (20 scenarios), `r1-fresh.txt` (isolated migration/fixture checks), `r1-layout.json` (224 layout combinations plus accessibility check). Historical baseline evidence is retained separately.
 
 R4: `r4-local-checks.md` is the final local verification receipt; `r4-layout.json` records the populated 176-state render/accessibility matrix. Reproducible commands, exact regression totals and observed test-harness limitations are in `../verification.md`.
+
+R13: `r13-release.json` records the final 26-gate run; `r13-verification.txt` records 76 browser journeys, 1,120 rendered states, exact scope, discovered/fixed defects and limitations. The seven `r13-*-layout.json` files retain the declared matrices. Historical counts above describe their own checkpoints.
