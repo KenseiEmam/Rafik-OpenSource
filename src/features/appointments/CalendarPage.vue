@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import TimezonePicker from '../../components/TimezonePicker.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { user, profile } from '../../app/auth'
@@ -43,7 +44,7 @@ type Command = {
   args: Record<string, unknown>
 }
 const pending = ref<Command>()
-const zones = Intl.supportedValuesOf('timeZone')
+
 const validViewZone = computed(() => {
   try {
     new Intl.DateTimeFormat('en', { timeZone: viewZone.value })
@@ -250,10 +251,7 @@ onMounted(async () => {
         </button>
       </div>
       <div class="progress-filters">
-        <label
-          >{{ l('View times in', 'عرض الأوقات حسب')
-          }}<input v-model="viewZone" list="timezone-list" /></label
-        ><label
+        <TimezonePicker v-model="viewZone" :label="l('View times in', 'عرض الأوقات حسب')" /><label
           >{{ coach ? l('Client', 'المتدرب') : l('Coach', 'المدرب')
           }}<select v-model="relation" @change="selectRelation">
             <option v-if="coach" value="">{{ l('All clients', 'كل المتدربين') }}</option>
@@ -265,10 +263,7 @@ onMounted(async () => {
           }}</label
         >
       </div>
-      <datalist id="timezone-list">
-        <option value="UTC"></option>
-        <option v-for="z in zones" :key="z" :value="z"></option>
-      </datalist>
+
       <p v-if="!validViewZone" class="notice error" role="alert">
         {{
           l(
@@ -470,10 +465,11 @@ onMounted(async () => {
                 :placeholder="
                   l('Studio, phone, or meeting link', 'المكان أو الهاتف أو رابط اللقاء')
                 " /></label
-            ><label
-              >{{ l('Offer timezone', 'توقيت الإتاحة')
-              }}<input v-model="zone" list="timezone-list" required :disabled="!!pending" /></label
-            ><label
+            ><TimezonePicker
+              v-model="zone"
+              :label="l('Offer timezone', 'توقيت الإتاحة')"
+              :disabled="!!pending"
+            /><label
               >{{ l('First local date and time', 'أول تاريخ ووقت محلي')
               }}<input type="datetime-local" v-model="local" required :disabled="!!pending"
             /></label>

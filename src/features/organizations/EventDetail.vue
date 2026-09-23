@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import TimezonePicker from '../../components/TimezonePicker.vue'
 import { computed, onMounted, ref, watch, nextTick, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { user } from '../../app/auth'
@@ -346,8 +347,11 @@ onMounted(load)
             <label
               >{{ l('Local date and time', 'التاريخ والوقت المحلي')
               }}<input type="datetime-local" v-model="local" required /></label
-            ><label>{{ l('Timezone', 'المنطقة الزمنية') }}<input v-model="zone" required /></label
-            ><label
+            ><TimezonePicker
+              v-model="zone"
+              :label="l('Timezone', 'المنطقة الزمنية')"
+              :disabled="locked"
+            /><label
               >{{ l('Minutes', 'الدقائق')
               }}<select v-model.number="minutes">
                 <option v-for="n in [15, 30, 45, 60, 90, 120]" :key="n" :value="n">{{ n }}</option>

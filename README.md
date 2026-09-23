@@ -26,19 +26,19 @@ npm ci
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173`. Start with **Try a workout**, or use **Explore sample accounts** in the footer to inspect both sides of the local workflow. Sample accounts use real local identity and database calls. Sign-in email stays in the backend's test inbox at `http://127.0.0.1:55331/local/inbox`.
+Open `http://127.0.0.1:5173`. Start with **Try a workout**, or use **Explore sample accounts** in the sidebar (footer on public/trainee pages) to inspect both sides of the local workflow. Sample accounts use real local identity and database calls. Sign-in email stays in the backend's test inbox at `http://127.0.0.1:55331/local/inbox`.
 
 ## Explore R3
 
-Sign into Laila or Amir at `/local-preview`, then choose **More** in the workspace navigation. Nutrition supports guidance and actual meal records; Appointments supports availability and booking; Resources supports real private upload and explicit sharing. Shared files can be attached to Messages. Upcoming appointments appear on Today when there are bookings in the next week. No extra signup fields are required.
+Sign into Laila or Amir at `/local-preview`, then choose the desired tool in the sidebar or phone navigation drawer. Nutrition supports guidance and actual meal records; Appointments supports availability and booking; Resources supports real private upload and explicit sharing. Shared files can be attached to Messages. Upcoming appointments appear on Today when there are bookings in the next week. No extra signup fields are required.
 
 See the [R3 contract](../rafik-api/docs/implementation/r3-contract.md) for units, timezones, retries and file lifecycle. New modules are `src/features/nutrition`, `appointments`, `resources` and `services`; there is no new global state layer.
 
 ## Explore R4
 
-Open **More → Teams** as Laila. Create a team, invite `coach2@rafik.test`, and open the generated invitation link as **Nour Mahfouz** in another browser profile. Both identities have buttons at `/local-preview`; no email code is needed. Choose an existing client for enrollment; **Amir Hassan** approves on Today or **More → Teams**. Team admins manage staff/groups and propose coach handoffs; clients approve before their future plan changes. Published team plans become independent editable copies. Files have separate, explicit staff sharing.
+Open **Teams** as Laila. Create a team, invite `coach2@rafik.test`, and open the generated invitation link as **Nour Mahfouz** in another browser profile. Both identities have buttons at `/local-preview`; no email code is needed. Choose an existing client for enrollment; **Amir Hassan** approves on Today or **More → Teams**. Team admins manage staff/groups and propose coach handoffs; clients approve before their future plan changes. Published team plans become independent editable copies. Files have separate, explicit staff sharing.
 
-**More → Business** is an optional personal account; **Team subscription** handles the selected team. Its owner-only local simulator exercises subscription states without cards, charges or a real provider. **More → Support** saves actual local requests and supports admin replies, resolve/reopen and draft recovery. See the [R4 contract](../rafik-api/docs/implementation/r4-contract.md) and maintainer guide for access and retry boundaries.
+**Business** is an optional personal account; **Team subscription** handles the selected team. Its owner-only local simulator exercises subscription states without cards, charges or a real provider. **Support** saves actual local requests and supports admin replies, resolve/reopen and draft recovery. See the [R4 contract](../rafik-api/docs/implementation/r4-contract.md) and maintainer guide for access and retry boundaries.
 
 Modules: `src/features/teams` (workspace, invitations and one persisted pending command), `business` (account state), `support` (cases). The existing workout queue and solo-coaching architecture remain in place. `tests/team-fixture.ts` creates isolated synthetic accounts and removes them after the R4 browser/layout checks; it must only run with the sibling local backend.
 
@@ -125,7 +125,7 @@ Use **Manage workspaces** to explicitly create an organization or activate indep
 
 ## Organization services
 
-Calendar supports reviewed group scheduling, specific assessors, attendance and separate per-trainee results with corrections. More contains Groups and Assessment templates. Analytics provides date/trainee filters, current workload and participation, accessible chart tables and metric definitions. `src/features/organizations` owns these workflows; `src/features/analytics` owns shared charts/reports. `tests/organization-services.e2e.ts` covers the full schedule/result/correction/recovery journey; `scripts/audit-services.ts` checks role/locale/theme/viewport states.
+Calendar supports reviewed group scheduling, specific assessors, attendance and separate per-trainee results with corrections. The Library navigation contains Groups and Assessment templates. Analytics provides date/trainee filters, current workload and participation, accessible chart tables and metric definitions. `src/features/organizations` owns these workflows; `src/features/analytics` owns shared charts/reports. `tests/organization-services.e2e.ts` covers the full schedule/result/correction/recovery journey; `scripts/audit-services.ts` checks role/locale/theme/viewport states.
 
 R10 adds organization conversations and the global notification inbox/preferences. The local dispatcher intercepts optional generic previews; no email/push is sent. See the backend implementation ledger, ADR 0007 and runbook for authority, retry and maintenance contracts.
 
@@ -136,3 +136,13 @@ Platform operations are available through Amina in the local sample switcher, wi
 ## Connected experience and release handoff (R12)
 
 The homepage now leads coaches and organizations into the appropriate workspace while retaining the immediate workout sample. Sample accounts are grouped by scope; Help explains admin/trainer/independent tasks. Conversation creation scrolls naturally, scheduling preserves selections through catalog searches and focuses each step, and optional setup stays behind disclosure. Current engineering coverage and release evidence distinguish local verification from hosting, physical-device and human outcome gates. Continue maintaining the companion implementation ledger, verification and maintainer guide with every change.
+
+## Dashboard components (R13)
+
+Coach/organization staff use a persistent desktop sidebar and scrollable workspace; **Open navigation** opens the same grouped links on phones. Public and trainee routes keep their own shell. `src/styles/dashboard.css` owns staff geometry, `src/features/workspace/DashboardNav.vue` owns links, and router scroll handling preserves browser-back position.
+
+- `src/features/analytics/MetricChart.vue`: pinned Unovis line/area/bar/donut rendering, keyboard readout, data tables, category paging and theme tokens. AnalyticsPage owns reporting/filter/tab state and retained refresh data.
+- `src/components/TimezonePicker.vue`: Reka combobox with browser IANA entries, UTC, saved aliases, common city search names and current offsets. All timezone inputs share it; typed search does not update the saved value.
+- `tests/dashboard.e2e.ts`, `tests/design-controls.test.ts`, `scripts/audit-dashboard.ts`: saved/keyboard controls, report recovery, scroll geometry, token validity and rendered role/theme/breakpoint checks. Run the audit with `npm run test:dashboard:layout` against the preserved local preview.
+
+[ADR0009](../rafik-api/docs/decisions/0009-dashboard-components.md) records why these underlying libraries were integrated directly with Rafik CSS instead of migrating the app to Tailwind. [Audit and acceptance](../rafik-api/docs/implementation/dashboard-quality-audit.md) documents the previous UX gaps and current evidence.

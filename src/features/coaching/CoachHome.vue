@@ -70,7 +70,7 @@ onMounted(() => load())
     <header class="work-heading">
       <div>
         <p class="overline">{{ l('Your coaching day', 'يومك التدريبي') }}</p>
-        <h1>{{ l('A clear next step.', 'خطوة تالية واضحة.') }}</h1>
+        <h1>{{ l('Today', 'اليوم') }}</h1>
         <p>
           {{
             l('See who needs you. Keep their progress moving.', 'شاهد من يحتاجك وساعده على التقدم.')
@@ -117,37 +117,44 @@ onMounted(() => load())
             }}
           </p>
           <p v-if="error && data.items.length" class="notice error" role="alert">{{ error }}</p>
-          <RouterLink
-            v-for="task in data.items"
-            :key="task.key"
-            class="attention-row"
-            :to="{
-              path: destination(task),
-              query: { from: 'today', view: kind, search: search || undefined },
-            }"
+          <div
+            v-if="data.items.length"
+            class="attention-items"
+            tabindex="0"
+            :aria-label="l('Updates needing attention', 'مستجدات تحتاج المتابعة')"
           >
-            <span class="avatar" aria-hidden="true">{{ task.name.slice(0, 1) }}</span>
-            <div class="grow">
-              <strong>{{ task.name }}</strong
-              ><span>{{
-                task.kind === 'message'
-                  ? l('Unread messages', 'رسائل غير مقروءة') + ' · ' + task.unread
-                  : task.title
-              }}</span
-              ><span v-if="task.detail" class="note-excerpt">{{ task.detail }}</span
-              ><small
-                >{{
-                  task.kind === 'workout'
-                    ? l('Workout to review', 'حصة للمراجعة')
-                    : task.kind === 'checkin'
-                      ? l('Check-in to review', 'متابعة للمراجعة')
-                      : l('Reply in conversation', 'الرد في المحادثة')
-                }}
-                · {{ dateLabel(task.happened_at) }}</small
-              >
-            </div>
-            <span aria-hidden="true">↗</span>
-          </RouterLink>
+            <RouterLink
+              v-for="task in data.items"
+              :key="task.key"
+              class="attention-row"
+              :to="{
+                path: destination(task),
+                query: { from: 'today', view: kind, search: search || undefined },
+              }"
+            >
+              <span class="avatar" aria-hidden="true">{{ task.name.slice(0, 1) }}</span>
+              <div class="grow">
+                <strong>{{ task.name }}</strong
+                ><span>{{
+                  task.kind === 'message'
+                    ? l('Unread messages', 'رسائل غير مقروءة') + ' · ' + task.unread
+                    : task.title
+                }}</span
+                ><span v-if="task.detail" class="note-excerpt">{{ task.detail }}</span
+                ><small
+                  >{{
+                    task.kind === 'workout'
+                      ? l('Workout to review', 'حصة للمراجعة')
+                      : task.kind === 'checkin'
+                        ? l('Check-in to review', 'متابعة للمراجعة')
+                        : l('Reply in conversation', 'الرد في المحادثة')
+                  }}
+                  · {{ dateLabel(task.happened_at) }}</small
+                >
+              </div>
+              <span aria-hidden="true">↗</span>
+            </RouterLink>
+          </div>
           <div v-if="!data.items.length" class="workspace-empty">
             <h3>
               {{

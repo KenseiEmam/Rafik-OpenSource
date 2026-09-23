@@ -95,7 +95,11 @@ test('check-in moves through draft, submission, review, correction and contextua
   await expect(client.locator('.message-log')).toContainText('Yes, I can adjust the schedule')
   await clientContext.close()
   await page.getByRole('button', { name: 'Switch to Arabic' }).click()
+  const mobileNavigation = page.getByRole('button', { name: 'فتح التنقل', exact: true })
+  if (await mobileNavigation.isVisible()) await mobileNavigation.click()
   await page.getByRole('combobox', { name: 'المظهر' }).selectOption('dark')
+  if (await page.getByRole('dialog').isVisible())
+    await page.getByRole('button', { name: 'إغلاق التنقل', exact: true }).click()
   await page.screenshot({
     path: `artifacts/r2-messages-ar-${info.project.name}.png`,
     fullPage: true,
@@ -193,7 +197,11 @@ test('progress and private/shared measurement correction survive reload', async 
     .click()
   await page.getByRole('button', { name: 'Confirm removal' }).click()
   await page.getByRole('button', { name: 'Switch to Arabic' }).click()
+  const mobileNavigation = page.getByRole('button', { name: 'فتح التنقل', exact: true })
+  if (await mobileNavigation.isVisible()) await mobileNavigation.click()
   await page.getByRole('combobox', { name: 'المظهر' }).selectOption('dark')
+  if (await page.getByRole('dialog').isVisible())
+    await page.getByRole('button', { name: 'إغلاق التنقل', exact: true }).click()
   await clean(page)
   await page.screenshot({
     path: `artifacts/r2-progress-ar-${info.project.name}.png`,

@@ -5,7 +5,7 @@ import { language, t } from '../../lib/i18n'
 <template>
   <div class="container page prose-page">
     <p class="overline">{{ t('help') }}</p>
-    <h1>{{ language('Keep moving, with a little clarity.', 'تابع بوضوح أكثر.') }}</h1>
+    <h1>{{ language('Help', 'المساعدة') }}</h1>
     <section class="help-workspaces">
       <h2>{{ language('Start in the right workspace', 'ابدأ في مساحة العمل المناسبة') }}</h2>
       <p>
@@ -24,8 +24,8 @@ import { language, t } from '../../lib/i18n'
         <p>
           {{
             language(
-              'Start in People: invite administrators, trainers or trainees and assign a responsible trainer. In Programs, publish a plan and review who will receive it. Calendar schedules training and assessor-led assessments; More contains reusable groups and assessment templates.',
-              'ابدأ في الأشخاص: ادعُ المسؤولين والمدربين والمتدربين وعيّن المدرب المسؤول. انشر خطة في البرامج وراجع المستلمين. استخدم التقويم لجدولة التدريب والتقييمات؛ وتحتوي قائمة المزيد على المجموعات وقوالب التقييم القابلة لإعادة الاستخدام.',
+              'Start in People: invite administrators, trainers or trainees and assign a responsible trainer. In Programs, publish a plan and review who will receive it. Calendar schedules training and assessor-led assessments; the Library section contains reusable groups and assessment templates.',
+              'ابدأ في الأشخاص: ادعُ المسؤولين والمدربين والمتدربين وعيّن المدرب المسؤول. انشر خطة في البرامج وراجع المستلمين. استخدم التقويم لجدولة التدريب والتقييمات؛ ويحتوي قسم المكتبة على المجموعات وقوالب التقييم القابلة لإعادة الاستخدام.',
             )
           }}
         </p>
@@ -54,8 +54,8 @@ import { language, t } from '../../lib/i18n'
         <p>
           {{
             language(
-              'Today brings together sessions and check-ins awaiting review. Plans is where you prepare and publish training; Clients is where you invite people and manage each relationship. Optional scheduling, files and other tools stay under More. Independent coach teams do not merge your private client records.',
-              'يجمع اليوم الحصص والمتابعات بانتظار المراجعة. جهّز التدريب وانشره في الخطط، وادعُ المتدربين وأدر كل علاقة في المتدربين. تتوفر الجدولة والملفات والأدوات الاختيارية ضمن المزيد. لا تدمج فرق المدربين المستقلين سجلات متدربيك الخاصة.',
+              'Today brings together sessions and check-ins awaiting review. Plans is where you prepare and publish training; Clients is where you invite people and manage each relationship. Appointments, Resources and other tools have their own navigation links. Independent coach teams do not merge your private client records.',
+              'يجمع اليوم الحصص والمتابعات بانتظار المراجعة. جهّز التدريب وانشره في الخطط، وادعُ المتدربين وأدر كل علاقة في المتدربين. تتوفر الجدولة والملفات والأدوات الاختيارية في قائمة التنقل. لا تدمج فرق المدربين المستقلين سجلات متدربيك الخاصة.',
             )
           }}
         </p>

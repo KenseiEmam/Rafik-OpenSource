@@ -387,9 +387,7 @@ function removeDay() {
         <p class="overline">{{ language('Plan studio', 'تصميم الخطة') }}</p>
         <h1>
           {{
-            isNew
-              ? language('A useful place to start.', 'بداية مفيدة.')
-              : language('Make the next session better.', 'اجعل الحصة القادمة أفضل.')
+            isNew ? language('Create a plan', 'إنشاء خطة') : language('Edit plan', 'تعديل الخطة')
           }}
         </h1>
       </div>

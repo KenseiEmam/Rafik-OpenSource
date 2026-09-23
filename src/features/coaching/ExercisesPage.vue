@@ -154,7 +154,7 @@ onMounted(async () => {
     <header class="page-heading heading-actions">
       <div>
         <p class="overline">{{ language('Your coaching toolkit', 'أدواتك التدريبية') }}</p>
-        <h1>{{ language('A library you can make your own.', 'مكتبة تناسب أسلوبك.') }}</h1>
+        <h1>{{ language('Exercises', 'التمارين') }}</h1>
         <p>
           {{
             language(
