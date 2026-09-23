@@ -11,3 +11,11 @@
 - No old hosted credentials or project configuration may enter this runtime. Local sample identities and privacy copy are not deployable production configuration.
 
 - Every further change must update root `CHANGELOG.md` and the companion implementation ledger. Update the READMEs and `../rafik-api/docs/implementation/maintainer-guide.md` when files/workflows change, `architecture.md` for data/API/lifecycle changes, `runbook.md` for operations and `verification.md` for actual checks/limits. Commit matching code and docs together; do not leave stale phase status.
+
+## Engineering and product completion rules
+
+- Follow the backend `CONTRIBUTING.md` definition of done and `docs/README.md` documentation structure. Keep current architecture/reference docs accurate; phase logs are history, not the onboarding manual. Record durable architectural tradeoffs as ADRs.
+- Audit rendered user tasks before redesigning. Preserve the accepted visual identity while fixing hierarchy, navigation, interaction and recovery. Inspect realistic long/populated and empty/error states, phone/desktop, keyboard, Arabic/RTL and both themes.
+- A route, screenshot, test count or accessibility scan alone does not prove a good UX. Primary actions must stay reachable; optional controls should not overwhelm the task. Test what a person can actually accomplish, including interruption and correction.
+- Implement complete vertical features: authorization/data lifecycle, durable state/retry, discoverable UI, failure recovery, review/history/export and downstream analytics where relevant. Do not mark a partial demo as the revamp.
+- Fix observed regressions before extending scope. Add regression coverage for consequential failures, inspect the real rendered result, update matching docs, and state remaining release/product evidence limits honestly.

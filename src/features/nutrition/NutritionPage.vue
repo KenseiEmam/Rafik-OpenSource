@@ -401,7 +401,15 @@ onMounted(async () => {
           >
         </div>
       </div>
-      <div class="ongoing-layout">
+      <p v-if="coach && !scope" class="notice">
+        {{
+          l(
+            'Choose a client to view their shared food record or add guidance.',
+            'اختر متدرباً لعرض سجل طعامه المشارك أو إضافة إرشادات.',
+          )
+        }}
+      </p>
+      <div v-else class="ongoing-layout">
         <section class="form-stack">
           <article v-if="current" class="panel">
             <p class="overline">
@@ -419,10 +427,15 @@ onMounted(async () => {
             <h2>{{ l('Food record', 'سجل الطعام') }}</h2>
             <p v-if="!dayMeals.length">
               {{
-                l(
-                  'No meals recorded for this date. An empty log does not mean you ate nothing.',
-                  'لا توجد وجبات مسجلة لهذا التاريخ. السجل الفارغ لا يعني أنك لم تأكل.',
-                )
+                coach
+                  ? l(
+                      'No meals shared by this client for this date.',
+                      'لم يشارك هذا المتدرب وجبات لهذا التاريخ.',
+                    )
+                  : l(
+                      'No meals recorded for this date. An empty log does not mean you ate nothing.',
+                      'لا توجد وجبات مسجلة لهذا التاريخ. السجل الفارغ لا يعني أنك لم تأكل.',
+                    )
               }}
             </p>
             <article v-for="m in dayMeals" :key="m.id" class="meal-row">

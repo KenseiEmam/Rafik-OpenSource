@@ -235,7 +235,7 @@ test('assignment retry survives a lost acknowledgement and rejected messages rem
     .selectOption('72000000-0000-4000-8000-000000000001')
   // Count all occurrences, including reviewed history, so the assertion survives earlier manual use.
   await page.getByRole('combobox', { name: 'Show', exact: true }).selectOption('all')
-  const before = await page.locator('.request-row').count()
+  const before = Number((await page.locator('.request-total').innerText()).split(' ')[0])
   let once = true
   await page.route('**/rest/v1/rpc/assign_coaching_form', async (route) => {
     if (once) {
@@ -251,7 +251,8 @@ test('assignment retry survives a lost acknowledgement and rejected messages rem
   await page.getByRole('button', { name: 'Assign form', exact: true }).click()
   await expect(page.getByRole('status')).toContainText('Assigned.')
   await page.getByRole('combobox', { name: 'Show', exact: true }).selectOption('all')
-  await expect(page.locator('.request-row')).toHaveCount(before + 1)
+  await page.getByRole('searchbox', { name: 'Find a request' }).fill('')
+  await expect(page.locator('.request-total')).toHaveText(`${before + 1} requests`)
   await page.goto(
     '/coach/messages/' + relationship + '?session=00000000-0000-4000-8000-000000000001',
   )

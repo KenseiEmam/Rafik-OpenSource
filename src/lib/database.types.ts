@@ -1285,6 +1285,7 @@ export type Database = {
         Row: {
           completed: boolean
           effort: number | null
+          exercise_id: string | null
           exercise_key: string
           load: number
           metres: number | null
@@ -1297,6 +1298,7 @@ export type Database = {
         Insert: {
           completed?: boolean
           effort?: number | null
+          exercise_id?: string | null
           exercise_key: string
           load: number
           metres?: number | null
@@ -1309,6 +1311,7 @@ export type Database = {
         Update: {
           completed?: boolean
           effort?: number | null
+          exercise_id?: string | null
           exercise_key?: string
           load?: number
           metres?: number | null
@@ -2304,6 +2307,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      performed_exercise: { Args: { p: Json; p_choice: string }; Returns: Json }
       previous_performance: {
         Args: { p_before: string; p_exercises: string[] }
         Returns: Json

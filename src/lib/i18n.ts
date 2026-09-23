@@ -120,6 +120,26 @@ export function errorMessage(error: unknown): string {
         ? String(error.message)
         : String(error)
   const teamErrors: Record<string, [string, string]> = {
+    invalid_context: [
+      'The linked workout, response or file is unavailable. Remove the link or choose another.',
+      'الحصة أو الإجابة أو الملف المرتبط غير متاح. أزل الرابط أو اختر غيره.',
+    ],
+    invalid_alternatives: [
+      'Choose up to three approved alternatives.',
+      'اختر حتى ثلاثة بدائل معتمدة.',
+    ],
+    invalid_alternative: [
+      'An alternative is unavailable or uses a different recording type. Choose an active exercise of the same type.',
+      'أحد البدائل غير متاح أو يستخدم نوع تسجيل مختلفاً. اختر تمريناً نشطاً من النوع نفسه.',
+    ],
+    invalid_exercise_choice: [
+      'Choose an alternative approved in this workout.',
+      'اختر بديلاً معتمداً في هذه الحصة.',
+    ],
+    inconsistent_exercise_choice: [
+      'Use one exercise choice for all sets, then retry.',
+      'استخدم اختيار تمرين واحداً لكل المجموعات ثم أعد المحاولة.',
+    ],
     group_unavailable: [
       'This group was archived. Choose another active group.',
       'أُرشفت هذه المجموعة. اختر مجموعة نشطة أخرى.',

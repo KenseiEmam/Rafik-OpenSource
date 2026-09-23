@@ -52,7 +52,15 @@ function selectExercise(index: number) {
   ex.kind = info?.kind || 'strength'
   ex.seconds ||= 30
   ex.metres ||= 100
+  ex.alternatives = []
   delete ex.info
+}
+function toggleAlternative(index: number, exerciseId: string, checked: boolean) {
+  const ex = day.value.exercises[index]!
+  const alternatives = ex.alternatives || []
+  ex.alternatives = checked
+    ? [...alternatives, { exerciseId }].slice(0, 3)
+    : alternatives.filter((a) => a.exerciseId !== exerciseId)
 }
 function restDay() {
   if (day.value.restDay) day.value.exercises = []
@@ -468,6 +476,51 @@ function removeDay() {
                     ? catalog.find((e) => e.id === ex.exerciseId)?.instructions_ar
                     : catalog.find((e) => e.id === ex.exerciseId)?.instructions
                 }}
+              </p>
+              <details v-if="!preview" class="exercise-alternatives">
+                <summary>
+                  {{ language('Offer an alternative', 'اقتراح تمرين بديل')
+                  }}<span v-if="ex.alternatives?.length"> ({{ ex.alternatives.length }})</span>
+                </summary>
+                <p class="subtle">
+                  {{
+                    language(
+                      'Choose up to 3 exercises with the same recording type. They use the same sets and targets; your client can adjust their recorded results.',
+                      'اختر حتى 3 تمارين من نوع التسجيل نفسه. تستخدم المجموعات والأهداف نفسها، ويمكن للمتدرب تعديل نتائجه المسجلة.',
+                    )
+                  }}
+                </p>
+                <fieldset>
+                  <legend class="sr-only">
+                    {{ language('Approved alternatives', 'البدائل المعتمدة') }} {{ i + 1 }}
+                  </legend>
+                  <label
+                    v-for="option in catalog.filter(
+                      (e) =>
+                        e.active !== false &&
+                        e.id !== ex.exerciseId &&
+                        (e.kind || 'strength') === (ex.kind || 'strength'),
+                    )"
+                    :key="option.id"
+                    class="choice-label"
+                  >
+                    <input
+                      type="checkbox"
+                      :checked="ex.alternatives?.some((a) => a.exerciseId === option.id)"
+                      :disabled="
+                        (ex.alternatives?.length || 0) >= 3 &&
+                        !ex.alternatives?.some((a) => a.exerciseId === option.id)
+                      "
+                      @change="
+                        toggleAlternative(i, option.id, ($event.target as HTMLInputElement).checked)
+                      "
+                    />{{ name(option.id) }}
+                  </label>
+                </fieldset>
+              </details>
+              <p v-if="preview && ex.alternatives?.length" class="subtle">
+                {{ language('Approved alternatives', 'البدائل المعتمدة') }}:
+                {{ ex.alternatives.map((a) => name(a.exerciseId)).join(' · ') }}
               </p>
               <p v-if="preview && ex.note" class="coach-prescription">{{ ex.note }}</p>
               <details v-if="!preview">

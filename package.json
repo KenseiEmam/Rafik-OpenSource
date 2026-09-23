@@ -15,7 +15,8 @@
     "test:e2e": "playwright test",
     "format": "prettier --write src tests *.ts",
     "format:check": "prettier --check src tests *.ts",
-    "test:teams:layout": "node --experimental-strip-types scripts/verify-team-layout.ts"
+    "test:teams:layout": "node --experimental-strip-types scripts/verify-team-layout.ts",
+    "test:quality:layout": "node scripts/verify-product-quality.mjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "5.3.0",

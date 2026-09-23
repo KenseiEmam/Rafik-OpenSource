@@ -25,7 +25,13 @@ import {
 import { editLocalSession, getLocalSession } from '../../lib/storage'
 import { rpc } from '../../lib/backend'
 import sample from '../../content/sample.json'
-import { exerciseInfo, exerciseName, targetLabel, actualLabel } from '../../lib/prescriptions'
+import {
+  exerciseInfo,
+  exerciseName,
+  targetLabel,
+  actualLabel,
+  performedExercise,
+} from '../../lib/prescriptions'
 import type { Entry, PrescriptionExercise } from '../../lib/domain'
 const route = useRoute()
 const router = useRouter()
@@ -73,7 +79,21 @@ const nextIndex = computed(() => {
   }
   return selected.value + 1
 })
-const info = computed(() => (current.value ? exerciseInfo(current.value) : undefined))
+const performed = computed(() =>
+  current.value ? performedExercise(current.value, session.value?.entries || []) : undefined,
+)
+const info = computed(() => (performed.value ? exerciseInfo(performed.value) : undefined))
+function chooseExercise(event: Event) {
+  const choice = (event.target as HTMLSelectElement).value
+  const key = current.value!.key
+  void mutate((s) => {
+    s.entries
+      .filter((e) => e.exercise_key === key)
+      .forEach((e) => {
+        e.exercise_id = choice
+      })
+  })
+}
 const firstField = computed(() =>
   current.value?.kind === 'timed'
     ? 'seconds'
@@ -320,7 +340,10 @@ async function getPrevious() {
     const results = await rpc<
       { exercise_id: string; prescription: PrescriptionExercise; entries: Entry[] }[]
     >('previous_performance', {
-      p_exercises: session.value.prescription.exercises.map((e) => e.exerciseId),
+      p_exercises: session.value.prescription.exercises.flatMap((e) => [
+        e.exerciseId,
+        ...(e.alternatives || []).map((a) => a.exerciseId),
+      ]),
       p_before: session.value.started_at,
     })
     previous.value = Object.fromEntries(
@@ -436,7 +459,7 @@ function correctSets() {
                     aria-hidden="true"
                   /><template v-else>{{ i + 1 }}</template></span
                 ><span
-                  >{{ exerciseName(ex)
+                  >{{ exerciseName(performedExercise(ex, session.entries))
                   }}<small
                     >{{
                       session.entries.filter((e) => e.exercise_key === ex.key && e.completed).length
@@ -470,6 +493,39 @@ function correctSets() {
                   </select></label
                 >
               </div>
+              <details v-if="current.alternatives?.length" class="workout-alternatives">
+                <summary>{{ language('Choose an alternative', 'اختر تمريناً بديلاً') }}</summary>
+                <label
+                  >{{ language('Exercise to perform', 'التمرين الذي ستؤديه')
+                  }}<select
+                    :value="performed?.exerciseId"
+                    :disabled="row.conflict || savingLocal > 0"
+                    @change="chooseExercise"
+                  >
+                    <option :value="current.exerciseId">
+                      {{ exerciseName(current) }} · {{ language('Original', 'الأصلي') }}
+                    </option>
+                    <option
+                      v-for="alternative in current.alternatives"
+                      :key="alternative.exerciseId"
+                      :value="alternative.exerciseId"
+                    >
+                      {{ locale === 'ar' ? alternative.info?.name_ar : alternative.info?.name }}
+                    </option>
+                  </select></label
+                >
+                <p class="subtle">
+                  {{
+                    language(
+                      'Your coach approved these options with the same targets. Switching keeps recorded sets and values. Adjust them if needed.',
+                      'اعتمد مدربك هذه الخيارات بالأهداف نفسها. التبديل يحتفظ بالمجموعات والقيم المسجلة. عدّلها عند الحاجة.',
+                    )
+                  }}
+                </p>
+              </details>
+              <p v-if="performed?.exerciseId !== current.exerciseId" class="subtle">
+                {{ language('Alternative to', 'بديل عن') }} {{ exerciseName(current) }}
+              </p>
               <p class="instruction">
                 {{ locale === 'ar' ? info?.instructions_ar : info?.instructions }}
               </p>
@@ -496,8 +552,9 @@ function correctSets() {
                 >{{ language('Open demonstration', 'فتح الشرح') }} ↗</a
               >
               <p v-if="current.note" class="coach-prescription">{{ current.note }}</p>
-              <p v-if="previous[current.exerciseId]" class="previous-result">
-                {{ t('previous') }}: <strong dir="ltr">{{ previous[current.exerciseId] }}</strong>
+              <p v-if="previous[performed!.exerciseId]" class="previous-result">
+                {{ t('previous') }}:
+                <strong dir="ltr">{{ previous[performed!.exerciseId] }}</strong>
               </p>
               <div v-if="current.targets" class="set-target-list">
                 <small v-for="(target, n) in current.targets" :key="n"
@@ -688,7 +745,7 @@ function correctSets() {
             </button>
             <div class="summary-exercises">
               <div v-for="ex in session.prescription.exercises" :key="ex.key">
-                <span>{{ exerciseName(ex) }}</span
+                <span>{{ exerciseName(performedExercise(ex, session.entries)) }}</span
                 ><strong
                   >{{
                     session.entries.filter((e) => e.exercise_key === ex.key && e.completed).length

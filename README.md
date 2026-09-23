@@ -1,6 +1,8 @@
 # Rafik web revamp
 
-A responsive Vue 3/TypeScript application for training and ongoing coaching: programming, client management, progress, check-ins, assessments, conversation, optional nutrition, appointments and private files. R4 team/business operations are implemented locally; integrated readiness (R5) remains open. English/Arabic, light/dark themes, public sample workouts, email-code entry, coach plans/invitations/review, and recoverable local drafts.
+Engineering entry points: [documentation index](../rafik-api/docs/README.md), [contribution workflow](CONTRIBUTING.md), [architecture decisions](../rafik-api/docs/decisions/README.md).
+
+A responsive Vue 3/TypeScript application for training and ongoing coaching: programming, client management, progress, check-ins, assessments, conversation, optional nutrition, appointments and private files. The local product includes team/business workflows and exercise choices; hosted/device release gates remain open. English/Arabic, light/dark themes, public sample workouts, email-code entry, coach plans/invitations/review, and recoverable local drafts.
 
 Work belongs on `codex/revamp`. The old application is preserved in Git history. No native app or legacy backend is required.
 
@@ -96,3 +98,9 @@ The client workspace and conversation routes use a **relationship ID**. The Lail
 `tests/ongoing.e2e.ts` verifies the R2 lifecycles; `tests/ongoing.test.ts` checks unit-aware trends and response states. `node scripts/r2-visual-check.mjs` checks populated R2 screens across widths/languages/themes. Run the companion SQL suites after changing response, progress or conversation contracts. This is still local verification, not a physical-device or hosted-release claim.
 
 R4 checks: `npm run test:e2e -- tests/teams.e2e.ts` runs both browser engines; `npm run test:teams:layout` checks 176 populated layouts and saves its local report/screenshots in ignored `artifacts/`. The layout script uses Node 22's explicit experimental type-stripping flag; production application code does not depend on it.
+
+## Product quality and exercise choice
+
+Messages now keeps history and composing in a bounded workspace, with a searchable inbox and phone back flow. Today prioritizes training; check-ins/plans/reviews handle growing lists. Coaches can offer up to three same-kind exercise alternatives in the plan editor; publish and assign the version, then the client chooses within the workout. Recorded choices flow through offline recovery, coach review and progress while original targets remain unchanged.
+
+Read the [product quality review](../rafik-api/docs/implementation/product-quality-review.md), [R5 contract](../rafik-api/docs/implementation/r5-contract.md) and [release checklist](../rafik-api/docs/implementation/release-checklist.md). The contribution rules require real user-task inspection, complete lifecycle implementation and matching docs for future work.

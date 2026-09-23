@@ -116,7 +116,9 @@ test('appointment publishing and ambiguous booking retry lead to one rescheduled
     .first()
     .getByRole('button', { name: 'Book this time' })
     .click()
-  await expect(client.getByRole('button', { name: 'Retry calendar change' })).toBeVisible()
+  // Wait for the injected lost acknowledgement, not merely the in-flight pending UI.
+  await expect(client.getByRole('button', { name: 'Retry calendar change' })).toBeEnabled()
+  await expect(client.getByRole('alert')).toBeVisible()
   await client.reload()
   await client.getByRole('button', { name: 'Retry calendar change' }).click()
   await expect(client.locator('.appointment-row').filter({ hasText: title })).toHaveCount(1)

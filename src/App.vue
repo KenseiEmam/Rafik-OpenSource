@@ -8,12 +8,14 @@ import { localPreview } from './lib/backend'
 import { syncPending } from './lib/training'
 const route = useRoute()
 const coaching = computed(() => route.path.startsWith('/coach'))
+const messaging = computed(() => /^(\/coach)?\/messages(\/|$)/.test(route.path))
 const focused = computed(() => route.path.startsWith('/workout/'))
 const product = computed(
   () =>
     user.value &&
     !['/', '/login', '/routine', '/privacy', '/help', '/local-preview'].includes(route.path) &&
-    !route.path.startsWith('/invite/'),
+    !route.path.startsWith('/invite/') &&
+    !route.path.startsWith('/team-invite/'),
 )
 const theme = ref(localStorage.getItem('rafik.theme') || 'system')
 function setTheme() {
@@ -143,7 +145,9 @@ onUnmounted(() => window.removeEventListener('online', online))
       }}</span>
     </nav>
   </div>
-  <main id="main" tabindex="-1"><RouterView :key="route.path" /></main>
+  <main id="main" :class="{ 'messages-main': messaging }" tabindex="-1">
+    <RouterView :key="route.path" />
+  </main>
   <footer v-if="!focused" class="footer container">
     <span class="footer-brand">{{
       language('A little clarity. Every session.', 'وضوح أكثر. في كل حصة.')
