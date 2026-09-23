@@ -183,6 +183,68 @@ export type Database = { public: { Tables: {
         guidance: string
         created_at: string
     } }
+    organization_assignments: { Row: {
+        id: string
+        workspace_id: string
+        member_id: string
+        version_id: string
+        created_by: string
+        start_date: string
+        end_date: string | null
+        schedule_mode: string
+        state: string
+        revision: number
+        created_at: string
+    } }
+    organization_exercises: { Row: {
+        workspace_id: string
+        id: string
+        data: Json
+        created_by: string
+        revision: number
+        active: boolean
+    } }
+    organization_programs: { Row: {
+        id: string
+        workspace_id: string
+        created_by: string
+        title: string
+        draft: Json
+        draft_version: number
+        archived: boolean
+        listed: boolean
+        updated_at: string
+        revision: number
+    } }
+    organization_sessions: { Row: {
+        id: string
+        workspace_id: string
+        member_id: string
+        assignment_id: string
+        day_id: string
+        local_date: string
+        document: Json
+        version: number
+        started_at: string
+        completed_at: string | null
+    } }
+    organization_versions: { Row: {
+        id: string
+        workspace_id: string
+        program_id: string
+        revision: number
+        title: string
+        prescription: Json
+        created_by: string
+        created_at: string
+    } }
+    plan_deliveries: { Row: {
+        id: string
+        coach_id: string
+        payload: Json
+        result: Json
+        created_at: string
+    } }
     plan_versions: { Row: {
         id: string
         plan_id: string
@@ -214,6 +276,15 @@ export type Database = { public: { Tables: {
         locale: string
         units: string
         timezone: string
+        created_at: string
+    } }
+    program_media: { Row: {
+        id: string
+        workspace_id: string
+        created_by: string | null
+        media_type: string
+        bytes: number
+        digest: string
         created_at: string
     } }
     resource_shares: { Row: {
@@ -468,6 +539,7 @@ export type Database = { public: { Tables: {
     create_support_case: { Args: Record<string, unknown>; Returns: Json }
     create_team: { Args: Record<string, unknown>; Returns: Json }
     delete_my_account: { Args: Record<string, unknown>; Returns: Json }
+    deliver_plan: { Args: Record<string, unknown>; Returns: Json }
     ensure_profile: { Args: Record<string, unknown>; Returns: Json }
     finish_resource: { Args: Record<string, unknown>; Returns: Json }
     get_invitation: { Args: Record<string, unknown>; Returns: Json }

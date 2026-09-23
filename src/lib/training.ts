@@ -1,4 +1,4 @@
-import { api, rpc } from './backend'
+import { api, rpc, request } from './backend'
 import { clone, type Session, type LocalSession, type PlanDay } from './domain'
 import {
   editLocalSession,
@@ -18,6 +18,7 @@ export async function startWorkout(
   owner: string,
   assignmentId?: string,
   scheduledDate?: string,
+  workspace?: string,
 ) {
   const existing = (await localSessions(owner)).find(
     (x) =>
@@ -60,6 +61,18 @@ export async function startWorkout(
       completed_at: null,
       version: 1,
     }
+  else if (workspace)
+    session = await request<Session>(`/v1/workspaces/${workspace}/sessions`, {
+      method: 'POST',
+      body: JSON.stringify({
+        operation: id,
+        action: 'start',
+        view: 'trainee',
+        id,
+        assignment_id: assignmentId,
+        day_id: day.id,
+      }),
+    })
   else
     session = await rpc<Session>('start_session', {
       p_id: id,
@@ -83,7 +96,7 @@ export async function startWorkout(
   await event('session_started', session.id)
   return row
 }
-export async function loadWorkout(id: string, owner: string) {
+export async function loadWorkout(id: string, owner: string, workspace?: string) {
   const local = await getLocalSession(id)
   if (local && (local.owner === owner || local.owner === 'guest')) {
     if (
@@ -94,7 +107,7 @@ export async function loadWorkout(id: string, owner: string) {
     )
       return local
     try {
-      const remote = await rpc<Session | null>('session_document', { p_id: id })
+      const remote = await readSession(id, workspace || local.session.workspace_id)
       if (remote?.client_id === owner)
         return editLocalSession(id, (current) => {
           // Another tab may have edited while this read was in flight.
@@ -111,7 +124,7 @@ export async function loadWorkout(id: string, owner: string) {
     return local
   }
   if (owner === 'guest') throw new Error('unauthenticated')
-  const session = await rpc<Session | null>('session_document', { p_id: id })
+  const session = await readSession(id, workspace)
   if (!session) throw new Error('forbidden')
   // Coach review reads server data separately; this is the client's editing store.
   if (session.client_id !== owner) throw new Error('forbidden')
@@ -163,14 +176,28 @@ export async function syncWorkout(id: string, owner: string) {
         })
       const op = row.pending!
       try {
-        const result = await rpc<Session>('save_session', {
-          p_id: id,
-          p_expected_version: op.expectedVersion,
-          p_operation_id: op.id,
-          p_entries: op.entries,
-          p_note: op.note,
-          p_complete: op.complete,
-        })
+        const result = row.session.workspace_id
+          ? await request<Session>(`/v1/workspaces/${row.session.workspace_id}/sessions`, {
+              method: 'POST',
+              body: JSON.stringify({
+                operation: op.id,
+                action: 'save',
+                view: 'trainee',
+                id,
+                revision: op.expectedVersion,
+                entries: op.entries,
+                note: op.note,
+                complete: op.complete,
+              }),
+            })
+          : await rpc<Session>('save_session', {
+              p_id: id,
+              p_expected_version: op.expectedVersion,
+              p_operation_id: op.id,
+              p_entries: op.entries,
+              p_note: op.note,
+              p_complete: op.complete,
+            })
         row = await editLocalSession(id, (r) => {
           if (r.pending?.id !== op.id) return
           r.session.version = result.version
@@ -223,7 +250,8 @@ export async function adoptGuest(id: string, owner: string) {
 export async function reloadServerSession(id: string, owner: string) {
   const previous = await getLocalSession(id)
   if (!previous || previous.owner !== owner) throw new Error('forbidden')
-  const remote = await rpc<Session>('session_document', { p_id: id })
+  const remote = await readSession(id, previous.session.workspace_id)
+  if (!remote) throw Error('session_missing')
   await storeDraft('conflict-backup:' + owner + ':' + id, previous)
   return putLocalSession({
     id,
@@ -236,4 +264,10 @@ export async function reloadServerSession(id: string, owner: string) {
 }
 export async function syncPending(owner: string) {
   for (const row of await localSessions(owner)) await syncWorkout(row.id, owner)
+}
+
+async function readSession(id: string, workspace?: string) {
+  return workspace
+    ? request<Session>(`/v1/organization-sessions/${id}`)
+    : rpc<Session | null>('session_document', { p_id: id })
 }

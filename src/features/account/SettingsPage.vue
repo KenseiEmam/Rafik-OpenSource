@@ -4,7 +4,7 @@ import { onMounted, ref } from 'vue'
 import { cleanupAccountResources } from '../resources/files'
 import { useRouter } from 'vue-router'
 import { user, profile, refreshProfile, logout } from '../../app/auth'
-import { rpc, rows } from '../../lib/backend'
+import { rpc, rows, request } from '../../lib/backend'
 import type { Session, Profile, Unit } from '../../lib/domain'
 import { localSessions, diagnosticEvents, removeAccountLocalData } from '../../lib/storage'
 import { language, locale, t, errorMessage } from '../../lib/i18n'
@@ -57,6 +57,7 @@ async function exportData() {
     )
     download(
       {
+        organizations: await request('/v1/account/organizations'),
         exportedAt: new Date().toISOString(),
         profile: profile.value,
         sessions: records,

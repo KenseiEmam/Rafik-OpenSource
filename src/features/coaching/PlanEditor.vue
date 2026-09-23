@@ -1,9 +1,15 @@
 <script setup lang="ts">
+import ProgramCover from './ProgramCover.vue'
+import { request } from '../../lib/backend'
+import OrganizationNav from '../organizations/OrganizationNav.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { PhArrowLeft, PhPlus, PhTrash, PhArrowUp, PhArrowDown, PhEye } from '@phosphor-icons/vue'
-import { user } from '../../app/auth'
-import { rpc, rows } from '../../lib/backend'
+import { user, contexts } from '../../app/auth'
+import { duplicateSession, duplicateWeek } from './program-structure'
+import { programContext } from './program-context'
+import { useCommand } from '../teams/commands'
+import CommandStatus from '../teams/CommandStatus.vue'
 import { clone, type Plan, type PlanVersion, type Prescription } from '../../lib/domain'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { language, locale, t, errorMessage } from '../../lib/i18n'
@@ -14,22 +20,31 @@ import type { Exercise } from '../../lib/domain'
 import PageState from '../../components/PageState.vue'
 const route = useRoute(),
   router = useRouter()
+const context = programContext(route)
+const editable = ref(context.view !== 'trainee')
 const isNew = route.params.id === 'new'
 const id = ref(isNew ? crypto.randomUUID() : String(route.params.id))
 const title = ref(language('My training plan', 'خطتي التدريبية'))
 const draft = ref<Prescription>(upgradePrescription(clone(sample.prescription) as Prescription))
 const version = ref<number | null>(null)
 const selected = ref(0)
+const loadedSuccessfully = ref(false)
 const loading = ref(true),
-  busy = ref(false),
   preview = ref(false),
   restored = ref(false)
 const error = ref(''),
   message = ref('')
 const published = ref<PlanVersion>()
+const listed = ref(false),
+  recordRevision = ref(1),
+  uploading = ref(false)
 const form = ref<HTMLFormElement>()
 let initialized = false
-const key = `plan:${user.value!.id}:${route.params.id}`
+const keyFor = (id: string) =>
+  context.workspace ? `plan:${user.value!.id}:${context.key}:${id}` : `plan:${user.value!.id}:${id}`
+const key =
+  keyFor(String(route.params.id)) +
+  (route.query.source ? `:source:${route.query.source}:member:${route.query.member || ''}` : '')
 const day = computed(() => draft.value.days[selected.value]!)
 const catalog = ref<Exercise[]>([]),
   exerciseSearch = ref('')
@@ -43,7 +58,11 @@ const available = computed(() =>
   ),
 )
 const name = (id: string) => {
-  const e = catalog.value.find((e) => e.id === id)
+  const e =
+    catalog.value.find((e) => e.id === id) ||
+    draft.value.days
+      .flatMap((d) => d.exercises.flatMap((e) => [e, ...(e.alternatives || [])]))
+      .find((e) => e.exerciseId === id)?.info
   return (locale.value === 'ar' ? e?.name_ar : e?.name) || id
 }
 function selectExercise(index: number) {
@@ -74,10 +93,35 @@ function freeSlot() {
   return null
 }
 async function load(recover = true) {
+  loadedSuccessfully.value = false
   loading.value = true
   error.value = ''
   try {
-    catalog.value = await rows<Exercise>('exercises')
+    if (isNew) {
+      catalog.value = await context.catalog()
+      if (route.query.source) {
+        const source = await context.load(String(route.query.source))
+        title.value = source.program.title.slice(0, 85) + language(' adapted', ' معدّل')
+        draft.value = upgradePrescription(clone(source.program.draft))
+        version.value = null
+      }
+    } else {
+      const loaded = await context.load(id.value)
+      if (!loaded.program) throw Error('not_found')
+      catalog.value = loaded.catalog
+      editable.value = loaded.editable
+      listed.value = !!loaded.program.listed
+      recordRevision.value = loaded.program.revision || 1
+      title.value = loaded.program.title
+      draft.value = upgradePrescription(clone(loaded.program.draft))
+      version.value = loaded.program.draft_version
+      if (!loaded.editable) {
+        preview.value = true
+        initialized = true
+        loadedSuccessfully.value = true
+        return
+      }
+    }
     if (recover) {
       const local = await getDraft<{
         id: string
@@ -92,17 +136,12 @@ async function load(recover = true) {
         version.value = local.version
         restored.value = true
         initialized = true
+        loadedSuccessfully.value = true
         return
       }
     }
-    if (!isNew) {
-      const p = (await rows<Plan>('plans', 'id', id.value))[0]
-      if (!p) throw Error('not_found')
-      title.value = p.title
-      draft.value = upgradePrescription(clone(p.draft))
-      version.value = p.draft_version
-    }
     initialized = true
+    loadedSuccessfully.value = true
   } catch (e) {
     error.value = errorMessage(e)
   } finally {
@@ -129,54 +168,113 @@ watch(
   },
   { deep: true },
 )
-async function save() {
-  if (!form.value?.reportValidity()) return false
-  busy.value = true
+const command = useCommand<'save' | 'publish' | 'listing'>(
+  `program:${key}`,
+  async (action, result) => {
+    const value = result as { plan: Plan; version?: PlanVersion }
+    recordRevision.value = value.plan.revision || 1
+    listed.value = !!value.plan.listed
+    if (action === 'listing') {
+      message.value = listed.value
+        ? language('Available in the organization catalog.', 'متاح في مكتبة المؤسسة.')
+        : language(
+            'Removed from the catalog. Existing assignments remain available.',
+            'أُزيل من المكتبة. تبقى التعيينات الحالية متاحة.',
+          )
+      return
+    }
+    version.value = value.plan.draft_version
+    restored.value = false
+    if (action === 'publish') {
+      published.value = value.version
+      await removeDraft(key)
+    } else
+      await storeDraft(key, {
+        id: id.value,
+        title: title.value,
+        draft: draft.value,
+        version: version.value,
+      })
+    message.value =
+      action === 'publish'
+        ? language(
+            'Published. Choose who receives this version.',
+            'تم النشر. اختر من يتلقى هذه النسخة.',
+          )
+        : language(
+            'Draft saved. Current assignments are unchanged.',
+            'حُفظت المسودة. التعيينات الحالية لم تتغير.',
+          )
+  },
+  (action, args) => context.command(action, args),
+)
+const busy = computed(
+  () => uploading.value || command.state.busy || !!command.state.pending || !command.state.ready,
+)
+async function execute(action: 'save' | 'publish') {
+  if (!editable.value || !form.value?.reportValidity()) return
+  error.value = ''
+  message.value = ''
+  await command.run(action, {
+    operation: crypto.randomUUID(),
+    id: id.value,
+    title: title.value,
+    draft: clone(draft.value),
+    revision: version.value,
+  })
+}
+const save = () => execute('save')
+const publish = () => execute('publish')
+async function toggleListing() {
+  message.value = ''
+  await command.run('listing', {
+    operation: crypto.randomUUID(),
+    id: id.value,
+    revision: version.value,
+    record_revision: recordRevision.value,
+    value: !listed.value,
+  })
+}
+async function uploadCover(event: Event) {
+  const file = (event.target as HTMLInputElement).files?.[0]
+  if (!file) return
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 2097152) {
+    error.value = language(
+      'Choose a JPG, PNG or WebP image up to 2 MB.',
+      'اختر صورة JPG أو PNG أو WebP حتى ٢ ميغابايت.',
+    )
+    return
+  }
+  const workspace =
+    context.workspace || contexts.value.find((c) => c.kind === 'independent')?.workspace_id
+  if (!workspace) return
+  uploading.value = true
   error.value = ''
   try {
-    const p = await rpc<Plan>('save_plan', {
-      p_id: id.value,
-      p_title: title.value,
-      p_draft: clone(draft.value),
-      p_expected_version: version.value,
+    const digest = [
+      ...new Uint8Array(await crypto.subtle.digest('SHA-256', await file.arrayBuffer())),
+    ]
+      .map((x) => x.toString(16).padStart(2, '0'))
+      .join('')
+    const prior = await getDraft<{ digest: string; id: string }>(key + ':cover-upload')
+    const mediaId = prior?.digest === digest ? prior.id : crypto.randomUUID()
+    await storeDraft(key + ':cover-upload', { digest, id: mediaId })
+    await request(`/v1/program-media/${mediaId}?workspace=${workspace}`, {
+      method: 'PUT',
+      body: file,
+      headers: { 'Content-Type': file.type },
     })
-    version.value = p.draft_version
-    restored.value = false
-    await storeDraft(key, {
-      id: id.value,
-      title: title.value,
-      draft: draft.value,
-      version: version.value,
-    })
-    message.value = language(
-      'Draft saved. Clients keep their current plan until you publish and assign the update.',
-      'حُفظت المسودة. تبقى خطة المتدربين الحالية حتى تنشر التحديث وتعيّنه.',
-    )
-    return true
+    draft.value.presentation ||= {}
+    draft.value.presentation.cover = mediaId
+    await removeDraft(key + ':cover-upload')
   } catch (e) {
-    error.value = errorMessage(e)
-    return false
+    error.value =
+      errorMessage(e) +
+      ' ' +
+      language('Choose the same file again to retry.', 'اختر الملف نفسه لإعادة المحاولة.')
   } finally {
-    busy.value = false
-  }
-}
-async function publish() {
-  if (!(await save())) return
-  busy.value = true
-  try {
-    published.value = await rpc<PlanVersion>('publish_plan', {
-      p_id: id.value,
-      p_expected_version: version.value,
-    })
-    await removeDraft(key)
-    message.value = language(
-      'Published. You can now invite a client or update an existing assignment.',
-      'تم النشر. يمكنك الآن دعوة متدرب أو تحديث خطة متدرب حالي.',
-    )
-  } catch (e) {
-    error.value = errorMessage(e)
-  } finally {
-    busy.value = false
+    uploading.value = false
+    ;(event.target as HTMLInputElement).value = ''
   }
 }
 function addExercise() {
@@ -239,29 +337,49 @@ async function discard() {
 }
 async function duplicate() {
   const newId = crypto.randomUUID()
-  await storeDraft(`plan:${user.value!.id}:${newId}`, {
+  await storeDraft(keyFor(newId), {
     id: newId,
-    title: title.value + language(' copy', ' نسخة'),
+    title: title.value.slice(0, 85) + language(' copy', ' نسخة'),
     draft: clone(draft.value),
     version: null,
   })
-  await storeDraft(`plan:${user.value!.id}:new`, {
+  await storeDraft(keyFor('new'), {
     id: newId,
-    title: title.value + language(' copy', ' نسخة'),
+    title: title.value.slice(0, 85) + language(' copy', ' نسخة'),
     draft: clone(draft.value),
     version: null,
   })
-  await router.push('/coach/plans/new')
+  await router.push(
+    context.base + '/plans/new' + (route.query.member ? '?member=' + route.query.member : ''),
+  )
 }
 onMounted(() => load())
+function copySession() {
+  try {
+    draft.value = duplicateSession(draft.value, selected.value, language(' copy', ' نسخة'))
+    selected.value = draft.value.days.length - 1
+  } catch (e) {
+    error.value = errorMessage(e)
+  }
+}
+function copyWeek() {
+  try {
+    const old = day.value.week || 1
+    draft.value = duplicateWeek(draft.value, old)
+    selected.value = draft.value.days.findIndex((d) => d.week === draft.value.cycleWeeks)
+  } catch (e) {
+    error.value = errorMessage(e)
+  }
+}
 function removeDay() {
   draft.value.days.splice(selected.value, 1)
   selected.value = 0
 }
 </script>
 <template>
+  <OrganizationNav v-if="context.workspace" />
   <div class="container page editor-page">
-    <RouterLink class="back-link" to="/coach/plans"
+    <RouterLink class="back-link" :to="context.base + '/plans'"
       ><PhArrowLeft :size="18" aria-hidden="true" class="directional" />{{ t('plans') }}</RouterLink
     >
     <div class="page-heading heading-actions">
@@ -275,7 +393,7 @@ function removeDay() {
           }}
         </h1>
       </div>
-      <button class="button secondary small" @click="preview = !preview">
+      <button v-if="editable" class="button secondary small" @click="preview = !preview">
         <PhEye :size="18" aria-hidden="true" />{{
           preview
             ? language('Edit plan', 'تعديل الخطة')
@@ -283,7 +401,7 @@ function removeDay() {
         }}
       </button>
     </div>
-    <PageState :loading="loading" :error="loading ? error : ''" @retry="load()"
+    <PageState :loading="loading" :error="!loadedSuccessfully ? error : ''" @retry="load()"
       ><p v-if="restored" class="notice">
         {{ language('Your local draft has been restored.', 'تم استرداد مسودتك المحلية.') }}
         <button class="text-link" @click="discard">
@@ -303,10 +421,19 @@ function removeDay() {
       </p>
       <p v-if="message" class="notice success" role="status">
         {{ message }}
-        <RouterLink v-if="published" to="/coach/clients" class="text-link">{{
-          t('clients')
-        }}</RouterLink>
+        <RouterLink
+          v-if="published"
+          :to="
+            context.base +
+            '/deliver/' +
+            published.id +
+            (route.query.member ? '?member=' + route.query.member : '')
+          "
+          class="text-link"
+          >{{ language('Assign this plan', 'تعيين هذه الخطة') }}</RouterLink
+        >
       </p>
+      <CommandStatus :command="command" :show-notice="false" />
       <form ref="form" @submit.prevent="save">
         <fieldset :disabled="busy" class="form-fields">
           <div class="editor-title" v-if="!preview">
@@ -322,31 +449,151 @@ function removeDay() {
             </p>
           </div>
           <h2 v-else>{{ title }}</h2>
-          <div v-if="!preview" class="field-pair">
-            <label
-              >{{ language('Cycle length (weeks)', 'طول الدورة (أسابيع)')
-              }}<input
-                v-model.number="draft.cycleWeeks"
-                type="number"
-                min="1"
-                max="12"
-                required /></label
-            ><label
-              >{{ language('Find an exercise', 'البحث عن تمرين')
-              }}<input v-model="exerciseSearch" type="search"
-            /></label>
-          </div>
-          <p v-if="!preview" class="small-print">
-            {{
-              language(
-                'Day offsets start from the assignment date. Unfilled slots are recovery days.',
-                'تبدأ أيام الدورة من تاريخ تعيين الخطة. الأيام الفارغة للتعافي.',
-              )
-            }}
-            <RouterLink to="/coach/exercises" target="_blank"
-              >{{ language('Manage your exercise library', 'إدارة مكتبة التمارين') }} ↗</RouterLink
+          <details
+            v-if="context.workspace && editable && (published || !isNew)"
+            class="panel catalog-visibility"
+          >
+            <summary>{{ language('Organization catalog', 'مكتبة المؤسسة') }}</summary>
+            <p>
+              {{
+                language(
+                  'Catalog programs can be viewed by your organization’s members. Assignment is still an explicit step.',
+                  'يمكن لأعضاء المؤسسة مشاهدة برامج المكتبة. يبقى التعيين خطوة صريحة.',
+                )
+              }}
+            </p>
+            <button
+              type="button"
+              class="button secondary small"
+              :disabled="busy"
+              @click="toggleListing"
             >
+              {{
+                listed
+                  ? language('Remove from catalog', 'إزالة من المكتبة')
+                  : language('Make available in catalog', 'إتاحة في المكتبة')
+              }}
+            </button>
+          </details>
+          <ProgramCover
+            :id="draft.presentation?.cover"
+            :style="!preview ? { maxWidth: '220px', maxHeight: '124px' } : {}"
+          />
+          <details v-if="!preview" class="program-description">
+            <summary>
+              {{
+                language(
+                  'Help trainees recognize this program',
+                  'مساعدة المتدربين على تمييز البرنامج',
+                )
+              }}
+            </summary>
+            <label
+              >{{ language('Goal (optional)', 'الهدف (اختياري)')
+              }}<input
+                :value="draft.presentation?.goal"
+                maxlength="160"
+                @input="
+                  draft.presentation = {
+                    ...draft.presentation,
+                    goal: ($event.target as HTMLInputElement).value,
+                  }
+                "
+            /></label>
+            <label
+              >{{ language('Experience level', 'مستوى الخبرة')
+              }}<select
+                :value="draft.presentation?.level || 'mixed'"
+                @change="
+                  draft.presentation = {
+                    ...draft.presentation,
+                    level: ($event.target as HTMLSelectElement).value as
+                      'beginner' | 'mixed' | 'experienced',
+                  }
+                "
+              >
+                <option value="mixed">{{ language('Adaptable', 'قابل للتكييف') }}</option>
+                <option value="beginner">{{ language('Getting started', 'للمبتدئين') }}</option>
+                <option value="experienced">{{ language('Experienced', 'ذوو خبرة') }}</option>
+              </select></label
+            >
+            <label
+              >{{
+                language(
+                  'Cover image (optional, up to 2 MB)',
+                  'صورة الغلاف (اختيارية، حتى ٢ ميغابايت)',
+                )
+              }}<input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                @change="uploadCover" /></label
+            ><button
+              v-if="draft.presentation?.cover"
+              type="button"
+              class="text-link"
+              @click="delete draft.presentation.cover"
+            >
+              {{ language('Remove cover from this draft', 'إزالة الغلاف من المسودة') }}
+            </button>
+          </details>
+          <details v-if="!preview" class="program-description">
+            <summary>
+              {{ language('Program description (optional)', 'وصف البرنامج (اختياري)') }}
+            </summary>
+            <label
+              >{{ language('Who it helps and what to expect', 'لمن يناسب وماذا تتوقع')
+              }}<textarea v-model="draft.description" maxlength="1000" rows="3" /></label
+            ><label
+              >{{ language('Arabic description (optional)', 'الوصف بالعربية (اختياري)')
+              }}<textarea v-model="draft.descriptionAr" maxlength="1000" rows="3" />
+            </label>
+          </details>
+          <p v-else-if="draft.description">
+            {{ locale === 'ar' ? draft.descriptionAr || draft.description : draft.description }}
           </p>
+          <button
+            v-if="!editable && context.view !== 'trainee'"
+            type="button"
+            class="button secondary"
+            @click="duplicate"
+          >
+            {{ language('Make an editable copy', 'إنشاء نسخة للتعديل') }}
+          </button>
+          <details v-if="!preview" class="program-schedule">
+            <summary>
+              {{
+                language('Program schedule & exercise search', 'جدول البرنامج والبحث عن التمارين')
+              }}
+            </summary>
+            <div class="field-pair">
+              <label
+                >{{ language('Cycle length (weeks)', 'طول الدورة (أسابيع)')
+                }}<input
+                  v-model.number="draft.cycleWeeks"
+                  type="number"
+                  min="1"
+                  max="12"
+                  required /></label
+              ><label
+                >{{ language('Find an exercise', 'البحث عن تمرين')
+                }}<input v-model="exerciseSearch" type="search"
+              /></label>
+            </div>
+            <p v-if="!preview" class="small-print">
+              {{
+                language(
+                  'Day offsets start from the assignment date. Unfilled slots are recovery days.',
+                  'تبدأ أيام الدورة من تاريخ تعيين الخطة. الأيام الفارغة للتعافي.',
+                )
+              }}
+              <RouterLink :to="context.base + '/exercises'" target="_blank"
+                >{{
+                  language('Manage your exercise library', 'إدارة مكتبة التمارين')
+                }}
+                ↗</RouterLink
+              >
+            </p>
+          </details>
           <div class="day-tabs">
             <button
               v-for="(d, i) in draft.days"
@@ -362,6 +609,13 @@ function removeDay() {
             </button>
           </div>
           <section v-if="day" class="editor-day">
+            <div v-if="!preview" class="actions session-reuse">
+              <button type="button" class="text-link" @click="copySession">
+                {{ language('Duplicate session', 'نسخ الحصة') }}</button
+              ><button type="button" class="text-link" @click="copyWeek">
+                {{ language('Duplicate this week', 'نسخ هذا الأسبوع') }}
+              </button>
+            </div>
             <div v-if="!preview" class="day-settings">
               <label
                 >{{ language('Session name', 'اسم الحصة')
@@ -473,8 +727,8 @@ function removeDay() {
               <p v-if="preview">
                 {{
                   locale === 'ar'
-                    ? catalog.find((e) => e.id === ex.exerciseId)?.instructions_ar
-                    : catalog.find((e) => e.id === ex.exerciseId)?.instructions
+                    ? (catalog.find((e) => e.id === ex.exerciseId) || ex.info)?.instructions_ar
+                    : (catalog.find((e) => e.id === ex.exerciseId) || ex.info)?.instructions
                 }}
               </p>
               <details v-if="!preview" class="exercise-alternatives">
@@ -540,7 +794,7 @@ function removeDay() {
               <PhPlus :size="18" />{{ language('Add exercise', 'إضافة تمرين') }}
             </button>
           </section>
-          <div class="editor-savebar">
+          <div v-if="editable" class="editor-savebar">
             <p>
               {{
                 language(

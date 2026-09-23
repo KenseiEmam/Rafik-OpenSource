@@ -10,6 +10,7 @@ import CommandStatus from '../teams/CommandStatus.vue'
 import PageState from '../../components/PageState.vue'
 import type { Organization, Member, Role } from './types'
 import './organization.css'
+import OrganizationNav from './OrganizationNav.vue'
 const route = useRoute(),
   router = useRouter(),
   id = String(route.params.workspace),
@@ -156,31 +157,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <nav
-    v-if="data"
-    class="organization-nav container"
-    :aria-label="l('Organization navigation', 'تنقل المؤسسة')"
-  >
-    <RouterLink :to="base" :class="{ selected: section === 'overview' }">{{
-      l('Overview', 'نظرة عامة')
-    }}</RouterLink
-    ><RouterLink
-      v-if="view !== 'trainee'"
-      :to="base + '/people'"
-      :class="{ selected: section === 'people' }"
-      >{{ view === 'admin' ? l('People', 'الأشخاص') : l('My trainees', 'متدربوي') }}</RouterLink
-    ><RouterLink
-      v-if="view === 'admin'"
-      :to="base + '/activity'"
-      :class="{ selected: section === 'activity' }"
-      >{{ l('Activity', 'النشاط') }}</RouterLink
-    ><RouterLink
-      v-if="view === 'admin'"
-      :to="base + '/settings'"
-      :class="{ selected: section === 'settings' }"
-      >{{ l('Settings', 'الإعدادات') }}</RouterLink
-    >
-  </nav>
+  <OrganizationNav />
   <div class="container page organization-page">
     <header class="work-heading">
       <div>

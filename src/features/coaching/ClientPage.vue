@@ -401,8 +401,15 @@ onMounted(load)
               </select></label
             ><RouterLink
               class="text-link"
-              :to="currentPlan ? '/coach/plans/' + currentPlan.plan_id : '/coach/plans/new'"
-              >{{ language('Open plan editor', 'فتح محرر الخطة') }} →</RouterLink
+              :to="
+                currentPlan
+                  ? '/coach/plans/new?source=' + currentPlan.plan_id + '&member=' + id
+                  : '/coach/plans/new?member=' + id
+              "
+              >{{
+                language('Adapt a copy for this client', 'تكييف نسخة لهذا المتدرب')
+              }}
+              →</RouterLink
             >
             <div class="field-pair">
               <label

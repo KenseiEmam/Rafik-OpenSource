@@ -72,7 +72,9 @@ test('custom exercise and mixed multiweek plan reach actual client recording and
     .getByLabel('Instructions', { exact: true })
     .fill('Keep breathing. Hold a comfortable, steady position.')
   await page.getByRole('button', { name: 'Save exercise', exact: true }).click()
-  await expect(page.getByRole('status')).toContainText('Exercise saved')
+  await expect(
+    page.getByRole('status').filter({ hasText: 'Exercise library updated' }),
+  ).toBeVisible()
   await page.getByLabel('Search exercises', { exact: true }).fill(name)
   await expect(page.getByRole('heading', { name, exact: true })).toBeVisible()
   await page.screenshot({
@@ -83,6 +85,7 @@ test('custom exercise and mixed multiweek plan reach actual client recording and
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
   await page.goto('/coach/plans/new')
   await page.getByLabel('Plan name', { exact: true }).fill(title)
+  await page.getByText('Program schedule & exercise search', { exact: true }).click()
   await page.getByLabel('Cycle length (weeks)', { exact: true }).fill('2')
   const exercises = page.locator('.editor-exercise')
   await exercises

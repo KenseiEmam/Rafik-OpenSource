@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process'
-import { readFileSync } from 'node:fs'
+import { readFileSync, unlinkSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { randomBytes, randomUUID, createHash } from 'node:crypto'
 import type { Page } from '@playwright/test'
@@ -55,10 +55,30 @@ export async function teamFixture() {
   async function cleanup() {
     if (teamIds.some((id) => !/^[-a-f0-9]{36}$/.test(id))) throw Error('Invalid fixture ID')
     for (const id of teamIds) sql(`delete from public.teams where id='${id}';`)
-    for (const p of [...people].reverse())
+    for (const p of [...people].reverse()) {
+      const media = sql(
+        `copy (select m.workspace_id,m.id from public.program_media m join public.workspaces w on w.id=m.workspace_id where w.created_by='${p.id}') to stdout with csv;`,
+      ).trim()
+      for (const line of media ? media.split('\n') : []) {
+        const [workspace, id] = line.split(',')
+        if (!/^[-a-f0-9]{36}$/.test(workspace || '') || !/^[-a-f0-9]{36}$/.test(id || ''))
+          throw Error('Invalid media fixture')
+        try {
+          unlinkSync(
+            resolve(
+              root,
+              '.local/files',
+              createHash('sha256').update(`program/${workspace}/${id}`).digest('hex'),
+            ),
+          )
+        } catch (e) {
+          if ((e as NodeJS.ErrnoException).code !== 'ENOENT') throw e
+        }
+      }
       sql(
         `delete from public.workspaces where created_by='${p.id}'; delete from identity.users where id='${p.id}';`,
       )
+    }
   }
   try {
     for (const name of ['R4 Owner', 'R4 Coach', 'R4 Client']) {

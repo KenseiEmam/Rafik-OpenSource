@@ -129,3 +129,5 @@ export async function downloadFile(path: string) {
 export function removeFile(path: string) {
   return request('/v1/files/' + encodeURIComponent(path), { method: 'DELETE' })
 }
+
+export const programImage = (id: string) => url + '/v1/program-media/' + encodeURIComponent(id)

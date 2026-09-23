@@ -10,6 +10,41 @@ const router = createRouter({
       meta: { private: true },
     },
     {
+      path: '/coach/deliver/:id',
+      component: () => import('../features/coaching/DeliverPlan.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization/:workspace/:view/deliver/:id',
+      component: () => import('../features/coaching/DeliverPlan.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization/:workspace/:view/training',
+      component: () => import('../features/organizations/OrganizationTraining.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization/:workspace/:view/review/:id',
+      component: () => import('../features/coaching/ReviewPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization/:workspace/:view/plans',
+      component: () => import('../features/coaching/PlansPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization/:workspace/:view/plans/:id',
+      component: () => import('../features/coaching/PlanEditor.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization/:workspace/:view/exercises',
+      component: () => import('../features/coaching/ExercisesPage.vue'),
+      meta: { private: true },
+    },
+    {
       path: '/organization/:workspace/:view/:section?',
       component: () => import('../features/organizations/OrganizationPage.vue'),
       meta: { private: true },

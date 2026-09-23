@@ -1,0 +1,146 @@
+import { test, expect } from '@playwright/test'
+import { randomUUID, randomBytes } from 'node:crypto'
+import AxeBuilder from '@axe-core/playwright'
+import { teamFixture } from './team-fixture'
+import { layoutIssues } from './layout-contract'
+test('organization program authoring, reviewed delivery, recording and feedback stay in one scope', async ({
+  page,
+  browser,
+}, info) => {
+  test.setTimeout(90000)
+  const f = await teamFixture(),
+    clientContext = await browser.newContext(),
+    client = await clientContext.newPage(),
+    id = randomUUID()
+  try {
+    await f.call(f.owner, '/v1/workspaces', { id, kind: 'organization', name: 'Madar performance' })
+    const token = randomBytes(32).toString('hex')
+    await f.call(f.owner, `/v1/workspaces/${id}`, {
+      operation: randomUUID(),
+      action: 'invite',
+      id: randomUUID(),
+      email: f.client.email,
+      roles: ['trainee'],
+      token,
+    })
+    await f.call(f.client, `/v1/organization-invitations/${token}`, {})
+    const base = `/organization/${id}/admin`
+    await f.login(page, f.owner, base + '/plans/new')
+    await page.getByLabel('Plan name', { exact: true }).fill('Three-day foundation')
+    await page.getByText('Help trainees recognize this program', { exact: true }).click()
+    await page.getByLabel('Goal (optional)', { exact: true }).fill('Build a steady training habit')
+    await page.getByLabel('Cover image (optional, up to 2 MB)', { exact: true }).setInputFiles({
+      name: 'cover.png',
+      mimeType: 'image/png',
+      buffer: Buffer.from(
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aX1sAAAAASUVORK5CYII=',
+        'base64',
+      ),
+    })
+    await expect(page.locator('.program-cover')).toBeVisible()
+    await expect
+      .poll(() =>
+        page.locator('.program-cover').evaluate((image: HTMLImageElement) => image.naturalWidth),
+      )
+      .toBe(1)
+
+    await page.getByRole('button', { name: 'Duplicate session', exact: true }).click()
+    await page.getByLabel('Session name', { exact: true }).fill('Full body C')
+    await page.getByRole('button', { name: 'Duplicate this week', exact: true }).click()
+    await page.getByRole('button', { name: 'Client preview', exact: true }).click()
+    await expect(
+      page.getByRole('heading', { name: 'Three-day foundation', exact: true }),
+    ).toBeVisible()
+    await page.getByRole('button', { name: 'Edit plan', exact: true }).click()
+    await page.getByRole('button', { name: 'Publish plan', exact: true }).click()
+    await expect(page.getByRole('status').filter({ hasText: 'Published.' })).toBeVisible()
+    await page.getByRole('link', { name: 'Assign this plan', exact: true }).click()
+    await page.getByRole('checkbox', { name: /R4 Client/ }).check()
+    await page.getByRole('button', { name: /Review assignment/ }).click()
+    await expect(page.getByText('First assignment', { exact: false })).toBeVisible()
+    expect(await layoutIssues(page)).toEqual([])
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
+    await page.screenshot({
+      path: `artifacts/r8-delivery-${info.project.name}.png`,
+      fullPage: true,
+    })
+    let lost = false
+    await page.route(`**/v1/workspaces/${id}/delivery`, async (route) => {
+      if (!lost && route.request().method() === 'POST') {
+        lost = true
+        await route.fetch()
+        await route.abort('failed')
+      } else await route.continue()
+    })
+    await page.getByRole('button', { name: 'Confirm assignment', exact: true }).click()
+    await expect(
+      page.getByRole('button', { name: 'Retry saved change', exact: true }),
+    ).toBeEnabled()
+    await page.reload()
+    await page.getByRole('button', { name: 'Retry saved change', exact: true }).click()
+    await expect(
+      page.getByRole('heading', { name: 'Ready for their next session.', exact: true }),
+    ).toBeVisible()
+    await f.login(client, f.client, `/organization/${id}/trainee/training`)
+    await client.getByRole('button', { name: 'Open session', exact: true }).first().click()
+    await client.getByRole('spinbutton', { name: 'Set 1 load', exact: true }).fill('8')
+    await client.getByRole('button', { name: 'Mark set 1 done', exact: true }).click()
+    await client.getByRole('button', { name: 'Finish session', exact: true }).click()
+    await client.getByRole('button', { name: 'Finish with recorded sets', exact: true }).click()
+    await expect(client.getByRole('status')).toContainText('Synced with your account')
+    const workout = client.url()
+    await page.goto(base + '/training')
+    await page
+      .getByRole('link')
+      .filter({ hasText: 'R4 Client' })
+      .filter({ hasText: 'Three-day foundation' })
+      .click()
+    await expect(page.getByText('8 kg × 10', { exact: true })).toBeVisible()
+    await page.getByLabel('Coach feedback').fill('Keep the same load next time.')
+    await page.getByRole('button', { name: 'Save review', exact: true }).click()
+    await expect(page.getByRole('status').filter({ hasText: 'Review saved' })).toBeVisible()
+    await client.goto(workout)
+    await expect(client.getByText('Keep the same load next time.', { exact: true })).toBeVisible()
+    await page.goto(base + '/training')
+    await page
+      .getByRole('combobox', { name: 'Trainee', exact: true })
+      .selectOption({ label: 'R4 Client' })
+    await page.getByRole('link', { name: 'Adapt this program', exact: true }).click()
+    await expect(page.getByLabel('Plan name', { exact: true })).toHaveValue(
+      'Three-day foundation adapted',
+    )
+    await page.getByLabel('Plan name', { exact: true }).fill('R4 Client next block')
+    await page.reload()
+    await expect(page.getByLabel('Plan name', { exact: true })).toHaveValue('R4 Client next block')
+    await page.getByRole('button', { name: 'Publish plan', exact: true }).click()
+    await page.getByRole('link', { name: 'Assign this plan', exact: true }).click()
+    await expect(page.getByRole('checkbox', { name: /R4 Client/ })).toBeChecked()
+    await page.getByRole('button', { name: /Review assignment/ }).click()
+    await page.getByRole('button', { name: 'Confirm assignment', exact: true }).click()
+    await expect(
+      page.getByRole('heading', { name: 'Ready for their next session.', exact: true }),
+    ).toBeVisible()
+    await client.goto(workout)
+    await expect(client.getByText('Keep the same load next time.', { exact: true })).toBeVisible()
+  } finally {
+    await clientContext.close()
+    await f.cleanup()
+  }
+})
+test('independent coach delivers a reviewed program directly without changing another context', async ({
+  page,
+}) => {
+  const f = await teamFixture()
+  try {
+    await f.login(page, f.owner, '/coach/deliver/' + f.version.id)
+    await page.getByRole('checkbox', { name: /R4 Client/ }).check()
+    await page.getByRole('button', { name: /Review assignment/ }).click()
+    await expect(page.getByText('Replace future training', { exact: false })).toBeVisible()
+    await page.getByRole('button', { name: 'Confirm assignment', exact: true }).click()
+    await expect(
+      page.getByRole('heading', { name: 'Ready for their next session.', exact: true }),
+    ).toBeVisible()
+  } finally {
+    await f.cleanup()
+  }
+})

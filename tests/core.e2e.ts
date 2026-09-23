@@ -39,6 +39,10 @@ test('Arabic sample and dark theme remain readable and fit the viewport', async 
   await page.getByRole('button', { name: 'Switch to Arabic' }).click()
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
   await page.getByRole('combobox', { name: 'المظهر' }).selectOption('dark')
+  await page.evaluate(async () => {
+    await document.fonts.ready
+    await Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {})))
+  })
   await page.screenshot({
     path: `artifacts/routine-ar-dark-${info.project.name}.png`,
     fullPage: true,
@@ -131,7 +135,7 @@ test('coach publishes and invites; verified client trains; coach replies', async
     .getByLabel('Coach feedback')
     .fill('Keep the same load next time and focus on a steady pace.')
   await page.getByRole('button', { name: 'Save review' }).click()
-  await expect(page.getByRole('status')).toContainText('Review saved')
+  await expect(page.getByRole('status').filter({ hasText: 'Review saved' })).toBeVisible()
   await page.screenshot({ path: `artifacts/review-${info.project.name}.png`, fullPage: true })
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
   await client.goto(workoutUrl)
@@ -306,7 +310,7 @@ test('plan drafts recover after interruption and failed publication', async ({ p
     'Recoverable strength plan',
   )
   await page.unroute('**/v1/commands/save_plan')
-  await page.getByRole('button', { name: 'Publish plan', exact: true }).click()
+  await page.getByRole('button', { name: 'Retry saved change', exact: true }).click()
   await expect(page.getByRole('status')).toContainText('Published.')
 })
 
