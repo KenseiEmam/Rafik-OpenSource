@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import { language as l } from '../../lib/i18n'
-defineProps<{
-  command: {
-    state: { error: string; notice: string; pending: unknown; busy: boolean }
-    run: () => Promise<void>
-  }
-}>()
+withDefaults(
+  defineProps<{
+    showNotice?: boolean
+    command: {
+      state: { error: string; notice: string; pending: unknown; busy: boolean }
+      run: () => Promise<void>
+    }
+  }>(),
+  { showNotice: true },
+)
 </script>
 <template>
   <p v-if="command.state.error" class="notice error" role="alert">{{ command.state.error }}</p>
-  <p v-if="command.state.notice" class="notice success" role="status">{{ command.state.notice }}</p>
+  <p v-if="command.state.notice && showNotice !== false" class="notice success" role="status">
+    {{ command.state.notice }}
+  </p>
   <p v-if="command.state.busy" class="notice" role="status">
     {{ l('Saving change…', 'جارٍ حفظ التعديل…') }}
   </p>

@@ -147,7 +147,14 @@ onUnmounted(() => window.removeEventListener('online', online))
     "
   />
   <main id="main" :class="{ 'messages-main': messaging }" tabindex="-1">
-    <RouterView :key="route.path" />
+    <RouterView
+      :key="
+        route.path +
+        (route.path.endsWith('/plans/new')
+          ? JSON.stringify([route.query.source, route.query.member])
+          : '')
+      "
+    />
   </main>
   <footer v-if="!focused" class="footer container">
     <span class="footer-brand">{{

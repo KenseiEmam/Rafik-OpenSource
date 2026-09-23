@@ -1,31 +1,46 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { PhArrowLeft, PhCheckCircle } from '@phosphor-icons/vue'
 import { user } from '../../app/auth'
-import { rpc, rows } from '../../lib/backend'
+import { rpc, rows, request } from '../../lib/backend'
 import type { Session, Profile, Relationship } from '../../lib/domain'
 import { language, locale, t, errorMessage, dateLabel } from '../../lib/i18n'
 import { exerciseName, targetLabel, actualLabel, performedExercise } from '../../lib/prescriptions'
 import PageState from '../../components/PageState.vue'
+import { programContext } from './program-context'
+import OrganizationNav from '../organizations/OrganizationNav.vue'
+import { useCommand } from '../teams/commands'
+import CommandStatus from '../teams/CommandStatus.vue'
+import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 const route = useRoute()
+const context = programContext(route)
+const draftKey = `review:${user.value!.id}:${context.key}:${route.params.id}`
 const id = String(route.params.id)
 const back = {
-  path: '/coach',
+  path: context.workspace ? context.base + '/training' : '/coach',
   query: { view: String(route.query.view || 'all'), search: route.query.search },
 }
 const session = ref<Session>(),
-  person = ref<Profile>()
+  person = ref<{ display_name: string }>()
 const relationship = ref('')
 const note = ref(''),
   error = ref(''),
   message = ref('')
-const loading = ref(true),
-  busy = ref(false)
+const loading = ref(true)
 async function load() {
   loading.value = true
   error.value = ''
   try {
+    if (context.workspace) {
+      const s = await request<Session & { member_name: string }>(
+        `/v1/organization-sessions/${id}?view=${context.view}`,
+      )
+      session.value = s
+      person.value = { display_name: s.member_name }
+      note.value = s.coach_note
+      return
+    }
     const s = await rpc<Session>('session_document', { p_id: id })
     if (!s || s.coach_id !== user.value!.id) throw Error('forbidden')
     session.value = s
@@ -41,23 +56,50 @@ async function load() {
     loading.value = false
   }
 }
-async function save() {
-  busy.value = true
-  try {
-    await rpc('review_session', { p_id: id, p_note: note.value })
+const command = useCommand<'review'>(
+  draftKey,
+  async () => {
+    await removeDraft(draftKey)
+    await load()
     message.value = language(
       'Review saved. Your client can see this feedback in their session.',
       'حُفظت المراجعة. يمكن لمتدربك رؤية الملاحظات ضمن حصته.',
     )
-  } catch (e) {
-    error.value = errorMessage(e)
-  } finally {
-    busy.value = false
-  }
+  },
+  (_, args) =>
+    context.workspace
+      ? request(`/v1/workspaces/${context.workspace}/sessions`, {
+          method: 'POST',
+          body: JSON.stringify(args),
+        })
+      : rpc('review_session', { p_id: id, p_note: args.note }),
+)
+const busy = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
+async function save() {
+  message.value = ''
+  await command.run('review', {
+    operation: crypto.randomUUID(),
+    action: 'review',
+    view: context.view,
+    id,
+    revision: session.value!.version,
+    note: note.value,
+  })
 }
-onMounted(load)
+let draftReady = false
+watch(note, () => {
+  if (draftReady)
+    void storeDraft(draftKey, note.value).catch((e) => (error.value = errorMessage(e)))
+})
+onMounted(async () => {
+  await load()
+  const draft = await getDraft<string>(draftKey)
+  if (draft !== undefined) note.value = draft
+  draftReady = true
+})
 </script>
 <template>
+  <OrganizationNav v-if="context.workspace" />
   <div class="container page">
     <RouterLink :to="back" class="back-link"
       ><PhArrowLeft :size="18" class="directional" />{{
@@ -73,6 +115,7 @@ onMounted(load)
             {{ dateLabel(session.completed_at || session.started_at) }}
           </p>
         </div>
+        <CommandStatus :command="command" :show-notice="false" />
         <div class="review-layout">
           <section>
             <article

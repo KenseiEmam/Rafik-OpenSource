@@ -23,7 +23,7 @@ import {
   reloadServerSession,
 } from '../../lib/training'
 import { editLocalSession, getLocalSession } from '../../lib/storage'
-import { rpc } from '../../lib/backend'
+import { rpc, request } from '../../lib/backend'
 import sample from '../../content/sample.json'
 import {
   exerciseInfo,
@@ -54,6 +54,13 @@ onBeforeRouteLeave(async () => {
 })
 const owner = computed(() => user.value?.id || 'guest')
 const session = computed(() => row.value?.session)
+const returnPath = computed(() =>
+  session.value?.workspace_id
+    ? `/organization/${session.value.workspace_id}/trainee/training`
+    : user.value
+      ? '/today'
+      : '/routine',
+)
 const current = computed(() => session.value?.prescription.exercises[selected.value])
 const groupBounds = computed(() => {
   const list = session.value?.prescription.exercises || [],
@@ -140,7 +147,11 @@ async function load() {
   loading.value = true
   error.value = ''
   try {
-    row.value = await loadWorkout(id, owner.value)
+    row.value = await loadWorkout(
+      id,
+      owner.value,
+      route.query.workspace ? String(route.query.workspace) : undefined,
+    )
     if (row.value.owner === 'guest' && user.value && route.query.save === '1') {
       await adoptGuest(id, user.value.id)
       row.value = await getLocalSession(id)
@@ -337,15 +348,20 @@ const previous = ref<Record<string, string>>({})
 async function getPrevious() {
   if (!user.value || !session.value) return
   try {
-    const results = await rpc<
-      { exercise_id: string; prescription: PrescriptionExercise; entries: Entry[] }[]
-    >('previous_performance', {
-      p_exercises: session.value.prescription.exercises.flatMap((e) => [
-        e.exerciseId,
-        ...(e.alternatives || []).map((a) => a.exerciseId),
-      ]),
-      p_before: session.value.started_at,
-    })
+    const results = session.value.workspace_id
+      ? await request<
+          { exercise_id: string; prescription: PrescriptionExercise; entries: Entry[] }[]
+        >(`/v1/organization-sessions/${id}/previous`)
+      : await rpc<{ exercise_id: string; prescription: PrescriptionExercise; entries: Entry[] }[]>(
+          'previous_performance',
+          {
+            p_exercises: session.value.prescription.exercises.flatMap((e) => [
+              e.exerciseId,
+              ...(e.alternatives || []).map((a) => a.exerciseId),
+            ]),
+            p_before: session.value.started_at,
+          },
+        )
     previous.value = Object.fromEntries(
       results.map((r) => [
         r.exercise_id,
@@ -374,7 +390,7 @@ function correctSets() {
 </script>
 <template>
   <div class="container page workout-page">
-    <RouterLink class="back-link" :to="user ? '/today' : '/routine'"
+    <RouterLink class="back-link" :to="returnPath"
       ><PhArrowLeft :size="18" class="directional" aria-hidden="true" />{{
         user ? t('today') : t('sample')
       }}</RouterLink
@@ -754,7 +770,7 @@ function correctSets() {
                 >
               </div>
             </div>
-            <RouterLink :to="user ? '/today' : '/routine'" class="button secondary"
+            <RouterLink :to="returnPath" class="button secondary"
               >{{ language('Back to training', 'العودة إلى التدريب')
               }}<PhArrowRight :size="19" class="directional" aria-hidden="true"
             /></RouterLink>

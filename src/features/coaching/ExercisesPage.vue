@@ -1,7 +1,12 @@
 <script setup lang="ts">
+import OrganizationNav from '../organizations/OrganizationNav.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { user } from '../../app/auth'
-import { rpc, rows } from '../../lib/backend'
+import { useRoute } from 'vue-router'
+import { useCommand } from '../teams/commands'
+import CommandStatus from '../teams/CommandStatus.vue'
+import { programContext } from './program-context'
+const context = programContext(useRoute())
 import { clone, type Exercise } from '../../lib/domain'
 import { language, locale, errorMessage, t } from '../../lib/i18n'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
@@ -11,18 +16,18 @@ const exercises = ref<Exercise[]>([]),
   equipment = ref(''),
   movement = ref(''),
   scope = ref('active')
+const authorized = ref(false)
 const loading = ref(true),
-  busy = ref(false),
   error = ref(''),
   message = ref(''),
   editing = ref<Exercise>(),
   restored = ref(false)
-const key = `exercise-draft:${user.value!.id}`
+const key = `exercise-draft:${user.value!.id}:${context.key}`
 const visible = computed(() =>
   exercises.value.filter(
     (e) =>
       (scope.value === 'archived' ? e.active === false : e.active !== false) &&
-      (scope.value !== 'mine' || e.owner_id === user.value!.id) &&
+      (scope.value !== 'mine' || context.editableExercise(e)) &&
       (!equipment.value || e.equipment === equipment.value) &&
       (!movement.value || e.movement === movement.value) &&
       `${e.name} ${e.name_ar} ${e.equipment} ${e.movement}`
@@ -40,8 +45,10 @@ async function load() {
   loading.value = true
   error.value = ''
   try {
-    exercises.value = await rows<Exercise>('exercises')
+    exercises.value = await context.catalog()
+    authorized.value = true
   } catch (e) {
+    authorized.value = false
     error.value = errorMessage(e)
   } finally {
     loading.value = false
@@ -49,7 +56,7 @@ async function load() {
 }
 function create() {
   editing.value = {
-    id: 'custom-' + crypto.randomUUID(),
+    id: (context.workspace ? 'org-' : 'custom-') + crypto.randomUUID(),
     name: '',
     name_ar: '',
     equipment: '',
@@ -83,51 +90,57 @@ watch(
   },
   { deep: true },
 )
-async function save() {
-  if (!editing.value) return
-  busy.value = true
-  error.value = ''
-  try {
-    const e = editing.value
-    const data = {
-      name: e.name.trim(),
-      name_ar: e.name_ar.trim() || e.name.trim(),
-      equipment: e.equipment.trim(),
-      equipment_ar: e.equipment_ar.trim() || e.equipment.trim(),
-      instructions: e.instructions.trim(),
-      instructions_ar: e.instructions_ar.trim() || e.instructions.trim(),
-      movement: e.movement.trim(),
-      kind: e.kind || 'strength',
-      media_url: e.media_url?.trim() || '',
-    }
-    await rpc('save_exercise', { p_id: e.id, p_data: data, p_revision: e.revision || 0 })
+const command = useCommand<'save' | 'active'>(
+  key,
+  async () => {
     await close()
     await load()
-    message.value = language('Exercise saved to your library.', 'حُفظ التمرين في مكتبتك.')
-  } catch (e) {
-    error.value = errorMessage(e)
-  } finally {
-    busy.value = false
+    message.value = language(
+      'Exercise library updated. Published instructions are preserved.',
+      'تم تحديث المكتبة. تبقى التعليمات المنشورة محفوظة.',
+    )
+  },
+  (action, args) =>
+    action === 'save'
+      ? context.exercise(
+          String(args.id),
+          args.data as Record<string, unknown>,
+          Number(args.revision),
+          String(args.operation),
+        )
+      : context.exerciseActive(args.exercise as Exercise, String(args.operation)),
+)
+const busy = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
+async function save() {
+  if (!editing.value) return
+  const e = editing.value
+  message.value = ''
+  error.value = ''
+  const data = {
+    name: e.name.trim(),
+    name_ar: e.name_ar.trim() || e.name.trim(),
+    equipment: e.equipment.trim(),
+    equipment_ar: e.equipment_ar.trim() || e.equipment.trim(),
+    instructions: e.instructions.trim(),
+    instructions_ar: e.instructions_ar.trim() || e.instructions.trim(),
+    movement: e.movement.trim(),
+    kind: e.kind || 'strength',
+    media_url: e.media_url?.trim() || '',
   }
+  await command.run('save', {
+    operation: crypto.randomUUID(),
+    id: e.id,
+    data,
+    revision: e.revision || 0,
+  })
 }
 async function archive(e: Exercise) {
-  busy.value = true
-  error.value = ''
-  try {
-    await rpc('set_exercise_active', { p_id: e.id, p_active: e.active === false })
-    await load()
-    message.value = language(
-      'Library updated. Published plans and training history keep their original instructions.',
-      'تم تحديث المكتبة. تحتفظ الخطط المنشورة والسجلات بالتعليمات الأصلية.',
-    )
-  } catch (e) {
-    error.value = errorMessage(e)
-  } finally {
-    busy.value = false
-  }
+  message.value = ''
+  await command.run('active', { operation: crypto.randomUUID(), exercise: e })
 }
 onMounted(async () => {
   await load()
+  if (!authorized.value) return
   const draft = await getDraft<Exercise>(key)
   if (draft) {
     editing.value = draft
@@ -136,6 +149,7 @@ onMounted(async () => {
 })
 </script>
 <template>
+  <OrganizationNav v-if="context.workspace" />
   <div class="container page">
     <header class="page-heading heading-actions">
       <div>
@@ -150,84 +164,97 @@ onMounted(async () => {
           }}
         </p>
       </div>
-      <button class="button" v-if="!editing" @click="create">
+      <button class="button" v-if="!editing && authorized" :disabled="busy" @click="create">
         {{ language('Create exercise', 'إنشاء تمرين') }}
       </button>
     </header>
     <p v-if="error" class="notice error" role="alert">{{ error }}</p>
     <p v-if="message" class="notice success" role="status">{{ message }}</p>
-    <section v-if="editing" class="panel exercise-editor">
+    <CommandStatus :command="command" :show-notice="false" />
+    <section v-if="editing && authorized" class="panel exercise-editor">
       <form class="context-form" @submit.prevent="save">
-        <div class="section-heading">
-          <h2>
-            {{
-              editing.revision
-                ? language('Edit your exercise', 'تعديل تمرينك')
-                : language('New exercise', 'تمرين جديد')
-            }}
-          </h2>
-          <button type="button" class="text-link" :disabled="busy" @click="close">
-            {{ language('Discard and close', 'تجاهل وإغلاق') }}
-          </button>
-        </div>
-        <p v-if="restored" class="notice">
-          {{ language('Your exercise draft was restored.', 'تم استرداد مسودة التمرين.') }}
-        </p>
-        <p>
-          {{
-            language(
-              'Private to your library. Assigned clients see the instructions captured when you publish a plan.',
-              'خاص بمكتبتك. يرى المتدرب التعليمات المحفوظة عند نشر الخطة.',
-            )
-          }}
-        </p>
-        <fieldset :disabled="busy">
-          <div class="field-pair">
-            <label
-              >{{ language('Exercise name', 'اسم التمرين')
-              }}<input v-model="editing.name" required maxlength="120" /></label
-            ><label
-              >{{ language('Recording type', 'نوع التسجيل')
-              }}<select v-model="editing.kind">
-                <option value="strength">{{ language('Reps and load', 'تكرارات ووزن') }}</option>
-                <option value="timed">{{ language('Time', 'زمن') }}</option>
-                <option value="distance">{{ language('Distance', 'مسافة') }}</option>
-              </select></label
-            ><label
-              >{{ language('Equipment', 'المعدات')
-              }}<input v-model="editing.equipment" maxlength="120" /></label
-            ><label
-              >{{ language('Movement category', 'فئة الحركة')
-              }}<input v-model="editing.movement" maxlength="80"
-            /></label>
+        <fieldset class="form-fields" :disabled="busy">
+          <div class="section-heading">
+            <h2>
+              {{
+                editing.revision
+                  ? language('Edit your exercise', 'تعديل تمرينك')
+                  : language('New exercise', 'تمرين جديد')
+              }}
+            </h2>
+            <button type="button" class="text-link" :disabled="busy" @click="close">
+              {{ language('Discard and close', 'تجاهل وإغلاق') }}
+            </button>
           </div>
-          <label
-            >{{ language('Instructions', 'التعليمات')
-            }}<textarea v-model="editing.instructions" required rows="4" maxlength="2000" /></label
-          ><label
-            >{{ language('Demonstration link (optional, HTTPS)', 'رابط الشرح (اختياري، HTTPS)')
-            }}<input v-model="editing.media_url" type="url" pattern="https://.*" maxlength="1000"
-          /></label>
-          <details>
-            <summary>
-              {{ language('Arabic translation (optional)', 'الترجمة العربية (اختيارية)') }}
-            </summary>
-            <div class="context-form">
+          <p v-if="restored" class="notice">
+            {{ language('Your exercise draft was restored.', 'تم استرداد مسودة التمرين.') }}
+          </p>
+          <p>
+            {{
+              language(
+                'Private to your library. Assigned clients see the instructions captured when you publish a plan.',
+                'خاص بمكتبتك. يرى المتدرب التعليمات المحفوظة عند نشر الخطة.',
+              )
+            }}
+          </p>
+          <fieldset :disabled="busy">
+            <div class="field-pair">
               <label
-                >{{ language('Arabic name', 'الاسم بالعربية')
-                }}<input v-model="editing.name_ar" maxlength="120" dir="rtl" /></label
+                >{{ language('Exercise name', 'اسم التمرين')
+                }}<input v-model="editing.name" required maxlength="120" /></label
               ><label
-                >{{ language('Arabic equipment', 'المعدات بالعربية')
-                }}<input v-model="editing.equipment_ar" maxlength="120" dir="rtl" /></label
+                >{{ language('Recording type', 'نوع التسجيل')
+                }}<select v-model="editing.kind">
+                  <option value="strength">{{ language('Reps and load', 'تكرارات ووزن') }}</option>
+                  <option value="timed">{{ language('Time', 'زمن') }}</option>
+                  <option value="distance">{{ language('Distance', 'مسافة') }}</option>
+                </select></label
               ><label
-                >{{ language('Arabic instructions', 'التعليمات بالعربية')
-                }}<textarea v-model="editing.instructions_ar" maxlength="2000" rows="3" dir="rtl" />
-              </label>
+                >{{ language('Equipment', 'المعدات')
+                }}<input v-model="editing.equipment" maxlength="120" /></label
+              ><label
+                >{{ language('Movement category', 'فئة الحركة')
+                }}<input v-model="editing.movement" maxlength="80"
+              /></label>
             </div>
-          </details>
-          <button class="button" :disabled="busy">
-            {{ language('Save exercise', 'حفظ التمرين') }}
-          </button>
+            <label
+              >{{ language('Instructions', 'التعليمات')
+              }}<textarea
+                v-model="editing.instructions"
+                required
+                rows="4"
+                maxlength="2000"
+              /></label
+            ><label
+              >{{ language('Demonstration link (optional, HTTPS)', 'رابط الشرح (اختياري، HTTPS)')
+              }}<input v-model="editing.media_url" type="url" pattern="https://.*" maxlength="1000"
+            /></label>
+            <details>
+              <summary>
+                {{ language('Arabic translation (optional)', 'الترجمة العربية (اختيارية)') }}
+              </summary>
+              <div class="context-form">
+                <label
+                  >{{ language('Arabic name', 'الاسم بالعربية')
+                  }}<input v-model="editing.name_ar" maxlength="120" dir="rtl" /></label
+                ><label
+                  >{{ language('Arabic equipment', 'المعدات بالعربية')
+                  }}<input v-model="editing.equipment_ar" maxlength="120" dir="rtl" /></label
+                ><label
+                  >{{ language('Arabic instructions', 'التعليمات بالعربية')
+                  }}<textarea
+                    v-model="editing.instructions_ar"
+                    maxlength="2000"
+                    rows="3"
+                    dir="rtl"
+                  />
+                </label>
+              </div>
+            </details>
+            <button class="button" :disabled="busy">
+              {{ language('Save exercise', 'حفظ التمرين') }}
+            </button>
+          </fieldset>
         </fieldset>
       </form>
     </section>
@@ -302,7 +329,7 @@ onMounted(async () => {
               >
             </details>
           </div>
-          <div v-if="e.owner_id === user?.id" class="actions">
+          <div v-if="context.editableExercise(e)" class="actions">
             <button class="text-link" :disabled="busy || !!editing" @click="edit(e)">
               {{ language('Edit', 'تعديل') }}</button
             ><button class="text-link" :disabled="busy || !!editing" @click="archive(e)">

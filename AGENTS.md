@@ -42,3 +42,5 @@
 - For every phase, trace legacy capabilities to retained/replaced/deferred/defective with evidence. Test against the role/workflow requirements, not merely the current reduced implementation; record missing product scope even when all existing tests pass.
 
 - Recovery UI must distinguish actively persisting/sending from an uncertain result. Offer retry only after the request is durably stored and dispatch has settled; reload/fault tests must exercise that real user-visible state. Await completed route navigation and loaded records before measuring layout.
+
+- Verify every step of a multistep flow, especially initial selection and empty states, not only the final review/confirmation. Include native date/select controls at 320px. Optional Vue boolean props need explicit defaults when absence should mean true; shared feedback changes require regression of existing consumers.

@@ -1,5 +1,6 @@
 export type Role = 'admin' | 'trainer' | 'trainee'
 export type Context = {
+  member_id?: string
   id: string
   workspace_id?: string
   kind: 'personal' | 'independent' | 'organization'

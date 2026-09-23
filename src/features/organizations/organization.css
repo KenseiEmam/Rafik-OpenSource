@@ -184,3 +184,26 @@
     width: 100%;
   }
 }
+
+.organization-nav-links {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.organization-nav-select {
+  display: none;
+}
+@media (max-width: 700px) {
+  .organization-nav-links {
+    display: none;
+  }
+  .organization-nav-select {
+    display: block;
+    width: 100%;
+    padding-block: 8px;
+  }
+  .organization-nav-select select {
+    min-height: 44px;
+    width: 100%;
+  }
+}

@@ -120,6 +120,38 @@ export function errorMessage(error: unknown): string {
         ? String(error.message)
         : String(error)
   const teamErrors: Record<string, [string, string]> = {
+    program_unavailable: [
+      'This program is no longer available in this workspace. Return to the program library.',
+      'لم يعد البرنامج متاحاً في هذه المساحة. عُد إلى مكتبة البرامج.',
+    ],
+    trainee_unavailable: [
+      'This trainee is no longer in your assigned scope. Refresh the people list before continuing.',
+      'لم يعد هذا المتدرب ضمن مسؤوليتك. حدّث قائمة الأشخاص قبل المتابعة.',
+    ],
+    invalid_program_cover: [
+      'Use a JPG, PNG or WebP image up to 2 MB from this workspace.',
+      'استخدم صورة JPG أو PNG أو WebP حتى ٢ ميغابايت من هذه المساحة.',
+    ],
+    invalid_program_details: [
+      'Check the program description and experience level.',
+      'تحقق من وصف البرنامج ومستوى الخبرة.',
+    ],
+    publish_first: [
+      'Publish a program before making it available in the catalog.',
+      'انشر البرنامج قبل إتاحته في المكتبة.',
+    ],
+    invalid_recipients: [
+      'Select between 1 and 50 people and review the assignment again.',
+      'اختر من ١ إلى ٥٠ شخصاً وراجع التعيين مجدداً.',
+    ],
+    assignment_unavailable: [
+      'This assignment is not active today. Refresh your training workspace.',
+      'هذا التعيين غير نشط اليوم. حدّث مساحة تدريبك.',
+    ],
+    not_scheduled_today: [
+      'This session is scheduled for another day. Open today’s training or resume a started session.',
+      'هذه الحصة مجدولة ليوم آخر. افتح تدريب اليوم أو استأنف حصة بدأت سابقاً.',
+    ],
     workspace_unavailable: [
       'Your access to this organization or view is no longer available. Choose another workspace or contact an administrator.',
       'لم يعد الوصول إلى هذه المؤسسة أو هذا العرض متاحاً. اختر مساحة أخرى أو تواصل مع المسؤول.',

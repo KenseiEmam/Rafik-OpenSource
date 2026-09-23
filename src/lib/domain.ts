@@ -16,6 +16,8 @@ export interface Exercise {
   instructions: string
   instructions_ar: string
   movement: string
+  workspace_id?: string
+  created_by?: string
   owner_id?: string | null
   active?: boolean
   revision?: number
@@ -51,6 +53,7 @@ export interface PlanDay {
   exercises: PrescriptionExercise[]
 }
 export interface Prescription {
+  presentation?: { goal?: string; level?: 'beginner' | 'mixed' | 'experienced'; cover?: string }
   schema: number
   cycleWeeks?: number
   description?: string
@@ -58,6 +61,8 @@ export interface Prescription {
   days: PlanDay[]
 }
 export interface Plan {
+  listed?: boolean
+  revision?: number
   id: string
   coach_id: string
   title: string
@@ -121,6 +126,8 @@ export interface Entry {
   effort?: number | null
 }
 export interface Session {
+  workspace_id?: string
+  member_id?: string
   id: string
   client_id: string
   coach_id: string | null
