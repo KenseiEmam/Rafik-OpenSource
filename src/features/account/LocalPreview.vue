@@ -8,7 +8,7 @@ import { language, t, errorMessage } from '../../lib/i18n'
 const busy = ref('')
 const error = ref('')
 const router = useRouter()
-async function enter(role: 'coach' | 'client') {
+async function enter(role: 'coach' | 'client' | 'coach2' | 'other') {
   busy.value = role
   error.value = ''
   try {
@@ -19,7 +19,7 @@ async function enter(role: 'coach' | 'client') {
     if (e) throw e
     user.value = data.user
     await refreshProfile()
-    await router.push(role === 'coach' ? '/coach' : '/today')
+    await router.push(role.startsWith('coach') ? '/coach' : '/today')
   } catch (e) {
     error.value = errorMessage(e)
   } finally {
@@ -60,6 +60,24 @@ async function enter(role: 'coach' | 'client') {
                 'Client: train, save, and see feedback',
                 'متدرب: تمرّن واحفظ وشاهد الملاحظات',
               )
+            }}</small></span
+          ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
+        </button>
+        <button class="preview-account panel" :disabled="!!busy" @click="enter('coach2')">
+          <span class="avatar">N</span
+          ><span
+            ><strong>Nour Mahfouz</strong
+            ><small>{{
+              language('Second coach: team collaboration', 'مدرب آخر: تعاون الفريق')
+            }}</small></span
+          ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
+        </button>
+        <button class="preview-account panel" :disabled="!!busy" @click="enter('other')">
+          <span class="avatar">D</span
+          ><span
+            ><strong>Dalia Saad</strong
+            ><small>{{
+              language('Second client: independent access', 'متدربة أخرى: وصول مستقل')
             }}</small></span
           ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
         </button>

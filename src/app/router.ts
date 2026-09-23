@@ -141,6 +141,40 @@ const router = createRouter({
       component: () => import('../features/resources/ResourcesPage.vue'),
       meta: { private: true },
     },
+    {
+      path: '/coach/teams',
+      component: () => import('../features/teams/TeamsPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/teams',
+      component: () => import('../features/teams/TeamsPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/coach/teams/:id',
+      component: () => import('../features/teams/TeamPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/coach/business',
+      component: () => import('../features/business/BusinessPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/coach/support',
+      component: () => import('../features/support/SupportPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/support',
+      component: () => import('../features/support/SupportPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/team-invite/:token',
+      component: () => import('../features/teams/TeamInvitePage.vue'),
+    },
     { path: '/local-preview', component: () => import('../features/account/LocalPreview.vue') },
     { path: '/help', component: () => import('../features/account/HelpPage.vue') },
     { path: '/privacy', component: () => import('../features/public/PrivacyPage.vue') },

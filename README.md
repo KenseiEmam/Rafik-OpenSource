@@ -1,6 +1,6 @@
 # Rafik web revamp
 
-A responsive Vue 3/TypeScript application for training and ongoing coaching: programming, client management, progress, check-ins, assessments, conversation, optional nutrition, appointments and private files. R3 is implemented locally; the broader revamp remains in progress. English/Arabic, light/dark themes, public sample workouts, email-code entry, coach plans/invitations/review, and recoverable local drafts.
+A responsive Vue 3/TypeScript application for training and ongoing coaching: programming, client management, progress, check-ins, assessments, conversation, optional nutrition, appointments and private files. R4 team/business operations are implemented locally; integrated readiness (R5) remains open. English/Arabic, light/dark themes, public sample workouts, email-code entry, coach plans/invitations/review, and recoverable local drafts.
 
 Work belongs on `codex/revamp`. The old application is preserved in Git history. No native app or legacy backend is required.
 
@@ -29,6 +29,14 @@ Open `http://127.0.0.1:5173`. Start with **Try a workout**, or use **Explore sam
 Sign into Laila or Amir at `/local-preview`, then choose **More** in the workspace navigation. Nutrition supports guidance and actual meal records; Appointments supports availability and booking; Resources supports real private upload and explicit sharing. Shared files can be attached to Messages. Upcoming appointments appear on Today when there are bookings in the next week. No extra signup fields are required.
 
 See the [R3 contract](../rafik-api/docs/implementation/r3-contract.md) for units, timezones, retries and file lifecycle. New modules are `src/features/nutrition`, `appointments`, `resources` and `services`; there is no new global state layer.
+
+## Explore R4
+
+Open **More → Teams** as Laila. Create a team, invite `coach2@rafik.test`, and open the generated invitation link as **Nour Mahfouz** in another browser profile. Both identities have buttons at `/local-preview`; no email code is needed. Choose an existing client for enrollment; **Amir Hassan** approves on Today or **More → Teams**. Team admins manage staff/groups and propose coach handoffs; clients approve before their future plan changes. Published team plans become independent editable copies. Files have separate, explicit staff sharing.
+
+**More → Business** is an optional personal account; **Team subscription** handles the selected team. Its owner-only local simulator exercises subscription states without cards, charges or a real provider. **More → Support** saves actual local requests and supports admin replies, resolve/reopen and draft recovery. See the [R4 contract](../rafik-api/docs/implementation/r4-contract.md) and maintainer guide for access and retry boundaries.
+
+Modules: `src/features/teams` (workspace, invitations and one persisted pending command), `business` (account state), `support` (cases). The existing workout queue and solo-coaching architecture remain in place. `tests/team-fixture.ts` creates isolated synthetic accounts and removes them after the R4 browser/layout checks; it must only run with the sibling local backend.
 
 ## Check and build
 
@@ -86,3 +94,5 @@ Open `/local-preview` and choose Laila (coach) or Amir (client). Buttons use rea
 The client workspace and conversation routes use a **relationship ID**. The Laila–Amir fixture relationship is `40000000-0000-4000-8000-000000000001`.
 
 `tests/ongoing.e2e.ts` verifies the R2 lifecycles; `tests/ongoing.test.ts` checks unit-aware trends and response states. `node scripts/r2-visual-check.mjs` checks populated R2 screens across widths/languages/themes. Run the companion SQL suites after changing response, progress or conversation contracts. This is still local verification, not a physical-device or hosted-release claim.
+
+R4 checks: `npm run test:e2e -- tests/teams.e2e.ts` runs both browser engines; `npm run test:teams:layout` checks 176 populated layouts and saves its local report/screenshots in ignored `artifacts/`. The layout script uses Node 22's explicit experimental type-stripping flag; production application code does not depend on it.

@@ -3447,3 +3447,91 @@ select {
     padding-block: 0.5rem;
   }
 }
+
+/* Team work uses the same quiet rows and forms as individual coaching. */
+.team-staff,
+.team-library-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+.team-staff > *,
+.team-library-row > * {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.team-activity {
+  list-style: none;
+  padding: 0;
+}
+.team-activity li {
+  padding-block: 0.85rem;
+  border-bottom: 1px solid var(--line);
+}
+.business-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 3rem;
+  margin-block: 1.5rem;
+}
+.business-facts dt {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.business-facts dd {
+  margin: 0.3rem 0 0;
+  font-weight: 700;
+}
+.support-list {
+  display: grid;
+  gap: 0.5rem;
+  margin-block: 1rem;
+}
+.support-list button {
+  text-align: start;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .team-staff,
+  .team-library-row {
+    align-items: start;
+    flex-direction: column;
+  }
+}
+
+.command-fields {
+  display: grid;
+  gap: 1rem;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.command-fields > .button {
+  justify-self: start;
+}
+.team-activity li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+.team-activity time {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.support-list button {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--surface);
+}
+.support-list button.selected {
+  border-color: var(--accent);
+}

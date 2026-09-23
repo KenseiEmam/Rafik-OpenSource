@@ -190,6 +190,92 @@ export type Database = {
           },
         ]
       }
+      business_accounts: {
+        Row: {
+          access_until: string
+          client_limit: number
+          id: string
+          owner_id: string | null
+          provider_sequence: number
+          staff_limit: number
+          state: string
+          team_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          access_until?: string
+          client_limit?: number
+          id: string
+          owner_id?: string | null
+          provider_sequence?: number
+          staff_limit?: number
+          state?: string
+          team_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          access_until?: string
+          client_limit?: number
+          id?: string
+          owner_id?: string | null
+          provider_sequence?: number
+          staff_limit?: number
+          state?: string
+          team_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_accounts_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "business_accounts_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: true
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      business_events: {
+        Row: {
+          account_id: string
+          applied: boolean
+          created_at: string
+          id: string
+          payload: Json
+          sequence: number
+        }
+        Insert: {
+          account_id: string
+          applied: boolean
+          created_at?: string
+          id: string
+          payload: Json
+          sequence: number
+        }
+        Update: {
+          account_id?: string
+          applied?: boolean
+          created_at?: string
+          id?: string
+          payload?: Json
+          sequence?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_events_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "business_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       client_context: {
         Row: {
           constraints: string
@@ -827,6 +913,7 @@ export type Database = {
           draft: Json
           draft_version: number
           id: string
+          team_template_id: string | null
           title: string
           updated_at: string
         }
@@ -837,6 +924,7 @@ export type Database = {
           draft: Json
           draft_version?: number
           id?: string
+          team_template_id?: string | null
           title: string
           updated_at?: string
         }
@@ -847,6 +935,7 @@ export type Database = {
           draft?: Json
           draft_version?: number
           id?: string
+          team_template_id?: string | null
           title?: string
           updated_at?: string
         }
@@ -856,6 +945,13 @@ export type Database = {
             columns: ["coach_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "plans_team_template_id_fkey"
+            columns: ["team_template_id"]
+            isOneToOne: false
+            referencedRelation: "team_plans"
             referencedColumns: ["id"]
           },
         ]
@@ -969,6 +1065,21 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      runtime_settings: {
+        Row: {
+          id: boolean
+          local_simulation: boolean
+        }
+        Insert: {
+          id?: boolean
+          local_simulation?: boolean
+        }
+        Update: {
+          id?: boolean
+          local_simulation?: boolean
+        }
+        Relationships: []
       }
       saved_foods: {
         Row: {
@@ -1217,13 +1328,542 @@ export type Database = {
           },
         ]
       }
+      support_cases: {
+        Row: {
+          created_at: string
+          detail: string
+          id: string
+          reply: string
+          reporter_id: string
+          revision: number
+          state: string
+          subject: string
+          team_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          detail: string
+          id: string
+          reply?: string
+          reporter_id: string
+          revision?: number
+          state?: string
+          subject: string
+          team_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          detail?: string
+          id?: string
+          reply?: string
+          reporter_id?: string
+          revision?: number
+          state?: string
+          subject?: string
+          team_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_cases_reporter_id_fkey"
+            columns: ["reporter_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_cases_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_activity: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          id: string
+          subject_id: string | null
+          team_id: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          subject_id?: string | null
+          team_id: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          subject_id?: string | null
+          team_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_activity_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_activity_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_assignments: {
+        Row: {
+          actor_id: string | null
+          client_ids: string[]
+          created_at: string
+          group_id: string
+          id: string
+          version_id: string | null
+        }
+        Insert: {
+          actor_id?: string | null
+          client_ids: string[]
+          created_at?: string
+          group_id: string
+          id: string
+          version_id?: string | null
+        }
+        Update: {
+          actor_id?: string | null
+          client_ids?: string[]
+          created_at?: string
+          group_id?: string
+          id?: string
+          version_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_assignments_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_assignments_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "team_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_assignments_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "plan_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_clients: {
+        Row: {
+          client_id: string
+          coach_id: string | null
+          created_at: string
+          id: string
+          last_accept: boolean | null
+          last_response_revision: number | null
+          pending_coach_id: string | null
+          relationship_id: string
+          revision: number
+          state: string
+          team_id: string
+        }
+        Insert: {
+          client_id: string
+          coach_id?: string | null
+          created_at?: string
+          id: string
+          last_accept?: boolean | null
+          last_response_revision?: number | null
+          pending_coach_id?: string | null
+          relationship_id: string
+          revision?: number
+          state?: string
+          team_id: string
+        }
+        Update: {
+          client_id?: string
+          coach_id?: string | null
+          created_at?: string
+          id?: string
+          last_accept?: boolean | null
+          last_response_revision?: number | null
+          pending_coach_id?: string | null
+          relationship_id?: string
+          revision?: number
+          state?: string
+          team_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_clients_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_clients_coach_id_fkey"
+            columns: ["coach_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_clients_pending_coach_id_fkey"
+            columns: ["pending_coach_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_clients_relationship_id_fkey"
+            columns: ["relationship_id"]
+            isOneToOne: false
+            referencedRelation: "coach_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_clients_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_group_members: {
+        Row: {
+          client_id: string
+          group_id: string
+          id: string
+        }
+        Insert: {
+          client_id: string
+          group_id: string
+          id?: string
+        }
+        Update: {
+          client_id?: string
+          group_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_group_members_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "team_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_group_members_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "team_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_groups: {
+        Row: {
+          archived: boolean
+          id: string
+          name: string
+          revision: number
+          team_id: string
+        }
+        Insert: {
+          archived?: boolean
+          id: string
+          name: string
+          revision?: number
+          team_id: string
+        }
+        Update: {
+          archived?: boolean
+          id?: string
+          name?: string
+          revision?: number
+          team_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_groups_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_invitations: {
+        Row: {
+          accepted_by: string | null
+          email: string
+          expires_at: string
+          id: string
+          role: string
+          state: string
+          team_id: string
+          token_hash: string
+        }
+        Insert: {
+          accepted_by?: string | null
+          email: string
+          expires_at?: string
+          id: string
+          role: string
+          state?: string
+          team_id: string
+          token_hash: string
+        }
+        Update: {
+          accepted_by?: string | null
+          email?: string
+          expires_at?: string
+          id?: string
+          role?: string
+          state?: string
+          team_id?: string
+          token_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_invitations_accepted_by_fkey"
+            columns: ["accepted_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_invitations_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_members: {
+        Row: {
+          id: string
+          role: string
+          state: string
+          team_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: string
+          state?: string
+          team_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: string
+          state?: string
+          team_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_members_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_plans: {
+        Row: {
+          archived: boolean
+          contributor_id: string | null
+          created_at: string
+          id: string
+          prescription: Json
+          source_id: string | null
+          team_id: string
+          title: string
+        }
+        Insert: {
+          archived?: boolean
+          contributor_id?: string | null
+          created_at?: string
+          id: string
+          prescription: Json
+          source_id?: string | null
+          team_id: string
+          title: string
+        }
+        Update: {
+          archived?: boolean
+          contributor_id?: string | null
+          created_at?: string
+          id?: string
+          prescription?: Json
+          source_id?: string | null
+          team_id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_plans_contributor_id_fkey"
+            columns: ["contributor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_plans_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "plan_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_plans_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_resource_shares: {
+        Row: {
+          id: string
+          resource_id: string
+          team_id: string
+        }
+        Insert: {
+          id?: string
+          resource_id: string
+          team_id: string
+        }
+        Update: {
+          id?: string
+          resource_id?: string
+          team_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_resource_shares_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_resource_shares_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teams: {
+        Row: {
+          archived: boolean
+          created_at: string
+          id: string
+          name: string
+          owner_id: string | null
+          revision: number
+        }
+        Insert: {
+          archived?: boolean
+          created_at?: string
+          id: string
+          name: string
+          owner_id?: string | null
+          revision?: number
+        }
+        Update: {
+          archived?: boolean
+          created_at?: string
+          id?: string
+          name?: string
+          owner_id?: string | null
+          revision?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teams_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
       accept_invitation: { Args: { p_token: string }; Returns: string }
+      accept_team_invitation: { Args: { p_token: string }; Returns: string }
+      account_deletion_ready: { Args: never; Returns: undefined }
+      apply_business_event: {
+        Args: {
+          p_account: string
+          p_id: string
+          p_payload: Json
+          p_sequence: number
+        }
+        Returns: {
+          access_until: string
+          client_limit: number
+          id: string
+          owner_id: string | null
+          provider_sequence: number
+          staff_limit: number
+          state: string
+          team_id: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "business_accounts"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       archive_food: {
+        Args: { p_id: string; p_revision: number }
+        Returns: undefined
+      }
+      archive_team_group: {
         Args: { p_id: string; p_revision: number }
         Returns: undefined
       }
@@ -1284,6 +1924,28 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      assign_team_group: {
+        Args: {
+          p_clients: string[]
+          p_group: string
+          p_id: string
+          p_version: string
+        }
+        Returns: {
+          actor_id: string | null
+          client_ids: string[]
+          created_at: string
+          group_id: string
+          id: string
+          version_id: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "team_assignments"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       assignment_schedule: {
         Args: { p_from: string; p_id: string; p_to: string }
         Returns: Json
@@ -1322,6 +1984,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      business_access: { Args: { p_account: string }; Returns: boolean }
       can_read_resource: { Args: { p_id: string }; Returns: boolean }
       can_upload_resource: { Args: { p_path: string }; Returns: boolean }
       cancel_coaching_request: {
@@ -1368,6 +2031,18 @@ export type Database = {
         }
         Returns: undefined
       }
+      change_team_member: {
+        Args: { p_action: string; p_team: string; p_user: string }
+        Returns: undefined
+      }
+      close_team: {
+        Args: { p_id: string; p_revision: number }
+        Returns: undefined
+      }
+      close_team_client: {
+        Args: { p_id: string; p_revision: number }
+        Returns: undefined
+      }
       configure_assignment: {
         Args: {
           p_end: string
@@ -1398,6 +2073,32 @@ export type Database = {
         }
       }
       conversation_inbox: { Args: never; Returns: Json }
+      copy_snapshot_plan: {
+        Args: {
+          p_id: string
+          p_owner: string
+          p_snapshot: Json
+          p_template?: string
+          p_title: string
+        }
+        Returns: {
+          archived: boolean
+          coach_id: string
+          created_at: string
+          draft: Json
+          draft_version: number
+          id: string
+          team_template_id: string | null
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "plans"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       create_invitation: {
         Args: {
           p_email: string
@@ -1421,6 +2122,49 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "invitations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      create_support_case: {
+        Args: {
+          p_detail: string
+          p_id: string
+          p_subject: string
+          p_team: string
+        }
+        Returns: {
+          created_at: string
+          detail: string
+          id: string
+          reply: string
+          reporter_id: string
+          revision: number
+          state: string
+          subject: string
+          team_id: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "support_cases"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      create_team: {
+        Args: { p_id: string; p_name: string }
+        Returns: {
+          archived: boolean
+          created_at: string
+          id: string
+          name: string
+          owner_id: string | null
+          revision: number
+        }
+        SetofOptions: {
+          from: "*"
+          to: "teams"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -1468,13 +2212,123 @@ export type Database = {
         }
       }
       get_invitation: { Args: { p_token: string }; Returns: Json }
+      import_team_plan: {
+        Args: { p_id: string; p_template: string }
+        Returns: {
+          archived: boolean
+          coach_id: string
+          created_at: string
+          draft: Json
+          draft_version: number
+          id: string
+          team_template_id: string | null
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "plans"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      invite_team_member: {
+        Args: {
+          p_email: string
+          p_id: string
+          p_role: string
+          p_team: string
+          p_token: string
+        }
+        Returns: {
+          accepted_by: string | null
+          email: string
+          expires_at: string
+          id: string
+          role: string
+          state: string
+          team_id: string
+          token_hash: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "team_invitations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       mark_conversation_read: {
         Args: { p_relationship: string; p_sequence: number }
         Returns: undefined
       }
+      my_resource_teams: { Args: never; Returns: Json }
+      my_team_enrollments: { Args: never; Returns: Json }
+      open_business_account: {
+        Args: { p_id: string; p_team?: string }
+        Returns: {
+          access_until: string
+          client_limit: number
+          id: string
+          owner_id: string | null
+          provider_sequence: number
+          staff_limit: number
+          state: string
+          team_id: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "business_accounts"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      operator_support_reply: {
+        Args: { p_id: string; p_reply: string; p_revision: number }
+        Returns: {
+          created_at: string
+          detail: string
+          id: string
+          reply: string
+          reporter_id: string
+          revision: number
+          state: string
+          subject: string
+          team_id: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "support_cases"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       previous_performance: {
         Args: { p_before: string; p_exercises: string[] }
         Returns: Json
+      }
+      propose_team_client: {
+        Args: { p_id: string; p_relationship: string; p_team: string }
+        Returns: {
+          client_id: string
+          coach_id: string | null
+          created_at: string
+          id: string
+          last_accept: boolean | null
+          last_response_revision: number | null
+          pending_coach_id: string | null
+          relationship_id: string
+          revision: number
+          state: string
+          team_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "team_clients"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       publish_availability: {
         Args: {
@@ -1561,6 +2415,72 @@ export type Database = {
         Returns: undefined
       }
       remove_resource_record: { Args: { p_id: string }; Returns: undefined }
+      remove_team_plan: { Args: { p_id: string }; Returns: undefined }
+      rename_team: {
+        Args: { p_id: string; p_name: string; p_revision: number }
+        Returns: {
+          archived: boolean
+          created_at: string
+          id: string
+          name: string
+          owner_id: string | null
+          revision: number
+        }
+        SetofOptions: {
+          from: "*"
+          to: "teams"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      request_team_handoff: {
+        Args: { p_coach: string; p_id: string; p_revision: number }
+        Returns: {
+          client_id: string
+          coach_id: string | null
+          created_at: string
+          id: string
+          last_accept: boolean | null
+          last_response_revision: number | null
+          pending_coach_id: string | null
+          relationship_id: string
+          revision: number
+          state: string
+          team_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "team_clients"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      require_team_growth: {
+        Args: { p_action: string; p_team: string }
+        Returns: undefined
+      }
+      respond_team_client: {
+        Args: { p_accept: boolean; p_id: string; p_revision: number }
+        Returns: {
+          client_id: string
+          coach_id: string | null
+          created_at: string
+          id: string
+          last_accept: boolean | null
+          last_response_revision: number | null
+          pending_coach_id: string | null
+          relationship_id: string
+          revision: number
+          state: string
+          team_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "team_clients"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       retire_resource: {
         Args: { p_id: string; p_revision: number }
         Returns: {
@@ -1638,6 +2558,7 @@ export type Database = {
         }
       }
       revoke_invitation: { Args: { p_id: string }; Returns: undefined }
+      revoke_team_invitation: { Args: { p_id: string }; Returns: undefined }
       save_client_context: {
         Args: {
           p_constraints: string
@@ -1868,6 +2789,7 @@ export type Database = {
           draft: Json
           draft_version: number
           id: string
+          team_template_id: string | null
           title: string
           updated_at: string
         }
@@ -1888,6 +2810,27 @@ export type Database = {
           p_operation_id: string
         }
         Returns: Json
+      }
+      save_team_group: {
+        Args: {
+          p_id: string
+          p_name: string
+          p_revision: number
+          p_team: string
+        }
+        Returns: {
+          archived: boolean
+          id: string
+          name: string
+          revision: number
+          team_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "team_groups"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       send_message: {
         Args: {
@@ -1937,9 +2880,61 @@ export type Database = {
         Args: { p_active: boolean; p_id: string }
         Returns: undefined
       }
+      set_team_group_client: {
+        Args: { p_client: string; p_group: string; p_included: boolean }
+        Returns: undefined
+      }
       share_resource: {
         Args: { p_id: string; p_relationship: string; p_shared: boolean }
         Returns: undefined
+      }
+      share_team_plan: {
+        Args: { p_id: string; p_team: string; p_version: string }
+        Returns: {
+          archived: boolean
+          contributor_id: string | null
+          created_at: string
+          id: string
+          prescription: Json
+          source_id: string | null
+          team_id: string
+          title: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "team_plans"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      share_team_resource: {
+        Args: { p_resource: string; p_shared: boolean; p_team: string }
+        Returns: undefined
+      }
+      simulate_business_event: {
+        Args: {
+          p_account: string
+          p_id: string
+          p_payload: Json
+          p_sequence: number
+        }
+        Returns: {
+          access_until: string
+          client_limit: number
+          id: string
+          owner_id: string | null
+          provider_sequence: number
+          staff_limit: number
+          state: string
+          team_id: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "business_accounts"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       snapshot_prescription: { Args: { p: Json }; Returns: Json }
       start_session: {
@@ -1952,6 +2947,13 @@ export type Database = {
         }
         Returns: Json
       }
+      team_invitation: { Args: { p_token: string }; Returns: Json }
+      team_log: {
+        Args: { p_action: string; p_subject?: string; p_team: string }
+        Returns: undefined
+      }
+      team_role: { Args: { p_team: string }; Returns: string }
+      team_workspace: { Args: { p_team: string }; Returns: Json }
       training_progress: {
         Args: { p_from: string; p_relationship: string; p_to: string }
         Returns: Json
@@ -1974,6 +2976,32 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "profiles"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      update_support_case: {
+        Args: {
+          p_id: string
+          p_reply?: string
+          p_revision: number
+          p_state: string
+        }
+        Returns: {
+          created_at: string
+          detail: string
+          id: string
+          reply: string
+          reporter_id: string
+          revision: number
+          state: string
+          subject: string
+          team_id: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "support_cases"
           isOneToOne: true
           isSetofReturn: false
         }
