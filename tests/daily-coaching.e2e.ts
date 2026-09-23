@@ -73,6 +73,10 @@ test('custom exercise and mixed multiweek plan reach actual client recording and
   await page.locator('.exercise-editor').getByLabel('Equipment', { exact: true }).fill('Mat')
   await page.getByLabel('Movement category', { exact: true }).fill('Brace')
   await page
+    .locator('.exercise-editor')
+    .getByRole('combobox', { name: 'Body area', exact: true })
+    .selectOption('waist')
+  await page
     .getByLabel('Instructions', { exact: true })
     .fill('Keep breathing. Hold a comfortable, steady position.')
   await page.getByRole('button', { name: 'Save exercise', exact: true }).click()
@@ -80,7 +84,9 @@ test('custom exercise and mixed multiweek plan reach actual client recording and
     page.getByRole('status').filter({ hasText: 'Exercise library updated' }),
   ).toBeVisible()
   await page.getByLabel('Search exercises', { exact: true }).fill(name)
+  await page.locator('.catalog-choice').filter({ hasText: name }).click()
   await expect(page.getByRole('heading', { name, exact: true })).toBeVisible()
+  await expect(page.locator('.catalog-detail .catalog-tags')).toContainText('Waist')
   await page.screenshot({
     path: `artifacts/r1-library-${info.project.name}.png`,
     fullPage: true,
@@ -89,13 +95,18 @@ test('custom exercise and mixed multiweek plan reach actual client recording and
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
   await page.goto('/coach/plans/new')
   await page.getByLabel('Plan name', { exact: true }).fill(title)
-  await page.getByText('Program schedule & exercise search', { exact: true }).click()
+  await page.getByText('Program schedule', { exact: true }).click()
   await page.getByLabel('Cycle length (weeks)', { exact: true }).fill('2')
   const exercises = page.locator('.editor-exercise')
-  await exercises
-    .nth(0)
-    .getByRole('combobox', { name: 'Exercise 1', exact: true })
-    .selectOption({ label: name })
+  const firstExercise = exercises.nth(0).getByRole('combobox', { name: 'Exercise 1', exact: true })
+  await firstExercise.fill(name)
+  await expect(
+    page.locator('.exercise-picker-options:visible').getByText(name, { exact: true }),
+  ).toBeVisible()
+  await firstExercise.press('ArrowDown')
+  await firstExercise.press('Enter')
+  await expect(firstExercise).toHaveValue(name)
+  await expect(exercises.nth(0).getByLabel('Seconds', { exact: true })).toBeVisible()
   await exercises.nth(0).getByLabel('Seconds', { exact: true }).fill('35')
   await exercises.nth(0).getByText('Set targets, effort & grouping', { exact: true }).click()
   await exercises.nth(0).getByLabel('Superset / circuit label', { exact: true }).fill('A')
@@ -106,10 +117,14 @@ test('custom exercise and mixed multiweek plan reach actual client recording and
     .nth(1)
     .getByLabel('Seconds', { exact: true })
     .fill('45')
-  await exercises
-    .nth(1)
-    .getByRole('combobox', { name: 'Exercise 2', exact: true })
-    .selectOption('brisk-walk')
+  const secondExercise = exercises.nth(1).getByRole('combobox', { name: 'Exercise 2', exact: true })
+  await secondExercise.fill('Brisk walk')
+  await expect(
+    page.locator('.exercise-picker-options:visible').getByText('Brisk walk', { exact: true }),
+  ).toBeVisible()
+  await secondExercise.press('ArrowDown')
+  await secondExercise.press('Enter')
+  await expect(secondExercise).toHaveValue('Brisk walk')
   await exercises.nth(1).getByLabel('Metres', { exact: true }).fill('400')
   await exercises.nth(1).getByText('Set targets, effort & grouping', { exact: true }).click()
   await exercises.nth(1).getByLabel('Superset / circuit label', { exact: true }).fill('A')

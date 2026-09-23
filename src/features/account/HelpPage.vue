@@ -156,12 +156,14 @@ import { language, t } from '../../lib/i18n'
       </p>
     </section>
     <section>
-      <h2>{{ language('See an exercise movement', 'شاهد وضعيات التمرين') }}</h2>
+      <h2>
+        {{ language('Find exercises and see the movement', 'ابحث عن التمارين وشاهد الحركة') }}
+      </h2>
       <p>
         {{
           language(
-            'Open See movement beside a supported exercise. Step between three reference positions, or choose Play steps and pause at any time. These are reference poses, not a real-time demonstration of cadence. Your coach’s instructions and approved alternatives remain alongside the exercise.',
-            'افتح عرض الحركة بجوار التمرين المدعوم. تنقل بين ثلاث وضعيات مرجعية أو شغّل الخطوات وأوقفها في أي وقت. هذه وضعيات مرجعية وليست عرضاً للإيقاع الفعلي للحركة. تبقى تعليمات مدربك والبدائل المعتمدة بجوار التمرين.',
+            'Filter Exercises by body area, equipment, recording type or video availability, then select a result to see the instructions and preview. Available videos play silently when visible; use Pause at any time. Reduced-motion settings prevent automatic playback. Exercises without video show written guidance or static reference positions. The plan editor searches the full library and keeps up to three approved alternatives.',
+            'رشّح التمارين حسب منطقة الجسم والمعدات ونوع التسجيل وتوفر الفيديو، ثم اختر تمريناً لعرض التعليمات والشرح. تُشغّل الفيديوهات بصمت عند ظهورها ويمكن إيقافها في أي وقت. تمنع إعدادات تقليل الحركة التشغيل التلقائي. تعرض التمارين الأخرى تعليمات مكتوبة أو وضعيات ثابتة. يبحث محرر الخطة في المكتبة الكاملة ويحفظ حتى ثلاثة بدائل معتمدة.',
           )
         }}
       </p>

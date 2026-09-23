@@ -22,6 +22,10 @@ export interface Exercise {
   active?: boolean
   revision?: number
   kind?: ExerciseKind
+  source_ref?: string | null
+  category?: string | null
+  body_part?: string | null
+  target_muscle?: string | null
   media_ref?: string | null
   media_url?: string
 }

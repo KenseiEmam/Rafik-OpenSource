@@ -152,6 +152,10 @@ export type Database = { public: { Tables: {
         media_url: string
         revision: number
         media_ref: string | null
+        category: string | null
+        body_part: string | null
+        target_muscle: string | null
+        source_ref: string | null
     } }
     invitations: { Row: {
         id: string

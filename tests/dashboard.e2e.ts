@@ -39,6 +39,15 @@ test('timezone picker searches the full catalog, commits keyboard selection and 
     ).toBeVisible()
     await page.getByRole('dialog').press('Escape')
     await expect(page.getByRole('button', { name: 'Open navigation', exact: true })).toBeFocused()
+    await page.getByRole('button', { name: 'Switch to Arabic', exact: true }).click()
+    const arabicZone = page.locator('.timezone-anchor input').first()
+    await arabicZone.fill('Kathmandu')
+    const popup = page.locator('.timezone-options:visible')
+    await expect(popup).toHaveCSS('direction', 'rtl')
+    await expect(page.getByRole('option', { name: /Asia\/Kath?mandu/ })).toBeVisible()
+    await expect.poll(() => layoutIssues(page)).toEqual([])
+    await page.screenshot({ path: info.outputPath('timezone-phone-rtl.png') })
+    await arabicZone.press('Escape')
   } finally {
     await f.cleanup()
   }

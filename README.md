@@ -1,5 +1,7 @@
 # Rafik web revamp
 
+Exercises now provides a paged library with body-area/equipment/type/media filters, automatic muted motion previews and a phone detail/back flow. Program selection uses a bounded searchable picker and removable alternative chips. Generated catalogs/credits come from the API checkout; see its [content guide](../rafik-api/docs/implementation/content.md) and [R15 correction](../rafik-api/docs/implementation/r15-exercise-correction.md).
+
 Engineering entry points: [documentation index](../rafik-api/docs/README.md), [contribution workflow](CONTRIBUTING.md), [architecture decisions](../rafik-api/docs/decisions/README.md).
 
 A responsive Vue 3/TypeScript application for training and ongoing coaching: programming, client management, progress, check-ins, assessments, conversation, optional nutrition, appointments and private files. The local product includes team/business workflows and exercise choices; hosted/device release gates remain open. English/Arabic, light/dark themes, public sample workouts, email-code entry, coach plans/invitations/review, and recoverable local drafts.

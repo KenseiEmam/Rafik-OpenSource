@@ -8,3 +8,5 @@ src/content/sample.json
 package-lock.json
 
 src/content/exercise-media.json
+src/content/exercise-videos.json
+src/content/exercise-credits.json

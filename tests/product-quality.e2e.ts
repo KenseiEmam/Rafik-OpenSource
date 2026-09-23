@@ -89,7 +89,24 @@ test('approved alternative survives offline recording, completion, review and co
     await f.login(page, f.owner, `/coach/plans/${f.version.plan_id}`)
     const exercise = page.locator('.editor-exercise').first()
     await exercise.getByText('Offer an alternative', { exact: true }).click()
-    await exercise.getByRole('checkbox', { name: 'Split squat', exact: true }).check()
+    const alternative = exercise.getByRole('combobox', {
+      name: 'Add approved alternative 1',
+      exact: true,
+    })
+    await alternative.fill('Split squat')
+    await expect(
+      page.locator('.exercise-picker-options:visible').getByText('Split squat', { exact: true }),
+    ).toBeVisible()
+    await expect(
+      page
+        .locator('.exercise-picker-options:visible .exercise-picker-option')
+        .first()
+        .locator('strong'),
+    ).toHaveText('Split squat')
+    await alternative.press('Enter')
+    await expect(
+      exercise.getByRole('button', { name: 'Remove alternative Split squat', exact: true }),
+    ).toBeVisible()
     await page.getByRole('button', { name: 'Save draft', exact: true }).click()
     await expect(page.getByRole('status')).toContainText('Draft saved')
     await page.getByRole('button', { name: 'Publish plan', exact: true }).click()
