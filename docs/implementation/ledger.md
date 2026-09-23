@@ -1,6 +1,18 @@
 # Revamp execution ledger
 
-Updated 23 September 2026. **A working local web/backend foundation is implemented on `codex/revamp`; the full Rafik revamp is incomplete.** The user correctly rejected the narrow core as a complete replacement. R7 daily-workspace improvements are implemented locally; the source-grounded role audit requires R7A organization/ownership and Prisma API work next. R6 responsive maintenance and local release hardening remain recorded below; listed checks cover only their named scopes. The user-reported inbox regression reopened R5 local quality acceptance. Earlier phase entries retain their checkpoint context; use the current next action and R5 section for ongoing work. Read [revamp coverage and corrected execution scope](revamp-coverage.md) before continuing. The E01–E12 statuses below describe only the initial slice, not whole-product completion.
+Updated 23 September 2026. **The full revamp remains in progress. R7A1 replaces the local Supabase runtime with the standalone Prisma/PostgreSQL API.** R7A2 organizational membership/ownership and subsequent R8–R12 work follow immediately under the user's authorization. The current team overlay remains independent-coach collaboration. Earlier entries are historical checkpoint evidence, not current setup instructions; use architecture/runbook for today's runtime.
+
+## R7A1 — Standalone API transition
+
+- One Node/TypeScript API, Prisma 7.10 and PostgreSQL 17.6 replace Supabase Auth, browser REST/RPC and private Storage. HttpOnly opaque sessions, bounded email-code verification, local intercepted inbox and server-verified actor context cover identity. Domain transactions retain their tested snapshots, revisions, locking and idempotent replay.
+- The restricted database login uses transaction-local roles/settings; browser callers cannot select another actor or invoke operator-only commands. Private uploads are immutable, authenticated and recoverable; deletes retire/revoke before byte and metadata cleanup.
+- Vue now uses the owned fetch transport. New error-format handling preserves uncertain commands while unlocking confirmed rejection; set-returning commands preserve array semantics. Authorized account-event history remains visible through its read policy.
+- Prisma schema/migrations, API source, SQL/HTTP fixtures and generated JSON types have clear owners. Removed Supabase CLI/SDK and obsolete runtime sources; history is at backend `727f02d`. Stopped the old local stack and retained its volumes. No hosted or native change, outbound delivery or push.
+- Rewrote current README/runbook/API reference/source map and added ADR 0006. Fresh install is forward migrations plus an empty-only synthetic seed; verification uses a disposable database, never an automatic preview reset.
+
+**Verified:** 239 rollback SQL assertions; fresh Prisma migrations/seed/seven SQL suites; 4 real HTTP identity/access/file tests; 5 service lifecycle groups; 9 team/business groups; 54 Chromium/phone-WebKit browser journeys; 320 product layout states with no reported clipping/overflow/page errors; 11 web unit tests, TypeScript/build/format checks, documentation links and dependency audits. Representative actual coach entry and message renders were inspected. R7A1 is a backend transition, not completed organization scope or whole-product UX acceptance. No physical-device, hosting, remote CI, real mail/payment or human retention claim.
+
+**Next:** R7A2 context/organization ownership and role-specific views, then R8 programming, R9 services/assessments/analytics, R10 notifications, R11 local operations and R12 available refinement. Commit each accepted phase and continue; stop only for genuinely required user input.
 
 | Unit | Status | Evidence / boundary |
 |---|---|---|
@@ -58,13 +70,13 @@ Updated 23 September 2026. **A working local web/backend foundation is implement
 
 `RAFIK-FRONTEND` now contains the fresh Vue application, domain/persistence modules, generated API types, authored content, visual system, browser checks and production shell caching. Old source remains in Git at baseline `a0c723e`.
 
-`rafik-api` now contains the fresh Supabase configuration, ten local migrations, explicit commands, fixtures, regression scenarios and implementation documentation. The audit and historical live-backend evidence remain under `docs/revival`; its old-source links refer to baseline `652e9ee`.
+`rafik-api` contains the standalone API, Prisma schema/migrations, explicit domain commands, fixtures, regression scenarios and engineering documentation. The audit and historical live-backend evidence remain under `docs/revival`; its old-source links refer to baseline `652e9ee`.
 
 `rafik-mobile` remains at its original application content. `rafik-worker` is unchanged apart from its pre-existing `.DS_Store` modification. All four branches remain `codex/revamp`. The active backend/frontend now have local commits; nothing has been pushed.
 
 ## Current architecture, not a final feature ceiling
 
-One responsive web application and one Supabase backend, now with 37 domain tables, one internal runtime setting and private Storage. No migration of old users, restored legacy database, configurable role/workspace hierarchy, automatic progression, AI/nutrition integrations, credit system, notification pipeline or native compatibility adapter. The local product provides an immediate useful sample and a complete coach-delivered training loop.
+One responsive web application and one Prisma/PostgreSQL API, with explicit identity and private-file adapters. No migration of old users, restored legacy database, configurable role/workspace hierarchy, automatic progression, AI/nutrition integrations, credit system, notification pipeline or native compatibility adapter. The local product provides an immediate useful sample and a complete coach-delivered training loop.
 
 The earlier decision to treat the broad product inventory as merely optional was too restrictive. The corrected coverage register restores a broader execution backlog for clients, programming, progress, communication, nutrition, scheduling and teams. Simplify each useful job and its implementation; do not make its existence contingent on finding customers first. The initial manual plan-conversion pilot remains a service experiment; no automatic import is implemented.
 
@@ -73,7 +85,7 @@ The earlier decision to treat the broad product inventory as merely optional was
 **Founder steering during R7:** prioritize coach/organization web workflows; trainees primarily use the later native revamp. Hosting must use Prisma + PostgreSQL and one server API; replace the transitional Supabase Auth/RPC/Storage dependencies locally before hosting. See [ADR 0004](../decisions/0004-coach-web-and-prisma-target.md). All upcoming local phases and per-phase commits are authorized.
 
 
-The [forward roadmap](forward-roadmap.md) now sequences **R7 checkpoint → R7A → R8 → R9 → R10 → R11 → R12**. R7 is implemented locally below; R7A and later phases are not implemented.
+The [forward roadmap](forward-roadmap.md) now sequences **R7 checkpoint → R7A → R8 → R9 → R10 → R11 → R12**. R7 is implemented locally below; R7A1 transport is implemented; R7A2 organization ownership and later phases remain in progress.
 
 1. The [original-role audit](role-scope-audit.md) traced six roles through original web/mobile, captured deployed schema/functions and worker. The founder is correct: R4 teams do not represent organizations with their own admins, trainers and trainees. The scope correction is architectural and behavioral, not a naming or RLS patch.
 2. Next implement **R7A organization/identity ownership and the Prisma/PostgreSQL API transition** under [ADR 0005](../decisions/0005-organization-and-independent-scopes.md). This moves the backend transition ahead of R8. Preserve R7's useful daily-flow work while replacing the universal role selector and personal-team ownership assumptions.

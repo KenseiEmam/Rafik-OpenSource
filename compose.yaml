@@ -1,0 +1,19 @@
+name: rafik-prisma-local
+services:
+  db:
+    image: postgres:17.6
+    ports:
+      - "127.0.0.1:55332:5432"
+    environment:
+      POSTGRES_USER: rafik_migrate
+      POSTGRES_PASSWORD: rafik-local-migrations-only
+      POSTGRES_DB: rafik
+    volumes:
+      - rafik_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rafik_migrate -d rafik"]
+      interval: 2s
+      timeout: 2s
+      retries: 20
+volumes:
+  rafik_pg:

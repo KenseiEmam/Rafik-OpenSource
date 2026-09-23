@@ -11,9 +11,13 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm start
-      - run: npm run reset
+      - run: npm run seed:local
       - run: npm run test:docs
       - run: npm test
+      - run: npm run start:api > /tmp/rafik-api.log 2>&1 &
+      - run: curl --retry 10 --retry-connrefused --retry-delay 1 --fail http://127.0.0.1:55331/health
+      - run: npm run typecheck
+      - run: npm run test:api
       - run: npm run test:services
       - run: npm run test:teams
       - run: npm stop

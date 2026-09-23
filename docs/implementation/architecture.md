@@ -1,26 +1,24 @@
 # Current system architecture
 
-**Target change (R7):** the founder selected Prisma + PostgreSQL with an explicit server API for hosting. Supabase below describes the current transitional local implementation, not the target release architecture. [ADR 0004](../decisions/0004-coach-web-and-prisma-target.md) defines required Auth/API/Storage replacement and coach-first web priorities.
+R7A1 replaces the transitional backend with **one Node/TypeScript API, Prisma and PostgreSQL**. The Vue application retains its accepted interaction design and durable IndexedDB queue. [ADR 0006](../decisions/0006-prisma-api-transition.md) records the transition; [API conventions](../reference/api.md) and the [maintainer guide](maintainer-guide.md) specify its boundaries.
 
-**Organizational correction:** [ADR 0005](../decisions/0005-organization-and-independent-scopes.md) defines the planned separate independent/organization scopes and advances the Prisma transition to R7A. The current R4 team overlay is not that model. See the [role audit](role-scope-audit.md) for original capabilities, mismatches and required acceptance. No organization-role implementation is claimed below.
-
-Start with the [documentation index](../README.md), [ADRs](../decisions/README.md) and [API conventions](../reference/api.md). This file is the current structural/lifecycle reference; dated completion evidence belongs in the verification record and ledger.
-
-Local revamp, 23 September 2026. This record describes the new implementation; `docs/revival` preserves the audit and rationale. It is not a compatibility plan for the retired backend.
-
-**Current scope:** one web application and one Supabase project, with 37 domain tables and one internal runtime-setting table. Domain contracts cover training/daily coaching, ongoing coaching, service delivery and optional teams/commercial/support. The [coverage register](revamp-coverage.md) tracks capability/release boundaries; [ADRs](../decisions/README.md) explain durable decisions. The numbered R1–R7 contract documents record feature invariants; the [maintainer guide](maintainer-guide.md) maps current files and change recipes.
+**Organizational correction:** [ADR 0005](../decisions/0005-organization-and-independent-scopes.md) defines the separate independent/organization scopes still to implement in R7A2. The R4 team overlay remains an independent-coach collaboration feature, not the required organization model. Read the [role audit](role-scope-audit.md) before changing ownership.
 
 ## System boundary
 
-One Vue application communicates with one Supabase project: Auth, Postgres, PostgREST and private Storage. Static assets and self-hosted fonts belong to the web build. IndexedDB stores resumable workout records, pending commands, recoverable editor drafts and a bounded local diagnostic log. A small production service worker caches application code and public assets for reloads during a workout; it never caches API responses or access tokens.
+Vue calls the explicit HTTP API for identity, bounded commands/reads and private files. Prisma owns model generation/migration execution and database access. Existing domain transactions remain PostgreSQL functions, preserving tested snapshots, locking, RLS and replay semantics. Authentication uses Rafik-owned identity tables, hashed opaque sessions and HttpOnly cookies. Local code delivery uses an intercepted database inbox; no mail provider is connected.
 
-There is no Edge Function, worker, Firebase dependency, external analytics service, AI service, billing service, or scheduled notification system in the new runtime. Mail is intercepted locally by Mailpit. Coaches share invitation links using their existing channel. Contextual feedback appears with the session and on Today; the UI does not claim it sent a notification.
+The API database login cannot inherit broad domain permissions. Each domain transaction sets its fixed guest/user role and actor/claims locally; pooled connections cannot retain actor context. Function/table names come from a server-owned registry of explicitly granted contracts. Parameters are bound, reads are capped and operator-only functions are not registered. The browser never receives database or operator credentials.
+
+Private bytes are behind the same API, with explicit metadata and permissions in PostgreSQL and a local filesystem adapter. Immutable upload, retirement, byte cleanup and metadata cleanup preserve recovery semantics. There is no Rafik identity, HTTP API or Storage service in the runtime. Hosting requires different mail/file/configuration adapters and is deliberately blocked with local defaults.
+
+Static assets/fonts belong to the web build. IndexedDB stores resumable workouts, exact pending commands, editor drafts and bounded diagnostics. The production worker caches static shell files only. There is no restored legacy worker, Firebase, AI service, payment provider or scheduled external notification system. Invitation links are shared by the person; saving a message does not claim delivery outside Rafik.
 
 ## Data model and ownership
 
 | Record | Owner and meaning |
 |---|---|
-| `profiles` | Auth UUID, optional display name and locale/units/timezone preferences; one identity for either role |
+| `profiles` | Identity UUID, optional display name and locale/units/timezone preferences; one identity for either role |
 | `exercises` | Shared source-controlled catalog plus coach-owned, revisioned private content; publication snapshots instructions/media links |
 | `plans` | Coach-owned editable draft and monotonic draft revision |
 | `plan_versions` | Immutable published prescription; public flag reserved for the starter fixture |
@@ -55,13 +53,13 @@ All ordinary writes go through explicit Postgres functions; no trigger orchestra
 
 | Command | Inputs / outcome | Retry and failure behavior |
 |---|---|---|
-| `ensure_profile` | Current Auth identity, optional name/locale/timezone; returns profile | Creates once; no setup wizard |
+| `ensure_profile` | Current verified identity, optional name/locale/timezone; returns profile | Creates once; no setup wizard |
 | `update_profile` | Name, locale, units, IANA timezone | Validates timezone and bounded fields |
 | `save_plan` | Stable plan UUID, draft, title, expected revision | Compare-and-swap; same acknowledged content can be replayed without another revision |
 | `publish_plan` | Plan UUID, expected revision | One immutable version per draft revision; duplicate publication returns it |
 | `create_invitation` | Intended email, owned version, random token, stable request UUID | Token hash only on server; request replay returns same record; payload mismatch rejected |
 | `get_invitation` | Token | Public response contains coach context/status, no email or private prescription |
-| `accept_invitation` | Token and verified current Auth identity | Intended email checked; relationship, assignment and acceptance commit together; retry returns the same assignment |
+| `accept_invitation` | Token and verified current verified identity | Intended email checked; relationship, assignment and acceptance commit together; retry returns the same assignment |
 | `revoke_invitation` | Owned pending invitation UUID | Stops future acceptance; does not send anything |
 | `assign_plan` | Owned relationship and published version | Changes future starts; clears schedule exceptions; existing sessions keep snapshots |
 | `save_client_context` / `set_client_state` | Owned relationship, bounded private text + expected revision / active or archived | Context replay/CAS; relationship lock serializes archive versus start |
@@ -72,7 +70,7 @@ All ordinary writes go through explicit Postgres functions; no trigger orchestra
 | `start_session` | Persistent attempt UUID, version, day, optional assignment | Server verifies access and selects the prescription; same assigned occurrence returns its canonical UUID |
 | `save_session` | Session, expected version, stable operation UUID, full bounded entries, note, completion flag | Transactional validation, compare-and-swap, receipt replay; conflict keeps the device draft |
 | `review_session` | Owned coached completed session, feedback | Stores feedback and reviewed time; does not alter client results or completion |
-| `delete_my_account` | Current Auth identity and literal confirmation | Deletes that identity and owned records; other clients retain their session snapshots with nullable coach/version references |
+| `delete_my_account` | Current verified identity and literal confirmation | Deletes that identity and owned records; other clients retain their session snapshots with nullable coach/version references |
 
 `session_document` reads one authorized session with its actual set entries. Tables are not an alternative write interface. Failures such as `conflict`, `wrong_email`, `plan_changed`, `invalid_entry` and `invitation_unavailable` map to contextual recovery copy.
 
@@ -131,7 +129,7 @@ Availability is a concrete UTC interval with its originating IANA timezone and l
 
 Private Storage is the one new service. Resource registration must precede upload. Its path is `owner UUID/resource UUID`; MIME and size are bounded. Upload authorization takes a share lock on the pending resource row for the Storage metadata transaction, preventing retirement from racing an already-authorized insertion. Finalization verifies size/type metadata before the resource becomes shareable. Updates/overwrites are not granted. Sharing is a separate idempotent relationship command, and attachments require a ready resource shared to that conversation.
 
-Downloads use authenticated Storage requests with browser cache disabled, not signed URLs that remain usable after revocation. A revoked recipient loses future authorized downloads; previously downloaded bytes cannot be recalled. Removal marks the resource retired, calls the Storage API to remove bytes, then removes metadata only after the object record is absent. A partially completed removal stays visible for retry. Registration and account deletion lock the same profile; account deletion refuses while any owned resource remains. The Settings UI cleans resources before deleting the account. It also releases future booked slots when deleting a client. Do not bypass this lifecycle by deleting `storage.objects` with SQL.
+Downloads use authenticated Storage requests with browser cache disabled, not signed URLs that remain usable after revocation. A revoked recipient loses future authorized downloads; previously downloaded bytes cannot be recalled. Removal marks the resource retired, calls the Storage API to remove bytes, then removes metadata only after the object record is absent. A partially completed removal stays visible for retry. Registration and account deletion lock the same profile; account deletion refuses while any owned resource remains. The Settings UI cleans resources before deleting the account. It also releases future booked slots when deleting a client. Do not bypass this lifecycle by deleting `file_store.objects` with SQL.
 
 R3 has no upload worker, image transformation service, external food provider, calendar integration or delivery outbox. File bytes are not stored in IndexedDB; an interrupted upload may require the user to reselect the original file. Nutrition editors keep device drafts; calendar mutations keep the exact pending command. Only the workout flow promises offline recording. All new feature writes still require server acknowledgement.
 

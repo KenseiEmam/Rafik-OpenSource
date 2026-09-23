@@ -1,0 +1,9 @@
+R7A1 local verification, 23 September 2026
+SQL: 239 assertions across seven suites passed.
+Fresh: three Prisma migrations + seed + seven suites passed in a disposable database.
+API: 4 tests passed. Service HTTP: 5 groups passed. Teams HTTP: 9 groups passed.
+Browser: 54 journeys passed (Chromium, phone WebKit).
+Layout: 320 states; failures 0; page errors 0.
+Web units: 11 passed. TypeScript/build/format/docs/release prerequisites passed.
+Dependency audits: zero reported vulnerabilities at this checkpoint.
+No physical-device, hosted, remote CI, real-delivery/payment or human-retention acceptance.

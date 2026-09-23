@@ -1,6 +1,6 @@
 # Forward implementation roadmap after R6
 
-Owner: Codex. Reviewed 23 September 2026 against backend `7ae6691`, frontend `ff1f4ce`, current source and recorded R6 rendered evidence. R7 now has a local implementation checkpoint; R7A and R8–R12 remain planned. The original review was documentation-only; subsequent R7 checks are recorded in the ledger and verification record.
+Owner: Codex. Reviewed 23 September 2026 against backend `7ae6691`, frontend `ff1f4ce`, current source and recorded R6 rendered evidence. R7 and R7A1 API transition have local checkpoints; R7A2 ownership and R8–R12 follow. The original review was documentation-only; subsequent R7 checks are recorded in the ledger and verification record.
 
 This is the execution plan for subsequent work, with dependencies and acceptance gates. It supersedes the next-action ordering in historical phase notes. The [ledger](ledger.md) records implementation status; [architecture](architecture.md) describes what exists; [verification](verification.md) records actual evidence. The initial revival audit remains historical rationale, not a ceiling on the broader scope the user subsequently requested.
 
@@ -16,13 +16,13 @@ The founder requested informative charts tailored separately to coaches and orga
 
 The web application primarily serves coaches and organizational staff. Preserve trainee web behavior; prioritize the subsequent work on coach programming, client oversight, calendar and organizational operations. Trainee-native design remains last. R9 is revised to emphasize the coach client workspace, structured service delivery and organization workflows, with the existing client web journey maintained as its counterpart.
 
-The deployment target is now **Prisma + PostgreSQL behind one server API**, replacing Supabase. Its Auth/RPC/Storage dependencies must be replaced and locally verified before hosting; the transition now belongs to R7A before further organizational expansion. See [ADR 0004](../decisions/0004-coach-web-and-prisma-target.md) and the sequencing correction in ADR 0005. The current local stack remains transitional until R7A acceptance.
+The deployment target is now **Prisma + PostgreSQL behind one server API**, replacing Supabase. Its Auth/RPC/Storage dependencies must be replaced and locally verified before hosting; the transition now belongs to R7A before further organizational expansion. See [ADR 0004](../decisions/0004-coach-web-and-prisma-target.md) and the sequencing correction in ADR 0005. R7A1 now runs the standalone Prisma/PostgreSQL API locally; organization ownership is R7A2.
 
 ## Assessment of the current product
 
 Rafik has a substantial local implementation: programming, scheduling, durable workout recording, review, progress, assessments/check-ins, messages, nutrition, appointments, private files, teams, handoff and support. These are backed by real local database commands and Storage. Commercial state is implemented, but collection/payment is simulated. Notifications and production delivery are missing. This is a working foundation, not a finished commercial product.
 
-The strongest work is the data lifecycle: immutable published/started prescriptions, explicit ownership, transactional commands, recoverable drafts and idempotent retries. Preserve it. The runtime remains one Vue application and one Supabase project. Neither a framework replacement nor a return to the old worker architecture is needed.
+The strongest work is the data lifecycle: immutable published/started prescriptions, explicit ownership, transactional commands, recoverable drafts and idempotent retries. Preserve it. The runtime is one Vue application and one Prisma/PostgreSQL API. Neither a framework replacement nor a return to the old worker architecture is needed.
 
 The weakest part is product cohesion. Features have mostly been delivered as separate pages with repeated headings, filters and forms. They can be individually correct while the combined task still requires too much attention, navigation and explanation. Passing layout/accessibility assertions establishes specific constraints, not ease of use or visual excellence.
 

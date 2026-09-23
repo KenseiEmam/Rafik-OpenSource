@@ -9,3 +9,5 @@ ADRs record durable choices, their reasons and costs. Status is Accepted unless 
 - [0002: explicit commands, immutable prescriptions and durable client work](0002-state-and-commands.md)
 
 For a new decision, add the next number with Context, Decision, Consequences and Status. Link the implementation and superseding ADR when appropriate. Keep current behavior in architecture/reference docs.
+
+- [0006 — Prisma API transition](0006-prisma-api-transition.md)

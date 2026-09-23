@@ -1,5 +1,10 @@
 # Rafik backend change history
 
+## R7A1 — Prisma/PostgreSQL API transition · 23 September 2026
+
+Replaced local Supabase identity, browser transport and private-file service with one TypeScript API using Prisma/PostgreSQL. Added opaque cookie sessions, intercepted code inbox, transaction-local actor isolation, immutable private bytes, generated JSON transport types and real HTTP acceptance. Preserved transactional domain/retry contracts and corrected integration error/array/read behavior. Removed retired SDK/CLI/runtime sources; current setup, source map, ADR and verification documentation updated. Organization ownership follows in R7A2; this is not whole-revamp or hosted acceptance.
+
+
 ## Original-role audit and corrected architecture order · 23 September 2026
 
 - Traced platform, independent and organizational roles through the original web/mobile, captured deployed schema/functions and worker; documented source evidence, combined-role behavior and legacy defects.

@@ -3,9 +3,9 @@
 - The current work is a clean local rebuild on `codex/revamp`. Never push main. Follow any later user instruction that explicitly changes the phase.
 - Start with `docs/implementation/ledger.md`, then `architecture.md`, `runbook.md` and `verification.md`. `docs/revival` contains the completed audit and business/design rationale; old source links refer to the recorded baseline commits.
 - The companion web checkout is `../RAFIK-FRONTEND`. Native app and worker source are deferred. Do not resurrect old runtime services or require legacy data migration.
-- Local project: `rafik-revamp-local`. The retired hosted project must not be used by the new runtime. Local scripts reject linked remote metadata.
-- Node 22.16.0; `npm ci`, `npm start`, `npm run reset`, `npm test`. Reset is destructive only to the new local fixtures. Never apply synthetic seeds to hosting.
-- Edit content in `content/starter.json`, then `npm run content`. Generate web types with `npm run types` after a schema reset.
+- Local project: `rafik-prisma-local`. The retired hosted project must not be used by the new runtime. Local scripts verify the isolated Compose project.
+- Node 22.16.0; `npm ci`, `npm start`, `npm run seed:local` (empty database only), `npm run start:api`, `npm test`. Never reset a preview to apply a migration. Never apply synthetic seeds to hosting.
+- Edit content in `content/starter.json`, then `npm run content`. Generate web types with `npm run types` after schema changes.
 - Keep writes as explicit bounded commands. Published versions and started prescriptions are immutable. Completion retries and note/set corrections must not create another completion or progression.
 - Do not mark physical-device use, real retention/payment, remote CI or hosting verified from local automated tests. Record concrete results and limits in the implementation ledger.
 
@@ -30,7 +30,7 @@
 ## Founder direction during R7
 
 - Prioritize coach and organization workflows in RAFIK-FRONTEND; preserve trainee web functionality, with the primary trainee experience reserved for the later native revamp. Do not equate a simplified client logger with the complete coach product.
-- Hosting target is **Prisma + PostgreSQL with an explicit server API**, replacing Supabase. The local Supabase runtime is transitional. Before hosting, replace Auth/RPC/Storage coupling and verify transactions, authorization, durable retries and file lifecycle against the new stack. Follow backend ADR 0004; do not deploy the Supabase prototype as the final architecture.
+- Hosting target is **Prisma + PostgreSQL with an explicit server API**, replacing Supabase. R7A1 uses the local Prisma/PostgreSQL API; Supabase is retired. Before hosting, configure real identity/mail/file adapters and verify transactions, authorization, durable retries and file lifecycle against the new stack. Follow backend ADR 0004; do not deploy the Supabase prototype as the final architecture.
 
 ## Role and organization scope correction (R7A)
 

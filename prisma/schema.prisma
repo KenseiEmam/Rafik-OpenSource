@@ -1,0 +1,829 @@
+generator client {
+  provider        = "prisma-client"
+  output          = "../server/generated/prisma"
+  previewFeatures = ["partialIndexes"]
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["file_store", "identity", "public"]
+}
+
+model buckets {
+  id                 String    @id
+  name               String
+  public             Boolean   @default(false)
+  file_size_limit    BigInt?
+  allowed_mime_types String[]
+  objects            objects[]
+
+  @@schema("file_store")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model objects {
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bucket_id String
+  name      String
+  metadata  Json
+  buckets   buckets @relation(fields: [bucket_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([bucket_id, name])
+  @@schema("file_store")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model challenges {
+  email      String   @id
+  code_hash  String
+  expires_at DateTime @db.Timestamptz(6)
+  sent_at    DateTime @default(now()) @db.Timestamptz(6)
+  attempts   Int      @default(0)
+
+  @@schema("identity")
+}
+
+model mail_messages {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email      String
+  subject    String
+  body       String
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  expires_at DateTime @db.Timestamptz(6)
+
+  @@schema("identity")
+}
+
+model rate_limits {
+  key          String   @id
+  count        Int      @default(1)
+  window_start DateTime @default(now()) @db.Timestamptz(6)
+
+  @@schema("identity")
+}
+
+model identity_sessions {
+  token_hash   String   @id
+  user_id      String   @db.Uuid
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+  expires_at   DateTime @db.Timestamptz(6)
+  last_seen_at DateTime @default(now()) @db.Timestamptz(6)
+  users        users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([user_id], map: "sessions_user")
+  @@map("sessions")
+  @@schema("identity")
+}
+
+model users {
+  id                 String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email              String?             @unique
+  email_confirmed_at DateTime?           @db.Timestamptz(6)
+  raw_user_meta_data Json                @default("{}")
+  created_at         DateTime            @default(now()) @db.Timestamptz(6)
+  sessions           identity_sessions[]
+  profiles           profiles?
+
+  @@schema("identity")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model appointment_slots {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  series_id    String        @db.Uuid
+  coach_id     String        @db.Uuid
+  starts_at    DateTime      @db.Timestamptz(6)
+  ends_at      DateTime      @db.Timestamptz(6)
+  local_start  DateTime      @db.Timestamp(6)
+  timezone     String
+  title        String
+  location     String
+  state        String        @default("open")
+  profiles     profiles      @relation(fields: [coach_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  appointments appointments?
+
+  @@unique([series_id, starts_at])
+  @@index([coach_id, starts_at], map: "slots_coach_time")
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model appointments {
+  id                String            @id @db.Uuid
+  relationship_id   String            @db.Uuid
+  slot_id           String            @unique(map: "slot_one_booking", where: raw("(state = 'booked'::text)")) @db.Uuid
+  starts_at         DateTime          @db.Timestamptz(6)
+  ends_at           DateTime          @db.Timestamptz(6)
+  title             String
+  location          String
+  timezone          String
+  state             String            @default("booked")
+  note              String            @default("")
+  revision          Int               @default(1)
+  created_at        DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime          @default(now()) @db.Timestamptz(6)
+  coach_clients     coach_clients     @relation(fields: [relationship_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  appointment_slots appointment_slots @relation(fields: [slot_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([relationship_id, starts_at], map: "appointments_relationship_time")
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model assignments {
+  id                                       String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  relationship_id                          String                @unique(map: "one_active_assignment", where: raw("(state = 'active'::text)")) @db.Uuid
+  coach_id                                 String                @db.Uuid
+  client_id                                String                @db.Uuid
+  version_id                               String                @db.Uuid
+  start_date                               DateTime              @default(dbgenerated("CURRENT_DATE")) @db.Date
+  state                                    String                @default("active")
+  created_at                               DateTime              @default(now()) @db.Timestamptz(6)
+  schedule_mode                            String                @default("flexible")
+  end_date                                 DateTime?             @db.Date
+  revision                                 Int                   @default(1)
+  profiles_assignments_client_idToprofiles profiles              @relation("assignments_client_idToprofiles", fields: [client_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  profiles_assignments_coach_idToprofiles  profiles              @relation("assignments_coach_idToprofiles", fields: [coach_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  coach_clients                            coach_clients         @relation(fields: [relationship_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  plan_versions                            plan_versions         @relation(fields: [version_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  invitations                              invitations[]
+  schedule_exceptions                      schedule_exceptions[]
+  sessions                                 public_sessions[]
+
+  @@index([client_id, state], map: "assignments_client")
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model business_accounts {
+  id                String            @id @db.Uuid
+  owner_id          String?           @unique @db.Uuid
+  team_id           String?           @unique @db.Uuid
+  state             String            @default("trial")
+  access_until      DateTime          @default(dbgenerated("(now() + '14 days'::interval)")) @db.Timestamptz(6)
+  staff_limit       Int               @default(10)
+  client_limit      Int               @default(50)
+  provider_sequence BigInt            @default(0)
+  updated_at        DateTime          @default(now()) @db.Timestamptz(6)
+  profiles          profiles?         @relation(fields: [owner_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  teams             teams?            @relation(fields: [team_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  business_events   business_events[]
+
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model business_events {
+  id                String            @id @db.Uuid
+  account_id        String            @db.Uuid
+  sequence          BigInt
+  payload           Json
+  applied           Boolean
+  created_at        DateTime          @default(now()) @db.Timestamptz(6)
+  business_accounts business_accounts @relation(fields: [account_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([account_id, sequence])
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model client_context {
+  id            String        @id @db.Uuid
+  goals         String        @default("")
+  constraints   String        @default("")
+  notes         String        @default("")
+  revision      Int           @default(1)
+  updated_at    DateTime      @default(now()) @db.Timestamptz(6)
+  coach_clients coach_clients @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model coach_clients {
+  id                                         String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  coach_id                                   String               @db.Uuid
+  client_id                                  String               @db.Uuid
+  state                                      String               @default("active")
+  created_at                                 DateTime             @default(now()) @db.Timestamptz(6)
+  appointments                               appointments[]
+  assignments                                assignments?
+  client_context                             client_context?
+  profiles_coach_clients_client_idToprofiles profiles             @relation("coach_clients_client_idToprofiles", fields: [client_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  profiles_coach_clients_coach_idToprofiles  profiles             @relation("coach_clients_coach_idToprofiles", fields: [coach_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  coaching_requests                          coaching_requests[]
+  conversation_reads                         conversation_reads[]
+  meal_entries                               meal_entries[]
+  measurements                               measurements[]
+  messages                                   messages[]
+  nutrition_guidance                         nutrition_guidance[]
+  resource_shares                            resource_shares[]
+  team_clients                               team_clients?
+
+  @@unique([coach_id, client_id])
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model coaching_forms {
+  id                String              @id @db.Uuid
+  coach_id          String              @db.Uuid
+  title             String
+  kind              String
+  fields            Json
+  revision          Int                 @default(1)
+  updated_at        DateTime            @default(now()) @db.Timestamptz(6)
+  profiles          profiles            @relation(fields: [coach_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  coaching_requests coaching_requests[]
+
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model coaching_requests {
+  id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  series_id       String          @db.Uuid
+  relationship_id String          @db.Uuid
+  form_id         String?         @db.Uuid
+  form_revision   Int
+  title           String
+  kind            String
+  fields          Json
+  due_date        DateTime        @db.Date
+  answers         Json            @default("{}")
+  revision        Int             @default(1)
+  submitted_at    DateTime?       @db.Timestamptz(6)
+  reviewed_at     DateTime?       @db.Timestamptz(6)
+  feedback        String          @default("")
+  cancelled       Boolean         @default(false)
+  updated_at      DateTime        @default(now()) @db.Timestamptz(6)
+  coaching_forms  coaching_forms? @relation(fields: [form_id], references: [id], onUpdate: NoAction)
+  coach_clients   coach_clients   @relation(fields: [relationship_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  messages        messages[]
+
+  @@unique([series_id, due_date])
+  @@index([relationship_id, due_date], map: "requests_relationship_due")
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model conversation_reads {
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  relationship_id String        @db.Uuid
+  user_id         String        @db.Uuid
+  last_sequence   BigInt        @default(0)
+  coach_clients   coach_clients @relation(fields: [relationship_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  profiles        profiles      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([relationship_id, user_id])
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model exercises {
+  id              String    @id
+  name            String
+  name_ar         String
+  equipment       String
+  equipment_ar    String
+  instructions    String
+  instructions_ar String
+  movement        String
+  active          Boolean   @default(true)
+  owner_id        String?   @db.Uuid
+  kind            String    @default("strength")
+  media_url       String    @default("")
+  revision        Int       @default(1)
+  profiles        profiles? @relation(fields: [owner_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([owner_id], map: "exercises_owner")
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model invitations {
+  id                                         String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  coach_id                                   String        @db.Uuid
+  intended_email                             String
+  version_id                                 String        @db.Uuid
+  token_hash                                 String        @unique
+  request_id                                 String        @db.Uuid
+  status                                     String        @default("pending")
+  accepted_by                                String?       @db.Uuid
+  assignment_id                              String?       @db.Uuid
+  expires_at                                 DateTime      @default(dbgenerated("(now() + '7 days'::interval)")) @db.Timestamptz(6)
+  created_at                                 DateTime      @default(now()) @db.Timestamptz(6)
+  profiles_invitations_accepted_byToprofiles profiles?     @relation("invitations_accepted_byToprofiles", fields: [accepted_by], references: [id], onUpdate: NoAction)
+  assignments                                assignments?  @relation(fields: [assignment_id], references: [id], onUpdate: NoAction)
+  profiles_invitations_coach_idToprofiles    profiles      @relation("invitations_coach_idToprofiles", fields: [coach_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  plan_versions                              plan_versions @relation(fields: [version_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([coach_id, request_id])
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model meal_entries {
+  id              String         @id @db.Uuid
+  client_id       String         @db.Uuid
+  relationship_id String?        @db.Uuid
+  logged_on       DateTime       @db.Date
+  meal            String
+  food_id         String?        @db.Uuid
+  name            String
+  quantity        Decimal        @db.Decimal
+  basis           Decimal        @db.Decimal
+  unit            String
+  nutrients       Json
+  source          String
+  note            String         @default("")
+  revision        Int            @default(1)
+  created_at      DateTime       @default(now()) @db.Timestamptz(6)
+  profiles        profiles       @relation(fields: [client_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  saved_foods     saved_foods?   @relation(fields: [food_id], references: [id], onUpdate: NoAction)
+  coach_clients   coach_clients? @relation(fields: [relationship_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([client_id, logged_on], map: "meals_owner_date")
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model measurements {
+  id              String         @id @db.Uuid
+  client_id       String         @db.Uuid
+  relationship_id String?        @db.Uuid
+  metric          String
+  measured_on     DateTime       @db.Date
+  value           Decimal        @db.Decimal
+  unit            String
+  revision        Int            @default(1)
+  profiles        profiles       @relation(fields: [client_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  coach_clients   coach_clients? @relation(fields: [relationship_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([client_id, measured_on], map: "measurements_owner_date")
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model messages {
+  id                String             @id @db.Uuid
+  sequence          BigInt             @unique @default(autoincrement())
+  relationship_id   String             @db.Uuid
+  sender_id         String             @db.Uuid
+  body              String
+  session_id        String?            @db.Uuid
+  request_id        String?            @db.Uuid
+  created_at        DateTime           @default(now()) @db.Timestamptz(6)
+  resource_id       String?            @db.Uuid
+  coach_clients     coach_clients      @relation(fields: [relationship_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  coaching_requests coaching_requests? @relation(fields: [request_id], references: [id], onUpdate: NoAction)
+  resources         resources?         @relation(fields: [resource_id], references: [id], onUpdate: NoAction)
+  profiles          profiles           @relation(fields: [sender_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  sessions          public_sessions?   @relation(fields: [session_id], references: [id], onUpdate: NoAction)
+
+  @@index([relationship_id, sequence(sort: Desc)], map: "messages_conversation")
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model nutrition_guidance {
+  id              String        @id @db.Uuid
+  relationship_id String        @db.Uuid
+  revision        Int
+  effective_on    DateTime      @db.Date
+  targets         Json
+  guidance        String
+  created_at      DateTime      @default(now()) @db.Timestamptz(6)
+  coach_clients   coach_clients @relation(fields: [relationship_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([relationship_id, revision])
+  @@index([relationship_id, effective_on(sort: Desc), revision(sort: Desc)], map: "guidance_relationship_date")
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model plan_versions {
+  id               String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  plan_id          String             @db.Uuid
+  coach_id         String             @db.Uuid
+  revision         Int
+  title            String
+  prescription     Json
+  is_public        Boolean            @default(false)
+  published_at     DateTime           @default(now()) @db.Timestamptz(6)
+  assignments      assignments[]
+  invitations      invitations[]
+  profiles         profiles           @relation(fields: [coach_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  plans            plans              @relation(fields: [plan_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  sessions         public_sessions[]
+  team_assignments team_assignments[]
+  team_plans       team_plans[]
+
+  @@unique([plan_id, revision])
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model plans {
+  id               String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  coach_id         String          @db.Uuid
+  title            String
+  draft            Json
+  draft_version    Int             @default(1)
+  archived         Boolean         @default(false)
+  updated_at       DateTime        @default(now()) @db.Timestamptz(6)
+  created_at       DateTime        @default(now()) @db.Timestamptz(6)
+  team_template_id String?         @db.Uuid
+  plan_versions    plan_versions[]
+  profiles         profiles        @relation(fields: [coach_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  team_plans       team_plans?     @relation(fields: [team_template_id], references: [id], onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model profiles {
+  id                                                   String               @id @db.Uuid
+  display_name                                         String
+  locale                                               String               @default("en")
+  units                                                String               @default("kg")
+  timezone                                             String               @default("Asia/Dubai")
+  created_at                                           DateTime             @default(now()) @db.Timestamptz(6)
+  appointment_slots                                    appointment_slots[]
+  assignments_assignments_client_idToprofiles          assignments[]        @relation("assignments_client_idToprofiles")
+  assignments_assignments_coach_idToprofiles           assignments[]        @relation("assignments_coach_idToprofiles")
+  business_accounts                                    business_accounts?
+  coach_clients_coach_clients_client_idToprofiles      coach_clients[]      @relation("coach_clients_client_idToprofiles")
+  coach_clients_coach_clients_coach_idToprofiles       coach_clients[]      @relation("coach_clients_coach_idToprofiles")
+  coaching_forms                                       coaching_forms[]
+  conversation_reads                                   conversation_reads[]
+  exercises                                            exercises[]
+  invitations_invitations_accepted_byToprofiles        invitations[]        @relation("invitations_accepted_byToprofiles")
+  invitations_invitations_coach_idToprofiles           invitations[]        @relation("invitations_coach_idToprofiles")
+  meal_entries                                         meal_entries[]
+  measurements                                         measurements[]
+  messages                                             messages[]
+  plan_versions                                        plan_versions[]
+  plans                                                plans[]
+  users                                                users                @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  resources                                            resources[]
+  saved_foods                                          saved_foods[]
+  sessions_sessions_client_idToprofiles                public_sessions[]    @relation("sessions_client_idToprofiles")
+  sessions_sessions_coach_idToprofiles                 public_sessions[]    @relation("sessions_coach_idToprofiles")
+  support_cases                                        support_cases[]
+  team_activity                                        team_activity[]
+  team_assignments                                     team_assignments[]
+  team_clients_team_clients_client_idToprofiles        team_clients[]       @relation("team_clients_client_idToprofiles")
+  team_clients_team_clients_coach_idToprofiles         team_clients[]       @relation("team_clients_coach_idToprofiles")
+  team_clients_team_clients_pending_coach_idToprofiles team_clients[]       @relation("team_clients_pending_coach_idToprofiles")
+  team_invitations                                     team_invitations[]
+  team_members                                         team_members[]
+  team_plans                                           team_plans[]
+  teams                                                teams[]
+
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model resource_shares {
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  resource_id     String        @db.Uuid
+  relationship_id String        @db.Uuid
+  created_at      DateTime      @default(now()) @db.Timestamptz(6)
+  coach_clients   coach_clients @relation(fields: [relationship_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  resources       resources     @relation(fields: [resource_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([resource_id, relationship_id])
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model resources {
+  id                   String                 @id @db.Uuid
+  owner_id             String                 @db.Uuid
+  title                String
+  filename             String
+  media_type           String
+  bytes                BigInt
+  object_path          String                 @unique
+  state                String                 @default("pending")
+  revision             Int                    @default(1)
+  created_at           DateTime               @default(now()) @db.Timestamptz(6)
+  messages             messages[]
+  resource_shares      resource_shares[]
+  profiles             profiles               @relation(fields: [owner_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  team_resource_shares team_resource_shares[]
+
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model runtime_settings {
+  id               Boolean @id @default(true)
+  local_simulation Boolean @default(false)
+
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model saved_foods {
+  id           String         @id @db.Uuid
+  owner_id     String         @db.Uuid
+  name         String
+  basis        Decimal        @db.Decimal
+  unit         String
+  nutrients    Json
+  source       String
+  revision     Int            @default(1)
+  archived     Boolean        @default(false)
+  meal_entries meal_entries[]
+  profiles     profiles       @relation(fields: [owner_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model schedule_exceptions {
+  id             String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  assignment_id  String      @db.Uuid
+  day_id         String
+  scheduled_date DateTime    @db.Date
+  target_date    DateTime    @db.Date
+  state          String
+  assignments    assignments @relation(fields: [assignment_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([assignment_id, day_id, scheduled_date])
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model session_operations {
+  session_id   String          @db.Uuid
+  operation_id String          @db.Uuid
+  request_hash String
+  result       Json
+  created_at   DateTime        @default(now()) @db.Timestamptz(6)
+  sessions     public_sessions @relation(fields: [session_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([session_id, operation_id])
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model public_sessions {
+  id                                    String               @id @db.Uuid
+  client_id                             String               @db.Uuid
+  coach_id                              String?              @db.Uuid
+  assignment_id                         String?              @db.Uuid
+  version_id                            String?              @db.Uuid
+  day_id                                String
+  occurrence_key                        String
+  local_date                            DateTime             @db.Date
+  title                                 String
+  prescription                          Json
+  status                                String               @default("in_progress")
+  note                                  String               @default("")
+  coach_note                            String               @default("")
+  reviewed_at                           DateTime?            @db.Timestamptz(6)
+  started_at                            DateTime             @default(now()) @db.Timestamptz(6)
+  completed_at                          DateTime?            @db.Timestamptz(6)
+  version                               Int                  @default(1)
+  messages                              messages[]
+  session_operations                    session_operations[]
+  assignments                           assignments?         @relation(fields: [assignment_id], references: [id], onUpdate: NoAction)
+  profiles_sessions_client_idToprofiles profiles             @relation("sessions_client_idToprofiles", fields: [client_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  profiles_sessions_coach_idToprofiles  profiles?            @relation("sessions_coach_idToprofiles", fields: [coach_id], references: [id], onUpdate: NoAction)
+  plan_versions                         plan_versions?       @relation(fields: [version_id], references: [id], onUpdate: NoAction)
+  set_entries                           set_entries[]
+
+  @@unique([client_id, occurrence_key])
+  @@index([client_id, reviewed_at(sort: Desc)], map: "sessions_client_feedback", where: raw("(coach_note <> ''::text)"))
+  @@index([client_id, started_at(sort: Desc)], map: "sessions_client_history")
+  @@index([coach_id, completed_at(sort: Desc)], map: "sessions_coach_review", where: raw("(status = 'completed'::text)"))
+  @@index([coach_id, completed_at, id], map: "sessions_pending_review", where: raw("((status = 'completed'::text) AND (reviewed_at IS NULL))"))
+  @@map("sessions")
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model set_entries {
+  session_id   String          @db.Uuid
+  exercise_key String
+  set_index    Int
+  reps         Int
+  load         Decimal         @db.Decimal(8, 2)
+  unit         String
+  completed    Boolean         @default(false)
+  seconds      Int?
+  metres       Decimal?        @db.Decimal(12, 2)
+  effort       Decimal?        @db.Decimal(3, 1)
+  exercise_id  String?
+  sessions     public_sessions @relation(fields: [session_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([session_id, exercise_key, set_index])
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model support_cases {
+  id          String   @id @db.Uuid
+  reporter_id String   @db.Uuid
+  team_id     String?  @db.Uuid
+  subject     String
+  detail      String
+  state       String   @default("open")
+  reply       String   @default("")
+  revision    Int      @default(1)
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime @default(now()) @db.Timestamptz(6)
+  profiles    profiles @relation(fields: [reporter_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  teams       teams?   @relation(fields: [team_id], references: [id], onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model team_activity {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  team_id    String    @db.Uuid
+  actor_id   String?   @db.Uuid
+  action     String
+  subject_id String?   @db.Uuid
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  profiles   profiles? @relation(fields: [actor_id], references: [id], onUpdate: NoAction)
+  teams      teams     @relation(fields: [team_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model team_assignments {
+  id            String         @id @db.Uuid
+  group_id      String         @db.Uuid
+  actor_id      String?        @db.Uuid
+  version_id    String?        @db.Uuid
+  client_ids    String[]       @db.Uuid
+  created_at    DateTime       @default(now()) @db.Timestamptz(6)
+  profiles      profiles?      @relation(fields: [actor_id], references: [id], onUpdate: NoAction)
+  team_groups   team_groups    @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  plan_versions plan_versions? @relation(fields: [version_id], references: [id], onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model team_clients {
+  id                                               String               @id @db.Uuid
+  team_id                                          String               @db.Uuid
+  client_id                                        String               @db.Uuid
+  relationship_id                                  String               @unique(map: "relationship_one_team", where: raw("(state <> 'closed'::text)")) @db.Uuid
+  coach_id                                         String?              @db.Uuid
+  pending_coach_id                                 String?              @db.Uuid
+  state                                            String               @default("pending")
+  last_response_revision                           Int?
+  last_accept                                      Boolean?
+  revision                                         Int                  @default(1)
+  created_at                                       DateTime             @default(now()) @db.Timestamptz(6)
+  profiles_team_clients_client_idToprofiles        profiles             @relation("team_clients_client_idToprofiles", fields: [client_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  profiles_team_clients_coach_idToprofiles         profiles?            @relation("team_clients_coach_idToprofiles", fields: [coach_id], references: [id], onUpdate: NoAction)
+  profiles_team_clients_pending_coach_idToprofiles profiles?            @relation("team_clients_pending_coach_idToprofiles", fields: [pending_coach_id], references: [id], onUpdate: NoAction)
+  coach_clients                                    coach_clients        @relation(fields: [relationship_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  teams                                            teams                @relation(fields: [team_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  team_group_members                               team_group_members[]
+
+  @@unique([team_id, client_id], map: "team_one_enrollment", where: raw("(state <> 'closed'::text)"))
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model team_group_members {
+  id           String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  group_id     String       @db.Uuid
+  client_id    String       @db.Uuid
+  team_clients team_clients @relation(fields: [client_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  team_groups  team_groups  @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([group_id, client_id])
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model team_groups {
+  id                 String               @id @db.Uuid
+  team_id            String               @db.Uuid
+  name               String
+  revision           Int                  @default(1)
+  archived           Boolean              @default(false)
+  team_assignments   team_assignments[]
+  team_group_members team_group_members[]
+  teams              teams                @relation(fields: [team_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model team_invitations {
+  id          String    @id @db.Uuid
+  team_id     String    @db.Uuid
+  email       String
+  role        String
+  token_hash  String    @unique
+  state       String    @default("pending")
+  accepted_by String?   @db.Uuid
+  expires_at  DateTime  @default(dbgenerated("(now() + '7 days'::interval)")) @db.Timestamptz(6)
+  profiles    profiles? @relation(fields: [accepted_by], references: [id], onUpdate: NoAction)
+  teams       teams     @relation(fields: [team_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model team_members {
+  id       String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  team_id  String   @db.Uuid
+  user_id  String   @db.Uuid
+  role     String
+  state    String   @default("active")
+  teams    teams    @relation(fields: [team_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  profiles profiles @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([team_id, user_id])
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model team_plans {
+  id             String         @id @db.Uuid
+  team_id        String         @db.Uuid
+  contributor_id String?        @db.Uuid
+  source_id      String?        @db.Uuid
+  title          String
+  prescription   Json
+  archived       Boolean        @default(false)
+  created_at     DateTime       @default(now()) @db.Timestamptz(6)
+  plans          plans[]
+  profiles       profiles?      @relation(fields: [contributor_id], references: [id], onUpdate: NoAction)
+  plan_versions  plan_versions? @relation(fields: [source_id], references: [id], onUpdate: NoAction)
+  teams          teams          @relation(fields: [team_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model team_resource_shares {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  team_id     String    @db.Uuid
+  resource_id String    @db.Uuid
+  resources   resources @relation(fields: [resource_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  teams       teams     @relation(fields: [team_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([team_id, resource_id])
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model teams {
+  id                   String                 @id @db.Uuid
+  owner_id             String?                @db.Uuid
+  name                 String
+  archived             Boolean                @default(false)
+  revision             Int                    @default(1)
+  created_at           DateTime               @default(now()) @db.Timestamptz(6)
+  business_accounts    business_accounts?
+  support_cases        support_cases[]
+  team_activity        team_activity[]
+  team_clients         team_clients[]
+  team_groups          team_groups[]
+  team_invitations     team_invitations[]
+  team_members         team_members[]
+  team_plans           team_plans[]
+  team_resource_shares team_resource_shares[]
+  profiles             profiles?              @relation(fields: [owner_id], references: [id], onUpdate: NoAction)
+
+  @@schema("public")
+}

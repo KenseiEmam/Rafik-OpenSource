@@ -1,81 +1,48 @@
 # Working on the Rafik revamp
 
-Before changing ownership, roles or organization features, read the [role-scope audit](role-scope-audit.md) and [ADR 0005](../decisions/0005-organization-and-independent-scopes.md). Current team modules implement an independent-coach collaboration overlay; the next R7A phase replaces that assumption with scoped organizations and the Prisma API. The audit is the role/workflow traceability reference; it is not generated API documentation.
+Updated for R7A1. Read the [ledger](ledger.md), [architecture](architecture.md), [runbook](runbook.md) and [role audit](role-scope-audit.md). Current teams are independent-coach collaboration; R7A2 supplies organization ownership. Native and hosting remain deferred.
 
-
-Last updated: 23 September 2026, R5 product quality and exercise choices. This is the practical entry point for developers and future Codex work. Update it when responsibilities, files or workflows change. The [ledger](ledger.md) records what is actually implemented; [architecture](architecture.md) specifies behavior; [verification](verification.md) records evidence and limits. Use the [engineering index](../README.md) for onboarding. Local R5 implementation and remaining release gates are tracked in [coverage](revamp-coverage.md) and the ledger.
-
-## What changed from the retired product
-
-The old four-repository platform is preserved in Git history and audited in `docs/revival`. The new runtime uses **two repositories, one Vue web application and one local Supabase project**. The old native and worker implementations are parked, not dependencies. There is no legacy compatibility layer or old-user migration requirement.
-
-Backend baseline before revamp: `652e9ee`; frontend baseline: `a0c723e`. Foundation checkpoints: backend `dc60441`, frontend `a6afdc3`. R1 checkpoints: backend `31084bb`, frontend `8097f0d`. Root `CHANGELOG.md` files describe subsequent phases. Do not use old source links in the audit as current implementation instructions.
-
-The new application has one person identity who may train, coach, or do both. A direct coach–client relationship grants access. Plans publish immutable versions; sessions copy the prescription and save actual results through explicit commands. R1 adds client context, private exercise content and richer cycles. R2 adds ongoing coaching through versioned question snapshots, measurements and conversations. R3 adds optional nutrition, concrete appointment booking and private files. R4 adds optional fixed-role teams, client-consented handoff, shared libraries/groups and local commercial/support operations. Old trigger-driven orchestration, organization setup requirements, credits, provider chains and global store complexity have not been restored.
-
-## Runtime and responsibilities
+## Runtime responsibilities
 
 ```mermaid
 flowchart LR
-  Person[Coach or client] --> Web[Vue web app]
-  Web --> Auth[Supabase Auth]
-  Web --> Read[PostgREST reads with RLS]
-  Web --> Commands[Explicit Postgres RPC commands]
-  Read --> DB[(Postgres)]
-  Commands --> DB
-  Web --> Storage[Private Supabase Storage]
-  Storage --> DB
-  Web <--> Device[(IndexedDB drafts and workout queue)]
-  Auth --> Mail[Local Mailpit inbox]
+  Web[Vue web] --> API[Node API]
+  API --> Prisma[Prisma]
+  Prisma --> DB[(PostgreSQL)]
+  API --> Files[Private local files]
+  Web <--> Device[(IndexedDB drafts and queue)]
+  DB --> Inbox[Intercepted local mail]
 ```
 
-- **Database is the authority:** ownership, value bounds, immutable snapshots, revisions and retry semantics live in SQL. RLS permits reads; ordinary direct table writes are revoked.
-- **UI owns interaction:** input state, validation hints, loading/error/empty states, navigation and local draft recovery. It never declares a server mutation successful before acknowledgement.
-- **Auth is one adapter:** `src/app/auth.ts`. No separate coach identity system.
-- **Device storage is limited in purpose:** workout recording supports durable queued commands and offline continuation. Form/template/message drafts support recovery; form submission and new assignment require the backend. Do not claim all screens are offline-first.
-- **No notification provider:** in-app activity is derived from requests/messages. Message persistence succeeds independently of any future delivery adapter. Foreground polling is currently sufficient; no Realtime server is enabled.
+The database owns transactional domain invariants, revisions, permissions and immutable snapshots. The API owns authentication, transport validation, bounded reads and file bytes. Vue owns interaction and device recovery, never independent server authority. There is one identity system; organizational role/context expansion follows ADR 0005.
 
-## Backend file map (`rafik-api`)
+## Backend file map
 
-```text
-AGENTS.md                         required working rules and documentation-update rule
-README.md                         quick setup and navigation into maintained docs
-CHANGELOG.md                      concrete changes grouped by implementation phase
-content/starter.json              canonical shared exercises and starter prescription
-supabase/config.toml              local project identity, services and ports
-supabase/migrations/
-  202609220001_core.sql            identity, relationships, plans, workouts, core commands
-  202609220002_daily_coaching.sql  client notes, custom catalog, cycle scheduling, rich results
-  202609220003_ongoing_coaching.sql forms/requests, measurements, messages/cursors, progress
-  202609220004_nutrition.sql       immutable guidance, saved foods, meal snapshots
-  202609220005_appointments.sql    concrete slots, conflict-safe booking and attendance
-  202609220006_resources.sql       private file lifecycle, sharing and message attachments
-  202609230007_teams.sql           optional team roles/consent/groups/shared assets and start retry
-  202609230008_business_support.sql commercial receipts, local simulation, support and deletion guard
-  202609230009_exercise_choices.sql frozen alternatives, recorded choice and actual-identity projections
-supabase/fixtures-business.sql      local-only simulator enablement, never hosted
-supabase/fixtures-users.sql        synthetic local Auth identities
-supabase/fixtures-history.sql      synthetic training history
-supabase/fixtures-coaching.sql     synthetic forms, requests and example conversation
-supabase/seed.sql                  GENERATED content + local fixture composition
-supabase/tests/
-  core.sql                        foundation invariants and account lifecycle
-  daily_coaching.sql              R1 domain/ownership/retry/snapshot scenarios
-  ongoing_coaching.sql            R2 response/measurement/message lifecycle scenarios
-  service_delivery.sql            R3 nutrition/booking/resource lifecycle and access scenarios
-  team_business.sql               R4 role/consent/handoff/group/provider/support regressions
-  exercise_choices.sql            R5 approval/snapshot/retry/analytics/copy regressions
-scripts/verify-teams.mjs           temporary Auth/Storage/handoff/provider/cleanup checks
-scripts/support-local.mjs          guarded local operator reply from a text file
-scripts/verify-services.mjs        real local HTTP booking race, Storage and account cleanup
-scripts/local.mjs                 guarded start/stop/reset/types/env/test commands
-scripts/content.mjs               generates seed and sibling web sample from canonical content
-scripts/verify-fresh.mjs          isolated clean-schema verification; preserves preview records
-docs/implementation/              current contracts, status, maintenance and verification
-docs/revival/                     completed audit and historical business/design rationale
-```
+| Path | Responsibility |
+|---|---|
+| `compose.yaml` | Isolated local PostgreSQL service, loopback ports and persistent volume |
+| `prisma.config.ts` | Migration connection and schema location |
+| `prisma/schema.prisma` | ORM models, generated client source declaration |
+| `prisma/migrations/` | Forward schema, RLS, constraints and transactional command changes |
+| `prisma/fixtures/` | Synthetic local identities, history, coaching and business configuration |
+| `prisma/seed.sql` | Generated composition of content and fixtures; empty local database only |
+| `server/index.ts` | HTTP routing, origins, payload limits and error boundary |
+| `server/db.ts` | Prisma instance and transaction-local actor context |
+| `server/auth.ts` | Email challenges, opaque sessions, local preview and logout |
+| `server/commands.ts` | Granted command registry, bounded reads and focused projections |
+| `server/files.ts` | Private immutable bytes, download and recoverable cleanup |
+| `server/generated/` | Ignored generated Prisma client; never edit |
+| `tests/sql/` | Seven rollback domain/access/lifecycle suites |
+| `tests/api.test.ts` | Actual authentication, pool isolation, transport and file checks |
+| `scripts/prisma/local.mjs` | Local start/stop/seed/env/test commands |
+| `scripts/prisma/fresh.mjs` | Disposable fresh-schema verification |
+| `scripts/prisma/types.ts` | JSON transport types for the web app |
+| `scripts/prisma/fixture.mjs` | Guarded local synthetic identity/operator test helpers |
+| `scripts/verify-{services,teams}.mjs` | Real HTTP lifecycle/race/access checks |
+| `scripts/content.mjs` | Canonical content generation |
+| `docs/` | Current engineering references, phase evidence and historical audit |
 
-The backend no longer runs an application API server. `npm start` starts this local Supabase stack. The SQL functions are the API. No service-role key belongs in the web application.
+`npm start` starts/migrates the database; `npm run start:api` runs the API separately. Use the runbook for precise commands. Old runtime source is preserved at backend commit `727f02d`; no legacy services or old data migration are required.
 
 ## Frontend file map (`RAFIK-FRONTEND`)
 
@@ -129,7 +96,7 @@ scripts/verify-team-layout.ts      populated R4 layout/accessibility matrix; iso
 tests/team-fixture.ts              local-only fresh identity setup/cleanup for R4 checks
 tests/teams.e2e.ts                 consent/handoff/group lost-ack recovery/business/support UI
 tests/*.test.ts                   pure unit/data invariants
-tests/*.e2e.ts                    real browser workflows against local Supabase
+tests/*.e2e.ts                    real browser workflows against local PostgreSQL/API
 ```
 
 Modules use the existing Vue Composition API; there is no new global store layer, chart package, general form-rule engine or repository abstraction. Check-ins and assessments share one small typed question vocabulary because their assignment/submission/review lifecycle is the same. They retain different purposes and separate compatible-result histories. The editor does not support nested rules, branching, uploads or calculated scoring.
@@ -156,11 +123,11 @@ For R2: open the seeded reflection as Amir, save a draft, submit it; switch to L
 
 ## Safe local development
 
-For the exact commands see [runbook](runbook.md). Keep both repositories on `codex/revamp`; never push main. Node is 22.16.0. Docker must be running. Local API: 55321; database: 55322; mail: 55324; dev: 5173; production preview: 5174.
+For the exact commands see [runbook](runbook.md). Keep both repositories on `codex/revamp`; never push main. Node is 22.16.0. Docker must be running. Local API: 55331; database: 55332; mail: `/local/inbox` on the API; dev: 5173; production preview: 5174.
 
 1. Install pinned dependencies with `npm ci` in both checkouts, start the backend, generate the ignored frontend environment with `npm run web-env`.
-2. **First setup only, or deliberate fixture restart:** `npm run reset`. This erases the new local preview data. Do not use it simply to test a migration.
-3. **Existing preview:** verify `supabase/.temp/project-ref` is absent, then `npx supabase migration up --local` and `npm run types`. Preserve entered notes/invitations/history.
+2. **Empty first setup only:** `npm run seed:local`. It refuses a populated preview.
+3. **Existing preview:** `npm run db:migrate`, `npm run db:generate`, `npm run types`, then restart the API. Preserve entered notes/invitations/history.
 4. Start frontend dev. Build and run preview for browser regression tests. All tests must target this local stack, never hosting.
 5. Use `npm run test:fresh` to validate a clean install in a temporary database without disturbing the preview.
 
@@ -178,7 +145,7 @@ Schema changes go into the next migration. Existing uncommitted local migration 
 
 **Shared content:** edit `content/starter.json`; run `npm run content` and `content:check`. Generated files are not independent sources. Synthetic R2 examples live in `fixtures-coaching.sql`; keep them out of production data provisioning.
 
-**Schema:** add a migration, run SQL tests and clean-schema verification, regenerate web types, then build/test affected UI. Add a new SQL suite to both `scripts/local.mjs` and `scripts/verify-fresh.mjs` if introducing a new suite file. Do not hand-edit generated TypeScript.
+**Schema:** add a migration, run SQL tests and clean-schema verification, regenerate web types, then build/test affected UI. Add a new SQL suite to both `scripts/prisma/local.mjs` and `scripts/prisma/fresh.mjs` if introducing a new suite file. Do not hand-edit generated TypeScript.
 
 ## Required finish checklist for every future change
 
@@ -197,9 +164,9 @@ To change nutrition fields, update migration validation and `nutrition/model.ts`
 
 To change scheduling, start with `r3-contract.md` and `appointments.sql`. Keep UTC instants separate from local date/time inputs, preview DST effects and preserve the sorted participant locks. The calendar's persisted pending command must remain unchanged until acknowledged or definitively rejected. Test two concurrent clients and dual-role participants through `npm run test:services`.
 
-To add a file type or change limits, update the private bucket configuration, registration validation, frontend `fileTypes`, accepted input/help copy and service tests together. A resource is usable only after finalization. Never add an overwrite API to change bytes under existing message attachments. Upload a new resource instead. Keep deletion in `files.ts` as retire → Storage remove → metadata remove. Account deletion reuses that function. Exported JSON contains metadata; downloads are separate authenticated byte requests.
+To add a file type or change limits, update the private bucket configuration, registration validation, frontend `fileTypes`, accepted input/help copy and service tests together. A resource is usable only after finalization. Never add an overwrite API to change bytes under existing message attachments. Upload a new resource instead. Keep deletion in `files.ts` as retire → byte removal → metadata remove. Account deletion reuses that function. Exported JSON contains metadata; downloads are separate authenticated byte requests.
 
-Run `npm run test:services` from the backend for real Auth/REST/Storage integration; it creates and deletes only temporary synthetic accounts. The disposable database test now bootstraps the local managed Auth/Storage schemas, strips Rafik's Storage policies from that bootstrap and reapplies them through migrations. It does not copy preview records or physical file bytes. `scripts/r3-visual-check.mjs` in the frontend checks eight role/routes × four widths × two languages × two themes and saves local artifacts. Screenshots and local test logs are ignored, while repeatable checks and results are documented.
+Run `npm run test:services` from the backend for real identity/commands/files integration; it creates and deletes only temporary synthetic accounts. The disposable database test applies the same Prisma migrations and synthetic seed to a new database. It does not copy preview records or physical file bytes. `scripts/r3-visual-check.mjs` in the frontend checks eight role/routes × four widths × two languages × two themes and saves local artifacts. Screenshots and local test logs are ignored, while repeatable checks and results are documented.
 
 Current R3 gaps belong in the ledger: no team ownership, real calendar/reminder provider, large/multipart upload, file scanning or hosted deployment. R4 should extend explicit person/relationship ownership deliberately; it must not expose every private client record just because two coaches join a team.
 
@@ -211,7 +178,7 @@ Current R3 gaps belong in the ledger: no team ownership, real calendar/reminder 
 4. Shared plan import must preserve its independent exercise copies. A shared snapshot is not a live reference to a colleague's editable draft. Team file grants stay separate from client relationship shares; use the Resources owner audience list to revoke even after departure.
 5. Local commercial defaults live in `business_accounts`; the internal simulator flag lives in `runtime_settings`. Never expose service-role credentials or call provider commands directly from the browser. Changes to provider state must leave training/history usable. Test duplicate, stale and unauthorized events with `npm run test:teams`.
 6. R4 screens use one persisted pending command with a stable ID/payload. On reload, show retry even if the last command closed a team or removed the current member. Never silently discard an uncertain command. New mutation functions need a documented exact-retry path.
-7. After schema changes, run `npm test`, `npm run test:fresh`, `npm run test:services`, `npm run test:teams`, schema lint and `npm run types`. Then run web unit/build/format checks and full browser scenarios; `test:teams:layout` verifies R4 rendering. Fresh/test fixture accounts are temporary and cleaned up; do not turn these helpers into deployment seeds.
+7. After schema changes, run `npm test`, `npm run test:fresh`, `npm run test:services`, `npm run test:teams`, API type checking and `npm run types`. Then run web unit/build/format checks and full browser scenarios; `test:teams:layout` verifies R4 rendering. Fresh/test fixture accounts are temporary and cleaned up; do not turn these helpers into deployment seeds.
 
 ### R4 manual tour
 

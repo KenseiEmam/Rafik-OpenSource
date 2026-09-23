@@ -2,7 +2,7 @@
 
 ## Development environment
 
-Use Node 22.16.0, Docker and adjacent `rafik-api` / `RAFIK-FRONTEND` checkouts. Follow each README; never copy credentials from the retired backend. Local commands reject linked remote metadata. Use `codex/revamp` for the current rebuild; never push main. Do not reset an existing preview merely to apply a migration.
+Use Node 22.16.0, Docker and adjacent `rafik-api` / `RAFIK-FRONTEND` checkouts. Follow each README; never copy credentials from the retired backend. Local commands verify the isolated Compose project. Use `codex/revamp` for the current rebuild; never push main. Do not reset an existing preview merely to apply a migration.
 
 ## Make a change
 
@@ -29,7 +29,7 @@ A feature is complete only when an intended user can discover it, understand it,
 
 Frontend changes: `npm test`, `npm run format:check`, `npm run build`, relevant Playwright scenarios and direct screenshot/interaction inspection. Shared navigation, persistence or domain changes require the full browser suite across Chromium and phone-sized WebKit.
 
-Backend changes: `npm test`, `npm run test:fresh`, local schema lint, generated types; run `test:services` / `test:teams` when Storage, authorization, appointments, teams, handoffs or commercial/support contracts may be affected. Full verification commands and prerequisites are in [verification](docs/implementation/verification.md).
+Backend changes: `npm test`, `npm run test:fresh`, API type checking, generated types; run `test:services` / `test:teams` when Storage, authorization, appointments, teams, handoffs or commercial/support contracts may be affected. Full verification commands and prerequisites are in [verification](docs/implementation/verification.md).
 
 ## Documentation ownership
 

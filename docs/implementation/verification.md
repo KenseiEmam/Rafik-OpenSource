@@ -1,3 +1,25 @@
+# Verification record
+
+## R7A1 — Prisma/PostgreSQL transition (23 September 2026)
+
+The active local backend is standalone PostgreSQL plus the TypeScript API. Historical Supabase results below describe earlier checkpoints only. Reproduction commands and current ports are in the [runbook](runbook.md).
+
+| Scope | Executed result |
+|---|---|
+| Domain regression | 239 assertions across seven rollback SQL suites passed on standalone PostgreSQL |
+| Fresh installation | Three Prisma migrations, local fixtures and seven SQL suites passed in a separately created disposable database; preview untouched |
+| HTTP boundary | 4 tests passed: single-use codes/logout, attempt/origin enforcement, pooled actor isolation/bounded identifiers, immutable private byte lifecycle |
+| Service integration | 5 groups passed: booking races/cross-role conflicts, private file access/revocation/cleanup and account deletion |
+| Independent teams/business | 9 groups passed: invitation/roles/consent, handoff, groups, receipts, sharing/revocation, support and safe deletion |
+| Browser regression | 54 journeys passed across Chromium and phone-sized WebKit against the new API; actual dropped-acknowledgement, offline and correction scenarios retained |
+| Broad layout audit | 320 loaded route/language/theme/viewport states, zero reported layout failures or page errors; automated checks are not a human usability score |
+| Web maintenance | 11 unit tests, TypeScript/build and formatting passed; Supabase SDK removed |
+| Backend maintenance | TypeScript, content drift, documentation links and release-guard tests passed; Supabase CLI removed; npm dependency audits reported zero known vulnerabilities |
+
+Found during integration: no-argument function registration, set-returning JSON array shape, PostgreSQL catalog visibility under a restricted login, error-format mismatch that prevented confirmed-rejection editing, and an overrestricted account-event projection. Corrected and rerun. One early browser run hit a dev-server restart; the final 54-journey run passed. Final private-file locking/missing-byte handling and the local inbox addition were followed by passing API/service/team checks; they did not change browser UI contracts.
+
+Actual rendered coach entry and desktop inbox were inspected through the in-app browser; phone inbox and Arabic dark resources captures from the broad audit were also inspected for row spacing, containment and readable controls. Automated sample-account suites still leave some synthetic history; fixture isolation remains an explicit maintenance item before final product presentation. Organization role acceptance is R7A2, not implied by independent-team results. Production startup is deliberately blocked until real adapters/configuration exist. Hosting, physical devices, remote CI, external delivery/payments and real-person outcomes remain unverified.
+
 # Local verification record
 
 ## R7 checkpoint and original-role audit — 23 September 2026

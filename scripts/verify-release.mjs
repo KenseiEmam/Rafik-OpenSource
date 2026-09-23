@@ -82,18 +82,18 @@ try {
   });
   assertLocalRelease({
     nodeVersion: process.version,
-    config: readFileSync(resolve(root, "supabase/config.toml"), "utf8"),
-    linked: existsSync(resolve(root, "supabase/.temp/project-ref")),
+    config: readFileSync(resolve(root, "compose.yaml"), "utf8"),
+    linked: false,
     branches,
     webEnvironment: readFileSync(resolve(web, ".env.local"), "utf8"),
   });
   execFileSync(
     "docker",
-    ["exec", "supabase_db_rafik-revamp-local", "pg_isready", "-U", "postgres"],
+    ["compose", "exec", "-T", "db", "pg_isready", "-U", "rafik_migrate", "-d", "rafik"],
     { stdio: "pipe" },
   );
-  for (const port of [5173, 5174]) {
-    const response = await fetch(`http://127.0.0.1:${port}`, {
+  for (const port of [55331, 5173, 5174]) {
+    const response = await fetch(`http://127.0.0.1:${port}${port === 55331 ? "/health" : ""}`, {
       signal: AbortSignal.timeout(5000),
     });
     if (!response.ok) throw Error(`Start the local web server on ${port}.`);
@@ -115,12 +115,8 @@ try {
         "run",
         script,
       ]);
-    await step("schema-lint", root, [
-      resolve(root, "node_modules/.bin/supabase"),
-      "db",
-      "lint",
-      "--local",
-    ]);
+    await step("api-types",root,["npm","run","typecheck"]);
+    await step("api-contract",root,["npm","run","test:api"]);
     for (const script of [
       "test",
       "format:check",
