@@ -23,7 +23,9 @@ const links = computed(() =>
       ],
 )
 const moreActive = computed(() =>
-  /\/(more|nutrition|appointments|resources|teams|business|support)(\/|$)/.test(route.path),
+  /\/(more|analytics|nutrition|appointments|resources|teams|business|support)(\/|$)/.test(
+    route.path,
+  ),
 )
 </script>
 <template>

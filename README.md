@@ -6,7 +6,7 @@ A responsive Vue 3/TypeScript application for training and ongoing coaching: pro
 
 Work belongs on `codex/revamp`. The old application is preserved in Git history. No native app or legacy backend is required.
 
-**Current direction:** web development prioritizes coaches and organization staff. The local runtime is Prisma/PostgreSQL behind one TypeScript API; identity and private files use that API. The [role-scope audit](../rafik-api/docs/implementation/role-scope-audit.md) documents the original six roles and the current organization gaps. R7A1/R7A2 implement the API transition and separate organizational memberships, invitations, role views and trainer responsibility; R8 adds organization-owned programs, reviewed delivery and training history; services/analytics follow in R9. Current teams are not a complete organizational implementation.
+**Current direction:** web development prioritizes coaches and organization staff. The local runtime is Prisma/PostgreSQL behind one TypeScript API; identity and private files use that API. The [role-scope audit](../rafik-api/docs/implementation/role-scope-audit.md) documents the original six roles and the current organization gaps. R7A1/R7A2 implement the API transition and separate organizational memberships, invitations, role views and trainer responsibility; R8 adds organization-owned programs, reviewed delivery and training history; R9 adds organization calendars, groups, assessor-led assessments and separate coach/admin analytics. Current teams are not a complete organizational implementation.
 
 ## Start here
 
@@ -122,3 +122,7 @@ Use **Manage workspaces** to explicitly create an organization or activate indep
 ## Programming ownership
 
 `src/features/coaching/program-context.ts` adapts the shared editor/library to independent or organization scope. `DeliverPlan.vue` provides reviewable assignment; `ProgramCover.vue` renders private optional covers. `src/features/organizations/OrganizationTraining.vue` provides scoped delivery/history entry. Both scopes use `lib/training.ts` and its existing durable queue. New adaptation draft/retry keys include source and recipient. The backend [R8 contract](../rafik-api/docs/implementation/r8-contract.md) documents authorization, revision and lifecycle rules.
+
+## Organization services
+
+Calendar supports reviewed group scheduling, specific assessors, attendance and separate per-trainee results with corrections. More contains Groups and Assessment templates. Analytics provides date/trainee filters, current workload and participation, accessible chart tables and metric definitions. `src/features/organizations` owns these workflows; `src/features/analytics` owns shared charts/reports. `tests/organization-services.e2e.ts` covers the full schedule/result/correction/recovery journey; `scripts/audit-services.ts` checks role/locale/theme/viewport states.

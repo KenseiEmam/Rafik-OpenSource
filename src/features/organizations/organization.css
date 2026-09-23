@@ -4,7 +4,6 @@
   align-items: center;
   min-height: 54px;
   border-bottom: 1px solid var(--line);
-  overflow-x: auto;
 }
 .organization-nav a {
   flex-shrink: 0;
