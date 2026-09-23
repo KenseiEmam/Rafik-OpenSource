@@ -2,7 +2,7 @@
 
 22 September 2026. Execution owner: Codex. This document supersedes the earlier assumption that delivering the small training loop completes the Rafik revamp. The user likes the visual direction but correctly identifies that the implementation lacks much of the original product's capability.
 
-**Implementation update:** R1 daily-coaching, R2 ongoing-coaching and R3 service-delivery expansions are now implemented locally; see `ledger.md` for its exact scope and `verification.md` for evidence. The comparison below records the gaps that prompted this correction. R4–R5 remain open.
+**Implementation update:** R1 daily-coaching, R2 ongoing-coaching, R3 service-delivery and R4 team/business expansions are now implemented locally; see `ledger.md` for its exact scope and `verification.md` for evidence. The comparison below records the gaps that prompted this correction. R5 remains open.
 
 ## Status and mistake
 
@@ -81,7 +81,7 @@ Write exact schema, command payloads, errors, invariants and interaction states 
 | R1 — Complete daily coaching | Client detail workspace, roster lifecycle, exercise library/custom content, richer programming, assignment schedule and prior performance | Coach creates a realistic multiweek plan with custom/timed/grouped exercises, assigns two different clients, adapts future work and reviews results; client can train without the coach editing SQL/content files |
 | R2 — Ongoing coaching (implemented locally) | Progress, check-ins, assessments, direct communication and contextual activity | Client submits/revises relevant data, coach reviews/responds, both can find history and understand next steps; retry/correction/access tests cover each lifecycle |
 | R3 — Broader service delivery (implemented locally) | Optional nutrition, calendar/booking and resources | Real local data flows for planning, logging, booking/rescheduling and resource access; optional features do not add required signup fields or overwhelm Today |
-| R4 — Team and business operations | Team roles/groups, shared plans/client assignment, simple commercial/support states | Solo flow remains simple; team role changes and reassignment preserve ownership/history; provider behavior verified through local simulations |
+| R4 — Team and business operations (implemented locally) | Team roles/groups, shared plans/client assignment, simple commercial/support states | Solo flow remains simple; team role changes and reassignment preserve ownership/history; provider behavior verified through local simulations |
 | R5 — Integrated product readiness | Whole-product navigation, content, accessibility, lifecycle/permission/failure coverage, release runbook | Complete recurring coach/client/team tasks using fresh accounts, not only seeded happy paths; no advertised destination is an empty placeholder |
 | Later release/native | New hosted backend, controlled real delivery/device checks, then native decision | Existing local-only/mobile constraints remain; no remote readiness claims from local tests |
 
@@ -93,4 +93,4 @@ The revamp is complete only when the documented retained product capabilities wo
 
 Commercial success still requires evidence from real use, and not all original ideas deserve restoration. That uncertainty does not justify calling a basic slice the entire revamp. Tests for the current foundation stay valid within their recorded scope; broader product completeness remains open.
 
-**Next implementation action:** R4 team and business operations. R1/R2/R3 contracts and implementation are recorded in the ledger. Nutrition, booking, private resources and conversation attachments are implemented locally; notification delivery, team/group ownership and commercial/support states remain to be built. R1 exercise alternatives/client substitutions remain explicitly outstanding for integrated readiness. No redesign of the accepted visual identity, old-data restoration, production changes or mobile work is needed to begin.
+**Next implementation action:** R5 integrated product readiness. R1–R4 contracts and implementation are recorded in the ledger. Optional fixed-role teams/groups, client-approved handoff, shared snapshots/staff file access, local commercial/provider-state simulations and support are implemented locally. Complete the still-open R1 exercise alternatives/client substitutions, then verify recurring whole-product tasks, permissions, failure/recovery paths, content/navigation and the new-project release runbook. Real notification/payment/calendar delivery, hosted/device verification and native work remain separate later gates. Preserve the accepted visual identity and local-only constraints; no old-data restoration or production mutation is required.

@@ -1,0 +1,1414 @@
+{
+  "checks": 176,
+  "errors": [],
+  "results": [
+    {
+      "route": "team-list",
+      "width": 320,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-0",
+      "width": 320,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-1",
+      "width": 320,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-2",
+      "width": 320,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-3",
+      "width": 320,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-4",
+      "width": 320,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "business",
+      "width": 320,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-owner",
+      "width": 320,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "enrollment",
+      "width": 320,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-client",
+      "width": 320,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "invitation",
+      "width": 320,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-list",
+      "width": 320,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-0",
+      "width": 320,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-1",
+      "width": 320,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-2",
+      "width": 320,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-3",
+      "width": 320,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-4",
+      "width": 320,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "business",
+      "width": 320,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-owner",
+      "width": 320,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "enrollment",
+      "width": 320,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-client",
+      "width": 320,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "invitation",
+      "width": 320,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-list",
+      "width": 320,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-0",
+      "width": 320,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-1",
+      "width": 320,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-2",
+      "width": 320,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-3",
+      "width": 320,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-4",
+      "width": 320,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "business",
+      "width": 320,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-owner",
+      "width": 320,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "enrollment",
+      "width": 320,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-client",
+      "width": 320,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "invitation",
+      "width": 320,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-list",
+      "width": 320,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-0",
+      "width": 320,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-1",
+      "width": 320,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-2",
+      "width": 320,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-3",
+      "width": 320,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-4",
+      "width": 320,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "business",
+      "width": 320,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-owner",
+      "width": 320,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "enrollment",
+      "width": 320,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-client",
+      "width": 320,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "invitation",
+      "width": 320,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-list",
+      "width": 390,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-0",
+      "width": 390,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-1",
+      "width": 390,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-2",
+      "width": 390,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-3",
+      "width": 390,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-4",
+      "width": 390,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "business",
+      "width": 390,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-owner",
+      "width": 390,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "enrollment",
+      "width": 390,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-client",
+      "width": 390,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "invitation",
+      "width": 390,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-list",
+      "width": 390,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-0",
+      "width": 390,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-1",
+      "width": 390,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-2",
+      "width": 390,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-3",
+      "width": 390,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-4",
+      "width": 390,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "business",
+      "width": 390,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-owner",
+      "width": 390,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "enrollment",
+      "width": 390,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-client",
+      "width": 390,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "invitation",
+      "width": 390,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-list",
+      "width": 390,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-0",
+      "width": 390,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-1",
+      "width": 390,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-2",
+      "width": 390,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-3",
+      "width": 390,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-4",
+      "width": 390,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "business",
+      "width": 390,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-owner",
+      "width": 390,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "enrollment",
+      "width": 390,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-client",
+      "width": 390,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "invitation",
+      "width": 390,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-list",
+      "width": 390,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-0",
+      "width": 390,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-1",
+      "width": 390,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-2",
+      "width": 390,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-3",
+      "width": 390,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-4",
+      "width": 390,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "business",
+      "width": 390,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-owner",
+      "width": 390,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "enrollment",
+      "width": 390,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-client",
+      "width": 390,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "invitation",
+      "width": 390,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-list",
+      "width": 768,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-0",
+      "width": 768,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-1",
+      "width": 768,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-2",
+      "width": 768,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-3",
+      "width": 768,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-4",
+      "width": 768,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "business",
+      "width": 768,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-owner",
+      "width": 768,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "enrollment",
+      "width": 768,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-client",
+      "width": 768,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "invitation",
+      "width": 768,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-list",
+      "width": 768,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-0",
+      "width": 768,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-1",
+      "width": 768,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-2",
+      "width": 768,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-3",
+      "width": 768,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-4",
+      "width": 768,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "business",
+      "width": 768,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-owner",
+      "width": 768,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "enrollment",
+      "width": 768,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-client",
+      "width": 768,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "invitation",
+      "width": 768,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-list",
+      "width": 768,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-0",
+      "width": 768,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-1",
+      "width": 768,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-2",
+      "width": 768,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-3",
+      "width": 768,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-4",
+      "width": 768,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "business",
+      "width": 768,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-owner",
+      "width": 768,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "enrollment",
+      "width": 768,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-client",
+      "width": 768,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "invitation",
+      "width": 768,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-list",
+      "width": 768,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-0",
+      "width": 768,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-1",
+      "width": 768,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-2",
+      "width": 768,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-3",
+      "width": 768,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-4",
+      "width": 768,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "business",
+      "width": 768,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-owner",
+      "width": 768,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "enrollment",
+      "width": 768,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-client",
+      "width": 768,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "invitation",
+      "width": 768,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-list",
+      "width": 1440,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-0",
+      "width": 1440,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-1",
+      "width": 1440,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-2",
+      "width": 1440,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-3",
+      "width": 1440,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-4",
+      "width": 1440,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "business",
+      "width": 1440,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-owner",
+      "width": 1440,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "enrollment",
+      "width": 1440,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-client",
+      "width": 1440,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "invitation",
+      "width": 1440,
+      "lang": "en",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-list",
+      "width": 1440,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-0",
+      "width": 1440,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-1",
+      "width": 1440,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-2",
+      "width": 1440,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-3",
+      "width": 1440,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-4",
+      "width": 1440,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "business",
+      "width": 1440,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-owner",
+      "width": 1440,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "enrollment",
+      "width": 1440,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-client",
+      "width": 1440,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "invitation",
+      "width": 1440,
+      "lang": "en",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-list",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-0",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-1",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-2",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-3",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-4",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "business",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-owner",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "enrollment",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-client",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "invitation",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "light",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-list",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-0",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-1",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-2",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-3",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "team-4",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "business",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-owner",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "enrollment",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "support-client",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "invitation",
+      "width": 1440,
+      "lang": "ar",
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    }
+  ]
+}

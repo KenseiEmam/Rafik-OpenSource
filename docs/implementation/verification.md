@@ -1,5 +1,29 @@
 # Local verification record
 
+## R4 verification — 23 September 2026
+
+Executed locally with Node 22.16.0, CLI 2.90.0 and `rafik-revamp-local`. R3 was checked before implementation: 135 SQL assertions, real service/concurrency tests and 36 browser scenarios passed. Existing preview data was preserved; R4 adds two migrations without reset.
+
+| Check | Actual result / boundary |
+|---|---|
+| Backend `npm test` | **209** rollback assertions pass: previous 135 plus **74 R4**. Includes email/expiry/verified-invite rules, fixed-role boundaries, minimal roster/private context, exact consent/handoff replay, future plan copy, started-workout replay after handoff, atomic group selection/receipt, independent template/exercise copies with catalog-edit isolation, lifecycle guards/ownership transfer/group archive, commercial limits/out-of-order receipts/server simulator gate and support visibility/revision. |
+| `npm run test:fresh` | All **eight** migrations, generated content/local fixtures and **five** SQL suites pass in a disposable database. No preview reset. |
+| `npm run test:teams` | Nine real HTTP check groups pass with four temporary Auth identities: intended invitation email; concurrent handoff replay and private started history; future appointment release/unanswered-form cancellation; real staff-only Storage bytes; service-only duplicate/stale provider receipts; private support/operator reply via the actual guarded CLI; download revocation on member removal; departed file-owner audience/revocation; guarded owner deletion followed by closed-team cleanup preserving client history. Temporary accounts and bytes removed. |
+| Existing `npm run test:services` | All R3 booking/concurrency, dual-role booking, registered Storage upload/overwrite/share/revoke/byte cleanup and account-deletion scenarios pass. |
+| SQL lint/content | Application schema lint reports no errors. Generated content check passes. Generated API types reflect all 38 public tables (37 domain + internal settings). |
+| Web unit/data tests | **10/10** pass; existing prescription/date/progress/nutrition checks retained. |
+| New browser scenarios | Four R4 scenarios (two workflows × Chromium/WebKit phone configuration) pass; repeated twice for **8/8** after correcting failure-injection timing. Fresh identities exercise staff invite, client consent/Today cue, explicit group assignment with dropped acknowledgement/reload/retry, shared plan editing destination, handoff, restricted subscription and support draft/reply/reload. |
+| Full browser regression | **40/40** pass across Chromium and phone-sized WebKit: all 36 prior-phase scenarios plus four R4 scenarios. Final complete run finished after the retry-test timing correction and UI permission-state adjustments. |
+| Final affected-flow rerun | **4/4** R4 browser scenarios pass after the final proposed-coach access and legacy-snapshot hardening; final 209-assertion/fresh/HTTP/lint runs also pass. |
+| R4 rendered layout matrix | **176/176** states: eleven populated destinations/tab states × four widths (320, 390, 768, 1440) × English/Arabic × light/dark. Zero horizontal overflow or page errors. **44** 390px states checked with Axe: zero reported violations. Representative rendered desktop/light and phone/Arabic/dark screenshots inspected. This is automated Chromium rendering, not physical-device/human usability evidence. |
+| Build/format | Production build + TypeScript checks and web formatting check pass. Whitespace diff checks pass. |
+
+Reproducible sources: `supabase/tests/team_business.sql`, `scripts/verify-teams.mjs`, `scripts/verify-fresh.mjs`; companion `tests/teams.e2e.ts`, `tests/team-fixture.ts`, `scripts/verify-team-layout.ts`. Existing suites remain in the standard test commands. Raw ignored local evidence is under web `artifacts/r4-*`, `playwright-report` and `test-results`; compact persisted receipts are in `evidence/r4-local-checks.md` and `evidence/r4-layout.json`.
+
+Two test-development findings are recorded explicitly. The new browser fault-injection test initially reloaded as soon as the pending command appeared, which could precede the intended network abort; it now waits until that attempt finishes before reload. An intentionally denied dynamic SQL call inside the temporary PL/pgSQL test helper caused one local database process crash/recovery during development. The grant check now uses `has_function_privilege`, and denial is independently tested through real PostgREST. The final fresh/database/HTTP checks passed afterward; no database-engine fix or hosted behavior is claimed.
+
+Local simulation is not verified payment collection. No hosted project/deployment, actual outbound support/staff email, remote CI run, physical phone, real participant retention or commercial success was tested. R5 product integration and the explicitly open substitutions/alternatives remain unfinished. Test fixture ownership/handoff does not modify existing Laila/Amir team membership or historical data.
+
 ## R3 verification — 22 September 2026
 
 Executed against `rafik-revamp-local` with Node 22.16.0, CLI 2.90.0 and local Storage enabled. Existing preview data was preserved; no hosted stack or native device was used.

@@ -62,3 +62,5 @@ insert into public.coaching_requests(id,series_id,relationship_id,form_id,form_r
 select '73000000-0000-4000-8000-000000000003','74000000-0000-4000-8000-000000000002','40000000-0000-4000-8000-000000000001',id,revision,title,kind,fields,current_date from public.coaching_forms where id='72000000-0000-4000-8000-000000000002' on conflict(id) do nothing;
 insert into public.messages(id,relationship_id,sender_id,body,request_id) values
 ('75000000-0000-4000-8000-000000000001','40000000-0000-4000-8000-000000000001','10000000-0000-4000-8000-000000000001','How did this week feel? Your reflection is ready when you are. / كيف كان أسبوعك؟ نموذج المتابعة جاهز عندما تكون مستعداً.','73000000-0000-4000-8000-000000000001') on conflict(id) do nothing;
+-- Synthetic LOCAL runtime switch. Never apply fixture files to hosting.
+update public.runtime_settings set local_simulation=true where id=true;

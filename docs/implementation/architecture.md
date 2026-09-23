@@ -1,8 +1,8 @@
 # Implemented architecture
 
-Local revamp, 22 September 2026. This record describes the new implementation; `docs/revival` preserves the audit and rationale. It is not a compatibility plan for the retired backend.
+Local revamp, 23 September 2026. This record describes the new implementation; `docs/revival` preserves the audit and rationale. It is not a compatibility plan for the retired backend.
 
-**Scope correction:** this describes the implemented foundation, not the final product architecture or feature ceiling. [Revamp coverage](revamp-coverage.md) governs the broader remaining work and identifies contracts to resolve before extending the schema. The original ten-table count is not a design constraint; R1 adds `client_context` and `schedule_exceptions`. R2 adds five ongoing-coaching tables, bringing the public domain to seventeen. R3 adds seven nutrition/appointment/resource tables, for 24 total. See `r1-contract.md`, `r2-contract.md` and `r3-contract.md` for the phase invariants, and [maintainer guide](maintainer-guide.md) for the file map and change recipes.
+**Scope correction:** this describes the implemented foundation, not the final product architecture or feature ceiling. [Revamp coverage](revamp-coverage.md) governs the broader remaining work and identifies contracts to resolve before extending the schema. The original ten-table count is not a design constraint; R1 adds `client_context` and `schedule_exceptions`. R2 adds five ongoing-coaching tables, bringing the public domain to seventeen. R3 adds seven nutrition/appointment/resource tables, for 24 total. R4 adds thirteen team/commercial/support domain tables plus one internal runtime-setting table: 37 domain tables, 38 public tables overall. See `r1-contract.md`, `r2-contract.md` `r3-contract.md` and `r4-contract.md` for the phase invariants, and [maintainer guide](maintainer-guide.md) for the file map and change recipes.
 
 ## System boundary
 
@@ -128,3 +128,42 @@ Private Storage is the one new service. Resource registration must precede uploa
 Downloads use authenticated Storage requests with browser cache disabled, not signed URLs that remain usable after revocation. A revoked recipient loses future authorized downloads; previously downloaded bytes cannot be recalled. Removal marks the resource retired, calls the Storage API to remove bytes, then removes metadata only after the object record is absent. A partially completed removal stays visible for retry. Registration and account deletion lock the same profile; account deletion refuses while any owned resource remains. The Settings UI cleans resources before deleting the account. It also releases future booked slots when deleting a client. Do not bypass this lifecycle by deleting `storage.objects` with SQL.
 
 R3 has no upload worker, image transformation service, external food provider, calendar integration or delivery outbox. File bytes are not stored in IndexedDB; an interrupted upload may require the user to reselect the original file. Nutrition editors keep device drafts; calendar mutations keep the exact pending command. Only the workout flow promises offline recording. All new feature writes still require server acknowledgement.
+
+## R4 — Optional teams, business state and support
+
+The [R4 contract](r4-contract.md) is the ownership/interaction contract. Teams are an optional coordination layer over existing direct coaching relationships. They do not replace Auth identity or participant access. Ten coordination tables each have one purpose:
+
+| Table | Responsibility |
+|---|---|
+| `teams` | Name, one owner, revision, closed flag; closed teams survive owner deletion with a null owner |
+| `team_members` | Fixed admin/coach membership and active/removed state; owner derived from team record |
+| `team_invitations` | Intended verified email, token hash, role, expiry and acceptance/revocation |
+| `team_clients` | Client-approved roster enrollment, current direct relationship/coach, proposed coach, consent revision/last decision |
+| `team_groups`, `team_group_members` | Named optional roster subsets; archiving removes membership links, preserves receipts |
+| `team_plans` | Immutable published snapshots; import clones exercises and creates an independently owned draft |
+| `team_resource_shares` | Explicit staff grant for person-owned ready files; distinct from client relationship sharing |
+| `team_assignments` | Stable bulk-command receipt: actor, group, version and canonical selected enrollment IDs |
+| `team_activity` | Small administrative event log; latest 30 entries shown to owners/admins |
+
+`business_accounts` is uniquely personal or team-scoped; `business_events` stores provider receipts; `support_cases` stores submitted case content/state/reply. `runtime_settings` is internal, RLS-enabled and ungranted to browser roles. Its `local_simulation` defaults false in the migration and is enabled by local fixtures only. Initial trial (14 days, 10 staff/50 clients) is a testable local default, **not validated pricing or a production offer**.
+
+### Commands and ownership
+
+- `create_team`, `rename_team`, `close_team`, `invite_team_member`, `accept_team_invitation`, `revoke_team_invitation`, `change_team_member` implement lifecycle. Staff invite acceptance checks confirmed Auth email; replaying an old accepted invite does not restore a removed member. Only the owner appoints admins/transfers ownership. Owners/admins have a minimal administrative roster, not private coaching access.
+- `propose_team_client`, `respond_team_client`, `request_team_handoff`, `close_team_client` implement consent. Responses bind to the exact proposed revision and decision; an old approval cannot approve a newer proposal. Handoff copies current plan/schedule, replaces any existing future assignment with the new coach, archives the old relationship and cancels its future booked appointments/unsubmitted requests. No private notes/messages/measurements/nutrition history copy occurs. Client training history remains client-owned. Clients may leave the team while retaining direct coaching.
+- `save_team_group`, `archive_team_group`, `set_team_group_client`, `assign_team_group` manage groups. Bulk requests canonicalize/deduplicate 1–50 explicitly selected IDs, validate every target belongs to the group and acting coach, then run existing assignment commands atomically. Membership changes do not auto-assign a plan. Stable receipts prevent replay from resetting schedules a second time. Archived groups cannot accept new membership/assignments.
+- `share_team_plan`, `remove_team_plan`, `import_team_plan` handle immutable library publication and independent copies. `plans.team_template_id` identifies an imported copy for retry. Private helper `copy_snapshot_plan` is not callable by browsers. Legacy starter versions receive missing exercise snapshots when shared; existing published snapshots are preserved. Copies own their cloned exercise definitions and remain editable/publishable after contributor departure/template removal.
+- `share_team_resource` extends private Storage authorization through `can_read_resource`; client file access still requires R3 relationship sharing. `my_resource_teams` returns only grants for the current person's owned files, including after team departure, so owners can revoke those grants without rejoining. Removing a member ends future downloads; already downloaded bytes cannot be recalled.
+- `team_workspace` returns scoped workspace JSON; `my_team_enrollments` returns the signed-in client's consent queue. They do not disclose other participants' health/coaching detail. Ordinary direct writes remain revoked; all new tables have scoped read policies or internal-only access.
+- `open_business_account`, service-only `apply_business_event`, owner-only local `simulate_business_event` separate commercial state from training. Provider IDs bind to exact account/sequence/payload; duplicate receipts are harmless, lower sequences are recorded without rolling state back. A later provider adapter must verify its external signature and map events to a monotonic account sequence before calling the service-only command. No adapter/webhook or real checkout exists yet.
+- `create_support_case`, `update_support_case`, service-only `operator_support_reply` manage one acknowledged response and case revision. Reporters can resolve/reopen; only explicitly selected team admins can reply through the app. Platform cases stay private to reporter/operator. This is intentionally a simple case record, not a ticket conversation engine.
+
+Team mutations lock the team before enrollment/relationship/account rows; bulk relationships are visited in stable order. Admission counts run under the same team lock. Team account restrictions only gate new invitations/enrollments, shared publication and bulk assignment. Existing training, reading/importing existing team material, handoffs, closure/removal, export and support remain usable. Lower limits never evict existing members. Personal commercial state is observational in R4 and adds no solo paywall.
+
+`account_deletion_ready` checks active ownership and assigned/proposed coaching before the UI deletes any file bytes. `delete_my_account` repeats that guard under team locks before existing profile/file checks. Closed-team ownership can become null; an active team cannot lose its owner. `start_session` now checks an existing authenticated client's stable start ID before current assignment availability, allowing lost-acknowledgement recovery after handoff/archive; changed day/version reuse conflicts. `save_session` and immutable prescription semantics are unchanged.
+
+### Frontend boundary and recovery
+
+`teams/commands.ts` persists one pending command under current account + screen scope; it does not introduce a general queue, background worker or global store. All team/business/support writes await acknowledgement. The pending payload remains available after reload for explicit retry; database-confirmed validation errors release it for correction. Invitation-link recovery occurs before clearing its pending command. Team workspace recovery stays visible even after membership or team access changes. Ordinary text/select edits require explicit save; support request text additionally survives reload. File operations retain R3 lifecycle recovery.
+
+New routes: `/coach/teams`, `/coach/teams/:id`, `/teams`, public `/team-invite/:token`, `/coach/business`, `/coach/support`, `/support`. Team/account context uses `?team=<UUID>` where needed. These remain optional More tools. There is no new required onboarding field, organization-wide permission builder, external service or native dependency.

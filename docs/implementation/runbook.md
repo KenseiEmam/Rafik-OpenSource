@@ -105,3 +105,40 @@ Removal interrupted: the owner sees **Removal incomplete / Retry removal**. Retr
 Appointment interrupted: the calendar disables new commands and shows **Retry calendar change**. Retry the saved exact command after reconnect/reload. A confirmed validation failure unlocks correction. An unavailable slot requires a refresh/new choice. Cancelling an upcoming booking releases the slot; attendance is recorded separately after its end. Published availability is bounded to eight occurrences, not an infinite calendar subscription.
 
 No synthetic file is seeded into hosted Storage. Local reset is destructive to this local project and may also remove its Storage objects; download any local file you want to retain before choosing reset. Stop/start is the preservation path.
+
+## R4 local teams, commercial simulation and support
+
+Apply migrations 007/008 only to `rafik-revamp-local`; confirm `supabase/.temp/project-ref` is absent, then `npx supabase migration up --local` and `npm run types`. Existing preview rows require no migration/reset or team enrollment. Current synthetic Laila/Amir records are not automatically moved into a team. New resets compose `fixtures-business.sql` through `scripts/content.mjs`.
+
+For an **existing local installation** after applying 008, enable local provider simulation without resetting records:
+
+```sh
+# Exact local container; never substitute a remote connection or apply this fixture to hosting.
+docker exec -i supabase_db_rafik-revamp-local psql -U postgres -d postgres -v ON_ERROR_STOP=1 < supabase/fixtures-business.sql
+```
+
+The backend flag defaults false on a fresh schema without local seeds. `VITE_LOCAL_PREVIEW=true` exposes the UI, but cannot bypass the backend flag or account-owner check. Team subscription shows trial/active/past-due/cancelled plus access expiry and limits. Local event forms let the owner exercise those states with no cards, actual charges or provider requests. The initial 14-day/10-staff/50-client trial is a local default, not approved pricing. Personal commercial setup is optional and has no solo paywall in this phase.
+
+A later hosted provider adapter must authenticate provider callbacks, resolve a valid account, order state transitions with monotonic per-account sequence and call service-only `apply_business_event`. Duplicate IDs must retain identical payloads. The current schema records older events but never applies them over newer state. Do not enable the browser simulator in production or ship service-role credentials in the web build. No hosted payment integration has been installed or verified.
+
+### Staff/client recovery
+
+- Staff invitation: link is manually shared, email-bound, seven-day expiry. The initiating browser retains the latest link, and an unconfirmed invite command retains its token until acknowledgement. If unavailable on another device, revoke the pending invitation and create a fresh link. No outbound email is implied by the staff invitation button.
+- Pending mutation: reopen the same account and screen, then **Retry saved change**. The exact UUID/arguments are replayed. Confirmed validation conflicts clear the pending command so the user can refresh/correct. Do not manually delete IndexedDB to dismiss an uncertain write.
+- Handoff: admin proposes → client approves/declines. Before approval, current coaching continues. After approval, the new coach owns a copied plan and schedule; old started sessions can still sync and a lost start acknowledgement can be recovered by stable ID. Previous private coaching records remain with their original participants. Future old-coach appointments and unanswered forms are cancelled with the handoff. New-coach future assignment, if any, is replaced.
+- Team departure/deletion: hand off assigned clients or close their enrollments first. Owner transfers ownership or closes all client enrollments and then the team. Settings preflight runs before file cleanup and the final account command rechecks under locks. Closed team records may outlive the deleted owner; active teams must retain an owner.
+- Group archive retains assigned client plans and bulk receipts. Template removal retains independent copies. Staff file grants can be revoked from the team library, and owners can also inspect/revoke them from Resources after leaving a team. Downloaded files are outside future-access revocation.
+
+### Local support operator
+
+Client/coach **More → Support** saves a real case. Selecting a team explicitly shares it with that team's owner/admins, who respond in the web app. Selecting Rafik support keeps it private to the reporter and platform operator. The local screen explicitly says no live support service is connected.
+
+For a platform reply, read the specific case's current revision through the local database/operator context, write 1–4000 characters to a text file, then run:
+
+```sh
+npm run support:local -- <case-uuid> <current-revision> /absolute/path/to/reply.txt
+```
+
+The script validates arguments and local project identity, obtains the service credential in memory from local CLI status, and calls only `http://127.0.0.1:55321`. It updates the case response/status; it sends no external message. Identical replies replay safely; stale changed replies conflict. The reporter can reopen the case. This is a simple case/status/response workflow, not a multi-message ticketing service.
+
+R4 verification: `npm test`, `npm run test:fresh`, `npm run test:teams`; existing `test:services` remains mandatory after changing file/access/account lifecycles. In the frontend, run `npm run test:e2e -- tests/teams.e2e.ts` and `npm run test:teams:layout`. Both use temporary fresh identities, with explicit local-only setup/cleanup. Full regression runs require dev 5173 and current production preview 5174, as before. Remote CI definition now includes `test:teams`; no remote run is claimed.

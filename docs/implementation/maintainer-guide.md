@@ -1,6 +1,6 @@
 # Working on the Rafik revamp
 
-Last updated: 22 September 2026, R3 broader service delivery. This is the practical entry point for developers and future Codex work. Update it when responsibilities, files or workflows change. The [ledger](ledger.md) records what is actually implemented; [architecture](architecture.md) specifies behavior; [verification](verification.md) records evidence and limits. The full product is still being rebuilt: R4–R5 remain open in [coverage](revamp-coverage.md).
+Last updated: 23 September 2026, R4 team and business operations. This is the practical entry point for developers and future Codex work. Update it when responsibilities, files or workflows change. The [ledger](ledger.md) records what is actually implemented; [architecture](architecture.md) specifies behavior; [verification](verification.md) records evidence and limits. The full product is still being rebuilt: R5 remains open in [coverage](revamp-coverage.md).
 
 ## What changed from the retired product
 
@@ -8,7 +8,7 @@ The old four-repository platform is preserved in Git history and audited in `doc
 
 Backend baseline before revamp: `652e9ee`; frontend baseline: `a0c723e`. Foundation checkpoints: backend `dc60441`, frontend `a6afdc3`. R1 checkpoints: backend `31084bb`, frontend `8097f0d`. Root `CHANGELOG.md` files describe subsequent phases. Do not use old source links in the audit as current implementation instructions.
 
-The new application has one person identity who may train, coach, or do both. A direct coach–client relationship grants access. Plans publish immutable versions; sessions copy the prescription and save actual results through explicit commands. R1 adds client context, private exercise content and richer cycles. R2 adds ongoing coaching through versioned question snapshots, measurements and conversations. R3 adds optional nutrition, concrete appointment booking and private files. Old trigger-driven orchestration, organization setup requirements, credits, provider chains and global store complexity have not been restored.
+The new application has one person identity who may train, coach, or do both. A direct coach–client relationship grants access. Plans publish immutable versions; sessions copy the prescription and save actual results through explicit commands. R1 adds client context, private exercise content and richer cycles. R2 adds ongoing coaching through versioned question snapshots, measurements and conversations. R3 adds optional nutrition, concrete appointment booking and private files. R4 adds optional fixed-role teams, client-consented handoff, shared libraries/groups and local commercial/support operations. Old trigger-driven orchestration, organization setup requirements, credits, provider chains and global store complexity have not been restored.
 
 ## Runtime and responsibilities
 
@@ -47,6 +47,9 @@ supabase/migrations/
   202609220004_nutrition.sql       immutable guidance, saved foods, meal snapshots
   202609220005_appointments.sql    concrete slots, conflict-safe booking and attendance
   202609220006_resources.sql       private file lifecycle, sharing and message attachments
+  202609230007_teams.sql           optional team roles/consent/groups/shared assets and start retry
+  202609230008_business_support.sql commercial receipts, local simulation, support and deletion guard
+supabase/fixtures-business.sql      local-only simulator enablement, never hosted
 supabase/fixtures-users.sql        synthetic local Auth identities
 supabase/fixtures-history.sql      synthetic training history
 supabase/fixtures-coaching.sql     synthetic forms, requests and example conversation
@@ -56,6 +59,9 @@ supabase/tests/
   daily_coaching.sql              R1 domain/ownership/retry/snapshot scenarios
   ongoing_coaching.sql            R2 response/measurement/message lifecycle scenarios
   service_delivery.sql            R3 nutrition/booking/resource lifecycle and access scenarios
+  team_business.sql               R4 role/consent/handoff/group/provider/support regressions
+scripts/verify-teams.mjs           temporary Auth/Storage/handoff/provider/cleanup checks
+scripts/support-local.mjs          guarded local operator reply from a text file
 scripts/verify-services.mjs        real local HTTP booking race, Storage and account cleanup
 scripts/local.mjs                 guarded start/stop/reset/types/env/test commands
 scripts/content.mjs               generates seed and sibling web sample from canonical content
@@ -97,6 +103,9 @@ src/features/appointments/
 src/features/resources/
   ResourcesPage.vue              upload/share/download/delete and recovery UI
   files.ts                       authenticated download, byte cleanup and account cleanup
+src/features/teams/               list/workspace/invitation, scoped types, explicit pending-command helper
+src/features/business/BusinessPage.vue account state/event history and local simulator
+src/features/support/SupportPage.vue submitted cases, recoverable draft and response lifecycle
 src/components/PageState.vue      common loading/error rendering
 src/lib/backend.ts                typed table/RPC entry point, paged record reads, old-host guard
 src/lib/database.types.ts         GENERATED SQL schema types
@@ -111,6 +120,9 @@ src/style.css                    tokens, controls and semantic feature layouts
 public/                          local assets/brand; no remote font dependency
 scripts/visual-check.mjs           route/width/language/theme overflow checks
 scripts/r2-visual-check.mjs        populated ongoing-coaching render and accessibility matrix
+scripts/verify-team-layout.ts      populated R4 layout/accessibility matrix; isolated synthetic users
+tests/team-fixture.ts              local-only fresh identity setup/cleanup for R4 checks
+tests/teams.e2e.ts                 consent/handoff/group lost-ack recovery/business/support UI
 tests/*.test.ts                   pure unit/data invariants
 tests/*.e2e.ts                    real browser workflows against local Supabase
 ```
@@ -185,3 +197,21 @@ To add a file type or change limits, update the private bucket configuration, re
 Run `npm run test:services` from the backend for real Auth/REST/Storage integration; it creates and deletes only temporary synthetic accounts. The disposable database test now bootstraps the local managed Auth/Storage schemas, strips Rafik's Storage policies from that bootstrap and reapplies them through migrations. It does not copy preview records or physical file bytes. `scripts/r3-visual-check.mjs` in the frontend checks eight role/routes × four widths × two languages × two themes and saves local artifacts. Screenshots and local test logs are ignored, while repeatable checks and results are documented.
 
 Current R3 gaps belong in the ledger: no team ownership, real calendar/reminder provider, large/multipart upload, file scanning or hosted deployment. R4 should extend explicit person/relationship ownership deliberately; it must not expose every private client record just because two coaches join a team.
+
+## Working on R4 safely
+
+1. Read `r4-contract.md` before changing roles, handoff or commercial behavior. Team membership never grants all client data. Add an explicit workflow for any broader sharing; do not relax participant reads.
+2. Add new staff roles only if a concrete job cannot be expressed by owner/admin/coach. There is no configurable role builder. Teams are optional; keep solo clients/coaches out of setup forms.
+3. Group UI lives in `TeamPage.vue`; persistence is `save_team_group`/`archive_team_group`/`set_team_group_client`, assignment is `assign_team_group`. Keep explicit selection and one transaction/receipt. Do not call assignment repeatedly from a browser loop.
+4. Shared plan import must preserve its independent exercise copies. A shared snapshot is not a live reference to a colleague's editable draft. Team file grants stay separate from client relationship shares; use the Resources owner audience list to revoke even after departure.
+5. Local commercial defaults live in `business_accounts`; the internal simulator flag lives in `runtime_settings`. Never expose service-role credentials or call provider commands directly from the browser. Changes to provider state must leave training/history usable. Test duplicate, stale and unauthorized events with `npm run test:teams`.
+6. R4 screens use one persisted pending command with a stable ID/payload. On reload, show retry even if the last command closed a team or removed the current member. Never silently discard an uncertain command. New mutation functions need a documented exact-retry path.
+7. After schema changes, run `npm test`, `npm run test:fresh`, `npm run test:services`, `npm run test:teams`, schema lint and `npm run types`. Then run web unit/build/format checks and full browser scenarios; `test:teams:layout` verifies R4 rendering. Fresh/test fixture accounts are temporary and cleaned up; do not turn these helpers into deployment seeds.
+
+### R4 manual tour
+
+Use separate browser profiles for Laila, Nour and Amir. At `/local-preview`, choose Laila → More → Teams → create team → Staff → invite `coach2@rafik.test`. Open the link in Nour's profile and accept. As Laila, Clients → choose Amir → request enrollment; Amir sees a Today link and approves in `/teams`. Laila creates a group, adds Amir, selects Amir explicitly, selects a published version and reviews/confirms assignment. Shared library → share a published plan; Nour copies it and can edit/publish independently. Upload files in Resources, then explicitly share them in the team library.
+
+Laila proposes Nour as Amir's new coach; Amir approves with the consequences displayed. Nour can now open the direct coaching workspace. Laila retains her original participant history; Nour cannot read that private history. Team subscription → Local provider simulation can set past due and restore active. Existing workouts stay available. Client Support → choose team → submit a request; team owner/admin responds in Support. Platform support response is a separate guarded CLI operation documented in the runbook.
+
+Team Activity includes rename and owner closure; Staff includes ownership transfer/departure. Group archive removes only its grouping, not assigned plans. These are real local mutations: use clearly named test teams when exploring and close their enrollments/team when finished. No team fixtures are imposed on the existing Laila/Amir preview.
