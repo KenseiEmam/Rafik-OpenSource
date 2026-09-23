@@ -45,6 +45,46 @@ const router = createRouter({
       meta: { private: true },
     },
     {
+      path: '/coach/analytics',
+      component: () => import('../features/analytics/AnalyticsPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization/:workspace/:view/analytics',
+      component: () => import('../features/analytics/AnalyticsPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization/:workspace/:view/calendar',
+      component: () => import('../features/organizations/OrganizationCalendar.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization/:workspace/:view/calendar/new',
+      component: () => import('../features/organizations/EventComposer.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization/:workspace/:view/calendar/:id',
+      component: () => import('../features/organizations/EventDetail.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization/:workspace/:view/groups',
+      component: () => import('../features/organizations/ServiceCatalog.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization/:workspace/:view/assessment-templates',
+      component: () => import('../features/organizations/ServiceCatalog.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization/:workspace/:view/assessments/:member',
+      component: () => import('../features/organizations/AssessmentHistory.vue'),
+      meta: { private: true },
+    },
+    {
       path: '/organization/:workspace/:view/:section?',
       component: () => import('../features/organizations/OrganizationPage.vue'),
       meta: { private: true },

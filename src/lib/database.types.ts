@@ -28,6 +28,35 @@ export type Database = { public: { Tables: {
         created_at: string
         updated_at: string
     } }
+    assessment_result_history: { Row: {
+        id: string
+        workspace_id: string
+        event_id: string
+        member_id: string
+        revision: number
+        document: Json
+        recorded_by: string
+        recorded_at: string
+    } }
+    assessment_results: { Row: {
+        workspace_id: string
+        event_id: string
+        member_id: string
+        values: Json
+        note: string
+        revision: number
+        recorded_by: string
+        recorded_at: string
+    } }
+    assessment_templates: { Row: {
+        id: string
+        workspace_id: string
+        created_by: string
+        title: string
+        definition: Json
+        revision: number
+        archived: boolean
+    } }
     assignments: { Row: {
         id: string
         relationship_id: string
@@ -196,6 +225,32 @@ export type Database = { public: { Tables: {
         revision: number
         created_at: string
     } }
+    organization_event_people: { Row: {
+        workspace_id: string
+        event_id: string
+        member_id: string
+        duty: string
+        attendance: string
+        revision: number
+    } }
+    organization_events: { Row: {
+        id: string
+        workspace_id: string
+        created_by: string
+        series_id: string
+        title: string
+        starts_at: string
+        ends_at: string
+        timezone: string
+        location: string
+        kind: string
+        definition: Json | null
+        template_id: string | null
+        template_revision: number | null
+        state: string
+        revision: number
+        created_at: string
+    } }
     organization_exercises: { Row: {
         workspace_id: string
         id: string
@@ -203,6 +258,19 @@ export type Database = { public: { Tables: {
         created_by: string
         revision: number
         active: boolean
+    } }
+    organization_group_members: { Row: {
+        workspace_id: string
+        group_id: string
+        member_id: string
+    } }
+    organization_groups: { Row: {
+        id: string
+        workspace_id: string
+        name: string
+        created_by: string
+        archived: boolean
+        revision: number
     } }
     organization_programs: { Row: {
         id: string

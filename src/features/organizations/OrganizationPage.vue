@@ -10,6 +10,7 @@ import CommandStatus from '../teams/CommandStatus.vue'
 import PageState from '../../components/PageState.vue'
 import type { Organization, Member, Role } from './types'
 import './organization.css'
+import OrganizationUpcoming from './OrganizationUpcoming.vue'
 import OrganizationNav from './OrganizationNav.vue'
 const route = useRoute(),
   router = useRouter(),
@@ -269,7 +270,21 @@ onMounted(async () => {
               ><span>{{ l('Need a trainer', 'بحاجة إلى مدرب') }}</span></RouterLink
             >
           </div>
-          <section class="panel">
+          <div class="actions">
+            <RouterLink class="button" :to="base + '/training'">{{
+              view === 'trainee'
+                ? l('Open my training', 'فتح تدريبي')
+                : l('Review training', 'مراجعة التدريب')
+            }}</RouterLink
+            ><RouterLink
+              v-if="view !== 'trainee'"
+              class="button secondary"
+              :to="base + '/analytics'"
+              >{{ l('View analytics', 'عرض التحليلات') }}</RouterLink
+            >
+          </div>
+          <OrganizationUpcoming />
+          <section v-if="view === 'trainee' || !trainees.length" class="panel">
             <h2>
               {{
                 view === 'admin'

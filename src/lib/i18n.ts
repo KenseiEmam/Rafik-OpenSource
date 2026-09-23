@@ -120,6 +120,36 @@ export function errorMessage(error: unknown): string {
         ? String(error.message)
         : String(error)
   const teamErrors: Record<string, [string, string]> = {
+    invalid_assessment: [
+      'Check the assessment drills, names, units and bounds.',
+      'تحقق من الاختبارات وأسمائها ووحداتها وحدودها.',
+    ],
+    invalid_results: ['Complete every drill with a valid result.', 'أكمل كل اختبار بنتيجة صالحة.'],
+    event_unavailable: [
+      'This event is no longer available in this role.',
+      'لم يعد هذا الموعد متاحاً بهذا الدور.',
+    ],
+    event_not_started: ['Recording opens when the event starts.', 'يفتح التسجيل عند بدء الموعد.'],
+    inactive_participant: [
+      'An event participant is no longer active. Update staff or cancel and reschedule with the current roster.',
+      'أحد المشاركين غير نشط. حدّث الموظفين أو ألغِ الموعد وأعد جدولته بالقائمة الحالية.',
+    ],
+    event_has_results: [
+      'This event has recorded results. Correct the results instead of cancelling it.',
+      'لهذا الموعد نتائج مسجلة. صحّح النتائج بدلاً من إلغائه.',
+    ],
+    results_required: [
+      'Record results for every present trainee before finishing.',
+      'سجل نتائج كل متدرب حاضر قبل الإنهاء.',
+    ],
+    attendance_required: [
+      'Record attendance first. Results require the trainee to be marked present.',
+      'سجل الحضور أولاً. تتطلب النتائج تحديد المتدرب كحاضر.',
+    ],
+    template_unavailable: [
+      'This assessment template is unavailable. Choose an active template in this organization.',
+      'قالب التقييم غير متاح. اختر قالباً نشطاً في المؤسسة.',
+    ],
     program_unavailable: [
       'This program is no longer available in this workspace. Return to the program library.',
       'لم يعد البرنامج متاحاً في هذه المساحة. عُد إلى مكتبة البرامج.',

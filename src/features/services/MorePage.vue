@@ -24,6 +24,9 @@ const coach = useRoute().path.startsWith('/coach'),
         >{{ l('Check-ins & assessments', 'المتابعات والتقييمات') }} ↗</RouterLink
       >
     </nav>
+    <RouterLink v-if="coach" class="button secondary" to="/coach/analytics"
+      >{{ l('Coaching analytics', 'تحليلات التدريب') }} ↗</RouterLink
+    >
     <nav class="service-links" :aria-label="l('Optional tools', 'أدوات اختيارية')">
       <RouterLink :to="base + '/nutrition'"
         ><span

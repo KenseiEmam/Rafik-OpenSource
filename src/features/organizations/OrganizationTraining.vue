@@ -204,7 +204,15 @@ onMounted(async () => {
           }}
         </p>
         <section>
-          <h2>{{ l('Session history', 'سجل الحصص') }}</h2>
+          <div class="heading-actions">
+            <h2>{{ l('Session history', 'سجل الحصص') }}</h2>
+            <RouterLink
+              v-if="selected || context.view === 'trainee'"
+              class="text-link"
+              :to="context.base + '/assessments/' + (selected || data.self)"
+              >{{ l('Assessment history', 'سجل التقييمات') }} ↗</RouterLink
+            >
+          </div>
           <p v-if="!data.sessions.length" class="subtle">
             {{
               l(
