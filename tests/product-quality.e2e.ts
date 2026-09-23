@@ -94,12 +94,8 @@ test('approved alternative survives offline recording, completion, review and co
     await expect(page.getByRole('status')).toContainText('Draft saved')
     await page.getByRole('button', { name: 'Publish plan', exact: true }).click()
     await expect(page.getByRole('status')).toContainText('Published')
-    const versions = await f.owner.api
-      .from('plan_versions')
-      .select('*')
-      .eq('plan_id', f.version.plan_id)
-      .order('revision', { ascending: false })
-    const version = versions.data![0]!
+    const versions = await f.rows(f.owner, 'plan_versions', 'plan_id', f.version.plan_id)
+    const version = versions.sort((a: any, b: any) => b.revision - a.revision)[0]
     await f.rpc(f.owner, 'assign_plan', {
       p_relationship_id: f.assignment.relationship_id,
       p_version_id: version.id,
@@ -112,12 +108,12 @@ test('approved alternative survives offline recording, completion, review and co
     })
     await f.login(page, f.client, `/workout/${session.id}`)
     await page.getByText('Choose an alternative', { exact: true }).click()
-    await context.route('**/rest/v1/rpc/save_session', (route) => route.abort())
+    await context.route('**/v1/commands/save_session', (route) => route.abort())
     await page.getByRole('combobox', { name: 'Exercise to perform' }).selectOption('split-squat')
     await expect(page.locator('.logger-exercise-heading h2')).toHaveText('Split squat')
     await page.reload()
     await expect(page.locator('.logger-exercise-heading h2')).toHaveText('Split squat')
-    await context.unroute('**/rest/v1/rpc/save_session')
+    await context.unroute('**/v1/commands/save_session')
     await page.getByRole('button', { name: /Mark set 1 done/ }).click()
     await expect
       .poll(

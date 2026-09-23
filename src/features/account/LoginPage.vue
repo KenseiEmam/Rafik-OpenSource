@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { PhArrowRight, PhEnvelopeSimple, PhArrowLeft } from '@phosphor-icons/vue'
-import { backend, localPreview, configured } from '../../lib/backend'
+import { api, localPreview, configured } from '../../lib/backend'
 import { user, refreshProfile } from '../../app/auth'
 import { safeNext } from '../../app/router'
 import { language, t, errorMessage } from '../../lib/i18n'
@@ -32,11 +32,7 @@ async function send() {
   busy.value = true
   error.value = ''
   try {
-    const { error: e } = await backend.auth.signInWithOtp({
-      email: email.value.trim().toLowerCase(),
-      options: { shouldCreateUser: true },
-    })
-    if (e) throw e
+    await api.requestCode(email.value.trim().toLowerCase())
     step.value = 'code'
     sentAt.value = Date.now()
   } catch (e) {
@@ -49,13 +45,7 @@ async function verify() {
   busy.value = true
   error.value = ''
   try {
-    const { data, error: e } = await backend.auth.verifyOtp({
-      email: email.value.trim().toLowerCase(),
-      token: code.value.trim(),
-      type: 'email',
-    })
-    if (e) throw e
-    user.value = data.user
+    user.value = await api.verifyCode(email.value.trim().toLowerCase(), code.value.trim())
     await refreshProfile()
     await router.replace(next.value)
   } catch (e) {
@@ -190,9 +180,13 @@ function changeEmail() {
             )
           }}
         </p>
-        <a class="text-link" href="http://127.0.0.1:55324" target="_blank" rel="noopener">{{
-          language('Open test inbox', 'فتح صندوق الاختبار')
-        }}</a>
+        <a
+          class="text-link"
+          href="http://127.0.0.1:55331/local/inbox"
+          target="_blank"
+          rel="noopener"
+          >{{ language('Open test inbox', 'فتح صندوق الاختبار') }}</a
+        >
       </div>
     </section>
   </div>

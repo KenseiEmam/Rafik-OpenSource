@@ -3,8 +3,8 @@ import { commandRejected, exerciseTrend, responseState } from '../src/features/o
 import type { ProgressSession, CoachingRequest } from '../src/features/ongoing/types'
 describe('progress interpretation', () => {
   it('distinguishes rejected commands from unknown delivery', () => {
-    expect(commandRejected({ code: 'P0001', message: 'invalid_context' })).toBe(true)
-    expect(commandRejected({ code: '', message: 'Failed to fetch' })).toBe(false)
+    expect(commandRejected({ statusCode: 400, message: 'invalid_context' })).toBe(true)
+    expect(commandRejected({ statusCode: 503, message: 'service_unavailable' })).toBe(false)
     expect(commandRejected(new Error('offline'))).toBe(false)
   })
   it('converts completed weights and keeps duration separate from strength', () => {

@@ -103,7 +103,7 @@ test('appointment publishing and ambiguous booking retry lead to one rescheduled
   await login(client, false)
   await client.goto('/appointments')
   let once = true
-  await client.route('**/rest/v1/rpc/book_appointment', async (route) => {
+  await client.route('**/v1/commands/book_appointment', async (route) => {
     if (once) {
       once = false
       await route.fetch()
@@ -173,7 +173,7 @@ test('private file recovers lost finalization, shares real bytes, attaches, revo
     .getByLabel('Choose a file', { exact: true })
     .setInputFiles({ name: 'guide.txt', mimeType: 'text/plain', buffer: Buffer.from(content) })
   let once = true
-  await page.route('**/rest/v1/rpc/finish_resource', async (route) => {
+  await page.route('**/v1/commands/finish_resource', async (route) => {
     if (once) {
       once = false
       await route.fetch()

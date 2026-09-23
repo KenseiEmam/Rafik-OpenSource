@@ -58,7 +58,7 @@ test('team invitation, client consent, group assignment and handoff work with re
       .selectOption(f.version.id)
     await page.getByRole('button', { name: 'Review assignment', exact: true }).click()
     let dropped = false
-    await page.route('**/rest/v1/rpc/assign_team_group', async (route) => {
+    await page.route('**/v1/commands/assign_team_group', async (route) => {
       if (!dropped) {
         dropped = true
         await route.fetch()
@@ -75,7 +75,7 @@ test('team invitation, client consent, group assignment and handoff work with re
     await page.reload()
     await page.getByRole('button', { name: 'Retry saved change', exact: true }).click()
     await expect(page.getByRole('button', { name: 'Retry saved change', exact: true })).toBeHidden()
-    const receipts = await f.owner.api.from('team_assignments').select('*')
+    const receipts = { data: await f.rows(f.owner, 'team_assignments') }
     expect(receipts.data).toHaveLength(1)
     await page.getByRole('button', { name: 'Shared library', exact: true }).click()
     await page

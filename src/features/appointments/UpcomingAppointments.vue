@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { user, profile } from '../../app/auth'
-import { backend, rows } from '../../lib/backend'
+import { request } from '../../lib/backend'
 import { language as l, locale } from '../../lib/i18n'
 import type { Relationship } from '../../lib/domain'
 import { appointmentTime, type Appointment } from './model'
@@ -9,23 +9,9 @@ const props = defineProps<{ coach?: boolean }>()
 const appointments = ref<Appointment[]>([])
 onMounted(async () => {
   try {
-    const relationships = await rows<Relationship>(
-      'coach_clients',
-      props.coach ? 'coach_id' : 'client_id',
-      user.value!.id,
+    appointments.value = await request<Appointment[]>(
+      '/v1/appointments/upcoming?coach=' + Boolean(props.coach),
     )
-    const ids = relationships.map((r) => r.id)
-    if (!ids.length) return
-    const { data } = await backend
-      .from('appointments')
-      .select('*')
-      .in('relationship_id', ids)
-      .eq('state', 'booked')
-      .gte('starts_at', new Date().toISOString())
-      .lte('starts_at', new Date(Date.now() + 7 * 86400000).toISOString())
-      .order('starts_at')
-      .limit(3)
-    appointments.value = data || []
   } catch {
     /* The full calendar retains explicit error and retry controls. */
   }
