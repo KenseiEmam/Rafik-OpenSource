@@ -3,7 +3,7 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import WorkspaceNav from './features/workspace/WorkspaceNav.vue'
 import { PhArrowUpRight, PhTranslate, PhCaretDown, PhBell } from '@phosphor-icons/vue'
-import { user, profile, ready, contexts } from './app/auth'
+import { user, profile, ready, contexts, platform } from './app/auth'
 import { language, locale, t } from './lib/i18n'
 import { localPreview } from './lib/backend'
 import { syncPending } from './lib/training'
@@ -87,7 +87,9 @@ onUnmounted(() => window.removeEventListener('online', online))
         ><span class="sr-only">{{ language('Workspace', 'مساحة العمل') }}</span
         ><select
           :aria-label="language('Workspace', 'مساحة العمل')"
-          :value="route.path === '/workspaces' ? '/workspaces' : currentContext?.path"
+          :value="
+            ['/workspaces', '/platform'].includes(route.path) ? route.path : currentContext?.path
+          "
           @change="router.push(($event.target as HTMLSelectElement).value)"
         >
           <option v-for="context in contexts" :key="context.id" :value="context.path">
@@ -105,6 +107,9 @@ onUnmounted(() => window.removeEventListener('online', online))
                       { admin: 'الإدارة', trainer: 'التدريب', trainee: 'تدريبي' }[context.role],
                     )
             }}
+          </option>
+          <option v-if="platform" value="/platform">
+            {{ language('Platform operations', 'عمليات المنصة') }}
           </option>
           <option value="/workspaces">
             {{ language('Manage workspaces', 'إدارة مساحات العمل') }}
@@ -155,7 +160,7 @@ onUnmounted(() => window.removeEventListener('online', online))
       product &&
       !focused &&
       !route.path.startsWith('/organization/') &&
-      !['/workspaces', '/notifications'].includes(route.path)
+      !['/workspaces', '/notifications', '/platform'].includes(route.path)
     "
   />
   <main id="main" :class="{ 'messages-main': messaging }" tabindex="-1">

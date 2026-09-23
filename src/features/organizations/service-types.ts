@@ -54,6 +54,7 @@ export type AssessmentResult = {
   recorded_by: string
 }
 export type EventDetail = {
+  historyNext: number | null
   event: CalendarEvent
   people: EventPerson[]
   results: AssessmentResult[]

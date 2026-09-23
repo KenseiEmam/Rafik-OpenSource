@@ -83,10 +83,23 @@ test('organization program authoring, reviewed delivery, recording and feedback 
     ).toBeVisible()
     await f.login(client, f.client, `/organization/${id}/trainee/training`)
     await client.getByRole('button', { name: 'Open session', exact: true }).first().click()
+    await expect(client.getByRole('spinbutton', { name: 'Set 1 load', exact: true })).toBeVisible()
+    let offline = true
+    await client.route(`**/v1/workspaces/${id}/sessions`, async (r) => {
+      if (offline && r.request().method() === 'POST') await r.abort('failed')
+      else await r.continue()
+    })
     await client.getByRole('spinbutton', { name: 'Set 1 load', exact: true }).fill('8')
     await client.getByRole('button', { name: 'Mark set 1 done', exact: true }).click()
     await client.getByRole('button', { name: 'Finish session', exact: true }).click()
     await client.getByRole('button', { name: 'Finish with recorded sets', exact: true }).click()
+    await expect(client.getByRole('status')).toContainText('Saved here')
+    await client.reload()
+    await expect(
+      client.getByRole('heading', { name: 'Session complete.', exact: true }),
+    ).toBeVisible()
+    offline = false
+    await client.reload()
     await expect(client.getByRole('status')).toContainText('Synced with your account')
     const workout = client.url()
     await page.goto(base + '/training')
@@ -102,9 +115,11 @@ test('organization program authoring, reviewed delivery, recording and feedback 
     await client.goto(workout)
     await expect(client.getByText('Keep the same load next time.', { exact: true })).toBeVisible()
     await page.goto(base + '/training')
+    await page.getByText('Filter by trainee', { exact: true }).click()
     await page
-      .getByRole('combobox', { name: 'Trainee', exact: true })
-      .selectOption({ label: 'R4 Client' })
+      .locator('.member-picker')
+      .getByRole('checkbox', { name: 'R4 Client', exact: true })
+      .check()
     await page.getByRole('link', { name: 'Adapt this program', exact: true }).click()
     await expect(page.getByLabel('Plan name', { exact: true })).toHaveValue(
       'Three-day foundation adapted',

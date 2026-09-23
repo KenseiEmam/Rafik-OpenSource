@@ -1,3 +1,4 @@
+import { testDatabase } from './local-config'
 import { test, expect } from '@playwright/test'
 import { randomUUID, randomBytes } from 'node:crypto'
 import { execFileSync } from 'node:child_process'
@@ -117,7 +118,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
         '-U',
         'rafik_migrate',
         '-d',
-        'rafik',
+        testDatabase,
         '-v',
         'ON_ERROR_STOP=1',
       ],

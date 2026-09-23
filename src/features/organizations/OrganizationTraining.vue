@@ -8,6 +8,7 @@ import type { Assignment, PlanVersion, Session, PlanDay } from '../../lib/domain
 import { programContext } from '../coaching/program-context'
 import { startWorkout } from '../../lib/training'
 import OrganizationNav from './OrganizationNav.vue'
+import MemberPicker from './MemberPicker.vue'
 import PageState from '../../components/PageState.vue'
 const route = useRoute(),
   router = useRouter(),
@@ -70,7 +71,9 @@ async function load(append = false) {
     if (seq !== generation) return
     if (append && data.value) result.sessions = [...data.value.sessions, ...result.sessions]
     data.value = result
-    if (!selected.value) people.value = result.members
+    people.value = Array.from(
+      new Map([...people.value, ...result.members].map((m) => [m.id, m])).values(),
+    )
   } catch (e) {
     if (!append) data.value = undefined
     error.value = errorMessage(e)
@@ -107,15 +110,7 @@ async function begin(day: PlanDay) {
     busy.value = false
   }
 }
-onMounted(async () => {
-  if (selected.value) {
-    const all = await request<Training>(
-      `/v1/workspaces/${context.workspace}/delivery?history=true&view=${context.view}`,
-    ).catch(() => undefined)
-    people.value = all?.members || []
-  }
-  await load()
-})
+onMounted(() => load())
 </script>
 <template>
   <OrganizationNav />
@@ -138,13 +133,24 @@ onMounted(async () => {
         >{{ l('Choose a program', 'اختيار برنامج') }}</RouterLink
       >
     </header>
-    <label v-if="context.view !== 'trainee'" class="training-person-select"
-      >{{ l('Trainee', 'المتدرب')
-      }}<select v-model="selected">
-        <option value="">{{ l('All assigned trainees', 'جميع المتدربين المعنيين') }}</option>
-        <option v-for="p in people" :key="p.id" :value="p.id">{{ p.name }}</option>
-      </select></label
-    ><PageState :loading="loading" :error="!data ? error : ''" @retry="load()"
+    <details v-if="context.view !== 'trainee'" class="training-filter">
+      <summary>
+        {{ l('Filter by trainee', 'تصفية حسب المتدرب')
+        }}{{ selected ? ' · ' + name(selected) : '' }}
+      </summary>
+      <MemberPicker
+        :workspace="context.workspace!"
+        :view="context.view"
+        single
+        :model-value="selected ? [selected] : []"
+        :label="l('Find a trainee', 'البحث عن متدرب')"
+        @update:model-value="selected = $event[0] || ''"
+        @options="
+          people = Array.from(new Map([...people, ...$event].map((m) => [m.id, m])).values())
+        "
+      />
+    </details>
+    <PageState :loading="loading" :error="!data ? error : ''" @retry="load()"
       ><p v-if="error && data" class="notice error" role="alert">{{ error }}</p>
       <template v-if="data"
         ><section v-if="current" class="panel">

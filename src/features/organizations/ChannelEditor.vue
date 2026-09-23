@@ -6,6 +6,7 @@ import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { language as l, errorMessage } from '../../lib/i18n'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
+import MemberPicker from './MemberPicker.vue'
 import PageState from '../../components/PageState.vue'
 import type { Organization } from './types'
 const props = defineProps<{
@@ -59,7 +60,21 @@ async function load() {
   loading.value = true
   error.value = ''
   try {
-    people.value = await request(`/v1/workspaces/${props.workspace}?view=${props.view}`)
+    people.value = await request(
+      `/v1/workspaces/${props.workspace}?view=${props.view}&summary=true`,
+    )
+    if (!people.value!.members.some((m) => m.id === people.value!.self.id)) {
+      const own = people.value!.self
+      people.value!.members.unshift({
+        id: own.id,
+        name: people.value!.names.find((m) => m.id === own.id)?.name || l('You', 'أنت'),
+        roles: own.roles,
+        active: true,
+        user_id: user.value!.id,
+        revision: 0,
+        trainer_id: null,
+      })
+    }
     if (!props.initial) {
       draft.value.members = [people.value!.self.id]
       draft.value.managers = [people.value!.self.id]
@@ -139,41 +154,36 @@ onMounted(async () => {
               )
             }}
           </p>
-          <label
-            >{{ l('Find people', 'البحث عن أشخاص') }}<input type="search" v-model="search"
-          /></label>
-          <p class="small-print">
-            {{ draft.members.length }}
-            {{
-              l(
-                'selected · up to 100. Search to find more people.',
-                'محدد · حتى 100. ابحث للعثور على المزيد.',
-              )
-            }}
-          </p>
-          <div v-for="person in visible" :key="person.id" class="channel-person-choice">
-            <label class="check-label"
-              ><input
-                v-model="draft.members"
-                type="checkbox"
-                :value="person.id"
-                :disabled="person.id === people.self.id"
-              />{{ person.name }}</label
-            >
+          <MemberPicker
+            :workspace="workspace"
+            :view="view"
+            v-model="draft.members"
+            include-self
+            :required-ids="[people.self.id]"
+            :disabled="locked"
+            @options="people.members = $event"
+          />
+          <fieldset>
+            <legend>{{ l('Conversation managers', 'مديرو المحادثة') }}</legend>
             <label
-              v-if="
-                draft.members.includes(person.id) &&
-                person.roles.some((r) => r === 'admin' || r === 'trainer')
-              "
-              class="check-label small-print"
+              v-for="person in people.members.filter(
+                (m) =>
+                  draft.members.includes(m.id) &&
+                  (m.roles.includes('admin') || m.roles.includes('trainer')),
+              )"
+              :key="person.id"
+              class="check-label"
               ><input
                 v-model="draft.managers"
                 type="checkbox"
                 :value="person.id"
-                :disabled="person.id === people.self.id"
-              />{{ l('Can manage participants', 'يمكنه إدارة المشاركين') }}</label
+                :disabled="
+                  person.id === people.self.id ||
+                  (!draft.managers.includes(person.id) && draft.managers.length >= 8)
+                "
+              />{{ person.name }}</label
             >
-          </div>
+          </fieldset>
           <p v-for="id in missing" :key="id" class="notice">
             {{ l('A selected person is unavailable.', 'أحد الأشخاص المحددين غير متاح.') }}
             <button type="button" class="text-link" @click="remove(id)">

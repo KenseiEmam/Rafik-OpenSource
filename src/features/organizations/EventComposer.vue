@@ -8,6 +8,7 @@ import { localDate, addDays } from '../../lib/dates'
 import { language as l, errorMessage, locale } from '../../lib/i18n'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
+import MemberPicker from './MemberPicker.vue'
 import PageState from '../../components/PageState.vue'
 import OrganizationNav from './OrganizationNav.vue'
 import type { Organization } from './types'
@@ -44,12 +45,11 @@ const draft = ref({
   every: 7,
   location: '',
 })
+const trainerOptions = ref<Organization['members']>([])
 const people = computed(
     () => data.value?.members.filter((m) => m.active && m.roles.includes('trainee')) || [],
   ),
-  staff = computed(
-    () => data.value?.members.filter((m) => m.active && m.roles.includes('trainer')) || [],
-  )
+  staff = computed(() => trainerOptions.value)
 const visible = computed(() =>
   people.value
     .filter((m) => m.name.toLowerCase().includes(search.value.toLowerCase()))
@@ -57,28 +57,34 @@ const visible = computed(() =>
 )
 const chosen = computed(() => people.value.filter((m) => draft.value.participants.includes(m.id)))
 const selectedTemplate = computed(() => templates.value.find((t) => t.id === draft.value.template))
-async function allCatalog<T>(kind: string) {
-  const result: T[] = []
-  let offset: number | null = 0
-  do {
-    const page: { items: T[]; next: number | null } = await request<{
-      items: T[]
-      next: number | null
-    }>(`/v1/workspaces/${id}/services?view=${view}&kind=${kind}&offset=${offset}`)
-    result.push(...page.items)
-    offset = page.next
-  } while (offset !== null)
-  return result
+const templateSearch = ref(''),
+  groupSearch = ref(''),
+  templateNext = ref<number | null>(null),
+  groupNext = ref<number | null>(null)
+async function catalogPage(kind: 'templates' | 'groups', append = false) {
+  const q = new URLSearchParams({
+    view,
+    kind,
+    search: kind === 'templates' ? templateSearch.value : groupSearch.value,
+    offset: String(append ? (kind === 'templates' ? templateNext.value : groupNext.value) || 0 : 0),
+  })
+  const page = await request<{ items: any[]; next: number | null }>(
+    `/v1/workspaces/${id}/services?${q}`,
+  )
+  if (kind === 'templates') {
+    templates.value = append ? [...templates.value, ...page.items] : page.items
+    templateNext.value = page.next
+  } else {
+    groups.value = append ? [...groups.value, ...page.items] : page.items
+    groupNext.value = page.next
+  }
 }
 async function load() {
   loading.value = true
   loadError.value = ''
   try {
-    ;[data.value, templates.value, groups.value] = await Promise.all([
-      request<Organization>(`/v1/workspaces/${id}?view=${view}`),
-      allCatalog<AssessmentTemplate>('templates'),
-      allCatalog<TrainingGroup>('groups'),
-    ])
+    data.value = await request<Organization>(`/v1/workspaces/${id}?view=${view}&summary=true`)
+    await Promise.all([catalogPage('templates'), catalogPage('groups')])
     if (view === 'trainer') draft.value.staff = [data.value.self.id]
   } catch (e) {
     loadError.value = errorMessage(e)
@@ -101,7 +107,7 @@ function groupMembers() {
   const selected = groups.value.find((g) => g.id === group.value)
   if (selected)
     draft.value.participants = selected.members
-      .filter((m) => people.value.some((p) => p.id === m.id) && !draft.value.staff.includes(m.id))
+      .filter((m) => m.active && m.roles.includes('trainee') && !draft.value.staff.includes(m.id))
       .map((m) => m.id)
 }
 async function advance() {
@@ -160,7 +166,15 @@ watch(
 onMounted(async () => {
   await load()
   const stored = await getDraft<typeof draft.value>(key).catch(() => undefined)
-  if (stored) draft.value = stored
+  if (stored) {
+    draft.value = stored
+    if (stored.template && !templates.value.some((t) => t.id === stored.template)) {
+      const page = await request<{ items: AssessmentTemplate[] }>(
+        `/v1/workspaces/${id}/services?view=${view}&kind=templates&id=${stored.template}`,
+      )
+      templates.value.push(...page.items)
+    }
+  }
   ready.value = true
 })
 </script>
@@ -213,6 +227,24 @@ onMounted(async () => {
                 </option>
               </select></label
             >
+            <div v-if="draft.kind === 'assessment'" class="form-fields">
+              <label
+                >{{ l('Find an assessment template', 'البحث عن قالب تقييم')
+                }}<input
+                  v-model="templateSearch"
+                  type="search"
+                  @keydown.enter.prevent="catalogPage('templates')" /></label
+              ><button type="button" class="text-link" @click="catalogPage('templates')">
+                {{ l('Search templates', 'البحث في القوالب') }}</button
+              ><button
+                v-if="templateNext !== null"
+                type="button"
+                class="text-link"
+                @click="catalogPage('templates', true)"
+              >
+                {{ l('More templates', 'المزيد من القوالب') }}
+              </button>
+            </div>
             <label v-if="draft.kind === 'assessment'"
               >{{ l('Assessment template', 'قالب التقييم')
               }}<select v-model="draft.template" required>
@@ -276,31 +308,41 @@ onMounted(async () => {
             </details>
           </section>
           <section v-else-if="step === 2" class="panel">
-            <fieldset v-if="view === 'admin'" class="form-fields">
-              <legend>{{ l('Trainers / assessors', 'المدربون / المقيمون') }}</legend>
-              <label v-for="m in staff" :key="m.id" class="check-label"
-                ><input
-                  v-model="draft.staff"
-                  type="checkbox"
-                  :value="m.id"
-                  :disabled="draft.participants.includes(m.id)"
-                />{{ m.name }}</label
-              >
-              <p v-if="!staff.length">
-                {{
-                  l(
-                    'Add an organization trainer before scheduling.',
-                    'أضف مدرباً للمؤسسة قبل الجدولة.',
-                  )
-                }}
-              </p>
-            </fieldset>
+            <MemberPicker
+              v-if="view === 'admin'"
+              :workspace="id"
+              :view="view"
+              role="trainer"
+              :max="8"
+              v-model="draft.staff"
+              :exclude-ids="draft.participants"
+              :label="l('Trainers / assessors', 'المدربون / المقيمون')"
+              @options="trainerOptions = $event"
+            />
             <p v-else>
               {{
                 l('You are the assigned trainer for this event.', 'أنت المدرب المعيّن لهذا الموعد.')
               }}
             </p>
             <h2>{{ l('Trainees', 'المتدربون') }}</h2>
+            <div class="form-fields">
+              <label
+                >{{ l('Find a group (optional)', 'البحث عن مجموعة (اختياري)')
+                }}<input
+                  v-model="groupSearch"
+                  type="search"
+                  @keydown.enter.prevent="catalogPage('groups')" /></label
+              ><button type="button" class="text-link" @click="catalogPage('groups')">
+                {{ l('Search groups', 'البحث في المجموعات') }}</button
+              ><button
+                v-if="groupNext !== null"
+                type="button"
+                class="text-link"
+                @click="catalogPage('groups', true)"
+              >
+                {{ l('More groups', 'المزيد من المجموعات') }}
+              </button>
+            </div>
             <label v-if="groups.length"
               >{{ l('Start with a group (optional)', 'ابدأ بمجموعة (اختياري)')
               }}<select v-model="group" @change="groupMembers">
@@ -310,23 +352,15 @@ onMounted(async () => {
                 <option v-for="g in groups" :key="g.id" :value="g.id">{{ g.name }}</option>
               </select></label
             >
-            <label
-              >{{ l('Find trainees', 'البحث عن متدربين') }}<input v-model="search" type="search"
-            /></label>
-            <p class="small-print">
-              {{ draft.participants.length }} {{ l('selected · up to 100', 'محدد · حتى 100') }}
-            </p>
-            <label v-for="m in visible" :key="m.id" class="check-label"
-              ><input
-                v-model="draft.participants"
-                type="checkbox"
-                :value="m.id"
-                :disabled="draft.staff.includes(m.id)"
-              />{{ m.name }}</label
-            >
-            <p v-if="!visible.length">
-              {{ l('No matching active trainees.', 'لا يوجد متدربون نشطون مطابقون.') }}
-            </p>
+            <MemberPicker
+              :workspace="id"
+              :view="view"
+              role="trainee"
+              v-model="draft.participants"
+              :exclude-ids="draft.staff"
+              :label="l('Find trainees', 'البحث عن متدربين')"
+              @options="data!.members = $event"
+            />
           </section>
           <section v-else class="panel event-review">
             <h2>{{ draft.title }}</h2>

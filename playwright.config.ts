@@ -1,3 +1,4 @@
+import { testWeb } from './tests/local-config'
 import { defineConfig, devices } from '@playwright/test'
 export default defineConfig({
   testDir: './tests',
@@ -8,7 +9,7 @@ export default defineConfig({
   expect: { timeout: 10000 },
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
-    baseURL: 'http://127.0.0.1:5173',
+    baseURL: testWeb,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },

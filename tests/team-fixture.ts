@@ -1,10 +1,11 @@
+import { testApi, testDatabase, testFiles } from './local-config'
 import { execFileSync } from 'node:child_process'
 import { readFileSync, unlinkSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { randomBytes, randomUUID, createHash } from 'node:crypto'
 import type { Page } from '@playwright/test'
 const root = resolve('../rafik-api'),
-  url = 'http://127.0.0.1:55331'
+  url = testApi
 const sql = (input: string) =>
   execFileSync(
     'docker',
@@ -17,7 +18,7 @@ const sql = (input: string) =>
       '-U',
       'rafik_migrate',
       '-d',
-      'rafik',
+      testDatabase,
       '-v',
       'ON_ERROR_STOP=1',
     ],
@@ -67,7 +68,7 @@ export async function teamFixture() {
           unlinkSync(
             resolve(
               root,
-              '.local/files',
+              testFiles,
               createHash('sha256').update(`program/${workspace}/${id}`).digest('hex'),
             ),
           )

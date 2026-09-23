@@ -7,6 +7,7 @@ import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { language as l, errorMessage, locale } from '../../lib/i18n'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
+import MemberPicker from './MemberPicker.vue'
 import PageState from '../../components/PageState.vue'
 import OrganizationNav from './OrganizationNav.vue'
 import type { EventDetail, EventPerson } from './service-types'
@@ -39,6 +40,36 @@ const data = ref<EventDetail>(),
   minutes = ref(60),
   previewTimes = ref<{ starts_at: string; ends_at: string }[]>([]),
   previewError = ref('')
+const histories = ref<
+  Record<
+    string,
+    { items: EventDetail['history']; next: number | null; loading: boolean; error: string }
+  >
+>({})
+async function loadHistory(member: string, more = false) {
+  const previous = histories.value[member]
+  histories.value[member] = {
+    items: previous?.items || [],
+    next: previous?.next ?? null,
+    loading: true,
+    error: '',
+  }
+  try {
+    const result = await request<EventDetail>(
+      endpoint +
+        `?view=${view}&id=${eid}&historyMember=${member}&historyOffset=${more ? previous?.next || 0 : 0}`,
+    )
+    histories.value[member] = {
+      items: more ? [...(previous?.items || []), ...result.history] : result.history,
+      next: result.historyNext,
+      loading: false,
+      error: '',
+    }
+  } catch (e) {
+    histories.value[member]!.error = errorMessage(e)
+    histories.value[member]!.loading = false
+  }
+}
 const trainees = computed(() => data.value?.people.filter((p) => p.duty === 'trainee') || []),
   person = computed(() => trainees.value.find((p) => p.member_id === selected.value)),
   result = computed(() => data.value?.results.find((r) => r.member_id === selected.value))
@@ -98,7 +129,7 @@ async function load() {
   loading.value = true
   error.value = ''
   try {
-    data.value = await request<EventDetail>(endpoint + `?view=${view}&id=${eid}`)
+    data.value = await request<EventDetail>(endpoint + `?view=${view}&id=${eid}&summary=true`)
     attendance.value = Object.fromEntries(data.value.people.map((p) => [p.member_id, p.attendance]))
     zone.value = data.value.event.timezone
     local.value = localInput(data.value.event.starts_at, zone.value)
@@ -106,7 +137,9 @@ async function load() {
       (Date.parse(data.value.event.ends_at) - Date.parse(data.value.event.starts_at)) / 60000
     newStaff.value = data.value.people.filter((p) => p.duty === 'staff').map((p) => p.member_id)
     if (view === 'admin')
-      organization.value = await request<Organization>(`/v1/workspaces/${id}?view=admin`)
+      organization.value = await request<Organization>(
+        `/v1/workspaces/${id}?view=admin&summary=true`,
+      )
     newStaff.value = newStaff.value.filter((id) =>
       data.value!.people.some((p) => p.member_id === id && p.active && p.roles.includes('trainer')),
     )
@@ -348,17 +381,14 @@ onMounted(load)
         >
           <fieldset :disabled="locked" class="form-fields">
             <h2>{{ l('Assign active trainers', 'تعيين مدربين نشطين') }}</h2>
-            <label
-              v-for="m in organization.members.filter(
-                (m) =>
-                  m.active &&
-                  m.roles.includes('trainer') &&
-                  !trainees.some((p) => p.member_id === m.id),
-              )"
-              :key="m.id"
-              class="check-label"
-              ><input type="checkbox" v-model="newStaff" :value="m.id" />{{ m.name }}</label
-            >
+            <MemberPicker
+              :workspace="id"
+              view="admin"
+              role="trainer"
+              :max="8"
+              v-model="newStaff"
+              :exclude-ids="trainees.map((p) => p.member_id)"
+            />
             <p class="small-print">
               {{
                 l(
@@ -522,26 +552,40 @@ onMounted(load)
               >
             </dl>
             <p v-if="r.note">{{ r.note }}</p>
-            <details>
+            <details
+              @toggle="($event.target as HTMLDetailsElement).open && loadHistory(r.member_id)"
+            >
               <summary>{{ l('Correction history', 'سجل التصحيحات') }}</summary>
               <p class="small-print">
                 {{
                   l(
-                    'Most recent 100 saved revisions in this event.',
-                    'أحدث 100 نسخة محفوظة في هذا الموعد.',
+                    'Saved revisions for this trainee, newest first.',
+                    'النسخ المحفوظة لهذا المتدرب، الأحدث أولاً.',
                   )
                 }}
               </p>
-              <article
-                v-for="h in data.history.filter((h) => h.member_id === r.member_id)"
-                :key="h.id"
-              >
+              <article v-for="h in histories[r.member_id]?.items || []" :key="h.id">
                 <p>{{ l('Revision', 'النسخة') }} {{ h.revision }} · {{ label(h.recorded_at) }}</p>
                 <p v-for="d in data.event.definition || []" :key="d.key">
                   {{ d.name }}: {{ h.document.values[d.key] }} {{ d.unit }}
                 </p>
                 <p v-if="h.document.note">{{ h.document.note }}</p>
               </article>
+              <p v-if="histories[r.member_id]?.error" role="alert">
+                {{ histories[r.member_id]?.error }}
+                <button type="button" class="text-link" @click="loadHistory(r.member_id)">
+                  {{ l('Try again', 'حاول مجدداً') }}
+                </button>
+              </p>
+              <button
+                v-if="histories[r.member_id]?.next != null"
+                type="button"
+                class="text-link"
+                :disabled="histories[r.member_id]?.loading"
+                @click="loadHistory(r.member_id, true)"
+              >
+                {{ l('Earlier revisions', 'نسخ أقدم') }}
+              </button>
             </details>
           </article>
         </section>

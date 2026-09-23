@@ -7,6 +7,7 @@ import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { language as l, errorMessage } from '../../lib/i18n'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
+import MemberPicker from './MemberPicker.vue'
 import PageState from '../../components/PageState.vue'
 import OrganizationNav from './OrganizationNav.vue'
 import type { Organization } from './types'
@@ -59,7 +60,7 @@ async function load(append = false) {
       request<{ items: (TrainingGroup & AssessmentTemplate)[]; next: number | null }>(
         `/v1/workspaces/${id}/services?view=${view}&kind=${kind}&search=${encodeURIComponent(search.value)}&archived=${archived.value}&offset=${append ? next.value || 0 : 0}`,
       ),
-      request<Organization>(`/v1/workspaces/${id}?view=${view}`),
+      request<Organization>(`/v1/workspaces/${id}?view=${view}&summary=true`),
     ])
     items.value = append ? [...items.value, ...result.items] : result.items
     next.value = result.next
@@ -249,37 +250,15 @@ onMounted(async () => {
             {{ l('Add drill', 'إضافة اختبار') }}
           </button></template
         >
-        <template v-else
-          ><label
-            >{{ l('Find trainees', 'البحث عن متدربين')
-            }}<input v-model="memberSearch" type="search"
-          /></label>
-          <p class="small-print">
-            {{ draft.members.length }}
-            {{ l('selected · search to find more people', 'محدد · ابحث عن أشخاص آخرين') }}
-          </p>
-          <label v-for="m in visibleMembers" :key="m.id" class="check-label"
-            ><input v-model="draft.members" type="checkbox" :value="m.id" />{{ m.name }}</label
-          >
-          <p v-for="member in unavailable" :key="member" class="notice">
-            {{
-              l(
-                'A previously selected member is no longer eligible.',
-                'أحد الأعضاء المحددين سابقاً لم يعد متاحاً.',
-              )
-            }}
-            <button
-              type="button"
-              class="text-link"
-              @click="draft.members = draft.members.filter((id) => id !== member)"
-            >
-              {{ l('Remove unavailable member', 'إزالة العضو غير المتاح') }}
-            </button>
-          </p>
-          <p v-if="!visibleMembers.length">
-            {{ l('No matching active trainees.', 'لا يوجد متدربون نشطون مطابقون.') }}
-          </p></template
-        >
+        <MemberPicker
+          v-else
+          :workspace="id"
+          :view="view"
+          role="trainee"
+          v-model="draft.members"
+          :label="l('Find trainees', 'البحث عن متدربين')"
+          @options="organization!.members = $event"
+        />
         <label v-if="draft.revision" class="check-label"
           ><input v-model="draft.archived" type="checkbox" />{{
             l('Archive from new scheduling', 'أرشفة من الجدولة الجديدة')

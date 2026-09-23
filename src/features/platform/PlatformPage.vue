@@ -1,0 +1,288 @@
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { user } from '../../app/auth'
+import { request } from '../../lib/backend'
+import { language as l, errorMessage, dateLabel } from '../../lib/i18n'
+import { useCommand } from '../teams/commands'
+import CommandStatus from '../teams/CommandStatus.vue'
+import PageState from '../../components/PageState.vue'
+const includeReads = ref(false)
+const actionLabel = (kind: string) =>
+  l(
+    (
+      {
+        identity_state: 'Account access changed',
+        organization_state: 'Organization access changed',
+        support_reply: 'Support response saved',
+        view_users: 'Account directory viewed',
+        view_organizations: 'Organization directory viewed',
+        view_support: 'Support queue viewed',
+        view_audit: 'Audit history viewed',
+      } as Record<string, string>
+    )[kind] || 'Platform action',
+    (
+      {
+        identity_state: 'تغيير وصول الحساب',
+        organization_state: 'تغيير وصول المؤسسة',
+        support_reply: 'حفظ رد الدعم',
+        view_users: 'عرض دليل الحسابات',
+        view_organizations: 'عرض دليل المؤسسات',
+        view_support: 'عرض طلبات الدعم',
+        view_audit: 'عرض سجل الإجراءات',
+      } as Record<string, string>
+    )[kind] || 'إجراء في المنصة',
+  )
+const section = ref('organizations'),
+  search = ref(''),
+  items = ref<any[]>([]),
+  next = ref<number | null>(null),
+  loading = ref(true),
+  error = ref(''),
+  selected = ref<any>(),
+  reason = ref(''),
+  reply = ref('')
+const labels = () => ({
+  organizations: l('Organizations', 'المؤسسات'),
+  users: l('Accounts', 'الحسابات'),
+  support: l('Platform support', 'دعم المنصة'),
+  audit: l('Audit history', 'سجل الإجراءات'),
+})
+async function load(append = false) {
+  loading.value = true
+  error.value = ''
+  try {
+    const data = await request<{ items: any[]; next: number | null }>(
+      `/v1/platform?section=${section.value}&search=${encodeURIComponent(search.value)}&includeReads=${includeReads.value}&offset=${append ? next.value || 0 : 0}`,
+    )
+    items.value = append ? [...items.value, ...data.items] : data.items
+    next.value = data.next
+  } catch (e) {
+    error.value = errorMessage(e)
+    items.value = []
+  } finally {
+    loading.value = false
+  }
+}
+function change() {
+  selected.value = undefined
+  search.value = ''
+  void load()
+}
+const command = useCommand<'apply'>(
+  `platform:${user.value!.id}`,
+  async () => {
+    selected.value = undefined
+    reason.value = ''
+    reply.value = ''
+    await load()
+  },
+  (_, args) => request('/v1/platform', { method: 'POST', body: JSON.stringify(args) }),
+)
+function choose(item: any) {
+  selected.value = item
+  reason.value = ''
+  reply.value = item.reply || ''
+}
+function apply() {
+  const item = selected.value
+  return command.run('apply', {
+    operation: crypto.randomUUID(),
+    id: item.id,
+    revision: item.revision,
+    reason: reason.value,
+    action:
+      section.value === 'organizations'
+        ? 'organization_state'
+        : section.value === 'users'
+          ? 'identity_state'
+          : 'support_reply',
+    ...(section.value === 'support'
+      ? { reply: reply.value }
+      : { value: section.value === 'organizations' ? !item.archived : !item.suspended }),
+  })
+}
+onMounted(() => load())
+</script>
+<template>
+  <div class="container page platform-page">
+    <header class="work-heading">
+      <div>
+        <p class="overline">{{ l('Platform operations', 'عمليات المنصة') }}</p>
+        <h1>{{ l('Keep Rafik running well', 'إدارة عمليات رفيق') }}</h1>
+        <p>
+          {{
+            l(
+              'Operational access is audited. Organization roles do not grant platform authority.',
+              'يُسجَّل الوصول التشغيلي. أدوار المؤسسات لا تمنح صلاحية إدارة المنصة.',
+            )
+          }}
+        </p>
+      </div>
+    </header>
+    <form class="platform-filters" @submit.prevent="load()">
+      <label
+        >{{ l('Area', 'القسم')
+        }}<select v-model="section" @change="change">
+          <option v-for="(label, key) in labels()" :key="key" :value="key">{{ label }}</option>
+        </select></label
+      ><label v-if="section !== 'audit'"
+        >{{ l('Search', 'بحث') }}<input v-model="search" type="search" /></label
+      ><label v-if="section === 'audit'" class="check-label"
+        ><input v-model="includeReads" type="checkbox" @change="load()" />{{
+          l('Include directory access', 'تضمين الوصول إلى القوائم')
+        }}</label
+      ><button class="button secondary">{{ l('Refresh results', 'تحديث النتائج') }}</button>
+    </form>
+    <CommandStatus :command="command" />
+    <section v-if="selected" class="card platform-action">
+      <h2>{{ selected.name || selected.email || selected.subject }}</h2>
+      <p v-if="section === 'support'" class="support-detail" dir="auto">{{ selected.detail }}</p>
+      <p v-else>
+        {{
+          section === 'organizations'
+            ? l(
+                'Closing ends access for every organization member; reopening restores their existing memberships. History is preserved.',
+                'يوقف الإغلاق وصول جميع أعضاء المؤسسة وتستعيد إعادة الفتح عضوياتهم الحالية. يُحفظ السجل.',
+              )
+            : l(
+                'Suspension ends sign-in access and revokes current sessions. Restoring access requires a new sign-in. Records stay preserved.',
+                'يوقف التعليق تسجيل الدخول ويلغي الجلسات الحالية. بعد استعادة الوصول يلزم تسجيل الدخول مجدداً. تبقى السجلات محفوظة.',
+              )
+        }}
+      </p>
+      <form @submit.prevent="apply">
+        <fieldset :disabled="command.state.busy || !!command.state.pending">
+          <label
+            >{{ l('Reason for this action', 'سبب الإجراء')
+            }}<textarea v-model="reason" minlength="10" maxlength="500" required /></label
+          ><label v-if="section === 'support'"
+            >{{ l('Reply in Rafik', 'الرد في رفيق')
+            }}<textarea v-model="reply" maxlength="4000" required />
+          </label>
+          <div class="actions">
+            <button class="button" :disabled="reason.trim().length < 10">
+              {{ l('Confirm action', 'تأكيد الإجراء') }}</button
+            ><button type="button" class="text-link" @click="selected = undefined">
+              {{ l('Cancel', 'إلغاء') }}
+            </button>
+          </div>
+        </fieldset>
+      </form>
+    </section>
+    <PageState :loading="loading" :error="error" @retry="load()"
+      ><p v-if="!items.length" class="notice">
+        {{ l('No matching records.', 'لا توجد سجلات مطابقة.') }}
+      </p>
+      <div class="platform-records">
+        <article v-for="item in items" :key="item.id" class="platform-row">
+          <div class="grow">
+            <h2 dir="auto">
+              {{ item.name || item.email || item.subject || actionLabel(item.kind) }}
+            </h2>
+            <p v-if="section === 'organizations'">
+              {{ item.archived ? l('Closed', 'مغلقة') : l('Open', 'مفتوحة') }} ·
+              {{ item._count.workspace_members }} {{ l('members', 'عضو') }}
+            </p>
+            <p v-else-if="section === 'users'">
+              {{
+                item.operator
+                  ? l('Platform operator', 'مشغل المنصة')
+                  : item.suspended
+                    ? l('Suspended', 'معلّق')
+                    : l('Can sign in', 'يمكنه تسجيل الدخول')
+              }}
+            </p>
+            <p v-else-if="section === 'support'">
+              {{
+                item.state === 'open'
+                  ? l('Needs a response', 'بانتظار الرد')
+                  : l('Resolved', 'تم الحل')
+              }}
+            </p>
+            <template v-else
+              ><p v-if="item.subject_label" dir="auto">{{ item.subject_label }}</p>
+              <p>{{ item.reason }}</p>
+              <small
+                >{{ dateLabel(item.created_at) }} ·
+                {{ item.actor_name || l('Deleted account', 'حساب محذوف') }}</small
+              ></template
+            >
+          </div>
+          <button
+            v-if="section !== 'audit' && !item.operator"
+            class="text-link"
+            @click="choose(item)"
+          >
+            {{
+              section === 'support'
+                ? l('Read and respond', 'قراءة ورد')
+                : section === 'organizations'
+                  ? item.archived
+                    ? l('Reopen', 'إعادة فتح')
+                    : l('Close organization', 'إغلاق المؤسسة')
+                  : item.suspended
+                    ? l('Restore access', 'استعادة الوصول')
+                    : l('Suspend access', 'تعليق الوصول')
+            }}
+          </button>
+        </article>
+      </div>
+      <button v-if="next !== null" class="button secondary" @click="load(true)">
+        {{ l('Load more', 'تحميل المزيد') }}
+      </button></PageState
+    >
+  </div>
+</template>
+<style scoped>
+.platform-page {
+  max-width: 1100px;
+}
+.platform-filters {
+  display: flex;
+  align-items: end;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 24px 0;
+}
+.platform-filters label {
+  flex: 1;
+  min-width: 0;
+}
+.platform-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+.platform-row h2 {
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+  margin: 0;
+}
+.platform-row p {
+  margin: 6px 0;
+}
+.platform-row small {
+  overflow-wrap: anywhere;
+}
+.platform-action {
+  margin: 24px 0;
+}
+.support-detail {
+  white-space: pre-wrap;
+}
+.platform-row button {
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  .platform-filters {
+    display: grid;
+  }
+  .platform-row {
+    align-items: start;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+</style>

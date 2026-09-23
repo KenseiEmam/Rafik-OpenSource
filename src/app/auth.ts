@@ -6,20 +6,26 @@ import { locale } from '../lib/i18n'
 export const user = shallowRef<ApiUser | null>(null)
 export const profile = ref<Profile | null>(null)
 export const contexts = ref<Context[]>([])
+export const platform = ref(false)
 export async function refreshContexts() {
   const id = user.value?.id
   if (!id) {
     contexts.value = []
+    platform.value = false
     return
   }
-  const data = await request<{ contexts: Context[] }>('/v1/contexts')
-  if (user.value?.id === id) contexts.value = data.contexts
+  const data = await request<{ contexts: Context[]; platform: boolean }>('/v1/contexts')
+  if (user.value?.id === id) {
+    contexts.value = data.contexts
+    platform.value = data.platform
+  }
 }
 let init: Promise<void> | undefined
 export async function refreshProfile() {
   if (!user.value) {
     profile.value = null
     contexts.value = []
+    platform.value = false
     return
   }
   const id = user.value.id
@@ -44,6 +50,7 @@ export function ready() {
       if (changed) {
         profile.value = null
         contexts.value = []
+        platform.value = false
         setTimeout(() => void refreshProfile().catch(() => {}), 0)
       }
     })
@@ -54,4 +61,5 @@ export async function logout() {
   user.value = null
   profile.value = null
   contexts.value = []
+  platform.value = false
 }

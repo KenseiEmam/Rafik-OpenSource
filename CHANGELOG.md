@@ -1,5 +1,12 @@
 # Rafik web change history
 
+## R11 — Operations, scale and recovery · 23 September 2026
+
+- Separate platform authority, audited actions/support and account/session suspension; local Amina sample.
+- Bounded organization people/recipients/history/analytics, persistent multi-page selections and measured roster index.
+- Disposable browser acceptance, private-file maintenance and database-plus-byte recovery rehearsal; current architecture/runbook/API/maintainer docs and ADR0008.
+- Verified70 browser journeys,96 rendered states,domain/HTTP/fresh/schema checks. Local only; real providers/devices/human outcomes remain outstanding.
+
 ## R10 — Scoped communication and notifications (23 September 2026)
 
 Organization channels with visible membership, compact responsive list/detail, durable message drafts/exact retries and accessible history. Global authorized notification links, category preferences and quiet hours; transactional intent capture, bounded retries/retention and local intercepted delivery. No external provider delivery.
