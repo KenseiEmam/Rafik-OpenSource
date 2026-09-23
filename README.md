@@ -146,3 +146,9 @@ Coach/organization staff use a persistent desktop sidebar and scrollable workspa
 - `tests/dashboard.e2e.ts`, `tests/design-controls.test.ts`, `scripts/audit-dashboard.ts`: saved/keyboard controls, report recovery, scroll geometry, token validity and rendered role/theme/breakpoint checks. Run the audit with `npm run test:dashboard:layout` against the preserved local preview.
 
 [ADR0009](../rafik-api/docs/decisions/0009-dashboard-components.md) records why these underlying libraries were integrated directly with Rafik CSS instead of migrating the app to Tailwind. [Audit and acceptance](../rafik-api/docs/implementation/dashboard-quality-audit.md) documents the previous UX gaps and current evidence.
+
+## Reference content and nutrition (R14)
+
+Independent-coach Nutrition now puts daily calories/macros and a structured example day first. Trainees choose a sourced food, adjust a portion and explicitly log what they ate; suggestions never count as consumption. The starter library contains 15 USDA foods, with manual/custom entries and saved foods for other choices. Ten shared exercises have sharp vector reference positions in libraries, the program editor and training, with explicit play/pause and attribution.
+
+Canonical content lives in the backend `content/` directory. Run backend `npm run content:media`, `npm run content` and `npm run content:check`; generated web media and manifests must not be hand-edited. Backend `test:catalog` verifies provenance, bytes and public API contracts. See the [content guide](../rafik-api/docs/implementation/content.md), [ADR0010](../rafik-api/docs/decisions/0010-reference-content-and-nutrition.md) and [research synthesis](../rafik-api/docs/implementation/open-source-research.md). Nutrition remains an independent coaching feature; organization nutrition needs its own ownership/sharing lifecycle. Native integration and hosting remain deferred.

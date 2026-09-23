@@ -151,6 +151,7 @@ export type Database = { public: { Tables: {
         kind: string
         media_url: string
         revision: number
+        media_ref: string | null
     } }
     invitations: { Row: {
         id: string
@@ -244,6 +245,7 @@ export type Database = { public: { Tables: {
         targets: Json
         guidance: string
         created_at: string
+        meals: Json
     } }
     organization_assignments: { Row: {
         id: string

@@ -1,5 +1,14 @@
 # Rafik web change history
 
+## R14 — Actionable nutrition and sharp exercise guidance · 23 September 2026
+
+- Visible calorie/macro targets, optional budget arithmetic, source-backed food picker, structured example days, adjustable actual portions and truthful target progress.
+- Context-specific nutrition drafts and durable exact retries for all nutrition writes; unit changes clear incompatible values and helper drafts do not block plan saving.
+- Shared exercise viewer with three vector reference poses, deliberate play/pause, reduced-motion/hidden-page behavior, attribution and image retry. Offline shell includes the bounded public reference pack.
+- Research, engineering content guide, API contract, Help and acceptance coverage updated. The library starts with 15 foods and ten exact exercise matches; organization nutrition and native integration remain outstanding.
+
+- Acceptance: 28 full release gates passed, followed by 22 final focused browser regressions after the late-save navigation guard and Arabic portion refinements. Full evidence and limits are in the implementation verification record.
+
 ## R13 — Staff dashboard and control quality · 23 September 2026
 
 - Persistent coach/organization sidebar, compact task headings, mobile navigation drawer and bounded desktop workspace/collection scrolling.

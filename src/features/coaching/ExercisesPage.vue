@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import ExerciseDemo from '../../components/ExerciseDemo.vue'
+import media from '../../content/exercise-media.json'
 import OrganizationNav from '../organizations/OrganizationNav.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { user } from '../../app/auth'
@@ -66,6 +68,7 @@ function create() {
     movement: '',
     kind: 'strength',
     media_url: '',
+    media_ref: null,
     revision: 0,
     active: true,
   }
@@ -126,6 +129,7 @@ async function save() {
     movement: e.movement.trim(),
     kind: e.kind || 'strength',
     media_url: e.media_url?.trim() || '',
+    media_ref: e.media_ref || null,
   }
   await command.run('save', {
     operation: crypto.randomUUID(),
@@ -229,6 +233,30 @@ onMounted(async () => {
               >{{ language('Demonstration link (optional, HTTPS)', 'رابط الشرح (اختياري، HTTPS)')
               }}<input v-model="editing.media_url" type="url" pattern="https://.*" maxlength="1000"
             /></label>
+            <label
+              >{{ language('Illustration (optional)', 'رسم توضيحي (اختياري)')
+              }}<select v-model="editing.media_ref">
+                <option :value="null">
+                  {{ language('No library illustration', 'دون رسم من المكتبة') }}
+                </option>
+                <option v-for="item in media.items" :key="item.id" :value="item.id">
+                  {{
+                    locale === 'ar'
+                      ? exercises.find((e) => e.id === item.exerciseId)?.name_ar || item.sourceSlug
+                      : exercises.find((e) => e.id === item.exerciseId)?.name || item.sourceSlug
+                  }}
+                </option>
+              </select></label
+            >
+            <p class="subtle">
+              {{
+                language(
+                  'Choose only an exact movement match. An external demonstration link takes priority.',
+                  'اختر رسماً مطابقاً للحركة. تكون الأولوية لرابط الشرح الخارجي.',
+                )
+              }}
+            </p>
+            <ExerciseDemo :exercise="editing" />
             <details>
               <summary>
                 {{ language('Arabic translation (optional)', 'الترجمة العربية (اختيارية)') }}
@@ -319,15 +347,8 @@ onMounted(async () => {
               <p class="preserve-lines">
                 {{ locale === 'ar' ? e.instructions_ar || e.instructions : e.instructions }}
               </p>
-              <a
-                v-if="e.media_url"
-                :href="e.media_url"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-link"
-                >{{ language('Open demonstration', 'فتح الشرح') }} ↗</a
-              >
             </details>
+            <ExerciseDemo :exercise="e" thumbnail />
           </div>
           <div v-if="context.editableExercise(e)" class="actions">
             <button class="text-link" :disabled="busy || !!editing" @click="edit(e)">

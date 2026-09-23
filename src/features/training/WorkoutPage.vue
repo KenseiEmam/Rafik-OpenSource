@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ExerciseDemo from '../../components/ExerciseDemo.vue'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import {
@@ -567,14 +568,7 @@ function correctSets() {
               <p class="prescription-line">
                 {{ language('Target', 'الهدف') }}: {{ targetLabel(current) }}
               </p>
-              <a
-                v-if="info && 'media_url' in info && info.media_url"
-                :href="String(info.media_url)"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-link"
-                >{{ language('Open demonstration', 'فتح الشرح') }} ↗</a
-              >
+              <ExerciseDemo :exercise="info" />
               <p v-if="current.note" class="coach-prescription">{{ current.note }}</p>
               <p v-if="previous[performed!.exerciseId]" class="previous-result">
                 {{ t('previous') }}:

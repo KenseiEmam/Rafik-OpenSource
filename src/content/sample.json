@@ -115,7 +115,8 @@
       "instructions": "Hold the weight close to your chest. Sit down between your hips, then stand tall. Choose a comfortable depth.",
       "instructions_ar": "أمسك الدمبل قريباً من صدرك. انزل بثني الركبتين والوركين ثم قف باعتدال. اختر عمقاً مريحاً.",
       "movement": "squat",
-      "kind": "strength"
+      "kind": "strength",
+      "media_ref": "wg-aac5992-goblet-squat"
     },
     {
       "id": "dumbbell-row",
@@ -126,7 +127,8 @@
       "instructions": "Support one hand on a stable bench. Pull the weight toward your hip and lower with control. Repeat on both sides.",
       "instructions_ar": "اسند يدك على مقعد ثابت. اسحب الدمبل نحو وركك وأنزله بتحكم. كرر على الجانبين.",
       "movement": "pull",
-      "kind": "strength"
+      "kind": "strength",
+      "media_ref": "wg-aac5992-one-arm-dumbbell-row"
     },
     {
       "id": "floor-press",
@@ -137,7 +139,8 @@
       "instructions": "Lie on the floor with knees bent. Press the dumbbells up, then lower until your upper arms gently touch the floor.",
       "instructions_ar": "استلقِ على الأرض مع ثني الركبتين. ادفع الدمبل للأعلى ثم أنزله حتى يلامس أعلى الذراعين الأرض برفق.",
       "movement": "push",
-      "kind": "strength"
+      "kind": "strength",
+      "media_ref": null
     },
     {
       "id": "romanian-deadlift",
@@ -148,7 +151,8 @@
       "instructions": "Keep a soft bend in your knees. Move your hips back with the weights close to your legs, then stand tall.",
       "instructions_ar": "اثنِ ركبتيك قليلاً. ادفع الوركين للخلف والدمبل قريب من ساقيك، ثم قف باعتدال.",
       "movement": "hinge",
-      "kind": "strength"
+      "kind": "strength",
+      "media_ref": "wg-aac5992-dumbbell-romanian-deadlift"
     },
     {
       "id": "split-squat",
@@ -159,7 +163,8 @@
       "instructions": "Take a split stance. Lower straight down with control and push through the front foot to stand. Repeat both sides.",
       "instructions_ar": "قف بقدم أمام الأخرى. انزل بتحكم وادفع بالقدم الأمامية للوقوف. كرر على الجانبين.",
       "movement": "squat",
-      "kind": "strength"
+      "kind": "strength",
+      "media_ref": "wg-aac5992-split-squat"
     },
     {
       "id": "glute-bridge",
@@ -170,7 +175,8 @@
       "instructions": "Lie with feet flat and knees bent. Lift your hips, pause briefly, then lower slowly.",
       "instructions_ar": "استلقِ مع ثني الركبتين ووضع القدمين على الأرض. ارفع الحوض، توقف قليلاً ثم انزل ببطء.",
       "movement": "hinge",
-      "kind": "strength"
+      "kind": "strength",
+      "media_ref": "wg-aac5992-glute-bridge"
     },
     {
       "id": "overhead-press",
@@ -181,7 +187,8 @@
       "instructions": "Sit tall with dumbbells at shoulder height. Press up in a comfortable range, then lower with control.",
       "instructions_ar": "اجلس باعتدال والدمبل عند مستوى الكتفين. ادفعه للأعلى ضمن مدى مريح ثم أنزله بتحكم.",
       "movement": "push",
-      "kind": "strength"
+      "kind": "strength",
+      "media_ref": "wg-aac5992-seated-dumbbell-press"
     },
     {
       "id": "dead-bug",
@@ -192,7 +199,8 @@
       "instructions": "Lie on your back with arms raised and knees bent. Slowly extend the opposite arm and leg, then alternate sides.",
       "instructions_ar": "استلقِ على ظهرك مع رفع الذراعين وثني الركبتين. مد الذراع والساق المقابلة ببطء ثم بدّل الجانبين.",
       "movement": "core",
-      "kind": "strength"
+      "kind": "strength",
+      "media_ref": "wg-aac5992-dead-bug"
     },
     {
       "id": "forearm-plank",
@@ -203,7 +211,8 @@
       "movement": "brace",
       "kind": "timed",
       "instructions": "Place your forearms on the floor with elbows below shoulders. Keep breathing and hold a steady position. Stop the set when you can no longer maintain it.",
-      "instructions_ar": "ضع ساعديك على الأرض ومرفقيك تحت كتفيك. تنفس وحافظ على وضع ثابت. أنهِ المجموعة عندما لا تستطيع الحفاظ على الوضع."
+      "instructions_ar": "ضع ساعديك على الأرض ومرفقيك تحت كتفيك. تنفس وحافظ على وضع ثابت. أنهِ المجموعة عندما لا تستطيع الحفاظ على الوضع.",
+      "media_ref": "wg-aac5992-plank"
     },
     {
       "id": "brisk-walk",
@@ -214,7 +223,8 @@
       "movement": "locomotion",
       "kind": "distance",
       "instructions": "Choose a clear route and walk at a pace that feels manageable. Record the distance you actually cover. Slow down when needed.",
-      "instructions_ar": "اختر مساراً واضحاً وامشِ بوتيرة مناسبة لك. سجّل المسافة التي قطعتها فعلاً. خفّف السرعة عند الحاجة."
+      "instructions_ar": "اختر مساراً واضحاً وامشِ بوتيرة مناسبة لك. سجّل المسافة التي قطعتها فعلاً. خفّف السرعة عند الحاجة.",
+      "media_ref": null
     },
     {
       "id": "stationary-cycle",
@@ -225,7 +235,8 @@
       "movement": "locomotion",
       "kind": "timed",
       "instructions": "Adjust the seat so your knee stays slightly bent at the bottom of the pedal stroke. Pedal smoothly at a comfortable resistance and record your moving time.",
-      "instructions_ar": "اضبط المقعد لتبقى ركبتك مثنية قليلاً عند أسفل دورة الدواسة. حرّك الدواسات بسلاسة بمقاومة مناسبة وسجّل زمن الحركة."
+      "instructions_ar": "اضبط المقعد لتبقى ركبتك مثنية قليلاً عند أسفل دورة الدواسة. حرّك الدواسات بسلاسة بمقاومة مناسبة وسجّل زمن الحركة.",
+      "media_ref": null
     },
     {
       "id": "incline-pushup",
@@ -236,7 +247,8 @@
       "movement": "push",
       "kind": "strength",
       "instructions": "Place your hands on a stable raised surface. Keep your body aligned, lower your chest toward your hands, then press back. Use a higher surface to make the movement easier.",
-      "instructions_ar": "ضع يديك على سطح مرتفع وثابت. حافظ على استقامة جسمك، واخفض صدرك نحو يديك ثم ادفع للعودة. استخدم سطحاً أعلى لتسهيل الحركة."
+      "instructions_ar": "ضع يديك على سطح مرتفع وثابت. حافظ على استقامة جسمك، واخفض صدرك نحو يديك ثم ادفع للعودة. استخدم سطحاً أعلى لتسهيل الحركة.",
+      "media_ref": "wg-aac5992-incline-push-up"
     },
     {
       "id": "low-step-up",
@@ -247,7 +259,8 @@
       "movement": "squat",
       "kind": "strength",
       "instructions": "Place one foot fully on a low, stable step. Push through that foot to rise, then lower under control. Complete the prescribed repetitions on each side.",
-      "instructions_ar": "ضع قدماً كاملة على درجة منخفضة وثابتة. ادفع عبر تلك القدم للصعود ثم انزل بتحكم. أكمل التكرارات المحددة لكل جانب."
+      "instructions_ar": "ضع قدماً كاملة على درجة منخفضة وثابتة. ادفع عبر تلك القدم للصعود ثم انزل بتحكم. أكمل التكرارات المحددة لكل جانب.",
+      "media_ref": null
     },
     {
       "id": "band-row",
@@ -258,7 +271,8 @@
       "movement": "pull",
       "kind": "strength",
       "instructions": "Secure the band to a stable anchor. Pull your elbows back without leaning, pause briefly, then return slowly. Check the band and anchor before each set.",
-      "instructions_ar": "ثبّت الشريط في نقطة ثابتة. اسحب مرفقيك للخلف دون ميل، توقف لحظة ثم عد ببطء. تحقق من الشريط ونقطة تثبيته قبل كل مجموعة."
+      "instructions_ar": "ثبّت الشريط في نقطة ثابتة. اسحب مرفقيك للخلف دون ميل، توقف لحظة ثم عد ببطء. تحقق من الشريط ونقطة تثبيته قبل كل مجموعة.",
+      "media_ref": "wg-aac5992-banded-row"
     }
   ]
 }

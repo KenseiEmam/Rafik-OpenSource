@@ -1,0 +1,130 @@
+.nutrition-workspace .nutrition-tabs {
+  margin-block: 1.25rem;
+}
+.nutrition-workspace .progress-filters {
+  border: 0;
+  padding: 0;
+}
+.nutrition-workspace .nutrition-totals {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.nutrition-workspace progress {
+  width: 100%;
+  height: 0.5rem;
+  margin-block: 0.6rem;
+  accent-color: var(--accent);
+}
+.nutrition-coach {
+  grid-template-columns: minmax(0, 1fr);
+}
+.nutrition-plan-fields {
+  border: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+}
+.nutrition-plan-fields > .meal-plan-editor {
+  grid-column: 2;
+  grid-row: 1 / span 5;
+  border-inline-start: 1px solid var(--line);
+  padding-inline-start: 1.5rem;
+}
+.nutrition-calculator {
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  padding: 1rem;
+}
+.nutrition-calculator > .form-stack {
+  margin-top: 1rem;
+}
+.food-results {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 18rem;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 0.6rem;
+}
+.food-results li + li {
+  border-top: 1px solid var(--line);
+}
+.food-results button {
+  width: 100%;
+  padding: 0.75rem;
+  text-align: start;
+  display: grid;
+  gap: 0.2rem;
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+}
+.food-results button:hover,
+.food-results button:focus-visible {
+  background: var(--tint);
+}
+.food-results span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.planned-food-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: space-between;
+  padding-block: 0.75rem;
+  border-bottom: 1px solid var(--line);
+}
+.planned-food-row > div {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.planned-food-row small,
+.planned-food-row span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.nutrition-workspace fieldset {
+  min-width: 0;
+  border: 0;
+  padding: 0;
+}
+.nutrition-workspace input[type='date'] {
+  min-width: 0;
+  max-width: 100%;
+}
+@media (max-width: 760px) {
+  .nutrition-workspace .nutrition-totals {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .nutrition-plan-fields {
+    display: flex;
+    flex-direction: column;
+  }
+  .nutrition-plan-fields > * {
+    width: 100%;
+    min-width: 0;
+  }
+  .nutrition-plan-fields > .meal-plan-editor {
+    border-inline-start: 0;
+    padding-inline-start: 0;
+  }
+  .nutrition-tabs {
+    flex-wrap: wrap;
+  }
+}
+
+.planned-portion {
+  flex: 0 0 6.5rem;
+  width: 6.5rem;
+}
+.meal-plan-editor .planned-food-row {
+  flex-wrap: wrap;
+}
+.meal-plan-editor .planned-food-row > div {
+  flex: 1 1 12rem;
+}

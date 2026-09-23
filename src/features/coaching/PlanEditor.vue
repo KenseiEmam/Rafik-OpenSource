@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ExerciseDemo from '../../components/ExerciseDemo.vue'
 import ProgramCover from './ProgramCover.vue'
 import { request } from '../../lib/backend'
 import OrganizationNav from '../organizations/OrganizationNav.vue'
@@ -722,6 +723,7 @@ function removeDay() {
                 </p>
               </div>
               <PrescriptionFields v-else v-model="day.exercises[i]!" />
+              <ExerciseDemo :exercise="catalog.find((e) => e.id === ex.exerciseId) || ex.info" />
               <p v-if="preview">
                 {{
                   locale === 'ar'

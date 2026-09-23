@@ -24,7 +24,7 @@ test('optional nutrition connects immutable guidance, saved food and corrected a
   await page
     .getByLabel('Meal guidance', { exact: true })
     .fill('Keep regular meals and choose food you enjoy.')
-  await page.getByRole('button', { name: 'Save guidance', exact: true }).click()
+  await page.getByRole('button', { name: 'Save nutrition plan', exact: true }).click()
   await expect(page.getByRole('status')).toContainText('Guidance saved')
   const context = await browser.newContext(),
     client = await context.newPage()
@@ -37,8 +37,8 @@ test('optional nutrition connects immutable guidance, saved food and corrected a
     client.getByText('Keep regular meals and choose food you enjoy.', { exact: true }).first(),
   ).toBeVisible()
   await client.getByLabel('Food or meal name', { exact: true }).fill(title)
-  await client.getByLabel('Amount eaten', { exact: true }).fill('150')
   await client.getByRole('combobox', { name: 'Portion unit', exact: true }).selectOption('g')
+  await client.getByLabel('Amount eaten', { exact: true }).fill('150')
   await client.getByText('Nutrition details (optional)', { exact: true }).click()
   await client.getByLabel('Values below are per').fill('100')
   await client.getByLabel('Energy (kcal)', { exact: true }).fill('130')
@@ -63,6 +63,7 @@ test('optional nutrition connects immutable guidance, saved food and corrected a
     animations: 'disabled',
   })
   await page.reload()
+  await page.getByRole('button', { name: 'Food record & history', exact: true }).click()
   await expect(page.locator('.meal-row').filter({ hasText: title }).first()).toContainText(
     '260 kcal',
   )

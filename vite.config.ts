@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import media from './src/content/exercise-media.json'
 import { shellIdentity, shellWorker } from './build/offline-shell.ts'
 export default defineConfig({
   plugins: [
@@ -19,6 +20,10 @@ export default defineConfig({
             ...new Set([
               'index.html',
               'brand/rafik.png',
+              'exercise-media/CREDITS.txt',
+              ...media.items.flatMap((item) =>
+                item.frames.map((frame) => frame.path.replace('/v1/catalog/', '')),
+              ),
               ...Object.values(bundle).map((output) => output.fileName),
             ]),
           ]
