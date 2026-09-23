@@ -46,3 +46,5 @@
 - Verify every step of a multistep flow, especially initial selection and empty states, not only the final review/confirmation. Include native date/select controls at 320px. Optional Vue boolean props need explicit defaults when absence should mean true; shared feedback changes require regression of existing consumers.
 
 - Responsive charts need readable labels at actual rendered size, not just SVG source font size. Keep textual axes/units legible on narrow screens and provide table equivalents. Keep datalist suggestions outside labels so the input's accessible name stays concise. Verify participant filters and permission changes against the original role contract.
+
+- Check vertical collisions as well as horizontal overflow, especially viewport-sized conversation layouts with headers and footers. Scrollable histories must be keyboard focusable in Safari. Device-save feedback must wait for storage acknowledgment; edits during an active sync must schedule another pass instead of being dropped by a busy flag.

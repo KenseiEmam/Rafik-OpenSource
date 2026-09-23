@@ -120,6 +120,14 @@ export function errorMessage(error: unknown): string {
         ? String(error.message)
         : String(error)
   const teamErrors: Record<string, [string, string]> = {
+    conversation_unavailable: [
+      'This conversation is unavailable in this workspace. Refresh your conversations or contact an organization administrator.',
+      'هذه المحادثة غير متاحة في مساحة العمل. حدّث المحادثات أو تواصل مع مسؤول المؤسسة.',
+    ],
+    notification_unavailable: [
+      'This update is no longer available. Return to Notifications for current updates.',
+      'لم يعد هذا التحديث متاحاً. ارجع إلى الإشعارات للتحديثات الحالية.',
+    ],
     invalid_assessment: [
       'Check the assessment drills, names, units and bounds.',
       'تحقق من الاختبارات وأسمائها ووحداتها وحدودها.',

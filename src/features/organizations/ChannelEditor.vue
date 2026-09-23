@@ -1,0 +1,223 @@
+<script setup lang="ts">
+import { computed, onMounted, ref, watch } from 'vue'
+import { user } from '../../app/auth'
+import { request } from '../../lib/backend'
+import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
+import { language as l, errorMessage } from '../../lib/i18n'
+import { useCommand } from '../teams/commands'
+import CommandStatus from '../teams/CommandStatus.vue'
+import PageState from '../../components/PageState.vue'
+import type { Organization } from './types'
+const props = defineProps<{
+  workspace: string
+  view: string
+  initial?: {
+    id: string
+    title: string
+    revision: number
+    people: { id: string; manager: boolean }[]
+  }
+}>()
+const emit = defineEmits<{ saved: [id: string]; close: [] }>()
+const key = `channel-editor:${user.value!.id}:${props.workspace}:${props.view}:${props.initial?.id || 'new'}`
+const people = ref<Organization>(),
+  loading = ref(true),
+  error = ref(''),
+  search = ref(''),
+  ready = ref(false),
+  saved = ref(false)
+const draft = ref({
+  id: props.initial?.id || crypto.randomUUID(),
+  title: props.initial?.title || '',
+  members: props.initial?.people.map((p) => p.id) || ([] as string[]),
+  managers: props.initial?.people.filter((p) => p.manager).map((p) => p.id) || ([] as string[]),
+})
+const visible = computed(
+  () =>
+    people.value?.members
+      .filter((m) => m.active && m.name.toLowerCase().includes(search.value.toLowerCase()))
+      .slice(0, 30) || [],
+)
+const missing = computed(() =>
+  draft.value.members.filter((id) => !people.value?.members.some((m) => m.id === id && m.active)),
+)
+const command = useCommand<'save'>(
+  key,
+  async (_, result) => {
+    ready.value = false
+    await removeDraft(key)
+    emit('saved', (result as { id: string }).id)
+  },
+  (_, args) =>
+    request(`/v1/workspaces/${props.workspace}/communication`, {
+      method: 'POST',
+      body: JSON.stringify(args),
+    }),
+)
+const locked = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
+async function load() {
+  loading.value = true
+  error.value = ''
+  try {
+    people.value = await request(`/v1/workspaces/${props.workspace}?view=${props.view}`)
+    if (!props.initial) {
+      draft.value.members = [people.value!.self.id]
+      draft.value.managers = [people.value!.self.id]
+    }
+  } catch (e) {
+    error.value = errorMessage(e)
+  } finally {
+    loading.value = false
+  }
+}
+function remove(id: string) {
+  draft.value.members = draft.value.members.filter((x) => x !== id)
+  draft.value.managers = draft.value.managers.filter((x) => x !== id)
+}
+function save() {
+  return command.run('save', {
+    ...draft.value,
+    managers: draft.value.managers.filter((id) => draft.value.members.includes(id)),
+    action: props.initial ? 'members' : 'create',
+    view: props.view,
+    revision: props.initial?.revision || 0,
+    operation: crypto.randomUUID(),
+  })
+}
+watch(
+  draft,
+  async () => {
+    if (!ready.value) return
+    saved.value = false
+    try {
+      await storeDraft(key, draft.value)
+      saved.value = true
+    } catch (e) {
+      error.value = errorMessage(e)
+    }
+  },
+  { deep: true },
+)
+onMounted(async () => {
+  await load()
+  const stored = await getDraft<typeof draft.value>(key).catch(() => undefined)
+  if (stored) draft.value = stored
+  ready.value = true
+})
+</script>
+<template>
+  <section class="channel-editor panel">
+    <div class="heading-actions">
+      <h2>
+        {{
+          initial
+            ? l('Conversation participants', 'المشاركون في المحادثة')
+            : l('New conversation', 'محادثة جديدة')
+        }}
+      </h2>
+      <button class="text-link" @click="emit('close')" :disabled="locked">
+        {{ l('Close', 'إغلاق') }}
+      </button>
+    </div>
+    <CommandStatus :command="command" />
+    <PageState :loading="loading" :error="error" @retry="load"
+      ><form v-if="people" @submit.prevent="save">
+        <fieldset class="form-fields" :disabled="locked">
+          <label v-if="!initial"
+            >{{ l('Conversation name', 'اسم المحادثة')
+            }}<input
+              v-model="draft.title"
+              maxlength="100"
+              required
+              :placeholder="l('e.g. Tuesday training group', 'مثلاً مجموعة تدريب الثلاثاء')"
+          /></label>
+          <p>
+            {{
+              l(
+                'Only the people listed here can read and send messages. New participants can see the existing history. Organization administrators may explicitly join; they appear in this list.',
+                'الأشخاص المدرجون هنا فقط يستطيعون قراءة الرسائل وإرسالها. يرى المشاركون الجدد السجل السابق. يمكن لمسؤولي المؤسسة الانضمام بشكل صريح ويظهرون في هذه القائمة.',
+              )
+            }}
+          </p>
+          <label
+            >{{ l('Find people', 'البحث عن أشخاص') }}<input type="search" v-model="search"
+          /></label>
+          <p class="small-print">
+            {{ draft.members.length }}
+            {{
+              l(
+                'selected · up to 100. Search to find more people.',
+                'محدد · حتى 100. ابحث للعثور على المزيد.',
+              )
+            }}
+          </p>
+          <div v-for="person in visible" :key="person.id" class="channel-person-choice">
+            <label class="check-label"
+              ><input
+                v-model="draft.members"
+                type="checkbox"
+                :value="person.id"
+                :disabled="person.id === people.self.id"
+              />{{ person.name }}</label
+            >
+            <label
+              v-if="
+                draft.members.includes(person.id) &&
+                person.roles.some((r) => r === 'admin' || r === 'trainer')
+              "
+              class="check-label small-print"
+              ><input
+                v-model="draft.managers"
+                type="checkbox"
+                :value="person.id"
+                :disabled="person.id === people.self.id"
+              />{{ l('Can manage participants', 'يمكنه إدارة المشاركين') }}</label
+            >
+          </div>
+          <p v-for="id in missing" :key="id" class="notice">
+            {{ l('A selected person is unavailable.', 'أحد الأشخاص المحددين غير متاح.') }}
+            <button type="button" class="text-link" @click="remove(id)">
+              {{ l('Remove', 'إزالة') }}
+            </button>
+          </p>
+          <p role="status" class="small-print">
+            {{
+              saved
+                ? l('Draft saved on this device.', 'حُفظت المسودة على هذا الجهاز.')
+                : l(
+                    'Changes stay on this device until confirmed.',
+                    'تبقى التغييرات على هذا الجهاز حتى التأكيد.',
+                  )
+            }}
+          </p>
+          <button class="button" :disabled="draft.members.length < 2 || !!missing.length">
+            {{
+              initial
+                ? l('Confirm participants', 'تأكيد المشاركين')
+                : l('Create conversation', 'إنشاء المحادثة')
+            }}
+          </button>
+        </fieldset>
+      </form></PageState
+    >
+  </section>
+</template>
+<style scoped>
+.channel-editor {
+  max-width: 760px;
+  margin-block: 20px;
+}
+.channel-editor h2 {
+  font-size: 1.2rem;
+}
+.channel-editor label {
+  margin-block: 12px;
+}
+.channel-person-choice {
+  border-block-end: 1px solid var(--line);
+  padding-block: 8px;
+}
+.channel-editor p {
+  overflow-wrap: anywhere;
+}
+</style>

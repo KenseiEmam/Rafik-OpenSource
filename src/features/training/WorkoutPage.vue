@@ -167,12 +167,20 @@ async function load() {
     loading.value = false
   }
 }
+let syncAgain = false
 async function sync() {
-  if (syncing.value || !row.value || row.value.owner === 'guest') return
+  if (!row.value || row.value.owner === 'guest') return
+  if (syncing.value) {
+    syncAgain = true
+    return
+  }
   syncing.value = true
   try {
-    await syncWorkout(id, owner.value)
-    row.value = await getLocalSession(id)
+    do {
+      syncAgain = false
+      await syncWorkout(id, owner.value)
+      row.value = await getLocalSession(id)
+    } while (syncAgain)
   } finally {
     syncing.value = false
   }

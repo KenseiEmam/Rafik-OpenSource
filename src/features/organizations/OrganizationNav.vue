@@ -13,6 +13,7 @@ const items = computed(() => [
   ...(route.params.view === 'trainee' ? [] : [{ path: '/people', name: l('People', 'الأشخاص') }]),
   { path: '/plans', name: l('Programs', 'البرامج') },
   { path: '/training', name: l('Training', 'التدريب') },
+  { path: '/messages', name: l('Messages', 'الرسائل') },
   { path: '/calendar', name: l('Calendar', 'التقويم') },
   ...(route.params.view === 'trainee'
     ? []

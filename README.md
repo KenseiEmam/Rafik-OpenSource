@@ -126,3 +126,5 @@ Use **Manage workspaces** to explicitly create an organization or activate indep
 ## Organization services
 
 Calendar supports reviewed group scheduling, specific assessors, attendance and separate per-trainee results with corrections. More contains Groups and Assessment templates. Analytics provides date/trainee filters, current workload and participation, accessible chart tables and metric definitions. `src/features/organizations` owns these workflows; `src/features/analytics` owns shared charts/reports. `tests/organization-services.e2e.ts` covers the full schedule/result/correction/recovery journey; `scripts/audit-services.ts` checks role/locale/theme/viewport states.
+
+R10 adds organization conversations and the global notification inbox/preferences. The local dispatcher intercepts optional generic previews; no email/push is sent. See the backend implementation ledger, ADR 0007 and runbook for authority, retry and maintenance contracts.

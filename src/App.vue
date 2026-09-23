@@ -2,7 +2,7 @@
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import WorkspaceNav from './features/workspace/WorkspaceNav.vue'
-import { PhArrowUpRight, PhTranslate, PhCaretDown } from '@phosphor-icons/vue'
+import { PhArrowUpRight, PhTranslate, PhCaretDown, PhBell } from '@phosphor-icons/vue'
 import { user, profile, ready, contexts } from './app/auth'
 import { language, locale, t } from './lib/i18n'
 import { localPreview } from './lib/backend'
@@ -41,7 +41,11 @@ const currentContext = computed(
     contexts.value[0],
 )
 const coaching = computed(() => route.path.startsWith('/coach'))
-const messaging = computed(() => /^(\/coach)?\/messages(\/|$)/.test(route.path))
+const messaging = computed(
+  () =>
+    /^(\/coach)?\/messages(\/|$)/.test(route.path) ||
+    /^\/organization\/[^/]+\/[^/]+\/messages(\/|$)/.test(route.path),
+)
 const focused = computed(() => route.path.startsWith('/workout/'))
 const product = computed(
   () =>
@@ -125,6 +129,14 @@ onUnmounted(() => window.removeEventListener('online', online))
             locale === 'en' ? 'العربية' : 'EN'
           }}</span>
         </button>
+        <RouterLink
+          v-if="user && !focused"
+          to="/notifications"
+          class="icon-button notification-entry"
+          :aria-label="language('Notifications', 'الإشعارات')"
+          :title="language('Notifications', 'الإشعارات')"
+          ><PhBell :size="20" aria-hidden="true"
+        /></RouterLink>
         <RouterLink v-if="user && !focused" class="account-link" to="/settings"
           ><span class="avatar small">{{ (profile?.display_name || 'R').slice(0, 1) }}</span
           ><span class="account-name">{{
@@ -143,7 +155,7 @@ onUnmounted(() => window.removeEventListener('online', online))
       product &&
       !focused &&
       !route.path.startsWith('/organization/') &&
-      route.path !== '/workspaces'
+      !['/workspaces', '/notifications'].includes(route.path)
     "
   />
   <main id="main" :class="{ 'messages-main': messaging }" tabindex="-1">

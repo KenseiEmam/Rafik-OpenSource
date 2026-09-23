@@ -203,6 +203,39 @@ export type Database = { public: { Tables: {
         created_at: string
         resource_id: string | null
     } }
+    notification_events: { Row: {
+        id: string
+        user_id: string
+        workspace_id: string | null
+        category: string
+        source_kind: string
+        source_id: string
+        source_group: string
+        event_key: string
+        source_revision: number | null
+        created_at: string
+        read_at: string | null
+        not_before: string
+        expires_at: string
+        state: string
+        attempts: number
+        reason: string
+        sequence: number
+    } }
+    notification_intercepts: { Row: {
+        event_id: string
+        user_id: string
+        subject: string
+        body: string
+        created_at: string
+    } }
+    notification_preferences: { Row: {
+        user_id: string
+        categories: Json
+        quiet_start: number
+        quiet_end: number
+        revision: number
+    } }
     nutrition_guidance: { Row: {
         id: string
         relationship_id: string
@@ -223,6 +256,27 @@ export type Database = { public: { Tables: {
         schedule_mode: string
         state: string
         revision: number
+        created_at: string
+    } }
+    organization_channel_members: { Row: {
+        channel_id: string
+        workspace_id: string
+        member_id: string
+        manager: boolean
+    } }
+    organization_channel_reads: { Row: {
+        channel_id: string
+        workspace_id: string
+        member_id: string
+        sequence: number
+    } }
+    organization_channels: { Row: {
+        id: string
+        workspace_id: string
+        title: string
+        created_by: string
+        revision: number
+        archived: boolean
         created_at: string
     } }
     organization_event_people: { Row: {
@@ -271,6 +325,15 @@ export type Database = { public: { Tables: {
         created_by: string
         archived: boolean
         revision: number
+    } }
+    organization_messages: { Row: {
+        id: string
+        sequence: number
+        workspace_id: string
+        channel_id: string
+        sender_id: string
+        body: string
+        created_at: string
     } }
     organization_programs: { Row: {
         id: string

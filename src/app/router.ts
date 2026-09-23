@@ -55,6 +55,11 @@ const router = createRouter({
       meta: { private: true },
     },
     {
+      path: '/organization/:workspace/:view/messages/:channel?',
+      component: () => import('../features/organizations/ChannelsPage.vue'),
+      meta: { auth: true },
+    },
+    {
       path: '/organization/:workspace/:view/calendar',
       component: () => import('../features/organizations/OrganizationCalendar.vue'),
       meta: { private: true },
@@ -95,6 +100,11 @@ const router = createRouter({
     },
     { path: '/', component: () => import('../features/public/HomePage.vue') },
     { path: '/routine', component: () => import('../features/training/RoutinePage.vue') },
+    {
+      path: '/notifications',
+      component: () => import('../features/notifications/NotificationsPage.vue'),
+      meta: { auth: true },
+    },
     { path: '/workout/:id', component: () => import('../features/training/WorkoutPage.vue') },
     { path: '/login', component: () => import('../features/account/LoginPage.vue') },
     { path: '/auth/callback', component: () => import('../features/account/CallbackPage.vue') },
