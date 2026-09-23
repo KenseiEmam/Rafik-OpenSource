@@ -15,7 +15,7 @@ This maps the implemented user jobs to executable checks. It is a coverage index
 | Appointments | Timezone availability, booking/reschedule/cancel, ambiguous acknowledgement, concurrent/cross-role collision, attendance rules | `service-delivery.e2e.ts`, service SQL and real HTTP suite |
 | Files | Real bytes, upload/finalize recovery, explicit sharing, conversation context, revocation, deletion and account cleanup | `service-delivery.e2e.ts`, service/team HTTP suites, service SQL |
 | Teams | Staff invitation/roles, client consent, groups/shared material, independently copied handoff, access after departure and deletion preflight | `teams.e2e.ts`, populated team-tab layout matrix, team HTTP/SQL suites |
-| Organizations and contexts | Separate organizations, combined roles, verified invitation/revocation, current trainer responsibility, last-admin/concurrent departure guards, preserved membership after deletion, scoped drafts and exact retry | `organizations.e2e.ts`, `tests/workspaces.test.ts`; owned programs/history now covered by `programming.e2e.ts` and `tests/programming.test.ts`; services follow |
+| Organizations and contexts | Separate organizations, combined roles, verified invitation/revocation, current trainer responsibility, last-admin/concurrent departure guards, preserved membership after deletion, scoped drafts and exact retry | `organizations.e2e.ts`, `tests/workspaces.test.ts`; owned programs/history now covered by `programming.e2e.ts` and `tests/programming.test.ts`; organization services are covered below |
 | Organization programming/media | Scoped publication, session/week reuse, private cover retry/access, reviewed atomic delivery, lost ACK/reload, trainee actuals, previous performance, correction and reassignment | `programming.e2e.ts`, `program-structure.test.ts`, `tests/programming.test.ts`, `tests/program-media.test.ts`, `scripts/audit-programming.ts` |
 | Business and support | Local entitlement state/order/retry, owner simulation, private/team support, response/reopen and draft recovery | `teams.e2e.ts`, team HTTP/SQL suites; no real payment/delivery claim |
 | Application updates | Failed install, waiting release with two tabs, old-version navigation, retained workout on activation/offline reload; final built-file/HTML-only cache identity | `app-updates.e2e.ts`, `offline-shell.test.ts`, `scripts/check-shell-build.mjs` |
@@ -26,11 +26,11 @@ This maps the implemented user jobs to executable checks. It is a coverage index
 
 Inspect the entry/list state and the selected/detail state separately. Use more than one record, long labels, optional controls and no-match/error cases. Measure nested scroll containers, control containment and row spacing. Wait for data loading to finish before measuring. Review both viewport captures and full-page context; full-page images alone can make tall broken layouts appear harmless when scaled down.
 
-The broad matrix uses current synthetic preview records; isolated scenario tests supply deterministic fresh fixtures for sensitive state/retry contracts. Some older lifecycle tests leave synthetic sample-account records for inspection; do not depend on their presence or delete the user's preview to conceal layout failures. Each new fixture should clean up only its own records.
+The broad matrix uses current synthetic preview records; isolated scenario tests supply deterministic fresh fixtures for sensitive state/retry contracts. The default R11 browser harness runs even older lifecycle tests in a disposable database; older preview pollution was not erased. Do not depend on old test records or delete the user's preview to conceal layout failures. Each new fixture should clean up only its own records.
 
 ## Remaining boundaries
 
-No matrix establishes every possible record count, translation, device size, keyboard state or race. Phone-sized WebKit is not a physical iPhone. Physical keyboard/touch/suspension, assistive technology, hosted email/Storage/backup/CDN behavior, remote CI, actual notification/calendar/payment providers and human task success/retention remain separate gates. In-app Today activity is implemented; notification preferences and local delivery/outbox are not yet implemented. Marketplace/AI/rankings/native remain explicitly deferred decisions.
+No matrix establishes every possible record count, translation, device size, keyboard state or race. Phone-sized WebKit is not a physical iPhone. Physical keyboard/touch/suspension, assistive technology, hosted email/Storage/backup/CDN behavior, remote CI, actual notification/calendar/payment providers and human task success/retention remain separate gates. In-app Today activity, notification preferences and local intent/interception are implemented; no actual external delivery is claimed. Marketplace/AI/rankings/native remain explicitly deferred decisions.
 
 ## Organization services (R9)
 
@@ -38,9 +38,23 @@ No matrix establishes every possible record count, translation, device size, key
 |---|---|---|
 | Admin schedules a reviewed group assessment; designated assessor records separate trainee values and correction | `tests/organization-services.test.ts`, web `tests/organization-services.e2e.ts` | Physical keyboard/touch and unaided human task observation |
 | Trainer reassignment changes roster analytics/history access while an event-specific assessor grant stays narrow | HTTP reassignment/revocation/export assertions | Hosted environment acceptance |
-| Admin and independent/organization coach interpret real operational diagrams | Report filters/definitions, chart tables, browser role checks and 104-state service audit | Real workload scale/retention evidence, R11 pagination |
+| Admin and independent/organization coach interpret real operational diagrams | Report filters/definitions, chart tables, browser role checks and 104-state service audit | Hosted scale/retention evidence; R11 adds measured fixture paging |
 
 Rendered chart label readability was checked after the automated matrix; see product quality review.
 
+## Communication (R10)
+
+| User task | Evidence | Remaining evidence |
+|---|---|---|
 | Organization participants communicate without scope leaks | R10 HTTP authority/replay tests, both-engine create/send/draft/retry/inbox journey, responsive captures | Real-device keyboard/suspension remains unverified |
 | People control optional updates and reach the right workspace | Intent/preference/reminder/sink tests, generic previews, notification-to-conversation journey | Manual local dispatcher only; real mail/push acceptance is deferred |
+
+## Operations and connected refinement
+
+| User job | Evidence | Limit |
+|---|---|---|
+| Operator manages access/support with reasons | `tests/platform.test.ts`, `operations.e2e.ts` | Separate grant; no private health/message browser |
+| Select people across a large roster | `tests/scale.test.ts`, `operations.e2e.ts`, `MemberPicker` | 120 trainers/1,200 trainees; local fixture, not production SLA |
+| Restore registered bytes and clean old orphans | `tests/maintenance.test.ts`, recovery/maintenance scripts | Local coordinated-hosting snapshot still required |
+| Choose the right workspace and understand the role | `cohesion.e2e.ts`, role-specific Help, rendered entry/help sweep | Developer walkthrough, not unaided human observation |
+| Schedule while keeping selected template/people | `organization-services.e2e.ts`, HTTP per-participant history tests | Real touch/keyboard and user comprehension still require observation |

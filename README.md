@@ -48,3 +48,7 @@ R10 adds organization conversations and the global notification inbox/preference
 ## Operations and large rosters (R11)
 
 Platform operations are available through Amina in the local sample switcher, with separate authority and audited reasons. Organization people, delivery recipients, analytics breakdowns and correction history now use bounded server pages. Selected people remain visible across searches and reloads. Web `npm run test:e2e` owns a disposable database/API/build, preserving the preview; backend `test:operations`, `recovery:local` and `files:maintenance` cover operational checks and local recovery. See the companion backend runbook and maintainer guide for exact file ownership, commands and provider limits.
+
+## Connected experience and release handoff (R12)
+
+The homepage now leads coaches and organizations into the appropriate workspace while retaining the immediate workout sample. Sample accounts are grouped by scope; Help explains admin/trainer/independent tasks. Conversation creation scrolls naturally, scheduling preserves selections through catalog searches and focuses each step, and optional setup stays behind disclosure. Current engineering coverage and release evidence distinguish local verification from hosting, physical-device and human outcome gates. Continue maintaining the companion implementation ledger, verification and maintainer guide with every change.

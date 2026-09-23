@@ -63,3 +63,26 @@ The local SQL launcher previously called `process.exit()` immediately after writ
 ## R9 rendered review
 
 The 104-state service matrix reported no overflow or checked Axe failures, but actual phone capture inspection still found scaled SVG labels too small to read. Moved range/date labels into normal-size HTML and kept the plot at a useful height. This demonstrates why passing geometry/accessibility scans do not replace visual inspection. A timezone datalist nested in its label also polluted exact accessible naming; suggestions now sit outside the label. Group editors expose removal of unavailable prior members; staff reassignment removes inactive staff from the new proposed selection. Result recovery clears the exact persisted participant draft, not whichever participant happens to be selected after reload.
+
+## R12 connected-experience review
+
+Developer review, not human study. The rendered and source audit identified these additional issues after R11:
+
+| Finding | User effect | Correction and verification |
+|---|---|---|
+| Landing/help still primarily described an individual workout | Coach/organization breadth and the correct entry were hard to discover | Coach/organization workspace entry, organization responsibility section, grouped sample roles and role-specific Help; sign-in continuation journey |
+| Conversation creation inherited fixed-height chat framing | Nested scrolling cramped setup, particularly Arabic on a short phone | Normal page scrolling for creation; retain bounded history/composition in the conversation; test editor has no internal vertical clipping and perform actual create/send |
+| Assessment catalog search replaced the selected option | A person could lose a deliberate choice merely while browsing alternatives | Retain selected template across search, handle failed catalog/restore reads, keep reviewed participants complete; test selection through a no-match search |
+| Optional group/catalog controls crowded the default scheduling flow | Extra controls appeared before selecting people even when no group was needed | Disclosure for optional group/template search; direct people selection remains first-class, group route still tested |
+| Selecting a person after loading another roster page triggered a fresh first-page read | Multi-selection jumped back to the beginning of the list | Resolve known selected IDs locally and preserve loaded pages; regression selects row50, verifies50 options remain, then searches/reloads |
+| Step changes lacked a deliberate focus destination | Keyboard focus could remain at the old form action | Focus the labelled current panel after a step transition; browser journey verifies focus and review |
+| Concurrent roster/report/operator reads could display an older response | Fast searches/filters could show outdated context or duplicate paging | Latest-request guards, roster busy feedback and pagination locks; retain server revision/authority on writes |
+| Current-looking documents still described missing organizations/notifications or Supabase | Maintenance required reconstructing history to find actual behavior | Current coverage/reference status corrected; historical source-role audit explicitly labelled; release evidence separates real outcome gates |
+
+Action comparison for the known scheduling task: initial template-search controls are now behind one deliberate disclosure; the existing template remains selectable immediately. Optional group search and selection are behind one disclosure, while individual people selection needs no group setup. Creating a conversation no longer requires scrolling a constrained form inside the page. These are inspected design changes, not measured human completion-time improvements.
+
+The original phone-inbox miss came from desktop-first verification, a flex-basis inherited after changing layout direction, and checking only document width while a nested container clipped overflowing content. R6 corrected that and added state-based containment/row-height checks. R12 found a different consequence of reusing the same bounded chat shell for a creation form; actual Arabic phone inspection led to natural page scrolling. The later-page selector regression shows why paging checks must perform a selection after loading, not stop at counting appended rows. These are distinct mechanisms, now covered by interaction tests and durable rules; no guarantee of every possible future state is claimed.
+
+The full release command also caught a test-helper import that worked under Playwright transformation but failed under direct Node type stripping. The fix is explicit `.ts` imports with the no-emit compiler option; Vite's config import uses the same convention. The actual direct layout script is rerun, not replaced by a weaker test.
+
+The older team-layout harness also assumed the first select on the page was the group picker. The new workspace selector invalidated that assumption, so the harness now targets the bilingual Selected group accessible name. The check failed visibly rather than certifying the wrong control; the complete rendered matrix is rerun with the corrected locator.

@@ -1,6 +1,6 @@
 # Original roles, organizational scope and revamp corrections
 
-Reviewed 23 September 2026. **The current revamp does not yet implement the original organizational operating model.** Its R4 teams coordinate independent coaching relationships; they are not a replacement for an organization with its own administrators, trainers and trainees. This audit corrects the product and architecture baseline before further feature expansion.
+Reviewed 23 September 2026. **This is the historical role audit that corrected the R4 model.** R7A–R11 now implement separate organization memberships/ownership, programs/history, assessor-led services, scoped communication and platform operations. R4 independent-coach teams remain distinct. Use the current coverage register, ledger and verification for shipped-local scope; the source findings below are retained as evidence, not a claim that those corrected gaps remain open.
 
 ## Evidence and limits
 

@@ -1,5 +1,19 @@
 # Verification record
 
+## R12 — Connected experience and final local acceptance · 23 September 2026
+
+The uninterrupted final `npm run verify:release -- --full` passed **all 25 recorded steps**, including prerequisites. [Persisted report](evidence/r12-release.json), [execution summary](evidence/r12-verification.txt). Full local logs: `artifacts/release/2026-09-23T11-35-27.532Z/`. Application/runtime source was stable; the team harness correction was completed before its gate ran. Subsequent edits finalized documentation/evidence only.
+
+- **72/72 end-to-end journeys**, Chromium and phone WebKit, using a disposable database/API/files/build. Includes sign-in continuation, role Help, short-phone conversation creation/send, retained template selection, focused scheduling steps, selecting the 50th loaded person without losing position, search/reload and existing fault/retry/permission lifecycles.
+- **928 rendered states:** focused quality 128, broad product 320, team Chromium 176/WebKit 176, operations 104 and entry/help 24. Zero reported layout/alert/page failures and zero violations in checked Axe states. The scripts specify exact widths/heights and language/theme pairings; the total is not every possible combination. Machine-readable evidence is in `evidence/r12-*-layout.json`.
+- **239 rollback SQL assertions**, a disposable fresh install of 22 forward migrations/seven suites, all identity/API, services, teams, memberships, programming/media, organization services, communication and operations tests. Operations cover role changes/replay, 120-trainer/1,200-trainee paging, registered-byte restore and grace/reference-preserving cleanup.
+- **12 web unit tests**, seven release guards, API/web types, production build/offline-shell checks, formatting, generated content and documentation links pass. Final audit scripts also pass Prettier; final documentation/diff checks are rerun before commit.
+- Actual renders inspected: English/dark desktop and Arabic/dark phone homepage, Arabic phone scheduling People step and team Groups; interactive 390×664 organization conversation creation verified ordinary page scrolling and reachable participant/save controls. R11 inspection covered populated selected chips, operator audit and Arabic analytics. These are developer reviews, not observed human task success.
+
+Earlier development attempts are not accepted full runs. The first full command passed 72 journeys and 448 layouts before direct Node execution exposed an extensionless helper import; explicit `.ts` imports and the no-emit compiler setting fixed it. A standalone team retry then exposed an obsolete first-select assumption; the harness now targets the named bilingual group control and waits for loaded state. The complete command was rerun successfully. Earlier focused 12/12 and post-selection-fix 14/14 runs are supplementary, not added to the final 72 count.
+
+No preview reset, push, deployment or native changes. Local mail interception, browser emulation and synthetic fixtures do not establish real provider delivery/payment, physical-device/assistive-technology behavior, hosted recovery/remote CI, unaided usability or retention. [Release evidence](release-evidence.md) records those remaining gates.
+
 ## R11 — Operations and scale · 23 September 2026
 
 - Full isolated browser acceptance: **70/70** Chromium/phone-WebKit journeys passed. Dedicated organization recording test disconnects an opened session, preserves edits/completion across reload, reconnects and verifies coach review. The default harness owns and cleans its database/files/servers/build; preview is preserved.

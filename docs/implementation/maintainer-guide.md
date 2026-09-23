@@ -1,6 +1,6 @@
 # Working on the Rafik revamp
 
-Updated through R10. Read the [ledger](ledger.md), [architecture](architecture.md), [runbook](runbook.md) and [role audit](role-scope-audit.md). Independent teams remain collaboration. R7A2 implements organization membership and views; R8 implements owned programs/history; R9 adds organization services. Native and hosting remain deferred.
+Updated through R12 local refinement. Read the [ledger](ledger.md), [architecture](architecture.md), [runbook](runbook.md) and [role audit](role-scope-audit.md). Independent teams remain collaboration. R7A2 implements organization membership and views; R8 implements owned programs/history; R9 adds organization services. Native and hosting remain deferred.
 
 ## Runtime responsibilities
 
@@ -30,7 +30,7 @@ The database owns transactional domain invariants, revisions, permissions and im
 | `server/db.ts` | Prisma instance and transaction-local actor context |
 | `server/auth.ts` | Email challenges, opaque sessions, local preview and logout |
 | `server/commands.ts` | Granted command registry, bounded reads and focused projections |
-| `server/files.ts` | Private immutable bytes, download and recoverable cleanup |
+| `server/files.ts` / `private-bytes.ts` | Private metadata/permissions, immutable bytes, download and recoverable cleanup |
 | `server/generated/` | Ignored generated Prisma client; never edit |
 | `tests/sql/` | Seven rollback domain/access/lifecycle suites |
 | `tests/api.test.ts` | Actual authentication, pool isolation, transport and file checks |
@@ -128,10 +128,10 @@ For the exact commands see [runbook](runbook.md). Keep both repositories on `cod
 1. Install pinned dependencies with `npm ci` in both checkouts, start the backend, generate the ignored frontend environment with `npm run web-env`.
 2. **Empty first setup only:** `npm run seed:local`. It refuses a populated preview.
 3. **Existing preview:** `npm run db:migrate`, `npm run db:generate`, `npm run types`, then restart the API. Preserve entered notes/invitations/history.
-4. Start frontend dev. Build and run preview for browser regression tests. All tests must target this local stack, never hosting.
+4. Start frontend dev. The default browser test command starts its own disposable stack; preview servers remain necessary for read-only visual sweeps. All tests stay local, never hosting.
 5. Use `npm run test:fresh` to validate a clean install in a temporary database without disturbing the preview.
 
-Schema changes go into the next migration. Existing uncommitted local migration functions may be iterated during development, but the actual preview schema and checked-in migration must match before completion. Once a migration has been shared/applied beyond this local rebuild, use forward migrations. Never apply synthetic Auth seeds to hosting.
+Schema changes go into the next migration. Once a migration has been applied, keep it immutable and add a forward migration; checked-in migrations must reproduce the preview schema. Never apply synthetic Auth seeds to hosting.
 
 ## Change recipes
 
@@ -184,7 +184,7 @@ Current R3 gaps belong in the ledger: no team ownership, real calendar/reminder 
 
 Use separate browser profiles for Laila, Nour and Amir. At `/local-preview`, choose Laila → More → Teams → create team → Staff → invite `coach2@rafik.test`. Open the link in Nour's profile and accept. As Laila, Clients → choose Amir → request enrollment; Amir sees a Today link and approves in `/teams`. Laila creates a group, adds Amir, selects Amir explicitly, selects a published version and reviews/confirms assignment. Shared library → share a published plan; Nour copies it and can edit/publish independently. Upload files in Resources, then explicitly share them in the team library.
 
-Laila proposes Nour as Amir's new coach; Amir approves with the consequences displayed. Nour can now open the direct coaching workspace. Laila retains her original participant history; Nour cannot read that private history. Team subscription → Local provider simulation can set past due and restore active. Existing workouts stay available. Client Support → choose team → submit a request; team owner/admin responds in Support. Platform support response is a separate guarded CLI operation documented in the runbook.
+Laila proposes Nour as Amir's new coach; Amir approves with the consequences displayed. Nour can now open the direct coaching workspace. Laila retains her original participant history; Nour cannot read that private history. Team subscription → Local provider simulation can set past due and restore active. Existing workouts stay available. Client Support → choose team → submit a request; team owner/admin responds in Support. Platform support response has separate operator authority through Platform Operations; the guarded local CLI is also documented in the runbook.
 
 Team Activity includes rename and owner closure; Staff includes ownership transfer/departure. Group archive removes only its grouping, not assigned plans. These are real local mutations: use clearly named test teams when exploring and close their enrollments/team when finished. No team fixtures are imposed on the existing Laila/Amir preview.
 
@@ -209,7 +209,7 @@ Messages layout rules are scoped in `style.css`; changing shared shell sizing re
 
 ## Daily workspace maintenance (R7)
 
-`src/features/workspace/WorkspaceNav.vue` owns role-specific primary/secondary links, `types.ts` describes attention rows, and `src/styles/workspace.css` owns the compact shell and daily layouts. `CoachHome.vue` composes the attention projection and upcoming appointments; `TodayPage.vue` uses `client_today`; `ClientsPage.vue` uses cursor-based `coach_roster`. Change these read contracts in migration 010 or a forward migration as appropriate, regenerate types, and run `daily_workspace.sql` plus `tests/workspace.e2e.ts`. Keep More and desktop navigation aligned so phone secondary tools remain discoverable.
+`src/features/workspace/WorkspaceNav.vue` owns role-specific primary/secondary links, `types.ts` describes attention rows, and `src/styles/workspace.css` owns the compact shell and daily layouts. `CoachHome.vue` composes the attention projection and upcoming appointments; `TodayPage.vue` uses `client_today`; `ClientsPage.vue` uses cursor-based `coach_roster`. Extend these read contracts through a new forward migration (migration 010 records the original contract), regenerate types, and run `daily_workspace.sql` plus `tests/workspace.e2e.ts`. Keep More and desktop navigation aligned so phone secondary tools remain discoverable.
 
 ## Working on organization contexts
 
@@ -252,3 +252,13 @@ An ordinary UI change rehearsed in R11 replaced raw audit operation keys with bi
 A domain change rehearsed in R11 added the roster order index and paginated result history: first inspect query plans and define continuation/scope, add a forward migration for the index, apply/introspect/generate/types, implement bounded reads, then verify scale and cross-trainee history access with real HTTP tests. Update the consumer with explicit load-more and current selection retention. Do not edit historical migrations or introduce a second data store. The local before/after query plan and the 29-revision participant test make this recipe reproducible; an independent engineer has not yet validated this handoff.
 
 Keep new tests test-owned and cleanup bounded. Use `set -e` for dependent shell checks so a failed type check cannot be hidden by a later successful command. Run complete browser suites through the isolation wrapper; stop editing sources during the accepted run. Keep current architecture/API docs separate from historical phase totals.
+
+## Connected product entry and setup (R12)
+
+`features/public/HomePage.vue` owns the coach/organization positioning and keeps the workout sample available. `account/LocalPreview.vue` groups synthetic roles; `account/HelpPage.vue` explains actual scope. These are presentation owners, not authorization logic. `EventComposer.vue` owns optional catalog/group disclosure, retained selections and step focus; `ChannelsPage.vue` changes page sizing only while creating, preserving the thread workspace.
+
+Before reordering landing sections, inspect spacing that formerly came from adjacent sections. When moving a form inside a viewport-sized workspace, verify both its initial and completed states with natural page scrolling and reachable actions. Preserve selected identities when replacing search results; disable review until their names/authority-dependent eligibility resolve. Use latest-request guards when independent search/filter requests can finish out of order. `cohesion.e2e.ts` and `audit-cohesion.ts` cover the connected entry/help review alongside operations/service tests.
+
+Selecting an already loaded member is a local selection change: keep the current result page and resolve its name from authorized loaded rows. Fetch separately only when a restored/bulk selection includes unknown IDs. The server still rechecks authority/revisions at commit. Deduplicate appended catalogs by stable ID. The large-member browser scenario now verifies that selecting row50 keeps all50 loaded choices before search/reload.
+
+Shared test helpers that run under both Playwright and direct Node type stripping use explicit local `.ts` imports. The web compiler allows those imports under `noEmit`; Vite's config follows the same convention. Verify direct script entry points as well as transformed test imports. Do not resolve a module failure by skipping the layout gate.

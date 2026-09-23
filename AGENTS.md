@@ -49,3 +49,9 @@
 - Check vertical collisions as well as horizontal overflow, especially viewport-sized conversation layouts with headers and footers. Scrollable histories must be keyboard focusable in Safari. Device-save feedback must wait for storage acknowledgment; edits during an active sync must schedule another pass instead of being dropped by a busy flag.
 
 - Run full browser acceptance with the web isolation wrapper; never reset or reseed the preview for tests. Keep sources stable during final evidence. Use fail-fast dependent shell checks. New selectors must search the full authorized roster and retain selected IDs across pages/reload; summary totals must not count only loaded rows. Operational authority is a separate platform grant, checked before retry receipts.
+
+- Preserve product cohesion across entry, role/context selection, task steps and Help. Optional setup should not dominate the default flow. Never drop a selected record when replacing search results; ensure review resolves every selected identity. Inspect natural page scrolling for creation forms separately from fixed-height conversation threads. Treat developer walkthroughs and synthetic metrics separately from human outcomes.
+
+- Pagination acceptance must choose records from later loaded pages, then verify list position, selected chips, search and reload. Do not merely check that a load-more button appends rows. Direct Node-run TypeScript helpers require explicit local `.ts` imports and matching no-emit compiler settings; run the actual script entry point, not only the Playwright-transformed equivalent.
+
+- Prefer scoped semantic test locators over page-wide first-element assumptions. Shared navigation additions can change DOM order without changing the intended task control; verify the actual named control in the user flow.

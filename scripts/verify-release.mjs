@@ -145,6 +145,7 @@ try {
       "test:product:layout",
       "test:teams:layout",
       "test:operations:layout",
+      "test:cohesion:layout",
     ])
       await step("web-" + script.replaceAll(":", "-"), web, [
         "npm",

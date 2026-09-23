@@ -1,11 +1,18 @@
 # Rafik backend change history
 
+## R12 — Connected entry and product refinement · 23 September 2026
+
+- Coach/organization public entry, preserved immediate workout, grouped sample roles and role-specific Help; workspace intent retained through sign-in.
+- Natural-page conversation creation, optional scheduling setup, retained selected templates, resolved participant review, step focus and superseded-read protection.
+- Current scope/architecture/runbook/source map and release-evidence handoff; prepared organization observation protocol without claiming human outcomes.
+- Final serial acceptance passed 72 browser journeys, 928 rendered states and all backend/fresh/build/maintenance gates; see the backend verification record. Hosting/providers/devices/human use remain separate gates.
+
 ## R11 — Operations, scale and recovery · 23 September 2026
 
 - Separate platform authority, audited actions/support and account/session suspension; local Amina sample.
 - Bounded organization people/recipients/history/analytics, persistent multi-page selections and measured roster index.
 - Disposable browser acceptance, private-file maintenance and database-plus-byte recovery rehearsal; current architecture/runbook/API/maintainer docs and ADR0008.
-- Verified70 browser journeys,96 rendered states,domain/HTTP/fresh/schema checks. Local only; real providers/devices/human outcomes remain outstanding.
+- Verified 70 browser journeys, 96 rendered states,domain/HTTP/fresh/schema checks. Local only; real providers/devices/human outcomes remain outstanding.
 
 ## R10 — Scoped communication and notifications (23 September 2026)
 

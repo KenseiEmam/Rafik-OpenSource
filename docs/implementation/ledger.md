@@ -1,6 +1,14 @@
 # Revamp execution ledger
 
-Updated 23 September 2026. **R11 local operations, bounded reads and recovery is implemented and verified.** Continue the available R12 product-cohesion/refinement work under standing authorization. Hosting, native, real providers, physical devices and observed human/business outcomes remain separate gates.
+Updated 23 September 2026. **All planned local web/backend phases through R12 are implemented and verified.** Final serial release acceptance passed; phase commits remain on `codex/revamp`. Hosting, native, real providers, physical devices and observed human/business outcomes remain separate gates.
+
+## R12 — Connected experience and release handoff
+
+Coach/organization entry now matches the web product's audience, with the usable guest sample preserved. Grouped synthetic roles and role-specific Help explain the distinct scopes. Conversation creation uses normal page scrolling; scheduling retains chosen templates across catalog searches, reveals optional group setup only when requested, checks complete review names and focuses each step. Current coverage/reference docs supersede stale foundation-only claims. Prepared organization/combined-role observation prompts and an honest release-evidence register; no human results or commercial metrics are invented.
+
+**Verified:** the final uninterrupted `npm run verify:release -- --full` passed all 25 recorded steps: 72/72 browser journeys, 928 rendered states, 239 rollback SQL assertions, 22-migration fresh install/seven suites, all API/domain/operations groups, 12 web units, seven release guards and type/build/format/content/docs checks. Selected rows on later roster pages now retain loaded rows and position; stale read responses cannot overwrite newer context. Actual entry, scheduling, team and short-phone creation states were inspected. See [verification](verification.md) and [persisted release report](evidence/r12-release.json). Earlier harness failures and fixes are recorded, not counted as green runs.
+
+**Boundary:** local implementation is complete for the [coverage register](revamp-coverage.md). Hosting/provider configuration, physical-device and assistive-technology checks, remote CI, unaided human use/retention/payment and the later native revamp remain separate work in the [release-evidence register](release-evidence.md). No deployment, push, preview reset, native work or outreach occurred.
 
 ## R11 — Local operations, scale and integrated acceptance
 

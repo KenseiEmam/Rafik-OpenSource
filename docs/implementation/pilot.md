@@ -13,7 +13,7 @@ A coach who already has clients can deliver a usable plan and review what happen
 1. Open the public sample on a phone-sized browser. No signup. Start a session, change a weight, record a set and reload. Show the retained values.
 2. Finish, then optionally save to an account. Explain the difference between device save and server acknowledgment only when that status matters.
 3. Open the synthetic coach account. Start a plan from the populated starter, adjust one exercise, preview, and publish.
-4. Create an invitation for a synthetic inbox address. Open it in another browser context; verify the code from local Mailpit and accept.
+4. Create an invitation for a synthetic inbox address. Open it in another browser context; verify the code from the local API inbox and accept.
 5. Complete a session, leave a note, then save a coach reply. Reopen the client result and show the reply.
 
 The sample accounts are visibly labelled and all activity is synthetic. Do not describe them as customer proof.
@@ -56,3 +56,23 @@ Use the earlier predeclared decision thresholds, including actual repeat use and
 - If clients train but coaches do not review, identify whether the buyer values delivery alone before adding an inbox/reminder platform.
 - If Arabic wording causes uncertainty, correct it with observed language usage and retest the same task.
 - Finish and simplify the already authorized team, nutrition and commercial capabilities. Evaluate further integrations, AI or new business models against observed value and operating burden. Native remains deferred until web/backend readiness; local commercial simulation does not establish real billing or willingness to pay.
+
+## Organization observation tasks (R12 preparation)
+
+These are prompts for a future consented study, not instructions sent to anyone. Keep participant contact/consent and private health content outside Git. Run an English-first and Arabic-first pass; include an administrator who does not coach and a combined trainer/trainee account.
+
+| Role | Goal to give the participant | Observe without coaching |
+|---|---|---|
+| Organization admin | Bring an existing small training group into your workspace and put the right trainer in charge. | Role understanding, invitation/email friction, responsibility choice, time until a useful roster; no accidental independent setup |
+| Admin | Give selected trainees the published program and check who still needs attention. | Full-roster search, selection retention, review confidence, interpretation of analytics denominators |
+| Trainer | Find your trainees’ latest work, give feedback and change the next session for one person. | Discovery/action count, prescribed vs actual comprehension, history continuity and appropriate scope |
+| Assessor | Schedule a small group assessment, record different results and correct one mistake. | People/staff roles, dates/timezone, template interpretation, correction vs duplicate result |
+| Combined roles | Switch from your trainer responsibilities to your own organization workout and back. | Context recognition, accidental wrong-scope actions, whether the switch is discoverable |
+| Admin after staff change | Replace the responsible trainer while preserving the organization’s history. | Scope/confidence, preservation of completed work, understanding of retained assessor duties |
+| Conversation participant | Start or find the relevant conversation and recover a draft after interruption. | Visible participants/privacy understanding, scroll/keyboard/composer reachability, acknowledgment confidence |
+
+Record one row per attempt: study ID, role/context/language, device/OS/browser, task, start/first-useful-action/finish times, completion status, assistance, wrong turns, repeated entry, lost or recovered work, participant wording, severity and proposed fix. Separate developer walkthroughs, automation and real participant attempts. A blank observation row is **not run**, never zero friction.
+
+Measure repeat use and paid continuation over their declared periods. Report denominator/withdrawals alongside completions. Operating-cost sheet fields are actual hosting + storage + delivery + provider costs, setup/support minutes × chosen internal hourly rate, active paying organizations/coaches and collected revenue; populate from real invoices/logs and explain allocation. No costs, conversion rate or customer outcomes have been invented.
+
+Decision gate: use the completed local product for controlled observation after environment/device readiness. Improve blocked or confusing tasks before expanding integrations. Start native implementation only when the shared domain and release prerequisites are accepted, with the trainee workflow as its focus. This task prepares the protocol and fixes known local issues; it does not authorize recruitment or claim commercial validation.

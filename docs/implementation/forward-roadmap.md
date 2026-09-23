@@ -1,6 +1,6 @@
 # Forward implementation roadmap after R6
 
-Owner: Codex. Reviewed 23 September 2026 against backend `7ae6691`, frontend `ff1f4ce`, current source and recorded R6 rendered evidence. R7, R7A1 API transition and R7A2 membership/context foundation have local checkpoints; R8 organization-owned programming/history has a local checkpoint; R9 organization services/analytics has a local checkpoint; R10 has a local checkpoint; R11 has a local checkpoint; available R12 refinement follows. The original review was documentation-only; subsequent R7 checks are recorded in the ledger and verification record.
+Owner: Codex. Reviewed 23 September 2026 against backend `7ae6691`, frontend `ff1f4ce`, current source and recorded R6 rendered evidence. R7, R7A1 API transition and R7A2 membership/context foundation have local checkpoints; R8 organization-owned programming/history has a local checkpoint; R9 organization services/analytics has a local checkpoint; R10 has a local checkpoint; R11 has a local checkpoint; R12 local refinement has passed final serial acceptance; real environment/device/human gates remain. The original review was documentation-only; subsequent R7 checks are recorded in the ledger and verification record.
 
 This is the execution plan for subsequent work, with dependencies and acceptance gates. It supersedes the next-action ordering in historical phase notes. The [ledger](ledger.md) records implementation status; [architecture](architecture.md) describes what exists; [verification](verification.md) records actual evidence. The initial revival audit remains historical rationale, not a ceiling on the broader scope the user subsequently requested.
 
@@ -18,9 +18,11 @@ The web application primarily serves coaches and organizational staff. Preserve 
 
 The deployment target is now **Prisma + PostgreSQL behind one server API**, replacing Supabase. Its Auth/RPC/Storage dependencies must be replaced and locally verified before hosting; the transition now belongs to R7A before further organizational expansion. See [ADR 0004](../decisions/0004-coach-web-and-prisma-target.md) and the sequencing correction in ADR 0005. R7A1 now runs the standalone Prisma/PostgreSQL API locally; organization ownership is R7A2.
 
-## Assessment of the current product
+## Recorded assessment at the R6 planning checkpoint
 
-Rafik has a substantial local implementation: programming, scheduling, durable workout recording, review, progress, assessments/check-ins, messages, nutrition, appointments, private files, teams, handoff and support. These are backed by real local database commands and Storage. Commercial state is implemented, but collection/payment is simulated. Notifications and production delivery are missing. This is a working foundation, not a finished commercial product.
+The following assessment motivated R7–R12; it is historical, not the current capability register. Use [current coverage](revamp-coverage.md) and [release evidence](release-evidence.md) for completed work and remaining gates.
+
+At this checkpoint, Rafik had a substantial local implementation: programming, scheduling, durable workout recording, review, progress, assessments/check-ins, messages, nutrition, appointments, private files, teams, handoff and support. These are backed by real local database commands and Storage. Commercial state is implemented, but collection/payment is simulated. Notifications and production delivery are missing. This is a working foundation, not a finished commercial product.
 
 The strongest work is the data lifecycle: immutable published/started prescriptions, explicit ownership, transactional commands, recoverable drafts and idempotent retries. Preserve it. The runtime is one Vue application and one Prisma/PostgreSQL API. Neither a framework replacement nor a return to the old worker architecture is needed.
 
@@ -173,6 +175,8 @@ Release gates requiring actual environment/device access:
 - Native planning begins only after web/backend readiness and a concrete benefit requiring it; share domain contracts and content, not the old runtime complexity. External calendar sync, automated food lookup, broad AI automation and marketplace functionality require distinct justification and contracts.
 
 **Completion:** transparent observed results, outstanding issues with severity and owner, and a deliberate next investment decision. Recruiting participants is not a prerequisite for fixing known design problems or completing R7–R10. It is necessary evidence for claiming usability in human use or commercial success. Current authorization does not include sending outreach.
+
+The phase descriptions above preserve the intended outcomes. Current implemented/local/deferred dispositions are in the coverage register and release evidence; real service or human evidence is not implied by a local checkpoint.
 
 ## Quality and simplicity gates for every phase
 

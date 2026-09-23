@@ -1,6 +1,6 @@
 # Coach and organization workflow coverage after founder steering
 
-23 September 2026. This is a current execution backlog, not a promise that a legacy screen was complete or worth copying. Evidence: original frontend `a0c723e` router, `ProgramTabs`, `ClientTabs`, Calendar and Groups source inventories; current R1–R7 code/contracts. The web audience is primarily coaches and organization staff. Preserve trainee web regression paths; reserve primary trainee design expansion for native after backend/web readiness.
+Historical R7 backlog, 23 September 2026. R8–R11 have since delivered the scoped programming, organization services/analytics, communication and operational work; R12 adds local cohesion/refinement. The [current coverage register](revamp-coverage.md) and [release evidence](release-evidence.md) now own implementation status and remaining work. The table below records the founder-steering backlog, not a current list of missing features or a promise that a legacy screen was complete or worth copying. Evidence: original frontend `a0c723e` router, `ProgramTabs`, `ClientTabs`, Calendar and Groups source inventories; current R1–R7 code/contracts. The web audience is primarily coaches and organization staff. Preserve trainee web regression paths; reserve primary trainee design expansion for native after backend/web readiness.
 
 | Coach/organization job | What works now | Work required in the upcoming phases |
 |---|---|---|
@@ -17,7 +17,7 @@
 | Publish/sell programs or acquire clients | Historical program pricing/reviews and public coach/organization routes | Not implemented as a commercial marketplace. Explicit business decision remains open; do not substitute subscription state or a public sample for these capabilities |
 | Maintain the system | One current local app/backend, explicit commands, tests/docs | Prisma/PostgreSQL server API transition before hosting (ADR 0004), scoped modules/styles, bounded reads, clean curated preview and isolated test identities |
 
-## Revised priority
+## Priority recorded at the R7 checkpoint
 
 R7 is an incremental daily-workspace checkpoint. **R7A1/R7A2 foundation is implemented locally:** Prisma/PostgreSQL API and separate membership/context/responsibility. Organization-owned delivery records continue in R8. See the [original-role audit](role-scope-audit.md) and [ADR 0005](../decisions/0005-organization-and-independent-scopes.md). R8 then implements scoped programming/delivery; R9 coach services, organizational calendar/assessments and distinct analytics; R10 scoped notifications; R11 operational/release readiness and platform administration; R12 available review/refinement and actual-use evidence. Native remains last.
 
