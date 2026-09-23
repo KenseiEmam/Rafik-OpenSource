@@ -1,5 +1,28 @@
 # Local verification record
 
+## R5 verification — 23 September 2026
+
+Executed locally on Node 22.16.0, Supabase CLI 2.90.0 and `rafik-revamp-local`. Migration 009 was applied additively; the existing preview was retained. No hosted project, external provider, remote CI run, native change or push is implied.
+
+| Check | Actual result / boundary |
+|---|---|
+| Backend `npm test` | **229** rollback assertions pass: 209 prior + 20 exercise-choice cases. Validates approval/kind/bounds/access, trustworthy snapshots, immutable prescriptions, actual choice consistency, exact retry and payload mismatch, correction/completion, progress/prior performance and independent import/handoff copying. |
+| `npm run test:fresh` | All **nine migrations**, fixtures and six SQL suites pass in a disposable database without resetting the preview. |
+| Real HTTP services/teams | All **five service** and **nine team** groups pass, including booking races, real private Storage, consent/handoff, provider/support boundaries and temporary-account cleanup. |
+| Schema/content/types | Local schema lint reports no errors; generated web types and canonical content checks pass. Domain table count stays 37 plus one internal setting. |
+| Unit/build/format | **10/10** unit/data tests, production build/TypeScript, formatting and whitespace checks pass. |
+| Full browser regression | **46/46** pass in one final serial run across Chromium and phone-sized WebKit: all 40 existing scenarios plus six new quality scenarios. No retries configured. New tests use disposable accounts. |
+| New user journeys | Long history with reachable composer, older paging, unread while reading, phone inbox/back, draft/context recovery and send focus; coach authors alternatives, client records through a blocked save/reload and completes via UI, coach reviews actual identity, progress and correction preserve history; check-in growth/search/paging/focus/direct scheduling destination. |
+| Render review | **52 baseline layouts** across 26 routes informed the audit. Final focused **128-layout matrix**, 32 phone Axe states, no overflow/page errors/accessibility violations or failed composer-in-viewport checks. Actual desktop/phone/Arabic/dark and phone validation-state screenshots inspected; this is not physical-device or human-task evidence. |
+| Engineering docs | `npm run test:docs` validates local links in **29** maintained documents. CONTRIBUTING, ADRs, API conventions, current architecture/file maps/runbook and both AGENTS rules are updated. CI definition includes the doc check; remote execution remains unverified. |
+
+Reproduce with backend `npm test`, `npm run test:fresh`, `npm run test:services`, `npm run test:teams`, `npm run content:check`, `npm run test:docs` and `npx supabase db lint --local`; frontend `npm test`, `npm run format:check`, `npm run build`, `npm run test:e2e`, `npm run test:quality:layout`. Browser checks require local backend + dev 5173 + production preview 5174. Persisted evidence: [R5 local checks](evidence/r5-local-checks.md), [layout matrix](evidence/r5-quality-layout.json), [product quality review](product-quality-review.md). Raw logs are `/tmp/rafik-r5-*.log`; web artifacts/reports/traces are ignored.
+
+Verification found and fixed real issues, including unbounded conversations, unseen-message read marking, disabled-field focus and phone validation-state hit-testing. Pagination required a direct post-scheduling destination and full-result count assertions. A test-only completion race was removed by exercising the actual finish UI; an older appointment fault test now waits for the injected failure before reload. One stale exact-text test locator was corrected to assert its contextual region. The known local engine crash on a denied internal-function call inside PL/pgSQL was avoided by testing the public command boundary; later SQL/fresh/HTTP checks pass, but no engine fix is claimed. Development trace collisions from an overlapping run were eliminated in the final serial execution.
+
+**Still unverified:** physical-device keyboard/touch/suspension, assistive technology, new hosted Auth/email/Storage/backup/CI operations, real external adapters, observed unaided task success, retention and payments. Follow the [release checklist](release-checklist.md); local engineering acceptance does not certify launch readiness or business success.
+
+
 ## R4 verification — 23 September 2026
 
 Executed locally with Node 22.16.0, CLI 2.90.0 and `rafik-revamp-local`. R3 was checked before implementation: 135 SQL assertions, real service/concurrency tests and 36 browser scenarios passed. Existing preview data was preserved; R4 adds two migrations without reset.

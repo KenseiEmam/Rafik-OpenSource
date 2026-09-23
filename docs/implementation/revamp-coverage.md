@@ -2,7 +2,7 @@
 
 22 September 2026. Execution owner: Codex. This document supersedes the earlier assumption that delivering the small training loop completes the Rafik revamp. The user likes the visual direction but correctly identifies that the implementation lacks much of the original product's capability.
 
-**Implementation update:** R1 daily-coaching, R2 ongoing-coaching, R3 service-delivery and R4 team/business expansions are now implemented locally; see `ledger.md` for its exact scope and `verification.md` for evidence. The comparison below records the gaps that prompted this correction. R5 remains open.
+**Implementation update:** R1 daily-coaching, R2 ongoing-coaching, R3 service-delivery and R4 team/business expansions are now implemented locally; see `ledger.md` for its exact scope and `verification.md` for evidence. The comparison below is the historical gap inventory that prompted this correction. R5 now implements the remaining exercise choices and integrated UX/documentation work; see its latest verification and release limits in the ledger.
 
 ## Status and mistake
 
@@ -93,4 +93,4 @@ The revamp is complete only when the documented retained product capabilities wo
 
 Commercial success still requires evidence from real use, and not all original ideas deserve restoration. That uncertainty does not justify calling a basic slice the entire revamp. Tests for the current foundation stay valid within their recorded scope; broader product completeness remains open.
 
-**Next implementation action:** R5 integrated product readiness. R1–R4 contracts and implementation are recorded in the ledger. Optional fixed-role teams/groups, client-approved handoff, shared snapshots/staff file access, local commercial/provider-state simulations and support are implemented locally. Complete the still-open R1 exercise alternatives/client substitutions, then verify recurring whole-product tasks, permissions, failure/recovery paths, content/navigation and the new-project release runbook. Real notification/payment/calendar delivery, hosted/device verification and native work remain separate later gates. Preserve the accepted visual identity and local-only constraints; no old-data restoration or production mutation is required.
+**Current implementation action:** accept the R5 local regression/quality checkpoint recorded in the ledger, then address the release checklist's device/hosted operational gates and any findings from observed tasks. Exercise alternatives/client substitutions are implemented through immutable approved options, durable actual choices, review/progress and shared-plan/handoff copying. R1–R5 contracts and concrete verification remain authoritative for implemented behavior. External delivery/payment/calendar adapters and native work remain separate later gates. Preserve the accepted visual identity and local-only constraints; no old-data restoration or production mutation is required.

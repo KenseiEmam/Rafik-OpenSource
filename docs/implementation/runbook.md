@@ -142,3 +142,13 @@ npm run support:local -- <case-uuid> <current-revision> /absolute/path/to/reply.
 The script validates arguments and local project identity, obtains the service credential in memory from local CLI status, and calls only `http://127.0.0.1:55321`. It updates the case response/status; it sends no external message. Identical replies replay safely; stale changed replies conflict. The reporter can reopen the case. This is a simple case/status/response workflow, not a multi-message ticketing service.
 
 R4 verification: `npm test`, `npm run test:fresh`, `npm run test:teams`; existing `test:services` remains mandatory after changing file/access/account lifecycles. In the frontend, run `npm run test:e2e -- tests/teams.e2e.ts` and `npm run test:teams:layout`. Both use temporary fresh identities, with explicit local-only setup/cleanup. Full regression runs require dev 5173 and current production preview 5174, as before. Remote CI definition now includes `test:teams`; no remote run is claimed.
+
+## R5 local upgrade and quality checks
+
+Confirm the revamp local project and absence of `supabase/.temp/project-ref`. Apply `npx supabase migration up --local`, then `npm run types`; do not reset existing preview records. Migration 009 is additive and existing sessions need no data rewrite. Old plans have no alternatives until a coach explicitly edits/publishes/assigns a new version.
+
+Run `npm run test:docs` for maintained engineering links, `npm test` for all rollback suites, `npm run test:fresh` for all nine migrations/fixtures without touching the preview, and the frontend commands in verification. Review the [release checklist](release-checklist.md) before moving beyond local work. There is no implicit authorization to reuse the retired hosted backend or push main.
+
+Try alternatives: local coach → Plans → edit an exercise → Offer an alternative → select up to three → save/publish/assign. Local client → start that newly assigned session → Choose an alternative. Record results; coach review and Progress identify the actual exercise while preserving original targets. Starting a session before reassignment intentionally retains its old snapshot.
+
+Try Messages on phone width: open an inbox contact, scroll history independently, compose at the bottom, use Back to conversations; Attach a file reveals optional shared-file tools. Theme/help remain in the footer. The app does not claim external message delivery.

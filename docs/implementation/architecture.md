@@ -1,8 +1,10 @@
-# Implemented architecture
+# Current system architecture
+
+Start with the [documentation index](../README.md), [ADRs](../decisions/README.md) and [API conventions](../reference/api.md). This file is the current structural/lifecycle reference; dated completion evidence belongs in the verification record and ledger.
 
 Local revamp, 23 September 2026. This record describes the new implementation; `docs/revival` preserves the audit and rationale. It is not a compatibility plan for the retired backend.
 
-**Scope correction:** this describes the implemented foundation, not the final product architecture or feature ceiling. [Revamp coverage](revamp-coverage.md) governs the broader remaining work and identifies contracts to resolve before extending the schema. The original ten-table count is not a design constraint; R1 adds `client_context` and `schedule_exceptions`. R2 adds five ongoing-coaching tables, bringing the public domain to seventeen. R3 adds seven nutrition/appointment/resource tables, for 24 total. R4 adds thirteen team/commercial/support domain tables plus one internal runtime-setting table: 37 domain tables, 38 public tables overall. See `r1-contract.md`, `r2-contract.md` `r3-contract.md` and `r4-contract.md` for the phase invariants, and [maintainer guide](maintainer-guide.md) for the file map and change recipes.
+**Current scope:** one web application and one Supabase project, with 37 domain tables and one internal runtime-setting table. Domain contracts cover training/daily coaching, ongoing coaching, service delivery and optional teams/commercial/support. The [coverage register](revamp-coverage.md) tracks capability/release boundaries; [ADRs](../decisions/README.md) explain durable decisions. The numbered R1–R5 contract documents record feature invariants; the [maintainer guide](maintainer-guide.md) maps current files and change recipes.
 
 ## System boundary
 
@@ -62,7 +64,7 @@ All ordinary writes go through explicit Postgres functions; no trigger orchestra
 | `save_exercise` / `set_exercise_active` | Stable ID, owned bounded content + revision / active flag | CAS and stable-create replay; retire without mutating snapshots |
 | `configure_assignment` | Owned assignment, version, start/end, flexible/cycle, revision | CAS; clears exceptions on a changed schedule; no history regeneration |
 | `assignment_schedule` / `change_scheduled_day` | Bounded date range / original day/date and target/state | At most 42 queried days and 41-day move; started occurrences cannot move |
-| `previous_performance` | At most twelve exercise IDs and session start cutoff | Most recent completed actual per exercise; caller-owned results only |
+| `previous_performance` | At most 48 exercise IDs (12 prescribed exercises plus three alternatives each) and session start cutoff | Most recent completed actual per exercise; caller-owned results only |
 | `start_session` | Persistent attempt UUID, version, day, optional assignment | Server verifies access and selects the prescription; same assigned occurrence returns its canonical UUID |
 | `save_session` | Session, expected version, stable operation UUID, full bounded entries, note, completion flag | Transactional validation, compare-and-swap, receipt replay; conflict keeps the device draft |
 | `review_session` | Owned coached completed session, feedback | Stores feedback and reviewed time; does not alter client results or completion |
@@ -70,7 +72,7 @@ All ordinary writes go through explicit Postgres functions; no trigger orchestra
 
 `session_document` reads one authorized session with its actual set entries. Tables are not an alternative write interface. Failures such as `conflict`, `wrong_email`, `plan_changed`, `invalid_entry` and `invitation_unavailable` map to contextual recovery copy.
 
-## R2 commands and lifecycle
+## Ongoing coaching commands and lifecycle
 
 | Command | Contract |
 |---|---|
@@ -115,9 +117,9 @@ The browser must have successfully loaded the production shell once for a fully 
 
 ## What is deliberately outside this build
 
-There is currently no automatic spreadsheet import, external reminder delivery, nutrition, appointment booking, file attachments, billing subscription, organization administration, or native application. Direct text conversations, progress and check-ins/assessments are implemented locally in R2. The starter and duplicate/edit workflow cover initial plan preparation only. Manual conversion of a coach's current plan is a pilot service to measure, not a hidden import feature. These describe current gaps; the corrected coverage register governs remaining web/backend scope. Native work remains deferred by user instruction.
+Automatic spreadsheet import, external reminder delivery, real payment collection, external calendar synchronization and native applications remain outside the local runtime. Nutrition, booking, private file sharing, fixed-role teams and local commercial/support workflows are implemented. See the ledger for precise local verification and remaining release gates.
 
-## R3 service delivery boundaries
+## Service delivery boundaries
 
 Nutrition guidance is a prescription, and meal entries are actual records. They never share a mutable JSON document. Each meal copies explicit nutrient values, amount, basis, unit and source; changing a saved food leaves historical meals intact. Known totals sum `value × amount / basis` and retain a missing-value count. An empty day is not zero intake. Guidance versions are append-only, selected by effective date and revision. No medical or energy-needs calculation is implemented.
 
@@ -129,7 +131,7 @@ Downloads use authenticated Storage requests with browser cache disabled, not si
 
 R3 has no upload worker, image transformation service, external food provider, calendar integration or delivery outbox. File bytes are not stored in IndexedDB; an interrupted upload may require the user to reselect the original file. Nutrition editors keep device drafts; calendar mutations keep the exact pending command. Only the workout flow promises offline recording. All new feature writes still require server acknowledgement.
 
-## R4 — Optional teams, business state and support
+## Optional teams, business state and support
 
 The [R4 contract](r4-contract.md) is the ownership/interaction contract. Teams are an optional coordination layer over existing direct coaching relationships. They do not replace Auth identity or participant access. Ten coordination tables each have one purpose:
 
@@ -167,3 +169,13 @@ Team mutations lock the team before enrollment/relationship/account rows; bulk r
 `teams/commands.ts` persists one pending command under current account + screen scope; it does not introduce a general queue, background worker or global store. All team/business/support writes await acknowledgement. The pending payload remains available after reload for explicit retry; database-confirmed validation errors release it for correction. Invitation-link recovery occurs before clearing its pending command. Team workspace recovery stays visible even after membership or team access changes. Ordinary text/select edits require explicit save; support request text additionally survives reload. File operations retain R3 lifecycle recovery.
 
 New routes: `/coach/teams`, `/coach/teams/:id`, `/teams`, public `/team-invite/:token`, `/coach/business`, `/coach/support`, `/support`. Team/account context uses `?team=<UUID>` where needed. These remain optional More tools. There is no new required onboarding field, organization-wide permission builder, external service or native dependency.
+
+## Exercise choice and conversation interaction
+
+Migration `202609230009_exercise_choices.sql` adds nullable `set_entries.exercise_id`. Historical rows default to the original exercise. The nullable choice intentionally has no catalog foreign key: the command validates it against the session snapshot, so retiring or deleting catalog content cannot rewrite historical identity. `PrescriptionExercise.alternatives` is an optional list of at most three accessible, active exercises matching the recording kind. Publication snapshots their info; actual choices never modify published/started prescriptions. Same-kind alternatives inherit targets; there is no automatic target conversion or recommendation.
+
+`save_session` validates one approved choice per exercise across all its sets. The existing entries payload and receipt hash cover it, with no new command/queue. `performed_exercise` is a pure projection for previous-performance/progress; the equivalent small web projection drives logger/review labels. Shared-plan import and handoff clone both original and alternative exercise definitions into recipient ownership. Export includes entry choices and existing immutable snapshots. Old JSON/device operations without choices continue to work.
+
+Messages uses a bounded history viewport, desktop inbox/thread and phone inbox/back flow. Foreground refresh merges immutable messages by ID; read cursors advance only at the viewed end. Optional attachments do not occupy the default composer. Check-in lists are filtered/paged in the presentation layer over the existing complete authorized read; this bounds rendered interaction, not database query volume. The client Today prioritizes training before optional coaching updates.
+
+See [R5 contract](r5-contract.md), [quality review](product-quality-review.md), [contribution workflow](../../CONTRIBUTING.md) and [release checklist](release-checklist.md).

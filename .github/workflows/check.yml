@@ -12,6 +12,7 @@ jobs:
       - run: npm ci
       - run: npm start
       - run: npm run reset
+      - run: npm run test:docs
       - run: npm test
       - run: npm run test:services
       - run: npm run test:teams

@@ -1,6 +1,6 @@
 # Revamp execution ledger
 
-Updated 23 September 2026. **A working local web/backend foundation is implemented on `codex/revamp`; the full Rafik revamp is incomplete.** The user correctly rejected the narrow core as a complete replacement. Read [revamp coverage and corrected execution scope](revamp-coverage.md) before continuing. The E01–E12 statuses below describe only the initial slice, not whole-product completion.
+Updated 23 September 2026. **A working local web/backend foundation is implemented on `codex/revamp`; the full Rafik revamp is incomplete.** The user correctly rejected the narrow core as a complete replacement. R5 implementation and the latest verification appear below. Earlier phase entries retain their checkpoint context; use the current next action and R5 section for ongoing work. Read [revamp coverage and corrected execution scope](revamp-coverage.md) before continuing. The E01–E12 statuses below describe only the initial slice, not whole-product completion.
 
 | Unit | Status | Evidence / boundary |
 |---|---|---|
@@ -20,7 +20,7 @@ Updated 23 September 2026. **A working local web/backend foundation is implement
 
 ## R1 — Daily coaching expansion
 
-**Implemented locally. The complete revamp remains in progress; R2 ongoing coaching is also implemented locally (below); R3 is implemented locally; R4 is implemented locally below; R5 remains open.** The first checkpoint was committed as backend `dc60441` and frontend `a6afdc3`, both on `codex/revamp`. No push was made.
+**Implemented locally. The complete revamp remains in progress; R2 ongoing coaching is also implemented locally (below); R3 is implemented locally; R4 is implemented locally below; R5 is recorded below; release gates remain open.** The first checkpoint was committed as backend `dc60441` and frontend `a6afdc3`, both on `codex/revamp`. No push was made.
 
 - Client workspace with private goals/constraints/notes, revision conflict checks and device draft recovery; overview, current plan/schedule and training history.
 - Searchable active/archived roster and archive/reactivate commands. Archived relationships cannot start new assigned sessions; history and already started work remain usable.
@@ -52,13 +52,13 @@ Updated 23 September 2026. **A working local web/backend foundation is implement
 
 **Boundaries:** direct text conversation is implemented; file attachments and external notification delivery are not. Body measurements are optional, not health assessments or automatic advice. Assessment comparisons deliberately separate edited definitions. Forms/messages are recoverable drafts/commands, not a universal offline application. Hosting, physical-device behavior, real retention/payment and remote CI remain unverified.
 
-**Next after R2:** R3 service delivery, now implemented below. R1 exercise alternatives/client substitutions remain explicitly outstanding for integrated readiness.
+**Next after R2:** R3 service delivery, now implemented below. R1 exercise alternatives/client substitutions were outstanding at this checkpoint and are implemented in R5 below.
 
 ## What changed
 
 `RAFIK-FRONTEND` now contains the fresh Vue application, domain/persistence modules, generated API types, authored content, visual system, browser checks and production shell caching. Old source remains in Git at baseline `a0c723e`.
 
-`rafik-api` now contains the fresh Supabase configuration, eight local migrations, explicit commands, fixtures, regression scenarios and implementation documentation. The audit and historical live-backend evidence remain under `docs/revival`; its old-source links refer to baseline `652e9ee`.
+`rafik-api` now contains the fresh Supabase configuration, nine local migrations, explicit commands, fixtures, regression scenarios and implementation documentation. The audit and historical live-backend evidence remain under `docs/revival`; its old-source links refer to baseline `652e9ee`.
 
 `rafik-mobile` remains at its original application content. `rafik-worker` is unchanged apart from its pre-existing `.DS_Store` modification. All four branches remain `codex/revamp`. The active backend/frontend now have local commits; nothing has been pushed.
 
@@ -68,18 +68,18 @@ One responsive web application and one Supabase backend, now with 37 domain tabl
 
 The earlier decision to treat the broad product inventory as merely optional was too restrictive. The corrected coverage register restores a broader execution backlog for clients, programming, progress, communication, nutrition, scheduling and teams. Simplify each useful job and its implementation; do not make its existence contingent on finding customers first. The initial manual plan-conversion pilot remains a service experiment; no automatic import is implemented.
 
-## Next action for Codex
+## Current next action for Codex
 
-1. Continue with R5 in `revamp-coverage.md`: integrated product readiness. Read R1–R4 contracts and the maintainer guide. Complete the still-open R1 exercise alternatives/client substitutions, then integrated recurring client/coach/team tasks and release failure/lifecycle review. Do not treat local R4 or automated tests as full revamp/release completion.
-2. Keep the visual direction the user likes. Extend real backend-backed tasks and recovery states, not just navigation or seeded screenshots. Record each capability as absent, partial, implemented or verified.
-3. Complete integrated product and physical-device checks before declaring release readiness. Business observations remain separate evidence, not a substitute for missing features.
-4. When moving beyond local-only work, follow the new-project hosted release gate. Never deploy synthetic Auth fixtures, reuse old credentials, or push main. Native stays deferred until the broader web/backend work is ready.
+1. R5 local implementation acceptance is complete: 46/46 final browser scenarios, 229 SQL assertions, fresh-install/HTTP/build/format/doc checks and the focused render review pass. Use the release checklist for the next stage; preserve all recorded local constraints.
+2. Follow the shared contribution definition of done and quality rules in both AGENTS files. Preserve the accepted visual identity and explicit domain/state boundaries. Do not equate automated counts with human usability.
+3. After local implementation acceptance, use the release checklist for physical-device/assistive-technology and new-project hosted operations. External notification/payment/calendar adapters require separate contracts and evidence. Native remains deferred.
+4. Continue to update matching current documentation and historical evidence; never reuse the retired hosted backend, deploy synthetic fixtures, or push main.
 
 Detailed source/operation contracts are in `architecture.md`, local/deployment instructions in `runbook.md`, content provenance in `content.md`, and business observation materials in `pilot.md`.
 
 ## R3 — Broader service delivery
 
-**Implemented locally; the complete revamp remains in progress. R4 is implemented locally below; R5 integrated readiness is next.** No hosting, native work or remote push was performed. Earlier R1 exercise alternatives/client substitutions remain explicitly outstanding.
+**Implemented locally; the complete revamp remains in progress. R4 is implemented locally below; R5 follows below.** No hosting, native work or remote push was performed. Earlier R1 exercise alternatives/client substitutions were outstanding here and are implemented in R5 below.
 
 - Optional nutrition: immutable coach guidance with effective dates and optional targets; reusable private foods; manual portion-based meal actuals, explicit personal/coach visibility, correction/removal and known-value summaries. No mandatory nutrition onboarding, food lookup provider, AI estimate or automatic prescription.
 - Appointment delivery: up to eight concrete weekly/fortnightly availability slots, timezone preview and DST rules; client booking, participant rescheduling/cancellation, history and coach attendance. Locks protect both people across coach/client roles. Appointment attendance never completes a workout. Exact pending commands can be retried after a lost acknowledgement and reload.
@@ -93,7 +93,7 @@ Detailed source/operation contracts are in `architecture.md`, local/deployment i
 
 ## R4 — Team and business operations
 
-**Implemented locally; full revamp and release readiness remain incomplete. Next is R5 integrated readiness.** Work is on `codex/revamp` in both active repositories. The existing local preview was preserved; no hosting, real payment/delivery, mobile/worker source change or push was performed.
+**Implemented locally; full revamp and release readiness remain incomplete. The subsequent R5 checkpoint is recorded below.** Work is on `codex/revamp` in both active repositories. The existing local preview was preserved; no hosting, real payment/delivery, mobile/worker source change or push was performed.
 
 - Optional fixed-role teams with creation/rename, verified staff invitations, admin/coach changes, ownership transfer, safe departure and closure. Client enrollment is explicitly approved; a scoped roster does not grant access to private coaching notes, conversations or health/training records.
 - Client-approved coach handoff copies current plan/schedule into independently owned new-coach records, archives the old relationship, cancels its future appointments/unanswered forms and preserves client history/started sessions. Exact decision retries cannot approve a newer proposal. Already-started workout creation can now be retried after a handoff/archive without creating another session.
@@ -104,4 +104,16 @@ Detailed source/operation contracts are in `architecture.md`, local/deployment i
 
 **Verification:** 209 rollback SQL assertions; eight-migration disposable database; nine real team/Storage/provider/support HTTP groups and all existing service checks; 40/40 full browser scenarios across Chromium/WebKit, ten unit tests, build/type/format and schema lint. The 176-layout matrix has no overflow/page errors and no Axe violations in 44 checked phone states. See the R4 section in `verification.md` for exact commands, the retry-test correction and limits. Earlier phases remain covered by the full regression suite. Local checks do not establish physical-device behavior, actual retention/payment, hosted operations or remote CI.
 
-**Remaining boundaries:** R5 recurring-product integration and R1 exercise substitutions/alternatives; later hosted provider/notification/calendar adapters and device/release checks. Support is a single case/current response with revision, not threaded ticket messaging. Team material uses explicit staff publication; client sharing remains per relationship. Handoff does not copy old private conversations, measurements, meal history or coach notes. No universal offline support is claimed for team administration.
+**Boundaries at the R4 checkpoint:** R5 recurring-product integration and R1 exercise choices were still pending, and are implemented below. Hosted provider/notification/calendar adapters and device/release checks remain later gates. Support is a single case/current response with revision, not threaded ticket messaging. Team material uses explicit staff publication; client sharing remains per relationship. Handoff does not copy old private conversations, measurements, meal history or coach notes. No universal offline support is claimed for team administration.
+
+## R5 — Product quality, engineering handoff and exercise choice
+
+**Implemented and verified locally: 46/46 final browser scenarios, 229 SQL assertions, nine-migration fresh install, real service/team checks, 128 focused layouts and build/type/format/doc checks pass.** See `verification.md` for evidence and limits. This checkpoint addresses the user's reported UX and documentation quality concerns before extending the remaining training flow. The broader release still has hosted/device/human-observation gates; no real payment/delivery, native/worker work, remote push or preview reset occurred.
+
+- Conventional documentation index, contribution workflow/definition of done, architecture decisions, API conventions, release checklist and link-check script/CI step. Current architecture contradictions removed; both AGENTS files now require complete user journeys, real rendered review and synchronized documentation.
+- Audited all implemented feature families via source, 52 baseline route/layout captures and existing lifecycle tests. Rebuilt Messages into a searchable bounded workspace with phone inbox/back navigation, reachable composer, optional attachments, scroll-aware unread behavior and correct post-send focus. Kept stable send retry/drafts/private contextual files.
+- Prioritized the client's workout before optional updates; bounded and searched check-in/template/plan/review lists; scheduling now provides a direct destination and clear results; corrected unselected nutrition and coach-resource copy plus team-invitation navigation. Findings and limits are in `product-quality-review.md`.
+- Coach-approved same-kind exercise alternatives (up to three), immutable publication snapshots, durable client substitutions inside existing actual-entry commands, correct actual labels/previous-performance/progress, and independent cloning during shared-plan import/handoff. No extra state service or workflow engine.
+- Additive migration 009 and 20 new rollback assertions; fresh-account browser coverage for long conversations, visible read cursors/drafts/focus, blocked-save alternative recovery and growing check-in lists. Full regression evidence and development failures are recorded honestly in verification.
+
+**Remaining gates:** physical-device keyboard/touch/suspension and assistive technology; new hosted project's Auth/email/Storage/backup/CI operations; real external adapters if enabled; observed unaided user tasks and repeat use. Lists use complete authorized reads with bounded rendering, not server-side large-scale query pagination. Same-kind alternatives inherit targets and are explicit coach choices, not automatic recommendations.

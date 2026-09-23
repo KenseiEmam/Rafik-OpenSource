@@ -18,7 +18,8 @@
     "test:fresh": "node scripts/verify-fresh.mjs",
     "test:services": "node scripts/verify-services.mjs",
     "support:local": "node scripts/support-local.mjs",
-    "test:teams": "node scripts/verify-teams.mjs"
+    "test:teams": "node scripts/verify-teams.mjs",
+    "test:docs": "node scripts/check-docs.mjs"
   },
   "devDependencies": {
     "supabase": "2.90.0"

@@ -1,6 +1,6 @@
 # Working on the Rafik revamp
 
-Last updated: 23 September 2026, R4 team and business operations. This is the practical entry point for developers and future Codex work. Update it when responsibilities, files or workflows change. The [ledger](ledger.md) records what is actually implemented; [architecture](architecture.md) specifies behavior; [verification](verification.md) records evidence and limits. The full product is still being rebuilt: R5 remains open in [coverage](revamp-coverage.md).
+Last updated: 23 September 2026, R5 product quality and exercise choices. This is the practical entry point for developers and future Codex work. Update it when responsibilities, files or workflows change. The [ledger](ledger.md) records what is actually implemented; [architecture](architecture.md) specifies behavior; [verification](verification.md) records evidence and limits. Use the [engineering index](../README.md) for onboarding. Local R5 implementation and remaining release gates are tracked in [coverage](revamp-coverage.md) and the ledger.
 
 ## What changed from the retired product
 
@@ -49,6 +49,7 @@ supabase/migrations/
   202609220006_resources.sql       private file lifecycle, sharing and message attachments
   202609230007_teams.sql           optional team roles/consent/groups/shared assets and start retry
   202609230008_business_support.sql commercial receipts, local simulation, support and deletion guard
+  202609230009_exercise_choices.sql frozen alternatives, recorded choice and actual-identity projections
 supabase/fixtures-business.sql      local-only simulator enablement, never hosted
 supabase/fixtures-users.sql        synthetic local Auth identities
 supabase/fixtures-history.sql      synthetic training history
@@ -60,6 +61,7 @@ supabase/tests/
   ongoing_coaching.sql            R2 response/measurement/message lifecycle scenarios
   service_delivery.sql            R3 nutrition/booking/resource lifecycle and access scenarios
   team_business.sql               R4 role/consent/handoff/group/provider/support regressions
+  exercise_choices.sql            R5 approval/snapshot/retry/analytics/copy regressions
 scripts/verify-teams.mjs           temporary Auth/Storage/handoff/provider/cleanup checks
 scripts/support-local.mjs          guarded local operator reply from a text file
 scripts/verify-services.mjs        real local HTTP booking race, Storage and account cleanup
@@ -215,3 +217,15 @@ Use separate browser profiles for Laila, Nour and Amir. At `/local-preview`, cho
 Laila proposes Nour as Amir's new coach; Amir approves with the consequences displayed. Nour can now open the direct coaching workspace. Laila retains her original participant history; Nour cannot read that private history. Team subscription → Local provider simulation can set past due and restore active. Existing workouts stay available. Client Support → choose team → submit a request; team owner/admin responds in Support. Platform support response is a separate guarded CLI operation documented in the runbook.
 
 Team Activity includes rename and owner closure; Staff includes ownership transfer/departure. Group archive removes only its grouping, not assigned plans. These are real local mutations: use clearly named test teams when exploring and close their enrollments/team when finished. No team fixtures are imposed on the existing Laila/Amir preview.
+
+## Engineering handoff and R5 change recipe
+
+Start at [docs/README](../README.md), then [CONTRIBUTING](../../CONTRIBUTING.md); use ADRs for lasting decisions and the architecture/API reference for current contracts. `scripts/check-docs.mjs` checks maintained local documentation links (`npm run test:docs`); historical audit links are deliberately excluded because they reference baseline commits.
+
+When changing exercise choice, touch all relevant layers: SQL validator/snapshot/save/copy/projections in migration 009; `domain.ts` shape; `prescriptions.ts` actual-identity helper; plan editor; workout logger; review; progress/previous-performance; rollback and browser scenarios. Choices travel inside the existing Entry array and durable operation. Do not add a second synchronization channel or mutate `Session.prescription`.
+
+`tests/product-quality.e2e.ts` creates disposable identities with the existing `team-fixture.ts` helper for long-message and exercise-choice journeys. It tests observable composer geometry/focus/read state and blocked-save recovery, rather than only route existence. Existing suites retain dropped-acknowledgement, permissions, lifecycle and actual Storage checks.
+
+Messages layout rules are scoped in `style.css`; changing shared shell sizing requires desktop/phone/RTL/theme inspection plus the full browser suite. Lists currently use complete authorized reads with bounded rendering; do not describe that as server-side pagination or infinite-scale performance.
+
+`npm run test:quality:layout` in the frontend runs the focused 128-layout English/Arabic/theme/width matrix, including an explicit composer-in-viewport assertion. Inspect its ignored `artifacts/r5-final-*` screenshots; metrics alone do not establish usability.

@@ -1,6 +1,8 @@
 # Rafik revamp backend
 
-A fresh, local Supabase backend for training, daily coaching, progress, check-ins, assessments, conversation, optional nutrition, appointments and private resources. R4 adds optional teams/groups, client-approved coach handoffs, shared plans/files, local subscription states and support. Integrated readiness (R5) remains open. The old platform is retained in Git history; it is not a runtime dependency. Work stays on `codex/revamp`.
+Engineering entry points: [documentation index](docs/README.md), [contribution workflow](CONTRIBUTING.md), [architecture decisions](docs/decisions/README.md).
+
+The local Supabase backend for Rafik's coaching web application: training plans and exercise choices, client progress, check-ins, messages, optional nutrition, appointments, private files, teams/groups, coach handoffs and support. Local commercial states are simulated; hosted/device release gates remain open. The retired platform exists in Git history and is not a runtime dependency. Work stays on `codex/revamp`.
 
 ## Start here
 
@@ -55,8 +57,14 @@ R3 enables local Supabase Storage. On an existing pre-R3 stack, run `npm stop` t
 
 The runtime remains one web app and one Supabase project. No native app, worker, payment provider, marketplace, AI service, configurable role hierarchy or automatic workout generation is required.
 
-## Explore R4
+## Explore teams and support
 
 Use **More → Teams** to create an optional team. Invite `coach2@rafik.test` and open the resulting link as **Nour Mahfouz** in a separate browser profile; **Laila Khoury**, **Amir Hassan**, **Nour Mahfouz** and **Dalia Saad** are available at `/local-preview`, without email codes. Enroll an existing coaching client; the client approves under **More → Teams** or the link on Today. Groups require explicit client selection before assignment. Staff sharing never grants clients file access automatically.
 
 For existing local installs, after applying migration 008, enable the simulator only by applying `supabase/fixtures-business.sql` to the guarded local container (see runbook). New local resets already include it. Never apply this fixture to hosting. **Team subscription** displays commercial state and offers a clearly labelled local simulator to the owner. It does not charge money. **More → Support** stores a real local request; team admins reply in the app. Platform replies use `npm run support:local -- <case-id> <revision> <reply-file>`; see the runbook.
+
+## Product quality and exercise choice
+
+Messages now keeps history and composing in a bounded workspace, with a searchable inbox and phone back flow. Today prioritizes training; check-ins/plans/reviews handle growing lists. Coaches can offer up to three same-kind exercise alternatives in the plan editor; publish and assign the version, then the client chooses within the workout. Recorded choices flow through offline recovery, coach review and progress while original targets remain unchanged.
+
+Read the [product quality review](docs/implementation/product-quality-review.md), [R5 contract](docs/implementation/r5-contract.md) and [release checklist](docs/implementation/release-checklist.md). The contribution rules require real user-task inspection, complete lifecycle implementation and matching docs for future work.
