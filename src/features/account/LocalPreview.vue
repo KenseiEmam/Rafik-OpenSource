@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { PhArrowRight } from '@phosphor-icons/vue'
-import { backend, localPreview } from '../../lib/backend'
+import { api, localPreview } from '../../lib/backend'
 import { user, refreshProfile } from '../../app/auth'
 import { language, t, errorMessage } from '../../lib/i18n'
 const busy = ref('')
@@ -12,12 +12,7 @@ async function enter(role: 'coach' | 'client' | 'coach2' | 'other') {
   busy.value = role
   error.value = ''
   try {
-    const { data, error: e } = await backend.auth.signInWithPassword({
-      email: role + '@rafik.test',
-      password: 'Rafik-local-only-2026!',
-    })
-    if (e) throw e
-    user.value = data.user
+    user.value = await api.preview(role + '@rafik.test')
     await refreshProfile()
     await router.push(role.startsWith('coach') ? '/coach' : '/today')
   } catch (e) {

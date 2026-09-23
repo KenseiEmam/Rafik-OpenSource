@@ -1,4 +1,4 @@
-import { backend, rpc } from './backend'
+import { api, rpc } from './backend'
 import { clone, type Session, type LocalSession, type PlanDay } from './domain'
 import {
   editLocalSession,
@@ -148,8 +148,8 @@ export async function syncWorkout(id: string, owner: string) {
       (row.pending || row.localRevision > row.syncedRevision)
     ) {
       if (!navigator.onLine) return row
-      const { data } = await backend.auth.getSession()
-      if (data.session?.user.id !== owner) return row
+      const current = await api.session()
+      if (current?.id !== owner) return row
       if (!row.pending)
         row = await editLocalSession(id, (r) => {
           r.pending = {

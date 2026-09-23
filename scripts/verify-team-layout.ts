@@ -86,18 +86,16 @@ try {
           // Wait for Auth bootstrap before replacing the synthetic session/navigation.
           await page.locator('main h1').waitFor()
           await page.evaluate(
-            ({ session, lang, theme }) => {
-              localStorage.setItem('rafik-revamp-auth', JSON.stringify(session))
+            ({ lang, theme }) => {
               localStorage.setItem('rafik.locale', lang)
               localStorage.setItem('rafik.theme', theme)
             },
             {
-              session: 'client' in r && r.client ? f.client.session : f.owner.session,
               lang,
               theme,
             },
           )
-          await page.goto(r.path)
+          await f.login(page, 'client' in r && r.client ? f.client : f.owner, r.path)
           await page.locator('main h1').waitFor()
           if ('tab' in r) {
             await page

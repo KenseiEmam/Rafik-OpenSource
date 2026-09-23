@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { backend } from '../../lib/backend'
+import { api } from '../../lib/backend'
 import { user, refreshProfile } from '../../app/auth'
 import { safeNext } from '../../app/router'
 import { language, errorMessage } from '../../lib/i18n'
@@ -10,13 +10,7 @@ const router = useRouter()
 const route = useRoute()
 onMounted(async () => {
   try {
-    if (route.query.code) {
-      const { error: e } = await backend.auth.exchangeCodeForSession(String(route.query.code))
-      if (e) throw e
-    }
-    const { data, error: e } = await backend.auth.getSession()
-    if (e || !data.session) throw e || new Error('invalid_callback')
-    user.value = data.session.user
+    user.value = await api.session()
     await refreshProfile()
     await router.replace(safeNext(route.query.next))
   } catch (e) {

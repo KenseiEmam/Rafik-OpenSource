@@ -4,7 +4,7 @@ import { onBeforeRouteLeave, useRoute } from 'vue-router'
 import { PhArrowLeft, PhPaperclip, PhPaperPlaneTilt, PhArrowClockwise } from '@phosphor-icons/vue'
 import { user } from '../../app/auth'
 import { downloadResource, type Resource, type Share } from '../resources/files'
-import { backend, rpc, rows } from '../../lib/backend'
+import { request, rpc, rows } from '../../lib/backend'
 import { language as l, errorMessage, dateLabel } from '../../lib/i18n'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { commandRejected } from './helpers'
@@ -116,16 +116,9 @@ watch(
   { deep: true },
 )
 async function pageMessages(before?: number) {
-  let query = backend
-    .from('messages')
-    .select('*')
-    .eq('relationship_id', id)
-    .order('sequence', { ascending: false })
-    .limit(50)
-  if (before !== undefined) query = query.lt('sequence', before)
-  const result = await query
-  if (result.error) throw result.error
-  return result.data as Message[]
+  return request<Message[]>(
+    '/v1/conversations/' + id + (before !== undefined ? '?before=' + before : ''),
+  )
 }
 async function refresh() {
   if (refreshing || document.hidden || disposed) return

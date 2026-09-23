@@ -209,7 +209,7 @@ test('ambiguous message delivery retries the saved ID after reload without dupli
   const body = `Retry message ${Date.now()}`
   await page.getByLabel('Message', { exact: true }).fill(body)
   let once = true
-  await page.route('**/rest/v1/rpc/send_message', async (route) => {
+  await page.route('**/v1/commands/send_message', async (route) => {
     if (once) {
       once = false
       await route.fetch()
@@ -238,7 +238,7 @@ test('assignment retry survives a lost acknowledgement and rejected messages rem
   await page.getByRole('combobox', { name: 'Show', exact: true }).selectOption('all')
   const before = Number((await page.locator('.request-total').innerText()).split(' ')[0])
   let once = true
-  await page.route('**/rest/v1/rpc/assign_coaching_form', async (route) => {
+  await page.route('**/v1/commands/assign_coaching_form', async (route) => {
     if (once) {
       once = false
       await route.fetch()

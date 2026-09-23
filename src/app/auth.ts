@@ -1,9 +1,8 @@
 import { shallowRef, ref } from 'vue'
-import type { User } from '@supabase/supabase-js'
-import { backend, configured, rpc } from '../lib/backend'
+import { api, configured, rpc, type ApiUser } from '../lib/backend'
 import type { Profile } from '../lib/domain'
 import { locale } from '../lib/i18n'
-export const user = shallowRef<User | null>(null)
+export const user = shallowRef<ApiUser | null>(null)
 export const profile = ref<Profile | null>(null)
 let init: Promise<void> | undefined
 export async function refreshProfile() {
@@ -22,12 +21,11 @@ export async function refreshProfile() {
 export function ready() {
   return (init ||= (async () => {
     if (!configured) return
-    const { data } = await backend.auth.getSession()
-    user.value = data.session?.user || null
+    user.value = await api.session().catch(() => null)
     if (user.value) await refreshProfile().catch(() => {})
-    backend.auth.onAuthStateChange((_event, session) => {
-      const changed = user.value?.id !== session?.user?.id
-      user.value = session?.user || null
+    api.onSession((current) => {
+      const changed = user.value?.id !== current?.id
+      user.value = current
       if (changed) {
         profile.value = null
         setTimeout(() => void refreshProfile().catch(() => {}), 0)
@@ -36,8 +34,7 @@ export function ready() {
   })())
 }
 export async function logout() {
-  const { error } = await backend.auth.signOut()
-  if (error) throw error
+  await api.logout()
   user.value = null
   profile.value = null
 }

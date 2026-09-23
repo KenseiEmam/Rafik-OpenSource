@@ -36,13 +36,13 @@ export function exerciseTrend(sessions: ProgressSession[], exercise: string) {
   })
 }
 
-// PostgREST SQL/validation errors confirm that the command transaction was rejected.
-// Transport errors have no SQL code: preserve their exact command for replay.
+// A definite HTTP rejection means the transaction did not commit. Network errors and
+// server failures remain ambiguous: retain the exact command for idempotent replay.
 export function commandRejected(error: unknown) {
   return (
     typeof error === 'object' &&
     error !== null &&
-    'code' in error &&
-    /^(P0001|22|23|42501|PGRST)/.test(String(error.code))
+    'statusCode' in error &&
+    [400, 403, 409, 422].includes(Number(error.statusCode))
   )
 }

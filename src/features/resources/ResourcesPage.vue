@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { user } from '../../app/auth'
-import { backend, rows, rpc } from '../../lib/backend'
+import { uploadFile, rows, rpc } from '../../lib/backend'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { language as l, errorMessage, dateLabel } from '../../lib/i18n'
 import type { Profile, Relationship } from '../../lib/domain'
@@ -96,11 +96,11 @@ async function upload() {
       }))
     if (r.state === 'retired') throw Error('resource_unavailable')
     if (r.state === 'pending') {
-      const { error: e } = await backend.storage
-        .from('rafik-private')
-        .upload(r.object_path, file.value, { contentType: r.media_type, upsert: false })
-      // A lost upload acknowledgement can leave immutable bytes in place. Finalize verifies metadata.
-      if (e && !['409', '400'].includes(String(e.statusCode))) throw e
+      try {
+        await uploadFile(r.object_path, file.value, r.media_type)
+      } catch (e) {
+        if (String((e as { statusCode?: number }).statusCode) !== '409') throw e
+      }
       await rpc('finish_resource', { p_id: r.id })
     }
     await removeDraft(key)

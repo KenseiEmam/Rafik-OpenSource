@@ -31,7 +31,7 @@
 ## Founder direction during R7
 
 - Prioritize coach and organization workflows in RAFIK-FRONTEND; preserve trainee web functionality, with the primary trainee experience reserved for the later native revamp. Do not equate a simplified client logger with the complete coach product.
-- Hosting target is **Prisma + PostgreSQL with an explicit server API**, replacing Supabase. The local Supabase runtime is transitional. Before hosting, replace Auth/RPC/Storage coupling and verify transactions, authorization, durable retries and file lifecycle against the new stack. Follow backend ADR 0004; do not deploy the Supabase prototype as the final architecture.
+- Hosting target is **Prisma + PostgreSQL with an explicit server API**, replacing Supabase. R7A1 uses the local Prisma/PostgreSQL API; Supabase is retired. Before hosting, configure real identity/mail/file adapters and verify transactions, authorization, durable retries and file lifecycle against the new stack. Follow backend ADR 0004; do not deploy the Supabase prototype as the final architecture.
 
 ## Role and organization scope correction (R7A)
 

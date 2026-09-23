@@ -1,5 +1,10 @@
 # Rafik web change history
 
+## R7A1 — Prisma/PostgreSQL API transition · 23 September 2026
+
+Replaced the Supabase browser SDK with the owned HTTP API for identity, commands, reads and private files. Cookie sessions replace JavaScript-held access tokens. Preserved durable drafts/retries and fixed confirmed-rejection handling. Updated actual browser/fixture/layout tests and engineering docs; 54 browser journeys pass across both engines. Organization ownership follows in R7A2.
+
+
 ## Original-role audit and corrected architecture order · 23 September 2026
 
 - Traced platform, independent and organizational roles through the original web/mobile, captured deployed schema/functions and worker; documented source evidence, combined-role behavior and legacy defects.

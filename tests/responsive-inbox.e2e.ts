@@ -68,8 +68,7 @@ test('long native plan selections and Arabic resource filters stay inside phone 
 }) => {
   const f = await teamFixture()
   try {
-    const plan = (await f.owner.api.from('plans').select('*').eq('id', f.version.plan_id).single())
-      .data!
+    const plan = (await f.rows(f.owner, 'plans', 'id', f.version.plan_id))[0]
     await f.rpc(f.owner, 'save_plan', {
       p_id: plan.id,
       p_title: 'A practical strength plan for a busy working week with flexible session choices',

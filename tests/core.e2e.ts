@@ -95,19 +95,14 @@ test('coach publishes and invites; verified client trains; coach replies', async
   await client.getByLabel('Email address', { exact: true }).fill(email)
   await client.getByRole('button', { name: 'Send me a code' }).click()
   await expect(client.getByRole('heading', { name: 'Check your email' })).toBeVisible()
-  let messageId = ''
+  let code = ''
   await expect
     .poll(async () => {
-      const inbox = await (await request.get('http://127.0.0.1:55324/api/v1/messages')).json()
-      messageId =
-        inbox.messages.find((m: any) => m.To?.some((p: any) => p.Address === email))?.ID || ''
-      return messageId
+      const inbox = await (await request.get('http://127.0.0.1:55331/local/mail')).json()
+      code = inbox.find((m: any) => m.email === email)?.body || ''
+      return code
     })
-    .not.toBe('')
-  const mail = await (
-    await request.get('http://127.0.0.1:55324/api/v1/message/' + messageId)
-  ).json()
-  const code = (mail.Text || mail.HTML).match(/\b\d{6}\b/)?.[0]
+    .toMatch(/^[0-9]{6}$/)
   expect(code).toBeTruthy()
   await client.getByLabel('Sign-in code').fill(code)
   await client.getByRole('button', { name: 'Continue', exact: true }).click()
@@ -171,7 +166,7 @@ test('offline saves and lost acknowledgments recover; concurrent devices preserv
   await context.setOffline(false)
   await expect(page.getByRole('status')).toContainText('Synced with your account')
   let lost = false
-  await page.route('**/rest/v1/rpc/save_session', async (route) => {
+  await page.route('**/v1/commands/save_session', async (route) => {
     if (!lost) {
       lost = true
       await route.fetch()
@@ -182,7 +177,7 @@ test('offline saves and lost acknowledgments recover; concurrent devices preserv
   await expect(page.getByRole('status')).toContainText('Sync needs attention')
   await page.getByRole('button', { name: 'Try again', exact: true }).click()
   await expect(page.getByRole('status')).toContainText('Synced with your account')
-  await page.unroute('**/rest/v1/rpc/save_session')
+  await page.unroute('**/v1/commands/save_session')
   const otherContext = await browser.newContext()
   const other = await otherContext.newPage()
   await other.goto('http://127.0.0.1:5173/local-preview')
@@ -266,19 +261,14 @@ test('guest account save returns to the completed session and adopts it automati
   await page.getByLabel('Email address', { exact: true }).fill(email)
   await page.getByRole('button', { name: 'Send me a code' }).click()
   await expect(page.getByLabel('Sign-in code')).toBeVisible()
-  let messageId = ''
+  let code = ''
   await expect
     .poll(async () => {
-      const inbox = await (await request.get('http://127.0.0.1:55324/api/v1/messages')).json()
-      messageId =
-        inbox.messages.find((m: any) => m.To?.some((p: any) => p.Address === email))?.ID || ''
-      return messageId
+      const inbox = await (await request.get('http://127.0.0.1:55331/local/mail')).json()
+      code = inbox.find((m: any) => m.email === email)?.body || ''
+      return code
     })
-    .not.toBe('')
-  const mail = await (
-    await request.get('http://127.0.0.1:55324/api/v1/message/' + messageId)
-  ).json()
-  const code = (mail.Text || mail.HTML).match(/\b\d{6}\b/)[0]
+    .toMatch(/^[0-9]{6}$/)
   await page.getByLabel('Sign-in code').fill(code)
   await page.getByRole('button', { name: 'Continue', exact: true }).click()
   await expect(page).toHaveURL('http://127.0.0.1:5173' + path)
@@ -303,7 +293,7 @@ test('plan drafts recover after interruption and failed publication', async ({ p
   await expect(
     page.getByText('Your local draft has been restored.', { exact: false }),
   ).toBeVisible()
-  await page.route('**/rest/v1/rpc/save_plan', (route) =>
+  await page.route('**/v1/commands/save_plan', (route) =>
     route.fulfill({
       status: 503,
       contentType: 'application/json',
@@ -315,7 +305,7 @@ test('plan drafts recover after interruption and failed publication', async ({ p
   await expect(page.getByLabel('Plan name', { exact: true })).toHaveValue(
     'Recoverable strength plan',
   )
-  await page.unroute('**/rest/v1/rpc/save_plan')
+  await page.unroute('**/v1/commands/save_plan')
   await page.getByRole('button', { name: 'Publish plan', exact: true }).click()
   await expect(page.getByRole('status')).toContainText('Published.')
 })

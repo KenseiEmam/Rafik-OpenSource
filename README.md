@@ -6,7 +6,7 @@ A responsive Vue 3/TypeScript application for training and ongoing coaching: pro
 
 Work belongs on `codex/revamp`. The old application is preserved in Git history. No native app or legacy backend is required.
 
-**Current direction:** web development prioritizes coaches and organization staff. The local Supabase runtime is transitional; the target is Prisma/PostgreSQL behind one API. The [role-scope audit](../rafik-api/docs/implementation/role-scope-audit.md) documents the original six roles and the current organization gaps. R7A corrects organizational membership/ownership and the backend boundary before further programming/analytics expansion. Current teams are not a complete organizational implementation.
+**Current direction:** web development prioritizes coaches and organization staff. The local runtime is Prisma/PostgreSQL behind one TypeScript API; identity and private files use that API. The [role-scope audit](../rafik-api/docs/implementation/role-scope-audit.md) documents the original six roles and the current organization gaps. R7A corrects organizational membership/ownership and the backend boundary before further programming/analytics expansion. Current teams are not a complete organizational implementation.
 
 ## Start here
 
@@ -26,7 +26,7 @@ npm ci
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173`. Start with **Try a workout**, or use **Explore sample accounts** in the footer to inspect both sides of the local workflow. Sample accounts use real local Auth and database calls. Sign-in email stays in the backend's test inbox at `http://127.0.0.1:55324`.
+Open `http://127.0.0.1:5173`. Start with **Try a workout**, or use **Explore sample accounts** in the footer to inspect both sides of the local workflow. Sample accounts use real local identity and database calls. Sign-in email stays in the backend's test inbox at `http://127.0.0.1:55331/local/inbox`.
 
 ## Explore R3
 
@@ -53,7 +53,7 @@ npm run preview -- --port 5174 --strictPort
 
 The production build includes a service worker for the public application shell, so an already opened workout can reload without a network connection. API responses are never cached by it. IndexedDB retains workout records; a durable local save and a server acknowledgment have distinct statuses.
 
-For full browser checks, keep both dev (5173) and production preview (5174) servers running with local Supabase:
+For full browser checks, keep both dev (5173) and production preview (5174) servers running with the local PostgreSQL/API stack:
 
 ```sh
 npx playwright install chromium webkit
@@ -88,7 +88,7 @@ The wider revamp remains in progress. Current coverage and the next phase are in
 
 ## R2 test tour
 
-Open `/local-preview` and choose Laila (coach) or Amir (client). Buttons use real local Auth; you do not need an email code. Seeded reflection/assessment examples make the new paths immediately usable.
+Open `/local-preview` and choose Laila (coach) or Amir (client). Buttons use real local identity; you do not need an email code. Seeded reflection/assessment examples make the new paths immediately usable.
 
 - Coach **Check-ins**: create/edit a template, assign a client with bounded recurrence, review submitted responses or cancel unsubmitted occurrences.
 - Client **Check-ins**: save draft, submit, read feedback and correct results. **Discuss this response** adds verified context to a message. Assessments show earlier compatible results.
