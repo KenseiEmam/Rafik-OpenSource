@@ -19,6 +19,9 @@ export type Member = {
   trainer_id: string | null
 }
 export type Organization = {
+  invitationsNext: number | null
+  eventsNext: number | null
+  summary: { trainees: number; trainers: number; unassigned: number }
   workspace: { id: string; name: string; revision: number }
   self: { id: string; roles: Role[] }
   members: Member[]

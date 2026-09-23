@@ -19,6 +19,8 @@ const from = ref(addDays(localDate(profile.value?.timezone || 'UTC'), -27)),
   selected = ref(''),
   search = ref('')
 type Report = {
+  workloadNext: number | null
+  programNext: number | null
   people: { id: string; name: string }[]
   window: { zone: string; from: string; to: string }
   summary: Record<string, number>
@@ -28,13 +30,22 @@ type Report = {
   programs: { id: string; label: string; value: number }[]
 }
 const data = ref<Report>()
-async function load() {
+async function load(part?: 'workload' | 'program') {
   loading.value = true
   error.value = ''
   try {
-    data.value = await request<Report>(
-      `${workspace ? '/v1/workspaces/' + workspace + '/analytics' : '/v1/coach/analytics'}?view=${view}&from=${from.value}&to=${to.value}&${workspace ? 'member' : 'client'}=${selected.value}&search=${encodeURIComponent(search.value)}`,
+    const result = await request<Report>(
+      `${workspace ? '/v1/workspaces/' + workspace + '/analytics' : '/v1/coach/analytics'}?view=${view}&from=${from.value}&to=${to.value}&${workspace ? 'member' : 'client'}=${selected.value}&search=${encodeURIComponent(search.value)}&workloadOffset=${part === 'workload' ? data.value?.workloadNext || 0 : 0}&programOffset=${part === 'program' ? data.value?.programNext || 0 : 0}`,
     )
+    if (part && data.value) {
+      if (part === 'workload') {
+        data.value.workload.push(...result.workload)
+        data.value.workloadNext = result.workloadNext
+      } else {
+        data.value.programs.push(...result.programs)
+        data.value.programNext = result.programNext
+      }
+    } else data.value = result
   } catch (e) {
     error.value = errorMessage(e)
     data.value = undefined
@@ -84,7 +95,7 @@ const attendance = computed(
       ),
     })) || [],
 )
-onMounted(load)
+onMounted(() => load())
 </script>
 <template>
   <OrganizationNav v-if="workspace" />
@@ -116,7 +127,7 @@ onMounted(load)
     </header>
     <details class="analytics-person-filter">
       <summary>{{ l('Focus on one trainee', 'التركيز على متدرب واحد') }}</summary>
-      <form class="analytics-filters" @submit.prevent="load">
+      <form class="analytics-filters" @submit.prevent="load()">
         <label
           >{{ l('Find a trainee', 'البحث عن متدرب')
           }}<input type="search" v-model="search" maxlength="100"
@@ -124,7 +135,7 @@ onMounted(load)
         <button class="button secondary" :disabled="loading">{{ l('Find', 'بحث') }}</button>
         <label
           >{{ l('Trainee', 'المتدرب')
-          }}<select v-model="selected" @change="load">
+          }}<select v-model="selected" @change="load()">
             <option value="">{{ l('Everyone in this scope', 'الجميع في هذا النطاق') }}</option>
             <option v-for="person in data?.people || []" :key="person.id" :value="person.id">
               {{ person.name }}
@@ -141,7 +152,7 @@ onMounted(load)
         }}
       </p>
     </details>
-    <form class="analytics-filters" @submit.prevent="load">
+    <form class="analytics-filters" @submit.prevent="load()">
       <label>{{ l('From', 'من') }}<input type="date" v-model="from" :max="to" required /></label
       ><label
         >{{ l('Through', 'حتى') }}<input type="date" v-model="to" :min="from" required /></label
@@ -149,7 +160,7 @@ onMounted(load)
         {{ l('Update view', 'تحديث العرض') }}
       </button>
     </form>
-    <PageState :loading="loading" :error="error" @retry="load">
+    <PageState :loading="loading" :error="error" @retry="load()">
       <template v-if="data">
         <p class="small-print">
           {{ data.window.from }} — {{ data.window.to }} · {{ data.window.zone }}.
@@ -226,28 +237,44 @@ onMounted(load)
             "
             :items="attendance"
           />
-          <MetricChart
-            v-if="view === 'admin'"
-            :title="l('Trainer responsibility', 'مسؤولية المدربين')"
-            :description="
-              l(
-                'Current active trainees by responsible trainer. This shows workload, not trainer quality.',
-                'المتدربون النشطون حالياً لكل مدرب مسؤول. هذا حجم العمل وليس جودة المدرب.',
-              )
-            "
-            :items="data.workload.map((x) => ({ ...x, href: base + '/people' }))"
-          />
-          <MetricChart
-            v-if="workspace"
-            :title="l('Programs in use', 'البرامج المستخدمة')"
-            :description="
-              l(
-                'Current active assignments by program version title. Historical assignments are excluded.',
-                'التعيينات النشطة الحالية حسب عنوان نسخة البرنامج؛ التعيينات السابقة مستبعدة.',
-              )
-            "
-            :items="data.programs.map((x) => ({ ...x, href: base + '/training' }))"
-          />
+          <div v-if="view === 'admin'" class="chart-page">
+            <MetricChart
+              :title="l('Trainer responsibility', 'مسؤولية المدربين')"
+              :description="
+                l(
+                  'Current active trainees by responsible trainer. This shows workload, not trainer quality.',
+                  'المتدربون النشطون حالياً لكل مدرب مسؤول. هذا حجم العمل وليس جودة المدرب.',
+                )
+              "
+              :items="data.workload.map((x) => ({ ...x, href: base + '/people' }))"
+            /><button
+              v-if="data.workloadNext != null"
+              :disabled="loading"
+              class="text-link"
+              @click="load('workload')"
+            >
+              {{ l('Load more trainers', 'تحميل المزيد من المدربين') }}
+            </button>
+          </div>
+          <div v-if="workspace" class="chart-page">
+            <MetricChart
+              :title="l('Programs in use', 'البرامج المستخدمة')"
+              :description="
+                l(
+                  'Current active assignments by program version title. Historical assignments are excluded.',
+                  'التعيينات النشطة الحالية حسب عنوان نسخة البرنامج؛ التعيينات السابقة مستبعدة.',
+                )
+              "
+              :items="data.programs.map((x) => ({ ...x, href: base + '/training' }))"
+            /><button
+              v-if="data.programNext != null"
+              :disabled="loading"
+              class="text-link"
+              @click="load('program')"
+            >
+              {{ l('Load more programs', 'تحميل المزيد من البرامج') }}
+            </button>
+          </div>
           <section v-else class="metric-chart checkin-summary">
             <h2>{{ l('Check-in response', 'الرد على المتابعات') }}</h2>
             <p class="response-number" dir="ltr">
@@ -290,6 +317,15 @@ onMounted(load)
   </div>
 </template>
 <style scoped>
+.chart-page {
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+.chart-page > button {
+  justify-self: start;
+}
 .analytics-page {
   max-width: 1180px;
 }

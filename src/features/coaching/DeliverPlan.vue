@@ -27,6 +27,8 @@ const version = ref<PlanVersion>(),
   selected = ref<string[]>([]),
   search = ref(''),
   limit = ref(20),
+  pagePeople = ref<Recipient[]>([]),
+  nextPeople = ref<number | null>(null),
   review = ref(false),
   loading = ref(true),
   error = ref(''),
@@ -42,11 +44,7 @@ const start = ref(
   end = ref(''),
   mode = ref('flexible')
 const key = `delivery:${user.value!.id}:${context.key}:${versionId}`
-const visible = computed(() =>
-  people.value
-    .filter((p) => p.name.toLowerCase().includes(search.value.toLowerCase()))
-    .slice(0, limit.value),
-)
+const visible = computed(() => pagePeople.value)
 const recipients = computed(() => people.value.filter((p) => selected.value.includes(p.id)))
 let initialized = false
 watch(
@@ -62,52 +60,53 @@ watch(
   },
   { deep: true },
 )
-watch(search, () => (limit.value = 20))
+let rosterGeneration = 0,
+  searchTimer: ReturnType<typeof setTimeout>
+async function loadRoster(append = false) {
+  const current = ++rosterGeneration
+  const q = new URLSearchParams({
+    view: context.view,
+    search: search.value,
+    selected: selected.value.join(','),
+    offset: String(append ? nextPeople.value || 0 : 0),
+  })
+  try {
+    const result = await request<{
+      items: Recipient[]
+      selected: Recipient[]
+      next: number | null
+    }>(
+      (context.workspace
+        ? `/v1/workspaces/${context.workspace}/recipients`
+        : '/v1/coach/recipients') +
+        '?' +
+        q,
+    )
+    if (current !== rosterGeneration) return
+    pagePeople.value = append ? [...pagePeople.value, ...result.items] : result.items
+    people.value = Array.from(
+      new Map([...result.selected, ...pagePeople.value].map((m) => [m.id, m])).values(),
+    )
+    nextPeople.value = result.next
+  } catch (e) {
+    error.value = errorMessage(e)
+  }
+}
+watch(search, () => {
+  clearTimeout(searchTimer)
+  searchTimer = setTimeout(() => void loadRoster(), 180)
+})
 async function load() {
   loading.value = true
   error.value = ''
   try {
-    if (context.workspace) {
-      const [data, roster] = await Promise.all([
-        request<{ version: PlanVersion }>(
-          `/v1/workspaces/${context.workspace}/programs?view=${context.view}&version=${versionId}`,
-        ),
-        request<{
-          members: { id: string; name: string; revision: number }[]
-          assignments: ({ member_id: string; version: PlanVersion } & Assignment)[]
-        }>(`/v1/workspaces/${context.workspace}/delivery?view=${context.view}`),
-      ])
-      version.value = data.version
-      people.value = roster.members.map((m) => {
-        const a = roster.assignments.find((a) => a.member_id === m.id && a.state === 'active')
-        return {
-          ...m,
-          assignment_id: a?.id || null,
-          assignment_revision: a?.revision || null,
-          current: a?.version.title,
-        }
-      })
-    } else {
-      const [v, relationships, profiles, assignments] = await Promise.all([
-        rows<PlanVersion>('plan_versions', 'id', versionId),
-        rows<Relationship>('coach_clients', 'coach_id', user.value!.id),
-        rows<Profile>('profiles'),
-        rows<Assignment>('assignments', 'coach_id', user.value!.id),
-      ])
-      version.value = v[0]
-      people.value = relationships
-        .filter((r) => r.state === 'active')
-        .map((r) => {
-          const a = assignments.find((a) => a.relationship_id === r.id && a.state === 'active')
-          return {
-            id: r.id,
-            name: profiles.find((p) => p.id === r.client_id)?.display_name || l('Client', 'متدرب'),
-            assignment_id: a?.id || null,
-            assignment_revision: a?.revision || null,
-            current: a ? l('Current assigned plan', 'الخطة الحالية') : undefined,
-          }
-        })
-    }
+    version.value = context.workspace
+      ? (
+          await request<{ version: PlanVersion }>(
+            `/v1/workspaces/${context.workspace}/programs?view=${context.view}&version=${versionId}`,
+          )
+        ).version
+      : (await rows<PlanVersion>('plan_versions', 'id', versionId))[0]
     if (!version.value) throw Error('program_unavailable')
     const local = await getDraft<{ selected: string[]; start: string; end: string; mode: string }>(
       key,
@@ -118,6 +117,7 @@ async function load() {
       end.value = local.end
       mode.value = local.mode
     } else if (route.query.member) selected.value = [String(route.query.member)]
+    await loadRoster()
     initialized = true
   } catch (e) {
     error.value = errorMessage(e)
@@ -232,16 +232,28 @@ onMounted(load)
                   }}</small></span
                 ></label
               ><button
-                v-if="
-                  visible.length <
-                  people.filter((p) => p.name.toLowerCase().includes(search.toLowerCase())).length
-                "
+                v-if="nextPeople !== null"
                 type="button"
                 class="text-link"
-                @click="limit += 20"
+                @click="loadRoster(true)"
               >
                 {{ l('Show more', 'عرض المزيد') }}
               </button>
+              <p v-if="selected.length" class="small-print">
+                {{ l('Selected people', 'الأشخاص المحددون') }}
+              </p>
+              <div v-for="id in selected" :key="id" class="heading-actions">
+                <span>{{
+                  people.find((p) => p.id === id)?.name || l('Unavailable person', 'شخص غير متاح')
+                }}</span
+                ><button
+                  type="button"
+                  class="text-link"
+                  @click="selected = selected.filter((x) => x !== id)"
+                >
+                  {{ l('Remove', 'إزالة') }}
+                </button>
+              </div>
             </section>
             <section class="panel">
               <h2>{{ l('How should it run?', 'كيف يُنفّذ؟') }}</h2>
@@ -274,7 +286,10 @@ onMounted(load)
                 }}
               </p>
             </section>
-            <button class="button" :disabled="!recipients.length">
+            <button
+              class="button"
+              :disabled="!recipients.length || recipients.length !== selected.length"
+            >
               {{ l('Review assignment', 'مراجعة التعيين') }} · {{ recipients.length }}
             </button></template
           >
@@ -305,7 +320,10 @@ onMounted(load)
             <div class="actions">
               <button type="button" class="button secondary" @click="review = false">
                 {{ l('Back to selection', 'العودة للاختيار') }}</button
-              ><button class="button" :disabled="!recipients.length">
+              ><button
+                class="button"
+                :disabled="!recipients.length || recipients.length !== selected.length"
+              >
                 {{ l('Confirm assignment', 'تأكيد التعيين') }}
               </button>
             </div>

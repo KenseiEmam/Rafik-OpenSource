@@ -48,3 +48,5 @@
 - Responsive charts need readable labels at actual rendered size, not just SVG source font size. Keep textual axes/units legible on narrow screens and provide table equivalents. Keep datalist suggestions outside labels so the input's accessible name stays concise. Verify participant filters and permission changes against the original role contract.
 
 - Check vertical collisions as well as horizontal overflow, especially viewport-sized conversation layouts with headers and footers. Scrollable histories must be keyboard focusable in Safari. Device-save feedback must wait for storage acknowledgment; edits during an active sync must schedule another pass instead of being dropped by a busy flag.
+
+- Run full browser acceptance with the web isolation wrapper; never reset or reseed the preview for tests. Keep sources stable during final evidence. Use fail-fast dependent shell checks. New selectors must search the full authorized roster and retain selected IDs across pages/reload; summary totals must not count only loaded rows. Operational authority is a separate platform grant, checked before retry receipts.

@@ -17,7 +17,8 @@ async function enter(
     | 'orgadmin'
     | 'orgtrainer'
     | 'orgtrainee'
-    | 'orgadmin2',
+    | 'orgadmin2'
+    | 'operator',
 ) {
   busy.value = role
   error.value = ''
@@ -25,14 +26,16 @@ async function enter(
     user.value = await api.preview(role + '@rafik.test')
     await refreshProfile()
     await router.push(
-      role.startsWith('org')
-        ? '/organization/12000000-0000-4000-8000-00000000000' +
+      role === 'operator'
+        ? '/platform'
+        : role.startsWith('org')
+          ? '/organization/12000000-0000-4000-8000-00000000000' +
             (role === 'orgadmin2' ? '2' : '1') +
             '/' +
             (role === 'orgadmin2' ? 'admin' : role.slice(3))
-        : role.startsWith('coach')
-          ? '/coach'
-          : '/today',
+          : role.startsWith('coach')
+            ? '/coach'
+            : '/today',
     )
   } catch (e) {
     error.value = errorMessage(e)
@@ -134,6 +137,18 @@ async function enter(
             ><strong>{{ account.name }}</strong
             ><small>{{ account.description }}</small></span
           ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
+        </button>
+        <button class="preview-account panel" :disabled="!!busy" @click="enter('operator')">
+          <span class="avatar">A</span
+          ><span
+            ><strong>Amina</strong
+            ><small>{{
+              language(
+                'Platform operator: audited local operations',
+                'مشغلة المنصة: العمليات المحلية المسجَّلة',
+              )
+            }}</small></span
+          ><PhArrowRight :size="22" aria-hidden="true" />
         </button>
       </div>
       <p v-if="busy" role="status">{{ t('loading') }}</p>

@@ -401,6 +401,21 @@ export type Database = { public: { Tables: {
         user_id: string
         created_at: string
     } }
+    platform_identity_state: { Row: {
+        user_id: string
+        suspended: boolean
+        revision: number
+    } }
+    platform_operations: { Row: {
+        id: string
+        actor_id: string | null
+        kind: string
+        subject_id: string | null
+        reason: string
+        payload: Json
+        result: Json
+        created_at: string
+    } }
     profiles: { Row: {
         id: string
         display_name: string

@@ -1,3 +1,4 @@
+import { testApi, testWeb, testPreview } from './local-config'
 import { staticPreview } from './static-preview'
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
@@ -102,7 +103,7 @@ test('coach publishes and invites; verified client trains; coach replies', async
   let code = ''
   await expect
     .poll(async () => {
-      const inbox = await (await request.get('http://127.0.0.1:55331/local/mail')).json()
+      const inbox = await (await request.get(testApi + '/local/mail')).json()
       code = inbox.find((m: any) => m.email === email)?.body || ''
       return code
     })
@@ -184,7 +185,7 @@ test('offline saves and lost acknowledgments recover; concurrent devices preserv
   await page.unroute('**/v1/commands/save_session')
   const otherContext = await browser.newContext()
   const other = await otherContext.newPage()
-  await other.goto('http://127.0.0.1:5173/local-preview')
+  await other.goto(testWeb + '/local-preview')
   await other.getByRole('button', { name: /Amir Hassan/ }).click()
   await expect(other).toHaveURL(/\/today$/)
   await other.goto(url)
@@ -217,7 +218,7 @@ test('production shell reloads an opened guest workout while offline', async ({
     await page.addInitScript(() => {
       window.name = crypto.randomUUID()
     })
-    await page.goto((isolated?.origin || 'http://127.0.0.1:5174') + '/routine')
+    await page.goto((isolated?.origin || testPreview) + '/routine')
     await page.evaluate(() => navigator.serviceWorker.ready.then(() => true))
     await expect
       .poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller)))
@@ -268,14 +269,14 @@ test('guest account save returns to the completed session and adopts it automati
   let code = ''
   await expect
     .poll(async () => {
-      const inbox = await (await request.get('http://127.0.0.1:55331/local/mail')).json()
+      const inbox = await (await request.get(testApi + '/local/mail')).json()
       code = inbox.find((m: any) => m.email === email)?.body || ''
       return code
     })
     .toMatch(/^[0-9]{6}$/)
   await page.getByLabel('Sign-in code').fill(code)
   await page.getByRole('button', { name: 'Continue', exact: true }).click()
-  await expect(page).toHaveURL('http://127.0.0.1:5173' + path)
+  await expect(page).toHaveURL(testWeb + path)
   await expect(page.getByRole('heading', { name: 'Session complete.' })).toBeVisible()
   await expect(page.getByRole('status')).toContainText('Synced with your account')
   await expect(page.getByRole('button', { name: 'Save to my account' })).toHaveCount(0)

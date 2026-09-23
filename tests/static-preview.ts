@@ -4,7 +4,7 @@ import { resolve, extname, sep } from 'node:path'
 // A test-owned server allows real origin loss without WebKit's offline-emulation
 // navigation error. It serves only the production build, then is shut down.
 export async function staticPreview(transform?: (path: string, body: Buffer) => Buffer) {
-  const root = resolve('dist')
+  const root = resolve(process.env.RAFIK_TEST_DIST || 'dist')
   const types: Record<string, string> = {
     '.html': 'text/html',
     '.js': 'text/javascript',

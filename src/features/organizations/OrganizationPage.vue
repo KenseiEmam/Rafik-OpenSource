@@ -11,6 +11,7 @@ import PageState from '../../components/PageState.vue'
 import type { Organization, Member, Role } from './types'
 import './organization.css'
 import OrganizationUpcoming from './OrganizationUpcoming.vue'
+import MemberPicker from './MemberPicker.vue'
 import OrganizationNav from './OrganizationNav.vue'
 const route = useRoute(),
   router = useRouter(),
@@ -18,6 +19,8 @@ const route = useRoute(),
   view = String(route.params.view) as Role,
   base = `/organization/${id}/${view}`,
   section = computed(() => String(route.params.section || 'overview'))
+const nextPeople = ref<number | null>(null),
+  peopleTotal = ref(0)
 const data = ref<Organization>(),
   loading = ref(true),
   error = ref(''),
@@ -71,9 +74,12 @@ async function load() {
   loading.value = true
   error.value = ''
   try {
-    const loaded = await request<Organization>(`/v1/workspaces/${id}?view=${view}`)
+    const loaded = await request<Organization>(
+      `/v1/workspaces/${id}?view=${view}&summary=${view !== 'trainee'}`,
+    )
     data.value = loaded
     newName.value = loaded.workspace.name
+    if (section.value === 'people') await loadPeople()
   } catch (e) {
     data.value = undefined
     error.value = errorMessage(e)
@@ -82,6 +88,56 @@ async function load() {
     loading.value = false
   }
 }
+async function loadExtra(kind: 'invitations' | 'events') {
+  if (!data.value) return
+  try {
+    const result = await request<Organization>(
+      `/v1/workspaces/${id}?view=${view}&summary=true&${kind === 'events' ? 'eventOffset' : 'invitationOffset'}=${kind === 'events' ? data.value.eventsNext : data.value.invitationsNext}`,
+    )
+    if (kind === 'events') {
+      data.value.events.push(...result.events)
+      data.value.eventsNext = result.eventsNext
+    } else {
+      data.value.invitations.push(...result.invitations)
+      data.value.invitationsNext = result.invitationsNext
+    }
+  } catch (e) {
+    error.value = errorMessage(e)
+  }
+}
+let rosterGeneration = 0,
+  rosterTimer: ReturnType<typeof setTimeout>
+async function loadPeople(append = false) {
+  const current = ++rosterGeneration
+  try {
+    const q = new URLSearchParams({
+      view,
+      search: search.value,
+      state: filter.value === 'inactive' ? 'inactive' : 'active',
+      role: ['admin', 'trainer', 'trainee'].includes(filter.value) ? filter.value : '',
+      offset: String(append ? nextPeople.value || 0 : 0),
+    })
+    const page = await request<{
+      items: Member[]
+      names: { id: string; name: string }[]
+      next: number | null
+      total: number
+    }>(`/v1/workspaces/${id}/people?${q}`)
+    if (current !== rosterGeneration || !data.value) return
+    data.value.members = append ? [...data.value.members, ...page.items] : page.items
+    data.value.names = Array.from(
+      new Map([...data.value.names, ...page.names].map((m) => [m.id, m])).values(),
+    )
+    nextPeople.value = page.next
+    peopleTotal.value = page.total
+  } catch (e) {
+    error.value = errorMessage(e)
+  }
+}
+watch([search, filter], () => {
+  clearTimeout(rosterTimer)
+  rosterTimer = setTimeout(() => void loadPeople(), 180)
+})
 const command = useCommand<'organization'>(
   `organization:${id}:${view}`,
   async (_, result, args) => {
@@ -256,17 +312,17 @@ onMounted(async () => {
         <template v-if="section === 'overview'">
           <div v-if="view !== 'trainee'" class="organization-summary">
             <RouterLink :to="base + '/people'"
-              ><strong>{{ trainees.length }}</strong
+              ><strong>{{ data.summary.trainees }}</strong
               ><span>{{
                 view === 'admin'
                   ? l('Active trainees', 'المتدربون النشطون')
                   : l('Assigned to you', 'المعيّنون لك')
               }}</span></RouterLink
             ><RouterLink v-if="view === 'admin'" :to="base + '/people?filter=trainer'"
-              ><strong>{{ trainers.length }}</strong
+              ><strong>{{ data.summary.trainers }}</strong
               ><span>{{ l('Trainers', 'المدربون') }}</span></RouterLink
             ><RouterLink v-if="view === 'admin'" :to="base + '/people'"
-              ><strong>{{ trainees.filter((m) => !m.trainer_id).length }}</strong
+              ><strong>{{ data.summary.unassigned }}</strong
               ><span>{{ l('Need a trainer', 'بحاجة إلى مدرب') }}</span></RouterLink
             >
           </div>
@@ -284,7 +340,7 @@ onMounted(async () => {
             >
           </div>
           <OrganizationUpcoming />
-          <section v-if="view === 'trainee' || !trainees.length" class="panel">
+          <section v-if="view === 'trainee' || !data.summary.trainees" class="panel">
             <h2>
               {{
                 view === 'admin'
@@ -346,15 +402,11 @@ onMounted(async () => {
           </div>
           <div class="organization-people">
             <section>
-              <p class="muted">{{ visible.length }} {{ l('people', 'أشخاص') }}</p>
+              <p class="muted">{{ peopleTotal }} {{ l('people', 'أشخاص') }}</p>
               <p v-if="!visible.length" class="empty-state">
                 {{ l('No people match this view.', 'لا أشخاص يطابقون هذا العرض.') }}
               </p>
-              <article
-                v-for="member in visible.slice(0, limit)"
-                :key="member.id"
-                class="organization-person"
-              >
+              <article v-for="member in visible" :key="member.id" class="organization-person">
                 <div class="person-identity">
                   <span class="avatar">{{ member.name.slice(0, 1) }}</span>
                   <div>
@@ -375,7 +427,7 @@ onMounted(async () => {
                   {{ l('Manage', 'إدارة') }}
                 </button>
               </article>
-              <button v-if="visible.length > limit" class="button secondary" @click="limit += 20">
+              <button v-if="nextPeople !== null" class="button secondary" @click="loadPeople(true)">
                 {{ l('Show more people', 'عرض المزيد') }}
               </button>
             </section>
@@ -442,19 +494,17 @@ onMounted(async () => {
                     })
                   "
                 >
-                  <label
-                    >{{ l('Responsible trainer', 'المدرب المسؤول')
-                    }}<select v-model="trainer">
-                      <option value="">{{ l('Not assigned', 'غير معيّن') }}</option>
-                      <option
-                        v-for="person in trainers.filter((m) => m.id !== selected!.id)"
-                        :key="person.id"
-                        :value="person.id"
-                      >
-                        {{ person.name }}
-                      </option>
-                    </select></label
-                  ><button class="button secondary">
+                  <MemberPicker
+                    :workspace="id"
+                    :view="view"
+                    role="trainer"
+                    single
+                    :label="l('Responsible trainer', 'المدرب المسؤول')"
+                    :model-value="trainer ? [trainer] : []"
+                    :exclude-ids="[selected.id]"
+                    @update:model-value="trainer = $event[0] || ''"
+                  />
+                  <button class="button secondary">
                     {{ l('Update trainer', 'تحديث المدرب') }}
                   </button>
                 </form>
@@ -483,6 +533,14 @@ onMounted(async () => {
                 {{ l('Revoke invitation', 'إلغاء الدعوة') }}
               </button>
             </article>
+            <button
+              v-if="data.invitationsNext !== null"
+              type="button"
+              class="text-link"
+              @click="loadExtra('invitations')"
+            >
+              {{ l('More pending invitations', 'المزيد من الدعوات المعلقة') }}
+            </button>
           </section>
         </template>
         <section v-else-if="section === 'activity' && view === 'admin'" class="panel">
@@ -524,6 +582,14 @@ onMounted(async () => {
               ><time>{{ dateLabel(event.created_at) }}</time>
             </li>
           </ol>
+          <button
+            v-if="data.eventsNext !== null"
+            type="button"
+            class="text-link"
+            @click="loadExtra('events')"
+          >
+            {{ l('Earlier activity', 'نشاط أقدم') }}
+          </button>
         </section>
         <section v-else-if="section === 'settings' && view === 'admin'" class="panel narrow">
           <h2>{{ l('Organization settings', 'إعدادات المؤسسة') }}</h2>

@@ -46,8 +46,9 @@ test('organization admin enrolls combined roles and reassigns responsibility wit
     await page.goto(base + '/people')
     await page.getByRole('button', { name: 'Manage R4 Client', exact: true }).click()
     await page
-      .getByRole('combobox', { name: 'Responsible trainer', exact: true })
-      .selectOption({ label: 'R4 Coach' })
+      .locator('.organization-trainer-form')
+      .getByRole('checkbox', { name: 'R4 Coach', exact: true })
+      .check()
     let lost = false
     await page.route('**/v1/workspaces/' + id, async (route) => {
       if (

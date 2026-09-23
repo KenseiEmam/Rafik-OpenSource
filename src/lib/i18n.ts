@@ -120,6 +120,10 @@ export function errorMessage(error: unknown): string {
         ? String(error.message)
         : String(error)
   const teamErrors: Record<string, [string, string]> = {
+    account_suspended: [
+      'Sign-in access is suspended. Contact platform support.',
+      'تم تعليق تسجيل الدخول. تواصل مع دعم المنصة.',
+    ],
     conversation_unavailable: [
       'This conversation is unavailable in this workspace. Refresh your conversations or contact an organization administrator.',
       'هذه المحادثة غير متاحة في مساحة العمل. حدّث المحادثات أو تواصل مع مسؤول المؤسسة.',
