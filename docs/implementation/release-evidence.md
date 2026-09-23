@@ -1,6 +1,6 @@
 # Release evidence and remaining gates
 
-Owner: Codex. Reviewed 23 September 2026. **Local revamp; not deployed.** The current exercise correction is R15; organization nutrition, complete exercise media and broader nutrition content remain product work. Final results and the follow-up delta are recorded in the verification record. This register prevents a local test result from being mistaken for release or customer evidence.
+Owner: Codex. Reviewed 23 September 2026. **Local revamp; not deployed.** The current implementation is R16 organization nutrition. Complete exercise media, broader nutrition content and the review-to-adaptation refinement remain product work. Final results and the follow-up delta are recorded in the verification record. This register prevents a local test result from being mistaken for release or customer evidence.
 
 | Gate | Status | Concrete evidence / next action |
 |---|---|---|
@@ -9,8 +9,8 @@ Owner: Codex. Reviewed 23 September 2026. **Local revamp; not deployed.** The cu
 | Interruption/correction/retry | Locally tested | Real lost acknowledgment, offline organization/independent recording, stale device revisions, command replay and correction history; one workout queue |
 | Responsive/readable local web | Developer rendered review and automated checks | Final verification names tested viewports/scripts/themes/states and inspected captures; physical device and human comprehension still separate |
 | Larger roster and private-byte operation | Locally tested | 120-trainer/1,200-trainee fixture, bounded pages/totals, measured roster index; private-file grace/reference checks and disposable dump-plus-byte restore |
-| Engineering handoff | Maintained and locally rehearsed | README, CONTRIBUTING, current architecture/API/source map, ADR0008–0011, maintained content imports and shared dashboard controls and ordinary UI/domain recipes; no independent engineer onboarding observation yet |
-| Local release chain | Historical full R14 chain plus focused R15 acceptance | R14: 28 gates and follow-up. R15 checks are recorded separately in the current verification record; the entire 31-gate release chain has not been rerun for R15. Disposable browser environment, no preview reset |
+| Engineering handoff | Maintained and locally rehearsed | README, CONTRIBUTING, current architecture/API/source map, ADR0008–0012, maintained content imports and shared dashboard controls and ordinary UI/domain recipes; no independent engineer onboarding observation yet |
+| Local release chain | Historical full R14 chain plus focused R15/R16 acceptance | R14: 28 gates and follow-up. R15/R16 checks are recorded separately in the current verification record; the expanded32-gate release chain has not been rerun for R16. Disposable browser environment, no preview reset |
 | Remote CI | Not run | Execute committed CI against the revamp branches after an authorized push; inspect actual remote results |
 | Hosted PostgreSQL/API/web | Not configured or deployed | Fresh hosting environment, secrets/roles/HTTPS/same-origin/configuration, monitoring, controlled upgrade and recovery drill |
 | Real mail/notification/file/billing services | Not configured | Concrete owners and acceptance in provider-readiness; no simulation counts as real delivery or payment |
@@ -21,6 +21,6 @@ Owner: Codex. Reviewed 23 September 2026. **Local revamp; not deployed.** The cu
 
 ## Next investment decision
 
-The next engineering dependency is environment and device readiness, followed by controlled human observation using the finished local workflows. Fix observed confusion before widening rollout. Do not add AI, marketplace acquisition, galleries, generalized permissions or new services to compensate for absent outcome evidence. No customer outreach or external write is performed by this register.
+The next local product phase is the documented coach review-to-individual-adaptation refinement; environment and device readiness then gate release, followed by controlled human observation using the finished local workflows. Fix observed confusion before widening rollout. Do not add AI, marketplace acquisition, galleries, generalized permissions or new services to compensate for absent outcome evidence. No customer outreach or external write is performed by this register.
 
 Any future claim of “ready for users” must name the actual environment and passing gates. Any claim of “successful” needs actual repeat use and paid continuation. A documented outstanding gate is not a hidden implementation success.

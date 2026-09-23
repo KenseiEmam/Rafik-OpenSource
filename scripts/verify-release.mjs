@@ -123,6 +123,7 @@ try {
       "test:organizations",
       "test:programming",
       "test:organization-services",
+      "test:organization-nutrition",
       "test:communication",
       "test:operations",
       "content:check",

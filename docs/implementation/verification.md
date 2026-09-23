@@ -1,5 +1,15 @@
 # Verification record
 
+## R16 — Organization nutrition (23 September 2026)
+
+**22/22 focused Chromium/phone-WebKit cases pass** on final runtime sources: eight new organization nutrition cases, twelve existing independent nutrition cases and two organization membership cases. The new workflow covers publication, actual portions, explicit sharing/withdrawal, correction/removal/history, subject export, member/date draft isolation, reload, lost acknowledgements and exact retry without duplicate plans or consumption. The layout case covers 16 engine/width/language/theme combinations, each visiting plan/editor/diary; Axe runs on the plan states, and geometry is checked on all three views. Desktop main-container bounds, four target inputs and unresolved component warnings are explicit assertions.
+
+Two new API groups plus five membership, two organization service and seven release guard groups pass. API cases include admin-only, assigned trainer and combined trainee roles, two organizations/outsiders, reassignment/revocation before replay, sharing and removed-history privacy, correction provenance, validation, concurrent revision conflict, date/expiry semantics and bounded history. A disposable installation applies **33 migrations, fixtures and eight SQL suites**. Existing preview records remain intact. Final web build/typecheck, **27 units**, two production-shell checks, formatting and backend content/docs/type checks pass.
+
+Actual final captures inspected: English/light1280px plan and open editor; Arabic/dark320px WebKit plan. Earlier interactive preview review caught duplicate target fields and nested dashboard scrolling. Browser reload testing caught premature draft-save feedback; only the latest queued edit now confirms saved. Development failures and corrected test assumptions are recorded in the [receipt](evidence/r16-verification.txt), not counted as accepted runs.
+
+This is focused local acceptance, not a full32-gate release pass, physical-device test, native implementation, remote CI or hosting result. Human comprehension, retention, commercial outcomes and qualified clinical suitability are not established. Nutrition reference coverage remains fifteen starter foods; no inferred calorie/medical recommendations were introduced.
+
 ## R15 — Exercise coverage, categories and continuous motion (23 September 2026)
 
 This correction has focused acceptance; **the entire release chain was not rerun**. R14's full result remains historical. The [R15 receipt](evidence/r15-verification.txt) records its own commands, source snapshot, failures corrected and remaining limits. **34/34 combined browser cases passed**, followed by **6/6 focused final cases** after the exercise/timezone popup direction correction, across Chromium and phone WebKit. Final type/build, 27 units, two build/cache contracts and formatting pass.

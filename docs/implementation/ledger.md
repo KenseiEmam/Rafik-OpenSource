@@ -1,6 +1,16 @@
 # Revamp execution ledger
 
-Updated 23 September 2026. **R15 broad exercise library, categorized selection and continuous motion are implemented locally.** Phase commits remain on `codex/revamp`. Hosting, native, real providers, physical devices and observed human/business outcomes remain separate gates.
+Updated 23 September 2026. **R16 organization nutrition is implemented locally.** Phase commits remain on `codex/revamp`. Hosting, native, real providers, physical devices and observed human/business outcomes remain separate gates.
+
+## R16 — Organization nutrition and shared food diary
+
+Organization admins and assigned trainers can publish dated calorie/macronutrient targets and an example day for a chosen trainee. Plans, actual food and immutable history are separate views. Trainees record actual portions, correct/remove entries and decide whether to share the organization diary; sharing defaults off and withdrawal hides all actuals/history from staff. Organization ownership remains separate from independent coaching. Reassignment and inactive membership revoke access before retry receipts. Subject export includes the member's plans, sharing state, food and corrections.
+
+The phase reuses the existing food reference, target editor and durable command infrastructure. Four PostgreSQL tables and three forward migrations preserve existing preview data. Desktop content panes own scrolling; phone pages flow naturally. Closed editors resume their drafts; member/date changes and reloads retain the correct context. Actual rendered review caught duplicate target controls and nested scrolling; reload testing caught saved feedback acknowledging an earlier queued edit. These were fixed and made explicit engineering rules in both AGENTS files.
+
+Acceptance: **22/22 focused browser cases**, including both-engine organization nutrition, existing independent nutrition and membership flows; two nutrition API groups, five membership groups, two organization service groups, seven release guards, 33-migration/eight-suite disposable fresh installation, 27 web units, production/type/cache/format/content/docs checks. [R16 receipt](evidence/r16-verification.txt), [contract](r16-contract.md) and [ADR0012](../decisions/0012-organization-nutrition.md) record the contract, commands, failure corrections and boundaries. The expanded32-gate full release chain was not rerun. No preview reset, push, deployment or native work.
+
+Web implementation commit: `6133db7` on `codex/revamp`. This backend checkpoint contains the paired schema/API, three migrations, role/lifecycle tests, engineering docs and acceptance receipt. Next local phase: coach review-to-individual-adaptation refinement from the research priorities; broader food coverage and release/device/human gates remain explicit.
 
 ## R15 — Exercise coverage and interaction correction
 

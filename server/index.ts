@@ -1,3 +1,4 @@
+import { nutrition, nutritionCommand } from "./organization-nutrition.ts";
 import {
   organizationPeople,
   organizationRecipients,
@@ -453,6 +454,19 @@ const server = createServer(async (req, res) => {
         200,
         await independentAnalytics(requireActor(actor), url.searchParams),
       );
+      return;
+    }
+    const nutritionMatch = path.match(
+      /^\/v1\/workspaces\/([a-f0-9-]{36})\/nutrition$/,
+    );
+    if (nutritionMatch) {
+      const who = requireActor(actor),
+        id = nutritionMatch[1];
+      if (req.method === "GET")
+        send(res, 200, await nutrition(who, id, url.searchParams));
+      else if (req.method === "POST")
+        send(res, 200, await nutritionCommand(who, id, input));
+      else throw new ApiError(405, "method_not_allowed");
       return;
     }
     const serviceMatch = path.match(

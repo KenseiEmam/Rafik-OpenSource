@@ -124,3 +124,9 @@ Backend CI now declares `content:media` and `test:catalog` after API startup. Ca
 This phase adds five forward migrations (30 total). On an existing preview, apply migrations and regenerate Prisma/types; **do not seed or reset**. Source catalog imports are reference records, separate from synthetic user fixtures. Restart a stable API after code changes, then reload the web library. Sample accounts can immediately browse the expanded corpus.
 
 Run `content:exercise-dataset -- --check`, `content:wger-exercises -- --check`, `content:videos`, `content:check` and `test:catalog`. Content acquisition/transcoding is an explicit maintenance step described in the content guide; no provider account or FFmpeg process is needed at runtime. Keep all referenced old media versions available. Missing/corrupt media yields a readable fallback and retry; investigate hashes before regenerating. Do not rewrite published media bytes under an existing key.
+
+## R16 additive upgrade
+
+Run `npm run db:migrate` then `npm run db:generate` and restart the API. R16 adds three forward migrations (33 total): organization nutrition tables, the explicit sharing composite key, and the server-only subject-date projection. No seed/reset is needed. `npm run types` refreshes web transport types; format generated output with the web formatter. `npm run test:organization-nutrition` exercises the local API using owned disposable records; `npm run test:fresh` installs all migrations in a disposable database. Web acceptance must use its isolated wrapper.
+
+Preview: Rania → Nutrition → Sara → Create plan. Sara → Nutrition can view it, record actual food and opt into sharing. Kareem's assigned-trainer view reads the same organization history when authorized. This walkthrough intentionally uses user-created preview records rather than quietly seeding dietary targets.

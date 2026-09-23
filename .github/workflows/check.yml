@@ -30,5 +30,6 @@ jobs:
       - run: npm run test:operations
       - run: npm run test:communication
       - run: npm run test:organization-services
+      - run: npm run test:organization-nutrition
       - run: npm stop
         if: always()

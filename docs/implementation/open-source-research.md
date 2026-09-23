@@ -34,7 +34,7 @@ Exercise illustrations are available in the independent and organization library
 
 ## Prioritized follow-on work
 
-1. **Organization nutrition:** define organization-owned plans, assigned trainer authoring, admin oversight and trainee sharing without reusing independent relationships. This remains a distinct missing scope, not implied by the new food API.
+1. **Organization nutrition:** define organization-owned plans, assigned trainer authoring, admin oversight and trainee sharing without reusing independent relationships. Implemented locally in R16 with a separate ownership/consent lifecycle; see [R16 contract](r16-contract.md).
 2. **Exercise coverage:** exact licensed floor-press, low-step and stationary-bike demonstrations; then expand reviewed catalog coverage using the same import contract. A qualified coach should review instructional accuracy before production use.
 3. **Coach review → individual adaptation:** make the existing future-program adjustment discoverable beside actual session evidence; retain explicit approval and immutable past sessions. No automatic load changes.
 4. **Regional food usefulness:** measure UAE/Gulf dishes and brands, then add rights-cleared sources and a correction flow. Do not call 15 generic foods a comprehensive nutrition database.

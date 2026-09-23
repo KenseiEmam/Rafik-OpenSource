@@ -95,3 +95,18 @@ Independent and organization exercise authoring accept `media_ref` from the revi
 - `GET|HEAD /v1/catalog/exercise-videos/:key.mp4` or `:key.webp`: allowlisted public asset. Supports a single `Range: bytes=...` request (206 with Content-Range); malformed/unsatisfiable ranges return 416. Unknown asset/type is 404; integrity mismatch is 503. Cache is public/immutable; video variants are H.264 MP4 with no audio. Full downloads remain available under the asset license.
 
 Shared exercise records additionally contain nullable `category`, `body_part`, `target_muscle` and immutable `source_ref`. Custom authoring may set the facets; clients cannot forge the source reference. Existing prescription snapshots and media keys remain valid.
+
+## Organization nutrition (R16)
+
+`GET /v1/workspaces/:id/nutrition?view=admin|trainer|trainee&member=:membership&date=YYYY-MM-DD` returns authorized subject metadata, current plan for the date, latest revision, ten plan versions/next offset and authors. Trainee view resolves its own membership and rejects a different supplied member; staff use an explicit authorized membership. Omitting staff member returns `{member:null}`. Date defaults to the subject's local date.
+
+The response includes `{sharing:{enabled,revision},canReadDiary,meals,removed,removedNext,corrections,correctionsNext}`. Actuals are returned to their subject or currently authorized staff while sharing is enabled. `removed=true&removedOffset=N` reads ten removed rows for the date; `meal=:id&historyOffset=N` reads ten revisions of an owned diary entry. `offset=N` pages plan versions. Unknown nutrients stay null/absent, not zero. Live daily meals are capped at200.
+
+`POST` accepts an exact command with `operation` UUID, `view`, `member` and one action:
+
+- `publish`: staff only, `id` UUID, `revision` matching latest plan, `effective_on` from subject today through366 days ahead, optional `expires_on` from start through366 days after start, `targets`, `guidance` (max4000), `meals` (max20/32KiB). Reuses nutrient and suggestion validation. Empty plans are rejected. Earlier versions cannot be edited.
+- `sharing`: trainee only, expected `revision` (initial0), boolean `enabled`. Defaults off. Disabling hides all actuals/history from subsequent staff reads.
+- `meal`: trainee only, `id`, expected `revision` (initial0), `logged_on` within the past366 days through subject today, `food` snapshot (`name,meal,quantity,basis,unit,nutrients,source`) and `note` (max2000). Positive bounded quantities/bases and known nutrient keys; units `g|ml|serving`.
+- `remove`: trainee only, `id`, expected `revision`; creates a tombstone and history version, excludes it from current totals. Retrying the same operation returns its receipt; changing its payload is rejected.
+
+Current membership/role/responsibility checks precede receipt lookup, so revoked staff cannot replay. `GET /v1/account/organizations` additionally includes the subject's `nutritionPlans`, `nutritionSharing` and `nutritionMeals` with `organization_meal_history`. Generic browser table queries do not expose these tables. These contracts are available to a later native client; no native/offline diary implementation is claimed.

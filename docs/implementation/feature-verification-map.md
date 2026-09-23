@@ -84,3 +84,9 @@ Rendered chart label readability was checked after the automated matrix; see pro
 - `exercise-catalog.test.ts`: compound equipment membership, aliases and Arabic facet labels.
 - `exercise_catalog.sql`, `exercise_choices.sql` and programming tests: imported categories, custom validation/retry, immutable source and media references through publication/copy, own-scope authority.
 - Content checks verify pinned corpus, immutable first-import SQL, reviewed wger editorial snapshot and all committed media hashes. Fresh-install results and actual browser counts belong in the verification record.
+
+## R16 organization nutrition
+
+- API: `tests/organization-nutrition.test.ts` — separate organizations/independent roles, combined trainer/trainee, admin-only publication, reassignment/revoked replay, consent withdrawal, immutable plans/corrections, expiry, concurrent revisions, bounded histories, source validation and subject export.
+- Web: `tests/organization-nutrition.e2e.ts` — author→trainee→staff lifecycle, actual portions, sharing/removal history, scoped/closed drafts, lost publication/meal response recovery, EN/AR/themes/phone/desktop; screenshots and console/geometry/Axe checks complement actual review.
+- Regression: independent nutrition and existing organization journeys; fresh migration/install, maintained docs and configured CI/release gate. Refer to the current verification record for executed results; configured gates alone do not mean they passed.

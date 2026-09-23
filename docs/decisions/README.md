@@ -20,3 +20,5 @@ For a new decision, add the next number with Context, Decision, Consequences and
 - [0010: Owned reference content and actionable nutrition](0010-reference-content-and-nutrition.md).
 
 - [0011: Broad exercise catalog and genuine motion previews](0011-exercise-catalog-and-motion.md).
+
+- [0012 — Organization nutrition and explicit diary sharing](0012-organization-nutrition.md)

@@ -72,3 +72,6 @@
 - Picker acceptance must verify that an option is visibly inside the popup and viewport, not merely mounted or selectable by keyboard. Prefer one scroll owner; avoid fixed height subtraction when filter controls can wrap. Capture viewport images with browser-specific names so phone runs cannot overwrite desktop evidence.
 
 - Portaled Reka popups need their own locale direction (or a verified global ConfigProvider); Root direction does not establish Popper Content direction. Assert the open popup’s computed direction and inspect mixed Arabic/English labels; use auto direction for untranslated names.
+
+- When reusing a UI component, inspect its rendered contents before wrapping it; avoid duplicate fields/headings. Scope acceptance to the actual nutrient controls, not unrelated inputs. Capture console component-resolution warnings as well as runtime errors.
+- Device-save feedback must acknowledge the latest queued draft write, and remain visible when an editor closes. Test close → saved feedback → reload → continue, plus switching subjects/dates. Keep sharing decisions and nutrition actuals separate from published suggestions; reassignment and revocation must be checked before replay.
