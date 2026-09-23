@@ -87,6 +87,11 @@ const router = createRouter({
       meta: { private: true },
     },
     {
+      path: '/organization/:workspace/:view/nutrition',
+      component: () => import('../features/nutrition/OrganizationNutrition.vue'),
+      meta: { private: true },
+    },
+    {
       path: '/organization/:workspace/:view/analytics',
       component: () => import('../features/analytics/AnalyticsPage.vue'),
       meta: { private: true },
