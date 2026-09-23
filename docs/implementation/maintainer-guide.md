@@ -1,5 +1,8 @@
 # Working on the Rafik revamp
 
+Before changing ownership, roles or organization features, read the [role-scope audit](role-scope-audit.md) and [ADR 0005](../decisions/0005-organization-and-independent-scopes.md). Current team modules implement an independent-coach collaboration overlay; the next R7A phase replaces that assumption with scoped organizations and the Prisma API. The audit is the role/workflow traceability reference; it is not generated API documentation.
+
+
 Last updated: 23 September 2026, R5 product quality and exercise choices. This is the practical entry point for developers and future Codex work. Update it when responsibilities, files or workflows change. The [ledger](ledger.md) records what is actually implemented; [architecture](architecture.md) specifies behavior; [verification](verification.md) records evidence and limits. Use the [engineering index](../README.md) for onboarding. Local R5 implementation and remaining release gates are tracked in [coverage](revamp-coverage.md) and the ledger.
 
 ## What changed from the retired product
@@ -236,3 +239,7 @@ Messages layout rules are scoped in `style.css`; changing shared shell sizing re
 - Inbox CSS: remove obsolete flex-basis/direction rules; the phone grid and inbox must have zero minimum width, contact rows intrinsic height, and vertical scrolling bounded by the workspace. Native select text must stay inside the input in Safari/RTL. Roster renders twelve clients at a time; search/status operates over all loaded authorized rows and resets the visible count.
 - Offline updates: `build/offline-shell.ts` hashes contents and generates the worker; `src/app/updates.ts` registers/checks it; `src/components/AppUpdates.vue` provides shared Help/Settings UI. `npm run test:build` checks final emitted files and two HTML-only builds; worker generation must run after all bundler transforms. `tests/app-updates.e2e.ts` serves a real production bundle under two release identities plus a failed installation, preserving actual IndexedDB work across activation and offline reload. Never add `skipWaiting` or automatic reload without a new cross-tab/draft contract.
 - Release gate: from backend, `npm run verify:release -- --check` validates prerequisites; `npm run verify:release -- --full` runs the complete local chain serially. See the runbook for reports and recovery. `npm run test:release` checks rejection of remote/wrong-project/main/wrong-runtime prerequisites. New scripts must never print local service credentials.
+
+## Daily workspace maintenance (R7)
+
+`src/features/workspace/WorkspaceNav.vue` owns role-specific primary/secondary links, `types.ts` describes attention rows, and `src/styles/workspace.css` owns the compact shell and daily layouts. `CoachHome.vue` composes the attention projection and upcoming appointments; `TodayPage.vue` uses `client_today`; `ClientsPage.vue` uses cursor-based `coach_roster`. Change these read contracts in migration 010 or a forward migration as appropriate, regenerate types, and run `daily_workspace.sql` plus `tests/workspace.e2e.ts`. Keep More and desktop navigation aligned so phone secondary tools remain discoverable.

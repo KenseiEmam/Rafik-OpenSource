@@ -1,10 +1,14 @@
 # Current system architecture
 
+**Target change (R7):** the founder selected Prisma + PostgreSQL with an explicit server API for hosting. Supabase below describes the current transitional local implementation, not the target release architecture. [ADR 0004](../decisions/0004-coach-web-and-prisma-target.md) defines required Auth/API/Storage replacement and coach-first web priorities.
+
+**Organizational correction:** [ADR 0005](../decisions/0005-organization-and-independent-scopes.md) defines the planned separate independent/organization scopes and advances the Prisma transition to R7A. The current R4 team overlay is not that model. See the [role audit](role-scope-audit.md) for original capabilities, mismatches and required acceptance. No organization-role implementation is claimed below.
+
 Start with the [documentation index](../README.md), [ADRs](../decisions/README.md) and [API conventions](../reference/api.md). This file is the current structural/lifecycle reference; dated completion evidence belongs in the verification record and ledger.
 
 Local revamp, 23 September 2026. This record describes the new implementation; `docs/revival` preserves the audit and rationale. It is not a compatibility plan for the retired backend.
 
-**Current scope:** one web application and one Supabase project, with 37 domain tables and one internal runtime-setting table. Domain contracts cover training/daily coaching, ongoing coaching, service delivery and optional teams/commercial/support. The [coverage register](revamp-coverage.md) tracks capability/release boundaries; [ADRs](../decisions/README.md) explain durable decisions. The numbered R1–R6 contract documents record feature invariants; the [maintainer guide](maintainer-guide.md) maps current files and change recipes.
+**Current scope:** one web application and one Supabase project, with 37 domain tables and one internal runtime-setting table. Domain contracts cover training/daily coaching, ongoing coaching, service delivery and optional teams/commercial/support. The [coverage register](revamp-coverage.md) tracks capability/release boundaries; [ADRs](../decisions/README.md) explain durable decisions. The numbered R1–R7 contract documents record feature invariants; the [maintainer guide](maintainer-guide.md) maps current files and change recipes.
 
 ## System boundary
 
@@ -187,3 +191,7 @@ The production shell pins each controlled tab to one complete cached version. Ca
 `build/offline-shell.ts` owns worker generation; `src/app/updates.ts` owns only registration/update status; `AppUpdates.vue` renders that status in existing pages. No backend table/command or new runtime service is added. Keep future backend migrations compatible with older open clients.
 
 Backend `scripts/verify-release.mjs` runs the local acceptance commands sequentially after `release-guard.mjs` checks the pinned runtime, branches, project identity and exact API target. Reports/logs stay in ignored `artifacts/release/`. It checks, but does not deploy/reset/push. Feature-state layout checks supplement domain/lifecycle tests; they do not certify hardware or human usability.
+
+## Daily workspace projections (R7)
+
+Migration 010 adds invoker/RLS-preserving `coach_attention`, `coach_roster` and `client_today` reads and two session indexes. No table or write command was added. Attention remains derived from authoritative message/review records; roster and attention use stable ordered server pages. See [R7 contract](r7-contract.md) for cursor/concurrency limits.

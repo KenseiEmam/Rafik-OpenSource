@@ -1,5 +1,24 @@
 # Local verification record
 
+## R7 checkpoint and original-role audit — 23 September 2026
+
+The source audit is documented in [role-scope-audit.md](role-scope-audit.md), with baseline commits, source paths, observed behavior and target decisions separated. It inspected original web/mobile, captured deployed backend definitions and worker audiences. It did not exercise the retired hosted application or change native code. Passing the current tests below does **not** establish the missing organizational capabilities; R7A acceptance is explicitly separate.
+
+| Check | Result and boundary |
+|---|---|
+| SQL regression | **239** rollback assertions across seven suites, including ten new workspace paging/search/isolation checks. Final log `/tmp/r7-sql-final.log`. |
+| Fresh setup | All **ten** migrations, local fixtures and suites pass in a disposable database; preview data preserved. Final log `/tmp/r7-fresh-final.log`. |
+| Full browser regression | **54/54** pass, Chromium and phone-sized WebKit, final serial run. Includes the new named attention/filter/navigation/read-cursor journey and existing responsive inbox/retry scenarios. Final log `/tmp/r7-acceptance-browser.log`. |
+| Focused workflow regression | **28/28** core, ongoing and workspace scenarios pass after updating stale queue assertions to use the actual new search/filter flow. Final log `/tmp/r7-targeted.log`. |
+| Broad rendered check | **320** states, zero reported layout failures or page errors; persisted [layout results](evidence/r7-product-layout.json). This checks the current routes, not unimplemented organization contexts. |
+| Unit/build/format | **11/11** unit/data tests, production build/TypeScript and Prettier checks pass after the unshipped R8 drafts were set aside. Build reports a non-fatal future Vite config-loader import warning; no dependency upgrade is claimed. |
+| Visual inspection | Final R7 desktop 1440px and WebKit 390px full-page captures inspected for hierarchy, navigation, task/row spacing and action containment; earlier development inspection included daily workspace states. Browser screenshots are synthetic fixtures, not proof of physical-device or human usability. |
+
+Final full browser suites ran serially after a development overlap caused a trace-file collision. The prior failed runs are not counted as acceptance. R8's unused personal-only delivery migration/component/helpers/tests were never accepted; migration 011 was not applied and those drafts are no longer in executable source/migration paths. No product code changed after the final R7 browser run other than removal of those unwired drafts; the final build/type/unit/format checks ran afterward.
+
+Remaining scope: organization-role ownership/API transition, old fixture isolation, broad secondary reads, some contextual focus/scroll restoration, real provider/hosting/CI behavior, physical devices and observed user outcomes. R7's universal role selector is a transitional UX, not evidence of role-derived organizational navigation.
+
+
 ## R6 verification — 23 September 2026
 
 The user's mobile-inbox report reopened the previous local quality acceptance. Read the [root-cause review](product-quality-review.md) and [feature verification map](feature-verification-map.md). The following checks pass on the current local implementation; they do not establish every possible state or hardware behavior.

@@ -2,6 +2,8 @@
 
 Owner: Codex. This is a ready-to-use observation protocol and iteration guide. No outreach, invitation to a real person, sales message or payment request has been sent. The earlier market analysis remains the decision record; automated product tests do not prove willingness to pay.
 
+The original narrow-slice experiments below provide observation methods, not a ceiling on the subsequently authorized broader revamp. Teams, nutrition and commercial-state contracts are already implemented locally. Follow the [current forward roadmap](forward-roadmap.md) for implementation order; known UX improvements and feature completion do not depend on recruiting customers first.
+
 ## Hypothesis being tested
 
 A coach who already has clients can deliver a usable plan and review what happened with less explanation and administrative effort. The client gets a workout they can follow immediately. Rafik does not promise the coach new leads. The public sample also permits a separate direct-client test without building a second product.
@@ -53,4 +55,4 @@ Use the earlier predeclared decision thresholds, including actual repeat use and
 - If plan setup dominates support time, compare a narrowly supported import format or a paid setup service against further editor complexity.
 - If clients train but coaches do not review, identify whether the buyer values delivery alone before adding an inbox/reminder platform.
 - If Arabic wording causes uncertainty, correct it with observed language usage and retest the same task.
-- Expand organizations, billing, nutrition, AI or native clients only when measured demand supports the extra operating burden.
+- Finish and simplify the already authorized team, nutrition and commercial capabilities. Evaluate further integrations, AI or new business models against observed value and operating burden. Native remains deferred until web/backend readiness; local commercial simulation does not establish real billing or willingness to pay.

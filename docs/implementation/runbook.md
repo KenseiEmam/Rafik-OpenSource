@@ -1,5 +1,11 @@
 # Local operation and next-release runbook
 
+**R7A order correction:** the Prisma/PostgreSQL server transition now precedes R8, together with organizational membership/ownership (ADR 0005). Commands below still run the transitional local stack until that checkpoint is accepted; do not infer that the new backend exists yet. Supabase migration 011 for personal-only delivery was an unshipped draft, never applied and removed from the runnable migration directory during the role audit.
+
+
+**Deployment direction updated during R7:** local Supabase commands remain valid for the transitional implementation. The earlier Supabase-hosting procedure is superseded as a deployment recommendation by [ADR 0004](../decisions/0004-coach-web-and-prisma-target.md). Do not use it to deploy the final revamp. R7A must supply and verify the local Prisma/PostgreSQL API, identity and file-provider runbook; R11 adds hosting-specific operational evidence.
+
+
 ## Environment
 
 Use the `codex/revamp` branches in `rafik-api` and `RAFIK-FRONTEND`. The native app and worker are parked; preserve the worker's pre-existing `.DS_Store` change. Never push `main`. No commit or remote push is needed to inspect this build.

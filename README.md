@@ -4,6 +4,8 @@ Engineering entry points: [documentation index](docs/README.md), [contribution w
 
 The local Supabase backend for Rafik's coaching web application: training plans and exercise choices, client progress, check-ins, messages, optional nutrition, appointments, private files, teams/groups, coach handoffs and support. Local commercial states are simulated; hosted/device release gates remain open. The retired platform exists in Git history and is not a runtime dependency. Work stays on `codex/revamp`.
 
+**Current direction:** web development prioritizes coaches and organization staff. The local Supabase runtime is transitional; the target is Prisma/PostgreSQL behind one API. The [role-scope audit](docs/implementation/role-scope-audit.md) documents the original six roles and the current organization gaps. R7A corrects organizational membership/ownership and the backend boundary before further programming/analytics expansion. Current teams are not a complete organizational implementation.
+
 ## Start here
 
 Read the [maintainer guide](docs/implementation/maintainer-guide.md) for the current architecture, full backend/frontend file map, ownership boundaries, test tour and change recipes. [CHANGELOG.md](CHANGELOG.md) records exactly what changed by phase; [ledger.md](docs/implementation/ledger.md) tracks implemented versus remaining scope. Update these records with future work as required by `AGENTS.md`.

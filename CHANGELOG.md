@@ -1,5 +1,23 @@
 # Rafik backend change history
 
+## Original-role audit and corrected architecture order · 23 September 2026
+
+- Traced platform, independent and organizational roles through the original web/mobile, captured deployed schema/functions and worker; documented source evidence, combined-role behavior and legacy defects.
+- Recorded that R4 teams, personal-coach handoff and response forms do not replace organizational membership, internal staff reassignment or assessor-led assessments.
+- Added ADR 0005 and R7A ahead of R8: scoped organization ownership and the Prisma/PostgreSQL API transition, with role-specific navigation and acceptance. Coach/admin analytics now depend on this foundation. These are documented decisions, not implemented organizational features.
+- Set aside unshipped personal-only R8 delivery drafts; no draft migration was applied. Added durable requirements-tracing rules and updated engineering entry points.
+
+
+## R7 — Daily workspace
+
+- Added authorized attention/Today/roster read projections, stable bounded roster and attention pages, and session indexes. No new domain table or runtime service.
+- Added rollback checks for paging, search and access isolation; documented cohesive daily navigation and incremental style ownership. See verification for actual acceptance and remaining fixture consolidation.
+
+## Product review and forward roadmap · 23 September 2026
+
+- Added a source-grounded assessment and R7–R12 execution plan with concrete user journeys, architecture work, dependency order and acceptance criteria. Identified daily workflow/navigation, programming effort, limited content, broad reads and shared-style maintenance as the next improvement areas.
+- Updated the documentation index, ledger and coverage next action; reconciled the original narrow pilot guidance with the broader implemented scope. No runtime, database, provider or native changes. Checked documentation links and whitespace; existing R6 results remain historical evidence for that code.
+
 ## R6 — Responsive maintenance and local release hardening · 23 September 2026
 
 - Fixed mobile inbox 250px rows and hidden width overflow by removing obsolete horizontal-list CSS, constraining intrinsic widths and keeping list scrolling bounded. Restored wrapping workspace navigation; fixed WebKit long select/Arabic resource filter overflow.

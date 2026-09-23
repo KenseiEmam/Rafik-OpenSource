@@ -1,6 +1,6 @@
 # Revamp execution ledger
 
-Updated 23 September 2026. **A working local web/backend foundation is implemented on `codex/revamp`; the full Rafik revamp is incomplete.** The user correctly rejected the narrow core as a complete replacement. R6 responsive maintenance and local release hardening are implemented below; listed local acceptance checks pass. The user-reported inbox regression reopened R5 local quality acceptance. Earlier phase entries retain their checkpoint context; use the current next action and R5 section for ongoing work. Read [revamp coverage and corrected execution scope](revamp-coverage.md) before continuing. The E01–E12 statuses below describe only the initial slice, not whole-product completion.
+Updated 23 September 2026. **A working local web/backend foundation is implemented on `codex/revamp`; the full Rafik revamp is incomplete.** The user correctly rejected the narrow core as a complete replacement. R7 daily-workspace improvements are implemented locally; the source-grounded role audit requires R7A organization/ownership and Prisma API work next. R6 responsive maintenance and local release hardening remain recorded below; listed checks cover only their named scopes. The user-reported inbox regression reopened R5 local quality acceptance. Earlier phase entries retain their checkpoint context; use the current next action and R5 section for ongoing work. Read [revamp coverage and corrected execution scope](revamp-coverage.md) before continuing. The E01–E12 statuses below describe only the initial slice, not whole-product completion.
 
 | Unit | Status | Evidence / boundary |
 |---|---|---|
@@ -58,7 +58,7 @@ Updated 23 September 2026. **A working local web/backend foundation is implement
 
 `RAFIK-FRONTEND` now contains the fresh Vue application, domain/persistence modules, generated API types, authored content, visual system, browser checks and production shell caching. Old source remains in Git at baseline `a0c723e`.
 
-`rafik-api` now contains the fresh Supabase configuration, nine local migrations, explicit commands, fixtures, regression scenarios and implementation documentation. The audit and historical live-backend evidence remain under `docs/revival`; its old-source links refer to baseline `652e9ee`.
+`rafik-api` now contains the fresh Supabase configuration, ten local migrations, explicit commands, fixtures, regression scenarios and implementation documentation. The audit and historical live-backend evidence remain under `docs/revival`; its old-source links refer to baseline `652e9ee`.
 
 `rafik-mobile` remains at its original application content. `rafik-worker` is unchanged apart from its pre-existing `.DS_Store` modification. All four branches remain `codex/revamp`. The active backend/frontend now have local commits; nothing has been pushed.
 
@@ -70,10 +70,16 @@ The earlier decision to treat the broad product inventory as merely optional was
 
 ## Current next action for Codex
 
-1. R6 local checks pass: 52 browser scenarios, 800 layout states/202 Axe scans, 229 SQL assertions, 11 unit tests, real service/fresh/build checks and release-guard/doc checks. Use the recorded evidence below. Earlier R5 test counts did not establish mobile-inbox usability; the defect and prevention rules are documented in the product quality review.
-2. Use the feature verification map, shared contribution definition of done and AGENTS rules for all later work. Verify list/detail/back/error states, nested clipping and real content, not just routes or document width. Keep the accepted visual identity and simple runtime boundaries.
-3. Carry forward the original notification-preference/intercepted-delivery gap explicitly: Today activity exists, but preferences, a bounded local delivery/outbox contract and provider adapter acceptance are not implemented. Resolve that local product contract before claiming the complete retained feature inventory is finished.
-4. Physical devices/assistive technology, new hosted-project operations, actual external providers and human usefulness/retention evidence remain release gates. Native remains deferred. Do not deploy, reuse retired credentials, seed hosting or push main without a scope change.
+**Founder steering during R7:** prioritize coach/organization web workflows; trainees primarily use the later native revamp. Hosting must use Prisma + PostgreSQL and one server API; replace the transitional Supabase Auth/RPC/Storage dependencies locally before hosting. See [ADR 0004](../decisions/0004-coach-web-and-prisma-target.md). All upcoming local phases and per-phase commits are authorized.
+
+
+The [forward roadmap](forward-roadmap.md) now sequences **R7 checkpoint → R7A → R8 → R9 → R10 → R11 → R12**. R7 is implemented locally below; R7A and later phases are not implemented.
+
+1. The [original-role audit](role-scope-audit.md) traced six roles through original web/mobile, captured deployed schema/functions and worker. The founder is correct: R4 teams do not represent organizations with their own admins, trainers and trainees. The scope correction is architectural and behavioral, not a naming or RLS patch.
+2. Next implement **R7A organization/identity ownership and the Prisma/PostgreSQL API transition** under [ADR 0005](../decisions/0005-organization-and-independent-scopes.md). This moves the backend transition ahead of R8. Preserve R7's useful daily-flow work while replacing the universal role selector and personal-team ownership assumptions.
+3. R8 programming/catalog/delivery then uses explicit business contexts; R9 delivers coach services, organizational calendar/assessor-led assessments and distinct real coach/admin analytics; R10 scoped notifications; R11 operational/release and platform-admin readiness; R12 available human review/refinement. Native remains last.
+4. Unshipped R8 personal-only delivery/helper/test drafts were set aside outside the repositories at `/tmp/rafik-r8-before-role-audit` for reference. Migration 011 was never applied and is no longer in the runnable migrations directory. These drafts are not a product dependency or accepted phase.
+5. Physical devices/assistive technology, hosting/providers, remote CI and human usefulness/retention remain unverified gates. No retired backend changes, deployment, outreach or push was made.
 
 Detailed source/operation contracts are in `architecture.md`, local/deployment instructions in `runbook.md`, content provenance in `content.md`, and business observation materials in `pilot.md`.
 
@@ -92,6 +98,8 @@ Detailed source/operation contracts are in `architecture.md`, local/deployment i
 **Boundaries:** notification/reminder delivery, external calendar synchronization, payment collection, organization/group ownership, automatic food estimates and native devices are not part of R3. Resource records are currently person-owned; team ownership must be designed in R4. JSON export includes resource metadata; individual file downloads provide the bytes. There is no bundled account-file ZIP, malware scanner, resumable multipart upload or remote Storage deployment. Local browser success is not evidence of real retention, payments or physical-device readiness.
 
 ## R4 — Team and business operations
+
+**Later audit correction:** this checkpoint implements collaboration between independent coaches. It does not establish the original organization model. Membership/ownership, internal reassignment and assessor-led operations require R7A/R9; see the role-scope audit. The historical test results below remain evidence only for the described team implementation.
 
 **Implemented locally; full revamp and release readiness remain incomplete. The subsequent R5 checkpoint is recorded below.** Work is on `codex/revamp` in both active repositories. The existing local preview was preserved; no hosting, real payment/delivery, mobile/worker source change or push was performed.
 
@@ -131,3 +139,13 @@ Detailed source/operation contracts are in `architecture.md`, local/deployment i
 Evidence is composed from the final full browser/check run plus a corrected team-layout harness rerun and a SQL log-draining rerun; see the release summary for exact provenance.
 
 See [verification](verification.md), [feature coverage](feature-verification-map.md) and [R6 contract](r6-contract.md) for scope, concrete results and remaining boundaries. This is local implementation evidence, not hosted, physical-device or business success certification.
+
+## R7 — Daily workspace checkpoint and organizational scope audit
+
+Implemented locally as an incremental daily-coaching improvement; not full organizational readiness. Migration 010 adds derived attention/Today/roster reads with stable bounded pages and explicit caller scope. Web navigation is compact on phones, active workspace is remembered, coach attention identifies each client, search reaches the full authorized queue/roster, and review/client return links preserve filters. Client Today emphasizes today's available or resumable work; future schedule expands explicitly. Touched navigation styles moved to an owned workspace stylesheet.
+
+Local acceptance: 239 rollback SQL assertions, isolated fresh installation of ten migrations, 54 browser scenarios across Chromium/WebKit, 320 broad rendered states with no reported layout/page errors, 11 unit tests and build/type/format checks pass. Desktop and phone R7 captures were inspected. Full browser suites were run serially for final evidence after a development overlap produced a trace-output collision; earlier outdated queue assertions were corrected to use the new user-facing search/filter workflow. See verification for evidence boundaries.
+
+The subsequent source audit found an important requirements gap despite passing tests: R4 teams differ from the original separate organizational roles and workflows. Added the role matrix, ownership/lifecycle comparison, legacy defects, ADR 0005 and an actor/context acceptance matrix. Updated the roadmap, architecture status, READMEs, maintainer instructions and durable AGENTS rules. No claim that these documented organization corrections are already implemented.
+
+R7 still leaves older test-fixture isolation, several secondary broad reads, some focus/scroll restoration and role-derived navigation outstanding. All are explicit work, not silently waived acceptance. R7A is next; R8 drafts based on personal-only delivery were set aside pending the corrected scope.
