@@ -110,6 +110,7 @@ try {
       "test:organizations",
       "test:programming",
       "test:organization-services",
+      "test:communication",
       "content:check",
       "test:docs",
     ])

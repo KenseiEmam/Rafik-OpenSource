@@ -71,7 +71,7 @@ do $$ declare a uuid; b uuid; begin
  perform pg_temp.assert((select count(*) from public.assignments where client_id=identity.actor_id() and state='active')=1,'accepted invitation creates exactly one active assignment');
 end $$;
 reset role;
-select pg_temp.assert((select count(*) from pg_trigger where tgrelid in ('public.assignments'::regclass,'public.sessions'::regclass) and not tgisinternal)=0,'ordinary assignment/session updates have no hidden orchestration triggers');
+select pg_temp.assert((select count(*) from pg_trigger where tgrelid in ('public.assignments'::regclass,'public.sessions'::regclass) and not tgisinternal and not (tgrelid='public.sessions'::regclass and tgname='notification_workout' and tgfoid='public.capture_domain_notification()'::regprocedure))=0,'assignment/session updates allow only the documented notification-intent capture trigger');
 set local role rafik_user;
 select set_config('rafik.claims','{"sub":"10000000-0000-4000-8000-000000000002","role":"rafik_user"}',true);
 do $$ declare s jsonb; entries jsonb; v uuid; begin

@@ -1,5 +1,9 @@
 # Rafik backend change history
 
+## R10 — Scoped communication and notifications (23 September 2026)
+
+Organization channels with visible membership, compact responsive list/detail, durable message drafts/exact retries and accessible history. Global authorized notification links, category preferences and quiet hours; transactional intent capture, bounded retries/retention and local intercepted delivery. No external provider delivery.
+
 ## R9 — Organization services and informative analytics · 23 September 2026
 
 Added organization groups, assessment templates, reviewed recurring scheduling, explicit assessors, cross-context booking conflict checks, per-trainee attendance/results and retained corrections. Added distinct independent coach, organization trainer and administrator analytics with date/trainee filters, source links, chart tables and explicit definitions. Focused result editing, device drafts and exact interrupted-command retry preserve work. Consolidated secondary organization navigation. Added fixture, HTTP, browser and responsive acceptance coverage plus maintained API/source/operations documentation. External reminders follow in R10.

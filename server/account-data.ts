@@ -35,7 +35,13 @@ export async function organizationAccountData(actor: Actor) {
         orderBy: { recorded_at: "asc" },
       }),
     ]);
+  const [messages,notificationPreferences,notifications]=await Promise.all([
+    db.organization_messages.findMany({where:{sender_id:{in:ids}},select:{id:true,channel_id:true,workspace_id:true,body:true,created_at:true},orderBy:{created_at:'asc'}}),
+    db.notification_preferences.findUnique({where:{user_id:actor.id}}),
+    db.notification_events.findMany({where:{user_id:actor.id},select:{id:true,category:true,source_kind:true,created_at:true,read_at:true,state:true}})
+  ]);
   return {
+    messages,notificationPreferences,notifications,
     calendar,
     results,
     corrections,

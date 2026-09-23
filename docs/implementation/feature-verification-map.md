@@ -41,3 +41,6 @@ No matrix establishes every possible record count, translation, device size, key
 | Admin and independent/organization coach interpret real operational diagrams | Report filters/definitions, chart tables, browser role checks and 104-state service audit | Real workload scale/retention evidence, R11 pagination |
 
 Rendered chart label readability was checked after the automated matrix; see product quality review.
+
+| Organization participants communicate without scope leaks | R10 HTTP authority/replay tests, both-engine create/send/draft/retry/inbox journey, responsive captures | Real-device keyboard/suspension remains unverified |
+| People control optional updates and reach the right workspace | Intent/preference/reminder/sink tests, generic previews, notification-to-conversation journey | Manual local dispatcher only; real mail/push acceptance is deferred |

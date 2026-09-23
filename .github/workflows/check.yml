@@ -22,6 +22,7 @@ jobs:
       - run: npm run test:teams
       - run: npm run test:organizations
       - run: npm run test:programming
+      - run: npm run test:communication
       - run: npm run test:organization-services
       - run: npm stop
         if: always()

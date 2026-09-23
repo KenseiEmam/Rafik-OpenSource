@@ -11,3 +11,5 @@ ADRs record durable choices, their reasons and costs. Status is Accepted unless 
 For a new decision, add the next number with Context, Decision, Consequences and Status. Link the implementation and superseding ADR when appropriate. Keep current behavior in architecture/reference docs.
 
 - [0006 — Prisma API transition](0006-prisma-api-transition.md)
+
+- [0007: Transactional notification intent capture](0007-notification-intents.md).

@@ -1,3 +1,5 @@
+import { notificationPreferences,notificationInbox,readNotification } from './notifications.ts';
+import { communication,communicationCommand } from './organization-communication.ts';
 import {
   serviceCatalog,
   serviceCatalogCommand,
@@ -130,6 +132,12 @@ const server = createServer(async (req, res) => {
       return;
     }
     const actor = await identify(req);
+    if(path==='/v1/notifications/preferences' && ['GET','POST'].includes(req.method||'')){send(res,200,await notificationPreferences(requireActor(actor),req.method==='POST'?JSON.parse((await body(req,16384)).toString()):undefined));return;}
+    if(path==='/v1/notifications' && ['GET','POST'].includes(req.method||'')){send(res,200,req.method==='GET'?await notificationInbox(requireActor(actor),url.searchParams):await readNotification(requireActor(actor),JSON.parse((await body(req,16384)).toString())));return;}
+
+    const conversationMatch=path.match(/^\/v1\/workspaces\/([a-f0-9-]+)\/communication$/);
+    if(conversationMatch && ['GET','POST'].includes(req.method||'')){const who=requireActor(actor);send(res,200,req.method==='GET'?await communication(who,conversationMatch[1],url.searchParams):await communicationCommand(who,conversationMatch[1],JSON.parse((await body(req,1024*1024)).toString())));return;}
+
     if (path.startsWith("/v1/conversations/") && req.method === "GET") {
       send(
         res,

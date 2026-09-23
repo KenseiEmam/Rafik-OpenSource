@@ -1,6 +1,6 @@
 # Working on the Rafik revamp
 
-Updated through R8. Read the [ledger](ledger.md), [architecture](architecture.md), [runbook](runbook.md) and [role audit](role-scope-audit.md). Independent teams remain collaboration. R7A2 implements organization membership and views; R8 implements owned programs/history; R9 adds organization services. Native and hosting remain deferred.
+Updated through R10. Read the [ledger](ledger.md), [architecture](architecture.md), [runbook](runbook.md) and [role audit](role-scope-audit.md). Independent teams remain collaboration. R7A2 implements organization membership and views; R8 implements owned programs/history; R9 adds organization services. Native and hosting remain deferred.
 
 ## Runtime responsibilities
 
@@ -232,3 +232,7 @@ Web views/types/styles live in `src/features/organizations/`. `auth.ts` fetches 
 Web `ServiceCatalog`, `EventComposer`, `OrganizationCalendar`, `EventDetail`, `AssessmentHistory` and `OrganizationUpcoming` form the complete workflow. `analytics/AnalyticsPage` and `MetricChart` share truthful charts and table equivalents. For a new drill kind, update validation, immutable snapshot, result editor, correction/history, comparison compatibility and tests together. Never combine incompatible units/definitions into one line. Add acceptance to `test:organization-services` and `organization-services.e2e.ts`; `audit-services.ts` checks rendered roles/states.
 
 Local tour: Rania → Calendar → Schedule; More → Assessment templates or Groups. Kareem → Calendar → completed Movement baseline → review Sara's distinct result; Training → Assessment history shows synthetic 10/12 repetition examples. Rania Analytics shows organization responsibility/attendance; Kareem Analytics contains only current assigned-trainee scope. A designated assessor can record an event even when another trainer normally owns responsibility.
+
+## Communication ownership
+
+Backend `server/organization-communication.ts` owns channel commands and reads; `server/notifications.ts` owns current audience, preferences, generic links and local dispatch. Forward migrations 260–290 contain their schema and capture/reminder functions. The matching web modules are `features/organizations/{ChannelsPage,ChannelThread,ChannelEditor}.vue` and `features/notifications/`. Reuse `useCommand` for uncertain writes; do not hand-roll a second pending queue. Run `test:communication`, the browser communication journey and `scripts/audit-communication.ts` for changes here.

@@ -1,6 +1,14 @@
 # Revamp execution ledger
 
-Updated 23 September 2026. **R9 organization services and analytics is implemented locally; the full revamp remains in progress.** Continue R10 communication/notifications, R11 local operations/scale and R12 available refinement under standing authorization. Current architecture/runbook are authoritative; older checkpoints below are history.
+Updated 23 September 2026. **R10 scoped communication and notifications is implemented locally.** Continue R11 operations/scale and available R12 refinement under standing authorization; hosting/native, physical devices, real providers and human outcome evidence remain separate gates.
+
+## R10 — Scoped communication and optional notifications
+
+Organization channels have explicit participants/managers, visible admin joins, bounded history, observed cursors, durable device drafts and exact send recovery. The global notification inbox keeps contexts explicit, revalidates links, separates read state from intercepted acceptance and exposes per-category preferences and timezone-aware quiet hours. A guarded manual dispatcher captures due reminders, suppresses obsolete/revoked/read/opted-out intents, coalesces bursts, retries with a five-attempt limit and prunes only notification records. No email/push is sent. ADR 0007 documents the narrow transactional intent-capture trigger exception.
+
+Verification found and fixed Safari keyboard access, an unnoticed long-history gap, short-screen footer overlap, and a shared workout-sync handoff race. The full browser run passed 63/64 and exposed that race; after correction all 18 affected core/communication journeys passed across both engines. Three communication/notification HTTP groups and existing API/services/team/organization/programming checks pass; 239 SQL assertions, twenty-migration disposable install, 12 web unit checks, seven release guards and type/build/doc/content checks pass. The rendered communication matrix and inspected captures are recorded in verification. Preview was preserved; no push or deployment.
+
+**Next:** R11 local platform operations, bounded reads/scale, fixture isolation, cleanup/recovery and integrated fault acceptance; then available R12 refinement and a truthful release evidence record.
 
 ## R9 — Organization services and distinct analytics
 

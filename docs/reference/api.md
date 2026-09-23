@@ -52,3 +52,12 @@ See [membership contract](../implementation/r7a2-contract.md). These Prisma-inte
 - `GET /assessment-history?view=&member=&from=&to=&offset=`: 50 authorized results and subject name. Same-definition comparisons use immutable definition/template revision; absent/excused rows remain historical records but do not enter the performance line.
 
 All mutations validate current role/resource before exact receipt replay; revisions conflict explicitly. Date parameters are calendar dates in the viewer's profile timezone. No external scheduling/reminder provider is connected.
+
+## R10 communication and notification endpoints
+
+- `GET /v1/workspaces/:id/communication?view=…&search=…&offset=…`: 25 channel summaries; admin `manage=true` exposes metadata only. `id` reads an authorized channel, `before` its prior sequence page (50).
+- `POST` on that path: explicit `create`, `join`, `members`, `archive`, `rename`, `send` commands with stable operation UUID; `read` is monotonic and needs no receipt. Current role/resource permission precedes replay.
+- `GET /v1/notifications`: latest authorized prompt per group, 25 per bounded page; `id` validates a direct link. `POST {id}` observes that group through the selected sequence.
+- `GET/POST /v1/notifications/preferences`: own four-category in-app/local-email booleans and quiet hours, revision checked.
+
+Local dispatch is CLI-only. No public generic event emission, provider send or operator endpoint is registered.

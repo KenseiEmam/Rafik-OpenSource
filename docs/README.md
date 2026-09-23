@@ -29,4 +29,4 @@ This is the maintained entry point for engineers working on the Rafik web/backen
 - [Changelog](../CHANGELOG.md): changes grouped by checkpoint.
 - [Original revival audit](revival/README.md): recorded baseline evidence and business/design rationale.
 
-Phase contracts R1–R9 live under `implementation/`; they explain feature invariants and acceptance scenarios. They complement the current architecture, rather than replacing it. Historical verification counts describe the code checked at that checkpoint.
+Phase contracts R1–R10 live under `implementation/`; they explain feature invariants and acceptance scenarios. They complement the current architecture, rather than replacing it. Historical verification counts describe the code checked at that checkpoint.

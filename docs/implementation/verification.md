@@ -1,3 +1,12 @@
+## R10 — Communication and notifications (23 September 2026)
+
+- Three real HTTP groups pass: organization participation/admin join/revocation/replay; transactional intents/preferences/quiet hours/concurrent local interception; answered/cancelled reminder suppression/coalescing/five-attempt failure. Local sink rollback and unique receipt tests do not prove real provider exactly-once delivery.
+- Existing API (4), service (5), team/business (9), organization membership (5), programming/media and organization service (2) groups pass. All 239 rollback assertions and the disposable twenty-migration install with seven suites pass; the preview was not reset.
+- Full browser run: 63/64 passed. The failure exposed a real shared workout sync handoff race: an edit could arrive after the running sync had made its last dirty check while the UI busy flag suppressed another pass. The UI now remembers a requested subsequent pass. All 18 affected core/communication journeys passed afterward, including both-engine offline/lost acknowledgment/conflict and completed-note review flows. This is composed acceptance, not an uninterrupted green full run.
+- Twelve unit checks, seven release guards, type/build/format/content/docs checks pass. Actual phone captures prompted a footer-collision fix; the layout contract now checks vertical overlap. Safari scrollable-history focus and truthful draft-save feedback are covered. Notification and conversation pages were inspected in English/light and Arabic/dark phone states.
+
+Evidence summary: `evidence/r10-verification.txt`; final layout results are `evidence/r10-layout.json`. Browser emulation, local intercepted mail and synthetic fixtures do not establish physical-device, real-provider, remote-CI, hosted or human retention outcomes. Post-login return behavior reuses the tested authentication route contract; no external email was sent.
+
 # Verification record
 
 ## R9 — Organization services and analytics · 23 September 2026

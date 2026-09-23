@@ -80,3 +80,7 @@ Apply forward migrations with `npm run db:migrate`, regenerate Prisma with `npm 
 Apply forward migrations 240/250 using the normal migration command, then regenerate Prisma/types. `npm run test:organization-services` creates/cleans isolated identities and verifies scope, immutable definitions, corrections, exact retries, collisions and DST. `prisma/fixtures/organization-services.sql` is included in the empty-only seed; its synthetic Madar examples were added without resetting the preview. Do not treat their counts as real adoption.
 
 For a stale result revision, reload the current participant result and deliberately reapply the correction; the prior device draft remains available. Do not delete result history to repair a current value. If a staff member leaves, an admin explicitly replaces event staff; scheduling does not silently recruit a new assessor.
+
+## Local notifications
+
+`npm run notifications:local` prepares bounded due reminders and dispatches one bounded batch into `notification_intercepts`; it sends nothing externally. Re-run for subsequent batches and due retries. Category email opt-in is required; default is in-app only. Preferences are in the header bell → Notification preferences. Quiet-hour endpoints are profile-local hours; equal values disable the interval. Inspect `notification_events` state/reason/attempts for suppression or failures; never infer read state from intercepted delivery. `npm run test:communication` uses disposable test identities to verify scope, retry, reminders and local sink behavior.
