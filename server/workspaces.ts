@@ -90,6 +90,10 @@ export async function mutation(
   roles: Role[],
   input: Record<string, unknown>,
   run: (tx: Tx, member: Awaited<ReturnType<typeof access>>) => Promise<unknown>,
+  authorize?: (
+    tx: Tx,
+    member: Awaited<ReturnType<typeof access>>,
+  ) => Promise<void>,
 ) {
   const operation = uuid(input.operation);
   return scoped(
@@ -97,6 +101,7 @@ export async function mutation(
     id,
     roles,
     async (tx, member) => {
+      await authorize?.(tx, member);
       const existing = await tx.workspace_operations.findUnique({
         where: { id: operation },
       });
@@ -160,6 +165,7 @@ export async function contexts(actor: Actor) {
         m.roles.map((role) => ({
           id: m.workspace_id + ":" + role,
           workspace_id: m.workspace_id,
+          member_id: m.id,
           kind: m.workspaces.kind,
           name: m.workspaces.name,
           role,

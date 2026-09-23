@@ -21,6 +21,20 @@ import {
   invitation,
   requirePractice,
 } from "./workspaces.ts";
+import {
+  programs,
+  programCommand,
+  catalog,
+  delivery,
+  deliveryCommand,
+  organizationSession,
+  sessionCommand,
+  previousOrganizationPerformance,
+  role,
+} from "./programming.ts";
+import { scoped } from "./workspaces.ts";
+import { organizationAccountData } from "./account-data.ts";
+import { getProgramMedia, putProgramMedia } from "./program-media.ts";
 import { localInbox } from "./local-inbox.ts";
 const origins = new Set([
   "http://127.0.0.1:5173",
@@ -118,6 +132,34 @@ const server = createServer(async (req, res) => {
       );
       return;
     }
+    const mediaMatch = path.match(/^\/v1\/program-media\/([a-f0-9-]{36})$/);
+    if (mediaMatch) {
+      if (req.method === "PUT") {
+        send(
+          res,
+          200,
+          await putProgramMedia(
+            requireActor(actor),
+            url.searchParams.get("workspace") || "",
+            mediaMatch[1],
+            await body(req, 2097152),
+            String(req.headers["content-type"] || ""),
+          ),
+        );
+        return;
+      }
+      if (req.method === "GET") {
+        const file = await getProgramMedia(requireActor(actor), mediaMatch[1]);
+        res.writeHead(200, {
+          "Content-Type": file.type,
+          "Cache-Control": "no-store",
+          "X-Content-Type-Options": "nosniff",
+          "Content-Disposition": "inline",
+        });
+        res.end(file.bytes);
+        return;
+      }
+    }
     if (path.startsWith("/v1/files/")) {
       const result = await fileOperation(
         requireActor(actor),
@@ -152,12 +194,88 @@ const server = createServer(async (req, res) => {
       if (!input || Array.isArray(input) || typeof input !== "object")
         throw new ApiError(400, "invalid_request");
     }
+    if (path === "/v1/account/organizations" && req.method === "GET") {
+      send(res, 200, await organizationAccountData(requireActor(actor)));
+      return;
+    }
+    const previousMatch = path.match(
+      /^\/v1\/organization-sessions\/([a-f0-9-]{36})\/previous$/,
+    );
+    if (previousMatch && req.method === "GET") {
+      send(
+        res,
+        200,
+        await previousOrganizationPerformance(
+          requireActor(actor),
+          previousMatch[1],
+        ),
+      );
+      return;
+    }
     if (path === "/v1/contexts" && req.method === "GET") {
       send(res, 200, await contexts(requireActor(actor)));
       return;
     }
     if (path === "/v1/workspaces" && req.method === "POST") {
       send(res, 200, await createWorkspace(requireActor(actor), input));
+      return;
+    }
+    const programMatch = path.match(
+      /^\/v1\/workspaces\/([a-f0-9-]{36})\/(programs|catalog|delivery|sessions)$/,
+    );
+    if (programMatch) {
+      const who = requireActor(actor),
+        id = programMatch[1],
+        domain = programMatch[2];
+      if (req.method === "GET") {
+        if (
+          domain === "catalog" &&
+          role(url.searchParams.get("view")) === "trainee"
+        )
+          throw new ApiError(403, "forbidden");
+        const value =
+          domain === "programs"
+            ? await programs(who, id, url.searchParams)
+            : domain === "delivery"
+              ? await delivery(who, id, url.searchParams)
+              : domain === "catalog"
+                ? await scoped(
+                    who,
+                    id,
+                    [role(url.searchParams.get("view"))],
+                    (tx) => catalog(tx, id),
+                  )
+                : null;
+        if (value === null) throw new ApiError(405, "method_not_allowed");
+        send(res, 200, value);
+        return;
+      }
+      if (req.method === "POST") {
+        send(
+          res,
+          200,
+          await (domain === "programs" || domain === "catalog"
+            ? programCommand(who, id, input)
+            : domain === "delivery"
+              ? deliveryCommand(who, id, input)
+              : sessionCommand(who, id, input)),
+        );
+        return;
+      }
+    }
+    const orgSession = path.match(
+      /^\/v1\/organization-sessions\/([a-f0-9-]{36})$/,
+    );
+    if (orgSession && req.method === "GET") {
+      send(
+        res,
+        200,
+        await organizationSession(
+          requireActor(actor),
+          orgSession[1],
+          role(url.searchParams.get("view") || "trainee"),
+        ),
+      );
       return;
     }
     const workspaceMatch = path.match(/^\/v1\/workspaces\/([a-f0-9-]{36})$/);
@@ -205,6 +323,7 @@ const server = createServer(async (req, res) => {
       if (
         [
           "save_plan",
+          "deliver_plan",
           "publish_plan",
           "save_exercise",
           "create_invitation",
@@ -233,9 +352,10 @@ const server = createServer(async (req, res) => {
       err.meta?.driverAdapterError?.cause?.originalMessage ||
       err.meta?.message ||
       "";
-    const match = detail.match(/(?:ERROR: )?([a-z][a-z0-9_]{2,70})$/);
+    const detailMatch = detail.match(/(?:ERROR: )?([a-z][a-z0-9_]{2,70})$/);
     const databaseCode =
       err.meta?.code || err.meta?.driverAdapterError?.cause?.originalCode;
+    const match = databaseCode === "P0001" ? detailMatch : null;
     const mapped =
       databaseCode === "23505"
         ? { status: 409, message: "conflict" }

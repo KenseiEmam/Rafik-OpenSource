@@ -108,6 +108,7 @@ try {
       "test:services",
       "test:teams",
       "test:organizations",
+      "test:programming",
       "content:check",
       "test:docs",
     ])

@@ -1,0 +1,358 @@
+import { test, after } from "node:test";
+import assert from "node:assert/strict";
+import { randomUUID } from "node:crypto";
+import { readFile } from "node:fs/promises";
+import { db } from "../server/db.ts";
+import {
+  organizationFixture,
+  call,
+  operation,
+} from "./organization-fixture.ts";
+after(() => db.$disconnect());
+const sample = JSON.parse(
+  await readFile(new URL("../content/starter.json", import.meta.url), "utf8"),
+);
+const draft = () => structuredClone(sample.prescription);
+test("organization publication, actuals, reassignment and exact replay preserve owned history", async () => {
+  const f = await organizationFixture();
+  try {
+    const admin = await f.person(),
+      trainer = await f.person(),
+      client = await f.person(),
+      replacement = await f.person(),
+      foreign = await f.person(),
+      id = await f.create(admin),
+      other = await f.create(foreign);
+    const staff = await f.join(admin, id, trainer, ["trainer"]),
+      trainee = await f.join(admin, id, client, ["trainee"]),
+      next = await f.join(admin, id, replacement, ["trainer"]);
+    const assignStaff = operation("assign-trainer", {
+      id: trainee.id,
+      revision: 1,
+      trainer: staff.id,
+    });
+    assert.equal(
+      (await call(admin, `/v1/workspaces/${id}`, assignStaff)).status,
+      200,
+    );
+    const pid = randomUUID(),
+      publish = operation("publish", {
+        view: "trainer",
+        id: pid,
+        title: "Three-day foundation",
+        draft: draft(),
+        revision: null,
+      });
+    let r = await call(trainer, `/v1/workspaces/${id}/programs`, publish);
+    assert.equal(r.status, 200, JSON.stringify(r));
+    const version = r.data.version;
+    assert.deepEqual(
+      (await call(trainer, `/v1/workspaces/${id}/programs`, publish)).data,
+      r.data,
+    );
+    assert.equal(
+      (
+        await call(
+          foreign,
+          `/v1/workspaces/${id}/programs?view=admin&program=${pid}`,
+        )
+      ).status,
+      403,
+    );
+    assert.equal(
+      (
+        await call(
+          client,
+          `/v1/workspaces/${id}/programs?view=trainee&program=${pid}`,
+        )
+      ).status,
+      403,
+    );
+    let roster = (
+      await call(trainer, `/v1/workspaces/${id}/delivery?view=trainer`)
+    ).data;
+    const assign = operation("assign", {
+      view: "trainer",
+      version_id: version.id,
+      start_date: new Date().toISOString().slice(0, 10),
+      schedule_mode: "flexible",
+      members: roster.members.map((m: any) => ({
+        id: m.id,
+        revision: m.revision,
+        assignment_id: null,
+        assignment_revision: null,
+      })),
+    });
+    r = await call(trainer, `/v1/workspaces/${id}/delivery`, assign);
+    assert.equal(r.status, 200, JSON.stringify(r));
+    const assignment = r.data[0];
+    const sessionId = randomUUID(),
+      start = operation("start", {
+        view: "trainee",
+        id: sessionId,
+        assignment_id: assignment.id,
+        day_id: version.prescription.days[0].id,
+      });
+    r = await call(client, `/v1/workspaces/${id}/sessions`, start);
+    assert.equal(r.status, 200, JSON.stringify(r));
+    const session = r.data;
+    const entries = session.entries.map((e: any, i: number) => ({
+      ...e,
+      completed: i === 0,
+      reps: 8,
+    }));
+    const save = operation("save", {
+      view: "trainee",
+      id: sessionId,
+      revision: 1,
+      entries,
+      note: "First session",
+      complete: true,
+    });
+    r = await call(client, `/v1/workspaces/${id}/sessions`, save);
+    assert.equal(r.status, 200, JSON.stringify(r));
+    const completed = r.data.completed_at;
+    assert.deepEqual(
+      (await call(client, `/v1/workspaces/${id}/sessions`, save)).data,
+      r.data,
+    );
+    assert.equal(
+      (
+        await call(client, `/v1/workspaces/${other}/sessions`, {
+          ...save,
+          operation: randomUUID(),
+        })
+      ).status,
+      403,
+    );
+    const previousEmpty = await call(
+      client,
+      `/v1/organization-sessions/${sessionId}/previous`,
+    );
+    assert.equal(previousEmpty.status, 200, JSON.stringify(previousEmpty));
+    assert.deepEqual(previousEmpty.data, []);
+    // A previous completed occurrence must supply actuals, never targets or another member's work.
+    const historicalId = randomUUID();
+    await db.organization_sessions.create({
+      data: {
+        id: historicalId,
+        workspace_id: id,
+        member_id: trainee.id,
+        assignment_id: assignment.id,
+        day_id: session.day_id,
+        local_date: new Date("2026-01-01"),
+        started_at: new Date("2026-01-01T08:00:00Z"),
+        completed_at: new Date("2026-01-01T09:00:00Z"),
+        document: {
+          ...session,
+          id: historicalId,
+          entries,
+          status: "completed",
+        },
+        version: 2,
+      },
+    });
+    const previous = await call(
+      client,
+      `/v1/organization-sessions/${sessionId}/previous`,
+    );
+    assert.equal(previous.status, 200, JSON.stringify(previous));
+    assert.equal(previous.data.length, 1);
+    assert.equal(previous.data[0].entries[0].reps, 8);
+    await db.organization_sessions.delete({ where: { id: historicalId } });
+    const changed = draft();
+    changed.days[0].exercises[0].reps = 15;
+    r = await call(
+      trainer,
+      `/v1/workspaces/${id}/programs`,
+      operation("publish", {
+        ...publish,
+        operation: randomUUID(),
+        draft: changed,
+        revision: 1,
+      }),
+    );
+    assert.equal(r.status, 200, JSON.stringify(r));
+    assert.equal(
+      (await call(client, `/v1/organization-sessions/${sessionId}`)).data
+        .prescription.exercises[0].reps,
+      session.prescription.exercises[0].reps,
+    );
+    const member = await db.workspace_members.findUniqueOrThrow({
+      where: { id: trainee.id },
+    });
+    assert.equal(
+      (
+        await call(
+          admin,
+          `/v1/workspaces/${id}`,
+          operation("assign-trainer", {
+            id: member.id,
+            revision: member.revision,
+            trainer: next.id,
+          }),
+        )
+      ).status,
+      200,
+    );
+    assert.equal(
+      (await call(trainer, `/v1/workspaces/${id}/delivery`, assign)).status,
+      403,
+      "replay rechecks recipient responsibility",
+    );
+    assert.equal(
+      (
+        await call(
+          trainer,
+          `/v1/organization-sessions/${sessionId}?view=trainer`,
+        )
+      ).status,
+      403,
+    );
+    assert.equal(
+      (
+        await call(
+          replacement,
+          `/v1/organization-sessions/${sessionId}?view=trainer`,
+        )
+      ).status,
+      200,
+    );
+    r = await call(
+      replacement,
+      `/v1/workspaces/${id}/sessions`,
+      operation("review", {
+        view: "trainer",
+        id: sessionId,
+        revision: 2,
+        note: "Keep the same load.",
+      }),
+    );
+    assert.equal(r.status, 200, JSON.stringify(r));
+    r = await call(
+      client,
+      `/v1/workspaces/${id}/sessions`,
+      operation("save", {
+        view: "trainee",
+        id: sessionId,
+        revision: 3,
+        entries,
+        note: "Corrected note",
+        complete: true,
+      }),
+    );
+    assert.equal(r.status, 200, JSON.stringify(r));
+    assert.equal(r.data.completed_at, completed);
+    assert.equal(r.data.reviewed_at, null);
+    assert.equal(
+      await db.organization_sessions.count({ where: { workspace_id: id } }),
+      1,
+    );
+  } finally {
+    await f.cleanup();
+  }
+});
+test("bulk delivery is atomic; internal catalog never grants edit or personal exercise access", async () => {
+  const f = await organizationFixture();
+  try {
+    const admin = await f.person(),
+      trainer = await f.person(),
+      client = await f.person(),
+      other = await f.person(),
+      id = await f.create(admin),
+      foreign = await f.create(other);
+    await f.join(admin, id, trainer, ["trainer"]);
+    const trainee = await f.join(admin, id, client, ["trainee"]),
+      outsider = await f.join(other, foreign, client, ["trainee"]);
+    const p = operation("publish", {
+      view: "admin",
+      id: randomUUID(),
+      title: "Internal program",
+      draft: draft(),
+      revision: null,
+    });
+    const published = await call(admin, `/v1/workspaces/${id}/programs`, p);
+    assert.equal(published.status, 200, JSON.stringify(published));
+    const recipients = [trainee, outsider].map((m) => ({
+      id: m.id,
+      revision: m.revision,
+    }));
+    const bad = await call(
+      admin,
+      `/v1/workspaces/${id}/delivery`,
+      operation("assign", {
+        view: "admin",
+        version_id: published.data.version.id,
+        start_date: "2026-09-23",
+        schedule_mode: "flexible",
+        members: recipients,
+      }),
+    );
+    assert.equal(bad.status, 403);
+    assert.equal(
+      await db.organization_assignments.count({ where: { workspace_id: id } }),
+      0,
+    );
+    assert.equal(
+      (
+        await call(
+          admin,
+          `/v1/workspaces/${id}/programs`,
+          operation("listing", {
+            view: "admin",
+            id: p.id,
+            revision: 1,
+            record_revision: 1,
+            value: true,
+          }),
+        )
+      ).status,
+      200,
+    );
+    assert.equal(
+      (
+        await call(
+          client,
+          `/v1/workspaces/${id}/programs?view=trainee&program=${p.id}`,
+        )
+      ).status,
+      200,
+    );
+    assert.equal(
+      (await call(client, `/v1/workspaces/${id}/catalog?view=trainee`)).status,
+      403,
+    );
+    assert.equal(
+      (
+        await call(trainer, `/v1/workspaces/${id}/programs`, {
+          ...p,
+          operation: randomUUID(),
+          view: "trainer",
+          revision: 1,
+        })
+      ).status,
+      403,
+    );
+    const catalog = await call(
+      trainer,
+      `/v1/workspaces/${id}/catalog?view=trainer`,
+    );
+    assert.equal(catalog.status, 200);
+    assert.ok(catalog.data.every((x: any) => !x.owner_id));
+    const invalid = draft();
+    invalid.days[0].exercises[0].sets = 50;
+    assert.equal(
+      (
+        await call(admin, `/v1/workspaces/${id}/programs`, {
+          ...p,
+          id: randomUUID(),
+          operation: randomUUID(),
+          draft: invalid,
+        })
+      ).status,
+      400,
+    );
+  } finally {
+    await f.cleanup();
+  }
+});

@@ -1,6 +1,6 @@
 # ADR 0005: Separate organizational and independent coaching scopes
 
-Status: Accepted. API transition and membership/context foundation implemented locally (R7A1/R7A2); program/history/service ownership continues in R8/R9. Date: 23 September 2026.
+Status: Accepted. API transition and membership/context foundation implemented locally (R7A1/R7A2); program/history ownership implemented in R8; services continue in R9. Date: 23 September 2026.
 
 ## Context
 

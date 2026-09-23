@@ -1,5 +1,15 @@
 # Verification record
 
+## R8 — 23 September 2026
+
+- Backend: 239 rollback SQL assertions, fourteen fresh forward migrations/generated fixtures/seven SQL suites, 4 identity/API tests, 5 service groups, 9 team/business groups, 5 membership groups and 3 organization programming/media groups pass. Previous actuals, first completion preservation, current responsibility before replay, atomic foreign-recipient rejection and private cover/revocation are explicitly checked.
+- Web: 12 unit/data tests, TypeScript/build/format checks pass. Source-local structure tests are explicitly included in Vitest. Full browser run passes 58/60; two test-observation failures were corrected (theme-transition sampling and ambiguous live-status selector), then both paths pass twice in each engine (8/8). After a 320px date-field fix, the affected programming suite passes 4/4 again.
+- Organization render sweep: 72 combinations across admin/trainer/trainee routes, Chromium/WebKit, widths 320/390/768/1440 and paired English/Arabic/light/dark states. No overflow, alerts, page errors or checked Axe violations in the final sweep. Two earlier aborted-navigation WebKit errors were resolved by waiting for loaded context before starting the sweep; errors remain recorded rather than filtered. Source: web `scripts/audit-programming.ts`; final JSON archived under `evidence/r8-layout.json`.
+- Direct inspection included library/editor/delivery phone and desktop, Arabic dark phone editor and the initially overflowing date-entry screen. The fix stacks native date fields; optional catalog settings no longer displace the plan name. These are rendered developer reviews, not human participant observations.
+- Acceptance caught a real shared-component regression: optional boolean casting made an omitted `showNotice` false. An explicit true default restores existing success feedback; membership regression paths pass. Search focus and source-specific draft/retry keys were also corrected.
+
+Sanitized execution summary: `evidence/r8-verification.txt`. Fresh install preserved the preview; a synthetic Madar program was applied additively. No hosted/native/provider/physical-device/remote-CI/human-outcome claim. Organization offline transport reuses the proven queue but its new route has not yet received a dedicated network-loss browser scenario; include that in integrated R11 fault acceptance.
+
 ## R7A2 — Organization membership/context checkpoint (23 September 2026)
 
 - Five real HTTP organization tests pass: two-organization isolation, combined roles, forged trainer IDs, responsibility continuity, wrong-email invitations, revocation, receipt replay, closure, last-admin/concurrent departure and account deletion. Final log `/tmp/rafik-org-http-last.log`.

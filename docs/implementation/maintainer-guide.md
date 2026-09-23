@@ -1,6 +1,6 @@
 # Working on the Rafik revamp
 
-Updated for R7A1. Read the [ledger](ledger.md), [architecture](architecture.md), [runbook](runbook.md) and [role audit](role-scope-audit.md). Independent teams remain collaboration. R7A2 implements organization membership and views; R8/R9 add owned programs, history and services. Native and hosting remain deferred.
+Updated through R8. Read the [ledger](ledger.md), [architecture](architecture.md), [runbook](runbook.md) and [role audit](role-scope-audit.md). Independent teams remain collaboration. R7A2 implements organization membership and views; R8 implements owned programs/history; R9 adds organization services. Native and hosting remain deferred.
 
 ## Runtime responsibilities
 
@@ -216,3 +216,11 @@ Messages layout rules are scoped in `style.css`; changing shared shell sizing re
 Read [R7A2](r7a2-contract.md). API logic is `server/workspaces.ts`; membership schema/lifecycle is in Prisma migrations 130–150. Never infer a global coach/admin grant from an organization role. Add domain operations behind `scoped`/`mutation`, passing the explicit organization ID and required fixed role, and validate related membership IDs in that same organization. Receipts must not bypass revocation. The database login for ORM organization tables is API-internal; no generic browser table grant is added.
 
 Web views/types/styles live in `src/features/organizations/`. `auth.ts` fetches valid contexts; the shell renders them. Draft and pending keys include account, organization and role. `tests/workspaces.test.ts` exercises HTTP access/lifecycle; web `tests/organizations.e2e.ts` exercises actual invitation/assignment/recovery/revocation. Add new checks to the serial release runner. Current organization membership names are scoped snapshots, separate from a person's independent profile.
+
+## Programming changes (R8)
+
+- Shared editor/library transport: web `src/features/coaching/program-context.ts`. Keep independent and organization authorization on the server; the adapter only supplies context and normalizes transport.
+- Safe reuse: `program-structure.ts` plus its unit test. Copies allocate new day/exercise keys and schedule positions, preserving the source. Do not change started prescriptions when editing a draft.
+- Reviewed delivery: `DeliverPlan.vue`; its pending command contains the confirmed recipient IDs/revisions and schedule. A refresh must not replace that pending payload with a newly loaded selection.
+- Organization navigation/training: `OrganizationNav.vue`, `OrganizationTraining.vue`; existing `PlanEditor`, `ExercisesPage`, `ReviewPage` and the durable workout logger are reused. Every draft/command includes account/context.
+- Server: `server/programming.ts`, organization models/migrations, `tests/programming.test.ts`. Before adding a mutation, define both current-role and subject authorization, including before receipt replay after a staff change. Extend `tests/programming.e2e.ts` for the complete human-visible flow.

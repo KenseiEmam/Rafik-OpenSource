@@ -1,6 +1,16 @@
 # Revamp execution ledger
 
-Updated 23 September 2026. **The full revamp remains in progress. R7A1 replaces the local Supabase runtime with the standalone Prisma/PostgreSQL API.** R7A2 establishes organizational membership, role views and trainer responsibility. Organization-owned programming/history and subsequent R8–R12 work continue immediately under the user's authorization. The current team overlay remains independent-coach collaboration. Earlier entries are historical checkpoint evidence, not current setup instructions; use architecture/runbook for today's runtime.
+Updated 23 September 2026. **The full revamp remains in progress. R8 scoped programming/delivery is implemented locally.** R9 organization services and analytics starts immediately, followed by R10–R12 under the user's standing authorization. Use current architecture/runbook for setup; earlier checkpoints below are historical.
+
+## R8 — Scoped programming, reusable editing and reviewed delivery
+
+Organization programs/exercises, immutable versions, atomic recipient review/delivery, organization-owned training/history and feedback now preserve business scope through trainer reassignment. Shared editor/logger components serve independent and organization contexts. Added session/week reuse, explicit individual adaptation, private optional covers and useful program metadata. Publication/start snapshots remain fixed; one durable workout queue handles actuals. Subject account export includes own organization records.
+
+Verification found and fixed date-field overflow at 320px, a shared Vue boolean default hiding success notices, interrupted search focus and adaptation retry-key collisions. Catalog settings now use disclosure in the editor. Added every-step/native-control rules to both AGENTS files. Exact checks and observation limits are in [verification](verification.md) and [R8 contract](r8-contract.md).
+
+**Verified locally:** 239 SQL assertions; fourteen fresh migrations plus fixtures/seven SQL suites; API/services/teams/membership/programming/media tests; twelve web unit tests; full browser run 58/60 followed by 8/8 repeats of the two corrected observation paths, plus 4/4 affected programming checks after the responsive fix. The 72-state organization programming matrix passes with no reported overflow, alerts, page errors or checked Axe violations. Representative English/Arabic phone and desktop renders were inspected. These totals do not establish human usability or device/hosting readiness.
+
+**Next:** R9 calendar/groups, assessor-led per-trainee results and role-specific analytics; then R10 notifications, R11 local operations/scale/cleanup and R12 available refinement. No hosting, native work, real provider delivery or push. R11 includes large-roster reads, preview fixture isolation and orphan-byte maintenance.
 
 ## R7A2 — Organization membership, contexts and responsibility
 
@@ -95,7 +105,7 @@ The earlier decision to treat the broad product inventory as merely optional was
 **Founder steering during R7:** prioritize coach/organization web workflows; trainees primarily use the later native revamp. Hosting must use Prisma + PostgreSQL and one server API; replace the transitional Supabase Auth/RPC/Storage dependencies locally before hosting. See [ADR 0004](../decisions/0004-coach-web-and-prisma-target.md). All upcoming local phases and per-phase commits are authorized.
 
 
-The [forward roadmap](forward-roadmap.md) now sequences **R7 checkpoint → R7A → R8 → R9 → R10 → R11 → R12**. R7 is implemented locally below; R7A1 transport is implemented; R7A2 organization ownership and later phases remain in progress.
+The [forward roadmap](forward-roadmap.md) now sequences **R7 checkpoint → R7A → R8 → R9 → R10 → R11 → R12**. R7 is implemented locally below; R7A1 transport is implemented; R7A2 membership and R8 programming/history are implemented locally; R9–R12 remain in progress.
 
 1. The [original-role audit](role-scope-audit.md) traced six roles through original web/mobile, captured deployed schema/functions and worker. The founder is correct: R4 teams do not represent organizations with their own admins, trainers and trainees. The scope correction is architectural and behavioral, not a naming or RLS patch.
 2. Next implement **R7A organization/identity ownership and the Prisma/PostgreSQL API transition** under [ADR 0005](../decisions/0005-organization-and-independent-scopes.md). This moves the backend transition ahead of R8. Preserve R7's useful daily-flow work while replacing the universal role selector and personal-team ownership assumptions.

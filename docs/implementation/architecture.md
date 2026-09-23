@@ -2,7 +2,7 @@
 
 R7A1 replaces the transitional backend with **one Node/TypeScript API, Prisma and PostgreSQL**. The Vue application retains its accepted interaction design and durable IndexedDB queue. [ADR 0006](../decisions/0006-prisma-api-transition.md) records the transition; [API conventions](../reference/api.md) and the [maintainer guide](maintainer-guide.md) specify its boundaries.
 
-**Organizational correction:** [ADR 0005](../decisions/0005-organization-and-independent-scopes.md) defines the separate independent/organization scopes partly implemented in R7A2 membership/context/responsibility; organization-owned programming and services follow. The R4 team overlay remains an independent-coach collaboration feature, not the required organization model. Read the [role audit](role-scope-audit.md) before changing ownership.
+**Organizational correction:** [ADR 0005](../decisions/0005-organization-and-independent-scopes.md) defines the separate independent/organization scopes partly implemented in R7A2 membership/context/responsibility; organization-owned programming/history is implemented in R8; services follow in R9. The R4 team overlay remains an independent-coach collaboration feature, not the required organization model. Read the [role audit](role-scope-audit.md) before changing ownership.
 
 ## System boundary
 
@@ -201,3 +201,11 @@ The [R7A2 contract](r7a2-contract.md) defines the implemented identity boundary.
 `server/workspaces.ts` centralizes live membership checks, exact receipts and serialized lifecycle commands. Organization reads/writes are explicit API routes, without generic table access or identity impersonation. Independent domain functions retain their participant/owner checks; enabling independent coaching is explicit. Organization program/session records are subsequent work rather than aliases of personal coaching relationships. Record authorship must stay separate from ownership when adding them.
 
 Account deletion retains a deactivated, anonymized organization membership shell while deleting the person's identity. Last-admin and independent team/handoff guards run first, under the same lock order used by membership commands. Scoped membership export and broader organization record lifecycle continue with the subsequent feature phases.
+
+## Organization programming and training (R8)
+
+`server/programming.ts` owns organization catalog, program publication, reviewed delivery, workout persistence and review. `organization_*` records carry a workspace and member authorship/subject reference. They do not create an independent coaching relationship. Trainer reads/commands use current responsibility; operation replay runs resource authorization before returning an old receipt. Organization membership changes and commands serialize on the same workspace lock.
+
+The shared PostgreSQL `validate_prescription_catalog` and `validate_session_actuals` functions hold prescription/actual bounds. Independent wrappers supply the actor's authorized catalog; the API supplies the organization/shared catalog. Organization publications embed instruction snapshots. `organization_sessions.document` uses the existing logger transport shape, while indexed membership/assignment/date/version columns provide ownership and concurrency. Completion corrections preserve first completion time; corrected organizational records require fresh review.
+
+The web's `program-context.ts` supplies explicit adapters to the existing editor/library. `training.ts` keeps one IndexedDB queue and switches only the server transport for sessions with `workspace_id`. It never impersonates another identity. `DeliverPlan.vue` reviews the exact recipients and future schedule before an atomic command. Independent delivery uses `deliver_plan`; organizations use `/v1/workspaces/:id/delivery`. Both reject stale or invalid recipients as one unit.

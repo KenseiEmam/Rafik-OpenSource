@@ -1,0 +1,9 @@
+R8 verification on 23 September 2026, Node 22.16.0, local Prisma/PostgreSQL.
+239 rollback SQL assertions pass; fourteen migrations, generated fixtures and seven SQL suites pass in a disposable database without resetting preview.
+Real HTTP: identity/API 4, existing services 5 groups, teams/business 9 groups, organization membership 5 groups, programming/media 3 groups pass.
+Web 12 unit tests pass; TypeScript/build/format pass. Source-local program-structure tests are now included explicitly in Vitest configuration.
+Full browser run: 58/60 passed. Two failures were test observation issues: contrast sampled during a theme transition and ambiguous generic status selector while review acknowledgement settled. Wait for font/animation settlement and select actual success status. The two paths are rechecked twice in both engines separately.
+A prior run caught a real optional-Vue-boolean default hiding success messages. Explicit true default fixed it; both membership journeys pass in the full rerun.
+Program author→publish→reviewed assignment with lost ACK/reload→trainee actuals→coach feedback→adaptation retains snapshots passes in Chromium and phone WebKit, including private cover bytes. API checks cover scope, reassignment before replay, batch atomicity, publication isolation, previous actuals, immutable image retry and revoked access.
+No physical hardware, hosting, real email/payment, remote CI or human outcome claim.
+Final targeted repeats: 8/8. After responsive correction: programming journeys 4/4. Final organization matrix: 72 states, zero reported layout/alert/Axe/page errors.

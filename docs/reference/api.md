@@ -34,3 +34,11 @@ Training schedules use client-local calendar dates. Appointments use UTC instant
 - `GET /v1/organization-invitations/:token`: minimal organization/role preview, no intended email. `POST` accepts only the verified intended identity.
 
 See [membership contract](../implementation/r7a2-contract.md). These Prisma-internal tables have no generic browser row grants. Closure preserves records while removing access; an exact closure retry confirms the old result. Organizational programming and service contracts are separate subsequent work.
+
+## Scoped programming
+
+`GET /v1/workspaces/:id/programs?view=admin|trainer|trainee` supports `search`, `offset`, `program` or `version`; list pages contain 24 programs. `POST` supports explicit save/publish/archive/listing commands with operation UUID, draft revision and (for visibility/archive) separate record revision. `GET /catalog` is staff-only; exercise writes use the programs command boundary.
+
+`GET /delivery` returns authorized recipients/assignments and 50 sessions (`before` is the verified session UUID cursor; `history=true` includes former trainees with retained history). `POST /delivery` atomically assigns a fixed version to 1–50 reviewed recipients with member and current-assignment revisions. Independent `deliver_plan` provides the equivalent command within independent relationships.
+
+`POST /sessions` starts/saves/reviews organization workouts; `/v1/organization-sessions/:id` and `/previous` supply authorized record/actual references. Publication/started snapshots and first completion time are retained. Current responsibility is checked before receipt replay. `PUT /v1/program-media/:id?workspace=:id` accepts at most 2 MiB PNG/JPEG/WebP; the authenticated GET rechecks publication/assignment/member access. `/v1/account/organizations` exports only the authenticated subject's organization records.
