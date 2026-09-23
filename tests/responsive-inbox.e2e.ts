@@ -53,6 +53,7 @@ test('populated inbox contains long names and compact rows at short, tall, RTL a
     await page.locator('.conversation-person').click()
     await expect(page.getByRole('textbox', { name: 'Message', exact: true })).toBeVisible()
     await page.getByRole('link', { name: 'Back to conversations' }).click()
+    await expect(page).toHaveURL(/\/coach\/messages$/)
     await expectUsableInbox(page)
     await page.getByRole('searchbox').fill('No person matches')
     await expect(page.getByText('No matching conversations.')).toBeVisible()

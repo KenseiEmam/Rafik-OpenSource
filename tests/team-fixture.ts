@@ -55,7 +55,10 @@ export async function teamFixture() {
   async function cleanup() {
     if (teamIds.some((id) => !/^[-a-f0-9]{36}$/.test(id))) throw Error('Invalid fixture ID')
     for (const id of teamIds) sql(`delete from public.teams where id='${id}';`)
-    for (const p of [...people].reverse()) sql(`delete from identity.users where id='${p.id}';`)
+    for (const p of [...people].reverse())
+      sql(
+        `delete from public.workspaces where created_by='${p.id}'; delete from identity.users where id='${p.id}';`,
+      )
   }
   try {
     for (const name of ['R4 Owner', 'R4 Coach', 'R4 Client']) {
@@ -68,6 +71,8 @@ export async function teamFixture() {
       const person = { id, email, session: { cookie } }
       people.push(person)
       await rpc(person, 'ensure_profile', { p_name: name })
+      if (name !== 'R4 Client')
+        await call(person, '/v1/workspaces', { id: randomUUID(), kind: 'independent', name })
     }
     const [owner, coach, client] = people as [Person, Person, Person],
       plan = randomUUID()
@@ -97,7 +102,7 @@ export async function teamFixture() {
       ])
       await page.goto(path)
     }
-    return { owner, coach, client, rpc, rows, login, cleanup, teamIds, assignment, version }
+    return { owner, coach, client, call, rpc, rows, login, cleanup, teamIds, assignment, version }
   } catch (e) {
     await cleanup()
     throw e

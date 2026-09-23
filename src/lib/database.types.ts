@@ -204,6 +204,10 @@ export type Database = { public: { Tables: {
         created_at: string
         team_template_id: string | null
     } }
+    platform_grants: { Row: {
+        user_id: string
+        created_at: string
+    } }
     profiles: { Row: {
         id: string
         display_name: string
@@ -381,6 +385,55 @@ export type Database = { public: { Tables: {
         id: string
         owner_id: string | null
         name: string
+        archived: boolean
+        revision: number
+        created_at: string
+    } }
+    workspace_events: { Row: {
+        id: string
+        workspace_id: string
+        actor_id: string | null
+        kind: string
+        subject_id: string | null
+        detail: Json
+        created_at: string
+    } }
+    workspace_invitations: { Row: {
+        id: string
+        workspace_id: string
+        email: string
+        roles: string[]
+        token_hash: string
+        created_by: string | null
+        expires_at: string
+        state: string
+        accepted_by: string | null
+        created_at: string
+    } }
+    workspace_members: { Row: {
+        id: string
+        workspace_id: string
+        user_id: string | null
+        roles: string[]
+        active: boolean
+        revision: number
+        trainer_id: string | null
+        joined_at: string
+        name: string
+    } }
+    workspace_operations: { Row: {
+        id: string
+        workspace_id: string
+        actor_id: string
+        payload: Json
+        result: Json
+        created_at: string
+    } }
+    workspaces: { Row: {
+        id: string
+        kind: string
+        name: string
+        created_by: string | null
         archived: boolean
         revision: number
         created_at: string

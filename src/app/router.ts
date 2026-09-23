@@ -1,9 +1,23 @@
 import { nextTick } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import { ready, user } from './auth'
+import { ready, user, contexts, refreshContexts } from './auth'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+    {
+      path: '/workspaces',
+      component: () => import('../features/organizations/WorkspacesPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization/:workspace/:view/:section?',
+      component: () => import('../features/organizations/OrganizationPage.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization-invite/:token',
+      component: () => import('../features/organizations/OrganizationInvite.vue'),
+    },
     { path: '/', component: () => import('../features/public/HomePage.vue') },
     { path: '/routine', component: () => import('../features/training/RoutinePage.vue') },
     { path: '/workout/:id', component: () => import('../features/training/WorkoutPage.vue') },
@@ -192,6 +206,11 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   await ready()
   if (to.meta.private && !user.value) return { path: '/login', query: { next: to.fullPath } }
+  if (user.value && (to.path.startsWith('/coach') || to.path.startsWith('/organization/'))) {
+    await refreshContexts().catch(() => {})
+    if (to.path.startsWith('/coach') && !contexts.value.some((c) => c.kind === 'independent'))
+      return '/workspaces?start=independent'
+  }
 })
 export const safeNext = (value: unknown, fallback = '/today') =>
   typeof value === 'string' &&

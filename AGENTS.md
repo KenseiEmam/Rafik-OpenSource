@@ -40,3 +40,5 @@
 - Organization-owned training history survives internal trainer reassignment; do not model it as a new independent coaching relationship or transfer unrelated personal data. Check-ins do not replace scheduled assessor-led assessments with per-trainee results.
 - R7A brings the Prisma/PostgreSQL API transition and scoped organization foundation before R8 feature expansion (supersedes the earlier R11 timing). No permanent dual backend, generic permission builder or legacy data migration. Native and hosting stay deferred.
 - For every phase, trace legacy capabilities to retained/replaced/deferred/defective with evidence. Test against the role/workflow requirements, not merely the current reduced implementation; record missing product scope even when all existing tests pass.
+
+- Recovery UI must distinguish actively persisting/sending from an uncertain result. Offer retry only after the request is durably stored and dispatch has settled; reload/fault tests must exercise that real user-visible state. Await completed route navigation and loaded records before measuring layout.
