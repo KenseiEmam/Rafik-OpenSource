@@ -1,165 +1,204 @@
 <script setup lang="ts">
+import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import UpcomingAppointments from '../appointments/UpcomingAppointments.vue'
-import CoachingActivity from '../ongoing/CoachingActivity.vue'
-import { computed, onMounted, ref } from 'vue'
-import { PhArrowRight, PhCheckCircle, PhPlus, PhNotebook } from '@phosphor-icons/vue'
-import { user, profile } from '../../app/auth'
-import { rows } from '../../lib/backend'
-import { type Session, type Profile, type Relationship, type Plan } from '../../lib/domain'
-import { language, t, errorMessage, dateLabel } from '../../lib/i18n'
+import { rpc } from '../../lib/backend'
+import { language as l, dateLabel, errorMessage } from '../../lib/i18n'
+import type { AttentionPage, AttentionTask } from '../workspace/types'
 import PageState from '../../components/PageState.vue'
-const sessions = ref<Session[]>([])
-const people = ref<Profile[]>([])
-const relationships = ref<Relationship[]>([])
-const plans = ref<Plan[]>([])
-const loading = ref(true)
-const error = ref('')
-const reviewLimit = ref(8)
-const awaiting = computed(() =>
-  sessions.value
-    .filter((s) => s.status === 'completed' && !s.reviewed_at)
-    .sort((a, b) => (b.completed_at || '').localeCompare(a.completed_at || '')),
+const route = useRoute(),
+  router = useRouter()
+const search = ref(String(route.query.search || ''))
+let searchTimer: ReturnType<typeof setTimeout>
+watch(search, () => {
+  clearTimeout(searchTimer)
+  searchTimer = setTimeout(() => {
+    void router.replace({ query: { ...route.query, search: search.value || undefined } })
+    void load()
+  }, 180)
+})
+onUnmounted(() => clearTimeout(searchTimer))
+const kind = ref(
+  ['workout', 'checkin', 'message'].includes(String(route.query.view))
+    ? String(route.query.view)
+    : 'all',
 )
-const done = computed(() => sessions.value.filter((s) => s.status === 'completed').length)
-async function load() {
-  loading.value = true
+const data = ref<AttentionPage>({ items: [], total: 0, clients: 0, plans: 0 })
+const loading = ref(true),
+  busy = ref(false),
+  error = ref('')
+let generation = 0
+async function load(more = false) {
+  const request = ++generation
+  if (!more) loading.value = true
+  busy.value = true
   error.value = ''
+  const last = more ? data.value.items.at(-1) : undefined
   try {
-    ;[sessions.value, people.value, relationships.value, plans.value] = await Promise.all([
-      rows<Session>('sessions', 'coach_id', user.value!.id),
-      rows<Profile>('profiles'),
-      rows<Relationship>('coach_clients', 'coach_id', user.value!.id),
-      rows<Plan>('plans', 'coach_id', user.value!.id),
-    ])
+    const result = await rpc<AttentionPage>('coach_attention', {
+      p_kind: kind.value,
+      p_search: search.value,
+      p_after_time: last?.happened_at ?? null,
+      p_after_key: last?.key ?? '',
+      p_limit: 12,
+    })
+    if (request !== generation) return
+    data.value = { ...result, items: more ? [...data.value.items, ...result.items] : result.items }
   } catch (e) {
-    error.value = errorMessage(e)
+    if (request === generation) error.value = errorMessage(e)
   } finally {
-    loading.value = false
+    if (request === generation) {
+      loading.value = false
+      busy.value = false
+    }
   }
 }
-onMounted(load)
+watch(kind, () => {
+  void router.replace({ query: { ...route.query, view: kind.value } })
+  void load()
+})
+const destination = (task: AttentionTask) =>
+  task.kind === 'workout'
+    ? '/coach/review/' + task.id
+    : task.kind === 'checkin'
+      ? '/coach/checkins/' + task.id
+      : '/coach/messages/' + task.id
+onMounted(() => load())
 </script>
 <template>
-  <div class="container page">
-    <div class="page-heading heading-actions">
+  <div class="container page daily-workspace">
+    <header class="work-heading">
       <div>
-        <p class="overline">{{ t('coaching') }}</p>
-        <h1>
-          {{ language('Good to see you,', 'أهلاً بك،') }}
-          {{ profile?.display_name?.split(' ')[0] || language('coach', 'مدرب') }}.
-        </h1>
+        <p class="overline">{{ l('Your coaching day', 'يومك التدريبي') }}</p>
+        <h1>{{ l('A clear next step.', 'خطوة تالية واضحة.') }}</h1>
         <p>
           {{
-            language(
-              'See what happened. Help with what comes next.',
-              'شاهد ما تم إنجازه. وساعد في الخطوة التالية.',
-            )
+            l('See who needs you. Keep their progress moving.', 'شاهد من يحتاجك وساعده على التقدم.')
           }}
         </p>
       </div>
-      <RouterLink class="button" to="/coach/clients"
-        ><PhPlus :size="18" aria-hidden="true" />{{ t('invite') }}</RouterLink
-      >
-    </div>
-    <PageState :loading="loading" :error="error" @retry="load"
-      ><div class="coach-stats">
-        <div>
-          <span>{{ language('Active clients', 'المتدربون النشطون') }}</span
-          ><strong>{{ relationships.filter((c) => c.state === 'active').length }}</strong>
-        </div>
-        <div>
-          <span>{{ language('Sessions completed', 'الحصص المكتملة') }}</span
-          ><strong>{{ done }}</strong>
-        </div>
-        <div>
-          <span>{{ language('Ready for review', 'جاهز للمراجعة') }}</span
-          ><strong>{{ awaiting.length }}</strong>
-        </div>
-      </div>
-      <CoachingActivity coach />
-      <UpcomingAppointments coach />
-      <div class="coach-home-layout">
-        <section class="review-section">
+      <RouterLink class="button secondary" to="/coach/clients#invite">{{
+        l('Invite a client', 'دعوة متدرب')
+      }}</RouterLink>
+    </header>
+    <PageState :loading="loading" :error="!data.items.length ? error : ''" @retry="load()">
+      <div class="daily-grid">
+        <section class="attention-panel">
           <div class="section-title">
-            <h2>{{ language('Your review list', 'قائمة المراجعة') }}</h2>
-            <span v-if="awaiting.length" class="count">{{ awaiting.length }}</span>
+            <h2>
+              {{ l('Needs your attention', 'بحاجة إلى متابعتك') }}
+              <span class="count">{{ data.total }}</span>
+            </h2>
+            <button class="text-link" :disabled="busy" @click="load()">
+              {{ l('Refresh', 'تحديث') }}
+            </button>
           </div>
-          <div v-if="awaiting.length" class="review-list">
-            <RouterLink
-              v-for="s in awaiting.slice(0, reviewLimit)"
-              :key="s.id"
-              class="review-row"
-              :to="'/coach/review/' + s.id"
-              ><span class="avatar">{{
-                people.find((p) => p.id === s.client_id)?.display_name.slice(0, 1)
-              }}</span>
-              <div class="grow">
-                <h3>{{ people.find((p) => p.id === s.client_id)?.display_name }}</h3>
-                <p>
-                  {{ s.prescription.name }}
-                  <span class="subtle">{{ dateLabel(s.completed_at!) }}</span>
-                </p>
-                <p v-if="s.note" class="note-excerpt">“{{ s.note }}”</p>
-              </div>
-              <PhArrowRight :size="22" class="directional" aria-hidden="true"
-            /></RouterLink>
-          </div>
-          <div v-else class="empty-review">
-            <PhCheckCircle :size="44" weight="light" aria-hidden="true" />
+          <label class="attention-search"
+            >{{ l('Find a client or update', 'البحث عن متدرب أو مستجد')
+            }}<input v-model="search" type="search" maxlength="100"
+          /></label>
+          <label class="attention-filter"
+            >{{ l('Show', 'عرض')
+            }}<select v-model="kind" :aria-label="l('Show', 'عرض')">
+              <option value="all">{{ l('All updates', 'كل المستجدات') }}</option>
+              <option value="workout">{{ l('Workout reviews', 'مراجعة الحصص') }}</option>
+              <option value="checkin">{{ l('Check-in reviews', 'مراجعة المتابعات') }}</option>
+              <option value="message">
+                {{ l('Unread conversations', 'المحادثات غير المقروءة') }}
+              </option>
+            </select></label
+          >
+          <p class="small-print">
+            {{
+              l(
+                'Oldest waiting first. Opening a review does not mark it complete.',
+                'الأقدم انتظاراً أولاً. فتح المراجعة لا يُكملها.',
+              )
+            }}
+          </p>
+          <p v-if="error && data.items.length" class="notice error" role="alert">{{ error }}</p>
+          <RouterLink
+            v-for="task in data.items"
+            :key="task.key"
+            class="attention-row"
+            :to="{
+              path: destination(task),
+              query: { from: 'today', view: kind, search: search || undefined },
+            }"
+          >
+            <span class="avatar" aria-hidden="true">{{ task.name.slice(0, 1) }}</span>
+            <div class="grow">
+              <strong>{{ task.name }}</strong
+              ><span>{{
+                task.kind === 'message'
+                  ? l('Unread messages', 'رسائل غير مقروءة') + ' · ' + task.unread
+                  : task.title
+              }}</span
+              ><span v-if="task.detail" class="note-excerpt">{{ task.detail }}</span
+              ><small
+                >{{
+                  task.kind === 'workout'
+                    ? l('Workout to review', 'حصة للمراجعة')
+                    : task.kind === 'checkin'
+                      ? l('Check-in to review', 'متابعة للمراجعة')
+                      : l('Reply in conversation', 'الرد في المحادثة')
+                }}
+                · {{ dateLabel(task.happened_at) }}</small
+              >
+            </div>
+            <span aria-hidden="true">↗</span>
+          </RouterLink>
+          <div v-if="!data.items.length" class="workspace-empty">
             <h3>
               {{
-                relationships.length
-                  ? t('allCaughtUp')
-                  : language(
-                      'Your first client result will appear here.',
-                      'ستظهر أول نتيجة لمتدرب هنا.',
-                    )
+                data.clients
+                  ? l('You’re up to date.', 'أنت على اطلاع بكل جديد.')
+                  : l('Your next client starts here.', 'متدربك التالي يبدأ من هنا.')
               }}
             </h3>
             <p>
               {{
-                language(
-                  'Completed sessions come here for a quick review and a useful reply.',
-                  'تظهر الحصص المكتملة هنا لمراجعة سريعة ورد مفيد.',
-                )
+                data.clients
+                  ? l(
+                      'New messages and submitted work will appear here.',
+                      'ستظهر الرسائل الجديدة والحصص والمتابعات المقدّمة هنا.',
+                    )
+                  : l(
+                      'Prepare a plan, preview the client experience, then share a personal invitation.',
+                      'جهّز خطة وعاين تجربة المتدرب ثم شارك دعوة شخصية.',
+                    )
               }}
             </p>
+            <RouterLink
+              v-if="!data.clients"
+              class="button"
+              :to="data.plans ? '/coach/plans' : '/coach/plans/new'"
+              >{{ l('Prepare a plan', 'تجهيز خطة') }}</RouterLink
+            >
           </div>
           <button
-            v-if="awaiting.length > reviewLimit"
+            v-if="data.items.length < data.total"
             class="button secondary"
-            @click="reviewLimit += 8"
+            :disabled="busy"
+            @click="load(true)"
           >
-            {{ language('Show more sessions', 'عرض حصص أخرى') }}
+            {{ l('Show more updates', 'عرض مستجدات أخرى') }}
           </button>
         </section>
-        <aside class="panel coach-next">
-          <PhNotebook :size="30" class="accent-icon" aria-hidden="true" />
-          <h2>
-            {{
-              plans.length
-                ? language('A good plan is a starting point.', 'الخطة الجيدة نقطة البداية.')
-                : language('Start with something useful.', 'ابدأ بشيء مفيد.')
-            }}
-          </h2>
-          <p>
-            {{
-              language(
-                'Use the full-body starter, adjust the details, and preview exactly what your client will see.',
-                'استخدم خطة كامل الجسم، وعدّل التفاصيل، وعاين ما سيشاهده متدربك.',
-              )
-            }}
-          </p>
-          <RouterLink
-            class="button secondary full"
-            :to="plans.length ? '/coach/plans' : '/coach/plans/new'"
-            >{{
-              plans.length
-                ? language('Open your plans', 'افتح خططك')
-                : language('Make your first plan', 'أنشئ خطتك الأولى')
-            }}<PhArrowRight :size="18" class="directional" aria-hidden="true"
-          /></RouterLink>
-        </aside></div
-    ></PageState>
+        <aside class="daily-aside">
+          <div class="workspace-summary">
+            <strong>{{ data.clients }}</strong
+            ><span>{{ l('active clients', 'متدربون نشطون') }}</span
+            ><RouterLink to="/coach/clients"
+              >{{ l('Open your roster', 'عرض المتدربين') }} ↗</RouterLink
+            >
+          </div>
+          <UpcomingAppointments coach /><RouterLink class="workspace-shortcut" to="/coach/plans"
+            ><strong>{{ l('Prepare what comes next', 'جهّز الخطوة التالية') }}</strong
+            ><span>{{ l('Open your plans', 'افتح خططك') }} ↗</span></RouterLink
+          >
+        </aside>
+      </div>
+    </PageState>
   </div>
 </template>

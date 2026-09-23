@@ -27,3 +27,16 @@
 - Verify list, selected/detail, back, search/no-match and error states with multiple realistic records and long names/labels. Include short phone heights, landscape and live resizing, Chromium and WebKit, English/Arabic and both themes. Wait for the actual data surface, not just the page heading.
 - Capture both viewport and full-page evidence; inspect the rendered states, including entry/list screens. A generated screenshot that nobody inspected is not visual acceptance. Document the feature/state coverage and gaps; never claim absence of every possible issue.
 - Keep full browser suites serial; final evidence must use the final source/build. New fixtures must clean up only their own records and must not depend on test pollution in sample accounts.
+
+## Founder direction during R7
+
+- Prioritize coach and organization workflows in RAFIK-FRONTEND; preserve trainee web functionality, with the primary trainee experience reserved for the later native revamp. Do not equate a simplified client logger with the complete coach product.
+- Hosting target is **Prisma + PostgreSQL with an explicit server API**, replacing Supabase. The local Supabase runtime is transitional. Before hosting, replace Auth/RPC/Storage coupling and verify transactions, authorization, durable retries and file lifecycle against the new stack. Follow backend ADR 0004; do not deploy the Supabase prototype as the final architecture.
+
+## Role and organization scope correction (R7A)
+
+- Read the backend `docs/implementation/role-scope-audit.md` and ADR 0005 before expanding features. R4 teams are not the required organization model. Organizations have their own admins, trainers and trainees; independent coaches/trainees remain separate. Platform administrator is a separate grant.
+- Preserve authorized combined roles without mixing business scopes. Define actor, context, resource and lifecycle permissions before coding; derive navigation from server capabilities. Test two organizations, independent users, combined roles, stale tabs and revoked staff access.
+- Organization-owned training history survives internal trainer reassignment; do not model it as a new independent coaching relationship or transfer unrelated personal data. Check-ins do not replace scheduled assessor-led assessments with per-trainee results.
+- R7A brings the Prisma/PostgreSQL API transition and scoped organization foundation before R8 feature expansion (supersedes the earlier R11 timing). No permanent dual backend, generic permission builder or legacy data migration. Native and hosting stay deferred.
+- For every phase, trace legacy capabilities to retained/replaced/deferred/defective with evidence. Test against the role/workflow requirements, not merely the current reduced implementation; record missing product scope even when all existing tests pass.

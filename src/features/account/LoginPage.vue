@@ -14,7 +14,12 @@ const step = ref<'email' | 'code'>('email')
 const busy = ref(false)
 const error = ref('')
 const sentAt = ref(0)
-const next = computed(() => safeNext(route.query.next))
+const next = computed(() =>
+  safeNext(
+    route.query.next,
+    user.value ? localStorage.getItem('rafik.workspace:' + user.value.id) || '/today' : '/today',
+  ),
+)
 const coaching = computed(() => next.value.startsWith('/coach'))
 async function send() {
   if (!configured) {

@@ -6,6 +6,8 @@ A responsive Vue 3/TypeScript application for training and ongoing coaching: pro
 
 Work belongs on `codex/revamp`. The old application is preserved in Git history. No native app or legacy backend is required.
 
+**Current direction:** web development prioritizes coaches and organization staff. The local Supabase runtime is transitional; the target is Prisma/PostgreSQL behind one API. The [role-scope audit](../rafik-api/docs/implementation/role-scope-audit.md) documents the original six roles and the current organization gaps. R7A corrects organizational membership/ownership and the backend boundary before further programming/analytics expansion. Current teams are not a complete organizational implementation.
+
 ## Start here
 
 - [Developer and architecture guide](../rafik-api/docs/implementation/maintainer-guide.md): complete file map, responsibilities, data flow, routes, local tour and change recipes for both repositories.

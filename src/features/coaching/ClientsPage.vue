@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { PhCopy, PhCheck, PhArrowRight } from '@phosphor-icons/vue'
 import { user, profile, refreshProfile } from '../../app/auth'
 import { rows, rpc } from '../../lib/backend'
@@ -28,35 +29,75 @@ const latest = computed(() =>
       !versions.value.some((other) => other.plan_id === v.plan_id && other.revision > v.revision),
   ),
 )
-const search = ref(''),
-  rosterState = ref('active')
-const filteredClients = computed(() =>
-  clients.value.filter(
-    (c) =>
-      c.state === rosterState.value &&
-      (people.value.find((p) => p.id === c.client_id)?.display_name || '')
-        .toLowerCase()
-        .includes(search.value.toLowerCase()),
-  ),
-)
-const visibleCount = ref(12)
+const route = useRoute(),
+  router = useRouter()
+const search = ref(String(route.query.search || '')),
+  rosterState = ref(route.query.state === 'archived' ? 'archived' : 'active')
+const total = ref(0),
+  rosterBusy = ref(false)
+const filteredClients = computed(() => clients.value)
+let rosterGeneration = 0,
+  searchTimer: ReturnType<typeof setTimeout>
 watch([search, rosterState], () => {
-  visibleCount.value = 12
+  clearTimeout(searchTimer)
+  searchTimer = setTimeout(() => {
+    void router.replace({
+      query: { ...route.query, search: search.value || undefined, state: rosterState.value },
+    })
+    void loadRoster()
+  }, 180)
 })
+async function loadRoster(more = false) {
+  const generation = ++rosterGeneration
+  rosterBusy.value = true
+  const last = more ? clients.value.at(-1) : undefined
+  try {
+    const result = await rpc<{
+      items: (Relationship & { display_name: string })[]
+      assignments: Assignment[]
+      total: number
+    }>('coach_roster', {
+      p_search: search.value,
+      p_state: rosterState.value,
+      p_after_name: last
+        ? people.value.find((p) => p.id === last.client_id)?.display_name.toLowerCase()
+        : null,
+      p_after_id: last?.id ?? null,
+      p_limit: 12,
+    })
+    if (generation !== rosterGeneration) return
+    clients.value = more ? [...clients.value, ...result.items] : result.items
+    people.value = more
+      ? [
+          ...people.value,
+          ...result.items.map(
+            (c) => ({ id: c.client_id, display_name: c.display_name }) as Profile,
+          ),
+        ]
+      : result.items.map((c) => ({ id: c.client_id, display_name: c.display_name }) as Profile)
+    assignments.value = more ? [...assignments.value, ...result.assignments] : result.assignments
+    total.value = result.total
+    for (const c of result.items)
+      choices.value[c.id] =
+        result.assignments.find((a) => a.relationship_id === c.id)?.version_id || ''
+    error.value = ''
+  } catch (e) {
+    if (generation === rosterGeneration) error.value = errorMessage(e)
+  } finally {
+    if (generation === rosterGeneration) rosterBusy.value = false
+  }
+}
 const pendingInvites = computed(() => invites.value.filter((i) => i.status === 'pending'))
 async function load() {
   loading.value = true
   error.value = ''
   try {
     const id = user.value!.id
-    ;[people.value, versions.value, clients.value, assignments.value, invites.value] =
-      await Promise.all([
-        rows<Profile>('profiles'),
-        rows<PlanVersion>('plan_versions', 'coach_id', id),
-        rows<Relationship>('coach_clients', 'coach_id', id),
-        rows<Assignment>('assignments', 'coach_id', id),
-        rows<Invitation>('invitations', 'coach_id', id),
-      ])
+    ;[versions.value, invites.value] = await Promise.all([
+      rows<PlanVersion>('plan_versions', 'coach_id', id),
+      rows<Invitation>('invitations', 'coach_id', id),
+      loadRoster(),
+    ])
     if (!version.value) version.value = latest.value[0]?.id || ''
     for (const c of clients.value)
       choices.value[c.id] =
@@ -153,9 +194,9 @@ onMounted(load)
 </script>
 <template>
   <div class="container page">
-    <div class="page-heading">
+    <div class="work-heading roster-heading">
       <p class="overline">{{ t('coaching') }}</p>
-      <h1>{{ language('Good coaching stays connected.', 'التدريب الجيد يبقيك قريباً.') }}</h1>
+      <h1>{{ language('Your clients', 'متدربوك') }}</h1>
       <p>
         {{
           language(
@@ -199,20 +240,18 @@ onMounted(load)
               }}
             </p>
           </div>
-          <p class="small-print roster-total">
-            {{ filteredClients.length }} {{ language('clients', 'متدربون') }}
-          </p>
-          <article
-            v-for="c in filteredClients.slice(0, visibleCount)"
-            :key="c.id"
-            class="client-row"
-          >
+          <p class="small-print roster-total">{{ total }} {{ language('clients', 'متدربون') }}</p>
+          <article v-for="c in filteredClients" :key="c.id" class="client-row">
             <div class="client-heading">
               <span class="avatar">{{
                 people.find((p) => p.id === c.client_id)?.display_name.slice(0, 1)
               }}</span>
               <h3>
-                <RouterLink :to="'/coach/clients/' + c.id"
+                <RouterLink
+                  :to="{
+                    path: '/coach/clients/' + c.id,
+                    query: { search: search || undefined, state: rosterState },
+                  }"
                   >{{ people.find((p) => p.id === c.client_id)?.display_name }} →</RouterLink
                 >
               </h3>
@@ -248,9 +287,10 @@ onMounted(load)
             </template>
           </article>
           <button
-            v-if="filteredClients.length > visibleCount"
+            v-if="clients.length < total"
             class="button secondary small"
-            @click="visibleCount += 12"
+            @click="loadRoster(true)"
+            :disabled="rosterBusy"
           >
             {{ language('Show more clients', 'عرض المزيد من المتدربين') }}
           </button>
@@ -275,7 +315,7 @@ onMounted(load)
             </p>
           </section>
         </section>
-        <aside class="panel invite-panel">
+        <aside id="invite" class="panel invite-panel">
           <h2>{{ t('invite') }}</h2>
           <template v-if="latest.length"
             ><form @submit.prevent="invite">

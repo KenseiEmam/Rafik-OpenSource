@@ -5,7 +5,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { PhArrowRight, PhBarbell, PhClock, PhCheckCircle } from '@phosphor-icons/vue'
 import { user, profile } from '../../app/auth'
-import { rows, rpc } from '../../lib/backend'
+import { rpc } from '../../lib/backend'
 import {
   type Assignment,
   type Relationship,
@@ -33,6 +33,9 @@ const local = ref<LocalSession[]>([])
 const schedules = ref<Record<string, ScheduledDay[]>>({})
 const today = computed(() => localDate(profile.value?.timezone || 'UTC'))
 const relationships = ref<Relationship[]>([])
+const showSchedule = ref<Record<string, boolean>>({})
+const visibleSchedule = (id: string) =>
+  (schedules.value[id] || []).filter((s) => showSchedule.value[id] || s.date === today.value)
 const active = computed(() =>
   assignments.value.filter(
     (a) =>
@@ -53,15 +56,22 @@ async function load() {
   error.value = ''
   try {
     const id = user.value!.id
-    relationships.value = await rows<Relationship>('coach_clients', 'client_id', id)
-    ;[assignments.value, versions.value, people.value, history.value, local.value] =
-      await Promise.all([
-        rows<Assignment>('assignments', 'client_id', id),
-        rows<PlanVersion>('plan_versions'),
-        rows<Profile>('profiles'),
-        rows<Session>('sessions', 'client_id', id),
-        localSessions(id),
-      ])
+    const [data, saved] = await Promise.all([
+      rpc<{
+        relationships: Relationship[]
+        assignments: Assignment[]
+        versions: PlanVersion[]
+        people: Profile[]
+        feedback: Session[]
+      }>('client_today'),
+      localSessions(id),
+    ])
+    relationships.value = data.relationships
+    assignments.value = data.assignments
+    versions.value = data.versions
+    people.value = data.people
+    history.value = data.feedback
+    local.value = saved
     for (const a of active.value)
       if (a.schedule_mode === 'cycle')
         schedules.value[a.id] = await rpc<ScheduledDay[]>('assignment_schedule', {
@@ -99,20 +109,22 @@ onMounted(load)
 </script>
 <template>
   <div class="container page">
-    <div class="page-heading">
-      <p class="overline">{{ t('training') }}</p>
-      <h1>
-        {{ language('A little progress,', 'تقدم بسيط،') }}
-        {{ profile?.display_name?.split(' ')[0] || language('at your pace', 'بوتيرتك') }}.
-      </h1>
-      <p>
-        {{
-          language(
-            'A clear next step. A session you can make your own.',
-            'خطوة تالية واضحة. وحصة تناسبك.',
-          )
-        }}
-      </p>
+    <div class="work-heading">
+      <div>
+        <p class="overline">{{ t('training') }}</p>
+        <h1>
+          {{ language('Your training,', 'تدريبك،') }}
+          {{ profile?.display_name?.split(' ')[0] || language('at your pace', 'بوتيرتك') }}.
+        </h1>
+        <p>
+          {{
+            language(
+              'A clear next step. A session you can make your own.',
+              'خطوة تالية واضحة. وحصة تناسبك.',
+            )
+          }}
+        </p>
+      </div>
     </div>
     <PageState :loading="loading" :error="loading || !active.length ? error : ''" @retry="load"
       ><div v-if="open.length" class="resume-banner">
@@ -128,7 +140,6 @@ onMounted(load)
           >{{ t('resume') }}<PhArrowRight :size="18" class="directional" aria-hidden="true"
         /></RouterLink>
       </div>
-      <UpcomingAppointments />
       <div v-if="active.length" class="today-layout">
         <section>
           <article v-for="a in active" :key="a.id" class="assigned-plan">
@@ -143,8 +154,28 @@ onMounted(load)
               </div>
               <PhBarbell :size="32" class="accent-icon" aria-hidden="true" />
             </div>
-            <template v-if="a.schedule_mode === 'cycle'"
-              ><p v-if="!schedules[a.id]?.length">
+            <template v-if="a.schedule_mode === 'cycle'">
+              <div v-if="!schedules[a.id]?.some((s) => s.date === today)" class="today-status">
+                <h3>{{ language('No workout scheduled today.', 'لا توجد حصة مجدولة اليوم.') }}</h3>
+                <p>
+                  {{
+                    language('Your next dates are in your schedule.', 'مواعيدك القادمة في الجدول.')
+                  }}
+                </p>
+              </div>
+              <button
+                v-if="schedules[a.id]?.some((s) => s.date !== today)"
+                class="text-link"
+                :aria-expanded="!!showSchedule[a.id]"
+                @click="showSchedule[a.id] = !showSchedule[a.id]"
+              >
+                {{
+                  showSchedule[a.id]
+                    ? language('Show today only', 'عرض اليوم فقط')
+                    : language('See upcoming schedule', 'عرض الجدول القادم')
+                }}
+              </button>
+              <p v-if="!schedules[a.id]?.length">
                 {{
                   language(
                     'No scheduled workouts in the next two weeks.',
@@ -153,7 +184,7 @@ onMounted(load)
                 }}
               </p>
               <div
-                v-for="s in schedules[a.id]"
+                v-for="s in visibleSchedule(a.id)"
                 :key="s.scheduled_date + s.day.id"
                 class="day-choice"
               >
@@ -205,6 +236,7 @@ onMounted(load)
           <p v-if="error" class="notice error" role="alert">{{ error }}</p>
         </section>
         <aside>
+          <UpcomingAppointments />
           <section v-if="latestFeedback" class="panel feedback-panel">
             <span class="tag">{{ t('feedback') }}</span>
             <h2>{{ language('A note from your coach', 'ملاحظة من مدربك') }}</h2>

@@ -2038,6 +2038,7 @@ export type Database = {
         Args: { p_action: string; p_team: string; p_user: string }
         Returns: undefined
       }
+      client_today: { Args: never; Returns: Json }
       close_team: {
         Args: { p_id: string; p_revision: number }
         Returns: undefined
@@ -2045,6 +2046,26 @@ export type Database = {
       close_team_client: {
         Args: { p_id: string; p_revision: number }
         Returns: undefined
+      }
+      coach_attention: {
+        Args: {
+          p_after_key?: string
+          p_after_time?: string
+          p_kind?: string
+          p_limit?: number
+          p_search?: string
+        }
+        Returns: Json
+      }
+      coach_roster: {
+        Args: {
+          p_after_id?: string
+          p_after_name?: string
+          p_limit?: number
+          p_search?: string
+          p_state?: string
+        }
+        Returns: Json
       }
       configure_assignment: {
         Args: {

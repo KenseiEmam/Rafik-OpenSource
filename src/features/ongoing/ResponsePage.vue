@@ -171,7 +171,13 @@ onMounted(() => load())
 </script>
 <template>
   <div class="container page narrow-page">
-    <RouterLink class="back-link" :to="base"
+    <RouterLink
+      class="back-link"
+      :to="
+        route.query.from === 'today'
+          ? { path: coach ? '/coach' : '/today', query: { view: route.query.view } }
+          : base
+      "
       >← {{ l('Check-ins & assessments', 'المتابعات والتقييمات') }}</RouterLink
     >
     <PageState :loading="loading" :error="!q ? error : ''" @retry="load()"

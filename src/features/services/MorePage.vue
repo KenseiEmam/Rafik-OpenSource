@@ -8,13 +8,22 @@ const coach = useRoute().path.startsWith('/coach'),
   <div class="container page more-page">
     <header class="page-heading">
       <p class="overline">{{ l('Alongside your training', 'إلى جانب تدريبك') }}</p>
-      <h1>{{ l('A little more support.', 'مزيد من الدعم.') }}</h1>
+      <h1>{{ l('Your tools', 'أدواتك') }}</h1>
       <p>
-        {{
-          l('Use what helps. Everything here is optional.', 'استخدم ما يفيدك. كل ما هنا اختياري.')
-        }}
+        {{ l('Everything you need, when you need it.', 'كل ما تحتاجه، حين تحتاجه.') }}
       </p>
     </header>
+    <nav class="tool-shortcuts" :aria-label="l('Daily tools', 'الأدوات اليومية')">
+      <template v-if="coach"
+        ><RouterLink to="/coach/plans">{{ l('Plans', 'الخطط') }} ↗</RouterLink
+        ><RouterLink to="/coach/exercises"
+          >{{ l('Exercise library', 'مكتبة التمارين') }} ↗</RouterLink
+        ></template
+      ><RouterLink v-else to="/history">{{ l('Training history', 'سجل التدريب') }} ↗</RouterLink
+      ><RouterLink :to="base + '/checkins'"
+        >{{ l('Check-ins & assessments', 'المتابعات والتقييمات') }} ↗</RouterLink
+      >
+    </nav>
     <nav class="service-links" :aria-label="l('Optional tools', 'أدوات اختيارية')">
       <RouterLink :to="base + '/nutrition'"
         ><span
