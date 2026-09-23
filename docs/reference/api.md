@@ -24,3 +24,13 @@ Publications and started sessions are immutable server-selected snapshots. Prese
 ## Dates and privacy
 
 Training schedules use client-local calendar dates. Appointments use UTC instants plus original IANA timezone. Analytics compare actual values of the same kind with explicit units/denominators. Messages are participant-scoped; foreground polling is not external notification delivery. API responses/private bytes are `no-store`; the service worker caches only static assets.
+
+## Organization membership API (R7A2)
+
+- `GET /v1/contexts`: current authorized personal/independent/organization role destinations and separate operator grant.
+- `POST /v1/workspaces`: explicit creation, fixed kind/name and caller UUID.
+- `GET /v1/workspaces/:id?view=admin|trainer|trainee`: current-role projection; no personal profile disclosure.
+- `POST /v1/workspaces/:id`: `invite`, `revoke-invite`, `member`, `assign-trainer`, `rename`, `close`; operation UUID, revision where applicable, current admin authority checked before receipt replay.
+- `GET /v1/organization-invitations/:token`: minimal organization/role preview, no intended email. `POST` accepts only the verified intended identity.
+
+See [membership contract](../implementation/r7a2-contract.md). These Prisma-internal tables have no generic browser row grants. Closure preserves records while removing access; an exact closure retry confirms the old result. Organizational programming and service contracts are separate subsequent work.

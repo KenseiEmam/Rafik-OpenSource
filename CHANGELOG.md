@@ -1,5 +1,10 @@
 # Rafik backend change history
 
+## R7A2 — Organization membership and role views · 23 September 2026
+
+Added separate organizations, combined admin/trainer/trainee memberships, verified invitations, internal trainer responsibility, role-derived navigation and explicit independent-practice activation. Membership revision checks, exact receipts, last-admin protection, departure/closure and account deletion preserve scope and ownership. Recoverable setup/invitation drafts and shared truthful sending/retry states support the UI. Added isolated HTTP/browser regression coverage and maintained contracts/source-map documentation. Organization programs/history/services follow in R8/R9; this checkpoint is not the whole organization product.
+
+
 ## R7A1 — Prisma/PostgreSQL API transition · 23 September 2026
 
 Replaced local Supabase identity, browser transport and private-file service with one TypeScript API using Prisma/PostgreSQL. Added opaque cookie sessions, intercepted code inbox, transaction-local actor isolation, immutable private bytes, generated JSON transport types and real HTTP acceptance. Preserved transactional domain/retry contracts and corrected integration error/array/read behavior. Removed retired SDK/CLI/runtime sources; current setup, source map, ADR and verification documentation updated. Organization ownership follows in R7A2; this is not whole-revamp or hosted acceptance.

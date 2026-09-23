@@ -43,11 +43,12 @@ export function createActor(prefix) {
   sql(
     `insert into identity.users(id,email,email_confirmed_at) values('${id}','${email}',now());insert into identity.sessions(token_hash,user_id,expires_at) values('${createHash("sha256").update(token).digest("hex")}','${id}',now()+interval '1 hour');`,
   );
+  sql(`insert into public.workspaces(id,kind,name,created_by) values('${id}','independent','Test practice','${id}');insert into public.workspace_members(id,workspace_id,user_id,roles) values('${randomUUID()}','${id}','${id}',array['trainer']);`);
   return { id, email, token };
 }
 export function deleteActor(id) {
   if (!/^[a-f0-9-]{36}$/.test(id)) throw Error("Invalid actor");
-  sql(`delete from identity.users where id='${id}';`);
+  sql(`delete from public.workspaces where created_by='${id}' and kind='independent';delete from identity.users where id='${id}';`);
 }
 export async function call(
   path,

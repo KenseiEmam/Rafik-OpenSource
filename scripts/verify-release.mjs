@@ -107,6 +107,7 @@ try {
       "test:fresh",
       "test:services",
       "test:teams",
+      "test:organizations",
       "content:check",
       "test:docs",
     ])

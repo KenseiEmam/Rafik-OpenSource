@@ -1,6 +1,6 @@
 # Working on the Rafik revamp
 
-Updated for R7A1. Read the [ledger](ledger.md), [architecture](architecture.md), [runbook](runbook.md) and [role audit](role-scope-audit.md). Current teams are independent-coach collaboration; R7A2 supplies organization ownership. Native and hosting remain deferred.
+Updated for R7A1. Read the [ledger](ledger.md), [architecture](architecture.md), [runbook](runbook.md) and [role audit](role-scope-audit.md). Independent teams remain collaboration. R7A2 implements organization membership and views; R8/R9 add owned programs, history and services. Native and hosting remain deferred.
 
 ## Runtime responsibilities
 
@@ -210,3 +210,9 @@ Messages layout rules are scoped in `style.css`; changing shared shell sizing re
 ## Daily workspace maintenance (R7)
 
 `src/features/workspace/WorkspaceNav.vue` owns role-specific primary/secondary links, `types.ts` describes attention rows, and `src/styles/workspace.css` owns the compact shell and daily layouts. `CoachHome.vue` composes the attention projection and upcoming appointments; `TodayPage.vue` uses `client_today`; `ClientsPage.vue` uses cursor-based `coach_roster`. Change these read contracts in migration 010 or a forward migration as appropriate, regenerate types, and run `daily_workspace.sql` plus `tests/workspace.e2e.ts`. Keep More and desktop navigation aligned so phone secondary tools remain discoverable.
+
+## Working on organization contexts
+
+Read [R7A2](r7a2-contract.md). API logic is `server/workspaces.ts`; membership schema/lifecycle is in Prisma migrations 130–150. Never infer a global coach/admin grant from an organization role. Add domain operations behind `scoped`/`mutation`, passing the explicit organization ID and required fixed role, and validate related membership IDs in that same organization. Receipts must not bypass revocation. The database login for ORM organization tables is API-internal; no generic browser table grant is added.
+
+Web views/types/styles live in `src/features/organizations/`. `auth.ts` fetches valid contexts; the shell renders them. Draft and pending keys include account, organization and role. `tests/workspaces.test.ts` exercises HTTP access/lifecycle; web `tests/organizations.e2e.ts` exercises actual invitation/assignment/recovery/revocation. Add new checks to the serial release runner. Current organization membership names are scoped snapshots, separate from a person's independent profile.

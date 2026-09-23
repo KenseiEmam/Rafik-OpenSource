@@ -2,7 +2,7 @@
 
 R7A1 replaces the transitional backend with **one Node/TypeScript API, Prisma and PostgreSQL**. The Vue application retains its accepted interaction design and durable IndexedDB queue. [ADR 0006](../decisions/0006-prisma-api-transition.md) records the transition; [API conventions](../reference/api.md) and the [maintainer guide](maintainer-guide.md) specify its boundaries.
 
-**Organizational correction:** [ADR 0005](../decisions/0005-organization-and-independent-scopes.md) defines the separate independent/organization scopes still to implement in R7A2. The R4 team overlay remains an independent-coach collaboration feature, not the required organization model. Read the [role audit](role-scope-audit.md) before changing ownership.
+**Organizational correction:** [ADR 0005](../decisions/0005-organization-and-independent-scopes.md) defines the separate independent/organization scopes partly implemented in R7A2 membership/context/responsibility; organization-owned programming and services follow. The R4 team overlay remains an independent-coach collaboration feature, not the required organization model. Read the [role audit](role-scope-audit.md) before changing ownership.
 
 ## System boundary
 
@@ -10,7 +10,7 @@ Vue calls the explicit HTTP API for identity, bounded commands/reads and private
 
 The API database login cannot inherit broad domain permissions. Each domain transaction sets its fixed guest/user role and actor/claims locally; pooled connections cannot retain actor context. Function/table names come from a server-owned registry of explicitly granted contracts. Parameters are bound, reads are capped and operator-only functions are not registered. The browser never receives database or operator credentials.
 
-Private bytes are behind the same API, with explicit metadata and permissions in PostgreSQL and a local filesystem adapter. Immutable upload, retirement, byte cleanup and metadata cleanup preserve recovery semantics. There is no Rafik identity, HTTP API or Storage service in the runtime. Hosting requires different mail/file/configuration adapters and is deliberately blocked with local defaults.
+Private bytes are behind the same API, with explicit metadata and permissions in PostgreSQL and a local filesystem adapter. Immutable upload, retirement, byte cleanup and metadata cleanup preserve recovery semantics. There is no Supabase Auth, REST/RPC gateway or Storage service in the runtime. Hosting requires different mail/file/configuration adapters and is deliberately blocked with local defaults.
 
 Static assets/fonts belong to the web build. IndexedDB stores resumable workouts, exact pending commands, editor drafts and bounded diagnostics. The production worker caches static shell files only. There is no restored legacy worker, Firebase, AI service, payment provider or scheduled external notification system. Invitation links are shared by the person; saving a message does not claim delivery outside Rafik.
 
@@ -193,3 +193,11 @@ Backend `scripts/verify-release.mjs` runs the local acceptance commands sequenti
 ## Daily workspace projections (R7)
 
 Migration 010 adds invoker/RLS-preserving `coach_attention`, `coach_roster` and `client_today` reads and two session indexes. No table or write command was added. Attention remains derived from authoritative message/review records; roster and attention use stable ordered server pages. See [R7 contract](r7-contract.md) for cursor/concurrency limits.
+
+## Organization membership and business contexts (R7A2)
+
+The [R7A2 contract](r7a2-contract.md) defines the implemented identity boundary. `workspaces`, `workspace_members`, `workspace_invitations`, `workspace_events` and `workspace_operations` are API-internal Prisma models. `platform_grants` is a separate capability source. Composite organization/member references prevent foreign trainer assignment. Membership roles are fixed arrays, not a configurable policy engine.
+
+`server/workspaces.ts` centralizes live membership checks, exact receipts and serialized lifecycle commands. Organization reads/writes are explicit API routes, without generic table access or identity impersonation. Independent domain functions retain their participant/owner checks; enabling independent coaching is explicit. Organization program/session records are subsequent work rather than aliases of personal coaching relationships. Record authorship must stay separate from ownership when adding them.
+
+Account deletion retains a deactivated, anonymized organization membership shell while deleting the person's identity. Last-admin and independent team/handoff guards run first, under the same lock order used by membership commands. Scoped membership export and broader organization record lifecycle continue with the subsequent feature phases.

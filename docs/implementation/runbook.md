@@ -33,7 +33,7 @@ The previous local Supabase volumes are retained separately; they are not a runt
 
 Open `http://127.0.0.1:5173/local-preview` for the fixed synthetic sample accounts. Email-code entry uses a ten-minute, single-use code with bounded attempts and resend rate limits. Local deliveries are intercepted at `http://127.0.0.1:55331/local/inbox`; machine-readable messages are at `/local/mail`. No external recipient is contacted. Separate browser profiles preserve different accounts for coach/client walkthroughs. Session cookies are HttpOnly; logout revokes the server session.
 
-A public sample requires no account. Client workspace routes use relationship IDs; Laila/Amir is `40000000-0000-4000-8000-000000000001`. Teams remain collaboration between independent coaches until the organization phase. Follow the domain tours in the maintainer guide.
+A public sample requires no account. Client workspace routes use relationship IDs; Laila/Amir is `40000000-0000-4000-8000-000000000001`. Teams remain independent-coach collaboration. Organization membership views are separate. Follow the domain tours in the maintainer guide.
 
 ## Verification
 
@@ -64,3 +64,9 @@ Add a forward SQL migration under `prisma/migrations/<timestamp>_<name>/migratio
 Production startup deliberately refuses to run with these local adapters. Before deployment, configure PostgreSQL application/migration roles, HTTPS same-origin API routing, secure cookies, secret management, real mail and private object storage adapters, origin configuration, identity/session cleanup and operational monitoring. Never enable local preview accounts/inbox/simulation or apply synthetic seeds to hosting. Supply accurate operator/privacy/retention information and a production-owned starter version.
 
 Demonstrate backup/restore of database plus private bytes, migration/rollback procedure, controlled hosted identity/file/retry checks, remote CI, physical phone/assistive-technology checks and human task observation. Native stays last. Local automated success is not evidence of deliverability, payments, retention or physical-device readiness.
+
+## Organization review
+
+Local preview includes **Rania Mansour** (Madar administrator), **Kareem Nasser** (Madar trainer and trainee), **Sara Khalil** (Madar trainee) and **Omar Saleh** (Athar administrator). Switch roles using the workspace selector. Organization settings and people management are admin-only; Kareem sees only assigned trainees in his trainer view. **Manage workspaces** provides deliberate independent-coaching or organization setup. An invitation produces a verified-email link; share only through an authorized channel, with no implied automatic email.
+
+`npm run test:organizations` runs isolated actual HTTP scenarios. Organization fixtures are part of the empty-local seed. Additive local fixture changes must be explicitly bounded to synthetic IDs; never seed hosting or reset the preview merely to apply them. Organization-owned program/session/service workflows follow this membership checkpoint.

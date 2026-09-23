@@ -1,5 +1,15 @@
 # Verification record
 
+## R7A2 — Organization membership/context checkpoint (23 September 2026)
+
+- Five real HTTP organization tests pass: two-organization isolation, combined roles, forged trainer IDs, responsibility continuity, wrong-email invitations, revocation, receipt replay, closure, last-admin/concurrent departure and account deletion. Final log `/tmp/rafik-org-http-last.log`.
+- All 239 existing rollback SQL assertions pass. Fresh installation applies six forward migrations plus synthetic fixtures and all seven SQL suites in a disposable database. Preview was not reset. Logs `/tmp/rafik-org-sql.log`, `/tmp/rafik-org-fresh.log`.
+- Existing HTTP regression passes: four API tests, five service lifecycle groups and nine independent-team/business groups (`/tmp/rafik-org-api.log`, `/tmp/rafik-org-services.log`, `/tmp/rafik-org-teams.log`).
+- Browser acceptance covers all 56 scenarios across Chromium and phone-sized WebKit. Evidence is composite: final full run passed 55 and exposed an ambiguous test locator matching both the sending and loading statuses; the organization assertion now specifically waits for the acknowledged Saved status. Both organization scenarios then passed twice (four runs) without product changes. Logs `/tmp/rafik-org-browser2.log`, `/tmp/rafik-org-browser-focused-final.log`. Earlier runs also exposed/fixed premature retry feedback, draft-save timing and navigation/layout timing; those failures are not counted as acceptance.
+- Eleven web unit tests, production build/typecheck, formatting, backend typecheck/content/doc checks, seven release guards and Git whitespace checks pass. New organization browser journeys include loaded-state containment and Axe checks; actual desktop organization overview and phone People captures were inspected. The phone capture has readable compact rows and reachable actions; this is not a full new organization language/theme matrix or physical-device acceptance.
+
+Program/history/service ownership and large-roster pagination remain subsequent explicit work. Hosting, external delivery/payments, remote CI, physical devices and human usability/retention remain unverified.
+
 ## R7A1 — Prisma/PostgreSQL transition (23 September 2026)
 
 The active local backend is standalone PostgreSQL plus the TypeScript API. Historical Supabase results below describe earlier checkpoints only. Reproduction commands and current ports are in the [runbook](runbook.md).

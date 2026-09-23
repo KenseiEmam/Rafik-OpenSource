@@ -1,6 +1,6 @@
 # Forward implementation roadmap after R6
 
-Owner: Codex. Reviewed 23 September 2026 against backend `7ae6691`, frontend `ff1f4ce`, current source and recorded R6 rendered evidence. R7 and R7A1 API transition have local checkpoints; R7A2 ownership and R8–R12 follow. The original review was documentation-only; subsequent R7 checks are recorded in the ledger and verification record.
+Owner: Codex. Reviewed 23 September 2026 against backend `7ae6691`, frontend `ff1f4ce`, current source and recorded R6 rendered evidence. R7, R7A1 API transition and R7A2 membership/context foundation have local checkpoints; organization-owned programming/history and R8–R12 follow. The original review was documentation-only; subsequent R7 checks are recorded in the ledger and verification record.
 
 This is the execution plan for subsequent work, with dependencies and acceptance gates. It supersedes the next-action ordering in historical phase notes. The [ledger](ledger.md) records implementation status; [architecture](architecture.md) describes what exists; [verification](verification.md) records actual evidence. The initial revival audit remains historical rationale, not a ceiling on the broader scope the user subsequently requested.
 
@@ -77,7 +77,7 @@ Deliver:
 
 **Completion:** demonstrate coach review → contextual reply → next task and client open → start/resume across empty/sparse/populated states. Primary actions remain reachable at 320×568, phone landscape, tablet and desktop, including enlarged text, RTL and both themes. Preserve old URLs/deep links or redirect them intentionally. Record before/after navigation and task steps; verify query bounds on a test-owned large roster. All current capabilities remain reachable.
 
-### R7A — Correct organizational ownership and the Prisma API boundary (next)
+### R7A — Correct organizational ownership and the Prisma API boundary (foundation implemented; records continue in R8/R9)
 
 **Outcome:** independent users and each organization's admins/trainers/trainees have distinct data scopes, coherent daily views and a maintainable shared implementation.
 

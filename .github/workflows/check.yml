@@ -20,5 +20,6 @@ jobs:
       - run: npm run test:api
       - run: npm run test:services
       - run: npm run test:teams
+      - run: npm run test:organizations
       - run: npm stop
         if: always()

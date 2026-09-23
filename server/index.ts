@@ -13,6 +13,14 @@ import {
   upcoming,
 } from "./commands.ts";
 import { fileOperation } from "./files.ts";
+import {
+  contexts,
+  createWorkspace,
+  workspaceView,
+  workspaceCommand,
+  invitation,
+  requirePractice,
+} from "./workspaces.ts";
 import { localInbox } from "./local-inbox.ts";
 const origins = new Set([
   "http://127.0.0.1:5173",
@@ -144,6 +152,47 @@ const server = createServer(async (req, res) => {
       if (!input || Array.isArray(input) || typeof input !== "object")
         throw new ApiError(400, "invalid_request");
     }
+    if (path === "/v1/contexts" && req.method === "GET") {
+      send(res, 200, await contexts(requireActor(actor)));
+      return;
+    }
+    if (path === "/v1/workspaces" && req.method === "POST") {
+      send(res, 200, await createWorkspace(requireActor(actor), input));
+      return;
+    }
+    const workspaceMatch = path.match(/^\/v1\/workspaces\/([a-f0-9-]{36})$/);
+    if (workspaceMatch) {
+      if (req.method === "GET") {
+        send(
+          res,
+          200,
+          await workspaceView(
+            requireActor(actor),
+            workspaceMatch[1],
+            url.searchParams.get("view") || "admin",
+          ),
+        );
+        return;
+      }
+      if (req.method === "POST") {
+        send(
+          res,
+          200,
+          await workspaceCommand(requireActor(actor), workspaceMatch[1], input),
+        );
+        return;
+      }
+    }
+    if (path.startsWith("/v1/organization-invitations/")) {
+      if (!["GET", "POST"].includes(req.method || ""))
+        throw new ApiError(405, "method_not_allowed");
+      send(
+        res,
+        200,
+        await invitation(path.slice(29), actor, req.method === "POST"),
+      );
+      return;
+    }
     if (
       path.startsWith("/v1/auth/") &&
       (req.method === "POST" ||
@@ -153,6 +202,18 @@ const server = createServer(async (req, res) => {
       return;
     }
     if (path.startsWith("/v1/commands/") && req.method === "POST") {
+      if (
+        [
+          "save_plan",
+          "publish_plan",
+          "save_exercise",
+          "create_invitation",
+          "create_team",
+          "save_coaching_form",
+          "publish_availability",
+        ].includes(path.slice(13))
+      )
+        await requirePractice(actor);
       send(res, 200, await command(actor, path.slice(13), input));
       return;
     }

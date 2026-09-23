@@ -1,6 +1,16 @@
 # Revamp execution ledger
 
-Updated 23 September 2026. **The full revamp remains in progress. R7A1 replaces the local Supabase runtime with the standalone Prisma/PostgreSQL API.** R7A2 organizational membership/ownership and subsequent R8–R12 work follow immediately under the user's authorization. The current team overlay remains independent-coach collaboration. Earlier entries are historical checkpoint evidence, not current setup instructions; use architecture/runbook for today's runtime.
+Updated 23 September 2026. **The full revamp remains in progress. R7A1 replaces the local Supabase runtime with the standalone Prisma/PostgreSQL API.** R7A2 establishes organizational membership, role views and trainer responsibility. Organization-owned programming/history and subsequent R8–R12 work continue immediately under the user's authorization. The current team overlay remains independent-coach collaboration. Earlier entries are historical checkpoint evidence, not current setup instructions; use architecture/runbook for today's runtime.
+
+## R7A2 — Organization membership, contexts and responsibility
+
+Implemented locally: fixed organization memberships with combined admin/trainer/trainee roles, verified intended-email invitations, internal trainer responsibility, explicit independent coaching activation and server-authorized workspace navigation. Organizations retain membership identity through staff changes and account deletion; last-admin protection and exact closure recovery are transactional. Prisma-internal tables are inaccessible through generic browser row reads. The [contract](r7a2-contract.md) records ownership, lifecycle and current limits.
+
+The web includes separate admin/assigned-trainer/own-trainee views, focused member editing, invitation/setup draft recovery, current-role revocation handling and sample accounts in two organizations. Shared command feedback now distinguishes active sending from recoverable uncertainty; the old immediate retry display was misleading and made reload checks race persistence. Navigation/layout checks await the actual destination and loaded records.
+
+**Boundary:** this is the membership/context checkpoint. Organization-owned programs, immutable training history and internal reassignment of those records are implemented next in R8, followed by R9 services/analytics. No hosting, outbound delivery, native work or main-branch push. Existing preview data remains intact. Verification details are in the current verification record.
+
+**Next:** continue R8 immediately and commit after acceptance, then R9–R12 within the local scope.
 
 ## R7A1 — Standalone API transition
 

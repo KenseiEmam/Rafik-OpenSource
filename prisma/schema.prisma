@@ -76,13 +76,20 @@ model identity_sessions {
 }
 
 model users {
-  id                 String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email              String?             @unique
-  email_confirmed_at DateTime?           @db.Timestamptz(6)
-  raw_user_meta_data Json                @default("{}")
-  created_at         DateTime            @default(now()) @db.Timestamptz(6)
-  sessions           identity_sessions[]
-  profiles           profiles?
+  id                                                             String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email                                                          String?                 @unique
+  email_confirmed_at                                             DateTime?               @db.Timestamptz(6)
+  raw_user_meta_data                                             Json                    @default("{}")
+  created_at                                                     DateTime                @default(now()) @db.Timestamptz(6)
+  sessions                                                       identity_sessions[]
+  platform_grants                                                platform_grants?
+  profiles                                                       profiles?
+  workspace_events                                               workspace_events[]
+  workspace_invitations_workspace_invitations_accepted_byTousers workspace_invitations[] @relation("workspace_invitations_accepted_byTousers")
+  workspace_invitations_workspace_invitations_created_byTousers  workspace_invitations[] @relation("workspace_invitations_created_byTousers")
+  workspace_members                                              workspace_members[]
+  workspace_operations                                           workspace_operations[]
+  workspaces                                                     workspaces[]
 
   @@schema("identity")
 }
@@ -824,6 +831,103 @@ model teams {
   team_plans           team_plans[]
   team_resource_shares team_resource_shares[]
   profiles             profiles?              @relation(fields: [owner_id], references: [id], onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+model platform_grants {
+  user_id    String   @id @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+model workspace_events {
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  workspace_id String     @db.Uuid
+  actor_id     String?    @db.Uuid
+  kind         String
+  subject_id   String?    @db.Uuid
+  detail       Json       @default("{}")
+  created_at   DateTime   @default(now()) @db.Timestamptz(6)
+  users        users?     @relation(fields: [actor_id], references: [id], onUpdate: NoAction)
+  workspaces   workspaces @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([workspace_id, created_at(sort: Desc), id], map: "workspace_events_recent")
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model workspace_invitations {
+  id                                             String     @id @db.Uuid
+  workspace_id                                   String     @db.Uuid
+  email                                          String
+  roles                                          String[]
+  token_hash                                     String     @unique
+  created_by                                     String?    @db.Uuid
+  expires_at                                     DateTime   @default(dbgenerated("(now() + '7 days'::interval)")) @db.Timestamptz(6)
+  state                                          String     @default("pending")
+  accepted_by                                    String?    @db.Uuid
+  created_at                                     DateTime   @default(now()) @db.Timestamptz(6)
+  users_workspace_invitations_accepted_byTousers users?     @relation("workspace_invitations_accepted_byTousers", fields: [accepted_by], references: [id], onUpdate: NoAction)
+  users_workspace_invitations_created_byTousers  users?     @relation("workspace_invitations_created_byTousers", fields: [created_by], references: [id], onUpdate: NoAction)
+  workspaces                                     workspaces @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([workspace_id, email], map: "workspace_invitations_pending", where: raw("(state = 'pending'::text)"))
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model workspace_members {
+  id                      String              @id @db.Uuid
+  workspace_id            String              @db.Uuid
+  user_id                 String?             @db.Uuid
+  roles                   String[]
+  active                  Boolean             @default(true)
+  revision                Int                 @default(1)
+  trainer_id              String?             @db.Uuid
+  joined_at               DateTime            @default(now()) @db.Timestamptz(6)
+  name                    String              @default("Former member")
+  users                   users?              @relation(fields: [user_id], references: [id], onUpdate: NoAction)
+  workspaces              workspaces          @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  workspace_members       workspace_members?  @relation("workspace_membersToworkspace_members", fields: [workspace_id, trainer_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+  other_workspace_members workspace_members[] @relation("workspace_membersToworkspace_members")
+
+  @@unique([workspace_id, id])
+  @@unique([workspace_id, user_id])
+  @@index([workspace_id, trainer_id], map: "workspace_members_trainer", where: raw("active"))
+  @@index([user_id, active], map: "workspace_members_user")
+  @@schema("public")
+}
+
+model workspace_operations {
+  id           String     @id @db.Uuid
+  workspace_id String     @db.Uuid
+  actor_id     String     @db.Uuid
+  payload      Json
+  result       Json
+  created_at   DateTime   @default(now()) @db.Timestamptz(6)
+  users        users      @relation(fields: [actor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  workspaces   workspaces @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model workspaces {
+  id                    String                  @id @db.Uuid
+  kind                  String
+  name                  String
+  created_by            String?                 @db.Uuid
+  archived              Boolean                 @default(false)
+  revision              Int                     @default(1)
+  created_at            DateTime                @default(now()) @db.Timestamptz(6)
+  workspace_events      workspace_events[]
+  workspace_invitations workspace_invitations[]
+  workspace_members     workspace_members[]
+  workspace_operations  workspace_operations[]
+  users                 users?                  @relation(fields: [created_by], references: [id], onUpdate: NoAction)
 
   @@schema("public")
 }

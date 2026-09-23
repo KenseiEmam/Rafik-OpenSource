@@ -1,6 +1,6 @@
 # ADR 0005: Separate organizational and independent coaching scopes
 
-Status: Accepted direction; not yet implemented. Date: 23 September 2026.
+Status: Accepted. API transition and membership/context foundation implemented locally (R7A1/R7A2); program/history/service ownership continues in R8/R9. Date: 23 September 2026.
 
 ## Context
 
@@ -32,7 +32,7 @@ Keep client-response check-ins distinct from scheduled assessor-led assessments.
 
 ## Sequencing and consequences
 
-**R7A now precedes R8:** implement the tenant/role foundation and Prisma/PostgreSQL server transition locally before adding more organizational feature dependencies. This supersedes ADR 0004's R11 transition timing, not its technology decision. Transfer tested transactional command invariants in bounded slices; the completed transition has one active API/runtime, not permanent dual writes or two parallel permission systems. Existing local Supabase remains transitional until that acceptance passes.
+**R7A now precedes R8:** implement the tenant/role foundation and Prisma/PostgreSQL server transition locally before adding more organizational feature dependencies. This supersedes ADR 0004's R11 transition timing, not its technology decision. Transfer tested transactional command invariants in bounded slices; the completed transition has one active API/runtime, not permanent dual writes or two parallel permission systems. R7A1 retired the local Supabase runtime; one Prisma/PostgreSQL API is active.
 
 This adds a necessary ownership boundary and role-specific views, while avoiding separate apps/authentication stacks per audience. It requires revisiting current teams, personal-only plan delivery drafts, account lifecycle, resource access and test fixtures. There is no legacy production migration requirement. Preserve useful tested behavior without treating the current schema as a constraint on a clean rebuild.
 

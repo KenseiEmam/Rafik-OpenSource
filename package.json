@@ -28,7 +28,8 @@
     "db:migrate": "prisma migrate deploy",
     "db:generate": "prisma generate",
     "seed:local": "node scripts/prisma/local.mjs seed",
-    "test:api": "tsx --test tests/api.test.ts"
+    "test:api": "tsx --test tests/api.test.ts",
+    "test:organizations": "tsx --test tests/workspaces.test.ts"
   },
   "devDependencies": {
     "@types/node": "22.19.0",
