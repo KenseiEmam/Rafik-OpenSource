@@ -3,7 +3,7 @@ import { readFileSync, existsSync } from 'node:fs'
 import { resolve, extname, sep } from 'node:path'
 // A test-owned server allows real origin loss without WebKit's offline-emulation
 // navigation error. It serves only the production build, then is shut down.
-export async function staticPreview() {
+export async function staticPreview(transform?: (path: string, body: Buffer) => Buffer) {
   const root = resolve('dist')
   const types: Record<string, string> = {
     '.html': 'text/html',
@@ -18,7 +18,9 @@ export async function staticPreview() {
     if (!path.startsWith(root + sep) || !existsSync(path) || !extname(path))
       path = resolve(root, 'index.html')
     response.setHeader('Content-Type', types[extname(path)] || 'application/octet-stream')
-    response.end(readFileSync(path))
+    const body = readFileSync(path)
+    response.setHeader('Cache-Control', 'no-store')
+    response.end(transform ? transform(path, body) : body)
   })
   await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve))
   const address = server.address()

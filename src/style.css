@@ -176,6 +176,10 @@ textarea {
 }
 select {
   padding-inline-end: 28px;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 label {
   display: block;
@@ -3198,17 +3202,6 @@ h3 {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-  .conversation-layout {
-    grid-template-columns: 1fr;
-  }
-  .conversation-list {
-    display: flex;
-    overflow-x: auto;
-    max-width: 100%;
-  }
-  .conversation-person {
-    min-width: 220px;
-  }
 }
 @media (max-width: 480px) {
   .number-options {
@@ -3252,12 +3245,6 @@ h3 {
   justify-content: space-between;
   color: var(--muted);
   font-size: 0.8rem;
-}
-@media (max-width: 850px) {
-  .conversation-person {
-    flex: 0 0 250px;
-    min-width: 0;
-  }
 }
 
 /* Optional service tools share the established workspace layout and tokens. */
@@ -3585,6 +3572,7 @@ select {
   align-items: stretch;
 }
 .conversation-inbox {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -3595,6 +3583,10 @@ select {
   font-size: 0.8rem;
 }
 .messages-page .conversation-list {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -3603,7 +3595,7 @@ select {
 }
 .messages-page .conversation-person {
   min-width: 0;
-  flex-shrink: 0;
+  flex: none;
 }
 .messages-page .conversation-person p {
   max-width: none;
@@ -3704,7 +3696,7 @@ select {
 }
 @media (max-width: 850px) {
   .messages-page .conversation-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .messages-page.has-thread .conversation-inbox,
   .messages-page .conversation-placeholder {
@@ -3719,16 +3711,8 @@ select {
   .conversation-inbox {
     border-inline-end: 0;
   }
-  .messages-page .conversation-person p {
-    max-width: 65vw;
-  }
 }
 @media (max-width: 600px) {
-  #app:has(.messages-main) .product-nav {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
   #app:has(.messages-main) .sample-label {
     display: none;
   }
@@ -3821,4 +3805,8 @@ select {
   z-index: 1;
   background: var(--surface);
   padding-block: 0.4rem;
+}
+
+.app-updates p {
+  margin-block: 1rem;
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { PhCopy, PhCheck, PhArrowRight } from '@phosphor-icons/vue'
 import { user, profile, refreshProfile } from '../../app/auth'
 import { rows, rpc } from '../../lib/backend'
@@ -39,9 +39,14 @@ const filteredClients = computed(() =>
         .includes(search.value.toLowerCase()),
   ),
 )
+const visibleCount = ref(12)
+watch([search, rosterState], () => {
+  visibleCount.value = 12
+})
 const pendingInvites = computed(() => invites.value.filter((i) => i.status === 'pending'))
 async function load() {
   loading.value = true
+  error.value = ''
   try {
     const id = user.value!.id
     ;[people.value, versions.value, clients.value, assignments.value, invites.value] =
@@ -194,7 +199,14 @@ onMounted(load)
               }}
             </p>
           </div>
-          <article v-for="c in filteredClients" :key="c.id" class="client-row">
+          <p class="small-print roster-total">
+            {{ filteredClients.length }} {{ language('clients', 'متدربون') }}
+          </p>
+          <article
+            v-for="c in filteredClients.slice(0, visibleCount)"
+            :key="c.id"
+            class="client-row"
+          >
             <div class="client-heading">
               <span class="avatar">{{
                 people.find((p) => p.id === c.client_id)?.display_name.slice(0, 1)
@@ -235,6 +247,13 @@ onMounted(load)
               }}</small>
             </template>
           </article>
+          <button
+            v-if="filteredClients.length > visibleCount"
+            class="button secondary small"
+            @click="visibleCount += 12"
+          >
+            {{ language('Show more clients', 'عرض المزيد من المتدربين') }}
+          </button>
           <section v-if="pendingInvites.length" class="pending-invites">
             <h2>{{ language('Pending invitations', 'الدعوات المعلقة') }}</h2>
             <article v-for="i in pendingInvites" :key="i.id" class="invite-row">

@@ -104,3 +104,11 @@ R4 checks: `npm run test:e2e -- tests/teams.e2e.ts` runs both browser engines; `
 Messages now keeps history and composing in a bounded workspace, with a searchable inbox and phone back flow. Today prioritizes training; check-ins/plans/reviews handle growing lists. Coaches can offer up to three same-kind exercise alternatives in the plan editor; publish and assign the version, then the client chooses within the workout. Recorded choices flow through offline recovery, coach review and progress while original targets remain unchanged.
 
 Read the [product quality review](../rafik-api/docs/implementation/product-quality-review.md), [R5 contract](../rafik-api/docs/implementation/r5-contract.md) and [release checklist](../rafik-api/docs/implementation/release-checklist.md). The contribution rules require real user-task inspection, complete lifecycle implementation and matching docs for future work.
+
+## R6 responsive checks and application updates
+
+`npm run test:product:layout` audits client/coach routes in Chromium and WebKit with internal clipping checks. `tests/responsive-inbox.e2e.ts` covers populated long-name inboxes, short/tall/landscape/resized viewports, search/back and native select overflow. Inspect screenshots in ignored `artifacts/`; a passing metric is not visual acceptance.
+
+Production Help/Settings includes **App updates**. A downloaded release waits for old tabs to close; no automatic reload or data clearing occurs. `build/offline-shell.ts` owns versioned worker generation, `src/app/updates.ts` its status, and `AppUpdates.vue` its UI. `tests/app-updates.e2e.ts` checks failed installs, waiting releases, preserved workouts and offline reopening on both engines. `npm run test:build` verifies the emitted files and HTML-only release identities. The dev server does not register a worker.
+
+Run the companion backend's `npm run verify:release -- --full` for one guarded serial verification chain across both repositories. See the [runbook](../rafik-api/docs/implementation/runbook.md) and [ADR 0003](../rafik-api/docs/decisions/0003-application-updates.md). This remains local preparation, not a hosted release.

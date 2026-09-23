@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppUpdates from '../../components/AppUpdates.vue'
 import { onMounted, ref } from 'vue'
 import { cleanupAccountResources } from '../resources/files'
 import { useRouter } from 'vue-router'
@@ -214,6 +215,7 @@ function cancelDelete() {
             </button>
           </p>
         </section>
+        <AppUpdates />
         <details class="panel diagnostics">
           <summary>
             {{ language('Save status and support details', 'حالة الحفظ وتفاصيل الدعم') }}
