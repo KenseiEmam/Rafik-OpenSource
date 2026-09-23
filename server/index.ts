@@ -1,5 +1,18 @@
-import { notificationPreferences,notificationInbox,readNotification } from './notifications.ts';
-import { communication,communicationCommand } from './organization-communication.ts';
+import {
+  organizationPeople,
+  organizationRecipients,
+  independentRecipients,
+} from "./people.ts";
+import { platformRead, platformCommand } from "./platform.ts";
+import {
+  notificationPreferences,
+  notificationInbox,
+  readNotification,
+} from "./notifications.ts";
+import {
+  communication,
+  communicationCommand,
+} from "./organization-communication.ts";
 import {
   serviceCatalog,
   serviceCatalogCommand,
@@ -53,6 +66,11 @@ import { organizationAccountData } from "./account-data.ts";
 import { getProgramMedia, putProgramMedia } from "./program-media.ts";
 import { localInbox } from "./local-inbox.ts";
 const origins = new Set([
+  ...(process.env.RAFIK_TEST_ORIGINS
+    ? process.env.RAFIK_TEST_ORIGINS.split(",").filter((o) =>
+        /^http:\/\/127\.0\.0\.1:518[34]$/.test(o),
+      )
+    : []),
   "http://127.0.0.1:5173",
   "http://127.0.0.1:5174",
   "http://localhost:5173",
@@ -132,11 +150,106 @@ const server = createServer(async (req, res) => {
       return;
     }
     const actor = await identify(req);
-    if(path==='/v1/notifications/preferences' && ['GET','POST'].includes(req.method||'')){send(res,200,await notificationPreferences(requireActor(actor),req.method==='POST'?JSON.parse((await body(req,16384)).toString()):undefined));return;}
-    if(path==='/v1/notifications' && ['GET','POST'].includes(req.method||'')){send(res,200,req.method==='GET'?await notificationInbox(requireActor(actor),url.searchParams):await readNotification(requireActor(actor),JSON.parse((await body(req,16384)).toString())));return;}
+    if (path === "/v1/platform" && ["GET", "POST"].includes(req.method || "")) {
+      send(
+        res,
+        200,
+        req.method === "GET"
+          ? await platformRead(requireActor(actor), url.searchParams)
+          : await platformCommand(
+              requireActor(actor),
+              JSON.parse((await body(req, 16384)).toString()),
+            ),
+      );
+      return;
+    }
+    if (
+      path === "/v1/notifications/preferences" &&
+      ["GET", "POST"].includes(req.method || "")
+    ) {
+      send(
+        res,
+        200,
+        await notificationPreferences(
+          requireActor(actor),
+          req.method === "POST"
+            ? JSON.parse((await body(req, 16384)).toString())
+            : undefined,
+        ),
+      );
+      return;
+    }
+    if (
+      path === "/v1/notifications" &&
+      ["GET", "POST"].includes(req.method || "")
+    ) {
+      send(
+        res,
+        200,
+        req.method === "GET"
+          ? await notificationInbox(requireActor(actor), url.searchParams)
+          : await readNotification(
+              requireActor(actor),
+              JSON.parse((await body(req, 16384)).toString()),
+            ),
+      );
+      return;
+    }
 
-    const conversationMatch=path.match(/^\/v1\/workspaces\/([a-f0-9-]+)\/communication$/);
-    if(conversationMatch && ['GET','POST'].includes(req.method||'')){const who=requireActor(actor);send(res,200,req.method==='GET'?await communication(who,conversationMatch[1],url.searchParams):await communicationCommand(who,conversationMatch[1],JSON.parse((await body(req,1024*1024)).toString())));return;}
+    const recipientMatch = path.match(
+      /^\/v1\/workspaces\/([a-f0-9-]+)\/recipients$/,
+    );
+    if (recipientMatch && req.method === "GET") {
+      send(
+        res,
+        200,
+        await organizationRecipients(
+          requireActor(actor),
+          recipientMatch[1],
+          url.searchParams,
+        ),
+      );
+      return;
+    }
+    if (path === "/v1/coach/recipients" && req.method === "GET") {
+      send(
+        res,
+        200,
+        await independentRecipients(requireActor(actor), url.searchParams),
+      );
+      return;
+    }
+    const peopleMatch = path.match(/^\/v1\/workspaces\/([a-f0-9-]+)\/people$/);
+    if (peopleMatch && req.method === "GET") {
+      send(
+        res,
+        200,
+        await organizationPeople(
+          requireActor(actor),
+          peopleMatch[1],
+          url.searchParams,
+        ),
+      );
+      return;
+    }
+    const conversationMatch = path.match(
+      /^\/v1\/workspaces\/([a-f0-9-]+)\/communication$/,
+    );
+    if (conversationMatch && ["GET", "POST"].includes(req.method || "")) {
+      const who = requireActor(actor);
+      send(
+        res,
+        200,
+        req.method === "GET"
+          ? await communication(who, conversationMatch[1], url.searchParams)
+          : await communicationCommand(
+              who,
+              conversationMatch[1],
+              JSON.parse((await body(req, 1024 * 1024)).toString()),
+            ),
+      );
+      return;
+    }
 
     if (path.startsWith("/v1/conversations/") && req.method === "GET") {
       send(
@@ -357,6 +470,7 @@ const server = createServer(async (req, res) => {
             requireActor(actor),
             workspaceMatch[1],
             url.searchParams.get("view") || "admin",
+            url.searchParams,
           ),
         );
         return;

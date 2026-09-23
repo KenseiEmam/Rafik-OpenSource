@@ -13,3 +13,4 @@ For a new decision, add the next number with Context, Decision, Consequences and
 - [0006 — Prisma API transition](0006-prisma-api-transition.md)
 
 - [0007: Transactional notification intent capture](0007-notification-intents.md).
+- [0008: Local operations and bounded reads](0008-local-operations-and-bounded-reads.md).

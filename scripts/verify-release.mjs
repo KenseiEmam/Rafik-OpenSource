@@ -89,13 +89,26 @@ try {
   });
   execFileSync(
     "docker",
-    ["compose", "exec", "-T", "db", "pg_isready", "-U", "rafik_migrate", "-d", "rafik"],
+    [
+      "compose",
+      "exec",
+      "-T",
+      "db",
+      "pg_isready",
+      "-U",
+      "rafik_migrate",
+      "-d",
+      "rafik",
+    ],
     { stdio: "pipe" },
   );
   for (const port of [55331, 5173, 5174]) {
-    const response = await fetch(`http://127.0.0.1:${port}${port === 55331 ? "/health" : ""}`, {
-      signal: AbortSignal.timeout(5000),
-    });
+    const response = await fetch(
+      `http://127.0.0.1:${port}${port === 55331 ? "/health" : ""}`,
+      {
+        signal: AbortSignal.timeout(5000),
+      },
+    );
     if (!response.ok) throw Error(`Start the local web server on ${port}.`);
   }
   report.steps.push({ name: "prerequisites", status: "passed" });
@@ -111,6 +124,7 @@ try {
       "test:programming",
       "test:organization-services",
       "test:communication",
+      "test:operations",
       "content:check",
       "test:docs",
     ])
@@ -119,8 +133,8 @@ try {
         "run",
         script,
       ]);
-    await step("api-types",root,["npm","run","typecheck"]);
-    await step("api-contract",root,["npm","run","test:api"]);
+    await step("api-types", root, ["npm", "run", "typecheck"]);
+    await step("api-contract", root, ["npm", "run", "test:api"]);
     for (const script of [
       "test",
       "format:check",
@@ -130,6 +144,7 @@ try {
       "test:quality:layout",
       "test:product:layout",
       "test:teams:layout",
+      "test:operations:layout",
     ])
       await step("web-" + script.replaceAll(":", "-"), web, [
         "npm",

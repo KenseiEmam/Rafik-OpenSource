@@ -73,6 +73,27 @@ export async function calendar(actor: Actor, id: string, q: URLSearchParams) {
         event_id: item.id,
         ...(view === "trainee" ? { member_id: self.id } : {}),
       };
+      const historyMember = q.get("historyMember"),
+        historyOffset = pageOffset(q.get("historyOffset"));
+      if (
+        historyMember &&
+        !people.some(
+          (p) => p.member_id === historyMember && p.duty === "trainee",
+        )
+      )
+        throw new ApiError(403, "forbidden");
+      const history =
+        q.get("summary") === "true"
+          ? []
+          : await tx.assessment_result_history.findMany({
+              where: {
+                ...where,
+                ...(historyMember ? { member_id: uuid(historyMember) } : {}),
+              },
+              orderBy: [{ recorded_at: "desc" }, { id: "desc" }],
+              skip: historyOffset,
+              take: historyMember ? 26 : 101,
+            });
       return {
         event: { ...item, organization_event_people: undefined },
         people: people.map((p) => ({
@@ -83,11 +104,11 @@ export async function calendar(actor: Actor, id: string, q: URLSearchParams) {
           roles: p.workspace_members.roles,
         })),
         results: await tx.assessment_results.findMany({ where }),
-        history: await tx.assessment_result_history.findMany({
-          where,
-          orderBy: { recorded_at: "desc" },
-          take: 100,
-        }),
+        history: history.slice(0, historyMember ? 25 : 100),
+        historyNext:
+          history.length > (historyMember ? 25 : 100)
+            ? historyOffset + (historyMember ? 25 : 100)
+            : null,
       };
     }
     const from = calendarDate(q.get("from")),

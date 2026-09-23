@@ -2,7 +2,10 @@ import { mkdir, readFile, writeFile, unlink } from "node:fs/promises";
 import { resolve } from "node:path";
 import { createHash } from "node:crypto";
 import { ApiError } from "./db.ts";
-const directory = resolve(".local/files");
+const testDirectory = process.env.RAFIK_TEST_FILES;
+if (testDirectory && !/^\.local\/browser-[0-9]+$/.test(testDirectory))
+  throw Error("Invalid isolated file directory");
+const directory = resolve(testDirectory || ".local/files");
 const location = (path: string) =>
   resolve(directory, createHash("sha256").update(path).digest("hex"));
 export async function readPrivate(path: string) {

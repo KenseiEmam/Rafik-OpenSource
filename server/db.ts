@@ -6,11 +6,22 @@ if (!local)
   throw new Error(
     "Hosting adapters and release configuration must be configured before production startup.",
   );
+const connectionString =
+  process.env.DATABASE_URL ||
+  "postgresql://rafik_api:rafik-local-api-only@127.0.0.1:55332/rafik";
+const target = new URL(connectionString);
+if (
+  target.hostname !== "127.0.0.1" ||
+  target.port !== "55332" ||
+  !/^\/(rafik|rafik_browser_\d+)$/.test(target.pathname) ||
+  target.username !== "rafik_api"
+)
+  throw Error(
+    "The local API accepts only the isolated Rafik database or a disposable browser database.",
+  );
 export const db = new PrismaClient({
   adapter: new PrismaPg({
-    connectionString:
-      process.env.DATABASE_URL ||
-      "postgresql://rafik_api:rafik-local-api-only@127.0.0.1:55332/rafik",
+    connectionString,
   }),
 });
 export type Actor = {

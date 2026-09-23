@@ -236,6 +236,35 @@ test("organization agenda and assessor-led results preserve each participant, co
       ],
       19,
     );
+    // A long correction trail is paged per authorized participant, not downloaded with the event.
+    for (let revision = 2; revision < 29; revision++) {
+      const correction = await call(trainer, `/v1/workspaces/${id}/calendar`, {
+        ...result,
+        operation: randomUUID(),
+        revision,
+        values: { [drill.key]: 14 },
+        note: `Correction ${revision}`,
+      });
+      assert.equal(correction.status, 200, JSON.stringify(correction));
+    }
+    const summary = await call(
+      admin,
+      `/v1/workspaces/${id}/calendar?view=admin&id=${event.id}&summary=true`,
+    );
+    assert.equal(summary.data.history.length, 0);
+    const historyPath = `/v1/workspaces/${id}/calendar?view=trainee&id=${event.id}&historyMember=${a.id}`;
+    const firstHistory = await call(one, historyPath);
+    assert.equal(firstHistory.data.history.length, 25);
+    assert.equal(firstHistory.data.historyNext, 25);
+    const olderHistory = await call(one, historyPath + "&historyOffset=25");
+    assert.equal(olderHistory.data.history.length, 4);
+    assert.equal(olderHistory.data.historyNext, null);
+    assert.ok(
+      !olderHistory.data.history.some((row: any) =>
+        firstHistory.data.history.some((old: any) => row.id === old.id),
+      ),
+    );
+    assert.equal((await call(two, historyPath)).status, 403);
     const today = new Date().toISOString().slice(0, 10),
       params = `from=${today}&to=${today}`;
     const adminReport = await call(
@@ -272,7 +301,7 @@ test("organization agenda and assessor-led results preserve each participant, co
     assert.equal(exported.status, 200);
     assert.equal(exported.data.results.length, 1);
     assert.equal(exported.data.results[0].member_id, a.id);
-    assert.equal(exported.data.corrections.length, 2);
+    assert.equal(exported.data.corrections.length, 29);
     assert.equal(
       (
         await call(

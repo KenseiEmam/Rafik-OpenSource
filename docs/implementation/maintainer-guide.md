@@ -236,3 +236,19 @@ Local tour: Rania → Calendar → Schedule; More → Assessment templates or Gr
 ## Communication ownership
 
 Backend `server/organization-communication.ts` owns channel commands and reads; `server/notifications.ts` owns current audience, preferences, generic links and local dispatch. Forward migrations 260–290 contain their schema and capture/reminder functions. The matching web modules are `features/organizations/{ChannelsPage,ChannelThread,ChannelEditor}.vue` and `features/notifications/`. Reuse `useCommand` for uncertain writes; do not hand-roll a second pending queue. Run `test:communication`, the browser communication journey and `scripts/audit-communication.ts` for changes here.
+
+## Operations, roster paging and ordinary change rehearsal (R11)
+
+| Owner | Files / contract |
+|---|---|
+| Platform | Backend `server/platform.ts`, migration 300; web `features/platform/PlatformPage.vue`; grant checks before receipt lookup |
+| People/recipients | Backend `server/people.ts`; shared web `organizations/MemberPicker.vue`, `coaching/DeliverPlan.vue`; bounded search plus selected IDs |
+| Summary/history | `workspaces.ts`, `programming.ts`, `organization-calendar.ts`, `analytics.ts`; preserve full-scope totals, page breakdowns |
+| Test isolation | Web `scripts/isolated-browser.mjs`, `tests/local-config.ts`; backend guarded test database/files configuration |
+| Recovery | `scripts/prisma/recovery.mjs`, `cleanup-private.mjs`; private local archives and grace-period report/apply |
+
+An ordinary UI change rehearsed in R11 replaced raw audit operation keys with bilingual action labels and grouped analytics continuation controls with their charts. Edit the owning feature, preserve pending-command behavior, run web type/unit/build, then the operations browser journey and `test:operations:layout`. Inspect real phone/RTL captures; a passing type check does not establish readable labels.
+
+A domain change rehearsed in R11 added the roster order index and paginated result history: first inspect query plans and define continuation/scope, add a forward migration for the index, apply/introspect/generate/types, implement bounded reads, then verify scale and cross-trainee history access with real HTTP tests. Update the consumer with explicit load-more and current selection retention. Do not edit historical migrations or introduce a second data store. The local before/after query plan and the 29-revision participant test make this recipe reproducible; an independent engineer has not yet validated this handoff.
+
+Keep new tests test-owned and cleanup bounded. Use `set -e` for dependent shell checks so a failed type check cannot be hidden by a later successful command. Run complete browser suites through the isolation wrapper; stop editing sources during the accepted run. Keep current architecture/API docs separate from historical phase totals.

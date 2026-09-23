@@ -33,7 +33,10 @@
     "test:programming": "tsx --test tests/programming.test.ts tests/program-media.test.ts",
     "test:organization-services": "tsx --test tests/organization-services.test.ts",
     "test:communication": "tsx --test tests/communication.test.ts tests/notifications.test.ts",
-    "notifications:local": "tsx scripts/dispatch-notifications.ts"
+    "notifications:local": "tsx scripts/dispatch-notifications.ts",
+    "test:operations": "tsx --test tests/platform.test.ts tests/scale.test.ts tests/maintenance.test.ts tests/local-boundary.test.ts",
+    "recovery:local": "node scripts/prisma/recovery.mjs",
+    "files:maintenance": "node scripts/prisma/cleanup-private.mjs"
   },
   "devDependencies": {
     "@types/node": "22.19.0",

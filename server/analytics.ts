@@ -51,11 +51,11 @@ export async function organizationAnalytics(
       view === "admin"
         ? await tx.$queryRaw<
             any[]
-          >`SELECT t.id,t.name AS label,count(m.id)::int AS value FROM public.workspace_members t LEFT JOIN public.workspace_members m ON m.trainer_id=t.id AND m.active AND 'trainee'=ANY(m.roles) WHERE t.workspace_id=${id}::uuid AND t.active AND 'trainer'=ANY(t.roles) GROUP BY t.id ORDER BY t.name,t.id LIMIT 100`
+          >`SELECT t.id,t.name AS label,count(m.id)::int AS value FROM public.workspace_members t LEFT JOIN public.workspace_members m ON m.trainer_id=t.id AND m.active AND 'trainee'=ANY(m.roles) WHERE t.workspace_id=${id}::uuid AND t.active AND 'trainer'=ANY(t.roles) GROUP BY t.id ORDER BY t.name,t.id LIMIT 26 OFFSET ${pageOffset(q.get("workloadOffset"))}`
         : [];
     const programs = await tx.$queryRaw<
       any[]
-    >`SELECT v.program_id AS id,v.title AS label,count(*)::int AS value FROM public.organization_assignments a JOIN public.workspace_members m ON m.id=a.member_id JOIN public.organization_versions v ON v.id=a.version_id WHERE a.workspace_id=${id}::uuid AND a.state='active' AND a.start_date<=(now() AT TIME ZONE ${window.zone})::date AND (a.end_date IS NULL OR a.end_date>=(now() AT TIME ZONE ${window.zone})::date) AND m.active AND 'trainee'=ANY(m.roles) AND (${trainer}::uuid IS NULL OR m.trainer_id=${trainer}::uuid) AND (${selected}::uuid IS NULL OR m.id=${selected}::uuid) GROUP BY v.program_id,v.title ORDER BY value DESC,v.title LIMIT 30`;
+    >`SELECT v.program_id AS id,v.title AS label,count(*)::int AS value FROM public.organization_assignments a JOIN public.workspace_members m ON m.id=a.member_id JOIN public.organization_versions v ON v.id=a.version_id WHERE a.workspace_id=${id}::uuid AND a.state='active' AND a.start_date<=(now() AT TIME ZONE ${window.zone})::date AND (a.end_date IS NULL OR a.end_date>=(now() AT TIME ZONE ${window.zone})::date) AND m.active AND 'trainee'=ANY(m.roles) AND (${trainer}::uuid IS NULL OR m.trainer_id=${trainer}::uuid) AND (${selected}::uuid IS NULL OR m.id=${selected}::uuid) GROUP BY v.program_id,v.title ORDER BY value DESC,v.title,v.program_id LIMIT 26 OFFSET ${pageOffset(q.get("programOffset"))}`;
     const people = await tx.workspace_members.findMany({
       where: {
         workspace_id: id,
@@ -70,7 +70,19 @@ export async function organizationAnalytics(
       orderBy: [{ name: "asc" }, { id: "asc" }],
       take: 25,
     });
-    return { window, summary, daily, attendance, workload, programs, people };
+    return {
+      window,
+      summary,
+      daily,
+      attendance,
+      workload: workload.slice(0, 25),
+      programs: programs.slice(0, 25),
+      workloadNext:
+        workload.length > 25 ? pageOffset(q.get("workloadOffset")) + 25 : null,
+      programNext:
+        programs.length > 25 ? pageOffset(q.get("programOffset")) + 25 : null,
+      people,
+    };
   });
 }
 export async function independentAnalytics(actor: Actor, q: URLSearchParams) {

@@ -1,6 +1,16 @@
 # Revamp execution ledger
 
-Updated 23 September 2026. **R10 scoped communication and notifications is implemented locally.** Continue R11 operations/scale and available R12 refinement under standing authorization; hosting/native, physical devices, real providers and human outcome evidence remain separate gates.
+Updated 23 September 2026. **R11 local operations, bounded reads and recovery is implemented and verified.** Continue the available R12 product-cohesion/refinement work under standing authorization. Hosting, native, real providers, physical devices and observed human/business outcomes remain separate gates.
+
+## R11 — Local operations, scale and integrated acceptance
+
+Added separately authorized platform operations with audited directory access/reasons, account suspension/restoration, organization closure/reopening and platform support replies. Added bounded people/recipient selection, summary counts, session history, analytics breakdowns, invitation/activity pages and per-participant correction history. Current selection survives searches and reloads. No platform grant exposes private training or conversation browsing.
+
+Full browser acceptance now owns disposable database/API/files/build and preserves the preview. Added private-byte report/cleanup with grace period, database-plus-byte restore rehearsal, strict local runtime guards and a measured roster index. Provider boundaries and ordinary UI/domain change recipes are documented in current engineering docs and ADR0008.
+
+**Verified:** 70/70 Chromium/phone-WebKit journeys, 96 rendered paired states with zero reported layout/alert/checked Axe/page errors; actual phone selections, platform history, initial scheduling, Arabic analytics and conversation setup inspected. Four operations HTTP/scale/recovery groups, expanded organization-service tests (29 corrections), existing domain/API suites, 239 SQL assertions, 22-migration disposable install/seven suites, 12 web units, seven release guards and type/build/content/docs checks pass. Scale uses 120 trainers/1,200 trainees; local measurements are not a production SLA. New browser runs no longer pollute the preview; older synthetic pollution was not erased.
+
+**Next:** R12 local entry/help/setup cohesion, observation materials and truthful release evidence. Human usability/retention/payment cannot be established without actual participants, and outreach is not authorized. Continue all available local refinement without pausing for permission.
 
 ## R10 — Scoped communication and optional notifications
 

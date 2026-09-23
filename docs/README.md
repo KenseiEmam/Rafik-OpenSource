@@ -17,6 +17,7 @@ This is the maintained entry point for engineers working on the Rafik web/backen
 - [Verification](implementation/verification.md): reproducible commands, actual results and limits.
 - [Product quality review](implementation/product-quality-review.md): user tasks, findings, fixes and remaining gates.
 - [Feature verification map](implementation/feature-verification-map.md): user jobs, lifecycle/state checks and remaining coverage limits.
+- [Provider boundaries](implementation/provider-readiness.md): concrete local owners and external acceptance still required.
 - [Release checklist](implementation/release-checklist.md): required evidence before a release.
 - [Content maintenance and provenance](implementation/content.md).
 
@@ -29,4 +30,4 @@ This is the maintained entry point for engineers working on the Rafik web/backen
 - [Changelog](../CHANGELOG.md): changes grouped by checkpoint.
 - [Original revival audit](revival/README.md): recorded baseline evidence and business/design rationale.
 
-Phase contracts R1–R10 live under `implementation/`; they explain feature invariants and acceptance scenarios. They complement the current architecture, rather than replacing it. Historical verification counts describe the code checked at that checkpoint.
+Phase contracts R1–R11 live under `implementation/`; they explain feature invariants and acceptance scenarios. They complement the current architecture, rather than replacing it. Historical verification counts describe the code checked at that checkpoint.

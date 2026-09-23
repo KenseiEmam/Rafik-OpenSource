@@ -1,3 +1,4 @@
+import { pageOffset } from "./service-definitions.ts";
 import { createHash, randomUUID } from "node:crypto";
 import { db, asActor, ApiError, type Actor } from "./db.ts";
 import type { Prisma } from "./generated/prisma/client.ts";
@@ -255,7 +256,12 @@ export async function createWorkspace(
     return workspace;
   });
 }
-export async function workspaceView(actor: Actor, id: string, view: string) {
+export async function workspaceView(
+  actor: Actor,
+  id: string,
+  view: string,
+  query = new URLSearchParams(),
+) {
   if (!["admin", "trainer", "trainee"].includes(view))
     throw new ApiError(400, "invalid_request");
   return scoped(actor, id, [view as Role], async (tx, self) => {
@@ -265,15 +271,18 @@ export async function workspaceView(actor: Actor, id: string, view: string) {
         : view === "trainer"
           ? { trainer_id: self.id }
           : { id: self.id };
-    const members = await tx.workspace_members.findMany({
-      where: { workspace_id: id, ...filter },
-      include: {
-        users: {
-          select: { email: true },
-        },
-      },
-      orderBy: [{ active: "desc" }, { joined_at: "asc" }],
-    });
+    const members =
+      query.get("summary") === "true"
+        ? []
+        : await tx.workspace_members.findMany({
+            where: { workspace_id: id, ...filter },
+            include: {
+              users: {
+                select: { email: true },
+              },
+            },
+            orderBy: [{ active: "desc" }, { joined_at: "asc" }],
+          });
     const ids = new Set(members.map((m) => m.id));
     ids.add(self.id);
     if (self.trainer_id) ids.add(self.trainer_id);
@@ -294,7 +303,8 @@ export async function workspaceView(actor: Actor, id: string, view: string) {
             },
             select: { id: true, email: true, roles: true, expires_at: true },
             orderBy: { created_at: "desc" },
-            take: 100,
+            take: 26,
+            skip: pageOffset(query.get("invitationOffset")),
           })
         : [];
     const events =
@@ -302,10 +312,42 @@ export async function workspaceView(actor: Actor, id: string, view: string) {
         ? await tx.workspace_events.findMany({
             where: { workspace_id: id },
             orderBy: [{ created_at: "desc" }, { id: "desc" }],
-            take: 30,
+            take: 31,
+            skip: pageOffset(query.get("eventOffset")),
           })
         : [];
     return {
+      summary: {
+        trainees: await tx.workspace_members.count({
+          where: {
+            workspace_id: id,
+            ...filter,
+            active: true,
+            roles: { has: "trainee" },
+          },
+        }),
+        trainers:
+          view === "admin"
+            ? await tx.workspace_members.count({
+                where: {
+                  workspace_id: id,
+                  active: true,
+                  roles: { has: "trainer" },
+                },
+              })
+            : 0,
+        unassigned:
+          view === "admin"
+            ? await tx.workspace_members.count({
+                where: {
+                  workspace_id: id,
+                  active: true,
+                  roles: { has: "trainee" },
+                  trainer_id: null,
+                },
+              })
+            : 0,
+      },
       workspace: {
         id,
         name: self.workspaces.name,
@@ -321,8 +363,14 @@ export async function workspaceView(actor: Actor, id: string, view: string) {
         id: m.id,
         name: m.name,
       })),
-      invitations,
-      events,
+      invitations: invitations.slice(0, 25),
+      invitationsNext:
+        invitations.length > 25
+          ? pageOffset(query.get("invitationOffset")) + 25
+          : null,
+      events: events.slice(0, 30),
+      eventsNext:
+        events.length > 30 ? pageOffset(query.get("eventOffset")) + 30 : null,
     };
   });
 }

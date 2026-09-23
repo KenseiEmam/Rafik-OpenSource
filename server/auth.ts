@@ -28,11 +28,24 @@ export async function identify(req: IncomingMessage): Promise<Actor | null> {
     where: { token_hash: hash(token) },
     include: { users: true },
   });
-  return session && session.expires_at > new Date()
+  const blocked =
+    session &&
+    (await db.platform_identity_state.findUnique({
+      where: { user_id: session.user_id },
+    }));
+  return session && !blocked?.suspended && session.expires_at > new Date()
     ? actor(session.users)
     : null;
 }
 async function session(res: ServerResponse, user: Actor) {
+  if (
+    (
+      await db.platform_identity_state.findUnique({
+        where: { user_id: user.id },
+      })
+    )?.suspended
+  )
+    throw new ApiError(403, "account_suspended");
   const token = randomBytes(32).toString("hex"),
     expires = new Date(Date.now() + 7 * 86400000);
   await db.identity_sessions.create({
@@ -95,6 +108,7 @@ export async function authRoute(
         "orgtrainer",
         "orgtrainee",
         "orgadmin2",
+        "operator",
       ].some((n) => email === `${n}@rafik.test`)
     )
       throw new ApiError(403, "forbidden");

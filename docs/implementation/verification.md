@@ -1,3 +1,14 @@
+# Verification record
+
+## R11 — Operations and scale · 23 September 2026
+
+- Full isolated browser acceptance: **70/70** Chromium/phone-WebKit journeys passed. Dedicated organization recording test disconnects an opened session, preserves edits/completion across reload, reconnects and verifies coach review. The default harness owns and cleans its database/files/servers/build; preview is preserved.
+- **96 rendered states** across Amina/Rania/Kareem, 320/390/768/1440 widths, paired English/light, Arabic/dark, Arabic/light and English/dark, both engines. Zero reported overflow/clipping, alerts, page errors or Axe violations in checked390px states. Actual captures inspected: long selected names/chips, platform audit, initial calendar form, Arabic analytics and conversation creation. Scrollable editors work but their cramped setup framing is a refinement item for R12.
+- Four operations groups pass: platform authority/state/replay/revocation, 120-trainer/1,200-trainee scope/pagination, registered-byte restore and orphan grace/reference preservation, local-only startup guards. Per-trainee correction test walks29 revisions and rejects another trainee's access. Invitation/activity pagination tested beyond a full page. Query plan changed from1,213 to5 buffer hits for first25 after the roster index on this fixture; no production latency/scale claim.
+- Existing API/services/teams/membership/programming/communication and organization-service groups pass; 239 rollback SQL assertions,22 fresh migrations/seven suites,12 web units,seven release guards,type/build/format/content/doc checks pass. Final acceptance is not remote CI or physical hardware.
+
+Reproduction: runbook and `evidence/r11-verification.txt`; persisted `evidence/r11-layout.json` and `evidence/r11-scale.json`. Failed development runs are recorded separately from accepted results. Local backup is a disposable restore rehearsal, not a coordinated hosted snapshot. External providers, devices, real human usability/retention and payment remain unverified.
+
 ## R10 — Communication and notifications (23 September 2026)
 
 - Three real HTTP groups pass: organization participation/admin join/revocation/replay; transactional intents/preferences/quiet hours/concurrent local interception; answered/cancelled reminder suppression/coalescing/five-attempt failure. Local sink rollback and unique receipt tests do not prove real provider exactly-once delivery.
@@ -7,7 +18,6 @@
 
 Evidence summary: `evidence/r10-verification.txt`; final layout results are `evidence/r10-layout.json`. Browser emulation, local intercepted mail and synthetic fixtures do not establish physical-device, real-provider, remote-CI, hosted or human retention outcomes. Post-login return behavior reuses the tested authentication route contract; no external email was sent.
 
-# Verification record
 
 ## R9 — Organization services and analytics · 23 September 2026
 

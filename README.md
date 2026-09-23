@@ -44,3 +44,7 @@ Madar has a synthetic foundation program. As Rania, open Programs, edit or dupli
 Rania's Calendar shows Madar's week agenda. More contains reusable groups and assessment templates; Schedule follows Details → People → Review. Kareem sees only assigned events, and each trainee has separate attendance/results. Results can be corrected with preserved history. Analytics distinguishes organization workload/delivery from a trainer's assigned roster; Laila has separate independent coaching analytics. Sample assessment results are explicitly synthetic. See the [service contract](docs/implementation/r9-contract.md).
 
 R10 adds organization conversations and the global notification inbox/preferences. The local dispatcher intercepts optional generic previews; no email/push is sent. See the backend implementation ledger, ADR 0007 and runbook for authority, retry and maintenance contracts.
+
+## Operations and large rosters (R11)
+
+Platform operations are available through Amina in the local sample switcher, with separate authority and audited reasons. Organization people, delivery recipients, analytics breakdowns and correction history now use bounded server pages. Selected people remain visible across searches and reloads. Web `npm run test:e2e` owns a disposable database/API/build, preserving the preview; backend `test:operations`, `recovery:local` and `files:maintenance` cover operational checks and local recovery. See the companion backend runbook and maintainer guide for exact file ownership, commands and provider limits.

@@ -390,6 +390,67 @@ export async function delivery(
   return scoped(actor, id, [view], async (tx, self) => {
     const selected = query.get("member");
     if (selected) await recipient(tx, id, self, view, selected);
+    if (query.get("history") === "true") {
+      const scope = {
+        workspace_id: id,
+        ...(selected
+          ? { id: selected }
+          : view === "trainer"
+            ? { trainer_id: self.id }
+            : view === "trainee"
+              ? { id: self.id }
+              : {}),
+      };
+      const cursor = query.get("before");
+      if (
+        cursor &&
+        !(await tx.organization_sessions.findFirst({
+          where: {
+            id: uuid(cursor),
+            workspace_id: id,
+            workspace_members: scope,
+          },
+        }))
+      )
+        throw new ApiError(400, "invalid_request");
+      const page = await tx.organization_sessions.findMany({
+        where: { workspace_id: id, workspace_members: scope },
+        include: {
+          workspace_members: { select: { id: true, name: true, active: true } },
+        },
+        orderBy: [{ started_at: "desc" }, { id: "asc" }],
+        take: 51,
+        ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+      });
+      const sessions = page.slice(0, 50),
+        member = selected || (view === "trainee" ? self.id : null);
+      const assignments = member
+        ? await tx.organization_assignments.findMany({
+            where: { workspace_id: id, member_id: member, state: "active" },
+            include: { organization_versions: true },
+          })
+        : [];
+      return {
+        members: Array.from(
+          new Map(
+            sessions.map((s) => [s.member_id, s.workspace_members]),
+          ).values(),
+        ),
+        assignments: assignments.map((a) => ({
+          ...a,
+          version: a.organization_versions,
+          organization_versions: undefined,
+        })),
+        sessions: sessions.map((s) => ({
+          ...(s.document as object),
+          version: s.version,
+          member_id: s.member_id,
+          completed_at: s.completed_at,
+        })),
+        self: self.id,
+        next: page.length > 50 ? sessions.at(-1)!.id : null,
+      };
+    }
     const members = await tx.workspace_members.findMany({
       where: {
         workspace_id: id,

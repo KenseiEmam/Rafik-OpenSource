@@ -1,0 +1,10 @@
+R11 local acceptance, 23 September 2026
+Operations: /tmp/r11-operations-final2.log (4 actual HTTP/scale/recovery/boundary groups)
+Organization services: /tmp/r11-orgservices-final2.log (2 groups, including 29 participant corrections and denied cross-trainee history)
+Backend regression: /tmp/r11-sql-final.log (239 assertions); /tmp/r11-fresh-final.log (22 migrations/seven suites); /tmp/r11-api-final.log; /tmp/r11-services-final.log; /tmp/r11-teams-final.log; /tmp/r11-membership-final.log; /tmp/r11-programming-final.log; /tmp/r11-communication-final.log
+Browser: /tmp/r11-browser-final.log, disposable API/db/files/build; see verification for completed result
+Rendering: /tmp/r11-layout-final2.log (96 states, zero reported issues/alerts/checked Axe violations/page errors); web artifacts/operations-audit; persisted r11-layout.json
+Scale: persisted r11-scale.json, 120 trainers/1,200 trainees; unthrottled local development machine, not a production SLA. Before index query read 1,213 buffers; after index five buffers for first25; fixture only.
+Maintenance: /tmp/r11-unit-final.log (12), /tmp/r11-guards-final.log (7), /tmp/r11-type-final.log, /tmp/r11-build-final.log, /tmp/r11-backtype-final.log, /tmp/r11-content-final.log, /tmp/r11-docs-final2.log
+Initial development runs exposed a DOM-handler typing/analytics-layout bug (fixed), premature offline fault injection (test fixed), duplicate audit-reason locator (test fixed), and an initial layout navigation/context request interruption (await loaded entry before sweep). New correction fixture changed export count from2 to29; assertion updated accordingly. None of those failing runs is accepted evidence.
+No hosting, external delivery/payments, physical device, remote CI, native or human/business outcome claim.

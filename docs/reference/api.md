@@ -61,3 +61,15 @@ All mutations validate current role/resource before exact receipt replay; revisi
 - `GET/POST /v1/notifications/preferences`: own four-category in-app/local-email booleans and quiet hours, revision checked.
 
 Local dispatch is CLI-only. No public generic event emission, provider send or operator endpoint is registered.
+
+## R11 operations and continuation reads
+
+- `GET /v1/platform?section=organizations|users|support|audit&search=&offset=`: separate current platform grant; 25 operational rows and `next`. Every access is recorded. Audit defaults to writes; `includeReads=true` includes access events. No generic private-record access.
+- `POST /v1/platform`: `operation`, `action` (`organization_state`, `identity_state`, `support_reply`), `id`, `revision`, `reason` (10–500 characters), and `value` or `reply`. Payload identity/revision and grant checks govern replay. Confirmed refusal is editable; uncertain acknowledgment keeps the exact pending operation.
+- `GET /v1/workspaces/:id/people?view=&role=&state=&search=&offset=&selected=&self=`: 25 scoped memberships, full filtered `total`, `next`, separately resolved selected people and responsible trainer names. Name search is case-insensitive. `selected` contains at most 100 UUIDs. Trainer scope is current responsibility; `self=true` also resolves the trainer's own channel participation.
+- `GET /v1/workspaces/:id/recipients` and `GET /v1/coach/recipients`: bounded selected/available recipients with current assignment IDs/revisions/title. Independent selection max 50. Commands still validate each recipient at commit time.
+- Workspace `summary=true` avoids downloading the roster; `invitationOffset` and `eventOffset` page 25 invitations/30 events. Modern web uses summary + people APIs.
+- Organization delivery `history=true` returns 50 sessions and a verified continuation cursor; member names and current assignment are limited to the viewed history/person. Analytics `workloadOffset`/`programOffset` page 25 breakdown rows without changing full-scope totals.
+- Calendar detail `summary=true` avoids the initial correction log; `historyMember` plus `historyOffset` returns 25 revisions and `historyNext` for an authorized event participant. A trainee cannot select another trainee's history.
+
+Old open-client read shapes remain supported. Offset pages can shift during concurrent edits; exact writes use current revision checks and never trust displayed selection alone.

@@ -27,6 +27,7 @@ export async function serviceCatalog(
       kind = q.get("kind");
     const where = {
       workspace_id: id,
+      ...(q.get("id") ? { id: uuid(q.get("id")) } : {}),
       ...(view === "trainer" ? { created_by: self.id } : {}),
       archived: q.get("archived") === "true",
     };

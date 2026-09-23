@@ -73,7 +73,7 @@ Local preview includes **Rania Mansour** (Madar administrator), **Kareem Nasser*
 
 ## R8 local maintenance
 
-Apply forward migrations with `npm run db:migrate`, regenerate Prisma with `npm run db:generate`, then `npm run types`. `npm run test:programming` runs isolated organization delivery/history and private-cover HTTP checks. The content generator appends `prisma/fixtures/programming.sql` to the empty-database seed; do not reseed a populated preview. R8's Madar sample program was applied additively. Cover bytes share ignored `.local/files` with resources; metadata and immutable digest ownership are in `program_media`. R11 owns orphan-byte retention/cleanup; deleting a cover reference never deletes a historical publication.
+Apply forward migrations with `npm run db:migrate`, regenerate Prisma with `npm run db:generate`, then `npm run types`. `npm run test:programming` runs isolated organization delivery/history and private-cover HTTP checks. The content generator appends `prisma/fixtures/programming.sql` to the empty-database seed; do not reseed a populated preview. R8's Madar sample program was applied additively. Cover bytes share ignored `.local/files` with resources; metadata and immutable digest ownership are in `program_media`. R11 provides explicit orphan-byte report/cleanup; deleting a cover reference never deletes a historical publication.
 
 ## Organization services
 
@@ -84,3 +84,15 @@ For a stale result revision, reload the current participant result and deliberat
 ## Local notifications
 
 `npm run notifications:local` prepares bounded due reminders and dispatches one bounded batch into `notification_intercepts`; it sends nothing externally. Re-run for subsequent batches and due retries. Category email opt-in is required; default is in-app only. Preferences are in the header bell → Notification preferences. Quiet-hour endpoints are profile-local hours; equal values disable the interval. Inspect `notification_events` state/reason/attempts for suppression or failures; never infer read state from intercepted delivery. `npm run test:communication` uses disposable test identities to verify scope, retry, reminders and local sink behavior.
+
+## Platform operations and isolated acceptance (R11)
+
+Choose **Amina · local operator** under Explore sample accounts to review `/platform`. This grant is separate from all organization roles. Use a clear reason for suspension, restoration, organization closure/reopening or a support reply. Suspending an account revokes existing sessions; restoring it requires a new login. Audit history defaults to state changes; include directory access when investigating reads. There is no browser grant editor or private health/message browser. Never create a real operator by copying the synthetic seed into hosting.
+
+Web `npm run test:e2e` now starts disposable database `rafik_browser_<timestamp>`, API 55341, dev 5183 and preview 5184. It applies all migrations/fixtures only there, builds in ignored `artifacts/isolated-browser/`, and removes its own database/files on completion. Keep these ports free. `test:e2e:running` targets an already running environment and is for deliberate focused diagnostics; the default isolated command is the acceptance path. Existing read-only layout scripts use preview 5173; team layout scripts create and clean their own fixtures. Do not run source edits or a second browser suite during final acceptance.
+
+If forcibly terminated, inspect the timestamped service logs and processes before cleanup. Remove only the exact generated database and `.local/browser-<timestamp>` belonging to the abandoned run. Never reset `rafik`, and never infer a disposable name from an arbitrary environment variable. Test output/traces remain ignored because they can contain identity information. Older preview pollution was not erased by this change; new full browser runs no longer add to it.
+
+`npm run test:operations` checks operational authority/replay, 1,321-member scale/paging, recovery/private-byte cleanup, and runtime local-only guards. `npm run recovery:local` saves an ignored private dump and byte archive, restores into `rafik_restore_<timestamp>`, checks ready resources and program-media hashes, and drops only that restored database. Read its manifest/result before calling it successful. This is a local rehearsal, not an atomic online hosted backup. Archives remain on disk for inspection; remove a specifically reviewed archive when no longer needed.
+
+`npm run files:maintenance` reports unreferenced hash files older than 24 hours. `npm run files:maintenance -- --apply` removes only those still unreferenced after a live metadata recheck; all resource states and all program-media rows protect their bytes. Recent and non-hash/symlink entries are left alone. Do not remove metadata first to force cleanup. Hosted object storage needs its own inventory, retention and backup verification.

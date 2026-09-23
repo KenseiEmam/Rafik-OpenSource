@@ -124,3 +124,7 @@ INSERT INTO public.organization_messages(id,workspace_id,channel_id,sender_id,bo
 ('1b000000-0000-4000-8000-000000000001','12000000-0000-4000-8000-000000000001','1a000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000001','This is a synthetic conversation for local review. Everyone in the participant list can read these messages.'),
 ('1b000000-0000-4000-8000-000000000002','12000000-0000-4000-8000-000000000001','1a000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000002','For the next foundation session, we will review the movement examples together. Bring any questions here.'),
 ('1b000000-0000-4000-8000-000000000003','12000000-0000-4000-8000-000000000001','1a000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000003','سأراجع البرنامج وأضيف أسئلتي هنا. هذا مثال محلي للتجربة.') ON CONFLICT DO NOTHING;
+-- Synthetic local platform operator. Never seed on hosting.
+INSERT INTO identity.users(id,email,email_confirmed_at,raw_user_meta_data) VALUES('10000000-0000-4000-8000-000000000009','operator@rafik.test',now(),'{"display_name":"Amina · local operator"}');
+INSERT INTO public.profiles(id,display_name) VALUES('10000000-0000-4000-8000-000000000009','Amina · local operator');
+INSERT INTO public.platform_grants(user_id) VALUES('10000000-0000-4000-8000-000000000009');
