@@ -1,6 +1,20 @@
 # Revamp execution ledger
 
-Updated 23 September 2026. **R13 staff dashboard and control-quality correction is implemented and verified locally.** Final serial release acceptance passed; phase commits remain on `codex/revamp`. Hosting, native, real providers, physical devices and observed human/business outcomes remain separate gates.
+Updated 23 September 2026. **R14 actionable nutrition and exercise reference content is implemented and verified locally.** Phase commits remain on `codex/revamp`. Hosting, native, real providers, physical devices and observed human/business outcomes remain separate gates.
+
+## R14 — Actionable nutrition and exercise reference content
+
+Research used three smaller workers (two GPT-5.6 Sol, one GPT-5.6 Terra), with root source/license reconciliation and implementation. The requested GIF repository excludes its media from its software grant. Selected Workout Guide vector assets instead: ten exact compatible movements, thirty unchanged reference poses, retained CC BY-SA attribution/pins/hashes. USDA's official SR Legacy archive supplies fifteen verified staple foods and portions. [Research synthesis](open-source-research.md) and [ADR0010](../decisions/0010-reference-content-and-nutrition.md) explain adopted/rejected sources and follow-on priorities.
+
+Independent Nutrition now leads with explicit calorie/macronutrient targets, optional budget allocation arithmetic and an editable example day. Trainees choose sourced foods or suggestions, adjust actual quantities and explicitly log them. Target progress, source energy and unknown/partial values remain truthful. Structured suggestions preserve immutable version history; actual consumption is separate. All nutrition writes use durable exact commands; drafts are scoped to client/visibility/date, incompatible unit changes clear values, optional helpers cannot block valid plan saves and source precision survives real form validation.
+
+The shared exercise viewer covers independent and organization libraries, program editing, public routine and the existing logger. Manual reference positions, explicit play/pause, attribution, failure/retry and sharp bounded vectors replace off-site-only guidance for supported movements. The bounded pack is in the public offline shell and available through versioned API keys for later native use; published/start snapshots and copied prescriptions retain media references. Three forward migrations preserve preview data. Standard engineering docs, Help, source maintenance tools and quality rules accompany the code.
+
+**Acceptance:** all 28 full release gates passed (88 browser journeys, 1,120 broad layouts, 246 SQL assertions, 25 fresh migrations, 17 units and all domain/build/maintenance checks). After four Arabic label refinements, strengthened catalog/CI checks and a reproduced/fixed late-save navigation race, all 22 focused final journeys passed, including the 32-state nutrition/media matrix. See the [full report](evidence/r14-release.json), [final follow-up](evidence/r14-followup.json) and [receipt](evidence/r14-verification.txt) for exact provenance and limits. Source values were independently re-extracted and verified.
+
+**Limits:** 15 foods are a starter reference library, not regional/branded coverage; only 10 of 14 starter movements have exact media. Three poses are not a cadence/technique certification. Organization nutrition needs its own ownership/sharing lifecycle. Native rendering, physical devices, hosted operations, human outcomes and actual providers remain unverified. No push, deployment, external messaging, paid provider or preview reset.
+
+Web implementation commit: `6c4fa6f` on `codex/revamp`. This backend checkpoint contains the paired migrations, catalogs, source provenance, research, architecture and accepted evidence.
 
 ## R13 — Staff dashboard and usable controls
 

@@ -126,6 +126,8 @@ try {
       "test:communication",
       "test:operations",
       "content:check",
+      "content:media",
+      "test:catalog",
       "test:docs",
     ])
       await step("backend-" + script.replaceAll(":", "-"), root, [

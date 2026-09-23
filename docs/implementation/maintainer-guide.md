@@ -165,7 +165,7 @@ Schema changes go into the next migration. Once a migration has been applied, ke
 
 The coach routes are `/coach/more`, `/coach/nutrition`, `/coach/appointments` and `/coach/resources`; clients use the same paths without `/coach`. The nutrition/calendar components share presentation where the task overlaps, with role-specific commands. Authorization always lives in SQL, not route names. `/coach/nutrition?client=<relationship UUID>` and `/coach/appointments?client=<relationship UUID>` provide client context. There are no duplicate coach/client stores.
 
-To change nutrition fields, update migration validation and `nutrition/model.ts`, then the small `NutrientFields.vue` component. Preserve nullable unknown values, explicit basis/units/source and immutable meal snapshots. Do not infer targets or import a provider response directly into a client's history. Adding a food lookup later should fill an editable draft through an adapter.
+To change nutrition fields, update migration validation and `nutrition/model.ts`, then the small `NutrientFields.vue` component. Preserve nullable unknown values, explicit basis/units/source and immutable meal snapshots. Do not infer targets or import a provider response directly into a client's history. The local USDA food picker fills an editable draft; it never writes a client's history directly. Expand its canonical content using the content guide.
 
 To change scheduling, start with `r3-contract.md` and `appointments.sql`. Keep UTC instants separate from local date/time inputs, preview DST effects and preserve the sorted participant locks. The calendar's persisted pending command must remain unchanged until acknowledged or definitively rejected. Test two concurrent clients and dual-role participants through `npm run test:services`.
 
@@ -277,3 +277,18 @@ Reuse `TimezonePicker` for every timezone editor: `v-model` is the selected IANA
 Run `tests/dashboard.e2e.ts` for saved selection, keyboard/escape, drawer focus, chart tabs/filters/failure retention and viewport scrolling, then `npm run test:dashboard:layout` for role/theme/language/breakpoint renders. The latter reads local sample accounts without synthetic writes. Final release includes both this matrix and the existing journey/layout suites. Dependency upgrades must inspect open portals and all chart variants, not just compile the wrappers.
 
 Workspace Back restoration waits for asynchronous content to support the saved offset and cancels on new navigation or user input. Keep this behavior covered when changing loading states or page structure.
+
+## R14 file map and change recipes
+
+| Owner | Files and responsibility |
+|---|---|
+| Reference content | `content/foods.json`, `content/exercise-media.json`, `content/exercise-media/`, `content/upstream/`; source values, rights and immutable bytes |
+| Content tooling | `scripts/content.mjs`, `scripts/content/exercise-media.mjs`, `scripts/content/extract-usda-foods.sh`; reproducible generation/verification |
+| Public API | `server/public-catalog.ts`, catalog routes in `server/index.ts`; reference-only reads and digest-verified SVG serving |
+| Nutrition persistence | migrations `202609231500_nutrition_meal_plans`; immutable bounded suggested foods and compatible command default |
+| Exercise reference persistence | migrations `202609231510_exercise_media`, `202609231520_media_reference_commands`; keys, validation and plan-copy retention |
+| Web nutrition | `src/features/nutrition/{NutritionPage,MacroPlanner,MealPlanEditor,FoodPicker,NutrientFields}.vue`, `model.ts`, `src/styles/nutrition.css`; scoped drafts, command recovery, explicit targets and portions |
+| Shared exercise presentation | `src/components/ExerciseDemo.vue`; library/editor/routine/logger consumers, explicit motion and fallback |
+| Acceptance | backend `tests/public-catalog.test.ts`, SQL service/exercise suites; web `tests/nutrition-planning.e2e.ts`, `tests/exercise-media.e2e.ts`, nutrient units |
+
+Food lookup is now a small local source-backed catalog. Expand it through the content guide, not by embedding provider calls in components. Adding organization nutrition requires separate ownership, assignment and sharing contracts first. To change portion math, cover unknown versus zero, source calorie differences and independent suggestion/actual snapshots. To change helper forms, test abandoned invalid helper values while saving a valid parent plan. To change drafts, test client/date/visibility switches and uncertain responses after reload.

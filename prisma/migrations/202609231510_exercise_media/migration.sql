@@ -1,0 +1,11 @@
+alter table public.exercises add column media_ref text;
+update public.exercises set media_ref='wg-aac5992-goblet-squat' where id='goblet-squat' and owner_id is null;
+update public.exercises set media_ref='wg-aac5992-one-arm-dumbbell-row' where id='dumbbell-row' and owner_id is null;
+update public.exercises set media_ref='wg-aac5992-dumbbell-romanian-deadlift' where id='romanian-deadlift' and owner_id is null;
+update public.exercises set media_ref='wg-aac5992-split-squat' where id='split-squat' and owner_id is null;
+update public.exercises set media_ref='wg-aac5992-glute-bridge' where id='glute-bridge' and owner_id is null;
+update public.exercises set media_ref='wg-aac5992-seated-dumbbell-press' where id='overhead-press' and owner_id is null;
+update public.exercises set media_ref='wg-aac5992-dead-bug' where id='dead-bug' and owner_id is null;
+update public.exercises set media_ref='wg-aac5992-plank' where id='forearm-plank' and owner_id is null;
+update public.exercises set media_ref='wg-aac5992-incline-push-up' where id='incline-pushup' and owner_id is null;
+update public.exercises set media_ref='wg-aac5992-banded-row' where id='band-row' and owner_id is null;

@@ -36,7 +36,9 @@
     "notifications:local": "tsx scripts/dispatch-notifications.ts",
     "test:operations": "tsx --test tests/platform.test.ts tests/scale.test.ts tests/maintenance.test.ts tests/local-boundary.test.ts",
     "recovery:local": "node scripts/prisma/recovery.mjs",
-    "files:maintenance": "node scripts/prisma/cleanup-private.mjs"
+    "files:maintenance": "node scripts/prisma/cleanup-private.mjs",
+    "test:catalog": "tsx --test tests/public-catalog.test.ts",
+    "content:media": "node scripts/content/exercise-media.mjs"
   },
   "devDependencies": {
     "@types/node": "22.19.0",

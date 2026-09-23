@@ -67,3 +67,12 @@ Rendered chart label readability was checked after the automated matrix; see pro
 | Read activity and delivery at a glance, recover a failed refresh | Unovis axes/count ticks, tabs/presets, keyboard readout, table equivalents; dashboard mock/fault journey plus real organization-service lifecycle | UI mock is not database evidence; no invented customer/quality metrics |
 | Keep context while navigating a working dashboard | Dashboard journey covers stable sidebar, main scrolling, Back restoration, phone drawer focus; product/team/operations/cohesion audits retain existing coverage | Physical-device and unaided first-use observation remain separate |
 | Read the UI across role/locale/theme/breakpoints | `audit-dashboard.ts`: 192 paired states across independent/admin/trainer roles and both engines; all states include Axe and geometry checks | Paired combinations, not every possible cross-product or arbitrary data set |
+
+## Useful reference content (R14)
+
+| User job | Evidence | Limit |
+|---|---|---|
+| Coach turns calorie/macronutrient targets into a suggested day | Nutrition planning journey, SQL immutable versions/replay/bounds; optional helper, context-switch and held-response navigation regressions | Independent coaching only; no inferred calorie recommendation |
+| Trainee records actual source-backed portions and recovers an uncertain save | Sourced rice quantities/precision, lost acknowledgment/reload/exact replay, source kcal and unknown-value units, food lookup failure/manual fallback | Fifteen starter foods; no offline/barcode/regional completeness claim |
+| Coach/client reads an exercise demonstration without leaving the task | Independent/organization library, public routine, editor/logger component integration; SVG failure/retry/steps/play/pause and cache contract | Ten exact references, no cadence/technique certification or native renderer |
+| Maintainer expands content without runtime dependence | Catalog/provenance/hash tests, generator drift check, retained licenses and immutable keys | Each new movement/source still requires explicit review |

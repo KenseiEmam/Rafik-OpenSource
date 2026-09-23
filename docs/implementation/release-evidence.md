@@ -1,6 +1,6 @@
 # Release evidence and remaining gates
 
-Owner: Codex. Reviewed 23 September 2026. **Local revamp; not deployed.** All planned local web/backend work through R13 is accepted locally; final results are recorded in the verification record. This register prevents a local test result from being mistaken for release or customer evidence.
+Owner: Codex. Reviewed 23 September 2026. **Local revamp; not deployed.** Local web/backend work through R14 is accepted for the documented scope; organization nutrition and expanded content remain product work. Final results and the follow-up delta are recorded in the verification record. This register prevents a local test result from being mistaken for release or customer evidence.
 
 | Gate | Status | Concrete evidence / next action |
 |---|---|---|
@@ -9,8 +9,8 @@ Owner: Codex. Reviewed 23 September 2026. **Local revamp; not deployed.** All pl
 | Interruption/correction/retry | Locally tested | Real lost acknowledgment, offline organization/independent recording, stale device revisions, command replay and correction history; one workout queue |
 | Responsive/readable local web | Developer rendered review and automated checks | Final verification names tested viewports/scripts/themes/states and inspected captures; physical device and human comprehension still separate |
 | Larger roster and private-byte operation | Locally tested | 120-trainer/1,200-trainee fixture, bounded pages/totals, measured roster index; private-file grace/reference checks and disposable dump-plus-byte restore |
-| Engineering handoff | Maintained and locally rehearsed | README, CONTRIBUTING, current architecture/API/source map, ADR0008/0009, shared dashboard controls and ordinary UI/domain recipes; no independent engineer onboarding observation yet |
-| Local release chain | Passed all 26 recorded steps | Final serial report: 76 browser journeys, 1,120 rendered states, domain/fresh/build/maintenance checks; disposable browser environment, no preview reset |
+| Engineering handoff | Maintained and locally rehearsed | README, CONTRIBUTING, current architecture/API/source map, ADR0008–0010, maintained content imports and shared dashboard controls and ordinary UI/domain recipes; no independent engineer onboarding observation yet |
+| Local release chain | Passed 28 steps plus final focused regression | Full serial baseline: 88 journeys/1,120 broad layouts; final delta: 22 focused journeys and source/content checks. See R14 verification for exact provenance; disposable browser environment, no preview reset |
 | Remote CI | Not run | Execute committed CI against the revamp branches after an authorized push; inspect actual remote results |
 | Hosted PostgreSQL/API/web | Not configured or deployed | Fresh hosting environment, secrets/roles/HTTPS/same-origin/configuration, monitoring, controlled upgrade and recovery drill |
 | Real mail/notification/file/billing services | Not configured | Concrete owners and acceptance in provider-readiness; no simulation counts as real delivery or payment |

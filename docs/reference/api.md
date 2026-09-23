@@ -73,3 +73,15 @@ Local dispatch is CLI-only. No public generic event emission, provider send or o
 - Calendar detail `summary=true` avoids the initial correction log; `historyMember` plus `historyOffset` returns 25 revisions and `historyNext` for an authorized event participant. A trainee cannot select another trainee's history.
 
 Old open-client read shapes remain supported. Offset pages can shift during concurrent edits; exact writes use current revision checks and never trust displayed selection alone.
+
+## Public reference catalogs (R14)
+
+These endpoints are unauthenticated and contain no user or workspace data:
+
+- `GET /v1/catalog/foods`: versioned object with `foods`; each includes stable ID, English/Arabic display names, original FDC metadata, source string, `basis: 100`, `unit: "g"`, `nutrients` (`kcal`, `protein_g`, `carb_g`, `fat_g`) and sourced portions (`name`, optional `name_ar`, `grams`). Values scale by actual quantity / basis. A missing nutrient is unknown, not zero.
+- `GET /v1/catalog/exercise-media`: schema/version, source metadata and `items`; each immutable key has compatible starter mapping, frame paths, SHA256/dimensions and source/license attribution. Do not infer exercise matches from similar names.
+- `GET /v1/catalog/exercise-media/:key/:frame.svg`: only manifest-listed keys and frames 1–3. Returns digest-verified SVG, immutable cache headers, ETag, no-sniff and restrictive CSP. Invalid keys/frames return the normal unavailable error.
+
+`save_nutrition_guidance` accepts optional `p_meals` (default `[]`), up to 20 suggestions / 32 KiB. Each contains name, meal, positive quantity/basis (max 10000), unit, nutrient object and source. Existing participant/revision checks and immutable receipts apply to all fields; a changed payload with the same receipt is rejected. A suggestion is not consumption; trainee `save_meal` explicitly snapshots actual values.
+
+Independent and organization exercise authoring accept `media_ref` from the reviewed catalog or null. Existing `media_url` remains optional HTTPS. Publication and copied prescriptions preserve the chosen key. Public catalog access does not grant access to private exercises, client records or organizational data.

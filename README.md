@@ -25,7 +25,7 @@ Use **Explore sample accounts** to inspect Laila, Amir, Nour and Dalia without c
 
 - Domain: `prisma/migrations/` owns database schema, transactional commands and RLS; `prisma/schema.prisma` describes ORM models. Add forward migrations, then `npm run db:migrate`, `db:generate` and `types`.
 - HTTP and identity: `server/`; [API conventions](docs/reference/api.md) document errors, cookies, pagination and replay.
-- Content: edit `content/starter.json`, then `npm run content`. Generated outputs are `prisma/seed.sql` and the companion web sample.
+- Content: edit the canonical starter/media/food files in `content/`; see the content guide before importing sources. `npm run content` generates the seed, web sample, media manifest, SVGs and credits; verify with `content:check`, `content:media` and `test:catalog`.
 - Tests: `npm test` (rollback SQL), `npm run test:fresh` (disposable database), `npm run test:api`, `test:services`, `test:teams`, `test:organizations`, `test:programming`, `test:organization-services`, `typecheck`, `content:check`, `test:docs`.
 - Full local gate: `npm run verify:release -- --full` with API and web servers on 5173/5174 running. Reports stay under ignored `artifacts/release/`.
 
@@ -56,3 +56,9 @@ The homepage now leads coaches and organizations into the appropriate workspace 
 ## Staff dashboard (R13)
 
 The web now has a persistent staff sidebar and independently scrolling desktop workspace. Analytics uses Unovis charts with activity/delivery tabs, reporting presets and accessible data views; timezone editors use the shared full-catalog searchable picker. [ADR0009](docs/decisions/0009-dashboard-components.md) and the [dashboard audit](docs/implementation/dashboard-quality-audit.md) explain architecture, findings and acceptance. API/Prisma ownership and runtime boundaries are unchanged.
+
+## Reference content and nutrition (R14)
+
+Independent-coach Nutrition now puts daily calories/macros and a structured example day first. Trainees choose a sourced food, adjust a portion and explicitly log what they ate; suggestions never count as consumption. The starter library contains 15 USDA foods, with manual/custom entries and saved foods for other choices. Ten shared exercises have sharp vector reference positions in libraries, the program editor and training, with explicit play/pause and attribution.
+
+Canonical content lives in the backend `content/` directory. Run backend `npm run content:media`, `npm run content` and `npm run content:check`; generated web media and manifests must not be hand-edited. Backend `test:catalog` verifies provenance, bytes and public API contracts. See the [content guide](docs/implementation/content.md), [ADR0010](docs/decisions/0010-reference-content-and-nutrition.md) and [research synthesis](docs/implementation/open-source-research.md). Nutrition remains an independent coaching feature; organization nutrition needs its own ownership/sharing lifecycle. Native integration and hosting remain deferred.

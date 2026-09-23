@@ -1,5 +1,14 @@
 # Rafik backend change history
 
+## R14 — Useful nutrition and exercise reference content · 23 September 2026
+
+- Immutable structured nutrition suggestions, explicit calorie/macro targets and source-backed food/portion calculation; separate suggestions from actual diary snapshots.
+- Public USDA starter-food and licensed exercise-reference endpoints; immutable media keys preserved through exercise publication and shared-plan copies.
+- Forward migrations, source pins/checksums/license attribution, reproducible content generation and focused contracts. No runtime provider, external account, new service or preview reset.
+- Research synthesis and ADR0010 document source decisions and remaining organization nutrition/native/regional coverage gates. Verification is recorded in the implementation ledger.
+
+- Acceptance: 28 full release gates passed, followed by 22 final focused browser regressions after the late-save navigation guard and Arabic portion refinements. Full evidence and limits are in the implementation verification record.
+
 ## R13 — Staff dashboard and control quality · 23 September 2026
 
 - Persistent coach/organization sidebar, compact task headings, mobile navigation drawer and bounded desktop workspace/collection scrolling.

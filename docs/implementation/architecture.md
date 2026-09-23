@@ -241,3 +241,15 @@ Migrations 300/310 add operational records and the measured `(workspace_id, acti
 ## Presentation cohesion (R12)
 
 The coach/organization entry and role-specific Help use the existing server contexts and router sign-in continuation. No additional onboarding service or global state layer was added. Conversation creation uses natural page height while the thread retains its bounded scrolling. Scheduling's optional catalog/group controls preserve selected IDs, render resolved review names and focus the active step. New roster/report/operator reads ignore superseded responses; commands continue to validate current authority/revisions on the server.
+
+## Reference content and nutrition lifecycle (R14)
+
+[ADR0010](../decisions/0010-reference-content-and-nutrition.md) records the maintenance-time import boundary. `content/foods.json` and `content/exercise-media.json` are canonical public reference catalogs. `server/public-catalog.ts` serves catalogs and allowlisted, digest-verified SVG bytes; these routes do not query private records. The content generator mirrors the manifest/30 SVGs/credits into the web build. Only this bounded public pack enters the offline shell, never uploaded or person/organization content.
+
+`exercises.media_ref` is an optional immutable reference key captured by publication/session snapshots and retained through plan copying. Replacing an asset requires a new key, with old bytes retained for history. Ten original shared starter IDs have an explicit first-pack fallback for older snapshots; this adds a viewer without mutating their stored prescriptions. External HTTPS demonstration links take precedence when deliberately supplied.
+
+`nutrition_guidance.meals` is a validated bounded JSON array inside an immutable guidance revision. Existing six-argument callers remain compatible with the default empty seventh argument. Foods record nutrient basis, quantity, unit and source; published suggestions and meal entries preserve values independently of subsequent catalog/saved-food updates. The optional calculator allocates a coach-entered budget, never infers personal needs. Unknown nutrients remain unknown; source food calories are not recomputed from macros.
+
+Web nutrition uses the existing persisted command mechanism, one pending exact request per actor/role. Draft keys additionally include relationship/visibility and (for actual meals) date. A pending response locks editing until resolved. Context changes restore only that context's draft. Independent nutrition relationship authorization is unchanged; organization nutrition is not modeled by repurposing those relationships.
+
+Nutrition acknowledgement cleanup can finish after navigation, but its route/query updates are guarded by screen lifetime. Initial loads and draft-context selection use the same disposal boundary. The durable command receipt is still resolved; ignoring a stale screen does not mean abandoning the user’s acknowledged write.

@@ -1,3 +1,4 @@
+import media from "../content/exercise-media.json" with { type: "json" };
 import { isDeepStrictEqual } from "node:util";
 import { ApiError, db, asActor, type Actor } from "./db.ts";
 import {
@@ -249,6 +250,7 @@ export async function programCommand(actor: Actor, id: string, input: Input) {
             equipment_ar: 100,
             movement: 60,
             media_url: 500,
+            media_ref: 100,
           })) {
             const v = String(x[key] || "").trim();
             if (v.length > max) throw new ApiError(400, "invalid_exercise");
@@ -261,6 +263,11 @@ export async function programCommand(actor: Actor, id: string, input: Input) {
           )
             throw new ApiError(400, "invalid_exercise");
           if (data.media_url && !/^https:\/\//.test(String(data.media_url)))
+            throw new ApiError(400, "invalid_exercise");
+          if (
+            data.media_ref &&
+            !media.items.some((item) => item.id === data.media_ref)
+          )
             throw new ApiError(400, "invalid_exercise");
           data.kind = x.kind;
           data.name_ar ||= data.name;

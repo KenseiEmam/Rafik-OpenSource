@@ -64,6 +64,11 @@ import {
 import { scoped } from "./workspaces.ts";
 import { organizationAccountData } from "./account-data.ts";
 import { getProgramMedia, putProgramMedia } from "./program-media.ts";
+import {
+  foodCatalog,
+  exerciseMediaCatalog,
+  exerciseMediaAsset,
+} from "./public-catalog.ts";
 import { localInbox } from "./local-inbox.ts";
 const origins = new Set([
   ...(process.env.RAFIK_TEST_ORIGINS
@@ -147,6 +152,34 @@ const server = createServer(async (req, res) => {
           take: 100,
         }),
       );
+      return;
+    }
+    if (req.method === "GET" && path === "/v1/catalog/foods") {
+      send(res, 200, await foodCatalog());
+      return;
+    }
+    if (req.method === "GET" && path === "/v1/catalog/exercise-media") {
+      send(res, 200, await exerciseMediaCatalog());
+      return;
+    }
+    const exerciseAsset = path.match(
+      /^\/v1\/catalog\/exercise-media\/([a-z0-9-]+)\/([123])\.svg$/,
+    );
+    if (req.method === "GET" && exerciseAsset) {
+      const asset = await exerciseMediaAsset(
+        exerciseAsset[1],
+        exerciseAsset[2],
+      );
+      res.writeHead(200, {
+        "Content-Type": "image/svg+xml",
+        "Cache-Control": "public, max-age=31536000, immutable",
+        ETag: `"${asset.digest}"`,
+        "X-Content-Type-Options": "nosniff",
+        "Content-Security-Policy":
+          "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+        "Content-Length": asset.bytes.length,
+      });
+      res.end(asset.bytes);
       return;
     }
     const actor = await identify(req);

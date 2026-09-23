@@ -11,6 +11,12 @@ do $$ declare draft jsonb; p public.plans; v public.plan_versions; a public.assi
  begin perform public.save_plan(gen_random_uuid(),'Validation',jsonb_set(draft,'{days,0,exercises,0,alternatives}','[{"exerciseId":"split-squat"},{"exerciseId":"floor-press"},{"exerciseId":"glute-bridge"},{"exerciseId":"band-row"}]'),null);raise exception 'accepted';exception when raise_exception then if sqlerrm<>'invalid_alternatives' then raise;end if;end;
  perform pg_temp.assert(true,'more than three alternatives rejected');
  perform public.save_exercise('r5-private-alternative','{"name":"Private squat","name_ar":"قرفصاء خاصة","equipment":"","equipment_ar":"","instructions":"Steady","instructions_ar":"بهدوء","movement":"squat","kind":"strength","media_url":""}',0);
+ perform public.save_exercise('r14-media-choice','{"name":"Squat illustration","instructions":"Controlled movement","kind":"strength","media_ref":"wg-aac5992-goblet-squat"}',0);
+ perform pg_temp.assert((select media_ref='wg-aac5992-goblet-squat' from exercises where id='r14-media-choice'),'coach can select an approved illustration');
+ p:=public.save_plan(gen_random_uuid(),'Media snapshot',draft,null);v:=public.publish_plan(p.id,p.draft_version);
+ perform pg_temp.assert(v.prescription#>>'{days,0,exercises,0,info,media_ref}'='wg-aac5992-goblet-squat','published prescription captures immutable media reference');
+ begin perform public.save_exercise('r14-invalid-media','{"name":"Invalid","instructions":"Invalid","kind":"strength","media_ref":"arbitrary-external-asset"}',0);raise exception 'accepted';exception when raise_exception then if sqlerrm<>'invalid_exercise' then raise;end if;end;
+ perform pg_temp.assert(true,'unknown managed media rejected');
  perform public.set_exercise_active('r5-private-alternative',false);
  begin perform public.save_plan(gen_random_uuid(),'Validation',jsonb_set(draft,'{days,0,exercises,0,alternatives}','[{"exerciseId":"r5-private-alternative"}]'),null);raise exception 'accepted';exception when raise_exception then if sqlerrm<>'invalid_alternative' then raise;end if;end;
  perform pg_temp.assert(true,'retired draft alternative rejected');

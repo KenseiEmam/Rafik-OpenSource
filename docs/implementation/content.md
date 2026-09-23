@@ -18,3 +18,14 @@ The local Auth identities and any browser-test sessions are synthetic. Do not mi
 ## Maintenance rehearsal
 
 During construction, the unit preference was carried through the new-session command to the actual set values, with a database scenario proving 4 kg becomes 8.82 lb. Another scenario proved that changing a future published load from 8 to 12 leaves the started prescription at 8. These are representative domain changes: one explicit command/validation owner and bounded UI consumers, with no trigger cascade or worker changes.
+
+## Reference pack maintenance (R14)
+
+- `content/foods.json`: 15 USDA SR Legacy records with original descriptions/FDC IDs, canonical nutrients per 100 g, exact portion weights and editorial Arabic names. The file records the official archive URL and SHA256. `scripts/content/extract-usda-foods.sh` reproduces the source extraction; compare records before approving an update. Preserve source kcal (e.g. olive oil 884 kcal/100 g), not a reconstructed macro estimate. This is not a complete branded/regional database.
+- `content/exercise-media.json`: immutable keys, exercise mapping, source pin, dimensions, hashes, frame paths and per-item attribution/lineage. `content/exercise-media/` holds 30 unchanged SVGs (586,741 bytes). Full licenses/source metadata are in `content/upstream/workout-guide/`. Asset CC BY-SA terms are separate from MIT software terms.
+- `npm run content:media` verifies local file digests and safe self-contained SVG structure. `node scripts/content/exercise-media.mjs --fetch` downloads only missing allowlisted pinned files and verifies them before writing. It is a maintenance operation, never runtime fetching.
+- `npm run content` emits the existing seed/sample plus the web media manifest, static SVG pack and `public/exercise-media/CREDITS.txt`. `content:check` rejects drift. Do not edit generated files. `test:catalog` checks source values, portions, source-byte mapping, public responses and cache/security headers.
+
+For a new illustration: review the exact equipment/movement and rights first; retain full asset attribution and any derivative sources, pin a commit and hash every frame. Assign a new immutable key, never overwrite old media referenced by history. Update the shared exercise through a forward migration; content generation alone does not update an existing database, and preview reseeding is forbidden. Add a mapping/byte/snapshot test, regenerate the web pack, and inspect library/editor/logger in both engines and languages. New custom exercise illustrations use the same allowlist. Images are reference positions, not cadence or qualified technique certification.
+
+The public API returns the same keys/frames for future native use. Native must retain attribution and use a suitable SVG renderer or a reviewed raster derivative, preserve offline version compatibility and pass physical-device checks. No native support is claimed from web rendering alone.

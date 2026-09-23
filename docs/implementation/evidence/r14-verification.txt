@@ -1,0 +1,19 @@
+R14 local acceptance — 23 September 2026
+Node 22.16.0; both repositories on codex/revamp. No push/deployment or preview reset.
+
+Full serial baseline: npm run verify:release -- --full
+artifacts/release/2026-09-23T14-03-23.221Z/report.json
+28/28 recorded gates passed on stable application/test/content sources for that run.
+88/88 journeys (44 Chromium, 44 phone-sized WebKit), 17 web units, 7 release guards.
+246 named rollback SQL assertions; 25 fresh migrations, fixtures and seven SQL suites.
+All API/domain/operations, content media/catalog, types/build/format/docs gates passed.
+1,120 broad rendered states: quality128, product320, teams Chromium176/WebKit176, operations104, cohesion24, dashboard192. Zero reported geometry/page errors or checked Axe violations. Each matrix retains its declared accessibility subset.
+The new nutrition/media journey matrix adds32 focused English/Arabic, light/dark, 320/1280px states across both engines, checked with Axe and containment.
+
+Final delta after the full run: four Arabic source-portion labels, stronger catalog/CI assertions and a nutrition screen-lifetime guard. A held save response reproduced stale destination query mutation before the guard. Final focused command reran nutrition-planning.e2e.ts, exercise-media.e2e.ts and service-delivery.e2e.ts:22/22 passed, including4 new unique cases beyond the full baseline, the32-state focused matrix, Arabic named-portion selection, durable save/meal recovery, draft isolation, abandoned helper drafts, source precision, image recovery and existing booking/file lifecycles. The isolated wrapper builds/typechecks final web source. Final catalog groups2/2 passed; backend types/content/docs and final web format/build/cache checks also pass. Do not represent the28-gate report alone as covering the later navigation guard.
+
+Source verification: checksum-pinned USDA archive independently re-extracted; all60 nutrient values match the15 canonical foods. All30 SVGs have verified source SHA256s/dimensions/safety and generated web byte parity (586741bytes); ten exact starter mappings. No data/provider runtime import or external user-data transmission.
+Inspected actual renders: desktop coach nutrition (empty and populated), open helper/library, 390px phone food search, Arabic/dark320px nutrition and named portions, Arabic/light exercise viewer and desktop dark exercise poses. Controls are contained and reference vectors remain sharp. Full-page captures can include sticky-header capture artifacts; interactive viewport review separately checked actual positioning. Temporary in-app viewport reset.
+
+Development failures: ambiguous/native-select and overly broad meal-row locators corrected; missing Node JSON import attribute corrected; source nutrient step0.1 blocked valid decimal submissions and was changed to any; duplicate saving/saved feedback corrected. First full prerequisite attempt encountered the API watcher restarting after formatting and ran no gates. Later held-response navigation test intentionally failed before its fix. Failed/partial attempts are not green acceptance.
+Limits: fifteen foods and ten demonstrations are a starter pack; organization nutrition needs its own scope/lifecycle; native rendering, qualified instructional review, physical devices/assistive technology, actual providers, hosting/remote CI and unaided human outcomes remain unverified.

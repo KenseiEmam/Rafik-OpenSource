@@ -1,5 +1,16 @@
 # Verification record
 
+## R14 — Useful nutrition and exercise reference content (23 September 2026)
+
+Acceptance combines the **28/28 full serial release gates** with a final **22/22 focused browser rerun** after editorial/CI hardening and the nutrition navigation guard. [Full report](evidence/r14-release.json), [follow-up record](evidence/r14-followup.json) and [detailed receipt](evidence/r14-verification.txt) identify the exact delta; the earlier full report is not presented as testing later code.
+
+- Full baseline: **88 browser journeys**, **1,120 broad rendered states**, **17 web units**, **246 named rollback SQL assertions**, **25 fresh migrations/seven suites**, all HTTP/domain/operations and type/build/format/content/docs gates.
+- Final focused run: nutrition publication → trainee actual → coach review; lost acknowledgements/reload/exact replay for guidance and meals; visibility/date/client draft isolation; invalid helper drafts; decimal source precision; lookup/media failure recovery; named Arabic source portions; navigation while a save is pending; existing scheduling and private-file lifecycles. Includes **32 English/Arabic, light/dark, 320/1280px nutrition/viewer states** across both engines, plus named-portion containment/Axe checks.
+- The held-response navigation case reproduced a destination-query mutation before the screen-lifetime guard and passes afterward, waiting for durable acknowledgement before asserting the URL. The final isolated wrapper rebuilt/typechecked the application. Catalog/source/type/content/docs and web format/production-cache checks pass after final refinements.
+- Independently re-extracted the official checksum-pinned USDA archive: **all60 nutrient values** match. Thirty SVGs /586,741bytes have matching hashes, safe self-contained structure, source attribution, generated web byte parity and immutable API/cache contracts. The API exposes reference content only.
+
+Selected actual rendered screens were inspected, including open helpers, desktop/phone coach layouts, Arabic portions and exercise controls. Raw logs/screenshots remain in ignored artifacts; sanitized broad matrices are the `r14-*-layout.json` files here. The detailed receipt records development failures and corrections instead of counting them as acceptance. Native, hosted/remote CI, actual providers, physical devices/assistive technology, qualified movement review and human outcomes remain unverified. Organization nutrition and broader regional/branded food/media coverage remain product work.
+
 ## R13 — Staff dashboard and usable controls (23 September 2026)
 
 The final uninterrupted `npm run verify:release -- --full` passed **26/26 gates** on stable implementation sources. [Release report](evidence/r13-release.json), [detailed receipt](evidence/r13-verification.txt) and the `r13-*-layout.json` files persist this checkpoint.

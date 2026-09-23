@@ -58,3 +58,9 @@
 
 - Dashboard quality gate: distinguish public pages from operational workspaces. Keep staff navigation visible, use semantic section titles and shared real selection controls, and disclose optional detail progressively. Review first-use scanability as well as overflow. Charts require meaningful axes/units, truthful empty/count behavior and accessible keyboard/table equivalents.
 - Shared UI changes require open-popup, focus/keyboard, 320px/desktop-breakpoint, RTL/theme and populated/empty/error-state checks in both engines. Test document vertical overflow and local scroll ownership, including hidden accessibility elements; do not hide overflow globally to mask defects. Run token-definition checks. Preserve prior results during refresh and guard stale responses. Update Help and engineering navigation instructions with shell changes.
+
+- Reference-content changes must verify dataset and asset rights separately, pin sources/digests and map exact movements; a repository software license does not imply media rights. Keep published reference keys immutable and credits available. Nutrition must distinguish source kcal from macro arithmetic, unknown from zero and suggestions from consumption. Test scoped drafts, exact uncertain-response retries and abandoned helper inputs alongside the complete coach-to-client flow.
+
+- Imported numeric precision must remain valid in real forms. Test source-backed values through actual submission (including controls inside collapsed details); a calculated preview alone does not prove the record can be saved.
+
+- Async navigation guards apply to initialization and successful write callbacks as well as read responses. Persist/acknowledge the original command, but never rewrite route/query state after its screen unmounts. Add an in-flight SPA navigation test that waits for durable acknowledgement before checking the destination; sequential save-then-navigate journeys miss this race.

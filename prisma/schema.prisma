@@ -314,6 +314,7 @@ model exercises {
   kind            String    @default("strength")
   media_url       String    @default("")
   revision        Int       @default(1)
+  media_ref       String?
   profiles        profiles? @relation(fields: [owner_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([owner_id], map: "exercises_owner")
@@ -417,6 +418,7 @@ model nutrition_guidance {
   targets         Json
   guidance        String
   created_at      DateTime      @default(now()) @db.Timestamptz(6)
+  meals           Json          @default("[]")
   coach_clients   coach_clients @relation(fields: [relationship_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([relationship_id, revision])

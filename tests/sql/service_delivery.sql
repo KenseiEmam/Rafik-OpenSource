@@ -9,6 +9,13 @@ select pg_temp.assert((public.save_nutrition_guidance('b3000000-0000-4000-8000-0
 select pg_temp.reject($q$select public.save_nutrition_guidance('b3000000-0000-4000-8000-000000000002','40000000-0000-4000-8000-000000000001',current_setting('r3.rev')::int,current_date,'{}','Stale')$q$,'conflict','stale guidance cannot overwrite newer version');
 select public.save_nutrition_guidance('b3000000-0000-4000-8000-000000000002','40000000-0000-4000-8000-000000000001',current_setting('r3.rev')::int+1,current_date+1,'{}','Later guide');
 select pg_temp.assert((select guidance='A practical guide' and targets->>'protein_g'='120' from nutrition_guidance where id='b3000000-0000-4000-8000-000000000001'),'later guidance preserves earlier targets and text');
+-- R14 example meals are immutable suggestions, never actual food records.
+select set_config('r14.example','[{"name":"Cooked rice","meal":"lunch","quantity":150,"basis":100,"unit":"g","nutrients":{"kcal":130,"protein_g":2.69,"carb_g":28.2,"fat_g":0.28},"source":"USDA FDC 168878"}]',true);
+select public.save_nutrition_guidance('b3140000-0000-4000-8000-000000000001','40000000-0000-4000-8000-000000000001',current_setting('r3.rev')::int+2,current_date,'{"kcal":2000}','Example day',current_setting('r14.example')::jsonb);
+select pg_temp.assert((public.save_nutrition_guidance('b3140000-0000-4000-8000-000000000001','40000000-0000-4000-8000-000000000001',current_setting('r3.rev')::int+2,current_date,'{"kcal":2000}','Example day',current_setting('r14.example')::jsonb)).revision=current_setting('r3.rev')::int+3,'structured nutrition plan exact retry preserves version');
+select pg_temp.reject($q$select public.save_nutrition_guidance('b3140000-0000-4000-8000-000000000001','40000000-0000-4000-8000-000000000001',0,current_date,'{"kcal":2000}','Example day','[]')$q$,'conflict','plan receipt rejects changed example meals');
+select pg_temp.reject($q$select public.save_nutrition_guidance('b3140000-0000-4000-8000-000000000002','40000000-0000-4000-8000-000000000001',current_setting('r3.rev')::int+3,current_date,'{}','Invalid','[{"name":"Rice","meal":"lunch","quantity":150,"basis":0,"unit":"g","nutrients":{"kcal":130},"source":"Label"}]')$q$,'invalid_guidance','example meal zero basis rejected');
+select pg_temp.assert((select meals=current_setting('r14.example')::jsonb from nutrition_guidance where id='b3140000-0000-4000-8000-000000000001'),'example meal preserves nutrient and source snapshot');
 set local role rafik_user;
 select set_config('rafik.claims','{"sub":"10000000-0000-4000-8000-000000000002","role":"rafik_user"}',true);
 select public.save_food('b3000000-0000-4000-8000-000000000003','Rice',100,'g','{"kcal":130,"protein_g":null}','Label',0);

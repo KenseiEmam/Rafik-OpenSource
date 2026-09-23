@@ -106,3 +106,15 @@ Open the homepage to choose the workspace flow or immediate workout. `/local-pre
 Use the persistent sidebar as staff on desktop, or **Open navigation** on a phone. Analytics exposes reporting presets, activity and delivery/follow-up tabs. Timezone fields search all available IANA entries; type a city and select a result. The displayed offset is current; schedule previews remain authoritative for the selected future date.
 
 `npm run test:dashboard:layout` in the web checkout reads the running preview and captures 192 paired role/viewport/language/theme states under `artifacts/dashboard-audit/`. It must not seed or reset preview data. `tests/dashboard.e2e.ts` runs through the disposable acceptance wrapper and uses an explicitly mocked populated analytics response for UI/fault behavior; organization-service lifecycle tests independently verify real persisted reporting. Empty preview charts are legitimate, not grounds for invented activity.
+
+## R14 content and forward rollout
+
+On an existing local preview use `npm run db:migrate`, `npm run db:generate`, `npm run types`, then restart the API. The three R14 migrations add structured suggestions and exercise media references without reseeding. A fresh install includes 25 migrations. Never edit an already-applied migration; repair through another forward migration.
+
+Before content changes run `content:media`, `content:check` and `test:catalog`. After canonical edits run `content`, inspect generated changes and rerun those gates. Keep all previously published media keys/bytes available. A new web shell version includes the reviewed reference pack (about 573 KiB of SVGs); normal waiting-update behavior preserves active work. Food lookup requires the API and provides manual entry when unavailable; it is not claimed as an offline food catalog.
+
+No upstream provider API keys are needed. All third-party network access is maintenance-time only. Retain `content/upstream/workout-guide` licenses and the generated web credits in distributions. The full release command includes media verification and catalog tests. Source/license review and instructional accuracy remain required when expanding the pack.
+
+R14 deliberately does not auto-adopt the old single nutrition browser-draft key: that key could combine values from different selected clients. It leaves that local record untouched and starts context-specific drafts. Previously saved server guidance, saved foods and actual meals remain intact. Open old nutrition work should be resolved before a future hosted rollout; local browser success does not establish a cross-version hosted migration.
+
+Backend CI now declares `content:media` and `test:catalog` after API startup. Catalog tests validate all canonical source bytes and values in a backend-only checkout; generated web-byte parity is additionally asserted when the companion checkout exists. The local full release gate always includes both repositories and generation-drift checks. Remote CI has not been executed from this local phase.
