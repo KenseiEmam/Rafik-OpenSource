@@ -6,7 +6,7 @@ A responsive Vue 3/TypeScript application for training and ongoing coaching: pro
 
 Work belongs on `codex/revamp`. The old application is preserved in Git history. No native app or legacy backend is required.
 
-**Current direction:** web development prioritizes coaches and organization staff. The local runtime is Prisma/PostgreSQL behind one TypeScript API; identity and private files use that API. The [role-scope audit](../rafik-api/docs/implementation/role-scope-audit.md) documents the original six roles and the current organization gaps. R7A1/R7A2 implement the API transition and separate organizational memberships, invitations, role views and trainer responsibility; R8 adds organization-owned programs, reviewed delivery and training history; R9 adds organization calendars, groups, assessor-led assessments and separate coach/admin analytics. Current teams are not a complete organizational implementation.
+**Current direction:** web development prioritizes coaches and organization staff. The local runtime is Prisma/PostgreSQL behind one TypeScript API; identity and private files use that API. The [role-scope audit](../rafik-api/docs/implementation/role-scope-audit.md) documents the original roles, the earlier organization gaps and their replacement contracts. R7A1/R7A2 implement the API transition and separate organizational memberships, invitations, role views and trainer responsibility; R8 adds organization-owned programs, reviewed delivery and training history; R9 adds organization calendars, groups, assessor-led assessments and separate coach/admin analytics. Independent-coach teams remain separate from the organization implementation.
 
 ## Start here
 
@@ -84,7 +84,7 @@ The current privacy page, sample version IDs, test mail settings and synthetic s
 
 After signing in through `/local-preview`, open **Clients** for each client's overview, private notes, plan/schedule and history. **Exercises** contains the shared catalog and your editable private exercises. **Plans** now supports cycle weeks, rest days, per-set targets, timed/distance work and consecutive exercise groups. Published instructions and started workout prescriptions remain fixed.
 
-The wider revamp remains in progress. Current coverage and the next phase are in the backend's `docs/implementation/ledger.md`. Full browser checks now include `tests/daily-coaching.e2e.ts`; run both repositories' checks before changing prescription or scheduling rules.
+Current local coverage and remaining release gates are in the backend's `docs/implementation/ledger.md` and `docs/implementation/release-evidence.md`. Full browser checks now include `tests/daily-coaching.e2e.ts`; run both repositories' checks before changing prescription or scheduling rules.
 
 ## R2 test tour
 
@@ -132,3 +132,7 @@ R10 adds organization conversations and the global notification inbox/preference
 ## Operations and large rosters (R11)
 
 Platform operations are available through Amina in the local sample switcher, with separate authority and audited reasons. Organization people, delivery recipients, analytics breakdowns and correction history now use bounded server pages. Selected people remain visible across searches and reloads. Web `npm run test:e2e` owns a disposable database/API/build, preserving the preview; backend `test:operations`, `recovery:local` and `files:maintenance` cover operational checks and local recovery. See the companion backend runbook and maintainer guide for exact file ownership, commands and provider limits.
+
+## Connected experience and release handoff (R12)
+
+The homepage now leads coaches and organizations into the appropriate workspace while retaining the immediate workout sample. Sample accounts are grouped by scope; Help explains admin/trainer/independent tasks. Conversation creation scrolls naturally, scheduling preserves selections through catalog searches and focuses each step, and optional setup stays behind disclosure. Current engineering coverage and release evidence distinguish local verification from hosting, physical-device and human outcome gates. Continue maintaining the companion implementation ledger, verification and maintainer guide with every change.

@@ -80,14 +80,27 @@ test('organization staff schedule a group assessment, recover a result, correct 
     await page
       .getByRole('combobox', { name: 'Assessment template', exact: true })
       .selectOption({ label: 'Movement baseline' })
+    await page.getByText('Find another template', { exact: true }).click()
+    await page
+      .getByRole('searchbox', { name: 'Find an assessment template', exact: true })
+      .fill('No matching template')
+    await page.getByRole('button', { name: 'Search templates', exact: true }).click()
+    await expect(
+      page
+        .getByRole('combobox', { name: 'Assessment template', exact: true })
+        .locator('option:checked'),
+    ).toHaveText('Movement baseline')
     await page.getByLabel('Timezone', { exact: true }).fill('UTC')
     await page.getByRole('button', { name: 'Choose people', exact: true }).click()
+    await expect(page.locator('section[aria-label="Choose people"]')).toBeFocused()
     await page.getByRole('checkbox', { name: 'R4 Coach', exact: true }).check()
+    await page.getByText('Start with a training group', { exact: true }).click()
     await page
       .getByRole('combobox', { name: 'Start with a group (optional)', exact: true })
       .selectOption({ label: 'Morning group' })
     await page.getByRole('button', { name: 'Review schedule', exact: true }).click()
     await expect(page.getByText('Dates to schedule', { exact: true })).toBeVisible()
+    await expect(page.locator('section[aria-label="Review schedule"]')).toBeFocused()
     expect(await layoutIssues(page)).toEqual([])
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
     let lost = false

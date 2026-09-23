@@ -30,13 +30,16 @@ type Report = {
   programs: { id: string; label: string; value: number }[]
 }
 const data = ref<Report>()
+let generation = 0
 async function load(part?: 'workload' | 'program') {
+  const current = ++generation
   loading.value = true
   error.value = ''
   try {
     const result = await request<Report>(
       `${workspace ? '/v1/workspaces/' + workspace + '/analytics' : '/v1/coach/analytics'}?view=${view}&from=${from.value}&to=${to.value}&${workspace ? 'member' : 'client'}=${selected.value}&search=${encodeURIComponent(search.value)}&workloadOffset=${part === 'workload' ? data.value?.workloadNext || 0 : 0}&programOffset=${part === 'program' ? data.value?.programNext || 0 : 0}`,
     )
+    if (current !== generation) return
     if (part && data.value) {
       if (part === 'workload') {
         data.value.workload.push(...result.workload)
@@ -47,10 +50,11 @@ async function load(part?: 'workload' | 'program') {
       }
     } else data.value = result
   } catch (e) {
+    if (current !== generation) return
     error.value = errorMessage(e)
     data.value = undefined
   } finally {
-    loading.value = false
+    if (current === generation) loading.value = false
   }
 }
 const trend = computed(() => {

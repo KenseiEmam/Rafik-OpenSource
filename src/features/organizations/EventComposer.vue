@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { user, profile } from '../../app/auth'
 import { request } from '../../lib/backend'
@@ -19,6 +19,7 @@ const route = useRoute(),
   view = String(route.params.view),
   base = `/organization/${id}/${view}`,
   key = `event-composer:${user.value!.id}:${id}:${view}`
+const stepPanel = ref<HTMLElement>()
 const data = ref<Organization>(),
   templates = ref<AssessmentTemplate[]>([]),
   groups = ref<TrainingGroup[]>([]),
@@ -28,7 +29,6 @@ const data = ref<Organization>(),
   saved = ref(false),
   step = ref(1),
   ready = ref(false),
-  search = ref(''),
   group = ref(''),
   times = ref<{ starts_at: string; ends_at: string }[]>([])
 const draft = ref({
@@ -45,22 +45,22 @@ const draft = ref({
   every: 7,
   location: '',
 })
+watch(step, async () => {
+  await nextTick()
+  stepPanel.value?.focus()
+})
 const trainerOptions = ref<Organization['members']>([])
 const people = computed(
     () => data.value?.members.filter((m) => m.active && m.roles.includes('trainee')) || [],
   ),
   staff = computed(() => trainerOptions.value)
-const visible = computed(() =>
-  people.value
-    .filter((m) => m.name.toLowerCase().includes(search.value.toLowerCase()))
-    .slice(0, 30),
-)
 const chosen = computed(() => people.value.filter((m) => draft.value.participants.includes(m.id)))
 const selectedTemplate = computed(() => templates.value.find((t) => t.id === draft.value.template))
 const templateSearch = ref(''),
   groupSearch = ref(''),
   templateNext = ref<number | null>(null),
   groupNext = ref<number | null>(null)
+const catalogBusy = ref({ templates: false, groups: false })
 async function catalogPage(kind: 'templates' | 'groups', append = false) {
   const q = new URLSearchParams({
     view,
@@ -72,11 +72,28 @@ async function catalogPage(kind: 'templates' | 'groups', append = false) {
     `/v1/workspaces/${id}/services?${q}`,
   )
   if (kind === 'templates') {
-    templates.value = append ? [...templates.value, ...page.items] : page.items
+    const selected = selectedTemplate.value
+    templates.value = append
+      ? Array.from(new Map([...templates.value, ...page.items].map((t) => [t.id, t])).values())
+      : page.items
+    if (selected && !templates.value.some((t) => t.id === selected.id))
+      templates.value.unshift(selected)
     templateNext.value = page.next
   } else {
     groups.value = append ? [...groups.value, ...page.items] : page.items
     groupNext.value = page.next
+  }
+}
+async function findCatalog(kind: 'templates' | 'groups', append = false) {
+  if (catalogBusy.value[kind]) return
+  catalogBusy.value[kind] = true
+  error.value = ''
+  try {
+    await catalogPage(kind, append)
+  } catch (e) {
+    error.value = errorMessage(e)
+  } finally {
+    catalogBusy.value[kind] = false
   }
 }
 async function load() {
@@ -168,11 +185,15 @@ onMounted(async () => {
   const stored = await getDraft<typeof draft.value>(key).catch(() => undefined)
   if (stored) {
     draft.value = stored
-    if (stored.template && !templates.value.some((t) => t.id === stored.template)) {
-      const page = await request<{ items: AssessmentTemplate[] }>(
-        `/v1/workspaces/${id}/services?view=${view}&kind=templates&id=${stored.template}`,
-      )
-      templates.value.push(...page.items)
+    try {
+      if (stored.template && !templates.value.some((t) => t.id === stored.template)) {
+        const page = await request<{ items: AssessmentTemplate[] }>(
+          `/v1/workspaces/${id}/services?view=${view}&kind=templates&id=${stored.template}`,
+        )
+        templates.value.push(...page.items)
+      }
+    } catch (e) {
+      error.value = errorMessage(e)
     }
   }
   ready.value = true
@@ -213,7 +234,13 @@ onMounted(async () => {
     <PageState :loading="loading" :error="loadError" @retry="load">
       <form v-if="data" @submit.prevent="step === 3 ? submit() : advance()">
         <fieldset :disabled="locked" class="form-fields">
-          <section v-if="step === 1" class="panel">
+          <section
+            v-if="step === 1"
+            ref="stepPanel"
+            tabindex="-1"
+            :aria-label="l('Event details', 'تفاصيل الموعد')"
+            class="panel"
+          >
             <label
               >{{ l('Event name', 'اسم الموعد')
               }}<input v-model="draft.title" required maxlength="100"
@@ -227,24 +254,33 @@ onMounted(async () => {
                 </option>
               </select></label
             >
-            <div v-if="draft.kind === 'assessment'" class="form-fields">
-              <label
-                >{{ l('Find an assessment template', 'البحث عن قالب تقييم')
-                }}<input
-                  v-model="templateSearch"
-                  type="search"
-                  @keydown.enter.prevent="catalogPage('templates')" /></label
-              ><button type="button" class="text-link" @click="catalogPage('templates')">
-                {{ l('Search templates', 'البحث في القوالب') }}</button
-              ><button
-                v-if="templateNext !== null"
-                type="button"
-                class="text-link"
-                @click="catalogPage('templates', true)"
-              >
-                {{ l('More templates', 'المزيد من القوالب') }}
-              </button>
-            </div>
+            <details v-if="draft.kind === 'assessment'" class="catalog-search">
+              <summary>{{ l('Find another template', 'ابحث عن قالب آخر') }}</summary>
+              <div class="form-fields">
+                <label
+                  >{{ l('Find an assessment template', 'البحث عن قالب تقييم')
+                  }}<input
+                    v-model="templateSearch"
+                    type="search"
+                    @keydown.enter.prevent="findCatalog('templates')" /></label
+                ><button
+                  type="button"
+                  class="text-link"
+                  :disabled="catalogBusy.templates"
+                  @click="findCatalog('templates')"
+                >
+                  {{ l('Search templates', 'البحث في القوالب') }}</button
+                ><button
+                  v-if="templateNext !== null"
+                  type="button"
+                  class="text-link"
+                  :disabled="catalogBusy.templates"
+                  @click="findCatalog('templates', true)"
+                >
+                  {{ l('More templates', 'المزيد من القوالب') }}
+                </button>
+              </div>
+            </details>
             <label v-if="draft.kind === 'assessment'"
               >{{ l('Assessment template', 'قالب التقييم')
               }}<select v-model="draft.template" required>
@@ -307,7 +343,13 @@ onMounted(async () => {
               </div>
             </details>
           </section>
-          <section v-else-if="step === 2" class="panel">
+          <section
+            v-else-if="step === 2"
+            ref="stepPanel"
+            tabindex="-1"
+            :aria-label="l('Choose people', 'اختيار الأشخاص')"
+            class="panel"
+          >
             <MemberPicker
               v-if="view === 'admin'"
               :workspace="id"
@@ -325,33 +367,42 @@ onMounted(async () => {
               }}
             </p>
             <h2>{{ l('Trainees', 'المتدربون') }}</h2>
-            <div class="form-fields">
-              <label
-                >{{ l('Find a group (optional)', 'البحث عن مجموعة (اختياري)')
-                }}<input
-                  v-model="groupSearch"
-                  type="search"
-                  @keydown.enter.prevent="catalogPage('groups')" /></label
-              ><button type="button" class="text-link" @click="catalogPage('groups')">
-                {{ l('Search groups', 'البحث في المجموعات') }}</button
-              ><button
-                v-if="groupNext !== null"
-                type="button"
-                class="text-link"
-                @click="catalogPage('groups', true)"
+            <details class="group-shortcut">
+              <summary>{{ l('Start with a training group', 'ابدأ بمجموعة تدريب') }}</summary>
+              <div class="form-fields">
+                <label
+                  >{{ l('Find a group (optional)', 'البحث عن مجموعة (اختياري)')
+                  }}<input
+                    v-model="groupSearch"
+                    type="search"
+                    @keydown.enter.prevent="findCatalog('groups')" /></label
+                ><button
+                  type="button"
+                  class="text-link"
+                  :disabled="catalogBusy.groups"
+                  @click="findCatalog('groups')"
+                >
+                  {{ l('Search groups', 'البحث في المجموعات') }}</button
+                ><button
+                  v-if="groupNext !== null"
+                  type="button"
+                  class="text-link"
+                  :disabled="catalogBusy.groups"
+                  @click="findCatalog('groups', true)"
+                >
+                  {{ l('More groups', 'المزيد من المجموعات') }}
+                </button>
+              </div>
+              <label v-if="groups.length"
+                >{{ l('Start with a group (optional)', 'ابدأ بمجموعة (اختياري)')
+                }}<select v-model="group" @change="groupMembers">
+                  <option value="">
+                    {{ l('Choose people individually', 'اختيار الأشخاص فردياً') }}
+                  </option>
+                  <option v-for="g in groups" :key="g.id" :value="g.id">{{ g.name }}</option>
+                </select></label
               >
-                {{ l('More groups', 'المزيد من المجموعات') }}
-              </button>
-            </div>
-            <label v-if="groups.length"
-              >{{ l('Start with a group (optional)', 'ابدأ بمجموعة (اختياري)')
-              }}<select v-model="group" @change="groupMembers">
-                <option value="">
-                  {{ l('Choose people individually', 'اختيار الأشخاص فردياً') }}
-                </option>
-                <option v-for="g in groups" :key="g.id" :value="g.id">{{ g.name }}</option>
-              </select></label
-            >
+            </details>
             <MemberPicker
               :workspace="id"
               :view="view"
@@ -362,7 +413,13 @@ onMounted(async () => {
               @options="data!.members = $event"
             />
           </section>
-          <section v-else class="panel event-review">
+          <section
+            v-else
+            ref="stepPanel"
+            tabindex="-1"
+            :aria-label="l('Review schedule', 'مراجعة الجدول')"
+            class="panel event-review"
+          >
             <h2>{{ draft.title }}</h2>
             <p>{{ draft.location }} · {{ draft.zone }}</p>
             <p v-if="selectedTemplate">
@@ -412,7 +469,17 @@ onMounted(async () => {
               {{ l('Back', 'رجوع') }}</button
             ><button
               class="button"
-              :disabled="step === 2 && (!draft.staff.length || !chosen.length)"
+              :disabled="
+                step === 2 &&
+                (!draft.staff.length ||
+                  !chosen.length ||
+                  chosen.length !== draft.participants.length ||
+                  (view === 'admin' &&
+                    draft.staff.some(
+                      (id) =>
+                        !staff.some((m) => m.id === id && m.active && m.roles.includes('trainer')),
+                    )))
+              "
             >
               {{
                 step === 3

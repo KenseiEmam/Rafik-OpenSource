@@ -49,7 +49,14 @@ async function enter(
     <template v-if="localPreview"
       ><div class="page-heading">
         <span class="tag">{{ language('Local preview', 'معاينة محلية') }}</span>
-        <h1>{{ language('See both sides of a useful session.', 'شاهد جانبي الحصة المفيدة.') }}</h1>
+        <h1>
+          {{
+            language(
+              'Choose a role. Explore the whole workflow.',
+              'اختر دوراً واستكشف رحلة العمل كاملة.',
+            )
+          }}
+        </h1>
         <p>
           {{
             language(
@@ -59,6 +66,7 @@ async function enter(
           }}
         </p>
       </div>
+      <h2>{{ language('Independent coaching', 'التدريب المستقل') }}</h2>
       <div class="preview-accounts">
         <button class="preview-account panel" :disabled="!!busy" @click="enter('coach')">
           <span class="avatar">L</span
@@ -98,6 +106,17 @@ async function enter(
             }}</small></span
           ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
         </button>
+      </div>
+      <h2>{{ language('Organizations', 'المؤسسات') }}</h2>
+      <p class="preview-context">
+        {{
+          language(
+            'Madar’s people and training belong to Madar. Omar’s Athar workspace is separate; Kareem can switch between his trainer and trainee roles.',
+            'أشخاص مدار وتدريبهم يتبعون مؤسسة مدار. مساحة عمر في أثر مستقلة؛ ويمكن لكريم التبديل بين دوري المدرب والمتدرب.',
+          )
+        }}
+      </p>
+      <div class="preview-accounts">
         <button
           v-for="account in [
             {
@@ -138,6 +157,9 @@ async function enter(
             ><small>{{ account.description }}</small></span
           ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
         </button>
+      </div>
+      <h2>{{ language('Platform operations', 'عمليات المنصة') }}</h2>
+      <div class="preview-accounts">
         <button class="preview-account panel" :disabled="!!busy" @click="enter('operator')">
           <span class="avatar">A</span
           ><span
@@ -169,3 +191,14 @@ async function enter(
     >
   </div>
 </template>
+
+<style scoped>
+h2 {
+  font-size: 1.2rem;
+  margin-block: 32px 16px;
+}
+.preview-context {
+  margin-bottom: 20px;
+  color: var(--muted);
+}
+</style>

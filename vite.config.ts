@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { shellIdentity, shellWorker } from './build/offline-shell'
+import { shellIdentity, shellWorker } from './build/offline-shell.ts'
 export default defineConfig({
   plugins: [
     vue(),

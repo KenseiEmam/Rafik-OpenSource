@@ -6,6 +6,61 @@ import { language, t } from '../../lib/i18n'
   <div class="container page prose-page">
     <p class="overline">{{ t('help') }}</p>
     <h1>{{ language('Keep moving, with a little clarity.', 'تابع بوضوح أكثر.') }}</h1>
+    <section class="help-workspaces">
+      <h2>{{ language('Start in the right workspace', 'ابدأ في مساحة العمل المناسبة') }}</h2>
+      <p>
+        {{
+          language(
+            'Use the workspace selector at the top to choose independent coaching or a specific organization and role. Each organization keeps its own people, programs and history.',
+            'اختر التدريب المستقل أو مؤسسة ودوراً محددين من قائمة مساحة العمل بالأعلى. تحتفظ كل مؤسسة بأشخاصها وبرامجها وسجلها.',
+          )
+        }}
+      </p>
+      <RouterLink class="text-link" to="/workspaces">{{
+        language('Choose your workspace', 'اختر مساحة عملك')
+      }}</RouterLink>
+      <details>
+        <summary>{{ language('I administer an organization', 'أنا مسؤول مؤسسة') }}</summary>
+        <p>
+          {{
+            language(
+              'Start in People: invite administrators, trainers or trainees and assign a responsible trainer. In Programs, publish a plan and review who will receive it. Calendar schedules training and assessor-led assessments; More contains reusable groups and assessment templates.',
+              'ابدأ في الأشخاص: ادعُ المسؤولين والمدربين والمتدربين وعيّن المدرب المسؤول. انشر خطة في البرامج وراجع المستلمين. استخدم التقويم لجدولة التدريب والتقييمات؛ وتحتوي قائمة المزيد على المجموعات وقوالب التقييم القابلة لإعادة الاستخدام.',
+            )
+          }}
+        </p>
+        <p>
+          {{
+            language(
+              'Analytics shows organization workload, participation and gaps. Its totals and definitions describe recorded activity. They do not rate trainer quality. Reassigning a trainer preserves the organization’s training history.',
+              'تعرض التحليلات أعباء العمل والمشاركة والنواقص في المؤسسة. تصف الأرقام النشاط المسجّل ولا تقيّم جودة المدرب. يبقى سجل المؤسسة محفوظاً عند تغيير المدرب المسؤول.',
+            )
+          }}
+        </p>
+      </details>
+      <details>
+        <summary>{{ language('I train people in an organization', 'أنا مدرب في مؤسسة') }}</summary>
+        <p>
+          {{
+            language(
+              'Choose the organization’s Coaching role. People and Training show your assigned trainees; Calendar includes events where you are designated staff. Review a completed session, leave feedback or adapt the next prescription. Analytics describes your current responsibility, and conversations have their own visible participant lists.',
+              'اختر دور التدريب في المؤسسة. يعرض الأشخاص والتدريب متدربيك المعيّنين، ويعرض التقويم المواعيد المسندة إليك. راجع الحصة المكتملة وقدّم ملاحظاتك أو عدّل التدريب القادم. تخص التحليلات مسؤوليتك الحالية، ولكل محادثة قائمة مشاركين واضحة.',
+            )
+          }}
+        </p>
+      </details>
+      <details>
+        <summary>{{ language('I coach independently', 'أنا مدرب مستقل') }}</summary>
+        <p>
+          {{
+            language(
+              'Today brings together sessions and check-ins awaiting review. Plans is where you prepare and publish training; Clients is where you invite people and manage each relationship. Optional scheduling, files and other tools stay under More. Independent coach teams do not merge your private client records.',
+              'يجمع اليوم الحصص والمتابعات بانتظار المراجعة. جهّز التدريب وانشره في الخطط، وادعُ المتدربين وأدر كل علاقة في المتدربين. تتوفر الجدولة والملفات والأدوات الاختيارية ضمن المزيد. لا تدمج فرق المدربين المستقلين سجلات متدربيك الخاصة.',
+            )
+          }}
+        </p>
+      </details>
+    </section>
     <section>
       <h2>{{ language('Start without an account', 'ابدأ بلا حساب') }}</h2>
       <p>
@@ -70,6 +125,29 @@ import { language, t } from '../../lib/i18n'
         }}
       </p>
     </section>
+    <section>
+      <h2>{{ language('Know who receives a message', 'اعرف من يستقبل الرسالة') }}</h2>
+      <p>
+        {{
+          language(
+            'A conversation lists the people who can read its history and send messages. Organization administrators join visibly. The notification bell keeps updates from different workspaces separate. In this local preview, optional email is intercepted for testing; no real email or push is sent.',
+            'توضح المحادثة من يستطيع قراءة سجلها وإرسال الرسائل، ويظهر انضمام مسؤول المؤسسة. يفصل جرس الإشعارات تحديثات مساحات العمل. في هذه المعاينة المحلية تُعترض الرسائل الاختيارية للاختبار ولا يُرسل بريد أو إشعار دفع فعلي.',
+          )
+        }}
+      </p>
+    </section>
     <AppUpdates />
   </div>
 </template>
+
+<style scoped>
+.help-workspaces details {
+  margin-top: 20px;
+}
+.help-workspaces summary {
+  font-weight: 600;
+}
+.help-workspaces details p {
+  margin-top: 16px;
+}
+</style>

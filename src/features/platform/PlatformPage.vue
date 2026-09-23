@@ -47,20 +47,24 @@ const labels = () => ({
   support: l('Platform support', 'دعم المنصة'),
   audit: l('Audit history', 'سجل الإجراءات'),
 })
+let generation = 0
 async function load(append = false) {
+  const current = ++generation
   loading.value = true
   error.value = ''
   try {
     const data = await request<{ items: any[]; next: number | null }>(
       `/v1/platform?section=${section.value}&search=${encodeURIComponent(search.value)}&includeReads=${includeReads.value}&offset=${append ? next.value || 0 : 0}`,
     )
+    if (current !== generation) return
     items.value = append ? [...items.value, ...data.items] : data.items
     next.value = data.next
   } catch (e) {
+    if (current !== generation) return
     error.value = errorMessage(e)
     items.value = []
   } finally {
-    loading.value = false
+    if (current === generation) loading.value = false
   }
 }
 function change() {

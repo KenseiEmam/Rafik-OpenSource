@@ -56,7 +56,9 @@ async function load(append = false) {
       total: number
     }>(`/v1/workspaces/${props.workspace}/people?${q}`)
     if (current !== generation) return
-    items.value = append ? [...items.value, ...data.items] : data.items
+    items.value = append
+      ? Array.from(new Map([...items.value, ...data.items].map((m) => [m.id, m])).values())
+      : data.items
     chosen.value = data.selected
     next.value = data.next
     total.value = data.total
@@ -91,8 +93,14 @@ function toggle(id: string) {
 }
 watch(
   () => props.modelValue.join(','),
-  () => load(),
-  { deep: true },
+  () => {
+    const known = new Map([...chosen.value, ...items.value].map((m) => [m.id, m]))
+    if (!loading.value && props.modelValue.every((id) => known.has(id))) {
+      // A choice from a loaded page must not reset the list or move the person's place.
+      chosen.value = props.modelValue.map((id) => known.get(id)!)
+      emit('options', Array.from(known.values()))
+    } else void load()
+  },
 )
 watch(
   () => props.role,
@@ -160,6 +168,7 @@ onUnmounted(() => {
           :checked="modelValue.includes(m.id)"
           :disabled="
             disabled ||
+            loading ||
             requiredIds.includes(m.id) ||
             excludeIds.includes(m.id) ||
             (!modelValue.includes(m.id) && modelValue.length >= max)

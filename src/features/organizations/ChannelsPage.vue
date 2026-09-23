@@ -70,7 +70,10 @@ onMounted(() => load())
 </script>
 <template>
   <OrganizationNav />
-  <div class="container page messages-page organization-messages" :class="{ 'has-thread': !!id }">
+  <div
+    class="container page messages-page organization-messages"
+    :class="{ 'has-thread': !!id, 'is-creating': creating }"
+  >
     <header class="messages-heading">
       <h1>{{ l('Messages', 'الرسائل') }}</h1>
       <div class="actions">
@@ -183,8 +186,10 @@ onMounted(() => load())
 .organization-messages {
   min-width: 0;
 }
-.organization-messages :deep(.channel-editor) {
-  overflow: auto;
+.organization-messages.is-creating :deep(.channel-editor) {
+  flex: none;
+  overflow: visible;
+  width: 100%;
 }
 .conversation-search {
   display: grid;
@@ -217,6 +222,10 @@ onMounted(() => load())
 
 <style>
 /* Short viewports may scroll the page; the footer must never cover the inbox. */
+#app:has(.organization-messages.is-creating) {
+  height: auto;
+  min-height: 100dvh;
+}
 #app:has(.organization-messages) {
   min-height: 44rem;
 }
