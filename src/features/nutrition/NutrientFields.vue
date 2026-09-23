@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { language as l } from '../../lib/i18n'
 import { nutrientKeys, type Nutrients } from './model'
+withDefaults(defineProps<{ draftOnly?: boolean }>(), { draftOnly: false })
 const model = defineModel<Nutrients>({ required: true })
 const labels = {
   kcal: ['Energy (kcal)', 'الطاقة (سعرة)'],
@@ -20,10 +21,11 @@ function update(key: (typeof nutrientKeys)[number], e: Event) {
       }}<input
         :value="model[key] ?? ''"
         @input="update(key, $event)"
-        type="number"
-        min="0"
-        max="10000"
-        step="0.1"
+        :type="draftOnly ? 'text' : 'number'"
+        inputmode="decimal"
+        :min="draftOnly ? undefined : 0"
+        :max="draftOnly ? undefined : 10000"
+        step="any"
         :placeholder="l('Not entered', 'غير مدخل')"
     /></label>
   </div>

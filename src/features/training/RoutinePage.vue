@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ExerciseDemo from '../../components/ExerciseDemo.vue'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { PhArrowLeft, PhArrowRight, PhBarbell, PhClock, PhCheckCircle } from '@phosphor-icons/vue'
@@ -90,6 +91,7 @@ async function start() {
                   }}
                 </p>
               </details>
+              <ExerciseDemo :exercise="exercise(item.exerciseId)" />
             </div>
             <span class="set-prescription"
               >{{ item.sets }} × {{ item.reps

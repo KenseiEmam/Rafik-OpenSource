@@ -1,0 +1,30 @@
+Exercise artwork: Bryl Lim / Workout Guide. Original glute-bridge pose: Everkinetic.
+Source commit: aac599224bb9780305239607ef98540b7e0ce389. Assets unchanged by Rafik.
+All illustration files in this directory are CC BY-SA 4.0. Application code is separate.
+Source and per-frame attribution: /v1/catalog/exercise-media on the Rafik API.
+
+Workout Guide visual assets are licensed under the Creative Commons
+Attribution-ShareAlike 4.0 International license (CC BY-SA 4.0).
+
+Copyright (c) 2026 Bryl Lim, except where ATTRIBUTION.md identifies an
+upstream source.
+
+You may share and adapt these assets for any purpose, including commercially,
+provided that you give appropriate credit, link to the license, indicate
+changes, and distribute adaptations under the same license.
+
+License text: https://creativecommons.org/licenses/by-sa/4.0/legalcode
+Human-readable summary: https://creativecommons.org/licenses/by-sa/4.0/
+
+# Attribution
+
+The original pose artwork used by Workout Guide comes from
+[Everkinetic](https://github.com/everkinetic/data), licensed under
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+
+[Bryl Lim](https://bryllim.com) expanded upon that foundation with additional
+exercises and animation frames, normalized transparent 512 × 512 assets,
+structured metadata, package APIs, and the documentation gallery. Seventy-six
+first-pose frames are vector-traced adaptations of rasterized Everkinetic SVGs; their
+exact source URLs and recorded changes are retained in
+`packages/workout-guide/manifest.json`.

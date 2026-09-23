@@ -136,6 +136,39 @@ import { language, t } from '../../lib/i18n'
         }}
       </p>
     </section>
+    <section>
+      <h2>{{ language('Make nutrition actionable', 'حوّل التغذية إلى خطوات عملية') }}</h2>
+      <p>
+        {{
+          language(
+            'Independent coaches: open Nutrition, choose a client, enter agreed calorie/macronutrient targets and build an example day. The calculator only converts your chosen budget into grams. Save the plan to share it. Trainees: choose who can see the record, select a food or suggested meal, adjust the amount actually eaten and save. Suggested meals never count as logged food automatically. Unknown values stay blank.',
+            'للمدرب المستقل: افتح التغذية واختر متدرباً وحدد الأهداف المتفق عليها للسعرات والمغذيات وأضف يوماً مقترحاً. تحوّل الحاسبة السعرات التي اخترتها إلى غرامات فقط. احفظ الخطة لمشاركتها. للمتدرب: حدد من يرى السجل واختر طعاماً أو وجبة مقترحة وعدّل الكمية التي تناولتها ثم احفظ. لا تُسجل المقترحات كطعام متناول تلقائياً. تبقى القيم المجهولة فارغة.',
+          )
+        }}
+      </p>
+      <p>
+        {{
+          language(
+            'The food library starts with 15 sourced USDA staples. Use a label or a saved food for other choices; check the nutrient basis before changing portions. Organization nutrition is not available yet.',
+            'تبدأ مكتبة الطعام بخمسة عشر طعاماً موثقاً من وزارة الزراعة الأمريكية. استخدم الملصق أو طعاماً محفوظاً للخيارات الأخرى وراجع أساس القيم قبل تعديل الكميات. تغذية المؤسسات غير متاحة بعد.',
+          )
+        }}
+      </p>
+    </section>
+    <section>
+      <h2>{{ language('See an exercise movement', 'شاهد وضعيات التمرين') }}</h2>
+      <p>
+        {{
+          language(
+            'Open See movement beside a supported exercise. Step between three reference positions, or choose Play steps and pause at any time. These are reference poses, not a real-time demonstration of cadence. Your coach’s instructions and approved alternatives remain alongside the exercise.',
+            'افتح عرض الحركة بجوار التمرين المدعوم. تنقل بين ثلاث وضعيات مرجعية أو شغّل الخطوات وأوقفها في أي وقت. هذه وضعيات مرجعية وليست عرضاً للإيقاع الفعلي للحركة. تبقى تعليمات مدربك والبدائل المعتمدة بجوار التمرين.',
+          )
+        }}
+      </p>
+      <a class="text-link" href="/exercise-media/CREDITS.txt" target="_blank" rel="noopener">{{
+        language('Exercise illustration credits and license', 'مصادر الرسوم التوضيحية وترخيصها')
+      }}</a>
+    </section>
     <AppUpdates />
   </div>
 </template>

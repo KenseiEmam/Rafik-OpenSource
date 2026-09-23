@@ -1,0 +1,660 @@
+{
+  "schema": 1,
+  "version": "wg-aac5992-v1",
+  "source": {
+    "repository": "https://github.com/bryllim/workout-guide",
+    "commit": "aac599224bb9780305239607ef98540b7e0ce389"
+  },
+  "license": "CC-BY-SA-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "items": [
+    {
+      "id": "wg-aac5992-goblet-squat",
+      "exerciseId": "goblet-squat",
+      "sourceExerciseId": "exercise-goblet-squat",
+      "sourceSlug": "goblet-squat",
+      "attribution": {
+        "creator": "Bryl Lim",
+        "creatorUrl": "https://bryllim.com",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "modified": false,
+      "frames": [
+        {
+          "index": 1,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-goblet-squat/1.svg",
+          "sourcePath": "packages/workout-guide/assets/goblet-squat/frame-1.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 14251,
+          "sha256": "f94a73243089f6a472e0fdcca604ae26f940b2dae4216b7280cf0f6867a34c63",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 2,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-goblet-squat/2.svg",
+          "sourcePath": "packages/workout-guide/assets/goblet-squat/frame-2.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 29578,
+          "sha256": "cbe23f873b6d1f4102356553df02b25fdee21897d82c261b8d09bbcdd2b2e10e",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 3,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-goblet-squat/3.svg",
+          "sourcePath": "packages/workout-guide/assets/goblet-squat/frame-3.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 14777,
+          "sha256": "57a91dd57805784263701ff6363965b40512d919f829840b59b43c4a10f7a90a",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wg-aac5992-one-arm-dumbbell-row",
+      "exerciseId": "dumbbell-row",
+      "sourceExerciseId": "exercise-one-arm-dumbbell-row",
+      "sourceSlug": "one-arm-dumbbell-row",
+      "attribution": {
+        "creator": "Bryl Lim",
+        "creatorUrl": "https://bryllim.com",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "modified": false,
+      "frames": [
+        {
+          "index": 1,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-one-arm-dumbbell-row/1.svg",
+          "sourcePath": "packages/workout-guide/assets/one-arm-dumbbell-row/frame-1.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 19510,
+          "sha256": "b818e63d8dc40bf3bd1b59aa9fa91fd5c7bdfed99bbb2ac599c4bed328a7de2f",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 2,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-one-arm-dumbbell-row/2.svg",
+          "sourcePath": "packages/workout-guide/assets/one-arm-dumbbell-row/frame-2.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 20446,
+          "sha256": "0d1000130af10a095a2625e2f0fda0c11a4f8aa126ebf583a100ae21e1b467f7",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 3,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-one-arm-dumbbell-row/3.svg",
+          "sourcePath": "packages/workout-guide/assets/one-arm-dumbbell-row/frame-3.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 18119,
+          "sha256": "fadaa4327b6c68fcfa52944054a5a8d9e5c87f51504736d718157169ea11eea5",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wg-aac5992-dumbbell-romanian-deadlift",
+      "exerciseId": "romanian-deadlift",
+      "sourceExerciseId": "exercise-dumbbell-romanian-deadlift",
+      "sourceSlug": "dumbbell-romanian-deadlift",
+      "attribution": {
+        "creator": "Bryl Lim",
+        "creatorUrl": "https://bryllim.com",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "modified": false,
+      "frames": [
+        {
+          "index": 1,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-dumbbell-romanian-deadlift/1.svg",
+          "sourcePath": "packages/workout-guide/assets/dumbbell-romanian-deadlift/frame-1.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 16790,
+          "sha256": "ff05da6e13d1f1cc053af32e37b0cf4c2c47f472bf2f53706c7061b484f9ad05",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 2,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-dumbbell-romanian-deadlift/2.svg",
+          "sourcePath": "packages/workout-guide/assets/dumbbell-romanian-deadlift/frame-2.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 13344,
+          "sha256": "6b34ffe50fb458f1386a06bf953d8c5d711383a3c42656282c65abc857f5cb29",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 3,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-dumbbell-romanian-deadlift/3.svg",
+          "sourcePath": "packages/workout-guide/assets/dumbbell-romanian-deadlift/frame-3.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 19303,
+          "sha256": "69c4840c349b7aee96943f6cebba36e333c4128b19a781d67b8420e1f9a8dc32",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wg-aac5992-split-squat",
+      "exerciseId": "split-squat",
+      "sourceExerciseId": "exercise-split-squat",
+      "sourceSlug": "split-squat",
+      "attribution": {
+        "creator": "Bryl Lim",
+        "creatorUrl": "https://bryllim.com",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "modified": false,
+      "frames": [
+        {
+          "index": 1,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-split-squat/1.svg",
+          "sourcePath": "packages/workout-guide/assets/split-squat/frame-1.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 16066,
+          "sha256": "f90ccc390934a79a9086b0eb7df46e92bcd02bd9fa47b466d3bbdc6e49c21b12",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 2,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-split-squat/2.svg",
+          "sourcePath": "packages/workout-guide/assets/split-squat/frame-2.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 19874,
+          "sha256": "60669abf49ce69010f94667c590c2bc900eea033f44b9f84bf0f7199fdf09406",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 3,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-split-squat/3.svg",
+          "sourcePath": "packages/workout-guide/assets/split-squat/frame-3.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 18601,
+          "sha256": "909c0cd68f17c2cd37acd1191863f22442bb53d0a1bb0fea875b5a74b80ce01b",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wg-aac5992-glute-bridge",
+      "exerciseId": "glute-bridge",
+      "sourceExerciseId": "exercise-glute-bridge",
+      "sourceSlug": "glute-bridge",
+      "attribution": {
+        "creator": "Bryl Lim",
+        "creatorUrl": "https://bryllim.com",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "source": {
+          "name": "Everkinetic",
+          "url": "https://github.com/everkinetic/data/blob/main/dist/svg/0109-tension.svg",
+          "license": "CC BY-SA 4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+          "changes": "Rasterized on a transparent 512 × 512 canvas, recolored for monochrome display, and vector-traced.",
+          "resolvedCommit": "446bb9a3d0c3beb6b84f7c9d77dfc8af707a2ab6",
+          "pinnedUrl": "https://github.com/everkinetic/data/blob/446bb9a3d0c3beb6b84f7c9d77dfc8af707a2ab6/dist/svg/0109-tension.svg"
+        }
+      },
+      "modified": false,
+      "frames": [
+        {
+          "index": 1,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-glute-bridge/1.svg",
+          "sourcePath": "packages/workout-guide/assets/glute-bridge/frame-1.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 9796,
+          "sha256": "64830d042d3ef122b54391cee0339f60d10dc05a79007893f56f6ba35c344e96",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "source": {
+              "name": "Everkinetic",
+              "url": "https://github.com/everkinetic/data/blob/main/dist/svg/0109-tension.svg",
+              "license": "CC BY-SA 4.0",
+              "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+              "changes": "Rasterized on a transparent 512 × 512 canvas, recolored for monochrome display, and vector-traced.",
+              "resolvedCommit": "446bb9a3d0c3beb6b84f7c9d77dfc8af707a2ab6",
+              "pinnedUrl": "https://github.com/everkinetic/data/blob/446bb9a3d0c3beb6b84f7c9d77dfc8af707a2ab6/dist/svg/0109-tension.svg"
+            }
+          }
+        },
+        {
+          "index": 2,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-glute-bridge/2.svg",
+          "sourcePath": "packages/workout-guide/assets/glute-bridge/frame-2.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 9495,
+          "sha256": "4eeffd0c95b32e0306bed86b9cda802ad3b3ac52135bd1f49f4939569f113375",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 3,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-glute-bridge/3.svg",
+          "sourcePath": "packages/workout-guide/assets/glute-bridge/frame-3.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 10098,
+          "sha256": "693e4d8dc5140804c02caf66fa69df4ac97cbb8f6e41a665d5b6adb7fa3b49f1",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wg-aac5992-seated-dumbbell-press",
+      "exerciseId": "overhead-press",
+      "sourceExerciseId": "exercise-seated-dumbbell-press",
+      "sourceSlug": "seated-dumbbell-press",
+      "attribution": {
+        "creator": "Bryl Lim",
+        "creatorUrl": "https://bryllim.com",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "modified": false,
+      "frames": [
+        {
+          "index": 1,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-seated-dumbbell-press/1.svg",
+          "sourcePath": "packages/workout-guide/assets/seated-dumbbell-press/frame-1.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 23640,
+          "sha256": "78d50c1ac770871a58d7637777f60e9b7fcb0c939415ca4c7e1fdd9919e7536e",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 2,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-seated-dumbbell-press/2.svg",
+          "sourcePath": "packages/workout-guide/assets/seated-dumbbell-press/frame-2.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 54722,
+          "sha256": "bbc8675ddb73d4131836950ccbf7abefe526b670840473fd363e118d0dc926e9",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 3,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-seated-dumbbell-press/3.svg",
+          "sourcePath": "packages/workout-guide/assets/seated-dumbbell-press/frame-3.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 56885,
+          "sha256": "8922a6edac1722d972236bcb85d32fbbcd9e97cbe7123fe43e5c97b4535eb6fe",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wg-aac5992-dead-bug",
+      "exerciseId": "dead-bug",
+      "sourceExerciseId": "exercise-dead-bug",
+      "sourceSlug": "dead-bug",
+      "attribution": {
+        "creator": "Bryl Lim",
+        "creatorUrl": "https://bryllim.com",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "modified": false,
+      "frames": [
+        {
+          "index": 1,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-dead-bug/1.svg",
+          "sourcePath": "packages/workout-guide/assets/dead-bug/frame-1.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 13704,
+          "sha256": "0e1208250b923348fbf170f163e581be3dcc1ce7f906b14766da59a7801206a2",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 2,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-dead-bug/2.svg",
+          "sourcePath": "packages/workout-guide/assets/dead-bug/frame-2.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 18480,
+          "sha256": "333a91ce60ff475586a813310cffc705231956511f86d1c191b31d0878005842",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 3,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-dead-bug/3.svg",
+          "sourcePath": "packages/workout-guide/assets/dead-bug/frame-3.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 21359,
+          "sha256": "63f83858a148877d987a8b661eca1cc18157595225aa36f07ed2f171f07e77ac",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wg-aac5992-plank",
+      "exerciseId": "forearm-plank",
+      "sourceExerciseId": "exercise-plank",
+      "sourceSlug": "plank",
+      "attribution": {
+        "creator": "Bryl Lim",
+        "creatorUrl": "https://bryllim.com",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "modified": false,
+      "frames": [
+        {
+          "index": 1,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-plank/1.svg",
+          "sourcePath": "packages/workout-guide/assets/plank/frame-1.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 12483,
+          "sha256": "0f65a842d151f80918e4ee45d1a9f659dd5a82e2d9857c9ad6ae06832a872e94",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 2,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-plank/2.svg",
+          "sourcePath": "packages/workout-guide/assets/plank/frame-2.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 21517,
+          "sha256": "00210f9137bfe8e801e9287f1ba9427fe841b1128a4e8f69ea8b1bcb96c9d4a7",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 3,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-plank/3.svg",
+          "sourcePath": "packages/workout-guide/assets/plank/frame-3.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 14665,
+          "sha256": "d768cc8d2ad533e840eece02df9e79ad4836f59990dc6dea5e1b2005b27e892c",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wg-aac5992-incline-push-up",
+      "exerciseId": "incline-pushup",
+      "sourceExerciseId": "exercise-incline-push-up",
+      "sourceSlug": "incline-push-up",
+      "attribution": {
+        "creator": "Bryl Lim",
+        "creatorUrl": "https://bryllim.com",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "modified": false,
+      "frames": [
+        {
+          "index": 1,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-incline-push-up/1.svg",
+          "sourcePath": "packages/workout-guide/assets/incline-push-up/frame-1.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 12254,
+          "sha256": "14278ef039b0942e06b7aba35a1e5836662c332ece834f83f6828b98edfac22c",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 2,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-incline-push-up/2.svg",
+          "sourcePath": "packages/workout-guide/assets/incline-push-up/frame-2.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 11822,
+          "sha256": "38ca6cfa445582bca9cd95c0dc44ad1ae8fd1da63d2b650bc3b7e926325aab80",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 3,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-incline-push-up/3.svg",
+          "sourcePath": "packages/workout-guide/assets/incline-push-up/frame-3.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 10758,
+          "sha256": "7a7aa9ce71bbd1bc0abcdfd240d6bcc3ecb50ccba7cd61eebbc362a29f282cf1",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        }
+      ]
+    },
+    {
+      "id": "wg-aac5992-banded-row",
+      "exerciseId": "band-row",
+      "sourceExerciseId": "exercise-banded-row",
+      "sourceSlug": "banded-row",
+      "attribution": {
+        "creator": "Bryl Lim",
+        "creatorUrl": "https://bryllim.com",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "modified": false,
+      "frames": [
+        {
+          "index": 1,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-banded-row/1.svg",
+          "sourcePath": "packages/workout-guide/assets/banded-row/frame-1.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 14321,
+          "sha256": "76ff5bff05eb6344c4c800a523449c923add18a368b67845c17f7f39171c1cfe",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 2,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-banded-row/2.svg",
+          "sourcePath": "packages/workout-guide/assets/banded-row/frame-2.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 30255,
+          "sha256": "66ff0ce671ec604d4ad40006334a7eca1b3476786d91042c44f44ace60f27991",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        },
+        {
+          "index": 3,
+          "path": "/v1/catalog/exercise-media/wg-aac5992-banded-row/3.svg",
+          "sourcePath": "packages/workout-guide/assets/banded-row/frame-3.svg",
+          "width": 512,
+          "height": 512,
+          "mime": "image/svg+xml",
+          "bytes": 19828,
+          "sha256": "fed17d46a373035d8b6697f7d230cb4b3e2ab00844cebfee5cf02e8f47777751",
+          "attribution": {
+            "creator": "Bryl Lim",
+            "creatorUrl": "https://bryllim.com",
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+          }
+        }
+      ]
+    }
+  ]
+}

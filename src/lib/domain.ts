@@ -22,6 +22,7 @@ export interface Exercise {
   active?: boolean
   revision?: number
   kind?: ExerciseKind
+  media_ref?: string | null
   media_url?: string
 }
 export interface PrescriptionExercise {
