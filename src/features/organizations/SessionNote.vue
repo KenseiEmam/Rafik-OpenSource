@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { nextTick } from 'vue'
 import { ref, computed, onMounted, watch } from 'vue'
 import { user } from '../../app/auth'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
@@ -27,8 +28,14 @@ const text = ref(props.note),
 let generation = 0
 const command = useCommand<'note'>(
   key,
-  async () => {
+  async (_, result) => {
+    ready.value = false
+    revision.value = (result as { revision: number }).revision
+    text.value = (result as { session_note: string }).session_note
+    await nextTick()
     await removeDraft(key)
+    saved.value = false
+    ready.value = true
     editing.value = false
   },
   (_, args) =>

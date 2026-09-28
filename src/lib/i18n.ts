@@ -166,6 +166,14 @@ export function errorMessage(error: unknown): string {
       'This program is no longer available in this workspace. Return to the program library.',
       'لم يعد البرنامج متاحاً في هذه المساحة. عُد إلى مكتبة البرامج.',
     ],
+    feedback_unavailable: [
+      'Only your completed, eligible sessions can be rated.',
+      'يمكنك تقييم جلساتك المكتملة والمؤهلة فقط.',
+    ],
+    feedback_period_changed: [
+      'The feedback month has changed. Reload before submitting.',
+      'تغيّر شهر التقييم. أعد التحميل قبل الإرسال.',
+    ],
     package_unavailable: [
       'This package is no longer available for this trainee.',
       'هذه الباقة لم تعد متاحة لهذا المتدرب.',

@@ -8,6 +8,8 @@ import { localDate, addDays } from '../../lib/dates'
 import PageState from '../../components/PageState.vue'
 import OrganizationNav from '../organizations/OrganizationNav.vue'
 import MetricChart from './MetricChart.vue'
+import TrainerDelivery from './TrainerDelivery.vue'
+import ExperienceReport, { type Experience } from './ExperienceReport.vue'
 import { TabsRoot, TabsList, TabsTrigger, TabsContent } from 'reka-ui'
 const route = useRoute(),
   workspace = String(route.params.workspace || ''),
@@ -20,6 +22,14 @@ const from = ref(addDays(localDate(profile.value?.timezone || 'UTC'), -27)),
   selected = ref(''),
   search = ref('')
 type Report = {
+  performance?: {
+    id: string
+    name: string
+    completed_sessions: number
+    present: number
+    absent: number
+  }[]
+  experience?: Experience
   workloadNext: number | null
   programNext: number | null
   people: { id: string; name: string }[]
@@ -31,7 +41,8 @@ type Report = {
   programs: { id: string; label: string; value: number }[]
 }
 const data = ref<Report>()
-const period = ref('28')
+const period = ref('28'),
+  section = ref('activity')
 function setPeriod() {
   if (period.value !== 'custom') {
     to.value = localDate(profile.value?.timezone || 'UTC')
@@ -65,6 +76,7 @@ async function load(part?: 'workload' | 'program') {
     if (part && data.value) {
       if (part === 'workload') {
         data.value.workload.push(...result.workload)
+        data.value.performance?.push(...(result.performance || []))
         data.value.workloadNext = result.workloadNext
       } else {
         data.value.programs.push(...result.programs)
@@ -214,7 +226,7 @@ onMounted(() => load())
     </div>
     <PageState :loading="loading && !data" :error="!data ? error : ''" @retry="load()">
       <template v-if="data">
-        <div class="analytics-numbers">
+        <div v-if="section !== 'experience'" class="analytics-numbers">
           <RouterLink :to="base + (workspace ? '/people' : '/clients')"
             ><span>{{
               workspace
@@ -225,7 +237,7 @@ onMounted(() => load())
             ><small>{{ l('View roster', 'عرض القائمة') }} ↗</small></RouterLink
           >
           <RouterLink :to="base + (workspace ? '/training' : '/clients')"
-            ><span>{{ l('Completed sessions', 'الحصص المكتملة') }}</span
+            ><span>{{ l('Completed workouts', 'التمارين المكتملة') }}</span
             ><strong>{{ data.summary.completed }}</strong
             ><small>{{ l('In this period', 'خلال الفترة') }}</small></RouterLink
           >
@@ -241,7 +253,12 @@ onMounted(() => load())
             ><small>{{ l('Review training', 'مراجعة التدريب') }} ↗</small></RouterLink
           >
         </div>
-        <TabsRoot default-value="activity" class="analytics-sections">
+        <TabsRoot
+          activation-mode="manual"
+          v-model="section"
+          default-value="activity"
+          class="analytics-sections"
+        >
           <TabsList class="report-tabs" :aria-label="l('Analytics views', 'عروض التحليلات')"
             ><TabsTrigger value="activity">{{
               l('Training activity', 'النشاط التدريبي')
@@ -250,16 +267,22 @@ onMounted(() => load())
               workspace
                 ? l('Delivery & capacity', 'التدريب وقدرة الفريق')
                 : l('Follow-up', 'المتابعة')
+            }}</TabsTrigger
+            ><TabsTrigger v-if="workspace" value="experience">{{
+              l('Experience & renewals', 'التجربة والتجديدات')
             }}</TabsTrigger></TabsList
           >
+          <TabsContent v-if="data.experience" value="experience" tabindex="0"
+            ><ExperienceReport :report="data.experience" :base="base"
+          /></TabsContent>
           <TabsContent value="activity" class="analytics-charts" tabindex="0">
             <MetricChart
               counts
               :title="l('Training over time', 'التدريب عبر الوقت')"
               :description="
                 l(
-                  'Completed sessions per day. Each completion is counted once.',
-                  'الحصص المكتملة يومياً. تحتسب كل حصة مرة واحدة.',
+                  'Completed workouts per day. Each completion is counted once.',
+                  'التمارين المكتملة يومياً. يحتسب كل تمرين مرة واحدة.',
                 )
               "
               :items="trend"
@@ -280,6 +303,11 @@ onMounted(() => load())
             />
           </TabsContent>
           <TabsContent value="delivery" class="delivery-section" tabindex="0">
+            <TrainerDelivery
+              v-if="view === 'admin' && data.performance"
+              :items="data.performance"
+              :base="base"
+            />
             <section
               class="analytics-attention"
               v-if="data.summary.without_program || data.summary.unassigned"

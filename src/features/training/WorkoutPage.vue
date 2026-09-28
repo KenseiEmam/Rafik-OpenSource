@@ -772,6 +772,12 @@ function correctSets() {
                 >
               </div>
             </div>
+            <RouterLink
+              v-if="session.workspace_id"
+              :to="`/organization/${session.workspace_id}/trainee/feedback`"
+              class="text-link"
+              >{{ language('Rate your session (optional)', 'قيّم جلستك (اختياري)') }}</RouterLink
+            >
             <RouterLink :to="returnPath" class="button secondary"
               >{{ language('Back to training', 'العودة إلى التدريب')
               }}<PhArrowRight :size="19" class="directional" aria-hidden="true"

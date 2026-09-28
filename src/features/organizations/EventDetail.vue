@@ -339,6 +339,17 @@ onMounted(load)
                 : l('Scheduled', 'مجدول')
           }}</span>
         </section>
+        <RouterLink
+          v-if="
+            view === 'trainee' &&
+            data.event.kind === 'training' &&
+            data.event.state === 'completed' &&
+            trainees.some((p) => p.attendance === 'present')
+          "
+          :to="base + '/feedback'"
+          class="text-link"
+          >{{ l('Rate your session (optional)', 'قيّم جلستك (اختياري)') }}</RouterLink
+        >
         <div v-if="view !== 'trainee' && data.event.state === 'scheduled'" class="event-tools">
           <button
             v-if="!started"

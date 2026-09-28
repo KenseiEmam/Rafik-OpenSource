@@ -431,6 +431,17 @@ export type Database = { public: { Tables: {
         updated_at: string
         revision: number
     } }
+    organization_session_feedback: { Row: {
+        id: string
+        workspace_id: string
+        member_id: string
+        workout_id: string | null
+        event_id: string | null
+        score: number
+        revision: number
+        created_at: string
+        updated_at: string
+    } }
     organization_sessions: { Row: {
         id: string
         workspace_id: string
@@ -467,6 +478,15 @@ export type Database = { public: { Tables: {
         prescription: Json
         created_by: string
         created_at: string
+    } }
+    organization_workplace_feedback: { Row: {
+        workspace_id: string
+        member_id: string
+        month: string
+        score: number
+        revision: number
+        created_at: string
+        updated_at: string
     } }
     plan_deliveries: { Row: {
         id: string

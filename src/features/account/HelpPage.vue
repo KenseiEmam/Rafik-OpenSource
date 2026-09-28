@@ -6,6 +6,25 @@ import { language, t } from '../../lib/i18n'
   <div class="container page prose-page">
     <p class="overline">{{ t('help') }}</p>
     <h1>{{ language('Help', 'المساعدة') }}</h1>
+    <section>
+      <h2>{{ language('Sessions, packages and feedback', 'الجلسات والباقات والتقييمات') }}</h2>
+      <p>
+        {{
+          language(
+            'Administrators assign session allowances in Packages. Book from a package or choose the funding when scheduling a Calendar session. Package bookings reserve a session; completing attendance uses it. Cancellations release it, and every no-show has an explicit charge or release choice. Independent trial, makeup and prize sessions never reduce a subscription.',
+            'يعيّن المسؤولون أرصدة الجلسات من الباقات. احجز من الباقة أو اختر التمويل عند جدولة جلسة في التقويم. يحجز الموعد جلسة وتستهلك عند إكمال الحضور. يلغي الإلغاء الحجز، ولكل غياب قرار صريح بالخصم أو التحرير. الجلسات المستقلة التجريبية والتعويضية وجلسات الجوائز لا تخفض الاشتراك.',
+          )
+        }}
+      </p>
+      <p>
+        {{
+          language(
+            'Session details hold attendance, check-in time and trainee-visible notes. The overview shows missed sessions to follow up. Analytics separates session experience, trainers’ workplace feedback and recorded renewals. Trainers use My feedback for an optional monthly workplace rating; trainees can rate completed sessions from their completion screen. Neither question has a preselected answer.',
+            'تضم تفاصيل الجلسة الحضور ووقت تسجيله وملاحظات مرئية للمتدرب. تعرض النظرة العامة الجلسات الفائتة للمتابعة. تفصل التحليلات تجربة الجلسات عن آراء المدربين في بيئة العمل والتجديدات المسجلة. يستخدم المدربون تقييماتي للتقييم الشهري الاختياري، ويمكن للمتدربين تقييم الجلسات من شاشة الإكمال. لا إجابة مختارة مسبقاً.',
+          )
+        }}
+      </p>
+    </section>
     <section class="help-workspaces">
       <h2>{{ language('Start in the right workspace', 'ابدأ في مساحة العمل المناسبة') }}</h2>
       <p>

@@ -149,8 +149,33 @@ test('package assignment and reservation recover; completion deducts while indep
     await expect(trainerPage.getByLabel('Session note for R4 Client', { exact: true })).toHaveValue(
       'Arrange a replacement after the client returns.',
     )
+    let lostNote = false
+    await trainerPage.route(`**/v1/workspaces/${id}/calendar`, async (route) => {
+      if (
+        !lostNote &&
+        route.request().method() === 'POST' &&
+        route.request().postDataJSON()?.action === 'session-note'
+      ) {
+        lostNote = true
+        await route.fetch()
+        await route.abort('failed')
+      } else await route.continue()
+    })
     await trainerPage.getByRole('button', { name: 'Save session note', exact: true }).click()
+    await expect(
+      trainerPage.getByRole('button', { name: 'Retry saved change', exact: true }),
+    ).toBeEnabled()
+    await trainerPage.reload()
+    await trainerPage.getByRole('button', { name: 'Retry saved change', exact: true }).click()
     await expect(trainerPage.locator('.session-note-copy')).toContainText('Arrange a replacement')
+    await trainerPage.getByRole('button', { name: 'Edit session note', exact: true }).click()
+    await trainerPage
+      .getByLabel('Session note for R4 Client', { exact: true })
+      .fill('Replacement discussed; client will confirm.')
+    await trainerPage.getByRole('button', { name: 'Save session note', exact: true }).click()
+    await expect(trainerPage.locator('.session-note-copy')).toContainText(
+      'Replacement discussed; client will confirm.',
+    )
     await trainerPage.getByRole('button', { name: 'Complete session', exact: true }).click()
     await expect(trainerPage.locator('.event-overview .tag')).toHaveText('Completed')
     expect((await packages()).items[0].available).toBe(8)
