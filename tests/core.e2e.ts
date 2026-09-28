@@ -8,10 +8,11 @@ test('guest reaches value, records, reloads, and finishes without signup', async
   const errors: string[] = []
   page.on('pageerror', (e) => errors.push(e.message))
   await page.goto('/')
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('A clear plan')
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Your people. Your programs.')
   await page.screenshot({ path: `artifacts/home-${info.project.name}.png`, fullPage: true })
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
-  await page.getByRole('link', { name: 'Try a workout', exact: true }).first().click()
+  // The retained trainee examination route is no longer the gym marketing CTA.
+  await page.goto('/routine')
   await expect(page.getByRole('heading', { name: 'Build your base' })).toBeVisible()
   await page.getByRole('button', { name: 'Start workout', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'Full body A', exact: true })).toBeVisible()
@@ -78,7 +79,7 @@ test('coach publishes and invites; verified client trains; coach replies', async
   await page.screenshot({ path: `artifacts/editor-${info.project.name}.png`, fullPage: true })
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
   await page.getByRole('button', { name: 'Publish plan', exact: true }).click()
-  await expect(page.getByRole('status')).toContainText('Published.')
+  await expect(page.getByRole('status').filter({ hasText: 'Published.' })).toBeVisible()
   await page.goto('/coach/clients')
   await page.getByLabel('Client email', { exact: true }).fill(email)
   await page.getByLabel('Published plan', { exact: true }).selectOption({ label: title + ' · 1' })
@@ -312,7 +313,7 @@ test('plan drafts recover after interruption and failed publication', async ({ p
   )
   await page.unroute('**/v1/commands/save_plan')
   await page.getByRole('button', { name: 'Retry saved change', exact: true }).click()
-  await expect(page.getByRole('status')).toContainText('Published.')
+  await expect(page.getByRole('status').filter({ hasText: 'Published.' })).toBeVisible()
 })
 
 test('invalid set values cannot be marked complete, and keyboard skip navigation works', async ({
@@ -320,7 +321,7 @@ test('invalid set values cannot be marked complete, and keyboard skip navigation
   browserName,
 }) => {
   await page.goto('/')
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('A clear plan')
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Your people. Your programs.')
   await page.keyboard.press(browserName === 'webkit' ? 'Alt+Tab' : 'Tab')
   await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused()
   await page.keyboard.press('Enter')

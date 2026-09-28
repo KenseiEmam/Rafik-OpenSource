@@ -47,10 +47,11 @@ const name = computed(() =>
     :compact="thumbnail"
   />
   <ExerciseVideo v-else-if="motion" :key="motion.id" :item="motion" :name="name" />
-  <section
+  <div
     v-else-if="pack"
+    role="group"
     class="exercise-demo"
-    :aria-label="l('Technique illustrations', 'رسومات التقنية')"
+    :aria-label="`${name} · ${l('Technique illustrations', 'رسومات التقنية')}`"
   >
     <div class="demo-positions">
       <figure v-for="(frame, index) in pack.frames" :key="frame.path">
@@ -77,7 +78,7 @@ const name = computed(() =>
       >
       · <a :href="media.licenseUrl" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>
     </p>
-  </section>
+  </div>
   <a
     v-else-if="exercise?.media_url"
     :href="exercise.media_url"

@@ -85,7 +85,12 @@
 - Conversation lists must remain mounted when selecting a thread; retain search and scroll, isolate thread drafts/requests by conversation, and test actual DOM continuity. Separate direct conversation privacy from organization group visibility.
 - Per-set values and program descriptions must be visible during authoring. Weekly cycles need an explicit day-count/rest-day explanation; do not silently migrate historical prescriptions.
 - Organization exercises shared with trainers mean within the same organization, not a cross-tenant public catalog. Recheck media permission on every byte read and preserve authorized immutable snapshot references.
-- Ask the founder again when reaching session-package deduction/cancellation/no-show policy, as requested; do not implement an assumed commercial policy.
+- Founder-confirmed session policy: only explicitly package-linked bookings reserve an allowance; completion consumes, cancellation releases, and each no-show needs an explicit staff charge/release decision. Independent trial/makeup/prize/other sessions never reserve or deduct subscription sessions. Do not ask for this policy again unless the user changes it.
+- Satisfaction has two separately reported scopes: client experience with trainers (including explicit session feedback as a labelled source) and trainer workplace satisfaction. Never combine them or infer ratings from activity, effort, attendance, renewal or missing feedback.
 
 - When adding multi-select metadata beside compatibility fields, test removing every selection on an existing record as well as adding values. Keep singular fields synchronized and immutable snapshots unchanged.
 - File acceptance must cover uncertain upload retries, unsent attachment privacy, wrong-channel reuse, owner revocation, resource archive/restore and a real-media rendered view. Keep group-channel and private-pair authority explicit; an administrator role must not silently bypass pair privacy.
+
+- Canonical SQL assertions must run in a disposable migrated/seeded database; never repair or reset preview users to match fixtures. Repeated media inside exercise lists should use local groups, not duplicate page landmarks. Include complete multi-exercise authoring and preview views in shared-media accessibility checks.
+
+- Media-aware UI audits must wait for application data and rendered controls, not global network idleness: looping video can keep media requests active indefinitely. Track domain fetch completion separately and retain layout/accessibility assertions; do not disable playback to make a test pass.

@@ -1,4 +1,4 @@
-import { chromium, webkit } from '@playwright/test'
+import { chromium, webkit, expect, type Request } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { layoutIssues } from '../tests/layout-contract.ts'
@@ -12,13 +12,39 @@ for (const engine of [chromium, webkit]) {
     for (const name of ['Rania', 'Kareem', 'Laila']) {
       const context = await browser.newContext({ baseURL: 'http://127.0.0.1:5173' }),
         page = await context.newPage()
+      // Looping previews may keep media requests active. Wait for domain reads,
+      // not global network idleness, before inspecting the rendered data surface.
+      const pending = new Set<Request>()
+      page.on('request', (request) => {
+        if (
+          ['fetch', 'xhr'].includes(request.resourceType()) &&
+          new URL(request.url()).pathname.startsWith('/v1/')
+        )
+          pending.add(request)
+      })
+      page.on('requestfinished', (request) => pending.delete(request))
+      page.on('requestfailed', (request) => pending.delete(request))
+      const dataReady = async () => {
+        await expect
+          .poll(() => pending.size, {
+            timeout: 15000,
+            message: `Domain requests must finish at ${page.url()}`,
+          })
+          .toBe(0)
+        await page.evaluate(
+          () =>
+            new Promise<void>((resolve) =>
+              requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+            ),
+        )
+      }
       page.on('pageerror', (e) =>
         errors.push({ engine: engine.name(), name, url: page.url(), message: e.message }),
       )
       await page.goto('/local-preview')
       await page.getByRole('button', { name: new RegExp(name) }).click()
       await page.waitForURL(name === 'Laila' ? /\/coach$/ : /\/organization\//)
-      await page.waitForLoadState('networkidle')
+      await dataReady()
       const base = name === 'Laila' ? '/coach' : org + (name === 'Rania' ? '/admin' : '/trainer')
       const paths = [
         '',
@@ -47,7 +73,7 @@ for (const engine of [chromium, webkit]) {
           await page.goto(url)
           await page.locator('h1').waitFor()
           await page.locator('.loading-state').waitFor({ state: 'hidden' })
-          await page.waitForLoadState('networkidle')
+          await dataReady()
           if (action === 'delivery')
             await page
               .getByRole('tab', {

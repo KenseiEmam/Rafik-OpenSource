@@ -10,7 +10,12 @@ const base = computed(() => `/organization/${route.params.workspace}/${route.par
 const allowed = computed(() => contexts.value.some((c) => c.path === base.value))
 const items = computed(() => [
   { path: '', name: l('Overview', 'نظرة عامة') },
-  ...(route.params.view === 'trainee' ? [] : [{ path: '/people', name: l('People', 'الأشخاص') }]),
+  ...(route.params.view === 'trainee'
+    ? []
+    : [
+        { path: '/people', name: l('People', 'الأشخاص') },
+        { path: '/tasks', name: l('Tasks', 'المهام') },
+      ]),
   { path: '/plans', name: l('Programs', 'البرامج') },
   { path: '/training', name: l('Training', 'التدريب') },
   { path: '/nutrition', name: l('Nutrition', 'التغذية') },

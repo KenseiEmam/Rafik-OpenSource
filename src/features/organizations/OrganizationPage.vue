@@ -10,6 +10,7 @@ import CommandStatus from '../teams/CommandStatus.vue'
 import PageState from '../../components/PageState.vue'
 import type { Organization, Member, Role } from './types'
 import './organization.css'
+import OrganizationFollowUp from './OrganizationFollowUp.vue'
 import OrganizationUpcoming from './OrganizationUpcoming.vue'
 import MemberPicker from './MemberPicker.vue'
 import OrganizationNav from './OrganizationNav.vue'
@@ -352,6 +353,7 @@ onMounted(async () => {
               >{{ l('View analytics', 'عرض التحليلات') }}</RouterLink
             >
           </div>
+          <OrganizationFollowUp v-if="view !== 'trainee'" />
           <OrganizationUpcoming />
           <section v-if="view === 'trainee' || !data.summary.trainees" class="panel">
             <h2>

@@ -71,7 +71,9 @@ test('custom exercise and mixed multiweek plan reach actual client recording and
   await page.getByLabel('Exercise name', { exact: true }).fill(name)
   await page.getByRole('combobox', { name: 'Recording type', exact: true }).selectOption('timed')
   await page.locator('.exercise-editor').getByLabel('Equipment', { exact: true }).fill('Mat')
-  await page.getByLabel('Movement category', { exact: true }).fill('Brace')
+  await page
+    .getByRole('combobox', { name: 'Movement category', exact: true })
+    .selectOption('bodyweight')
   await page
     .locator('.exercise-editor')
     .getByRole('combobox', { name: 'Body area', exact: true })
@@ -114,7 +116,7 @@ test('custom exercise and mixed multiweek plan reach actual client recording and
     .locator('.exercise-fields')
     .getByLabel('Seconds', { exact: true })
     .fill('35')
-  await exercises.nth(0).getByText('Set targets, effort & grouping', { exact: true }).click()
+  await expect(exercises.nth(0).locator('.per-set-target')).toHaveCount(3)
   await exercises.nth(0).getByLabel('Superset / circuit label', { exact: true }).fill('A')
   await exercises.nth(0).getByLabel('Different targets for each set', { exact: true }).check()
   await exercises
@@ -136,7 +138,6 @@ test('custom exercise and mixed multiweek plan reach actual client recording and
     .locator('.exercise-fields')
     .getByLabel('Metres', { exact: true })
     .fill('400')
-  await exercises.nth(1).getByText('Set targets, effort & grouping', { exact: true }).click()
   await exercises.nth(1).getByLabel('Superset / circuit label', { exact: true }).fill('A')
   await page.getByLabel('Cycle week', { exact: true }).fill('2')
   await page.getByRole('button', { name: 'Add day', exact: true }).click()
