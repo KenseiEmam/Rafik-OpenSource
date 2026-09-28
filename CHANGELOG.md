@@ -1,5 +1,13 @@
 # Rafik web change history
 
+## R17 — Gym-first entry and authoring usability · 28 September 2026
+
+- Gym-first homepage with an original workflow diagram, staff-only context switching, dark default, unchanged logo colors and reachable support navigation.
+- Prefixed Tailwind utilities with no Preflight; existing tokens and components remain authoritative.
+- Visible program descriptions and per-set tables, clearer weekly repetition/rest days and grouped supersets; separate organization nutrition example-plan tab.
+- Month calendar and selected-day agenda; persistent messaging inbox keeps search and position when switching threads.
+- Local acceptance: 32 focused Chromium/WebKit journeys, 27 units, production/type/cache/format checks. Package policy and exercise/media ownership are subsequent phases, not included in this checkpoint.
+
 ## R16 — Organization nutrition and shared follow-up · 23 September 2026
 
 - Organization-owned dated calorie/macro plans and example meals, immutable versions, expiry and current-trainer/admin authority.

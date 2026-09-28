@@ -428,6 +428,7 @@ onBeforeUnmount(() => {
             <button
               v-for="item in [
                 ['plan', l('Plan', 'الخطة')],
+                ['example', l('Example meal plan', 'مثال لخطة وجبات')],
                 ['diary', l('Food diary', 'سجل الطعام')],
                 ['history', l('Plan history', 'سجل الخطط')],
               ]"
@@ -570,44 +571,9 @@ onBeforeUnmount(() => {
                   </div>
                 </div>
                 <p class="org-guidance" v-if="data.current.guidance">{{ data.current.guidance }}</p>
-                <h3 v-if="data.current.meals.length">{{ l('Example day', 'مثال ليوم غذائي') }}</h3>
-                <p v-if="data.current.meals.length" class="subtle">
-                  {{
-                    l(
-                      'Suggestions only. Record what was actually eaten, adjusting portions as needed.',
-                      'مقترحات فقط. سجّل ما تم تناوله فعلياً مع تعديل الكميات عند الحاجة.',
-                    )
-                  }}
-                </p>
-                <article v-for="(food, i) in data.current.meals" :key="i" class="org-food-row">
-                  <div>
-                    <small>{{ mealLabel(food.meal) }}</small
-                    ><strong dir="auto">{{ food.name }}</strong
-                    ><span
-                      >{{ food.quantity }} {{ food.unit }} ·
-                      {{
-                        food.nutrients.kcal == null
-                          ? l('Energy unknown', 'الطاقة غير معروفة')
-                          : Math.round((food.nutrients.kcal * food.quantity) / food.basis) +
-                            ' ' +
-                            unit('kcal')
-                      }}</span
-                    >
-                  </div>
-                  <button
-                    v-if="trainee && canWrite"
-                    class="text-link"
-                    :disabled="locked"
-                    @click="editMeal(undefined, food)"
-                  >
-                    {{ l('Record this food', 'تسجيل هذا الطعام') }}
-                  </button>
-                </article>
-                <p v-if="data.current.meals.length" class="small-print">
-                  {{ l('Example day energy', 'طاقة المثال اليومي') }}:
-                  {{ planTotals.kcal.value ?? '—' }} {{ unit('kcal') }}
-                  {{ planTotals.kcal.missing ? l('(incomplete values)', '(قيم غير مكتملة)') : '' }}
-                </p></template
+                <button class="text-link" @click="section = 'example'">
+                  {{ l('View example meal plan', 'عرض مثال لخطة الوجبات') }}
+                </button></template
               >
               <div v-else class="empty-state">
                 <h3>{{ l('No plan for this date', 'لا توجد خطة لهذا التاريخ') }}</h3>
@@ -626,6 +592,67 @@ onBeforeUnmount(() => {
                 </p>
               </div>
             </template>
+          </template>
+          <template v-else-if="section === 'example'">
+            <div class="section-header">
+              <h2>{{ l('Example meal plan', 'مثال لخطة وجبات') }}</h2>
+              <button
+                v-if="!trainee && canWrite"
+                class="button small"
+                :disabled="locked"
+                @click="editPlan()"
+              >
+                {{ l('Edit meal plan', 'تعديل خطة الوجبات') }}
+              </button>
+            </div>
+            <template v-if="data.current?.meals.length">
+              <h3 v-if="data.current.meals.length">{{ l('Example day', 'مثال ليوم غذائي') }}</h3>
+              <p v-if="data.current.meals.length" class="subtle">
+                {{
+                  l(
+                    'Suggestions only. Record what was actually eaten, adjusting portions as needed.',
+                    'مقترحات فقط. سجّل ما تم تناوله فعلياً مع تعديل الكميات عند الحاجة.',
+                  )
+                }}
+              </p>
+              <article v-for="(food, i) in data.current.meals" :key="i" class="org-food-row">
+                <div>
+                  <small>{{ mealLabel(food.meal) }}</small
+                  ><strong dir="auto">{{ food.name }}</strong
+                  ><span
+                    >{{ food.quantity }} {{ food.unit }} ·
+                    {{
+                      food.nutrients.kcal == null
+                        ? l('Energy unknown', 'الطاقة غير معروفة')
+                        : Math.round((food.nutrients.kcal * food.quantity) / food.basis) +
+                          ' ' +
+                          unit('kcal')
+                    }}</span
+                  >
+                </div>
+                <button
+                  v-if="trainee && canWrite"
+                  class="text-link"
+                  :disabled="locked"
+                  @click="editMeal(undefined, food)"
+                >
+                  {{ l('Record this food', 'تسجيل هذا الطعام') }}
+                </button>
+              </article>
+              <p v-if="data.current.meals.length" class="small-print">
+                {{ l('Example day energy', 'طاقة المثال اليومي') }}:
+                {{ planTotals.kcal.value ?? '—' }} {{ unit('kcal') }}
+                {{ planTotals.kcal.missing ? l('(incomplete values)', '(قيم غير مكتملة)') : '' }}
+              </p></template
+            >
+            <p v-else class="notice">
+              {{
+                l(
+                  'No example meals for this date. Your plan’s targets remain available in Plan.',
+                  'لا توجد وجبات مقترحة لهذا التاريخ. الأهداف متاحة في الخطة.',
+                )
+              }}
+            </p>
           </template>
           <template v-else-if="section === 'diary'">
             <div class="section-header">

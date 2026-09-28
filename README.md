@@ -164,3 +164,13 @@ The local samples Rania (admin), Kareem (trainer/trainee) and Sara (trainee) are
 Source owners: backend `server/organization-nutrition.ts`, four `organization_*` nutrition tables, account export and three forward migrations; web `features/nutrition/OrganizationNutrition.vue`, `OrganizationMealFields.vue` and `organization-nutrition.css`. Shared food/macro/example-day controls remain in the same feature directory. Run backend `npm run test:organization-nutrition`; web browser checks run through the isolated `npm run test:e2e -- tests/organization-nutrition.e2e.ts` wrapper.
 
 See [R16 scope and authority](../rafik-api/docs/implementation/r16-contract.md), [ADR0012](../rafik-api/docs/decisions/0012-organization-nutrition.md) and [verification](../rafik-api/docs/implementation/verification.md). Native/offline diary synchronization, professional nutrition review and hosted delivery remain separate gates.
+
+## Gym-first web corrections (R17)
+
+The public page targets gyms and training organizations and uses no generated photography. Dark is the default for a new browser; saved theme choices still apply. The header only switches between multiple staff contexts. Local examination of trainee/legacy roles remains on the sample-account and organization/role pages. Support retains the staff navigation.
+
+`src/styles/utilities.css` enables Tailwind4 utilities through the Vite plugin, with the `tw:` prefix and no Preflight. Examples: `tw:grid`, `tw:gap-8`, `tw:md:grid-cols-2`, `tw:text-ink`. Keep existing semantic CSS and Reka/Unovis styling; shared colors resolve to existing theme tokens. Do not introduce unprefixed Tailwind imports or a second reset.
+
+`MessagesPage.vue` now owns the persistent independent inbox; `MessageThread.vue` owns keyed per-conversation state. Organization `ChannelsPage.vue` similarly retains its list while `ChannelThread.vue` changes. The root router key preserves messaging scopes, never different organizations/roles. Program presentation and per-set values are visible; organization nutrition has an Example meal plan view. `MonthCalendar.vue` is an owned month widget over the existing authorized calendar API, with day summaries and a week-agenda option; it does not create a second scheduler.
+
+The backend [gym correction register](../rafik-api/docs/implementation/r17-gym-direction.md) tracks remaining asset/session/dashboard work separately from accepted UI changes.

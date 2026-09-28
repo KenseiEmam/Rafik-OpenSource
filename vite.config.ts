@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import tailwindcss from '@tailwindcss/vite'
 import { readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import media from './src/content/exercise-media.json'
@@ -7,6 +8,7 @@ import { shellIdentity, shellWorker } from './build/offline-shell.ts'
 export default defineConfig({
   plugins: [
     vue(),
+    tailwindcss(),
     {
       name: 'rafik-offline-shell',
       apply: 'build',

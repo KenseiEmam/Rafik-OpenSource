@@ -12,7 +12,7 @@ const route = useRoute(),
   router = useRouter(),
   workspace = String(route.params.workspace),
   view = String(route.params.view),
-  id = String(route.params.channel || ''),
+  id = computed(() => String(route.params.channel || '')),
   base = `/organization/${workspace}/${view}/messages`
 type Channel = {
   id: string
@@ -161,6 +161,7 @@ onMounted(() => load())
       </aside>
       <ChannelThread
         ref="thread"
+        :key="id"
         v-if="id"
         :id="id"
         :workspace="workspace"

@@ -3,7 +3,7 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { contexts, refreshContexts, user } from '../../app/auth'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
-import { request } from '../../lib/backend'
+import { request, localPreview } from '../../lib/backend'
 import { language as l } from '../../lib/i18n'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
@@ -71,15 +71,29 @@ function create() {
         <p>
           {{
             l(
-              'Each organization has its own people and training. Your independent coaching stays separate.',
-              'لكل مؤسسة أشخاصها وتدريبها. يبقى تدريبك المستقل منفصلاً.',
+              'Each organization has its own staff, trainees and training history. Choose a staff role to continue.',
+              'لكل مؤسسة موظفوها ومتدربوها وسجلها التدريبي. اختر دورك للمتابعة.',
             )
           }}
         </p>
       </div>
     </header>
+    <p v-if="localPreview" class="notice">
+      {{
+        l(
+          'Local examination: trainee and legacy coaching views remain available here for testing.',
+          'معاينة محلية: عروض المتدربين والتدريب المستقل متاحة هنا للاختبار.',
+        )
+      }}
+    </p>
     <div class="form-stack">
-      <RouterLink v-for="c in contexts" :key="c.id" :to="c.path" class="panel text-link"
+      <RouterLink
+        v-for="c in contexts.filter(
+          (c) => localPreview || (c.kind !== 'personal' && c.role !== 'trainee'),
+        )"
+        :key="c.id"
+        :to="c.path"
+        class="panel text-link"
         >{{ c.kind === 'personal' ? l('My training', 'تدريبي') : c.name }}
         <span class="muted"
           >·
@@ -117,7 +131,10 @@ function create() {
           >{{ l('What are you setting up?', 'ماذا تريد إعداد؟')
           }}<select v-model="kind">
             <option value="organization">{{ l('An organization', 'مؤسسة') }}</option>
-            <option v-if="!contexts.some((c) => c.kind === 'independent')" value="independent">
+            <option
+              v-if="localPreview && !contexts.some((c) => c.kind === 'independent')"
+              value="independent"
+            >
               {{ l('My independent coaching', 'تدريبي المستقل') }}
             </option>
           </select></label

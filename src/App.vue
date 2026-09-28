@@ -13,7 +13,7 @@ import {
   DialogDescription,
   DialogClose,
 } from 'reka-ui'
-import { PhArrowUpRight, PhTranslate, PhCaretDown, PhBell, PhList, PhX } from '@phosphor-icons/vue'
+import { PhArrowUpRight, PhTranslate, PhBell, PhList, PhX } from '@phosphor-icons/vue'
 import { user, profile, ready, contexts, platform } from './app/auth'
 import { language, locale, t } from './lib/i18n'
 import { localPreview } from './lib/backend'
@@ -51,6 +51,10 @@ const currentContext = computed(
     ) ||
     contexts.value[0],
 )
+const staffContexts = computed(() =>
+  contexts.value.filter((c) => c.kind !== 'personal' && c.role !== 'trainee'),
+)
+const selectableContexts = computed(() => staffContexts.value)
 const coaching = computed(() => route.path.startsWith('/coach'))
 const messaging = computed(
   () =>
@@ -74,7 +78,7 @@ const dashboard = computed(
       (route.path.startsWith('/organization/') &&
         currentContext.value?.kind === 'organization' &&
         currentContext.value.role !== 'trainee') ||
-      (['/settings', '/notifications'].includes(route.path) &&
+      (['/settings', '/notifications', '/support'].includes(route.path) &&
         (currentContext.value?.kind === 'independent' ||
           (currentContext.value?.kind === 'organization' &&
             currentContext.value.role !== 'trainee')))) &&
@@ -90,7 +94,7 @@ watch(
     menuOpen.value = false
   },
 )
-const theme = ref(localStorage.getItem('rafik.theme') || 'system')
+const theme = ref(localStorage.getItem('rafik.theme') || 'dark')
 function setTheme() {
   localStorage.setItem('rafik.theme', theme.value)
   document.documentElement.dataset.theme = theme.value
@@ -165,7 +169,7 @@ onUnmounted(() => window.removeEventListener('online', online))
             >rafik<span class="brand-period">.</span></span
           ></RouterLink
         >
-        <label v-if="user && !focused" class="workspace-switch"
+        <label v-if="user && !focused && selectableContexts.length > 1" class="workspace-switch"
           ><span class="sr-only">{{ language('Workspace', 'مساحة العمل') }}</span
           ><select
             :aria-label="language('Workspace', 'مساحة العمل')"
@@ -174,7 +178,7 @@ onUnmounted(() => window.removeEventListener('online', online))
             "
             @change="router.push(($event.target as HTMLSelectElement).value)"
           >
-            <option v-for="context in contexts" :key="context.id" :value="context.path">
+            <option v-for="context in selectableContexts" :key="context.id" :value="context.path">
               {{
                 context.kind === 'personal'
                   ? t('training')
@@ -199,11 +203,11 @@ onUnmounted(() => window.removeEventListener('online', online))
           </select></label
         >
         <nav
-          v-else-if="!focused"
+          v-else-if="!user && !focused"
           class="main-nav"
           :aria-label="language('Main navigation', 'التنقل الرئيسي')"
         >
-          <RouterLink to="/routine">{{ language('Try a workout', 'جرّب تمريناً') }}</RouterLink
+          <RouterLink to="/#for-your-team">{{ language('For your team', 'لفريقك') }}</RouterLink
           ><RouterLink to="/#how-it-works">{{ language('How it works', 'كيف يعمل') }}</RouterLink>
         </nav>
         <div class="header-actions">
@@ -228,9 +232,8 @@ onUnmounted(() => window.removeEventListener('online', online))
             ><span class="avatar small">{{ (profile?.display_name || 'R').slice(0, 1) }}</span
             ><span class="account-name">{{
               profile?.display_name?.split(' ')[0] || t('settings')
-            }}</span
-            ><PhCaretDown :size="14" aria-hidden="true"
-          /></RouterLink>
+            }}</span>
+          </RouterLink>
           <RouterLink v-if="!user && !focused" class="button small secondary" to="/login"
             >{{ t('signIn') }}<PhArrowUpRight :size="17" aria-hidden="true"
           /></RouterLink>
@@ -270,7 +273,7 @@ onUnmounted(() => window.removeEventListener('online', online))
     <main id="main" :class="{ 'messages-main': messaging }" tabindex="-1">
       <RouterView
         :key="
-          route.path +
+          (messaging ? route.path.replace(/(\/messages)(\/[^/]+)?$/, '$1') : route.path) +
           (route.path.endsWith('/plans/new')
             ? JSON.stringify([route.query.source, route.query.member])
             : '')

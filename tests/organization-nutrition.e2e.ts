@@ -72,6 +72,7 @@ test('organization plan publication flows through trainee portions, consent, cor
     await expect(page.locator('.nutrition-totals')).toContainText('2100')
     await page.screenshot({ path: `artifacts/r16-plan-${info.project.name}.png` })
     await f.login(client, f.client, `${f.base}/trainee/nutrition`)
+    await client.getByRole('button', { name: 'Example meal plan', exact: true }).click()
     await client.getByRole('button', { name: 'Record this food', exact: true }).click()
     await client.getByRole('spinbutton', { name: 'Amount eaten', exact: true }).fill('75')
     await client.getByRole('button', { name: 'Save food entry', exact: true }).click()
