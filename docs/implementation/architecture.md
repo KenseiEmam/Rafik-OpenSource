@@ -272,3 +272,11 @@ Admin-only authorship is supported. Assigned trainers lose access upon reassignm
 Plans select the latest effective date and revision as of the viewing date. Optional expiry hides that applicable plan without reviving an older version. Plans/history are bounded to ten versions, removed rows/history to ten, and live daily meals to200; authorized member search uses the existing25-row picker. The server-only `organization_member_today` helper projects the subject date without exposing profile rows. Subject export includes own current and historical nutrition across former memberships.
 
 Web composition reuses food search, nutrient fields, macro allocation and example meals. Its dedicated context adapter never calls independent nutrition RPCs. Drafts bind actor/workspace/view/member/date; latest persisted write controls feedback. The shared durable command mechanism preserves exact pending writes, while page-lifetime guards prevent late callbacks from changing a destination. Three forward migrations extend the existing local database, without reset/reseeding.
+
+## Gym-first presentation (R17)
+
+The public web audience is gym/organization staff. Staff-context switching excludes synthetic personal roles; local role examination and existing trainee API/history remain intact for later apps. New browsers default to dark; explicit themes persist. No generated marketing imagery is used.
+
+Tailwind4 is integrated through Vite as prefixed, additive utilities without Preflight; semantic CSS and its tokens retain control over existing components. `MonthCalendar.vue` projects existing authorized event responses into a local-timezone month; bounded results explicitly indicate additional pages. Day selection filters the agenda without inventing attendance/package metrics.
+
+Messaging scopes keep their parent route component mounted. Only the conversation thread is keyed/remounted, preserving inbox search/scroll. Each child retains its original conversation-specific durable command/draft. Program cycles remain week-based, with visible repeat-day/rest-day explanation; descriptions and per-set values are no longer hidden by default. Organization nutrition presents example meals separately from daily targets and actual consumption.

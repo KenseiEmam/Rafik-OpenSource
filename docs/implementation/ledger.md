@@ -1,6 +1,16 @@
 # Revamp execution ledger
 
-Updated 23 September 2026. **R16 organization nutrition is implemented locally.** Phase commits remain on `codex/revamp`. Hosting, native, real providers, physical devices and observed human/business outcomes remain separate gates.
+Updated 28 September 2026. **R17 gym-first entry and authoring corrections are implemented locally.** The broader founder correction list remains in progress in [the ordered register](r17-gym-direction.md). No hosting or native work.
+
+## R17 — Gym-first entry, authoring and navigation
+
+The web now markets organization workflows without generated photography or public workout trials. Dark is the default, saved preferences remain, and the original logo asset is unchanged. Staff context switching excludes trainee contexts; examination remains available through local preview. Support has dashboard navigation. Tailwind uses prefixed utilities without Preflight and shares existing theme tokens.
+
+Program descriptions and set tables are initially visible; repeated weeks show equivalent days and rest-day meaning; supersets have explicit grouping. Organization nutrition separates the example meal plan from targets. The calendar defaults to an actual month grid with a selected-day agenda and honest pagination. Messaging preserves its inbox instance/search when changing threads, mounting only the selected thread.
+
+Acceptance: **32/32 focused browser cases** across Chromium/WebKit, 27 web units, production/type/cache/format checks. Actual desktop and Arabic phone captures inspected. [Receipt](evidence/r17-verification.txt) records failures corrected and limits. No backend schema or preview data changes. Exercise sharing/direct uploads, private conversation media, package accounting and staff tasks remain subsequent work; the user confirmed sharing within the same organization and asked to revisit package policy when that phase starts.
+
+Web checkpoint: `f3d7b7b` on `codex/revamp`.
 
 ## R16 — Organization nutrition and shared food diary
 

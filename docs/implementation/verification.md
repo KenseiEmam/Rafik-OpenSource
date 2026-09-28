@@ -1,5 +1,11 @@
 # Verification record
 
+## R17 — Gym-first usability (28 September 2026)
+
+The final isolated browser run passed **32/32 cases** across Chromium and phone WebKit. It covers homepage entry, EN/AR and theme/width states, month navigation/day selection, support navigation, retained inbox/search, existing communication, program authoring/delivery, nutrition and role workflows. Web units **27/27**, build/typecheck, two production shell checks and formatting pass. No backend behavior/schema changed in this checkpoint.
+
+Actual inspected captures include desktop dark and Arabic 320px home, desktop month calendar and open program authoring. Automated geometry/Axe assertions supplement these observations; they do not prove every feature or physical-device usability. Earlier heading hierarchy, stale text selectors and changed search-retention assumptions were corrected before the accepted run. See [receipt](evidence/r17-verification.txt). The full release chain was not run. Remaining founder requirements are tracked in [the ordered register](r17-gym-direction.md).
+
 ## R16 — Organization nutrition (23 September 2026)
 
 **22/22 focused Chromium/phone-WebKit cases pass** on final runtime sources: eight new organization nutrition cases, twelve existing independent nutrition cases and two organization membership cases. The new workflow covers publication, actual portions, explicit sharing/withdrawal, correction/removal/history, subject export, member/date draft isolation, reload, lost acknowledgements and exact retry without duplicate plans or consumption. The layout case covers 16 engine/width/language/theme combinations, each visiting plan/editor/diary; Axe runs on the plan states, and geometry is checked on all three views. Desktop main-container bounds, four target inputs and unresolved component warnings are explicit assertions.

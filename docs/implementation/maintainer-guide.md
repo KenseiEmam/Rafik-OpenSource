@@ -310,3 +310,11 @@ Start with [ADR0012](../decisions/0012-organization-nutrition.md) and [R16 contr
 The web page owns context selection, view switching and durable drafts; `OrganizationMealFields.vue` owns actual portion/source controls. `MacroPlanner` already renders target fields, so do not wrap it with a duplicate `NutrientFields`. `MealPlanEditor` is suggestion-only. Navigation belongs in both organization navigation and dashboard navigation, plus roster links and Help. The desktop panel fills remaining workspace height; phone form scrolling stays natural.
 
 Changes must cover independent nutrition regression as well as organization author/subject/staff views. Exercise consent withdrawal, current-trainer changes, revoked receipt replay, source density versus actual amount, removal history, stale revisions, closed draft resumption and lost acknowledgements. Add API scenarios to `tests/organization-nutrition.test.ts` and UI cases to the companion `tests/organization-nutrition.e2e.ts`; both are in normal local acceptance/CI configuration.
+
+## R17 presentation owners
+
+- Web `src/styles/utilities.css` and `vite.config.ts`: additive prefixed Tailwind (no Preflight). Existing theme tokens/CSS stay authoritative.
+- `App.vue`: staff context selection, dark default and messaging-scope router identity. Changing route identity requires independent and organization inbox/uncertain-send regression.
+- `features/ongoing/MessagesPage.vue` / `MessageThread.vue`: persistent inbox versus keyed thread; organization counterparts are `ChannelsPage.vue` / `ChannelThread.vue`.
+- `components/MonthCalendar.vue`, `features/organizations/OrganizationCalendar.vue`: month projection/day selection over the same calendar API. Do not interpret a loaded page as the complete monthly total.
+- `tests/gym-direction.e2e.ts` plus responsive inbox, daily coaching, organization nutrition, programming and service journeys cover this change. See verification for executed counts and limitations.

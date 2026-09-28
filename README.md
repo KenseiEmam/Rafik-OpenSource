@@ -1,5 +1,7 @@
 # Rafik backend
 
+Current founder corrections and delivery order: [gym-first implementation register](docs/implementation/r17-gym-direction.md). R17 covers entry, authoring, calendar and navigation; exercise uploads/ownership, packages and staff operations follow.
+
 The exercise library now imports 1,324 requested-source entries plus 46 wger entries alongside the 14 starters. There are 45 continuous-motion previews, category filters and immutable source credits. See [exercise correction](docs/implementation/r15-exercise-correction.md), [content maintenance](docs/implementation/content.md) and [ADR0011](docs/decisions/0011-exercise-catalog-and-motion.md).
 
 Rafik's local revamp uses a Vue web application, one Node/TypeScript API, Prisma and PostgreSQL. Authentication and private files go through the API; there is no Supabase runtime dependency. Coach and organization web work comes first; native and hosting remain deferred.
