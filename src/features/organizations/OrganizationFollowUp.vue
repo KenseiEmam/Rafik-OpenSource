@@ -10,6 +10,10 @@ const context = programContext(useRoute()),
   loading = ref(true),
   error = ref('')
 type Result = {
+  missed: {
+    total: number
+    items: { id: string; member_id: string; name: string; title: string; starts_at: string }[]
+  }
   reviews: {
     total: number
     items: { id: string; name: string; title: string; completed_at: string }[]
@@ -115,6 +119,39 @@ onUnmounted(() => {
     <div v-if="data" class="followup-columns">
       <section class="panel">
         <h3>
+          {{ l('Missed sessions to follow up', 'جلسات فائتة للمتابعة') }}
+          <span class="count">{{ data.missed.total }}</span>
+        </h3>
+        <p class="small-print">
+          {{
+            l(
+              'Review with the trainee before arranging a replacement. A missed session does not automatically grant a free session.',
+              'راجع مع المتدرب قبل ترتيب جلسة بديلة. الجلسة الفائتة لا تمنح جلسة مجانية تلقائياً.',
+            )
+          }}
+        </p>
+        <p v-if="!data.missed.total" class="small-print">
+          {{ l('No missed sessions awaiting a replacement.', 'لا توجد جلسات فائتة بانتظار بديل.') }}
+        </p>
+        <ul>
+          <li v-for="s in data.missed.items" :key="s.id + s.member_id">
+            <RouterLink
+              :to="context.base + '/calendar/new?makeup=' + s.id + '&member=' + s.member_id"
+              ><strong>{{ s.name }}</strong
+              ><span>{{ s.title }}</span
+              ><small>{{ l('Arrange a replacement', 'ترتيب جلسة بديلة') }}</small></RouterLink
+            >
+          </li>
+        </ul>
+        <RouterLink
+          v-if="data.missed.total > 8"
+          class="text-link"
+          :to="context.base + '/calendar'"
+          >{{ l('Open calendar', 'فتح التقويم') }}</RouterLink
+        >
+      </section>
+      <section class="panel">
+        <h3>
           {{ l('Training to review', 'تدريب للمراجعة') }}
           <span class="count">{{ data.reviews.total }}</span>
         </h3>
@@ -206,7 +243,7 @@ onUnmounted(() => {
 }
 .overview-task-queue ul {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
 }
 .overview-task-queue li + li {
@@ -222,7 +259,7 @@ onUnmounted(() => {
 }
 .followup-columns {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
 }
 .followup-columns > .panel {

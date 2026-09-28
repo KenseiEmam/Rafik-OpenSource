@@ -166,6 +166,46 @@ export function errorMessage(error: unknown): string {
       'This program is no longer available in this workspace. Return to the program library.',
       'لم يعد البرنامج متاحاً في هذه المساحة. عُد إلى مكتبة البرامج.',
     ],
+    package_unavailable: [
+      'This package is no longer available for this trainee.',
+      'هذه الباقة لم تعد متاحة لهذا المتدرب.',
+    ],
+    package_capacity: [
+      'Not enough available sessions. Refresh the package balance or choose independent funding.',
+      'لا توجد جلسات متاحة كافية. حدّث رصيد الباقة أو اختر حجزاً مستقلاً.',
+    ],
+    package_date: [
+      'The session must fall within the package validity dates in its timezone.',
+      'يجب أن تكون الجلسة ضمن صلاحية الباقة في منطقتها الزمنية.',
+    ],
+    package_has_reservations: [
+      'Resolve reserved bookings before archiving this package.',
+      'حدّث الحجوزات القائمة قبل أرشفة الباقة.',
+    ],
+    package_already_renewed: [
+      'A renewal already exists. Refresh to see the current package.',
+      'يوجد تجديد بالفعل. حدّث لعرض الباقة الحالية.',
+    ],
+    invalid_funding: [
+      'Choose a package or an independent reason for each trainee.',
+      'اختر باقة أو سبب حجز مستقل لكل متدرب.',
+    ],
+    no_show_decision_required: [
+      'Choose whether to deduct or release the no-show session.',
+      'اختر خصم أو تحرير جلسة الغياب.',
+    ],
+    makeup_unavailable: [
+      'This session is not available for a makeup booking.',
+      'هذه الجلسة غير متاحة لحجز تعويضي.',
+    ],
+    task_unavailable: [
+      'This task is no longer available to you. Refresh the task list.',
+      'هذه المهمة لم تعد متاحة لك. حدّث قائمة المهام.',
+    ],
+    trainer_unavailable: [
+      'This trainer is no longer available. Choose an active organization trainer.',
+      'هذا المدرب لم يعد متاحاً. اختر مدرباً نشطاً في المؤسسة.',
+    ],
     trainee_unavailable: [
       'This trainee is no longer in your assigned scope. Refresh the people list before continuing.',
       'لم يعد هذا المتدرب ضمن مسؤوليتك. حدّث قائمة الأشخاص قبل المتابعة.',
