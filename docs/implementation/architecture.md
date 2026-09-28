@@ -284,3 +284,7 @@ Messaging scopes keep their parent route component mounted. Only the conversatio
 ## R18 — Organization exercise media
 
 [ADR0013](../decisions/0013-organization-exercise-media.md) defines trainer-private and organization-shared exercise scope, array categories, immutable asset IDs and private-pair messages. `server/organization-assets.ts` owns upload/read/list/archive authorization; `programming.ts` filters catalog ownership before snapshotting. `organization-communication.ts` binds message files to their sender/conversation and denies admin discovery/join for pairs. Backup/orphan scripts include both registries. No additional runtime service.
+
+## R19 — Staff operations
+
+`organization_tasks` records one assignee membership, creator, date/priority, current state and optimistic revision. `server/organization-tasks.ts` reuses `scoped`, `mutation` and organization activity; task reassignment revokes the prior assignee before replay. The follow-up endpoint derives bounded queues from existing assignments, session review state and calendar bookings. It never changes appointment outcomes or package balances. [Contract](r19-staff-operations.md).

@@ -90,3 +90,9 @@ Rendered chart label readability was checked after the automated matrix; see pro
 - API: `tests/organization-nutrition.test.ts` — separate organizations/independent roles, combined trainer/trainee, admin-only publication, reassignment/revoked replay, consent withdrawal, immutable plans/corrections, expiry, concurrent revisions, bounded histories, source validation and subject export.
 - Web: `tests/organization-nutrition.e2e.ts` — author→trainee→staff lifecycle, actual portions, sharing/removal history, scoped/closed drafts, lost publication/meal response recovery, EN/AR/themes/phone/desktop; screenshots and console/geometry/Axe checks complement actual review.
 - Regression: independent nutrition and existing organization journeys; fresh migration/install, maintained docs and configured CI/release gate. Refer to the current verification record for executed results; configured gates alone do not mean they passed.
+
+## R18–R19 organization ownership and operations
+
+- `tests/organization-assets.test.ts` and web `organization-assets.e2e.ts`: creator/tenant scope, immutable direct upload, multi-category clear/add, resource archive/reuse, pair-only attachment/replay and revocation. Backup/recovery includes asset digests.
+- `tests/organization-tasks.test.ts` and web `organization-tasks.e2e.ts`: admin assignment, current-assignee completion, reassignment/replay, concurrent revision conflicts, inactive members, search/history, closed drafts/recovery and real follow-up source lifecycles.
+- Current local results are in the ledger. Package accounting, satisfaction semantics and physical/hosted/human evidence are separate, unfinished gates.

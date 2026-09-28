@@ -77,7 +77,10 @@ export async function organizationAccountData(actor: Actor) {
   ]);
   const assets =
     await db.$queryRaw`SELECT id,workspace_id,purpose,channel_id,filename,media_type,bytes,retired,created_at FROM public.organization_assets WHERE owner_id=ANY(${ids}::uuid[])`;
+  const tasks =
+    await db.$queryRaw`SELECT * FROM public.organization_tasks WHERE assigned_to=ANY(${ids}::uuid[]) OR created_by=ANY(${ids}::uuid[])`;
   return {
+    tasks,
     assets,
     nutritionPlans,
     nutritionSharing,

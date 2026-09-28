@@ -118,3 +118,11 @@ Current membership/role/responsibility checks precede receipt lookup, so revoked
 `GET /v1/organization-assets/:id` rechecks membership and exact purpose/reference permissions. MP4 accepts a single byte range. `GET /v1/workspaces/:id/assets?view=admin|trainer&search=&offset=0&archived=false` returns 24 authorized exercise assets plus `next`; message files are excluded. `POST` to the same collection accepts the standard operation ID, `action: archive`, asset `id`, `revision`, `view` and boolean `retired`. Archive affects new selections, not existing published reads.
 
 Organization message commands accept optional `asset_id`; the file must belong to the sender and that channel. `private_pair` on the channel makes participant changes and nonparticipant admin access unavailable.
+
+## Organization trainer tasks
+
+`GET /v1/workspaces/:id/tasks?view=admin|trainer&state=open|completed|cancelled&search=&offset=0&today=YYYY-MM-DD` returns 24 scoped rows, next offset and open/overdue/completed counts. The date-only `today` aligns the due-date count with the caller's calendar day. Trainers see only tasks assigned to their membership; admins see the organization queue.
+
+`POST` accepts standard `operation`, `view`, `id` and `revision`. Admin `action: save` takes `title`, optional `description`, active trainer `assigned_to`, `priority: normal|high` and optional `due_date`. `action: state` takes `state: open|completed|cancelled`; cancellation/restoring cancelled tasks requires admin authority. Assignees can complete/reopen their work. Authorization is rechecked before replay.
+
+`GET /v1/workspaces/:id/follow-up?view=admin|trainer` derives scoped counts and the first eight oldest review/outcome rows and alphabetic unassigned-program trainees. It is read-only and does not infer no-shows or deduct sessions.

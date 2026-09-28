@@ -37,7 +37,7 @@ A public sample requires no account. Client workspace routes use relationship ID
 
 ## Verification
 
-`npm test` runs seven SQL suites in rollback transactions. `npm run test:fresh` creates its own disposable database, applies Prisma migrations and synthetic fixtures, runs those suites and drops only that database. It does not reset the preview. `test:api` checks actual identity/HTTP/access/file contracts; `test:services` and `test:teams` exercise domain lifecycles through the real API with temporary local identities.
+`npm test` and `npm run test:fresh` both run the fresh-install harness: create a disposable database, apply Prisma migrations and synthetic fixtures, run all eight rollback SQL suites and drop only that database. Normal preview use cannot contaminate their canonical fixture assumptions. It does not reset the preview. `test:api` checks actual identity/HTTP/access/file contracts; `test:services` and `test:teams` exercise domain lifecycles through the real API with temporary local identities.
 
 Run backend `typecheck`, `content:check`, `test:docs` and `test:release`. In the web checkout run `npm test`, `format:check`, `build`, `test:build`, then `test:e2e`. Playwright requires installed Chromium/WebKit and all three servers. Run full suites serially, with a stable API and final web build. Layout scripts inspect populated bilingual/theme/viewport states; inspect actual captures as well.
 

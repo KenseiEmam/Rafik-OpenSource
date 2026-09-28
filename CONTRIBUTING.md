@@ -29,7 +29,7 @@ A feature is complete only when an intended user can discover it, understand it,
 
 Frontend changes: `npm test`, `npm run format:check`, `npm run build`, relevant Playwright scenarios and direct screenshot/interaction inspection. Shared navigation, persistence or domain changes require the full browser suite across Chromium and phone-sized WebKit.
 
-Backend changes: `npm test`, `npm run test:fresh`, API type checking, generated types; run `test:services` / `test:teams` when Storage, authorization, appointments, teams, handoffs or commercial/support contracts may be affected. Full verification commands and prerequisites are in [verification](docs/implementation/verification.md).
+Backend changes: `npm test` (fresh database and eight SQL suites; `test:fresh` is equivalent), API type checking, generated types; run `test:services` / `test:teams` when Storage, authorization, appointments, teams, handoffs or commercial/support contracts may be affected. Full verification commands and prerequisites are in [verification](docs/implementation/verification.md).
 
 ## Documentation ownership
 

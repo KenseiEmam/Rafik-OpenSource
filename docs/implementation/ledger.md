@@ -1,6 +1,16 @@
 # Revamp execution ledger
 
-Updated 28 September 2026. **R18 organization ownership and media corrections are implemented locally.** The broader founder correction list remains in progress in [the ordered register](r17-gym-direction.md). No hosting or native work.
+Updated 28 September 2026. **R19 staff tasks and follow-up are implemented and verified locally. Package accounting (R20) is next.** The broader founder correction list remains in progress in [the ordered register](r17-gym-direction.md). No hosting or native work.
+
+## R19 — Staff tasks and daily follow-up
+
+Admins assign specific tasks to active organizational trainers with priority, due date and instructions. Assigned trainers complete/reopen them; admins edit, reassign, cancel and restore. The task queue opens with results, preserves unfinished drafts and uses existing durable operation/revision semantics. The overview now exposes actual tasks, completed training awaiting review, past scheduled bookings awaiting an outcome and trainees without an active program assignment. Each queue has a direct next action, and the existing upcoming-calendar component remains in place.
+
+Focused acceptance: **6/6 browser cases** including both-engine task workflow, closed draft/reload, uncertain-response retry, staff visibility, completion/reopening, 16 task layout/theme/language states and existing organization/service workflows. **Two API groups** cover role/tenant scope, reassignment/revocation before replay, concurrent revisions, inactive assignees and real publication/completion/review queues. A **36-migration/eight-suite fresh installation** passes. Desktop overview/task queue and Arabic phone captures were inspected. Combined integrated acceptance: **118 browser journeys, 1,120 broad layout states, 27 units, all backend/domain/build checks and 36 migrations/eight SQL suites**. The main run passed 32 of 33 gates; the last dashboard audit passed separately after replacing global network-idle waiting with data/render readiness for looping video. Application sources were unchanged for that audit follow-up. [Receipt](evidence/r19-verification.txt) and [accepted summary](evidence/r19-verification.json) retain the failures and exact evidence instead of claiming an uninterrupted pass.
+
+The founder confirmed package accounting: reserve at booking, consume on completion, release cancellations and decide each no-show explicitly. The founder also confirmed two separately reported satisfaction measures: clients with trainers and trainers with the organization. Package balances, makeup accounting, subscription retention and satisfaction reporting are not marked complete. No native or hosted work.
+
+Web checkpoint: `d665769` on `codex/revamp`. This backend checkpoint contains the paired task service/schema, 36th migration, isolation maintenance, accepted evidence and next-phase contracts.
 
 ## R18 — Organization exercise ownership and private uploads
 

@@ -117,7 +117,6 @@ try {
     for (const script of [
       "test:release",
       "test",
-      "test:fresh",
       "test:services",
       "test:teams",
       "test:organizations",
@@ -126,6 +125,7 @@ try {
       "test:organization-nutrition",
       "test:communication",
       "test:organization-assets",
+      "test:organization-tasks",
       "test:operations",
       "content:check",
       "content:media",

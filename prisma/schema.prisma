@@ -923,6 +923,8 @@ model workspace_members {
   organization_nutrition_sharing                                                                      organization_nutrition_sharing?
   organization_programs                                                                               organization_programs[]
   organization_sessions                                                                               organization_sessions[]
+  organization_tasks_organization_tasks_workspace_id_assigned_toToworkspace_members                   organization_tasks[]            @relation("organization_tasks_workspace_id_assigned_toToworkspace_members")
+  organization_tasks_organization_tasks_workspace_id_created_byToworkspace_members                    organization_tasks[]            @relation("organization_tasks_workspace_id_created_byToworkspace_members")
   organization_versions                                                                               organization_versions[]
   users                                                                                               users?                          @relation(fields: [user_id], references: [id], onUpdate: NoAction)
   workspaces                                                                                          workspaces                      @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
@@ -976,6 +978,7 @@ model workspaces {
   organization_nutrition_sharing organization_nutrition_sharing[]
   organization_programs          organization_programs[]
   organization_sessions          organization_sessions[]
+  organization_tasks             organization_tasks[]
   program_media                  program_media[]
   workspace_events               workspace_events[]
   workspace_invitations          workspace_invitations[]
@@ -1484,5 +1487,29 @@ model organization_assets {
 
   @@unique([workspace_id, id])
   @@index([workspace_id, owner_id, created_at(sort: Desc), id], map: "organization_assets_owner")
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model organization_tasks {
+  id                                                                               String            @id @db.Uuid
+  workspace_id                                                                     String            @db.Uuid
+  assigned_to                                                                      String            @db.Uuid
+  created_by                                                                       String            @db.Uuid
+  title                                                                            String
+  description                                                                      String            @default("")
+  priority                                                                         String            @default("normal")
+  due_date                                                                         DateTime?         @db.Date
+  state                                                                            String            @default("open")
+  revision                                                                         Int               @default(1)
+  created_at                                                                       DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at                                                                       DateTime          @default(now()) @db.Timestamptz(6)
+  completed_at                                                                     DateTime?         @db.Timestamptz(6)
+  workspace_members_organization_tasks_workspace_id_assigned_toToworkspace_members workspace_members @relation("organization_tasks_workspace_id_assigned_toToworkspace_members", fields: [workspace_id, assigned_to], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+  workspace_members_organization_tasks_workspace_id_created_byToworkspace_members  workspace_members @relation("organization_tasks_workspace_id_created_byToworkspace_members", fields: [workspace_id, created_by], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+  workspaces                                                                       workspaces        @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([workspace_id, assigned_to, state, due_date, id], map: "organization_tasks_queue")
   @@schema("public")
 }

@@ -16,7 +16,7 @@ Status: in progress. This founder direction supersedes independent-coach acquisi
 - Keep existing week-based prescriptions and clarify repetition with the equivalent day count. Changing the interval schema across published plans, assignments and offline started sessions is disproportionate for this request; the founder explicitly permits clear weeks. Empty slots are rest days, explicit rest days remain supported.
 - Gym staff are the public web audience. Personal/trainee routes stay for developer examination and the later mobile contract. Organization memberships do not get collapsed into independent coaching.
 - Founder confirmed organization exercise sharing is within its own organization. Do not expose organization-owned assets across tenants.
-- Package proposal: reserve at booking, consume at completion, release on cancellation; staff must explicitly choose whether a no-show consumes a session. Package totals and reservations cannot be overspent by concurrent bookings. Founder requested being asked again when implementation reaches this part; do not decide that policy yet.
+- Package policy confirmed by the founder on 28 September: reserve at booking, consume at completion, release on cancellation; staff explicitly chooses whether each no-show consumes a session. Concurrent bookings must not overspend available sessions. Only explicitly package-linked sessions affect the allowance. Independent trial, makeup, prize and other sessions never do. Implement this next without introducing payment processing.
 - Tailwind Vite integration uses a prefix, no Preflight, semantic existing tokens and theme attribute. Existing Reka/Unovis/Vue and semantic CSS remain in place. Official references: https://tailwindcss.com/docs/installation/using-vite and https://tailwindcss.com/docs/preflight.
 
 ## Scope boundaries
@@ -30,3 +30,7 @@ Items 1–2 and the month-calendar portion of item 5 are implemented locally. Bo
 ## Accepted checkpoint R18
 
 Item 3 is implemented for organization exercise ownership, multi-category controls, direct uploads and Resources; organization private-pair messaging is hardened. Existing independent resource sharing remains a compatibility contract. R18 acceptance is 30 broader plus four final focused browser cases, domain/operations checks and fresh installation. Package accounting and operational dashboards remain open. Package policy and the meaning of trainer satisfaction were asked explicitly; no assumed business rules have been applied.
+
+## Accepted checkpoint R19
+
+The operational portion of item 5 now includes real follow-up queues and admin-assigned trainer tasks. Trainer performance continues to use actual workload/participation in Analytics. Package balances, makeup sessions and renewal/retention remain the next implementation phase; the founder has now confirmed the accounting policy. The founder confirmed both client satisfaction with trainers and trainer workplace satisfaction, reported separately. Integrated local acceptance passes 118 browser journeys and 1,120 broad states, with the final dashboard audit accepted in a documented follow-up.

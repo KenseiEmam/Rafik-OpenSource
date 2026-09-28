@@ -1,5 +1,13 @@
 # Verification record
 
+## R19 — Staff tasks, daily follow-up and integrated acceptance (28 September 2026)
+
+**118/118 browser journeys** pass across Chromium and phone WebKit. Combined acceptance covers **1,120 broad layout states**, **27 web units**, all backend/domain/operations/content/type/build/cache/guard checks and a **36-migration/eight-suite disposable database installation**. Task-specific tests add 16 layout/language/theme/engine states and actual desktop/Arabic phone review, plus task ownership, reassignment/revocation, revision races and real review/outcome queues.
+
+The main release attempt passed 32 of 33 gates; its last dashboard audit timed out waiting for global network idleness while the exercise page played looping video. The corrected audit waits for domain fetch completion and rendered frames, with playback and geometry/Axe checks retained. It passes all 192 states on unchanged application sources. This is combined acceptance with an audit follow-up, **not an uninterrupted full-chain pass**. [Summary](evidence/r19-verification.json), [original report](evidence/r19-release-attempt.json), [receipt](evidence/r19-verification.txt) and the `r19-*-layout.json` files preserve provenance.
+
+Earlier checks also repaired duplicate exercise-media landmarks, premature publication success, stale authoring tests and SQL assertions incorrectly assuming untouched preview identities. SQL acceptance now owns a disposable canonical database; the preview was preserved. R20 package accounting and R21 separately sourced satisfaction/renewal reporting remain implementation work, with founder policy confirmed. No push, hosting, native/physical-device or human/business-outcome claim.
+
 ## R18 — Organization exercise ownership and uploaded media (28 September 2026)
 
 **30/30 broader browser cases** passed across Chromium and phone WebKit, followed by **4/4 focused final cases** for category clearing, upload retry, archive/restore/reuse and attachment draft/send recovery. The new editor covers 16 width/language/theme/engine states with geometry and Axe checks. Actual desktop Resources and Arabic phone editor/attachment captures use an existing licensed exercise poster; the one-pixel payload remains only in API contract tests.

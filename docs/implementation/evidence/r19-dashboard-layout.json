@@ -1,0 +1,5189 @@
+{
+  "results": [
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1667,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 1597.078125,
+          "top": 70,
+          "right": 320,
+          "bottom": 1667.078125,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania-overview-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/analytics",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1673,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 1602.53125,
+          "top": 70,
+          "right": 320,
+          "bottom": 1672.53125,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--analytics-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/analytics#delivery",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1976,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": -364,
+          "width": 320,
+          "height": 1906.21875,
+          "top": -364,
+          "right": 320,
+          "bottom": 1542.21875,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--analytics#delivery-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/plans",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1087,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 1016.578125,
+          "top": 70,
+          "right": 320,
+          "bottom": 1086.578125,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--plans-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/exercises",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 862,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 791.5,
+          "top": 70,
+          "right": 320,
+          "bottom": 861.5,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--exercises-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/people",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 941,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 870.609375,
+          "top": 70,
+          "right": 320,
+          "bottom": 940.609375,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--people-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/calendar/new#zone",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1064,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": -310,
+          "width": 320,
+          "height": 993.59375,
+          "top": -310,
+          "right": 320,
+          "bottom": 683.59375,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--calendar-new#zone-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/settings#zone",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1469,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": -250,
+          "width": 320,
+          "height": 1399.03125,
+          "top": -250,
+          "right": 320,
+          "bottom": 1149.03125,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--settings#zone-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1504,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1434.15625,
+          "top": 70,
+          "right": 390,
+          "bottom": 1504.15625,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania-overview-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/analytics",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1636,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1566.390625,
+          "top": 70,
+          "right": 390,
+          "bottom": 1636.390625,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--analytics-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/analytics#delivery",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1939,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": -293,
+          "width": 390,
+          "height": 1869.40625,
+          "top": -293,
+          "right": 390,
+          "bottom": 1576.40625,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--analytics#delivery-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/plans",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1055,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 984.859375,
+          "top": 70,
+          "right": 390,
+          "bottom": 1054.859375,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--plans-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/exercises",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 924,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 853.90625,
+          "top": 70,
+          "right": 390,
+          "bottom": 923.90625,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--exercises-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/people",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 755,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 684.65625,
+          "top": 70,
+          "right": 390,
+          "bottom": 754.65625,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--people-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/calendar/new#zone",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1097,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 22,
+          "width": 390,
+          "height": 1027.09375,
+          "top": 22,
+          "right": 390,
+          "bottom": 1049.09375,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--calendar-new#zone-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/settings#zone",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1459,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1388.765625,
+          "top": 70,
+          "right": 390,
+          "bottom": 1458.765625,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--settings#zone-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania-overview-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/analytics",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--analytics-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/analytics#delivery",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--analytics#delivery-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/plans",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--plans-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/exercises",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--exercises-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/people",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--people-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/calendar/new#zone",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--calendar-new#zone-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/settings#zone",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Rania--settings#zone-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Rania-overview-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/analytics",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Rania--analytics-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/analytics#delivery",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Rania--analytics#delivery-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/plans",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Rania--plans-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/exercises",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Rania--exercises-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/people",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Rania--people-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/calendar/new#zone",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Rania--calendar-new#zone-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Rania",
+      "path": "/settings#zone",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Rania--settings#zone-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1507,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 1436.578125,
+          "top": 70,
+          "right": 320,
+          "bottom": 1506.578125,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem-overview-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/analytics",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1696,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 1625.640625,
+          "top": 70,
+          "right": 320,
+          "bottom": 1695.640625,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--analytics-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/analytics#delivery",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1332,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": -387,
+          "width": 320,
+          "height": 1261.90625,
+          "top": -387,
+          "right": 320,
+          "bottom": 874.90625,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--analytics#delivery-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/plans",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1087,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 1016.578125,
+          "top": 70,
+          "right": 320,
+          "bottom": 1086.578125,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--plans-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/exercises",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 862,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 791.5,
+          "top": 70,
+          "right": 320,
+          "bottom": 861.5,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--exercises-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/people",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 568,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 481.34375,
+          "top": 70,
+          "right": 320,
+          "bottom": 551.34375,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--people-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/calendar/new#zone",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1064,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": -310,
+          "width": 320,
+          "height": 993.59375,
+          "top": -310,
+          "right": 320,
+          "bottom": 683.59375,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--calendar-new#zone-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/settings#zone",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1469,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": -250,
+          "width": 320,
+          "height": 1399.03125,
+          "top": -250,
+          "right": 320,
+          "bottom": 1149.03125,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--settings#zone-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1403,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1332.734375,
+          "top": 70,
+          "right": 390,
+          "bottom": 1402.734375,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem-overview-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/analytics",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1636,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1566.390625,
+          "top": 70,
+          "right": 390,
+          "bottom": 1636.390625,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--analytics-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/analytics#delivery",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1288,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": -293,
+          "width": 390,
+          "height": 1217.828125,
+          "top": -293,
+          "right": 390,
+          "bottom": 924.828125,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--analytics#delivery-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/plans",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1055,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 984.859375,
+          "top": 70,
+          "right": 390,
+          "bottom": 1054.859375,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--plans-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/exercises",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 924,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 853.90625,
+          "top": 70,
+          "right": 390,
+          "bottom": 923.90625,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--exercises-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/people",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 664,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 486.140625,
+          "top": 70,
+          "right": 390,
+          "bottom": 556.140625,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--people-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/calendar/new#zone",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1097,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 22,
+          "width": 390,
+          "height": 1027.09375,
+          "top": 22,
+          "right": 390,
+          "bottom": 1049.09375,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--calendar-new#zone-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/settings#zone",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1459,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1388.765625,
+          "top": 70,
+          "right": 390,
+          "bottom": 1458.765625,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--settings#zone-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem-overview-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/analytics",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--analytics-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/analytics#delivery",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--analytics#delivery-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/plans",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--plans-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/exercises",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--exercises-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/people",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--people-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/calendar/new#zone",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--calendar-new#zone-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/settings#zone",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Kareem--settings#zone-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Kareem-overview-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/analytics",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Kareem--analytics-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/analytics#delivery",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Kareem--analytics#delivery-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/plans",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Kareem--plans-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/exercises",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Kareem--exercises-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/people",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Kareem--people-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/calendar/new#zone",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Kareem--calendar-new#zone-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Kareem",
+      "path": "/settings#zone",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Kareem--settings#zone-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 2350,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 2280.03125,
+          "top": 70,
+          "right": 320,
+          "bottom": 2350.03125,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila-overview-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/analytics",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1703,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 1632.640625,
+          "top": 70,
+          "right": 320,
+          "bottom": 1702.640625,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--analytics-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/analytics#delivery",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1566,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": -387,
+          "width": 320,
+          "height": 1496.359375,
+          "top": -387,
+          "right": 320,
+          "bottom": 1109.359375,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--analytics#delivery-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/plans",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 3803,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 3732.828125,
+          "top": 70,
+          "right": 320,
+          "bottom": 3802.828125,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--plans-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/exercises",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 862,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 791.5,
+          "top": 70,
+          "right": 320,
+          "bottom": 861.5,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--exercises-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/clients",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 3911,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 3840.9375,
+          "top": 70,
+          "right": 320,
+          "bottom": 3910.9375,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--clients-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/appointments#zone",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1662,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 1591.546875,
+          "top": 70,
+          "right": 320,
+          "bottom": 1661.546875,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--appointments#zone-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/settings#zone",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1469,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": -250,
+          "width": 320,
+          "height": 1399.03125,
+          "top": -250,
+          "right": 320,
+          "bottom": 1149.03125,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--settings#zone-320.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 2415,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 2345.078125,
+          "top": 70,
+          "right": 390,
+          "bottom": 2415.078125,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila-overview-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/analytics",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1643,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1573.390625,
+          "top": 70,
+          "right": 390,
+          "bottom": 1643.390625,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--analytics-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/analytics#delivery",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1501,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": -293,
+          "width": 390,
+          "height": 1430.609375,
+          "top": -293,
+          "right": 390,
+          "bottom": 1137.609375,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--analytics#delivery-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/plans",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 3763,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 3692.609375,
+          "top": 70,
+          "right": 390,
+          "bottom": 3762.609375,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--plans-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/exercises",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 924,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 853.90625,
+          "top": 70,
+          "right": 390,
+          "bottom": 923.90625,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--exercises-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/clients",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 3909,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 3838.546875,
+          "top": 70,
+          "right": 390,
+          "bottom": 3908.546875,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--clients-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/appointments#zone",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1682,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1612.171875,
+          "top": 70,
+          "right": 390,
+          "bottom": 1682.171875,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--appointments#zone-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/settings#zone",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1459,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1388.765625,
+          "top": 70,
+          "right": 390,
+          "bottom": 1458.765625,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--settings#zone-390.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila-overview-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/analytics",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--analytics-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/analytics#delivery",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--analytics#delivery-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/plans",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--plans-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/exercises",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--exercises-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/clients",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--clients-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/appointments#zone",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--appointments#zone-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/settings#zone",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "chromium-Laila--settings#zone-1024.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Laila-overview-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/analytics",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Laila--analytics-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/analytics#delivery",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Laila--analytics#delivery-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/plans",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Laila--plans-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/exercises",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Laila--exercises-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/clients",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Laila--clients-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/appointments#zone",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Laila--appointments#zone-1440.png"
+    },
+    {
+      "engine": "chromium",
+      "name": "Laila",
+      "path": "/settings#zone",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "chromium-Laila--settings#zone-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1667,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 1597.484375,
+          "top": 70,
+          "right": 320,
+          "bottom": 1667.484375,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania-overview-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/analytics",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1672,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 1602.4375,
+          "top": 70,
+          "right": 320,
+          "bottom": 1672.4375,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--analytics-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/analytics#delivery",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1976,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": -365,
+          "width": 320,
+          "height": 1906.078125,
+          "top": -365,
+          "right": 320,
+          "bottom": 1541.078125,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--analytics#delivery-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/plans",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1087,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 1016.546875,
+          "top": 70,
+          "right": 320,
+          "bottom": 1086.546875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--plans-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/exercises",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 861,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 791.46875,
+          "top": 70,
+          "right": 320,
+          "bottom": 861.46875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--exercises-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/people",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 941,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 870.546875,
+          "top": 70,
+          "right": 320,
+          "bottom": 940.546875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--people-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/calendar/new#zone",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1065,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": -312,
+          "width": 320,
+          "height": 995.359375,
+          "top": -312,
+          "right": 320,
+          "bottom": 683.359375,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--calendar-new#zone-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/settings#zone",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1469,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": -250,
+          "width": 320,
+          "height": 1398.6875,
+          "top": -250,
+          "right": 320,
+          "bottom": 1148.6875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--settings#zone-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1505,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1435.109375,
+          "top": 70,
+          "right": 390,
+          "bottom": 1505.109375,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania-overview-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/analytics",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1637,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1566.734375,
+          "top": 70,
+          "right": 390,
+          "bottom": 1636.734375,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--analytics-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/analytics#delivery",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1940,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": -293,
+          "width": 390,
+          "height": 1869.6875,
+          "top": -293,
+          "right": 390,
+          "bottom": 1576.6875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--analytics#delivery-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/plans",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1063,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 992.828125,
+          "top": 70,
+          "right": 390,
+          "bottom": 1062.828125,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--plans-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/exercises",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 932,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 861.875,
+          "top": 70,
+          "right": 390,
+          "bottom": 931.875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--exercises-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/people",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 763,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 692.59375,
+          "top": 70,
+          "right": 390,
+          "bottom": 762.59375,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--people-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/calendar/new#zone",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1115,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": -292,
+          "width": 390,
+          "height": 1045.375,
+          "top": -292,
+          "right": 390,
+          "bottom": 753.375,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--calendar-new#zone-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/settings#zone",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1459,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1388.53125,
+          "top": 70,
+          "right": 390,
+          "bottom": 1458.53125,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--settings#zone-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania-overview-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/analytics",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--analytics-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/analytics#delivery",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--analytics#delivery-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/plans",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--plans-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/exercises",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--exercises-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/people",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--people-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/calendar/new#zone",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--calendar-new#zone-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/settings#zone",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Rania--settings#zone-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Rania-overview-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/analytics",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Rania--analytics-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/analytics#delivery",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Rania--analytics#delivery-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/plans",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Rania--plans-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/exercises",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Rania--exercises-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/people",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Rania--people-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/calendar/new#zone",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Rania--calendar-new#zone-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Rania",
+      "path": "/settings#zone",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Rania--settings#zone-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1507,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 1436.953125,
+          "top": 70,
+          "right": 320,
+          "bottom": 1506.953125,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem-overview-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/analytics",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1696,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 1625.546875,
+          "top": 70,
+          "right": 320,
+          "bottom": 1695.546875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--analytics-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/analytics#delivery",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1332,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": -388,
+          "width": 320,
+          "height": 1261.875,
+          "top": -388,
+          "right": 320,
+          "bottom": 873.875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--analytics#delivery-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/plans",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1087,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 1016.546875,
+          "top": 70,
+          "right": 320,
+          "bottom": 1086.546875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--plans-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/exercises",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 861,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 791.46875,
+          "top": 70,
+          "right": 320,
+          "bottom": 861.46875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--exercises-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/people",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 568,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 481.28125,
+          "top": 70,
+          "right": 320,
+          "bottom": 551.28125,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--people-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/calendar/new#zone",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1065,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": -312,
+          "width": 320,
+          "height": 995.359375,
+          "top": -312,
+          "right": 320,
+          "bottom": 683.359375,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--calendar-new#zone-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/settings#zone",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1469,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": -250,
+          "width": 320,
+          "height": 1398.6875,
+          "top": -250,
+          "right": 320,
+          "bottom": 1148.6875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--settings#zone-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1404,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1333.6875,
+          "top": 70,
+          "right": 390,
+          "bottom": 1403.6875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem-overview-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/analytics",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1637,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1566.734375,
+          "top": 70,
+          "right": 390,
+          "bottom": 1636.734375,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--analytics-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/analytics#delivery",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1288,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": -293,
+          "width": 390,
+          "height": 1218.203125,
+          "top": -293,
+          "right": 390,
+          "bottom": 925.203125,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--analytics#delivery-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/plans",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1063,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 992.828125,
+          "top": 70,
+          "right": 390,
+          "bottom": 1062.828125,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--plans-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/exercises",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 932,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 861.875,
+          "top": 70,
+          "right": 390,
+          "bottom": 931.875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--exercises-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/people",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 664,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 494.078125,
+          "top": 70,
+          "right": 390,
+          "bottom": 564.078125,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--people-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/calendar/new#zone",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1115,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": -292,
+          "width": 390,
+          "height": 1045.375,
+          "top": -292,
+          "right": 390,
+          "bottom": 753.375,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--calendar-new#zone-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/settings#zone",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1459,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1388.53125,
+          "top": 70,
+          "right": 390,
+          "bottom": 1458.53125,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--settings#zone-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem-overview-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/analytics",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--analytics-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/analytics#delivery",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--analytics#delivery-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/plans",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--plans-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/exercises",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--exercises-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/people",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--people-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/calendar/new#zone",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--calendar-new#zone-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/settings#zone",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Kareem--settings#zone-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Kareem-overview-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/analytics",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Kareem--analytics-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/analytics#delivery",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Kareem--analytics#delivery-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/plans",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Kareem--plans-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/exercises",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Kareem--exercises-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/people",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Kareem--people-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/calendar/new#zone",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Kareem--calendar-new#zone-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Kareem",
+      "path": "/settings#zone",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Kareem--settings#zone-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 2350,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 2279.625,
+          "top": 70,
+          "right": 320,
+          "bottom": 2349.625,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila-overview-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/analytics",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1703,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 1632.546875,
+          "top": 70,
+          "right": 320,
+          "bottom": 1702.546875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--analytics-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/analytics#delivery",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1566,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": -388,
+          "width": 320,
+          "height": 1496.28125,
+          "top": -388,
+          "right": 320,
+          "bottom": 1108.28125,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--analytics#delivery-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/plans",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 3803,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 3732.796875,
+          "top": 70,
+          "right": 320,
+          "bottom": 3802.796875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--plans-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/exercises",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 861,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 791.46875,
+          "top": 70,
+          "right": 320,
+          "bottom": 861.46875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--exercises-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/clients",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 3910,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 3839.703125,
+          "top": 70,
+          "right": 320,
+          "bottom": 3909.703125,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--clients-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/appointments#zone",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1663,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 320,
+          "height": 1593.296875,
+          "top": 70,
+          "right": 320,
+          "bottom": 1663.296875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--appointments#zone-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/settings#zone",
+      "width": 320,
+      "height": 568,
+      "lang": "en",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1469,
+        "viewport": 568,
+        "main": {
+          "x": 0,
+          "y": -250,
+          "width": 320,
+          "height": 1398.6875,
+          "top": -250,
+          "right": 320,
+          "bottom": 1148.6875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--settings#zone-320.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 2423,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 2353.296875,
+          "top": 70,
+          "right": 390,
+          "bottom": 2423.296875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila-overview-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/analytics",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1644,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1573.734375,
+          "top": 70,
+          "right": 390,
+          "bottom": 1643.734375,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--analytics-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/analytics#delivery",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1501,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": -293,
+          "width": 390,
+          "height": 1430.9375,
+          "top": -293,
+          "right": 390,
+          "bottom": 1137.9375,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--analytics#delivery-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/plans",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 3771,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 3700.578125,
+          "top": 70,
+          "right": 390,
+          "bottom": 3770.578125,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--plans-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/exercises",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 932,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 861.875,
+          "top": 70,
+          "right": 390,
+          "bottom": 931.875,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--exercises-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/clients",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 3916,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 3845.5,
+          "top": 70,
+          "right": 390,
+          "bottom": 3915.5,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--clients-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/appointments#zone",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1708,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1638.4375,
+          "top": 70,
+          "right": 390,
+          "bottom": 1708.4375,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--appointments#zone-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/settings#zone",
+      "width": 390,
+      "height": 664,
+      "lang": "ar",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1459,
+        "viewport": 664,
+        "main": {
+          "x": 0,
+          "y": 70,
+          "width": 390,
+          "height": 1388.53125,
+          "top": 70,
+          "right": 390,
+          "bottom": 1458.53125,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--settings#zone-390.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila-overview-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/analytics",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--analytics-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/analytics#delivery",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--analytics#delivery-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/plans",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--plans-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/exercises",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--exercises-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/clients",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--clients-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/appointments#zone",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--appointments#zone-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/settings#zone",
+      "width": 1024,
+      "height": 850,
+      "lang": "ar",
+      "theme": "light",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 850,
+        "viewport": 850,
+        "main": {
+          "x": 0,
+          "y": 64,
+          "width": 808,
+          "height": 786,
+          "top": 64,
+          "right": 808,
+          "bottom": 850,
+          "left": 0
+        }
+      },
+      "capture": "webkit-Laila--settings#zone-1024.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Laila-overview-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/analytics",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Laila--analytics-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/analytics#delivery",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Laila--analytics#delivery-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/plans",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Laila--plans-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/exercises",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Laila--exercises-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/clients",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Laila--clients-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/appointments#zone",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Laila--appointments#zone-1440.png"
+    },
+    {
+      "engine": "webkit",
+      "name": "Laila",
+      "path": "/settings#zone",
+      "width": 1440,
+      "height": 1000,
+      "lang": "en",
+      "theme": "dark",
+      "issues": [],
+      "alerts": [],
+      "axe": [],
+      "geometry": {
+        "document": 1000,
+        "viewport": 1000,
+        "main": {
+          "x": 216,
+          "y": 64,
+          "width": 1224,
+          "height": 936,
+          "top": 64,
+          "right": 1440,
+          "bottom": 1000,
+          "left": 216
+        }
+      },
+      "capture": "webkit-Laila--settings#zone-1440.png"
+    }
+  ],
+  "errors": []
+}

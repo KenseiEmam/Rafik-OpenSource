@@ -30,7 +30,7 @@ Use **Explore sample accounts** to inspect Laila, Amir, Nour and Dalia without c
 - Domain: `prisma/migrations/` owns database schema, transactional commands and RLS; `prisma/schema.prisma` describes ORM models. Add forward migrations, then `npm run db:migrate`, `db:generate` and `types`.
 - HTTP and identity: `server/`; [API conventions](docs/reference/api.md) document errors, cookies, pagination and replay.
 - Content: edit the canonical starter/media/food files in `content/`; see the content guide before importing sources. `npm run content` generates the seed, web sample, media manifest, SVGs and credits; verify with `content:check`, `content:media` and `test:catalog`.
-- Tests: `npm test` (rollback SQL), `npm run test:fresh` (disposable database), `npm run test:api`, `test:services`, `test:teams`, `test:organizations`, `test:programming`, `test:organization-services`, `typecheck`, `content:check`, `test:docs`.
+- Tests: `npm test` (eight SQL suites in a disposable fresh database; `test:fresh` is equivalent), `npm run test:api`, `test:services`, `test:teams`, `test:organizations`, `test:programming`, `test:organization-services`, `typecheck`, `content:check`, `test:docs`.
 - Full local gate: `npm run verify:release -- --full` with API and web servers on 5173/5174 running. Reports stay under ignored `artifacts/release/`.
 
 See the [maintainer guide](docs/implementation/maintainer-guide.md) for file ownership and feature recipes, [runbook](docs/implementation/runbook.md) for operations, and [verification](docs/implementation/verification.md) for evidence and remaining limits. Update these and `CHANGELOG.md` with every phase. Old Supabase implementation is preserved in Git at `727f02d`; old product audit is under `docs/revival`.
@@ -80,3 +80,7 @@ See [R16 scope and authority](docs/implementation/r16-contract.md), [ADR0012](do
 ## Organization uploads (R18)
 
 `organization_assets` reuses private local files and current membership checks for exercise demonstrations and conversation attachments. `npm start` applies the forward migrations to existing previews; no reset/seed is necessary. `npm run test:organization-assets` checks ownership, authorized snapshots, exact upload retry and private-pair media. See [ADR0013](docs/decisions/0013-organization-exercise-media.md) for authorization and maintenance contracts.
+
+## Staff tasks (R19)
+
+Open an organization role and choose **Tasks**. Admins assign tasks to active trainers; trainers complete/reopen their own work. The overview links actual tasks, sessions requiring review, unresolved past appointments and trainees without an assignment. Apply forward migrations through backend `npm start`. Package accounting and separate client/staff satisfaction reporting are the next implementation phases, using the founder-confirmed policies.

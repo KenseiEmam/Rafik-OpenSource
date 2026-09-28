@@ -1,4 +1,4 @@
-import { execFileSync, spawnSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync, writeFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 const root = resolve(import.meta.dirname, "../.."),
@@ -60,38 +60,9 @@ else if (command === "seed") {
     },
   );
 } else if (command === "test") {
-  const input = [
-    "core",
-    "daily_coaching",
-    "ongoing_coaching",
-    "service_delivery",
-    "team_business",
-    "exercise_choices",
-    "daily_workspace",
-    "exercise_catalog",
-  ]
-    .map((n) => readFileSync(resolve(root, `tests/sql/${n}.sql`), "utf8"))
-    .join("\n");
-  const result = spawnSync(
-    "docker",
-    [
-      "compose",
-      "exec",
-      "-T",
-      "db",
-      "psql",
-      "-U",
-      "rafik_migrate",
-      "-d",
-      "rafik",
-      "-v",
-      "ON_ERROR_STOP=1",
-    ],
-    { cwd: root, input, encoding: "utf8", maxBuffer: 20 * 1024 * 1024 },
-  );
-  process.stdout.write(result.stdout || "");
-  process.stderr.write(result.stderr || "");
-  process.exitCode = result.status ?? 1;
+  // Preview identities may own real local organizations after normal app use.
+  // Even rollback-only assertions need a canonical fixture baseline.
+  run(process.execPath, [resolve(root, "scripts/prisma/fresh.mjs")]);
 } else if (command === "web-env") {
   writeFileSync(
     resolve(root, "../RAFIK-FRONTEND/.env.local"),
