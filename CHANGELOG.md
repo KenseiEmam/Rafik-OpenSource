@@ -1,5 +1,13 @@
 # Rafik web change history
 
+## R19 — Trainer tasks and daily follow-up · 28 September 2026
+
+- SQL acceptance uses a disposable fixture database. Repeated exercise illustrations use local accessibility groups; publication success waits for durable command completion.
+- Organization admins assign/reassign dated, prioritized trainer tasks. Trainers complete/reopen their own queue; admins can cancel and restore tasks. Search, history, scoped drafts, revisions and exact retry are included.
+- Organization overview now links actual tasks, training awaiting review, past bookings awaiting an outcome and trainees without an active assignment. Upcoming appointments keep using the calendar.
+- Task permissions follow current organization membership; reassignment revokes former assignee access before receipt replay. One table/service reuses existing command infrastructure.
+- Package accounting follows in the next phase using the founder-confirmed reservation/completion/cancellation policy and explicit no-show decisions. Client-to-trainer satisfaction and trainer workplace satisfaction will be reported separately from explicit feedback; no invented risk/quality metrics.
+
 ## R18 — Organization exercise ownership, uploads and private conversations · 28 September 2026
 
 - Multi-select body areas, muscles and equipment, controlled movement choices, direct uploads and existing-file reuse in organization exercise creation. Clearing selections also clears compatibility fields.

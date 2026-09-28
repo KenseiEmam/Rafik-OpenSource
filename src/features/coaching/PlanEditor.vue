@@ -439,7 +439,11 @@ function removeDay() {
           }}
         </button>
       </p>
-      <p v-if="message" class="notice success" role="status">
+      <p
+        v-if="message && !command.state.busy && !command.state.pending"
+        class="notice success"
+        role="status"
+      >
         {{ message }}
         <RouterLink
           v-if="published"

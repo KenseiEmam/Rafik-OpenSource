@@ -6,10 +6,7 @@ test('coach and organization entry keeps context through sign-in and explains di
   page,
 }, info) => {
   await page.goto('/')
-  await page.getByRole('link', { name: 'Open your workspace', exact: true }).click()
-  await expect.poll(() => new URL(page.url()).searchParams.get('next')).toBe('/workspaces')
-  await page.goto('/')
-  await page.getByRole('link', { name: 'Set up an organization', exact: true }).click()
+  await page.getByRole('link', { name: 'Open your organization', exact: true }).click()
   await expect
     .poll(() => new URL(page.url()).searchParams.get('next'))
     .toBe('/workspaces?start=organization')

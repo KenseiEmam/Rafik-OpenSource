@@ -421,6 +421,21 @@ export type Database = { public: { Tables: {
         started_at: string
         completed_at: string | null
     } }
+    organization_tasks: { Row: {
+        id: string
+        workspace_id: string
+        assigned_to: string
+        created_by: string
+        title: string
+        description: string
+        priority: string
+        due_date: string | null
+        state: string
+        revision: number
+        created_at: string
+        updated_at: string
+        completed_at: string | null
+    } }
     organization_versions: { Row: {
         id: string
         workspace_id: string
