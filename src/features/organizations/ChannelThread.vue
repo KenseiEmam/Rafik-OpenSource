@@ -6,6 +6,8 @@ import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { language as l, errorMessage, locale } from '../../lib/i18n'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
+import OrganizationUpload, { type UploadedAsset } from '../../components/OrganizationUpload.vue'
+import OrganizationAsset from '../../components/OrganizationAsset.vue'
 import ChannelEditor from './ChannelEditor.vue'
 const props = defineProps<{ workspace: string; view: string; id: string; base: string }>(),
   emit = defineEmits<{ refresh: [] }>()
@@ -13,12 +15,13 @@ type Message = {
   id: string
   sequence: number
   sender_id: string
+  asset_id?: string
   body: string
   name: string
   created_at: string
 }
 type Detail = {
-  channel: { id: string; title: string; revision: number; archived: boolean }
+  channel: { id: string; title: string; revision: number; archived: boolean; private_pair: boolean }
   self: string
   canManage: boolean
   people: { id: string; name: string; manager: boolean; active: boolean }[]
@@ -30,6 +33,8 @@ const endpoint = `/v1/workspaces/${props.workspace}/communication`,
 const data = ref<Detail>(),
   messages = ref<Message[]>([]),
   text = ref(''),
+  attachment = ref<UploadedAsset>(),
+  uploading = ref(false),
   error = ref(''),
   loading = ref(true),
   more = ref(false),
@@ -62,6 +67,7 @@ const command = useCommand<'send' | 'archive'>(
     if (name === 'send') {
       ready.value = false
       text.value = ''
+      attachment.value = undefined
       await removeDraft(key)
       ready.value = true
     }
@@ -72,7 +78,9 @@ const command = useCommand<'send' | 'archive'>(
   },
   (_, args) => request(endpoint, { method: 'POST', body: JSON.stringify(args) }),
 )
-const locked = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
+const locked = computed(
+  () => uploading.value || command.state.busy || !!command.state.pending || !command.state.ready,
+)
 async function observe() {
   const el = log.value,
     last = messages.value.at(-1)
@@ -161,7 +169,8 @@ function send() {
     view: props.view,
     operation: crypto.randomUUID(),
     message: crypto.randomUUID(),
-    body: text.value.trim(),
+    body: text.value.trim() || attachment.value?.filename,
+    asset_id: attachment.value?.id,
   })
 }
 function archive() {
@@ -181,20 +190,24 @@ function stamp(value: string) {
     timeZone: profile.value?.timezone || 'UTC',
   }).format(new Date(value))
 }
-watch(text, async () => {
+watch([text, attachment], async () => {
   draftSaved.value = false
   if (!ready.value) return
   try {
-    const savedText = text.value
-    await storeDraft(key, savedText)
-    draftSaved.value = savedText === text.value
+    const draft = { text: text.value, attachment: attachment.value }
+    await storeDraft(key, draft)
+    draftSaved.value = draft.text === text.value && draft.attachment?.id === attachment.value?.id
     draftError.value = ''
   } catch (e) {
     draftError.value = errorMessage(e)
   }
 })
 onMounted(async () => {
-  text.value = (await getDraft<string>(key).catch(() => undefined)) || ''
+  const draft = await getDraft<string | { text: string; attachment?: UploadedAsset }>(key).catch(
+    () => undefined,
+  )
+  text.value = typeof draft === 'string' ? draft : draft?.text || ''
+  attachment.value = typeof draft === 'object' ? draft.attachment : undefined
   ready.value = true
   await load(false, true)
   poll = setInterval(() => {
@@ -232,7 +245,12 @@ onUnmounted(() => {
         </li>
       </ul>
       <div v-if="data.canManage" class="actions">
-        <button class="text-link" @click="editing = !editing" :disabled="locked">
+        <button
+          v-if="!data.channel.private_pair"
+          class="text-link"
+          @click="editing = !editing"
+          :disabled="locked"
+        >
           {{ l('Manage participants', 'إدارة المشاركين') }}</button
         ><button class="text-link" @click="archive" :disabled="locked">
           {{
@@ -292,6 +310,7 @@ onUnmounted(() => {
           {{ message.sender_id === data.self ? l('You', 'أنت') : message.name }}
         </p>
         <p dir="auto">{{ message.body }}</p>
+        <OrganizationAsset v-if="message.asset_id" :id="message.asset_id" compact />
         <time :datetime="message.created_at">{{ stamp(message.created_at) }}</time>
       </article>
     </div>
@@ -325,11 +344,39 @@ onUnmounted(() => {
           rows="2"
           :placeholder="l('Write a message…', 'اكتب رسالة…')"
         />
+        <details class="attachment-controls">
+          <summary>
+            {{ attachment ? attachment.filename : l('Attach a file', 'إرفاق ملف') }}
+          </summary>
+          <OrganizationUpload
+            :workspace="workspace"
+            :view="view"
+            :channel="id"
+            purpose="message"
+            :disabled="locked"
+            @busy="uploading = $event"
+            @uploaded="attachment = $event"
+          />
+          <button
+            v-if="attachment"
+            type="button"
+            class="text-link"
+            :disabled="locked"
+            @click="attachment = undefined"
+          >
+            {{ l('Remove attachment', 'إزالة المرفق') }}
+          </button>
+        </details>
         <div class="composer-actions">
           <small>{{
-            l('Only this conversation’s participants', 'المشاركون في هذه المحادثة فقط')
+            data.channel.private_pair
+              ? l('Private to the two participants', 'خاص بالمشاركين الاثنين')
+              : l(
+                  'Group conversation · organization admins can join',
+                  'محادثة جماعية · يمكن لمديري المؤسسة الانضمام',
+                )
           }}</small
-          ><button class="button" :disabled="locked || !text.trim()">
+          ><button class="button" :disabled="locked || (!text.trim() && !attachment)">
             {{ l('Send message', 'إرسال الرسالة') }}
           </button>
         </div></template

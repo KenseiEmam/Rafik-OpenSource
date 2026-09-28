@@ -42,6 +42,7 @@ const groups = computed(() =>
           items: [
             ['/plans', l('Programs', 'البرامج'), PhClipboardText],
             ['/exercises', l('Exercises', 'التمارين'), PhBarbell],
+            ['/resources', l('Resources', 'الموارد'), PhFolder],
             ['/groups', l('Groups', 'المجموعات'), PhUsers],
             ['/assessment-templates', l('Assessment templates', 'قوالب التقييم'), PhListChecks],
           ],

@@ -1,5 +1,12 @@
 # Rafik web change history
 
+## R18 — Organization exercise ownership, uploads and private conversations · 28 September 2026
+
+- Multi-select body areas, muscles and equipment, controlled movement choices, direct uploads and existing-file reuse in organization exercise creation. Clearing selections also clears compatibility fields.
+- Trainer-created library entries stay creator-private; organization-shared entries remain tenant-local. Published snapshots retain their categories and immutable demonstrations.
+- Authenticated organization assets, resource search/archive/restore, safe upload retries and exact message attachment binding. Two-person conversations exclude nonparticipant administrators; group behavior is explicitly separate.
+- Backup/export/orphan maintenance, forward-only migrations, permission tests, rendered review and engineering documentation. No preview reset, hosted storage or native work.
+
 ## R17 — Gym-first entry and authoring usability · 28 September 2026
 
 - Gym-first homepage with an original workflow diagram, staff-only context switching, dark default, unchanged logo colors and reachable support navigation.

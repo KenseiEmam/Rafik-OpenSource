@@ -1,9 +1,18 @@
 <script setup lang="ts">
+import { request } from '../../lib/backend'
+import MultiChoice from '../../components/MultiChoice.vue'
+import OrganizationUpload, { type UploadedAsset } from '../../components/OrganizationUpload.vue'
 import ExerciseDemo from '../../components/ExerciseDemo.vue'
 import { exerciseVideos, videoForExercise, exerciseAssetUrl } from '../../lib/exercise-media'
 import media from '../../content/exercise-media.json'
 import {
   exerciseArea,
+  exerciseAreas,
+  areas,
+  muscles,
+  movements,
+  optionLabel,
+  equipmentArabic,
   categoryLabel,
   equipmentCategories,
   equipmentLabel,
@@ -43,13 +52,13 @@ const visible = computed(() =>
         (scope.value === 'archived' ? e.active === false : e.active !== false) &&
         (scope.value !== 'mine' || context.editableExercise(e)) &&
         (!equipment.value || equipmentCategories(e).includes(equipment.value)) &&
-        (!movement.value || exerciseArea(e) === movement.value) &&
+        (!movement.value || exerciseAreas(e).includes(movement.value)) &&
         (!recording.value || (e.kind || 'strength') === recording.value) &&
         (!mediaFilter.value ||
           (mediaFilter.value === 'video'
             ? !!videoForExercise(e)
-            : !!e.media_url || !!e.media_ref)) &&
-        `${e.name} ${e.name_ar} ${e.equipment} ${e.movement} ${e.target_muscle || ''}`
+            : !!e.media_url || !!e.media_ref || !!e.media_asset)) &&
+        `${e.name} ${e.name_ar} ${e.equipment} ${e.movement} ${e.target_muscle || ''} ${(e.muscles || []).join(' ')}`
           .toLowerCase()
           .includes(search.value.toLowerCase()),
     )
@@ -136,7 +145,7 @@ const equipmentOptions = computed(() =>
   [...new Set(exercises.value.flatMap(equipmentCategories).filter(Boolean))].sort(),
 )
 const movementOptions = computed(() =>
-  [...new Set(exercises.value.map(exerciseArea).filter(Boolean))].sort(),
+  [...new Set(exercises.value.flatMap(exerciseAreas).filter(Boolean))].sort(),
 )
 async function load() {
   loading.value = true
@@ -164,6 +173,10 @@ function create() {
     category: '',
     body_part: '',
     target_muscle: '',
+    body_parts: [],
+    muscles: [],
+    equipment_items: [],
+    scope: context.view === 'admin' ? 'organization' : 'private',
     kind: 'strength',
     media_url: '',
     media_ref: null,
@@ -174,6 +187,10 @@ function create() {
 }
 function edit(e: Exercise) {
   editing.value = clone(e)
+  editing.value.scope = e.scope || 'organization'
+  editing.value.body_parts = exerciseAreas(e)
+  editing.value.muscles = e.muscles || []
+  editing.value.equipment_items = equipmentCategories(e)
   restored.value = false
 }
 async function close() {
@@ -211,10 +228,56 @@ const command = useCommand<'save' | 'active'>(
         )
       : context.exerciseActive(args.exercise as Exercise, String(args.operation)),
 )
-const busy = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
+const resourceFiles = ref<UploadedAsset[]>([]),
+  resourceSearch = ref(''),
+  resourceNext = ref<number | null>(null),
+  resourceError = ref('')
+let resourceRead = 0
+async function findResources(more = false) {
+  const read = ++resourceRead
+  try {
+    const result = await request<{ items: UploadedAsset[]; next: number | null }>(
+      `/v1/workspaces/${context.workspace}/assets?` +
+        new URLSearchParams({
+          view: context.view,
+          search: resourceSearch.value,
+          offset: String(more ? resourceNext.value || 0 : 0),
+        }),
+    )
+    if (read !== resourceRead) return
+    resourceFiles.value = more ? [...resourceFiles.value, ...result.items] : result.items
+    resourceNext.value = result.next
+    resourceError.value = ''
+  } catch (e) {
+    if (read === resourceRead) resourceError.value = errorMessage(e)
+  }
+}
+const uploading = ref(false)
+function uploaded(asset: UploadedAsset) {
+  if (editing.value) {
+    editing.value.media_asset = asset.id
+    editing.value.media_type = asset.media_type
+    editing.value.media_filename = asset.filename
+    editing.value.media_url = ''
+    editing.value.media_ref = null
+  }
+}
+const multiOptions = (values: Record<string, string>, label: (v: string) => string) =>
+  Object.keys(values).map((value) => ({ value, label: label(value) }))
+const busy = computed(
+  () => uploading.value || command.state.busy || !!command.state.pending || !command.state.ready,
+)
 async function save() {
   if (!editing.value) return
   const e = editing.value
+  if (context.workspace) {
+    e.body_part = e.body_parts?.[0] || ''
+    e.equipment = (e.equipment_items || []).join(', ')
+    e.equipment_ar = (e.equipment_items || [])
+      .map((value) => equipmentArabic[value] || value)
+      .join('، ')
+    e.target_muscle = e.muscles?.[0] || ''
+  }
   message.value = ''
   error.value = ''
   const data = {
@@ -231,6 +294,15 @@ async function save() {
     kind: e.kind || 'strength',
     media_url: e.media_url?.trim() || '',
     media_ref: e.media_ref || null,
+    ...(context.workspace
+      ? {
+          scope: e.scope,
+          body_parts: e.body_parts,
+          muscles: e.muscles,
+          equipment_items: e.equipment_items,
+          media_asset: e.media_asset || null,
+        }
+      : {}),
   }
   await command.run('save', {
     operation: crypto.randomUUID(),
@@ -300,8 +372,8 @@ onMounted(async () => {
           <p>
             {{
               language(
-                'Private to your library. Assigned clients see the instructions captured when you publish a plan.',
-                'خاص بمكتبتك. يرى المتدرب التعليمات المحفوظة عند نشر الخطة.',
+                'Assigned trainees see the instructions captured when you publish a plan. Library sharing is shown below.',
+                'يرى المتدرب التعليمات المحفوظة عند نشر الخطة. نطاق مشاركة المكتبة موضح أدناه.',
               )
             }}
           </p>
@@ -317,34 +389,68 @@ onMounted(async () => {
                   <option value="timed">{{ language('Time', 'زمن') }}</option>
                   <option value="distance">{{ language('Distance', 'مسافة') }}</option>
                 </select></label
-              ><label
+              >
+              <label v-if="!context.workspace"
                 >{{ language('Equipment', 'المعدات')
-                }}<input v-model="editing.equipment" maxlength="100" /></label
-              ><label
-                >{{ language('Movement category', 'فئة الحركة')
-                }}<input v-model="editing.movement" maxlength="60"
+                }}<input v-model="editing.equipment" maxlength="100"
               /></label>
+              <label
+                >{{ language('Movement category', 'فئة الحركة')
+                }}<select v-model="editing.movement">
+                  <option value="">{{ language('Choose a category', 'اختر فئة') }}</option>
+                  <option
+                    v-if="editing.movement && !movements[editing.movement]"
+                    :value="editing.movement"
+                  >
+                    {{ editing.movement }}
+                  </option>
+                  <option v-for="(_, value) in movements" :key="value" :value="value">
+                    {{ optionLabel(value, movements) }}
+                  </option>
+                </select></label
+              >
             </div>
-            <label
+            <template v-if="context.workspace">
+              <label v-if="context.view === 'admin'"
+                >{{ language('Available to', 'متاح لـ')
+                }}<select v-model="editing.scope">
+                  <option value="organization">
+                    {{ language('All trainers in this organization', 'كل مدربي هذه المؤسسة') }}
+                  </option>
+                  <option value="private">{{ language('Only me', 'أنا فقط') }}</option>
+                </select></label
+              >
+              <p v-else class="small-print">
+                {{
+                  editing.scope === 'organization'
+                    ? language('Shared within this organization.', 'مشترك داخل هذه المؤسسة.')
+                    : language(
+                        'Only you can find this exercise in the library. Assigned trainees can see its published demonstration.',
+                        'أنت فقط ترى التمرين في المكتبة. يرى المتدربون المعيّنون الشرح المنشور.',
+                      )
+                }}
+              </p>
+              <MultiChoice
+                v-model="editing.body_parts"
+                :label="language('Body areas', 'مناطق الجسم')"
+                :options="multiOptions(areas, categoryLabel)"
+              />
+              <MultiChoice
+                v-model="editing.muscles"
+                :label="language('Muscle groups', 'المجموعات العضلية')"
+                :options="multiOptions(muscles, (v) => optionLabel(v, muscles))"
+              />
+              <MultiChoice
+                v-model="editing.equipment_items"
+                :label="language('Equipment', 'المعدات')"
+                :options="multiOptions(equipmentArabic, equipmentLabel)"
+              />
+            </template>
+            <label v-else
               >{{ language('Body area', 'منطقة الجسم')
               }}<select v-model="editing.body_part">
                 <option value="">{{ language('Not categorized', 'غير مصنّف') }}</option>
-                <option
-                  v-for="area in [
-                    'back',
-                    'cardio',
-                    'chest',
-                    'lower arms',
-                    'lower legs',
-                    'neck',
-                    'shoulders',
-                    'upper arms',
-                    'upper legs',
-                    'waist',
-                  ]"
-                  :key="area"
-                  :value="area"
-                >
+                <option v-for="(_, area) in areas" :key="area" :value="area">
                   {{ categoryLabel(area) }}
                 </option>
               </select></label
@@ -357,10 +463,64 @@ onMounted(async () => {
                 rows="4"
                 maxlength="2000"
               /></label
-            ><label
+            ><label v-if="!context.workspace"
               >{{ language('Demonstration link (optional, HTTPS)', 'رابط الشرح (اختياري، HTTPS)')
               }}<input v-model="editing.media_url" type="url" pattern="https://.*" maxlength="500"
             /></label>
+            <OrganizationUpload
+              v-if="context.workspace"
+              :workspace="context.workspace"
+              :view="context.view"
+              purpose="exercise"
+              @uploaded="uploaded"
+              @busy="uploading = $event"
+            />
+            <details
+              v-if="context.workspace"
+              @toggle="($event.target as HTMLDetailsElement).open && findResources()"
+            >
+              <summary>{{ language('Choose an uploaded file', 'اختر ملفاً مرفوعاً') }}</summary>
+              <label
+                >{{ language('Search uploaded files', 'البحث في الملفات المرفوعة')
+                }}<input type="search" v-model="resourceSearch" @input="findResources()"
+              /></label>
+              <p v-if="resourceError" role="alert">{{ resourceError }}</p>
+              <div class="uploaded-options">
+                <button
+                  v-for="file in resourceFiles"
+                  :key="file.id"
+                  type="button"
+                  class="button secondary small"
+                  @click="uploaded(file)"
+                >
+                  {{ file.filename }}
+                </button>
+              </div>
+              <p v-if="!resourceFiles.length">
+                {{
+                  language(
+                    'No matching files. Upload a demonstration above.',
+                    'لا توجد ملفات مطابقة. ارفع شرحاً أعلاه.',
+                  )
+                }}
+              </p>
+              <button
+                v-if="resourceNext !== null"
+                type="button"
+                class="text-link"
+                @click="findResources(true)"
+              >
+                {{ language('More files', 'المزيد من الملفات') }}
+              </button>
+            </details>
+            <button
+              v-if="editing.media_asset"
+              type="button"
+              class="text-link"
+              @click="editing.media_asset = undefined"
+            >
+              {{ language('Remove uploaded demonstration', 'إزالة الشرح المرفوع') }}
+            </button>
             <label
               >{{ language('Library demonstration (optional)', 'شرح من المكتبة (اختياري)')
               }}<select v-model="editing.media_ref">
@@ -383,8 +543,8 @@ onMounted(async () => {
             <p class="subtle">
               {{
                 language(
-                  'Choose only an exact movement match. An external demonstration link takes priority.',
-                  'اختر رسماً مطابقاً للحركة. تكون الأولوية لرابط الشرح الخارجي.',
+                  'Choose an exact movement match. An uploaded demonstration takes priority.',
+                  'اختر شرحاً مطابقاً للحركة. تكون الأولوية للشرح المرفوع.',
                 )
               }}
             </p>
@@ -656,6 +816,18 @@ onMounted(async () => {
   </div>
 </template>
 <style scoped>
+@media (max-width: 520px) {
+  .exercise-editor .field-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.uploaded-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  max-height: 220px;
+  overflow: auto;
+}
 .catalog-filter-toggle {
   display: none;
 }

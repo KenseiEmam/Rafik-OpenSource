@@ -251,6 +251,20 @@ export type Database = { public: { Tables: {
         created_at: string
         meals: Json
     } }
+    organization_assets: { Row: {
+        id: string
+        workspace_id: string
+        owner_id: string
+        purpose: string
+        channel_id: string | null
+        filename: string
+        media_type: string
+        bytes: number
+        digest: string
+        retired: boolean
+        created_at: string
+        revision: number
+    } }
     organization_assignments: { Row: {
         id: string
         workspace_id: string
@@ -284,6 +298,7 @@ export type Database = { public: { Tables: {
         revision: number
         archived: boolean
         created_at: string
+        private_pair: boolean
     } }
     organization_event_people: { Row: {
         workspace_id: string
@@ -360,6 +375,7 @@ export type Database = { public: { Tables: {
         sender_id: string
         body: string
         created_at: string
+        asset_id: string | null
     } }
     organization_nutrition_plans: { Row: {
         id: string

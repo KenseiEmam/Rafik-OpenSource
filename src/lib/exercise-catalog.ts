@@ -1,6 +1,6 @@
 import type { Exercise } from './domain'
 import { locale } from './i18n'
-const areas: Record<string, string> = {
+export const areas: Record<string, string> = {
   back: 'الظهر',
   cardio: 'لياقة قلبية',
   chest: 'الصدر',
@@ -12,7 +12,7 @@ const areas: Record<string, string> = {
   'upper legs': 'الفخذان',
   waist: 'الجذع',
 }
-const equipmentArabic: Record<string, string> = {
+export const equipmentArabic: Record<string, string> = {
   assisted: 'مساعدة',
   'assisted pull up machine': 'جهاز العقلة المساعد',
   band: 'شريط مقاومة',
@@ -102,6 +102,8 @@ const starterAreas: Record<string, string> = {
 }
 export const exerciseArea = (e: Exercise) =>
   e.body_part || e.category || (!e.owner_id && !e.workspace_id ? starterAreas[e.id] : '') || ''
+export const exerciseAreas = (e: Exercise) =>
+  e.body_parts?.length ? e.body_parts : [exerciseArea(e)].filter(Boolean)
 export function categoryLabel(value: string) {
   return locale.value === 'ar'
     ? areas[value] || value
@@ -128,9 +130,44 @@ function normalizeEquipmentPart(value: string) {
 
 export function equipmentCategories(e: Exercise) {
   const result = new Set<string>()
-  for (const part of e.equipment.split(/\s*(?:,|\/|&|\b(?:and|or)\b)\s*/i)) {
+  for (const part of (e.equipment_items?.join(', ') || e.equipment).split(
+    /\s*(?:,|\/|&|\b(?:and|or)\b)\s*/i,
+  )) {
     const category = normalizeEquipmentPart(part)
     if (category) result.add(category)
   }
   return [...result]
 }
+
+export const muscles: Record<string, string> = {
+  abdominals: 'البطن',
+  obliques: 'العضلات المائلة',
+  quadriceps: 'العضلات الرباعية',
+  hamstrings: 'أوتار الركبة',
+  glutes: 'الأرداف',
+  calves: 'السمانة',
+  chest: 'الصدر',
+  lats: 'الظهر العريض',
+  trapezius: 'العضلة شبه المنحرفة',
+  'lower back': 'أسفل الظهر',
+  shoulders: 'الكتفان',
+  biceps: 'العضلة ذات الرأسين',
+  triceps: 'العضلة ثلاثية الرؤوس',
+  forearms: 'الساعدان',
+  adductors: 'المقربات',
+  abductors: 'المبعدات',
+  'hip flexors': 'مثنيات الورك',
+  neck: 'الرقبة',
+}
+export const movements: Record<string, string> = {
+  compound: 'مركّب',
+  isolation: 'عزل',
+  cardio: 'لياقة قلبية',
+  bodyweight: 'وزن الجسم',
+  stretch: 'تمدد',
+  mobility: 'حركية',
+  balance: 'توازن',
+  plyometric: 'بليومتري',
+}
+export const optionLabel = (key: string, options: Record<string, string>) =>
+  locale.value === 'ar' ? options[key] || key : key.charAt(0).toUpperCase() + key.slice(1)

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import OrganizationAsset from './OrganizationAsset.vue'
 import ExerciseVideo from './ExerciseVideo.vue'
 import { videoForExercise } from '../lib/exercise-media'
 import credits from '../content/exercise-credits.json'
@@ -39,7 +40,13 @@ const name = computed(() =>
 )
 </script>
 <template>
-  <ExerciseVideo v-if="motion" :key="motion.id" :item="motion" :name="name" />
+  <OrganizationAsset
+    v-if="exercise?.media_asset"
+    :id="exercise.media_asset"
+    :name="name"
+    :compact="thumbnail"
+  />
+  <ExerciseVideo v-else-if="motion" :key="motion.id" :item="motion" :name="name" />
   <section
     v-else-if="pack"
     class="exercise-demo"

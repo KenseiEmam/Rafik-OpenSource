@@ -25,7 +25,10 @@ const items = computed(() => [
       ]),
   ...(route.params.view === 'trainee'
     ? []
-    : [{ path: '/exercises', name: l('Exercises', 'التمارين') }]),
+    : [
+        { path: '/exercises', name: l('Exercises', 'التمارين') },
+        { path: '/resources', name: l('Resources', 'الموارد') },
+      ]),
   ...(route.params.view === 'admin'
     ? [
         { path: '/activity', name: l('Activity', 'النشاط') },
@@ -43,6 +46,7 @@ const secondary = new Set([
   '/groups',
   '/assessment-templates',
   '/exercises',
+  '/resources',
   '/activity',
   '/settings',
 ])

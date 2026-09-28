@@ -58,7 +58,8 @@ export function programContext(route: RouteLocationNormalizedLoaded) {
     },
     editableExercise: (e: Exercise) =>
       workspace
-        ? !!e.workspace_id && (view === 'admin' || e.created_by === self())
+        ? !!e.workspace_id &&
+          ((view === 'admin' && e.scope !== 'private') || e.created_by === self())
         : e.owner_id === user.value?.id,
     exercise: (
       id: string,

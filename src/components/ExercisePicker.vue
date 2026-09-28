@@ -19,6 +19,7 @@ import {
   equipmentCategories,
   equipmentLabel,
   exerciseArea,
+  exerciseAreas,
 } from '../lib/exercise-catalog'
 import { language, locale } from '../lib/i18n'
 
@@ -142,7 +143,7 @@ const equipmentOptions = computed(() => {
 })
 
 const bodyAreaOptions = computed(() =>
-  [...new Set(baseExercises.value.map(exerciseArea).filter(Boolean))].sort((a, b) =>
+  [...new Set(baseExercises.value.flatMap(exerciseAreas).filter(Boolean))].sort((a, b) =>
     categoryLabel(a).localeCompare(categoryLabel(b), locale.value),
   ),
 )
@@ -155,7 +156,7 @@ const matches = computed(() => {
     .filter(({ exercise }) => {
       if (recordingType.value && (exercise.kind || 'strength') !== recordingType.value) return false
       if (equipment.value && !equipmentCategories(exercise).includes(equipment.value)) return false
-      if (bodyArea.value && exerciseArea(exercise) !== bodyArea.value) return false
+      if (bodyArea.value && !exerciseAreas(exercise).includes(bodyArea.value)) return false
       const haystack = normalize(searchText(exercise))
       return terms.every((term) => haystack.includes(term))
     })
