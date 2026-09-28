@@ -335,6 +335,11 @@ function addDay() {
   selected.value = draft.value.days.length - 1
   if (!d.exercises.length) addExercise()
 }
+function joinPrevious(index: number) {
+  const previous = day.value.exercises[index - 1]!
+  previous.group ||= language('Superset', 'مجموعة مركبة') + ' ' + index
+  day.value.exercises[index]!.group = previous.group
+}
 function move(index: number, offset: number) {
   const ex = day.value.exercises.splice(index, 1)[0]!
   day.value.exercises.splice(index + offset, 0, ex)
@@ -494,7 +499,7 @@ function removeDay() {
             :id="draft.presentation?.cover"
             :style="!preview ? { maxWidth: '220px', maxHeight: '124px' } : {}"
           />
-          <details v-if="!preview" class="program-description">
+          <details open v-if="!preview" class="program-description">
             <summary>
               {{
                 language(
@@ -551,7 +556,7 @@ function removeDay() {
               {{ language('Remove cover from this draft', 'إزالة الغلاف من المسودة') }}
             </button>
           </details>
-          <details v-if="!preview" class="program-description">
+          <details open v-if="!preview" class="program-description">
             <summary>
               {{ language('Program description (optional)', 'وصف البرنامج (اختياري)') }}
             </summary>
@@ -574,19 +579,19 @@ function removeDay() {
           >
             {{ language('Make an editable copy', 'إنشاء نسخة للتعديل') }}
           </button>
-          <details v-if="!preview" class="program-schedule">
+          <details open v-if="!preview" class="program-schedule">
             <summary>
               {{ language('Program schedule', 'جدول البرنامج') }}
             </summary>
             <label
-              >{{ language('Cycle length (weeks)', 'طول الدورة (أسابيع)')
+              >{{ language('Repeat every (weeks)', 'التكرار كل (أسابيع)')
               }}<input v-model.number="draft.cycleWeeks" type="number" min="1" max="12" required
             /></label>
             <p v-if="!preview" class="small-print">
               {{
                 language(
-                  'Day offsets start from the assignment date. Unfilled slots are recovery days.',
-                  'تبدأ أيام الدورة من تاريخ تعيين الخطة. الأيام الفارغة للتعافي.',
+                  `This ${draft.cycleWeeks || 1}-week plan repeats every ${(draft.cycleWeeks || 1) * 7} days from the assignment start date. Days without a workout are rest days. Use one week for a simple weekly routine.`,
+                  `تتكرر الخطة كل ${(draft.cycleWeeks || 1) * 7} أيام من تاريخ البدء. الأيام دون تمارين أيام راحة. اختر أسبوعاً واحداً لروتين أسبوعي بسيط.`,
                 )
               }}
               <RouterLink :to="context.base + '/exercises'" target="_blank"
@@ -671,7 +676,21 @@ function removeDay() {
                 language('Recovery day. No workout to record.', 'يوم تعافٍ. لا يوجد تمرين للتسجيل.')
               }}
             </p>
-            <article v-for="(ex, i) in day.exercises" :key="ex.key" class="editor-exercise">
+            <article
+              v-for="(ex, i) in day.exercises"
+              :key="ex.key"
+              class="editor-exercise"
+              :class="{
+                'grouped-exercise': !!ex.group,
+                'group-continued': !!ex.group && day.exercises[i - 1]?.group === ex.group,
+              }"
+            >
+              <p v-if="ex.group" class="superset-banner">
+                {{ language('Superset / circuit', 'مجموعة مركبة / دائرة') }} · {{ ex.group
+                }}<span v-if="day.exercises[i - 1]?.group === ex.group">
+                  · {{ language('Continue together', 'تابع ضمن المجموعة') }}</span
+                >
+              </p>
               <div class="editor-exercise-top">
                 <span class="exercise-index">{{ String(i + 1).padStart(2, '0') }}</span>
                 <h3 v-if="preview">{{ name(ex.exerciseId) }}</h3>
@@ -722,7 +741,16 @@ function removeDay() {
                   {{ n + 1 }}. {{ targetLabel(ex, target) }}
                 </p>
               </div>
-              <PrescriptionFields v-else v-model="day.exercises[i]!" />
+              <template v-else
+                ><button
+                  v-if="i > 0 && !ex.group"
+                  type="button"
+                  class="text-link"
+                  @click="joinPrevious(i)"
+                >
+                  {{ language('Pair with previous exercise', 'اربط بالتمرين السابق') }}</button
+                ><PrescriptionFields v-model="day.exercises[i]!"
+              /></template>
               <ExerciseDemo :exercise="catalog.find((e) => e.id === ex.exerciseId) || ex.info" />
               <p v-if="preview">
                 {{
@@ -883,5 +911,21 @@ function removeDay() {
     flex: 1 0 calc(100% - 28px);
     width: calc(100% - 28px);
   }
+}
+</style>
+
+<style scoped>
+.grouped-exercise {
+  border-inline-start: 4px solid var(--accent);
+}
+.group-continued {
+  margin-block-start: 8px;
+}
+.superset-banner {
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
 }
 </style>

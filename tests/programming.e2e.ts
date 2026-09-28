@@ -27,7 +27,7 @@ test('organization program authoring, reviewed delivery, recording and feedback 
     const base = `/organization/${id}/admin`
     await f.login(page, f.owner, base + '/plans/new')
     await page.getByLabel('Plan name', { exact: true }).fill('Three-day foundation')
-    await page.getByText('Help trainees recognize this program', { exact: true }).click()
+    await expect(page.getByLabel('Goal (optional)', { exact: true })).toBeVisible()
     await page.getByLabel('Goal (optional)', { exact: true }).fill('Build a steady training habit')
     await page.getByLabel('Cover image (optional, up to 2 MB)', { exact: true }).setInputFiles({
       name: 'cover.png',

@@ -1,239 +1,348 @@
 <script setup lang="ts">
-import { PhArrowRight, PhArrowUpRight, PhCheck, PhBarbell } from '@phosphor-icons/vue'
-import { language, t } from '../../lib/i18n'
+import {
+  PhArrowRight,
+  PhCalendarBlank,
+  PhBarbell,
+  PhBowlFood,
+  PhUsersThree,
+} from '@phosphor-icons/vue'
+import { language as l } from '../../lib/i18n'
 </script>
 <template>
-  <div class="container landing">
-    <section class="hero">
-      <div class="hero-copy">
+  <div class="container gym-home">
+    <section class="gym-hero">
+      <div>
         <p class="eyebrow">
-          {{ language('For coaches and training organizations', 'للمدربين والمؤسسات التدريبية') }}
+          {{ l('For gyms & training organizations', 'للصالات الرياضية والمؤسسات التدريبية') }}
         </p>
-        <h1>{{ language('A clear plan. A connected team.', 'خطة واضحة. فريق متواصل.') }}</h1>
-        <p class="hero-description">
+        <h1>
           {{
-            language(
-              'Plan the training. Support the people. See what needs your attention—all in your own workspace.',
-              'خطّط للتدريب، وتابع الأشخاص، واعرف ما يحتاج اهتمامك، في مساحة عملك.',
+            l('Your people. Your programs. One training day.', 'فريقك. برامجك. يوم تدريبي مترابط.')
+          }}
+        </h1>
+        <p class="gym-intro">
+          {{
+            l(
+              'Give your trainers the tools to coach well—and your organization a clear view of the work. Bring training, nutrition, scheduled sessions and follow-up together.',
+              'امنح مدربيك أدوات التدريب الفعّال، ومؤسستك رؤية واضحة للعمل. اجمع التدريب والتغذية والحصص المجدولة والمتابعة في مكان واحد.',
             )
           }}
         </p>
         <div class="actions">
-          <RouterLink class="button" to="/workspaces"
-            >{{ language('Open your workspace', 'افتح مساحة عملك')
-            }}<PhArrowRight :size="20" class="directional" aria-hidden="true"
+          <RouterLink class="button" to="/workspaces?start=organization"
+            >{{ l('Open your organization', 'افتح مؤسستك')
+            }}<PhArrowRight :size="19" class="directional"
           /></RouterLink>
-          <RouterLink class="text-link" to="/routine"
-            >{{ language('Try a workout', 'جرّب تمريناً')
-            }}<PhArrowUpRight :size="18" aria-hidden="true"
-          /></RouterLink>
+          <a class="text-link" href="#how-it-works">{{ l('See how it works', 'شاهد كيف يعمل') }}</a>
         </div>
+        <p class="small-print">
+          {{
+            l('Built for the staff who keep training moving.', 'مصمم للفريق الذي يدير يوم التدريب.')
+          }}
+        </p>
       </div>
-      <figure class="hero-photo">
-        <img
-          src="/images/training.png"
-          :alt="
-            language(
-              'A woman taking a quiet break between sets in a sunlit gym',
-              'امرأة تستريح بين مجموعات التمرين في صالة مضاءة بالشمس',
-            )
-          "
-          width="1536"
-          height="1024"
-          fetchpriority="high"
-        />
-      </figure>
+      <div
+        class="gym-workflow"
+        :aria-label="l('A connected coaching workflow', 'سير عمل تدريبي مترابط')"
+      >
+        <div class="workflow-heading">
+          <span>{{ l('THE TRAINING DAY', 'يوم التدريب') }}</span
+          ><PhCalendarBlank :size="26" />
+        </div>
+        <ol>
+          <li>
+            <span class="workflow-step">01</span>
+            <div>
+              <h2>{{ l('Prepare', 'حضّر') }}</h2>
+              <p>
+                {{
+                  l(
+                    'Choose a trainee. Build the training and nutrition plan.',
+                    'اختر المتدرب. جهّز خطة التدريب والتغذية.',
+                  )
+                }}
+              </p>
+            </div>
+            <PhBarbell :size="23" />
+          </li>
+          <li>
+            <span class="workflow-step">02</span>
+            <div>
+              <h2>{{ l('Coordinate', 'نسّق') }}</h2>
+              <p>
+                {{
+                  l(
+                    'Put people and sessions on the same calendar.',
+                    'اجمع الفريق والحصص في تقويم واحد.',
+                  )
+                }}
+              </p>
+            </div>
+            <PhUsersThree :size="23" />
+          </li>
+          <li>
+            <span class="workflow-step">03</span>
+            <div>
+              <h2>{{ l('Follow through', 'تابع') }}</h2>
+              <p>
+                {{
+                  l(
+                    'Review attendance and progress. Make the next step clear.',
+                    'راجع الحضور والتقدم. وضّح الخطوة التالية.',
+                  )
+                }}
+              </p>
+            </div>
+            <PhArrowRight :size="23" class="directional" />
+          </li>
+        </ol>
+        <p class="workflow-foot">
+          {{ l('One organization. Clear responsibilities.', 'مؤسسة واحدة. مسؤوليات واضحة.') }}
+        </p>
+      </div>
     </section>
-    <section class="coach-section">
+    <section id="for-your-team" class="gym-team">
       <div>
-        <h2>{{ language('Your plan. Their progress.', 'خطتك. تقدّمهم.') }}</h2>
-        <p>
-          {{
-            language(
-              'For coaches who already have clients: start from a useful plan, make it your own, and review what actually happened.',
-              'للمدربين الذين لديهم متدربون: ابدأ بخطة مفيدة، عدّلها، وراجع ما أنجزوه فعلاً.',
-            )
-          }}
-        </p>
-        <RouterLink to="/coach" class="button secondary"
-          >{{ language('Open your coaching workspace', 'افتح مساحة التدريب')
-          }}<PhArrowUpRight :size="18" aria-hidden="true"
-        /></RouterLink>
-      </div>
-      <div class="coach-principles">
-        <p>
-          {{ language('Start with a plan, not a blank dashboard.', 'ابدأ بخطة، لا بلوحة فارغة.') }}
-        </p>
-        <p>
-          {{
-            language('Give feedback where the workout happened.', 'قدّم ملاحظاتك ضمن الحصة نفسها.')
-          }}
-        </p>
-        <p>
-          {{
-            language(
-              'Change what comes next. Keep what was done.',
-              'عدّل القادم. واحتفظ بما تم إنجازه.',
-            )
-          }}
-        </p>
-      </div>
-    </section>
-    <section class="organization-intro" aria-labelledby="organization-title">
-      <div>
-        <p class="eyebrow">
-          {{
-            language('One organization. Clear responsibilities.', 'مؤسسة واحدة. مسؤوليات واضحة.')
-          }}
-        </p>
-        <h2 id="organization-title">
-          {{ language('Keep the whole training day connected.', 'كل تفاصيل يوم التدريب مترابطة.') }}
+        <p class="eyebrow">{{ l('Built around your team', 'حول احتياجات فريقك') }}</p>
+        <h2>
+          {{ l('Better coaching starts with a clearer picture.', 'تدريب أفضل يبدأ برؤية أوضح.') }}
         </h2>
         <p>
           {{
-            language(
-              'Your organization has its own administrators, trainers and trainees. Assign responsibility, deliver programs and schedule assessments without mixing work with independent coaching.',
-              'لمؤسستك مسؤولوها ومدربوها ومتدربوها. وزّع المسؤوليات وقدّم البرامج وجدول التقييمات، مع فصل أعمال المؤسسة عن التدريب المستقل.',
+            l(
+              'Keep client relationships consistent when schedules or trainers change. Your organization retains its training history, and each trainer knows who they are responsible for.',
+              'حافظ على استمرارية المتابعة عند تغيير المواعيد أو المدربين. تحتفظ مؤسستك بسجل التدريب ويعرف كل مدرب مسؤولياته.',
             )
           }}
         </p>
-        <RouterLink class="text-link" to="/workspaces?start=organization"
-          >{{ language('Set up an organization', 'أنشئ مساحة للمؤسسة')
-          }}<PhArrowUpRight :size="18" aria-hidden="true"
-        /></RouterLink>
       </div>
-      <dl class="organization-benefits">
+      <dl>
         <div>
-          <dt>{{ language('Administrators', 'المسؤولون') }}</dt>
+          <dt>{{ l('For organization managers', 'لمديري المؤسسة') }}</dt>
           <dd>
             {{
-              language(
-                'See workload, unassigned trainees and programs in use. Keep people and responsibilities up to date.',
-                'تابع أعباء العمل والمتدربين بلا مدرب والبرامج المستخدمة. حدّث الأشخاص والمسؤوليات.',
+              l(
+                'Coordinate trainers, review workload and participation, and spot the clients who need follow-up.',
+                'نسّق المدربين وراجع أعباء العمل والمشاركة وحدّد المتدربين الذين يحتاجون متابعة.',
               )
             }}
           </dd>
         </div>
         <div>
-          <dt>{{ language('Trainers', 'المدربون') }}</dt>
+          <dt>{{ l('For your trainers', 'لمدربيك') }}</dt>
           <dd>
             {{
-              language(
-                'Review your trainees, give feedback and follow up in scoped conversations.',
-                'راجع تدريب متدربيك وقدّم الملاحظات وتابعهم في محادثات محددة المشاركين.',
-              )
-            }}
-          </dd>
-        </div>
-        <div>
-          <dt>{{ language('Continuity', 'استمرارية التدريب') }}</dt>
-          <dd>
-            {{
-              language(
-                'Change who is responsible without losing the organization’s training history.',
-                'غيّر المدرب المسؤول مع الاحتفاظ بسجل تدريب المؤسسة.',
+              l(
+                'Create individual programs, set nutrition targets, review sessions and keep conversations in context.',
+                'أنشئ برامج فردية وحدّد أهداف التغذية وراجع الحصص والمحادثات في سياقها.',
               )
             }}
           </dd>
         </div>
       </dl>
     </section>
-    <section class="sample-feature" aria-labelledby="sample-title">
-      <div>
-        <PhBarbell :size="30" weight="regular" class="accent-icon" aria-hidden="true" />
-        <h2 id="sample-title">
-          {{ language('Your next workout is already here.', 'تمرينك القادم جاهز.') }}
-        </h2>
-        <p>
+    <section id="how-it-works" class="gym-tools">
+      <header>
+        <p class="eyebrow">{{ l('The tools behind the service', 'الأدوات التي تدعم خدمتك') }}</p>
+        <h2>
           {{
-            language(
-              'Start with a simple full-body session. No account, installation, or long introduction.',
-              'ابدأ بحصة بسيطة لكامل الجسم. بلا حساب أو تنزيل أو مقدمة طويلة.',
-            )
+            l('Less switching. More attention to each client.', 'تنقّل أقل. اهتمام أكبر بكل متدرب.')
           }}
-        </p>
+        </h2>
+      </header>
+      <div class="tw:grid tw:gap-8 tw:md:grid-cols-2">
+        <article>
+          <PhBarbell :size="28" />
+          <h3>{{ l('Training with a purpose', 'تدريب بهدف واضح') }}</h3>
+          <p>
+            {{
+              l(
+                'An exercise library, custom programs and preserved session history keep preparation connected to progress.',
+                'مكتبة تمارين وبرامج مخصصة وسجل حصص محفوظ يربط التخطيط بالتقدم.',
+              )
+            }}
+          </p>
+        </article>
+        <article>
+          <PhBowlFood :size="28" />
+          <h3>{{ l('Practical nutrition', 'تغذية قابلة للتطبيق') }}</h3>
+          <p>
+            {{
+              l(
+                'Clear calorie and macro targets, example meals, and food diaries shared by the trainee.',
+                'أهداف واضحة للسعرات والمغذيات ووجبات مقترحة وسجل طعام يختار المتدرب مشاركته.',
+              )
+            }}
+          </p>
+        </article>
       </div>
-      <RouterLink to="/routine" class="workout-teaser"
-        ><span class="teaser-label">{{ t('sample') }}</span>
-        <h3>{{ t('contentTitle') }}</h3>
-        <div class="teaser-facts">
-          <span>{{ language('4 movements', '٤ تمارين') }}</span
-          ><span>{{ language('About 35 minutes', 'حوالي ٣٥ دقيقة') }}</span>
-        </div>
-        <div class="teaser-bottom">
-          <span>{{ language('Dumbbells and a mat', 'دمبل وحصيرة') }}</span
-          ><span class="round-arrow"
-            ><PhArrowRight :size="24" class="directional" aria-hidden="true"
-          /></span></div
-      ></RouterLink>
-    </section>
-    <section id="how-it-works" class="how-section">
-      <h2>{{ language('Less setup. More useful training.', 'إعداد أقل. تدريب أكثر فائدة.') }}</h2>
-      <div class="how-grid">
-        <article>
-          <span class="feature-symbol"><PhCheck :size="22" aria-hidden="true" /></span>
-          <h3>{{ language('See the whole session', 'شاهد الحصة كاملة') }}</h3>
-          <p>
-            {{
-              language(
-                'Exercises, sets, and clear instructions together. You always know what comes next.',
-                'التمارين والمجموعات والتعليمات في مكان واحد. تعرف دائماً ما الخطوة التالية.',
-              )
-            }}
-          </p>
-        </article>
-        <article>
-          <span class="feature-symbol"><PhCheck :size="22" aria-hidden="true" /></span>
-          <h3>{{ language('Pick up where you left off', 'تابع من حيث توقفت') }}</h3>
-          <p>
-            {{
-              language(
-                'Your sets stay on your device through interruptions. Connected workouts sync with your account.',
-                'تبقى مجموعاتك على الجهاز عند الانقطاع. وتتم مزامنة حصصك المرتبطة بحسابك.',
-              )
-            }}
-          </p>
-        </article>
+      <div class="gym-close">
+        <p>
+          {{ l('Give every trainer a clear place to work.', 'امنح كل مدرب مكاناً واضحاً للعمل.') }}
+        </p>
+        <RouterLink class="button" to="/workspaces?start=organization"
+          >{{ l('Get started', 'ابدأ الآن') }}<PhArrowRight :size="18" class="directional"
+        /></RouterLink>
       </div>
     </section>
   </div>
 </template>
 <style scoped>
-.coach-section {
-  margin-block: clamp(40px, 6vw, 72px) 0;
+.gym-home {
+  padding-block: clamp(40px, 6vw, 88px);
 }
-.organization-intro {
+.gym-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: 1.12fr 1fr;
   gap: clamp(32px, 6vw, 96px);
-  padding-block: clamp(40px, 7vw, 88px);
-  border-bottom: 1px solid var(--line);
+  align-items: center;
 }
-.organization-intro h2 {
-  max-width: 19ch;
+h1 {
+  font-size: clamp(2.4rem, 4.5vw, 4.5rem);
+  line-height: 1.08;
+  max-width: 15ch;
+  text-wrap: balance;
 }
-.organization-intro p {
-  max-width: 58ch;
-  margin-block: 16px 24px;
-}
-.organization-benefits {
-  margin: 0;
-}
-.organization-benefits > div {
-  padding-block: 20px;
-  border-top: 1px solid var(--line);
-}
-.organization-benefits dt {
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-.organization-benefits dd {
-  margin: 0;
+.gym-intro {
+  font-size: 1.08rem;
+  line-height: 1.85;
+  max-width: 53ch;
+  margin-block: 28px;
   color: var(--muted);
 }
-@media (max-width: 700px) {
-  .organization-intro {
+.gym-workflow {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 18px;
+  overflow: hidden;
+}
+.workflow-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px;
+  color: var(--accent);
+  border-bottom: 1px solid var(--line);
+  font-size: 0.73rem;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+ol {
+  list-style: none;
+  padding: 0 24px;
+  margin: 0;
+}
+li {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 24px;
+  gap: 16px;
+  align-items: start;
+  padding-block: 26px;
+  border-bottom: 1px solid var(--line);
+}
+li:last-child {
+  border: 0;
+}
+.workflow-step {
+  color: var(--accent);
+  font-size: 0.75rem;
+  padding-top: 5px;
+  font-variant-numeric: tabular-nums;
+}
+li h2 {
+  font-size: 1.15rem;
+  margin: 0 0 8px;
+}
+li p {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.65;
+  margin: 0;
+}
+li svg {
+  color: var(--muted);
+}
+.workflow-foot {
+  background: var(--surface-soft);
+  padding: 18px 24px;
+  margin: 0;
+  font-size: 0.78rem;
+}
+.gym-team {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 7vw, 100px);
+  margin-block: clamp(64px, 9vw, 120px);
+  padding-top: 48px;
+  border-top: 1px solid var(--line);
+}
+.gym-team h2,
+.gym-tools h2 {
+  font-size: clamp(1.7rem, 2.6vw, 2.5rem);
+  max-width: 24ch;
+  line-height: 1.2;
+}
+.gym-team p,
+.gym-team dd,
+.gym-tools article p {
+  line-height: 1.8;
+  color: var(--muted);
+  max-width: 56ch;
+}
+dl {
+  margin: 0;
+}
+dl div {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+dt {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+dd {
+  margin: 0;
+}
+.gym-tools header {
+  margin-bottom: 36px;
+}
+.gym-tools article {
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.gym-tools article svg {
+  color: var(--accent);
+}
+.gym-tools h3 {
+  margin-block: 18px 10px;
+}
+.gym-close {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 48px;
+  border-top: 1px solid var(--line);
+  padding-top: 32px;
+}
+.gym-close p {
+  font-weight: 600;
+}
+@media (max-width: 800px) {
+  .gym-hero,
+  .gym-team {
     grid-template-columns: minmax(0, 1fr);
+  }
+  h1 {
+    max-width: 20ch;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  a {
+    transition:
+      background 0.15s ease,
+      color 0.15s ease;
   }
 }
 </style>

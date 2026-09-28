@@ -39,7 +39,7 @@ test('daily workspace connects named attention, filters and complete mobile navi
       .getByRole('dialog')
       .getByRole('button', { name: 'Close navigation', exact: true })
       .click()
-    await page.getByLabel('Workspace', { exact: true }).selectOption('/today')
+    await page.goto('/today')
     await expect(page).toHaveURL(/\/today$/)
     await page.evaluate(() => {
       localStorage.setItem('rafik.locale', 'ar')

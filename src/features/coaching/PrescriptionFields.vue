@@ -74,10 +74,10 @@ watch(
       }}<input v-model.number="ex.rest" type="number" required min="0" max="600"
     /></label>
   </div>
-  <details class="advanced-prescription">
-    <summary>
+  <section class="advanced-prescription">
+    <p class="prescription-label">
       {{ language('Set targets, effort & grouping', 'أهداف المجموعات والجهد والتجميع') }}
-    </summary>
+    </p>
     <div>
       <div class="field-pair">
         <label
@@ -114,7 +114,12 @@ watch(
           language('Different targets for each set', 'أهداف مختلفة لكل مجموعة')
         }}</label
       >
-      <div v-for="(s, i) in ex.targets" :key="i" class="per-set-target">
+      <fieldset
+        :disabled="!ex.targets"
+        v-for="(s, i) in ex.targets || Array.from({ length: ex.sets }, target)"
+        :key="i"
+        class="per-set-target"
+      >
         <strong>{{ i + 1 }}</strong
         ><label v-if="!ex.kind || ex.kind === 'strength'"
           >{{ t('reps')
@@ -153,7 +158,18 @@ watch(
             max="10"
             step="0.5"
         /></label>
-      </div>
+      </fieldset>
     </div>
-  </details>
+  </section>
 </template>
+
+<style scoped>
+.prescription-label {
+  font-weight: 700;
+}
+.per-set-target {
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+</style>

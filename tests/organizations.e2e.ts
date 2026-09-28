@@ -36,7 +36,7 @@ test('organization admin enrolls combined roles and reassigns responsibility wit
     await expect(staff).toHaveURL(new RegExp(`/organization/${id}/trainer$`))
     await expect(
       staff.getByRole('combobox', { name: 'Workspace', exact: true }).locator('option'),
-    ).toContainText(['My training', 'Coaching', 'Madar test organization'])
+    ).toContainText(['Coaching', 'Madar test organization'])
     await page.getByLabel('Email address', { exact: true }).fill(f.client.email)
     await page.getByRole('button', { name: 'Create invitation', exact: true }).click()
     const clientLink = await page.getByLabel('Invitation link', { exact: true }).inputValue()

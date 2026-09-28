@@ -76,3 +76,13 @@
 
 - When reusing a UI component, inspect its rendered contents before wrapping it; avoid duplicate fields/headings. Scope acceptance to the actual nutrient controls, not unrelated inputs. Capture console component-resolution warnings as well as runtime errors.
 - Device-save feedback must acknowledge the latest queued draft write, and remain visible when an editor closes. Test close → saved feedback → reload → continue, plus switching subjects/dates. Keep sharing decisions and nutrition actuals separate from published suggestions; reassignment and revocation must be checked before replay.
+
+## Gym-first direction (28 September 2026)
+
+- Public web serves gyms and training organizations; trainers operate inside organizations. Retain legacy/personal APIs for compatibility and explicit local examination, not acquisition or primary web navigation. Trainee and trainer tablet apps remain later work.
+- No generated marketing photography. Default new visitors to dark; preserve an explicit theme choice and the original logo colors.
+- Tailwind is additive, prefixed `tw:`, with no Preflight. Reuse semantic theme tokens; do not mass-convert or override existing Reka/Unovis controls.
+- Conversation lists must remain mounted when selecting a thread; retain search and scroll, isolate thread drafts/requests by conversation, and test actual DOM continuity. Separate direct conversation privacy from organization group visibility.
+- Per-set values and program descriptions must be visible during authoring. Weekly cycles need an explicit day-count/rest-day explanation; do not silently migrate historical prescriptions.
+- Organization exercises shared with trainers mean within the same organization, not a cross-tenant public catalog. Recheck media permission on every byte read and preserve authorized immutable snapshot references.
+- Ask the founder again when reaching session-package deduction/cancellation/no-show policy, as requested; do not implement an assumed commercial policy.

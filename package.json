@@ -38,9 +38,11 @@
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
     "@playwright/test": "1.63.0",
+    "@tailwindcss/vite": "4.3.3",
     "@types/node": "22.19.0",
     "@vitejs/plugin-vue": "6.0.9",
     "prettier": "3.9.8",
+    "tailwindcss": "4.3.3",
     "typescript": "5.9.3",
     "vite": "8.3.0",
     "vitest": "5.0.1",
