@@ -130,3 +130,7 @@ Run `content:exercise-dataset -- --check`, `content:wger-exercises -- --check`, 
 Run `npm run db:migrate` then `npm run db:generate` and restart the API. R16 adds three forward migrations (33 total): organization nutrition tables, the explicit sharing composite key, and the server-only subject-date projection. No seed/reset is needed. `npm run types` refreshes web transport types; format generated output with the web formatter. `npm run test:organization-nutrition` exercises the local API using owned disposable records; `npm run test:fresh` installs all migrations in a disposable database. Web acceptance must use its isolated wrapper.
 
 Preview: Rania → Nutrition → Sara → Create plan. Sara → Nutrition can view it, record actual food and opt into sharing. Kareem's assigned-trainer view reads the same organization history when authorized. This walkthrough intentionally uses user-created preview records rather than quietly seeding dietary targets.
+
+### R18 organization media
+
+Apply forward migrations with `npm start`; do not reset existing preview fixtures. Keep `.local/files` with database backups. Recovery and orphan inventory now include `organization/<workspace>/<asset>` paths and SHA-256 digests. Resource archive is a visibility command, not byte deletion: published/history references still resolve. Pair-message attachments never enter the general resource library. Test fixture cleanup must delete only the owning fixture's bytes and records.

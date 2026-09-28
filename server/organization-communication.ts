@@ -43,6 +43,8 @@ export async function channelAccess(
   const own = channel.organization_channel_members.find(
     (m) => m.member_id === self.id,
   );
+  if (channel.private_pair && !own)
+    throw new ApiError(403, "conversation_unavailable");
   if (manage ? view !== "admin" && (view !== "trainer" || !own?.manager) : !own)
     throw new ApiError(403, "conversation_unavailable");
   return channel;
@@ -74,6 +76,7 @@ export async function communication(
           title: c.title,
           revision: c.revision,
           archived: c.archived,
+          private_pair: c.private_pair,
         },
         self: self.id,
         canManage:
@@ -113,18 +116,16 @@ export async function communication(
         last_sequence: bigint | null;
         unread: bigint;
       }[]
-    >`SELECT c.id,c.title,c.revision,c.archived,last.body last_body,last.sequence last_sequence,(SELECT count(*) FROM public.organization_messages m WHERE m.channel_id=c.id AND m.sender_id<>${self.id}::uuid AND m.sequence>coalesce(r.sequence,0)) unread FROM public.organization_channels c LEFT JOIN public.organization_channel_reads r ON r.channel_id=c.id AND r.member_id=${self.id}::uuid LEFT JOIN LATERAL(SELECT body,sequence FROM public.organization_messages WHERE channel_id=c.id ORDER BY sequence DESC LIMIT 1) last ON true WHERE c.workspace_id=${id}::uuid AND c.title ILIKE ${search} AND (${manage} OR EXISTS(SELECT 1 FROM public.organization_channel_members p WHERE p.channel_id=c.id AND p.member_id=${self.id}::uuid)) ORDER BY last.sequence DESC NULLS LAST,c.id LIMIT 26 OFFSET ${offset}`;
+    >`SELECT c.id,c.title,c.revision,c.archived,last.body last_body,last.sequence last_sequence,(SELECT count(*) FROM public.organization_messages m WHERE m.channel_id=c.id AND m.sender_id<>${self.id}::uuid AND m.sequence>coalesce(r.sequence,0)) unread FROM public.organization_channels c LEFT JOIN public.organization_channel_reads r ON r.channel_id=c.id AND r.member_id=${self.id}::uuid LEFT JOIN LATERAL(SELECT body,sequence FROM public.organization_messages WHERE channel_id=c.id ORDER BY sequence DESC LIMIT 1) last ON true WHERE c.workspace_id=${id}::uuid AND c.title ILIKE ${search} AND ((${manage} AND NOT c.private_pair) OR EXISTS(SELECT 1 FROM public.organization_channel_members p WHERE p.channel_id=c.id AND p.member_id=${self.id}::uuid)) ORDER BY last.sequence DESC NULLS LAST,c.id LIMIT 26 OFFSET ${offset}`;
     // Management discovery exposes channel metadata only; it cannot disclose message previews/counts before joining.
     return {
       self: self.id,
-      items: list
-        .slice(0, 25)
-        .map((c) => ({
-          ...c,
-          last_body: manage ? null : c.last_body,
-          last_sequence: manage ? null : Number(c.last_sequence || 0),
-          unread: manage ? 0 : Number(c.unread),
-        })),
+      items: list.slice(0, 25).map((c) => ({
+        ...c,
+        last_body: manage ? null : c.last_body,
+        last_sequence: manage ? null : Number(c.last_sequence || 0),
+        unread: manage ? 0 : Number(c.unread),
+      })),
       next: list.length > 25 ? offset + 25 : null,
     };
   });
@@ -227,6 +228,7 @@ export async function communicationCommand(
             id: key,
             workspace_id: id,
             title: textValue(input.title),
+            private_pair: members.length === 2,
             created_by: self.id,
           },
         });
@@ -277,6 +279,13 @@ export async function communicationCommand(
         return { joined: true };
       }
       if (action === "send") {
+        const asset = input.asset_id ? uuid(input.asset_id) : null;
+        if (asset) {
+          const found = await tx.$queryRaw<
+            { id: string }[]
+          >`SELECT id FROM public.organization_assets WHERE id=${asset}::uuid AND workspace_id=${id}::uuid AND channel_id=${key}::uuid AND owner_id=${self.id}::uuid AND purpose='message' AND NOT retired`;
+          if (!found.length) throw new ApiError(403, "resource_unavailable");
+        }
         if (c.archived) throw new ApiError(400, "conversation_unavailable");
         const message = await tx.organization_messages.create({
           data: {
@@ -285,12 +294,15 @@ export async function communicationCommand(
             channel_id: key,
             sender_id: self.id,
             body: textValue(input.body, 4000),
+            asset_id: asset,
           },
         });
         return { ...message, sequence: Number(message.sequence) };
       }
       if (c.revision !== input.revision) throw new ApiError(409, "conflict");
       if (action === "members") {
+        if (c.private_pair)
+          throw new ApiError(403, "private_conversation_members");
         const { members, managers } = await selectedPeople(
           tx,
           id,

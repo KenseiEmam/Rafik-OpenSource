@@ -100,6 +100,11 @@ export async function organizationFixture() {
     >`SELECT id,workspace_id FROM public.program_media WHERE workspace_id=ANY(${spaces}::uuid[])`;
     for (const m of media)
       await removePrivate(`program/${m.workspace_id}/${m.id}`);
+    const assets = await db.$queryRaw<
+      { id: string; workspace_id: string }[]
+    >`SELECT id,workspace_id FROM public.organization_assets WHERE workspace_id=ANY(${spaces}::uuid[])`;
+    for (const a of assets)
+      await removePrivate(`organization/${a.workspace_id}/${a.id}`);
     await db.workspaces.deleteMany({ where: { id: { in: spaces } } });
     await db.users.deleteMany({ where: { id: { in: people } } });
   };

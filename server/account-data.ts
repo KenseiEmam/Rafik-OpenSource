@@ -43,6 +43,7 @@ export async function organizationAccountData(actor: Actor) {
         channel_id: true,
         workspace_id: true,
         body: true,
+        asset_id: true,
         created_at: true,
       },
       orderBy: { created_at: "asc" },
@@ -74,7 +75,10 @@ export async function organizationAccountData(actor: Actor) {
       orderBy: { created_at: "asc" },
     }),
   ]);
+  const assets =
+    await db.$queryRaw`SELECT id,workspace_id,purpose,channel_id,filename,media_type,bytes,retired,created_at FROM public.organization_assets WHERE owner_id=ANY(${ids}::uuid[])`;
   return {
+    assets,
     nutritionPlans,
     nutritionSharing,
     nutritionMeals,

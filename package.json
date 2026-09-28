@@ -44,7 +44,8 @@
     "content:wger-exercises": "node scripts/content/wger-exercises.mjs --from-review",
     "content:wger-exercises:check": "node scripts/content/wger-exercises.mjs --check",
     "content:videos": "node scripts/content/exercise-videos.mjs",
-    "test:organization-nutrition": "tsx --test tests/organization-nutrition.test.ts"
+    "test:organization-nutrition": "tsx --test tests/organization-nutrition.test.ts",
+    "test:organization-assets": "tsx --test tests/organization-assets.test.ts"
   },
   "devDependencies": {
     "@types/node": "22.19.0",

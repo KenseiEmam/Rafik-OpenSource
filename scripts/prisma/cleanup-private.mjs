@@ -33,7 +33,7 @@ const referenced = () =>
         "-d",
         "rafik",
         "-Atc",
-        "select object_path from public.resources union select 'program/'||workspace_id||'/'||id from public.program_media",
+        "select object_path from public.resources union select 'program/'||workspace_id||'/'||id from public.program_media union select 'organization/'||workspace_id||'/'||id from public.organization_assets",
       ],
       { cwd: root, encoding: "utf8" },
     )

@@ -1,3 +1,9 @@
+import {
+  putOrganizationAsset,
+  getOrganizationAsset,
+  organizationAssets,
+  assetCommand,
+} from "./organization-assets.ts";
 import { nutrition, nutritionCommand } from "./organization-nutrition.ts";
 import {
   organizationPeople,
@@ -360,6 +366,67 @@ const server = createServer(async (req, res) => {
       );
       return;
     }
+    const assetMatch = path.match(
+      /^\/v1\/organization-assets\/([a-f0-9-]{36})$/,
+    );
+    if (assetMatch && req.method === "PUT") {
+      send(
+        res,
+        200,
+        await putOrganizationAsset(
+          requireActor(actor),
+          url.searchParams.get("workspace") || "",
+          assetMatch[1],
+          url.searchParams,
+          await body(req, 26214400),
+          String(req.headers["content-type"] || ""),
+        ),
+      );
+      return;
+    }
+    if (assetMatch && req.method === "GET") {
+      const file = await getOrganizationAsset(
+        requireActor(actor),
+        assetMatch[1],
+      );
+      const headers = {
+        "Content-Type": file.type,
+        "Cache-Control": "no-store",
+        "X-Content-Type-Options": "nosniff",
+        "Content-Disposition": `inline; filename*=UTF-8''${encodeURIComponent(file.filename)}`,
+      };
+      const range =
+        file.type === "video/mp4"
+          ? videoRange(req.headers.range, file.bytes.length)
+          : null;
+      res.writeHead(range ? 206 : 200, {
+        ...headers,
+        "Accept-Ranges": "bytes",
+        ...(range
+          ? {
+              "Content-Range": `bytes ${range.start}-${range.end}/${file.bytes.length}`,
+              "Content-Length": range.end - range.start + 1,
+            }
+          : { "Content-Length": file.bytes.length }),
+      });
+      res.end(
+        range ? file.bytes.subarray(range.start, range.end + 1) : file.bytes,
+      );
+      return;
+    }
+    const assetList = path.match(/^\/v1\/workspaces\/([a-f0-9-]{36})\/assets$/);
+    if (assetList && req.method === "GET") {
+      send(
+        res,
+        200,
+        await organizationAssets(
+          requireActor(actor),
+          assetList[1],
+          url.searchParams,
+        ),
+      );
+      return;
+    }
     const mediaMatch = path.match(/^\/v1\/program-media\/([a-f0-9-]{36})$/);
     if (mediaMatch) {
       if (req.method === "PUT") {
@@ -531,7 +598,7 @@ const server = createServer(async (req, res) => {
                     who,
                     id,
                     [role(url.searchParams.get("view"))],
-                    (tx) => catalog(tx, id),
+                    (tx, self) => catalog(tx, id, self),
                   )
                 : null;
         if (value === null) throw new ApiError(405, "method_not_allowed");
@@ -606,6 +673,14 @@ const server = createServer(async (req, res) => {
         (req.method === "GET" && path.endsWith("/session")))
     ) {
       send(res, 200, await authRoute(path.slice(9), input, req, res));
+      return;
+    }
+    if (assetList && req.method === "POST") {
+      send(
+        res,
+        200,
+        await assetCommand(requireActor(actor), assetList[1], input),
+      );
       return;
     }
     if (path.startsWith("/v1/commands/") && req.method === "POST") {

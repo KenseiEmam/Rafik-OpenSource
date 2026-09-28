@@ -15,10 +15,21 @@ test("organization conversation scope, participation, read cursors and replay re
       trainer = await f.person(),
       client = await f.person(),
       foreign = await f.person(),
+      secondClient = await f.person(),
       id = await f.create(admin),
       other = await f.create(foreign),
       staff = await f.join(admin, id, trainer, ["trainer"]),
-      trainee = await f.join(admin, id, client, ["trainee"]);
+      trainee = await f.join(admin, id, client, ["trainee"]),
+      second = await f.join(admin, id, secondClient, ["trainee"]);
+    await call(
+      admin,
+      `/v1/workspaces/${id}`,
+      operation("assign-trainer", {
+        id: second.id,
+        revision: 1,
+        trainer: staff.id,
+      }),
+    );
     await call(
       admin,
       `/v1/workspaces/${id}`,
@@ -33,7 +44,7 @@ test("organization conversation scope, participation, read cursors and replay re
         id: channel,
         view: "trainer",
         title: "Thursday training",
-        members: [staff.id, trainee.id],
+        members: [staff.id, trainee.id, second.id],
         managers: [staff.id],
       });
     let r = await call(trainer, `/v1/workspaces/${id}/communication`, create);
@@ -133,7 +144,7 @@ test("organization conversation scope, participation, read cursors and replay re
       admin,
       `/v1/workspaces/${id}/communication?view=admin&id=${channel}`,
     );
-    assert.equal(joined.data.people.length, 3);
+    assert.equal(joined.data.people.length, 4);
     assert.equal(joined.data.messages.length, 1);
     const me = joined.data.self;
     assert.equal(

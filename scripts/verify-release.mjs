@@ -125,6 +125,7 @@ try {
       "test:organization-services",
       "test:organization-nutrition",
       "test:communication",
+      "test:organization-assets",
       "test:operations",
       "content:check",
       "content:media",

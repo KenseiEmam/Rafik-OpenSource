@@ -280,3 +280,7 @@ The public web audience is gym/organization staff. Staff-context switching exclu
 Tailwind4 is integrated through Vite as prefixed, additive utilities without Preflight; semantic CSS and its tokens retain control over existing components. `MonthCalendar.vue` projects existing authorized event responses into a local-timezone month; bounded results explicitly indicate additional pages. Day selection filters the agenda without inventing attendance/package metrics.
 
 Messaging scopes keep their parent route component mounted. Only the conversation thread is keyed/remounted, preserving inbox search/scroll. Each child retains its original conversation-specific durable command/draft. Program cycles remain week-based, with visible repeat-day/rest-day explanation; descriptions and per-set values are no longer hidden by default. Organization nutrition presents example meals separately from daily targets and actual consumption.
+
+## R18 — Organization exercise media
+
+[ADR0013](../decisions/0013-organization-exercise-media.md) defines trainer-private and organization-shared exercise scope, array categories, immutable asset IDs and private-pair messages. `server/organization-assets.ts` owns upload/read/list/archive authorization; `programming.ts` filters catalog ownership before snapshotting. `organization-communication.ts` binds message files to their sender/conversation and denies admin discovery/join for pairs. Backup/orphan scripts include both registries. No additional runtime service.

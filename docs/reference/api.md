@@ -110,3 +110,11 @@ The response includes `{sharing:{enabled,revision},canReadDiary,meals,removed,re
 - `remove`: trainee only, `id`, expected `revision`; creates a tombstone and history version, excludes it from current totals. Retrying the same operation returns its receipt; changing its payload is rejected.
 
 Current membership/role/responsibility checks precede receipt lookup, so revoked staff cannot replay. `GET /v1/account/organizations` additionally includes the subject's `nutritionPlans`, `nutritionSharing` and `nutritionMeals` with `organization_meal_history`. Generic browser table queries do not expose these tables. These contracts are available to a later native client; no native/offline diary implementation is claimed.
+
+## Organization assets
+
+`PUT /v1/organization-assets/:id?workspace=:uuid&view=admin|trainer|trainee&purpose=exercise|message&filename=:name[&channel=:uuid]` uploads raw bytes with an allowed Content-Type, maximum 25 MB. Message purpose requires current channel participation; exercise purpose requires a staff role. The ID, owner, digest, MIME, purpose, name and channel are immutable. An identical retry succeeds; conflicting reuse returns 409.
+
+`GET /v1/organization-assets/:id` rechecks membership and exact purpose/reference permissions. MP4 accepts a single byte range. `GET /v1/workspaces/:id/assets?view=admin|trainer&search=&offset=0&archived=false` returns 24 authorized exercise assets plus `next`; message files are excluded. `POST` to the same collection accepts the standard operation ID, `action: archive`, asset `id`, `revision`, `view` and boolean `retired`. Archive affects new selections, not existing published reads.
+
+Organization message commands accept optional `asset_id`; the file must belong to the sender and that channel. `private_pair` on the channel makes participant changes and nonparticipant admin access unavailable.

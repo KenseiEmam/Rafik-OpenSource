@@ -905,6 +905,7 @@ model workspace_members {
   assessment_result_history                                                                           assessment_result_history[]
   assessment_results                                                                                  assessment_results[]
   assessment_templates                                                                                assessment_templates[]
+  organization_assets                                                                                 organization_assets[]
   organization_assignments_organization_assignments_workspace_id_created_byToworkspace_members        organization_assignments[]      @relation("organization_assignments_workspace_id_created_byToworkspace_members")
   organization_assignments_organization_assignments_workspace_id_member_idToworkspace_members         organization_assignments?       @relation("organization_assignments_workspace_id_member_idToworkspace_members")
   organization_channel_members                                                                        organization_channel_members[]
@@ -962,6 +963,7 @@ model workspaces {
   assessment_results             assessment_results[]
   assessment_templates           assessment_templates[]
   notification_events            notification_events[]
+  organization_assets            organization_assets[]
   organization_assignments       organization_assignments[]
   organization_channels          organization_channels[]
   organization_event_people      organization_event_people[]
@@ -1281,6 +1283,8 @@ model organization_channels {
   revision                     Int                            @default(1)
   archived                     Boolean                        @default(false)
   created_at                   DateTime                       @default(now()) @db.Timestamptz(6)
+  private_pair                 Boolean                        @default(false)
+  organization_assets          organization_assets[]
   organization_channel_members organization_channel_members[]
   organization_channel_reads   organization_channel_reads[]
   workspace_members            workspace_members              @relation(fields: [created_by, workspace_id], references: [id, workspace_id], onDelete: NoAction, onUpdate: NoAction)
@@ -1301,8 +1305,10 @@ model organization_messages {
   sender_id             String                @db.Uuid
   body                  String
   created_at            DateTime              @default(now()) @db.Timestamptz(6)
+  asset_id              String?               @db.Uuid
   organization_channels organization_channels @relation(fields: [channel_id, workspace_id], references: [id, workspace_id], onDelete: Cascade, onUpdate: NoAction)
   workspace_members     workspace_members     @relation(fields: [sender_id, workspace_id], references: [id, workspace_id], onDelete: NoAction, onUpdate: NoAction)
+  organization_assets   organization_assets?  @relation(fields: [workspace_id, asset_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([channel_id, sequence(sort: Desc)], map: "organization_messages_page")
   @@schema("public")
@@ -1454,5 +1460,29 @@ model organization_nutrition_sharing {
   workspace_members workspace_members @relation(fields: [workspace_id, member_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([workspace_id, member_id])
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model organization_assets {
+  id                    String                  @id @db.Uuid
+  workspace_id          String                  @db.Uuid
+  owner_id              String                  @db.Uuid
+  purpose               String
+  channel_id            String?                 @db.Uuid
+  filename              String
+  media_type            String
+  bytes                 Int
+  digest                String
+  retired               Boolean                 @default(false)
+  created_at            DateTime                @default(now()) @db.Timestamptz(6)
+  revision              Int                     @default(1)
+  organization_channels organization_channels?  @relation(fields: [workspace_id, channel_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
+  workspaces            workspaces              @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  workspace_members     workspace_members       @relation(fields: [workspace_id, owner_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+  organization_messages organization_messages[]
+
+  @@unique([workspace_id, id])
+  @@index([workspace_id, owner_id, created_at(sort: Desc), id], map: "organization_assets_owner")
   @@schema("public")
 }

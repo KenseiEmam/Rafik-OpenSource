@@ -76,3 +76,7 @@ The local samples Rania (admin), Kareem (trainer/trainee) and Sara (trainee) are
 Source owners: backend `server/organization-nutrition.ts`, four `organization_*` nutrition tables, account export and three forward migrations; web `features/nutrition/OrganizationNutrition.vue`, `OrganizationMealFields.vue` and `organization-nutrition.css`. Shared food/macro/example-day controls remain in the same feature directory. Run backend `npm run test:organization-nutrition`; web browser checks run through the isolated `npm run test:e2e -- tests/organization-nutrition.e2e.ts` wrapper.
 
 See [R16 scope and authority](docs/implementation/r16-contract.md), [ADR0012](docs/decisions/0012-organization-nutrition.md) and [verification](docs/implementation/verification.md). Native/offline diary synchronization, professional nutrition review and hosted delivery remain separate gates.
+
+## Organization uploads (R18)
+
+`organization_assets` reuses private local files and current membership checks for exercise demonstrations and conversation attachments. `npm start` applies the forward migrations to existing previews; no reset/seed is necessary. `npm run test:organization-assets` checks ownership, authorized snapshots, exact upload retry and private-pair media. See [ADR0013](docs/decisions/0013-organization-exercise-media.md) for authorization and maintenance contracts.

@@ -26,3 +26,7 @@ No deletion of independent history, generalized access-control framework, rewrit
 ## Accepted checkpoint R17
 
 Items 1–2 and the month-calendar portion of item 5 are implemented locally. Both-engine focused acceptance passed 32 cases, plus 27 units and build/cache/format checks. See the ledger and R17 receipt. The exercise/media, package, operational dashboard and integrated-release items are still open.
+
+## Accepted checkpoint R18
+
+Item 3 is implemented for organization exercise ownership, multi-category controls, direct uploads and Resources; organization private-pair messaging is hardened. Existing independent resource sharing remains a compatibility contract. R18 acceptance is 30 broader plus four final focused browser cases, domain/operations checks and fresh installation. Package accounting and operational dashboards remain open. Package policy and the meaning of trainer satisfaction were asked explicitly; no assumed business rules have been applied.

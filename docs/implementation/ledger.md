@@ -1,6 +1,16 @@
 # Revamp execution ledger
 
-Updated 28 September 2026. **R17 gym-first entry and authoring corrections are implemented locally.** The broader founder correction list remains in progress in [the ordered register](r17-gym-direction.md). No hosting or native work.
+Updated 28 September 2026. **R18 organization ownership and media corrections are implemented locally.** The broader founder correction list remains in progress in [the ordered register](r17-gym-direction.md). No hosting or native work.
+
+## R18 — Organization exercise ownership and private uploads
+
+Implemented organization multi-select exercise authoring and direct upload/reuse, creator-private trainer entries and tenant-local organization sharing. One immutable asset registry backs demonstrations, Resources and conversation attachments; publication retains exact asset/category snapshots. Resources offers bounded search and archive/restore without breaking published references. Two-person organization conversations deny nonparticipant administrator discovery/join, have fixed participants and bind each attachment to its sender/channel. Group conversation policy remains explicit and separate.
+
+Acceptance combines **30/30 broader browser cases** with **4/4 final focused cases** for category clearing and media lifecycle across both engines. Two asset/ownership API groups, communication, programming, four operations groups, 35-migration/eight-suite fresh installation, 27 units and build/cache/type/format/docs checks pass. Actual real-media desktop Resources, Arabic phone editor and attachment renders were reviewed. [Receipt](evidence/r18-verification.txt) and [ADR0013](../decisions/0013-organization-exercise-media.md) record exact scope and failures corrected.
+
+Session-package policy has been asked again as requested and remains pending. Trainer-satisfaction meaning also needs clarification. Staff-task/follow-up work can proceed independently. No full release-chain, physical-device, hosting or business-outcome claim; no reset, push or native changes.
+
+Web checkpoint: `9a7a6af` on `codex/revamp`.
 
 ## R17 — Gym-first entry, authoring and navigation
 

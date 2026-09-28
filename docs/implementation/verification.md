@@ -1,5 +1,13 @@
 # Verification record
 
+## R18 — Organization exercise ownership and uploaded media (28 September 2026)
+
+**30/30 broader browser cases** passed across Chromium and phone WebKit, followed by **4/4 focused final cases** for category clearing, upload retry, archive/restore/reuse and attachment draft/send recovery. The new editor covers 16 width/language/theme/engine states with geometry and Axe checks. Actual desktop Resources and Arabic phone editor/attachment captures use an existing licensed exercise poster; the one-pixel payload remains only in API contract tests.
+
+API acceptance covers tenant/creator restrictions, published/assigned snapshot access, private-pair admin exclusion, unsent recipient denial, wrong-channel send rejection and revocation before upload retries. Three programming/media groups, four operations groups and a **35-migration/eight-suite fresh installation** pass. Final web units **27/27**, production/type/cache/format, backend type/content/docs and release-guard checks pass. [Receipt](evidence/r18-verification.txt) records exact commands and corrected development failures. The expanded full release chain was not run.
+
+Scope is organization workflows. Existing independent resources retain their explicit sharing contract. Native rendering/streaming, physical devices, production quotas/scanning/storage, hosted delivery and human outcomes remain separate gates. Package accounting and staff operations are not included in this checkpoint.
+
 ## R17 — Gym-first usability (28 September 2026)
 
 The final isolated browser run passed **32/32 cases** across Chromium and phone WebKit. It covers homepage entry, EN/AR and theme/width states, month navigation/day selection, support navigation, retained inbox/search, existing communication, program authoring/delivery, nutrition and role workflows. Web units **27/27**, build/typecheck, two production shell checks and formatting pass. No backend behavior/schema changed in this checkpoint.

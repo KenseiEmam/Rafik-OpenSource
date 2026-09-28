@@ -1,3 +1,4 @@
+import { usableExerciseAsset } from "./organization-assets.ts";
 import media from "../content/exercise-media.json" with { type: "json" };
 import videos from "../content/exercise-videos.json" with { type: "json" };
 import { isDeepStrictEqual } from "node:util";
@@ -45,7 +46,7 @@ const date = (v: unknown) => {
     throw new ApiError(400, "invalid_date");
   return new Date(v + "T00:00:00Z");
 };
-export async function catalog(tx: Tx, id: string) {
+export async function catalog(tx: Tx, id: string, self: Member) {
   const [shared, own] = await Promise.all([
     tx.exercises.findMany({
       where: { owner_id: null },
@@ -58,14 +59,18 @@ export async function catalog(tx: Tx, id: string) {
   ]);
   return [
     ...shared,
-    ...own.map((e) => ({
-      ...(e.data as object),
-      id: e.id,
-      workspace_id: id,
-      created_by: e.created_by,
-      revision: e.revision,
-      active: e.active,
-    })),
+    ...own
+      .filter(
+        (e) => (e.data as any).scope !== "private" || e.created_by === self.id,
+      )
+      .map((e) => ({
+        ...(e.data as object),
+        id: e.id,
+        workspace_id: id,
+        created_by: e.created_by,
+        revision: e.revision,
+        active: e.active,
+      })),
   ];
 }
 async function programAccess(
@@ -112,8 +117,8 @@ export async function recipient(
     throw new ApiError(403, "trainee_unavailable");
   return m;
 }
-async function snapshot(tx: Tx, id: string, draft: unknown) {
-  const items = JSON.stringify(await catalog(tx, id)),
+async function snapshot(tx: Tx, id: string, self: Member, draft: unknown) {
+  const items = JSON.stringify(await catalog(tx, id, self)),
     p = JSON.stringify(draft);
   await tx.$queryRaw`SELECT public.validate_program_presentation(${p}::jsonb,${id}::uuid)::text`;
   await tx.$queryRaw`SELECT public.validate_prescription_catalog(${p}::jsonb,${items}::jsonb)::text`;
@@ -159,7 +164,7 @@ export async function programs(
           : { ...p, draft: versions[0].prescription, title: versions[0].title },
         editable,
         versions,
-        catalog: view === "trainee" ? [] : await catalog(tx, id),
+        catalog: view === "trainee" ? [] : await catalog(tx, id, self),
       };
     }
     const take = 24,
@@ -230,7 +235,11 @@ export async function programCommand(actor: Actor, id: string, input: Input) {
           workspace_id_id: { workspace_id: id, id: textValue(input.id, 100) },
         },
       });
-      if (e && view !== "admin" && e.created_by !== self.id)
+      if (
+        e &&
+        e.created_by !== self.id &&
+        (view !== "admin" || (e.data as any).scope === "private")
+      )
         throw new ApiError(403, "forbidden");
     } else throw new ApiError(400, "invalid_request");
   };
@@ -259,8 +268,8 @@ export async function programCommand(actor: Actor, id: string, input: Input) {
             name_ar: 100,
             instructions: 2000,
             instructions_ar: 2000,
-            equipment: 100,
-            equipment_ar: 100,
+            equipment: 4000,
+            equipment_ar: 4000,
             movement: 60,
             media_url: 500,
             media_ref: 100,
@@ -298,6 +307,66 @@ export async function programCommand(actor: Actor, id: string, input: Input) {
             !videos.items.some((item) => item.id === data.media_ref)
           )
             throw new ApiError(400, "invalid_exercise");
+          const oldData = old?.data as Input | undefined;
+          const scope =
+            x.scope ??
+            oldData?.scope ??
+            (old
+              ? "organization"
+              : view === "admin"
+                ? "organization"
+                : "private");
+          if (
+            !["private", "organization"].includes(String(scope)) ||
+            (view !== "admin" &&
+              scope !== (oldData?.scope ?? (old ? "organization" : "private")))
+          )
+            throw new ApiError(403, "forbidden");
+          data.scope = scope;
+          const lists: Record<string, Set<string> | undefined> = {
+            body_parts: bodyAreas,
+            muscles: undefined,
+            equipment_items: undefined,
+          };
+          for (const [key, allowed] of Object.entries(lists)) {
+            const values =
+              x[key] ??
+              (key === "body_parts"
+                ? data.body_part
+                  ? [data.body_part]
+                  : []
+                : []);
+            if (
+              !Array.isArray(values) ||
+              values.length > 64 ||
+              values.some(
+                (v) =>
+                  typeof v !== "string" ||
+                  !v.trim() ||
+                  v.length > 60 ||
+                  (allowed && !allowed.has(v)),
+              )
+            )
+              throw new ApiError(400, "invalid_exercise");
+            data[key] = [...new Set(values.map((v) => v.trim()))];
+          }
+          if (Array.isArray(x.body_parts))
+            data.category = data.body_part =
+              (data.body_parts as string[])[0] || "";
+          if (Array.isArray(x.equipment_items))
+            data.equipment = (data.equipment_items as string[]).join(", ");
+          if (x.media_asset) {
+            const asset = await usableExerciseAsset(
+              tx,
+              id,
+              self,
+              x.media_asset,
+              oldData?.media_asset === x.media_asset,
+            );
+            data.media_asset = asset.id;
+            data.media_type = asset.media_type;
+            data.media_filename = asset.filename;
+          }
           data.kind = x.kind;
           data.name_ar ||= data.name;
           data.instructions_ar ||= data.instructions;
@@ -359,7 +428,7 @@ export async function programCommand(actor: Actor, id: string, input: Input) {
         return { plan: p };
       }
       const title = textValue(input.title, 100),
-        prescription = await snapshot(tx, id, input.draft);
+        prescription = await snapshot(tx, id, self, input.draft);
       const same =
         p && p.title === title && isDeepStrictEqual(p.draft, input.draft);
       if (!same)

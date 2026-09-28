@@ -61,7 +61,7 @@ try {
   );
   const paths = sql(
     database,
-    "select object_path from public.resources where state='ready' union select 'program/'||workspace_id||'/'||id from public.program_media;",
+    "select object_path from public.resources where state='ready' union select 'program/'||workspace_id||'/'||id from public.program_media union select 'organization/'||workspace_id||'/'||id from public.organization_assets;",
   )
     .split("\n")
     .filter(Boolean);
@@ -69,7 +69,7 @@ try {
   const metadata = JSON.parse(
     sql(
       database,
-      "select coalesce(json_agg(x),'[]') from (select object_path path,bytes::int bytes,null::text digest from public.resources where state='ready' union all select 'program/'||workspace_id||'/'||id,bytes,digest from public.program_media) x;",
+      "select coalesce(json_agg(x),'[]') from (select object_path path,bytes::int bytes,null::text digest from public.resources where state='ready' union all select 'program/'||workspace_id||'/'||id,bytes,digest from public.program_media union all select 'organization/'||workspace_id||'/'||id,bytes,digest from public.organization_assets) x;",
     ),
   );
   for (const row of metadata) {

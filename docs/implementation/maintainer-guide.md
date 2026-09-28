@@ -318,3 +318,9 @@ Changes must cover independent nutrition regression as well as organization auth
 - `features/ongoing/MessagesPage.vue` / `MessageThread.vue`: persistent inbox versus keyed thread; organization counterparts are `ChannelsPage.vue` / `ChannelThread.vue`.
 - `components/MonthCalendar.vue`, `features/organizations/OrganizationCalendar.vue`: month projection/day selection over the same calendar API. Do not interpret a loaded page as the complete monthly total.
 - `tests/gym-direction.e2e.ts` plus responsive inbox, daily coaching, organization nutrition, programming and service journeys cover this change. See verification for executed counts and limitations.
+
+### Organization exercises and resources (R18)
+
+Exercise metadata lives in `organization_exercises.data`; keep singular category/equipment fields for older consumers and arrays for multi-selection. `ExercisePicker.vue` and `ExercisesPage.vue` use `exerciseAreas` and `equipmentCategories`; do not filter only the primary category. `MultiChoice.vue` provides searchable native checkbox selection without modifier keys. `OrganizationUpload.vue` uses a digest-keyed pending upload ID; `OrganizationAsset.vue` loads authenticated blobs, cancels stale reads and revokes browser object URLs. `OrganizationResources.vue` owns paginated search and archive/restore; exercise creation can reuse that same registry. The shared `ExerciseDemo.vue` makes uploaded media visible in published plan previews as well as the library.
+
+Files use API authorization rather than public URLs. Never expose message-purpose assets in Resources. Update `scripts/prisma/recovery.mjs`, `cleanup-private.mjs` and scoped test teardown whenever a new private-file owner is added. Run `test:organization-assets`, communication/programming/operations, fresh-install and the corresponding browser journeys. See [ADR0013](../decisions/0013-organization-exercise-media.md).
