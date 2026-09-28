@@ -307,6 +307,12 @@ export type Database = { public: { Tables: {
         duty: string
         attendance: string
         revision: number
+        package_id: string | null
+        makeup_for: string | null
+        independent_reason: string
+        charge_absence: boolean | null
+        session_note: string
+        checked_in_at: string | null
     } }
     organization_events: { Row: {
         id: string
@@ -395,6 +401,22 @@ export type Database = { public: { Tables: {
         member_id: string
         enabled: boolean
         revision: number
+        updated_at: string
+    } }
+    organization_packages: { Row: {
+        id: string
+        workspace_id: string
+        member_id: string
+        created_by: string
+        renewed_from: string | null
+        title: string
+        allowance: number
+        starts_on: string
+        ends_on: string
+        timezone: string
+        archived: boolean
+        revision: number
+        created_at: string
         updated_at: string
     } }
     organization_programs: { Row: {

@@ -1,5 +1,12 @@
 # Rafik web change history
 
+## R20 — Organization session packages
+
+Organization packages now track explicit trainee entitlements, derived available/reserved/used balances, validity dates, auditable allowance corrections and linked renewals. Calendar booking reserves only an explicitly selected package; completion consumes present/charged absent sessions, cancellation/excused/released no-shows release, and independent trial/makeup/prize/other sessions never affect allowances. Staff session details include check-in timestamps and durable notes; the overview surfaces missed sessions without a replacement. Reuses workspace transactions/receipts and existing calendar events; no parallel scheduler or payment processor.
+
+Open **Packages** from the organization sidebar; admins assign allowances and trainers book for their current roster. Package API checks: `npm run test:organization-packages` in rafik-api; web checks: `npm run test:e2e -- organization-packages.e2e.ts`. Apply new local migrations with `npm run db:migrate`, then `npm run db:generate`; never reseed an existing preview.
+
+
 ## R19 — Trainer tasks and daily follow-up · 28 September 2026
 
 - SQL acceptance uses a disposable fixture database. Repeated exercise illustrations use local accessibility groups; publication success waits for durable command completion.

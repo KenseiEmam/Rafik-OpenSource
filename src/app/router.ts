@@ -77,6 +77,11 @@ const router = createRouter({
       meta: { private: true },
     },
     {
+      path: '/organization/:workspace/:view/packages',
+      component: () => import('../features/organizations/OrganizationPackages.vue'),
+      meta: { private: true },
+    },
+    {
       path: '/organization/:workspace/:view/tasks',
       component: () => import('../features/organizations/OrganizationTasks.vue'),
       meta: { private: true },

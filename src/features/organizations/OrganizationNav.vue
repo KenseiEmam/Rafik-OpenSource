@@ -21,6 +21,7 @@ const items = computed(() => [
   { path: '/nutrition', name: l('Nutrition', 'التغذية') },
   { path: '/messages', name: l('Messages', 'الرسائل') },
   { path: '/calendar', name: l('Calendar', 'التقويم') },
+  { path: '/packages', name: l('Packages', 'الباقات') },
   ...(route.params.view === 'trainee'
     ? []
     : [

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SessionNote from './SessionNote.vue'
 import TimezonePicker from '../../components/TimezonePicker.vue'
 import { computed, onMounted, ref, watch, nextTick, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
@@ -25,6 +26,8 @@ const data = ref<EventDetail>(),
   loading = ref(true),
   error = ref(''),
   attendance = ref<Record<string, string>>({}),
+  absenceCharge = ref<Record<string, string>>({}),
+  correctionReason = ref<Record<string, string>>({}),
   selected = ref(''),
   values = ref<Record<string, number | string>>({}),
   note = ref(''),
@@ -85,6 +88,20 @@ const started = computed(
   writable = computed(
     () => view !== 'trainee' && data.value?.event.state !== 'cancelled' && started.value,
   )
+const fundingReason = (value: string) =>
+  value === 'trial'
+    ? l('Trial', 'تجريبية')
+    : value === 'makeup'
+      ? l('Makeup', 'تعويضية')
+      : value === 'prize'
+        ? l('Prize', 'جائزة')
+        : l('Other', 'أخرى')
+const attendanceDirty = (p: EventPerson) =>
+  attendance.value[p.member_id] !== p.attendance ||
+  (p.attendance === 'absent' &&
+    p.package_id &&
+    absenceCharge.value[p.member_id] !==
+      (p.charge_absence === true ? 'charge' : p.charge_absence === false ? 'release' : ''))
 const draftKey = () => `assessment-result:${user.value!.id}:${id}:${eid}:${selected.value}`
 function localInput(instant: string, tz: string) {
   const parts = new Intl.DateTimeFormat('en-GB', {
@@ -132,6 +149,13 @@ async function load() {
   try {
     data.value = await request<EventDetail>(endpoint + `?view=${view}&id=${eid}&summary=true`)
     attendance.value = Object.fromEntries(data.value.people.map((p) => [p.member_id, p.attendance]))
+    absenceCharge.value = Object.fromEntries(
+      data.value.people.map((p) => [
+        p.member_id,
+        p.charge_absence === true ? 'charge' : p.charge_absence === false ? 'release' : '',
+      ]),
+    )
+    correctionReason.value = {}
     zone.value = data.value.event.timezone
     local.value = localInput(data.value.event.starts_at, zone.value)
     minutes.value =
@@ -265,7 +289,13 @@ onMounted(load)
     >
     <header class="work-heading">
       <div>
-        <p class="overline">{{ l('Organization event', 'موعد المؤسسة') }}</p>
+        <p class="overline">
+          {{
+            data?.event.kind === 'training'
+              ? l('Training session', 'جلسة تدريب')
+              : l('Organization assessment', 'تقييم المؤسسة')
+          }}
+        </p>
         <h1>{{ data?.event.title || l('Event', 'الموعد') }}</h1>
       </div>
     </header>
@@ -425,6 +455,14 @@ onMounted(load)
               )
             }}
           </p>
+          <p v-if="trainees.some((p) => p.package_id)" class="notice">
+            {{
+              l(
+                'Cancellation releases the reserved package sessions. Independent sessions have no subscription balance to change.',
+                'يحرر الإلغاء جلسات الباقة المحجوزة. الجلسات المستقلة لا تغيّر رصيد الاشتراك.',
+              )
+            }}
+          </p>
           <button
             class="button"
             :disabled="locked"
@@ -492,6 +530,30 @@ onMounted(load)
           <article v-for="p in trainees" :key="p.member_id" class="event-participant">
             <div>
               <h3>{{ p.name }}</h3>
+              <p class="small-print" v-if="p.package">
+                {{ l('Package', 'الباقة') }}: {{ p.package.title }} · {{ p.package.available }}
+                {{ l('available', 'متاحة') }}
+              </p>
+              <p class="small-print" v-else>
+                {{ l('Independent', 'مستقلة') }} · {{ fundingReason(p.independent_reason) }} ·
+                {{ l('No subscription deduction', 'دون خصم من الاشتراك') }}
+              </p>
+              <p v-if="p.checked_in_at" class="small-print">
+                {{ l('Checked in', 'تم تسجيل الحضور') }} · {{ label(p.checked_in_at) }}
+              </p>
+              <p
+                v-if="p.package_id && p.attendance === 'absent' && p.charge_absence !== null"
+                class="small-print"
+              >
+                {{
+                  p.charge_absence
+                    ? l('No-show: deduct one session on completion', 'غياب: خصم جلسة عند الإكمال')
+                    : l(
+                        'No-show: release the session on completion',
+                        'غياب: تحرير الجلسة عند الإكمال',
+                      )
+                }}
+              </p>
               <span v-if="!writable">{{ attendanceName(p.attendance) }}</span>
               <p v-if="data.results.some((r) => r.member_id === p.member_id)" class="small-print">
                 {{ l('Result recorded', 'النتيجة مسجلة') }}
@@ -508,16 +570,45 @@ onMounted(load)
                 <option value="unmarked">{{ l('Not recorded', 'لم يسجل') }}</option>
                 <option value="present">{{ l('Present', 'حاضر') }}</option>
                 <option value="absent">{{ l('Absent', 'غائب') }}</option>
-                <option value="excused">{{ l('Excused', 'بعذر') }}</option></select
-              ><button
+                <option value="excused">{{ l('Excused', 'بعذر') }}</option>
+              </select>
+              <label v-if="p.package_id && attendance[p.member_id] === 'absent'"
+                >{{ l('No-show package decision', 'قرار الباقة عند الغياب')
+                }}<select v-model="absenceCharge[p.member_id]" :disabled="locked">
+                  <option value="" disabled>{{ l('Choose explicitly', 'اختر قراراً') }}</option>
+                  <option value="charge">{{ l('Deduct one session', 'خصم جلسة') }}</option>
+                  <option value="release">{{ l('Release the session', 'تحرير الجلسة') }}</option>
+                </select></label
+              >
+              <label v-if="p.package_id && data.event.state === 'completed' && attendanceDirty(p)"
+                >{{ l('Correction reason', 'سبب التصحيح')
+                }}<input v-model="correctionReason[p.member_id]" maxlength="500" :disabled="locked"
+              /></label>
+              <button
                 class="button secondary small"
-                :disabled="locked || attendance[p.member_id] === p.attendance"
+                :disabled="
+                  locked ||
+                  !attendanceDirty(p) ||
+                  (!!p.package_id &&
+                    attendance[p.member_id] === 'absent' &&
+                    !absenceCharge[p.member_id]) ||
+                  (!!p.package_id &&
+                    data.event.state === 'completed' &&
+                    !correctionReason[p.member_id]?.trim())
+                "
                 @click="
                   run({
                     action: 'attendance',
                     member: p.member_id,
                     revision: p.revision,
                     attendance: attendance[p.member_id],
+                    charge_absence:
+                      absenceCharge[p.member_id] === 'charge'
+                        ? true
+                        : absenceCharge[p.member_id] === 'release'
+                          ? false
+                          : null,
+                    reason: correctionReason[p.member_id],
                   })
                 "
               >
@@ -535,6 +626,28 @@ onMounted(load)
                 }}
               </button>
             </div>
+            <SessionNote
+              :key="p.member_id + ':' + p.revision"
+              :workspace="id"
+              :view="view"
+              :event="eid"
+              :member="p.member_id"
+              :name="p.name"
+              :note="p.session_note"
+              :revision="p.revision"
+              :writable="writable"
+              @saved="load"
+            />
+            <RouterLink
+              v-if="
+                view !== 'trainee' &&
+                data.event.state === 'completed' &&
+                ['absent', 'excused'].includes(p.attendance)
+              "
+              class="text-link"
+              :to="base + '/calendar/new?makeup=' + eid + '&member=' + p.member_id"
+              >{{ l('Book an independent makeup session', 'حجز جلسة تعويضية مستقلة') }}</RouterLink
+            >
           </article>
           <button
             v-if="writable && data.event.state === 'scheduled'"
@@ -542,7 +655,11 @@ onMounted(load)
             :disabled="locked"
             @click="run({ action: 'finish' })"
           >
-            {{ l('Finish event', 'إنهاء الموعد') }}
+            {{
+              data.event.kind === 'training'
+                ? l('Complete session', 'إكمال الجلسة')
+                : l('Finish event', 'إنهاء الموعد')
+            }}
           </button>
         </section>
         <section v-if="data.results.length && !selected" class="event-results">
@@ -634,6 +751,7 @@ onMounted(load)
 }
 .event-participant {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 20px;
   align-items: center;
