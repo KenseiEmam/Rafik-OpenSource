@@ -27,6 +27,13 @@ export interface Exercise {
   body_part?: string | null
   target_muscle?: string | null
   media_ref?: string | null
+  scope?: 'private' | 'organization'
+  body_parts?: string[]
+  muscles?: string[]
+  equipment_items?: string[]
+  media_asset?: string
+  media_type?: string
+  media_filename?: string
   media_url?: string
 }
 export interface PrescriptionExercise {

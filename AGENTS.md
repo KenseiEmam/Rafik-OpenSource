@@ -86,3 +86,6 @@
 - Per-set values and program descriptions must be visible during authoring. Weekly cycles need an explicit day-count/rest-day explanation; do not silently migrate historical prescriptions.
 - Organization exercises shared with trainers mean within the same organization, not a cross-tenant public catalog. Recheck media permission on every byte read and preserve authorized immutable snapshot references.
 - Ask the founder again when reaching session-package deduction/cancellation/no-show policy, as requested; do not implement an assumed commercial policy.
+
+- When adding multi-select metadata beside compatibility fields, test removing every selection on an existing record as well as adding values. Keep singular fields synchronized and immutable snapshots unchanged.
+- File acceptance must cover uncertain upload retries, unsent attachment privacy, wrong-channel reuse, owner revocation, resource archive/restore and a real-media rendered view. Keep group-channel and private-pair authority explicit; an administrator role must not silently bypass pair privacy.

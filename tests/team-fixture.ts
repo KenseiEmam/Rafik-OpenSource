@@ -58,10 +58,10 @@ export async function teamFixture() {
     for (const id of teamIds) sql(`delete from public.teams where id='${id}';`)
     for (const p of [...people].reverse()) {
       const media = sql(
-        `copy (select m.workspace_id,m.id from public.program_media m join public.workspaces w on w.id=m.workspace_id where w.created_by='${p.id}') to stdout with csv;`,
+        `copy (select 'program',m.workspace_id,m.id from public.program_media m join public.workspaces w on w.id=m.workspace_id where w.created_by='${p.id}' union all select 'organization',a.workspace_id,a.id from public.organization_assets a join public.workspaces w on w.id=a.workspace_id where w.created_by='${p.id}') to stdout with csv;`,
       ).trim()
       for (const line of media ? media.split('\n') : []) {
-        const [workspace, id] = line.split(',')
+        const [kind, workspace, id] = line.split(',')
         if (!/^[-a-f0-9]{36}$/.test(workspace || '') || !/^[-a-f0-9]{36}$/.test(id || ''))
           throw Error('Invalid media fixture')
         try {
@@ -69,7 +69,7 @@ export async function teamFixture() {
             resolve(
               root,
               testFiles,
-              createHash('sha256').update(`program/${workspace}/${id}`).digest('hex'),
+              createHash('sha256').update(`${kind}/${workspace}/${id}`).digest('hex'),
             ),
           )
         } catch (e) {

@@ -247,6 +247,10 @@ onUnmounted(() => window.removeEventListener('online', online))
     >
       <DashboardNav :base="dashboardBase" :role="currentContext?.role || 'coach'" />
       <div class="dashboard-utilities">
+        <RouterLink to="/support">{{ language('Support', 'الدعم') }}</RouterLink>
+        <RouterLink to="/workspaces">{{
+          language('Organizations and roles', 'المؤسسات والأدوار')
+        }}</RouterLink>
         <RouterLink to="/help">{{ t('help') }}</RouterLink
         ><RouterLink to="/settings">{{ t('settings') }}</RouterLink
         ><RouterLink v-if="localPreview" to="/local-preview">{{ t('localPreview') }}</RouterLink

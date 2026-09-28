@@ -174,3 +174,9 @@ The public page targets gyms and training organizations and uses no generated ph
 `MessagesPage.vue` now owns the persistent independent inbox; `MessageThread.vue` owns keyed per-conversation state. Organization `ChannelsPage.vue` similarly retains its list while `ChannelThread.vue` changes. The root router key preserves messaging scopes, never different organizations/roles. Program presentation and per-set values are visible; organization nutrition has an Example meal plan view. `MonthCalendar.vue` is an owned month widget over the existing authorized calendar API, with day summaries and a week-agenda option; it does not create a second scheduler.
 
 The backend [gym correction register](../rafik-api/docs/implementation/r17-gym-direction.md) tracks remaining asset/session/dashboard work separately from accepted UI changes.
+
+## Organization media and exercises (R18)
+
+Organization staff can select multiple muscle/body/equipment categories, upload demonstrations and reuse Resources files directly from the exercise editor. Admin-created exercises default to organization sharing; trainer-created entries are private. Two-participant conversations have fixed private membership and conversation-bound uploads.
+
+Source owners: `MultiChoice.vue`, `OrganizationUpload.vue`, `OrganizationAsset.vue`, `features/resources/OrganizationResources.vue`, the shared `ExerciseDemo.vue` and existing exercise/thread pages. The API serves authorized bytes; never replace these IDs with public URLs. Update the companion backend with `npm start` to apply forward migrations, then run its API. Existing preview data stays intact. See [ADR0013](../rafik-api/docs/decisions/0013-organization-exercise-media.md) and the [maintainer guide](../rafik-api/docs/implementation/maintainer-guide.md).

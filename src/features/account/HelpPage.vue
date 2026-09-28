@@ -11,8 +11,8 @@ import { language, t } from '../../lib/i18n'
       <p>
         {{
           language(
-            'Use the workspace selector at the top to choose independent coaching or a specific organization and role. Each organization keeps its own people, programs and history.',
-            'اختر التدريب المستقل أو مؤسسة ودوراً محددين من قائمة مساحة العمل بالأعلى. تحتفظ كل مؤسسة بأشخاصها وبرامجها وسجلها.',
+            'The role selector appears when you have multiple staff roles. Use Organizations and roles to manage memberships. Each organization keeps its own people, programs and history.',
+            'يظهر محدد الأدوار عندما تملك أدوار موظفين متعددة. استخدم المؤسسات والأدوار لإدارة العضويات. تحتفظ كل مؤسسة بأشخاصها وبرامجها وسجلها.',
           )
         }}
       </p>
@@ -62,16 +62,23 @@ import { language, t } from '../../lib/i18n'
       </details>
     </section>
     <section>
-      <h2>{{ language('Start without an account', 'ابدأ بلا حساب') }}</h2>
+      <h2>{{ language('Exercises and uploaded files', 'التمارين والملفات المرفوعة') }}</h2>
       <p>
         {{
           language(
-            'Open the sample, choose a session, and record a set. Progress stays in this browser. After finishing, you can save it to an account. Clearing browser data removes work that has not synced.',
-            'افتح التمرين التجريبي، واختر حصة، وسجّل مجموعة. يبقى تقدمك في هذا المتصفح. بعد الانتهاء يمكنك حفظه بحساب. مسح بيانات المتصفح يحذف العمل الذي لم تتم مزامنته.',
+            'Create an exercise with multiple body areas, muscle groups and equipment. Upload its demonstration directly or reuse an uploaded file. Organization exercises are shared only inside that organization; trainer-created exercises remain private to their trainer. Published assignments preserve their instructions and demonstration.',
+            'أنشئ تمريناً بمناطق جسم ومجموعات عضلية ومعدات متعددة. ارفع الشرح مباشرة أو أعد استخدام ملف مرفوع. تشارك تمارين المؤسسة داخلها فقط، وتبقى تمارين المدرب خاصة به. تحتفظ التكليفات المنشورة بالتعليمات والشرح.',
           )
         }}
       </p>
-      <RouterLink class="text-link" to="/routine">{{ t('sample') }}</RouterLink>
+      <p>
+        {{
+          language(
+            'Resources manages exercise uploads. Archiving removes a file from new selections while keeping existing plan references working. Private conversation files remain in their conversation. A two-person conversation cannot be joined by another staff member. Group conversations allow administrators to join explicitly.',
+            'تدير الموارد ملفات التمارين. تمنع الأرشفة الاختيارات الجديدة وتبقي مراجع الخطط الحالية. تبقى ملفات المحادثة الخاصة فيها. لا يستطيع موظف آخر الانضمام إلى محادثة ثنائية. تسمح المحادثات الجماعية للمسؤولين بالانضمام الصريح.',
+          )
+        }}
+      </p>
     </section>
     <section>
       <h2>{{ language('Use a coach’s invitation', 'استخدم دعوة المدرب') }}</h2>

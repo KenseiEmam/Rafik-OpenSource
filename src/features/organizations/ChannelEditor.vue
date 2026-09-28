@@ -148,10 +148,15 @@ onMounted(async () => {
           /></label>
           <p>
             {{
-              l(
-                'Only the people listed here can read and send messages. New participants can see the existing history. Organization administrators may explicitly join; they appear in this list.',
-                'الأشخاص المدرجون هنا فقط يستطيعون قراءة الرسائل وإرسالها. يرى المشاركون الجدد السجل السابق. يمكن لمسؤولي المؤسسة الانضمام بشكل صريح ويظهرون في هذه القائمة.',
-              )
+              !initial && draft.members.length === 2
+                ? l(
+                    'Private conversation for these two people. Other staff cannot join or read its messages and files.',
+                    'محادثة خاصة بهذين الشخصين. لا يستطيع الموظفون الآخرون الانضمام أو قراءة الرسائل والملفات.',
+                  )
+                : l(
+                    'Only the people listed here can read and send messages. New participants can see the existing history. Organization administrators may explicitly join; they appear in this list.',
+                    'الأشخاص المدرجون هنا فقط يستطيعون قراءة الرسائل وإرسالها. يرى المشاركون الجدد السجل السابق. يمكن لمسؤولي المؤسسة الانضمام بشكل صريح ويظهرون في هذه القائمة.',
+                  )
             }}
           </p>
           <MemberPicker
