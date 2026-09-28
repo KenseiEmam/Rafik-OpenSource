@@ -37,6 +37,9 @@ const groups = computed(() =>
             ['/packages', l('Packages', 'الباقات'), PhReceipt],
             ['/messages', l('Messages', 'الرسائل'), PhChatCircle],
             ['/analytics', l('Analytics', 'التحليلات'), PhChartLine],
+            ...(props.role === 'trainer'
+              ? [['/feedback', l('My feedback', 'تقييماتي'), PhClipboardText]]
+              : []),
           ],
         },
         {
