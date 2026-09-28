@@ -1,6 +1,6 @@
 # Gym-first corrections — 28 September 2026
 
-Status: in progress. This founder direction supersedes independent-coach acquisition in the earlier revival plan. Preserve working APIs/history and later trainee-app contracts; no native implementation or hosting in this change.
+Status: the ordered local web/backend corrections are implemented and accepted through R21. This founder direction supersedes independent-coach acquisition in the earlier revival plan. Preserve working APIs/history and later trainee-app contracts; no native implementation or hosting in this change.
 
 ## Ordered delivery and acceptance
 
@@ -16,7 +16,7 @@ Status: in progress. This founder direction supersedes independent-coach acquisi
 - Keep existing week-based prescriptions and clarify repetition with the equivalent day count. Changing the interval schema across published plans, assignments and offline started sessions is disproportionate for this request; the founder explicitly permits clear weeks. Empty slots are rest days, explicit rest days remain supported.
 - Gym staff are the public web audience. Personal/trainee routes stay for developer examination and the later mobile contract. Organization memberships do not get collapsed into independent coaching.
 - Founder confirmed organization exercise sharing is within its own organization. Do not expose organization-owned assets across tenants.
-- Package policy confirmed by the founder on 28 September: reserve at booking, consume at completion, release on cancellation; staff explicitly chooses whether each no-show consumes a session. Concurrent bookings must not overspend available sessions. Only explicitly package-linked sessions affect the allowance. Independent trial, makeup, prize and other sessions never do. Implement this next without introducing payment processing.
+- Package policy confirmed by the founder on 28 September: reserve at booking, consume at completion, release on cancellation; staff explicitly chooses whether each no-show consumes a session. Concurrent bookings must not overspend available sessions. Only explicitly package-linked sessions affect the allowance. Independent trial, makeup, prize and other sessions never do. Implemented in R20 without introducing payment processing.
 - Tailwind Vite integration uses a prefix, no Preflight, semantic existing tokens and theme attribute. Existing Reka/Unovis/Vue and semantic CSS remain in place. Official references: https://tailwindcss.com/docs/installation/using-vite and https://tailwindcss.com/docs/preflight.
 
 ## Scope boundaries
@@ -38,3 +38,9 @@ The operational portion of item 5 now includes real follow-up queues and admin-a
 ## Accepted checkpoint R20
 
 Package assignment, explicit funding/reservation/consumption, independent replacements, check-in/session notes, renewals and missed-session follow-up are implemented locally. See the R20 contract and evidence. R21 separately sourced satisfaction and transparent renewal reporting remain next.
+
+## Accepted checkpoint R21
+
+Optional session satisfaction feeds source-labelled client experience charts; trainer workplace satisfaction has a separate monthly response and administrator view. Trainer delivery uses actual completed calendar appointments, and renewal reporting uses explicit linked packages with a disclosed denominator. This completes items 4–6 for the authorized local web scope, including integrated regression acceptance. It does not close the separate hosted/native/device/human release gates.
+
+**Local acceptance passed:** all 35 full-release gates, 122 browser journeys, 1,120 broad layout states, 27 web units, backend/domain/content/build/cache checks and a fresh 40-migration/eight-SQL-suite installation. A subsequent four-case Chromium/WebKit run expanded feedback/report coverage to 96 width/language/theme/engine states and repeated package/session-note recovery, with unchanged application sources. Actual desktop and Arabic 320px renders were inspected. [Receipt](evidence/r21-verification.txt) and [full report](evidence/r21-release-report.json) preserve commands, failures corrected and limits. Native apps, hosting/providers, physical devices and human/business outcomes remain unverified.

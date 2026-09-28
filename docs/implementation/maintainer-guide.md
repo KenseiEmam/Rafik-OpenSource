@@ -1,13 +1,18 @@
 # Working on the Rafik revamp
 
+## Maintaining experience reports
+
+`FeedbackPage.vue` lists eligible own sources; `RatingForm.vue` handles optional non-defaulted scores and durable drafts/commands. `ExperienceReport.vue` separates client, workplace and renewal views; `TrainerDelivery.vue` adds event-staff delivery counts and a readable table. Session completion links lead to the same feedback service; do not add a second mobile-only rating store. Extend both HTTP authorization tests and the isolated source-to-chart journey when modifying a measure. Use `npm run test:organization-feedback`; web: `npm run test:e2e -- organization-feedback.e2e.ts`. [R21 contract](r21-satisfaction.md) defines exact time windows/denominators.
+
+
 ## Maintaining session packages
 
 Organization packages now track explicit trainee entitlements, derived available/reserved/used balances, validity dates, auditable allowance corrections and linked renewals. Calendar booking reserves only an explicitly selected package; completion consumes present/charged absent sessions, cancellation/excused/released no-shows release, and independent trial/makeup/prize/other sessions never affect allowances. Staff session details include check-in timestamps and durable notes; the overview surfaces missed sessions without a replacement. Reuses workspace transactions/receipts and existing calendar events; no parallel scheduler or payment processor.
 
-Contract: [session packages](r20-session-packages.md). Local acceptance: 3 package API groups, 2 calendar/service groups, 2 task groups, 6 isolated Chromium/WebKit journeys, 38 migrations/eight SQL suites, web units/build/types/format. Browser package list/detail covers 16 engine/width/language/theme combinations plus funding and correction flows. Desktop and Arabic 320px captures were inspected. Evidence: [receipt](evidence/r20-verification.txt). Full release verification and R21 feedback reporting follow; native, hosted payments/providers and physical devices are unverified.
+Change entitlements in `server/organization-packages.ts` and booking/accounting in `server/organization-calendar.ts`. Web entry points are `OrganizationPackages.vue`, `PackageFunding.vue` and `SessionNote.vue`. Keep derived balances and funding mutations in the same workspace transaction. Extend `tests/organization-packages.test.ts` and the companion `tests/organization-packages.e2e.ts` for lifecycle changes. See [the contract](r20-session-packages.md) and [verification](verification.md).
 
 
-Updated through R12 local refinement. Read the [ledger](ledger.md), [architecture](architecture.md), [runbook](runbook.md) and [role audit](role-scope-audit.md). Independent teams remain collaboration. R7A2 implements organization membership and views; R8 implements owned programs/history; R9 adds organization services. Native and hosting remain deferred.
+Updated through R21 local implementation. Read the [ledger](ledger.md), [architecture](architecture.md), [runbook](runbook.md) and [role audit](role-scope-audit.md). Independent teams remain collaboration. R7A2 implements organization membership and views; R8 implements owned programs/history; R9 adds organization services. Native and hosting remain deferred.
 
 ## Runtime responsibilities
 

@@ -1,5 +1,13 @@
 # Verification record
 
+## R21 — Explicit feedback and operational reporting (28 September 2026)
+
+**Local acceptance passed:** all 35 full-release gates, 122 browser journeys, 1,120 broad layout states, 27 web units, backend/domain/content/build/cache checks and a fresh 40-migration/eight-SQL-suite installation. A subsequent four-case Chromium/WebKit run expanded feedback/report coverage to 96 width/language/theme/engine states and repeated package/session-note recovery, with unchanged application sources. Actual desktop and Arabic 320px renders were inspected. [Receipt](evidence/r21-verification.txt) and [full report](evidence/r21-release-report.json) preserve commands, failures corrected and limits. Native apps, hosting/providers, physical devices and human/business outcomes remain unverified.
+
+Domain acceptance covers self-only eligible sources, revisions/replay, trainer/admin/tenant scope, attendance correction, membership revocation, own export, current-month workplace coverage, actual event-staff delivery and explicit linked renewals. Recovered rating and session-note commands now adopt acknowledged revisions before a second edit. Nested report grids stay contained at 320px; analytics tabs use explicit keyboard activation to prevent focus restoration from changing the selected report. See [ADR0015](../decisions/0015-explicit-feedback-sources.md).
+
+The full release chain ran before a test-only matrix expansion; all application sources were unchanged for supplemental acceptance. Final documentation links and web formatting were checked after documentation/test edits. The preview was preserved; no push, reset, native change or remote release occurred.
+
 ## R20 — Session packages (28 September 2026)
 
 Organization packages now track explicit trainee entitlements, derived available/reserved/used balances, validity dates, auditable allowance corrections and linked renewals. Calendar booking reserves only an explicitly selected package; completion consumes present/charged absent sessions, cancellation/excused/released no-shows release, and independent trial/makeup/prize/other sessions never affect allowances. Staff session details include check-in timestamps and durable notes; the overview surfaces missed sessions without a replacement. Reuses workspace transactions/receipts and existing calendar events; no parallel scheduler or payment processor.

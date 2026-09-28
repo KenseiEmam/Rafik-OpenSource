@@ -93,3 +93,7 @@
 - Canonical SQL assertions must run in a disposable migrated/seeded database; never repair or reset preview users to match fixtures. Repeated media inside exercise lists should use local groups, not duplicate page landmarks. Include complete multi-exercise authoring and preview views in shared-media accessibility checks.
 
 - Media-aware UI audits must wait for application data and rendered controls, not global network idleness: looping video can keep media requests active indefinitely. Track domain fetch completion separately and retain layout/accessibility assertions; do not disable playback to make a test pass.
+
+- For source-derived metrics, name the counted record precisely: workout completion differs from scheduled appointment completion. Keep session/workplace feedback source, time window and denominator visible; missing ratings remain unknown. Test every tab after switching, since nested grid/tab intrinsic widths can overflow only in secondary states. Prisma defining-side unique keys must include exactly the composite tenant/subject relation fields; validate introspected schema before treating migration work as complete.
+
+- After a recovered write, adopt the acknowledged server revision in local editor state even if a refreshed parent has the same revision/key. Do not rely on remounting to remove a restored stale draft version. Test lost acknowledgement → reload → retry → a second edit/save, not just the first successful recovery.

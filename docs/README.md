@@ -11,6 +11,8 @@ This is the maintained entry point for engineers working on the Rafik web/backen
 
 ## Reference and operations
 
+- [Gym-first corrections](implementation/r17-gym-direction.md), [session-package contract](implementation/r20-session-packages.md) and [feedback/reporting contract](implementation/r21-satisfaction.md): current founder-directed behavior and scope.
+
 - [Original role/scope audit](implementation/role-scope-audit.md): six original roles, workflow evidence, revamp mismatches and required organizational acceptance.
 
 - [Runbook](implementation/runbook.md): local setup, recovery, support and hosted release procedure.

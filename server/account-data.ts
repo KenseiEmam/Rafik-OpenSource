@@ -81,7 +81,13 @@ export async function organizationAccountData(actor: Actor) {
     await db.$queryRaw`SELECT * FROM public.organization_tasks WHERE assigned_to=ANY(${ids}::uuid[]) OR created_by=ANY(${ids}::uuid[])`;
   const packages =
     await db.$queryRaw`SELECT * FROM public.organization_package_balances WHERE member_id=ANY(${ids}::uuid[])`;
+  const sessionFeedback =
+    await db.$queryRaw`SELECT * FROM public.organization_session_feedback WHERE member_id=ANY(${ids}::uuid[])`;
+  const workplaceFeedback =
+    await db.$queryRaw`SELECT * FROM public.organization_workplace_feedback WHERE member_id=ANY(${ids}::uuid[])`;
   return {
+    sessionFeedback,
+    workplaceFeedback,
     packages,
     tasks,
     assets,

@@ -1,3 +1,4 @@
+import { experienceReport } from "./experience-report.ts";
 import { ApiError, asActor, type Actor } from "./db.ts";
 import { scoped, requirePractice, uuid } from "./workspaces.ts";
 import { role, recipient } from "./programming.ts";
@@ -56,6 +57,23 @@ export async function organizationAnalytics(
     const programs = await tx.$queryRaw<
       any[]
     >`SELECT v.program_id AS id,v.title AS label,count(*)::int AS value FROM public.organization_assignments a JOIN public.workspace_members m ON m.id=a.member_id JOIN public.organization_versions v ON v.id=a.version_id WHERE a.workspace_id=${id}::uuid AND a.state='active' AND a.start_date<=(now() AT TIME ZONE ${window.zone})::date AND (a.end_date IS NULL OR a.end_date>=(now() AT TIME ZONE ${window.zone})::date) AND m.active AND 'trainee'=ANY(m.roles) AND (${trainer}::uuid IS NULL OR m.trainer_id=${trainer}::uuid) AND (${selected}::uuid IS NULL OR m.id=${selected}::uuid) GROUP BY v.program_id,v.title ORDER BY value DESC,v.title,v.program_id LIMIT 26 OFFSET ${pageOffset(q.get("programOffset"))}`;
+    const performance =
+      view === "admin" && workload.length
+        ? await tx.$queryRaw<
+            {
+              id: string;
+              name: string;
+              completed_sessions: number;
+              present: number;
+              absent: number;
+            }[]
+          >`SELECT t.id,t.name,
+      (SELECT count(*)::int FROM public.organization_events e JOIN public.organization_event_people staff ON staff.event_id=e.id WHERE e.workspace_id=${id}::uuid AND staff.member_id=t.id AND staff.duty='staff' AND e.state='completed' AND e.kind='training' AND e.ends_at>=${window.start} AND e.ends_at<${window.end}) completed_sessions,
+      (SELECT count(*)::int FROM public.organization_events e JOIN public.organization_event_people staff ON staff.event_id=e.id AND staff.member_id=t.id AND staff.duty='staff' JOIN public.organization_event_people p ON p.event_id=e.id AND p.duty='trainee' WHERE e.state='completed' AND e.kind='training' AND e.ends_at>=${window.start} AND e.ends_at<${window.end} AND p.attendance='present') present,
+      (SELECT count(*)::int FROM public.organization_events e JOIN public.organization_event_people staff ON staff.event_id=e.id AND staff.member_id=t.id AND staff.duty='staff' JOIN public.organization_event_people p ON p.event_id=e.id AND p.duty='trainee' WHERE e.state='completed' AND e.kind='training' AND e.ends_at>=${window.start} AND e.ends_at<${window.end} AND p.attendance IN ('absent','excused')) absent
+      FROM public.workspace_members t WHERE t.id=ANY(${workload.slice(0, 25).map((x) => x.id)}::uuid[]) ORDER BY t.name,t.id`
+        : [];
+
     const people = await tx.workspace_members.findMany({
       where: {
         workspace_id: id,
@@ -71,6 +89,15 @@ export async function organizationAnalytics(
       take: 25,
     });
     return {
+      performance,
+      experience: await experienceReport(
+        tx,
+        id,
+        trainer,
+        selected,
+        window,
+        view,
+      ),
       window,
       summary,
       daily,

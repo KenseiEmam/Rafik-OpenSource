@@ -47,7 +47,8 @@
     "test:organization-nutrition": "tsx --test tests/organization-nutrition.test.ts",
     "test:organization-assets": "tsx --test tests/organization-assets.test.ts",
     "test:organization-tasks": "tsx --test tests/organization-tasks.test.ts",
-    "test:organization-packages": "tsx --test tests/organization-packages.test.ts"
+    "test:organization-packages": "tsx --test tests/organization-packages.test.ts",
+    "test:organization-feedback": "tsx --test tests/organization-feedback.test.ts"
   },
   "devDependencies": {
     "@types/node": "22.19.0",

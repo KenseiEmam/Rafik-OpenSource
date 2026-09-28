@@ -1,10 +1,15 @@
 # Local operation and release runbook
 
+## Feedback local operation
+
+Apply migrations with `npm run db:migrate`, then generate the Prisma client/types; no reset/reseed is required. Feedback needs no scheduler or external delivery provider. The workplace month is UTC, supplied by the server; stale-month submissions have an explicit reload path. Session source eligibility and organization membership are rechecked before retries. Run `npm run test:organization-feedback` for source/scope/retry/reporting/export checks. Native and hosted evidence remain separate.
+
+
 ## Session-package local checks
 
 Organization packages now track explicit trainee entitlements, derived available/reserved/used balances, validity dates, auditable allowance corrections and linked renewals. Calendar booking reserves only an explicitly selected package; completion consumes present/charged absent sessions, cancellation/excused/released no-shows release, and independent trial/makeup/prize/other sessions never affect allowances. Staff session details include check-in timestamps and durable notes; the overview surfaces missed sessions without a replacement. Reuses workspace transactions/receipts and existing calendar events; no parallel scheduler or payment processor.
 
-Contract: [session packages](r20-session-packages.md). Local acceptance: 3 package API groups, 2 calendar/service groups, 2 task groups, 6 isolated Chromium/WebKit journeys, 38 migrations/eight SQL suites, web units/build/types/format. Browser package list/detail covers 16 engine/width/language/theme combinations plus funding and correction flows. Desktop and Arabic 320px captures were inspected. Evidence: [receipt](evidence/r20-verification.txt). Full release verification and R21 feedback reporting follow; native, hosted payments/providers and physical devices are unverified.
+Apply forward migrations and regenerate the Prisma client on an existing preview; do not reseed it. Run `npm run test:organization-packages` for accounting and authorization checks. The companion web command `npm run test:e2e -- organization-packages.e2e.ts` owns a disposable browser database. See [the package contract](r20-session-packages.md) and [verification](verification.md).
 
 
 ## Environment and startup

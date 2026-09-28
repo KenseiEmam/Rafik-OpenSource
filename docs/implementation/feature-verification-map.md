@@ -96,3 +96,9 @@ Rendered chart label readability was checked after the automated matrix; see pro
 - `tests/organization-assets.test.ts` and web `organization-assets.e2e.ts`: creator/tenant scope, immutable direct upload, multi-category clear/add, resource archive/reuse, pair-only attachment/replay and revocation. Backup/recovery includes asset digests.
 - `tests/organization-tasks.test.ts` and web `organization-tasks.e2e.ts`: admin assignment, current-assignee completion, reassignment/replay, concurrent revision conflicts, inactive members, search/history, closed drafts/recovery and real follow-up source lifecycles.
 - Current local results are in the ledger. Package accounting, satisfaction semantics and physical/hosted/human evidence are separate, unfinished gates.
+
+## Gym session and experience additions (R20–R21)
+
+- Package assignment → explicit calendar funding → reserved/used/released history; independent replacement leaves balances unchanged. API package tests and organization-packages.e2e cover authority/concurrency/replay/no-show choices/corrections/drafts/rendered list/detail.
+- Own completed workout or attended completed appointment → optional explicit rating → source-labelled client chart. Trainer monthly workplace response → separate admin aggregate/denominator. organization-feedback API/browser tests cover eligibility, source separation, current role scope, lost acknowledgement, corrections, own export and every analytics subtab.
+- Actual trainer delivery uses event staff, not guessed quality; renewals require an explicit successor, not a new appointment. Provider payments, native forms and physical-device outcomes remain outside local acceptance.

@@ -1,5 +1,14 @@
 # Rafik backend change history
 
+## R21 — Session experience and workplace feedback
+
+Optional satisfaction feedback is now source-specific and reusable by the later mobile app: completed workouts and attended, completed training appointments have distinct response counts/distributions; unanswered feedback is unknown. Trainers submit a separate monthly workplace rating, with visibility explained before submission. Administrators see its current-active-trainer coverage separately from client/date filters. Analytics also shows actual trainer session delivery and explicitly recorded package renewals, without inferring quality, revenue or paid retention.
+
+Use organization **Analytics → Experience & renewals** for client/workplace/renewal views and **Delivery & capacity** for trainer session delivery. Trainers use **My feedback**; the retained trainee examination web has optional links after completion. The API is ready for later native integration; no native UI or hosting is claimed. Feedback checks: `npm run test:organization-feedback` in rafik-api and `npm run test:e2e -- organization-feedback.e2e.ts` in RAFIK-FRONTEND.
+
+Maintenance in this phase fixes stale revisions after recovered rating/session-note saves and automatic analytics-tab switching on focus. Nested report tabs now remain contained at 320px. The READMEs and engineering guides distinguish current contracts/setup from historical evidence.
+
+
 ## R20 — Organization session packages
 
 Organization packages now track explicit trainee entitlements, derived available/reserved/used balances, validity dates, auditable allowance corrections and linked renewals. Calendar booking reserves only an explicitly selected package; completion consumes present/charged absent sessions, cancellation/excused/released no-shows release, and independent trial/makeup/prize/other sessions never affect allowances. Staff session details include check-in timestamps and durable notes; the overview surfaces missed sessions without a replacement. Reuses workspace transactions/receipts and existing calendar events; no parallel scheduler or payment processor.

@@ -1,10 +1,15 @@
 # Current system architecture
 
+## Feedback and operational analytics
+
+Optional satisfaction feedback is now source-specific and reusable by the later mobile app: completed workouts and attended, completed training appointments have distinct response counts/distributions; unanswered feedback is unknown. Trainers submit a separate monthly workplace rating, with visibility explained before submission. Administrators see its current-active-trainer coverage separately from client/date filters. Analytics also shows actual trainer session delivery and explicitly recorded package renewals, without inferring quality, revenue or paid retention. Feedback collection lives in `server/organization-feedback.ts`; aggregation lives in `server/experience-report.ts`. Same-subject composite foreign keys, unique response keys, current authorization before replay, explicit revisions and existing workspace transactions protect writes. Own responses are included in exports. See [ADR 0015](../decisions/0015-explicit-feedback-sources.md), [ADR 0014](../decisions/0014-session-package-accounting.md) and [R21 contract](r21-satisfaction.md).
+
+
 ## Session package ownership and accounting
 
 Organization packages now track explicit trainee entitlements, derived available/reserved/used balances, validity dates, auditable allowance corrections and linked renewals. Calendar booking reserves only an explicitly selected package; completion consumes present/charged absent sessions, cancellation/excused/released no-shows release, and independent trial/makeup/prize/other sessions never affect allowances. Staff session details include check-in timestamps and durable notes; the overview surfaces missed sessions without a replacement. Reuses workspace transactions/receipts and existing calendar events; no parallel scheduler or payment processor.
 
-Contract: [session packages](r20-session-packages.md). Local acceptance: 3 package API groups, 2 calendar/service groups, 2 task groups, 6 isolated Chromium/WebKit journeys, 38 migrations/eight SQL suites, web units/build/types/format. Browser package list/detail covers 16 engine/width/language/theme combinations plus funding and correction flows. Desktop and Arabic 320px captures were inspected. Evidence: [receipt](evidence/r20-verification.txt). Full release verification and R21 feedback reporting follow; native, hosted payments/providers and physical devices are unverified.
+`organization-packages.ts` owns entitlements; `organization-calendar.ts` applies funding changes under the existing workspace transaction. The SQL balance view derives usage from participant/event state. See [the package contract](r20-session-packages.md) and [verification](verification.md) for lifecycle details and acceptance evidence.
 
 
 R7A1 replaces the transitional backend with **one Node/TypeScript API, Prisma and PostgreSQL**. The Vue application retains its accepted interaction design and durable IndexedDB queue. [ADR 0006](../decisions/0006-prisma-api-transition.md) records the transition; [API conventions](../reference/api.md) and the [maintainer guide](maintainer-guide.md) specify its boundaries.

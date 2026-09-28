@@ -1,3 +1,4 @@
+import { feedback, feedbackCommand } from "./organization-feedback.ts";
 import { packages, packageCommand } from "./organization-packages.ts";
 import { tasks, taskCommand, followUp } from "./organization-tasks.ts";
 import {
@@ -523,6 +524,19 @@ const server = createServer(async (req, res) => {
         200,
         await independentAnalytics(requireActor(actor), url.searchParams),
       );
+      return;
+    }
+    const feedbackMatch = path.match(
+      /^\/v1\/workspaces\/([a-f0-9-]{36})\/feedback$/,
+    );
+    if (feedbackMatch) {
+      const who = requireActor(actor),
+        id = feedbackMatch[1];
+      if (req.method === "GET")
+        send(res, 200, await feedback(who, id, url.searchParams));
+      else if (req.method === "POST")
+        send(res, 200, await feedbackCommand(who, id, input));
+      else throw new ApiError(405, "method_not_allowed");
       return;
     }
     const packageMatch = path.match(

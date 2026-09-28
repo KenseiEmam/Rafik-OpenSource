@@ -1,19 +1,16 @@
 # Rafik backend
 
-## R20 — Organization session packages
+Rafik is a local gym and training-organization platform: one Vue web application, one Node/TypeScript API, Prisma and PostgreSQL. Authentication and private files go through the API; there is no Supabase runtime dependency. Native apps and hosting remain deferred.
 
-Organization packages now track explicit trainee entitlements, derived available/reserved/used balances, validity dates, auditable allowance corrections and linked renewals. Calendar booking reserves only an explicitly selected package; completion consumes present/charged absent sessions, cancellation/excused/released no-shows release, and independent trial/makeup/prize/other sessions never affect allowances. Staff session details include check-in timestamps and durable notes; the overview surfaces missed sessions without a replacement. Reuses workspace transactions/receipts and existing calendar events; no parallel scheduler or payment processor.
+Work on `codex/revamp`; never push main. Start with the [engineering index](docs/README.md), [architecture](docs/implementation/architecture.md), [maintainer guide](docs/implementation/maintainer-guide.md) and [contribution guide](CONTRIBUTING.md). [CHANGELOG.md](CHANGELOG.md) records changes; the [ledger](docs/implementation/ledger.md) and [verification record](docs/implementation/verification.md) record actual acceptance and remaining gates.
 
-Open **Packages** from the organization sidebar; admins assign allowances and trainers book for their current roster. Package API checks: `npm run test:organization-packages` in rafik-api; web checks: `npm run test:e2e -- organization-packages.e2e.ts`. Apply new local migrations with `npm run db:migrate`, then `npm run db:generate`; never reseed an existing preview.
+## Current product scope
 
+Organization memberships and roles, programs/exercises, client delivery/review, nutrition, private communication/resources, calendar/assessments, trainer tasks, session packages and role-specific analytics are implemented locally. Independent-coach contracts remain separate compatibility features. The [gym-first register](docs/implementation/r17-gym-direction.md) records the latest founder corrections.
 
-Current founder corrections and delivery order: [gym-first implementation register](docs/implementation/r17-gym-direction.md). R17 covers entry, authoring, calendar and navigation; exercise uploads/ownership, packages and staff operations follow.
-
-The exercise library now imports 1,324 requested-source entries plus 46 wger entries alongside the 14 starters. There are 45 continuous-motion previews, category filters and immutable source credits. See [exercise correction](docs/implementation/r15-exercise-correction.md), [content maintenance](docs/implementation/content.md) and [ADR0011](docs/decisions/0011-exercise-catalog-and-motion.md).
-
-Rafik's local revamp uses a Vue web application, one Node/TypeScript API, Prisma and PostgreSQL. Authentication and private files go through the API; there is no Supabase runtime dependency. Coach and organization web work comes first; native and hosting remain deferred.
-
-Work on `codex/revamp`; never push main. Read the [engineering index](docs/README.md), [ledger](docs/implementation/ledger.md), [architecture](docs/implementation/architecture.md) and [contribution guide](CONTRIBUTING.md). Organizations now have their own memberships, admin/trainer/trainee views and responsibility lifecycle. Organization-owned programs, delivery and training history are implemented; organization calendar, groups, assessor-led results and role-specific analytics are implemented locally; independent-coach teams remain a separate collaboration feature.
+- **Packages:** explicit allowances, reservations, completion/no-show accounting and linked renewals. Independent trial/makeup/prize sessions never consume a subscription. [Contract](docs/implementation/r20-session-packages.md).
+- **Analytics → Experience & renewals:** separately labeled session ratings, trainer workplace feedback and explicitly recorded package renewals. Missing feedback is unknown. **Delivery & capacity** shows trainer session delivery. [Contract](docs/implementation/r21-satisfaction.md).
+- **Exercise library:** 1,324 requested-source entries, 46 wger entries and 14 starters; 45 continuous-motion previews with source credits. [Content maintenance](docs/implementation/content.md) documents coverage and rights.
 
 ## Local setup
 

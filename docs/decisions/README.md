@@ -24,3 +24,6 @@ For a new decision, add the next number with Context, Decision, Consequences and
 - [0012 — Organization nutrition and explicit diary sharing](0012-organization-nutrition.md)
 
 - [0013 — Organization exercise ownership and private media](0013-organization-exercise-media.md).
+
+- [0014: Session package accounting](0014-session-package-accounting.md)
+- [0015: Explicit feedback sources](0015-explicit-feedback-sources.md)
