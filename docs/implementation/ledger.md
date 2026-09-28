@@ -1,5 +1,12 @@
 # Revamp execution ledger
 
+## R20 — Session packages and accounting
+
+Organization packages now track explicit trainee entitlements, derived available/reserved/used balances, validity dates, auditable allowance corrections and linked renewals. Calendar booking reserves only an explicitly selected package; completion consumes present/charged absent sessions, cancellation/excused/released no-shows release, and independent trial/makeup/prize/other sessions never affect allowances. Staff session details include check-in timestamps and durable notes; the overview surfaces missed sessions without a replacement. Reuses workspace transactions/receipts and existing calendar events; no parallel scheduler or payment processor.
+
+Contract: [session packages](r20-session-packages.md). Local acceptance: 3 package API groups, 2 calendar/service groups, 2 task groups, 6 isolated Chromium/WebKit journeys, 38 migrations/eight SQL suites, web units/build/types/format. Browser package list/detail covers 16 engine/width/language/theme combinations plus funding and correction flows. Desktop and Arabic 320px captures were inspected. Evidence: [receipt](evidence/r20-verification.txt). Full release verification and R21 feedback reporting follow; native, hosted payments/providers and physical devices are unverified.
+
+
 Updated 28 September 2026. **R19 staff tasks and follow-up are implemented and verified locally. Package accounting (R20) is next.** The broader founder correction list remains in progress in [the ordered register](r17-gym-direction.md). No hosting or native work.
 
 ## R19 — Staff tasks and daily follow-up

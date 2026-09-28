@@ -126,6 +126,7 @@ try {
       "test:communication",
       "test:organization-assets",
       "test:organization-tasks",
+      "test:organization-packages",
       "test:operations",
       "content:check",
       "content:media",

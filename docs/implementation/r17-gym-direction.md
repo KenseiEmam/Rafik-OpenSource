@@ -34,3 +34,7 @@ Item 3 is implemented for organization exercise ownership, multi-category contro
 ## Accepted checkpoint R19
 
 The operational portion of item 5 now includes real follow-up queues and admin-assigned trainer tasks. Trainer performance continues to use actual workload/participation in Analytics. Package balances, makeup sessions and renewal/retention remain the next implementation phase; the founder has now confirmed the accounting policy. The founder confirmed both client satisfaction with trainers and trainer workplace satisfaction, reported separately. Integrated local acceptance passes 118 browser journeys and 1,120 broad states, with the final dashboard audit accepted in a documented follow-up.
+
+## Accepted checkpoint R20
+
+Package assignment, explicit funding/reservation/consumption, independent replacements, check-in/session notes, renewals and missed-session follow-up are implemented locally. See the R20 contract and evidence. R21 separately sourced satisfaction and transparent renewal reporting remain next.

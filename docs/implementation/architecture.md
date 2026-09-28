@@ -1,5 +1,12 @@
 # Current system architecture
 
+## Session package ownership and accounting
+
+Organization packages now track explicit trainee entitlements, derived available/reserved/used balances, validity dates, auditable allowance corrections and linked renewals. Calendar booking reserves only an explicitly selected package; completion consumes present/charged absent sessions, cancellation/excused/released no-shows release, and independent trial/makeup/prize/other sessions never affect allowances. Staff session details include check-in timestamps and durable notes; the overview surfaces missed sessions without a replacement. Reuses workspace transactions/receipts and existing calendar events; no parallel scheduler or payment processor.
+
+Contract: [session packages](r20-session-packages.md). Local acceptance: 3 package API groups, 2 calendar/service groups, 2 task groups, 6 isolated Chromium/WebKit journeys, 38 migrations/eight SQL suites, web units/build/types/format. Browser package list/detail covers 16 engine/width/language/theme combinations plus funding and correction flows. Desktop and Arabic 320px captures were inspected. Evidence: [receipt](evidence/r20-verification.txt). Full release verification and R21 feedback reporting follow; native, hosted payments/providers and physical devices are unverified.
+
+
 R7A1 replaces the transitional backend with **one Node/TypeScript API, Prisma and PostgreSQL**. The Vue application retains its accepted interaction design and durable IndexedDB queue. [ADR 0006](../decisions/0006-prisma-api-transition.md) records the transition; [API conventions](../reference/api.md) and the [maintainer guide](maintainer-guide.md) specify its boundaries.
 
 **Organizational correction:** [ADR 0005](../decisions/0005-organization-and-independent-scopes.md) defines the separate independent/organization scopes partly implemented in R7A2 membership/context/responsibility; organization-owned programming/history is implemented in R8; services/calendar/assessor-led results and analytics are implemented in R9. The R4 team overlay remains an independent-coach collaboration feature, not the required organization model. Read the [role audit](role-scope-audit.md) before changing ownership.

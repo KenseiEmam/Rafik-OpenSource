@@ -1,0 +1,6 @@
+R20 local acceptance — 28 September 2026
+
+Final isolated browser run: 1790605655562, six cases passed across Chromium and phone WebKit (package booking/no-show/independent replacement/correction, organization assessment/calendar/analytics, staff tasks). Package list/detail: 16 engine/width/language/theme combinations with geometry and Axe assertions. Actual final desktop dark and Arabic 320px phone captures inspected; package spacing tightened after rendered review.
+API: npm run test:organization-packages (3 groups); test:organization-services (2); test:organization-tasks (2); npm test (disposable 38 migrations/eight SQL suites). Final typecheck, 27 web units, build and formatting.
+Development corrections: composite renewal uniqueness initially failed Prisma introspection; forward migration repaired it without editing applied SQL/reset. Vue inline multi-statement handler replaced with named function. Test selected staff row instead of subject row corrected. Browser balance read waited for acknowledgement rather than merely disabled Save. Earlier failed attempts are not acceptance.
+Scope: local package accounting, notes, explicit funding/renewal and missed-session queue. Full release chain not run at this checkpoint. R21 feedback/reporting still next. No remote push, deployment, native/device, provider payment or business outcome verified.

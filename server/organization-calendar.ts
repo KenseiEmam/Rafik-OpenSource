@@ -1,3 +1,9 @@
+import {
+  packageRecord,
+  participantFunding,
+  validatePackageDate,
+  assertPackageCapacity,
+} from "./organization-packages.ts";
 import { ApiError, type Actor } from "./db.ts";
 import {
   scoped,
@@ -94,10 +100,19 @@ export async function calendar(actor: Actor, id: string, q: URLSearchParams) {
               skip: historyOffset,
               take: historyMember ? 26 : 101,
             });
+      const packageIds = people.flatMap((p) =>
+        p.package_id ? [p.package_id] : [],
+      );
+      const packages = packageIds.length
+        ? await tx.$queryRaw<
+            { id: string; title: string; available: number }[]
+          >`SELECT id,title,available FROM public.organization_package_balances WHERE id=ANY(${packageIds}::uuid[])`
+        : [];
       return {
         event: { ...item, organization_event_people: undefined },
         people: people.map((p) => ({
           ...p,
+          package: packages.find((item) => item.id === p.package_id) || null,
           workspace_members: undefined,
           name: p.workspace_members.name,
           active: p.workspace_members.active,
@@ -236,7 +251,31 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
   if (view === "trainee") throw new ApiError(403, "forbidden");
   const authorize = async (tx: Tx, self: Self) => {
     if (action === "create") {
-      await eventPeople(tx, id, self, view, input);
+      const authorized = await eventPeople(tx, id, self, view, input);
+      const funding = participantFunding(
+        input.funding,
+        authorized.participants,
+      );
+      for (const choice of funding.values())
+        if (choice.makeup_for) {
+          const original = (
+            await tx.$queryRaw<
+              { state: string; attendance: string }[]
+            >`SELECT e.state,p.attendance FROM public.organization_events e JOIN public.organization_event_people p ON p.event_id=e.id WHERE e.workspace_id=${id}::uuid AND e.id=${choice.makeup_for}::uuid AND p.member_id=${choice.member}::uuid AND p.duty='trainee'`
+          )[0];
+          if (
+            !original ||
+            original.state !== "completed" ||
+            !["absent", "excused"].includes(original.attendance)
+          )
+            throw new ApiError(403, "makeup_unavailable");
+        }
+      for (const choice of funding.values())
+        if (choice.package_id) {
+          const pack = await packageRecord(tx, id, choice.package_id);
+          if (pack.member_id !== choice.member)
+            throw new ApiError(403, "package_unavailable");
+        }
       const existing = await tx.organization_events.findUnique({
         where: { id: key },
       });
@@ -282,6 +321,7 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
           if (template.revision !== input.template_revision)
             throw new ApiError(409, "conflict");
         }
+        const funding = participantFunding(input.funding, participants);
         const list = [];
         for (let i = 0; i < times.length; i++) {
           const start = new Date(times[i].starts_at),
@@ -291,6 +331,15 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
             start.getTime() > Date.now() + 366 * 86400000
           )
             throw new ApiError(400, "invalid_availability");
+          for (const choice of funding.values())
+            if (choice.package_id)
+              await validatePackageDate(
+                tx,
+                id,
+                choice.package_id,
+                choice.member,
+                start,
+              );
           await tx.$queryRaw`SELECT public.validate_calendar_collision(${members.map((m) => m.user_id).filter(Boolean)}::uuid[],${start},${end},NULL::uuid)::text`;
           const item = await tx.organization_events.create({
             data: {
@@ -326,13 +375,24 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
                 event_id: item.id,
                 member_id,
                 duty: "trainee",
+                package_id: funding.get(member_id)!.package_id,
+                makeup_for: funding.get(member_id)!.makeup_for,
+                independent_reason: funding.get(member_id)!.independent_reason,
               })),
             ],
           });
           list.push(item);
         }
+        await assertPackageCapacity(
+          tx,
+          id,
+          [...funding.values()].flatMap((f) =>
+            f.package_id ? [f.package_id] : [],
+          ),
+        );
         await event(tx, actor, id, "calendar_scheduled", key, {
           count: list.length,
+          funding: [...funding.values()],
         });
         return list;
       }
@@ -340,6 +400,7 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
       if (
         action !== "result" &&
         action !== "attendance" &&
+        action !== "session-note" &&
         item.revision !== input.revision
       )
         throw new ApiError(409, "conflict");
@@ -354,6 +415,15 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
           start.getTime() > Date.now() + 366 * 86400000
         )
           throw new ApiError(400, "invalid_availability");
+        for (const person of item.organization_event_people)
+          if (person.package_id)
+            await validatePackageDate(
+              tx,
+              id,
+              person.package_id,
+              person.member_id,
+              start,
+            );
         const inactive = item.organization_event_people.some(
           (p) =>
             !p.workspace_members.active ||
@@ -455,6 +525,26 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
       }
       if (item.state === "cancelled" || item.starts_at > new Date())
         throw new ApiError(400, "event_not_started");
+      if (action === "session-note") {
+        const member = uuid(input.member),
+          person = item.organization_event_people.find(
+            (p) => p.member_id === member && p.duty === "trainee",
+          );
+        if (!person) throw new ApiError(403, "trainee_unavailable");
+        if (person.revision !== input.revision)
+          throw new ApiError(409, "conflict");
+        const note = typeof input.note === "string" ? input.note.trim() : "";
+        if (note.length > 2000) throw new ApiError(400, "invalid_request");
+        const result = await tx.organization_event_people.update({
+          where: { event_id_member_id: { event_id: key, member_id: member } },
+          data: { session_note: note, revision: { increment: 1 } },
+        });
+        await event(tx, actor, id, "session_note_recorded", key, {
+          member,
+          revision: result.revision,
+        });
+        return result;
+      }
       if (action === "attendance") {
         const member = uuid(input.member),
           person = item.organization_event_people.find(
@@ -481,16 +571,42 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
               }))))
         )
           throw new ApiError(400, "results_required");
+        const charge =
+          input.attendance === "absent" && person.package_id
+            ? input.charge_absence
+            : null;
+        if (
+          input.attendance === "absent" &&
+          person.package_id &&
+          typeof charge !== "boolean"
+        )
+          throw new ApiError(400, "no_show_decision_required");
+        const reason =
+          item.state === "completed" && person.package_id
+            ? textValue(input.reason, 500)
+            : "";
         const result = await tx.organization_event_people.update({
           where: { event_id_member_id: { event_id: key, member_id: member } },
           data: {
             attendance: String(input.attendance),
+            charge_absence: typeof charge === "boolean" ? charge : null,
+            checked_in_at:
+              input.attendance === "present"
+                ? person.checked_in_at || new Date()
+                : person.checked_in_at,
             revision: { increment: 1 },
           },
         });
+        if (person.package_id)
+          await assertPackageCapacity(tx, id, [person.package_id]);
         await event(tx, actor, id, "attendance_recorded", key, {
           member,
           attendance: String(input.attendance),
+          previous_attendance: person.attendance,
+          charge_absence: typeof charge === "boolean" ? charge : null,
+          previous_charge_absence: person.charge_absence,
+          reason,
+          package_id: person.package_id,
         });
         return result;
       }
@@ -551,6 +667,15 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
         const participants = item.organization_event_people.filter(
           (p) => p.duty === "trainee",
         );
+        if (
+          participants.some(
+            (p) =>
+              p.package_id &&
+              p.attendance === "absent" &&
+              p.charge_absence === null,
+          )
+        )
+          throw new ApiError(400, "no_show_decision_required");
         if (participants.some((p) => p.attendance === "unmarked"))
           throw new ApiError(400, "attendance_required");
         if (item.kind === "assessment")

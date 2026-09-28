@@ -921,6 +921,8 @@ model workspace_members {
   organization_nutrition_plans_organization_nutrition_plans_workspace_id_author_idToworkspace_members organization_nutrition_plans[]  @relation("organization_nutrition_plans_workspace_id_author_idToworkspace_members")
   organization_nutrition_plans_organization_nutrition_plans_workspace_id_member_idToworkspace_members organization_nutrition_plans[]  @relation("organization_nutrition_plans_workspace_id_member_idToworkspace_members")
   organization_nutrition_sharing                                                                      organization_nutrition_sharing?
+  organization_packages_organization_packages_workspace_id_created_byToworkspace_members              organization_packages[]         @relation("organization_packages_workspace_id_created_byToworkspace_members")
+  organization_packages_organization_packages_workspace_id_member_idToworkspace_members               organization_packages[]         @relation("organization_packages_workspace_id_member_idToworkspace_members")
   organization_programs                                                                               organization_programs[]
   organization_sessions                                                                               organization_sessions[]
   organization_tasks_organization_tasks_workspace_id_assigned_toToworkspace_members                   organization_tasks[]            @relation("organization_tasks_workspace_id_assigned_toToworkspace_members")
@@ -976,6 +978,7 @@ model workspaces {
   organization_meals             organization_meals[]
   organization_nutrition_plans   organization_nutrition_plans[]
   organization_nutrition_sharing organization_nutrition_sharing[]
+  organization_packages          organization_packages[]
   organization_programs          organization_programs[]
   organization_sessions          organization_sessions[]
   organization_tasks             organization_tasks[]
@@ -1172,19 +1175,29 @@ model assessment_templates {
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model organization_event_people {
-  workspace_id        String              @db.Uuid
-  event_id            String              @db.Uuid
-  member_id           String              @db.Uuid
-  duty                String
-  attendance          String              @default("unmarked")
-  revision            Int                 @default(1)
-  assessment_results  assessment_results?
-  organization_events organization_events @relation(fields: [workspace_id, event_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
-  workspaces          workspaces          @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  workspace_members   workspace_members   @relation(fields: [workspace_id, member_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+  workspace_id                    String                      @db.Uuid
+  event_id                        String                      @db.Uuid
+  member_id                       String                      @db.Uuid
+  duty                            String
+  attendance                      String                      @default("unmarked")
+  revision                        Int                         @default(1)
+  package_id                      String?                     @db.Uuid
+  makeup_for                      String?                     @db.Uuid
+  independent_reason              String                      @default("other")
+  charge_absence                  Boolean?
+  session_note                    String                      @default("")
+  checked_in_at                   DateTime?                   @db.Timestamptz(6)
+  assessment_results              assessment_results?
+  organization_event_people       organization_event_people?  @relation("organization_event_peopleToorganization_event_people", fields: [makeup_for, member_id], references: [event_id, member_id], onDelete: NoAction, onUpdate: NoAction, map: "organization_event_makeup")
+  other_organization_event_people organization_event_people[] @relation("organization_event_peopleToorganization_event_people")
+  organization_packages           organization_packages?      @relation(fields: [workspace_id, member_id, package_id], references: [workspace_id, member_id, id], onDelete: NoAction, onUpdate: NoAction, map: "organization_event_package_member")
+  organization_events             organization_events         @relation(fields: [workspace_id, event_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
+  workspaces                      workspaces                  @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  workspace_members               workspace_members           @relation(fields: [workspace_id, member_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([event_id, member_id])
   @@index([workspace_id, member_id, event_id], map: "organization_person_agenda")
+  @@index([package_id], map: "organization_event_package", where: raw("(package_id IS NOT NULL)"))
   @@schema("public")
 }
 
@@ -1511,5 +1524,35 @@ model organization_tasks {
   workspaces                                                                       workspaces        @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([workspace_id, assigned_to, state, due_date, id], map: "organization_tasks_queue")
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model organization_packages {
+  id                                                                                 String                      @id @db.Uuid
+  workspace_id                                                                       String                      @db.Uuid
+  member_id                                                                          String                      @db.Uuid
+  created_by                                                                         String                      @db.Uuid
+  renewed_from                                                                       String?                     @db.Uuid
+  title                                                                              String
+  allowance                                                                          Int
+  starts_on                                                                          DateTime                    @db.Date
+  ends_on                                                                            DateTime                    @db.Date
+  timezone                                                                           String
+  archived                                                                           Boolean                     @default(false)
+  revision                                                                           Int                         @default(1)
+  created_at                                                                         DateTime                    @default(now()) @db.Timestamptz(6)
+  updated_at                                                                         DateTime                    @default(now()) @db.Timestamptz(6)
+  organization_event_people                                                          organization_event_people[]
+  workspace_members_organization_packages_workspace_id_created_byToworkspace_members workspace_members           @relation("organization_packages_workspace_id_created_byToworkspace_members", fields: [workspace_id, created_by], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+  workspaces                                                                         workspaces                  @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  workspace_members_organization_packages_workspace_id_member_idToworkspace_members  workspace_members           @relation("organization_packages_workspace_id_member_idToworkspace_members", fields: [workspace_id, member_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+  organization_packages                                                              organization_packages?      @relation("organization_packagesToorganization_packages", fields: [workspace_id, member_id, renewed_from], references: [workspace_id, member_id, id], onDelete: NoAction, onUpdate: NoAction)
+  other_organization_packages                                                        organization_packages?      @relation("organization_packagesToorganization_packages")
+
+  @@unique([workspace_id, member_id, id])
+  @@unique([workspace_id, member_id, renewed_from], map: "organization_package_renewal")
+  @@index([workspace_id, member_id, ends_on, id], map: "organization_packages_member")
   @@schema("public")
 }

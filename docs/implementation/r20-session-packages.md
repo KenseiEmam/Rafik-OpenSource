@@ -1,6 +1,6 @@
 # R20 — Organization session packages
 
-Status: planned, not implemented. The founder confirmed the accounting policy on 28 September 2026: booking reserves one session, completion deducts it, cancellation releases it, and staff explicitly decides whether each no-show is charged.
+Status: implemented locally. The founder confirmed the accounting policy on 28 September 2026: booking reserves one session, completion deducts it, cancellation releases it, and staff explicitly decides whether each no-show is charged.
 
 ## User workflow
 
@@ -19,3 +19,9 @@ Package dates describe entitlement validity, not proof of money collected. Renew
 ## Acceptance before completion
 
 Verify same-tenant/member package references; staff/trainee and reassignment boundaries; concurrent final-slot bookings; exact retry after a lost acknowledgement; multi-occurrence rollback; cancelled reservation release; completion/no-show choices; attendance corrections; date changes and expiry; standalone bookings; task/calendar navigation; scoped drafts and recovery. Inspect real desktop, tablet and 320px Arabic layouts, both themes/engines. Preserve preview records and published training history; commit the accepted phase on `codex/revamp`. No native app, provider payments or hosting.
+
+## Implementation and evidence
+
+Organization packages now track explicit trainee entitlements, derived available/reserved/used balances, validity dates, auditable allowance corrections and linked renewals. Calendar booking reserves only an explicitly selected package; completion consumes present/charged absent sessions, cancellation/excused/released no-shows release, and independent trial/makeup/prize/other sessions never affect allowances. Staff session details include check-in timestamps and durable notes; the overview surfaces missed sessions without a replacement. Reuses workspace transactions/receipts and existing calendar events; no parallel scheduler or payment processor.
+
+`organization-packages.ts` owns entitlement reads/commands; `organization-calendar.ts` validates participant funding in the same workspace transaction. The SQL balance view has no independent write path. OrganizationPackages, PackageFunding and SessionNote own the web workflows. Applied migrations are append-only: the follow-up renewal-key migration aligns Prisma’s composite relation with its defining unique key. Generated Prisma/web types are synchronized. See [R20 receipt](evidence/r20-verification.txt).

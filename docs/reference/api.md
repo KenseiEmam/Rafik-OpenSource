@@ -126,3 +126,9 @@ Organization message commands accept optional `asset_id`; the file must belong t
 `POST` accepts standard `operation`, `view`, `id` and `revision`. Admin `action: save` takes `title`, optional `description`, active trainer `assigned_to`, `priority: normal|high` and optional `due_date`. `action: state` takes `state: open|completed|cancelled`; cancellation/restoring cancelled tasks requires admin authority. Assignees can complete/reopen their work. Authorization is rechecked before replay.
 
 `GET /v1/workspaces/:id/follow-up?view=admin|trainer` derives scoped counts and the first eight oldest review/outcome rows and alphabetic unassigned-program trainees. It is read-only and does not infer no-shows or deduct sessions.
+
+## Organization session packages
+
+`GET /v1/workspaces/:id/packages?view=admin|trainer|trainee` lists scoped packages before search (24/page); `member`, `search`, `status`, `offset` narrow results. `id` reads balance and paginated linked-session history. POST actions `create` (admin, allowance/dates/timezone/member, optional renewed_from), `adjust` (revision/allowance/reason), `archive` (revision/archived) use durable operation UUIDs. Current authorization is checked before receipt replay. Account exports include own-member package data.
+
+Calendar create accepts one funding entry per trainee: `{member,package_id}` or `{member,independent_reason}` plus optional `makeup_for`. Omitted funding on older clients means independent `other`; the new UI explicitly displays funding. Repeated bookings reserve atomically. Attendance absent on a package requires `charge_absence`; completed package corrections require `reason`. `session-note` accepts member/revision/note (2000 characters). No-show charge decisions do not consume until the event completes. Historical check-in timestamp records the first present mark, not a biometric arrival or revised attendance proof.

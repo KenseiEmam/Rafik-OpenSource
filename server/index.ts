@@ -1,3 +1,4 @@
+import { packages, packageCommand } from "./organization-packages.ts";
 import { tasks, taskCommand, followUp } from "./organization-tasks.ts";
 import {
   putOrganizationAsset,
@@ -522,6 +523,19 @@ const server = createServer(async (req, res) => {
         200,
         await independentAnalytics(requireActor(actor), url.searchParams),
       );
+      return;
+    }
+    const packageMatch = path.match(
+      /^\/v1\/workspaces\/([a-f0-9-]{36})\/packages$/,
+    );
+    if (packageMatch) {
+      const who = requireActor(actor),
+        id = packageMatch[1];
+      if (req.method === "GET")
+        send(res, 200, await packages(who, id, url.searchParams));
+      else if (req.method === "POST")
+        send(res, 200, await packageCommand(who, id, input));
+      else throw new ApiError(405, "method_not_allowed");
       return;
     }
     const taskMatch = path.match(

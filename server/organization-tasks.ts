@@ -171,6 +171,16 @@ export async function followUp(actor: Actor, id: string, q: URLSearchParams) {
     const outcomes = await tx.$queryRaw<
       { id: string; title: string; ends_at: Date; total: bigint }[]
     >`SELECT e.id,e.title,e.ends_at,count(*) OVER() total FROM public.organization_events e WHERE e.workspace_id=${id}::uuid AND e.state='scheduled' AND e.ends_at<now() AND (${view === "admin"} OR EXISTS(SELECT 1 FROM public.organization_event_people p WHERE p.event_id=e.id AND p.member_id=${self.id}::uuid AND p.duty='staff')) ORDER BY e.ends_at,e.id LIMIT 8`;
+    const missed = await tx.$queryRaw<
+      {
+        id: string;
+        member_id: string;
+        name: string;
+        title: string;
+        starts_at: Date;
+        total: bigint;
+      }[]
+    >`SELECT e.id,p.member_id,m.name,e.title,e.starts_at,count(*) OVER() total FROM public.organization_events e JOIN public.organization_event_people p ON p.event_id=e.id JOIN public.workspace_members m ON m.id=p.member_id WHERE e.workspace_id=${id}::uuid AND e.kind='training' AND e.state='completed' AND p.duty='trainee' AND p.attendance IN ('absent','excused') AND m.active AND (${view === "admin"} OR m.trainer_id=${self.id}::uuid) AND NOT EXISTS(SELECT 1 FROM public.organization_event_people replacement JOIN public.organization_events booked ON booked.id=replacement.event_id WHERE replacement.makeup_for=e.id AND replacement.member_id=p.member_id AND booked.state<>'cancelled') ORDER BY e.starts_at,e.id,p.member_id LIMIT 8`;
     const unplanned = await tx.$queryRaw<
       { id: string; name: string; total: bigint }[]
     >`SELECT m.id,m.name,count(*) OVER() total FROM public.workspace_members m WHERE m.workspace_id=${id}::uuid AND m.active AND 'trainee'=ANY(m.roles) AND (${view === "admin"} OR m.trainer_id=${self.id}::uuid) AND NOT EXISTS(SELECT 1 FROM public.organization_assignments a WHERE a.member_id=m.id AND a.state='active') ORDER BY m.name,m.id LIMIT 8`;
@@ -179,6 +189,7 @@ export async function followUp(actor: Actor, id: string, q: URLSearchParams) {
       total: Number(items[0]?.total || 0),
     });
     return {
+      missed: result(missed),
       reviews: result(review),
       outcomes: result(outcomes),
       unplanned: result(unplanned),
