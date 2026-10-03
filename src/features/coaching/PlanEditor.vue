@@ -293,8 +293,13 @@ async function uploadCover(event: Event) {
     ;(event.target as HTMLInputElement).value = ''
   }
 }
-function addExercise() {
-  const first = activeCatalog.value[0]
+const addPicker = ref(0)
+function addExercise(exerciseId?: string) {
+  const chosen = exerciseId
+    ? activeCatalog.value.find((exercise) => exercise.id === exerciseId)
+    : undefined
+  if (exerciseId && !chosen) return
+  const first = chosen || activeCatalog.value[0]
   day.value.exercises.push({
     key: crypto.randomUUID(),
     exerciseId: first?.id || 'goblet-squat',
@@ -829,14 +834,30 @@ function removeDay() {
                 </label>
               </details>
             </article>
-            <button
+            <div
               v-if="!preview && !day.restDay && day.exercises.length < 12"
-              type="button"
-              class="button secondary full"
-              @click="addExercise"
+              class="add-exercise-search"
             >
-              <PhPlus :size="18" />{{ language('Add exercise', 'إضافة تمرين') }}
-            </button>
+              <PhPlus :size="18" aria-hidden="true" class="add-exercise-icon" />
+              <ExercisePicker
+                :key="addPicker"
+                class="grow"
+                model-value=""
+                :exercises="catalog"
+                :label="language('Add exercise', 'إضافة تمرين')"
+                :placeholder="language('Search to add an exercise', 'ابحث لإضافة تمرين')"
+                hide-label
+                @update:model-value="(id) => (addExercise(id), addPicker++)"
+              />
+            </div>
+            <p v-else-if="!preview && !day.restDay" class="subtle">
+              {{
+                language(
+                  'This session has the maximum of 12 exercises.',
+                  'وصلت هذه الحصة إلى الحد الأقصى وهو 12 تمريناً.',
+                )
+              }}
+            </p>
           </section>
           <div v-if="editable" class="editor-savebar">
             <p>
@@ -919,6 +940,23 @@ function removeDay() {
 </style>
 
 <style scoped>
+.add-exercise-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 10px 12px;
+  border: 1.5px dashed var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+}
+.add-exercise-search:focus-within {
+  border-color: var(--accent);
+}
+.add-exercise-icon {
+  color: var(--accent);
+  flex-shrink: 0;
+}
 .grouped-exercise {
   border-inline-start: 4px solid var(--accent);
 }

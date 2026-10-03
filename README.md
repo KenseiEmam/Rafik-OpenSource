@@ -30,17 +30,17 @@ npm ci
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173`. Start with **Try a workout**, or use **Explore sample accounts** in the sidebar (footer on public/trainee pages) to inspect both sides of the local workflow. Sample accounts use real local identity and database calls. Sign-in email stays in the backend's test inbox at `http://127.0.0.1:55331/local/inbox`.
+Open `http://127.0.0.1:5173`. Start with **Try a workout**, or use **Explore sample accounts** in the sidebar (footer on public/trainee pages) to sign in as a gym administrator, trainer or trainee. Legacy independent-coach accounts are listed only at `/local-preview?legacy=1`. Sample accounts use real local identity and database calls. Sign-in email stays in the backend's test inbox at `http://127.0.0.1:55331/local/inbox`.
 
 ## Explore R3
 
-Sign into Laila or Amir at `/local-preview`, then choose the desired tool in the sidebar or phone navigation drawer. Nutrition supports guidance and actual meal records; Appointments supports availability and booking; Resources supports real private upload and explicit sharing. Shared files can be attached to Messages. Upcoming appointments appear on Today when there are bookings in the next week. No extra signup fields are required.
+Sign into Laila or Amir at `/local-preview?legacy=1`, then choose the desired tool in the sidebar or phone navigation drawer. Nutrition supports guidance and actual meal records; Appointments supports availability and booking; Resources supports real private upload and explicit sharing. Shared files can be attached to Messages. Upcoming appointments appear on Today when there are bookings in the next week. No extra signup fields are required.
 
 See the [R3 contract](../rafik-api/docs/implementation/r3-contract.md) for units, timezones, retries and file lifecycle. New modules are `src/features/nutrition`, `appointments`, `resources` and `services`; there is no new global state layer.
 
 ## Explore R4
 
-Open **Teams** as Laila. Create a team, invite `coach2@rafik.test`, and open the generated invitation link as **Nour Mahfouz** in another browser profile. Both identities have buttons at `/local-preview`; no email code is needed. Choose an existing client for enrollment; **Amir Hassan** approves on Today or **More → Teams**. Team admins manage staff/groups and propose coach handoffs; clients approve before their future plan changes. Published team plans become independent editable copies. Files have separate, explicit staff sharing.
+Open **Teams** as Laila. Create a team, invite `coach2@rafik.test`, and open the generated invitation link as **Nour Mahfouz** in another browser profile. Both identities have buttons at `/local-preview?legacy=1`; no email code is needed. Choose an existing client for enrollment; **Amir Hassan** approves on Today or **More → Teams**. Team admins manage staff/groups and propose coach handoffs; clients approve before their future plan changes. Published team plans become independent editable copies. Files have separate, explicit staff sharing.
 
 **Business** is an optional personal account; **Team subscription** handles the selected team. Its owner-only local simulator exercises subscription states without cards, charges or a real provider. **Support** saves actual local requests and supports admin replies, resolve/reopen and draft recovery. See the [R4 contract](../rafik-api/docs/implementation/r4-contract.md) and maintainer guide for access and retry boundaries.
 
@@ -92,7 +92,7 @@ Current local coverage and remaining release gates are in the backend's `docs/im
 
 ## R2 test tour
 
-Open `/local-preview` and choose Laila (coach) or Amir (client). Buttons use real local identity; you do not need an email code. Seeded reflection/assessment examples make the new paths immediately usable.
+Open `/local-preview?legacy=1` and choose Laila (coach) or Amir (client). Buttons use real local identity; you do not need an email code. Seeded reflection/assessment examples make the new paths immediately usable.
 
 - Coach **Check-ins**: create/edit a template, assign a client with bounded recurrence, review submitted responses or cancel unsubmitted occurrences.
 - Client **Check-ins**: save draft, submit, read feedback and correct results. **Discuss this response** adds verified context to a message. Assessments show earlier compatible results.

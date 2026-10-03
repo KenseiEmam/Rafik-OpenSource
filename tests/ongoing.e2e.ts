@@ -2,7 +2,7 @@ import { test, expect, type Page } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 const relationship = '40000000-0000-4000-8000-000000000001'
 async function login(page: Page, coach = true) {
-  await page.goto('/local-preview')
+  await page.goto('/local-preview?legacy=1')
   await page.getByRole('button', { name: coach ? /Laila Khoury/ : /Amir Hassan/ }).click()
   await expect(page).toHaveURL(coach ? /\/coach$/ : /\/today$/)
 }

@@ -115,7 +115,7 @@ test('organization program authoring, reviewed delivery, recording and feedback 
     await client.goto(workout)
     await expect(client.getByText('Keep the same load next time.', { exact: true })).toBeVisible()
     await page.goto(base + '/training')
-    await page.getByText('Filter by trainee', { exact: true }).click()
+    await page.getByText('Focus on one trainee', { exact: true }).click()
     await page
       .locator('.member-picker')
       .getByRole('checkbox', { name: 'R4 Client', exact: true })

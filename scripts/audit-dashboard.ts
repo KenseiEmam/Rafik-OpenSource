@@ -41,7 +41,7 @@ for (const engine of [chromium, webkit]) {
       page.on('pageerror', (e) =>
         errors.push({ engine: engine.name(), name, url: page.url(), message: e.message }),
       )
-      await page.goto('/local-preview')
+      await page.goto('/local-preview?legacy=1')
       await page.getByRole('button', { name: new RegExp(name) }).click()
       await page.waitForURL(name === 'Laila' ? /\/coach$/ : /\/organization\//)
       await dataReady()

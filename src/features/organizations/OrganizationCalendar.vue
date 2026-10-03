@@ -8,6 +8,9 @@ import { language as l, errorMessage, locale } from '../../lib/i18n'
 import MonthCalendar from '../../components/MonthCalendar.vue'
 import PageState from '../../components/PageState.vue'
 import OrganizationNav from './OrganizationNav.vue'
+import AgendaEvent from './AgendaEvent.vue'
+import EmptyState from '../../components/EmptyState.vue'
+import { PhCalendarBlank } from '@phosphor-icons/vue'
 import type { CalendarEvent } from './service-types'
 const route = useRoute(),
   router = useRouter(),
@@ -45,14 +48,30 @@ const date = (value: string) =>
     month: 'short',
     timeZone: zone,
   }).format(new Date(value))
-const time = (value: string) =>
-  new Intl.DateTimeFormat(locale.value === 'ar' ? 'ar-AE' : 'en-GB', {
-    hour: '2-digit',
-    minute: '2-digit',
-    timeZone: zone,
-  }).format(new Date(value))
-const missingStaff = (e: CalendarEvent) =>
-  !e.people?.some((p) => p.duty === 'staff' && p.active && p.roles.includes('trainer'))
+const eventLink = (e: CalendarEvent) => base + '/calendar/' + e.id + '?from=' + start.value
+// When the chosen range is empty, show the nearest real sessions instead of a dead end.
+const nearby = ref<{ upcoming: CalendarEvent[]; recent: CalendarEvent[] }>({
+  upcoming: [],
+  recent: [],
+})
+async function loadNearby(current: number) {
+  const later = addDays(end.value, 1) > today ? addDays(end.value, 1) : today
+  const range = (from: string, to: string) =>
+    request<{ items: CalendarEvent[] }>(
+      `/v1/workspaces/${id}/calendar?view=${view}&from=${from}&to=${to}&zone=${encodeURIComponent(zone)}`,
+    ).then((r) => r.items.filter((e) => e.state !== 'cancelled'))
+  const [upcoming, recent] = await Promise.all([
+    range(later, addDays(later, 30)).catch(() => []),
+    start.value > addDays(today, -1)
+      ? range(addDays(today, -30), addDays(today, -1)).catch(() => [])
+      : Promise.resolve([] as CalendarEvent[]),
+  ])
+  if (current !== generation) return
+  nearby.value = {
+    upcoming: upcoming.filter((e) => Date.parse(e.ends_at) > Date.now()).slice(0, 4),
+    recent: recent.reverse().slice(0, 4),
+  }
+}
 let generation = 0
 onUnmounted(() => generation++)
 async function load(append = false) {
@@ -66,6 +85,8 @@ async function load(append = false) {
     if (current !== generation) return
     items.value = append ? [...items.value, ...result.items] : result.items
     next.value = result.next
+    nearby.value = { upcoming: [], recent: [] }
+    if (!append && !items.value.some((e) => e.state !== 'cancelled')) void loadNearby(current)
     await router.replace({ query: { from: start.value } })
   } catch (e) {
     if (current === generation) error.value = errorMessage(e)
@@ -118,19 +139,6 @@ onMounted(() => load())
         l('Schedule event', 'جدولة موعد')
       }}</RouterLink>
     </header>
-    <div class="actions">
-      <label
-        >{{ l('Calendar view', 'عرض التقويم')
-        }}<select
-          :aria-label="l('Calendar view', 'عرض التقويم')"
-          v-model="mode"
-          @change="changeMode"
-        >
-          <option value="month">{{ l('Month', 'شهر') }}</option>
-          <option value="week">{{ l('Week agenda', 'جدول الأسبوع') }}</option>
-        </select></label
-      >
-    </div>
     <form class="calendar-controls" @submit.prevent="load()">
       <button type="button" class="button secondary" @click="move(-7)" :disabled="loading">
         {{
@@ -144,6 +152,18 @@ onMounted(() => load())
       ><button type="button" class="button secondary" @click="move(7)" :disabled="loading">
         {{ mode === 'month' ? l('Next month', 'الشهر التالي') : l('Next week', 'الأسبوع التالي') }}
       </button>
+      <label class="calendar-view-choice"
+        >{{ l('Calendar view', 'عرض التقويم')
+        }}<select
+          v-model="mode"
+          :aria-label="l('Calendar view', 'عرض التقويم')"
+          :disabled="loading"
+          @change="changeMode"
+        >
+          <option value="month">{{ l('Month', 'شهر') }}</option>
+          <option value="week">{{ l('Week agenda', 'جدول الأسبوع') }}</option>
+        </select></label
+      >
     </form>
     <p class="small-print">{{ start }} — {{ end }} · {{ zone }}</p>
     <label class="check-label"
@@ -172,56 +192,70 @@ onMounted(() => load())
         {{
           selectedDay
             ? date(selectedDay + 'T12:00:00')
-            : l('Booked sessions & events', 'الحصص والمواعيد المحجوزة')
+            : l('Sessions & events', 'الجلسات والمواعيد')
         }}
+        <span v-if="!loading" class="section-count">· {{ visible.length }}</span>
       </h2>
       <button v-if="selectedDay" class="text-link" @click="selectedDay = ''">
         {{ l('Show all dates', 'عرض كل التواريخ') }}
       </button>
     </div>
     <PageState :loading="loading" :error="error" @retry="load()"
-      ><section v-if="!visible.length" class="empty-state panel">
-        <h2>{{ l('No bookings for these dates', 'لا توجد حجوزات لهذه التواريخ') }}</h2>
-        <p>
-          {{ l('Choose another day or schedule a session.', 'اختر يوماً آخر أو جدول حصة.') }}
-        </p>
-      </section>
+      ><template v-if="!visible.length"
+        ><EmptyState
+          :icon="PhCalendarBlank"
+          :title="
+            selectedDay
+              ? l('Nothing booked on this day', 'لا حجوزات في هذا اليوم')
+              : mode === 'week'
+                ? l('No sessions this week', 'لا جلسات هذا الأسبوع')
+                : l('No sessions this month', 'لا جلسات هذا الشهر')
+          "
+          :text="
+            view === 'trainee'
+              ? l(
+                  'When your organization books you into a session or assessment, it appears here.',
+                  'عندما تحجز لك مؤسستك جلسة أو تقييماً سيظهر هنا.',
+                )
+              : l(
+                  'Pick another date, or schedule a session for your trainees.',
+                  'اختر تاريخاً آخر أو جدول جلسة لمتدربيك.',
+                )
+          "
+          ><button v-if="selectedDay" class="button secondary small" @click="selectedDay = ''">
+            {{ l('Show the whole month', 'عرض الشهر كاملاً') }}</button
+          ><RouterLink
+            v-if="view !== 'trainee'"
+            class="button small"
+            :to="base + '/calendar/new'"
+            >{{ l('Schedule a session', 'جدولة جلسة') }}</RouterLink
+          ></EmptyState
+        >
+        <section
+          v-if="!selectedDay && (nearby.upcoming.length || nearby.recent.length)"
+          class="calendar-nearby"
+          :aria-label="l('Other sessions', 'جلسات أخرى')"
+        >
+          <template v-if="nearby.upcoming.length">
+            <h3>{{ l('Next scheduled', 'المجدولة التالية') }}</h3>
+            <ol class="agenda-list">
+              <li v-for="e in nearby.upcoming" :key="e.id">
+                <AgendaEvent :event="e" :zone="zone" :to="eventLink(e)" />
+              </li>
+            </ol>
+          </template>
+          <template v-if="nearby.recent.length">
+            <h3>{{ l('Recently held', 'عُقدت مؤخراً') }}</h3>
+            <ol class="agenda-list">
+              <li v-for="e in nearby.recent" :key="e.id">
+                <AgendaEvent :event="e" :zone="zone" :to="eventLink(e)" />
+              </li>
+            </ol>
+          </template></section
+      ></template>
       <ol v-else class="agenda-list">
         <li v-for="e in visible" :key="e.id">
-          <RouterLink :to="base + '/calendar/' + e.id + '?from=' + start" class="agenda-event"
-            ><div class="agenda-time">
-              <strong>{{ date(e.starts_at) }}</strong
-              ><span>{{ time(e.starts_at) }} — {{ time(e.ends_at) }}</span>
-            </div>
-            <div class="agenda-content">
-              <span class="tag">{{
-                e.kind === 'assessment' ? l('Assessment', 'تقييم') : l('Training', 'تدريب')
-              }}</span>
-              <h2>{{ e.title }}</h2>
-              <p>{{ e.location || l('Location to be agreed', 'الموقع يحدد لاحقاً') }}</p>
-              <p class="small-print">
-                {{
-                  e.people
-                    ?.filter((p) => p.duty === 'staff')
-                    .map((p) => p.name)
-                    .join(' · ')
-                }}
-              </p>
-              <p v-if="e.state === 'scheduled' && missingStaff(e)" class="attention-label">
-                {{ l('Trainer reassignment needed', 'يلزم إعادة تعيين المدرب') }}
-              </p>
-            </div>
-            <span class="event-state"
-              >{{
-                e.state === 'completed'
-                  ? l('Completed', 'مكتمل')
-                  : e.state === 'cancelled'
-                    ? l('Cancelled', 'ملغي')
-                    : l('Open event', 'فتح الموعد')
-              }}
-              ↗</span
-            ></RouterLink
-          >
+          <AgendaEvent :event="e" :zone="zone" :to="eventLink(e)" />
         </li>
       </ol>
       <button v-if="next !== null" class="button secondary" :disabled="loading" @click="load(true)">
@@ -244,60 +278,39 @@ onMounted(() => load())
 .calendar-controls label {
   min-width: 0;
 }
+.calendar-view-choice {
+  margin-inline-start: auto;
+}
+.calendar-view-choice select {
+  min-width: 170px;
+}
 .agenda-list {
   list-style: none;
   padding: 0;
-  margin: 24px 0;
+  margin: 12px 0 24px;
 }
-.agenda-event {
-  display: grid;
-  grid-template-columns: 180px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 24px;
-  padding: 24px 0;
-  border-block-start: 1px solid var(--line);
-}
-.agenda-time {
-  display: grid;
-  gap: 8px;
-  font-size: 0.85rem;
-}
-.agenda-time span,
-.event-state {
+.section-count {
   color: var(--muted);
-  font-size: 0.85rem;
+  font-weight: 500;
 }
-.agenda-content {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-.agenda-content h2 {
-  font-size: 1.2rem;
-  margin: 8px 0;
-}
-.agenda-content p {
-  margin: 4px 0;
-}
-.attention-label {
-  color: var(--accent);
-  font-weight: 650;
+.calendar-nearby h3 {
+  font-size: 0.95rem;
+  margin-top: 24px;
+  color: var(--muted);
 }
 @media (max-width: 650px) {
-  .agenda-event {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
-  }
-  .agenda-time {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 16px;
-  }
   .calendar-controls {
     gap: 10px;
   }
   .calendar-controls label {
     order: -1;
-    flex-basis: 100%;
+    flex: 1 1 140px;
+  }
+  .calendar-view-choice {
+    margin-inline-start: 0;
+  }
+  .calendar-view-choice select {
+    min-width: 0;
   }
   .calendar-controls button {
     flex: 1;

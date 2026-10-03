@@ -49,6 +49,34 @@
 .dashboard-frame .page-heading > p:last-child {
   margin-top: 8px;
 }
+/* One heading scale inside workspaces: the page title is the only large heading,
+   section titles step down clearly and list/card titles step down again.
+   :where() keeps these defaults at element specificity so component rules still win. */
+:where(.dashboard-frame main) h2 {
+  font-size: 1.2rem;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+:where(.dashboard-frame main) h3 {
+  font-size: 1rem;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+.dashboard-frame .section-heading h2,
+.dashboard-frame .coach-next h2,
+.dashboard-frame .plan-card h2,
+.dashboard-frame .library-row h2,
+.dashboard-frame .feedback-form h2,
+.dashboard-frame .pending-invites h2,
+.dashboard-frame .overview-title h2 {
+  font-size: 1.2rem;
+}
+.dashboard-frame .section-heading h2 {
+  margin: 8px 0 4px;
+}
+.dashboard-frame .empty-state h2 {
+  font-size: 1.05rem;
+}
 .dashboard-frame .panel {
   padding: 22px;
 }
@@ -184,9 +212,6 @@
   }
   .dashboard-frame > .messages-main {
     overflow: hidden;
-  }
-  .dashboard-frame > main:has(.organization-messages.is-creating) {
-    overflow: auto;
   }
   .dashboard-frame .organization-people > section:first-child {
     max-height: calc(100dvh - 330px);

@@ -7,6 +7,7 @@ import { request, localPreview } from '../../lib/backend'
 import { language as l } from '../../lib/i18n'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
+import AppModal from '../../components/AppModal.vue'
 const router = useRouter(),
   route = useRoute(),
   kind = ref(route.query.start === 'independent' ? 'independent' : 'organization'),
@@ -107,56 +108,57 @@ function create() {
         →</RouterLink
       >
     </div>
-    <button
-      class="button secondary"
-      style="margin-block: 24px"
-      @click="adding = !adding"
-      :aria-expanded="adding"
-    >
+    <button class="button secondary" style="margin-block: 24px" @click="adding = true">
       {{ l('Set up a workspace', 'إعداد مساحة عمل') }}
     </button>
     <CommandStatus :command="command" />
-    <form v-if="adding" class="panel form-stack" @submit.prevent="create">
-      <h2>{{ l('A simple start', 'بداية بسيطة') }}</h2>
-      <p v-if="draftError" class="notice error" role="alert">{{ draftError }}</p>
-      <p v-else-if="name" class="muted" aria-live="polite">
-        {{
-          draftSaved
-            ? l('Draft saved on this device.', 'حُفظت المسودة على هذا الجهاز.')
-            : l('Saving draft…', 'جارٍ حفظ المسودة…')
-        }}
-      </p>
-      <fieldset class="command-fields" :disabled="locked">
-        <label
-          >{{ l('What are you setting up?', 'ماذا تريد إعداد؟')
-          }}<select v-model="kind">
-            <option value="organization">{{ l('An organization', 'مؤسسة') }}</option>
-            <option
-              v-if="localPreview && !contexts.some((c) => c.kind === 'independent')"
-              value="independent"
-            >
-              {{ l('My independent coaching', 'تدريبي المستقل') }}
-            </option>
-          </select></label
-        ><label
-          >{{ l('Name', 'الاسم')
-          }}<input v-model="name" maxlength="100" required autocomplete="organization"
-        /></label>
-        <p class="muted">
+    <AppModal
+      v-model:open="adding"
+      :title="l('Set up a workspace', 'إعداد مساحة عمل')"
+      :dismissible="!command.state.busy"
+    >
+      <form class="form-stack" @submit.prevent="create">
+        <CommandStatus :command="command" />
+        <p v-if="draftError" class="notice error" role="alert">{{ draftError }}</p>
+        <p v-else-if="name" class="muted" aria-live="polite">
           {{
-            kind === 'organization'
-              ? l(
-                  'You will be an administrator. Invite other admins, trainers and trainees when you are ready.',
-                  'ستكون مسؤولاً. ادعُ مسؤولين ومدربين ومتدربين عندما تكون جاهزاً.',
-                )
-              : l(
-                  'Start with your own plans and clients. No additional profile setup is required.',
-                  'ابدأ بخططك ومتدربيك دون إعداد ملف إضافي.',
-                )
+            draftSaved
+              ? l('Draft saved on this device.', 'حُفظت المسودة على هذا الجهاز.')
+              : l('Saving draft…', 'جارٍ حفظ المسودة…')
           }}
         </p>
-        <button class="button">{{ l('Create workspace', 'إنشاء مساحة العمل') }}</button>
-      </fieldset>
-    </form>
+        <fieldset class="command-fields" :disabled="locked">
+          <label
+            >{{ l('What are you setting up?', 'ماذا تريد إعداد؟')
+            }}<select v-model="kind">
+              <option value="organization">{{ l('An organization', 'مؤسسة') }}</option>
+              <option
+                v-if="localPreview && !contexts.some((c) => c.kind === 'independent')"
+                value="independent"
+              >
+                {{ l('My independent coaching', 'تدريبي المستقل') }}
+              </option>
+            </select></label
+          ><label
+            >{{ l('Name', 'الاسم')
+            }}<input v-model="name" maxlength="100" required autocomplete="organization"
+          /></label>
+          <p class="muted">
+            {{
+              kind === 'organization'
+                ? l(
+                    'You will be an administrator. Invite other admins, trainers and trainees when you are ready.',
+                    'ستكون مسؤولاً. ادعُ مسؤولين ومدربين ومتدربين عندما تكون جاهزاً.',
+                  )
+                : l(
+                    'Start with your own plans and clients. No additional profile setup is required.',
+                    'ابدأ بخططك ومتدربيك دون إعداد ملف إضافي.',
+                  )
+            }}
+          </p>
+          <button class="button">{{ l('Create workspace', 'إنشاء مساحة العمل') }}</button>
+        </fieldset>
+      </form>
+    </AppModal>
   </div>
 </template>

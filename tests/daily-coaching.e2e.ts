@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 const clientPath = '/coach/clients/40000000-0000-4000-8000-000000000001'
 async function coach(page: import('@playwright/test').Page) {
-  await page.goto('/local-preview')
+  await page.goto('/local-preview?legacy=1')
   await page.getByRole('button', { name: /Laila Khoury/ }).click()
   await expect(page).toHaveURL(/\/coach$/)
 }
@@ -184,7 +184,7 @@ test('custom exercise and mixed multiweek plan reach actual client recording and
     }),
     client = await context.newPage()
   try {
-    await client.goto('/local-preview')
+    await client.goto('/local-preview?legacy=1')
     await client.getByRole('button', { name: /Amir Hassan/ }).click()
     await expect(client).toHaveURL(/\/today$/)
     await client.getByRole('button', { name: 'Start workout', exact: true }).first().click()

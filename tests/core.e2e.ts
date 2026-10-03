@@ -68,7 +68,7 @@ test('coach publishes and invites; verified client trains; coach replies', async
 }, info) => {
   const email = `pilot-${crypto.randomUUID()}@rafik.test`
   const title = `Steady strength ${Date.now()}`
-  await page.goto('/local-preview')
+  await page.goto('/local-preview?legacy=1')
   await page.getByRole('button', { name: /Laila Khoury/ }).click()
   await expect(page).toHaveURL(/\/coach$/)
   await page.goto('/coach/plans/new')
@@ -158,7 +158,7 @@ test('offline saves and lost acknowledgments recover; concurrent devices preserv
   context,
   browser,
 }) => {
-  await page.goto('/local-preview')
+  await page.goto('/local-preview?legacy=1')
   await page.getByRole('button', { name: /Amir Hassan/ }).click()
   await expect(page).toHaveURL(/\/today$/)
   await page.goto('/routine')
@@ -186,7 +186,7 @@ test('offline saves and lost acknowledgments recover; concurrent devices preserv
   await page.unroute('**/v1/commands/save_session')
   const otherContext = await browser.newContext()
   const other = await otherContext.newPage()
-  await other.goto(testWeb + '/local-preview')
+  await other.goto(testWeb + '/local-preview?legacy=1')
   await other.getByRole('button', { name: /Amir Hassan/ }).click()
   await expect(other).toHaveURL(/\/today$/)
   await other.goto(url)
@@ -286,7 +286,7 @@ test('guest account save returns to the completed session and adopts it automati
 })
 
 test('plan drafts recover after interruption and failed publication', async ({ page }) => {
-  await page.goto('/local-preview')
+  await page.goto('/local-preview?legacy=1')
   await page.getByRole('button', { name: /Laila Khoury/ }).click()
   await expect(page).toHaveURL(/\/coach$/)
   await page.goto('/coach/plans/new')

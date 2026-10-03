@@ -28,6 +28,16 @@ const note = ref(''),
   error = ref(''),
   message = ref('')
 const loading = ref(true)
+const minutes = computed(() =>
+  session.value?.completed_at
+    ? Math.max(
+        1,
+        Math.round(
+          (Date.parse(session.value.completed_at) - Date.parse(session.value.started_at)) / 60000,
+        ),
+      )
+    : null,
+)
 async function load() {
   loading.value = true
   error.value = ''
@@ -103,7 +113,9 @@ onMounted(async () => {
   <div class="container page">
     <RouterLink :to="back" class="back-link"
       ><PhArrowLeft :size="18" class="directional" />{{
-        language('Review list', 'قائمة المراجعة')
+        context.workspace
+          ? language('Back to training', 'العودة إلى التدريب')
+          : language('Review list', 'قائمة المراجعة')
       }}</RouterLink
     ><PageState :loading="loading" :error="!session ? error : ''" @retry="load"
       ><template v-if="session"
@@ -115,6 +127,35 @@ onMounted(async () => {
             {{ dateLabel(session.completed_at || session.started_at) }}
           </p>
         </div>
+        <dl class="review-summary">
+          <div>
+            <dt>{{ language('Status', 'الحالة') }}</dt>
+            <dd>
+              {{
+                session.status === 'completed'
+                  ? session.reviewed_at
+                    ? language('Reviewed', 'تمت المراجعة')
+                    : language('Completed', 'مكتملة')
+                  : language('In progress', 'قيد التنفيذ')
+              }}
+            </dd>
+          </div>
+          <div>
+            <dt>{{ language('Sets recorded', 'المجموعات المسجلة') }}</dt>
+            <dd>
+              {{ session.entries.filter((e) => e.completed).length }} /
+              {{ session.entries.length }}
+            </dd>
+          </div>
+          <div>
+            <dt>{{ language('Exercises', 'التمارين') }}</dt>
+            <dd>{{ session.prescription.exercises.length }}</dd>
+          </div>
+          <div v-if="minutes !== null">
+            <dt>{{ language('Duration', 'المدة') }}</dt>
+            <dd>{{ minutes }} {{ language('min', 'دقيقة') }}</dd>
+          </div>
+        </dl>
         <CommandStatus :command="command" :show-notice="false" />
         <div class="review-layout">
           <section>
@@ -201,3 +242,28 @@ onMounted(async () => {
     >
   </div>
 </template>
+<style scoped>
+.review-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 1px;
+  margin: 0 0 24px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.review-summary > div {
+  background: var(--surface);
+  padding: 12px 14px;
+}
+.review-summary dt {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.review-summary dd {
+  margin: 4px 0 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+</style>

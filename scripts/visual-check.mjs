@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright'
 import{writeFileSync}from'node:fs'
 const browser=await chromium.launch();const results=[];const errors=[]
 for(const width of (process.argv.includes('--phone-only')?[320,390]:[320,390,768,1440])){
- const context=await browser.newContext({viewport:{width,height:1000}});const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));await page.goto('http://127.0.0.1:5173/local-preview');await page.getByRole('button',{name:/Laila Khoury/}).click();await page.waitForURL('**/coach')
+ const context=await browser.newContext({viewport:{width,height:1000}});const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));await page.goto('http://127.0.0.1:5173/local-preview?legacy=1');await page.getByRole('button',{name:/Laila Khoury/}).click();await page.waitForURL('**/coach')
  for(const lang of ['en','ar'])for(const theme of ['light','dark']){
   await page.evaluate(({lang,theme})=>{localStorage.setItem('rafik.locale',lang);localStorage.setItem('rafik.theme',theme)},{lang,theme})
   for(const path of ['/','/routine','/today','/history','/coach','/coach/plans','/coach/plans/new','/coach/clients','/coach/clients/40000000-0000-4000-8000-000000000001','/coach/exercises','/settings','/help','/privacy','/missing']){

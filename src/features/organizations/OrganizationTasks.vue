@@ -11,6 +11,7 @@ import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
 import MemberPicker from './MemberPicker.vue'
 import OrganizationNav from './OrganizationNav.vue'
+import AppModal from '../../components/AppModal.vue'
 const context = programContext(useRoute()),
   key = `trainer-tasks:${user.value!.id}:${context.key}`,
   today = localDate(profile.value?.timezone || 'UTC')
@@ -236,14 +237,19 @@ onUnmounted(() => {
         {{ l('Discard draft', 'تجاهل المسودة') }}
       </button>
     </div>
-    <section v-if="draft && editing && context.view === 'admin'" class="panel task-editor">
-      <div class="section-heading">
-        <h2>{{ draft.revision ? l('Edit task', 'تعديل المهمة') : l('New task', 'مهمة جديدة') }}</h2>
-        <button class="text-link" :disabled="locked" @click="editing = false">
-          {{ l('Close editor', 'إغلاق المحرر') }}
-        </button>
-      </div>
-      <form @submit.prevent="save">
+    <AppModal
+      :open="!!draft && editing && context.view === 'admin'"
+      :title="draft?.revision ? l('Edit task', 'تعديل المهمة') : l('New task', 'مهمة جديدة')"
+      :description="
+        l(
+          'Unfinished changes stay saved on this device if you close this window.',
+          'تبقى التغييرات غير المكتملة محفوظة على هذا الجهاز عند إغلاق النافذة.',
+        )
+      "
+      :dismissible="!locked"
+      @update:open="editing = $event"
+    >
+      <form v-if="draft" class="task-editor" @submit.prevent="save">
         <fieldset class="form-fields" :disabled="locked">
           <label
             >{{ l('Task title', 'عنوان المهمة')
@@ -283,13 +289,15 @@ onUnmounted(() => {
           <div class="actions">
             <button class="button" :disabled="locked || draft.members.length !== 1">
               {{ l('Save task', 'حفظ المهمة') }}</button
+            ><button type="button" class="text-link" :disabled="locked" @click="editing = false">
+              {{ l('Close editor', 'إغلاق المحرر') }}</button
             ><button type="button" class="text-link" @click="discard">
               {{ l('Discard draft', 'تجاهل المسودة') }}
             </button>
           </div>
         </fieldset>
       </form>
-    </section>
+    </AppModal>
     <div class="task-filters">
       <label
         >{{ l('Search tasks', 'البحث في المهام') }}<input type="search" v-model="search" /></label

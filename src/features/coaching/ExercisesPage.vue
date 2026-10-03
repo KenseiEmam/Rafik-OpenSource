@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { request } from '../../lib/backend'
 import MultiChoice from '../../components/MultiChoice.vue'
+import AppModal from '../../components/AppModal.vue'
 import OrganizationUpload, { type UploadedAsset } from '../../components/OrganizationUpload.vue'
 import ExerciseDemo from '../../components/ExerciseDemo.vue'
 import { exerciseVideos, videoForExercise, exerciseAssetUrl } from '../../lib/exercise-media'
@@ -351,234 +352,252 @@ onMounted(async () => {
     <p v-if="error" class="notice error" role="alert">{{ error }}</p>
     <p v-if="message" class="notice success" role="status">{{ message }}</p>
     <CommandStatus :command="command" :show-notice="false" />
-    <section v-if="editing && authorized" class="panel exercise-editor">
-      <form class="context-form" @submit.prevent="save">
-        <fieldset class="form-fields" :disabled="busy">
-          <div class="section-heading">
-            <h2>
-              {{
-                editing.revision
-                  ? language('Edit your exercise', 'تعديل تمرينك')
-                  : language('New exercise', 'تمرين جديد')
-              }}
-            </h2>
-            <button type="button" class="text-link" :disabled="busy" @click="close">
-              {{ language('Discard and close', 'تجاهل وإغلاق') }}
-            </button>
-          </div>
-          <p v-if="restored" class="notice">
-            {{ language('Your exercise draft was restored.', 'تم استرداد مسودة التمرين.') }}
-          </p>
-          <p>
-            {{
-              language(
-                'Assigned trainees see the instructions captured when you publish a plan. Library sharing is shown below.',
-                'يرى المتدرب التعليمات المحفوظة عند نشر الخطة. نطاق مشاركة المكتبة موضح أدناه.',
-              )
-            }}
-          </p>
-          <fieldset :disabled="busy">
-            <div class="field-pair">
-              <label
-                >{{ language('Exercise name', 'اسم التمرين')
-                }}<input v-model="editing.name" required maxlength="100" /></label
-              ><label
-                >{{ language('Recording type', 'نوع التسجيل')
-                }}<select v-model="editing.kind">
-                  <option value="strength">{{ language('Reps and load', 'تكرارات ووزن') }}</option>
-                  <option value="timed">{{ language('Time', 'زمن') }}</option>
-                  <option value="distance">{{ language('Distance', 'مسافة') }}</option>
-                </select></label
-              >
-              <label v-if="!context.workspace"
-                >{{ language('Equipment', 'المعدات')
-                }}<input v-model="editing.equipment" maxlength="100"
-              /></label>
-              <label
-                >{{ language('Movement category', 'فئة الحركة')
-                }}<select v-model="editing.movement">
-                  <option value="">{{ language('Choose a category', 'اختر فئة') }}</option>
-                  <option
-                    v-if="editing.movement && !movements[editing.movement]"
-                    :value="editing.movement"
-                  >
-                    {{ editing.movement }}
-                  </option>
-                  <option v-for="(_, value) in movements" :key="value" :value="value">
-                    {{ optionLabel(value, movements) }}
-                  </option>
-                </select></label
-              >
-            </div>
-            <template v-if="context.workspace">
-              <label v-if="context.view === 'admin'"
-                >{{ language('Available to', 'متاح لـ')
-                }}<select v-model="editing.scope">
-                  <option value="organization">
-                    {{ language('All trainers in this organization', 'كل مدربي هذه المؤسسة') }}
-                  </option>
-                  <option value="private">{{ language('Only me', 'أنا فقط') }}</option>
-                </select></label
-              >
-              <p v-else class="small-print">
-                {{
-                  editing.scope === 'organization'
-                    ? language('Shared within this organization.', 'مشترك داخل هذه المؤسسة.')
-                    : language(
-                        'Only you can find this exercise in the library. Assigned trainees can see its published demonstration.',
-                        'أنت فقط ترى التمرين في المكتبة. يرى المتدربون المعيّنون الشرح المنشور.',
-                      )
-                }}
-              </p>
-              <MultiChoice
-                v-model="editing.body_parts"
-                :label="language('Body areas', 'مناطق الجسم')"
-                :options="multiOptions(areas, categoryLabel)"
-              />
-              <MultiChoice
-                v-model="editing.muscles"
-                :label="language('Muscle groups', 'المجموعات العضلية')"
-                :options="multiOptions(muscles, (v) => optionLabel(v, muscles))"
-              />
-              <MultiChoice
-                v-model="editing.equipment_items"
-                :label="language('Equipment', 'المعدات')"
-                :options="multiOptions(equipmentArabic, equipmentLabel)"
-              />
-            </template>
-            <label v-else
-              >{{ language('Body area', 'منطقة الجسم')
-              }}<select v-model="editing.body_part">
-                <option value="">{{ language('Not categorized', 'غير مصنّف') }}</option>
-                <option v-for="(_, area) in areas" :key="area" :value="area">
-                  {{ categoryLabel(area) }}
-                </option>
-              </select></label
-            >
-            <label
-              >{{ language('Instructions', 'التعليمات')
-              }}<textarea
-                v-model="editing.instructions"
-                required
-                rows="4"
-                maxlength="2000"
-              /></label
-            ><label v-if="!context.workspace"
-              >{{ language('Demonstration link (optional, HTTPS)', 'رابط الشرح (اختياري، HTTPS)')
-              }}<input v-model="editing.media_url" type="url" pattern="https://.*" maxlength="500"
-            /></label>
-            <OrganizationUpload
-              v-if="context.workspace"
-              :workspace="context.workspace"
-              :view="context.view"
-              purpose="exercise"
-              @uploaded="uploaded"
-              @busy="uploading = $event"
-            />
-            <details
-              v-if="context.workspace"
-              @toggle="($event.target as HTMLDetailsElement).open && findResources()"
-            >
-              <summary>{{ language('Choose an uploaded file', 'اختر ملفاً مرفوعاً') }}</summary>
-              <label
-                >{{ language('Search uploaded files', 'البحث في الملفات المرفوعة')
-                }}<input type="search" v-model="resourceSearch" @input="findResources()"
-              /></label>
-              <p v-if="resourceError" role="alert">{{ resourceError }}</p>
-              <div class="uploaded-options">
-                <button
-                  v-for="file in resourceFiles"
-                  :key="file.id"
-                  type="button"
-                  class="button secondary small"
-                  @click="uploaded(file)"
-                >
-                  {{ file.filename }}
-                </button>
-              </div>
-              <p v-if="!resourceFiles.length">
-                {{
-                  language(
-                    'No matching files. Upload a demonstration above.',
-                    'لا توجد ملفات مطابقة. ارفع شرحاً أعلاه.',
-                  )
-                }}
-              </p>
-              <button
-                v-if="resourceNext !== null"
-                type="button"
-                class="text-link"
-                @click="findResources(true)"
-              >
-                {{ language('More files', 'المزيد من الملفات') }}
-              </button>
-            </details>
-            <button
-              v-if="editing.media_asset"
-              type="button"
-              class="text-link"
-              @click="editing.media_asset = undefined"
-            >
-              {{ language('Remove uploaded demonstration', 'إزالة الشرح المرفوع') }}
-            </button>
-            <label
-              >{{ language('Library demonstration (optional)', 'شرح من المكتبة (اختياري)')
-              }}<select v-model="editing.media_ref">
-                <option :value="null">
-                  {{ language('No library demonstration', 'دون شرح من المكتبة') }}
-                </option>
-                <option v-for="item in exerciseVideos" :key="item.id" :value="item.id">
-                  {{ exercises.find((e) => e.id === item.exerciseId)?.name || item.name }} ·
-                  {{ language('Video', 'فيديو') }}
-                </option>
-                <option v-for="item in media.items" :key="item.id" :value="item.id">
-                  {{
-                    locale === 'ar'
-                      ? exercises.find((e) => e.id === item.exerciseId)?.name_ar || item.sourceSlug
-                      : exercises.find((e) => e.id === item.exerciseId)?.name || item.sourceSlug
-                  }}
-                </option>
-              </select></label
-            >
-            <p class="subtle">
+    <AppModal
+      :open="!!editing && authorized"
+      size="large"
+      :dismissible="false"
+      :title="
+        editing?.revision
+          ? language('Edit your exercise', 'تعديل تمرينك')
+          : language('New exercise', 'تمرين جديد')
+      "
+      :description="
+        language(
+          'Your draft is kept on this device until you save or discard it.',
+          'تُحفظ المسودة على هذا الجهاز حتى تحفظها أو تتجاهلها.',
+        )
+      "
+    >
+      <section v-if="editing" class="exercise-editor">
+        <p v-if="error" class="notice error" role="alert">{{ error }}</p>
+        <CommandStatus :command="command" :show-notice="false" />
+        <form class="context-form" @submit.prevent="save">
+          <fieldset class="form-fields" :disabled="busy">
+            <p v-if="restored" class="notice">
+              {{ language('Your exercise draft was restored.', 'تم استرداد مسودة التمرين.') }}
+            </p>
+            <p>
               {{
                 language(
-                  'Choose an exact movement match. An uploaded demonstration takes priority.',
-                  'اختر شرحاً مطابقاً للحركة. تكون الأولوية للشرح المرفوع.',
+                  'Assigned trainees see the instructions captured when you publish a plan. Library sharing is shown below.',
+                  'يرى المتدرب التعليمات المحفوظة عند نشر الخطة. نطاق مشاركة المكتبة موضح أدناه.',
                 )
               }}
             </p>
-            <ExerciseDemo :exercise="editing" />
-            <details>
-              <summary>
-                {{ language('Arabic translation (optional)', 'الترجمة العربية (اختيارية)') }}
-              </summary>
-              <div class="context-form">
+            <fieldset :disabled="busy">
+              <div class="field-pair">
                 <label
-                  >{{ language('Arabic name', 'الاسم بالعربية')
-                  }}<input v-model="editing.name_ar" maxlength="100" dir="rtl" /></label
+                  >{{ language('Exercise name', 'اسم التمرين')
+                  }}<input v-model="editing.name" required maxlength="100" /></label
                 ><label
-                  >{{ language('Arabic equipment', 'المعدات بالعربية')
-                  }}<input v-model="editing.equipment_ar" maxlength="100" dir="rtl" /></label
-                ><label
-                  >{{ language('Arabic instructions', 'التعليمات بالعربية')
-                  }}<textarea
-                    v-model="editing.instructions_ar"
-                    maxlength="2000"
-                    rows="3"
-                    dir="rtl"
-                  />
-                </label>
+                  >{{ language('Recording type', 'نوع التسجيل')
+                  }}<select v-model="editing.kind">
+                    <option value="strength">
+                      {{ language('Reps and load', 'تكرارات ووزن') }}
+                    </option>
+                    <option value="timed">{{ language('Time', 'زمن') }}</option>
+                    <option value="distance">{{ language('Distance', 'مسافة') }}</option>
+                  </select></label
+                >
+                <label v-if="!context.workspace"
+                  >{{ language('Equipment', 'المعدات')
+                  }}<input v-model="editing.equipment" maxlength="100"
+                /></label>
+                <label
+                  >{{ language('Movement category', 'فئة الحركة')
+                  }}<select v-model="editing.movement">
+                    <option value="">{{ language('Choose a category', 'اختر فئة') }}</option>
+                    <option
+                      v-if="editing.movement && !movements[editing.movement]"
+                      :value="editing.movement"
+                    >
+                      {{ editing.movement }}
+                    </option>
+                    <option v-for="(_, value) in movements" :key="value" :value="value">
+                      {{ optionLabel(value, movements) }}
+                    </option>
+                  </select></label
+                >
               </div>
-            </details>
-            <button class="button" :disabled="busy">
-              {{ language('Save exercise', 'حفظ التمرين') }}
-            </button>
+              <template v-if="context.workspace">
+                <label v-if="context.view === 'admin'"
+                  >{{ language('Available to', 'متاح لـ')
+                  }}<select v-model="editing.scope">
+                    <option value="organization">
+                      {{ language('All trainers in this organization', 'كل مدربي هذه المؤسسة') }}
+                    </option>
+                    <option value="private">{{ language('Only me', 'أنا فقط') }}</option>
+                  </select></label
+                >
+                <p v-else class="small-print">
+                  {{
+                    editing.scope === 'organization'
+                      ? language('Shared within this organization.', 'مشترك داخل هذه المؤسسة.')
+                      : language(
+                          'Only you can find this exercise in the library. Assigned trainees can see its published demonstration.',
+                          'أنت فقط ترى التمرين في المكتبة. يرى المتدربون المعيّنون الشرح المنشور.',
+                        )
+                  }}
+                </p>
+                <MultiChoice
+                  v-model="editing.body_parts"
+                  :label="language('Body areas', 'مناطق الجسم')"
+                  :options="multiOptions(areas, categoryLabel)"
+                />
+                <MultiChoice
+                  v-model="editing.muscles"
+                  :label="language('Muscle groups', 'المجموعات العضلية')"
+                  :options="multiOptions(muscles, (v) => optionLabel(v, muscles))"
+                />
+                <MultiChoice
+                  v-model="editing.equipment_items"
+                  :label="language('Equipment', 'المعدات')"
+                  :options="multiOptions(equipmentArabic, equipmentLabel)"
+                />
+              </template>
+              <label v-else
+                >{{ language('Body area', 'منطقة الجسم')
+                }}<select v-model="editing.body_part">
+                  <option value="">{{ language('Not categorized', 'غير مصنّف') }}</option>
+                  <option v-for="(_, area) in areas" :key="area" :value="area">
+                    {{ categoryLabel(area) }}
+                  </option>
+                </select></label
+              >
+              <label
+                >{{ language('Instructions', 'التعليمات')
+                }}<textarea
+                  v-model="editing.instructions"
+                  required
+                  rows="4"
+                  maxlength="2000"
+                /></label
+              ><label v-if="!context.workspace"
+                >{{ language('Demonstration link (optional, HTTPS)', 'رابط الشرح (اختياري، HTTPS)')
+                }}<input
+                  v-model="editing.media_url"
+                  type="url"
+                  pattern="https://.*"
+                  maxlength="500"
+              /></label>
+              <OrganizationUpload
+                v-if="context.workspace"
+                :workspace="context.workspace"
+                :view="context.view"
+                purpose="exercise"
+                @uploaded="uploaded"
+                @busy="uploading = $event"
+              />
+              <details
+                v-if="context.workspace"
+                @toggle="($event.target as HTMLDetailsElement).open && findResources()"
+              >
+                <summary>{{ language('Choose an uploaded file', 'اختر ملفاً مرفوعاً') }}</summary>
+                <label
+                  >{{ language('Search uploaded files', 'البحث في الملفات المرفوعة')
+                  }}<input type="search" v-model="resourceSearch" @input="findResources()"
+                /></label>
+                <p v-if="resourceError" role="alert">{{ resourceError }}</p>
+                <div class="uploaded-options">
+                  <button
+                    v-for="file in resourceFiles"
+                    :key="file.id"
+                    type="button"
+                    class="button secondary small"
+                    @click="uploaded(file)"
+                  >
+                    {{ file.filename }}
+                  </button>
+                </div>
+                <p v-if="!resourceFiles.length">
+                  {{
+                    language(
+                      'No matching files. Upload a demonstration above.',
+                      'لا توجد ملفات مطابقة. ارفع شرحاً أعلاه.',
+                    )
+                  }}
+                </p>
+                <button
+                  v-if="resourceNext !== null"
+                  type="button"
+                  class="text-link"
+                  @click="findResources(true)"
+                >
+                  {{ language('More files', 'المزيد من الملفات') }}
+                </button>
+              </details>
+              <button
+                v-if="editing.media_asset"
+                type="button"
+                class="text-link"
+                @click="editing.media_asset = undefined"
+              >
+                {{ language('Remove uploaded demonstration', 'إزالة الشرح المرفوع') }}
+              </button>
+              <label
+                >{{ language('Library demonstration (optional)', 'شرح من المكتبة (اختياري)')
+                }}<select v-model="editing.media_ref">
+                  <option :value="null">
+                    {{ language('No library demonstration', 'دون شرح من المكتبة') }}
+                  </option>
+                  <option v-for="item in exerciseVideos" :key="item.id" :value="item.id">
+                    {{ exercises.find((e) => e.id === item.exerciseId)?.name || item.name }} ·
+                    {{ language('Video', 'فيديو') }}
+                  </option>
+                  <option v-for="item in media.items" :key="item.id" :value="item.id">
+                    {{
+                      locale === 'ar'
+                        ? exercises.find((e) => e.id === item.exerciseId)?.name_ar ||
+                          item.sourceSlug
+                        : exercises.find((e) => e.id === item.exerciseId)?.name || item.sourceSlug
+                    }}
+                  </option>
+                </select></label
+              >
+              <p class="subtle">
+                {{
+                  language(
+                    'Choose an exact movement match. An uploaded demonstration takes priority.',
+                    'اختر شرحاً مطابقاً للحركة. تكون الأولوية للشرح المرفوع.',
+                  )
+                }}
+              </p>
+              <ExerciseDemo :exercise="editing" />
+              <details>
+                <summary>
+                  {{ language('Arabic translation (optional)', 'الترجمة العربية (اختيارية)') }}
+                </summary>
+                <div class="context-form">
+                  <label
+                    >{{ language('Arabic name', 'الاسم بالعربية')
+                    }}<input v-model="editing.name_ar" maxlength="100" dir="rtl" /></label
+                  ><label
+                    >{{ language('Arabic equipment', 'المعدات بالعربية')
+                    }}<input v-model="editing.equipment_ar" maxlength="100" dir="rtl" /></label
+                  ><label
+                    >{{ language('Arabic instructions', 'التعليمات بالعربية')
+                    }}<textarea
+                      v-model="editing.instructions_ar"
+                      maxlength="2000"
+                      rows="3"
+                      dir="rtl"
+                    />
+                  </label>
+                </div>
+              </details>
+              <div class="actions">
+                <button class="button" :disabled="busy">
+                  {{ language('Save exercise', 'حفظ التمرين') }}</button
+                ><button type="button" class="text-link" :disabled="busy" @click="close">
+                  {{ language('Discard and close', 'تجاهل وإغلاق') }}
+                </button>
+              </div>
+            </fieldset>
           </fieldset>
-        </fieldset>
-      </form>
-    </section>
-    <PageState v-if="!editing" :loading="loading" @retry="load">
+        </form>
+      </section>
+    </AppModal>
+    <PageState :loading="loading" @retry="load">
       <div class="catalog-controls">
         <button
           type="button"
@@ -960,7 +979,7 @@ onMounted(async () => {
   min-width: 0;
 }
 .catalog-detail h2 {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   line-height: 1.25;
   margin-block: 8px 16px;
   overflow-wrap: anywhere;

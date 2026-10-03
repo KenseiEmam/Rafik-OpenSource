@@ -10,7 +10,7 @@ async function filters(page: import('@playwright/test').Page) {
     await toggle.click()
 }
 async function coach(page: import('@playwright/test').Page) {
-  await page.goto('/local-preview')
+  await page.goto('/local-preview?legacy=1')
   await page.getByRole('button', { name: /Laila Khoury/ }).click()
   await expect(page).toHaveURL(/\/coach$/)
   await page.goto('/coach/exercises')
@@ -42,7 +42,7 @@ test('full library categories, bounded pages and later-page selection work acros
   ).toBeVisible()
   await page.getByRole('button', { name: 'Clear filters', exact: true }).click()
   await expect(page.locator('.catalog-choice')).toHaveCount(24)
-  await page.goto('/local-preview')
+  await page.goto('/local-preview?legacy=1')
   await page.getByRole('button', { name: /Kareem Nasser/ }).click()
   await expect(page).toHaveURL(/organization/)
   await page.goto('/organization/12000000-0000-4000-8000-000000000001/trainer/exercises')

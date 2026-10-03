@@ -5,7 +5,7 @@ const browser=await chromium.launch(), results=[], errors=[]
 const rel='40000000-0000-4000-8000-000000000001',response='73000000-0000-4000-8000-000000000001',assessment='73000000-0000-4000-8000-000000000003'
 for(const width of [320,390,768,1440])for(const coach of [true,false]){
  const context=await browser.newContext({viewport:{width,height:1000}}),page=await context.newPage()
- page.on('pageerror',e=>errors.push(e.message));await page.goto('http://127.0.0.1:5173/local-preview');await page.getByRole('button',{name:coach?/Laila Khoury/:/Amir Hassan/}).click();await page.waitForURL(coach?'**/coach':'**/today')
+ page.on('pageerror',e=>errors.push(e.message));await page.goto('http://127.0.0.1:5173/local-preview?legacy=1');await page.getByRole('button',{name:coach?/Laila Khoury/:/Amir Hassan/}).click();await page.waitForURL(coach?'**/coach':'**/today')
  const routes=coach?['/coach/checkins','/coach/forms/new','/coach/checkins/'+response,'/coach/checkins/'+assessment,'/coach/messages/'+rel,'/coach/clients/'+rel+'/progress']:['/checkins','/checkins/'+response,'/checkins/'+assessment,'/messages/'+rel,'/progress']
  for(const lang of ['en','ar'])for(const theme of ['light','dark']){
   await page.evaluate(({lang,theme})=>{localStorage.setItem('rafik.locale',lang);localStorage.setItem('rafik.theme',theme)},{lang,theme})

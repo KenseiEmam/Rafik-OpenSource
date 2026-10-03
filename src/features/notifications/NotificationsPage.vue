@@ -223,7 +223,7 @@ onMounted(() => load())
   max-width: 550px;
 }
 .notification-empty h2 {
-  font-size: 1.4rem;
+  font-size: 1.1rem;
 }
 @media (max-width: 550px) {
   .notification-row {

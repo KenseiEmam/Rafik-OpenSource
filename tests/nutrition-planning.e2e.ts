@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright'
 import { layoutIssues } from './layout-contract'
 const relationship = '40000000-0000-4000-8000-000000000001'
 async function login(page: Page, name = 'Laila Khoury') {
-  await page.goto('/local-preview')
+  await page.goto('/local-preview?legacy=1')
   await page.getByRole('button', { name: new RegExp(name) }).click()
   await expect(page).toHaveURL(name === 'Laila Khoury' ? /\/coach$/ : /\/today$/)
 }

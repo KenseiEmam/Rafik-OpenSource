@@ -117,7 +117,7 @@ onMounted(load)
   max-width: 760px;
 }
 .notification-preferences h2 {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
 }
 .preference-row {
   padding: 18px 0;

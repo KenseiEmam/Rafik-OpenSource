@@ -18,6 +18,8 @@ const props = defineProps<{
     revision: number
     people: { id: string; manager: boolean }[]
   }
+  /** Rendered inside AppModal, which supplies the title and close control. */
+  embedded?: boolean
 }>()
 const emit = defineEmits<{ saved: [id: string]; close: [] }>()
 const key = `channel-editor:${user.value!.id}:${props.workspace}:${props.view}:${props.initial?.id || 'new'}`
@@ -121,8 +123,8 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <section class="channel-editor panel">
-    <div class="heading-actions">
+  <section class="channel-editor" :class="{ panel: !embedded, embedded }">
+    <div v-if="!embedded" class="heading-actions">
       <h2>
         {{
           initial
@@ -221,6 +223,10 @@ onMounted(async () => {
 .channel-editor {
   max-width: 760px;
   margin-block: 20px;
+}
+.channel-editor.embedded {
+  max-width: none;
+  margin: 0;
 }
 .channel-editor h2 {
   font-size: 1.2rem;

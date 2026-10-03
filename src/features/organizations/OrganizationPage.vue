@@ -14,6 +14,8 @@ import OrganizationFollowUp from './OrganizationFollowUp.vue'
 import OrganizationUpcoming from './OrganizationUpcoming.vue'
 import MemberPicker from './MemberPicker.vue'
 import OrganizationNav from './OrganizationNav.vue'
+import AppModal from '../../components/AppModal.vue'
+import PeopleImport from './PeopleImport.vue'
 const route = useRoute(),
   router = useRouter(),
   id = String(route.params.workspace),
@@ -36,6 +38,8 @@ const data = ref<Organization>(),
   newName = ref(''),
   closeName = ref(''),
   inviting = ref(false),
+  inviteMode = ref<'single' | 'import'>('single'),
+  pendingImport = ref(false),
   email = ref(''),
   roles = ref<Role[]>(['trainee']),
   inviteLink = ref(''),
@@ -189,6 +193,11 @@ async function closeEditor() {
   if (member) document.querySelector<HTMLElement>(`[data-member="${member}"]`)?.focus()
 }
 
+function openInvite(mode: 'single' | 'import') {
+  inviteMode.value = mode
+  inviteLink.value = ''
+  inviting.value = true
+}
 function invite() {
   inviteLink.value = ''
   const token = [...crypto.getRandomValues(new Uint8Array(32))]
@@ -222,8 +231,14 @@ onMounted(async () => {
   if (draft) {
     email.value = draft.email
     roles.value = draft.roles
+    // Recover an interrupted invitation where it was left.
     inviting.value = !!draft.email
   }
+  pendingImport.value = !!(
+    await getDraft<{ rows: { state: string }[] }>(
+      `organization-import:${user.value!.id}:${id}`,
+    ).catch(() => undefined)
+  )?.rows?.some((r) => r.state === 'pending' || r.state === 'failed')
   draftReady.value = true
 })
 </script>
@@ -247,82 +262,28 @@ onMounted(async () => {
           }}
         </p>
       </div>
-      <button
-        v-if="data && view === 'admin'"
-        class="button"
-        @click="inviting = !inviting"
-        :aria-expanded="inviting"
-      >
-        {{ l('Invite people', 'دعوة أشخاص') }}
-      </button>
+      <div v-if="data && view === 'admin'" class="actions organization-add-actions">
+        <button class="button secondary" @click="openInvite('import')">
+          {{ l('Import from Excel', 'استيراد من Excel') }}</button
+        ><button class="button" @click="openInvite('single')">
+          {{ l('Invite people', 'دعوة أشخاص') }}
+        </button>
+      </div>
     </header>
     <CommandStatus :command="command" />
+    <p v-if="pendingImport && view === 'admin' && !inviting" class="notice">
+      {{
+        l(
+          'A spreadsheet import was interrupted on this device.',
+          'توقف استيراد جدول بيانات على هذا الجهاز.',
+        )
+      }}
+      <button class="text-link" @click="openInvite('import')">
+        {{ l('Resume import', 'متابعة الاستيراد') }}
+      </button>
+    </p>
     <PageState :loading="loading" :error="error" @retry="load"
       ><template v-if="data">
-        <section v-if="inviting && view === 'admin'" class="panel organization-invite">
-          <form class="form-stack" @submit.prevent="invite">
-            <h2>
-              {{
-                l('Invite someone to ' + data.workspace.name, 'دعوة شخص إلى ' + data.workspace.name)
-              }}
-            </h2>
-            <p v-if="draftError" class="notice error" role="alert">{{ draftError }}</p>
-            <p v-else-if="email" class="muted" aria-live="polite">
-              {{
-                draftSaved
-                  ? l(
-                      'Invitation draft saved on this device.',
-                      'حُفظت مسودة الدعوة على هذا الجهاز.',
-                    )
-                  : l('Saving draft…', 'جارٍ حفظ المسودة…')
-              }}
-            </p>
-            <fieldset class="command-fields" :disabled="locked || !draftReady">
-              <label
-                >{{ l('Email address', 'البريد الإلكتروني')
-                }}<input type="email" v-model="email" maxlength="254" required
-              /></label>
-              <fieldset class="role-choices">
-                <legend>
-                  {{ l('Access within this organization', 'الصلاحيات داخل هذه المؤسسة') }}
-                </legend>
-                <label v-for="role in ['admin', 'trainer', 'trainee'] as Role[]" :key="role"
-                  ><input type="checkbox" v-model="roles" :value="role" />{{
-                    roleName(role)
-                  }}</label
-                >
-              </fieldset>
-              <p class="muted">
-                {{
-                  l(
-                    'Choose more than one role when needed. The invitation must be accepted using this verified email address.',
-                    'اختر أكثر من دور عند الحاجة. يجب قبول الدعوة بهذا البريد الإلكتروني الموثّق.',
-                  )
-                }}
-              </p>
-              <button class="button" :disabled="!roles.length">
-                {{ l('Create invitation', 'إنشاء الدعوة') }}
-              </button>
-            </fieldset>
-          </form>
-        </section>
-        <div v-if="inviteLink" class="notice success">
-          <p>
-            {{
-              l(
-                'Invitation ready. Share this link with the intended person.',
-                'الدعوة جاهزة. شارك الرابط مع الشخص المقصود.',
-              )
-            }}
-          </p>
-          <label
-            >{{ l('Invitation link', 'رابط الدعوة')
-            }}<input
-              :value="inviteLink"
-              readonly
-              @focus="($event.target as HTMLInputElement).select()"
-          /></label>
-        </div>
         <template v-if="section === 'overview'">
           <div v-if="view !== 'trainee'" class="organization-summary">
             <RouterLink :to="base + '/people'"
@@ -674,6 +635,112 @@ onMounted(async () => {
         </p>
       </template></PageState
     >
+    <AppModal
+      v-if="data && view === 'admin'"
+      v-model:open="inviting"
+      size="large"
+      :title="l('Add people to ' + data.workspace.name, 'إضافة أشخاص إلى ' + data.workspace.name)"
+      :description="
+        l(
+          'People join by accepting their invitation with the same email address.',
+          'ينضم الأشخاص بقبول دعوتهم بالبريد الإلكتروني نفسه.',
+        )
+      "
+    >
+      <div class="modal-tabs" role="group" :aria-label="l('How to add people', 'طريقة الإضافة')">
+        <button
+          type="button"
+          :aria-pressed="inviteMode === 'single'"
+          :class="{ active: inviteMode === 'single' }"
+          @click="inviteMode = 'single'"
+        >
+          {{ l('One person', 'شخص واحد') }}</button
+        ><button
+          type="button"
+          :aria-pressed="inviteMode === 'import'"
+          :class="{ active: inviteMode === 'import' }"
+          @click="inviteMode = 'import'"
+        >
+          {{ l('Import from Excel', 'استيراد من Excel') }}
+        </button>
+      </div>
+      <PeopleImport
+        v-if="inviteMode === 'import'"
+        :workspace="id"
+        :organization="data.workspace.name"
+        @changed="
+          pendingImport = false
+          load()
+        "
+        @close="inviting = false"
+      />
+      <template v-else-if="inviteLink"
+        ><div class="notice success">
+          <p>
+            {{
+              l(
+                'Invitation ready. Share this link with the intended person.',
+                'الدعوة جاهزة. شارك الرابط مع الشخص المقصود.',
+              )
+            }}
+          </p>
+          <label
+            >{{ l('Invitation link', 'رابط الدعوة')
+            }}<input
+              :value="inviteLink"
+              readonly
+              @focus="($event.target as HTMLInputElement).select()"
+          /></label>
+        </div>
+        <div class="actions modal-end-actions">
+          <button type="button" class="button secondary" @click="inviteLink = ''">
+            {{ l('Invite someone else', 'دعوة شخص آخر') }}</button
+          ><button type="button" class="button" @click="inviting = false">
+            {{ l('Done', 'تم') }}
+          </button>
+        </div></template
+      >
+      <form v-else class="form-stack" @submit.prevent="invite">
+        <CommandStatus :command="command" />
+        <p v-if="draftError" class="notice error" role="alert">{{ draftError }}</p>
+        <p v-else-if="email" class="muted" aria-live="polite">
+          {{
+            draftSaved
+              ? l('Invitation draft saved on this device.', 'حُفظت مسودة الدعوة على هذا الجهاز.')
+              : l('Saving draft…', 'جارٍ حفظ المسودة…')
+          }}
+        </p>
+        <fieldset class="command-fields" :disabled="locked || !draftReady">
+          <label
+            >{{ l('Email address', 'البريد الإلكتروني')
+            }}<input type="email" v-model="email" maxlength="254" required
+          /></label>
+          <fieldset class="role-choices">
+            <legend>
+              {{ l('Access within this organization', 'الصلاحيات داخل هذه المؤسسة') }}
+            </legend>
+            <label v-for="role in ['admin', 'trainer', 'trainee'] as Role[]" :key="role"
+              ><input type="checkbox" v-model="roles" :value="role" />{{ roleName(role) }}</label
+            >
+          </fieldset>
+          <p class="muted">
+            {{
+              l(
+                'Choose more than one role when needed. The invitation must be accepted using this verified email address.',
+                'اختر أكثر من دور عند الحاجة. يجب قبول الدعوة بهذا البريد الإلكتروني الموثّق.',
+              )
+            }}
+          </p>
+          <div class="actions modal-end-actions">
+            <button type="button" class="text-link" @click="inviting = false">
+              {{ l('Cancel', 'إلغاء') }}</button
+            ><button class="button" :disabled="!roles.length">
+              {{ l('Create invitation', 'إنشاء الدعوة') }}
+            </button>
+          </div>
+        </fieldset>
+      </form>
+    </AppModal>
     <RouterLink v-if="error" class="text-link" to="/workspaces">{{
       l('Choose another workspace', 'اختيار مساحة عمل أخرى')
     }}</RouterLink>

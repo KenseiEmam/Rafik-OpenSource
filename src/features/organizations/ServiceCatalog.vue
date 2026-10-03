@@ -10,6 +10,7 @@ import CommandStatus from '../teams/CommandStatus.vue'
 import MemberPicker from './MemberPicker.vue'
 import PageState from '../../components/PageState.vue'
 import OrganizationNav from './OrganizationNav.vue'
+import AppModal from '../../components/AppModal.vue'
 import type { Organization } from './types'
 import type { Drill, TrainingGroup, AssessmentTemplate } from './service-types'
 const route = useRoute(),
@@ -41,6 +42,7 @@ const fresh = () => ({
   definition: [{ key: crypto.randomUUID(), name: '', kind: 'number', unit: '', min: 0 } as Drill],
 })
 const draft = ref(fresh())
+const hasDraft = ref(false)
 const members = computed(
   () => organization.value?.members.filter((m) => m.active && m.roles.includes('trainee')) || [],
 )
@@ -76,6 +78,7 @@ const command = useCommand<'save'>(
   key,
   async () => {
     editing.value = false
+    hasDraft.value = false
     await removeDraft(key)
     draft.value = fresh()
     await load()
@@ -103,6 +106,7 @@ function edit(item?: TrainingGroup & AssessmentTemplate) {
 }
 async function close() {
   editing.value = false
+  hasDraft.value = false
   await removeDraft(key)
   draft.value = fresh()
 }
@@ -122,6 +126,7 @@ watch(
       saved.value = false
       await storeDraft(key, draft.value)
       saved.value = true
+      hasDraft.value = true
       draftError.value = ''
     } catch (e) {
       draftError.value = errorMessage(e)
@@ -135,6 +140,7 @@ onMounted(async () => {
   if (stored) {
     draft.value = stored
     editing.value = true
+    hasDraft.value = true
   }
   draftReady.value = true
 })
@@ -172,115 +178,138 @@ onMounted(async () => {
     </header>
     <CommandStatus :command="command" />
     <p v-if="draftError" role="alert" class="notice error">{{ draftError }}</p>
-    <form v-if="editing && organization" class="panel service-editor" @submit.prevent="save">
-      <fieldset class="form-fields" :disabled="locked">
-        <div class="heading-actions">
-          <h2>
-            {{
-              draft.revision ? l('Edit details', 'تعديل التفاصيل') : l('Set it up', 'إعداد جديد')
-            }}
-          </h2>
-          <button type="button" class="text-link" @click="close">
-            {{ l('Close editor', 'إغلاق المحرر') }}
-          </button>
-        </div>
-        <label
-          >{{ l('Name', 'الاسم')
-          }}<input v-if="templates" v-model="draft.title" maxlength="100" required /><input
-            v-else
-            v-model="draft.name"
-            maxlength="100"
-            required
-        /></label>
-        <template v-if="templates"
-          ><section
-            v-for="(drill, index) in draft.definition"
-            :key="drill.key"
-            class="assessment-drill-editor"
-          >
-            <div class="heading-actions">
-              <h3>{{ l('Drill', 'اختبار') }} {{ index + 1 }}</h3>
-              <button
-                type="button"
-                class="text-link"
-                :disabled="draft.definition.length === 1"
-                @click="draft.definition.splice(index, 1)"
-              >
-                {{ l('Remove drill', 'حذف الاختبار') }} {{ index + 1 }}
-              </button>
-            </div>
-            <label
-              >{{ l('Drill name', 'اسم الاختبار')
-              }}<input v-model="drill.name" maxlength="100" required
-            /></label>
-            <div class="service-field-row">
+    <p v-if="!editing && hasDraft" class="notice">
+      {{
+        l(
+          'Unfinished changes are saved on this device.',
+          'التغييرات غير المكتملة محفوظة على هذا الجهاز.',
+        )
+      }}
+      <button class="text-link" :disabled="locked" @click="editing = true">
+        {{ l('Continue draft', 'متابعة المسودة') }}</button
+      ><button class="text-link" :disabled="locked" @click="close">
+        {{ l('Discard draft', 'تجاهل المسودة') }}
+      </button>
+    </p>
+    <AppModal
+      :open="editing && !!organization"
+      size="large"
+      :title="
+        draft.revision
+          ? l('Edit details', 'تعديل التفاصيل')
+          : templates
+            ? l('New assessment template', 'قالب تقييم جديد')
+            : l('New training group', 'مجموعة تدريب جديدة')
+      "
+      :dismissible="!locked"
+      @update:open="editing = $event"
+    >
+      <form class="service-editor" @submit.prevent="save">
+        <fieldset class="form-fields" :disabled="locked">
+          <label
+            >{{ l('Name', 'الاسم')
+            }}<input v-if="templates" v-model="draft.title" maxlength="100" required /><input
+              v-else
+              v-model="draft.name"
+              maxlength="100"
+              required
+          /></label>
+          <template v-if="templates"
+            ><section
+              v-for="(drill, index) in draft.definition"
+              :key="drill.key"
+              class="assessment-drill-editor"
+            >
+              <div class="heading-actions">
+                <h3>{{ l('Drill', 'اختبار') }} {{ index + 1 }}</h3>
+                <button
+                  type="button"
+                  class="text-link"
+                  :disabled="draft.definition.length === 1"
+                  @click="draft.definition.splice(index, 1)"
+                >
+                  {{ l('Remove drill', 'حذف الاختبار') }} {{ index + 1 }}
+                </button>
+              </div>
               <label
-                >{{ l('Result type', 'نوع النتيجة')
-                }}<select v-model="drill.kind">
-                  <option value="number">{{ l('Number', 'رقم') }}</option>
-                  <option value="text">{{ l('Observation', 'ملاحظة') }}</option>
-                </select></label
-              ><label v-if="drill.kind === 'number'"
-                >{{ l('Unit', 'الوحدة')
-                }}<input
-                  v-model="drill.unit"
-                  maxlength="30"
-                  :placeholder="l('e.g. seconds, repetitions', 'مثلاً ثوانٍ أو تكرارات')"
+                >{{ l('Drill name', 'اسم الاختبار')
+                }}<input v-model="drill.name" maxlength="100" required
               /></label>
-            </div>
-            <details v-if="drill.kind === 'number'">
-              <summary>{{ l('Optional result bounds', 'حدود اختيارية للنتيجة') }}</summary>
               <div class="service-field-row">
                 <label
-                  >{{ l('Minimum', 'الحد الأدنى')
-                  }}<input v-model.number="drill.min" type="number" step="any" /></label
-                ><label
-                  >{{ l('Maximum', 'الحد الأقصى')
-                  }}<input v-model.number="drill.max" type="number" step="any"
+                  >{{ l('Result type', 'نوع النتيجة')
+                  }}<select v-model="drill.kind">
+                    <option value="number">{{ l('Number', 'رقم') }}</option>
+                    <option value="text">{{ l('Observation', 'ملاحظة') }}</option>
+                  </select></label
+                ><label v-if="drill.kind === 'number'"
+                  >{{ l('Unit', 'الوحدة')
+                  }}<input
+                    v-model="drill.unit"
+                    maxlength="30"
+                    :placeholder="l('e.g. seconds, repetitions', 'مثلاً ثوانٍ أو تكرارات')"
                 /></label>
               </div>
-            </details>
-          </section>
-          <button
-            type="button"
-            class="button secondary"
-            :disabled="draft.definition.length >= 12"
-            @click="addDrill"
+              <details v-if="drill.kind === 'number'">
+                <summary>{{ l('Optional result bounds', 'حدود اختيارية للنتيجة') }}</summary>
+                <div class="service-field-row">
+                  <label
+                    >{{ l('Minimum', 'الحد الأدنى')
+                    }}<input v-model.number="drill.min" type="number" step="any" /></label
+                  ><label
+                    >{{ l('Maximum', 'الحد الأقصى')
+                    }}<input v-model.number="drill.max" type="number" step="any"
+                  /></label>
+                </div>
+              </details>
+            </section>
+            <button
+              type="button"
+              class="button secondary"
+              :disabled="draft.definition.length >= 12"
+              @click="addDrill"
+            >
+              {{ l('Add drill', 'إضافة اختبار') }}
+            </button></template
           >
-            {{ l('Add drill', 'إضافة اختبار') }}
-          </button></template
-        >
-        <MemberPicker
-          v-else
-          :workspace="id"
-          :view="view"
-          role="trainee"
-          v-model="draft.members"
-          :label="l('Find trainees', 'البحث عن متدربين')"
-          @options="organization!.members = $event"
-        />
-        <label v-if="draft.revision" class="check-label"
-          ><input v-model="draft.archived" type="checkbox" />{{
-            l('Archive from new scheduling', 'أرشفة من الجدولة الجديدة')
-          }}</label
-        >
-        <p class="small-print">
-          {{
-            l(
-              saved
-                ? 'Draft saved on this device.'
-                : 'Changes are saved on this device as you type.',
-              saved
-                ? 'حُفظت المسودة على هذا الجهاز.'
-                : 'تُحفظ التغييرات على هذا الجهاز أثناء الكتابة.',
-            )
-          }}
-        </p>
-        <button class="button">
-          {{ templates ? l('Save template', 'حفظ القالب') : l('Save group', 'حفظ المجموعة') }}
-        </button>
-      </fieldset>
-    </form>
+          <MemberPicker
+            v-else
+            :workspace="id"
+            :view="view"
+            role="trainee"
+            v-model="draft.members"
+            :label="l('Find trainees', 'البحث عن متدربين')"
+            @options="organization!.members = $event"
+          />
+          <label v-if="draft.revision" class="check-label"
+            ><input v-model="draft.archived" type="checkbox" />{{
+              l('Archive from new scheduling', 'أرشفة من الجدولة الجديدة')
+            }}</label
+          >
+          <p class="small-print">
+            {{
+              l(
+                saved
+                  ? 'Draft saved on this device.'
+                  : 'Changes are saved on this device as you type.',
+                saved
+                  ? 'حُفظت المسودة على هذا الجهاز.'
+                  : 'تُحفظ التغييرات على هذا الجهاز أثناء الكتابة.',
+              )
+            }}
+          </p>
+          <div class="actions">
+            <button class="button">
+              {{
+                templates ? l('Save template', 'حفظ القالب') : l('Save group', 'حفظ المجموعة')
+              }}</button
+            ><button type="button" class="text-link" @click="close">
+              {{ l('Discard changes', 'تجاهل التغييرات') }}
+            </button>
+          </div>
+        </fieldset>
+      </form>
+    </AppModal>
     <form class="organization-toolbar" @submit.prevent="load()">
       <label
         >{{ l('Search library', 'البحث في المكتبة')

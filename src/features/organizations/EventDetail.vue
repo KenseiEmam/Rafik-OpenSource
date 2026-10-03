@@ -96,6 +96,41 @@ const fundingReason = (value: string) =>
       : value === 'prize'
         ? l('Prize', 'جائزة')
         : l('Other', 'أخرى')
+const tally = computed(() => {
+  const count = (value: string) => trainees.value.filter((p) => p.attendance === value).length
+  return {
+    present: count('present'),
+    absent: count('absent'),
+    excused: count('excused'),
+    unmarked: count('unmarked'),
+    notes: trainees.value.filter((p) => p.session_note?.trim()).length,
+  }
+})
+const clockTime = (value: string) =>
+  new Intl.DateTimeFormat(locale.value === 'ar' ? 'ar-AE' : 'en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: data.value?.event.timezone || 'UTC',
+  }).format(new Date(value))
+// Describes the package effect using the founder-confirmed policy; independent sessions never deduct.
+function fundingOutcome(p: EventPerson) {
+  if (!p.package_id) return l('Independent', 'مستقلة') + ' · ' + fundingReason(p.independent_reason)
+  const title = p.package?.title || l('Package', 'باقة')
+  const done = data.value?.event.state === 'completed'
+  if (p.attendance === 'present')
+    return title + ' · ' + (done ? l('1 session used', 'استُخدمت جلسة') : l('reserved', 'محجوزة'))
+  if (p.attendance === 'absent')
+    return (
+      title +
+      ' · ' +
+      (p.charge_absence === true
+        ? l('no-show charged', 'غياب محتسب')
+        : p.charge_absence === false
+          ? l('no-show released', 'غياب محرر')
+          : l('decision needed', 'يلزم قرار'))
+    )
+  return title + ' · ' + (done ? l('released', 'محررة') : l('reserved', 'محجوزة'))
+}
 const attendanceDirty = (p: EventPerson) =>
   attendance.value[p.member_id] !== p.attendance ||
   (p.attendance === 'absent' &&
@@ -338,6 +373,81 @@ onMounted(load)
                 ? l('Completed', 'مكتمل')
                 : l('Scheduled', 'مجدول')
           }}</span>
+        </section>
+        <section
+          v-if="started && data.event.state !== 'cancelled' && trainees.length"
+          class="event-record"
+          aria-labelledby="event-record-title"
+        >
+          <h2 id="event-record-title">
+            {{
+              data.event.state === 'completed'
+                ? l('What happened', 'ما الذي جرى')
+                : l('Session so far', 'الجلسة حتى الآن')
+            }}
+          </h2>
+          <dl class="event-record-stats">
+            <div>
+              <dt>{{ l('Attended', 'حضروا') }}</dt>
+              <dd>{{ tally.present }} / {{ trainees.length }}</dd>
+            </div>
+            <div>
+              <dt>{{ l('Absent', 'غائبون') }}</dt>
+              <dd>{{ tally.absent }}</dd>
+            </div>
+            <div>
+              <dt>{{ l('Excused', 'بعذر') }}</dt>
+              <dd>{{ tally.excused }}</dd>
+            </div>
+            <div>
+              <dt>{{ l('Not recorded', 'لم يسجل') }}</dt>
+              <dd>{{ tally.unmarked }}</dd>
+            </div>
+            <div>
+              <dt>{{ l('Session notes', 'ملاحظات الجلسة') }}</dt>
+              <dd>{{ tally.notes }}</dd>
+            </div>
+            <div v-if="data.event.kind === 'assessment'">
+              <dt>{{ l('Results recorded', 'النتائج المسجلة') }}</dt>
+              <dd>{{ data.results.length }}</dd>
+            </div>
+          </dl>
+          <div
+            class="event-record-table"
+            tabindex="0"
+            :aria-label="l('Participant record', 'سجل المشاركين')"
+          >
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">{{ l('Trainee', 'المتدرب') }}</th>
+                  <th scope="col">{{ l('Attendance', 'الحضور') }}</th>
+                  <th scope="col">{{ l('Funding', 'التمويل') }}</th>
+                  <th scope="col">{{ l('Session note', 'ملاحظة الجلسة') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="p in trainees" :key="p.member_id">
+                  <th scope="row" dir="auto">{{ p.name }}</th>
+                  <td>
+                    <span class="attendance-pill" :class="p.attendance">{{
+                      attendanceName(p.attendance)
+                    }}</span>
+                    <small v-if="p.checked_in_at"
+                      >{{ l('Checked in', 'سجّل حضوره') }} {{ clockTime(p.checked_in_at) }}</small
+                    >
+                  </td>
+                  <td>{{ fundingOutcome(p) }}</td>
+                  <td class="event-record-note">
+                    {{ p.session_note || '—' }}
+                    <small v-if="data.results.some((r) => r.member_id === p.member_id)">{{
+                      l('Assessment result recorded', 'نتيجة التقييم مسجلة')
+                    }}</small>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </section>
         <RouterLink
           v-if="
@@ -754,11 +864,87 @@ onMounted(load)
 .event-change h2,
 .result-editor h2,
 .event-participants h2,
-.event-results h2 {
-  font-size: 1.25rem;
+.event-results h2,
+.event-record h2 {
+  font-size: 1.2rem;
 }
 .event-participants {
   margin-block: 32px;
+}
+.event-record {
+  margin-block: 28px 8px;
+}
+.event-record-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1px;
+  margin: 14px 0 18px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.event-record-stats > div {
+  background: var(--surface);
+  padding: 12px 14px;
+}
+.event-record-stats dt {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.event-record-stats dd {
+  margin: 4px 0 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.event-record-table {
+  overflow-x: auto;
+}
+.event-record-table table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.event-record-table th,
+.event-record-table td {
+  text-align: start;
+  vertical-align: top;
+  padding-block: 10px;
+  padding-inline: 0 12px;
+  border-bottom: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+.event-record-table thead th {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+.event-record-table td small {
+  display: block;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.event-record-note {
+  white-space: pre-wrap;
+  max-width: 340px;
+}
+.attendance-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 650;
+  background: var(--surface-soft);
+}
+.attendance-pill.present {
+  background: var(--tint);
+  color: var(--accent);
+}
+.attendance-pill.absent {
+  background: var(--error-bg);
+  color: var(--error);
 }
 .event-participant {
   display: flex;

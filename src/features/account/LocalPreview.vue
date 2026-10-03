@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { PhArrowRight } from '@phosphor-icons/vue'
 import { api, localPreview } from '../../lib/backend'
 import { user, refreshProfile } from '../../app/auth'
@@ -8,6 +8,8 @@ import { language, t, errorMessage } from '../../lib/i18n'
 const busy = ref('')
 const error = ref('')
 const router = useRouter()
+// Independent-coach sample accounts stay reachable for compatibility tests only (?legacy=1).
+const legacy = useRoute().query.legacy === '1'
 async function enter(
   role:
     | 'coach'
@@ -52,67 +54,26 @@ async function enter(
         <h1>
           {{
             language(
-              'Choose a role. Explore the whole workflow.',
-              'اختر دوراً واستكشف رحلة العمل كاملة.',
+              'Choose a role. Explore how a gym runs on Rafik.',
+              'اختر دوراً واستكشف كيف يعمل النادي على رفيق.',
             )
           }}
         </h1>
         <p>
           {{
             language(
-              'These are synthetic accounts in the local database. Use them to try planning, training, and reviewing without sending any real email.',
-              'هذه حسابات تجريبية في قاعدة البيانات المحلية. جرّب التخطيط والتدريب والمراجعة بلا رسائل حقيقية.',
+              'Synthetic accounts in the local database. Switch between an administrator, a trainer and a trainee of the same gym to see each side of the workflow, without sending any real email.',
+              'حسابات تجريبية في قاعدة البيانات المحلية. بدّل بين مسؤول ومدرب ومتدرب في النادي نفسه لرؤية كل جانب من سير العمل، دون إرسال أي بريد حقيقي.',
             )
           }}
         </p>
       </div>
-      <h2>{{ language('Independent coaching', 'التدريب المستقل') }}</h2>
-      <div class="preview-accounts">
-        <button class="preview-account panel" :disabled="!!busy" @click="enter('coach')">
-          <span class="avatar">L</span
-          ><span
-            ><strong>Laila Khoury</strong
-            ><small>{{
-              language('Coach: plans, invitations, and review', 'مدربة: خطط ودعوات ومراجعة')
-            }}</small></span
-          ><PhArrowRight :size="22" class="directional" aria-hidden="true" /></button
-        ><button class="preview-account panel" :disabled="!!busy" @click="enter('client')">
-          <span class="avatar">A</span
-          ><span
-            ><strong>Amir Hassan</strong
-            ><small>{{
-              language(
-                'Client: train, save, and see feedback',
-                'متدرب: تمرّن واحفظ وشاهد الملاحظات',
-              )
-            }}</small></span
-          ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
-        </button>
-        <button class="preview-account panel" :disabled="!!busy" @click="enter('coach2')">
-          <span class="avatar">N</span
-          ><span
-            ><strong>Nour Mahfouz</strong
-            ><small>{{
-              language('Second coach: team collaboration', 'مدرب آخر: تعاون الفريق')
-            }}</small></span
-          ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
-        </button>
-        <button class="preview-account panel" :disabled="!!busy" @click="enter('other')">
-          <span class="avatar">D</span
-          ><span
-            ><strong>Dalia Saad</strong
-            ><small>{{
-              language('Second client: independent access', 'متدربة أخرى: وصول مستقل')
-            }}</small></span
-          ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
-        </button>
-      </div>
-      <h2>{{ language('Organizations', 'المؤسسات') }}</h2>
+      <h2>{{ language('Madar Training', 'مدار للتدريب') }}</h2>
       <p class="preview-context">
         {{
           language(
-            'Madar’s people and training belong to Madar. Omar’s Athar workspace is separate; Kareem can switch between his trainer and trainee roles.',
-            'أشخاص مدار وتدريبهم يتبعون مؤسسة مدار. مساحة عمر في أثر مستقلة؛ ويمكن لكريم التبديل بين دوري المدرب والمتدرب.',
+            'A gym with its own administrators, trainers and trainees. Madar’s people and training history belong to Madar.',
+            'نادٍ له مسؤولوه ومدربوه ومتدربوه. أشخاص مدار وسجلهم التدريبي يتبعون مدار.',
           )
         }}
       </p>
@@ -122,27 +83,25 @@ async function enter(
             {
               role: 'orgadmin' as const,
               name: 'Rania Mansour',
-              description: language('Madar Training · Administrator', 'مدار للتدريب · مسؤولة'),
+              description: language(
+                'Administrator: people, packages, calendar and analytics',
+                'مسؤولة: الأشخاص والباقات والتقويم والتحليلات',
+              ),
             },
             {
               role: 'orgtrainer' as const,
               name: 'Kareem Nasser',
               description: language(
-                'Madar Training · Trainer and trainee',
-                'مدار للتدريب · مدرب ومتدرب',
+                'Trainer: programs, sessions and follow-up (also trains here)',
+                'مدرب: البرامج والجلسات والمتابعة (ويتدرب هنا أيضاً)',
               ),
             },
             {
               role: 'orgtrainee' as const,
               name: 'Sara Khalil',
-              description: language('Madar Training · Trainee', 'مدار للتدريب · متدربة'),
-            },
-            {
-              role: 'orgadmin2' as const,
-              name: 'Omar Saleh',
               description: language(
-                'Athar Academy · Separate organization',
-                'أكاديمية أثر · مؤسسة منفصلة',
+                'Trainee: training, bookings and session feedback',
+                'متدربة: التدريب والحجوزات وتقييم الجلسات',
               ),
             },
           ]"
@@ -155,6 +114,26 @@ async function enter(
           ><span
             ><strong>{{ account.name }}</strong
             ><small>{{ account.description }}</small></span
+          ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
+        </button>
+      </div>
+      <h2>{{ language('A second organization', 'مؤسسة ثانية') }}</h2>
+      <p class="preview-context">
+        {{
+          language(
+            'Athar Academy is fully separate: nothing from Madar is visible here.',
+            'أكاديمية أثر منفصلة تماماً: لا يظهر فيها شيء من مدار.',
+          )
+        }}
+      </p>
+      <div class="preview-accounts">
+        <button class="preview-account panel" :disabled="!!busy" @click="enter('orgadmin2')">
+          <span class="avatar">O</span
+          ><span
+            ><strong>Omar Saleh</strong
+            ><small>{{
+              language('Athar Academy · Administrator', 'أكاديمية أثر · مسؤول')
+            }}</small></span
           ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
         </button>
       </div>
@@ -173,6 +152,57 @@ async function enter(
           ><PhArrowRight :size="22" aria-hidden="true" />
         </button>
       </div>
+      <template v-if="legacy">
+        <h2>{{ language('Legacy compatibility accounts', 'حسابات التوافق القديمة') }}</h2>
+        <p class="preview-context">
+          {{
+            language(
+              'Independent-coach accounts kept only for compatibility checks. They are not part of the gym product.',
+              'حسابات المدربين المستقلين محفوظة لاختبارات التوافق فقط وليست جزءاً من منتج الأندية.',
+            )
+          }}
+        </p>
+        <div class="preview-accounts">
+          <button class="preview-account panel" :disabled="!!busy" @click="enter('coach')">
+            <span class="avatar">L</span
+            ><span
+              ><strong>Laila Khoury</strong
+              ><small>{{
+                language('Coach: plans, invitations, and review', 'مدربة: خطط ودعوات ومراجعة')
+              }}</small></span
+            ><PhArrowRight :size="22" class="directional" aria-hidden="true" /></button
+          ><button class="preview-account panel" :disabled="!!busy" @click="enter('client')">
+            <span class="avatar">A</span
+            ><span
+              ><strong>Amir Hassan</strong
+              ><small>{{
+                language(
+                  'Client: train, save, and see feedback',
+                  'متدرب: تمرّن واحفظ وشاهد الملاحظات',
+                )
+              }}</small></span
+            ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
+          </button>
+          <button class="preview-account panel" :disabled="!!busy" @click="enter('coach2')">
+            <span class="avatar">N</span
+            ><span
+              ><strong>Nour Mahfouz</strong
+              ><small>{{
+                language('Second coach: team collaboration', 'مدرب آخر: تعاون الفريق')
+              }}</small></span
+            ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
+          </button>
+          <button class="preview-account panel" :disabled="!!busy" @click="enter('other')">
+            <span class="avatar">D</span
+            ><span
+              ><strong>Dalia Saad</strong
+              ><small>{{
+                language('Second client: independent access', 'متدربة أخرى: وصول مستقل')
+              }}</small></span
+            ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
+          </button>
+        </div>
+      </template>
       <p v-if="busy" role="status">{{ t('loading') }}</p>
       <p v-if="error" class="notice error" role="alert">{{ error }}</p>
       <RouterLink class="text-link" to="/routine">{{

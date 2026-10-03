@@ -13,7 +13,7 @@ for (const engine of [chromium, webkit]) {
       const context = await browser.newContext({ baseURL: 'http://127.0.0.1:5173' })
       const page = await context.newPage()
       page.on('pageerror', (e) => errors.push(e.message))
-      await page.goto('/local-preview')
+      await page.goto('/local-preview?legacy=1')
       await page.getByRole('button', { name: coach ? /Laila Khoury/ : /Amir Hassan/ }).click()
       await page.waitForURL(coach ? '**/coach' : '**/today')
       const base = coach ? '/coach' : ''

@@ -7,6 +7,7 @@ import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
 import OrganizationNav from './OrganizationNav.vue'
 import ChannelEditor from './ChannelEditor.vue'
+import AppModal from '../../components/AppModal.vue'
 import ChannelThread from './ChannelThread.vue'
 const route = useRoute(),
   router = useRouter(),
@@ -70,31 +71,40 @@ onMounted(() => load())
 </script>
 <template>
   <OrganizationNav />
-  <div
-    class="container page messages-page organization-messages"
-    :class="{ 'has-thread': !!id, 'is-creating': creating }"
-  >
+  <div class="container page messages-page organization-messages" :class="{ 'has-thread': !!id }">
     <header class="messages-heading">
       <h1>{{ l('Messages', 'الرسائل') }}</h1>
       <div class="actions">
-        <button v-if="view !== 'trainee'" class="text-link" @click="creating = !creating">
+        <button v-if="view !== 'trainee'" class="button small" @click="creating = true">
           {{ l('New conversation', 'محادثة جديدة') }}</button
         ><button class="text-link" @click="refresh">{{ l('Refresh', 'تحديث') }}</button>
       </div>
     </header>
-    <ChannelEditor
-      v-if="creating"
-      :workspace="workspace"
-      :view="view"
-      @close="creating = false"
-      @saved="opened"
-    />
+    <AppModal
+      v-model:open="creating"
+      size="large"
+      :title="l('New conversation', 'محادثة جديدة')"
+      :description="
+        l(
+          'Your draft stays on this device until the conversation is created.',
+          'تبقى المسودة على هذا الجهاز حتى إنشاء المحادثة.',
+        )
+      "
+    >
+      <ChannelEditor
+        :workspace="workspace"
+        :view="view"
+        embedded
+        @close="creating = false"
+        @saved="opened"
+      />
+    </AppModal>
     <CommandStatus :command="join" />
     <p v-if="error" role="alert" class="notice error">
       {{ error }}
       <button class="text-link" @click="load()">{{ l('Try again', 'حاول مجدداً') }}</button>
     </p>
-    <div v-if="!creating" class="conversation-layout">
+    <div class="conversation-layout">
       <aside class="conversation-inbox">
         <form class="conversation-search" @submit.prevent="load()">
           <label
@@ -187,11 +197,6 @@ onMounted(() => load())
 .organization-messages {
   min-width: 0;
 }
-.organization-messages.is-creating :deep(.channel-editor) {
-  flex: none;
-  overflow: visible;
-  width: 100%;
-}
 .conversation-search {
   display: grid;
   gap: 8px;
@@ -217,16 +222,12 @@ onMounted(() => load())
   min-height: 0;
 }
 .conversation-placeholder h2 {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
 }
 </style>
 
 <style>
 /* Short viewports may scroll the page; the footer must never cover the inbox. */
-#app:has(.organization-messages.is-creating) {
-  height: auto;
-  min-height: 100dvh;
-}
 #app:has(.organization-messages) {
   min-height: 44rem;
 }

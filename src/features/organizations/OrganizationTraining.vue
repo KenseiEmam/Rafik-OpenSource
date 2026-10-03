@@ -10,6 +10,8 @@ import { startWorkout } from '../../lib/training'
 import OrganizationNav from './OrganizationNav.vue'
 import MemberPicker from './MemberPicker.vue'
 import PageState from '../../components/PageState.vue'
+import EmptyState from '../../components/EmptyState.vue'
+import { PhBarbell } from '@phosphor-icons/vue'
 const route = useRoute(),
   router = useRouter(),
   context = programContext(route)
@@ -40,6 +42,7 @@ const current = computed(() =>
       a.member_id === (context.view === 'trainee' ? data.value?.self : selected.value),
   ),
 )
+const setsDone = (s: Session) => s.entries.filter((e) => e.completed).length
 const name = (id: string) =>
   people.value.find((m) => m.id === id)?.name || l('Former member', 'عضو سابق')
 function scheduled(day: PlanDay) {
@@ -133,23 +136,34 @@ onMounted(() => load())
         >{{ l('Choose a program', 'اختيار برنامج') }}</RouterLink
       >
     </header>
-    <details v-if="context.view !== 'trainee'" class="training-filter">
-      <summary>
-        {{ l('Filter by trainee', 'تصفية حسب المتدرب')
-        }}{{ selected ? ' · ' + name(selected) : '' }}
-      </summary>
-      <MemberPicker
-        :workspace="context.workspace!"
-        :view="context.view"
-        single
-        :model-value="selected ? [selected] : []"
-        :label="l('Find a trainee', 'البحث عن متدرب')"
-        @update:model-value="selected = $event[0] || ''"
-        @options="
-          people = Array.from(new Map([...people, ...$event].map((m) => [m.id, m])).values())
-        "
-      />
-    </details>
+    <section v-if="context.view !== 'trainee'" class="training-filter panel">
+      <div class="training-filter-heading">
+        <h2>
+          {{
+            selected
+              ? l('Showing', 'عرض') + ' · ' + name(selected)
+              : l('Showing all trainees', 'عرض كل المتدربين')
+          }}
+        </h2>
+        <button v-if="selected" type="button" class="text-link" @click="selected = ''">
+          {{ l('Show everyone', 'عرض الجميع') }}
+        </button>
+      </div>
+      <details>
+        <summary>{{ l('Focus on one trainee', 'التركيز على متدرب واحد') }}</summary>
+        <MemberPicker
+          :workspace="context.workspace!"
+          :view="context.view"
+          single
+          :model-value="selected ? [selected] : []"
+          :label="l('Find a trainee', 'البحث عن متدرب')"
+          @update:model-value="selected = $event[0] || ''"
+          @options="
+            people = Array.from(new Map([...people, ...$event].map((m) => [m.id, m])).values())
+          "
+        />
+      </details>
+    </section>
     <PageState :loading="loading" :error="!data ? error : ''" @retry="load()"
       ><p v-if="error && data" class="notice error" role="alert">{{ error }}</p>
       <template v-if="data"
@@ -201,7 +215,15 @@ onMounted(() => load())
             >{{ l('Adapt this program', 'تكييف هذا البرنامج') }}</RouterLink
           >
         </section>
-        <p v-else-if="context.view === 'trainee' || selected" class="notice">
+        <p v-else-if="context.view !== 'trainee' && !selected" class="subtle training-hint">
+          {{
+            l(
+              'Focus on one trainee to see their current program and adapt it.',
+              'ركّز على متدرب واحد لرؤية برنامجه الحالي وتكييفه.',
+            )
+          }}
+        </p>
+        <p v-else class="notice">
           {{
             l(
               'There is no active program yet. Your organization can assign one when it is ready.',
@@ -211,7 +233,12 @@ onMounted(() => load())
         </p>
         <section>
           <div class="heading-actions">
-            <h2>{{ l('Session history', 'سجل الحصص') }}</h2>
+            <h2>
+              {{ l('Recent sessions', 'الحصص الأخيرة') }}
+              <span class="section-count"
+                >· {{ data.sessions.length }}{{ data.next ? '+' : '' }}</span
+              >
+            </h2>
             <RouterLink
               v-if="selected || context.view === 'trainee'"
               class="text-link"
@@ -219,37 +246,74 @@ onMounted(() => load())
               >{{ l('Assessment history', 'سجل التقييمات') }} ↗</RouterLink
             >
           </div>
-          <p v-if="!data.sessions.length" class="subtle">
-            {{
-              l(
-                'Recorded sessions will appear here, including their coach feedback.',
-                'ستظهر الحصص المسجلة هنا مع ملاحظات المدرب.',
-              )
-            }}
-          </p>
-          <RouterLink
-            v-for="s in data.sessions"
-            :key="s.id"
-            class="organization-session-row"
-            :to="
-              context.view === 'trainee'
-                ? '/workout/' + s.id + '?workspace=' + context.workspace
-                : context.base + '/review/' + s.id
+          <EmptyState
+            v-if="!data.sessions.length"
+            :icon="PhBarbell"
+            :title="
+              selected
+                ? l('No sessions recorded for', 'لا حصص مسجلة لـ') + ' ' + name(selected)
+                : l('No sessions recorded yet', 'لا حصص مسجلة بعد')
             "
-            ><div>
-              <strong>{{
-                context.view === 'trainee' ? s.prescription.name : name(s.member_id)
-              }}</strong>
-              <p>{{ s.title }} · {{ dateLabel(s.started_at) }}</p>
-            </div>
-            <span>{{
-              s.status === 'completed'
-                ? s.reviewed_at
-                  ? l('Reviewed', 'تمت المراجعة')
-                  : l('Completed', 'مكتملة')
-                : l('In progress', 'قيد التنفيذ')
-            }}</span></RouterLink
+            :text="
+              context.view === 'trainee'
+                ? l(
+                    'Open a session from your current program. Once you record it, it appears here with your trainer’s feedback.',
+                    'افتح حصة من برنامجك الحالي. بعد تسجيلها تظهر هنا مع ملاحظات مدربك.',
+                  )
+                : l(
+                    'Sessions appear here as soon as trainees start recording workouts from an assigned program.',
+                    'تظهر الحصص هنا بمجرد أن يبدأ المتدربون تسجيل تمارين من برنامج معيّن.',
+                  )
+            "
+            ><button
+              v-if="selected"
+              type="button"
+              class="button secondary small"
+              @click="selected = ''"
+            >
+              {{ l('Show everyone’s sessions', 'عرض حصص الجميع') }}</button
+            ><RouterLink
+              v-if="context.view !== 'trainee'"
+              class="button small"
+              :to="context.base + '/plans'"
+              >{{ l('Assign a program', 'تعيين برنامج') }}</RouterLink
+            ></EmptyState
           >
+          <ol v-else class="session-history">
+            <li v-for="s in data.sessions" :key="s.id">
+              <RouterLink
+                class="organization-session-row"
+                :to="
+                  context.view === 'trainee'
+                    ? '/workout/' + s.id + '?workspace=' + context.workspace
+                    : context.base + '/review/' + s.id
+                "
+                ><div>
+                  <strong dir="auto">{{
+                    context.view === 'trainee' ? s.prescription.name : name(s.member_id)
+                  }}</strong>
+                  <p>
+                    <span dir="auto">{{
+                      context.view === 'trainee' ? s.title : s.prescription.name
+                    }}</span>
+                    · {{ dateLabel(s.completed_at || s.started_at) }} · {{ setsDone(s) }} /
+                    {{ s.entries.length }} {{ l('sets', 'مجموعات') }}
+                  </p>
+                </div>
+                <span class="session-status" :class="s.status"
+                  >{{
+                    s.status === 'completed'
+                      ? s.reviewed_at
+                        ? l('Reviewed', 'تمت المراجعة')
+                        : l('Completed', 'مكتملة')
+                      : l('In progress', 'قيد التنفيذ')
+                  }}
+                  · {{ l('View', 'عرض') }}
+                  <span aria-hidden="true" class="directional">→</span></span
+                ></RouterLink
+              >
+            </li>
+          </ol>
           <button
             v-if="data.next"
             class="button secondary"
@@ -268,9 +332,59 @@ onMounted(() => load())
   </div>
 </template>
 <style scoped>
-.training-person-select {
-  max-width: 560px;
-  margin-block: 16px 24px;
+.training-filter {
+  margin-bottom: 24px;
+}
+.training-filter-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+.training-filter h2 {
+  font-size: 1rem;
+  margin: 0;
+}
+.training-filter details {
+  margin-top: 10px;
+}
+.training-filter summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.training-hint {
+  margin-bottom: 24px;
+}
+.section-count {
+  color: var(--muted);
+  font-weight: 500;
+}
+.session-history {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 20px;
+}
+.organization-session-row {
+  color: inherit;
+  text-decoration: none;
+}
+a.organization-session-row:hover strong {
+  text-decoration: underline;
+}
+.session-status {
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-weight: 650;
+  white-space: nowrap;
+}
+.session-status.in_progress {
+  color: var(--muted);
+}
+.session-status .directional {
+  display: inline-block;
 }
 .organization-session-row {
   display: flex;

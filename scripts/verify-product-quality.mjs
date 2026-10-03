@@ -9,7 +9,7 @@ try {
     const context = await browser.newContext()
     const page = await context.newPage()
     page.on('pageerror', e => errors.push(e.message))
-    await page.goto('http://127.0.0.1:5173/local-preview')
+    await page.goto('http://127.0.0.1:5173/local-preview?legacy=1')
     await page.getByRole('button', { name: coach ? /Laila Khoury/ : /Amir Hassan/ }).click()
     await page.waitForURL(coach ? '**/coach' : '**/today')
     const base = coach ? '/coach' : ''

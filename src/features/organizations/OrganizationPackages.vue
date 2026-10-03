@@ -9,6 +9,7 @@ import { language as l, errorMessage, dateLabel } from '../../lib/i18n'
 import { localDate, addDays } from '../../lib/dates'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
+import AppModal from '../../components/AppModal.vue'
 import TimezonePicker from '../../components/TimezonePicker.vue'
 import MemberPicker from './MemberPicker.vue'
 import OrganizationNav from './OrganizationNav.vue'
@@ -288,71 +289,87 @@ const allocation = (state: string) =>
         {{ l('Discard draft', 'حذف المسودة') }}
       </button>
     </div>
-    <form v-if="editing && draft" class="panel package-editor" @submit.prevent="save">
-      <fieldset :disabled="locked" class="form-fields">
-        <div class="heading-actions">
-          <h2>{{ l('Assign a package', 'تعيين باقة') }}</h2>
-          <button type="button" class="text-link" @click="editing = false">
-            {{ l('Close editor', 'إغلاق المحرر') }}
-          </button>
-        </div>
-        <p v-if="draft.renewed_from" class="notice">
-          {{
-            l(
-              'Creates a new allowance linked to the previous package. Unused sessions are not transferred automatically.',
-              'ينشئ رصيداً جديداً مرتبطاً بالباقة السابقة. لا تُنقل الجلسات غير المستخدمة تلقائياً.',
-            )
-          }}
-        </p>
-        <MemberPicker
-          :disabled="!!draft.renewed_from"
-          :workspace="context.workspace"
-          view="admin"
-          role="trainee"
-          :max="1"
-          v-model="draft.members"
-        /><label
-          >{{ l('Package name', 'اسم الباقة')
-          }}<input
-            v-model="draft.title"
-            maxlength="160"
-            required
-            :placeholder="l('e.g. 8 personal training sessions', 'مثلاً: ٨ جلسات تدريب شخصي')"
-        /></label>
-        <div class="field-pair">
-          <label
-            >{{ l('Session allowance', 'عدد الجلسات')
+    <AppModal
+      :open="editing && !!draft"
+      size="large"
+      :title="
+        draft?.renewed_from
+          ? l('Renew a package', 'تجديد باقة')
+          : l('Assign a package', 'تعيين باقة')
+      "
+      :description="
+        l(
+          'Unfinished changes stay saved on this device if you close this window.',
+          'تبقى التغييرات غير المكتملة محفوظة على هذا الجهاز عند إغلاق النافذة.',
+        )
+      "
+      :dismissible="!locked"
+      @update:open="editing = $event"
+    >
+      <form v-if="draft" class="package-editor" @submit.prevent="save">
+        <fieldset :disabled="locked" class="form-fields">
+          <p v-if="draft.renewed_from" class="notice">
+            {{
+              l(
+                'Creates a new allowance linked to the previous package. Unused sessions are not transferred automatically.',
+                'ينشئ رصيداً جديداً مرتبطاً بالباقة السابقة. لا تُنقل الجلسات غير المستخدمة تلقائياً.',
+              )
+            }}
+          </p>
+          <MemberPicker
+            :disabled="!!draft.renewed_from"
+            :workspace="context.workspace"
+            view="admin"
+            role="trainee"
+            :max="1"
+            v-model="draft.members"
+          /><label
+            >{{ l('Package name', 'اسم الباقة')
             }}<input
-              v-model.number="draft.allowance"
-              type="number"
-              min="1"
-              max="1000"
-              required /></label
-          ><label
-            >{{ l('Starts on', 'تبدأ في')
-            }}<input v-model="draft.starts_on" type="date" required /></label
-          ><label
-            >{{ l('Valid through', 'صالحة حتى')
-            }}<input v-model="draft.ends_on" type="date" :min="draft.starts_on" required
+              v-model="draft.title"
+              maxlength="160"
+              required
+              :placeholder="l('e.g. 8 personal training sessions', 'مثلاً: ٨ جلسات تدريب شخصي')"
           /></label>
-        </div>
-        <TimezonePicker
-          v-model="draft.timezone"
-          :label="l('Package timezone', 'المنطقة الزمنية للباقة')"
-        />
-        <p class="small-print">
-          {{
-            l(
-              'Only bookings explicitly linked to this package use its allowance. This records an entitlement, not a payment.',
-              'لا يستخدم رصيد هذه الباقة إلا الحجز المرتبط بها صراحةً. هذا سجل استحقاق وليس دفعة مالية.',
-            )
-          }}
-        </p>
-        <button class="button" :disabled="draft.members.length !== 1">
-          {{ l('Assign package', 'تعيين الباقة') }}
-        </button>
-      </fieldset>
-    </form>
+          <div class="field-pair">
+            <label
+              >{{ l('Session allowance', 'عدد الجلسات')
+              }}<input
+                v-model.number="draft.allowance"
+                type="number"
+                min="1"
+                max="1000"
+                required /></label
+            ><label
+              >{{ l('Starts on', 'تبدأ في')
+              }}<input v-model="draft.starts_on" type="date" required /></label
+            ><label
+              >{{ l('Valid through', 'صالحة حتى')
+              }}<input v-model="draft.ends_on" type="date" :min="draft.starts_on" required
+            /></label>
+          </div>
+          <TimezonePicker
+            v-model="draft.timezone"
+            :label="l('Package timezone', 'المنطقة الزمنية للباقة')"
+          />
+          <p class="small-print">
+            {{
+              l(
+                'Only bookings explicitly linked to this package use its allowance. This records an entitlement, not a payment.',
+                'لا يستخدم رصيد هذه الباقة إلا الحجز المرتبط بها صراحةً. هذا سجل استحقاق وليس دفعة مالية.',
+              )
+            }}
+          </p>
+          <div class="actions">
+            <button class="button" :disabled="draft.members.length !== 1">
+              {{ l('Assign package', 'تعيين الباقة') }}</button
+            ><button type="button" class="text-link" @click="editing = false">
+              {{ l('Close editor', 'إغلاق المحرر') }}
+            </button>
+          </div>
+        </fieldset>
+      </form>
+    </AppModal>
     <div class="package-layout" :class="{ 'has-selection': selected }">
       <section class="package-list" :aria-label="l('Packages', 'الباقات')">
         <div class="package-filters">

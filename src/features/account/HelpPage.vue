@@ -43,8 +43,8 @@ import { language, t } from '../../lib/i18n'
         <p>
           {{
             language(
-              'Start in People: invite administrators, trainers or trainees and assign a responsible trainer. In Programs, publish a plan and review who will receive it. Calendar schedules training and assessor-led assessments; the Library section contains reusable groups and assessment templates.',
-              'ابدأ في الأشخاص: ادعُ المسؤولين والمدربين والمتدربين وعيّن المدرب المسؤول. انشر خطة في البرامج وراجع المستلمين. استخدم التقويم لجدولة التدريب والتقييمات؛ ويحتوي قسم المكتبة على المجموعات وقوالب التقييم القابلة لإعادة الاستخدام.',
+              'Start in People: invite administrators, trainers or trainees one at a time, or choose Import from Excel to create invitations for a whole list (only an email column is required), then assign a responsible trainer. In Programs, publish a plan and review who will receive it. Calendar schedules training and assessor-led assessments; the Library section contains reusable groups and assessment templates.',
+              'ابدأ في الأشخاص: ادعُ المسؤولين والمدربين والمتدربين واحداً تلو الآخر، أو اختر الاستيراد من Excel لإنشاء دعوات لقائمة كاملة (عمود البريد الإلكتروني فقط مطلوب)، ثم عيّن المدرب المسؤول. انشر خطة في البرامج وراجع المستلمين. استخدم التقويم لجدولة التدريب والتقييمات؛ ويحتوي قسم المكتبة على المجموعات وقوالب التقييم القابلة لإعادة الاستخدام.',
             )
           }}
         </p>

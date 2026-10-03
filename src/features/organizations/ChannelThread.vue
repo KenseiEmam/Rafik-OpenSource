@@ -9,6 +9,7 @@ import CommandStatus from '../teams/CommandStatus.vue'
 import OrganizationUpload, { type UploadedAsset } from '../../components/OrganizationUpload.vue'
 import OrganizationAsset from '../../components/OrganizationAsset.vue'
 import ChannelEditor from './ChannelEditor.vue'
+import AppModal from '../../components/AppModal.vue'
 const props = defineProps<{ workspace: string; view: string; id: string; base: string }>(),
   emit = defineEmits<{ refresh: [] }>()
 type Message = {
@@ -261,14 +262,21 @@ onUnmounted(() => {
         </button>
       </div>
     </div>
-    <ChannelEditor
-      v-if="editing && data"
-      :workspace="workspace"
-      :view="view"
-      :initial="{ ...data.channel, people: data.people }"
-      @close="editing = false"
-      @saved="afterMembers"
-    />
+    <AppModal
+      v-if="data"
+      v-model:open="editing"
+      size="large"
+      :title="l('Conversation participants', 'المشاركون في المحادثة')"
+    >
+      <ChannelEditor
+        :workspace="workspace"
+        :view="view"
+        :initial="{ ...data.channel, people: data.people }"
+        embedded
+        @close="editing = false"
+        @saved="afterMembers"
+      />
+    </AppModal>
     <p v-if="loading" role="status" class="notice">
       {{ l('Loading messages…', 'جارٍ تحميل الرسائل…') }}
     </p>
