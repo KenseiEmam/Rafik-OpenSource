@@ -2,11 +2,11 @@
 
 ## Stage tracking and security reporting — 2026-10-16
 
-- Surfaced Stage 2 status and remaining exit gates in the maintainer instructions and staged requirements; Stage 3 remains gated on Stage 2 acceptance.
+- Closed Stage 2 after confirming the renamed repository is public and its completion commit is pushed. Clarified that the unrelated Vercel deployment status is not a Docker acceptance gate; Stage 3 remains gated on user approval.
 - Added the root security disclosure policy and linked it from contributor, project, and documentation entry points. Added it to local documentation-link checks.
 - Fixed a backend test type error exposed by the clean Node 22 workspace check.
 - Preserved pinned SVG/JSON source bytes and generated SQL across Windows checkouts so digest and migration verification remain reproducible.
-- Completed the pinned-runtime install, local content/license review, frontend unit/build/type checks, backend type checks, and isolated fresh-migration SQL rehearsal. Remote GitHub rename/CI remain unverified.
+- Completed the pinned-runtime install, local content/license review, frontend unit/build/type checks, backend type checks, and isolated fresh-migration SQL rehearsal. No relevant GitHub Actions run was available.
 - No product behavior, deployment capability, or release status changed.
 
 ## University revamp planning — 2026-10-16

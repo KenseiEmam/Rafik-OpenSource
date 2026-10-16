@@ -419,4 +419,4 @@ The local foundation can be reviewed, but broader product implementation remains
 
 - `npm run docs:check`: passed; checked local links in 67 monorepo documents, including the new root security policy.
 - `git diff --check`: passed. Git reported only expected LF-to-CRLF working-copy conversion warnings.
-- No product tests, builds, or deployment checks were run; this documentation update does not change runtime behavior. Stage 2 remains in progress; see [requirements](../requirements/README.md) and the [ledger](ledger.md) for outstanding acceptance gates.
+- GitHub confirmed the repository is public as `KenseiEmam/Rafik-OpenSource`; commit `61432fc` (`completed stage 2`) is on `codex/university-revamp-plan`. No relevant GitHub Actions run was available. GitHub reported a Vercel status for a separate hosted deployment; it is not part of the Unix Docker acceptance criteria. Stage 2 is complete. Stage 3 (secure Compose self-hosting) has not started and awaits user approval; see [requirements](../requirements/README.md) and the [ledger](ledger.md).
