@@ -2,7 +2,7 @@
 
 ## Stage 3 self-hosting — 2026-10-16
 
-- Began the approved Compose deployment with web/API images, HTTPS proxy, SMTP sign-in delivery, one-time university bootstrap, production configuration validation and per-instance database role password setup. Removed the tracked Vercel frontend config. Patched Prisma to 7.10.1 and overrode vulnerable transitive packages; npm audits report zero vulnerabilities. Fixed two migration startup defects found in the isolated Linux Compose smoke test. The full 40-migration fresh database, API, and web health checks now pass. Stage 3 remains incomplete pending backup/restore, update/rollback verification and removal of the revoked Google service-account key from public Git history.
+- Began the approved Compose deployment with web/API images, HTTPS proxy, SMTP sign-in delivery, one-time university bootstrap, production configuration validation and per-instance database role password setup. Removed the tracked Vercel frontend config. Patched Prisma to 7.10.1 and overrode vulnerable transitive packages; npm audits report zero vulnerabilities. Fixed two migration startup defects found in the isolated Linux Compose smoke test. The full 40-migration fresh database, API, and web health checks now pass. The revoked Google service-account key was removed from the rewritten public university branch history. Stage 3 remains incomplete pending backup/restore and update/rollback verification.
 
 ## Stage tracking and security reporting — 2026-10-16
 
