@@ -4,10 +4,12 @@
 
 ## Current components
 
-- The repository root contains a Vue 3/TypeScript single-page application built with Vite. Feature modules cover training, coaching, organizations, assessments, communication, resources, nutrition, appointments, analytics, and account flows.
-- `../backend/` contains the TypeScript API with Prisma and PostgreSQL. It owns identity/session handling, domain authorization, database migrations, and private-file access.
+- `apps/frontend/` contains the Vue 3/TypeScript single-page application built with Vite. Feature modules cover training, coaching, organizations, assessments, communication, resources, nutrition, appointments, analytics, and account flows.
+- `apps/backend/` contains the TypeScript API with Prisma and PostgreSQL. It owns identity/session handling, domain authorization, database migrations, and private-file access.
+- `packages/shared/` contains transport contracts and generated database types imported by both workspaces.
+- `docs/` is the single documentation tree; `infrastructure/` contains the single local Compose definition.
 - The browser calls the API; domain writes use API commands and reads use scoped API endpoints. PostgreSQL is the durable server store. Browser IndexedDB supports recoverable drafts and workout recording; it is not a backup.
-- `backend/compose.yaml` starts PostgreSQL only for local development. The web app and API are started separately. Production hosting remains deferred in `backend/docs/implementation/runbook.md`.
+- `infrastructure/compose.yaml` starts PostgreSQL only for local development. The web app and API are started separately. Production hosting remains deferred in `docs/implementation/runbook.md`.
 
 ## Target deployment boundary
 
@@ -49,4 +51,4 @@ Self-hosting should have no default telemetry or outbound data transfer. If supp
 - A native application or reliable offline assessment sync before its data/command reconciliation contract is defined.
 - Clinical diagnosis or treatment decisions based on training assessment data.
 
-See [requirements and stage gates](../requirements/README.md) and [ADR 0001](../decisions/ADR-0001-university-owned-deployments.md).
+See [requirements and stage gates](../requirements/README.md) and [ADR 0006](../decisions/0006-prisma-api-transition.md).

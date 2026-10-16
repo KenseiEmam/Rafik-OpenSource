@@ -10,14 +10,14 @@ Run commands from the repository root unless noted:
 npm test
 npm run format:check
 npm run build
-npm --prefix backend run typecheck
-npm --prefix backend test
-npm --prefix backend run content:check
-npm --prefix backend run test:docs
+npm run backend:typecheck
+npm run backend:test
+npm run content:check
+npm run docs:check
 ```
 
-Backend database and full browser checks have additional local service prerequisites. Follow the [backend runbook](../../backend/docs/implementation/runbook.md) and the [verification record](../../backend/docs/implementation/verification.md). Full browser acceptance uses the isolation wrapper and local web ports 5173 and 5174; it must not reset or reseed the preserved preview.
+Backend database and full browser checks have additional local service prerequisites. Follow the [runbook](../implementation/runbook.md) and the [verification record](../implementation/verification.md). Full browser acceptance uses the isolation wrapper and local web ports 5173 and 5174; it must not reset or reseed the preserved preview.
 
 ## Evidence limits
 
-The existing backend verification record is historical evidence for the gym-first local product at its recorded checkpoints. New checks for this monorepo migration are recorded in the top entry of the backend [implementation ledger](../../backend/docs/implementation/ledger.md) and [verification record](../../backend/docs/implementation/verification.md). Browser emulation does not establish physical-device behavior or human usability outcomes. University onboarding, tenant isolation, production identity/mail/file providers, operations and releases require later acceptance.
+The implementation ledger and verification record preserve historical evidence for the current gym/training-organization application. Browser emulation does not establish physical-device behavior or human usability outcomes. University onboarding, tenant isolation, production identity/mail/file providers, operations and releases require later acceptance.

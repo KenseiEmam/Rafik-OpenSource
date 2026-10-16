@@ -1,0 +1,16 @@
+{
+  "name": "@rafik/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./contracts": {
+      "types": "./src/contracts.ts",
+      "default": "./src/contracts.ts"
+    },
+    "./database.types": {
+      "types": "./src/database.types.ts",
+      "default": "./src/database.types.ts"
+    }
+  }
+}

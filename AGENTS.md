@@ -1,20 +1,21 @@
 # Rafik web revamp working context
 
 - Work on `codex/university-revamp-plan` for the approved university-first migration; never push main. Complete one stage at a time and wait for approval before starting another. The existing app is a local web/backend foundation; Compose self-hosting comes before the later Android app stage.
-- Read `backend/docs/implementation/ledger.md`, `architecture.md`, `runbook.md` and `verification.md` before expanding product workflows. The business and UX audit is preserved under `backend/docs/revival`.
+- Read `docs/implementation/ledger.md`, `architecture.md`, `runbook.md` and `verification.md` before expanding product workflows. The business and UX audit is preserved under `docs/revival`.
 - Use the requested design-taste-frontend skill, with redesign-existing-projects when useful. The user authorized a clean rebuild; do not restore the old feature/route structure merely to preserve it.
 - Keep Vue 3/TypeScript and the small feature/module structure. No generic builder, new global-store hierarchy or duplicate server business rules without a concrete need.
 - Node 22.16.0. `npm test`, `npm run format:check`, `npm run build`; full Playwright checks require local backend + dev server 5173 + production preview 5174.
-- `src/content/sample.json` and `src/lib/database.types.ts` are generated from canonical sources in `backend/`. Edit those sources there, then regenerate.
+- `apps/frontend/src/content/sample.json` is generated from canonical sources in `apps/backend/`. Shared API contracts and generated database types live in `packages/shared/`; regenerate database types from the backend schema.
+- Install from the root lockfile with one `npm ci`; never create app-local lockfiles. Use root scripts or `--workspace @rafik/backend` / `--workspace @rafik/frontend` for workspace-specific commands.
 - Typed input, durable device storage and acknowledged server state are separate. Never let a delayed read overwrite newer local work, adopt another account's pending records, or report cloud success before acknowledgment.
 - Use real rendered browser checks for English/Arabic, light/dark and phone layouts. Distinguish browser emulation from physical hardware and human usability observation.
 - No old hosted credentials or project configuration may enter this runtime. Local sample identities and privacy copy are not deployable production configuration.
 
-- Every further change must update root `CHANGELOG.md` and `backend/docs/implementation/ledger.md`. Update the READMEs and `backend/docs/implementation/maintainer-guide.md` when files/workflows change, `architecture.md` for data/API/lifecycle changes, `runbook.md` for operations and `verification.md` for actual checks/limits. Do not leave stale phase status.
+- Every further change must update root `CHANGELOG.md` and `docs/implementation/ledger.md`. Update READMEs and `docs/implementation/maintainer-guide.md` when files/workflows change, `architecture.md` for data/API/lifecycle changes, `runbook.md` for operations and `verification.md` for actual checks/limits. Keep one root `AGENTS.md`, one `docs/` tree and one Compose definition under `infrastructure/`. Do not leave stale phase status.
 
 ## Engineering and product completion rules
 
-- Follow the backend `CONTRIBUTING.md` definition of done and `docs/README.md` documentation structure. Keep current architecture/reference docs accurate; phase logs are history, not the onboarding manual. Record durable architectural tradeoffs as ADRs.
+- Follow root `CONTRIBUTING.md` and `docs/README.md`. The frontend and backend are npm workspaces under `apps/`; shared types/contracts are a workspace under `packages/shared`. Keep current architecture/reference docs accurate; phase logs are history, not the onboarding manual. Record durable architectural tradeoffs as ADRs.
 - Audit rendered user tasks before redesigning. Preserve the accepted visual identity while fixing hierarchy, navigation, interaction and recovery. Inspect realistic long/populated and empty/error states, phone/desktop, keyboard, Arabic/RTL and both themes.
 - A route, screenshot, test count or accessibility scan alone does not prove a good UX. Primary actions must stay reachable; optional controls should not overwhelm the task. Test what a person can actually accomplish, including interruption and correction.
 - Implement complete vertical features: authorization/data lifecycle, durable state/retry, discoverable UI, failure recovery, review/history/export and downstream analytics where relevant. Do not mark a partial demo as the revamp.
@@ -35,7 +36,7 @@
 
 ## Role and organization scope correction (R7A)
 
-- Read the backend `docs/implementation/role-scope-audit.md` and ADR 0005 before expanding features. R4 teams are not the required organization model. Organizations have their own admins, trainers and trainees; independent coaches/trainees remain separate. Platform administrator is a separate grant.
+- Read `docs/implementation/role-scope-audit.md` and ADR 0005 before expanding features. R4 teams are not the required organization model. Organizations have their own admins, trainers and trainees; independent coaches/trainees remain separate. Platform administrator is a separate grant.
 - Preserve authorized combined roles without mixing business scopes. Define actor, context, resource and lifecycle permissions before coding; derive navigation from server capabilities. Test two organizations, independent users, combined roles, stale tabs and revoked staff access.
 - Organization-owned training history survives internal trainer reassignment; do not model it as a new independent coaching relationship or transfer unrelated personal data. Check-ins do not replace scheduled assessor-led assessments with per-trainee results.
 - Historical R7A sequencing brought the Prisma/PostgreSQL API and scoped organization foundation before later features. The approved current sequence is the university migration in `docs/requirements/README.md`: monorepo, secure Compose, university workflows/security, optional cloud templates, then Android.

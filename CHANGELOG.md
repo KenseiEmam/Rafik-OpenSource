@@ -10,13 +10,14 @@
 
 - Imported the companion API repository under `backend/`, retaining its branch history as a second parent in the monorepo merge.
 - Applied Apache-2.0 to project code/documentation and retained separate content/media license boundaries.
-- Consolidated developer setup, contribution, architecture, and requirements links for the monorepo. No hosted deployment or university injury workflow is claimed.
+- Reshaped the repository as npm workspaces under `apps/frontend`, `apps/backend` and `packages/shared`, with one root `AGENTS.md`, one `docs/` tree, and one Compose file in `infrastructure/`.
+- Added shared API error/user contracts and moved generated database transport types into `packages/shared`. Updated local scripts, tests, CI and documentation for the workspace layout. No hosted deployment or university injury workflow is claimed.
 
 ## R21 — Session experience and workplace feedback
 
 Optional satisfaction feedback is now source-specific and reusable by the later mobile app: completed workouts and attended, completed training appointments have distinct response counts/distributions; unanswered feedback is unknown. Trainers submit a separate monthly workplace rating, with visibility explained before submission. Administrators see its current-active-trainer coverage separately from client/date filters. Analytics also shows actual trainer session delivery and explicitly recorded package renewals, without inferring quality, revenue or paid retention.
 
-Use organization **Analytics → Experience & renewals** for client/workplace/renewal views and **Delivery & capacity** for trainer session delivery. Trainers use **My feedback**; the retained trainee examination web has optional links after completion. The API is ready for later native integration; no native UI or hosting is claimed. Historical feedback checks: `npm --prefix backend run test:organization-feedback` and `npm run test:e2e -- organization-feedback.e2e.ts` from the repository root.
+Use organization **Analytics → Experience & renewals** for client/workplace/renewal views and **Delivery & capacity** for trainer session delivery. Trainers use **My feedback**; the retained trainee examination web has optional links after completion. The API is ready for later native integration; no native UI or hosting is claimed. Historical feedback checks: `npm run test:organization-feedback --workspace @rafik/backend` and `npm run test:e2e --workspace @rafik/frontend -- organization-feedback.e2e.ts`.
 
 Maintenance in this phase fixes stale revisions after recovered rating/session-note saves and automatic analytics-tab switching on focus. Nested report tabs now remain contained at 320px. The READMEs and engineering guides distinguish current contracts/setup from historical evidence.
 
@@ -24,7 +25,7 @@ Maintenance in this phase fixes stale revisions after recovered rating/session-n
 
 Organization packages now track explicit trainee entitlements, derived available/reserved/used balances, validity dates, auditable allowance corrections and linked renewals. Calendar booking reserves only an explicitly selected package; completion consumes present/charged absent sessions, cancellation/excused/released no-shows release, and independent trial/makeup/prize/other sessions never affect allowances. Staff session details include check-in timestamps and durable notes; the overview surfaces missed sessions without a replacement. Reuses workspace transactions/receipts and existing calendar events; no parallel scheduler or payment processor.
 
-Open **Packages** from the organization sidebar; admins assign allowances and trainers book for their current roster. Historical package checks: `npm --prefix backend run test:organization-packages` and `npm run test:e2e -- organization-packages.e2e.ts` from the repository root. Apply new local migrations with `npm --prefix backend run db:migrate`, then `npm --prefix backend run db:generate`; never reseed an existing preview.
+Open **Packages** from the organization sidebar; admins assign allowances and trainers book for their current roster. Historical package checks: `npm run test:organization-packages --workspace @rafik/backend` and `npm run test:e2e --workspace @rafik/frontend -- organization-packages.e2e.ts`. Apply new local migrations with `npm run db:migrate`, then `npm run db:generate`; never reseed an existing preview.
 
 ## R19 — Trainer tasks and daily follow-up · 28 September 2026
 
@@ -175,7 +176,7 @@ Update this file whenever further implementation changes land. Keep the companio
 - Messages use persisted local send commands, server deduplication, unread summaries, bounded history loading and visible-page refresh. Failed acknowledgements can be retried after reload without another message. No outbound notification or attachment provider.
 - Added server/device draft recovery, stale-edit recovery, archived-state handling, bilingual copy, phone layouts and light/dark styling. Account export now includes the five new domains.
 - Regenerated SQL types; added pure trend/state tests and browser journeys for check-in review/correction, assessment comparison/cancellation, measurement sharing and dropped-message acknowledgement.
-- Expanded READMEs and added this change history. The backend [maintainer guide](backend/docs/implementation/maintainer-guide.md) explains the full file map and development workflow. `AGENTS.md` now requires documentation updates with further work.
+- Expanded READMEs and added this change history. The [maintainer guide](docs/implementation/maintainer-guide.md) explains the full file map and development workflow. `AGENTS.md` now requires documentation updates with further work.
 
 ## R1 — Daily coaching · 22 September 2026 · `8097f0d`
 
@@ -185,4 +186,4 @@ Expanded the client workspace/roster lifecycle, custom exercise catalog, richer 
 
 Rebuilt the web application in Vue 3/TypeScript with English/Arabic and light/dark support; useful public workout sample, local Auth/invitations, immutable published plans, durable workout logging/sync/recovery, coach review, account/help tools, tests and production shell caching. Old web source remains at `a0c723e`.
 
-[Current status](backend/docs/implementation/ledger.md) · [Architecture](backend/docs/implementation/architecture.md) · [Runbook](backend/docs/implementation/runbook.md) · [Verification](backend/docs/implementation/verification.md)
+[Current status](docs/implementation/ledger.md) · [Architecture](docs/implementation/architecture.md) · [Runbook](docs/implementation/runbook.md) · [Verification](docs/implementation/verification.md)

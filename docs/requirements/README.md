@@ -25,7 +25,7 @@ Rafik should help universities and university coaches support young athletes by 
 | Offline                      | Browser workout recording has durable local storage and server recovery behavior                                      | Does not establish offline support for field assessments or a future native app. Specify sync and conflict rules before mobile work.               |
 | Deployment                   | Local Compose file starts PostgreSQL; web and API run separately; hosting is deferred                                 | Deliver a documented, secure application Compose stack before optional cloud templates.                                                            |
 | Identity and private files   | API-mediated local identity and private-file behavior; production adapters are a documented hosting gate              | Add university-controlled first-admin bootstrap and production-ready identity/file configuration before declaring hosted readiness.                |
-| Open source (before Stage 2) | Two repositories; no release-ready public self-hosted package identified                                              | Consolidated locally with history under `backend/`, Apache-2.0 for code/docs, and separate third-party/content/media rights review still required. |
+| Open source (before Stage 2) | Two repositories; no release-ready public self-hosted package identified                                              | Consolidated locally with history in a single-workspace monorepo, Apache-2.0 for code/docs, and separate third-party/content/media rights review still required. |
 
 ## Stages and acceptance criteria
 
