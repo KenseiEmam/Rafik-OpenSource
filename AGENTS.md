@@ -32,11 +32,11 @@
 ## Founder direction during R7
 
 - Prioritize university coach, organization, and field workflows. Preserve useful athlete web functionality while the Android field app remains a later stage. Do not equate a simplified client logger with the complete university product.
-- Hosting target is **Prisma + PostgreSQL with an explicit server API**, replacing Supabase. R7A1 uses the local Prisma/PostgreSQL API; Supabase is retired. Before hosting, configure real identity/mail/file adapters and verify transactions, authorization, durable retries and file lifecycle against the new stack. Follow backend ADR 0004; do not deploy the Supabase prototype as the final architecture.
+- Hosting target is **Prisma + PostgreSQL with an explicit server API**, replacing Supabase. R7A1 uses the local Prisma/PostgreSQL API; Supabase is retired. Before hosting, configure real identity/mail/file adapters and verify transactions, authorization, durable retries and file lifecycle against the new stack. Follow [ADR 0004](docs/decisions/0004-coach-web-and-prisma-target.md); do not deploy the Supabase prototype as the final architecture.
 
 ## Role and organization scope correction (R7A)
 
-- Read `docs/implementation/role-scope-audit.md` and ADR 0005 before expanding features. R4 teams are not the required organization model. Organizations have their own admins, trainers and trainees; independent coaches/trainees remain separate. Platform administrator is a separate grant.
+- Read `docs/implementation/role-scope-audit.md` and [ADR 0005](docs/decisions/0005-organization-and-independent-scopes.md) before expanding features. R4 teams are not the required organization model. Organizations have their own admins, trainers and trainees; independent coaches/trainees remain separate. Platform administrator is a separate grant.
 - Preserve authorized combined roles without mixing business scopes. Define actor, context, resource and lifecycle permissions before coding; derive navigation from server capabilities. Test two organizations, independent users, combined roles, stale tabs and revoked staff access.
 - Organization-owned training history survives internal trainer reassignment; do not model it as a new independent coaching relationship or transfer unrelated personal data. Check-ins do not replace scheduled assessor-led assessments with per-trainee results.
 - Historical R7A sequencing brought the Prisma/PostgreSQL API and scoped organization foundation before later features. The approved current sequence is the university migration in `docs/requirements/README.md`: monorepo, secure Compose, university workflows/security, optional cloud templates, then Android.

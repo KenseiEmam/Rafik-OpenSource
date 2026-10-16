@@ -6,7 +6,7 @@ This is the single maintained documentation tree for the Rafik monorepo. Root [R
 
 - [University requirements and staged plan](requirements/README.md): goals, current-state audit, acceptance criteria, risks, and privacy/security gates.
 - [Target architecture](architecture/README.md): current component boundaries and university-owned deployment model.
-- [Architecture decisions](decisions/): accepted tradeoffs, including [ADR 0006: the Prisma API transition](decisions/0006-prisma-api-transition.md) and the original [runtime boundary](decisions/0001-runtime-boundary.md).
+- [Architecture decisions](decisions/): accepted tradeoffs, including [ADR 0001: isolated university deployments](decisions/ADR-0001-university-owned-deployments.md), [ADR 0006: the Prisma API transition](decisions/0006-prisma-api-transition.md), and the imported [runtime boundary](decisions/0016-runtime-boundary.md).
 - [Testing and verification](testing/README.md): local commands, scope, and evidence limits.
 - [API reference](reference/api.md): transport, error, retry and pagination conventions.
 

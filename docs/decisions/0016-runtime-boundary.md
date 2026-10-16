@@ -1,6 +1,6 @@
-# ADR 0001: Runtime boundary
+# ADR 0016: Runtime boundary
 
-Status: Current local implementation; hosting direction superseded by [ADR 0004](0004-coach-web-and-prisma-target.md). Recorded 23 September 2026 from the implemented revival design.
+Status: Current local implementation; hosting direction superseded by [ADR 0004](0004-coach-web-and-prisma-target.md). Renumbered from the imported frontend history to resolve the collision with the university deployment ADR 0001. Recorded 23 September 2026 from the implemented revival design.
 
 ## Context
 

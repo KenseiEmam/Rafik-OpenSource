@@ -28,7 +28,7 @@ flowchart LR
   DB --> Inbox[Intercepted local mail]
 ```
 
-The database owns transactional domain invariants, revisions, permissions and immutable snapshots. The API owns authentication, transport validation, bounded reads and file bytes. Vue owns interaction and device recovery, never independent server authority. There is one identity system; organizational role/context expansion follows ADR 0005.
+The database owns transactional domain invariants, revisions, permissions and immutable snapshots. The API owns authentication, transport validation, bounded reads and file bytes. Vue owns interaction and device recovery, never independent server authority. There is one identity system; organizational role/context expansion follows [ADR 0005](../decisions/0005-organization-and-independent-scopes.md).
 
 ## Backend file map
 

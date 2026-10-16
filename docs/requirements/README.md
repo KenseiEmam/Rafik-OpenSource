@@ -9,7 +9,7 @@ Rafik should help universities and university coaches support young athletes by 
 ## Confirmed direction
 
 - University and university-sport workflows replace the previous gym-first acquisition direction.
-- Canonical public repository: `KenseiEmam/refik-frontend`; the repository name may change later.
+- Canonical public repository target: `KenseiEmam/Rafik-OpenSource`; the authenticated GitHub rename is still pending.
 - Each university runs an isolated instance on infrastructure it controls. Docker Compose self-hosting is the first deployment target. AWS, Azure, and Google Cloud templates are not part of the initial release.
 - The Android field app is optional and comes after the web/backend and deployment foundations. React Native is the proposed framework, not an implementation decision.
 - Default Rafik branding is retained, with per-install university branding and a small Rafik attribution planned.

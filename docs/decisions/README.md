@@ -2,11 +2,12 @@
 
 ADRs record durable choices, their reasons and costs. Status is Accepted unless superseded. Each record identifies whether its decision is implemented or a target awaiting implementation.
 
-- [0005: organizational and independent scopes](0005-organization-and-independent-scopes.md)
-- [0004: coach-first web and Prisma/PostgreSQL target](0004-coach-web-and-prisma-target.md)
-- [0001: one web application and one Supabase backend](0001-runtime-boundary.md)
-- [0003: safe application version updates](0003-application-updates.md)
+- [0001: university-owned isolated deployments](ADR-0001-university-owned-deployments.md)
 - [0002: explicit commands, immutable prescriptions and durable client work](0002-state-and-commands.md)
+- [0003: safe application version updates](0003-application-updates.md)
+- [0004: coach-first web and Prisma/PostgreSQL target](0004-coach-web-and-prisma-target.md)
+- [0005: organizational and independent scopes](0005-organization-and-independent-scopes.md)
+- [0016: original runtime boundary](0016-runtime-boundary.md)
 
 For a new decision, add the next number with Context, Decision, Consequences and Status. Link the implementation and superseding ADR when appropriate. Keep current behavior in architecture/reference docs.
 
@@ -27,3 +28,5 @@ For a new decision, add the next number with Context, Decision, Consequences and
 
 - [0014: Session package accounting](0014-session-package-accounting.md)
 - [0015: Explicit feedback sources](0015-explicit-feedback-sources.md)
+
+The imported frontend's original ADR 0001 was renumbered to 0016 during consolidation so the approved university deployment ADR could retain number 0001.

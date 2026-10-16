@@ -1,5 +1,7 @@
 # Rafik
 
+Repository name target: `KenseiEmam/Rafik-OpenSource`. The local monorepo metadata is updated; the GitHub repository itself still needs its authenticated rename.
+
 Rafik is being redirected to help universities and university coaches support young athletes through training, attendance, performance, and relevant health workflows. The target is an open-source product that each university can deploy on infrastructure it controls, without a Rafik software subscription.
 
 ## Project status

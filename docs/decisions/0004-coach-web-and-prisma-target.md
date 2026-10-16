@@ -8,7 +8,7 @@ Status: Accepted direction; transition not yet implemented. Date: 23 September 2
 
 RAFIK-FRONTEND primarily serves coaches and organization staff. Existing trainee web flows remain functional and tested, but new web UX investment prioritizes programming, client/service delivery, calendar, review and organizational operations. Trainees are expected primarily to use the native application, which remains deferred until the web/backend are ready.
 
-The hosting target is a server application using Prisma with PostgreSQL, replacing Supabase as the deployed backend. The current Supabase local environment is an implementation/testing dependency only. Prior ADR 0001 describes the current runtime; its Supabase hosting choice is superseded by this decision. No deployment or native work is authorized by this direction alone.
+The hosting target is a server application using Prisma with PostgreSQL, replacing Supabase as the deployed backend. The current Supabase local environment is an implementation/testing dependency only. Prior [ADR 0016](0016-runtime-boundary.md) describes the former runtime; its Supabase hosting choice is superseded by this decision. No deployment or native work is authorized by this direction alone.
 
 ## Transition requirements
 

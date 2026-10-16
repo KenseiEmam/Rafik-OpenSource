@@ -8,10 +8,11 @@
 
 ## Monorepo foundation — 2026-10-16
 
-- Imported the companion API repository under `backend/`, retaining its branch history as a second parent in the monorepo merge.
+- Set the canonical repository/package name to `KenseiEmam/Rafik-OpenSource` / `rafik-opensource`; the hosted GitHub rename still requires an authorized GitHub connection.
+- Imported the companion API repository under `apps/backend/`, retaining its branch history as a second parent in the monorepo merge.
 - Applied Apache-2.0 to project code/documentation and retained separate content/media license boundaries.
 - Reshaped the repository as npm workspaces under `apps/frontend`, `apps/backend` and `packages/shared`, with one root `AGENTS.md`, one `docs/` tree, and one Compose file in `infrastructure/`.
-- Added shared API error/user contracts and moved generated database transport types into `packages/shared`. Updated local scripts, tests, CI and documentation for the workspace layout. No hosted deployment or university injury workflow is claimed.
+- Added shared API error/user contracts and moved generated database transport types into `packages/shared`; centralized research Markdown under `docs/revival/coordination/` and resolved an imported ADR number collision. Updated local scripts, tests, CI and documentation for the workspace layout. No hosted deployment or university injury workflow is claimed.
 
 ## R21 — Session experience and workplace feedback
 

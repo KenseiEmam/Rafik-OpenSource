@@ -19,7 +19,7 @@ Athlete health and injury records are sensitive. Universities need control over 
 6. Treat injury/health history as a distinct sensitive domain requiring least privilege, sensitive-read and change audit events, retention/export/correction rules, and tested revocation. Existing performance assessments are not diagnoses.
 7. Keep support outbound transfer disabled by default. Any submission to Rafik must be explicit, minimized, and must not include athlete health records by default.
 8. Plan the Android app after the web, API, and self-hosted release gates. Offline support requires defined durable storage, idempotency/deduplication, retry, conflict, revocation, and visible sync contracts before implementation.
-9. Publish under the confirmed GitHub repository `KenseiEmam/refik-frontend`; repository consolidation and release mechanics are a later stage. The final repository name remains open.
+9. Publish under the confirmed GitHub repository `KenseiEmam/Rafik-OpenSource`; repository consolidation and release mechanics are handled by the approved monorepo foundation stage.
 10. Use Apache-2.0 for project code and documentation. Bundled datasets, images, videos, fonts, and other third-party content retain their own licenses and attribution obligations.
 
 ## Options considered
