@@ -336,7 +336,14 @@ const router = createRouter({
       path: '/team-invite/:token',
       component: () => import('../features/teams/TeamInvitePage.vue'),
     },
-    { path: '/local-preview', component: () => import('../features/account/LocalPreview.vue') },
+    ...(import.meta.env.DEV
+      ? [
+          {
+            path: '/local-preview',
+            component: () => import('../features/account/LocalPreview.vue'),
+          },
+        ]
+      : []),
     { path: '/help', component: () => import('../features/account/HelpPage.vue') },
     { path: '/privacy', component: () => import('../features/public/PrivacyPage.vue') },
     { path: '/privacy-policy', redirect: '/privacy' },

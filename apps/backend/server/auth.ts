@@ -6,6 +6,7 @@ import {
 } from "node:crypto";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { db, local, ApiError, type Actor } from "./db.ts";
+import { sendSignInCode } from "./mailer.ts";
 const hash = (value: string) =>
   createHash("sha256").update(value).digest("hex");
 const actor = (u: {
@@ -91,7 +92,7 @@ export async function authRoute(
       });
     res.setHeader(
       "Set-Cookie",
-      "rafik_session=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0",
+      `rafik_session=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0${local ? "" : "; Secure"}`,
     );
     return { user: null };
   }
@@ -116,7 +117,15 @@ export async function authRoute(
     if (!u) throw new ApiError(404, "preview_unavailable");
     return session(res, actor(u));
   }
-  await rateLimit(`auth:${req.socket.remoteAddress}`, 100, 600);
+  const forwarded =
+    process.env.RAFIK_TRUST_PROXY === "true"
+      ? req.headers["x-forwarded-for"]?.toString().split(",")[0]?.trim()
+      : null;
+  await rateLimit(
+    `auth:${forwarded || req.socket.remoteAddress || "unknown"}`,
+    100,
+    600,
+  );
   if (path === "request-code") {
     await rateLimit(`code:${email}`, 1, 60);
     const code = String(randomInt(100000, 1000000)),
@@ -132,18 +141,21 @@ export async function authRoute(
           attempts: 0,
         },
       });
-      await tx.mail_messages.deleteMany({
-        where: { email, subject: "Your Rafik sign-in code" },
-      });
-      await tx.mail_messages.create({
-        data: {
-          email,
-          subject: "Your Rafik sign-in code",
-          body: code,
-          expires_at: expires,
-        },
-      });
+      if (local) {
+        await tx.mail_messages.deleteMany({
+          where: { email, subject: "Your Rafik sign-in code" },
+        });
+        await tx.mail_messages.create({
+          data: {
+            email,
+            subject: "Your Rafik sign-in code",
+            body: code,
+            expires_at: expires,
+          },
+        });
+      }
     });
+    if (!local) await sendSignInCode(email, code);
     return { sent: true };
   }
   if (path === "verify-code") {

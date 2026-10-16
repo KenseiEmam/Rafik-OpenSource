@@ -1,18 +1,16 @@
 # Local operation and release runbook
 
-**Monorepo setup, 16 October 2026:** the root npm workspaces are `apps/frontend`, `apps/backend` and `packages/shared`; run `npm ci` once at the repository root. The one Compose service at `infrastructure/compose.yaml` starts a local development database only; it is not the planned university deployment stack. See the root [README](../../README.md) for the consolidated quick start and the root [stages](../requirements/README.md) for self-hosting acceptance gates.
+**Monorepo setup, 16 October 2026:** the root npm workspaces are `apps/frontend`, `apps/backend` and `packages/shared`; run `npm ci` once at the repository root. The one Compose file has a local database default and an approved-but-not-yet-release-ready `selfhost` profile. See [infrastructure operations](../../infrastructure/README.md) and the root [stages](../requirements/README.md).
 
 ## Feedback local operation
 
 Apply migrations with `npm run db:migrate`, then generate the Prisma client/types; no reset/reseed is required. Feedback needs no scheduler or external delivery provider. The workplace month is UTC, supplied by the server; stale-month submissions have an explicit reload path. Session source eligibility and organization membership are rechecked before retries. Run `npm run test:organization-feedback` for source/scope/retry/reporting/export checks. Native and hosted evidence remain separate.
-
 
 ## Session-package local checks
 
 Organization packages now track explicit trainee entitlements, derived available/reserved/used balances, validity dates, auditable allowance corrections and linked renewals. Calendar booking reserves only an explicitly selected package; completion consumes present/charged absent sessions, cancellation/excused/released no-shows release, and independent trial/makeup/prize/other sessions never affect allowances. Staff session details include check-in timestamps and durable notes; the overview surfaces missed sessions without a replacement. Reuses workspace transactions/receipts and existing calendar events; no parallel scheduler or payment processor.
 
 Apply forward migrations and regenerate the Prisma client on an existing preview; do not reseed it. Run `npm run test:organization-packages` for accounting and authorization checks. The companion web command `npm run test:e2e -- organization-packages.e2e.ts` owns a disposable browser database. See [the package contract](r20-session-packages.md) and [verification](verification.md).
-
 
 ## Environment and startup
 
@@ -71,9 +69,26 @@ Add a forward SQL migration under `prisma/migrations/<timestamp>_<name>/migratio
 - Business simulation is enabled only by synthetic local fixture configuration. No charges, checkout or payment provider are connected.
 - Settings/Help explains device diagnostics and application update status. The static worker never caches API responses; updates wait for old tabs to close and do not interrupt workouts.
 
-## Hosting gate (deferred)
+## University self-hosted Compose deployment (Stage 3 in progress)
 
-Production startup deliberately refuses to run with these local adapters. Before deployment, configure PostgreSQL application/migration roles, HTTPS same-origin API routing, secure cookies, secret management, real mail and private object storage adapters, origin configuration, identity/session cleanup and operational monitoring. Never enable local preview accounts/inbox/simulation or apply synthetic seeds to hosting. Supply accurate operator/privacy/retention information and a production-owned starter version.
+The supported target is one Unix Docker deployment per university. No Google service-account key, cloud service credential, or Rafik-operated service is required or permitted. The Stage 3 profile uses PostgreSQL, the API, static web app, Caddy HTTPS, university SMTP and persistent private files. Start only after filling `infrastructure/.env.selfhost` from the example with unique random database passwords, a real SMTP account, HTTPS domain and designated initial administrator email. Keep that env file and backups outside public Git and restrict filesystem access.
+
+```sh
+cp infrastructure/.env.selfhost.example infrastructure/.env.selfhost
+# Edit the copy on the server; replace all sample values and use two distinct outputs from: openssl rand -hex 32
+docker compose --env-file infrastructure/.env.selfhost -f infrastructure/compose.yaml --profile selfhost up -d --build
+docker compose --env-file infrastructure/.env.selfhost -f infrastructure/compose.yaml --profile selfhost ps
+```
+
+The first user must authenticate through the university SMTP delivery and create the one permitted organization using the email configured as `RAFIK_BOOTSTRAP_EMAIL`. Later organization creation is denied. Add additional users through workspace invitations. The production build disables local preview identities and local inboxes. Monitor API, database and proxy health through Compose; preserve logs as sensitive operational data.
+
+Use `bash infrastructure/backup.sh` to stop API writes briefly and create checksummed PostgreSQL and private-file archives under the ignored `infrastructure/backups/` directory. Protect backups as sensitive health and identity data; store an encrypted copy on separate university-controlled storage and set a retention schedule. To restore, provision a clean matching Compose instance, start its database and apply migrations once, then run `bash infrastructure/restore.sh infrastructure/.env.selfhost /path/to/backup-directory`. Restore replaces the database and private-file volume; verify the target and checksum first. Bring the API/web/proxy up and verify a login plus file access after recovery.
+
+Update by reviewing release notes and migrations, recording the current revision, and deploying the approved revision with the same env file and persistent volumes. Forward migrations run once before the API. Take a current database/file backup before each update. Rollback is not a reverse migration: restore the pre-update database and matching private-file archive together before returning to the prior application revision. Backup restoration and complete upgrade/rollback integration testing are still required before Stage 3 can close.
+
+## Remaining production readiness limits
+
+No Google service-account key or cloud provider credential is needed. The current self-host profile uses university SMTP for single-use sign-in codes and a private Docker volume for file bytes. Before release, rehearse backups/restores and upgrades/rollbacks on disposable Linux deployments; review auth abuse controls, secret storage at rest, session cleanup, log/metrics privacy, retention/deletion, SMTP delivery and private-file permissions. Never enable local preview accounts/inbox/simulation or apply synthetic seeds to hosting. Provide accurate operator/privacy/retention information and a production-owned starter version.
 
 Demonstrate backup/restore of database plus private bytes, migration/rollback procedure, controlled hosted identity/file/retry checks, remote CI, physical phone/assistive-technology checks and human task observation. Native stays last. Local automated success is not evidence of deliverability, payments, retention or physical-device readiness.
 

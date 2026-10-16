@@ -53,19 +53,14 @@
   "devDependencies": {
     "@types/node": "22.19.0",
     "@types/pg": "8.15.6",
-    "prisma": "7.10.0",
-    "tsx": "4.20.6",
     "typescript": "5.9.3"
-  },
-  "overrides": {
-    "tar": "7.5.22",
-    "deepmerge-ts": "8.0.2",
-    "mysql2": "3.24.4"
   },
   "dependencies": {
     "@rafik/shared": "0.1.0",
-    "@prisma/adapter-pg": "7.10.0",
-    "@prisma/client": "7.10.0",
-    "pg": "8.16.3"
+    "@prisma/adapter-pg": "7.10.1",
+    "@prisma/client": "7.10.1",
+    "prisma": "7.10.1",
+    "pg": "8.16.3",
+    "tsx": "4.20.6"
   }
 }

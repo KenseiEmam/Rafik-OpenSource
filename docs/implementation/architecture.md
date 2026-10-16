@@ -1,18 +1,20 @@
 # Current system architecture
 
-**Repository status, 16 October 2026:** the Vue application is under `apps/frontend/`, the API/database/content sources are under `apps/backend/`, and shared API contracts live in `packages/shared/`. The target product is university-first with one university-owned deployment per institution; production self-hosting is still deferred. See the root [requirements](../requirements/README.md) and [architecture proposal](../architecture/README.md) for the target, not-yet-implemented deployment model.
+**Repository status, 16 October 2026:** the Vue application is under `apps/frontend/`, the API/database/content sources are under `apps/backend/`, and shared API contracts live in `packages/shared/`. The target product is university-first with one university-owned deployment per institution. Stage 3 is implementing isolated Compose hosting; release readiness remains gated on backup/restore, update/rollback and security verification. See the root [requirements](../requirements/README.md) and [architecture proposal](../architecture/README.md).
+
+## Self-host deployment boundary (Stage 3)
+
+The single `infrastructure/compose.yaml` defines both local PostgreSQL development and the explicit production `selfhost` profile: PostgreSQL on an internal network, a one-shot Prisma migration job, the Node API, unprivileged static Nginx web service and Caddy HTTPS ingress. The API owns its PostgreSQL identity, sends single-use sign-in codes through university-configured SMTP, and stores private file bytes on its persistent local volume. Every deployment has independent volumes and credentials; no central Rafik service, Google service account, cloud identity, or service key is required. The first organization bootstrap is restricted to the configured administrator email and is closed after that initial organization exists. `backup.sh` and `restore.sh` pair the database with the private-file volume while API writes are paused. See the [self-host runbook](runbook.md) and [ADR 0001](../decisions/ADR-0001-university-owned-deployments.md).
 
 ## Feedback and operational analytics
 
 Optional satisfaction feedback is now source-specific and reusable by the later mobile app: completed workouts and attended, completed training appointments have distinct response counts/distributions; unanswered feedback is unknown. Trainers submit a separate monthly workplace rating, with visibility explained before submission. Administrators see its current-active-trainer coverage separately from client/date filters. Analytics also shows actual trainer session delivery and explicitly recorded package renewals, without inferring quality, revenue or paid retention. Feedback collection lives in `server/organization-feedback.ts`; aggregation lives in `server/experience-report.ts`. Same-subject composite foreign keys, unique response keys, current authorization before replay, explicit revisions and existing workspace transactions protect writes. Own responses are included in exports. See [ADR 0015](../decisions/0015-explicit-feedback-sources.md), [ADR 0014](../decisions/0014-session-package-accounting.md) and [R21 contract](r21-satisfaction.md).
-
 
 ## Session package ownership and accounting
 
 Organization packages now track explicit trainee entitlements, derived available/reserved/used balances, validity dates, auditable allowance corrections and linked renewals. Calendar booking reserves only an explicitly selected package; completion consumes present/charged absent sessions, cancellation/excused/released no-shows release, and independent trial/makeup/prize/other sessions never affect allowances. Staff session details include check-in timestamps and durable notes; the overview surfaces missed sessions without a replacement. Reuses workspace transactions/receipts and existing calendar events; no parallel scheduler or payment processor.
 
 `organization-packages.ts` owns entitlements; `organization-calendar.ts` applies funding changes under the existing workspace transaction. The SQL balance view derives usage from participant/event state. See [the package contract](r20-session-packages.md) and [verification](verification.md) for lifecycle details and acceptance evidence.
-
 
 R7A1 replaces the transitional backend with **one Node/TypeScript API, Prisma and PostgreSQL**. The Vue application retains its accepted interaction design and durable IndexedDB queue. [ADR 0006](../decisions/0006-prisma-api-transition.md) records the transition; [API conventions](../reference/api.md) and the [maintainer guide](maintainer-guide.md) specify its boundaries.
 
@@ -24,42 +26,42 @@ R7A1 replaces the transitional backend with **one Node/TypeScript API, Prisma an
 
 ## System boundary
 
-Vue calls the explicit HTTP API for identity, bounded commands/reads and private files. Prisma owns model generation/migration execution and database access. Existing domain transactions remain PostgreSQL functions, preserving tested snapshots, locking, RLS and replay semantics. Authentication uses Rafik-owned identity tables, hashed opaque sessions and HttpOnly cookies. Local code delivery uses an intercepted database inbox; no mail provider is connected.
+Vue calls the explicit HTTP API for identity, bounded commands/reads and private files. Prisma owns model generation/migration execution and database access. Existing domain transactions remain PostgreSQL functions, preserving tested snapshots, locking, RLS and replay semantics. Authentication uses Rafik-owned identity tables, hashed opaque sessions and HttpOnly cookies. Local code delivery uses an intercepted database inbox; self-host code delivery uses university-configured SMTP.
 
 The API database login cannot inherit broad domain permissions. Each domain transaction sets its fixed guest/user role and actor/claims locally; pooled connections cannot retain actor context. Function/table names come from a server-owned registry of explicitly granted contracts. Parameters are bound, reads are capped and operator-only functions are not registered. The browser never receives database or operator credentials.
 
-Private bytes are behind the same API, with explicit metadata and permissions in PostgreSQL and a local filesystem adapter. Immutable upload, retirement, byte cleanup and metadata cleanup preserve recovery semantics. There is no Supabase Auth, REST/RPC gateway or Storage service in the runtime. Hosting requires different mail/file/configuration adapters and is deliberately blocked with local defaults.
+Private bytes are behind the same API, with explicit metadata and permissions in PostgreSQL and a local filesystem adapter. Immutable upload, retirement, byte cleanup and metadata cleanup preserve recovery semantics. There is no Supabase Auth, REST/RPC gateway or Storage service in the runtime. Local development intercepts code delivery in its local inbox; the self-host profile instead requires university SMTP and persists bytes on its own Docker volume. These production adapters have not yet completed release security and recovery rehearsal.
 
 Static assets/fonts belong to the web build. IndexedDB stores resumable workouts, exact pending commands, editor drafts and bounded diagnostics. The production worker caches static shell files only. There is no restored legacy worker, Firebase, AI service, payment provider or scheduled external notification system. Invitation links are shared by the person; saving a message does not claim delivery outside Rafik.
 
 ## Data model and ownership
 
-| Record | Owner and meaning |
-|---|---|
-| `profiles` | Identity UUID, optional display name and locale/units/timezone preferences; one identity for either role |
-| `exercises` | Shared source-controlled catalog plus coach-owned, revisioned private content; publication snapshots instructions/media links |
-| `plans` | Coach-owned editable draft and monotonic draft revision |
-| `plan_versions` | Immutable published prescription; public flag reserved for the starter fixture |
-| `coach_clients` | Explicit relationship between two people; no organization hierarchy |
-| `assignments` | One active plan assignment per relationship, pointing to a published version |
-| `invitations` | Intended verified email, hashed random token, seven-day expiry, acceptance state and request identity |
-| `sessions` | Client-owned occurrence and immutable day prescription snapshot, actual state, note and coach feedback |
-| `set_entries` | Actual values and units, completed flag, bounded by the session's prescribed set identities |
-| `session_operations` | Receipt for a stable save operation ID; same request replays the acknowledgment |
-| `client_context` | Relationship-scoped goals/constraints/notes; only the owning coach can read/write; revision checked |
-| `schedule_exceptions` | Move/skip overrides for an original assignment/day/date occurrence; no generated future sessions |
-| `coaching_forms` | Coach-owned reusable title/purpose and 1–10 typed questions, revisioned on edit |
-| `coaching_requests` | Assigned title/question/unit/revision snapshot, due date, answers, original submission/review timestamps; participant access |
-| `measurements` | Client-owned weight/waist values, explicit units/date, optional sharing with one relationship, CAS revision |
-| `messages` | Immutable participant text and optional verified workout/request/resource context; stable caller UUID and server sequence |
-| `nutrition_guidance` | Immutable coach-authored effective-date targets/text per relationship and revision |
-| `saved_foods` | Person-owned reusable portion/nutrient/source definitions; editable/retirable |
-| `meal_entries` | Client-owned date/meal/quantity with nutrient/source snapshot and optional relationship visibility |
-| `appointment_slots` | Coach-owned concrete UTC intervals, original local time/timezone, bounded series and availability state |
-| `appointments` | Participant booking snapshots with revision, cancellation/rescheduling and attendance state |
-| `resources` | Person-owned immutable file registration/path/type/size and pending/ready/retired lifecycle |
-| `resource_shares` | Explicit permission from resource owner to a coaching relationship |
-| `conversation_reads` | Current user's monotonic observed sequence per relationship; no public read receipts |
+| Record                | Owner and meaning                                                                                                             |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `profiles`            | Identity UUID, optional display name and locale/units/timezone preferences; one identity for either role                      |
+| `exercises`           | Shared source-controlled catalog plus coach-owned, revisioned private content; publication snapshots instructions/media links |
+| `plans`               | Coach-owned editable draft and monotonic draft revision                                                                       |
+| `plan_versions`       | Immutable published prescription; public flag reserved for the starter fixture                                                |
+| `coach_clients`       | Explicit relationship between two people; no organization hierarchy                                                           |
+| `assignments`         | One active plan assignment per relationship, pointing to a published version                                                  |
+| `invitations`         | Intended verified email, hashed random token, seven-day expiry, acceptance state and request identity                         |
+| `sessions`            | Client-owned occurrence and immutable day prescription snapshot, actual state, note and coach feedback                        |
+| `set_entries`         | Actual values and units, completed flag, bounded by the session's prescribed set identities                                   |
+| `session_operations`  | Receipt for a stable save operation ID; same request replays the acknowledgment                                               |
+| `client_context`      | Relationship-scoped goals/constraints/notes; only the owning coach can read/write; revision checked                           |
+| `schedule_exceptions` | Move/skip overrides for an original assignment/day/date occurrence; no generated future sessions                              |
+| `coaching_forms`      | Coach-owned reusable title/purpose and 1–10 typed questions, revisioned on edit                                               |
+| `coaching_requests`   | Assigned title/question/unit/revision snapshot, due date, answers, original submission/review timestamps; participant access  |
+| `measurements`        | Client-owned weight/waist values, explicit units/date, optional sharing with one relationship, CAS revision                   |
+| `messages`            | Immutable participant text and optional verified workout/request/resource context; stable caller UUID and server sequence     |
+| `nutrition_guidance`  | Immutable coach-authored effective-date targets/text per relationship and revision                                            |
+| `saved_foods`         | Person-owned reusable portion/nutrient/source definitions; editable/retirable                                                 |
+| `meal_entries`        | Client-owned date/meal/quantity with nutrient/source snapshot and optional relationship visibility                            |
+| `appointment_slots`   | Coach-owned concrete UTC intervals, original local time/timezone, bounded series and availability state                       |
+| `appointments`        | Participant booking snapshots with revision, cancellation/rescheduling and attendance state                                   |
+| `resources`           | Person-owned immutable file registration/path/type/size and pending/ready/retired lifecycle                                   |
+| `resource_shares`     | Explicit permission from resource owner to a coaching relationship                                                            |
+| `conversation_reads`  | Current user's monotonic observed sequence per relationship; no public read receipts                                          |
 
 A flexible assignment occurrence is `(client, assignment, client-local date, prescribed day ID)`. A scheduled occurrence uses its original scheduled date, even when moved. The bounded schedule projection applies cycle offsets, assignment dates and explicit exceptions; the start command verifies that the occurrence is available on the client-local current date. Starting that same slot twice returns one session. Two different day slots can be performed on one day. Repeating the identical assigned slot twice on one date is not a separate supported occurrence. Public sample attempts use their own persistent start ID. Dates use the saved client timezone, detected from the browser on initial profile creation; the UI allows changing it in Settings. A missing display name defaults to the verified email local part and can be edited later, keeping new clients identifiable without adding a signup form.
 
@@ -69,42 +71,42 @@ Exercise instructions are catalog content; prescribed sets, reps, loads and note
 
 Independent domain writes use explicit PostgreSQL functions; organization commands use explicit Prisma transactions. No trigger orchestrates another domain. R10 permits only transactional notification-intent capture, as specified in ADR 0007. Read policies provide only owned/related data or the public sample. Frontend command/table names are checked against generated database types; runtime JSON is validated by the database. Read helpers fetch stable pages so the server response cap does not silently omit older history.
 
-| Command | Inputs / outcome | Retry and failure behavior |
-|---|---|---|
-| `ensure_profile` | Current verified identity, optional name/locale/timezone; returns profile | Creates once; no setup wizard |
-| `update_profile` | Name, locale, units, IANA timezone | Validates timezone and bounded fields |
-| `save_plan` | Stable plan UUID, draft, title, expected revision | Compare-and-swap; same acknowledged content can be replayed without another revision |
-| `publish_plan` | Plan UUID, expected revision | One immutable version per draft revision; duplicate publication returns it |
-| `create_invitation` | Intended email, owned version, random token, stable request UUID | Token hash only on server; request replay returns same record; payload mismatch rejected |
-| `get_invitation` | Token | Public response contains coach context/status, no email or private prescription |
-| `accept_invitation` | Token and verified current verified identity | Intended email checked; relationship, assignment and acceptance commit together; retry returns the same assignment |
-| `revoke_invitation` | Owned pending invitation UUID | Stops future acceptance; does not send anything |
-| `assign_plan` | Owned relationship and published version | Changes future starts; clears schedule exceptions; existing sessions keep snapshots |
-| `save_client_context` / `set_client_state` | Owned relationship, bounded private text + expected revision / active or archived | Context replay/CAS; relationship lock serializes archive versus start |
-| `save_exercise` / `set_exercise_active` | Stable ID, owned bounded content + revision / active flag | CAS and stable-create replay; retire without mutating snapshots |
-| `configure_assignment` | Owned assignment, version, start/end, flexible/cycle, revision | CAS; clears exceptions on a changed schedule; no history regeneration |
-| `assignment_schedule` / `change_scheduled_day` | Bounded date range / original day/date and target/state | At most 42 queried days and 41-day move; started occurrences cannot move |
-| `previous_performance` | At most 48 exercise IDs (12 prescribed exercises plus three alternatives each) and session start cutoff | Most recent completed actual per exercise; caller-owned results only |
-| `start_session` | Persistent attempt UUID, version, day, optional assignment | Server verifies access and selects the prescription; same assigned occurrence returns its canonical UUID |
-| `save_session` | Session, expected version, stable operation UUID, full bounded entries, note, completion flag | Transactional validation, compare-and-swap, receipt replay; conflict keeps the device draft |
-| `review_session` | Owned coached completed session, feedback | Stores feedback and reviewed time; does not alter client results or completion |
-| `delete_my_account` | Current verified identity and literal confirmation | Deletes that identity and owned records; other clients retain their session snapshots with nullable coach/version references |
+| Command                                        | Inputs / outcome                                                                                        | Retry and failure behavior                                                                                                   |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `ensure_profile`                               | Current verified identity, optional name/locale/timezone; returns profile                               | Creates once; no setup wizard                                                                                                |
+| `update_profile`                               | Name, locale, units, IANA timezone                                                                      | Validates timezone and bounded fields                                                                                        |
+| `save_plan`                                    | Stable plan UUID, draft, title, expected revision                                                       | Compare-and-swap; same acknowledged content can be replayed without another revision                                         |
+| `publish_plan`                                 | Plan UUID, expected revision                                                                            | One immutable version per draft revision; duplicate publication returns it                                                   |
+| `create_invitation`                            | Intended email, owned version, random token, stable request UUID                                        | Token hash only on server; request replay returns same record; payload mismatch rejected                                     |
+| `get_invitation`                               | Token                                                                                                   | Public response contains coach context/status, no email or private prescription                                              |
+| `accept_invitation`                            | Token and verified current verified identity                                                            | Intended email checked; relationship, assignment and acceptance commit together; retry returns the same assignment           |
+| `revoke_invitation`                            | Owned pending invitation UUID                                                                           | Stops future acceptance; does not send anything                                                                              |
+| `assign_plan`                                  | Owned relationship and published version                                                                | Changes future starts; clears schedule exceptions; existing sessions keep snapshots                                          |
+| `save_client_context` / `set_client_state`     | Owned relationship, bounded private text + expected revision / active or archived                       | Context replay/CAS; relationship lock serializes archive versus start                                                        |
+| `save_exercise` / `set_exercise_active`        | Stable ID, owned bounded content + revision / active flag                                               | CAS and stable-create replay; retire without mutating snapshots                                                              |
+| `configure_assignment`                         | Owned assignment, version, start/end, flexible/cycle, revision                                          | CAS; clears exceptions on a changed schedule; no history regeneration                                                        |
+| `assignment_schedule` / `change_scheduled_day` | Bounded date range / original day/date and target/state                                                 | At most 42 queried days and 41-day move; started occurrences cannot move                                                     |
+| `previous_performance`                         | At most 48 exercise IDs (12 prescribed exercises plus three alternatives each) and session start cutoff | Most recent completed actual per exercise; caller-owned results only                                                         |
+| `start_session`                                | Persistent attempt UUID, version, day, optional assignment                                              | Server verifies access and selects the prescription; same assigned occurrence returns its canonical UUID                     |
+| `save_session`                                 | Session, expected version, stable operation UUID, full bounded entries, note, completion flag           | Transactional validation, compare-and-swap, receipt replay; conflict keeps the device draft                                  |
+| `review_session`                               | Owned coached completed session, feedback                                                               | Stores feedback and reviewed time; does not alter client results or completion                                               |
+| `delete_my_account`                            | Current verified identity and literal confirmation                                                      | Deletes that identity and owned records; other clients retain their session snapshots with nullable coach/version references |
 
 `session_document` reads one authorized session with its actual set entries. Tables are not an alternative write interface. Failures such as `conflict`, `wrong_email`, `plan_changed`, `invalid_entry` and `invitation_unavailable` map to contextual recovery copy.
 
 ## Ongoing coaching commands and lifecycle
 
-| Command | Contract |
-|---|---|
-| `save_coaching_form` | Stable UUID + expected revision, title, purpose and bounded fields. Identical content retry returns the same record. Coach ownership is explicit. |
-| `assign_coaching_form` | Stable series UUID, relationship, form/revision, first local due date, 1–12 occurrences and 7/14-day interval. Copies immutable questions/units into each request; same series/payload retries without duplication. |
-| `save_coaching_response` | Client only, request UUID, complete answer object, expected revision and submit flag. Validates typed values and required fields at submission. Incomplete drafts are allowed. Corrections retain `submitted_at`, clear old review and increment revision. |
-| `review_coaching_response` | Coach only, specific response revision and optional feedback. Stale review cannot silently approve a newer answer. |
-| `cancel_coaching_request` | Coach, expected revision; only unsubmitted occurrences can be cancelled. Other occurrences remain independent. |
-| `save_measurement` / `remove_measurement` | Client-only write, explicit weight/waist unit/date, expected revision. Personal by default or shared to one active relationship. A coach cannot author measurements as the client. |
-| `send_message` | Caller UUID, participant relationship, 1–4,000 characters, optional session/request context belonging to that relationship. Identical payload replays; conflicting UUID reuse fails. |
-| `mark_conversation_read` / `conversation_inbox` | Cursor can advance only to an existing sequence in the conversation; summaries count persisted incoming messages after that cursor. |
-| `training_progress` | Self or authorized relationship, inclusive range of at most 366 calendar days. Completed sessions and completed actual sets only; no projection or target values. |
+| Command                                         | Contract                                                                                                                                                                                                                                                   |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `save_coaching_form`                            | Stable UUID + expected revision, title, purpose and bounded fields. Identical content retry returns the same record. Coach ownership is explicit.                                                                                                          |
+| `assign_coaching_form`                          | Stable series UUID, relationship, form/revision, first local due date, 1–12 occurrences and 7/14-day interval. Copies immutable questions/units into each request; same series/payload retries without duplication.                                        |
+| `save_coaching_response`                        | Client only, request UUID, complete answer object, expected revision and submit flag. Validates typed values and required fields at submission. Incomplete drafts are allowed. Corrections retain `submitted_at`, clear old review and increment revision. |
+| `review_coaching_response`                      | Coach only, specific response revision and optional feedback. Stale review cannot silently approve a newer answer.                                                                                                                                         |
+| `cancel_coaching_request`                       | Coach, expected revision; only unsubmitted occurrences can be cancelled. Other occurrences remain independent.                                                                                                                                             |
+| `save_measurement` / `remove_measurement`       | Client-only write, explicit weight/waist unit/date, expected revision. Personal by default or shared to one active relationship. A coach cannot author measurements as the client.                                                                         |
+| `send_message`                                  | Caller UUID, participant relationship, 1–4,000 characters, optional session/request context belonging to that relationship. Identical payload replays; conflicting UUID reuse fails.                                                                       |
+| `mark_conversation_read` / `conversation_inbox` | Cursor can advance only to an existing sequence in the conversation; summaries count persisted incoming messages after that cursor.                                                                                                                        |
+| `training_progress`                             | Self or authorized relationship, inclusive range of at most 366 calendar days. Completed sessions and completed actual sets only; no projection or target values.                                                                                          |
 
 Question vocabulary is text (up to 2,000 characters), number (optional bounds and explicit unit) or boolean. One-off assignments use count 1; repeated assignments are explicitly bounded rows, not an automated recurring job. Due dates are calendar dates, displayed against the client's timezone. Requests have separate cancelled, draft, submitted, corrected and reviewed states. Assessments compare numeric results only within the same template ID and revision; labels/units from another revision never silently merge.
 
@@ -124,7 +126,7 @@ Frontend `features/ongoing` uses the shared API/Auth/storage adapters. Form edit
 6. The account ID namespaces local records. Switching accounts never adopts someone else's pending work. Guest adoption is a separate user action after sign-in.
 7. Clean local records refresh from the server when reopened, including new coach feedback. A concurrent local edit prevents a delayed read from replacing it.
 
-The browser must have successfully loaded the production shell once for a fully offline reload. Authenticated *new* sessions need the server to verify assignments. Already opened workouts can be recorded offline. Browser storage eviction/private-mode restrictions are not cloud backup; guest copy explains this distinction.
+The browser must have successfully loaded the production shell once for a fully offline reload. Authenticated _new_ sessions need the server to verify assignments. Already opened workouts can be recorded offline. Browser storage eviction/private-mode restrictions are not cloud backup; guest copy explains this distinction.
 
 ## Maintainability decisions
 
@@ -155,17 +157,17 @@ R3 has no upload worker, image transformation service, external food provider, c
 
 The [R4 contract](r4-contract.md) is the ownership/interaction contract. Teams are an optional coordination layer over existing direct coaching relationships. They do not replace Auth identity or participant access. Ten coordination tables each have one purpose:
 
-| Table | Responsibility |
-|---|---|
-| `teams` | Name, one owner, revision, closed flag; closed teams survive owner deletion with a null owner |
-| `team_members` | Fixed admin/coach membership and active/removed state; owner derived from team record |
-| `team_invitations` | Intended verified email, token hash, role, expiry and acceptance/revocation |
-| `team_clients` | Client-approved roster enrollment, current direct relationship/coach, proposed coach, consent revision/last decision |
-| `team_groups`, `team_group_members` | Named optional roster subsets; archiving removes membership links, preserves receipts |
-| `team_plans` | Immutable published snapshots; import clones exercises and creates an independently owned draft |
-| `team_resource_shares` | Explicit staff grant for person-owned ready files; distinct from client relationship sharing |
-| `team_assignments` | Stable bulk-command receipt: actor, group, version and canonical selected enrollment IDs |
-| `team_activity` | Small administrative event log; latest 30 entries shown to owners/admins |
+| Table                               | Responsibility                                                                                                       |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `teams`                             | Name, one owner, revision, closed flag; closed teams survive owner deletion with a null owner                        |
+| `team_members`                      | Fixed admin/coach membership and active/removed state; owner derived from team record                                |
+| `team_invitations`                  | Intended verified email, token hash, role, expiry and acceptance/revocation                                          |
+| `team_clients`                      | Client-approved roster enrollment, current direct relationship/coach, proposed coach, consent revision/last decision |
+| `team_groups`, `team_group_members` | Named optional roster subsets; archiving removes membership links, preserves receipts                                |
+| `team_plans`                        | Immutable published snapshots; import clones exercises and creates an independently owned draft                      |
+| `team_resource_shares`              | Explicit staff grant for person-owned ready files; distinct from client relationship sharing                         |
+| `team_assignments`                  | Stable bulk-command receipt: actor, group, version and canonical selected enrollment IDs                             |
+| `team_activity`                     | Small administrative event log; latest 30 entries shown to owners/admins                                             |
 
 `business_accounts` is uniquely personal or team-scoped; `business_events` stores provider receipts; `support_cases` stores submitted case content/state/reply. `runtime_settings` is internal, RLS-enabled and ungranted to browser roles. Its `local_simulation` defaults false in the migration and is enabled by local fixtures only. Initial trial (14 days, 10 staff/50 clients) is a testable local default, **not validated pricing or a production offer**.
 
@@ -267,7 +269,6 @@ The coach/organization entry and role-specific Help use the existing server cont
 Web nutrition uses the existing persisted command mechanism, one pending exact request per actor/role. Draft keys additionally include relationship/visibility and (for actual meals) date. A pending response locks editing until resolved. Context changes restore only that context's draft. Independent nutrition relationship authorization is unchanged; organization nutrition is implemented separately in R16; those relationships are not repurposed.
 
 Nutrition acknowledgement cleanup can finish after navigation, but its route/query updates are guarded by screen lifetime. Initial loads and draft-context selection use the same disposal boundary. The durable command receipt is still resolved; ignoring a stale screen does not mean abandoning the user’s acknowledged write.
-
 
 ## Exercise catalog, facets and motion (R15)
 

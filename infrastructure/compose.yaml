@@ -1,19 +1,143 @@
-name: rafik-prisma-local
+name: ${RAFIK_INSTANCE_ID:-rafik}
+
 services:
   db:
-    image: postgres:17.6
-    ports:
-      - "127.0.0.1:55332:5432"
+    image: postgres:17.6-alpine
+    restart: unless-stopped
     environment:
       POSTGRES_USER: rafik_migrate
-      POSTGRES_PASSWORD: rafik-local-migrations-only
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rafik-local-migrations-only}
       POSTGRES_DB: rafik
+    ports:
+      - '${POSTGRES_BIND:-127.0.0.1}:${POSTGRES_HOST_PORT:-55332}:5432'
     volumes:
       - rafik_pg:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U rafik_migrate -d rafik"]
-      interval: 2s
-      timeout: 2s
+      test: ['CMD-SHELL', 'pg_isready -U rafik_migrate -d rafik']
+      interval: 5s
+      timeout: 3s
       retries: 20
+      start_period: 10s
+    networks:
+      - database
+
+  migrate:
+    profiles: [selfhost]
+    build:
+      context: ..
+      dockerfile: apps/backend/Dockerfile
+    restart: 'no'
+    environment:
+      NODE_ENV: production
+      MIGRATION_DATABASE_URL: postgresql://rafik_migrate:${POSTGRES_PASSWORD:-rafik-local-migrations-only}@db:5432/rafik
+      RAFIK_API_PASSWORD: ${RAFIK_API_PASSWORD:-}
+    command: ['node', 'scripts/prisma/production-migrate.mjs']
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - database
+
+  api:
+    profiles: [selfhost]
+    build:
+      context: ..
+      dockerfile: apps/backend/Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      RAFIK_RUNTIME_MODE: self-hosted-university
+      RAFIK_TRUST_PROXY: 'true'
+      HOST: 0.0.0.0
+      PORT: 55331
+      DATABASE_URL: postgresql://rafik_api:${RAFIK_API_PASSWORD:-}@db:5432/rafik
+      RAFIK_API_PASSWORD: ${RAFIK_API_PASSWORD:-}
+      RAFIK_PUBLIC_ORIGIN: https://${APP_DOMAIN:-}
+      RAFIK_BOOTSTRAP_EMAIL: ${RAFIK_BOOTSTRAP_EMAIL:-}
+      RAFIK_PRIVATE_FILES_DIR: /data/private-files
+      RAFIK_SMTP_HOST: ${RAFIK_SMTP_HOST:-}
+      RAFIK_SMTP_PORT: ${RAFIK_SMTP_PORT:-587}
+      RAFIK_SMTP_TLS_MODE: ${RAFIK_SMTP_TLS_MODE:-starttls}
+      RAFIK_SMTP_USER: ${RAFIK_SMTP_USER:-}
+      RAFIK_SMTP_PASSWORD: ${RAFIK_SMTP_PASSWORD:-}
+      RAFIK_MAIL_FROM: ${RAFIK_MAIL_FROM:-}
+    volumes:
+      - rafik_private_files:/data/private-files
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:55331/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 10s
+      timeout: 4s
+      retries: 12
+      start_period: 20s
+    networks:
+      - database
+      - application
+
+  web:
+    profiles: [selfhost]
+    build:
+      context: ..
+      dockerfile: apps/frontend/Dockerfile
+      args:
+        VITE_API_URL: /api
+        VITE_LOCAL_PREVIEW: 'false'
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -q -O /dev/null http://127.0.0.1:8080/healthz']
+      interval: 10s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
+    networks:
+      - application
+
+  caddy:
+    profiles: [selfhost]
+    image: caddy:2.10.2-alpine
+    restart: unless-stopped
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:-}
+      ACME_EMAIL: ${ACME_EMAIL:-}
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      web:
+        condition: service_healthy
+    networks:
+      - application
+
+  file-ops:
+    profiles: [selfhost]
+    image: node:22.16.0-bookworm-slim
+    entrypoint: ['sh', '-c']
+    volumes:
+      - rafik_private_files:/data
+    networks:
+      - database
+
 volumes:
   rafik_pg:
+  rafik_private_files:
+  caddy_data:
+  caddy_config:
+
+networks:
+  database:
+    internal: true
+  application:

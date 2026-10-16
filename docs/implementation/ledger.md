@@ -6,7 +6,7 @@ The founder approved consolidating the Vue frontend and Prisma/PostgreSQL API in
 
 The repository now has a root contributor guide, architecture/requirements/testing documentation, a unified quick start, root license, CI workflow and corrected workspace script paths. Research and coordination Markdown was centralized under `docs/revival/coordination/`; canonical backend data inputs remain with the backend. The imported runtime ADR was renumbered to 0016 to avoid colliding with the university deployment ADR 0001. The current runtime remains the existing local gym-first product. On 16 October 2026, the GitHub repository was confirmed public under the requested name and the Stage 2 commit was pushed. University provisioning/model, provider integrations, deployment, and release remain future work.
 
-**Stage status: complete; Stage 3 has not started and awaits user approval.** The clean pinned-runtime install, focused workspace verification, dependency/license and third-party content/media rights review, and isolated fresh-database migration rehearsal are recorded in [verification](verification.md). The requested repository rename and public visibility were confirmed, and the Stage 2 commit was pushed. No relevant GitHub Actions run was available. The Vercel status belongs to a separate hosted deployment and is not a gate for the Unix Docker target. The root `SECURITY.md` gives a private-reporting path through GitHub Security Advisories when available, with a fallback that does not expose vulnerability details publicly. See [the staged plan](../requirements/README.md) for acceptance criteria and [verification](verification.md) for actual checks and limits.
+**Stage 2 is complete; Stage 3 is in progress (approved 16 October 2026).** The clean pinned-runtime install, focused workspace verification, dependency/license and third-party content/media rights review, and isolated fresh-database migration rehearsal are recorded in [verification](verification.md). Stage 3 adds the production Compose profile, container builds, SMTP adapter, first-organization bootstrap guard, generated per-instance database role password and Vercel config removal. Prisma is patched to 7.10.1; the root overrides pin audited transitive dependencies, and `npm audit` reports zero vulnerabilities. The founder revoked the exposed Google service-account key; its public Git ancestry still needs rewriting before release. Backup/restore and upgrade/rollback rehearsal also remain. Vercel dashboard cleanup is deferred by founder direction. See [the staged plan](../requirements/README.md) and [verification](verification.md).
 
 The pinned Node 22.16.0 clean install completed from the root lockfile without changing the workstation's Node 24 installation. Frontend unit tests (27), frontend production build/typecheck, backend typecheck, release-guard tests (7), canonical content checks, dependency/content-rights review, and the isolated fresh-database migration/eight-SQL-suite rehearsal passed. Backend typechecking exposed and fixed a `Buffer`-to-string typing mismatch in the scale test. The formatter still reports existing style differences in 167 frontend files; they were not bulk-reformatted. No relevant GitHub Actions run was available; the Vercel status is unrelated to the Docker hosting target. See the [verification log](verification.md) for evidence and limits.
 
@@ -15,7 +15,6 @@ The content-byte check exposed Git line-ending conversion on tracked SVGs, while
 ## R21 — Separate experience signals
 
 Optional satisfaction feedback is now source-specific and reusable by the later mobile app: completed workouts and attended, completed training appointments have distinct response counts/distributions; unanswered feedback is unknown. Trainers submit a separate monthly workplace rating, with visibility explained before submission. Administrators see its current-active-trainer coverage separately from client/date filters. Analytics also shows actual trainer session delivery and explicitly recorded package renewals, without inferring quality, revenue or paid retention. Implemented and accepted locally. See [contract](r21-satisfaction.md).
-
 
 **Local acceptance passed:** all 35 full-release gates, 122 browser journeys, 1,120 broad layout states, 27 web units, backend/domain/content/build/cache checks and a fresh 40-migration/eight-SQL-suite installation. A subsequent four-case Chromium/WebKit run expanded feedback/report coverage to 96 width/language/theme/engine states and repeated package/session-note recovery, with unchanged application sources. Actual desktop and Arabic 320px renders were inspected. [Receipt](evidence/r21-verification.txt) and [full report](evidence/r21-release-report.json) preserve commands, failures corrected and limits. Native apps, hosting/providers, physical devices and human/business outcomes remain unverified.
 
@@ -26,7 +25,6 @@ Paired web checkpoint: `47b1ac4` on `codex/revamp`. This backend checkpoint cont
 Organization packages now track explicit trainee entitlements, derived available/reserved/used balances, validity dates, auditable allowance corrections and linked renewals. Calendar booking reserves only an explicitly selected package; completion consumes present/charged absent sessions, cancellation/excused/released no-shows release, and independent trial/makeup/prize/other sessions never affect allowances. Staff session details include check-in timestamps and durable notes; the overview surfaces missed sessions without a replacement. Reuses workspace transactions/receipts and existing calendar events; no parallel scheduler or payment processor.
 
 Contract: [session packages](r20-session-packages.md). Local acceptance: 3 package API groups, 2 calendar/service groups, 2 task groups, 6 isolated Chromium/WebKit journeys, 38 migrations/eight SQL suites, web units/build/types/format. Browser package list/detail covers 16 engine/width/language/theme combinations plus funding and correction flows. Desktop and Arabic 320px captures were inspected. Evidence: [receipt](evidence/r20-verification.txt). Full release verification and R21 feedback reporting follow; native, hosted payments/providers and physical devices are unverified.
-
 
 Historical checkpoints follow in reverse chronological order. Current acceptance is recorded in the R21 entry above and [the ordered register](r17-gym-direction.md). No hosting or native work.
 
@@ -170,21 +168,21 @@ The web includes separate admin/assigned-trainer/own-trainee views, focused memb
 
 **Next:** R7A2 context/organization ownership and role-specific views, then R8 programming, R9 services/assessments/analytics, R10 notifications, R11 local operations and R12 available refinement. Commit each accepted phase and continue; stop only for genuinely required user input.
 
-| Unit | Status | Evidence / boundary |
-|---|---|---|
-| E01 Foundations | Implemented locally | Node/CLI/dependency pins, fresh Vite/Supabase configuration, synthetic reset, remote-link guard, generated types, CI definitions |
-| E02 Minimal domain | Implemented and database-tested | Ten tables, explicit transactional commands, stable occurrences, immutable prescriptions, bounded values, unit/timezone rules, no orchestration triggers |
-| E03 UI/UX | Initial slice implemented and visually inspected | Sample, basic client logging and basic coach tasks; Manrope/Noto Arabic; responsive light/dark/RTL; broader product surfaces remain missing |
-| E04 Entry/Auth | Implemented and browser-tested | Useful public sample; email code in local test inbox; private verified invitation; guest work preserved and adopted after sign-in |
-| E05 Durable recording | Implemented and fault-tested | IndexedDB writes, stable operation receipts, serial/cross-tab sync, offline recording, production shell cache, retry and explicit conflict recovery |
-| E06 Plan/results correctness | Implemented and tested | Fixed publication revisions; started snapshots survive updates; actual set/note correction preserves completion; contextual feedback refreshes |
-| E07 Coach work surface | Implemented core | Starter, duplicate/adapt, recoverable drafts, preview, publication, link invitation, explicit reassignment and actual-result review |
-| E08 Content | Implemented | Eight bilingual exercises and two starter sessions, one canonical content source, generated seed/web outputs, documented asset provenance |
-| E09 Necessary operations | Implemented locally | Truthful save states, bounded local diagnostics, help, data export/deletion, account settings; local mail only; no added worker/provider chain |
-| E10 Verification | Local checks passed; physical-device/participant gates remain | See `verification.md` for exact browser/database/build coverage and WebKit offline-test method |
-| E11 Hosting | Prepared, deferred | New-project release steps in `runbook.md`; no hosted project, deployment or old-backend change |
-| E12 Usefulness/business observations | Materials prepared; not claimed as completed research | Demo, observation scripts, outcome ledger and iteration rules in `pilot.md`; no outreach/payments sent |
-| Native app | Deferred as instructed | No application source changes |
+| Unit                                 | Status                                                        | Evidence / boundary                                                                                                                                      |
+| ------------------------------------ | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| E01 Foundations                      | Implemented locally                                           | Node/CLI/dependency pins, fresh Vite/Supabase configuration, synthetic reset, remote-link guard, generated types, CI definitions                         |
+| E02 Minimal domain                   | Implemented and database-tested                               | Ten tables, explicit transactional commands, stable occurrences, immutable prescriptions, bounded values, unit/timezone rules, no orchestration triggers |
+| E03 UI/UX                            | Initial slice implemented and visually inspected              | Sample, basic client logging and basic coach tasks; Manrope/Noto Arabic; responsive light/dark/RTL; broader product surfaces remain missing              |
+| E04 Entry/Auth                       | Implemented and browser-tested                                | Useful public sample; email code in local test inbox; private verified invitation; guest work preserved and adopted after sign-in                        |
+| E05 Durable recording                | Implemented and fault-tested                                  | IndexedDB writes, stable operation receipts, serial/cross-tab sync, offline recording, production shell cache, retry and explicit conflict recovery      |
+| E06 Plan/results correctness         | Implemented and tested                                        | Fixed publication revisions; started snapshots survive updates; actual set/note correction preserves completion; contextual feedback refreshes           |
+| E07 Coach work surface               | Implemented core                                              | Starter, duplicate/adapt, recoverable drafts, preview, publication, link invitation, explicit reassignment and actual-result review                      |
+| E08 Content                          | Implemented                                                   | Eight bilingual exercises and two starter sessions, one canonical content source, generated seed/web outputs, documented asset provenance                |
+| E09 Necessary operations             | Implemented locally                                           | Truthful save states, bounded local diagnostics, help, data export/deletion, account settings; local mail only; no added worker/provider chain           |
+| E10 Verification                     | Local checks passed; physical-device/participant gates remain | See `verification.md` for exact browser/database/build coverage and WebKit offline-test method                                                           |
+| E11 Hosting                          | Prepared, deferred                                            | New-project release steps in `runbook.md`; no hosted project, deployment or old-backend change                                                           |
+| E12 Usefulness/business observations | Materials prepared; not claimed as completed research         | Demo, observation scripts, outcome ledger and iteration rules in `pilot.md`; no outreach/payments sent                                                   |
+| Native app                           | Deferred as instructed                                        | No application source changes                                                                                                                            |
 
 ## R1 — Daily coaching expansion
 
@@ -239,7 +237,6 @@ The earlier decision to treat the broad product inventory as merely optional was
 ## Current next action for Codex
 
 **Founder steering during R7:** prioritize coach/organization web workflows; trainees primarily use the later native revamp. Hosting must use Prisma + PostgreSQL and one server API; replace the transitional Supabase Auth/RPC/Storage dependencies locally before hosting. See [ADR 0004](../decisions/0004-coach-web-and-prisma-target.md). All upcoming local phases and per-phase commits are authorized.
-
 
 The [forward roadmap](forward-roadmap.md) now sequences **R7 checkpoint → R7A → R8 → R9 → R10 → R11 → R12**. R7 is implemented locally below; R7A1 transport is implemented; R7A2 membership and R8 programming/history are implemented locally; R9–R12 remain in progress.
 

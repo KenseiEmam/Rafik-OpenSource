@@ -4,6 +4,9 @@ dist/
 .env
 .env.*
 !.env.example
+!infrastructure/.env.selfhost.example
+infrastructure/.env.selfhost
+infrastructure/backups/
 coverage/
 test-results/
 playwright-report/

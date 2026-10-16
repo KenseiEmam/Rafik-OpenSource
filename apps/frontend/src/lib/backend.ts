@@ -1,7 +1,8 @@
 import type { ApiErrorBody, ApiUser } from '@rafik/shared/contracts'
 import type { Database } from '@rafik/shared/database.types'
 export type { ApiUser } from '@rafik/shared/contracts'
-const url = import.meta.env.VITE_API_URL || 'http://127.0.0.1:55331'
+const url =
+  import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://127.0.0.1:55331' : '/api')
 if (url.includes('pexviywnztvqomfosvho')) throw new Error('The retired backend cannot be used.')
 export const configured = Boolean(url)
 export const localPreview =
@@ -28,7 +29,9 @@ export async function request<T>(path: string, options: RequestInit = {}): Promi
     },
   })
   if (!response.ok) {
-    const error = await response.json().catch((): ApiErrorBody => ({ message: 'service_unavailable' }))
+    const error = await response
+      .json()
+      .catch((): ApiErrorBody => ({ message: 'service_unavailable' }))
     throw new ApiError(response.status, error.message)
   }
   return response.json() as Promise<T>

@@ -211,6 +211,19 @@ export async function createWorkspace(
   const name = textValue(input.name);
   const memberName = await ownName(actor);
   return db.$transaction(async (tx) => {
+    if (process.env.RAFIK_RUNTIME_MODE === "self-hosted-university") {
+      await tx.$queryRaw`SELECT pg_advisory_xact_lock(1179406164,3)`;
+      const existing = await tx.workspaces.count({
+        where: { kind: "organization" },
+      });
+      if (
+        kind !== "organization" ||
+        existing !== 0 ||
+        actor.email?.toLowerCase() !==
+          process.env.RAFIK_BOOTSTRAP_EMAIL?.toLowerCase()
+      )
+        throw new ApiError(403, "initial_administrator_bootstrap_closed");
+    }
     await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${actor.id},74))::text`;
     const prior = await tx.workspaces.findUnique({ where: { id } });
     if (prior) {

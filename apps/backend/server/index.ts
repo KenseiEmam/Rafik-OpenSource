@@ -87,6 +87,7 @@ import {
 } from "./public-catalog.ts";
 import { localInbox } from "./local-inbox.ts";
 const origins = new Set([
+  ...(process.env.RAFIK_PUBLIC_ORIGIN ? [process.env.RAFIK_PUBLIC_ORIGIN] : []),
   ...(process.env.RAFIK_TEST_ORIGINS
     ? process.env.RAFIK_TEST_ORIGINS.split(",").filter((o) =>
         /^http:\/\/127\.0\.0\.1:518[34]$/.test(o),
@@ -792,10 +793,16 @@ const server = createServer(async (req, res) => {
   }
 });
 server.requestTimeout = 20000;
-server.listen(Number(process.env.PORT || 55331), "127.0.0.1", () =>
-  console.log(
-    "Rafik API ready on http://127.0.0.1:" + (process.env.PORT || 55331),
-  ),
+server.listen(
+  Number(process.env.PORT || 55331),
+  process.env.HOST || "127.0.0.1",
+  () =>
+    console.log(
+      "Rafik API ready on " +
+        (process.env.HOST || "127.0.0.1") +
+        ":" +
+        (process.env.PORT || 55331),
+    ),
 );
 for (const signal of ["SIGINT", "SIGTERM"] as const)
   process.on(signal, () =>

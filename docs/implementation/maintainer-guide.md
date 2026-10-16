@@ -8,13 +8,11 @@ Keep tracked SVG, JSON and SQL files at LF as defined in the root `.gitattribute
 
 `FeedbackPage.vue` lists eligible own sources; `RatingForm.vue` handles optional non-defaulted scores and durable drafts/commands. `ExperienceReport.vue` separates client, workplace and renewal views; `TrainerDelivery.vue` adds event-staff delivery counts and a readable table. Session completion links lead to the same feedback service; do not add a second mobile-only rating store. Extend both HTTP authorization tests and the isolated source-to-chart journey when modifying a measure. Use `npm run test:organization-feedback`; web: `npm run test:e2e -- organization-feedback.e2e.ts`. [R21 contract](r21-satisfaction.md) defines exact time windows/denominators.
 
-
 ## Maintaining session packages
 
 Organization packages now track explicit trainee entitlements, derived available/reserved/used balances, validity dates, auditable allowance corrections and linked renewals. Calendar booking reserves only an explicitly selected package; completion consumes present/charged absent sessions, cancellation/excused/released no-shows release, and independent trial/makeup/prize/other sessions never affect allowances. Staff session details include check-in timestamps and durable notes; the overview surfaces missed sessions without a replacement. Reuses workspace transactions/receipts and existing calendar events; no parallel scheduler or payment processor.
 
 Change entitlements in `server/organization-packages.ts` and booking/accounting in `server/organization-calendar.ts`. Web entry points are `OrganizationPackages.vue`, `PackageFunding.vue` and `SessionNote.vue`. Keep derived balances and funding mutations in the same workspace transaction. Extend `tests/organization-packages.test.ts` and the companion `tests/organization-packages.e2e.ts` for lifecycle changes. See [the contract](r20-session-packages.md) and [verification](verification.md).
-
 
 The current implementation is recorded through R21. Read the [ledger](ledger.md), [architecture](architecture.md), [runbook](runbook.md) and [role audit](role-scope-audit.md). The root docs describe the approved university-first stages. Existing gym/organization features are available locally; university injury workflows and production hosting are not implemented.
 
@@ -36,32 +34,32 @@ The database owns transactional domain invariants, revisions, permissions and im
 
 Run backend commands from the monorepo root through `npm run <script>` aliases, or target a workspace explicitly with `npm run <script> --workspace @rafik/backend`. Frontend commands target `@rafik/frontend`. Install once with root `npm ci`; there are no nested dependency installs or nested lockfiles.
 
-| Path | Responsibility |
-|---|---|
-| `infrastructure/compose.yaml` | The sole local PostgreSQL service definition, loopback ports and persistent volume |
-| `apps/backend/prisma.config.ts` | Migration connection and schema location |
-| `apps/backend/prisma/schema.prisma` | ORM models, generated client source declaration |
-| `apps/backend/prisma/migrations/` | Forward schema, RLS, constraints and transactional command changes |
-| `apps/backend/prisma/fixtures/` | Synthetic local identities, history, coaching and business configuration |
-| `apps/backend/prisma/seed.sql` | Generated composition of content and fixtures; empty local database only |
-| `apps/backend/server/index.ts` | HTTP routing, origins, payload limits and error boundary |
-| `apps/backend/server/db.ts` | Prisma instance and transaction-local actor context |
-| `apps/backend/server/auth.ts` | Email challenges, opaque sessions, local preview and logout |
-| `apps/backend/server/commands.ts` | Granted command registry, bounded reads and focused projections |
-| `apps/backend/server/files.ts` / `private-bytes.ts` | Private metadata/permissions, immutable bytes, download and recoverable cleanup |
-| `apps/backend/server/generated/` | Ignored generated Prisma client; never edit |
-| `apps/frontend/src/` | Vue application, feature modules, styling and user flows |
-| `packages/shared/src/` | Shared API transport contracts and generated database types |
-| `docs/` | Single source for contributor, product, architecture and operations documentation |
-| `tests/sql/` | Seven rollback domain/access/lifecycle suites |
-| `tests/api.test.ts` | Actual authentication, pool isolation, transport and file checks |
-| `scripts/prisma/local.mjs` | Local start/stop/seed/env/test commands |
-| `scripts/prisma/fresh.mjs` | Disposable fresh-schema verification |
-| `scripts/prisma/types.ts` | JSON transport types for the web app |
-| `scripts/prisma/fixture.mjs` | Guarded local synthetic identity/operator test helpers |
-| `scripts/verify-{services,teams}.mjs` | Real HTTP lifecycle/race/access checks |
-| `scripts/content.mjs` | Canonical content generation |
-| `docs/` | Current engineering references, phase evidence and historical audit |
+| Path                                                | Responsibility                                                                                                                        |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `infrastructure/compose.yaml`                       | The single local and self-hosted Compose definition; production uses PostgreSQL, migrations, API, web, Caddy and private-file storage |
+| `apps/backend/prisma.config.ts`                     | Migration connection and schema location                                                                                              |
+| `apps/backend/prisma/schema.prisma`                 | ORM models, generated client source declaration                                                                                       |
+| `apps/backend/prisma/migrations/`                   | Forward schema, RLS, constraints and transactional command changes                                                                    |
+| `apps/backend/prisma/fixtures/`                     | Synthetic local identities, history, coaching and business configuration                                                              |
+| `apps/backend/prisma/seed.sql`                      | Generated composition of content and fixtures; empty local database only                                                              |
+| `apps/backend/server/index.ts`                      | HTTP routing, origins, payload limits and error boundary                                                                              |
+| `apps/backend/server/db.ts`                         | Prisma instance and transaction-local actor context                                                                                   |
+| `apps/backend/server/auth.ts`                       | Email challenges, opaque sessions, local preview and logout                                                                           |
+| `apps/backend/server/commands.ts`                   | Granted command registry, bounded reads and focused projections                                                                       |
+| `apps/backend/server/files.ts` / `private-bytes.ts` | Private metadata/permissions, immutable bytes, download and recoverable cleanup                                                       |
+| `apps/backend/server/generated/`                    | Ignored generated Prisma client; never edit                                                                                           |
+| `apps/frontend/src/`                                | Vue application, feature modules, styling and user flows                                                                              |
+| `packages/shared/src/`                              | Shared API transport contracts and generated database types                                                                           |
+| `docs/`                                             | Single source for contributor, product, architecture and operations documentation                                                     |
+| `tests/sql/`                                        | Seven rollback domain/access/lifecycle suites                                                                                         |
+| `tests/api.test.ts`                                 | Actual authentication, pool isolation, transport and file checks                                                                      |
+| `scripts/prisma/local.mjs`                          | Local start/stop/seed/env/test commands                                                                                               |
+| `scripts/prisma/fresh.mjs`                          | Disposable fresh-schema verification                                                                                                  |
+| `scripts/prisma/types.ts`                           | JSON transport types for the web app                                                                                                  |
+| `scripts/prisma/fixture.mjs`                        | Guarded local synthetic identity/operator test helpers                                                                                |
+| `scripts/verify-{services,teams}.mjs`               | Real HTTP lifecycle/race/access checks                                                                                                |
+| `scripts/content.mjs`                               | Canonical content generation                                                                                                          |
+| `docs/`                                             | Current engineering references, phase evidence and historical audit                                                                   |
 
 `npm start` starts/migrates the database; `npm run start:api` runs the API separately. Use the runbook for precise commands. Old runtime source is preserved at backend commit `727f02d`; no legacy services or old data migration are required.
 
@@ -131,17 +129,17 @@ Modules use the existing Vue Composition API; there is no new global store layer
 
 Start at `http://127.0.0.1:5173/local-preview`. Choose **Laila Khoury** for the coach or **Amir Hassan** for the client; these buttons sign into real synthetic local accounts. No emailed code is needed. The ordinary login flow sends mail only to `http://127.0.0.1:55324`.
 
-| Task | Coach | Client |
-|---|---|---|
-| Work queue | `/coach` | `/today` |
-| Programming | `/coach/plans`, `/coach/plans/:planId` | assigned workouts from Today |
-| Client context/schedule | `/coach/clients/:relationshipId` | Today schedule |
-| Exercise catalog | `/coach/exercises` | exercise instructions inside workout |
-| Progress | `/coach/clients/:relationshipId/progress` | `/progress` |
-| Requests/history | `/coach/checkins` | `/checkins` |
-| Template creation/edit | `/coach/forms/new`, `/coach/forms/:formId` | assigned snapshots only |
-| Response/review | `/coach/checkins/:requestId` | `/checkins/:requestId` |
-| Conversations | `/coach/messages/:relationshipId` | `/messages/:relationshipId` |
+| Task                    | Coach                                      | Client                               |
+| ----------------------- | ------------------------------------------ | ------------------------------------ |
+| Work queue              | `/coach`                                   | `/today`                             |
+| Programming             | `/coach/plans`, `/coach/plans/:planId`     | assigned workouts from Today         |
+| Client context/schedule | `/coach/clients/:relationshipId`           | Today schedule                       |
+| Exercise catalog        | `/coach/exercises`                         | exercise instructions inside workout |
+| Progress                | `/coach/clients/:relationshipId/progress`  | `/progress`                          |
+| Requests/history        | `/coach/checkins`                          | `/checkins`                          |
+| Template creation/edit  | `/coach/forms/new`, `/coach/forms/:formId` | assigned snapshots only              |
+| Response/review         | `/coach/checkins/:requestId`               | `/checkins/:requestId`               |
+| Conversations           | `/coach/messages/:relationshipId`          | `/messages/:relationshipId`          |
 
 **Client workspace URLs use the relationship UUID, not the person's UUID.** The local Laila–Amir relationship is `40000000-0000-4000-8000-000000000001`.
 
@@ -265,13 +263,13 @@ Backend `server/organization-communication.ts` owns channel commands and reads; 
 
 ## Operations, roster paging and ordinary change rehearsal (R11)
 
-| Owner | Files / contract |
-|---|---|
-| Platform | Backend `server/platform.ts`, migration 300; web `features/platform/PlatformPage.vue`; grant checks before receipt lookup |
+| Owner             | Files / contract                                                                                                                      |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Platform          | Backend `server/platform.ts`, migration 300; web `features/platform/PlatformPage.vue`; grant checks before receipt lookup             |
 | People/recipients | Backend `server/people.ts`; shared web `organizations/MemberPicker.vue`, `coaching/DeliverPlan.vue`; bounded search plus selected IDs |
-| Summary/history | `workspaces.ts`, `programming.ts`, `organization-calendar.ts`, `analytics.ts`; preserve full-scope totals, page breakdowns |
-| Test isolation | Web `scripts/isolated-browser.mjs`, `tests/local-config.ts`; backend guarded test database/files configuration |
-| Recovery | `scripts/prisma/recovery.mjs`, `cleanup-private.mjs`; private local archives and grace-period report/apply |
+| Summary/history   | `workspaces.ts`, `programming.ts`, `organization-calendar.ts`, `analytics.ts`; preserve full-scope totals, page breakdowns            |
+| Test isolation    | Web `scripts/isolated-browser.mjs`, `tests/local-config.ts`; backend guarded test database/files configuration                        |
+| Recovery          | `scripts/prisma/recovery.mjs`, `cleanup-private.mjs`; private local archives and grace-period report/apply                            |
 
 An ordinary UI change rehearsed in R11 replaced raw audit operation keys with bilingual action labels and grouped analytics continuation controls with their charts. Edit the owning feature, preserve pending-command behavior, run web type/unit/build, then the operations browser journey and `test:operations:layout`. Inspect real phone/RTL captures; a passing type check does not establish readable labels.
 
@@ -301,16 +299,16 @@ Workspace Back restoration waits for asynchronous content to support the saved o
 
 ## R14 file map and change recipes
 
-| Owner | Files and responsibility |
-|---|---|
-| Reference content | `content/foods.json`, `content/exercise-media.json`, `content/exercise-media/`, `content/upstream/`; source values, rights and immutable bytes |
-| Content tooling | `scripts/content.mjs`, `scripts/content/exercise-media.mjs`, `scripts/content/extract-usda-foods.sh`; reproducible generation/verification |
-| Public API | `server/public-catalog.ts`, catalog routes in `server/index.ts`; reference-only reads and digest-verified SVG serving |
-| Nutrition persistence | migrations `202609231500_nutrition_meal_plans`; immutable bounded suggested foods and compatible command default |
-| Exercise reference persistence | migrations `202609231510_exercise_media`, `202609231520_media_reference_commands`; keys, validation and plan-copy retention |
-| Web nutrition | `src/features/nutrition/{NutritionPage,MacroPlanner,MealPlanEditor,FoodPicker,NutrientFields}.vue`, `model.ts`, `src/styles/nutrition.css`; scoped drafts, command recovery, explicit targets and portions |
-| Shared exercise presentation | `src/components/ExerciseDemo.vue`; library/editor/routine/logger consumers, explicit motion and fallback |
-| Acceptance | backend `tests/public-catalog.test.ts`, SQL service/exercise suites; web `tests/nutrition-planning.e2e.ts`, `tests/exercise-media.e2e.ts`, nutrient units |
+| Owner                          | Files and responsibility                                                                                                                                                                                   |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Reference content              | `content/foods.json`, `content/exercise-media.json`, `content/exercise-media/`, `content/upstream/`; source values, rights and immutable bytes                                                             |
+| Content tooling                | `scripts/content.mjs`, `scripts/content/exercise-media.mjs`, `scripts/content/extract-usda-foods.sh`; reproducible generation/verification                                                                 |
+| Public API                     | `server/public-catalog.ts`, catalog routes in `server/index.ts`; reference-only reads and digest-verified SVG serving                                                                                      |
+| Nutrition persistence          | migrations `202609231500_nutrition_meal_plans`; immutable bounded suggested foods and compatible command default                                                                                           |
+| Exercise reference persistence | migrations `202609231510_exercise_media`, `202609231520_media_reference_commands`; keys, validation and plan-copy retention                                                                                |
+| Web nutrition                  | `src/features/nutrition/{NutritionPage,MacroPlanner,MealPlanEditor,FoodPicker,NutrientFields}.vue`, `model.ts`, `src/styles/nutrition.css`; scoped drafts, command recovery, explicit targets and portions |
+| Shared exercise presentation   | `src/components/ExerciseDemo.vue`; library/editor/routine/logger consumers, explicit motion and fallback                                                                                                   |
+| Acceptance                     | backend `tests/public-catalog.test.ts`, SQL service/exercise suites; web `tests/nutrition-planning.e2e.ts`, `tests/exercise-media.e2e.ts`, nutrient units                                                  |
 
 Food lookup is now a small local source-backed catalog. Expand it through the content guide, not by embedding provider calls in components. Adding organization nutrition requires separate ownership, assignment and sharing contracts first. To change portion math, cover unknown versus zero, source calorie differences and independent suggestion/actual snapshots. To change helper forms, test abandoned invalid helper values while saving a valid parent plan. To change drafts, test client/date/visibility switches and uncertain responses after reload.
 

@@ -19,3 +19,7 @@ Maintainers will coordinate with the reporter on validation, remediation, and di
 This policy covers security issues in Rafik's source code, release artifacts, and documented deployment configuration. It does not authorize testing university or third-party deployments, infrastructure, accounts, or services. Report suspected exposure to the operator of the affected deployment as well as the project when relevant.
 
 This policy describes a reporting process; it does not assert a security certification, compliance status, or acceptance into any external program.
+
+## Credentials and secret material
+
+Do not commit private keys, service-account keys, cloud credentials, passwords, API tokens, or production environment files. Deployments must not require Google service-account keys; use university-controlled local infrastructure and explicitly configured adapters such as SMTP. Treat any credential found in current files or Git history as compromised: revoke/rotate it immediately, remove the material from all reachable Git history, and notify affected operators. Removing a secret from the latest tree alone does not make an exposed credential safe.

@@ -62,5 +62,11 @@
     "content:check": "npm run content:check --workspace @rafik/backend",
     "docs:check": "npm run test:docs --workspace @rafik/backend",
     "verify:release": "npm run verify:release --workspace @rafik/backend"
+  },
+  "overrides": {
+    "tar": "7.5.22",
+    "deepmerge-ts": "8.0.2",
+    "mysql2": "3.24.4",
+    "source-map-js": "1.2.2"
   }
 }
