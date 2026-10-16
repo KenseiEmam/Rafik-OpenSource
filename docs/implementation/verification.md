@@ -6,9 +6,21 @@ Scope: local repository consolidation, setup/script path migration, documentatio
 
 **Before the final workspace reshaping:** web unit tests (27/27), web typecheck and build; backend typecheck after generating the Prisma client; release-guard tests (7/7); canonical content check; and the pre-consolidation documentation link check passed. Those results predate the final workspace layout and are not a clean-install acceptance result.
 
-**Final layout checks:** one root `AGENTS.md`, one root `docs/` tree, one `infrastructure/compose.yaml`, one root `.nvmrc`, one root `.env.example`, one root `package-lock.json`, and the three declared npm workspaces are present. No nested app lockfiles or docs directories remain. `npm run docs:check` passed across 66 maintained documents; frontend `npm run typecheck` passed; and `git diff --check` passed.
+**Final layout checks:** one root `AGENTS.md`, one root `docs/` tree, one `infrastructure/compose.yaml`, one root `.nvmrc`, one root `.env.example`, one root `package-lock.json`, and the three declared npm workspaces are present. No nested app lockfiles or docs directories remain. The initial `npm run docs:check` passed across 66 maintained documents; frontend `npm run typecheck` passed; and `git diff --check` passed.
 
 **Environment and remaining checks:** the founder removed the previous `node_modules` and `dist` before this follow-up. This machine reports Node 24.21.0 while manifests pin Node 22.16.0. Root lockfile generation succeeded, but installing workspaces failed because npm attempted to fetch a package through the configured unavailable proxy (`127.0.0.1:9`). The subsequent frontend test/build attempts used an incomplete pre-cleanup dependency tree: Vitest could not spawn its resolver (`EPERM`), and Vite could not load the Tailwind native binding; they do not establish application regressions. `npm run format:check` reports 168 existing source files with formatting warnings; no bulk rewrite was applied. Docker/PostgreSQL tests, a clean `npm ci`, final build and browser acceptance remain to be rerun with Node 22.16.0, working registry access and Docker. No remote CI was run. Screenshots in older phase records were local ignored artifacts and are not present in this monorepo.
+
+**Registry follow-up:** with registry access, `npm ci` completed and added 436 packages under Node 24.21.0, outside the pinned runtime range. npm 11 reported four lifecycle scripts awaiting approval; after approving those named scripts locally, `npm rebuild` failed to spawn a child process (`EPERM`). The local npm approval field was removed from the tracked manifest. An explicit `npm audit` query returned zero advisories at the time checked; the initial `npm ci` summary reported five high findings, so dependency audit status needs reconciliation under the pinned runtime before Stage 2 acceptance. This is not a clean-install acceptance result.
+
+## Final pinned-runtime Stage 2 follow-up — 2026-10-16
+
+The official Node 22.16.0 Windows archive was unpacked in a temporary directory; the workstation's Node 24 installation was unchanged. Under Node 22.16.0/npm 10.9.2, a fresh root `npm ci` completed (436 packages added, 440 audited). No app-local lockfile was created.
+
+Passed checks: frontend units (9 files / 27 tests), frontend typecheck and production build, backend typecheck, release-guard tests (7/7), canonical content consistency, root docs links (67 documents), 30 vector frames (586,741 bytes), 45 video/poster pairs (50,958,403 bytes), the 1,324-entry MIT exercise import, and the 46-entry WGER provenance snapshot. A uniquely named disposable Compose project ran all 40 migrations and eight SQL suites successfully; it was removed afterward and the existing local database volume was left untouched. The cross-platform `.gitattributes` rule preserves LF for content-addressed SVG/JSON and SQL files.
+
+Dependency license inventory covered 433 installed package instances: MIT (301), ISC (62), Apache-2.0 (34), MPL-2.0 (6), BSD-3-Clause (15), BSD-2-Clause (5), OFL-1.1 (2), EPL-2.0 (2), Unlicense (2), 0BSD (1), MIT OR Apache-2.0 (1), and MIT and ISC (1). `seq-queue@0.0.5` omits a package.json license field, but its bundled LICENSE file identifies MIT. Asset/source licenses and attribution are recorded in [content maintenance](content.md). This is an inventory, not legal advice.
+
+`npm audit --json` subsequently returned zero advisories, while `npm ci` printed five high-severity findings in its install summary; reconcile this discrepancy before public release. `npm run format:check` still reports 167 frontend files with existing formatting differences; no bulk reformat was applied. Remote GitHub rename and remote CI were not run. Full browser journeys and the complete API/domain suite were not needed for this repository-layout/docs change and were not run. The hosted university product remains unimplemented.
 
 ## R21 — Explicit feedback and operational reporting (28 September 2026)
 
@@ -402,3 +414,9 @@ Screenshots include synthetic testing data. They were inspected for hierarchy, r
 No claim of customer acquisition, retention, willingness to pay, real-person completion time, production-scale performance, remote CI success, hosted deliverability or physical-device readiness is made. No external notification or payment integration exists. The local preview privacy copy and seeded public version must be replaced/configured through the hosted-release gate before deployment.
 
 The local foundation can be reviewed, but broader product implementation remains before whole-product release readiness. Execute the coverage register, then integrated and physical-device validation; hosting and real-use observations remain separate phases described in `runbook.md` and `pilot.md`.
+
+## Stage tracking and disclosure documentation — 2026-10-16
+
+- `npm run docs:check`: passed; checked local links in 67 monorepo documents, including the new root security policy.
+- `git diff --check`: passed. Git reported only expected LF-to-CRLF working-copy conversion warnings.
+- No product tests, builds, or deployment checks were run; this documentation update does not change runtime behavior. Stage 2 remains in progress; see [requirements](../requirements/README.md) and the [ledger](ledger.md) for outstanding acceptance gates.

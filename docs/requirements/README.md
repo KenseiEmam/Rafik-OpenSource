@@ -37,6 +37,8 @@ Rafik should help universities and university coaches support young athletes by 
 
 ### Stage 2 — Public monorepo and release foundation
 
+**Status: local acceptance complete; remote publication gates pending.** A clean root-lockfile install, focused workspace checks, release build, dependency/license inventory, third-party content rights verification, and disposable fresh-database migration rehearsal passed under Node 22.16.0. The formatter still reports existing style differences in 167 frontend files; these were not bulk-reformatted. The authenticated GitHub repository rename and remote CI evidence are not verified from this workspace. Review [the current verification record](../implementation/verification.md) before declaring the stage complete. Do not start Stage 3 until Stage 2 acceptance.
+
 - Combine frontend and backend under the confirmed GitHub repository, preserving useful history and documenting the new tree.
 - Apply the selected Apache-2.0 software license, contributor workflow, version/release conventions, and a clean-checkout development path.
 - Audit dependency licenses and separately verify rights for exercise datasets, images, video, fonts, and other bundled media.

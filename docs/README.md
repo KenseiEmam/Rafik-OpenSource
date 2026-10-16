@@ -1,5 +1,7 @@
 # Documentation
 
+The current delivery stage and exit gates are in [requirements and staged migration plan](requirements/README.md). Track implementation in the [ledger](implementation/ledger.md); see [verification](implementation/verification.md) for checks and known limits. Report vulnerabilities using the root [security policy](../SECURITY.md).
+
 This is the single maintained documentation tree for the Rafik monorepo. Root [README](../README.md) covers clean setup; [CONTRIBUTING](../CONTRIBUTING.md) defines change and verification practice.
 
 ## Product and architecture

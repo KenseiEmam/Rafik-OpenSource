@@ -72,6 +72,7 @@ The full local acceptance chain is documented in [the runbook](docs/implementati
 - [Target architecture](docs/architecture/README.md)
 - [Architecture decisions](docs/decisions/)
 - [Contribution workflow](CONTRIBUTING.md)
+- [Security vulnerability reporting](SECURITY.md)
 - [Current implementation ledger](docs/implementation/ledger.md)
 - [Verification record and limitations](docs/implementation/verification.md)
 

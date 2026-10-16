@@ -17,7 +17,7 @@ function markdown(dir) {
 }
 
 const files = [
-  ...['README.md', 'AGENTS.md', 'CONTRIBUTING.md', 'CHANGELOG.md'].map((path) =>
+  ...['README.md', 'AGENTS.md', 'CONTRIBUTING.md', 'CHANGELOG.md', 'SECURITY.md'].map((path) =>
     resolve(repo, path),
   ),
   ...['apps/frontend/README.md', 'apps/backend/README.md'].map((path) =>

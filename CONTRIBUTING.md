@@ -1,5 +1,7 @@
 # Contributing to Rafik
 
+Please report security issues privately according to the [security policy](SECURITY.md), rather than opening a public issue with exploit details.
+
 This is a staged university-first revamp. Read [the requirements](docs/requirements/README.md), [target architecture](docs/architecture/README.md), and relevant [architecture decisions](docs/decisions/) before changing behavior. The frontend and backend applications are npm workspaces in `apps/frontend/` and `apps/backend/`; shared contracts live in `packages/shared/`.
 
 ## Development conventions

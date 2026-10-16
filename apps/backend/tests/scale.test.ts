@@ -151,7 +151,7 @@ test("large organization reads page actual scope without truncating search or ag
           environment:
             "local PostgreSQL17, Node22, unthrottled loopback; not a production budget",
           measurements,
-          queryPlan: JSON.parse(explain),
+          queryPlan: JSON.parse(String(explain)),
         },
         null,
         2,

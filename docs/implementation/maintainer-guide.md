@@ -2,6 +2,8 @@
 
 **Monorepo layout, 16 October 2026:** Vue is under `apps/frontend/`; the API, Prisma, canonical content and API tests are under `apps/backend/`; cross-app API contracts and generated database transport types live in `packages/shared/`. The root [university requirements](../requirements/README.md) and [architecture proposal](../architecture/README.md) supersede the historical gym-first roadmap. Current service/development documentation does not establish production hosting.
 
+Keep tracked SVG, JSON and SQL files at LF as defined in the root `.gitattributes`. Content digests and generated migration checks compare exact source bytes; do not regenerate immutable assets or migrations to mask checkout line-ending changes.
+
 ## Maintaining experience reports
 
 `FeedbackPage.vue` lists eligible own sources; `RatingForm.vue` handles optional non-defaulted scores and durable drafts/commands. `ExperienceReport.vue` separates client, workplace and renewal views; `TrainerDelivery.vue` adds event-staff delivery counts and a readable table. Session completion links lead to the same feedback service; do not add a second mobile-only rating store. Extend both HTTP authorization tests and the isolated source-to-chart journey when modifying a measure. Use `npm run test:organization-feedback`; web: `npm run test:e2e -- organization-feedback.e2e.ts`. [R21 contract](r21-satisfaction.md) defines exact time windows/denominators.

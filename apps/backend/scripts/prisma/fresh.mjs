@@ -38,8 +38,8 @@ try {
   sql("rafik", `create database ${name};`);
   created = true;
   execFileSync(
-    resolve(repositoryRoot, "node_modules/.bin/prisma"),
-    ["migrate", "deploy"],
+    process.execPath,
+    [resolve(repositoryRoot, "node_modules/prisma/build/index.js"), "migrate", "deploy"],
     {
       cwd: root,
       env: {
