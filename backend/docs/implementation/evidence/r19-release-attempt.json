@@ -1,0 +1,213 @@
+{
+  "scope": "local only",
+  "mode": "full",
+  "startedAt": "2026-09-28T13:48:43.876Z",
+  "status": "failed",
+  "unverified": [
+    "hosted operations",
+    "remote CI",
+    "physical devices and assistive technology",
+    "human usability and retention",
+    "external delivery and payments"
+  ],
+  "steps": [
+    {
+      "name": "prerequisites",
+      "status": "passed"
+    },
+    {
+      "name": "backend-test-release",
+      "log": "2-backend-test-release.log",
+      "status": "passed",
+      "durationMs": 539
+    },
+    {
+      "name": "backend-test",
+      "log": "3-backend-test.log",
+      "status": "passed",
+      "durationMs": 3966
+    },
+    {
+      "name": "backend-test-services",
+      "log": "4-backend-test-services.log",
+      "status": "passed",
+      "durationMs": 1857
+    },
+    {
+      "name": "backend-test-teams",
+      "log": "5-backend-test-teams.log",
+      "status": "passed",
+      "durationMs": 2837
+    },
+    {
+      "name": "backend-test-organizations",
+      "log": "6-backend-test-organizations.log",
+      "status": "passed",
+      "durationMs": 2522
+    },
+    {
+      "name": "backend-test-programming",
+      "log": "7-backend-test-programming.log",
+      "status": "passed",
+      "durationMs": 2809
+    },
+    {
+      "name": "backend-test-organization-services",
+      "log": "8-backend-test-organization-services.log",
+      "status": "passed",
+      "durationMs": 2773
+    },
+    {
+      "name": "backend-test-organization-nutrition",
+      "log": "9-backend-test-organization-nutrition.log",
+      "status": "passed",
+      "durationMs": 2434
+    },
+    {
+      "name": "backend-test-communication",
+      "log": "10-backend-test-communication.log",
+      "status": "passed",
+      "durationMs": 2758
+    },
+    {
+      "name": "backend-test-organization-assets",
+      "log": "11-backend-test-organization-assets.log",
+      "status": "passed",
+      "durationMs": 2386
+    },
+    {
+      "name": "backend-test-organization-tasks",
+      "log": "12-backend-test-organization-tasks.log",
+      "status": "passed",
+      "durationMs": 2387
+    },
+    {
+      "name": "backend-test-operations",
+      "log": "13-backend-test-operations.log",
+      "status": "passed",
+      "durationMs": 4082
+    },
+    {
+      "name": "backend-content-check",
+      "log": "14-backend-content-check.log",
+      "status": "passed",
+      "durationMs": 430
+    },
+    {
+      "name": "backend-content-media",
+      "log": "15-backend-content-media.log",
+      "status": "passed",
+      "durationMs": 388
+    },
+    {
+      "name": "backend-content-videos",
+      "log": "16-backend-content-videos.log",
+      "status": "passed",
+      "durationMs": 522
+    },
+    {
+      "name": "backend-content-exercise-dataset-check",
+      "log": "17-backend-content-exercise-dataset-check.log",
+      "status": "passed",
+      "durationMs": 415
+    },
+    {
+      "name": "backend-content-wger-exercises-check",
+      "log": "18-backend-content-wger-exercises-check.log",
+      "status": "passed",
+      "durationMs": 386
+    },
+    {
+      "name": "backend-test-catalog",
+      "log": "19-backend-test-catalog.log",
+      "status": "passed",
+      "durationMs": 1498
+    },
+    {
+      "name": "backend-test-docs",
+      "log": "20-backend-test-docs.log",
+      "status": "passed",
+      "durationMs": 442
+    },
+    {
+      "name": "api-types",
+      "log": "21-api-types.log",
+      "status": "passed",
+      "durationMs": 3323
+    },
+    {
+      "name": "api-contract",
+      "log": "22-api-contract.log",
+      "status": "passed",
+      "durationMs": 2073
+    },
+    {
+      "name": "web-test",
+      "log": "23-web-test.log",
+      "status": "passed",
+      "durationMs": 1403
+    },
+    {
+      "name": "web-format-check",
+      "log": "24-web-format-check.log",
+      "status": "passed",
+      "durationMs": 4817
+    },
+    {
+      "name": "web-build",
+      "log": "25-web-build.log",
+      "status": "passed",
+      "durationMs": 9805
+    },
+    {
+      "name": "web-test-build",
+      "log": "26-web-test-build.log",
+      "status": "passed",
+      "durationMs": 3148
+    },
+    {
+      "name": "web-test-e2e",
+      "log": "27-web-test-e2e.log",
+      "status": "passed",
+      "durationMs": 592324
+    },
+    {
+      "name": "web-test-quality-layout",
+      "log": "28-web-test-quality-layout.log",
+      "status": "passed",
+      "durationMs": 24376
+    },
+    {
+      "name": "web-test-product-layout",
+      "log": "29-web-test-product-layout.log",
+      "status": "passed",
+      "durationMs": 84482
+    },
+    {
+      "name": "web-test-teams-layout",
+      "log": "30-web-test-teams-layout.log",
+      "status": "passed",
+      "durationMs": 331782
+    },
+    {
+      "name": "web-test-operations-layout",
+      "log": "31-web-test-operations-layout.log",
+      "status": "passed",
+      "durationMs": 90486
+    },
+    {
+      "name": "web-test-cohesion-layout",
+      "log": "32-web-test-cohesion-layout.log",
+      "status": "passed",
+      "durationMs": 24685
+    },
+    {
+      "name": "web-test-dashboard-layout",
+      "log": "33-web-test-dashboard-layout.log",
+      "status": "failed",
+      "durationMs": 52112
+    }
+  ],
+  "error": "web-test-dashboard-layout failed; inspect 33-web-test-dashboard-layout.log",
+  "finishedAt": "2026-09-28T14:09:44.407Z"
+}

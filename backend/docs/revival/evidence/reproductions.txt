@@ -1,0 +1,5 @@
+F24 reproduced: distinct quantities and Arabic food names collide after normalization.
+F21 reproduced: an old reminder suppresses sending; a recent reminder does not.
+F17 reproduced: swallowed store error resolves, allowing the UI success callback.
+F14 reproduced: null identity removes the filter; actual row access still depends on grants/RLS.
+F09 calculated: white on #d7bd21 contrast is 1.88:1 before opacity/background compositing.

@@ -1,0 +1,100 @@
+{
+  "project_ref": "pexviywnztvqomfosvho",
+  "captured_at": "2026-09-22T00:24:22.092721+00:00",
+  "method": "Supabase CLI linked SELECT metadata and aggregate counts; no individual application records",
+  "query": "04-operations.sql",
+  "redactions": 0,
+  "rows": [
+    {
+      "operations": {
+        "database_stats": {
+          "connections": 17,
+          "database_bytes": 34419503,
+          "deadlocks": 669,
+          "stats_reset": null
+        },
+        "default_acl": [
+          {
+            "acl": "{postgres=rwU/postgres,anon=rwU/postgres,authenticated=rwU/postgres,service_role=rwU/postgres}",
+            "object_type": "S",
+            "owner": "postgres",
+            "schema": "public"
+          },
+          {
+            "acl": "{postgres=rwU/supabase_admin,anon=rwU/supabase_admin,authenticated=rwU/supabase_admin,service_role=rwU/supabase_admin}",
+            "object_type": "S",
+            "owner": "supabase_admin",
+            "schema": "public"
+          },
+          {
+            "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+            "object_type": "f",
+            "owner": "postgres",
+            "schema": "public"
+          },
+          {
+            "acl": "{postgres=X/supabase_admin,anon=X/supabase_admin,authenticated=X/supabase_admin,service_role=X/supabase_admin}",
+            "object_type": "f",
+            "owner": "supabase_admin",
+            "schema": "public"
+          },
+          {
+            "acl": "{postgres=arwdDxt/postgres,anon=arwdDxt/postgres,authenticated=arwdDxt/postgres,service_role=arwdDxt/postgres}",
+            "object_type": "r",
+            "owner": "postgres",
+            "schema": "public"
+          },
+          {
+            "acl": "{postgres=arwdDxt/supabase_admin,anon=arwdDxt/supabase_admin,authenticated=arwdDxt/supabase_admin,service_role=arwdDxt/supabase_admin}",
+            "object_type": "r",
+            "owner": "supabase_admin",
+            "schema": "public"
+          }
+        ],
+        "migration_relations": [
+          "schema_migrations",
+          "seed_files"
+        ],
+        "scheduled_job_relation": null,
+        "schema_grants": [
+          {
+            "anon_create": false,
+            "anon_usage": true,
+            "authenticated_create": false,
+            "authenticated_usage": true,
+            "schema": "public"
+          },
+          {
+            "anon_create": false,
+            "anon_usage": true,
+            "authenticated_create": false,
+            "authenticated_usage": true,
+            "schema": "auth"
+          },
+          {
+            "anon_create": false,
+            "anon_usage": true,
+            "authenticated_create": false,
+            "authenticated_usage": true,
+            "schema": "storage"
+          }
+        ],
+        "storage_buckets": [
+          {
+            "allowed_mime_types": null,
+            "file_size_limit": null,
+            "id": "storage",
+            "public": true
+          }
+        ],
+        "storage_object_counts": [
+          {
+            "bucket_id": "storage",
+            "bytes": 675723262,
+            "objects": 237
+          }
+        ]
+      }
+    }
+  ]
+}

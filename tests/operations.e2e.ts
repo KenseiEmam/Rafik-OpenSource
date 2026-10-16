@@ -132,7 +132,7 @@ test('large member selection searches the full roster and keeps reviewed choices
         'ON_ERROR_STOP=1',
       ],
       {
-        cwd: '../rafik-api',
+        cwd: 'backend',
         input: `insert into public.workspace_members(id,workspace_id,name,roles) values ${people.map((p) => `('${p.id}','${id}','${p.name}',ARRAY['trainee'])`).join(',')};`,
         stdio: 'pipe',
       },

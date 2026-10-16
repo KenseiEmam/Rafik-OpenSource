@@ -1,0 +1,44 @@
+R18 organization exercise ownership and media — 2026-09-28
+API baseline a59d8e6; web baseline f3d7b7b. Branches codex/revamp.
+
+Browser acceptance:
+npm run test:e2e -- tests/organization-assets.e2e.ts tests/communication.e2e.ts tests/programming.e2e.ts tests/exercise-picker.e2e.ts tests/exercise-media.e2e.ts tests/gym-direction.e2e.ts tests/responsive-inbox.e2e.ts --max-failures=1
+PASS 30/30; isolated run1790601144187, 2.8m; artifacts/r18-browser-final.txt.
+After array clearing/admin published-media access correction:
+npm run test:e2e -- tests/organization-assets.e2e.ts --max-failures=1
+PASS 4/4, isolated run1790601414349, 44.8s; artifacts/r18-browser-followup.txt.
+No preview reset/reseed. Isolated browser fixtures cleaned up.
+
+Backend:
+npm run test:organization-assets — 2 lifecycle groups pass (r18-assets-final.txt).
+npm run test:communication — communication/notification contracts pass.
+npm run test:programming — 3 groups pass.
+npm run test:operations — 4 groups pass, including restored private bytes.
+npm run test:fresh — 35 migrations, fixtures and eight SQL suites pass.
+npm run test:release — 7 guards pass.
+typecheck, content:check, test:docs pass.
+Web: npm test — 27 units/9 files; build, test:build (two real builds), format:check pass.
+
+Actual review: r18-resources-chromium.png, r18-exercise-webkit-phone-320-ar-dark.png,
+r18-attachment-webkit-phone.png, earlier failed-state editor captures.
+Final test screenshots use an existing licensed wger poster, not generated imagery.
+
+Development failures and fixes:
+- Added missing schema field to a test prescription.
+- Deferred message/asset and asset/member cross-reference constraints so a full
+  organization cascade does not depend on trigger ordering.
+- Failed initial fixture cleanup left exactly one known synthetic workspace and
+  three program-UUID@rafik.test identities; removed those verified identities only.
+  Recovery correctly detected that fixture's missing bytes before cleanup; final
+  operations rerun passes. No existing preview user data was removed.
+- Replaced brittle select-label test locators with accessible combobox names.
+- Corrected a multiline Vue event expression; made route auth metadata consistent.
+- Restore/reuse test now waits for durable Saved acknowledgement before navigation.
+- Fixed resource query generation, missing selected-row token, panel margin,
+  narrow phone form columns and stale group-only privacy text.
+- Removing all multi-values now clears singular compatibility fields; snapshots
+  remain immutable. Category field limits accommodate the full offered option set.
+
+Limits: focused local acceptance, not full release chain, remote CI, hosting,
+physical device, native app or human/business outcome evidence. Organization pairs
+are private; legacy independent resource sharing remains a separate contract.

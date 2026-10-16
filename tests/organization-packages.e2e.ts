@@ -120,7 +120,7 @@ test('package assignment and reservation recover; completion deducts while indep
         'ON_ERROR_STOP=1',
       ],
       {
-        cwd: resolve('../rafik-api'),
+        cwd: resolve('backend'),
         input: `update public.organization_events set starts_at=now()-interval '2 hours',ends_at=now()-interval '1 hour' where id='${eid}' and workspace_id='${id}';`,
         stdio: ['pipe', 'pipe', 'pipe'],
       },

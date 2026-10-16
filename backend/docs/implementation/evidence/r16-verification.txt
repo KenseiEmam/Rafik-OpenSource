@@ -1,0 +1,89 @@
+R16 local acceptance — 23 September 2026
+Node 22.16.0; adjacent backend/web repositories on codex/revamp.
+No push, deployment, native changes, preview reset or synthetic preview reseeding.
+
+Scope
+Organization-owned dated nutrition plans, example foods, actual meal portions,
+explicit diary sharing, immutable plan/correction history and subject export.
+Admin-only and currently assigned trainer roles can publish; only the subject
+trainee records/corrects/removes actual food and changes sharing. Independent
+nutrition remains separate. Existing shared components and command queue reused.
+
+Backend accepted commands
+npm run typecheck — pass
+npm run test:organization-nutrition — 2/2 groups
+npm run test:organizations — 5/5 groups
+npm run test:organization-services — 2/2 groups
+npm run test:release — 7/7 guards
+Final combined command captured in tool session18939 (exit0).
+Earlier nutrition log artifacts/r16-api.txt also passed2/2 before extra removed-history assertions.
+API checks include two organizations, outsider scope, role/recipient reassignment,
+revocation before replay, same-receipt mismatch, concurrent publication conflict,
+sharingoff/on/withdrawal, source density vs actual quantity, correction/removal,
+private history, export, invalid values/dates, scheduled plans, expiry with no
+older-plan revival, 12-version paging and generic-table access rejection.
+
+npm run test:fresh — 33 migrations, fixtures, eight SQL suites pass
+Log: artifacts/r16-fresh.txt
+Three forward migrations applied locally without resetting preview records.
+Schema/client regenerated. npm run types regenerated web JSON transport contracts.
+Log: artifacts/r16-types.txt
+npm run typecheck && npm run content:check && npm run test:docs — pass
+Log: artifacts/r16-backend-final.txt
+The configured release chain now has32 gates; full verify:release was NOT rerun.
+Remote CI was updated to include organization nutrition but was NOT executed.
+
+Web accepted commands
+npm run test:e2e -- tests/organization-nutrition.e2e.ts tests/nutrition-planning.e2e.ts tests/organizations.e2e.ts --max-failures=2
+22/22 pass: 11 Chromium, 11 phone-WebKit.
+Log: artifacts/r16-browser-final.txt
+Disposable wrapper artifacts/isolated-browser/1790191587687 cleaned up successfully.
+No preview database/ports reset or test seed applied to preview.
+The organization journey covers publish, actual portion, consent, staff review,
+correction, removal, removed history and own export. Recovery cases cover closed
+editor drafts, member/date changes, reload, lost plan/food acknowledgements and
+exact retry without duplicate publication or food consumption.
+Existing independent nutrition and organization membership journeys also pass.
+Layout matrix: 16 combinations (2 engines x320/1280px xEN/AR xlight/dark),
+each visiting plan/editor/diary; plan Axe checks, three-view geometry checks,
+desktop main-container bounds, target-field count and component/page errors.
+This is not an all-features or all-possible-states layout audit.
+
+npm run format && npm run build && npm test && npm run test:build && npm run format:check
+All pass: production/Vue typecheck, 27 unit tests, two build/cache contract checks,
+formatting. Logs: artifacts/r16-format-final.txt, r16-build.txt, r16-units.txt,
+r16-cache.txt, r16-format-check.txt. Types were regenerated before these checks.
+No new external runtime dependencies.
+
+Rendered review
+Inspected actual final r16-chromium-1280-en-light.png,
+r16-editor-chromium-1280-en-light.png and r16-webkit-phone-320-ar-dark.png.
+Earlier interactive preview review inspected chosen trainee and open editor.
+Desktop has bounded content scrolling; phone has natural page flow. Plan/diary/
+history are separate views. Preview targets were not invented or seeded.
+Raw captures and logs are local ignored artifacts; this receipt is committed.
+
+Development failures and fixes (not accepted passes)
+- Prisma introspection needed explicit compound uniqueness for sharing's
+  one-to-one membership relation; added forward migration and regenerated schema.
+- API could not directly select profiles; used narrow server-only subject-date
+  projection instead of expanding table grants.
+- Multi-expression Vue inline handlers failed after formatting; replaced with
+  named handlers. Checkbox test used check() after picker auto-close/detachment;
+  now clicks and verifies resulting selection.
+- Reusing MacroPlanner alongside duplicate NutrientFields rendered redundant
+  targets. Removed duplication; added four-field count and unresolved-component
+  console checks. Removed leftover template reference caught during review.
+- Fixed desktop nested scrolling and compacted heading actions.
+- Closed editors now expose Continue draft. Reload testing exposed saved feedback
+  from an earlier queued write; latest sequence alone confirms draft saved.
+- Corrected target-input assertion to exclude legitimate example-food amount.
+- Previous failing20-case attempt is excluded; final22-case run passes completely.
+Both AGENTS files now require composition-level rendered inspection, newest-write
+acknowledgement, scoped draft/retry review and explicit organization diary audience.
+
+Limits
+Focused local acceptance only. No full32-gate rerun, remote CI, hosting, physical
+device/assistive technology, native implementation, professional clinical review,
+unaided human usability, retention or payment evidence. Food reference remains
+15 starter foods. No inferred calorie needs or medical recommendations added.

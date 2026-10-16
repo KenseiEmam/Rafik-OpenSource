@@ -1,0 +1,71 @@
+R19 staff tasks, follow-up and integrated regression — 2026-09-28
+API baseline 02712fa; web baseline 9a7a6af. Branches codex/revamp.
+
+Focused acceptance:
+npm run test:organization-tasks — 2 API groups pass; artifacts/r19-api.txt.
+npm run test:fresh — 36 migrations/fixtures/eight SQL suites pass; artifacts/r19-fresh.txt.
+npm run test:e2e -- tests/organization-tasks.e2e.ts tests/organizations.e2e.ts tests/organization-services.e2e.ts
+6/6 passed, isolated run1790601928192, 1.2m; artifacts/r19-browser.txt.
+Covers task assignment, closed draft/reload, uncertain-response retry,
+trainer completion/reopening and 16 layout/language/theme/engine states.
+API cases cover tenant/role scope, inactive assignees, revocation/reassignment
+before receipt replay, concurrent revisions and real completion/review queues.
+
+Actual captures inspected: r19-overview-chromium.png,
+r19-tasks-chromium-1280-en-dark.png, r19-tasks-webkit-phone-320-ar-dark.png.
+
+Integrated development findings:
+- First full run (2026-09-28T13-28-05.028Z) stopped in backend-test:
+  a normal preview organization ownership invalidated the canonical fixture
+  account-deletion assertion. npm test now uses the existing disposable fresh
+  database harness. No preview organization was deleted or reseeded. Removed
+  the duplicate fresh step from the serial release gate; both npm test and
+  npm run test:fresh remain supported aliases to that isolated SQL gate.
+- Second run (2026-09-28T13-29-30.264Z) passed backend/domain/unit/build gates
+  but found duplicate static exercise-media landmarks in multi-exercise pages,
+  a publication test matching transient progress plus success, and stale
+  movement-select/collapsed-per-set test assumptions. Browser run deliberately
+  interrupted after 25 passed, four failed, one interrupted; cleanup completed.
+  Local media now uses a named group rather than a page landmark; tests use
+  current accessible controls and require initially visible per-set rows.
+- Old homepage assertions now follow gym-first entry. Retained guest logger
+  compatibility is tested through its explicit examination route, not an
+  obsolete acquisition CTA.
+
+- Third run (2026-09-28T13-36-03.457Z) passed all backend/unit/build gates
+  and 117/118 browser cases; one WebKit publication assertion caught transient
+  overlap between Published and Saving change. The editor now exposes success
+  only once the durable command has fully settled and cleared its pending receipt.
+  This fixes the misleading UI state, rather than only narrowing test selectors.
+- Prior targeted core/daily-coaching repair run passed 20/20 (isolated1790602479682).
+
+Publication feedback follow-up: npm run test:e2e -- tests/product-quality.e2e.ts --max-failures=1
+PASS 6/6; isolated1790603282084; artifacts/r19-publication-feedback.txt.
+
+- Fourth run (2026-09-28T13-48-43.875Z) passed all backend/unit/build gates,
+  all 118 browser journeys (9.7m; isolated1790603384523), and the quality128,
+  product320, team176+176, operations104 and cohesion24 matrices. The final
+  dashboard audit timed out at global networkidle on the desktop exercise
+  page with looping video. It now waits for domain fetch completion and the
+  rendered frame, leaving video playback and all visual/Axe assertions enabled.
+  Only that audit script changed; application sources remain the full-run sources.
+
+Final dashboard follow-up: PASS 192 states, zero reported layout/alert/page/Axe issues.
+npm run test:dashboard:layout; artifacts/r19-dashboard-followup.txt.
+Combined final-source acceptance: 33 checks accounted for, 118 browser journeys,
+1,120 broad states, 27 web units, 36 migrations/eight SQL suites and all domain,
+operations, content, type, build, cache and release-guard checks. Main run passed
+32 gates; corrected dashboard audit is a separate accepted follow-up, not an
+uninterrupted full-chain pass. r19-verification.json summarizes this distinction;
+r19-release-attempt.json retains the actual failed final-gate report. Sanitized
+r19-*-layout.json records persist the seven matrix reports.
+
+Limits: no hosting, remote CI, native or physical-device verification; no human
+or business-outcome evidence. Package/no-show policy is now confirmed; its implementation follows this phase.
+Both satisfaction measures are confirmed separately, with session feedback to
+inform client satisfaction. Balances, makeup accounting, subscription retention
+and satisfaction reporting are not complete. Preview preserved, no push/deployment.
+
+Accepted web checkpoint: d665769 on codex/revamp.
+Final maintained-document links (63 documents), web formatting, audit-script
+formatting and whitespace checks pass after evidence updates.

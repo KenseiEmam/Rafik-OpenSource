@@ -1,0 +1,95 @@
+Command: npm test
+Local rollback suites; preview data retained.
+NOTICE:  PASS: public sample is readable without an account
+NOTICE:  PASS: duplicate start returns one canonical occurrence
+NOTICE:  PASS: prescribed sets are created exactly once
+NOTICE:  PASS: completion replay returns the original receipt without another transition
+NOTICE:  PASS: note correction preserves completion and history
+NOTICE:  PASS: stale write rejects without losing the acknowledged result
+NOTICE:  PASS: same operation ID cannot be reused with a different payload
+NOTICE:  PASS: unrelated client cannot read another client history
+NOTICE:  PASS: wrong client cannot start a private assignment
+NOTICE:  PASS: retrying a plan save does not create another revision
+NOTICE:  PASS: publishing a future revision does not rewrite the started prescription
+NOTICE:  PASS: old published version remains immutable
+NOTICE:  PASS: coach feedback belongs to a real result
+NOTICE:  PASS: invitation preview exposes coach context without private assignment contents
+NOTICE:  PASS: invitation preview does not disclose the client email
+NOTICE:  PASS: private invitation rejects a different verified email
+NOTICE:  PASS: invitation acceptance is atomic and idempotent
+NOTICE:  PASS: accepted invitation creates exactly one active assignment
+NOTICE:  PASS: ordinary assignment/session updates have no hidden orchestration triggers
+NOTICE:  PASS: different prescribed sessions can be performed on the same day
+NOTICE:  PASS: occurrence date follows the client timezone
+NOTICE:  PASS: preferred units convert the value, not just its label
+NOTICE:  PASS: an omitted expected version cannot bypass concurrency checks
+NOTICE:  PASS: invalid saves roll back the entire change
+NOTICE:  PASS: ordinary clients cannot bypass transactional commands
+NOTICE:  PASS: account deletion removes the auth identity
+NOTICE:  PASS: coach deletion preserves client-owned session snapshots
+NOTICE:  PASS: context save replay does not increment revision
+NOTICE:  PASS: stale context cannot overwrite notes
+NOTICE:  PASS: client cannot read private coach notes
+NOTICE:  PASS: another coach cannot read private notes
+NOTICE:  PASS: unrelated coach cannot archive a relationship
+NOTICE:  PASS: archive prevents new starts and preserves readable history
+NOTICE:  PASS: custom exercise create retries return the same record
+NOTICE:  PASS: publication captures private exercise instructions
+NOTICE:  PASS: retiring custom content does not change the published snapshot
+NOTICE:  PASS: two-week cycle projects exactly two cycles including rest days
+NOTICE:  PASS: reschedule preserves the original occurrence date
+NOTICE:  PASS: skip is explicit and does not generate a completed session
+NOTICE:  PASS: duplicate cycle slots are rejected
+NOTICE:  PASS: timed prescriptions require a positive duration
+NOTICE:  PASS: private catalog is isolated across coaches
+NOTICE:  PASS: assigned clients receive private exercise snapshots
+NOTICE:  PASS: individual targets initialize distinct actual values
+NOTICE:  PASS: timed completion requires positive seconds
+NOTICE:  PASS: mixed-result completion replays exactly once
+NOTICE:  PASS: previous performance finds each exercise independently
+NOTICE:  PASS: future or skipped occurrence cannot start today
+NOTICE:  PASS: rescheduling cannot rewrite a started occurrence
+NOTICE:  PASS: a second client gets an independent session from the same plan
+NOTICE:  PASS: two assigned clients cannot read each other’s results
+NOTICE:  PASS: form retry preserves version
+NOTICE:  PASS: empty definitions rejected
+NOTICE:  PASS: recurrence is bounded to twelve occurrences
+NOTICE:  PASS: assign retry produces one bounded series
+NOTICE:  PASS: series ID cannot be reused with different recurrence
+NOTICE:  PASS: assigned questions and units are immutable after template edits
+NOTICE:  PASS: client receives assignment snapshots without private template access
+NOTICE:  PASS: incomplete draft persists without submission
+NOTICE:  PASS: required questions gate submission
+NOTICE:  PASS: numeric bounds validated transactionally
+NOTICE:  PASS: boolean fields reject arbitrary text
+NOTICE:  PASS: unknown answers cannot bypass the assigned definition
+NOTICE:  PASS: submitted response retry preserves revision
+NOTICE:  PASS: coach cannot answer as client
+NOTICE:  PASS: review retries do not create another revision
+NOTICE:  PASS: completed response cannot be cancelled
+NOTICE:  PASS: stale response cannot overwrite coach review
+NOTICE:  PASS: correction preserves original submission and clears obsolete review
+NOTICE:  PASS: measurement retry creates no duplicate
+NOTICE:  PASS: measurement metric and unit must agree
+NOTICE:  PASS: stale measurement correction rejected
+NOTICE:  PASS: send retry yields exactly one persistent message
+NOTICE:  PASS: stable message ID rejects a different payload
+NOTICE:  PASS: message cannot link an unrelated workout
+NOTICE:  PASS: progress uses completed actual sets rather than targets or incomplete sets
+NOTICE:  PASS: progress recomputes corrections without creating another completion
+NOTICE:  PASS: client progress uses completed acknowledged sessions
+NOTICE:  PASS: progress queries are bounded
+NOTICE:  PASS: coach sees explicitly shared measurements only
+NOTICE:  PASS: review must reference the corrected response revision
+NOTICE:  PASS: inbox derives unread from persisted incoming messages
+NOTICE:  PASS: read cursor clears observed incoming messages
+NOTICE:  PASS: cursor cannot mark future messages as read
+NOTICE:  PASS: read cursor never moves backwards
+NOTICE:  PASS: archived conversation blocks new sends
+NOTICE:  PASS: archive retains conversation history
+NOTICE:  PASS: archived relationship blocks new responses
+NOTICE:  PASS: unrelated coach cannot read coaching records
+NOTICE:  PASS: unrelated coach cannot query private progress
+NOTICE:  PASS: unrelated coach cannot review a response
+NOTICE:  PASS: unrelated client cannot send into another conversation
+NOTICE:  PASS: unrelated client cannot remove a measurement

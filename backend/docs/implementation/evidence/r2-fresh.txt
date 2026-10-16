@@ -1,0 +1,7 @@
+Command: npm run test:fresh
+Fresh migrations, synthetic fixtures and all database suites passed in an isolated database. Preview records unchanged.
+
+Command: npx supabase db lint --local --level warning
+Linting schema: extensions
+Linting schema: public
+No schema errors found

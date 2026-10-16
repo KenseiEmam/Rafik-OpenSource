@@ -1,0 +1,2443 @@
+{
+  "schema": 1,
+  "source": {
+    "project": "wger-project/wger",
+    "sourceCommit": "80d4a989cf7b0e98eb8817e1b725161857980803",
+    "liveApiBase": "https://wger.de/api/v2",
+    "snapshotDate": "2026-09-23",
+    "reviewSha256": "7924e1112642c801c2a6949bd7a8e206f3682687c0136bb85308313685ec022b",
+    "instructionSupplementSha256": "ce72d9e5459bdbb643ec15eca1cb01a19d7dc9af2061bf12b6ea408ec95af9b3",
+    "editorialOverlaySha256": "c2d4fd8351fb4457ad95f88e980108f3b917569699ffc0ee8644d67a02f6e4eb",
+    "recordCount": 46,
+    "policy": "Use source English description text, the separately reviewed English supplement where upstream English is blank, and reviewed editorial corrections. No WGER image, video, source-media URL or HTML is imported."
+  },
+  "licenses": {
+    "1": {
+      "id": 1,
+      "full_name": " Creative Commons Attribution Share Alike 3",
+      "short_name": "CC-BY-SA 3",
+      "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+    },
+    "2": {
+      "id": 2,
+      "full_name": "Creative Commons Attribution Share Alike 4",
+      "short_name": "CC-BY-SA 4",
+      "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+    },
+    "3": {
+      "id": 3,
+      "full_name": "Creative Commons Public Domain 1.0",
+      "short_name": "CC0",
+      "url": "http://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    "4": {
+      "id": 4,
+      "full_name": "Creative Commons Attribution 4",
+      "short_name": "CC-BY 4",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "5": {
+      "id": 5,
+      "full_name": "Open Data Commons Open Database License",
+      "short_name": "ODbL",
+      "url": "https://opendatacommons.org/licenses/odbl/"
+    }
+  },
+  "categoryMap": {
+    "Legs": {
+      "category": "upper legs",
+      "bodyPart": "upper legs",
+      "categoryAr": "الفخذان"
+    },
+    "Chest": {
+      "category": "chest",
+      "bodyPart": "chest",
+      "categoryAr": "الصدر"
+    },
+    "Shoulders": {
+      "category": "shoulders",
+      "bodyPart": "shoulders",
+      "categoryAr": "الكتفان"
+    },
+    "Arms": {
+      "category": "upper arms",
+      "bodyPart": "upper arms",
+      "categoryAr": "أعلى الذراعين"
+    },
+    "Back": {
+      "category": "back",
+      "bodyPart": "back",
+      "categoryAr": "الظهر"
+    },
+    "Calves": {
+      "category": "lower legs",
+      "bodyPart": "lower legs",
+      "categoryAr": "أسفل الساقين"
+    }
+  },
+  "recordsSha256": "19c41f18aafff7e37d6bd31925ed0b71665881e6e059cf6b090a5f30a111db04",
+  "records": [
+    {
+      "id": "wger-12",
+      "sourceId": 12,
+      "sourceUuid": "53906cd1-61f1-4d56-ac60-e4fcc5824861",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/12/",
+      "name": "Seated Hip Adduction",
+      "nameAr": null,
+      "instructions": "Adjust the thigh pads and sit upright with your back against the support. Begin with your knees apart and the pads against the inside of your thighs. Hold the handles, bring your knees together under control, pause briefly, then let the pads return slowly.",
+      "instructionsAr": null,
+      "instructionStatus": "rafik_editorial_overlay",
+      "instructionProvenance": {
+        "mode": "rafik-editorial-overlay",
+        "statement": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records.",
+        "reason": "The source equipment is empty and its English description stops after the setup with a trailing typo. The source name and reviewed clip show a seated hip-adduction machine; this does not validate the upstream Glutes target label."
+      },
+      "category": "upper legs",
+      "categoryAr": "الفخذان",
+      "categorySource": "Legs",
+      "bodyPart": "upper legs",
+      "targetMuscle": "unspecified",
+      "equipment": "Hip adduction machine",
+      "equipmentAr": "جهاز ضم الفخذين",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "flori",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "flori",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "equipment",
+          "equipmentAr",
+          "instructions"
+        ],
+        "reason": "The source equipment is empty and its English description stops after the setup with a trailing typo. The source name and reviewed clip show a seated hip-adduction machine; this does not validate the upstream Glutes target label.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-46",
+      "sourceId": 46,
+      "sourceUuid": "04e7d7e4-f8d2-406d-97df-3df3bceec22c",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/46/",
+      "name": "Barbell Lunges Standing",
+      "nameAr": null,
+      "instructions": "Put barbell on the back of your shoulders. Stand upright, then take the first step forward. Step should bring you forward so that your supporting legs knee can touch the floor. Then stand back up and repeat with the other leg. Remember to keep good posture.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 405,
+          "translationUuid": "ae6a6c23-4616-49b7-a152-49d7461c2b7f",
+          "language": "en",
+          "license": {
+            "id": 2,
+            "full_name": "Creative Commons Attribution Share Alike 4",
+            "short_name": "CC-BY-SA 4",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+          },
+          "licenseAuthor": "Mikko Ruohola"
+        }
+      },
+      "category": "upper legs",
+      "categoryAr": "الفخذان",
+      "categorySource": "Legs",
+      "bodyPart": "upper legs",
+      "targetMuscle": "Quads",
+      "equipment": "Barbell",
+      "equipmentAr": "بار حديد",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 2,
+        "full_name": "Creative Commons Attribution Share Alike 4",
+        "short_name": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "Mikko Ruohola",
+      "translationLicense": {
+        "id": 2,
+        "title": null,
+        "author": "Mikko Ruohola",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": null
+    },
+    {
+      "id": "wger-73",
+      "sourceId": 73,
+      "sourceUuid": "3717d144-7815-4a97-9a56-956fb889c996",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/73/",
+      "name": "Bench Press",
+      "nameAr": null,
+      "instructions": "Lay down on a bench, the bar should be directly above your eyes, the knees are somewhat angled and the feet are firmly on the floor. Concentrate, breath deeply and grab the bar more than shoulder wide. Bring it slowly down till it briefly touches your chest at the height of your nipples. Push the bar up. If you train with a high weight it is advisable to have a spotter that can help you up if you can't lift the weight on your own. With the width of the grip you can also control which part of the chest is trained more: wide grip: outer chest muscles narrow grip: inner chest muscles and triceps",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 192,
+          "translationUuid": "5da6340b-22ec-4c1b-a443-eef2f59f92f0",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "sistab2"
+        }
+      },
+      "category": "chest",
+      "categoryAr": "الصدر",
+      "categorySource": "Chest",
+      "bodyPart": "chest",
+      "targetMuscle": "Chest",
+      "equipment": "Barbell, Bench",
+      "equipmentAr": "بار حديد، مقعد",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "sistab2",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "sistab2",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": null
+    },
+    {
+      "id": "wger-75",
+      "sourceId": 75,
+      "sourceUuid": "28321cf3-70e6-48a4-ade1-d11382180cb3",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/75/",
+      "name": "Dumbbell Bench Press",
+      "nameAr": null,
+      "instructions": "Setup and Starting Position: Sit at the end of a flat bench with a dumbbell resting vertically against each thigh. Carefully lean back while driving the dumbbells toward your chest with your knees. The “Leg Drive” and Posture: Plant your feet firmly on the floor. Retract your shoulder blades (press them together against the bench) and maintain a slight natural lumbar curve. Starting Position: Push the dumbbells toward the ceiling. Your wrists should be aligned with your elbows. Rotate the dumbbells slightly inward (about 45 degrees) so that your elbows do not splay out too far to the sides, thereby protecting your shoulders. Eccentric Phase (Lowering): Lower the dumbbells in a controlled manner toward the sides of your chest. Your elbows should lower at an angle of about 45–60 degrees relative to your body. Feel the stretch in the lower part of your chest. Concentric Phase (Lift): Push the weight upward in a slight arc (toward the center), without letting the dumbbells collide at the top or fully locking out your elbows to maintain muscle tension. Exhale as you lift.",
+      "instructionsAr": null,
+      "instructionStatus": "rafik_editorial_overlay",
+      "instructionProvenance": {
+        "mode": "rafik-editorial-overlay",
+        "statement": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records.",
+        "reason": "Normalize the awkward source title and remove the upstream translator-service footer; the reviewed clip and existing equipment identify a flat dumbbell bench press."
+      },
+      "category": "chest",
+      "categoryAr": "الصدر",
+      "categorySource": "Chest",
+      "bodyPart": "chest",
+      "targetMuscle": "Chest",
+      "equipment": "Bench, Dumbbell",
+      "equipmentAr": "مقعد، دمبل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "instructions"
+        ],
+        "reason": "Normalize the awkward source title and remove the upstream translator-service footer; the reviewed clip and existing equipment identify a flat dumbbell bench press.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-82",
+      "sourceId": 82,
+      "sourceUuid": "6f79b381-98a4-40d5-8a45-3bb0558be6fe",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/82/",
+      "name": "Bent-over Lateral Raises",
+      "nameAr": null,
+      "instructions": "Sit on bench while holding weights. Bend forward as far as possible, with arms slightly bent at the elbow. Perform a lateral raise while maintaining the bend in your elbow.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 421,
+          "translationUuid": "170cc52f-345f-41b3-bdae-8a5e0c9aa449",
+          "language": "en",
+          "license": {
+            "id": 2,
+            "full_name": "Creative Commons Attribution Share Alike 4",
+            "short_name": "CC-BY-SA 4",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+          },
+          "licenseAuthor": "apeschel"
+        }
+      },
+      "category": "shoulders",
+      "categoryAr": "الكتفان",
+      "categorySource": "Shoulders",
+      "bodyPart": "shoulders",
+      "targetMuscle": "unspecified",
+      "equipment": "Bench, Dumbbell",
+      "equipmentAr": "مقعد، دمبل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 2,
+        "full_name": "Creative Commons Attribution Share Alike 4",
+        "short_name": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "apeschel",
+      "translationLicense": {
+        "id": 2,
+        "title": null,
+        "author": "apeschel",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": null
+    },
+    {
+      "id": "wger-91",
+      "sourceId": 91,
+      "sourceUuid": "7b99a081-6b1a-4aa5-b86a-5a935d083a35",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/91/",
+      "name": "Biceps Curls With Barbell",
+      "nameAr": null,
+      "instructions": "Hold the Barbell shoulder-wide, the back is straight, the shoulders slightly back, the arms are streched. Bend the arms, bringing the weight up, with a fast movement. Without pausing, let down the bar with a slow and controlled movement. Don't allow your body to swing during the exercise, all work is done by the biceps, which are the only mucles that should move (pay attention to the elbows).",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 74,
+          "translationUuid": "c56078d2-ae85-4524-a467-d1e143b6df1a",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "upper arms",
+      "categoryAr": "أعلى الذراعين",
+      "categorySource": "Arms",
+      "bodyPart": "upper arms",
+      "targetMuscle": "Biceps",
+      "equipment": "Barbell",
+      "equipmentAr": "بار حديد",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": null
+    },
+    {
+      "id": "wger-92",
+      "sourceId": 92,
+      "sourceUuid": "1ae6a28d-10e7-4ecf-af4f-905f8193e2c6",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/92/",
+      "name": "Biceps Curls With Dumbbell",
+      "nameAr": null,
+      "instructions": "Hold two dumbbells, the arms are streched, the hands are on your side, the palms face inwards. Bend the arms and bring the weight with a fast movement up. At the same time, rotate your arms by 90 degrees at the very beginning of the movement. At the highest point, rotate a little the weights further outwards. Without a pause, bring them down, slowly. Don't allow your body to swing during the exercise, all work is done by the biceps, which are the only mucles that should move (pay attention to the elbows).",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 81,
+          "translationUuid": "48a59aa8-4568-409c-8afe-f8cb99c558ea",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "upper arms",
+      "categoryAr": "أعلى الذراعين",
+      "categorySource": "Arms",
+      "bodyPart": "upper arms",
+      "targetMuscle": "Biceps",
+      "equipment": "Dumbbell",
+      "equipmentAr": "دمبل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": null
+    },
+    {
+      "id": "wger-95",
+      "sourceId": 95,
+      "sourceUuid": "bcb7020c-8678-496d-8f4d-aad0e233a5bd",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/95/",
+      "name": "Biceps Curl With Cable",
+      "nameAr": null,
+      "instructions": "Stand around 30 - 40cm away from the cable, the feet are firmly on the floor. Take the bar and lift the weight with a fast movements. Lower the weight as with the dumbbell curls slowly and controlled.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 129,
+          "translationUuid": "8c6c1544-cbf8-403c-ae12-b27b392702f8",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "upper arms",
+      "categoryAr": "أعلى الذراعين",
+      "categorySource": "Arms",
+      "bodyPart": "upper arms",
+      "targetMuscle": "Biceps",
+      "equipment": "Cable machine",
+      "equipmentAr": "جهاز كابل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": null
+    },
+    {
+      "id": "wger-194",
+      "sourceId": 194,
+      "sourceUuid": "09dd3e3c-e53a-4e2c-a2e3-645d334f53e2",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/194/",
+      "name": "Dips",
+      "nameAr": null,
+      "instructions": "Support yourself on parallel bars with your arms straight. Lower under control by bending your elbows until you reach a comfortable depth, keeping your shoulders stable. Press through the bars to return to the start without swinging.",
+      "instructionsAr": null,
+      "instructionStatus": "rafik_editorial_overlay",
+      "instructionProvenance": {
+        "mode": "rafik-editorial-overlay",
+        "statement": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records.",
+        "reason": "The source text is a muscle-description excerpt rather than usable movement steps."
+      },
+      "category": "chest",
+      "categoryAr": "الصدر",
+      "categorySource": "Chest",
+      "bodyPart": "chest",
+      "targetMuscle": "Chest, Triceps",
+      "equipment": "none (bodyweight exercise)",
+      "equipmentAr": "وزن الجسم",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 3,
+        "full_name": "Creative Commons Public Domain 1.0",
+        "short_name": "CC0",
+        "url": "http://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "exerciseLicenseAuthor": "BFad07",
+      "translationLicense": {
+        "id": 3,
+        "title": null,
+        "author": "BFad07",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "instructions"
+        ],
+        "reason": "The source text is a muscle-description excerpt rather than usable movement steps.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-205",
+      "sourceId": 205,
+      "sourceUuid": "2f1a2707-e7ff-46ac-9112-3e31e6e961ee",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/205/",
+      "name": "Dumbbell Lunges Standing",
+      "nameAr": null,
+      "instructions": "Stand tall holding a dumbbell at each side. Step forward and lower under control until both knees are comfortably bent and the rear knee approaches the floor. Drive through the front foot to return to standing, then repeat on the other side while keeping your torso upright.",
+      "instructionsAr": null,
+      "instructionStatus": "rafik_editorial_overlay",
+      "instructionProvenance": {
+        "mode": "rafik-editorial-overlay",
+        "statement": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records.",
+        "reason": "The source English description is only a period."
+      },
+      "category": "upper legs",
+      "categoryAr": "الفخذان",
+      "categorySource": "Legs",
+      "bodyPart": "upper legs",
+      "targetMuscle": "Quads",
+      "equipment": "Dumbbell",
+      "equipmentAr": "دمبل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "instructions"
+        ],
+        "reason": "The source English description is only a period.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-206",
+      "sourceId": 206,
+      "sourceUuid": "dcc6e237-a8bb-4eca-bbc5-7fb852636f6a",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/206/",
+      "name": "Dumbbell Lunges Walking",
+      "nameAr": null,
+      "instructions": "Starting Position: Stand with feet hip-width apart and hands either on your hips or holding dumbbells at your sides. The Stride: Take a wide step forward with your right leg. The Descent: Lower your hips until both knees are bent at approximately 90-degree angles . The Transition: Drive through your front heel to stand up, bringing your back foot forward to step directly into the next lunge.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 113,
+          "translationUuid": "ffd4ce7e-e14f-49d4-9dc9-dc1362631382",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "upper legs",
+      "categoryAr": "الفخذان",
+      "categorySource": "Legs",
+      "bodyPart": "upper legs",
+      "targetMuscle": "Quads",
+      "equipment": "Dumbbell",
+      "equipmentAr": "دمبل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": null
+    },
+    {
+      "id": "wger-211",
+      "sourceId": 211,
+      "sourceUuid": "d8bddb58-91b0-4d7b-8ec1-cd742584b607",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/211/",
+      "name": "Seated Dumbbell Overhead Triceps Extension",
+      "nameAr": null,
+      "instructions": "Position one dumbbell over head with both hands under inner plate (heart shaped grip). With elbows over head, lower forearm behind upper arm by flexing elbows. Flex wrists at bottom to avoid hitting dumbbell on back of neck. Raise dumbbell over head by extending elbows while hyperextending wrists. Return and repeat.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 274,
+          "translationUuid": "3f7b893e-a089-450f-b8cc-ec3ec17d3bf3",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "tuninx"
+        }
+      },
+      "category": "upper arms",
+      "categoryAr": "أعلى الذراعين",
+      "categorySource": "Arms",
+      "bodyPart": "upper arms",
+      "targetMuscle": "Triceps",
+      "equipment": "Bench, Dumbbell",
+      "equipmentAr": "مقعد، دمبل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "tuninx",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "tuninx",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr"
+        ],
+        "reason": "The reviewed clip shows the two-hand overhead extension performed seated against a bench; the source title/equipment omit that setup.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-222",
+      "sourceId": 222,
+      "sourceUuid": "d7a418d4-d0cb-4f85-8a7c-1e9d97152cbd",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/222/",
+      "name": "Facepull",
+      "nameAr": null,
+      "instructions": "Attach a rope to a pulley station set at about chest level. Step back so you're supporting the weight with arms completely outstretched and assume a staggered (one foot forward) stance. Bend the knees slightly for a stable base. Retract the scapulae (squeeze your partner's finger with your shoulder blades) and pull the center of the rope slightly up towards the face. A good cue is to think about pulling the ends of the rope apart, not just pulling back. As you near your face, externally rotate so your knuckles are facing the ceiling. Hold for one second at the top position and slowly lower.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 394,
+          "translationUuid": "659f3fb9-2370-42fb-9c29-9aaf65c7a7de",
+          "language": "en",
+          "license": {
+            "id": 2,
+            "full_name": "Creative Commons Attribution Share Alike 4",
+            "short_name": "CC-BY-SA 4",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+          },
+          "licenseAuthor": "abeworld"
+        }
+      },
+      "category": "shoulders",
+      "categoryAr": "الكتفان",
+      "categorySource": "Shoulders",
+      "bodyPart": "shoulders",
+      "targetMuscle": "Trapezius",
+      "equipment": "Cable machine",
+      "equipmentAr": "جهاز كابل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 2,
+        "full_name": "Creative Commons Attribution Share Alike 4",
+        "short_name": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "abeworld",
+      "translationLicense": {
+        "id": 2,
+        "title": null,
+        "author": "abeworld",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": null
+    },
+    {
+      "id": "wger-245",
+      "sourceId": 245,
+      "sourceUuid": "893c07ea-2e24-49b6-92e4-d0033eedec62",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/245/",
+      "name": "Skullcrusher Dumbbells",
+      "nameAr": null,
+      "instructions": "Hold the dumbbells and lay down on a flat bench in such a way that around 1/4 of your head is over the edge. Stretch arms straight up and then lean dumbbells away from your toes to a 10-20 degree angle. Keep upper arm at this angle throughout exercise. Dumbbell shall not be amed at your head, but away over your head. This will maximise gain from exercise with load on triceps all the time. Pay attention to your elbows and arms: only the triceps are doing the work, the rest of the arms should not move.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 85,
+          "translationUuid": "ee00d53e-4482-44aa-b780-bbc570061841",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "upper arms",
+      "categoryAr": "أعلى الذراعين",
+      "categorySource": "Arms",
+      "bodyPart": "upper arms",
+      "targetMuscle": "Triceps",
+      "equipment": "Bench, Dumbbell",
+      "equipmentAr": "مقعد، دمبل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": null
+    },
+    {
+      "id": "wger-246",
+      "sourceId": 246,
+      "sourceUuid": "95a7e546-e8f8-4521-a76b-983d94161b25",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/246/",
+      "name": "EZ-Bar Skull Crusher",
+      "nameAr": null,
+      "instructions": "Hold the SZ-bar and lay down on a flat bench in such a way that around 1/4 of your head is over the edge. Stretch your arms with the bar and bend them so that the bar is lowered. Just before it touches your forehead, push it up. Pay attention to your elbows and arms: only the triceps are doing the work, the rest of the arms should not move.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 84,
+          "translationUuid": "ee4a350b-c681-407f-a414-6ec243809ec7",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "upper arms",
+      "categoryAr": "أعلى الذراعين",
+      "categorySource": "Arms",
+      "bodyPart": "upper arms",
+      "targetMuscle": "Triceps",
+      "equipment": "Bench, SZ-Bar",
+      "equipmentAr": "مقعد، بار إي زد",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name"
+        ],
+        "reason": "Use the common English equipment name instead of the source's regional SZ-bar label.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-257",
+      "sourceId": 257,
+      "sourceUuid": "d677de4c-5bd9-412a-91f1-857116a666a2",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/257/",
+      "name": "Front Squats",
+      "nameAr": null,
+      "instructions": "Rest the bar across the front of your shoulders and keep your elbows lifted. Stand about shoulder-width apart, brace your torso, and bend your hips and knees to lower under control. Keep your knees tracking with your toes, then drive through your feet to stand.",
+      "instructionsAr": null,
+      "instructionStatus": "rafik_editorial_overlay",
+      "instructionProvenance": {
+        "mode": "rafik-editorial-overlay",
+        "statement": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records.",
+        "reason": "The source description lists muscles but gives no setup or movement steps."
+      },
+      "category": "upper legs",
+      "categoryAr": "الفخذان",
+      "categorySource": "Legs",
+      "bodyPart": "upper legs",
+      "targetMuscle": "Glutes",
+      "equipment": "Barbell",
+      "equipmentAr": "بار حديد",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "sistab2",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "sistab2",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "instructions"
+        ],
+        "reason": "The source description lists muscles but gives no setup or movement steps.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-272",
+      "sourceId": 272,
+      "sourceUuid": "c0d9fe98-f4fe-49f3-8037-05e1984e7d2d",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/272/",
+      "name": "Hammer Curls",
+      "nameAr": null,
+      "instructions": "Start: Hold dumbbells at your sides with palms facing your torso. Curl: Lift the weights toward your shoulders while maintaining the neutral grip (like holding a hammer). Squeeze: Contract the biceps at the top without moving your elbows forward. Lower: Slowly return to the starting position with full control.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 86,
+          "translationUuid": "6dcc9adb-939c-4581-9e44-d0d73753997b",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "upper arms",
+      "categoryAr": "أعلى الذراعين",
+      "categorySource": "Arms",
+      "bodyPart": "upper arms",
+      "targetMuscle": "Biceps",
+      "equipment": "Dumbbell",
+      "equipmentAr": "دمبل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": null
+    },
+    {
+      "id": "wger-275",
+      "sourceId": 275,
+      "sourceUuid": "04365177-e078-489b-983a-8ac61b7346f1",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/275/",
+      "name": "Cable Hammer Curl",
+      "nameAr": null,
+      "instructions": "Take a cable in your hands (palms parallel, point to each other), the body is straight. Bend the arms and bring the weight up with a fast movement. Without any pause bring it back down with a slow, controlled movement, but don't stretch completely your arms. Don't swing your body during the exercise, the biceps should do all the work here. The elbows are at your side and don't move.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 138,
+          "translationUuid": "5baf40e5-ea3c-4f8d-b60a-d294ee2de55b",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "upper arms",
+      "categoryAr": "أعلى الذراعين",
+      "categorySource": "Arms",
+      "bodyPart": "upper arms",
+      "targetMuscle": "Biceps",
+      "equipment": "Cable machine",
+      "equipmentAr": "جهاز كابل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name"
+        ],
+        "reason": "Normalize the source title while preserving the demonstrated neutral-grip cable curl.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-294",
+      "sourceId": 294,
+      "sourceUuid": "19a289c0-33af-4055-bb34-3570c2975d3d",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/294/",
+      "name": "Hip Thrust",
+      "nameAr": null,
+      "instructions": "The bar should go directly on your upper thigh, directly below your crotch. Your feet should be directly under your knees. Push your hips up so that you form a straight line from your knees to your shoulders. Use a pad for comfort.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 854,
+          "translationUuid": "37097633-de80-4271-9b7c-291f359e0ef4",
+          "language": "en",
+          "license": {
+            "id": 2,
+            "full_name": "Creative Commons Attribution Share Alike 4",
+            "short_name": "CC-BY-SA 4",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+          },
+          "licenseAuthor": "Bret Contreras"
+        }
+      },
+      "category": "upper legs",
+      "categoryAr": "الفخذان",
+      "categorySource": "Legs",
+      "bodyPart": "upper legs",
+      "targetMuscle": "Glutes",
+      "equipment": "Barbell, Bench",
+      "equipmentAr": "بار حديد، مقعد",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 2,
+        "full_name": "Creative Commons Attribution Share Alike 4",
+        "short_name": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "Bret Contreras",
+      "translationLicense": {
+        "id": 2,
+        "title": null,
+        "author": "Bret Contreras",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": null
+    },
+    {
+      "id": "wger-341",
+      "sourceId": 341,
+      "sourceUuid": "316aca47-6f5b-40b7-b04f-f69e68387354",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/341/",
+      "name": "Smith Machine Squat",
+      "nameAr": null,
+      "instructions": "Set the bar around shoulder height and position it across your upper back. Stand about shoulder-width apart with your toes slightly outward. Unrack the bar, brace your torso, and bend your hips and knees to lower under control to a comfortable depth. Drive through your feet to stand, stopping short of forcefully locking your knees. Keep your knees tracking in the same direction as your toes.",
+      "instructionsAr": null,
+      "instructionStatus": "rafik_authored",
+      "instructionProvenance": {
+        "mode": "rafik-authored",
+        "statement": "Rafik-authored English guidance because every available upstream description was blank or unusable. It is based on the named Smith-machine squat movement and linked wger media identity; it is not presented as an upstream translation or professional technique certification.",
+        "source": {
+          "translationId": null,
+          "translationUuid": null,
+          "language": null,
+          "license": {
+            "id": 2,
+            "name": "Creative Commons Attribution Share Alike 4",
+            "shortName": "CC-BY-SA 4",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+            "author": "Goulart",
+            "authorUrl": null,
+            "objectUrl": null,
+            "derivativeSourceUrl": null,
+            "authorHistory": [
+              "Goulart"
+            ]
+          },
+          "licenseAuthor": null
+        }
+      },
+      "category": "upper legs",
+      "categoryAr": "الفخذان",
+      "categorySource": "Legs",
+      "bodyPart": "upper legs",
+      "targetMuscle": "Quads",
+      "equipment": "Smith machine",
+      "equipmentAr": "جهاز سميث",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr"
+        ],
+        "reason": "The source equipment is empty and 'Multipress' is a regional name; the reviewed clip shows a Smith-machine squat.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-348",
+      "sourceId": 348,
+      "sourceUuid": "63375f5b-2d81-471c-bea4-fc3d207e96cb",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/348/",
+      "name": "Lateral Raises",
+      "nameAr": null,
+      "instructions": "This exercise works the deltoid muscle of the shoulder. The movement starts with the arms straight, and the hands holding weights at the sides or in front of the body. Body is in a slight forward-leaning position with hips and knees bent a little. Arms are kept straight or slightly bent, and raised through an arc of movement in the coronal plane that terminates when the hands are at approximately shoulder height. Weights are lowered to the starting position, completing one rep. When using a cable machine the individual stands with the coronal plane in line with the pulley, which is at or near the ground.[9] The exercise can be completed one shoulder at a time (with the other hand used to stabilize the body against the weight moved), or with both hands simultaneously if two parallel pulleys are available.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 148,
+          "translationUuid": "5345766a-c092-457a-aa21-8ee6ffa855d4",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "shoulders",
+      "categoryAr": "الكتفان",
+      "categorySource": "Shoulders",
+      "bodyPart": "shoulders",
+      "targetMuscle": "Shoulders",
+      "equipment": "Dumbbell",
+      "equipmentAr": "دمبل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": null
+    },
+    {
+      "id": "wger-349",
+      "sourceId": 349,
+      "sourceUuid": "57263316-6f34-4539-952b-b07e09bac3ba",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/349/",
+      "name": "Single-Arm Cable Lateral Raise",
+      "nameAr": null,
+      "instructions": "Set a cable pulley low and stand side-on to it. Hold the handle with the outside hand, keep a soft bend in the elbow, and raise the arm out to the side to about shoulder height. Lower under control and repeat before changing sides.",
+      "instructionsAr": null,
+      "instructionStatus": "rafik_editorial_overlay",
+      "instructionProvenance": {
+        "mode": "rafik-editorial-overlay",
+        "statement": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records.",
+        "reason": "The source calls this a lateral row, but the reviewed continuous clip shows shoulder abduction: a single-arm cable lateral raise."
+      },
+      "category": "shoulders",
+      "categoryAr": "الكتفان",
+      "categorySource": "Shoulders",
+      "bodyPart": "shoulders",
+      "targetMuscle": "Shoulders",
+      "equipment": "Cable machine",
+      "equipmentAr": "جهاز كابل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "instructions"
+        ],
+        "reason": "The source calls this a lateral row, but the reviewed continuous clip shows shoulder abduction: a single-arm cable lateral raise.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-365",
+      "sourceId": 365,
+      "sourceUuid": "3bc8b411-a28d-4e1c-a6d1-769e18fe9881",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/365/",
+      "name": "Lying Leg Curl",
+      "nameAr": null,
+      "instructions": "Lay on a bench and put your calves behind the leg holder (better if they are hold on around the lower calves). Hold a grip on the bars to make sure the body is firmly in place. Bend your legs bringing the weight up, go slowly back. During the exercise the body should not move, all work is done by the legs.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 154,
+          "translationUuid": "cd4fac32-48fb-4237-a263-a44c5108790a",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "upper legs",
+      "categoryAr": "الفخذان",
+      "categorySource": "Legs",
+      "bodyPart": "upper legs",
+      "targetMuscle": "Hamstrings",
+      "equipment": "Lying leg curl machine",
+      "equipmentAr": "جهاز ثني الساقين بوضع الاستلقاء",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr"
+        ],
+        "reason": "The source equipment is empty; the reviewed clip shows a prone leg-curl machine.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-366",
+      "sourceId": 366,
+      "sourceUuid": "440a5184-de58-4a86-a7ba-76ddeafaa855",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/366/",
+      "name": "Seated Leg Curl",
+      "nameAr": null,
+      "instructions": "Adjust the machine lever to suit your height. Sit with your back against the back pad, place your ankles against the roller pads, and secure your thighs beneath the restraint just above your knees. Hold the handles. Bend your knees while keeping your back and hips still. Pause briefly in the contracted position, then return slowly to the starting position.",
+      "instructionsAr": null,
+      "instructionStatus": "translated_from_upstream",
+      "instructionProvenance": {
+        "mode": "translated-from-upstream",
+        "statement": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+        "source": {
+          "translationId": 2637,
+          "translationUuid": "bb9e846b-80d1-418e-902d-c59f19f2d28a",
+          "language": "es",
+          "license": {
+            "id": 2,
+            "full_name": "Creative Commons Attribution Share Alike 4",
+            "short_name": "CC-BY-SA 4",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+          },
+          "licenseAuthor": "admin"
+        }
+      },
+      "category": "upper legs",
+      "categoryAr": "الفخذان",
+      "categorySource": "Legs",
+      "bodyPart": "upper legs",
+      "targetMuscle": "Hamstrings",
+      "equipment": "Seated leg curl machine",
+      "equipmentAr": "جهاز ثني الساقين بوضع الجلوس",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr"
+        ],
+        "reason": "The source equipment is empty; the reviewed clip shows a seated leg-curl machine.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-367",
+      "sourceId": 367,
+      "sourceUuid": "49189e88-40b6-4c0d-a784-0cc3abbb8e75",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/367/",
+      "name": "Standing Single-Leg Curl",
+      "nameAr": null,
+      "instructions": "Work one leg at a time. Stand at the machine with the pad positioned against your lower leg just below the calf. Bend your knee until it reaches roughly a right angle, then lower the weight slowly and under control.",
+      "instructionsAr": null,
+      "instructionStatus": "translated_from_upstream",
+      "instructionProvenance": {
+        "mode": "translated-from-upstream",
+        "statement": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+        "source": {
+          "translationId": 72,
+          "translationUuid": "9075241c-0493-4f2a-a399-a57e3634093e",
+          "language": "de",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "upper legs",
+      "categoryAr": "الفخذان",
+      "categorySource": "Legs",
+      "bodyPart": "upper legs",
+      "targetMuscle": "Hamstrings",
+      "equipment": "Standing leg curl machine",
+      "equipmentAr": "جهاز ثني الساق واقفًا",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr"
+        ],
+        "reason": "The source equipment is empty and the clip demonstrates one leg at a time on a standing curl machine.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-371",
+      "sourceId": 371,
+      "sourceUuid": "66a42396-c207-44da-bc75-758a89d32404",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/371/",
+      "name": "45-Degree Leg Press",
+      "nameAr": null,
+      "instructions": "Sit with your back and head supported and place your feet about shoulder-width apart on the platform. Release the safeties, lower the platform under control until your knees reach a comfortable bend, then press it away without forcefully locking your knees. Keep your feet flat and your back supported.",
+      "instructionsAr": null,
+      "instructionStatus": "rafik_editorial_overlay",
+      "instructionProvenance": {
+        "mode": "rafik-editorial-overlay",
+        "statement": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records.",
+        "reason": "The source equipment is empty and its English text is only a definition; the reviewed clip shows a 45-degree sled leg press."
+      },
+      "category": "upper legs",
+      "categoryAr": "الفخذان",
+      "categorySource": "Legs",
+      "bodyPart": "upper legs",
+      "targetMuscle": "Hamstrings, Calves, Glutes, Quads",
+      "equipment": "Leg press machine",
+      "equipmentAr": "جهاز ضغط الساقين",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 3,
+        "full_name": "Creative Commons Public Domain 1.0",
+        "short_name": "CC0",
+        "url": "http://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "exerciseLicenseAuthor": "BFad07",
+      "translationLicense": {
+        "id": 3,
+        "title": null,
+        "author": "BFad07",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr",
+          "instructions"
+        ],
+        "reason": "The source equipment is empty and its English text is only a definition; the reviewed clip shows a 45-degree sled leg press.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-374",
+      "sourceId": 374,
+      "sourceUuid": "661287d4-d1dc-485c-896b-73f90b000536",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/374/",
+      "name": "Wide-Stance Leg Press",
+      "nameAr": null,
+      "instructions": "Sit on the machine and put your feet on the platform, a bit more than shoulder wide. The feet are turned outwards by a few degrees. Lower the weight so much, that the knees form a right angle. Push immediately the platform up again, without any pause. When in the lower position, the knees point a bit outwards and the movement should be always fluid.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 114,
+          "translationUuid": "3caed096-c65e-434d-9792-33db636743e7",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "upper legs",
+      "categoryAr": "الفخذان",
+      "categorySource": "Legs",
+      "bodyPart": "upper legs",
+      "targetMuscle": "Quads",
+      "equipment": "Leg press machine",
+      "equipmentAr": "جهاز ضغط الساقين",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr"
+        ],
+        "reason": "The source equipment is empty; the reviewed clip shows the wide-foot variation on a leg-press machine.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-375",
+      "sourceId": 375,
+      "sourceUuid": "18104387-4567-4c1e-8d03-db0b274646dd",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/375/",
+      "name": "Hack Squat Machine",
+      "nameAr": null,
+      "instructions": "Position yourself in the Hackenschmidt machine with your shoulders against the pads. Place your feet about shoulder-width apart with your toes slightly outward. Bend your knees and lower under control until they form an angle of about 90 degrees. Press back up and repeat, without forcefully locking your knees.",
+      "instructionsAr": null,
+      "instructionStatus": "translated_from_upstream",
+      "instructionProvenance": {
+        "mode": "translated-from-upstream",
+        "statement": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+        "source": {
+          "translationId": 402,
+          "translationUuid": "634dcf89-c346-4af8-8b09-61f238798877",
+          "language": "de",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "upper legs",
+      "categoryAr": "الفخذان",
+      "categorySource": "Legs",
+      "bodyPart": "upper legs",
+      "targetMuscle": "Quads",
+      "equipment": "Hack squat machine",
+      "equipmentAr": "جهاز هاك سكوات",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr"
+        ],
+        "reason": "The source equipment is empty and its English title says leg press; the reviewed clip shows a shoulder-supported hack squat.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-465",
+      "sourceId": 465,
+      "sourceUuid": "dd52fb99-9426-4a78-b446-20a8e3e4ec47",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/465/",
+      "name": "EZ-Bar Preacher Curl",
+      "nameAr": null,
+      "instructions": "Place the EZ curl bar on the rest handles in front of the preacher bench. Lean over the bench and grab the EZ curl bar with palms up. Sit down on the preacher bench seat so your upper arms rest on top of the pad and your chest is pressed against the pad. Lower the weight until your elbows are extended and arms are straight. Bring the weights back up to the starting point by contracting biceps. Repeat",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 193,
+          "translationUuid": "84b4e711-8b29-4541-ad58-dad967f82390",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "cgoob883"
+        }
+      },
+      "category": "upper arms",
+      "categoryAr": "أعلى الذراعين",
+      "categorySource": "Arms",
+      "bodyPart": "upper arms",
+      "targetMuscle": "Brachialis",
+      "equipment": "EZ bar, Preacher bench",
+      "equipmentAr": "بار متعرج، مقعد بريتشر",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "cgoob883",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "cgoob883",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr"
+        ],
+        "reason": "Normalize the bar name and include the preacher bench visible in the reviewed clip.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-475",
+      "sourceId": 475,
+      "sourceUuid": "8e420408-0682-4ab6-89f5-2681e54c7ce0",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/475/",
+      "name": "Pull-ups",
+      "nameAr": null,
+      "instructions": "Grab the pull up bar with a wide grip, the body is hanging freely. Keep your chest out and pull yourself up till your chin reaches the bar or it touches your neck, if you want to pull behind you. Go with a slow and controlled movement down, always keeping the chest out.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 107,
+          "translationUuid": "7ce6b090-5099-4cd0-83ae-1a02725c868b",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "back",
+      "categoryAr": "الظهر",
+      "categorySource": "Back",
+      "bodyPart": "back",
+      "targetMuscle": "Lats",
+      "equipment": "Pull-up bar",
+      "equipmentAr": "بار عقلة",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": null
+    },
+    {
+      "id": "wger-477",
+      "sourceId": 477,
+      "sourceUuid": "7f834f07-fa7b-46b6-8ffa-45930b0602db",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/477/",
+      "name": "Assisted Pull-Up Machine",
+      "nameAr": null,
+      "instructions": "Set the machine to the assistance you need. Position yourself on the platform or knee pad and grip the handles about shoulder-width apart with your arms extended. Bend your elbows and pull your body upward until your chin passes the handles or bar. Lower under control until your arms are extended again. Reduce the assistance gradually as your strength improves.",
+      "instructionsAr": null,
+      "instructionStatus": "translated_from_upstream",
+      "instructionProvenance": {
+        "mode": "translated-from-upstream",
+        "statement": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+        "source": {
+          "translationId": 2136,
+          "translationUuid": "743f7b44-541d-4d8c-955d-a1e44635aabe",
+          "language": "pt",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "back",
+      "categoryAr": "الظهر",
+      "categorySource": "Back",
+      "bodyPart": "back",
+      "targetMuscle": "Lats",
+      "equipment": "Assisted pull-up machine",
+      "equipmentAr": "جهاز العقلة المساعد",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr"
+        ],
+        "reason": "The text entry describes machine-assisted pull-ups and needs usable equipment filtering. Its video remains excluded because it duplicates the unassisted pull-up bytes and does not establish an assistance platform.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-507",
+      "sourceId": 507,
+      "sourceUuid": "2e7ffff9-e603-4b28-98c8-31d1a6ce8cd9",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/507/",
+      "name": "Romanian Deadlift",
+      "nameAr": null,
+      "instructions": "Stand with the bar in front of your thighs, feet about hip-width apart, and knees softly bent. Brace your torso, push your hips back, and keep the bar close to your legs as you lower it under control. Stop when you feel a comfortable hamstring stretch, then drive your hips forward to stand tall.",
+      "instructionsAr": null,
+      "instructionStatus": "rafik_editorial_overlay",
+      "instructionProvenance": {
+        "mode": "rafik-editorial-overlay",
+        "statement": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records.",
+        "reason": "The source English description is only a shorthand label and a YouTube URL."
+      },
+      "category": "upper legs",
+      "categoryAr": "الفخذان",
+      "categorySource": "Legs",
+      "bodyPart": "upper legs",
+      "targetMuscle": "Hamstrings, Glutes",
+      "equipment": "Barbell",
+      "equipmentAr": "بار حديد",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 2,
+        "full_name": "Creative Commons Attribution Share Alike 4",
+        "short_name": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "pjwirth",
+      "translationLicense": {
+        "id": 2,
+        "title": null,
+        "author": "pjwirth",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "instructions"
+        ],
+        "reason": "The source English description is only a shorthand label and a YouTube URL.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-512",
+      "sourceId": 512,
+      "sourceUuid": "00fcf603-b0d0-48d2-9b5e-c7f0d510d46c",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/512/",
+      "name": "Seated Cable Row — Narrow Grip",
+      "nameAr": null,
+      "instructions": "Sit at the cable row with your feet braced and hold the narrow handle. Keep your torso upright, pull the handle toward your lower ribs, and draw your shoulder blades back without leaning far behind you. Extend your arms again under control.",
+      "instructionsAr": null,
+      "instructionStatus": "rafik_editorial_overlay",
+      "instructionProvenance": {
+        "mode": "rafik-editorial-overlay",
+        "statement": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records.",
+        "reason": "The source equipment is empty and its English description is a fragment list rather than complete instructions."
+      },
+      "category": "back",
+      "categoryAr": "الظهر",
+      "categorySource": "Back",
+      "bodyPart": "back",
+      "targetMuscle": "Lats",
+      "equipment": "Cable machine",
+      "equipmentAr": "جهاز كابل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr",
+          "instructions"
+        ],
+        "reason": "The source equipment is empty and its English description is a fragment list rather than complete instructions.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-537",
+      "sourceId": 537,
+      "sourceUuid": "57e17672-52b9-43cf-8d0d-4b3f06a0c0d0",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/537/",
+      "name": "Incline Dumbbell Bench Press",
+      "nameAr": null,
+      "instructions": "This is a variation of the flat bench press designed to emphasize the clavicular head of the pectoralis major (the upper portion). By tilting the torso, the angle of the push changes, shifting more tension to the upper chest and shoulders, which helps achieve a more aesthetic, balanced, and three-dimensional development of the torso. Bench Adjustment and Preparation: Set the bench to an incline of between 30 and 45 degrees (an incline greater than 45° will place too much strain on the shoulders and reduce the stimulus to the chest). Sit down with a dumbbell on each thigh. Starting position: Lean back, resting your back against the bench, while using your knees one after the other to push the dumbbells upward to shoulder height. Anatomical Stabilization: Plant your feet firmly on the floor. Retract your scapulas (bring your shoulder blades together and press them into the bench) to protect your shoulders and stabilize the load. Eccentric Phase (Lowering): Lower the dumbbells slowly and in a controlled manner toward the upper part of your chest. Your elbows should not splay out to the sides (90°); maintain a safe angle of about 45 to 60 degrees relative to your torso. Concentric Phase (Lift): Push the dumbbells vertically upward as you exhale. Follow a slightly converging path (without letting them touch at the top). Stop the movement just before locking out your elbows to maintain muscle tension in the upper pectoral.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 210,
+          "translationUuid": "15c5dfa0-4103-4515-979d-807eee8faa53",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "chest",
+      "categoryAr": "الصدر",
+      "categorySource": "Chest",
+      "bodyPart": "chest",
+      "targetMuscle": "Chest",
+      "equipment": "Dumbbell, Incline bench",
+      "equipmentAr": "دمبل، مقعد مائل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name"
+        ],
+        "reason": "Normalize the source title without changing the demonstrated exercise.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-538",
+      "sourceId": 538,
+      "sourceUuid": "275fb49f-975c-4d6e-9d63-2c86ed740f40",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/538/",
+      "name": "Incline Barbell Bench Press",
+      "nameAr": null,
+      "instructions": "Set the bench to a moderate incline and lie back with your feet planted. Grip the bar slightly wider than shoulder-width, unrack it, and lower it under control toward your upper chest. Press the bar upward over your shoulders, then repeat with the bar path controlled. Use rack safeties or a spotter for challenging loads.",
+      "instructionsAr": null,
+      "instructionStatus": "rafik_editorial_overlay",
+      "instructionProvenance": {
+        "mode": "rafik-editorial-overlay",
+        "statement": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records.",
+        "reason": "The source English description contains only a tempo note and no setup or movement steps."
+      },
+      "category": "chest",
+      "categoryAr": "الصدر",
+      "categorySource": "Chest",
+      "bodyPart": "chest",
+      "targetMuscle": "Chest",
+      "equipment": "Barbell, Incline bench",
+      "equipmentAr": "بار حديد، مقعد مائل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "instructions"
+        ],
+        "reason": "The source English description contains only a tempo note and no setup or movement steps.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-543",
+      "sourceId": 543,
+      "sourceUuid": "5912d7ed-6a0e-4b4c-b30a-fc9f3f890fc1",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/543/",
+      "name": "Machine Shoulder Press",
+      "nameAr": null,
+      "instructions": "Sit in the machine with your feet about shoulder-width apart and your back upright against the support. Grip the handles or bar at shoulder height. Press upward until your arms are extended, then lower slowly to the starting position and repeat.",
+      "instructionsAr": null,
+      "instructionStatus": "translated_from_upstream",
+      "instructionProvenance": {
+        "mode": "translated-from-upstream",
+        "statement": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+        "source": {
+          "translationId": 2596,
+          "translationUuid": "127ce93b-bdea-4e71-bcf1-b936466cc07c",
+          "language": "es",
+          "license": {
+            "id": 2,
+            "full_name": "Creative Commons Attribution Share Alike 4",
+            "short_name": "CC-BY-SA 4",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+          },
+          "licenseAuthor": "Tierrasverdes"
+        }
+      },
+      "category": "shoulders",
+      "categoryAr": "الكتفان",
+      "categorySource": "Shoulders",
+      "bodyPart": "shoulders",
+      "targetMuscle": "Shoulders",
+      "equipment": "Shoulder press machine",
+      "equipmentAr": "جهاز ضغط الكتفين",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr"
+        ],
+        "reason": "The source equipment is empty; normalize the title to the machine shown in the reviewed clip.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-567",
+      "sourceId": 567,
+      "sourceUuid": "87affa4b-395b-437c-9581-2bd20ea5aa7c",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/567/",
+      "name": "Seated Dumbbell Shoulder Press",
+      "nameAr": null,
+      "instructions": "Sit on a bench, the back rest should be almost vertical. Take two dumbbells and bring them up to shoulder height, the palms and the elbows point during the whole exercise to the front. Press the weights up, at the highest point they come very near but don't touch. Go slowly down and repeat.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 123,
+          "translationUuid": "1df6a1b5-7bd2-402f-9d5e-94f9ed6d8b54",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "shoulders",
+      "categoryAr": "الكتفان",
+      "categorySource": "Shoulders",
+      "bodyPart": "shoulders",
+      "targetMuscle": "Shoulders",
+      "equipment": "Bench, Dumbbell",
+      "equipmentAr": "مقعد، دمبل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr"
+        ],
+        "reason": "The source equipment omits the upright bench used throughout the reviewed clip.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-570",
+      "sourceId": 570,
+      "sourceUuid": "f956977e-cc05-4db2-a387-ba6140b1ef34",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/570/",
+      "name": "Cable Shoulder Shrug",
+      "nameAr": null,
+      "instructions": "Stand upright holding the low cable handles at your sides with your arms straight. Lift your shoulders toward your ears without bending your elbows or rocking your torso. Pause briefly, then lower your shoulders under control.",
+      "instructionsAr": null,
+      "instructionStatus": "rafik_editorial_overlay",
+      "instructionProvenance": {
+        "mode": "rafik-editorial-overlay",
+        "statement": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records.",
+        "reason": "The source marks this as bodyweight, while the reviewed clip shows handles attached to low cable pulleys."
+      },
+      "category": "shoulders",
+      "categoryAr": "الكتفان",
+      "categorySource": "Shoulders",
+      "bodyPart": "shoulders",
+      "targetMuscle": "Trapezius",
+      "equipment": "Cable machine",
+      "equipmentAr": "جهاز كابل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 3,
+        "full_name": "Creative Commons Public Domain 1.0",
+        "short_name": "CC0",
+        "url": "http://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "exerciseLicenseAuthor": "BFad07",
+      "translationLicense": {
+        "id": 3,
+        "title": null,
+        "author": "BFad07",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr",
+          "instructions"
+        ],
+        "reason": "The source marks this as bodyweight, while the reviewed clip shows handles attached to low cable pulleys.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-575",
+      "sourceId": 575,
+      "sourceUuid": "6199b3c7-3ccb-47fa-89bb-ef7fef12c0e3",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/575/",
+      "name": "Smith Machine Shrug",
+      "nameAr": null,
+      "instructions": "Grip the Smith machine bar and stand about shoulder-width apart with your knees slightly bent and your gaze forward. Keep your arms straight at your sides. Raise the weight by lifting your shoulders without bending your elbows. Pause at the top for one or two seconds, then lower your shoulders slowly.",
+      "instructionsAr": null,
+      "instructionStatus": "translated_from_upstream",
+      "instructionProvenance": {
+        "mode": "translated-from-upstream",
+        "statement": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+        "source": {
+          "translationId": 67,
+          "translationUuid": "475a9665-2044-4c76-be29-cabbbef126bd",
+          "language": "de",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "shoulders",
+      "categoryAr": "الكتفان",
+      "categorySource": "Shoulders",
+      "bodyPart": "shoulders",
+      "targetMuscle": "Shoulders",
+      "equipment": "Smith machine",
+      "equipmentAr": "جهاز سميث",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr"
+        ],
+        "reason": "The source equipment is empty and 'Multipress' is a regional label; the reviewed clip shows a Smith-machine shrug.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-584",
+      "sourceId": 584,
+      "sourceUuid": "c85e6137-2577-4e28-82c2-427407d534eb",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/584/",
+      "name": "Single-Arm Dumbbell Preacher Curl",
+      "nameAr": null,
+      "instructions": "Sit on the preacher curl bench and perform a bicep curl with a dumbbell in one hand. Your other hand can be at rest, or beneath your curling arm's elbow.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 205,
+          "translationUuid": "83e079a9-b61c-413b-b055-f9cf515904f1",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "tuckerm"
+        }
+      },
+      "category": "upper arms",
+      "categoryAr": "أعلى الذراعين",
+      "categorySource": "Arms",
+      "bodyPart": "upper arms",
+      "targetMuscle": "Biceps",
+      "equipment": "Dumbbell, Preacher bench",
+      "equipmentAr": "دمبل، مقعد بريتشر",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "tuckerm",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "tuckerm",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr"
+        ],
+        "reason": "The source equipment omits the preacher bench used in the reviewed clip.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-590",
+      "sourceId": 590,
+      "sourceUuid": "6e46833d-fd83-4c1a-90af-eb3f3a917199",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/590/",
+      "name": "Seated Calf Raise Machine",
+      "nameAr": null,
+      "instructions": "Sit on a bench for calf raises and check that the feet are half free and that you can completely stretch the calf muscles down. Pull your calves up, going as far (up) as you can. Make at the highest point a short pause of 1 or 2 seconds and go down.",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 103,
+          "translationUuid": "399666e7-30a7-4b86-833d-4422e4c72b61",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de"
+        }
+      },
+      "category": "lower legs",
+      "categoryAr": "أسفل الساقين",
+      "categorySource": "Calves",
+      "bodyPart": "lower legs",
+      "targetMuscle": "Soleus",
+      "equipment": "Seated calf raise machine",
+      "equipmentAr": "جهاز رفع السمانة جالسًا",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr"
+        ],
+        "reason": "The source equipment is empty; the reviewed clip shows a seated calf-raise machine.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-622",
+      "sourceId": 622,
+      "sourceUuid": "7ce443b6-eb84-4f65-b05f-461c1cc8bcc0",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/622/",
+      "name": "Standing Calf Raise on Step",
+      "nameAr": null,
+      "instructions": "Stand with the balls of your feet on the edge of a stable step and use the rail lightly for balance. Lower your heels under control, then press through the balls of your feet to rise as high as comfortable. Pause briefly and lower again without bouncing.",
+      "instructionsAr": null,
+      "instructionStatus": "rafik_editorial_overlay",
+      "instructionProvenance": {
+        "mode": "rafik-editorial-overlay",
+        "statement": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records.",
+        "reason": "The source equipment is empty and its text describes a machine, but the reviewed clip shows bodyweight calf raises on a step with a handrail."
+      },
+      "category": "lower legs",
+      "categoryAr": "أسفل الساقين",
+      "categorySource": "Calves",
+      "bodyPart": "lower legs",
+      "targetMuscle": "Calves",
+      "equipment": "Step",
+      "equipmentAr": "درجة مرتفعة",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "equipment",
+          "equipmentAr",
+          "instructions"
+        ],
+        "reason": "The source equipment is empty and its text describes a machine, but the reviewed clip shows bodyweight calf raises on a step with a handrail.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-655",
+      "sourceId": 655,
+      "sourceUuid": "5915fabe-c941-4dac-b196-bc4e8c7ce57b",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/655/",
+      "name": "Tricep Dumbbell Kickback",
+      "nameAr": null,
+      "instructions": "Start with a dumbbell in each hand and your palms facing your torso. Keep your back straight with a slight bend in the knees and bend forward at the waist. Your torso should be almost parallel to the floor. Make sure to keep your head up. Your upper arms should be close to your torso and parallel to the floor. Your forearms should be pointed towards the floor as you hold the weights. There should be a 90-degree angle formed between your forearm and upper arm. This is your starting position. Now, while keeping your upper arms stationary, exhale and use your triceps to lift the weights until the arm is fully extended. Focus on moving the forearm. After a brief pause at the top contraction, inhale and slowly lower the dumbbells back down to the starting position. Repeat the movement for the prescribed amount of repetitions. Variations: This exercise can be executed also one arm at a time much like the one arm rows are performed. Also, if you like the one arm variety, you can use a low pulley handle instead of a dumbbell for better peak contraction. In this case, the palms should be facing up (supinated grip) as opposed to the torso (neutral grip).",
+      "instructionsAr": null,
+      "instructionStatus": "source",
+      "instructionProvenance": {
+        "mode": "upstream-english",
+        "source": {
+          "translationId": 279,
+          "translationUuid": "88568115-5e88-4afc-b005-e2f7d453ac13",
+          "language": "en",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "http://www.bodybuilding.com/"
+        }
+      },
+      "category": "upper arms",
+      "categoryAr": "أعلى الذراعين",
+      "categorySource": "Arms",
+      "bodyPart": "upper arms",
+      "targetMuscle": "Triceps",
+      "equipment": "Dumbbell",
+      "equipmentAr": "دمبل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "http://www.bodybuilding.com/",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "http://www.bodybuilding.com/",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": null
+    },
+    {
+      "id": "wger-659",
+      "sourceId": 659,
+      "sourceUuid": "3188868c-84e2-4a3b-b7dc-f79d8650988d",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/659/",
+      "name": "Overhead Cable Triceps Extension",
+      "nameAr": null,
+      "instructions": "Face away from a high cable with the rope held behind your head. Keep your upper arms steady beside your head and extend your elbows until your arms are straight. Pause briefly, then bend your elbows to return under control.",
+      "instructionsAr": null,
+      "instructionStatus": "rafik_editorial_overlay",
+      "instructionProvenance": {
+        "mode": "rafik-editorial-overlay",
+        "statement": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records.",
+        "reason": "The source title/text imply a pushdown, while the reviewed clip shows a two-arm overhead rope extension."
+      },
+      "category": "upper arms",
+      "categoryAr": "أعلى الذراعين",
+      "categorySource": "Arms",
+      "bodyPart": "upper arms",
+      "targetMuscle": "Triceps",
+      "equipment": "Cable machine",
+      "equipmentAr": "جهاز كابل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "translationLicense": {
+        "id": 1,
+        "title": null,
+        "author": "wger.de",
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "instructions"
+        ],
+        "reason": "The source title/text imply a pushdown, while the reviewed clip shows a two-arm overhead rope extension.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    },
+    {
+      "id": "wger-802",
+      "sourceId": 802,
+      "sourceUuid": "072a9fa8-1028-47b3-b958-d8052c6b8661",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/802/",
+      "name": "Barbell Lunges Walking",
+      "nameAr": null,
+      "instructions": "Place the bar across your upper back and stand with your feet about hip-width apart, leaving a clear path ahead. Take a long step forward and lower your hips under control until the rear knee is close to the floor and the front knee is near 90 degrees. Drive through the front heel and bring the rear leg forward into the next lunge. Continue alternating legs while keeping your torso upright and your abdomen braced.",
+      "instructionsAr": null,
+      "instructionStatus": "translated_from_upstream",
+      "instructionProvenance": {
+        "mode": "translated-from-upstream",
+        "statement": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+        "source": {
+          "translationId": 2567,
+          "translationUuid": "970504ab-4130-45d1-b22b-3eddb764f318",
+          "language": "es",
+          "license": {
+            "id": 2,
+            "full_name": "Creative Commons Attribution Share Alike 4",
+            "short_name": "CC-BY-SA 4",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+          },
+          "licenseAuthor": "wgerjhn"
+        }
+      },
+      "category": "upper legs",
+      "categoryAr": "الفخذان",
+      "categorySource": "Legs",
+      "bodyPart": "upper legs",
+      "targetMuscle": "Glutes, Quads",
+      "equipment": "Barbell",
+      "equipmentAr": "بار حديد",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 2,
+        "full_name": "Creative Commons Attribution Share Alike 4",
+        "short_name": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+      },
+      "exerciseLicenseAuthor": null,
+      "translationLicense": {
+        "id": 2,
+        "title": null,
+        "author": null,
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": null
+    },
+    {
+      "id": "wger-803",
+      "sourceId": 803,
+      "sourceUuid": "f8d69dd4-3c35-49c7-8cbe-f0132eca4c52",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/803/",
+      "name": "Single-Arm Overhead Cable Triceps Extension",
+      "nameAr": null,
+      "instructions": "Face away from the cable and hold the handle behind your head with one elbow pointing upward. Keep your upper arm steady, extend the elbow until the arm is straight, then return under control. Complete the set before changing sides.",
+      "instructionsAr": null,
+      "instructionStatus": "rafik_editorial_overlay",
+      "instructionProvenance": {
+        "mode": "rafik-editorial-overlay",
+        "statement": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records.",
+        "reason": "The source translation describes a pushdown, while the reviewed poster/clip shows a single-arm overhead cable extension."
+      },
+      "category": "upper arms",
+      "categoryAr": "أعلى الذراعين",
+      "categorySource": "Arms",
+      "bodyPart": "upper arms",
+      "targetMuscle": "Triceps",
+      "equipment": "Cable machine",
+      "equipmentAr": "جهاز كابل",
+      "kind": "strength",
+      "exerciseLicense": {
+        "id": 2,
+        "full_name": "Creative Commons Attribution Share Alike 4",
+        "short_name": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+      },
+      "exerciseLicenseAuthor": null,
+      "translationLicense": {
+        "id": 2,
+        "title": null,
+        "author": null,
+        "authorUrl": null,
+        "derivativeSourceUrl": null
+      },
+      "editorialOverlay": {
+        "fields": [
+          "name",
+          "instructions"
+        ],
+        "reason": "The source translation describes a pushdown, while the reviewed poster/clip shows a single-arm overhead cable extension.",
+        "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records."
+      }
+    }
+  ]
+}

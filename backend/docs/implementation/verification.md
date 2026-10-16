@@ -1,0 +1,402 @@
+# Verification record
+
+## Stage 2 — Monorepo integration (16 October 2026)
+
+Scope: local repository consolidation, setup/script path migration, documentation and CI workflow relocation. The current runtime remains the existing gym/training-organization product; this is not university workflow, hosted security, deployment or release acceptance.
+
+**Passed:** root web unit tests (27/27), root web typecheck, and production build; backend TypeScript typecheck after generating the Prisma client; backend release-guard tests (7/7); backend canonical content check after regenerating from `backend/content/starter.json`; maintained engineering-document links (73 documents); and `git diff --check`. No remote CI was run.
+
+**Environment and remaining checks:** the machine has Node 24.21.0 while both manifests pin Node 22.16.0. Backend `npm ci` did not complete in this environment, so the typecheck used the already-installed dependencies from the companion checkout; the lockfiles match byte-for-byte. `npm run format:check` reports 166 files with formatting warnings across the existing source tree; no repository-wide formatting rewrite was applied. The API tests and schema-derived web type refresh require PostgreSQL at `127.0.0.1:55332`; documented startup was attempted but Docker Desktop's Linux engine was unavailable. No database reset, seed or preview mutation occurred. Screenshots in older phase records were local ignored artifacts and are not present in this monorepo.
+
+## R21 — Explicit feedback and operational reporting (28 September 2026)
+
+**Local acceptance passed:** all 35 full-release gates, 122 browser journeys, 1,120 broad layout states, 27 web units, backend/domain/content/build/cache checks and a fresh 40-migration/eight-SQL-suite installation. A subsequent four-case Chromium/WebKit run expanded feedback/report coverage to 96 width/language/theme/engine states and repeated package/session-note recovery, with unchanged application sources. Actual desktop and Arabic 320px renders were inspected. [Receipt](evidence/r21-verification.txt) and [full report](evidence/r21-release-report.json) preserve commands, failures corrected and limits. Native apps, hosting/providers, physical devices and human/business outcomes remain unverified.
+
+Domain acceptance covers self-only eligible sources, revisions/replay, trainer/admin/tenant scope, attendance correction, membership revocation, own export, current-month workplace coverage, actual event-staff delivery and explicit linked renewals. Recovered rating and session-note commands now adopt acknowledged revisions before a second edit. Nested report grids stay contained at 320px; analytics tabs use explicit keyboard activation to prevent focus restoration from changing the selected report. See [ADR0015](../decisions/0015-explicit-feedback-sources.md).
+
+The full release chain ran before a test-only matrix expansion; all application sources were unchanged for supplemental acceptance. Final documentation links and web formatting were checked after documentation/test edits. The preview was preserved; no push, reset, native change or remote release occurred.
+
+## R20 — Session packages (28 September 2026)
+
+Organization packages now track explicit trainee entitlements, derived available/reserved/used balances, validity dates, auditable allowance corrections and linked renewals. Calendar booking reserves only an explicitly selected package; completion consumes present/charged absent sessions, cancellation/excused/released no-shows release, and independent trial/makeup/prize/other sessions never affect allowances. Staff session details include check-in timestamps and durable notes; the overview surfaces missed sessions without a replacement. Reuses workspace transactions/receipts and existing calendar events; no parallel scheduler or payment processor.
+
+Contract: [session packages](r20-session-packages.md). Local acceptance: 3 package API groups, 2 calendar/service groups, 2 task groups, 6 isolated Chromium/WebKit journeys, 38 migrations/eight SQL suites, web units/build/types/format. Browser package list/detail covers 16 engine/width/language/theme combinations plus funding and correction flows. Desktop and Arabic 320px captures were inspected. Evidence: [receipt](evidence/r20-verification.txt). Full release verification and R21 feedback reporting follow; native, hosted payments/providers and physical devices are unverified.
+
+
+## R19 — Staff tasks, daily follow-up and integrated acceptance (28 September 2026)
+
+**118/118 browser journeys** pass across Chromium and phone WebKit. Combined acceptance covers **1,120 broad layout states**, **27 web units**, all backend/domain/operations/content/type/build/cache/guard checks and a **36-migration/eight-suite disposable database installation**. Task-specific tests add 16 layout/language/theme/engine states and actual desktop/Arabic phone review, plus task ownership, reassignment/revocation, revision races and real review/outcome queues.
+
+The main release attempt passed 32 of 33 gates; its last dashboard audit timed out waiting for global network idleness while the exercise page played looping video. The corrected audit waits for domain fetch completion and rendered frames, with playback and geometry/Axe checks retained. It passes all 192 states on unchanged application sources. This is combined acceptance with an audit follow-up, **not an uninterrupted full-chain pass**. [Summary](evidence/r19-verification.json), [original report](evidence/r19-release-attempt.json), [receipt](evidence/r19-verification.txt) and the `r19-*-layout.json` files preserve provenance.
+
+Earlier checks also repaired duplicate exercise-media landmarks, premature publication success, stale authoring tests and SQL assertions incorrectly assuming untouched preview identities. SQL acceptance now owns a disposable canonical database; the preview was preserved. R20 package accounting and R21 separately sourced satisfaction/renewal reporting remain implementation work, with founder policy confirmed. No push, hosting, native/physical-device or human/business-outcome claim.
+
+## R18 — Organization exercise ownership and uploaded media (28 September 2026)
+
+**30/30 broader browser cases** passed across Chromium and phone WebKit, followed by **4/4 focused final cases** for category clearing, upload retry, archive/restore/reuse and attachment draft/send recovery. The new editor covers 16 width/language/theme/engine states with geometry and Axe checks. Actual desktop Resources and Arabic phone editor/attachment captures use an existing licensed exercise poster; the one-pixel payload remains only in API contract tests.
+
+API acceptance covers tenant/creator restrictions, published/assigned snapshot access, private-pair admin exclusion, unsent recipient denial, wrong-channel send rejection and revocation before upload retries. Three programming/media groups, four operations groups and a **35-migration/eight-suite fresh installation** pass. Final web units **27/27**, production/type/cache/format, backend type/content/docs and release-guard checks pass. [Receipt](evidence/r18-verification.txt) records exact commands and corrected development failures. The expanded full release chain was not run.
+
+Scope is organization workflows. Existing independent resources retain their explicit sharing contract. Native rendering/streaming, physical devices, production quotas/scanning/storage, hosted delivery and human outcomes remain separate gates. Package accounting and staff operations are not included in this checkpoint.
+
+## R17 — Gym-first usability (28 September 2026)
+
+The final isolated browser run passed **32/32 cases** across Chromium and phone WebKit. It covers homepage entry, EN/AR and theme/width states, month navigation/day selection, support navigation, retained inbox/search, existing communication, program authoring/delivery, nutrition and role workflows. Web units **27/27**, build/typecheck, two production shell checks and formatting pass. No backend behavior/schema changed in this checkpoint.
+
+Actual inspected captures include desktop dark and Arabic 320px home, desktop month calendar and open program authoring. Automated geometry/Axe assertions supplement these observations; they do not prove every feature or physical-device usability. Earlier heading hierarchy, stale text selectors and changed search-retention assumptions were corrected before the accepted run. See [receipt](evidence/r17-verification.txt). The full release chain was not run. Remaining founder requirements are tracked in [the ordered register](r17-gym-direction.md).
+
+## R16 — Organization nutrition (23 September 2026)
+
+**22/22 focused Chromium/phone-WebKit cases pass** on final runtime sources: eight new organization nutrition cases, twelve existing independent nutrition cases and two organization membership cases. The new workflow covers publication, actual portions, explicit sharing/withdrawal, correction/removal/history, subject export, member/date draft isolation, reload, lost acknowledgements and exact retry without duplicate plans or consumption. The layout case covers 16 engine/width/language/theme combinations, each visiting plan/editor/diary; Axe runs on the plan states, and geometry is checked on all three views. Desktop main-container bounds, four target inputs and unresolved component warnings are explicit assertions.
+
+Two new API groups plus five membership, two organization service and seven release guard groups pass. API cases include admin-only, assigned trainer and combined trainee roles, two organizations/outsiders, reassignment/revocation before replay, sharing and removed-history privacy, correction provenance, validation, concurrent revision conflict, date/expiry semantics and bounded history. A disposable installation applies **33 migrations, fixtures and eight SQL suites**. Existing preview records remain intact. Final web build/typecheck, **27 units**, two production-shell checks, formatting and backend content/docs/type checks pass.
+
+Actual final captures inspected: English/light1280px plan and open editor; Arabic/dark320px WebKit plan. Earlier interactive preview review caught duplicate target fields and nested dashboard scrolling. Browser reload testing caught premature draft-save feedback; only the latest queued edit now confirms saved. Development failures and corrected test assumptions are recorded in the [receipt](evidence/r16-verification.txt), not counted as accepted runs.
+
+This is focused local acceptance, not a full32-gate release pass, physical-device test, native implementation, remote CI or hosting result. Human comprehension, retention, commercial outcomes and qualified clinical suitability are not established. Nutrition reference coverage remains fifteen starter foods; no inferred calorie/medical recommendations were introduced.
+
+## R15 — Exercise coverage, categories and continuous motion (23 September 2026)
+
+This correction has focused acceptance; **the entire release chain was not rerun**. R14's full result remains historical. The [R15 receipt](evidence/r15-verification.txt) records its own commands, source snapshot, failures corrected and remaining limits. **34/34 combined browser cases passed**, followed by **6/6 focused final cases** after the exercise/timezone popup direction correction, across Chromium and phone WebKit. Final type/build, 27 units, two build/cache contracts and formatting pass.
+
+Backend verification passes: a disposable installation of **30 migrations/eight SQL suites**, six catalog/media tests, three programming/private-media lifecycle tests, seven release guards, TypeScript, generated-content drift, pinned corpus/editorial checks and all 90 video/poster hashes. Source imports and the editorial forward correction were applied to preview without reset or synthetic reseeding. Web production build and **27 unit tests** pass.
+
+Rendered review covered the actual desktop split library, combined body/equipment filters, later-page selection and phone list/detail/back in English and Arabic. It found phone filter density, compound-equipment loss, source footer text and the RTL root-rotation defect beyond the initial test assertions. All were corrected; explicit entry/orientation checks supplement overflow/Axe tests. The program picker has separate query-after-Escape, exact-match and same-kind-alternative coverage.
+
+Motion coverage is 45 of 1,384 shared source entries, with ten additional static starter reference sets. The requested corpus's text/metadata is complete; its restricted GIFs are excluded. Imported instructions are not fully translated or professionally certified. Native playback/downloads, physical devices, human usability/retention/payment, hosting and remote CI remain unverified. Large videos are fetched on demand and are not part of offline precaching.
+
+## R14 — Useful nutrition and exercise reference content (23 September 2026)
+
+Acceptance combines the **28/28 full serial release gates** with a final **22/22 focused browser rerun** after editorial/CI hardening and the nutrition navigation guard. [Full report](evidence/r14-release.json), [follow-up record](evidence/r14-followup.json) and [detailed receipt](evidence/r14-verification.txt) identify the exact delta; the earlier full report is not presented as testing later code.
+
+- Full baseline: **88 browser journeys**, **1,120 broad rendered states**, **17 web units**, **246 named rollback SQL assertions**, **25 fresh migrations/seven suites**, all HTTP/domain/operations and type/build/format/content/docs gates.
+- Final focused run: nutrition publication → trainee actual → coach review; lost acknowledgements/reload/exact replay for guidance and meals; visibility/date/client draft isolation; invalid helper drafts; decimal source precision; lookup/media failure recovery; named Arabic source portions; navigation while a save is pending; existing scheduling and private-file lifecycles. Includes **32 English/Arabic, light/dark, 320/1280px nutrition/viewer states** across both engines, plus named-portion containment/Axe checks.
+- The held-response navigation case reproduced a destination-query mutation before the screen-lifetime guard and passes afterward, waiting for durable acknowledgement before asserting the URL. The final isolated wrapper rebuilt/typechecked the application. Catalog/source/type/content/docs and web format/production-cache checks pass after final refinements.
+- Independently re-extracted the official checksum-pinned USDA archive: **all60 nutrient values** match. Thirty SVGs /586,741bytes have matching hashes, safe self-contained structure, source attribution, generated web byte parity and immutable API/cache contracts. The API exposes reference content only.
+
+Selected actual rendered screens were inspected, including open helpers, desktop/phone coach layouts, Arabic portions and exercise controls. Raw logs/screenshots remain in ignored artifacts; sanitized broad matrices are the `r14-*-layout.json` files here. The detailed receipt records development failures and corrections instead of counting them as acceptance. Native, hosted/remote CI, actual providers, physical devices/assistive technology, qualified movement review and human outcomes remain unverified. Organization nutrition and broader regional/branded food/media coverage remain product work.
+
+## R13 — Staff dashboard and usable controls (23 September 2026)
+
+The final uninterrupted `npm run verify:release -- --full` passed **26/26 gates** on stable implementation sources. [Release report](evidence/r13-release.json), [detailed receipt](evidence/r13-verification.txt) and the `r13-*-layout.json` files persist this checkpoint.
+
+- **76/76 browser journeys:** both-engine existing feature lifecycles plus full timezone catalog/search/keyboard/save/reload/escape, mobile drawer focus, analytics tabs/presets/table/failed-refresh retention, desktop scroll ownership and Back restoration. Organization-service coverage also holds a real calendar response across navigation and verifies that it cannot overwrite the destination's query.
+- **1,120 rendered states:** quality 128, product 320, team Chromium 176, team WebKit 176, operations 104, cohesion 24 and dashboard 192. No reported geometry/alert/page errors or violations in checked Axe states. These are the scripts' declared matrices; the dashboard matrix checks every state with Axe. Selected actual captures and interactions were inspected, including custom dates and trainee filtering at 320px, visible timezone popup, role-specific diagrams, drawer and messaging.
+- **Backend/engineering:** all 239 named rollback assertions, 22 fresh migrations/fixtures/seven suites, HTTP/domain/operations groups, 14 web units, 7 release guards and type/build/format/content/docs checks pass. Backend domain contracts did not change in this UI phase.
+
+Earlier attempts caught and corrected portal/sidebar landmarks, browser aliases/UTC labels, hidden-label document overflow, premature Back restoration and outdated mobile theme locators. The calendar navigation race was reproduced in a failing regression before the fix. Breakpoint checks await observer-driven chart resizing; scheduling tests focus the field before using an open picker. None of those failed/interrupted attempts is presented as acceptance.
+
+The dashboard's populated-report mock proves presentation/recovery; persisted organization-service tests separately prove actual reporting. This remains local browser emulation and developer review, not physical-device, assistive-technology or human-outcome evidence. Full per-step logs are in `artifacts/release/2026-09-23T13-04-15.904Z/`; raw screenshots remain in the web artifacts directories. Preview data was not reset.
+
+## R12 — Connected experience and final local acceptance · 23 September 2026
+
+The uninterrupted final `npm run verify:release -- --full` passed **all 25 recorded steps**, including prerequisites. [Persisted report](evidence/r12-release.json), [execution summary](evidence/r12-verification.txt). Full local logs: `artifacts/release/2026-09-23T11-35-27.532Z/`. Application/runtime source was stable; the team harness correction was completed before its gate ran. Subsequent edits finalized documentation/evidence only.
+
+- **72/72 end-to-end journeys**, Chromium and phone WebKit, using a disposable database/API/files/build. Includes sign-in continuation, role Help, short-phone conversation creation/send, retained template selection, focused scheduling steps, selecting the 50th loaded person without losing position, search/reload and existing fault/retry/permission lifecycles.
+- **928 rendered states:** focused quality 128, broad product 320, team Chromium 176/WebKit 176, operations 104 and entry/help 24. Zero reported layout/alert/page failures and zero violations in checked Axe states. The scripts specify exact widths/heights and language/theme pairings; the total is not every possible combination. Machine-readable evidence is in `evidence/r12-*-layout.json`.
+- **239 rollback SQL assertions**, a disposable fresh install of 22 forward migrations/seven suites, all identity/API, services, teams, memberships, programming/media, organization services, communication and operations tests. Operations cover role changes/replay, 120-trainer/1,200-trainee paging, registered-byte restore and grace/reference-preserving cleanup.
+- **12 web unit tests**, seven release guards, API/web types, production build/offline-shell checks, formatting, generated content and documentation links pass. Final audit scripts also pass Prettier; final documentation/diff checks are rerun before commit.
+- Actual renders inspected: English/dark desktop and Arabic/dark phone homepage, Arabic phone scheduling People step and team Groups; interactive 390×664 organization conversation creation verified ordinary page scrolling and reachable participant/save controls. R11 inspection covered populated selected chips, operator audit and Arabic analytics. These are developer reviews, not observed human task success.
+
+Earlier development attempts are not accepted full runs. The first full command passed 72 journeys and 448 layouts before direct Node execution exposed an extensionless helper import; explicit `.ts` imports and the no-emit compiler setting fixed it. A standalone team retry then exposed an obsolete first-select assumption; the harness now targets the named bilingual group control and waits for loaded state. The complete command was rerun successfully. Earlier focused 12/12 and post-selection-fix 14/14 runs are supplementary, not added to the final 72 count.
+
+No preview reset, push, deployment or native changes. Local mail interception, browser emulation and synthetic fixtures do not establish real provider delivery/payment, physical-device/assistive-technology behavior, hosted recovery/remote CI, unaided usability or retention. [Release evidence](release-evidence.md) records those remaining gates.
+
+## R11 — Operations and scale · 23 September 2026
+
+- Full isolated browser acceptance: **70/70** Chromium/phone-WebKit journeys passed. Dedicated organization recording test disconnects an opened session, preserves edits/completion across reload, reconnects and verifies coach review. The default harness owns and cleans its database/files/servers/build; preview is preserved.
+- **96 rendered states** across Amina/Rania/Kareem, 320/390/768/1440 widths, paired English/light, Arabic/dark, Arabic/light and English/dark, both engines. Zero reported overflow/clipping, alerts, page errors or Axe violations in checked390px states. Actual captures inspected: long selected names/chips, platform audit, initial calendar form, Arabic analytics and conversation creation. Scrollable editors work but their cramped setup framing is a refinement item for R12.
+- Four operations groups pass: platform authority/state/replay/revocation, 120-trainer/1,200-trainee scope/pagination, registered-byte restore and orphan grace/reference preservation, local-only startup guards. Per-trainee correction test walks29 revisions and rejects another trainee's access. Invitation/activity pagination tested beyond a full page. Query plan changed from1,213 to5 buffer hits for first25 after the roster index on this fixture; no production latency/scale claim.
+- Existing API/services/teams/membership/programming/communication and organization-service groups pass; 239 rollback SQL assertions,22 fresh migrations/seven suites,12 web units,seven release guards,type/build/format/content/doc checks pass. Final acceptance is not remote CI or physical hardware.
+
+Reproduction: runbook and `evidence/r11-verification.txt`; persisted `evidence/r11-layout.json` and `evidence/r11-scale.json`. Failed development runs are recorded separately from accepted results. Local backup is a disposable restore rehearsal, not a coordinated hosted snapshot. External providers, devices, real human usability/retention and payment remain unverified.
+
+## R10 — Communication and notifications (23 September 2026)
+
+- Three real HTTP groups pass: organization participation/admin join/revocation/replay; transactional intents/preferences/quiet hours/concurrent local interception; answered/cancelled reminder suppression/coalescing/five-attempt failure. Local sink rollback and unique receipt tests do not prove real provider exactly-once delivery.
+- Existing API (4), service (5), team/business (9), organization membership (5), programming/media and organization service (2) groups pass. All 239 rollback assertions and the disposable twenty-migration install with seven suites pass; the preview was not reset.
+- Full browser run: 63/64 passed. The failure exposed a real shared workout sync handoff race: an edit could arrive after the running sync had made its last dirty check while the UI busy flag suppressed another pass. The UI now remembers a requested subsequent pass. All 18 affected core/communication journeys passed afterward, including both-engine offline/lost acknowledgment/conflict and completed-note review flows. This is composed acceptance, not an uninterrupted green full run.
+- Twelve unit checks, seven release guards, type/build/format/content/docs checks pass. Actual phone captures prompted a footer-collision fix; the layout contract now checks vertical overlap. Safari scrollable-history focus and truthful draft-save feedback are covered. Notification and conversation pages were inspected in English/light and Arabic/dark phone states.
+
+Evidence summary: `evidence/r10-verification.txt`; final layout results are `evidence/r10-layout.json`. Browser emulation, local intercepted mail and synthetic fixtures do not establish physical-device, real-provider, remote-CI, hosted or human retention outcomes. Post-login return behavior reuses the tested authentication route contract; no external email was sent.
+
+
+## R9 — Organization services and analytics · 23 September 2026
+
+- `npm run test:organization-services`: two isolated HTTP groups cover two organizations, immutable assessment snapshots, two distinct results, correction history, trainee-only export, reassigned trainer/history scope, designated assessor exception, revoked replay, reschedule/cancellation receipts, concurrent cross-organization collisions, malformed paging/dates and DST. Five existing `test:services` groups also pass after the collision hook.
+- Existing rollback SQL: 239 assertions; fresh install: sixteen forward migrations, generated fixtures and seven rollback suites. No preview reset. Twelve web unit checks, TypeScript/build, content and documentation checks pass.
+- Full web regression: **62/62** Chromium/phone-WebKit journeys. Final chart label/reschedule preview refinement: **2/2** affected organization service journeys pass. Initial failures were a polluted accessible timezone label (fixed markup) and a test selector matching both chart and detail value (scoped to the result definition).
+- `scripts/audit-services.ts`: **104 states**, admin/trainer/trainee routes, 320/390/768/1440 widths, paired English/light, Arabic/dark, Arabic/light and English/dark configurations in Chromium/WebKit. No reported document/internal overflow, alerts, page errors or checked Axe failures. Screenshots of the initial phone scheduling form, populated Arabic results and comparison chart were actually inspected; undersized SVG text was fixed and the matrix rerun.
+
+See `evidence/r9-layout.json` and `evidence/r9-verification.txt`. These tests do not establish physical-device behavior, human usability/retention, remote CI or real provider delivery. The matrix is the listed paired configurations, not every possible combination. Dedicated organization offline fault acceptance and large-roster/read/fixture maintenance remain R11.
+
+
+## R8 — 23 September 2026
+
+- Backend: 239 rollback SQL assertions, fourteen fresh forward migrations/generated fixtures/seven SQL suites, 4 identity/API tests, 5 service groups, 9 team/business groups, 5 membership groups and 3 organization programming/media groups pass. Previous actuals, first completion preservation, current responsibility before replay, atomic foreign-recipient rejection and private cover/revocation are explicitly checked.
+- Web: 12 unit/data tests, TypeScript/build/format checks pass. Source-local structure tests are explicitly included in Vitest. Full browser run passes 58/60; two test-observation failures were corrected (theme-transition sampling and ambiguous live-status selector), then both paths pass twice in each engine (8/8). After a 320px date-field fix, the affected programming suite passes 4/4 again.
+- Organization render sweep: 72 combinations across admin/trainer/trainee routes, Chromium/WebKit, widths 320/390/768/1440 and paired English/Arabic/light/dark states. No overflow, alerts, page errors or checked Axe violations in the final sweep. Two earlier aborted-navigation WebKit errors were resolved by waiting for loaded context before starting the sweep; errors remain recorded rather than filtered. Source: web `scripts/audit-programming.ts`; final JSON archived under `evidence/r8-layout.json`.
+- Direct inspection included library/editor/delivery phone and desktop, Arabic dark phone editor and the initially overflowing date-entry screen. The fix stacks native date fields; optional catalog settings no longer displace the plan name. These are rendered developer reviews, not human participant observations.
+- Acceptance caught a real shared-component regression: optional boolean casting made an omitted `showNotice` false. An explicit true default restores existing success feedback; membership regression paths pass. Search focus and source-specific draft/retry keys were also corrected.
+
+Sanitized execution summary: `evidence/r8-verification.txt`. Fresh install preserved the preview; a synthetic Madar program was applied additively. No hosted/native/provider/physical-device/remote-CI/human-outcome claim. Organization offline transport reuses the proven queue but its new route has not yet received a dedicated network-loss browser scenario; include that in integrated R11 fault acceptance.
+
+## R7A2 — Organization membership/context checkpoint (23 September 2026)
+
+- Five real HTTP organization tests pass: two-organization isolation, combined roles, forged trainer IDs, responsibility continuity, wrong-email invitations, revocation, receipt replay, closure, last-admin/concurrent departure and account deletion. Final log `/tmp/rafik-org-http-last.log`.
+- All 239 existing rollback SQL assertions pass. Fresh installation applies six forward migrations plus synthetic fixtures and all seven SQL suites in a disposable database. Preview was not reset. Logs `/tmp/rafik-org-sql.log`, `/tmp/rafik-org-fresh.log`.
+- Existing HTTP regression passes: four API tests, five service lifecycle groups and nine independent-team/business groups (`/tmp/rafik-org-api.log`, `/tmp/rafik-org-services.log`, `/tmp/rafik-org-teams.log`).
+- Browser acceptance covers all 56 scenarios across Chromium and phone-sized WebKit. Evidence is composite: final full run passed 55 and exposed an ambiguous test locator matching both the sending and loading statuses; the organization assertion now specifically waits for the acknowledged Saved status. Both organization scenarios then passed twice (four runs) without product changes. Logs `/tmp/rafik-org-browser2.log`, `/tmp/rafik-org-browser-focused-final.log`. Earlier runs also exposed/fixed premature retry feedback, draft-save timing and navigation/layout timing; those failures are not counted as acceptance.
+- Eleven web unit tests, production build/typecheck, formatting, backend typecheck/content/doc checks, seven release guards and Git whitespace checks pass. New organization browser journeys include loaded-state containment and Axe checks; actual desktop organization overview and phone People captures were inspected. The phone capture has readable compact rows and reachable actions; this is not a full new organization language/theme matrix or physical-device acceptance.
+
+Program/history/service ownership and large-roster pagination remain subsequent explicit work. Hosting, external delivery/payments, remote CI, physical devices and human usability/retention remain unverified.
+
+## R7A1 — Prisma/PostgreSQL transition (23 September 2026)
+
+The active local backend is standalone PostgreSQL plus the TypeScript API. Historical Supabase results below describe earlier checkpoints only. Reproduction commands and current ports are in the [runbook](runbook.md).
+
+| Scope | Executed result |
+|---|---|
+| Domain regression | 239 assertions across seven rollback SQL suites passed on standalone PostgreSQL |
+| Fresh installation | Three Prisma migrations, local fixtures and seven SQL suites passed in a separately created disposable database; preview untouched |
+| HTTP boundary | 4 tests passed: single-use codes/logout, attempt/origin enforcement, pooled actor isolation/bounded identifiers, immutable private byte lifecycle |
+| Service integration | 5 groups passed: booking races/cross-role conflicts, private file access/revocation/cleanup and account deletion |
+| Independent teams/business | 9 groups passed: invitation/roles/consent, handoff, groups, receipts, sharing/revocation, support and safe deletion |
+| Browser regression | 54 journeys passed across Chromium and phone-sized WebKit against the new API; actual dropped-acknowledgement, offline and correction scenarios retained |
+| Broad layout audit | 320 loaded route/language/theme/viewport states, zero reported layout failures or page errors; automated checks are not a human usability score |
+| Web maintenance | 11 unit tests, TypeScript/build and formatting passed; Supabase SDK removed |
+| Backend maintenance | TypeScript, content drift, documentation links and release-guard tests passed; Supabase CLI removed; npm dependency audits reported zero known vulnerabilities |
+
+Found during integration: no-argument function registration, set-returning JSON array shape, PostgreSQL catalog visibility under a restricted login, error-format mismatch that prevented confirmed-rejection editing, and an overrestricted account-event projection. Corrected and rerun. One early browser run hit a dev-server restart; the final 54-journey run passed. Final private-file locking/missing-byte handling and the local inbox addition were followed by passing API/service/team checks; they did not change browser UI contracts.
+
+Actual rendered coach entry and desktop inbox were inspected through the in-app browser; phone inbox and Arabic dark resources captures from the broad audit were also inspected for row spacing, containment and readable controls. Automated sample-account suites still leave some synthetic history; fixture isolation remains an explicit maintenance item before final product presentation. Organization role acceptance is R7A2, not implied by independent-team results. Production startup is deliberately blocked until real adapters/configuration exist. Hosting, physical devices, remote CI, external delivery/payments and real-person outcomes remain unverified.
+
+# Local verification record
+
+## R7 checkpoint and original-role audit — 23 September 2026
+
+The source audit is documented in [role-scope-audit.md](role-scope-audit.md), with baseline commits, source paths, observed behavior and target decisions separated. It inspected original web/mobile, captured deployed backend definitions and worker audiences. It did not exercise the retired hosted application or change native code. Passing the current tests below does **not** establish the missing organizational capabilities; R7A acceptance is explicitly separate.
+
+| Check | Result and boundary |
+|---|---|
+| SQL regression | **239** rollback assertions across seven suites, including ten new workspace paging/search/isolation checks. Final log `/tmp/r7-sql-final.log`. |
+| Fresh setup | All **ten** migrations, local fixtures and suites pass in a disposable database; preview data preserved. Final log `/tmp/r7-fresh-final.log`. |
+| Full browser regression | **54/54** pass, Chromium and phone-sized WebKit, final serial run. Includes the new named attention/filter/navigation/read-cursor journey and existing responsive inbox/retry scenarios. Final log `/tmp/r7-acceptance-browser.log`. |
+| Focused workflow regression | **28/28** core, ongoing and workspace scenarios pass after updating stale queue assertions to use the actual new search/filter flow. Final log `/tmp/r7-targeted.log`. |
+| Broad rendered check | **320** states, zero reported layout failures or page errors; persisted [layout results](evidence/r7-product-layout.json). This checks the current routes, not unimplemented organization contexts. |
+| Unit/build/format | **11/11** unit/data tests, production build/TypeScript and Prettier checks pass after the unshipped R8 drafts were set aside. Build reports a non-fatal future Vite config-loader import warning; no dependency upgrade is claimed. |
+| Visual inspection | Final R7 desktop 1440px and WebKit 390px full-page captures inspected for hierarchy, navigation, task/row spacing and action containment; earlier development inspection included daily workspace states. Browser screenshots are synthetic fixtures, not proof of physical-device or human usability. |
+
+Final full browser suites ran serially after a development overlap caused a trace-file collision. The prior failed runs are not counted as acceptance. R8's unused personal-only delivery migration/component/helpers/tests were never accepted; migration 011 was not applied and those drafts are no longer in executable source/migration paths. No product code changed after the final R7 browser run other than removal of those unwired drafts; the final build/type/unit/format checks ran afterward.
+
+Remaining scope: organization-role ownership/API transition, old fixture isolation, broad secondary reads, some contextual focus/scroll restoration, real provider/hosting/CI behavior, physical devices and observed user outcomes. R7's universal role selector is a transitional UX, not evidence of role-derived organizational navigation.
+
+
+## R6 verification — 23 September 2026
+
+The user's mobile-inbox report reopened the previous local quality acceptance. Read the [root-cause review](product-quality-review.md) and [feature verification map](feature-verification-map.md). The following checks pass on the current local implementation; they do not establish every possible state or hardware behavior.
+
+| Check | Actual result / boundary |
+|---|---|
+| Full browser journeys | **52/52** across Chromium and phone-sized WebKit, serial, no configured retries. Includes failed first install/retry, failed update, waiting version with two tabs, retained workout after activation and offline reload; populated responsive inbox and long native selections. |
+| Broad product rendering | **320 states**: 296 client/coach route states across both engines plus 24 production Help/update states. No document/internal clipping failures, alerts or page errors; **82** Axe scans pass. |
+| Focused conversations | **128** language/theme/width states and **32** Axe scans pass, including composer reachability. New deterministic row geometry/state tests separately cover 320×568, 390×664, 444×1043, 844×390 and desktop, long-name search/back and no-match. |
+| Populated teams | **352** states across Chromium and WebKit, both languages/themes and four widths; **88** Axe scans pass. Final rerun waits for Auth route readiness before replacing test identities; zero page errors, with the error assertion retained. |
+| Database/fresh/services | **229** assertions across six rollback suites; nine-migration disposable fresh database; five service and nine team HTTP groups pass. No preview reset. Schema lint/content checks pass. A piped SQL rerun confirms all 229 notices and six rollback completions after fixing log drainage. |
+| Unit/build/release guard | **11** frontend unit tests, **7** local release-guard tests, type/build/format checks pass. Two real generated builds prove HTML-only releases have different identities and hashes match final output bytes. |
+| Maintenance | Both dependency audits report zero known vulnerabilities at this check. Documentation links and Git whitespace checks pass. No dependency/runtime service added. |
+
+Total layout checks: **800**, including **202** automated accessibility scans. Actual inspected renders and coverage limits are listed in [R6 evidence](evidence/r6-local-checks.md); these counts do not claim manual inspection of every screenshot or an accessibility certification. [Layout summary](evidence/r6-layout-summary.json) records artifact hashes/counts. [Release summary](evidence/r6-release-summary.json) records per-gate provenance.
+
+Reproduce with backend `npm run verify:release -- --check` then `npm run verify:release -- --full` (local stack and both web servers required). Individual web commands include `test:e2e`, `test:build`, `test:quality:layout`, `test:product:layout` and `test:teams:layout`. Never run separate Playwright suites into the same report directory concurrently.
+
+Acceptance is **composed**, not one uninterrupted green command: the full browser run and earlier gates passed; the final extended WebKit team check exposed test-setup navigation during Auth bootstrap. After adding an explicit route-ready wait, both complete team matrices passed independently. A separate piped SQL rerun verifies the output-drain-only maintenance fix. Earlier runs also caught transient theme contrast, initial-install recovery and pre-final-bundle hashing problems; they are recorded as development failures, not hidden or counted as acceptance.
+
+Physical mobile keyboard/touch/suspension, assistive technology, hosted Auth/email/Storage/CDN/backups, remote CI and human usefulness/retention remain unverified. Notification preferences/intercepted delivery and real external providers remain explicit future contracts. Native work remains deferred.
+
+
+## R5 verification — 23 September 2026
+
+Executed locally on Node 22.16.0, Supabase CLI 2.90.0 and `rafik-revamp-local`. Migration 009 was applied additively; the existing preview was retained. No hosted project, external provider, remote CI run, native change or push is implied.
+
+| Check | Actual result / boundary |
+|---|---|
+| Backend `npm test` | **229** rollback assertions pass: 209 prior + 20 exercise-choice cases. Validates approval/kind/bounds/access, trustworthy snapshots, immutable prescriptions, actual choice consistency, exact retry and payload mismatch, correction/completion, progress/prior performance and independent import/handoff copying. |
+| `npm run test:fresh` | All **nine migrations**, fixtures and six SQL suites pass in a disposable database without resetting the preview. |
+| Real HTTP services/teams | All **five service** and **nine team** groups pass, including booking races, real private Storage, consent/handoff, provider/support boundaries and temporary-account cleanup. |
+| Schema/content/types | Local schema lint reports no errors; generated web types and canonical content checks pass. Domain table count stays 37 plus one internal setting. |
+| Unit/build/format | **10/10** unit/data tests, production build/TypeScript, formatting and whitespace checks pass. |
+| Full browser regression | **46/46** pass in one final serial run across Chromium and phone-sized WebKit: all 40 existing scenarios plus six new quality scenarios. No retries configured. New tests use disposable accounts. |
+| New user journeys | Long history with reachable composer, older paging, unread while reading, phone inbox/back, draft/context recovery and send focus; coach authors alternatives, client records through a blocked save/reload and completes via UI, coach reviews actual identity, progress and correction preserve history; check-in growth/search/paging/focus/direct scheduling destination. |
+| Render review | **52 baseline layouts** across 26 routes informed the audit. Final focused **128-layout matrix**, 32 phone Axe states, no overflow/page errors/accessibility violations or failed composer-in-viewport checks. Actual desktop/phone/Arabic/dark and phone validation-state screenshots inspected; this is not physical-device or human-task evidence. |
+| Engineering docs | `npm run test:docs` validates local links in **29** maintained documents. CONTRIBUTING, ADRs, API conventions, current architecture/file maps/runbook and both AGENTS rules are updated. CI definition includes the doc check; remote execution remains unverified. |
+
+Reproduce with backend `npm test`, `npm run test:fresh`, `npm run test:services`, `npm run test:teams`, `npm run content:check`, `npm run test:docs` and `npx supabase db lint --local`; frontend `npm test`, `npm run format:check`, `npm run build`, `npm run test:e2e`, `npm run test:quality:layout`. Browser checks require local backend + dev 5173 + production preview 5174. Persisted evidence: [R5 local checks](evidence/r5-local-checks.md), [layout matrix](evidence/r5-quality-layout.json), [product quality review](product-quality-review.md). Raw logs are `/tmp/rafik-r5-*.log`; web artifacts/reports/traces are ignored.
+
+Verification found and fixed real issues, including unbounded conversations, unseen-message read marking, disabled-field focus and phone validation-state hit-testing. Pagination required a direct post-scheduling destination and full-result count assertions. A test-only completion race was removed by exercising the actual finish UI; an older appointment fault test now waits for the injected failure before reload. One stale exact-text test locator was corrected to assert its contextual region. The known local engine crash on a denied internal-function call inside PL/pgSQL was avoided by testing the public command boundary; later SQL/fresh/HTTP checks pass, but no engine fix is claimed. Development trace collisions from an overlapping run were eliminated in the final serial execution.
+
+**Still unverified:** physical-device keyboard/touch/suspension, assistive technology, new hosted Auth/email/Storage/backup/CI operations, real external adapters, observed unaided task success, retention and payments. Follow the [release checklist](release-checklist.md); local engineering acceptance does not certify launch readiness or business success.
+
+
+## R4 verification — 23 September 2026
+
+Executed locally with Node 22.16.0, CLI 2.90.0 and `rafik-revamp-local`. R3 was checked before implementation: 135 SQL assertions, real service/concurrency tests and 36 browser scenarios passed. Existing preview data was preserved; R4 adds two migrations without reset.
+
+| Check | Actual result / boundary |
+|---|---|
+| Backend `npm test` | **209** rollback assertions pass: previous 135 plus **74 R4**. Includes email/expiry/verified-invite rules, fixed-role boundaries, minimal roster/private context, exact consent/handoff replay, future plan copy, started-workout replay after handoff, atomic group selection/receipt, independent template/exercise copies with catalog-edit isolation, lifecycle guards/ownership transfer/group archive, commercial limits/out-of-order receipts/server simulator gate and support visibility/revision. |
+| `npm run test:fresh` | All **eight** migrations, generated content/local fixtures and **five** SQL suites pass in a disposable database. No preview reset. |
+| `npm run test:teams` | Nine real HTTP check groups pass with four temporary Auth identities: intended invitation email; concurrent handoff replay and private started history; future appointment release/unanswered-form cancellation; real staff-only Storage bytes; service-only duplicate/stale provider receipts; private support/operator reply via the actual guarded CLI; download revocation on member removal; departed file-owner audience/revocation; guarded owner deletion followed by closed-team cleanup preserving client history. Temporary accounts and bytes removed. |
+| Existing `npm run test:services` | All R3 booking/concurrency, dual-role booking, registered Storage upload/overwrite/share/revoke/byte cleanup and account-deletion scenarios pass. |
+| SQL lint/content | Application schema lint reports no errors. Generated content check passes. Generated API types reflect all 38 public tables (37 domain + internal settings). |
+| Web unit/data tests | **10/10** pass; existing prescription/date/progress/nutrition checks retained. |
+| New browser scenarios | Four R4 scenarios (two workflows × Chromium/WebKit phone configuration) pass; repeated twice for **8/8** after correcting failure-injection timing. Fresh identities exercise staff invite, client consent/Today cue, explicit group assignment with dropped acknowledgement/reload/retry, shared plan editing destination, handoff, restricted subscription and support draft/reply/reload. |
+| Full browser regression | **40/40** pass across Chromium and phone-sized WebKit: all 36 prior-phase scenarios plus four R4 scenarios. Final complete run finished after the retry-test timing correction and UI permission-state adjustments. |
+| Final affected-flow rerun | **4/4** R4 browser scenarios pass after the final proposed-coach access and legacy-snapshot hardening; final 209-assertion/fresh/HTTP/lint runs also pass. |
+| R4 rendered layout matrix | **176/176** states: eleven populated destinations/tab states × four widths (320, 390, 768, 1440) × English/Arabic × light/dark. Zero horizontal overflow or page errors. **44** 390px states checked with Axe: zero reported violations. Representative rendered desktop/light and phone/Arabic/dark screenshots inspected. This is automated Chromium rendering, not physical-device/human usability evidence. |
+| Build/format | Production build + TypeScript checks and web formatting check pass. Whitespace diff checks pass. |
+
+Reproducible sources: `supabase/tests/team_business.sql`, `scripts/verify-teams.mjs`, `scripts/verify-fresh.mjs`; companion `tests/teams.e2e.ts`, `tests/team-fixture.ts`, `scripts/verify-team-layout.ts`. Existing suites remain in the standard test commands. Raw ignored local evidence is under web `artifacts/r4-*`, `playwright-report` and `test-results`; compact persisted receipts are in `evidence/r4-local-checks.md` and `evidence/r4-layout.json`.
+
+Two test-development findings are recorded explicitly. The new browser fault-injection test initially reloaded as soon as the pending command appeared, which could precede the intended network abort; it now waits until that attempt finishes before reload. An intentionally denied dynamic SQL call inside the temporary PL/pgSQL test helper caused one local database process crash/recovery during development. The grant check now uses `has_function_privilege`, and denial is independently tested through real PostgREST. The final fresh/database/HTTP checks passed afterward; no database-engine fix or hosted behavior is claimed.
+
+Local simulation is not verified payment collection. No hosted project/deployment, actual outbound support/staff email, remote CI run, physical phone, real participant retention or commercial success was tested. R5 product integration and the explicitly open substitutions/alternatives remain unfinished. Test fixture ownership/handoff does not modify existing Laila/Amir team membership or historical data.
+
+## R3 verification — 22 September 2026
+
+Executed against `rafik-revamp-local` with Node 22.16.0, CLI 2.90.0 and local Storage enabled. Existing preview data was preserved; no hosted stack or native device was used.
+
+| Check | Actual result / boundary |
+|---|---|
+| Backend `npm test` | **135** rollback assertions pass: 27 foundation + 24 R1 + 42 R2 + 42 R3. R3 covers nutrition snapshots/unknowns/corrections, bounded/DST availability, booking/rescheduling/cancellation/attendance, permissions and resource metadata lifecycle. |
+| `npm run test:fresh` | All **six** migrations, generated fixtures and four SQL suites pass in a disposable database. Auth/Storage managed schemas are bootstrapped locally; preview rows are not copied/reset. |
+| `npm run test:services` | Real Auth/REST/Storage requests pass: two simultaneous clients yield exactly one booking; dual coach/client role conflicts are blocked; uploads require registration, overwrites are rejected, shared bytes match, revocation blocks subsequent download, deletion removes bytes before metadata, client deletion reopens future availability, coach deletion handles remaining bookings. Three temporary identities are removed afterward. |
+| Supabase schema lint | No schema errors/warnings in application functions after final changes. |
+| Web unit/data tests | **10** tests pass, including portion scaling, unknown versus zero nutrition values and existing calendar/progress/prescription checks. |
+| Browser regression suite | **36/36** pass on Chromium and phone-sized WebKit, including all prior-phase scenarios. The six R3 scenarios cover guidance/food reuse/meal correction/reload; booking/rescheduling/cancellation plus a lost booking acknowledgement; real private file download/attachment/revocation/removal plus a lost finalization acknowledgement. |
+| Final affected-flow rerun | **6/6** R3 scenarios pass after final UI adjustments; final SQL and HTTP tests pass after retry/lock hardening. |
+| R3 visual matrix | **128** combinations: eight role/routes × widths 320/390/768/1440 × English/Arabic × light/dark. Zero document overflow, zero page errors. The 32 states at 390px have zero reported Axe violations. |
+| Build and formatting | Production build/type check and Prettier check pass. Generated schema types match the final local schema. |
+
+Repeatable sources: `supabase/tests/service_delivery.sql`, `scripts/verify-services.mjs`; frontend `tests/service-delivery.e2e.ts`, `tests/nutrition.test.ts`, `scripts/r3-visual-check.mjs`. Local render evidence is in frontend `artifacts/r3-*.png` and `r3-visual-matrix.json`. Representative populated nutrition, booked appointment and shared-resource captures were inspected, alongside desktop English and Arabic dark phone states. During inspection, unused empty nutrient summaries were removed, query-only navigation was corrected to preserve input focus, phone workspace tabs were made to wrap so More stays visible, native Safari selects were styled at touch size, and direct entry-form links were added. The full 36-scenario suite and the matrix were rerun after the shared navigation/control refinements.
+
+Database assertions use synthetic storage metadata inside rolled-back transactions; **only the HTTP/browser checks establish real byte behavior**. Browser fault injection commits selected requests and drops the acknowledgement to exercise retry, rather than merely mocking a success response. Whole-product release readiness, real people/retention/payments, physical phones, remote CI, hosted Storage, outbound notifications and external calendar delivery remain unverified or unimplemented. No claim of malware scanning, file recall after download, all-feature offline support or production-scale performance is made.
+
+
+
+## R2 ongoing coaching — 22 September 2026
+
+| Check | Result and exact boundary |
+|---|---|
+| Database lifecycle suites | **93 assertions passed**: 27 foundation, 24 daily coaching, 42 ongoing coaching; all rollback transactions |
+| Clean install | All three migrations + generated synthetic seed + all suites pass in a disposable database; working preview preserved |
+| Schema lint | No schema errors reported by the pinned local Supabase CLI |
+| Type/build and formatting | Production build includes `vue-tsc`; Prettier and diff whitespace checks pass |
+| Unit/data checks | **8 passed**, including unit-aware mixed-result trends, response states and distinguishing rejected commands from ambiguous delivery |
+| Browser regression | Final full suite: **30 scenarios passed** across Chromium and phone-sized WebKit (20 foundation/R1 regression cases and 10 R2 cases), including assignment retry and rejected-message recovery |
+| Existing-layout regression | 224 route × width × language × theme combinations plus Arabic dark editor accessibility; no overflow/page errors |
+| Populated R2 matrix | 11 role-specific routes × 4 widths × 2 languages × 2 themes = **176** combinations; 44 phone accessibility states checked; no overflow, page errors or checked Axe violations |
+| Local preservation | Additive R2 migration and new synthetic fixture rows only; no preview reset, retired-backend change, native/worker source change, hosting or push |
+
+R2 browser paths cover template creation, assignment, draft persistence after reload, client submission, coach review, client correction clearing old feedback, contextual message/reply and unread activity; repeated numeric assessments with compatible-history comparison and cancellation; real progress and shared measurement correction/removal; lost message acknowledgement with reload/retry producing one message; lost assignment acknowledgement with reload/retry producing one occurrence; and a confirmed invalid message context remaining editable for correction.
+
+SQL coverage adds definition/snapshot stability, recurrence bounds and replay mismatch, required/type/range validation, coach/client ownership, stale review/response correction, original submission preservation, private/shared measurement reads, revision/units, message UUID/context isolation, forward-only/non-future cursor, archive behavior and unrelated participant rejection. Two additional progress assertions prove completed actual values (excluding incomplete sets/targets) and recomputation after a correction without another completion.
+
+Verification found and corrected an ambiguous SQL field alias. Browser tests initially used an implicit-label selector on selects; they now target accessible combobox names. A theme-switch accessibility check sampled intermediate transition colors; it now waits for fonts and active animations to settle. Visual inspection prompted phone conversation-name truncation, automatic text direction for messages, friendly-name fallback for older snapshots, and a first-result state instead of a one-point chart. Trend positions follow calendar spacing rather than pretending all sessions occurred at equal intervals.
+
+Captures were inspected from actual browser renders, including desktop progress, the form editor and Arabic dark phone conversation/response views. Regenerate with `node scripts/r2-visual-check.mjs`. Selected local captures:
+
+Historical browser screenshots for this phase were stored in ignored local `artifacts/` directories and are not included in the monorepo.
+
+Sanitized results are stored in `evidence/r2-*`. The test pages use synthetic local accounts and actual SQL/PostgREST; only delivery-failure tests intercept acknowledgements. No real email/message recipient or external provider was contacted. No claim is made about physical devices, hosting, remote CI, production-scale performance, retention or willingness to pay. Direct conversation attachments and nutrition/booking/resources remain subsequent work.
+
+
+22 September 2026. Scope: the newly rebuilt web application and local Supabase backend. Browser-generated activity is synthetic and is not customer validation. All commands ran on `codex/revamp`; no remote CI, deployment, push or live outbound message was performed.
+
+**Coverage limitation:** these checks cover the initial training/coaching slice only. They do not establish that Rafik's full feature set has been revamped. Missing and partial capabilities and their next implementation waves are recorded in [revamp coverage](revamp-coverage.md).
+
+## R1 verification update
+
+The original results below remain the baseline record. The daily-coaching expansion adds these verified local results:
+
+| Check | Result and boundary |
+|---|---|
+| Database suites | 51 assertions: 27 core + 24 daily coaching; both run in rollback transactions |
+| Fresh schema/fixtures | `npm run test:fresh` passed in a disposable database using Auth schema only, both public migrations and synthetic fixtures; original preview records unchanged |
+| Schema lint | Pinned Supabase CLI reports no schema errors or warnings after explicit array initialization and loop-variable cleanup |
+| Browser journeys | 20 passed: 10 in Chromium, 10 in phone-sized WebKit; includes custom exercise, multiweek mixed plan, schedule, actual recording, group round/rest guidance, review, private notes and archive/reactivation |
+| Layout | 224 combinations: 14 routes × four widths × English/Arabic × light/dark; no overflow or page errors |
+| Accessibility | Checked client workspace (English and Arabic dark), catalog, editor and mixed logger report no Axe violations; Arabic dark editor matrix check also passes |
+| Build/units | TypeScript + production build passed; five unit/data tests passed, including calendar dates west of UTC and leap-day/timezone boundaries |
+| Preservation | No preview reset, hosted change, worker/native source change or remote push |
+
+The roster and mixed-plan tests use real local Auth, SQL and PostgREST. Database scenarios separately prove that two clients receive independent sessions from the same plan. Schedule exceptions and wrong-date rejection are exercised at the database layer; physical-device and real-person task validation remain unperformed.
+
+The initial browser run found outdated test selectors after the review table changed from separate load/reps columns to actual/target columns. Repeatability also required selecting the newly created test client explicitly, and waiting for durable completion feedback before a reload. SQL fixtures are isolated inside rollback transactions so preview activity no longer collides with test occurrences/context revisions. The initial layout accessibility check ran before the editor had mounted; it now waits for the actual editor field. These were corrected before the passing results above.
+
+Actual new screenshots in the frontend's ignored `artifacts/` folder include `r1-client-*`, `r1-client-ar-*`, `r1-library-*`, `r1-plan-*`, `r1-schedule-*`, `r1-distance-*` and `r1-review-*`. Desktop and phone renders were inspected. Disabling animations for captures avoids showing transitional theme colors; unfocused skip links are clipped to avoid a WebKit full-page capture artifact while preserving keyboard access.
+
+Sanitized command summaries are in `evidence/r1-database.txt`, `r1-browser.txt`, `r1-fresh.txt` and `r1-layout.json`. This verifies R1, not the remaining product families in R2–R5.
+
+## Results
+
+| Check | Result | Evidence |
+|---|---|---|
+| Fresh Supabase reset | Passed | New migration and synthetic seed apply from source, project `rafik-revamp-local` |
+| Database regression suite | 27 assertions passed | `supabase/tests/core.sql`; rollback transaction, includes lifecycle/access/atomicity/concurrency |
+| Frontend TypeScript + production build | Passed | `npm run build`, includes `vue-tsc --noEmit` |
+| Unit/data-read tests | 3 passed | Weight conversion/round-trip and history beyond the 500-row server response limit |
+| Browser task/fault suite | 16 scenarios passed | Eight scenarios in each of Chromium and phone-sized WebKit; `tests/core.e2e.ts` |
+| Layout matrix | No horizontal overflow or page errors | 12 routes × four widths (320/390/768/1440) × English/Arabic × light/dark = 192 combinations; phone subset rechecked after navigation refinement |
+| Automated accessibility | No violations in checked states | Axe checks for public entry, logger, Arabic routine/logger, editor and review; additional Arabic dark editor pass |
+| Keyboard path | Passed in browser tests | Skip-link focus/activation and main-content focus; WebKit uses its Option-Tab link traversal behavior |
+| Content consistency | Passed | `npm run content:check`; canonical JSON matches generated SQL and web sample |
+| Dependency audit | No known vulnerabilities reported in the checked installs | npm audit; backend CLI's `tar` transitive dependency overridden to patched 7.5.22 |
+| Formatting/whitespace | Passed | Prettier check for new web source/tests/configuration; `git diff --check` |
+| Scope preservation | Passed | Four revamp branches; mobile clean; worker only has original `.DS_Store` change |
+
+## Browser scenarios
+
+1. Guest sees a useful sample, records changed actual values, reloads, and finishes without signup.
+2. Arabic RTL and dark theme display the sample/logger with no overflow and no Axe violations.
+3. Coach starts from a real plan, previews/publishes, creates an invitation; intended new client verifies a local email code, accepts, records, syncs and leaves a note; coach reviews; client sees the reply and corrects actual values.
+4. Offline entries sync after reconnect. A server-committed request with an intentionally lost response retries safely. A second device's stale edit retains its draft and offers deliberate recovery.
+5. The production shell reloads a real opened guest workout after origin/network loss and preserves subsequent edits across another reload.
+6. A completed guest workout survives email-code sign-in and is adopted automatically into the account without repeating the save action.
+7. A plan draft survives reload and a failed publish/save request; retry succeeds with the draft intact.
+8. Invalid set values prevent completion. Correcting the value restores the action. Keyboard skip navigation reaches the main content.
+
+The task tests use actual local Supabase Auth/PostgREST/SQL, not a mocked successful backend. Only fault injection deliberately intercepts a save response. All email recipients use the local synthetic domain and Mailpit.
+
+## Important offline-test distinction
+
+Chromium's production reload test uses browser offline emulation. In this macOS WebKit runner, `setOffline(true)` causes a navigation-level internal error before service-worker fallback. A separate controlled test shuts down a test-owned static server entirely, reloads the production page, verifies a new document boot identifier, and checks retained/continued workout values. That WebKit test passes. In-page offline save/reconnect tests also pass in WebKit.
+
+This isolates an automation-mode limitation; it does **not** certify a physical iPhone in airplane mode. Physical Safari/Chrome testing, storage eviction, OS app suspension, real mobile keyboards and device power interruptions remain release gates.
+
+## Defects found and corrected during verification
+
+| Finding | Consequence | Correction and recheck |
+|---|---|---|
+| Public version policy referenced authenticated-only tables | Guest public reads failed before evaluating the public branch | Split public and authenticated policies; guest/database checks pass |
+| A saved field rerender could reset another field before blur | Last typed repetition could disappear on reload | Independent input drafts and immediate valid-value persistence; exact-value reload checks pass on both engines |
+| Cached clean sessions did not reread coach feedback | A client could miss a saved reply | Refresh clean records on reopen, preserve concurrent local edits; coach/client test passes |
+| Recovery loaded remote data but kept old input buffers | The conflict view could still display the discarded value | Clear buffers only after deliberate remote reload; two-device test passes |
+| Production static requests had differing `Vary: Origin` headers | Offline shell loaded HTML but missed cached JS/CSS | Ignore header variation only for the allowlisted same-origin static cache; production reload tests pass |
+| Email sign-in returned to a guest save button | User had to repeat an already requested save | Explicit task context triggers adoption on return; automatic-adoption test passes |
+| Phone header hid the training/coaching switch | Switching tasks required a trip through the landing page | Visible compact authenticated navigation; phone matrix rechecked |
+| New plan save replay could add a revision | A lost acknowledgment could create extra publication revisions | Recognize identical acknowledged content; SQL replay assertion passes |
+
+## Render evidence
+
+Actual browser captures are stored locally in the frontend's ignored `artifacts/` directory. They can be regenerated with the task tests and `node scripts/visual-check.mjs`. Selected views:
+
+Historical browser screenshots for this phase were stored in ignored local `artifacts/` directories and are not included in the monorepo.
+
+Screenshots include synthetic testing data. They were inspected for hierarchy, readable controls, real content, clipping and responsive flow. Automated layout/accessibility checks complement that inspection; they are not a usability study or comprehensive accessibility certification.
+
+## Not established by these checks
+
+No claim of customer acquisition, retention, willingness to pay, real-person completion time, production-scale performance, remote CI success, hosted deliverability or physical-device readiness is made. No external notification or payment integration exists. The local preview privacy copy and seeded public version must be replaced/configured through the hosted-release gate before deployment.
+
+The local foundation can be reviewed, but broader product implementation remains before whole-product release readiness. Execute the coverage register, then integrated and physical-device validation; hosting and real-use observations remain separate phases described in `runbook.md` and `pilot.md`.

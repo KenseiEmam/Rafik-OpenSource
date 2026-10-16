@@ -2,7 +2,7 @@ import { spawn, execFileSync } from 'node:child_process'
 import { readFileSync, mkdirSync, openSync, closeSync, rmSync } from 'node:fs'
 import { resolve } from 'node:path'
 const web = resolve(import.meta.dirname, '..'),
-  api = resolve(web, '../rafik-api'),
+  api = resolve(web, 'backend'),
   stamp = Date.now(),
   database = 'rafik_browser_' + stamp,
   files = '.local/browser-' + stamp,

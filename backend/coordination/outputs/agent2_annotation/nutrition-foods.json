@@ -1,0 +1,488 @@
+{
+  "schemaVersion": 1,
+  "extractedAt": "2026-09-23",
+  "dataset": {
+    "name": "USDA FoodData Central SR Legacy",
+    "release": "April 2018 final release",
+    "archiveUrl": "https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_2018-04.zip",
+    "downloadPageUrl": "https://fdc.nal.usda.gov/download-datasets/",
+    "archiveSha256": "0fe8ae486a2c8eb42cb96413f058deb51863a46c8fb8eeb4b1fb45006dd338ef",
+    "dataLicense": "CC0 1.0 / United States public domain",
+    "licenseUrl": "https://fdc.nal.usda.gov/api-guide/",
+    "basis": "Values are per 100 g edible portion",
+    "nutrientFields": {
+      "kcal": { "fdcNutrientId": 1008, "name": "Energy", "unit": "kcal" },
+      "protein_g": { "fdcNutrientId": 1003, "name": "Protein", "unit": "g" },
+      "carb_g": {
+        "fdcNutrientId": 1005,
+        "name": "Carbohydrate, by difference",
+        "unit": "g"
+      },
+      "fat_g": { "fdcNutrientId": 1004, "name": "Total lipid (fat)", "unit": "g" }
+    },
+    "notes": [
+      "Source energy is retained and must not be replaced with a 4/4/9 derivation.",
+      "Arabic names and concise portion labels are Rafik editorial metadata, not USDA fields.",
+      "sourcePortions reproduces the amount, measure-unit name, modifier and gram weight supplied in the USDA record."
+    ]
+  },
+  "foods": [
+    {
+      "id": "usda-fdc-168878",
+      "fdcId": 168878,
+      "dataType": "SR Legacy",
+      "publicationDate": "4/1/2019",
+      "originalDescription": "Rice, white, long-grain, regular, enriched, cooked",
+      "name": "White long-grain rice, cooked",
+      "name_ar": "أرز أبيض طويل الحبة مطبوخ",
+      "basis": 100,
+      "unit": "g",
+      "nutrients": { "kcal": 130, "protein_g": 2.69, "carb_g": 28.2, "fat_g": 0.28 },
+      "source": "USDA FoodData Central SR Legacy · FDC 168878",
+      "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/168878/nutrients",
+      "portions": [{ "name": "1 cup", "grams": 158 }],
+      "sourcePortions": [
+        { "amount": 1, "measureUnit": "undetermined", "modifier": "cup", "gramWeight": 158 }
+      ]
+    },
+    {
+      "id": "usda-fdc-171477",
+      "fdcId": 171477,
+      "dataType": "SR Legacy",
+      "publicationDate": "4/1/2019",
+      "originalDescription": "Chicken, broilers or fryers, breast, meat only, cooked, roasted",
+      "name": "Chicken breast, meat only, roasted",
+      "name_ar": "صدر دجاج مشوي دون جلد",
+      "basis": 100,
+      "unit": "g",
+      "nutrients": { "kcal": 165, "protein_g": 31, "carb_g": 0, "fat_g": 3.57 },
+      "source": "USDA FoodData Central SR Legacy · FDC 171477",
+      "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/171477/nutrients",
+      "portions": [{ "name": "1 cup, chopped or diced", "grams": 140 }],
+      "sourcePortions": [
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "cup, chopped or diced",
+          "gramWeight": 140
+        },
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "unit (yield from 1 lb ready-to-cook chicken)",
+          "gramWeight": 52
+        },
+        {
+          "amount": 0.5,
+          "measureUnit": "undetermined",
+          "modifier": "breast, bone and skin removed",
+          "gramWeight": 86
+        }
+      ]
+    },
+    {
+      "id": "usda-fdc-173424",
+      "fdcId": 173424,
+      "dataType": "SR Legacy",
+      "publicationDate": "4/1/2019",
+      "originalDescription": "Egg, whole, cooked, hard-boiled",
+      "name": "Egg, whole, hard-boiled",
+      "name_ar": "بيض كامل مسلوق",
+      "basis": 100,
+      "unit": "g",
+      "nutrients": { "kcal": 155, "protein_g": 12.6, "carb_g": 1.12, "fat_g": 10.6 },
+      "source": "USDA FoodData Central SR Legacy · FDC 173424",
+      "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/173424/nutrients",
+      "portions": [{ "name": "1 large egg", "grams": 50 }],
+      "sourcePortions": [
+        { "amount": 1, "measureUnit": "undetermined", "modifier": "tbsp", "gramWeight": 8.5 },
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "cup, chopped",
+          "gramWeight": 136
+        },
+        { "amount": 1, "measureUnit": "undetermined", "modifier": "large", "gramWeight": 50 }
+      ]
+    },
+    {
+      "id": "usda-fdc-173905",
+      "fdcId": 173905,
+      "dataType": "SR Legacy",
+      "publicationDate": "4/1/2019",
+      "originalDescription": "Cereals, oats, regular and quick, unenriched, cooked with water (includes boiling and microwaving), without salt",
+      "name": "Oats, cooked with water, without salt",
+      "name_ar": "شوفان مطبوخ بالماء دون ملح",
+      "basis": 100,
+      "unit": "g",
+      "nutrients": { "kcal": 71, "protein_g": 2.54, "carb_g": 12, "fat_g": 1.52 },
+      "source": "USDA FoodData Central SR Legacy · FDC 173905",
+      "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/173905/nutrients",
+      "portions": [
+        { "name": "1 cup", "grams": 234 },
+        { "name": "3/4 cup", "grams": 175 }
+      ],
+      "sourcePortions": [
+        { "amount": 1, "measureUnit": "undetermined", "modifier": "tbsp", "gramWeight": 14.6 },
+        { "amount": 1, "measureUnit": "undetermined", "modifier": "cup", "gramWeight": 234 },
+        { "amount": 0.75, "measureUnit": "undetermined", "modifier": "cup", "gramWeight": 175 }
+      ]
+    },
+    {
+      "id": "usda-fdc-171284",
+      "fdcId": 171284,
+      "dataType": "SR Legacy",
+      "publicationDate": "4/1/2019",
+      "originalDescription": "Yogurt, plain, whole milk",
+      "name": "Plain whole-milk yogurt",
+      "name_ar": "زبادي سادة كامل الدسم",
+      "basis": 100,
+      "unit": "g",
+      "nutrients": { "kcal": 61, "protein_g": 3.47, "carb_g": 4.66, "fat_g": 3.25 },
+      "source": "USDA FoodData Central SR Legacy · FDC 171284",
+      "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/171284/nutrients",
+      "portions": [
+        { "name": "1 container (6 oz)", "grams": 170 },
+        { "name": "1 cup (8 fl oz)", "grams": 245 }
+      ],
+      "sourcePortions": [
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "container (8 oz)",
+          "gramWeight": 227
+        },
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "container (6 oz)",
+          "gramWeight": 170
+        },
+        {
+          "amount": 0.5,
+          "measureUnit": "undetermined",
+          "modifier": "container (4 oz)",
+          "gramWeight": 113
+        },
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "cup (8 fl oz)",
+          "gramWeight": 245
+        }
+      ]
+    },
+    {
+      "id": "usda-fdc-173757",
+      "fdcId": 173757,
+      "dataType": "SR Legacy",
+      "publicationDate": "4/1/2019",
+      "originalDescription": "Chickpeas (garbanzo beans, bengal gram), mature seeds, cooked, boiled, without salt",
+      "name": "Chickpeas, boiled, without salt",
+      "name_ar": "حمص مسلوق دون ملح",
+      "basis": 100,
+      "unit": "g",
+      "nutrients": { "kcal": 164, "protein_g": 8.86, "carb_g": 27.4, "fat_g": 2.59 },
+      "source": "USDA FoodData Central SR Legacy · FDC 173757",
+      "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/173757/nutrients",
+      "portions": [{ "name": "1 cup", "grams": 164 }],
+      "sourcePortions": [
+        { "amount": 1, "measureUnit": "undetermined", "modifier": "cup", "gramWeight": 164 }
+      ]
+    },
+    {
+      "id": "usda-fdc-172421",
+      "fdcId": 172421,
+      "dataType": "SR Legacy",
+      "publicationDate": "4/1/2019",
+      "originalDescription": "Lentils, mature seeds, cooked, boiled, without salt",
+      "name": "Lentils, boiled, without salt",
+      "name_ar": "عدس مطبوخ دون ملح",
+      "basis": 100,
+      "unit": "g",
+      "nutrients": { "kcal": 116, "protein_g": 9.02, "carb_g": 20.1, "fat_g": 0.38 },
+      "source": "USDA FoodData Central SR Legacy · FDC 172421",
+      "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/172421/nutrients",
+      "portions": [
+        { "name": "1 cup", "grams": 198 },
+        { "name": "1 tablespoon", "grams": 12.3 }
+      ],
+      "sourcePortions": [
+        { "amount": 1, "measureUnit": "undetermined", "modifier": "cup", "gramWeight": 198 },
+        { "amount": 1, "measureUnit": "undetermined", "modifier": "tbsp", "gramWeight": 12.3 }
+      ]
+    },
+    {
+      "id": "usda-fdc-171413",
+      "fdcId": 171413,
+      "dataType": "SR Legacy",
+      "publicationDate": "4/1/2019",
+      "originalDescription": "Oil, olive, salad or cooking",
+      "name": "Olive oil",
+      "name_ar": "زيت زيتون",
+      "basis": 100,
+      "unit": "g",
+      "nutrients": { "kcal": 884, "protein_g": 0, "carb_g": 0, "fat_g": 100 },
+      "source": "USDA FoodData Central SR Legacy · FDC 171413",
+      "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/171413/nutrients",
+      "portions": [
+        { "name": "1 tablespoon", "grams": 13.5 },
+        { "name": "1 teaspoon", "grams": 4.5 }
+      ],
+      "sourcePortions": [
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "tablespoon",
+          "gramWeight": 13.5
+        },
+        { "amount": 1, "measureUnit": "undetermined", "modifier": "tsp", "gramWeight": 4.5 },
+        { "amount": 1, "measureUnit": "undetermined", "modifier": "cup", "gramWeight": 216 }
+      ]
+    },
+    {
+      "id": "usda-fdc-173944",
+      "fdcId": 173944,
+      "dataType": "SR Legacy",
+      "publicationDate": "4/1/2019",
+      "originalDescription": "Bananas, raw",
+      "name": "Banana, raw",
+      "name_ar": "موز طازج",
+      "basis": 100,
+      "unit": "g",
+      "nutrients": { "kcal": 89, "protein_g": 1.09, "carb_g": 22.8, "fat_g": 0.33 },
+      "source": "USDA FoodData Central SR Legacy · FDC 173944",
+      "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/173944/nutrients",
+      "portions": [
+        { "name": "1 medium banana", "grams": 118 },
+        { "name": "1 cup, sliced", "grams": 150 }
+      ],
+      "sourcePortions": [
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "NLEA serving",
+          "gramWeight": 126
+        },
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "extra large (9\" or longer)",
+          "gramWeight": 152
+        },
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "large (8\" to 8-7/8\" long)",
+          "gramWeight": 136
+        },
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "cup, sliced",
+          "gramWeight": 150
+        },
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "small (6\" to 6-7/8\" long)",
+          "gramWeight": 101
+        },
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "extra small (less than 6\" long)",
+          "gramWeight": 81
+        },
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "medium (7\" to 7-7/8\" long)",
+          "gramWeight": 118
+        },
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "cup, mashed",
+          "gramWeight": 225
+        }
+      ]
+    },
+    {
+      "id": "usda-fdc-168191",
+      "fdcId": 168191,
+      "dataType": "SR Legacy",
+      "publicationDate": "4/1/2019",
+      "originalDescription": "Dates, medjool",
+      "name": "Medjool dates",
+      "name_ar": "تمر مجدول",
+      "basis": 100,
+      "unit": "g",
+      "nutrients": { "kcal": 277, "protein_g": 1.81, "carb_g": 75, "fat_g": 0.15 },
+      "source": "USDA FoodData Central SR Legacy · FDC 168191",
+      "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/168191/nutrients",
+      "portions": [{ "name": "1 pitted date", "grams": 24 }],
+      "sourcePortions": [
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "date, pitted",
+          "gramWeight": 24
+        }
+      ]
+    },
+    {
+      "id": "usda-fdc-174915",
+      "fdcId": 174915,
+      "dataType": "SR Legacy",
+      "publicationDate": "4/1/2019",
+      "originalDescription": "Bread, pita, white, enriched",
+      "name": "White pita bread, enriched",
+      "name_ar": "خبز عربي أبيض مدعّم",
+      "basis": 100,
+      "unit": "g",
+      "nutrients": { "kcal": 275, "protein_g": 9.1, "carb_g": 55.7, "fat_g": 1.2 },
+      "source": "USDA FoodData Central SR Legacy · FDC 174915",
+      "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/174915/nutrients",
+      "portions": [
+        { "name": "1 large pita (6.5 in)", "grams": 60 },
+        { "name": "1 small pita (4 in)", "grams": 28 }
+      ],
+      "sourcePortions": [
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "pita, small  (4\" dia)",
+          "gramWeight": 28
+        },
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "pita, large (6-1/2\" dia)",
+          "gramWeight": 60
+        }
+      ]
+    },
+    {
+      "id": "usda-fdc-172454",
+      "fdcId": 172454,
+      "dataType": "SR Legacy",
+      "publicationDate": "4/1/2019",
+      "originalDescription": "Hummus, home prepared",
+      "name": "Hummus, home prepared",
+      "name_ar": "حمص بالطحينة محضّر منزلياً",
+      "basis": 100,
+      "unit": "g",
+      "nutrients": { "kcal": 177, "protein_g": 4.86, "carb_g": 20.1, "fat_g": 8.59 },
+      "source": "USDA FoodData Central SR Legacy · FDC 172454",
+      "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/172454/nutrients",
+      "portions": [
+        { "name": "1 tablespoon", "grams": 15 },
+        { "name": "1 cup", "grams": 246 }
+      ],
+      "sourcePortions": [
+        { "amount": 1, "measureUnit": "undetermined", "modifier": "cup", "gramWeight": 246 },
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "tablespoon",
+          "gramWeight": 15
+        }
+      ]
+    },
+    {
+      "id": "usda-fdc-175168",
+      "fdcId": 175168,
+      "dataType": "SR Legacy",
+      "publicationDate": "4/1/2019",
+      "originalDescription": "Fish, salmon, Atlantic, farmed, cooked, dry heat",
+      "name": "Atlantic salmon, farmed, cooked",
+      "name_ar": "سلمون أطلسي مستزرع مطهو",
+      "basis": 100,
+      "unit": "g",
+      "nutrients": { "kcal": 206, "protein_g": 22.1, "carb_g": 0, "fat_g": 12.4 },
+      "source": "USDA FoodData Central SR Legacy · FDC 175168",
+      "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/175168/nutrients",
+      "portions": [{ "name": "3 oz", "grams": 85 }],
+      "sourcePortions": [
+        { "amount": 0.5, "measureUnit": "undetermined", "modifier": "fillet", "gramWeight": 178 },
+        { "amount": 3, "measureUnit": "undetermined", "modifier": "oz", "gramWeight": 85 }
+      ]
+    },
+    {
+      "id": "usda-fdc-171265",
+      "fdcId": 171265,
+      "dataType": "SR Legacy",
+      "publicationDate": "4/1/2019",
+      "originalDescription": "Milk, whole, 3.25% milkfat, with added vitamin D",
+      "name": "Whole milk, 3.25% milkfat",
+      "name_ar": "حليب كامل الدسم",
+      "basis": 100,
+      "unit": "g",
+      "nutrients": { "kcal": 61, "protein_g": 3.15, "carb_g": 4.8, "fat_g": 3.25 },
+      "source": "USDA FoodData Central SR Legacy · FDC 171265",
+      "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/171265/nutrients",
+      "portions": [
+        { "name": "1 cup", "grams": 244 },
+        { "name": "1 tablespoon", "grams": 15 }
+      ],
+      "sourcePortions": [
+        { "amount": 1, "measureUnit": "undetermined", "modifier": "fl oz", "gramWeight": 30.5 },
+        { "amount": 1, "measureUnit": "undetermined", "modifier": "cup", "gramWeight": 244 },
+        { "amount": 1, "measureUnit": "undetermined", "modifier": "tbsp", "gramWeight": 15 },
+        { "amount": 1, "measureUnit": "undetermined", "modifier": "quart", "gramWeight": 976 }
+      ]
+    },
+    {
+      "id": "usda-fdc-170567",
+      "fdcId": 170567,
+      "dataType": "SR Legacy",
+      "publicationDate": "4/1/2019",
+      "originalDescription": "Nuts, almonds",
+      "name": "Almonds",
+      "name_ar": "لوز",
+      "basis": 100,
+      "unit": "g",
+      "nutrients": { "kcal": 579, "protein_g": 21.2, "carb_g": 21.6, "fat_g": 49.9 },
+      "source": "USDA FoodData Central SR Legacy · FDC 170567",
+      "sourceUrl": "https://fdc.nal.usda.gov/fdc-app.html#/food-details/170567/nutrients",
+      "portions": [
+        { "name": "1 oz (23 whole kernels)", "grams": 28.35 },
+        { "name": "1 almond", "grams": 1.2 }
+      ],
+      "sourcePortions": [
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "oz (23 whole kernels)",
+          "gramWeight": 28.35
+        },
+        { "amount": 1, "measureUnit": "undetermined", "modifier": "almond", "gramWeight": 1.2 },
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "cup, whole",
+          "gramWeight": 143
+        },
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "cup, slivered",
+          "gramWeight": 108
+        },
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "cup, ground",
+          "gramWeight": 95
+        },
+        {
+          "amount": 1,
+          "measureUnit": "undetermined",
+          "modifier": "cup, sliced",
+          "gramWeight": 92
+        }
+      ]
+    }
+  ]
+}

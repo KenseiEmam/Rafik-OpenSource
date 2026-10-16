@@ -138,7 +138,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
         'ON_ERROR_STOP=1',
       ],
       {
-        cwd: resolve('../rafik-api'),
+        cwd: resolve('backend'),
         input: `update public.organization_events e set starts_at=now()-interval '2 hours',ends_at=now()-interval '1 hour' from public.workspaces w where e.workspace_id=w.id and e.id='${eid}' and w.id='${id}' and w.created_by='${f.owner.id}';`,
         stdio: ['pipe', 'pipe', 'pipe'],
       },

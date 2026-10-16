@@ -1,0 +1,209 @@
+{
+  "schemaVersion": 1,
+  "reviewDate": "2026-09-23",
+  "provenance": "Rafik editorial overlay after reviewing the dated wger metadata and local continuous-video posters/clips. These corrections improve labels, equipment filters and incomplete source instructions; they do not claim professional technique certification or alter upstream records.",
+  "records": [
+    {
+      "id": "wger-12",
+      "equipment": "Hip adduction machine",
+      "equipmentAr": "جهاز ضم الفخذين",
+      "instructions": "Adjust the thigh pads and sit upright with your back against the support. Begin with your knees apart and the pads against the inside of your thighs. Hold the handles, bring your knees together under control, pause briefly, then let the pads return slowly.",
+      "reason": "The source equipment is empty and its English description stops after the setup with a trailing typo. The source name and reviewed clip show a seated hip-adduction machine; this does not validate the upstream Glutes target label."
+    },
+    {
+      "id": "wger-75",
+      "name": "Dumbbell Bench Press",
+      "instructions": "Setup and Starting Position: Sit at the end of a flat bench with a dumbbell resting vertically against each thigh. Carefully lean back while driving the dumbbells toward your chest with your knees. The “Leg Drive” and Posture: Plant your feet firmly on the floor. Retract your shoulder blades (press them together against the bench) and maintain a slight natural lumbar curve. Starting Position: Push the dumbbells toward the ceiling. Your wrists should be aligned with your elbows. Rotate the dumbbells slightly inward (about 45 degrees) so that your elbows do not splay out too far to the sides, thereby protecting your shoulders. Eccentric Phase (Lowering): Lower the dumbbells in a controlled manner toward the sides of your chest. Your elbows should lower at an angle of about 45–60 degrees relative to your body. Feel the stretch in the lower part of your chest. Concentric Phase (Lift): Push the weight upward in a slight arc (toward the center), without letting the dumbbells collide at the top or fully locking out your elbows to maintain muscle tension. Exhale as you lift.",
+      "reason": "Normalize the awkward source title and remove the upstream translator-service footer; the reviewed clip and existing equipment identify a flat dumbbell bench press."
+    },
+    {
+      "id": "wger-194",
+      "instructions": "Support yourself on parallel bars with your arms straight. Lower under control by bending your elbows until you reach a comfortable depth, keeping your shoulders stable. Press through the bars to return to the start without swinging.",
+      "reason": "The source text is a muscle-description excerpt rather than usable movement steps."
+    },
+    {
+      "id": "wger-205",
+      "instructions": "Stand tall holding a dumbbell at each side. Step forward and lower under control until both knees are comfortably bent and the rear knee approaches the floor. Drive through the front foot to return to standing, then repeat on the other side while keeping your torso upright.",
+      "reason": "The source English description is only a period."
+    },
+    {
+      "id": "wger-211",
+      "name": "Seated Dumbbell Overhead Triceps Extension",
+      "equipment": "Bench, Dumbbell",
+      "equipmentAr": "مقعد، دمبل",
+      "reason": "The reviewed clip shows the two-hand overhead extension performed seated against a bench; the source title/equipment omit that setup."
+    },
+    {
+      "id": "wger-246",
+      "name": "EZ-Bar Skull Crusher",
+      "reason": "Use the common English equipment name instead of the source's regional SZ-bar label."
+    },
+    {
+      "id": "wger-257",
+      "instructions": "Rest the bar across the front of your shoulders and keep your elbows lifted. Stand about shoulder-width apart, brace your torso, and bend your hips and knees to lower under control. Keep your knees tracking with your toes, then drive through your feet to stand.",
+      "reason": "The source description lists muscles but gives no setup or movement steps."
+    },
+    {
+      "id": "wger-275",
+      "name": "Cable Hammer Curl",
+      "reason": "Normalize the source title while preserving the demonstrated neutral-grip cable curl."
+    },
+    {
+      "id": "wger-341",
+      "name": "Smith Machine Squat",
+      "equipment": "Smith machine",
+      "equipmentAr": "جهاز سميث",
+      "reason": "The source equipment is empty and 'Multipress' is a regional name; the reviewed clip shows a Smith-machine squat."
+    },
+    {
+      "id": "wger-349",
+      "name": "Single-Arm Cable Lateral Raise",
+      "instructions": "Set a cable pulley low and stand side-on to it. Hold the handle with the outside hand, keep a soft bend in the elbow, and raise the arm out to the side to about shoulder height. Lower under control and repeat before changing sides.",
+      "reason": "The source calls this a lateral row, but the reviewed continuous clip shows shoulder abduction: a single-arm cable lateral raise."
+    },
+    {
+      "id": "wger-365",
+      "name": "Lying Leg Curl",
+      "equipment": "Lying leg curl machine",
+      "equipmentAr": "جهاز ثني الساقين بوضع الاستلقاء",
+      "reason": "The source equipment is empty; the reviewed clip shows a prone leg-curl machine."
+    },
+    {
+      "id": "wger-366",
+      "name": "Seated Leg Curl",
+      "equipment": "Seated leg curl machine",
+      "equipmentAr": "جهاز ثني الساقين بوضع الجلوس",
+      "reason": "The source equipment is empty; the reviewed clip shows a seated leg-curl machine."
+    },
+    {
+      "id": "wger-367",
+      "name": "Standing Single-Leg Curl",
+      "equipment": "Standing leg curl machine",
+      "equipmentAr": "جهاز ثني الساق واقفًا",
+      "reason": "The source equipment is empty and the clip demonstrates one leg at a time on a standing curl machine."
+    },
+    {
+      "id": "wger-371",
+      "name": "45-Degree Leg Press",
+      "equipment": "Leg press machine",
+      "equipmentAr": "جهاز ضغط الساقين",
+      "instructions": "Sit with your back and head supported and place your feet about shoulder-width apart on the platform. Release the safeties, lower the platform under control until your knees reach a comfortable bend, then press it away without forcefully locking your knees. Keep your feet flat and your back supported.",
+      "reason": "The source equipment is empty and its English text is only a definition; the reviewed clip shows a 45-degree sled leg press."
+    },
+    {
+      "id": "wger-374",
+      "name": "Wide-Stance Leg Press",
+      "equipment": "Leg press machine",
+      "equipmentAr": "جهاز ضغط الساقين",
+      "reason": "The source equipment is empty; the reviewed clip shows the wide-foot variation on a leg-press machine."
+    },
+    {
+      "id": "wger-375",
+      "name": "Hack Squat Machine",
+      "equipment": "Hack squat machine",
+      "equipmentAr": "جهاز هاك سكوات",
+      "reason": "The source equipment is empty and its English title says leg press; the reviewed clip shows a shoulder-supported hack squat."
+    },
+    {
+      "id": "wger-465",
+      "name": "EZ-Bar Preacher Curl",
+      "equipment": "EZ bar, Preacher bench",
+      "equipmentAr": "بار متعرج، مقعد بريتشر",
+      "reason": "Normalize the bar name and include the preacher bench visible in the reviewed clip."
+    },
+    {
+      "id": "wger-477",
+      "name": "Assisted Pull-Up Machine",
+      "equipment": "Assisted pull-up machine",
+      "equipmentAr": "جهاز العقلة المساعد",
+      "reason": "The text entry describes machine-assisted pull-ups and needs usable equipment filtering. Its video remains excluded because it duplicates the unassisted pull-up bytes and does not establish an assistance platform."
+    },
+    {
+      "id": "wger-507",
+      "instructions": "Stand with the bar in front of your thighs, feet about hip-width apart, and knees softly bent. Brace your torso, push your hips back, and keep the bar close to your legs as you lower it under control. Stop when you feel a comfortable hamstring stretch, then drive your hips forward to stand tall.",
+      "reason": "The source English description is only a shorthand label and a YouTube URL."
+    },
+    {
+      "id": "wger-512",
+      "name": "Seated Cable Row — Narrow Grip",
+      "equipment": "Cable machine",
+      "equipmentAr": "جهاز كابل",
+      "instructions": "Sit at the cable row with your feet braced and hold the narrow handle. Keep your torso upright, pull the handle toward your lower ribs, and draw your shoulder blades back without leaning far behind you. Extend your arms again under control.",
+      "reason": "The source equipment is empty and its English description is a fragment list rather than complete instructions."
+    },
+    {
+      "id": "wger-537",
+      "name": "Incline Dumbbell Bench Press",
+      "reason": "Normalize the source title without changing the demonstrated exercise."
+    },
+    {
+      "id": "wger-538",
+      "name": "Incline Barbell Bench Press",
+      "instructions": "Set the bench to a moderate incline and lie back with your feet planted. Grip the bar slightly wider than shoulder-width, unrack it, and lower it under control toward your upper chest. Press the bar upward over your shoulders, then repeat with the bar path controlled. Use rack safeties or a spotter for challenging loads.",
+      "reason": "The source English description contains only a tempo note and no setup or movement steps."
+    },
+    {
+      "id": "wger-543",
+      "name": "Machine Shoulder Press",
+      "equipment": "Shoulder press machine",
+      "equipmentAr": "جهاز ضغط الكتفين",
+      "reason": "The source equipment is empty; normalize the title to the machine shown in the reviewed clip."
+    },
+    {
+      "id": "wger-567",
+      "name": "Seated Dumbbell Shoulder Press",
+      "equipment": "Bench, Dumbbell",
+      "equipmentAr": "مقعد، دمبل",
+      "reason": "The source equipment omits the upright bench used throughout the reviewed clip."
+    },
+    {
+      "id": "wger-570",
+      "name": "Cable Shoulder Shrug",
+      "equipment": "Cable machine",
+      "equipmentAr": "جهاز كابل",
+      "instructions": "Stand upright holding the low cable handles at your sides with your arms straight. Lift your shoulders toward your ears without bending your elbows or rocking your torso. Pause briefly, then lower your shoulders under control.",
+      "reason": "The source marks this as bodyweight, while the reviewed clip shows handles attached to low cable pulleys."
+    },
+    {
+      "id": "wger-575",
+      "name": "Smith Machine Shrug",
+      "equipment": "Smith machine",
+      "equipmentAr": "جهاز سميث",
+      "reason": "The source equipment is empty and 'Multipress' is a regional label; the reviewed clip shows a Smith-machine shrug."
+    },
+    {
+      "id": "wger-584",
+      "name": "Single-Arm Dumbbell Preacher Curl",
+      "equipment": "Dumbbell, Preacher bench",
+      "equipmentAr": "دمبل، مقعد بريتشر",
+      "reason": "The source equipment omits the preacher bench used in the reviewed clip."
+    },
+    {
+      "id": "wger-590",
+      "name": "Seated Calf Raise Machine",
+      "equipment": "Seated calf raise machine",
+      "equipmentAr": "جهاز رفع السمانة جالسًا",
+      "reason": "The source equipment is empty; the reviewed clip shows a seated calf-raise machine."
+    },
+    {
+      "id": "wger-622",
+      "name": "Standing Calf Raise on Step",
+      "equipment": "Step",
+      "equipmentAr": "درجة مرتفعة",
+      "instructions": "Stand with the balls of your feet on the edge of a stable step and use the rail lightly for balance. Lower your heels under control, then press through the balls of your feet to rise as high as comfortable. Pause briefly and lower again without bouncing.",
+      "reason": "The source equipment is empty and its text describes a machine, but the reviewed clip shows bodyweight calf raises on a step with a handrail."
+    },
+    {
+      "id": "wger-659",
+      "name": "Overhead Cable Triceps Extension",
+      "instructions": "Face away from a high cable with the rope held behind your head. Keep your upper arms steady beside your head and extend your elbows until your arms are straight. Pause briefly, then bend your elbows to return under control.",
+      "reason": "The source title/text imply a pushdown, while the reviewed clip shows a two-arm overhead rope extension."
+    },
+    {
+      "id": "wger-803",
+      "name": "Single-Arm Overhead Cable Triceps Extension",
+      "instructions": "Face away from the cable and hold the handle behind your head with one elbow pointing upward. Keep your upper arm steady, extend the elbow until the arm is straight, then return under control. Complete the set before changing sides.",
+      "reason": "The source translation describes a pushdown, while the reviewed poster/clip shows a single-arm overhead cable extension."
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "captured_at": "2026-09-22T00:22:30.046986+00:00",
+  "result": [
+    {
+      "created_at": 1728588616523,
+      "entrypoint_path": "file:///Users/sami/Developer/GitHub/rafik-api/supabase/functions/fat-secret/index.ts",
+      "id": "787be742-98a2-411f-96c3-bd5930ae89aa",
+      "import_map_path": "file:///Users/sami/Developer/GitHub/rafik-api",
+      "name": "fat-secret",
+      "slug": "fat-secret",
+      "status": "ACTIVE",
+      "updated_at": 1729354033771,
+      "verify_jwt": true,
+      "version": 38
+    },
+    {
+      "created_at": 1728593141022,
+      "entrypoint_path": "file:///Users/sami/Developer/GitHub/rafik-api/supabase/functions/hello/index.ts",
+      "id": "99a6bde1-0cb7-43f6-bab1-0a67de6e6306",
+      "import_map_path": "file:///Users/sami/Developer/GitHub/rafik-api",
+      "name": "hello",
+      "slug": "hello",
+      "status": "ACTIVE",
+      "updated_at": 1729354036008,
+      "verify_jwt": true,
+      "version": 37
+    },
+    {
+      "created_at": 1741375382350,
+      "entrypoint_path": "file:///Users/sami/Developer/GitHub/rafik-api/supabase/functions/smtp/index.ts",
+      "id": "04bf774c-fc90-4544-923c-51944792c00c",
+      "import_map_path": "file:///Users/sami/Developer/GitHub/rafik-api/supabase/functions/smtp/deno.json",
+      "name": "smtp",
+      "slug": "smtp",
+      "status": "ACTIVE",
+      "updated_at": 1750016287115,
+      "verify_jwt": false,
+      "version": 73
+    },
+    {
+      "created_at": 1741630423692,
+      "entrypoint_path": "file:///Users/sami/Developer/GitHub/rafik-api/supabase/functions/delete-user/index.ts",
+      "id": "70c04d98-dcba-4103-8447-2db26d87cd72",
+      "import_map_path": "file:///Users/sami/Developer/GitHub/rafik-api",
+      "name": "delete-user",
+      "slug": "delete-user",
+      "status": "ACTIVE",
+      "updated_at": 1741630607237,
+      "verify_jwt": true,
+      "version": 4
+    },
+    {
+      "created_at": 1744706298026,
+      "entrypoint_path": "file:///tmp/user_fn_pexviywnztvqomfosvho_dc46bf5c-116a-4e05-94f4-faf40506891f_71/source/supabase/functions/api/index.ts",
+      "id": "dc46bf5c-116a-4e05-94f4-faf40506891f",
+      "import_map": true,
+      "import_map_path": "file:///tmp/user_fn_pexviywnztvqomfosvho_dc46bf5c-116a-4e05-94f4-faf40506891f_71/source/supabase/functions/api/deno.json",
+      "name": "api",
+      "slug": "api",
+      "status": "ACTIVE",
+      "updated_at": 1763202880906,
+      "verify_jwt": true,
+      "version": 71
+    },
+    {
+      "created_at": 1744742094380,
+      "entrypoint_path": "file:///Users/sami/Developer/GitHub/rafik-api/supabase/functions/embed/index.ts",
+      "id": "cb94838b-52eb-4af7-bab4-c83f7eb99bcd",
+      "import_map_path": "file:///Users/sami/Developer/GitHub/rafik-api/supabase/functions/embed/deno.json",
+      "name": "embed",
+      "slug": "embed",
+      "status": "ACTIVE",
+      "updated_at": 1744742094380,
+      "verify_jwt": true,
+      "version": 3
+    },
+    {
+      "created_at": 1746126983197,
+      "entrypoint_path": "file:///Users/sami/Developer/GitHub/rafik-api/supabase/functions/push/index.ts",
+      "id": "8e67db59-b531-4b71-bb79-2f865799bf05",
+      "import_map_path": "file:///Users/sami/Developer/GitHub/rafik-api/supabase/functions/push/deno.json",
+      "name": "push",
+      "slug": "push",
+      "status": "ACTIVE",
+      "updated_at": 1746553978810,
+      "verify_jwt": false,
+      "version": 5
+    },
+    {
+      "created_at": 1749704590268,
+      "entrypoint_path": "file:///Users/sami/Developer/GitHub/rafik-api/supabase/functions/org-push/index.ts",
+      "id": "a7cd42f5-202d-43f3-9a88-4236e4e5c9d8",
+      "import_map_path": "file:///Users/sami/Developer/GitHub/rafik-api/supabase/functions/org-push/deno.json",
+      "name": "org-push",
+      "slug": "org-push",
+      "status": "ACTIVE",
+      "updated_at": 1749705400428,
+      "verify_jwt": false,
+      "version": 4
+    }
+  ]
+}

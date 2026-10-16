@@ -1,0 +1,11 @@
+> rafik-web@0.1.0 test
+> vitest run
+
+
+ RUN  v5.0.1 /Users/sami/Developer/GitHub/RAFIK-FRONTEND
+
+
+ Test Files  3 passed (3)
+      Tests  5 passed (5)
+   Start at  13:19:19
+   Duration  425ms (transform 72%, import 15%, tests 10%, worker 3%)

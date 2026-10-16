@@ -1,0 +1,75 @@
+R15 local acceptance — 23 September 2026
+Node 22.16.0; adjacent backend/web repositories on codex/revamp.
+No push/deployment, native implementation, outreach, preview reset or synthetic reseeding.
+
+Scope and source coverage
+1,324 metadata/English instruction records from hasaneyldrm/exercises-dataset,
+pinned commit 7455efae41b330c265e7cd4b78dfa848e7ce5ebd.
+46 separately licensed wger records plus 14 retained starters = 1,384 shared source entries.
+These are source records, not a claim of 1,384 distinct movements. Owned entries are additional.
+45 reviewed continuous videos; 90 video/poster files, 50,958,403 bytes.
+Ten static reference sets remain available. Restricted requested-source GIFs are excluded.
+
+Backend accepted commands
+npm run typecheck
+npm run content:check
+npm run content:exercise-dataset:check
+npm run content:wger-exercises:check
+npm run content:videos
+npm run test:catalog — 6/6 tests
+npm run test:programming — 3/3 tests
+npm run test:docs — 56 maintained documents
+Log: artifacts/r15-backend-final.txt
+npm run test:release — 7/7 release guards
+Log: artifacts/r15-release-guards.txt
+npm run test:fresh — 30 migrations, fixtures and eight SQL suites pass in disposable database
+Log: artifacts/r15-wger75-footer-fresh.txt
+Five forward migrations were applied to the preview; existing preview records were preserved.
+Full verify:release -- --full was NOT rerun. The configured chain now has31 gates; no31-gate pass is claimed.
+
+Web accepted commands
+npm run format && npm run build && npm test && npm run test:build && npm run format:check
+All pass: Vue typecheck, production build, 27 units, two real-build/cache contract tests, formatting.
+Log: artifacts/r15-web-final.txt
+npm run test:e2e -- tests/exercise-media.e2e.ts tests/exercise-picker.e2e.ts tests/daily-coaching.e2e.ts tests/product-quality.e2e.ts tests/nutrition-planning.e2e.ts --max-failures=3
+34/34 passed (17 Chromium, 17 phone WebKit).
+Log: artifacts/r15-browser-final.txt
+Disposable wrapper directory: artifacts/isolated-browser/1790179270907; cleanup completed.
+Covers full corpus/facets, later-page selection, independent/organization library, actual autoplay,
+pause/reduced motion/failure/retry/ranges, static/offline references, primary/alternative picks,
+query-after-Escape, bounded option visibility, draft persistence, existing coaching, nutrition and messages.
+Includes EN/AR, light/dark and320/1280px rendered exercise states in both engines.
+
+Final delta after34-case run
+Explicit locale direction on exercise and timezone ComboboxContent; auto text direction on
+untranslated exercise option names. Reka Root direction alone did not establish popup direction.
+Repeated build/type/unit/cache/format commands all pass on final runtime sources.
+Log: artifacts/r15-web-direction-final.txt
+npm run test:e2e -- tests/exercise-picker.e2e.ts tests/dashboard.e2e.ts --max-failures=2
+6/6 passed (3 per engine), including computed RTL popup direction, real keyboard selection,
+persisted timezone, category combinations/clear, plan selections/reload and analytics refresh recovery.
+Log: artifacts/r15-direction-final.txt
+Disposable wrapper directory: artifacts/isolated-browser/1790179510814; cleanup completed.
+The34-case baseline does not purport to test this later two-component direction change.
+
+Actual review beyond assertions
+Inspected desktop dark split library/video, combined Chest+Dumbbell results, later-page selection,
+phone320/390 English/Arabic entry/detail/back and final RTL popup viewport captures in both engines.
+Reviewed all candidate video midpoint contact frames and selected intros; excluded ambiguous477,
+trimmed camera introductions for73 and538. This is developer editorial review, not technique certification.
+Final picker captures are browser-qualified, viewport-sized and show actual visible results.
+Root also inspected final Arabic timezone popup screenshot. Browser preview restored to desktop English.
+
+Failures and correction record
+Earlier partial/failed development runs are excluded from accepted counts. Fixed incoming-query/reset
+ordering, ambiguous label locators, stale fixture first-match assumptions, duplicate keyboard advancement,
+compound-equipment loss, intrusive filters, source translation footer, globally compiled RTL page rotation,
+popup list clipping despite mounted options and independent popup direction. See r15-exercise-correction.md.
+Added durable AGENTS rules for corpus/media distinction, initial result visibility, actual option bounds,
+shared category normalization, scoped RTL compilation and portaled content direction.
+
+Limits
+The full release suite, physical devices/assistive technologies, native media consumption/downloads,
+remote CI/hosting, professional exercise certification and human usability/retention/payment remain unverified.
+Not every exercise has video or Arabic translation. Large videos load on demand, not offline precache.
+Raw local logs/captures are ignored artifacts; this receipt persists commands, counts and limitations.

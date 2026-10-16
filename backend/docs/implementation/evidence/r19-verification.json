@@ -1,0 +1,27 @@
+{
+  "date": "2026-09-28",
+  "scope": "local only",
+  "status": "passed_with_audit_followup",
+  "release_attempt": "r19-release-attempt.json",
+  "release_steps": 33,
+  "main_run_passed_steps": 32,
+  "browser_journeys": 118,
+  "web_units": 27,
+  "fresh_migrations": 36,
+  "sql_suites": 8,
+  "layout_states": 1120,
+  "final_audit": {
+    "command": "npm run test:dashboard:layout",
+    "states": 192,
+    "status": "passed",
+    "log": "RAFIK-FRONTEND/artifacts/r19-dashboard-followup.txt"
+  },
+  "delta": "Only audit-dashboard.ts changed after the main run: wait for domain fetch completion and rendered frames instead of global networkidle. Application sources stayed unchanged. The original failed final-gate report is retained, not rewritten.",
+  "unverified": [
+    "hosting",
+    "remote CI",
+    "native and physical devices",
+    "assistive technology",
+    "human and commercial outcomes"
+  ]
+}

@@ -1,0 +1,9 @@
+R9 local verification — 23 September 2026
+Full browser regression: 62/62 passed (4.0m).
+After chart label and reschedule preview refinement: 2/2 affected browser journeys passed.
+Final services layout: 104 states; zero reported overflow/alerts/Axe violations/page errors.
+HTTP services: 2 organization lifecycle/concurrency groups and 5 independent booking/file groups passed.
+SQL: 239 assertions; disposable fresh install: 16 migrations and seven SQL suites passed.
+Web: 12 unit checks, final type/build/format pass. Backend: type, docs, content and release-guard checks pass.
+Representative phone/desktop and Arabic/English captures actually inspected; chart text changed after visual finding.
+No physical-device, external delivery, hosted, remote CI or real human outcome claim.

@@ -1,0 +1,20 @@
+{
+  "date": "2026-09-22",
+  "documents": 9,
+  "local_links_validated": 139,
+  "source_findings": 35,
+  "backend_findings": 14,
+  "delivery_packages": 23,
+  "execution_units": 12,
+  "prototype_in_delivery": false,
+  "scope": "Clean local web/backend rebuild, revamp branches only, mobile after web/backend readiness, no legacy migration",
+  "secret_pattern_hits": [],
+  "errors": [],
+  "branches": {
+    "rafik-api": "codex/revamp",
+    "RAFIK-FRONTEND": "codex/revamp",
+    "rafik-mobile": "codex/revamp",
+    "rafik-worker": "codex/revamp"
+  },
+  "local_database_reproductions_passed": 8
+}

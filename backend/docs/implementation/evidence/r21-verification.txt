@@ -1,0 +1,62 @@
+R21 local verification — 28 September 2026
+Scope: codex/revamp in API and web; no push, deployment, preview reset/reseed or native changes.
+Previous paired R20 commits: API aff4183, web 816da77.
+
+Accepted full chain:
+  rafik-api: npm run verify:release -- --full
+  artifacts/release/2026-09-28T14-49-08.929Z/report.json
+  35/35 gates passed, 122/122 browser journeys (61 Chromium + 61 phone WebKit).
+  27 web units; API type/contract, content/provenance, build/cache/format/docs and domain gates passed.
+  Fresh installation: 40 forward migrations, eight SQL suites.
+  Broad layout states: quality 128, product 320, team Chromium 176, team WebKit 176,
+  operations 104, cohesion 24, dashboard 192 = 1,120.
+  Copied reports: r21-release-report.json and r21-*-layout.json in this directory.
+
+Supplemental final source acceptance:
+  RAFIK-FRONTEND: npm run test:e2e -- organization-feedback.e2e.ts organization-packages.e2e.ts
+  artifacts/r21-browser-expanded.txt: 4/4 passed; disposable data, preview preserved.
+  Feedback/report matrix: 2 engines x 2 widths (320/1280) x 2 languages x 2 themes x
+  6 states (client, workplace, renewal, delivery+attendance table, trainee form, trainer form) = 96.
+  Geometry in all 96; Axe in client/workplace/delivery and both forms.
+  Package list/detail additionally covers 16 combinations plus funding/correction/recovery flows.
+  Source-to-chart journey checks no default, lost ACK/reload/retry/second correction,
+  separate workplace/client authority and manual keyboard activation of analytics tabs.
+  Package journey checks lost session-note ACK/reload/retry/second edit.
+  Application sources were unchanged from full release; only supplemental test coverage/docs grew.
+  Final typecheck, web format:check, docs links and git diff --check passed.
+
+Actual inspected captures (web artifacts; local ignored outputs):
+  r20-packages-chromium-1280-en-dark.png
+  r20-packages-webkit-phone-320-ar-dark.png
+  r20-funding-chromium.png
+  r21-experience-chromium-1280-en-dark.png
+  r21-workplace-chromium-1280-en-dark.png
+  r21-workplace-webkit-phone-320-ar-dark.png
+  r21-renewals-chromium-1280-en-dark.png
+  r21-delivery-chromium.png
+  r21-delivery-webkit-phone-320-ar-dark.png
+  r21-rating-webkit-phone.png
+  r21-form-trainer-chromium-320-ar-dark.png
+  r21-form-trainer-webkit-phone-320-ar-dark.png
+  r21-form-trainee-webkit-phone-320-ar-light.png
+  Full-page captures can place a fixed header at the current scroll offset; matrix checks
+  use live geometry and semantics. Captures were inspected, not treated as universal UX proof.
+
+Corrected development failures:
+  - Composite same-tenant subject relations needed defining-side exact unique keys for Prisma.
+    Added a forward migration; did not rewrite an applied migration or reset preview.
+  - Secondary nested report tabs overflowed at 320px. Explicit minmax(0,1fr)/min-width:0 fixed it.
+  - WebKit focus restoration could activate a different analytics tab. Manual activation plus
+    keyboard focus/Enter regression preserves user-selected report.
+  - Recovered rating/session-note drafts kept stale revisions without a parent remount. Editors
+    adopt acknowledged revisions and values, and parent refresh waits for command settlement.
+  - Delivery test initially matched the chart's table and attendance table. Use named semantic table.
+  - A tentative claim that auxiliary contexts missed phone settings was disproved by installed
+    Playwright runner code and screenshot dimensions. No context workaround was introduced;
+    the actual gap was explicit 320px/Arabic/theme coverage for new forms and delivery states.
+
+Remaining evidence limits:
+  Local synthetic fixtures only. No hosted infrastructure/provider delivery/payment, remote CI,
+  physical-device/assistive-technology observation, native UI, unaided human usability, real
+  retention/revenue or customer-success claim. Current-roster corrected reports are not historical
+  snapshots. Session satisfaction is a source-specific client signal, not overall trainer quality.

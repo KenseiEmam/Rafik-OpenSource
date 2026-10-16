@@ -1,0 +1,7 @@
+R10 local acceptance, 23 September 2026
+HTTP: /tmp/r10-http-last.log (3 groups); /tmp/r10-api.log; /tmp/r10-services.log; /tmp/r10-teams.log; /tmp/r10-org.log; /tmp/r10-prog.log; /tmp/r10-orgservices.log
+SQL/fresh: /tmp/r10-sql2.log (239 assertions), /tmp/r10-fresh2.log (20 migrations, 7 suites)
+Browser: /tmp/r10-browser-full.log (63/64; shared sync handoff failure), /tmp/r10-affected.log (18/18 after correction)
+Rendering: /tmp/r10-layout-final.log; web artifacts/communication-audit; persisted r10-layout.json
+Maintenance: /tmp/r10-last-build.log; /tmp/r10-last-format.log; /tmp/r10-web-unit.log (12); /tmp/r10-release.log (7); /tmp/r10-backtype-final.log; /tmp/r10-content.log; /tmp/r10-docs.log
+No hosting, external delivery, physical device, remote CI, native or human/business outcome claim.

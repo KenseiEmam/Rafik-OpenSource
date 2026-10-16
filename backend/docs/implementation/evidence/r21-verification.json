@@ -1,0 +1,26 @@
+{
+  "scope": "local only",
+  "fullReleaseGates": 35,
+  "browserJourneys": 122,
+  "broadLayoutStates": 1120,
+  "webUnits": 27,
+  "forwardMigrations": 40,
+  "sqlSuites": 8,
+  "supplementalBrowserCases": 4,
+  "supplementalFeatureCaptures": {
+    "experience": 16,
+    "workplace": 16,
+    "renewals": 16,
+    "delivery": 16,
+    "form-trainee": 16,
+    "form-trainer": 16
+  },
+  "sourceProvenance": "Full release followed by test-only expanded matrix on unchanged application sources. See receipt.",
+  "unverified": [
+    "hosting/providers",
+    "remote CI",
+    "physical devices/assistive technology",
+    "native UI",
+    "human usability/business outcomes"
+  ]
+}

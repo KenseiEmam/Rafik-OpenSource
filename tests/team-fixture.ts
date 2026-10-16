@@ -4,7 +4,7 @@ import { readFileSync, unlinkSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { randomBytes, randomUUID, createHash } from 'node:crypto'
 import type { Page } from '@playwright/test'
-const root = resolve('../rafik-api'),
+const root = resolve('backend'),
   url = testApi
 const sql = (input: string) =>
   execFileSync(

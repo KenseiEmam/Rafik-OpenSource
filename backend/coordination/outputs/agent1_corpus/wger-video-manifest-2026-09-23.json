@@ -1,0 +1,2998 @@
+{
+  "schemaVersion": 1,
+  "snapshotDate": "2026-09-23",
+  "generatedAtUtc": "2026-09-23T15:10:04.859877+00:00",
+  "source": {
+    "project": "wger-project/wger",
+    "sourceCommit": "80d4a989cf7b0e98eb8817e1b725161857980803",
+    "liveApiBase": "https://wger.de/api/v2",
+    "videoCollectionUrl": "https://wger.de/api/v2/video/?limit=100",
+    "licenseCollectionUrl": "https://wger.de/api/v2/license/?limit=100",
+    "note": "The source commit pins API implementation, not the mutable live catalog. This file is the dated catalog observation."
+  },
+  "mediaLicense": {
+    "id": 2,
+    "full_name": "Creative Commons Attribution Share Alike 4",
+    "short_name": "CC-BY-SA 4",
+    "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+  },
+  "summary": {
+    "videoObjects": 78,
+    "uniqueExercises": 46,
+    "allHaveCcBySa4AndAuthor": true,
+    "directWebMp4H264Objects": 3,
+    "directWebUniqueExercises": 3,
+    "h264ObjectsAllContainers": 24,
+    "movObjects": 75,
+    "hevcObjects": 54,
+    "totalBytes": 3570623823,
+    "externalObjectSourcePresent": 0
+  },
+  "integrationRule": "Vendor only coach-reviewed exact matches. Verify bytes and compute SHA-256 during acquisition. Direct web use is limited to MP4/H.264. Transcodes are adaptations: preserve attribution, indicate modification, and distribute the derivative under CC BY-SA 4.0.",
+  "records": [
+    {
+      "videoId": 1,
+      "videoUuid": "fff4c294-93f0-4926-b3a2-bf59ad4afaa5",
+      "exerciseId": 512,
+      "exerciseUuid": "00fcf603-b0d0-48d2-9b5e-c7f0d510d46c",
+      "englishName": "Rowing seated, narrow grip",
+      "englishTranslationUuid": "57747eb3-411a-4efd-8842-a45e562320ee",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/512/fff4c294-93f0-4926-b3a2-bf59ad4afaa5.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/1/",
+      "bytes": 34332925,
+      "durationSeconds": 10.49,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 2,
+      "videoUuid": "307e7276-a14d-4ea0-b579-f5b0dbc6f5af",
+      "exerciseId": 507,
+      "exerciseUuid": "2e7ffff9-e603-4b28-98c8-31d1a6ce8cd9",
+      "englishName": "Romanian Deadlift",
+      "englishTranslationUuid": "e35528f9-1785-41b5-860a-3408a6c02b2d",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/507/307e7276-a14d-4ea0-b579-f5b0dbc6f5af.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/2/",
+      "bytes": 38136083,
+      "durationSeconds": 13.0,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 3,
+      "videoUuid": "6b6054b5-9236-4a63-8392-6ea7a9010ca6",
+      "exerciseId": 507,
+      "exerciseUuid": "2e7ffff9-e603-4b28-98c8-31d1a6ce8cd9",
+      "englishName": "Romanian Deadlift",
+      "englishTranslationUuid": "e35528f9-1785-41b5-860a-3408a6c02b2d",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/507/6b6054b5-9236-4a63-8392-6ea7a9010ca6.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/3/",
+      "bytes": 52134396,
+      "durationSeconds": 17.69,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 4,
+      "videoUuid": "e96295da-58b8-4b6f-921e-4cb1af3c6cfc",
+      "exerciseId": 507,
+      "exerciseUuid": "2e7ffff9-e603-4b28-98c8-31d1a6ce8cd9",
+      "englishName": "Romanian Deadlift",
+      "englishTranslationUuid": "e35528f9-1785-41b5-860a-3408a6c02b2d",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/507/e96295da-58b8-4b6f-921e-4cb1af3c6cfc.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/4/",
+      "bytes": 390563423,
+      "durationSeconds": 29.5,
+      "width": 3840,
+      "height": 2160,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 5,
+      "videoUuid": "9896d82e-d8b6-48af-bdd5-b8545dc523e9",
+      "exerciseId": 349,
+      "exerciseUuid": "57263316-6f34-4539-952b-b07e09bac3ba",
+      "englishName": "Lateral Rows on Cable, One Armed",
+      "englishTranslationUuid": "79a3a34c-262f-4cae-b827-b5a85b11b860",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/349/9896d82e-d8b6-48af-bdd5-b8545dc523e9.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/5/",
+      "bytes": 33127028,
+      "durationSeconds": 13.22,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 6,
+      "videoUuid": "de69928a-8a35-4096-821c-1f46de5e0e03",
+      "exerciseId": 348,
+      "exerciseUuid": "63375f5b-2d81-471c-bea4-fc3d207e96cb",
+      "englishName": "Lateral Raises",
+      "englishTranslationUuid": "5345766a-c092-457a-aa21-8ee6ffa855d4",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/348/de69928a-8a35-4096-821c-1f46de5e0e03.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/6/",
+      "bytes": 43874331,
+      "durationSeconds": 18.26,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 7,
+      "videoUuid": "28b53647-27e7-47cf-8852-2ee666c8b628",
+      "exerciseId": 82,
+      "exerciseUuid": "6f79b381-98a4-40d5-8a45-3bb0558be6fe",
+      "englishName": "Bent-over Lateral Raises",
+      "englishTranslationUuid": "170cc52f-345f-41b3-bdae-8a5e0c9aa449",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/82/28b53647-27e7-47cf-8852-2ee666c8b628.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/7/",
+      "bytes": 13386307,
+      "durationSeconds": 7.6,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 8,
+      "videoUuid": "ebf1e6d2-df48-44b8-a791-97f77e801bf3",
+      "exerciseId": 82,
+      "exerciseUuid": "6f79b381-98a4-40d5-8a45-3bb0558be6fe",
+      "englishName": "Bent-over Lateral Raises",
+      "englishTranslationUuid": "170cc52f-345f-41b3-bdae-8a5e0c9aa449",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/82/ebf1e6d2-df48-44b8-a791-97f77e801bf3.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/8/",
+      "bytes": 17879929,
+      "durationSeconds": 6.97,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 9,
+      "videoUuid": "437d79db-ac8f-49e2-8780-0365f94ee01c",
+      "exerciseId": 82,
+      "exerciseUuid": "6f79b381-98a4-40d5-8a45-3bb0558be6fe",
+      "englishName": "Bent-over Lateral Raises",
+      "englishTranslationUuid": "170cc52f-345f-41b3-bdae-8a5e0c9aa449",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/82/437d79db-ac8f-49e2-8780-0365f94ee01c.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/9/",
+      "bytes": 15973150,
+      "durationSeconds": 6.37,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 10,
+      "videoUuid": "7cfe6d04-5e59-4d0b-937b-b8f4ee10602d",
+      "exerciseId": 82,
+      "exerciseUuid": "6f79b381-98a4-40d5-8a45-3bb0558be6fe",
+      "englishName": "Bent-over Lateral Raises",
+      "englishTranslationUuid": "170cc52f-345f-41b3-bdae-8a5e0c9aa449",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/82/7cfe6d04-5e59-4d0b-937b-b8f4ee10602d.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/10/",
+      "bytes": 22994584,
+      "durationSeconds": 9.8,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 11,
+      "videoUuid": "dbfd396b-1aab-4a64-a50b-2c31ff0a2cf7",
+      "exerciseId": 543,
+      "exerciseUuid": "5912d7ed-6a0e-4b4c-b30a-fc9f3f890fc1",
+      "englishName": "Shoulder Press, on Machine",
+      "englishTranslationUuid": "7389be43-215b-4db8-8b69-75dc77004d74",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/543/dbfd396b-1aab-4a64-a50b-2c31ff0a2cf7.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/11/",
+      "bytes": 23511495,
+      "durationSeconds": 12.27,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 12,
+      "videoUuid": "64f33c19-1d96-4b7c-af17-6c6a4941c614",
+      "exerciseId": 567,
+      "exerciseUuid": "87affa4b-395b-437c-9581-2bd20ea5aa7c",
+      "englishName": "Shoulder Press, Dumbbells",
+      "englishTranslationUuid": "1df6a1b5-7bd2-402f-9d5e-94f9ed6d8b54",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/567/64f33c19-1d96-4b7c-af17-6c6a4941c614.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/12/",
+      "bytes": 62860017,
+      "durationSeconds": 23.13,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 13,
+      "videoUuid": "a325ae2e-686b-4a1f-aff2-ba37fa3fa157",
+      "exerciseId": 590,
+      "exerciseUuid": "6e46833d-fd83-4c1a-90af-eb3f3a917199",
+      "englishName": "Sitting Calf Raises",
+      "englishTranslationUuid": "399666e7-30a7-4b86-833d-4422e4c72b61",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/590/a325ae2e-686b-4a1f-aff2-ba37fa3fa157.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/13/",
+      "bytes": 27735168,
+      "durationSeconds": 20.71,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 14,
+      "videoUuid": "35b7b625-77fd-4c09-8c57-3ad0f2f23175",
+      "exerciseId": 622,
+      "exerciseUuid": "7ce443b6-eb84-4f65-b05f-461c1cc8bcc0",
+      "englishName": "Standing Calf Raises",
+      "englishTranslationUuid": "abc4c62e-27b2-4c31-8766-40f8dca84cab",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/622/35b7b625-77fd-4c09-8c57-3ad0f2f23175.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/14/",
+      "bytes": 30336315,
+      "durationSeconds": 16.79,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 15,
+      "videoUuid": "461171e5-2b16-407d-bf27-27aeef43f105",
+      "exerciseId": 622,
+      "exerciseUuid": "7ce443b6-eb84-4f65-b05f-461c1cc8bcc0",
+      "englishName": "Standing Calf Raises",
+      "englishTranslationUuid": "abc4c62e-27b2-4c31-8766-40f8dca84cab",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/622/461171e5-2b16-407d-bf27-27aeef43f105.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/15/",
+      "bytes": 27311167,
+      "durationSeconds": 16.43,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 16,
+      "videoUuid": "4349a6f6-4cee-4c09-828b-c5e7fc2c1ff1",
+      "exerciseId": 538,
+      "exerciseUuid": "275fb49f-975c-4d6e-9d63-2c86ed740f40",
+      "englishName": "Incline Bench Press - Barbell",
+      "englishTranslationUuid": "6cfd927c-8009-4cc2-9501-acb3db417396",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/538/4349a6f6-4cee-4c09-828b-c5e7fc2c1ff1.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/16/",
+      "bytes": 6205424,
+      "durationSeconds": 19.92,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 17,
+      "videoUuid": "080c799b-8afd-4130-8d72-9cef0cd79f54",
+      "exerciseId": 75,
+      "exerciseUuid": "28321cf3-70e6-48a4-ade1-d11382180cb3",
+      "englishName": "Benchpress Dumbbells",
+      "englishTranslationUuid": "0ec76f5d-1311-4d6d-bf79-00fa17c3061a",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/75/080c799b-8afd-4130-8d72-9cef0cd79f54.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/17/",
+      "bytes": 4543158,
+      "durationSeconds": 14.16,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 18,
+      "videoUuid": "a8263fe5-3015-41e3-9781-2d255adcea63",
+      "exerciseId": 75,
+      "exerciseUuid": "28321cf3-70e6-48a4-ade1-d11382180cb3",
+      "englishName": "Benchpress Dumbbells",
+      "englishTranslationUuid": "0ec76f5d-1311-4d6d-bf79-00fa17c3061a",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/75/a8263fe5-3015-41e3-9781-2d255adcea63.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/18/",
+      "bytes": 9894638,
+      "durationSeconds": 30.09,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 19,
+      "videoUuid": "9d803f97-0a48-4483-8f1c-ee5b19d6021e",
+      "exerciseId": 75,
+      "exerciseUuid": "28321cf3-70e6-48a4-ade1-d11382180cb3",
+      "englishName": "Benchpress Dumbbells",
+      "englishTranslationUuid": "0ec76f5d-1311-4d6d-bf79-00fa17c3061a",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/75/9d803f97-0a48-4483-8f1c-ee5b19d6021e.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/19/",
+      "bytes": 9938046,
+      "durationSeconds": 28.26,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 20,
+      "videoUuid": "c9cbd391-1e22-4014-8794-04630c80665f",
+      "exerciseId": 75,
+      "exerciseUuid": "28321cf3-70e6-48a4-ade1-d11382180cb3",
+      "englishName": "Benchpress Dumbbells",
+      "englishTranslationUuid": "0ec76f5d-1311-4d6d-bf79-00fa17c3061a",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/75/c9cbd391-1e22-4014-8794-04630c80665f.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/20/",
+      "bytes": 4576193,
+      "durationSeconds": 11.28,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 21,
+      "videoUuid": "2bdb390c-312c-4497-a722-5eed2c823e5a",
+      "exerciseId": 73,
+      "exerciseUuid": "3717d144-7815-4a97-9a56-956fb889c996",
+      "englishName": "Bench Press",
+      "englishTranslationUuid": "5da6340b-22ec-4c1b-a443-eef2f59f92f0",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/73/2bdb390c-312c-4497-a722-5eed2c823e5a.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/21/",
+      "bytes": 1108545,
+      "durationSeconds": 15.93,
+      "width": 640,
+      "height": 352,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 22,
+      "videoUuid": "255b3509-e454-48a6-bf66-c7ca482be21a",
+      "exerciseId": 73,
+      "exerciseUuid": "3717d144-7815-4a97-9a56-956fb889c996",
+      "englishName": "Bench Press",
+      "englishTranslationUuid": "5da6340b-22ec-4c1b-a443-eef2f59f92f0",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/73/255b3509-e454-48a6-bf66-c7ca482be21a.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/22/",
+      "bytes": 1422312,
+      "durationSeconds": 20.78,
+      "width": 640,
+      "height": 352,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 23,
+      "videoUuid": "cfb72002-898f-443a-a124-a0bce8a2e6ad",
+      "exerciseId": 73,
+      "exerciseUuid": "3717d144-7815-4a97-9a56-956fb889c996",
+      "englishName": "Bench Press",
+      "englishTranslationUuid": "5da6340b-22ec-4c1b-a443-eef2f59f92f0",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/73/cfb72002-898f-443a-a124-a0bce8a2e6ad.MP4",
+      "apiRecordUrl": "https://wger.de/api/v2/video/23/",
+      "bytes": 7222857,
+      "durationSeconds": 21.04,
+      "width": 1920,
+      "height": 1080,
+      "container": "mp4",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": true,
+        "requiresTranscodeToMp4H264": false
+      }
+    },
+    {
+      "videoId": 24,
+      "videoUuid": "b9c937e9-daeb-42a9-be8e-7a77e368478c",
+      "exerciseId": 537,
+      "exerciseUuid": "57e17672-52b9-43cf-8d0d-4b3f06a0c0d0",
+      "englishName": "Incline Bench Press - Dumbbell",
+      "englishTranslationUuid": "15c5dfa0-4103-4515-979d-807eee8faa53",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/537/b9c937e9-daeb-42a9-be8e-7a77e368478c.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/24/",
+      "bytes": 10602354,
+      "durationSeconds": 27.49,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 25,
+      "videoUuid": "ad8ac7d9-b04d-415f-ae0e-837942ce2840",
+      "exerciseId": 257,
+      "exerciseUuid": "d677de4c-5bd9-412a-91f1-857116a666a2",
+      "englishName": "Front Squats",
+      "englishTranslationUuid": "f2e563d2-507b-4586-88c8-77652cd19648",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/257/ad8ac7d9-b04d-415f-ae0e-837942ce2840.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/25/",
+      "bytes": 54167323,
+      "durationSeconds": 19.36,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 26,
+      "videoUuid": "f8f01bf8-0908-4915-a8f5-cc7bcfefff8c",
+      "exerciseId": 257,
+      "exerciseUuid": "d677de4c-5bd9-412a-91f1-857116a666a2",
+      "englishName": "Front Squats",
+      "englishTranslationUuid": "f2e563d2-507b-4586-88c8-77652cd19648",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/257/f8f01bf8-0908-4915-a8f5-cc7bcfefff8c.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/26/",
+      "bytes": 49899441,
+      "durationSeconds": 17.04,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 27,
+      "videoUuid": "93145935-29db-4e52-9d2d-174b1c30c098",
+      "exerciseId": 257,
+      "exerciseUuid": "d677de4c-5bd9-412a-91f1-857116a666a2",
+      "englishName": "Front Squats",
+      "englishTranslationUuid": "f2e563d2-507b-4586-88c8-77652cd19648",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/257/93145935-29db-4e52-9d2d-174b1c30c098.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/27/",
+      "bytes": 27090822,
+      "durationSeconds": 8.25,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 28,
+      "videoUuid": "520b98d4-c767-47dd-83e6-850189217925",
+      "exerciseId": 257,
+      "exerciseUuid": "d677de4c-5bd9-412a-91f1-857116a666a2",
+      "englishName": "Front Squats",
+      "englishTranslationUuid": "f2e563d2-507b-4586-88c8-77652cd19648",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/257/520b98d4-c767-47dd-83e6-850189217925.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/28/",
+      "bytes": 46773150,
+      "durationSeconds": 16.09,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 29,
+      "videoUuid": "200d9889-322f-476a-a47b-f15a1a97934a",
+      "exerciseId": 46,
+      "exerciseUuid": "04e7d7e4-f8d2-406d-97df-3df3bceec22c",
+      "englishName": "Barbell Lunges Standing",
+      "englishTranslationUuid": "ae6a6c23-4616-49b7-a152-49d7461c2b7f",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/46/200d9889-322f-476a-a47b-f15a1a97934a.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/29/",
+      "bytes": 42120832,
+      "durationSeconds": 12.99,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 30,
+      "videoUuid": "d45df7af-586b-42d0-bc56-d1e028812f12",
+      "exerciseId": 46,
+      "exerciseUuid": "04e7d7e4-f8d2-406d-97df-3df3bceec22c",
+      "englishName": "Barbell Lunges Standing",
+      "englishTranslationUuid": "ae6a6c23-4616-49b7-a152-49d7461c2b7f",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/46/d45df7af-586b-42d0-bc56-d1e028812f12.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/30/",
+      "bytes": 23571954,
+      "durationSeconds": 8.09,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 31,
+      "videoUuid": "c167ac34-ddbc-4e1b-8edf-1192e9d00e22",
+      "exerciseId": 205,
+      "exerciseUuid": "2f1a2707-e7ff-46ac-9112-3e31e6e961ee",
+      "englishName": "Dumbbell Lunges Standing",
+      "englishTranslationUuid": "587c0052-f2bc-48ca-8af9-415175308901",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/205/c167ac34-ddbc-4e1b-8edf-1192e9d00e22.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/31/",
+      "bytes": 49889363,
+      "durationSeconds": 17.09,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 32,
+      "videoUuid": "4cd5dc48-897f-4e0c-8c5a-639a4098ceb1",
+      "exerciseId": 205,
+      "exerciseUuid": "2f1a2707-e7ff-46ac-9112-3e31e6e961ee",
+      "englishName": "Dumbbell Lunges Standing",
+      "englishTranslationUuid": "587c0052-f2bc-48ca-8af9-415175308901",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/205/4cd5dc48-897f-4e0c-8c5a-639a4098ceb1.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/32/",
+      "bytes": 52460393,
+      "durationSeconds": 17.94,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 33,
+      "videoUuid": "47a65c45-6fd1-4181-b71a-3a6c882e516b",
+      "exerciseId": 206,
+      "exerciseUuid": "dcc6e237-a8bb-4eca-bbc5-7fb852636f6a",
+      "englishName": "Dumbbell Lunges Walking",
+      "englishTranslationUuid": "ffd4ce7e-e14f-49d4-9dc9-dc1362631382",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/206/47a65c45-6fd1-4181-b71a-3a6c882e516b.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/33/",
+      "bytes": 23850769,
+      "durationSeconds": 14.31,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 34,
+      "videoUuid": "85d1d7f8-c3c5-47e8-9b26-56896919e6e7",
+      "exerciseId": 802,
+      "exerciseUuid": "072a9fa8-1028-47b3-b958-d8052c6b8661",
+      "englishName": "Barbell Lunges Walking",
+      "englishTranslationUuid": "b368663d-f71f-4689-b462-76ac86a06362",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/802/85d1d7f8-c3c5-47e8-9b26-56896919e6e7.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/34/",
+      "bytes": 23668353,
+      "durationSeconds": 12.72,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 35,
+      "videoUuid": "becaf013-5044-40d0-bae9-7ed60c973737",
+      "exerciseId": 365,
+      "exerciseUuid": "3bc8b411-a28d-4e1c-a6d1-769e18fe9881",
+      "englishName": "Leg Curls (laying)",
+      "englishTranslationUuid": "cd4fac32-48fb-4237-a263-a44c5108790a",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/365/becaf013-5044-40d0-bae9-7ed60c973737.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/35/",
+      "bytes": 31825446,
+      "durationSeconds": 15.06,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 36,
+      "videoUuid": "1106bd7a-72cd-45b5-853f-5c9912b936ef",
+      "exerciseId": 365,
+      "exerciseUuid": "3bc8b411-a28d-4e1c-a6d1-769e18fe9881",
+      "englishName": "Leg Curls (laying)",
+      "englishTranslationUuid": "cd4fac32-48fb-4237-a263-a44c5108790a",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/365/1106bd7a-72cd-45b5-853f-5c9912b936ef.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/36/",
+      "bytes": 68628304,
+      "durationSeconds": 23.53,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 37,
+      "videoUuid": "43df4b79-d4c3-4fbf-bcb5-e0d825b84120",
+      "exerciseId": 366,
+      "exerciseUuid": "440a5184-de58-4a86-a7ba-76ddeafaa855",
+      "englishName": "Leg Curls (sitting)",
+      "englishTranslationUuid": "61950a59-be4e-43cc-abc1-cb52abd15354",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/366/43df4b79-d4c3-4fbf-bcb5-e0d825b84120.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/37/",
+      "bytes": 72266814,
+      "durationSeconds": 24.89,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 38,
+      "videoUuid": "6c24960c-20ab-4ef9-90f8-cf53e630ccec",
+      "exerciseId": 367,
+      "exerciseUuid": "49189e88-40b6-4c0d-a784-0cc3abbb8e75",
+      "englishName": "Leg Curls (standing)",
+      "englishTranslationUuid": "89c98117-dd53-4334-bfa6-72a96525629a",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/367/6c24960c-20ab-4ef9-90f8-cf53e630ccec.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/38/",
+      "bytes": 56530610,
+      "durationSeconds": 20.23,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 39,
+      "videoUuid": "e8113ae4-a0b4-42a2-8eaa-3263de64622e",
+      "exerciseId": 367,
+      "exerciseUuid": "49189e88-40b6-4c0d-a784-0cc3abbb8e75",
+      "englishName": "Leg Curls (standing)",
+      "englishTranslationUuid": "89c98117-dd53-4334-bfa6-72a96525629a",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/367/e8113ae4-a0b4-42a2-8eaa-3263de64622e.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/39/",
+      "bytes": 41674596,
+      "durationSeconds": 14.89,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 40,
+      "videoUuid": "effa7a81-dbdd-4014-83ee-ddf0fd835301",
+      "exerciseId": 375,
+      "exerciseUuid": "18104387-4567-4c1e-8d03-db0b274646dd",
+      "englishName": "Leg Press on Hackenschmidt Machine",
+      "englishTranslationUuid": "2966e4a2-4306-4cb5-a2dc-8951cd192555",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/375/effa7a81-dbdd-4014-83ee-ddf0fd835301.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/40/",
+      "bytes": 80419952,
+      "durationSeconds": 32.11,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 41,
+      "videoUuid": "d08a943d-c765-42b5-9ece-b80d90f2aefe",
+      "exerciseId": 375,
+      "exerciseUuid": "18104387-4567-4c1e-8d03-db0b274646dd",
+      "englishName": "Leg Press on Hackenschmidt Machine",
+      "englishTranslationUuid": "2966e4a2-4306-4cb5-a2dc-8951cd192555",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/375/d08a943d-c765-42b5-9ece-b80d90f2aefe.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/41/",
+      "bytes": 423240483,
+      "durationSeconds": 32.41,
+      "width": 3840,
+      "height": 2160,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 42,
+      "videoUuid": "0cbfeace-dda9-4166-8424-f51358e88a4f",
+      "exerciseId": 341,
+      "exerciseUuid": "316aca47-6f5b-40b7-b04f-f69e68387354",
+      "englishName": "Squats on Multipress",
+      "englishTranslationUuid": "9a427e41-a28b-40b5-ab44-d35f8071ecd9",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/341/0cbfeace-dda9-4166-8424-f51358e88a4f.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/42/",
+      "bytes": 34036878,
+      "durationSeconds": 11.96,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 43,
+      "videoUuid": "5336822a-7803-45b3-a880-f2bbf37a28f2",
+      "exerciseId": 374,
+      "exerciseUuid": "661287d4-d1dc-485c-896b-73f90b000536",
+      "englishName": "Leg Presses (wide)",
+      "englishTranslationUuid": "3caed096-c65e-434d-9792-33db636743e7",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/374/5336822a-7803-45b3-a880-f2bbf37a28f2.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/43/",
+      "bytes": 45597793,
+      "durationSeconds": 21.51,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 44,
+      "videoUuid": "6aae16b4-01b9-4eb4-935c-3250f84d2c59",
+      "exerciseId": 371,
+      "exerciseUuid": "66a42396-c207-44da-bc75-758a89d32404",
+      "englishName": "Leg Press",
+      "englishTranslationUuid": "6c8e863c-f6c2-4ad0-a0e9-5e6d9e6a928b",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/371/6aae16b4-01b9-4eb4-935c-3250f84d2c59.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/44/",
+      "bytes": 57665329,
+      "durationSeconds": 34.69,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 45,
+      "videoUuid": "32601896-b84a-49bf-ae8a-b27a8f57ab21",
+      "exerciseId": 371,
+      "exerciseUuid": "66a42396-c207-44da-bc75-758a89d32404",
+      "englishName": "Leg Press",
+      "englishTranslationUuid": "6c8e863c-f6c2-4ad0-a0e9-5e6d9e6a928b",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/371/32601896-b84a-49bf-ae8a-b27a8f57ab21.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/45/",
+      "bytes": 349345994,
+      "durationSeconds": 26.36,
+      "width": 3840,
+      "height": 2160,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 46,
+      "videoUuid": "db382bd9-f633-47cd-8b02-c52db835e41d",
+      "exerciseId": 371,
+      "exerciseUuid": "66a42396-c207-44da-bc75-758a89d32404",
+      "englishName": "Leg Press",
+      "englishTranslationUuid": "6c8e863c-f6c2-4ad0-a0e9-5e6d9e6a928b",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/371/db382bd9-f633-47cd-8b02-c52db835e41d.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/46/",
+      "bytes": 121381974,
+      "durationSeconds": 17.64,
+      "width": 3840,
+      "height": 2160,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 47,
+      "videoUuid": "af1fff93-eb58-4ba7-97a4-b38ee67853b4",
+      "exerciseId": 275,
+      "exerciseUuid": "04365177-e078-489b-983a-8ac61b7346f1",
+      "englishName": "Hammercurls on Cable",
+      "englishTranslationUuid": "5baf40e5-ea3c-4f8d-b60a-d294ee2de55b",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/275/af1fff93-eb58-4ba7-97a4-b38ee67853b4.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/47/",
+      "bytes": 38048587,
+      "durationSeconds": 11.85,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 48,
+      "videoUuid": "8bfb917c-3d0d-49b9-8073-5d7e01c1b894",
+      "exerciseId": 92,
+      "exerciseUuid": "1ae6a28d-10e7-4ecf-af4f-905f8193e2c6",
+      "englishName": "Biceps Curls With Dumbbell",
+      "englishTranslationUuid": "48a59aa8-4568-409c-8afe-f8cb99c558ea",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/92/8bfb917c-3d0d-49b9-8073-5d7e01c1b894.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/48/",
+      "bytes": 31753930,
+      "durationSeconds": 10.94,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 49,
+      "videoUuid": "483f4bff-e108-41f1-8e7b-0caf24952552",
+      "exerciseId": 91,
+      "exerciseUuid": "7b99a081-6b1a-4aa5-b86a-5a935d083a35",
+      "englishName": "Biceps Curls With Barbell",
+      "englishTranslationUuid": "c56078d2-ae85-4524-a467-d1e143b6df1a",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/91/483f4bff-e108-41f1-8e7b-0caf24952552.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/49/",
+      "bytes": 22680665,
+      "durationSeconds": 12.34,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 50,
+      "videoUuid": "ab770931-47d3-44fd-aef0-ac7a64c3b794",
+      "exerciseId": 95,
+      "exerciseUuid": "bcb7020c-8678-496d-8f4d-aad0e233a5bd",
+      "englishName": "Biceps Curl With Cable",
+      "englishTranslationUuid": "8c6c1544-cbf8-403c-ae12-b27b392702f8",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/95/ab770931-47d3-44fd-aef0-ac7a64c3b794.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/50/",
+      "bytes": 34233084,
+      "durationSeconds": 10.45,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 51,
+      "videoUuid": "df069052-2173-4f24-855f-a0eebe729f24",
+      "exerciseId": 272,
+      "exerciseUuid": "c0d9fe98-f4fe-49f3-8037-05e1984e7d2d",
+      "englishName": "Hammer Curls",
+      "englishTranslationUuid": "6dcc9adb-939c-4581-9e44-d0d73753997b",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/272/df069052-2173-4f24-855f-a0eebe729f24.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/51/",
+      "bytes": 30154182,
+      "durationSeconds": 10.37,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 52,
+      "videoUuid": "109e8d5d-62a4-40ad-8813-2ccef5bc751f",
+      "exerciseId": 584,
+      "exerciseUuid": "c85e6137-2577-4e28-82c2-427407d534eb",
+      "englishName": "Single-arm Preacher Curl",
+      "englishTranslationUuid": "83e079a9-b61c-413b-b055-f9cf515904f1",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/584/109e8d5d-62a4-40ad-8813-2ccef5bc751f.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/52/",
+      "bytes": 30869204,
+      "durationSeconds": 13.02,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 53,
+      "videoUuid": "b64ca95b-c677-4f3b-bb50-f75edc81aa74",
+      "exerciseId": 465,
+      "exerciseUuid": "dd52fb99-9426-4a78-b446-20a8e3e4ec47",
+      "englishName": "Preacher Curls",
+      "englishTranslationUuid": "84b4e711-8b29-4541-ad58-dad967f82390",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/465/b64ca95b-c677-4f3b-bb50-f75edc81aa74.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/53/",
+      "bytes": 56017153,
+      "durationSeconds": 25.78,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 54,
+      "videoUuid": "5d2339a4-815f-46ba-aa19-8a763cfdeba0",
+      "exerciseId": 465,
+      "exerciseUuid": "dd52fb99-9426-4a78-b446-20a8e3e4ec47",
+      "englishName": "Preacher Curls",
+      "englishTranslationUuid": "84b4e711-8b29-4541-ad58-dad967f82390",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/465/5d2339a4-815f-46ba-aa19-8a763cfdeba0.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/54/",
+      "bytes": 46887882,
+      "durationSeconds": 14.32,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 55,
+      "videoUuid": "1f2eb3b6-3185-429f-8330-26dc88f39aff",
+      "exerciseId": 659,
+      "exerciseUuid": "3188868c-84e2-4a3b-b7dc-f79d8650988d",
+      "englishName": "Triceps Extensions on Cable",
+      "englishTranslationUuid": "f1b5e525-6232-4d60-a243-9b2cd6c55298",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/659/1f2eb3b6-3185-429f-8330-26dc88f39aff.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/55/",
+      "bytes": 7557215,
+      "durationSeconds": 15.09,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 56,
+      "videoUuid": "be0b1bec-7d82-4a1d-85d6-84efa633ef3c",
+      "exerciseId": 659,
+      "exerciseUuid": "3188868c-84e2-4a3b-b7dc-f79d8650988d",
+      "englishName": "Triceps Extensions on Cable",
+      "englishTranslationUuid": "f1b5e525-6232-4d60-a243-9b2cd6c55298",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/659/be0b1bec-7d82-4a1d-85d6-84efa633ef3c.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/56/",
+      "bytes": 8030750,
+      "durationSeconds": 17.37,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 57,
+      "videoUuid": "85f6eb25-a76c-409e-9af9-497794ac0dfb",
+      "exerciseId": 211,
+      "exerciseUuid": "d8bddb58-91b0-4d7b-8ec1-cd742584b607",
+      "englishName": "Dumbbell Triceps Extension",
+      "englishTranslationUuid": "3f7b893e-a089-450f-b8cc-ec3ec17d3bf3",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/211/85f6eb25-a76c-409e-9af9-497794ac0dfb.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/57/",
+      "bytes": 11837332,
+      "durationSeconds": 32.02,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 58,
+      "videoUuid": "99e0001f-217a-4b11-823c-014d24a5415e",
+      "exerciseId": 803,
+      "exerciseUuid": "f8d69dd4-3c35-49c7-8cbe-f0132eca4c52",
+      "englishName": "One Arm Triceps Extensions on Cable",
+      "englishTranslationUuid": "e6dab89e-e3d8-4bd8-8993-b5f52462cbde",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/803/99e0001f-217a-4b11-823c-014d24a5415e.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/58/",
+      "bytes": 4296447,
+      "durationSeconds": 9.36,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 59,
+      "videoUuid": "589d24e5-aaee-455d-93fd-f0f01da5d9c6",
+      "exerciseId": 803,
+      "exerciseUuid": "f8d69dd4-3c35-49c7-8cbe-f0132eca4c52",
+      "englishName": "One Arm Triceps Extensions on Cable",
+      "englishTranslationUuid": "e6dab89e-e3d8-4bd8-8993-b5f52462cbde",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/803/589d24e5-aaee-455d-93fd-f0f01da5d9c6.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/59/",
+      "bytes": 4493262,
+      "durationSeconds": 12.28,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 60,
+      "videoUuid": "c253303e-9160-4f1f-b4fe-daf1e6c8661d",
+      "exerciseId": 245,
+      "exerciseUuid": "893c07ea-2e24-49b6-92e4-d0033eedec62",
+      "englishName": "Skullcrusher Dumbbells",
+      "englishTranslationUuid": "ee00d53e-4482-44aa-b780-bbc570061841",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/245/c253303e-9160-4f1f-b4fe-daf1e6c8661d.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/60/",
+      "bytes": 5813842,
+      "durationSeconds": 18.72,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 61,
+      "videoUuid": "75eb8c88-922e-45c5-8be3-ac073f62b63f",
+      "exerciseId": 246,
+      "exerciseUuid": "95a7e546-e8f8-4521-a76b-983d94161b25",
+      "englishName": "Skullcrusher SZ-bar",
+      "englishTranslationUuid": "ee4a350b-c681-407f-a414-6ec243809ec7",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/246/75eb8c88-922e-45c5-8be3-ac073f62b63f.MP4",
+      "apiRecordUrl": "https://wger.de/api/v2/video/61/",
+      "bytes": 4100912,
+      "durationSeconds": 15.23,
+      "width": 1920,
+      "height": 1080,
+      "container": "mp4",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": true,
+        "requiresTranscodeToMp4H264": false
+      }
+    },
+    {
+      "videoId": 62,
+      "videoUuid": "40ca562f-b46b-45c8-81fa-1ea8d544b1b8",
+      "exerciseId": 246,
+      "exerciseUuid": "95a7e546-e8f8-4521-a76b-983d94161b25",
+      "englishName": "Skullcrusher SZ-bar",
+      "englishTranslationUuid": "ee4a350b-c681-407f-a414-6ec243809ec7",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/246/40ca562f-b46b-45c8-81fa-1ea8d544b1b8.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/62/",
+      "bytes": 7255486,
+      "durationSeconds": 18.13,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 63,
+      "videoUuid": "2a194d11-ff5d-4bdf-849e-1c441cf7b0b1",
+      "exerciseId": 246,
+      "exerciseUuid": "95a7e546-e8f8-4521-a76b-983d94161b25",
+      "englishName": "Skullcrusher SZ-bar",
+      "englishTranslationUuid": "ee4a350b-c681-407f-a414-6ec243809ec7",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/246/2a194d11-ff5d-4bdf-849e-1c441cf7b0b1.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/63/",
+      "bytes": 3211377,
+      "durationSeconds": 10.91,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 64,
+      "videoUuid": "d039ec90-474d-47a9-a3ad-bf0b00828c82",
+      "exerciseId": 194,
+      "exerciseUuid": "09dd3e3c-e53a-4e2c-a2e3-645d334f53e2",
+      "englishName": "Dips",
+      "englishTranslationUuid": "7191e015-0c60-4376-9be0-733b9754b7f8",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/194/d039ec90-474d-47a9-a3ad-bf0b00828c82.MP4",
+      "apiRecordUrl": "https://wger.de/api/v2/video/64/",
+      "bytes": 5424928,
+      "durationSeconds": 12.75,
+      "width": 1920,
+      "height": 1080,
+      "container": "mp4",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": true,
+        "requiresTranscodeToMp4H264": false
+      }
+    },
+    {
+      "videoId": 65,
+      "videoUuid": "7a6987aa-138d-41e4-8842-5c3e3d970bd9",
+      "exerciseId": 194,
+      "exerciseUuid": "09dd3e3c-e53a-4e2c-a2e3-645d334f53e2",
+      "englishName": "Dips",
+      "englishTranslationUuid": "7191e015-0c60-4376-9be0-733b9754b7f8",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/194/7a6987aa-138d-41e4-8842-5c3e3d970bd9.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/65/",
+      "bytes": 8340144,
+      "durationSeconds": 16.37,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 66,
+      "videoUuid": "dd9a663f-d8ba-4621-823b-13788ccb66bc",
+      "exerciseId": 194,
+      "exerciseUuid": "09dd3e3c-e53a-4e2c-a2e3-645d334f53e2",
+      "englishName": "Dips",
+      "englishTranslationUuid": "7191e015-0c60-4376-9be0-733b9754b7f8",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/194/dd9a663f-d8ba-4621-823b-13788ccb66bc.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/66/",
+      "bytes": 4418928,
+      "durationSeconds": 10.17,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 68,
+      "videoUuid": "a7d99f2b-86fc-433a-8ab1-83144c802296",
+      "exerciseId": 575,
+      "exerciseUuid": "6199b3c7-3ccb-47fa-89bb-ef7fef12c0e3",
+      "englishName": "Shrugs on Multipress",
+      "englishTranslationUuid": "c7f7aa80-f9ae-4aad-ac9b-76b70e60cf8f",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/575/a7d99f2b-86fc-433a-8ab1-83144c802296.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/68/",
+      "bytes": 35270778,
+      "durationSeconds": 11.01,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 69,
+      "videoUuid": "bd1f14a3-9d2b-4ec0-b6b9-e82d739f7e60",
+      "exerciseId": 570,
+      "exerciseUuid": "f956977e-cc05-4db2-a387-ba6140b1ef34",
+      "englishName": "Shoulder Shrug",
+      "englishTranslationUuid": "4f7900d8-3cd8-41ae-8eec-a3e540c5b3ea",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/570/bd1f14a3-9d2b-4ec0-b6b9-e82d739f7e60.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/69/",
+      "bytes": 31195824,
+      "durationSeconds": 10.74,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 70,
+      "videoUuid": "2e23bb52-2782-40c8-bf88-fa2d2e2a9a0d",
+      "exerciseId": 477,
+      "exerciseUuid": "7f834f07-fa7b-46b6-8ffa-45930b0602db",
+      "englishName": "Pull Ups on Machine",
+      "englishTranslationUuid": "d46adbda-7c60-42a0-b1fd-9ec111b35956",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/477/2e23bb52-2782-40c8-bf88-fa2d2e2a9a0d.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/70/",
+      "bytes": 57098527,
+      "durationSeconds": 18.77,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 71,
+      "videoUuid": "83067ffe-ccb9-4e22-8507-5131b211ce74",
+      "exerciseId": 475,
+      "exerciseUuid": "8e420408-0682-4ab6-89f5-2681e54c7ce0",
+      "englishName": "Pull-ups",
+      "englishTranslationUuid": "7ce6b090-5099-4cd0-83ae-1a02725c868b",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/475/83067ffe-ccb9-4e22-8507-5131b211ce74.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/71/",
+      "bytes": 57098527,
+      "durationSeconds": 18.77,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 72,
+      "videoUuid": "45bacf4b-1bb6-4d47-8bd1-9f00eddd4019",
+      "exerciseId": 294,
+      "exerciseUuid": "19a289c0-33af-4055-bb34-3570c2975d3d",
+      "englishName": "Hip Thrust",
+      "englishTranslationUuid": "37097633-de80-4271-9b7c-291f359e0ef4",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/294/45bacf4b-1bb6-4d47-8bd1-9f00eddd4019.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/72/",
+      "bytes": 87548125,
+      "durationSeconds": 30.19,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 73,
+      "videoUuid": "7d6862eb-8848-4f5d-a288-764b0d113108",
+      "exerciseId": 294,
+      "exerciseUuid": "19a289c0-33af-4055-bb34-3570c2975d3d",
+      "englishName": "Hip Thrust",
+      "englishTranslationUuid": "37097633-de80-4271-9b7c-291f359e0ef4",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/294/7d6862eb-8848-4f5d-a288-764b0d113108.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/73/",
+      "bytes": 157313324,
+      "durationSeconds": 26.13,
+      "width": 3840,
+      "height": 2160,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 74,
+      "videoUuid": "5148c579-5df2-4618-9a7b-a2e29ac4dd7d",
+      "exerciseId": 12,
+      "exerciseUuid": "53906cd1-61f1-4d56-ac60-e4fcc5824861",
+      "englishName": "Seated Hip Adduction",
+      "englishTranslationUuid": "4b3025a9-b717-4577-9e92-b1c200fe5f1c",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/12/5148c579-5df2-4618-9a7b-a2e29ac4dd7d.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/74/",
+      "bytes": 60138928,
+      "durationSeconds": 20.86,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 75,
+      "videoUuid": "69e8c1e5-55b2-4da6-8166-092c24b16735",
+      "exerciseId": 655,
+      "exerciseUuid": "5915fabe-c941-4dac-b196-bc4e8c7ce57b",
+      "englishName": "Tricep Dumbbell Kickback",
+      "englishTranslationUuid": "88568115-5e88-4afc-b005-e2f7d453ac13",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/655/69e8c1e5-55b2-4da6-8166-092c24b16735.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/75/",
+      "bytes": 4541168,
+      "durationSeconds": 12.19,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 76,
+      "videoUuid": "2d88a05b-bde3-4026-bfbf-524c11068dc5",
+      "exerciseId": 655,
+      "exerciseUuid": "5915fabe-c941-4dac-b196-bc4e8c7ce57b",
+      "englishName": "Tricep Dumbbell Kickback",
+      "englishTranslationUuid": "88568115-5e88-4afc-b005-e2f7d453ac13",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/655/2d88a05b-bde3-4026-bfbf-524c11068dc5.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/76/",
+      "bytes": 3407290,
+      "durationSeconds": 10.26,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 77,
+      "videoUuid": "f1354a78-539c-4f22-a78f-b1f43f920740",
+      "exerciseId": 655,
+      "exerciseUuid": "5915fabe-c941-4dac-b196-bc4e8c7ce57b",
+      "englishName": "Tricep Dumbbell Kickback",
+      "englishTranslationUuid": "88568115-5e88-4afc-b005-e2f7d453ac13",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/655/f1354a78-539c-4f22-a78f-b1f43f920740.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/77/",
+      "bytes": 4183378,
+      "durationSeconds": 13.19,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "h264",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 78,
+      "videoUuid": "245a824b-cd39-45f2-b251-2c0b7efead0d",
+      "exerciseId": 222,
+      "exerciseUuid": "d7a418d4-d0cb-4f85-8a7c-1e9d97152cbd",
+      "englishName": "Facepull",
+      "englishTranslationUuid": "659f3fb9-2370-42fb-9c29-9aaf65c7a7de",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/222/245a824b-cd39-45f2-b251-2c0b7efead0d.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/78/",
+      "bytes": 21001245,
+      "durationSeconds": 8.7,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    },
+    {
+      "videoId": 79,
+      "videoUuid": "eea93fcc-6a3c-4783-8f70-0234c791a001",
+      "exerciseId": 222,
+      "exerciseUuid": "d7a418d4-d0cb-4f85-8a7c-1e9d97152cbd",
+      "englishName": "Facepull",
+      "englishTranslationUuid": "659f3fb9-2370-42fb-9c29-9aaf65c7a7de",
+      "sourceMediaUrl": "https://wger.de/media/exercise-video/222/eea93fcc-6a3c-4783-8f70-0234c791a001.MOV",
+      "apiRecordUrl": "https://wger.de/api/v2/video/79/",
+      "bytes": 20624981,
+      "durationSeconds": 8.57,
+      "width": 1920,
+      "height": 1080,
+      "container": "mov",
+      "codec": "hevc",
+      "isMain": false,
+      "license": {
+        "id": 2,
+        "name": "Creative Commons Attribution Share Alike 4",
+        "shortName": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+        "author": "Goulart",
+        "authorUrl": null,
+        "objectUrl": null,
+        "derivativeSourceUrl": null,
+        "authorHistory": [
+          "Goulart"
+        ]
+      },
+      "audit": {
+        "hasMediaLicense": true,
+        "hasMediaAuthor": true,
+        "hasEnglishName": true,
+        "hasExternalObjectSource": false,
+        "directWebCandidate": false,
+        "requiresTranscodeToMp4H264": true
+      }
+    }
+  ]
+}

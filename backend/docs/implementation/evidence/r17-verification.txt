@@ -1,0 +1,24 @@
+R17 local acceptance — 2026-09-28
+Branches: API and web codex/revamp. API baseline 9599526; web baseline 6133db7.
+No migration, reset, reseed, push, deployment or native change.
+
+Web final isolated command:
+npm run test:e2e -- tests/gym-direction.e2e.ts tests/responsive-inbox.e2e.ts tests/communication.e2e.ts tests/daily-coaching.e2e.ts tests/programming.e2e.ts tests/organization-nutrition.e2e.ts tests/organization-services.e2e.ts tests/organizations.e2e.ts tests/workspace.e2e.ts --max-failures=2
+PASS 32/32 (3.4m); artifacts/r17-browser-final.txt
+Isolated run 1790599468220; clean teardown; preview preserved.
+npm test: PASS 27 units / 9 files.
+npm run build: PASS vue-tsc and production Vite build.
+npm run test:build: PASS two real builds/final-file hashes/HTML-only version change.
+npm run format:check: PASS.
+
+Actually inspected: r17-home-chromium-1280-en-dark.png,
+r17-home-chromium-320-ar-dark.png, r17-calendar-chromium.png,
+r1-plan-chromium.png. Raw captures/logs stay in ignored web artifacts.
+Development failures corrected: malformed App closing tag; old workout nav CTA;
+repeated set-label selectors scoped to uniform fields; skipped heading level;
+calendar aria label; inbox test now checks deliberately retained search before
+clearing it to inspect unfiltered layout. Failed runs are not acceptance.
+
+Limits: focused regression, not full release chain; no hosted/provider/native/
+physical-device/human outcome claim. Calendar exposes loaded-page limitations.
+Exercise assets/privacy, packages, trainer tasks and satisfaction remain later work.

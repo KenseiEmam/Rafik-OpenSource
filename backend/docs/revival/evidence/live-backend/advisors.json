@@ -1,0 +1,2590 @@
+{
+  "project_ref": "pexviywnztvqomfosvho",
+  "captured_at": "2026-09-22T00:22:38.125259+00:00",
+  "result": [
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.lowerCaseEmail\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "lowerCaseEmail",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_lowerCaseEmail_be5532116892a6ad70c9b0feded0dfe8"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.Start and end dates Entitlement\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "Start and end dates Entitlement",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_Start and end dates Entitlement_c12df8c978caed06625f79d0a4770946"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.delete_incomplete_workout_sheets\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "delete_incomplete_workout_sheets",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_delete_incomplete_workout_sheets_0188c971011e3b8601b740a81cc597a1"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.check_domain_uniqueness\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "check_domain_uniqueness",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_check_domain_uniqueness_3cc083919d1b2a28065c62e4eaac282e"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.update_average_ratings\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "update_average_ratings",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_update_average_ratings_62a49a6ded286fb6bb14398ce60b61c5"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.search_exercises\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "search_exercises",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_search_exercises_cc39afe00f8cbcf081576cb43b08733b"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.updateExpiry\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "updateExpiry",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_updateExpiry_1ac1c714b9f00006b2d18770d397de80"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.set_user_organization\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "set_user_organization",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_set_user_organization_ab49a598708441b96abbf8158f534a1e"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.update Equipment Required\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "update Equipment Required",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_update Equipment Required_3d104f61e8035558df6d7a1a54117e17"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.search_ai_documents\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "search_ai_documents",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_search_ai_documents_3df89736be0b8cb9ad3201d5957ff63f"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.update_best_perf_sql\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "update_best_perf_sql",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_update_best_perf_sql_2b528b0f3b6b1b357ec39b536e95e4b0"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.update_workout_streak\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "update_workout_streak",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_update_workout_streak_1dac02aa7617b3e3b79b14146d81d1d7"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.search_ai_documents\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "search_ai_documents",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_search_ai_documents_2f21641f0ab4ad5c49fdcada388b4650"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.find_kinda_similar_food\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "find_kinda_similar_food",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_find_kinda_similar_food_c260f6c82126d087d8f001f783da33fa"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.ensure_workout_sheet\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "ensure_workout_sheet",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_ensure_workout_sheet_0b0c276d5af725c50bc82091057029a2"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.fn_sync_sets_muscle\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "fn_sync_sets_muscle",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_fn_sync_sets_muscle_1af9bb0940921458eb0c5e9d9755027b"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.update_meal_macros\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "update_meal_macros",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_update_meal_macros_40070168f9586713d9e075834f90b9c3"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.update_diet_streak\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "update_diet_streak",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_update_diet_streak_1b34c261f295ad86dffcff24d19ac7ee"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.update_drills_from_template\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "update_drills_from_template",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_update_drills_from_template_5bf65519fb9bef45e8a319270706d977"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.get_latest_group_messages\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "get_latest_group_messages",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_get_latest_group_messages_ba37dc2ef1c5f41127c33ce3995df259"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.workout_new_iteration\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "workout_new_iteration",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_workout_new_iteration_3277dba68449935f29d95119c8757a3d"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.get_latest_messages2\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "get_latest_messages2",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_get_latest_messages2_5bd15205e5d9b3398c0805c2292801dc"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.handle_user_program_inductions\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "handle_user_program_inductions",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_handle_user_program_inductions_e5f8c9fe40f5cd593c1d65a6d0cb1ba8"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.find_similar_food\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "find_similar_food",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_find_similar_food_3316a24bfea042840b2fb2bd6c275907"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.apply_progression_on_workout_update\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "apply_progression_on_workout_update",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_apply_progression_on_workout_update_782bf95dbdc066dc484b32b9c8c2efd8"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.match_documents\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "match_documents",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_match_documents_0ecc53ed19b73e72cd326906720ce401"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.notify_program_update\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "notify_program_update",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_notify_program_update_925c53e456fa50f0273b2140c7306e2a"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.send_workout_feedback\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "send_workout_feedback",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_send_workout_feedback_83be9d4d9461a556e029471dd68f9d9e"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.update_profile_coach_from_user_programs\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "update_profile_coach_from_user_programs",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_update_profile_coach_from_user_programs_f8257fb76d5734e6ecd1395e10137b4f"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.match_documents\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "match_documents",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_match_documents_5750d7c31ba3064c4f12b6ea4e95ce11"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.update previous weight\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "update previous weight",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_update previous weight_155bd78585180f6b5cfada63048d302a"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.copy_workouts_to_user_programs\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "copy_workouts_to_user_programs",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_copy_workouts_to_user_programs_520c391cabad6e87f36be5b2acf83311"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.json_merge\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "json_merge",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_json_merge_28612c2bb67d68b2a69f4a2181cfae64"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.update_assessment_perf_sql\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "update_assessment_perf_sql",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_update_assessment_perf_sql_bd0403a45312bab3d038e810dab0129b"
+    },
+    {
+      "name": "function_search_path_mutable",
+      "title": "Function Search Path Mutable",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects functions where the search_path parameter is not set.",
+      "detail": "Function \\`public.update calories\\` has a role mutable search_path",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable",
+      "metadata": {
+        "name": "update calories",
+        "schema": "public",
+        "type": "function"
+      },
+      "cache_key": "function_search_path_mutable_public_update calories_69113ca6a99ec52adf827d30a27b24e1"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.chatbots\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "chatbots",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_chatbots"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.ai_media\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "ai_media",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_ai_media"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.organizations\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "organizations",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_organizations"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.groups\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "groups",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_groups"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.certifications\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "certifications",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_certifications"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.assessment_template\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "assessment_template",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_assessment_template"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.nutritional_sheets\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "nutritional_sheets",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_nutritional_sheets"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.workout_sheets\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "workout_sheets",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_workout_sheets"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.cancel_request\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "cancel_request",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_cancel_request"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.roles\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "roles",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_roles"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.user_programs\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "user_programs",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_user_programs"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.exercises\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "exercises",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_exercises"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.users\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "users",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_users"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.chat_messages\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "chat_messages",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_chat_messages"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.reviews\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "reviews",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_reviews"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.trainer_profile\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "trainer_profile",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_trainer_profile"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.weights\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "weights",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_weights"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.ai_chat_messages\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "ai_chat_messages",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_ai_chat_messages"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.entitlements\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "entitlements",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_entitlements"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.ai_vectors\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "ai_vectors",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_ai_vectors"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.nationalities\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "nationalities",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_nationalities"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.programs\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "programs",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_programs"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.ticket_messages\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "ticket_messages",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_ticket_messages"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.notifications\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "notifications",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_notifications"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.user_settings\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "user_settings",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_user_settings"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.assessment\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "assessment",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_assessment"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.slots\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "slots",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_slots"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.debug_logs\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "debug_logs",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_debug_logs"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.support_tickets\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "support_tickets",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_support_tickets"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.forms\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "forms",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_forms"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.countries\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "countries",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_countries"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.profiles\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "profiles",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_profiles"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.food_cache\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "food_cache",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_food_cache"
+    },
+    {
+      "name": "rls_disabled_in_public",
+      "title": "RLS Disabled in Public",
+      "level": "ERROR",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects cases where row level security (RLS) has not been enabled on tables in schemas exposed to PostgREST",
+      "detail": "Table \\`public.org_notifications\\` is public, but RLS has not been enabled.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0013_rls_disabled_in_public",
+      "metadata": {
+        "name": "org_notifications",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "rls_disabled_in_public_public_org_notifications"
+    },
+    {
+      "name": "extension_in_public",
+      "title": "Extension in Public",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects extensions installed in the \\`public\\` schema.",
+      "detail": "Extension \\`pg_trgm\\` is installed in the public schema. Move it to another schema.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0014_extension_in_public",
+      "metadata": {
+        "name": "pg_trgm",
+        "schema": "public",
+        "type": "extension"
+      },
+      "cache_key": "extension_in_public_pg_trgm"
+    },
+    {
+      "name": "anon_security_definer_function_executable",
+      "title": "Public Can Execute SECURITY DEFINER Function",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects `SECURITY DEFINER` functions that are callable without signing in. Revoke `EXECUTE`, switch the function to `SECURITY INVOKER`, or move it out of your exposed API schema if it is not meant to be public.",
+      "detail": "Function `public.send_workout_feedback()` can be executed by the `anon` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/send_workout_feedback`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0028_anon_security_definer_function_executable",
+      "metadata": {
+        "name": "send_workout_feedback",
+        "schema": "public"
+      },
+      "cache_key": "anon_security_definer_function_executable_public_send_workout_feedback_"
+    },
+    {
+      "name": "authenticated_security_definer_function_executable",
+      "title": "Signed-In Users Can Execute SECURITY DEFINER Function",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Detects `SECURITY DEFINER` functions that are callable by signed-in users. Revoke `EXECUTE`, switch the function to `SECURITY INVOKER`, or move it out of your exposed API schema if signed-in users should not call it.",
+      "detail": "Function `public.send_workout_feedback()` can be executed by the `authenticated` role as a `SECURITY DEFINER` function via `/rest/v1/rpc/send_workout_feedback`. Revoke `EXECUTE` or switch it to `SECURITY INVOKER` if that is not intentional.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable",
+      "metadata": {
+        "name": "send_workout_feedback",
+        "schema": "public"
+      },
+      "cache_key": "authenticated_security_definer_function_executable_public_send_workout_feedback_"
+    },
+    {
+      "name": "auth_leaked_password_protection",
+      "title": "Leaked Password Protection Disabled",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Leaked password protection is currently disabled.",
+      "detail": "Supabase Auth prevents the use of compromised passwords by checking against HaveIBeenPwned.org. Enable this feature to enhance security.",
+      "remediation": "https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection",
+      "metadata": {
+        "entity": "Auth",
+        "type": "auth"
+      },
+      "cache_key": "auth_leaked_password_protection"
+    },
+    {
+      "name": "vulnerable_postgres_version",
+      "title": "Current Postgres version has security patches available",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "SECURITY"
+      ],
+      "description": "Upgrade your postgres database to apply important security patches",
+      "detail": "We have detected that the current version of postgres, supabase-postgres-15.8.1.026, has outstanding security patches available. Upgrade your database to receive the latest security patches.",
+      "remediation": "https://supabase.com/docs/guides/platform/upgrading",
+      "metadata": {
+        "entity": "Config",
+        "type": "compliance"
+      },
+      "cache_key": "vulnerable_postgres_version"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.ai_chat_messages\\` has a foreign key \\`ai_chat_messages_chatbot_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          9
+        ],
+        "fkey_name": "ai_chat_messages_chatbot_id_fkey",
+        "name": "ai_chat_messages",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_ai_chat_messages_ai_chat_messages_chatbot_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.ai_chat_messages\\` has a foreign key \\`ai_chat_messages_sent_by_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          7
+        ],
+        "fkey_name": "ai_chat_messages_sent_by_fkey",
+        "name": "ai_chat_messages",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_ai_chat_messages_ai_chat_messages_sent_by_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.ai_chat_messages\\` has a foreign key \\`ai_chat_messages_user_program_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          2
+        ],
+        "fkey_name": "ai_chat_messages_user_program_fkey",
+        "name": "ai_chat_messages",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_ai_chat_messages_ai_chat_messages_user_program_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.ai_media\\` has a foreign key \\`ai_media_chatbot_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          2
+        ],
+        "fkey_name": "ai_media_chatbot_id_fkey",
+        "name": "ai_media",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_ai_media_ai_media_chatbot_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.assessment\\` has a foreign key \\`assessment_organization_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          14
+        ],
+        "fkey_name": "assessment_organization_fkey",
+        "name": "assessment",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_assessment_assessment_organization_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.assessment\\` has a foreign key \\`assessment_template_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          15
+        ],
+        "fkey_name": "assessment_template_fkey",
+        "name": "assessment",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_assessment_assessment_template_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.assessment_template\\` has a foreign key \\`assessment_template_created_by_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          5
+        ],
+        "fkey_name": "assessment_template_created_by_fkey",
+        "name": "assessment_template",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_assessment_template_assessment_template_created_by_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.assessment_template\\` has a foreign key \\`assessment_template_organization_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          6
+        ],
+        "fkey_name": "assessment_template_organization_fkey",
+        "name": "assessment_template",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_assessment_template_assessment_template_organization_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.cancel_request\\` has a foreign key \\`cancel_request_closed_by_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          10
+        ],
+        "fkey_name": "cancel_request_closed_by_fkey",
+        "name": "cancel_request",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_cancel_request_cancel_request_closed_by_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.cancel_request\\` has a foreign key \\`cancel_request_raised_by_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          3
+        ],
+        "fkey_name": "cancel_request_raised_by_fkey",
+        "name": "cancel_request",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_cancel_request_cancel_request_raised_by_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.cancel_request\\` has a foreign key \\`cancel_request_user_program_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          4
+        ],
+        "fkey_name": "cancel_request_user_program_id_fkey",
+        "name": "cancel_request",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_cancel_request_cancel_request_user_program_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.chat_messages\\` has a foreign key \\`chat_messages_form_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          9
+        ],
+        "fkey_name": "chat_messages_form_fkey",
+        "name": "chat_messages",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_chat_messages_chat_messages_form_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.chat_messages\\` has a foreign key \\`chat_messages_group_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          11
+        ],
+        "fkey_name": "chat_messages_group_fkey",
+        "name": "chat_messages",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_chat_messages_chat_messages_group_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.chat_messages\\` has a foreign key \\`chat_messages_sent_by_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          8
+        ],
+        "fkey_name": "chat_messages_sent_by_fkey",
+        "name": "chat_messages",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_chat_messages_chat_messages_sent_by_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.chat_messages\\` has a foreign key \\`chat_messages_sent_to_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          10
+        ],
+        "fkey_name": "chat_messages_sent_to_fkey",
+        "name": "chat_messages",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_chat_messages_chat_messages_sent_to_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.chat_messages\\` has a foreign key \\`chat_messages_user_program_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          3
+        ],
+        "fkey_name": "chat_messages_user_program_fkey",
+        "name": "chat_messages",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_chat_messages_chat_messages_user_program_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.chatbots\\` has a foreign key \\`chatbots_trainer_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          2
+        ],
+        "fkey_name": "chatbots_trainer_id_fkey",
+        "name": "chatbots",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_chatbots_chatbots_trainer_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.entitlements\\` has a foreign key \\`entitlements_program_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          13
+        ],
+        "fkey_name": "entitlements_program_id_fkey",
+        "name": "entitlements",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_entitlements_entitlements_program_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.entitlements\\` has a foreign key \\`entitlements_trainer_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          3
+        ],
+        "fkey_name": "entitlements_trainer_id_fkey",
+        "name": "entitlements",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_entitlements_entitlements_trainer_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.entitlements\\` has a foreign key \\`entitlements_user_program_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          11
+        ],
+        "fkey_name": "entitlements_user_program_id_fkey",
+        "name": "entitlements",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_entitlements_entitlements_user_program_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.exercises\\` has a foreign key \\`Exercises_trainer_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          8
+        ],
+        "fkey_name": "Exercises_trainer_id_fkey",
+        "name": "exercises",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_exercises_Exercises_trainer_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.food_cache\\` has a foreign key \\`food_cache_user_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          6
+        ],
+        "fkey_name": "food_cache_user_id_fkey",
+        "name": "food_cache",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_food_cache_food_cache_user_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.forms\\` has a foreign key \\`forms_client_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          7
+        ],
+        "fkey_name": "forms_client_id_fkey",
+        "name": "forms",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_forms_forms_client_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.forms\\` has a foreign key \\`forms_message_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          3
+        ],
+        "fkey_name": "forms_message_id_fkey",
+        "name": "forms",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_forms_forms_message_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.forms\\` has a foreign key \\`forms_program_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          8
+        ],
+        "fkey_name": "forms_program_id_fkey",
+        "name": "forms",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_forms_forms_program_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.forms\\` has a foreign key \\`forms_trainer_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          6
+        ],
+        "fkey_name": "forms_trainer_id_fkey",
+        "name": "forms",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_forms_forms_trainer_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.groups\\` has a foreign key \\`groups_organization_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          9
+        ],
+        "fkey_name": "groups_organization_fkey",
+        "name": "groups",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_groups_groups_organization_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.notifications\\` has a foreign key \\`notifications_user_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          6
+        ],
+        "fkey_name": "notifications_user_id_fkey",
+        "name": "notifications",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_notifications_notifications_user_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.nutritional_sheets\\` has a foreign key \\`nutritional_sheets_profile_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          3
+        ],
+        "fkey_name": "nutritional_sheets_profile_id_fkey",
+        "name": "nutritional_sheets",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_nutritional_sheets_nutritional_sheets_profile_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.org_notifications\\` has a foreign key \\`org_notifications_organization_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          3
+        ],
+        "fkey_name": "org_notifications_organization_fkey",
+        "name": "org_notifications",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_org_notifications_org_notifications_organization_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.profiles\\` has a foreign key \\`profiles_user_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          8
+        ],
+        "fkey_name": "profiles_user_id_fkey",
+        "name": "profiles",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_profiles_profiles_user_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.programs\\` has a foreign key \\`program_template_trainer_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          7
+        ],
+        "fkey_name": "program_template_trainer_id_fkey",
+        "name": "programs",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_programs_program_template_trainer_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.programs\\` has a foreign key \\`programs_organization_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          27
+        ],
+        "fkey_name": "programs_organization_fkey",
+        "name": "programs",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_programs_programs_organization_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.reviews\\` has a foreign key \\`reviews_program_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          8
+        ],
+        "fkey_name": "reviews_program_fkey",
+        "name": "reviews",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_reviews_reviews_program_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.reviews\\` has a foreign key \\`reviews_trainer_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          4
+        ],
+        "fkey_name": "reviews_trainer_fkey",
+        "name": "reviews",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_reviews_reviews_trainer_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.reviews\\` has a foreign key \\`reviews_user_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          3
+        ],
+        "fkey_name": "reviews_user_fkey",
+        "name": "reviews",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_reviews_reviews_user_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.slots\\` has a foreign key \\`slots_organization_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          9
+        ],
+        "fkey_name": "slots_organization_fkey",
+        "name": "slots",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_slots_slots_organization_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.support_tickets\\` has a foreign key \\`support_tickets_created_by_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          2
+        ],
+        "fkey_name": "support_tickets_created_by_fkey",
+        "name": "support_tickets",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_support_tickets_support_tickets_created_by_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.support_tickets\\` has a foreign key \\`support_tickets_last_updated_by_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          10
+        ],
+        "fkey_name": "support_tickets_last_updated_by_fkey",
+        "name": "support_tickets",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_support_tickets_support_tickets_last_updated_by_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.ticket_messages\\` has a foreign key \\`ticket_messages_sender_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          3
+        ],
+        "fkey_name": "ticket_messages_sender_id_fkey",
+        "name": "ticket_messages",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_ticket_messages_ticket_messages_sender_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.ticket_messages\\` has a foreign key \\`ticket_messages_ticket_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          2
+        ],
+        "fkey_name": "ticket_messages_ticket_id_fkey",
+        "name": "ticket_messages",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_ticket_messages_ticket_messages_ticket_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.user_programs\\` has a foreign key \\`user_programs_client_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          5
+        ],
+        "fkey_name": "user_programs_client_id_fkey",
+        "name": "user_programs",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_user_programs_user_programs_client_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.user_programs\\` has a foreign key \\`user_programs_entitlement_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          18
+        ],
+        "fkey_name": "user_programs_entitlement_id_fkey",
+        "name": "user_programs",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_user_programs_user_programs_entitlement_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.user_programs\\` has a foreign key \\`user_programs_program_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          4
+        ],
+        "fkey_name": "user_programs_program_id_fkey",
+        "name": "user_programs",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_user_programs_user_programs_program_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.user_programs\\` has a foreign key \\`user_programs_trainer_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          17
+        ],
+        "fkey_name": "user_programs_trainer_id_fkey",
+        "name": "user_programs",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_user_programs_user_programs_trainer_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.users\\` has a foreign key \\`users_organisation_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          19
+        ],
+        "fkey_name": "users_organisation_fkey",
+        "name": "users",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_users_users_organisation_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.users\\` has a foreign key \\`users_profile_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          9
+        ],
+        "fkey_name": "users_profile_id_fkey",
+        "name": "users",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_users_users_profile_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.users\\` has a foreign key \\`users_profile_id_fkey1\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          9
+        ],
+        "fkey_name": "users_profile_id_fkey1",
+        "name": "users",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_users_users_profile_id_fkey1"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.users\\` has a foreign key \\`users_trainer_profile_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          14
+        ],
+        "fkey_name": "users_trainer_profile_fkey",
+        "name": "users",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_users_users_trainer_profile_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.weights\\` has a foreign key \\`weights_previous_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          4
+        ],
+        "fkey_name": "weights_previous_fkey",
+        "name": "weights",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_weights_weights_previous_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.weights\\` has a foreign key \\`weights_profile_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          5
+        ],
+        "fkey_name": "weights_profile_id_fkey",
+        "name": "weights",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_weights_weights_profile_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.workout_sheets\\` has a foreign key \\`workout_sheets_client_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          4
+        ],
+        "fkey_name": "workout_sheets_client_id_fkey",
+        "name": "workout_sheets",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_workout_sheets_workout_sheets_client_id_fkey"
+    },
+    {
+      "name": "unindexed_foreign_keys",
+      "title": "Unindexed foreign keys",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Identifies foreign key constraints without a covering index, which can impact database performance.",
+      "detail": "Table \\`public.workout_sheets\\` has a foreign key \\`workout_sheets_user_program_id_fkey\\` without a covering index. This can lead to suboptimal query performance.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys",
+      "metadata": {
+        "fkey_columns": [
+          5
+        ],
+        "fkey_name": "workout_sheets_user_program_id_fkey",
+        "name": "workout_sheets",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unindexed_foreign_keys_public_workout_sheets_workout_sheets_user_program_id_fkey"
+    },
+    {
+      "name": "auth_rls_initplan",
+      "title": "Auth RLS Initialization Plan",
+      "level": "WARN",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Detects if calls to \\`current_setting()\\` and \\`auth.<function>()\\` in RLS policies are being unnecessarily re-evaluated for each row",
+      "detail": "Table \\`public.secret_tokens\\` has a row level security policy \\`Policy with table joins\\` that re-evaluates current_setting() or auth.<function>() for each row. This produces suboptimal query performance at scale. Resolve the issue by replacing \\`auth.<function>()\\` with \\`(select auth.<function>())\\`. See [docs](https://supabase.com/docs/guides/database/postgres/row-level-security#call-functions-with-select) for more info.",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0003_auth_rls_initplan",
+      "metadata": {
+        "name": "secret_tokens",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "auth_rls_init_plan_public_secret_tokens_Policy with table joins"
+    },
+    {
+      "name": "unused_index",
+      "title": "Unused Index",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Detects if an index has never been used and may be a candidate for removal.",
+      "detail": "Index \\`idx_assessment_slot_occurrence\\` on table \\`public.assessment\\` has not been used",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index",
+      "metadata": {
+        "name": "assessment",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unused_index_public_assessment_idx_assessment_slot_occurrence"
+    },
+    {
+      "name": "unused_index",
+      "title": "Unused Index",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Detects if an index has never been used and may be a candidate for removal.",
+      "detail": "Index \\`idx_slots_assessment_data\\` on table \\`public.slots\\` has not been used",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index",
+      "metadata": {
+        "name": "slots",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unused_index_public_slots_idx_slots_assessment_data"
+    },
+    {
+      "name": "unused_index",
+      "title": "Unused Index",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Detects if an index has never been used and may be a candidate for removal.",
+      "detail": "Index \\`idx_slots_recurrence_rule\\` on table \\`public.slots\\` has not been used",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index",
+      "metadata": {
+        "name": "slots",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unused_index_public_slots_idx_slots_recurrence_rule"
+    },
+    {
+      "name": "unused_index",
+      "title": "Unused Index",
+      "level": "INFO",
+      "facing": "EXTERNAL",
+      "categories": [
+        "PERFORMANCE"
+      ],
+      "description": "Detects if an index has never been used and may be a candidate for removal.",
+      "detail": "Index \\`food_cache_gin_idx\\` on table \\`public.food_cache\\` has not been used",
+      "remediation": "https://supabase.com/docs/guides/database/database-linter?lint=0005_unused_index",
+      "metadata": {
+        "name": "food_cache",
+        "schema": "public",
+        "type": "table"
+      },
+      "cache_key": "unused_index_public_food_cache_food_cache_gin_idx"
+    }
+  ]
+}

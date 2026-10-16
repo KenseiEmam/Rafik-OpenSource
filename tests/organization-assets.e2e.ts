@@ -5,7 +5,7 @@ import AxeBuilder from '@axe-core/playwright'
 import { teamFixture } from './team-fixture'
 import { layoutIssues } from './layout-contract'
 const png = readFileSync(
-  '../rafik-api/content/exercise-videos/wger-fff4c294-93f0-4926-b3a2-bf59ad4afaa5-623708fc-r1.webp',
+  'backend/content/exercise-videos/wger-fff4c294-93f0-4926-b3a2-bf59ad4afaa5-623708fc-r1.webp',
 )
 test('organization author uploads, categorizes, filters, reuses and archives an exercise demonstration', async ({
   page,

@@ -1,0 +1,144 @@
+import { test, after } from "node:test";
+import assert from "node:assert/strict";
+import { randomUUID } from "node:crypto";
+import { readFile } from "node:fs/promises";
+import { db } from "../server/db.ts";
+import {
+  organizationFixture,
+  call,
+  operation,
+  type Person,
+} from "./organization-fixture.ts";
+after(() => db.$disconnect());
+const png = Buffer.from(
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aX1sAAAAASUVORK5CYII=",
+  "base64",
+);
+async function media(
+  p: Person,
+  id: string,
+  workspace?: string,
+  bytes = png,
+  type = "image/png",
+) {
+  return fetch(
+    `http://127.0.0.1:55331/v1/program-media/${id}${workspace ? "?workspace=" + workspace : ""}`,
+    {
+      method: workspace ? "PUT" : "GET",
+      headers: {
+        Cookie: p.cookie,
+        "x-rafik-client": "web",
+        "Content-Type": type,
+      },
+      body: workspace ? bytes : undefined,
+    },
+  );
+}
+test("private program imagery has immutable bytes, workspace publication and revoked audience checks", async () => {
+  const f = await organizationFixture();
+  try {
+    const admin = await f.person(),
+      client = await f.person(),
+      outsider = await f.person(),
+      id = await f.create(admin),
+      other = await f.create(outsider),
+      member = await f.join(admin, id, client, ["trainee"]),
+      image = randomUUID();
+    assert.equal((await media(admin, image, id)).status, 200);
+    assert.equal((await media(admin, image, id)).status, 200);
+    assert.equal(
+      (
+        await media(
+          admin,
+          image,
+          id,
+          Buffer.concat([png, Buffer.from("changed")]),
+        )
+      ).status,
+      409,
+    );
+    assert.equal(
+      (
+        await media(
+          admin,
+          randomUUID(),
+          id,
+          Buffer.from("<svg/>"),
+          "image/svg+xml",
+        )
+      ).status,
+      400,
+    );
+    assert.equal((await media(outsider, image)).status, 403);
+    assert.equal((await media(client, image)).status, 403);
+    const draft = JSON.parse(
+      await readFile(
+        new URL("../content/starter.json", import.meta.url),
+        "utf8",
+      ),
+    ).prescription;
+    draft.presentation = {
+      goal: "Learn consistent movement",
+      level: "beginner",
+      cover: image,
+    };
+    const program = randomUUID(),
+      publish = operation("publish", {
+        view: "admin",
+        id: program,
+        title: "Foundation with cover",
+        draft,
+        revision: null,
+      });
+    let r = await call(admin, `/v1/workspaces/${id}/programs`, publish);
+    assert.equal(r.status, 200, JSON.stringify(r));
+    const foreign = await call(outsider, `/v1/workspaces/${other}/programs`, {
+      ...publish,
+      operation: randomUUID(),
+      id: randomUUID(),
+    });
+    assert.equal(foreign.status, 400);
+    assert.equal(
+      (
+        await call(
+          admin,
+          `/v1/workspaces/${id}/programs`,
+          operation("listing", {
+            view: "admin",
+            id: program,
+            revision: 1,
+            record_revision: 1,
+            value: true,
+          }),
+        )
+      ).status,
+      200,
+    );
+    const downloaded = await media(client, image);
+    assert.equal(downloaded.status, 200);
+    assert.ok(Buffer.from(await downloaded.arrayBuffer()).equals(png));
+    assert.equal(downloaded.headers.get("cache-control"), "no-store");
+    assert.equal(
+      (
+        await call(
+          admin,
+          `/v1/workspaces/${id}`,
+          operation("member", {
+            id: member.id,
+            revision: 1,
+            roles: ["trainee"],
+            active: false,
+          }),
+        )
+      ).status,
+      200,
+    );
+    assert.equal((await media(client, image)).status, 403);
+    const exported = await call(client, "/v1/account/organizations");
+    assert.equal(exported.status, 200);
+    assert.equal(exported.data.memberships.length, 1);
+    assert.equal(exported.data.sessions.length, 0);
+  } finally {
+    await f.cleanup();
+  }
+});

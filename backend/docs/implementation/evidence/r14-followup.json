@@ -1,0 +1,29 @@
+{
+  "date": "2026-09-23",
+  "scope": "local only",
+  "base": "r14-release.json",
+  "status": "passed",
+  "changes_after_full_gate": [
+    "Four Arabic portion labels completed; nutrient values unchanged",
+    "Catalog assertions cover Arabic labels and starter/media parity; backend-only CI supported",
+    "Nutrition initialization, selection and acknowledgement routing guarded after unmount"
+  ],
+  "browser_command": "npm run test:e2e -- tests/nutrition-planning.e2e.ts tests/exercise-media.e2e.ts tests/service-delivery.e2e.ts",
+  "browser_scenarios": 22,
+  "engines": [
+    "Chromium",
+    "WebKit"
+  ],
+  "new_unique_scenarios_beyond_full_gate": 4,
+  "repeated_focus_matrix_states": 32,
+  "catalog_groups": 2,
+  "navigation_regression": "Reproduced red with a held save response; green after unmount guards, waiting for durable acknowledgement before destination assertion",
+  "raw_log": "RAFIK-FRONTEND/artifacts/r14-final-regressions.txt",
+  "unverified": [
+    "remote CI execution",
+    "physical devices and assistive technology",
+    "hosted operations",
+    "human outcomes",
+    "native integration"
+  ]
+}

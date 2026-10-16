@@ -1,0 +1,3990 @@
+{
+  "schemaVersion": 1,
+  "snapshotDate": "2026-09-23",
+  "generatedAtUtc": "2026-09-23T15:13:12.983972+00:00",
+  "source": {
+    "project": "wger-project/wger",
+    "sourceCommit": "80d4a989cf7b0e98eb8817e1b725161857980803",
+    "liveApiBase": "https://wger.de/api/v2",
+    "note": "The source commit pins the API implementation; these exercise records are a dated snapshot of the mutable live catalog."
+  },
+  "summary": {
+    "records": 46,
+    "uniqueExerciseUuids": 46,
+    "allHaveEnglishTranslation": true,
+    "emptyEnglishDescriptions": 9,
+    "exerciseLicenseIds": [
+      1,
+      2,
+      3
+    ],
+    "englishTranslationLicenseIds": [
+      1,
+      2,
+      3
+    ]
+  },
+  "importRule": "Use a distinct Rafik ID namespace such as wger-<exerciseUuid or reviewed slug>. Preserve exercise and translation licenses/authors separately. Sanitize descriptionHtml or use descriptionText. Empty descriptions require newly authored, coach-reviewed Rafik instructions; do not claim video-derived text is source-authored or technique-certified.",
+  "records": [
+    {
+      "exerciseId": 12,
+      "exerciseUuid": "53906cd1-61f1-4d56-ac60-e4fcc5824861",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2026-01-14T03:00:17.174694+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:46:23.870732+02:00",
+      "category": {
+        "id": 9,
+        "name": "Legs"
+      },
+      "equipment": [],
+      "primaryMuscles": [
+        {
+          "id": 8,
+          "name": "Gluteus maximus",
+          "name_en": "Glutes",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-8.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-8.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "95132eef-ae4e-4185-87b8-a8588caff4fa",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "flori",
+      "exerciseAuthorHistory": [
+        "flori"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "wger.de",
+        "flori",
+        "wgerjhn",
+        "Araaosf"
+      ],
+      "englishTranslation": {
+        "id": 377,
+        "uuid": "4b3025a9-b717-4577-9e92-b1c200fe5f1c",
+        "name": "Seated Hip Adduction",
+        "descriptionHtml": "<p>Starting Position: Sit on the machine with your knees inward and against the pads. Pull the pin to release the pads. Grab the handles on the sides.b</p>\n",
+        "descriptionText": "Starting Position: Sit on the machine with your knees inward and against the pads. Pull the pin to release the pads. Grab the handles on the sides.b",
+        "descriptionSource": "Starting Position: Sit on the machine with your knees inward and against the pads. Pull the pin to release the pads. Grab the handles on the sides.b",
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "flori",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "flori",
+          "Araaosf"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/12/"
+    },
+    {
+      "exerciseId": 46,
+      "exerciseUuid": "04e7d7e4-f8d2-406d-97df-3df3bceec22c",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:21:24.281782+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:56:45.225252+02:00",
+      "category": {
+        "id": 9,
+        "name": "Legs"
+      },
+      "equipment": [
+        {
+          "id": 1,
+          "name": "Barbell"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 10,
+          "name": "Quadriceps femoris",
+          "name_en": "Quads",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-10.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-10.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 8,
+          "name": "Gluteus maximus",
+          "name_en": "Glutes",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-8.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-8.svg"
+        }
+      ],
+      "variationGroupUuid": "c8727770-8ec1-4fe3-ae70-238a9fc46570",
+      "exerciseLicense": {
+        "id": 2,
+        "full_name": "Creative Commons Attribution Share Alike 4",
+        "short_name": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "Mikko Ruohola",
+      "exerciseAuthorHistory": [
+        "Mikko Ruohola"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "wger.de",
+        "wampir5000",
+        "Mikko Ruohola",
+        "wgerjhn"
+      ],
+      "englishTranslation": {
+        "id": 405,
+        "uuid": "ae6a6c23-4616-49b7-a152-49d7461c2b7f",
+        "name": "Barbell Lunges Standing",
+        "descriptionHtml": "<p>Put barbell on the back of your shoulders. Stand upright, then take the first step forward. Step should bring you forward so that your supporting legs knee can touch the floor. Then stand back up and repeat with the other leg.</p>\n<p>Remember to keep good posture.</p>\n",
+        "descriptionText": "Put barbell on the back of your shoulders. Stand upright, then take the first step forward. Step should bring you forward so that your supporting legs knee can touch the floor. Then stand back up and repeat with the other leg. Remember to keep good posture.",
+        "descriptionSource": "Put barbell on the back of your shoulders. Stand upright, then take the first step forward. Step should bring you forward so that your supporting legs knee can touch the floor. Then stand back up and repeat with the other leg.\n\nRemember to keep good posture.",
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 2,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "Mikko Ruohola",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "Mikko Ruohola"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/46/"
+    },
+    {
+      "exerciseId": 73,
+      "exerciseUuid": "3717d144-7815-4a97-9a56-956fb889c996",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:23:51.262565+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:46:21.803261+02:00",
+      "category": {
+        "id": 11,
+        "name": "Chest"
+      },
+      "equipment": [
+        {
+          "id": 1,
+          "name": "Barbell"
+        },
+        {
+          "id": 8,
+          "name": "Bench"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 4,
+          "name": "Pectoralis major",
+          "name_en": "Chest",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-4.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-4.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 2,
+          "name": "Anterior deltoid",
+          "name_en": "Shoulders",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-2.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-2.svg"
+        },
+        {
+          "id": 5,
+          "name": "Triceps brachii",
+          "name_en": "Triceps",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-5.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-5.svg"
+        }
+      ],
+      "variationGroupUuid": "f45f135e-4cd3-4023-a82a-83fca2078656",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "sistab2",
+      "exerciseAuthorHistory": [
+        "sistab2"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "rlamarca",
+        "Goulart",
+        "wger.de",
+        "sistab2",
+        "wampir5000",
+        "wgerjhn"
+      ],
+      "englishTranslation": {
+        "id": 192,
+        "uuid": "5da6340b-22ec-4c1b-a443-eef2f59f92f0",
+        "name": "Bench Press",
+        "descriptionHtml": "<p>Lay down on a bench, the bar should be directly above your eyes, the knees are somewhat angled and the feet are firmly on the floor. Concentrate, breath deeply and grab the bar more than shoulder wide. Bring it slowly down till it briefly touches your chest at the height of your nipples. Push the bar up.</p>\n<p>If you train with a high weight it is advisable to have a <em>spotter</em> that can help you up if you can't lift the weight on your own.</p>\n<p>With the width of the grip you can also control which part of the chest is trained more:</p>\n<ul>\n<li>wide grip: outer chest muscles</li>\n<li>narrow grip: inner chest muscles and triceps</li>\n</ul>\n",
+        "descriptionText": "Lay down on a bench, the bar should be directly above your eyes, the knees are somewhat angled and the feet are firmly on the floor. Concentrate, breath deeply and grab the bar more than shoulder wide. Bring it slowly down till it briefly touches your chest at the height of your nipples. Push the bar up. If you train with a high weight it is advisable to have a spotter that can help you up if you can't lift the weight on your own. With the width of the grip you can also control which part of the chest is trained more: wide grip: outer chest muscles narrow grip: inner chest muscles and triceps",
+        "descriptionSource": "Lay down on a bench, the bar should be directly above your eyes, the knees are somewhat angled and the feet are firmly on the floor. Concentrate, breath deeply and grab the bar more than shoulder wide. Bring it slowly down till it briefly touches your chest at the height of your nipples. Push the bar up.\n\nIf you train with a high weight it is advisable to have a *spotter* that can help you up if you can't lift the weight on your own.\n\nWith the width of the grip you can also control which part of the chest is trained more:\n\n* wide grip: outer chest muscles\n* narrow grip: inner chest muscles and triceps",
+        "aliases": [],
+        "notes": [
+          {
+            "id": 321,
+            "uuid": "db48a16f-0b54-4abe-a82b-aa802a3b3e86",
+            "translation": 192,
+            "comment": "Don't stretch your arms completly"
+          }
+        ],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "sistab2",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "sistab2"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/73/"
+    },
+    {
+      "exerciseId": 75,
+      "exerciseUuid": "28321cf3-70e6-48a4-ade1-d11382180cb3",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:23:21.212978+01:00",
+      "lastUpdateGlobal": "2026-07-02T16:44:41.508287+02:00",
+      "category": {
+        "id": 11,
+        "name": "Chest"
+      },
+      "equipment": [
+        {
+          "id": 8,
+          "name": "Bench"
+        },
+        {
+          "id": 3,
+          "name": "Dumbbell"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 4,
+          "name": "Pectoralis major",
+          "name_en": "Chest",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-4.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-4.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 2,
+          "name": "Anterior deltoid",
+          "name_en": "Shoulders",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-2.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-2.svg"
+        },
+        {
+          "id": 5,
+          "name": "Triceps brachii",
+          "name_en": "Triceps",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-5.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-5.svg"
+        }
+      ],
+      "variationGroupUuid": "f45f135e-4cd3-4023-a82a-83fca2078656",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "FEFFO",
+        "Jhonatan",
+        "Goulart",
+        "wger.de",
+        "admin",
+        "Garion"
+      ],
+      "englishTranslation": {
+        "id": 97,
+        "uuid": "0ec76f5d-1311-4d6d-bf79-00fa17c3061a",
+        "name": "Benchpress Dumbbells",
+        "descriptionHtml": "<ol>\n<li>\n<p>Setup and Starting Position: Sit at the end of a flat bench with a dumbbell resting vertically against each thigh. Carefully lean back while driving the dumbbells toward your chest with your knees.</p>\n</li>\n<li>\n<p>The “Leg Drive” and Posture: Plant your feet firmly on the floor. Retract your shoulder blades (press them together against the bench) and maintain a slight natural lumbar curve.</p>\n</li>\n<li>\n<p>Starting Position: Push the dumbbells toward the ceiling. Your wrists should be aligned with your elbows. Rotate the dumbbells slightly inward (about 45 degrees) so that your elbows do not splay out too far to the sides, thereby protecting your shoulders.</p>\n</li>\n<li>\n<p>Eccentric Phase (Lowering): Lower the dumbbells in a controlled manner toward the sides of your chest. Your elbows should lower at an angle of about 45–60 degrees relative to your body. Feel the stretch in the lower part of your chest.</p>\n</li>\n<li>\n<p>Concentric Phase (Lift): Push the weight upward in a slight arc (toward the center), without letting the dumbbells collide at the top or fully locking out your elbows to maintain muscle tension. Exhale as you lift.</p>\n</li>\n</ol>\n<p>Translated with DeepL.com (free version)</p>\n",
+        "descriptionText": "Setup and Starting Position: Sit at the end of a flat bench with a dumbbell resting vertically against each thigh. Carefully lean back while driving the dumbbells toward your chest with your knees. The “Leg Drive” and Posture: Plant your feet firmly on the floor. Retract your shoulder blades (press them together against the bench) and maintain a slight natural lumbar curve. Starting Position: Push the dumbbells toward the ceiling. Your wrists should be aligned with your elbows. Rotate the dumbbells slightly inward (about 45 degrees) so that your elbows do not splay out too far to the sides, thereby protecting your shoulders. Eccentric Phase (Lowering): Lower the dumbbells in a controlled manner toward the sides of your chest. Your elbows should lower at an angle of about 45–60 degrees relative to your body. Feel the stretch in the lower part of your chest. Concentric Phase (Lift): Push the weight upward in a slight arc (toward the center), without letting the dumbbells collide at the top or fully locking out your elbows to maintain muscle tension. Exhale as you lift. Translated with DeepL.com (free version)",
+        "descriptionSource": "1. Setup and Starting Position: Sit at the end of a flat bench with a dumbbell resting vertically against each thigh. Carefully lean back while driving the dumbbells toward your chest with your knees.\n\n2. The “Leg Drive” and Posture: Plant your feet firmly on the floor. Retract your shoulder blades (press them together against the bench) and maintain a slight natural lumbar curve.\n\n3. Starting Position: Push the dumbbells toward the ceiling. Your wrists should be aligned with your elbows. Rotate the dumbbells slightly inward (about 45 degrees) so that your elbows do not splay out too far to the sides, thereby protecting your shoulders.\n\n4. Eccentric Phase (Lowering): Lower the dumbbells in a controlled manner toward the sides of your chest. Your elbows should lower at an angle of about 45–60 degrees relative to your body. Feel the stretch in the lower part of your chest.\n\n5. Concentric Phase (Lift): Push the weight upward in a slight arc (toward the center), without letting the dumbbells collide at the top or fully locking out your elbows to maintain muscle tension. Exhale as you lift.\n\nTranslated with DeepL.com (free version)",
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/75/"
+    },
+    {
+      "exerciseId": 82,
+      "exerciseUuid": "6f79b381-98a4-40d5-8a45-3bb0558be6fe",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:23:19.837819+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:46:19.206526+02:00",
+      "category": {
+        "id": 13,
+        "name": "Shoulders"
+      },
+      "equipment": [
+        {
+          "id": 8,
+          "name": "Bench"
+        },
+        {
+          "id": 3,
+          "name": "Dumbbell"
+        }
+      ],
+      "primaryMuscles": [],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "b40d438a-c545-4507-8447-10bbb5e30bdd",
+      "exerciseLicense": {
+        "id": 2,
+        "full_name": "Creative Commons Attribution Share Alike 4",
+        "short_name": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "apeschel",
+      "exerciseAuthorHistory": [
+        "apeschel"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "apeschel",
+        "wger.de",
+        "wgerjhn"
+      ],
+      "englishTranslation": {
+        "id": 421,
+        "uuid": "170cc52f-345f-41b3-bdae-8a5e0c9aa449",
+        "name": "Bent-over Lateral Raises",
+        "descriptionHtml": "<p>Sit on bench while holding weights. Bend forward as far as possible, with arms slightly bent at the elbow. Perform a lateral raise while maintaining the bend in your elbow.</p>\n",
+        "descriptionText": "Sit on bench while holding weights. Bend forward as far as possible, with arms slightly bent at the elbow. Perform a lateral raise while maintaining the bend in your elbow.",
+        "descriptionSource": "Sit on bench while holding weights. Bend forward as far as possible, with arms slightly bent at the elbow. Perform a lateral raise while maintaining the bend in your elbow.",
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 2,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "apeschel",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "apeschel"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/82/"
+    },
+    {
+      "exerciseId": 91,
+      "exerciseUuid": "7b99a081-6b1a-4aa5-b86a-5a935d083a35",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:23:32.494961+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:46:19.725861+02:00",
+      "category": {
+        "id": 8,
+        "name": "Arms"
+      },
+      "equipment": [
+        {
+          "id": 1,
+          "name": "Barbell"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 1,
+          "name": "Biceps brachii",
+          "name_en": "Biceps",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-1.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-1.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 13,
+          "name": "Brachialis",
+          "name_en": "",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-13.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-13.svg"
+        }
+      ],
+      "variationGroupUuid": "674f258e-60c5-4c94-8495-cd918aabea77",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "rlamarca",
+        "Goulart",
+        "wger.de",
+        "roneydya",
+        "admin"
+      ],
+      "englishTranslation": {
+        "id": 74,
+        "uuid": "c56078d2-ae85-4524-a467-d1e143b6df1a",
+        "name": "Biceps Curls With Barbell",
+        "descriptionHtml": "<p>Hold the Barbell shoulder-wide, the back is straight, the shoulders slightly back, the arms are streched. Bend the arms, bringing the weight up, with a fast movement. Without pausing, let down the bar with a slow and controlled movement.</p>\n<p>Don't allow your body to swing during the exercise, all work is done by the biceps, which are the only mucles that should move (pay attention to the elbows).</p>\n",
+        "descriptionText": "Hold the Barbell shoulder-wide, the back is straight, the shoulders slightly back, the arms are streched. Bend the arms, bringing the weight up, with a fast movement. Without pausing, let down the bar with a slow and controlled movement. Don't allow your body to swing during the exercise, all work is done by the biceps, which are the only mucles that should move (pay attention to the elbows).",
+        "descriptionSource": "Hold the Barbell shoulder-wide, the back is straight, the shoulders slightly back, the arms are streched. Bend the arms, bringing the weight up, with a fast movement. Without pausing, let down the bar with a slow and controlled movement.\n\nDon't allow your body to swing during the exercise, all work is done by the biceps, which are the only mucles that should move (pay attention to the elbows).",
+        "aliases": [],
+        "notes": [
+          {
+            "id": 316,
+            "uuid": "60e27e25-263a-402e-963f-33d7db1d7f4d",
+            "translation": 74,
+            "comment": "Keep your upper body straight"
+          },
+          {
+            "id": 317,
+            "uuid": "2bb484b6-3d36-4441-9e40-66586bd3a0fa",
+            "translation": 74,
+            "comment": "Fluid movements with no pauses at the top or the bottom"
+          }
+        ],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/91/"
+    },
+    {
+      "exerciseId": 92,
+      "exerciseUuid": "1ae6a28d-10e7-4ecf-af4f-905f8193e2c6",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:21:59.622804+01:00",
+      "lastUpdateGlobal": "2026-06-19T19:55:06.817496+02:00",
+      "category": {
+        "id": 8,
+        "name": "Arms"
+      },
+      "equipment": [
+        {
+          "id": 3,
+          "name": "Dumbbell"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 1,
+          "name": "Biceps brachii",
+          "name_en": "Biceps",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-1.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-1.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 13,
+          "name": "Brachialis",
+          "name_en": "",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-13.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-13.svg"
+        }
+      ],
+      "variationGroupUuid": "674f258e-60c5-4c94-8495-cd918aabea77",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "FEFFO",
+        "Goulart",
+        "wger.de",
+        "colundrum"
+      ],
+      "englishTranslation": {
+        "id": 81,
+        "uuid": "48a59aa8-4568-409c-8afe-f8cb99c558ea",
+        "name": "Biceps Curls With Dumbbell",
+        "descriptionHtml": "<p>Hold two dumbbells, the arms are streched, the hands are on your side, the palms face inwards. Bend the arms and bring the weight with a fast movement up. At the same time, rotate your arms by 90 degrees at the very beginning of the movement. At the highest point, rotate a little the weights further outwards. Without a pause, bring them down, slowly.</p>\n<p>Don't allow your body to swing during the exercise, all work is done by the biceps, which are the only mucles that should move (pay attention to the elbows).</p>\n",
+        "descriptionText": "Hold two dumbbells, the arms are streched, the hands are on your side, the palms face inwards. Bend the arms and bring the weight with a fast movement up. At the same time, rotate your arms by 90 degrees at the very beginning of the movement. At the highest point, rotate a little the weights further outwards. Without a pause, bring them down, slowly. Don't allow your body to swing during the exercise, all work is done by the biceps, which are the only mucles that should move (pay attention to the elbows).",
+        "descriptionSource": "Hold two dumbbells, the arms are streched, the hands are on your side, the palms face inwards. Bend the arms and bring the weight with a fast movement up. At the same time, rotate your arms by 90 degrees at the very beginning of the movement. At the highest point, rotate a little the weights further outwards. Without a pause, bring them down, slowly.\n\nDon't allow your body to swing during the exercise, all work is done by the biceps, which are the only mucles that should move (pay attention to the elbows).",
+        "aliases": [],
+        "notes": [
+          {
+            "id": 302,
+            "uuid": "17e2f36d-49f7-402e-a1d7-3fdcd4ce9d04",
+            "translation": 81,
+            "comment": "Fluid movements with no pauses at the top or the bottom"
+          }
+        ],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/92/"
+    },
+    {
+      "exerciseId": 95,
+      "exerciseUuid": "bcb7020c-8678-496d-8f4d-aad0e233a5bd",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2026-07-23T12:36:13.168665+02:00",
+      "lastUpdateGlobal": "2026-07-23T12:36:13.168665+02:00",
+      "category": {
+        "id": 8,
+        "name": "Arms"
+      },
+      "equipment": [
+        {
+          "id": 12,
+          "name": "Cable machine"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 1,
+          "name": "Biceps brachii",
+          "name_en": "Biceps",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-1.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-1.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "674f258e-60c5-4c94-8495-cd918aabea77",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "wgerjhn",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 129,
+        "uuid": "8c6c1544-cbf8-403c-ae12-b27b392702f8",
+        "name": "Biceps Curl With Cable",
+        "descriptionHtml": "<p>Stand around 30 - 40cm away from the cable, the feet are firmly on the floor. Take the bar and lift the weight with a fast movements. Lower the weight as with the dumbbell curls slowly and controlled.</p>\n",
+        "descriptionText": "Stand around 30 - 40cm away from the cable, the feet are firmly on the floor. Take the bar and lift the weight with a fast movements. Lower the weight as with the dumbbell curls slowly and controlled.",
+        "descriptionSource": "Stand around 30 - 40cm away from the cable, the feet are firmly on the floor. Take the bar and lift the weight with a fast movements. Lower the weight as with the dumbbell curls slowly and controlled.",
+        "aliases": [],
+        "notes": [
+          {
+            "id": 322,
+            "uuid": "d6d37797-f924-4efa-b14c-96759309116e",
+            "translation": 129,
+            "comment": "Don't move the elbows during the exercise"
+          }
+        ],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/95/"
+    },
+    {
+      "exerciseId": 194,
+      "exerciseUuid": "09dd3e3c-e53a-4e2c-a2e3-645d334f53e2",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2026-07-23T12:08:29.998443+02:00",
+      "lastUpdateGlobal": "2026-07-23T12:08:29.998443+02:00",
+      "category": {
+        "id": 11,
+        "name": "Chest"
+      },
+      "equipment": [
+        {
+          "id": 7,
+          "name": "none (bodyweight exercise)"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 4,
+          "name": "Pectoralis major",
+          "name_en": "Chest",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-4.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-4.svg"
+        },
+        {
+          "id": 5,
+          "name": "Triceps brachii",
+          "name_en": "Triceps",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-5.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-5.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "f195b345-b4d2-42fb-8edb-3d39da7c9066",
+      "exerciseLicense": {
+        "id": 3,
+        "full_name": "Creative Commons Public Domain 1.0",
+        "short_name": "CC0",
+        "url": "http://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "exerciseLicenseAuthor": "BFad07",
+      "exerciseAuthorHistory": [
+        "BFad07"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "devupidea",
+        "cshep442",
+        "clafal",
+        "Goulart",
+        "wger.de",
+        "BFad07",
+        "wgerjhn"
+      ],
+      "englishTranslation": {
+        "id": 781,
+        "uuid": "7191e015-0c60-4376-9be0-733b9754b7f8",
+        "name": "Dips",
+        "descriptionHtml": "<p>A dip is an upper-body strength exercise. Narrow, shoulder-width dips primarily train the triceps, with major synergists being the anterior deltoid, the pectoralis muscles (sternal, clavicular, and minor), and the rhomboid muscles of the back (in that order).[1] Wide arm training places additional emphasis on the pectoral muscles, similar in respect to the way a wide grip bench press would focus more on the pectorals and less on the triceps.</p>\n",
+        "descriptionText": "A dip is an upper-body strength exercise. Narrow, shoulder-width dips primarily train the triceps, with major synergists being the anterior deltoid, the pectoralis muscles (sternal, clavicular, and minor), and the rhomboid muscles of the back (in that order).[1] Wide arm training places additional emphasis on the pectoral muscles, similar in respect to the way a wide grip bench press would focus more on the pectorals and less on the triceps.",
+        "descriptionSource": "A dip is an upper-body strength exercise. Narrow, shoulder-width dips primarily train the triceps, with major synergists being the anterior deltoid, the pectoralis muscles (sternal, clavicular, and minor), and the rhomboid muscles of the back (in that order).[1] Wide arm training places additional emphasis on the pectoral muscles, similar in respect to the way a wide grip bench press would focus more on the pectorals and less on the triceps.",
+        "aliases": [
+          {
+            "id": 614,
+            "uuid": "087c0292-7fce-4f30-b745-eb62c760bfde",
+            "alias": "Weighted Dips"
+          }
+        ],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 3,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "BFad07",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "BFad07"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/194/"
+    },
+    {
+      "exerciseId": 205,
+      "exerciseUuid": "2f1a2707-e7ff-46ac-9112-3e31e6e961ee",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:27:20.936371+01:00",
+      "lastUpdateGlobal": "2026-04-15T22:23:56.372270+02:00",
+      "category": {
+        "id": 9,
+        "name": "Legs"
+      },
+      "equipment": [
+        {
+          "id": 3,
+          "name": "Dumbbell"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 10,
+          "name": "Quadriceps femoris",
+          "name_en": "Quads",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-10.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-10.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 8,
+          "name": "Gluteus maximus",
+          "name_en": "Glutes",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-8.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-8.svg"
+        }
+      ],
+      "variationGroupUuid": "c8727770-8ec1-4fe3-ae70-238a9fc46570",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "perteus",
+        "Goulart",
+        "wger.de",
+        "wgerjhn"
+      ],
+      "englishTranslation": {
+        "id": 112,
+        "uuid": "587c0052-f2bc-48ca-8af9-415175308901",
+        "name": "Dumbbell Lunges Standing",
+        "descriptionHtml": "<p>.</p>\n",
+        "descriptionText": ".",
+        "descriptionSource": ".",
+        "aliases": [],
+        "notes": [
+          {
+            "id": 329,
+            "uuid": "cddb3fc4-876b-4490-a367-b7f8f5f2b8a8",
+            "translation": 112,
+            "comment": "Make no pauses, go immediately down"
+          }
+        ],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/205/"
+    },
+    {
+      "exerciseId": 206,
+      "exerciseUuid": "dcc6e237-a8bb-4eca-bbc5-7fb852636f6a",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:27:29.928659+01:00",
+      "lastUpdateGlobal": "2026-07-02T16:14:28.985601+02:00",
+      "category": {
+        "id": 9,
+        "name": "Legs"
+      },
+      "equipment": [
+        {
+          "id": 3,
+          "name": "Dumbbell"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 10,
+          "name": "Quadriceps femoris",
+          "name_en": "Quads",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-10.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-10.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 8,
+          "name": "Gluteus maximus",
+          "name_en": "Glutes",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-8.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-8.svg"
+        }
+      ],
+      "variationGroupUuid": "c8727770-8ec1-4fe3-ae70-238a9fc46570",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "nishant0712",
+        "Goulart",
+        "wger.de",
+        "wgerjhn"
+      ],
+      "englishTranslation": {
+        "id": 113,
+        "uuid": "ffd4ce7e-e14f-49d4-9dc9-dc1362631382",
+        "name": "Dumbbell Lunges Walking",
+        "descriptionHtml": "<ul>\n<li><strong>Starting Position:</strong> Stand with feet hip-width apart and hands either on your hips or holding dumbbells at your sides.</li>\n<li><strong>The Stride:</strong> Take a wide step forward with your right leg.</li>\n<li><strong>The Descent:</strong> Lower your hips until both knees are bent at approximately <strong>90-degree angles</strong>.</li>\n<li><strong>The Transition:</strong> Drive through your front heel to stand up, bringing your back foot forward to step directly into the next lunge.</li>\n</ul>\n",
+        "descriptionText": "Starting Position: Stand with feet hip-width apart and hands either on your hips or holding dumbbells at your sides. The Stride: Take a wide step forward with your right leg. The Descent: Lower your hips until both knees are bent at approximately 90-degree angles . The Transition: Drive through your front heel to stand up, bringing your back foot forward to step directly into the next lunge.",
+        "descriptionSource": "- **Starting Position:** Stand with feet hip-width apart and hands either on your hips or holding dumbbells at your sides.\n- **The Stride:** Take a wide step forward with your right leg.\n- **The Descent:** Lower your hips until both knees are bent at approximately **90-degree angles**.\n- **The Transition:** Drive through your front heel to stand up, bringing your back foot forward to step directly into the next lunge.",
+        "aliases": [
+          {
+            "id": 692,
+            "uuid": "e6fd9a6c-65d9-4d18-ad0a-b31d81045024",
+            "alias": "Walking Lunges"
+          }
+        ],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/206/"
+    },
+    {
+      "exerciseId": 211,
+      "exerciseUuid": "d8bddb58-91b0-4d7b-8ec1-cd742584b607",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:27:38.572463+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:56:54.943487+02:00",
+      "category": {
+        "id": 8,
+        "name": "Arms"
+      },
+      "equipment": [
+        {
+          "id": 3,
+          "name": "Dumbbell"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 5,
+          "name": "Triceps brachii",
+          "name_en": "Triceps",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-5.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-5.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 2,
+          "name": "Anterior deltoid",
+          "name_en": "Shoulders",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-2.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-2.svg"
+        },
+        {
+          "id": 4,
+          "name": "Pectoralis major",
+          "name_en": "Chest",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-4.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-4.svg"
+        }
+      ],
+      "variationGroupUuid": "290582f2-d94c-4eb6-a994-99e38d7251f7",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "tuninx",
+      "exerciseAuthorHistory": [
+        "tuninx"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "tuninx",
+        "Goulart",
+        "wger.de",
+        "wgerjhn"
+      ],
+      "englishTranslation": {
+        "id": 274,
+        "uuid": "3f7b893e-a089-450f-b8cc-ec3ec17d3bf3",
+        "name": "Dumbbell Triceps Extension",
+        "descriptionHtml": "<p>Position one dumbbell over head with both hands under inner plate (heart shaped grip).</p>\n<p>With elbows over head, lower forearm behind upper arm by flexing elbows. Flex wrists at bottom to avoid hitting dumbbell on back of neck. Raise dumbbell over head by extending elbows while hyperextending wrists. Return and repeat.</p>\n",
+        "descriptionText": "Position one dumbbell over head with both hands under inner plate (heart shaped grip). With elbows over head, lower forearm behind upper arm by flexing elbows. Flex wrists at bottom to avoid hitting dumbbell on back of neck. Raise dumbbell over head by extending elbows while hyperextending wrists. Return and repeat.",
+        "descriptionSource": "Position one dumbbell over head with both hands under inner plate (heart shaped grip).\n\nWith elbows over head, lower forearm behind upper arm by flexing elbows. Flex wrists at bottom to avoid hitting dumbbell on back of neck. Raise dumbbell over head by extending elbows while hyperextending wrists. Return and repeat.",
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "tuninx",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "tuninx"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/211/"
+    },
+    {
+      "exerciseId": 222,
+      "exerciseUuid": "d7a418d4-d0cb-4f85-8a7c-1e9d97152cbd",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2026-07-23T12:36:14.828136+02:00",
+      "lastUpdateGlobal": "2026-07-23T12:36:14.828136+02:00",
+      "category": {
+        "id": 13,
+        "name": "Shoulders"
+      },
+      "equipment": [
+        {
+          "id": 12,
+          "name": "Cable machine"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 9,
+          "name": "Trapezius",
+          "name_en": "",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-9.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-9.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": null,
+      "exerciseLicense": {
+        "id": 2,
+        "full_name": "Creative Commons Attribution Share Alike 4",
+        "short_name": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "abeworld",
+      "exerciseAuthorHistory": [
+        "abeworld"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "abeworld",
+        "TP-Tobi",
+        "Goulart",
+        "wger.de",
+        "Franpol"
+      ],
+      "englishTranslation": {
+        "id": 394,
+        "uuid": "659f3fb9-2370-42fb-9c29-9aaf65c7a7de",
+        "name": "Facepull",
+        "descriptionHtml": "<p>Attach a rope to a pulley station set at about chest level.</p>\n<p>Step back so you're supporting the weight with arms completely outstretched and assume a staggered (one foot forward) stance. Bend the knees slightly for a stable base.</p>\n<p>Retract the scapulae (squeeze your partner's finger with your shoulder blades) and pull the center of the rope slightly up towards the face. A good cue is to think about pulling the ends of the rope apart, not just pulling back.</p>\n<p>As you near your face, externally rotate so your knuckles are facing the ceiling.</p>\n<p>Hold for one second at the top position and slowly lower.</p>\n",
+        "descriptionText": "Attach a rope to a pulley station set at about chest level. Step back so you're supporting the weight with arms completely outstretched and assume a staggered (one foot forward) stance. Bend the knees slightly for a stable base. Retract the scapulae (squeeze your partner's finger with your shoulder blades) and pull the center of the rope slightly up towards the face. A good cue is to think about pulling the ends of the rope apart, not just pulling back. As you near your face, externally rotate so your knuckles are facing the ceiling. Hold for one second at the top position and slowly lower.",
+        "descriptionSource": "Attach a rope to a pulley station set at about chest level.\n\nStep back so you're supporting the weight with arms completely outstretched and assume a staggered (one foot forward) stance. Bend the knees slightly for a stable base.\n\nRetract the scapulae (squeeze your partner's finger with your shoulder blades) and pull the center of the rope slightly up towards the face. A good cue is to think about pulling the ends of the rope apart, not just pulling back.\n\nAs you near your face, externally rotate so your knuckles are facing the ceiling.\n\nHold for one second at the top position and slowly lower.",
+        "aliases": [
+          {
+            "id": 535,
+            "uuid": "4108f5a5-e286-41bd-95c0-4f1a2e226a0b",
+            "alias": "Face pull"
+          }
+        ],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 2,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "abeworld",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "abeworld"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/222/"
+    },
+    {
+      "exerciseId": 245,
+      "exerciseUuid": "893c07ea-2e24-49b6-92e4-d0033eedec62",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:28:34.984135+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:46:39.770835+02:00",
+      "category": {
+        "id": 8,
+        "name": "Arms"
+      },
+      "equipment": [
+        {
+          "id": 8,
+          "name": "Bench"
+        },
+        {
+          "id": 3,
+          "name": "Dumbbell"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 5,
+          "name": "Triceps brachii",
+          "name_en": "Triceps",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-5.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-5.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "46d83fa5-cddc-4cb5-9b16-dcd4c62ae861",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "wgerjhn",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 85,
+        "uuid": "ee00d53e-4482-44aa-b780-bbc570061841",
+        "name": "Skullcrusher Dumbbells",
+        "descriptionHtml": "<p>Hold the dumbbells and lay down on a flat bench in such a way that around 1/4 of your head is over the edge. Stretch arms straight up and then lean dumbbells away from your toes to a 10-20 degree angle. Keep upper arm at this angle throughout exercise. Dumbbell shall not be amed at your head, but away over your head. This will maximise gain from exercise with load on triceps all the time.</p>\n<p>Pay attention to your elbows and arms: only the triceps are doing the work, the rest of the arms should not move.</p>\n",
+        "descriptionText": "Hold the dumbbells and lay down on a flat bench in such a way that around 1/4 of your head is over the edge. Stretch arms straight up and then lean dumbbells away from your toes to a 10-20 degree angle. Keep upper arm at this angle throughout exercise. Dumbbell shall not be amed at your head, but away over your head. This will maximise gain from exercise with load on triceps all the time. Pay attention to your elbows and arms: only the triceps are doing the work, the rest of the arms should not move.",
+        "descriptionSource": "Hold the dumbbells and lay down on a flat bench in such a way that around 1/4 of your head is over the edge. Stretch arms straight up and then lean dumbbells away from your toes to a 10-20 degree angle. Keep upper arm at this angle throughout exercise. Dumbbell shall not be amed at your head, but away over your head. This will maximise gain from exercise with load on triceps all the time.\n\nPay attention to your elbows and arms: only the triceps are doing the work, the rest of the arms should not move.",
+        "aliases": [
+          {
+            "id": 536,
+            "uuid": "c02400a2-ef0d-4808-a517-8bb48f4d8554",
+            "alias": "French Press Dumbbells"
+          }
+        ],
+        "notes": [
+          {
+            "id": 340,
+            "uuid": "73d76d65-9807-4d37-a81a-84ded5a0efd9",
+            "translation": 85,
+            "comment": "Don't move the elbows during the exercise"
+          }
+        ],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/245/"
+    },
+    {
+      "exerciseId": 246,
+      "exerciseUuid": "95a7e546-e8f8-4521-a76b-983d94161b25",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:28:37.856572+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:46:40.278298+02:00",
+      "category": {
+        "id": 8,
+        "name": "Arms"
+      },
+      "equipment": [
+        {
+          "id": 8,
+          "name": "Bench"
+        },
+        {
+          "id": 2,
+          "name": "SZ-Bar"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 5,
+          "name": "Triceps brachii",
+          "name_en": "Triceps",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-5.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-5.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "46d83fa5-cddc-4cb5-9b16-dcd4c62ae861",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "wgerjhn",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 84,
+        "uuid": "ee4a350b-c681-407f-a414-6ec243809ec7",
+        "name": "Skullcrusher SZ-bar",
+        "descriptionHtml": "<p>Hold the SZ-bar and lay down on a flat bench in such a way that around 1/4 of your head is over the edge. Stretch your arms with the bar and bend them so that the bar is lowered. Just before it touches your forehead, push it up.</p>\n<p>Pay attention to your elbows and arms: only the triceps are doing the work, the rest of the arms should not move.</p>\n",
+        "descriptionText": "Hold the SZ-bar and lay down on a flat bench in such a way that around 1/4 of your head is over the edge. Stretch your arms with the bar and bend them so that the bar is lowered. Just before it touches your forehead, push it up. Pay attention to your elbows and arms: only the triceps are doing the work, the rest of the arms should not move.",
+        "descriptionSource": "Hold the SZ-bar and lay down on a flat bench in such a way that around 1/4 of your head is over the edge. Stretch your arms with the bar and bend them so that the bar is lowered. Just before it touches your forehead, push it up.\n\nPay attention to your elbows and arms: only the triceps are doing the work, the rest of the arms should not move.",
+        "aliases": [
+          {
+            "id": 537,
+            "uuid": "df1c0c38-7654-44b9-b933-723baa6ddc01",
+            "alias": "French Press SZ-bar"
+          }
+        ],
+        "notes": [
+          {
+            "id": 642,
+            "uuid": "3fd0e355-0a9d-4e34-9c33-dee2ac802aa8",
+            "translation": 84,
+            "comment": "Keeping the upper arms stationary, lower the bar by allowing the elbows to flex. Inhale as you perform this portion of the movement. Pause once the bar is directly above the forehead"
+          },
+          {
+            "id": 643,
+            "uuid": "5511ff38-353a-41ae-a088-82f503c4cacf",
+            "translation": 84,
+            "comment": "Lift the bar back to the starting position by extending the elbow and exhaling."
+          },
+          {
+            "id": 341,
+            "uuid": "4bc730cb-a5db-446c-8fc9-0c8fcf0e2d4d",
+            "translation": 84,
+            "comment": "Don't move the elbows during the exercise"
+          },
+          {
+            "id": 644,
+            "uuid": "8b831508-e063-4e1a-a7d8-83ebc0e20052",
+            "translation": 84,
+            "comment": "Using a close grip, lift the EZ bar and hold it with your elbows in as you lie on the bench. Your arms should be perpendicular to the floor. This will be your starting position."
+          }
+        ],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/246/"
+    },
+    {
+      "exerciseId": 257,
+      "exerciseUuid": "d677de4c-5bd9-412a-91f1-857116a666a2",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:28:15.243527+01:00",
+      "lastUpdateGlobal": "2026-04-15T22:23:55.585492+02:00",
+      "category": {
+        "id": 9,
+        "name": "Legs"
+      },
+      "equipment": [
+        {
+          "id": 1,
+          "name": "Barbell"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 8,
+          "name": "Gluteus maximus",
+          "name_en": "Glutes",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-8.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-8.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 6,
+          "name": "Rectus abdominis",
+          "name_en": "Abs",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-6.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-6.svg"
+        }
+      ],
+      "variationGroupUuid": "ba010720-728a-4baf-ba8c-e1a37370625b",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "sistab2",
+      "exerciseAuthorHistory": [
+        "sistab2"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Fogu",
+        "Goulart",
+        "sistab2",
+        "wgerjhn"
+      ],
+      "englishTranslation": {
+        "id": 191,
+        "uuid": "f2e563d2-507b-4586-88c8-77652cd19648",
+        "name": "Front Squats",
+        "descriptionHtml": "<p>This variation of the squat trains the hamstrings and gluteus maximus. It also works the back extensors and abductors.</p>\n",
+        "descriptionText": "This variation of the squat trains the hamstrings and gluteus maximus. It also works the back extensors and abductors.",
+        "descriptionSource": "This variation of the squat trains the hamstrings and gluteus maximus. It also works the back extensors and abductors.",
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "sistab2",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "sistab2"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/257/"
+    },
+    {
+      "exerciseId": 272,
+      "exerciseUuid": "c0d9fe98-f4fe-49f3-8037-05e1984e7d2d",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:28:19.336458+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:46:39.253111+02:00",
+      "category": {
+        "id": 8,
+        "name": "Arms"
+      },
+      "equipment": [
+        {
+          "id": 3,
+          "name": "Dumbbell"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 1,
+          "name": "Biceps brachii",
+          "name_en": "Biceps",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-1.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-1.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "674f258e-60c5-4c94-8495-cd918aabea77",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "rlamarca",
+        "Goulart",
+        "wger.de",
+        "roneydya",
+        "wgerjhn"
+      ],
+      "englishTranslation": {
+        "id": 86,
+        "uuid": "6dcc9adb-939c-4581-9e44-d0d73753997b",
+        "name": "Hammer Curls",
+        "descriptionHtml": "<ul>\n<li><strong>Start:</strong> Hold dumbbells at your sides with palms facing your torso.</li>\n<li><strong>Curl:</strong> Lift the weights toward your shoulders while maintaining the neutral grip (like holding a hammer).</li>\n<li><strong>Squeeze:</strong> Contract the biceps at the top without moving your elbows forward.</li>\n<li><strong>Lower:</strong> Slowly return to the starting position with full control.</li>\n</ul>\n",
+        "descriptionText": "Start: Hold dumbbells at your sides with palms facing your torso. Curl: Lift the weights toward your shoulders while maintaining the neutral grip (like holding a hammer). Squeeze: Contract the biceps at the top without moving your elbows forward. Lower: Slowly return to the starting position with full control.",
+        "descriptionSource": "- **Start:** Hold dumbbells at your sides with palms facing your torso.\n- **Curl:** Lift the weights toward your shoulders while maintaining the neutral grip (like holding a hammer).\n- **Squeeze:** Contract the biceps at the top without moving your elbows forward.\n- **Lower:** Slowly return to the starting position with full control.",
+        "aliases": [],
+        "notes": [
+          {
+            "id": 337,
+            "uuid": "9f9ce250-40d8-4330-8455-bbbb2cee2793",
+            "translation": 86,
+            "comment": "Keep the elbows right next to the body and don't move them"
+          }
+        ],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/272/"
+    },
+    {
+      "exerciseId": 275,
+      "exerciseUuid": "04365177-e078-489b-983a-8ac61b7346f1",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2026-07-23T12:36:15.643371+02:00",
+      "lastUpdateGlobal": "2026-07-23T12:36:15.643371+02:00",
+      "category": {
+        "id": 8,
+        "name": "Arms"
+      },
+      "equipment": [
+        {
+          "id": 12,
+          "name": "Cable machine"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 1,
+          "name": "Biceps brachii",
+          "name_en": "Biceps",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-1.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-1.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 13,
+          "name": "Brachialis",
+          "name_en": "",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-13.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-13.svg"
+        }
+      ],
+      "variationGroupUuid": "674f258e-60c5-4c94-8495-cd918aabea77",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "admin",
+        "Goulart",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 138,
+        "uuid": "5baf40e5-ea3c-4f8d-b60a-d294ee2de55b",
+        "name": "Hammercurls on Cable",
+        "descriptionHtml": "<p>Take a cable in your hands (palms parallel, point to each other), the body is straight. Bend the arms and bring the weight up with a fast movement. Without any pause bring it back down with a slow, controlled movement, but don't stretch completely your arms.</p>\n<p>Don't swing your body during the exercise, the biceps should do all the work here. The elbows are at your side and don't move.</p>\n",
+        "descriptionText": "Take a cable in your hands (palms parallel, point to each other), the body is straight. Bend the arms and bring the weight up with a fast movement. Without any pause bring it back down with a slow, controlled movement, but don't stretch completely your arms. Don't swing your body during the exercise, the biceps should do all the work here. The elbows are at your side and don't move.",
+        "descriptionSource": "Take a cable in your hands (palms parallel, point to each other), the body is straight. Bend the arms and bring the weight up with a fast movement. Without any pause bring it back down with a slow, controlled movement, but don't stretch completely your arms.\n\nDon't swing your body during the exercise, the biceps should do all the work here. The elbows are at your side and don't move.",
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/275/"
+    },
+    {
+      "exerciseId": 294,
+      "exerciseUuid": "19a289c0-33af-4055-bb34-3570c2975d3d",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:28:42.751884+01:00",
+      "lastUpdateGlobal": "2026-07-02T16:55:31.500709+02:00",
+      "category": {
+        "id": 9,
+        "name": "Legs"
+      },
+      "equipment": [
+        {
+          "id": 1,
+          "name": "Barbell"
+        },
+        {
+          "id": 8,
+          "name": "Bench"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 8,
+          "name": "Gluteus maximus",
+          "name_en": "Glutes",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-8.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-8.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": null,
+      "exerciseLicense": {
+        "id": 2,
+        "full_name": "Creative Commons Attribution Share Alike 4",
+        "short_name": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "Bret Contreras",
+      "exerciseAuthorHistory": [
+        "Bret Contreras"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "enros7500",
+        "Goulart",
+        "wger.de",
+        "Bret Contreras"
+      ],
+      "englishTranslation": {
+        "id": 854,
+        "uuid": "37097633-de80-4271-9b7c-291f359e0ef4",
+        "name": "Hip Thrust",
+        "descriptionHtml": "<p>The bar should go directly on your upper thigh, directly below your crotch. Your feet should be directly under your knees. Push your hips up so that you form a straight line from your knees to your shoulders. Use a pad for comfort.</p>\n",
+        "descriptionText": "The bar should go directly on your upper thigh, directly below your crotch. Your feet should be directly under your knees. Push your hips up so that you form a straight line from your knees to your shoulders. Use a pad for comfort.",
+        "descriptionSource": "The bar should go directly on your upper thigh, directly below your crotch. Your feet should be directly under your knees. Push your hips up so that you form a straight line from your knees to your shoulders. Use a pad for comfort.",
+        "aliases": [],
+        "notes": [
+          {
+            "id": 346,
+            "uuid": "7f8da2a9-7a90-4bf0-88ad-5ca6c293b008",
+            "translation": 854,
+            "comment": "Hold for a second at the top"
+          },
+          {
+            "id": 347,
+            "uuid": "cead38fe-1551-4f1e-ab9c-b78c5f3b893a",
+            "translation": 854,
+            "comment": "Slow, controlled movements"
+          }
+        ],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 2,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "Bret Contreras",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "Bret Contreras"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/294/"
+    },
+    {
+      "exerciseId": 341,
+      "exerciseUuid": "316aca47-6f5b-40b7-b04f-f69e68387354",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:29:28.620642+01:00",
+      "lastUpdateGlobal": "2026-04-15T22:23:54.440132+02:00",
+      "category": {
+        "id": 9,
+        "name": "Legs"
+      },
+      "equipment": [],
+      "primaryMuscles": [
+        {
+          "id": 10,
+          "name": "Quadriceps femoris",
+          "name_en": "Quads",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-10.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-10.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 8,
+          "name": "Gluteus maximus",
+          "name_en": "Glutes",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-8.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-8.svg"
+        }
+      ],
+      "variationGroupUuid": "10385554-2bdc-40a6-a7f8-1aadc205528c",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 1054,
+        "uuid": "9a427e41-a28b-40b5-ab44-d35f8071ecd9",
+        "name": "Squats on Multipress",
+        "descriptionHtml": "",
+        "descriptionText": "",
+        "descriptionSource": null,
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/341/",
+      "rafikEnglishSupplement": {
+        "exerciseId": 341,
+        "exerciseUuid": "316aca47-6f5b-40b7-b04f-f69e68387354",
+        "englishName": "Squats on Multipress",
+        "mode": "rafik-authored",
+        "englishDescription": "Set the bar around shoulder height and position it across your upper back. Stand about shoulder-width apart with your toes slightly outward. Unrack the bar, brace your torso, and bend your hips and knees to lower under control to a comfortable depth. Drive through your feet to stand, stopping short of forcefully locking your knees. Keep your knees tracking in the same direction as your toes.",
+        "provenance": "Rafik-authored English guidance because every available upstream description was blank or unusable. It is based on the named Smith-machine squat movement and linked wger media identity; it is not presented as an upstream translation or professional technique certification.",
+        "source": {
+          "exerciseUuid": "316aca47-6f5b-40b7-b04f-f69e68387354",
+          "englishTranslationUuid": "9a427e41-a28b-40b5-ab44-d35f8071ecd9",
+          "upstreamEnglishDescriptionWasBlank": true,
+          "videoUuid": "0cbfeace-dda9-4166-8424-f51358e88a4f",
+          "videoLicense": {
+            "id": 2,
+            "name": "Creative Commons Attribution Share Alike 4",
+            "shortName": "CC-BY-SA 4",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+            "author": "Goulart",
+            "authorUrl": null,
+            "objectUrl": null,
+            "derivativeSourceUrl": null,
+            "authorHistory": [
+              "Goulart"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "exerciseId": 348,
+      "exerciseUuid": "63375f5b-2d81-471c-bea4-fc3d207e96cb",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:29:05.370176+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:46:42.325194+02:00",
+      "category": {
+        "id": 13,
+        "name": "Shoulders"
+      },
+      "equipment": [
+        {
+          "id": 3,
+          "name": "Dumbbell"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 2,
+          "name": "Anterior deltoid",
+          "name_en": "Shoulders",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-2.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-2.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "b40d438a-c545-4507-8447-10bbb5e30bdd",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "rlamarca",
+        "M123",
+        "Goulart",
+        "wger.de",
+        "admin",
+        "BFad07"
+      ],
+      "englishTranslation": {
+        "id": 148,
+        "uuid": "5345766a-c092-457a-aa21-8ee6ffa855d4",
+        "name": "Lateral Raises",
+        "descriptionHtml": "<p>This exercise works the deltoid muscle of the shoulder. The movement starts with the arms straight, and the hands holding weights at the sides or in front of the body. Body is in a slight forward-leaning position with hips and knees bent a little. Arms are kept straight or slightly bent, and raised through an arc of movement in the coronal plane that terminates when the hands are at approximately shoulder height. Weights are lowered to the starting position, completing one rep. When using a cable machine the individual stands with the coronal plane in line with the pulley, which is at or near the ground.[9] The exercise can be completed one shoulder at a time (with the other hand used to stabilize the body against the weight moved), or with both hands simultaneously if two parallel pulleys are available.</p>\n",
+        "descriptionText": "This exercise works the deltoid muscle of the shoulder. The movement starts with the arms straight, and the hands holding weights at the sides or in front of the body. Body is in a slight forward-leaning position with hips and knees bent a little. Arms are kept straight or slightly bent, and raised through an arc of movement in the coronal plane that terminates when the hands are at approximately shoulder height. Weights are lowered to the starting position, completing one rep. When using a cable machine the individual stands with the coronal plane in line with the pulley, which is at or near the ground.[9] The exercise can be completed one shoulder at a time (with the other hand used to stabilize the body against the weight moved), or with both hands simultaneously if two parallel pulleys are available.",
+        "descriptionSource": "This exercise works the deltoid muscle of the shoulder. The movement starts with the arms straight, and the hands holding weights at the sides or in front of the body. Body is in a slight forward-leaning position with hips and knees bent a little. Arms are kept straight or slightly bent, and raised through an arc of movement in the coronal plane that terminates when the hands are at approximately shoulder height. Weights are lowered to the starting position, completing one rep. When using a cable machine the individual stands with the coronal plane in line with the pulley, which is at or near the ground.[9] The exercise can be completed one shoulder at a time (with the other hand used to stabilize the body against the weight moved), or with both hands simultaneously if two parallel pulleys are available.",
+        "aliases": [
+          {
+            "id": 539,
+            "uuid": "7ebcc512-baad-46ea-9ac1-3c4f9ca5e52f",
+            "alias": "Shoulder fly"
+          },
+          {
+            "id": 540,
+            "uuid": "a0981bd8-ba11-4be7-8d8e-6c192a2397fe",
+            "alias": "Side raises"
+          }
+        ],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "BFad07",
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/348/"
+    },
+    {
+      "exerciseId": 349,
+      "exerciseUuid": "57263316-6f34-4539-952b-b07e09bac3ba",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2026-07-23T12:36:16.855997+02:00",
+      "lastUpdateGlobal": "2026-07-23T12:36:16.855997+02:00",
+      "category": {
+        "id": 13,
+        "name": "Shoulders"
+      },
+      "equipment": [
+        {
+          "id": 12,
+          "name": "Cable machine"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 2,
+          "name": "Anterior deltoid",
+          "name_en": "Shoulders",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-2.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-2.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "b40d438a-c545-4507-8447-10bbb5e30bdd",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "philip",
+        "Goulart",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 149,
+        "uuid": "79a3a34c-262f-4cae-b827-b5a85b11b860",
+        "name": "Lateral Rows on Cable, One Armed",
+        "descriptionHtml": "<p>Set cable at waist height, start with arm across your belly and move han over and out too other side, one arm at the time.</p>\n",
+        "descriptionText": "Set cable at waist height, start with arm across your belly and move han over and out too other side, one arm at the time.",
+        "descriptionSource": "Set cable at waist height, start with arm across your belly and move han over and out too other side, one arm at the time.",
+        "aliases": [
+          {
+            "id": 538,
+            "uuid": "95ee7ac1-9a54-4d3a-bf45-ecd406ac5692",
+            "alias": "Side raises on Cable"
+          }
+        ],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/349/"
+    },
+    {
+      "exerciseId": 365,
+      "exerciseUuid": "3bc8b411-a28d-4e1c-a6d1-769e18fe9881",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:28:50.656846+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:56:57.741764+02:00",
+      "category": {
+        "id": 9,
+        "name": "Legs"
+      },
+      "equipment": [],
+      "primaryMuscles": [
+        {
+          "id": 11,
+          "name": "Biceps femoris",
+          "name_en": "Hamstrings",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-11.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-11.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "bf50ea3b-2bcb-4278-a682-083798f309d2",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 154,
+        "uuid": "cd4fac32-48fb-4237-a263-a44c5108790a",
+        "name": "Leg Curls (laying)",
+        "descriptionHtml": "<p>Lay on a bench and put your calves behind the leg holder (better if they are hold on around the lower calves). Hold a grip on the bars to make sure the body is firmly in place. Bend your legs bringing the weight up, go slowly back. During the exercise the body should not move, all work is done by the legs.</p>\n",
+        "descriptionText": "Lay on a bench and put your calves behind the leg holder (better if they are hold on around the lower calves). Hold a grip on the bars to make sure the body is firmly in place. Bend your legs bringing the weight up, go slowly back. During the exercise the body should not move, all work is done by the legs.",
+        "descriptionSource": "Lay on a bench and put your calves behind the leg holder (better if they are hold on around the lower calves). Hold a grip on the bars to make sure the body is firmly in place. Bend your legs bringing the weight up, go slowly back. During the exercise the body should not move, all work is done by the legs.",
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/365/"
+    },
+    {
+      "exerciseId": 366,
+      "exerciseUuid": "440a5184-de58-4a86-a7ba-76ddeafaa855",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:29:03.050534+01:00",
+      "lastUpdateGlobal": "2026-04-15T22:23:53.335983+02:00",
+      "category": {
+        "id": 9,
+        "name": "Legs"
+      },
+      "equipment": [],
+      "primaryMuscles": [
+        {
+          "id": 11,
+          "name": "Biceps femoris",
+          "name_en": "Hamstrings",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-11.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-11.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "bf50ea3b-2bcb-4278-a682-083798f309d2",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "admin",
+        "Goulart",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 117,
+        "uuid": "61950a59-be4e-43cc-abc1-cb52abd15354",
+        "name": "Leg Curls (sitting)",
+        "descriptionHtml": "",
+        "descriptionText": "",
+        "descriptionSource": null,
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/366/",
+      "rafikEnglishSupplement": {
+        "exerciseId": 366,
+        "exerciseUuid": "440a5184-de58-4a86-a7ba-76ddeafaa855",
+        "englishName": "Leg Curls (sitting)",
+        "mode": "translated-from-upstream",
+        "englishDescription": "Adjust the machine lever to suit your height. Sit with your back against the back pad, place your ankles against the roller pads, and secure your thighs beneath the restraint just above your knees. Hold the handles. Bend your knees while keeping your back and hips still. Pause briefly in the contracted position, then return slowly to the starting position.",
+        "provenance": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+        "source": {
+          "language": {
+            "id": 4,
+            "short_name": "es",
+            "full_name": "Español",
+            "full_name_en": "Spanish"
+          },
+          "translationId": 2637,
+          "translationUuid": "bb9e846b-80d1-418e-902d-c59f19f2d28a",
+          "name": "Curl femoral sentado",
+          "descriptionText": "Ajusta la palanca de la máquina para adaptarla a tu altura y siéntate en la máquina con la espalda contra la almohadilla de respaldo. Coloca los tobillos sobre los cojines , los muslos debajo del cojinete de sujeción justo por encima de las rodillas y las manos en los agarres.Al inspirar realiza una flexión de las rodillas. Mantener la espalda inmóvil en todo momento únicamente solo debe movilizarse los pies por la flexión de rodilla. Mantén la posición contraída por un segundo. Lentamente regresa a la posición inicial. Espirar al final del movimiento.",
+          "descriptionSource": "Ajusta la palanca de la máquina para adaptarla a tu altura y siéntate en la máquina con la espalda contra la almohadilla de respaldo. Coloca los tobillos sobre los cojines , los muslos debajo del cojinete de sujeción justo por encima de las rodillas y las manos en los agarres.Al inspirar realiza una flexión de las rodillas. Mantener la espalda inmóvil en todo momento únicamente solo debe movilizarse  los pies por la flexión de rodilla. Mantén la posición contraída por un segundo. Lentamente regresa a la posición inicial. Espirar al final del movimiento.",
+          "license": {
+            "id": 2,
+            "full_name": "Creative Commons Attribution Share Alike 4",
+            "short_name": "CC-BY-SA 4",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+          },
+          "licenseAuthor": "admin",
+          "licenseAuthorUrl": null,
+          "licenseObjectUrl": null,
+          "licenseDerivativeSourceUrl": null,
+          "authorHistory": [
+            "admin"
+          ]
+        }
+      }
+    },
+    {
+      "exerciseId": 367,
+      "exerciseUuid": "49189e88-40b6-4c0d-a784-0cc3abbb8e75",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:30:02.600823+01:00",
+      "lastUpdateGlobal": "2026-04-15T22:23:52.818788+02:00",
+      "category": {
+        "id": 9,
+        "name": "Legs"
+      },
+      "equipment": [],
+      "primaryMuscles": [
+        {
+          "id": 11,
+          "name": "Biceps femoris",
+          "name_en": "Hamstrings",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-11.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-11.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "bf50ea3b-2bcb-4278-a682-083798f309d2",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 118,
+        "uuid": "89c98117-dd53-4334-bfa6-72a96525629a",
+        "name": "Leg Curls (standing)",
+        "descriptionHtml": "",
+        "descriptionText": "",
+        "descriptionSource": null,
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/367/",
+      "rafikEnglishSupplement": {
+        "exerciseId": 367,
+        "exerciseUuid": "49189e88-40b6-4c0d-a784-0cc3abbb8e75",
+        "englishName": "Leg Curls (standing)",
+        "mode": "translated-from-upstream",
+        "englishDescription": "Work one leg at a time. Stand at the machine with the pad positioned against your lower leg just below the calf. Bend your knee until it reaches roughly a right angle, then lower the weight slowly and under control.",
+        "provenance": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+        "source": {
+          "language": {
+            "id": 1,
+            "short_name": "de",
+            "full_name": "Deutsch",
+            "full_name_en": "German"
+          },
+          "translationId": 72,
+          "translationUuid": "9075241c-0493-4f2a-a399-a57e3634093e",
+          "name": "Beinbeuger Stehend",
+          "descriptionText": "Diese Übung wird jeweils mit einem Bein durchgeführt. Stelle dich vor der Maschine und stelle deine Waden hinter dem Polster (setzte die Höhe so ein, dass es knapp unter den Waden ansetzt). Beuge nun das Bein bis dein Knie einen rechten Winkel einnimmt, bringe das Gewicht nun langsam und kontrolliert wieder nach unten.",
+          "descriptionSource": "Diese Übung wird jeweils mit einem Bein durchgeführt.\n\nStelle dich vor der Maschine und stelle deine Waden hinter dem Polster (setzte die Höhe so ein, dass es knapp unter den Waden ansetzt). Beuge nun das Bein bis dein Knie einen rechten Winkel einnimmt, bringe das Gewicht nun langsam und kontrolliert wieder nach unten.",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de",
+          "licenseAuthorUrl": null,
+          "licenseObjectUrl": null,
+          "licenseDerivativeSourceUrl": null,
+          "authorHistory": [
+            "wger.de"
+          ]
+        }
+      }
+    },
+    {
+      "exerciseId": 371,
+      "exerciseUuid": "66a42396-c207-44da-bc75-758a89d32404",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2026-07-23T12:08:30.382258+02:00",
+      "lastUpdateGlobal": "2026-07-23T12:08:30.382258+02:00",
+      "category": {
+        "id": 9,
+        "name": "Legs"
+      },
+      "equipment": [],
+      "primaryMuscles": [
+        {
+          "id": 11,
+          "name": "Biceps femoris",
+          "name_en": "Hamstrings",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-11.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-11.svg"
+        },
+        {
+          "id": 7,
+          "name": "Gastrocnemius",
+          "name_en": "Calves",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-7.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-7.svg"
+        },
+        {
+          "id": 8,
+          "name": "Gluteus maximus",
+          "name_en": "Glutes",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-8.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-8.svg"
+        },
+        {
+          "id": 10,
+          "name": "Quadriceps femoris",
+          "name_en": "Quads",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-10.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-10.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "10385554-2bdc-40a6-a7f8-1aadc205528c",
+      "exerciseLicense": {
+        "id": 3,
+        "full_name": "Creative Commons Public Domain 1.0",
+        "short_name": "CC0",
+        "url": "http://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "exerciseLicenseAuthor": "BFad07",
+      "exerciseAuthorHistory": [
+        "BFad07"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "wger.de",
+        "colundrum",
+        "BFad07"
+      ],
+      "englishTranslation": {
+        "id": 788,
+        "uuid": "6c8e863c-f6c2-4ad0-a0e9-5e6d9e6a928b",
+        "name": "Leg Press",
+        "descriptionHtml": "<p>The leg press is a weight training exercise in which the individual pushes a weight or resistance away from them using their legs.</p>\n",
+        "descriptionText": "The leg press is a weight training exercise in which the individual pushes a weight or resistance away from them using their legs.",
+        "descriptionSource": "The leg press is a weight training exercise in which the individual pushes a weight or resistance away from them using their legs.",
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 3,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "BFad07",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "BFad07"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/371/"
+    },
+    {
+      "exerciseId": 374,
+      "exerciseUuid": "661287d4-d1dc-485c-896b-73f90b000536",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:30:08.038427+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:57:08.953376+02:00",
+      "category": {
+        "id": 9,
+        "name": "Legs"
+      },
+      "equipment": [],
+      "primaryMuscles": [
+        {
+          "id": 10,
+          "name": "Quadriceps femoris",
+          "name_en": "Quads",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-10.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-10.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 8,
+          "name": "Gluteus maximus",
+          "name_en": "Glutes",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-8.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-8.svg"
+        }
+      ],
+      "variationGroupUuid": "10385554-2bdc-40a6-a7f8-1aadc205528c",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Franpol",
+        "Goulart",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 114,
+        "uuid": "3caed096-c65e-434d-9792-33db636743e7",
+        "name": "Leg Presses (wide)",
+        "descriptionHtml": "<p>Sit on the machine and put your feet on the platform, a bit more than shoulder wide. The feet are turned outwards by a few degrees.</p>\n<p>Lower the weight so much, that the knees form a right angle. Push immediately the platform up again, without any pause. When in the lower position, the knees point a bit outwards and the movement should be always fluid.</p>\n",
+        "descriptionText": "Sit on the machine and put your feet on the platform, a bit more than shoulder wide. The feet are turned outwards by a few degrees. Lower the weight so much, that the knees form a right angle. Push immediately the platform up again, without any pause. When in the lower position, the knees point a bit outwards and the movement should be always fluid.",
+        "descriptionSource": "Sit on the machine and put your feet on the platform, a bit more than shoulder wide. The feet are turned outwards by a few degrees.\n\nLower the weight so much, that the knees form a right angle. Push immediately the platform up again, without any pause. When in the lower position, the knees point a bit outwards and the movement should be always fluid.",
+        "aliases": [],
+        "notes": [
+          {
+            "id": 362,
+            "uuid": "dcf6517f-c095-4575-ab0f-7f7a3201b22b",
+            "translation": 114,
+            "comment": "Fluid movements with no pauses at the top or the bottom"
+          },
+          {
+            "id": 363,
+            "uuid": "1cd41439-34ae-4f76-9d1e-057b75c8d50e",
+            "translation": 114,
+            "comment": "The knees point slightly outwards"
+          }
+        ],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/374/"
+    },
+    {
+      "exerciseId": 375,
+      "exerciseUuid": "18104387-4567-4c1e-8d03-db0b274646dd",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:30:03.710063+01:00",
+      "lastUpdateGlobal": "2026-04-15T22:23:54.438518+02:00",
+      "category": {
+        "id": 9,
+        "name": "Legs"
+      },
+      "equipment": [],
+      "primaryMuscles": [
+        {
+          "id": 10,
+          "name": "Quadriceps femoris",
+          "name_en": "Quads",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-10.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-10.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "10385554-2bdc-40a6-a7f8-1aadc205528c",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 130,
+        "uuid": "2966e4a2-4306-4cb5-a2dc-8951cd192555",
+        "name": "Leg Press on Hackenschmidt Machine",
+        "descriptionHtml": "",
+        "descriptionText": "",
+        "descriptionSource": null,
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/375/",
+      "rafikEnglishSupplement": {
+        "exerciseId": 375,
+        "exerciseUuid": "18104387-4567-4c1e-8d03-db0b274646dd",
+        "englishName": "Leg Press on Hackenschmidt Machine",
+        "mode": "translated-from-upstream",
+        "englishDescription": "Position yourself in the Hackenschmidt machine with your shoulders against the pads. Place your feet about shoulder-width apart with your toes slightly outward. Bend your knees and lower under control until they form an angle of about 90 degrees. Press back up and repeat, without forcefully locking your knees.",
+        "provenance": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+        "source": {
+          "language": {
+            "id": 1,
+            "short_name": "de",
+            "full_name": "Deutsch",
+            "full_name_en": "German"
+          },
+          "translationId": 402,
+          "translationUuid": "634dcf89-c346-4af8-8b09-61f238798877",
+          "name": "Kniebeuge an Hackenschmidtmaschine",
+          "descriptionText": "Setze dich in die Maschine und drücke deine Schultern auf das Polster. Deine Füße sind etwa Schulterbreit auseinander und zeigen leicht nach außen. Gehe nun langsam nach unten in die Knie bis sich, wie bei der regulären Kniebeuge, einen Winken von ca. 90° ergibt. Drücke dich wieder nach oben und wiederhole die Bewegung. Wichtig ist hier, dass du die Knie nicht ganz ausstreckst.",
+          "descriptionSource": "Setze dich in die Maschine und drücke deine Schultern auf das Polster. Deine Füße sind etwa Schulterbreit auseinander und zeigen leicht nach außen. Gehe nun langsam nach unten in die Knie bis sich, wie bei der regulären Kniebeuge, einen Winken von ca. 90° ergibt. Drücke dich wieder nach oben und wiederhole die Bewegung. Wichtig ist hier, dass du die Knie nicht ganz ausstreckst.",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de",
+          "licenseAuthorUrl": null,
+          "licenseObjectUrl": null,
+          "licenseDerivativeSourceUrl": null,
+          "authorHistory": [
+            "wger.de"
+          ]
+        }
+      }
+    },
+    {
+      "exerciseId": 465,
+      "exerciseUuid": "dd52fb99-9426-4a78-b446-20a8e3e4ec47",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2026-07-23T12:08:30.792885+02:00",
+      "lastUpdateGlobal": "2026-07-23T12:08:30.792885+02:00",
+      "category": {
+        "id": 8,
+        "name": "Arms"
+      },
+      "equipment": [
+        {
+          "id": 2,
+          "name": "SZ-Bar"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 13,
+          "name": "Brachialis",
+          "name_en": "",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-13.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-13.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "674f258e-60c5-4c94-8495-cd918aabea77",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "cgoob883",
+      "exerciseAuthorHistory": [
+        "cgoob883"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "csequino",
+        "Goulart",
+        "wger.de",
+        "cgoob883"
+      ],
+      "englishTranslation": {
+        "id": 193,
+        "uuid": "84b4e711-8b29-4541-ad58-dad967f82390",
+        "name": "Preacher Curls",
+        "descriptionHtml": "<p>Place the EZ curl bar on the rest handles in front of the preacher bench.&nbsp;Lean over the bench and grab the EZ curl bar with palms up.&nbsp;Sit down on the preacher bench seat so your upper arms rest on top of the pad and your chest is pressed against the pad.&nbsp;Lower the weight until your elbows are extended and arms are straight.&nbsp;Bring the weights back up to the starting point by contracting biceps. Repeat</p>\n",
+        "descriptionText": "Place the EZ curl bar on the rest handles in front of the preacher bench. Lean over the bench and grab the EZ curl bar with palms up. Sit down on the preacher bench seat so your upper arms rest on top of the pad and your chest is pressed against the pad. Lower the weight until your elbows are extended and arms are straight. Bring the weights back up to the starting point by contracting biceps. Repeat",
+        "descriptionSource": " Place the EZ curl bar on the rest handles in front of the preacher bench. Lean over the bench and grab the EZ curl bar with palms up. Sit down on the preacher bench seat so your upper arms rest on top of the pad and your chest is pressed against the pad. Lower the weight until your elbows are extended and arms are straight. Bring the weights back up to the starting point by contracting biceps. Repeat",
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "cgoob883",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "cgoob883"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/465/"
+    },
+    {
+      "exerciseId": 475,
+      "exerciseUuid": "8e420408-0682-4ab6-89f5-2681e54c7ce0",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:32:20.243159+01:00",
+      "lastUpdateGlobal": "2026-04-15T22:23:56.751242+02:00",
+      "category": {
+        "id": 12,
+        "name": "Back"
+      },
+      "equipment": [
+        {
+          "id": 6,
+          "name": "Pull-up bar"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 12,
+          "name": "Latissimus dorsi",
+          "name_en": "Lats",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-12.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-12.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 2,
+          "name": "Anterior deltoid",
+          "name_en": "Shoulders",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-2.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-2.svg"
+        },
+        {
+          "id": 1,
+          "name": "Biceps brachii",
+          "name_en": "Biceps",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-1.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-1.svg"
+        },
+        {
+          "id": 9,
+          "name": "Trapezius",
+          "name_en": "",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-9.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-9.svg"
+        }
+      ],
+      "variationGroupUuid": "0e31687f-8dd5-4c68-9dc6-df0d9dbb7590",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Clément Mondon (imported from Feeel)",
+        "Heimen Stoffels (imported from Feeel)",
+        "Miroslav Mazel (imported from Feeel)",
+        "Rodolfo Candido (imported from Feeel)",
+        "poi / poipoipoipoipoipoipoipoipoi (imported from Feeel)",
+        "Maxime Leroy (imported from Feeel)",
+        "Vinicius Rodrigues (imported from Feeel)",
+        "Daan Vervacke (imported from Feeel)",
+        "gbpu (imported from Feeel)",
+        "bxezi (imported from Feeel)",
+        "wger.de",
+        "Rex_sa (imported from Feeel)",
+        "Imobard",
+        "Shimon (imported from Feeel)",
+        "flexagoon (imported from Feeel)",
+        "mondstern (imported from Feeel)",
+        "Jonathan D. (imported from Feeel)",
+        "Marco Galli (imported from Feeel)",
+        "Reza Almanda (imported from Feeel)",
+        "Gianluca Vespignani (imported from Feeel)",
+        "floris van den bosch (imported from Feeel)",
+        "Eduardo Celino (imported from Feeel)",
+        "Goulart",
+        "J. Lavoie (imported from Feeel)",
+        "albanobattistella (imported from Feeel)",
+        "Eric (imported from Feeel)",
+        "Vangelis Skarmoutsos (imported from Feeel)"
+      ],
+      "englishTranslation": {
+        "id": 107,
+        "uuid": "7ce6b090-5099-4cd0-83ae-1a02725c868b",
+        "name": "Pull-ups",
+        "descriptionHtml": "<p>Grab the pull up bar with a wide grip, the body is hanging freely. Keep your chest out and pull yourself up till your chin reaches the bar or it touches your neck, if you want to pull behind you. Go with a slow and controlled movement down, always keeping the chest out.</p>\n",
+        "descriptionText": "Grab the pull up bar with a wide grip, the body is hanging freely. Keep your chest out and pull yourself up till your chin reaches the bar or it touches your neck, if you want to pull behind you. Go with a slow and controlled movement down, always keeping the chest out.",
+        "descriptionSource": "Grab the pull up bar with a wide grip, the body is hanging freely. Keep your chest out and pull yourself up till your chin reaches the bar or it touches your neck, if you want to pull behind you. Go with a slow and controlled movement down, always keeping the chest out.",
+        "aliases": [],
+        "notes": [
+          {
+            "id": 379,
+            "uuid": "ca41d23c-2d53-477e-a672-7f45a6810312",
+            "translation": 107,
+            "comment": "Keep your head up"
+          },
+          {
+            "id": 380,
+            "uuid": "75ccc607-8a36-4022-958e-01dc86ccfa95",
+            "translation": 107,
+            "comment": "Keep your chest out"
+          },
+          {
+            "id": 381,
+            "uuid": "577d31f2-2f08-4881-b12a-7918db1bb673",
+            "translation": 107,
+            "comment": "The elbows always point back, don't let them open sidewards"
+          }
+        ],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/475/"
+    },
+    {
+      "exerciseId": 477,
+      "exerciseUuid": "7f834f07-fa7b-46b6-8ffa-45930b0602db",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:32:11.170050+01:00",
+      "lastUpdateGlobal": "2026-04-15T22:23:55.167004+02:00",
+      "category": {
+        "id": 12,
+        "name": "Back"
+      },
+      "equipment": [],
+      "primaryMuscles": [
+        {
+          "id": 12,
+          "name": "Latissimus dorsi",
+          "name_en": "Lats",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-12.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-12.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 2,
+          "name": "Anterior deltoid",
+          "name_en": "Shoulders",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-2.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-2.svg"
+        },
+        {
+          "id": 1,
+          "name": "Biceps brachii",
+          "name_en": "Biceps",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-1.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-1.svg"
+        },
+        {
+          "id": 9,
+          "name": "Trapezius",
+          "name_en": "",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-9.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-9.svg"
+        }
+      ],
+      "variationGroupUuid": "0e31687f-8dd5-4c68-9dc6-df0d9dbb7590",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "bruunomooura",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 140,
+        "uuid": "d46adbda-7c60-42a0-b1fd-9ec111b35956",
+        "name": "Pull Ups on Machine",
+        "descriptionHtml": "",
+        "descriptionText": "",
+        "descriptionSource": null,
+        "aliases": [],
+        "notes": [
+          {
+            "id": 374,
+            "uuid": "badd57c4-7347-4dbd-8e86-8dcf8234253d",
+            "translation": 140,
+            "comment": "Keep your head up"
+          },
+          {
+            "id": 375,
+            "uuid": "a3e4b604-ffd1-413f-b07a-fff15739f084",
+            "translation": 140,
+            "comment": "Keep your chest out"
+          }
+        ],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/477/",
+      "rafikEnglishSupplement": {
+        "exerciseId": 477,
+        "exerciseUuid": "7f834f07-fa7b-46b6-8ffa-45930b0602db",
+        "englishName": "Pull Ups on Machine",
+        "mode": "translated-from-upstream",
+        "englishDescription": "Set the machine to the assistance you need. Position yourself on the platform or knee pad and grip the handles about shoulder-width apart with your arms extended. Bend your elbows and pull your body upward until your chin passes the handles or bar. Lower under control until your arms are extended again. Reduce the assistance gradually as your strength improves.",
+        "provenance": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+        "source": {
+          "language": {
+            "id": 7,
+            "short_name": "pt",
+            "full_name": "Português",
+            "full_name_en": "Portuguese"
+          },
+          "translationId": 2136,
+          "translationUuid": "743f7b44-541d-4d8c-955d-a1e44635aabe",
+          "name": "Pull Ups na máquina",
+          "descriptionText": "Os pull-ups da máquina são uma variação assistida do exercício pull-up tradicional. Eles são projetados para ajudar as pessoas que estão desenvolvendo a força necessária para realizar o movimento completo. A máquina permite ajustar o peso para fornecer suporte adequado durante o exercício. Para realizar flexões na máquina, siga os seguintes passos: posicione-se corretamente, ajuste o peso para o suporte desejado, segure a barra com as mãos alinhadas com os ombros, mantenha os braços retos e a postura ereta. Inicie o movimento flexionando os cotovelos e puxando o corpo em direção à barra. Suba até que seu queixo esteja acima da barra e seus ombros estejam firmes. A descida deve ser feita de forma controlada, estendendo totalmente os braços. Realize o número desejado de repetições, adaptando-o à sua habilidade. Lembre-se de respirar corretamente durante o exercício, inspirando na fase descendente e expirando ao puxar o corpo para cima. A prática regular de flexões na máquina fortalecerá os músculos das costas, ombros e braços, ajudando a melhorar a postura e a força geral. À medida que você ganha mais força, pode reduzir gradualmente a assistência fornecida pela máquina e progredir para a tradicional flexão sem ajuda. Essa variação do exercício é uma opção acessível para iniciantes ou pessoas que lutam para realizar flexões completas. Lembre-se de adaptar o peso e o número de repetições de acordo com seu nível de força e capacidade. A prática regular e a progressão gradual ajudarão a melhorar sua forma e progredir em direção a flexões completas.",
+          "descriptionSource": "Os pull-ups da máquina são uma variação assistida do exercício pull-up tradicional. Eles são projetados para ajudar as pessoas que estão desenvolvendo a força necessária para realizar o movimento completo. A máquina permite ajustar o peso para fornecer suporte adequado durante o exercício.\nPara realizar flexões na máquina, siga os seguintes passos: posicione-se corretamente, ajuste o peso para o suporte desejado, segure a barra com as mãos alinhadas com os ombros, mantenha os braços retos e a postura ereta. Inicie o movimento flexionando os cotovelos e puxando o corpo em direção à barra. Suba até que seu queixo esteja acima da barra e seus ombros estejam firmes.\nA descida deve ser feita de forma controlada, estendendo totalmente os braços. Realize o número desejado de repetições, adaptando-o à sua habilidade. Lembre-se de respirar corretamente durante o exercício, inspirando na fase descendente e expirando ao puxar o corpo para cima.\nA prática regular de flexões na máquina fortalecerá os músculos das costas, ombros e braços, ajudando a melhorar a postura e a força geral. À medida que você ganha mais força, pode reduzir gradualmente a assistência fornecida pela máquina e progredir para a tradicional flexão sem ajuda.\nEssa variação do exercício é uma opção acessível para iniciantes ou pessoas que lutam para realizar flexões completas. Lembre-se de adaptar o peso e o número de repetições de acordo com seu nível de força e capacidade. A prática regular e a progressão gradual ajudarão a melhorar sua forma e progredir em direção a flexões completas.",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de",
+          "licenseAuthorUrl": null,
+          "licenseObjectUrl": null,
+          "licenseDerivativeSourceUrl": null,
+          "authorHistory": [
+            "bruunomooura",
+            "wger.de"
+          ]
+        }
+      }
+    },
+    {
+      "exerciseId": 507,
+      "exerciseUuid": "2e7ffff9-e603-4b28-98c8-31d1a6ce8cd9",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2026-07-23T12:24:58.024264+02:00",
+      "lastUpdateGlobal": "2026-08-27T18:08:47.716292+02:00",
+      "category": {
+        "id": 9,
+        "name": "Legs"
+      },
+      "equipment": [
+        {
+          "id": 1,
+          "name": "Barbell"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 11,
+          "name": "Biceps femoris",
+          "name_en": "Hamstrings",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-11.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-11.svg"
+        },
+        {
+          "id": 8,
+          "name": "Gluteus maximus",
+          "name_en": "Glutes",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-8.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-8.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 9,
+          "name": "Trapezius",
+          "name_en": "",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-9.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-9.svg"
+        }
+      ],
+      "variationGroupUuid": "100586dc-3923-44b3-a987-5f6c0ea17d1b",
+      "exerciseLicense": {
+        "id": 2,
+        "full_name": "Creative Commons Attribution Share Alike 4",
+        "short_name": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "pjwirth",
+      "exerciseAuthorHistory": [
+        "pjwirth"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "perteus",
+        "Goulart",
+        "wger.de",
+        "pjwirth",
+        "admin"
+      ],
+      "englishTranslation": {
+        "id": 351,
+        "uuid": "e35528f9-1785-41b5-860a-3408a6c02b2d",
+        "name": "Romanian Deadlift",
+        "descriptionHtml": "<p>DL from top to pos 2:&nbsp;https://www.youtube.com/watch?v=WtWtjViRsKo</p>\n",
+        "descriptionText": "DL from top to pos 2: https://www.youtube.com/watch?v=WtWtjViRsKo",
+        "descriptionSource": "DL from top to pos 2: https://www.youtube.com/watch?v=WtWtjViRsKo",
+        "aliases": [
+          {
+            "id": 553,
+            "uuid": "a29901f2-96c8-411b-b54d-7f1b5e290999",
+            "alias": "RDL"
+          }
+        ],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 2,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "pjwirth",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "pjwirth"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/507/"
+    },
+    {
+      "exerciseId": 512,
+      "exerciseUuid": "00fcf603-b0d0-48d2-9b5e-c7f0d510d46c",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:34:19.910517+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:46:53.825320+02:00",
+      "category": {
+        "id": 12,
+        "name": "Back"
+      },
+      "equipment": [],
+      "primaryMuscles": [
+        {
+          "id": 12,
+          "name": "Latissimus dorsi",
+          "name_en": "Lats",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-12.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-12.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "e87bd3db-75b1-44ec-8962-df2f97274109",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "wger.de",
+        "admin",
+        "mhs_79"
+      ],
+      "englishTranslation": {
+        "id": 108,
+        "uuid": "57747eb3-411a-4efd-8842-a45e562320ee",
+        "name": "Rowing seated, narrow grip",
+        "descriptionHtml": "<ul>\n<li>Tighten muscles</li>\n<li>Controlled movement</li>\n<li>Slow movement</li>\n<li>Keep upper body upright</li>\n<li>Do not lean back</li>\n<li>Pull toward chest</li>\n</ul>\n",
+        "descriptionText": "Tighten muscles Controlled movement Slow movement Keep upper body upright Do not lean back Pull toward chest",
+        "descriptionSource": "* Tighten muscles\n* Controlled movement\n* Slow movement\n* Keep upper body upright\n* Do not lean back\n* Pull toward chest",
+        "aliases": [],
+        "notes": [
+          {
+            "id": 384,
+            "uuid": "5dc4dd52-78d1-4829-bbb6-a1c8e8ff480e",
+            "translation": 108,
+            "comment": "Keep your chest out"
+          },
+          {
+            "id": 385,
+            "uuid": "4f01d84a-c492-4d4d-91a0-33b200ff9d0e",
+            "translation": 108,
+            "comment": "Pull the weight towards your belly button, not further up"
+          }
+        ],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/512/"
+    },
+    {
+      "exerciseId": 537,
+      "exerciseUuid": "57e17672-52b9-43cf-8d0d-4b3f06a0c0d0",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:39:59.412795+01:00",
+      "lastUpdateGlobal": "2026-07-02T16:44:43.088138+02:00",
+      "category": {
+        "id": 11,
+        "name": "Chest"
+      },
+      "equipment": [
+        {
+          "id": 3,
+          "name": "Dumbbell"
+        },
+        {
+          "id": 9,
+          "name": "Incline bench"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 4,
+          "name": "Pectoralis major",
+          "name_en": "Chest",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-4.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-4.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 2,
+          "name": "Anterior deltoid",
+          "name_en": "Shoulders",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-2.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-2.svg"
+        },
+        {
+          "id": 5,
+          "name": "Triceps brachii",
+          "name_en": "Triceps",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-5.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-5.svg"
+        }
+      ],
+      "variationGroupUuid": "f45f135e-4cd3-4023-a82a-83fca2078656",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Jhonatan",
+        "Goulart",
+        "tuckerm",
+        "wger.de",
+        "MorugaSkorpio",
+        "erikocobra"
+      ],
+      "englishTranslation": {
+        "id": 210,
+        "uuid": "15c5dfa0-4103-4515-979d-807eee8faa53",
+        "name": "Incline Bench Press - Dumbbell",
+        "descriptionHtml": "<p>This is a variation of the flat bench press designed to emphasize the clavicular head of the pectoralis major (the upper portion). By tilting the torso, the angle of the push changes, shifting more tension to the upper chest and shoulders, which helps achieve a more aesthetic, balanced, and three-dimensional development of the torso.</p>\n<ol>\n<li>\n<p>Bench Adjustment and Preparation: Set the bench to an incline of between 30 and 45 degrees (an incline greater than 45° will place too much strain on the shoulders and reduce the stimulus to the chest). Sit down with a dumbbell on each thigh.</p>\n</li>\n<li>\n<p>Starting position: Lean back, resting your back against the bench, while using your knees one after the other to push the dumbbells upward to shoulder height.</p>\n</li>\n<li>\n<p>Anatomical Stabilization: Plant your feet firmly on the floor. Retract your scapulas (bring your shoulder blades together and press them into the bench) to protect your shoulders and stabilize the load.</p>\n</li>\n<li>\n<p>Eccentric Phase (Lowering): Lower the dumbbells slowly and in a controlled manner toward the upper part of your chest. Your elbows should not splay out to the sides (90°); maintain a safe angle of about 45 to 60 degrees relative to your torso.</p>\n</li>\n<li>\n<p>Concentric Phase (Lift): Push the dumbbells vertically upward as you exhale. Follow a slightly converging path (without letting them touch at the top). Stop the movement just before locking out your elbows to maintain muscle tension in the upper pectoral.</p>\n</li>\n</ol>\n",
+        "descriptionText": "This is a variation of the flat bench press designed to emphasize the clavicular head of the pectoralis major (the upper portion). By tilting the torso, the angle of the push changes, shifting more tension to the upper chest and shoulders, which helps achieve a more aesthetic, balanced, and three-dimensional development of the torso. Bench Adjustment and Preparation: Set the bench to an incline of between 30 and 45 degrees (an incline greater than 45° will place too much strain on the shoulders and reduce the stimulus to the chest). Sit down with a dumbbell on each thigh. Starting position: Lean back, resting your back against the bench, while using your knees one after the other to push the dumbbells upward to shoulder height. Anatomical Stabilization: Plant your feet firmly on the floor. Retract your scapulas (bring your shoulder blades together and press them into the bench) to protect your shoulders and stabilize the load. Eccentric Phase (Lowering): Lower the dumbbells slowly and in a controlled manner toward the upper part of your chest. Your elbows should not splay out to the sides (90°); maintain a safe angle of about 45 to 60 degrees relative to your torso. Concentric Phase (Lift): Push the dumbbells vertically upward as you exhale. Follow a slightly converging path (without letting them touch at the top). Stop the movement just before locking out your elbows to maintain muscle tension in the upper pectoral.",
+        "descriptionSource": "This is a variation of the flat bench press designed to emphasize the clavicular head of the pectoralis major (the upper portion). By tilting the torso, the angle of the push changes, shifting more tension to the upper chest and shoulders, which helps achieve a more aesthetic, balanced, and three-dimensional development of the torso.\n\n1. Bench Adjustment and Preparation: Set the bench to an incline of between 30 and 45 degrees (an incline greater than 45° will place too much strain on the shoulders and reduce the stimulus to the chest). Sit down with a dumbbell on each thigh.\n\n2. Starting position: Lean back, resting your back against the bench, while using your knees one after the other to push the dumbbells upward to shoulder height.\n\n3. Anatomical Stabilization: Plant your feet firmly on the floor. Retract your scapulas (bring your shoulder blades together and press them into the bench) to protect your shoulders and stabilize the load.\n\n4. Eccentric Phase (Lowering): Lower the dumbbells slowly and in a controlled manner toward the upper part of your chest. Your elbows should not splay out to the sides (90°); maintain a safe angle of about 45 to 60 degrees relative to your torso.\n\n5. Concentric Phase (Lift): Push the dumbbells vertically upward as you exhale. Follow a slightly converging path (without letting them touch at the top). Stop the movement just before locking out your elbows to maintain muscle tension in the upper pectoral.",
+        "aliases": [
+          {
+            "id": 615,
+            "uuid": "7fa317f6-26e3-4120-81a4-5a8897a2008e",
+            "alias": "Incline Dumbbell Press"
+          }
+        ],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "tuckerm",
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/537/"
+    },
+    {
+      "exerciseId": 538,
+      "exerciseUuid": "275fb49f-975c-4d6e-9d63-2c86ed740f40",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:34:43.959061+01:00",
+      "lastUpdateGlobal": "2026-04-15T22:23:55.484203+02:00",
+      "category": {
+        "id": 11,
+        "name": "Chest"
+      },
+      "equipment": [
+        {
+          "id": 1,
+          "name": "Barbell"
+        },
+        {
+          "id": 9,
+          "name": "Incline bench"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 4,
+          "name": "Pectoralis major",
+          "name_en": "Chest",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-4.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-4.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 2,
+          "name": "Anterior deltoid",
+          "name_en": "Shoulders",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-2.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-2.svg"
+        },
+        {
+          "id": 5,
+          "name": "Triceps brachii",
+          "name_en": "Triceps",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-5.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-5.svg"
+        }
+      ],
+      "variationGroupUuid": "f45f135e-4cd3-4023-a82a-83fca2078656",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Mahoney",
+        "rlamarca",
+        "Goulart",
+        "wger.de",
+        "Franpol"
+      ],
+      "englishTranslation": {
+        "id": 163,
+        "uuid": "6cfd927c-8009-4cc2-9501-acb3db417396",
+        "name": "Incline Bench Press - Barbell",
+        "descriptionHtml": "<p>To do slowly, tempo is 4010</p>\n",
+        "descriptionText": "To do slowly, tempo is 4010",
+        "descriptionSource": "To do slowly, tempo is 4010",
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "Mahoney",
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/538/"
+    },
+    {
+      "exerciseId": 543,
+      "exerciseUuid": "5912d7ed-6a0e-4b4c-b30a-fc9f3f890fc1",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:34:41.626758+01:00",
+      "lastUpdateGlobal": "2026-04-15T22:23:55.116420+02:00",
+      "category": {
+        "id": 13,
+        "name": "Shoulders"
+      },
+      "equipment": [],
+      "primaryMuscles": [
+        {
+          "id": 2,
+          "name": "Anterior deltoid",
+          "name_en": "Shoulders",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-2.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-2.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 5,
+          "name": "Triceps brachii",
+          "name_en": "Triceps",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-5.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-5.svg"
+        }
+      ],
+      "variationGroupUuid": "e3388987-305b-43b8-9e90-c3bce376b203",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Tierrasverdes",
+        "Goulart",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 152,
+        "uuid": "7389be43-215b-4db8-8b69-75dc77004d74",
+        "name": "Shoulder Press, on Machine",
+        "descriptionHtml": "",
+        "descriptionText": "",
+        "descriptionSource": null,
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/543/",
+      "rafikEnglishSupplement": {
+        "exerciseId": 543,
+        "exerciseUuid": "5912d7ed-6a0e-4b4c-b30a-fc9f3f890fc1",
+        "englishName": "Shoulder Press, on Machine",
+        "mode": "translated-from-upstream",
+        "englishDescription": "Sit in the machine with your feet about shoulder-width apart and your back upright against the support. Grip the handles or bar at shoulder height. Press upward until your arms are extended, then lower slowly to the starting position and repeat.",
+        "provenance": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+        "source": {
+          "language": {
+            "id": 4,
+            "short_name": "es",
+            "full_name": "Español",
+            "full_name_en": "Spanish"
+          },
+          "translationId": 2596,
+          "translationUuid": "127ce93b-bdea-4e71-bcf1-b936466cc07c",
+          "name": "Press de hombro con maquina",
+          "descriptionText": "Sentarse en la máquina con las piernas separadas a la anchura de los hombros. Mantener la espalda erguida y también los brazos flexionados para tomar la barra a la altura de los hombro, alzar la barra lo mas alto que se pueda con los brazos extendidos. Bajar lentamente y repetir.",
+          "descriptionSource": "Sentarse en la máquina con las piernas separadas a la anchura de los hombros.\nMantener  la espalda erguida y también los brazos flexionados para tomar la barra a la altura de los hombro, alzar la barra lo mas alto que se pueda con los brazos extendidos.\nBajar lentamente y repetir.",
+          "license": {
+            "id": 2,
+            "full_name": "Creative Commons Attribution Share Alike 4",
+            "short_name": "CC-BY-SA 4",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+          },
+          "licenseAuthor": "Tierrasverdes",
+          "licenseAuthorUrl": null,
+          "licenseObjectUrl": null,
+          "licenseDerivativeSourceUrl": null,
+          "authorHistory": [
+            "Tierrasverdes"
+          ]
+        }
+      }
+    },
+    {
+      "exerciseId": 567,
+      "exerciseUuid": "87affa4b-395b-437c-9581-2bd20ea5aa7c",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:35:05.980375+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:46:58.504753+02:00",
+      "category": {
+        "id": 13,
+        "name": "Shoulders"
+      },
+      "equipment": [
+        {
+          "id": 3,
+          "name": "Dumbbell"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 2,
+          "name": "Anterior deltoid",
+          "name_en": "Shoulders",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-2.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-2.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "e3388987-305b-43b8-9e90-c3bce376b203",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "wger.de",
+        "admin",
+        "klabautermann"
+      ],
+      "englishTranslation": {
+        "id": 123,
+        "uuid": "1df6a1b5-7bd2-402f-9d5e-94f9ed6d8b54",
+        "name": "Shoulder Press, Dumbbells",
+        "descriptionHtml": "<p>Sit on a bench, the back rest should be almost vertical. Take two dumbbells and bring them up to shoulder height, the palms and the elbows point during the whole exercise to the front. Press the weights up, at the highest point they come very near but don't touch. Go slowly down and repeat.</p>\n",
+        "descriptionText": "Sit on a bench, the back rest should be almost vertical. Take two dumbbells and bring them up to shoulder height, the palms and the elbows point during the whole exercise to the front. Press the weights up, at the highest point they come very near but don't touch. Go slowly down and repeat.",
+        "descriptionSource": "Sit on a bench, the back rest should be almost vertical. Take two dumbbells and bring them up to shoulder height, the palms and the elbows point during the whole exercise to the front. Press the weights up, at the highest point they come very near but don't touch. Go slowly down and repeat.",
+        "aliases": [
+          {
+            "id": 559,
+            "uuid": "a3deedbc-1820-4f7b-aefe-d6312209e0a7",
+            "alias": "OHP Dumbbells"
+          },
+          {
+            "id": 560,
+            "uuid": "f5e5ddf5-8996-41c6-b77b-39ff49e70e1f",
+            "alias": "Overhead press Dumbbells"
+          },
+          {
+            "id": 561,
+            "uuid": "db894096-f05d-4b78-9233-c84aa3e16129",
+            "alias": "Military Press with Dumbbells"
+          }
+        ],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/567/"
+    },
+    {
+      "exerciseId": 570,
+      "exerciseUuid": "f956977e-cc05-4db2-a387-ba6140b1ef34",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:35:29.855985+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:57:29.170046+02:00",
+      "category": {
+        "id": 13,
+        "name": "Shoulders"
+      },
+      "equipment": [
+        {
+          "id": 7,
+          "name": "none (bodyweight exercise)"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 9,
+          "name": "Trapezius",
+          "name_en": "",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-9.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-9.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "fe504a2d-3468-4af2-8096-cd8a0ba3213c",
+      "exerciseLicense": {
+        "id": 3,
+        "full_name": "Creative Commons Public Domain 1.0",
+        "short_name": "CC0",
+        "url": "http://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "exerciseLicenseAuthor": "BFad07",
+      "exerciseAuthorHistory": [
+        "BFad07"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Clément Mondon (imported from Feeel)",
+        "Miroslav Mazel (imported from Feeel)",
+        "Heimen Stoffels (imported from Feeel)",
+        "Rodolfo Candido (imported from Feeel)",
+        "poi / poipoipoipoipoipoipoipoipoi (imported from Feeel)",
+        "Maxime Leroy (imported from Feeel)",
+        "Vinicius Rodrigues (imported from Feeel)",
+        "Daan Vervacke (imported from Feeel)",
+        "gbpu (imported from Feeel)",
+        "bxezi (imported from Feeel)",
+        "wger.de",
+        "Rex_sa (imported from Feeel)",
+        "BFad07",
+        "flexagoon (imported from Feeel)",
+        "mondstern (imported from Feeel)",
+        "Jonathan D. (imported from Feeel)",
+        "Marco Galli (imported from Feeel)",
+        "Reza Almanda (imported from Feeel)",
+        "Gianluca Vespignani (imported from Feeel)",
+        "floris van den bosch (imported from Feeel)",
+        "Eduardo Celino (imported from Feeel)",
+        "Goulart",
+        "J. Lavoie (imported from Feeel)",
+        "albanobattistella (imported from Feeel)",
+        "Eric (imported from Feeel)",
+        "Vangelis Skarmoutsos (imported from Feeel)"
+      ],
+      "englishTranslation": {
+        "id": 805,
+        "uuid": "4f7900d8-3cd8-41ae-8eec-a3e540c5b3ea",
+        "name": "Shoulder Shrug",
+        "descriptionHtml": "<p>The shoulder shrug (usually called simply the shrug) is an exercise in weight training used to develop the upper trapezius muscle. The lifter stands erect, hands about shoulder width apart, and raises the shoulders as high as possible, and then lowers them, while not bending the elbows, or moving the body at all. The lifter may not have as large a range of motion as in a normal shrug done for active flexibility. It is usually considered good form if the slope of the shoulders is horizontal in the elevated position.</p>\n",
+        "descriptionText": "The shoulder shrug (usually called simply the shrug) is an exercise in weight training used to develop the upper trapezius muscle. The lifter stands erect, hands about shoulder width apart, and raises the shoulders as high as possible, and then lowers them, while not bending the elbows, or moving the body at all. The lifter may not have as large a range of motion as in a normal shrug done for active flexibility. It is usually considered good form if the slope of the shoulders is horizontal in the elevated position.",
+        "descriptionSource": "The shoulder shrug (usually called simply the shrug) is an exercise in weight training used to develop the upper trapezius muscle. The lifter stands erect, hands about shoulder width apart, and raises the shoulders as high as possible, and then lowers them, while not bending the elbows, or moving the body at all. The lifter may not have as large a range of motion as in a normal shrug done for active flexibility. It is usually considered good form if the slope of the shoulders is horizontal in the elevated position.",
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 3,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "BFad07",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "BFad07"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/570/"
+    },
+    {
+      "exerciseId": 575,
+      "exerciseUuid": "6199b3c7-3ccb-47fa-89bb-ef7fef12c0e3",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:35:25.658893+01:00",
+      "lastUpdateGlobal": "2026-04-15T22:23:55.679163+02:00",
+      "category": {
+        "id": 13,
+        "name": "Shoulders"
+      },
+      "equipment": [],
+      "primaryMuscles": [
+        {
+          "id": 2,
+          "name": "Anterior deltoid",
+          "name_en": "Shoulders",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-2.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-2.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 5,
+          "name": "Triceps brachii",
+          "name_en": "Triceps",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-5.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-5.svg"
+        }
+      ],
+      "variationGroupUuid": "fe504a2d-3468-4af2-8096-cd8a0ba3213c",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 1060,
+        "uuid": "c7f7aa80-f9ae-4aad-ac9b-76b70e60cf8f",
+        "name": "Shrugs on Multipress",
+        "descriptionHtml": "",
+        "descriptionText": "",
+        "descriptionSource": null,
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/575/",
+      "rafikEnglishSupplement": {
+        "exerciseId": 575,
+        "exerciseUuid": "6199b3c7-3ccb-47fa-89bb-ef7fef12c0e3",
+        "englishName": "Shrugs on Multipress",
+        "mode": "translated-from-upstream",
+        "englishDescription": "Grip the Smith machine bar and stand about shoulder-width apart with your knees slightly bent and your gaze forward. Keep your arms straight at your sides. Raise the weight by lifting your shoulders without bending your elbows. Pause at the top for one or two seconds, then lower your shoulders slowly.",
+        "provenance": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+        "source": {
+          "language": {
+            "id": 1,
+            "short_name": "de",
+            "full_name": "Deutsch",
+            "full_name_en": "German"
+          },
+          "translationId": 67,
+          "translationUuid": "475a9665-2044-4c76-be29-cabbbef126bd",
+          "name": "Shrugs an der MP",
+          "descriptionText": "Greife die Stange der Multipresse, stelle dich mit Schulterbreitem Stand und sehr leicht gebeugte Beine auf und lasse den Blick nach vorn. Die Arme hängen am Körper. Aus dieser Position hebst du nun das Gewicht, indem du die Schultern nach oben ziehst. Beuge dabei die Arme nicht. Auf dem höchsten Punkt kannst du 1 oder 2 Sekunden ausharren, bringe dann die Schultern langsam nach unten.",
+          "descriptionSource": "Greife die Stange der Multipresse, stelle dich mit Schulterbreitem Stand und sehr leicht gebeugte Beine auf und lasse den Blick nach vorn. Die Arme hängen am Körper. Aus dieser Position hebst du nun das Gewicht, indem du die Schultern nach oben ziehst. Beuge dabei die Arme nicht. Auf dem höchsten Punkt kannst du 1 oder 2 Sekunden ausharren, bringe dann die Schultern langsam nach unten.",
+          "license": {
+            "id": 1,
+            "full_name": " Creative Commons Attribution Share Alike 3",
+            "short_name": "CC-BY-SA 3",
+            "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+          },
+          "licenseAuthor": "wger.de",
+          "licenseAuthorUrl": null,
+          "licenseObjectUrl": null,
+          "licenseDerivativeSourceUrl": null,
+          "authorHistory": [
+            "wger.de"
+          ]
+        }
+      }
+    },
+    {
+      "exerciseId": 584,
+      "exerciseUuid": "c85e6137-2577-4e28-82c2-427407d534eb",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:35:18.000435+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:57:24.335413+02:00",
+      "category": {
+        "id": 8,
+        "name": "Arms"
+      },
+      "equipment": [
+        {
+          "id": 3,
+          "name": "Dumbbell"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 1,
+          "name": "Biceps brachii",
+          "name_en": "Biceps",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-1.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-1.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "674f258e-60c5-4c94-8495-cd918aabea77",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "tuckerm",
+      "exerciseAuthorHistory": [
+        "tuckerm"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "tuckerm",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 205,
+        "uuid": "83e079a9-b61c-413b-b055-f9cf515904f1",
+        "name": "Single-arm Preacher Curl",
+        "descriptionHtml": "<p>Sit on the preacher curl bench and perform a bicep curl with a dumbbell in one hand. Your other hand can be at rest, or beneath your curling arm's elbow.</p>\n",
+        "descriptionText": "Sit on the preacher curl bench and perform a bicep curl with a dumbbell in one hand. Your other hand can be at rest, or beneath your curling arm's elbow.",
+        "descriptionSource": "Sit on the preacher curl bench and perform a bicep curl with a dumbbell in one hand. Your other hand can be at rest, or beneath your curling arm's elbow.",
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "tuckerm",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "tuckerm"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/584/"
+    },
+    {
+      "exerciseId": 590,
+      "exerciseUuid": "6e46833d-fd83-4c1a-90af-eb3f3a917199",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:35:18.339777+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:47:00.068013+02:00",
+      "category": {
+        "id": 14,
+        "name": "Calves"
+      },
+      "equipment": [],
+      "primaryMuscles": [
+        {
+          "id": 15,
+          "name": "Soleus",
+          "name_en": "",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-15.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-15.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 7,
+          "name": "Gastrocnemius",
+          "name_en": "Calves",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-7.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-7.svg"
+        }
+      ],
+      "variationGroupUuid": "4b54f372-2aef-4741-b76d-85e3f376f1d7",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "admin",
+        "Goulart",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 103,
+        "uuid": "399666e7-30a7-4b86-833d-4422e4c72b61",
+        "name": "Sitting Calf Raises",
+        "descriptionHtml": "<p>Sit on a bench for calf raises and check that the feet are half free and that you can completely stretch the calf muscles down. Pull your calves up, going as far (up) as you can. Make at the highest point a short pause of 1 or 2 seconds and go down.</p>\n",
+        "descriptionText": "Sit on a bench for calf raises and check that the feet are half free and that you can completely stretch the calf muscles down. Pull your calves up, going as far (up) as you can. Make at the highest point a short pause of 1 or 2 seconds and go down.",
+        "descriptionSource": "Sit on a bench for calf raises and check that the feet are half free and that you can completely stretch the calf muscles down. Pull your calves up, going as far (up) as you can. Make at the highest point a short pause of 1 or 2 seconds and go down.",
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/590/"
+    },
+    {
+      "exerciseId": 622,
+      "exerciseUuid": "7ce443b6-eb84-4f65-b05f-461c1cc8bcc0",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:35:53.031152+01:00",
+      "lastUpdateGlobal": "2026-06-19T18:47:04.282658+02:00",
+      "category": {
+        "id": 14,
+        "name": "Calves"
+      },
+      "equipment": [],
+      "primaryMuscles": [
+        {
+          "id": 7,
+          "name": "Gastrocnemius",
+          "name_en": "Calves",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-7.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-7.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 15,
+          "name": "Soleus",
+          "name_en": "",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-15.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-15.svg"
+        }
+      ],
+      "variationGroupUuid": "4b54f372-2aef-4741-b76d-85e3f376f1d7",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "FEFFO",
+        "Goulart",
+        "wger.de",
+        "admin",
+        "clafal"
+      ],
+      "englishTranslation": {
+        "id": 102,
+        "uuid": "abc4c62e-27b2-4c31-8766-40f8dca84cab",
+        "name": "Standing Calf Raises",
+        "descriptionHtml": "<p>Get onto the calf raises machine, you should able to completely push your calves down. Stand straight, don't make a hollow back and don't bend your legs. Pull yourself up as high as you can. Make a small pause of 1 - 2 seconds and go slowly down.</p>\n",
+        "descriptionText": "Get onto the calf raises machine, you should able to completely push your calves down. Stand straight, don't make a hollow back and don't bend your legs. Pull yourself up as high as you can. Make a small pause of 1 - 2 seconds and go slowly down.",
+        "descriptionSource": "Get onto the calf raises machine, you should able to completely push your calves down. Stand straight, don't make a hollow back and don't bend your legs. Pull yourself up as high as you can. Make a small pause of 1 - 2 seconds and go slowly down.",
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/622/"
+    },
+    {
+      "exerciseId": 655,
+      "exerciseUuid": "5915fabe-c941-4dac-b196-bc4e8c7ce57b",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2024-01-17T11:39:23.657191+01:00",
+      "lastUpdateGlobal": "2026-04-15T22:23:56.145134+02:00",
+      "category": {
+        "id": 8,
+        "name": "Arms"
+      },
+      "equipment": [
+        {
+          "id": 3,
+          "name": "Dumbbell"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 5,
+          "name": "Triceps brachii",
+          "name_en": "Triceps",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-5.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-5.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": null,
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "http://www.bodybuilding.com/",
+      "exerciseAuthorHistory": [
+        "http://www.bodybuilding.com/"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "wger.de",
+        "Franpol",
+        "Garion",
+        "http://www.bodybuilding.com/"
+      ],
+      "englishTranslation": {
+        "id": 279,
+        "uuid": "88568115-5e88-4afc-b005-e2f7d453ac13",
+        "name": "Tricep Dumbbell Kickback",
+        "descriptionHtml": "<ol>\n<li>Start with a dumbbell in each hand and your palms facing your torso. Keep your back straight with a slight bend in the knees and bend forward at the waist. Your torso should be almost parallel to the floor. Make sure to keep your head up. Your upper arms should be close to your torso and parallel to the floor. Your forearms should be pointed towards the floor as you hold the weights. There should be a 90-degree angle formed between your forearm and upper arm. This is your starting position.</li>\n<li>Now, while keeping your upper arms stationary, exhale and use your triceps to lift the weights until the arm is fully extended. Focus on moving the forearm.</li>\n<li>After a brief pause at the top contraction, inhale and slowly lower the dumbbells back down to the starting position.</li>\n<li>Repeat the movement for the prescribed amount of repetitions.</li>\n</ol>\n<p><strong>Variations:</strong> This exercise can be executed also one arm at a time much like the one arm rows are performed.</p>\n<p>Also, if you like the one arm variety, you can use a low pulley handle instead of a dumbbell for better peak contraction. In this case, the palms should be facing up (supinated grip) as opposed to the torso (neutral grip).</p>\n",
+        "descriptionText": "Start with a dumbbell in each hand and your palms facing your torso. Keep your back straight with a slight bend in the knees and bend forward at the waist. Your torso should be almost parallel to the floor. Make sure to keep your head up. Your upper arms should be close to your torso and parallel to the floor. Your forearms should be pointed towards the floor as you hold the weights. There should be a 90-degree angle formed between your forearm and upper arm. This is your starting position. Now, while keeping your upper arms stationary, exhale and use your triceps to lift the weights until the arm is fully extended. Focus on moving the forearm. After a brief pause at the top contraction, inhale and slowly lower the dumbbells back down to the starting position. Repeat the movement for the prescribed amount of repetitions. Variations: This exercise can be executed also one arm at a time much like the one arm rows are performed. Also, if you like the one arm variety, you can use a low pulley handle instead of a dumbbell for better peak contraction. In this case, the palms should be facing up (supinated grip) as opposed to the torso (neutral grip).",
+        "descriptionSource": "1. Start with a dumbbell in each hand and your palms facing your torso. Keep your back straight with a slight bend in the knees and bend forward at the waist. Your torso should be almost parallel to the floor. Make sure to keep your head up. Your upper arms should be close to your torso and parallel to the floor. Your forearms should be pointed towards the floor as you hold the weights. There should be a 90-degree angle formed between your forearm and upper arm. This is your starting position.\n2. Now, while keeping your upper arms stationary, exhale and use your triceps to lift the weights until the arm is fully extended. Focus on moving the forearm.\n3. After a brief pause at the top contraction, inhale and slowly lower the dumbbells back down to the starting position.\n4. Repeat the movement for the prescribed amount of repetitions.\n\n**Variations:** This exercise can be executed also one arm at a time much like the one arm rows are performed.\n\nAlso, if you like the one arm variety, you can use a low pulley handle instead of a dumbbell for better peak contraction. In this case, the palms should be facing up (supinated grip) as opposed to the torso (neutral grip).",
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "http://www.bodybuilding.com/",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "http://www.bodybuilding.com/"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/655/"
+    },
+    {
+      "exerciseId": 659,
+      "exerciseUuid": "3188868c-84e2-4a3b-b7dc-f79d8650988d",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2026-07-23T12:36:19.710591+02:00",
+      "lastUpdateGlobal": "2026-07-23T12:36:19.710591+02:00",
+      "category": {
+        "id": 8,
+        "name": "Arms"
+      },
+      "equipment": [
+        {
+          "id": 12,
+          "name": "Cable machine"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 5,
+          "name": "Triceps brachii",
+          "name_en": "Triceps",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-5.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-5.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "290582f2-d94c-4eb6-a994-99e38d7251f7",
+      "exerciseLicense": {
+        "id": 1,
+        "full_name": " Creative Commons Attribution Share Alike 3",
+        "short_name": "CC-BY-SA 3",
+        "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+      },
+      "exerciseLicenseAuthor": "wger.de",
+      "exerciseAuthorHistory": [
+        "wger.de"
+      ],
+      "exerciseTotalAuthorHistory": [
+        "Franpol",
+        "Goulart",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 89,
+        "uuid": "f1b5e525-6232-4d60-a243-9b2cd6c55298",
+        "name": "Triceps Extensions on Cable",
+        "descriptionHtml": "<p>Grab the cable, stand with your feet shoulder wide, keep your back straight and lean forward a little. Push the bar down, making sure the elbows don't move during the exercise. Rotate your hands outwards at the very end and go back to the initial position without pause.</p>\n",
+        "descriptionText": "Grab the cable, stand with your feet shoulder wide, keep your back straight and lean forward a little. Push the bar down, making sure the elbows don't move during the exercise. Rotate your hands outwards at the very end and go back to the initial position without pause.",
+        "descriptionSource": "Grab the cable, stand with your feet shoulder wide, keep your back straight and lean forward a little. Push the bar down, making sure the elbows don't move during the exercise. Rotate your hands outwards at the very end and go back to the initial position without pause.",
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 1,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": "wger.de",
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/659/"
+    },
+    {
+      "exerciseId": 802,
+      "exerciseUuid": "072a9fa8-1028-47b3-b958-d8052c6b8661",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2026-07-23T12:25:00.768313+02:00",
+      "lastUpdateGlobal": "2026-07-23T12:25:00.768313+02:00",
+      "category": {
+        "id": 9,
+        "name": "Legs"
+      },
+      "equipment": [
+        {
+          "id": 1,
+          "name": "Barbell"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 8,
+          "name": "Gluteus maximus",
+          "name_en": "Glutes",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-8.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-8.svg"
+        },
+        {
+          "id": 10,
+          "name": "Quadriceps femoris",
+          "name_en": "Quads",
+          "is_front": true,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-10.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-10.svg"
+        }
+      ],
+      "secondaryMuscles": [
+        {
+          "id": 11,
+          "name": "Biceps femoris",
+          "name_en": "Hamstrings",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-11.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-11.svg"
+        },
+        {
+          "id": 7,
+          "name": "Gastrocnemius",
+          "name_en": "Calves",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-7.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-7.svg"
+        }
+      ],
+      "variationGroupUuid": "c8727770-8ec1-4fe3-ae70-238a9fc46570",
+      "exerciseLicense": {
+        "id": 2,
+        "full_name": "Creative Commons Attribution Share Alike 4",
+        "short_name": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+      },
+      "exerciseLicenseAuthor": null,
+      "exerciseAuthorHistory": [],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "wgerjhn",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 1053,
+        "uuid": "b368663d-f71f-4689-b462-76ac86a06362",
+        "name": "Barbell Lunges Walking",
+        "descriptionHtml": "",
+        "descriptionText": "",
+        "descriptionSource": null,
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 2,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": null,
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/802/",
+      "rafikEnglishSupplement": {
+        "exerciseId": 802,
+        "exerciseUuid": "072a9fa8-1028-47b3-b958-d8052c6b8661",
+        "englishName": "Barbell Lunges Walking",
+        "mode": "translated-from-upstream",
+        "englishDescription": "Place the bar across your upper back and stand with your feet about hip-width apart, leaving a clear path ahead. Take a long step forward and lower your hips under control until the rear knee is close to the floor and the front knee is near 90 degrees. Drive through the front heel and bring the rear leg forward into the next lunge. Continue alternating legs while keeping your torso upright and your abdomen braced.",
+        "provenance": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+        "source": {
+          "language": {
+            "id": 4,
+            "short_name": "es",
+            "full_name": "Español",
+            "full_name_en": "Spanish"
+          },
+          "translationId": 2567,
+          "translationUuid": "970504ab-4130-45d1-b22b-3eddb764f318",
+          "name": "Zancadas Caminando con Barra",
+          "descriptionText": "Cómo realizarlo: Preparación: Coloca una barra sobre la parte alta de tu espalda (trapecios), igual que lo harías para una sentadilla. Párate derecho con los pies al ancho de las caderas, asegurándote de tener un pasillo o espacio libre por delante. Ejecución: Da un paso largo hacia adelante con una pierna. Baja la cadera de forma controlada hasta que la rodilla de la pierna de atrás quede muy cerca del suelo. La pierna delantera debe formar un ángulo de 90 grados. El Avance: En lugar de empujar hacia atrás para volver al inicio, impúlsate hacia adelante. Presiona con el talón de la pierna delantera y lleva la pierna de atrás hacia el frente para iniciar inmediatamente la siguiente zancada con esa pierna. Continuación: Sigue alternando las piernas, \"caminando\" hacia adelante con cada zancada de manera fluida pero controlada. Mantén siempre el torso erguido y el abdomen contraído para no perder el equilibrio.",
+          "descriptionSource": "**Cómo realizarlo:**\n\n1. **Preparación:** Coloca una barra sobre la parte alta de tu espalda (trapecios), igual que lo harías para una sentadilla. Párate derecho con los pies al ancho de las caderas, asegurándote de tener un pasillo o espacio libre por delante.\n2. **Ejecución:** Da un paso largo hacia adelante con una pierna. Baja la cadera de forma controlada hasta que la rodilla de la pierna de atrás quede muy cerca del suelo. La pierna delantera debe formar un ángulo de 90 grados.\n3. **El Avance:** En lugar de empujar hacia atrás para volver al inicio, impúlsate hacia adelante. Presiona con el talón de la pierna delantera y lleva la pierna de atrás hacia el frente para iniciar inmediatamente la siguiente zancada con esa pierna.\n4. **Continuación:** Sigue alternando las piernas, \"caminando\" hacia adelante con cada zancada de manera fluida pero controlada. Mantén siempre el torso erguido y el abdomen contraído para no perder el equilibrio.",
+          "license": {
+            "id": 2,
+            "full_name": "Creative Commons Attribution Share Alike 4",
+            "short_name": "CC-BY-SA 4",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+          },
+          "licenseAuthor": "wgerjhn",
+          "licenseAuthorUrl": null,
+          "licenseObjectUrl": null,
+          "licenseDerivativeSourceUrl": null,
+          "authorHistory": [
+            "wgerjhn"
+          ]
+        }
+      }
+    },
+    {
+      "exerciseId": 803,
+      "exerciseUuid": "f8d69dd4-3c35-49c7-8cbe-f0132eca4c52",
+      "created": "2023-08-06T10:17:17.422900+02:00",
+      "lastUpdate": "2026-07-23T12:36:21.839866+02:00",
+      "lastUpdateGlobal": "2026-07-23T12:36:21.839866+02:00",
+      "category": {
+        "id": 8,
+        "name": "Arms"
+      },
+      "equipment": [
+        {
+          "id": 12,
+          "name": "Cable machine"
+        }
+      ],
+      "primaryMuscles": [
+        {
+          "id": 5,
+          "name": "Triceps brachii",
+          "name_en": "Triceps",
+          "is_front": false,
+          "image_url_main": "https://wger.de/static/images/muscles/main/muscle-5.svg",
+          "image_url_secondary": "https://wger.de/static/images/muscles/secondary/muscle-5.svg"
+        }
+      ],
+      "secondaryMuscles": [],
+      "variationGroupUuid": "290582f2-d94c-4eb6-a994-99e38d7251f7",
+      "exerciseLicense": {
+        "id": 2,
+        "full_name": "Creative Commons Attribution Share Alike 4",
+        "short_name": "CC-BY-SA 4",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+      },
+      "exerciseLicenseAuthor": null,
+      "exerciseAuthorHistory": [],
+      "exerciseTotalAuthorHistory": [
+        "Goulart",
+        "wgerjhn",
+        "wger.de"
+      ],
+      "englishTranslation": {
+        "id": 1055,
+        "uuid": "e6dab89e-e3d8-4bd8-8993-b5f52462cbde",
+        "name": "One Arm Triceps Extensions on Cable",
+        "descriptionHtml": "",
+        "descriptionText": "",
+        "descriptionSource": null,
+        "aliases": [],
+        "notes": [],
+        "created": "2023-08-06T10:17:17.349574+02:00",
+        "languageId": 2,
+        "licenseId": 2,
+        "licenseTitle": null,
+        "licenseObjectUrl": null,
+        "licenseAuthor": null,
+        "licenseAuthorUrl": null,
+        "licenseDerivativeSourceUrl": null,
+        "authorHistory": [
+          "wger.de"
+        ]
+      },
+      "sourceApiUrl": "https://wger.de/api/v2/exerciseinfo/803/",
+      "rafikEnglishSupplement": {
+        "exerciseId": 803,
+        "exerciseUuid": "f8d69dd4-3c35-49c7-8cbe-f0132eca4c52",
+        "englishName": "One Arm Triceps Extensions on Cable",
+        "mode": "translated-from-upstream",
+        "englishDescription": "Set the pulley high and attach a single handle. Stand with your working elbow close to your side and keep it fixed throughout the movement. Extend your arm downward until the elbow is straight and the triceps is contracted. Pause briefly, then return slowly and under control to the starting position.",
+        "provenance": "Rafik English translation of the identified wger source translation. Preserve the source translation license and author; the English wording is newly translated for Rafik.",
+        "source": {
+          "language": {
+            "id": 4,
+            "short_name": "es",
+            "full_name": "Español",
+            "full_name_en": "Spanish"
+          },
+          "translationId": 2673,
+          "translationUuid": "6fae30d4-9665-4278-80ff-7b9c0d0d24bd",
+          "name": "Extensión de Tríceps a una Mano en Polea",
+          "descriptionText": "Este ejercicio es ideal para aislar y concentrarse en cada cabeza del tríceps de forma individual. Descripción: Coloca la polea en una posición alta y utiliza un agarre individual (maneral). De pie, mantén tu codo pegado al costado del cuerpo; este debe actuar como una bisagra y permanecer fijo durante todo el movimiento. Extiende el brazo completamente hacia abajo hasta sentir una fuerte contracción en el tríceps. Haz una breve pausa y regresa de forma lenta y controlada a la posición inicial.",
+          "descriptionSource": "Este ejercicio es ideal para aislar y concentrarse en cada cabeza del tríceps de forma individual.\n\n**Descripción:**\n\nColoca la polea en una posición alta y utiliza un agarre individual (maneral). De pie, mantén tu codo pegado al costado del cuerpo; este debe actuar como una bisagra y permanecer fijo durante todo el movimiento.\n\nExtiende el brazo completamente hacia abajo hasta sentir una fuerte contracción en el tríceps. Haz una breve pausa y regresa de forma lenta y controlada a la posición inicial.",
+          "license": {
+            "id": 2,
+            "full_name": "Creative Commons Attribution Share Alike 4",
+            "short_name": "CC-BY-SA 4",
+            "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+          },
+          "licenseAuthor": "wgerjhn",
+          "licenseAuthorUrl": null,
+          "licenseObjectUrl": null,
+          "licenseDerivativeSourceUrl": null,
+          "authorHistory": [
+            "wgerjhn"
+          ]
+        }
+      }
+    }
+  ],
+  "licenseDictionary": {
+    "1": {
+      "id": 1,
+      "full_name": " Creative Commons Attribution Share Alike 3",
+      "short_name": "CC-BY-SA 3",
+      "url": "https://creativecommons.org/licenses/by-sa/3.0/deed.en"
+    },
+    "4": {
+      "id": 4,
+      "full_name": "Creative Commons Attribution 4",
+      "short_name": "CC-BY 4",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "2": {
+      "id": 2,
+      "full_name": "Creative Commons Attribution Share Alike 4",
+      "short_name": "CC-BY-SA 4",
+      "url": "https://creativecommons.org/licenses/by-sa/4.0/deed.en"
+    },
+    "3": {
+      "id": 3,
+      "full_name": "Creative Commons Public Domain 1.0",
+      "short_name": "CC0",
+      "url": "http://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    "5": {
+      "id": 5,
+      "full_name": "Open Data Commons Open Database License",
+      "short_name": "ODbL",
+      "url": "https://opendatacommons.org/licenses/odbl/"
+    }
+  }
+}

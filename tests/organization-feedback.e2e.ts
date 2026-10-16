@@ -82,7 +82,7 @@ test('optional session and workplace feedback recover and appear as separate sou
         'ON_ERROR_STOP=1',
       ],
       {
-        cwd: resolve('../rafik-api'),
+        cwd: resolve('backend'),
         input: `update public.organization_events set starts_at=now()-interval '2 hours',ends_at=now()-interval '1 hour' where id='${id}' and workspace_id='${workspace}';`,
         stdio: ['pipe', 'pipe', 'pipe'],
       },

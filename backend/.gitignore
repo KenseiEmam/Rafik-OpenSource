@@ -1,0 +1,12 @@
+node_modules/
+.DS_Store
+.env
+.env.*
+!.env.example
+supabase/.temp/
+supabase/.branches/
+coverage/
+artifacts/
+
+server/generated/
+.local/

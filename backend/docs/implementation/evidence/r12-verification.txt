@@ -1,0 +1,13 @@
+R12 local acceptance — 23 September 2026
+Command: npm run verify:release -- --full (Node 22.16.0)
+Final uninterrupted serial run: artifacts/release/2026-09-23T11-35-27.532Z/report.json
+Status: passed; all 25 recorded steps including prerequisites.
+Runtime/application source was stable during final acceptance. The last team-layout loading/semantic-selector harness correction was made before that step executed. Subsequent changes only finalized documentation/evidence.
+72/72 browser journeys, Chromium and phone WebKit, disposable database/API/files/build; preview preserved.
+928 rendered states: quality128, product320, team Chromium176, team WebKit176, operations104, cohesion24. Zero reported geometry/alert/page errors or violations in checked accessibility states. This is the scripts' declared matrices, not every combination or physical devices.
+239 rollback SQL assertions,22 forward migrations in disposable fresh installation/seven suites; identity/API and all service/team/membership/programming/organization-service/communication/operations suites passed.12 web unit tests;7 release guards; type/build/format/content/documentation checks passed.
+Final scripts' JSON reports persisted alongside this record; full per-step logs remain at the local report directory. No credentials are included in this evidence packet.
+Focused earlier changed journeys:12/12; after later-page selection fix:14/14 affected journeys. Those are supplementary to the final72/72 run, not added to its count.
+Earlier full attempt 2026-09-23T11-26-29.145Z passed72 journeys and448 layouts, then failed direct Node import resolution. Explicit .ts imports/compiler option fixed that. A standalone team-layout retry exposed an outdated first-select locator; named bilingual group selection and loaded-state waiting fixed it. Neither failed attempt is accepted as a green full run.
+Actual renders inspected: desktop English/dark and phone Arabic/dark home; Arabic phone scheduling People step; Arabic phone team Groups. Interactive short-phone organization conversation creation checked ordinary page scroll and reachable participant/save controls. R11 inspected platform audit, analytics and populated selection captures.
+No hosted deployment, remote CI, real mail/push/payment, physical-device/assistive-technology, native implementation or human usability/retention claim. No push, preview reset or outreach.

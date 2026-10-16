@@ -1,0 +1,104 @@
+# Feature verification map
+
+This maps the implemented user jobs to executable checks. It is a coverage index, not a claim that every possible combination has been exercised. Concrete run results belong in [verification](verification.md).
+
+| User job | Behavior and recovery checked | Primary evidence source in web / backend |
+|---|---|---|
+| Entry and account | Guest value, email-code invitation/acceptance, guest adoption, profile/data ownership; export/deletion and owned file cleanup | `core.e2e.ts`, core SQL, service/team HTTP suites |
+| Training | Strength/timed/distance/group actuals, save/reload, offline/reconnect, dropped acknowledgement, concurrent edit conflict, completion/correction and immutable history | `core.e2e.ts`, `daily-coaching.e2e.ts`, `product-quality.e2e.ts`, core/daily/choice SQL |
+| Programming and clients | Draft recovery, publish/preview, custom exercise, mixed cycle, assignment/archive/reactivation, private context and approved alternatives | `daily-coaching.e2e.ts`, `product-quality.e2e.ts`, daily/choice SQL |
+| Roster and plan navigation | Whole-list search, status filtering, bounded visible records; long native option text in WebKit | `responsive-inbox.e2e.ts`, broad route audit; R6 observed 12→24→search→12 roster flow |
+| Progress and measurements | Completed actual identity, units, date filtering, correction, personal/shared visibility | `ongoing.e2e.ts`, `product-quality.e2e.ts`, ongoing/choice SQL |
+| Forms and assessments | Versioned definition, assignment, typed drafts, submission/review/correction, compatible comparisons, lost-acknowledgement retry, large request navigation | `ongoing.e2e.ts`, `product-quality.e2e.ts`, ongoing SQL |
+| Conversation | Inbox/list/detail/back/search/no-match, long names/history, independent scrolling, composing/focus, unread cursor, context permissions, pending send and exact retries | `responsive-inbox.e2e.ts`, `product-quality.e2e.ts`, `ongoing.e2e.ts`, ongoing SQL |
+| Nutrition | Guidance snapshots, saved food and meal actuals, correction/visibility | `service-delivery.e2e.ts`, service SQL |
+| Appointments | Timezone availability, booking/reschedule/cancel, ambiguous acknowledgement, concurrent/cross-role collision, attendance rules | `service-delivery.e2e.ts`, service SQL and real HTTP suite |
+| Files | Real bytes, upload/finalize recovery, explicit sharing, conversation context, revocation, deletion and account cleanup | `service-delivery.e2e.ts`, service/team HTTP suites, service SQL |
+| Teams | Staff invitation/roles, client consent, groups/shared material, independently copied handoff, access after departure and deletion preflight | `teams.e2e.ts`, populated team-tab layout matrix, team HTTP/SQL suites |
+| Organizations and contexts | Separate organizations, combined roles, verified invitation/revocation, current trainer responsibility, last-admin/concurrent departure guards, preserved membership after deletion, scoped drafts and exact retry | `organizations.e2e.ts`, `tests/workspaces.test.ts`; owned programs/history now covered by `programming.e2e.ts` and `tests/programming.test.ts`; organization services are covered below |
+| Organization programming/media | Scoped publication, session/week reuse, private cover retry/access, reviewed atomic delivery, lost ACK/reload, trainee actuals, previous performance, correction and reassignment | `programming.e2e.ts`, `program-structure.test.ts`, `tests/programming.test.ts`, `tests/program-media.test.ts`, `scripts/audit-programming.ts` |
+| Business and support | Local entitlement state/order/retry, owner simulation, private/team support, response/reopen and draft recovery | `teams.e2e.ts`, team HTTP/SQL suites; no real payment/delivery claim |
+| Application updates | Failed install, waiting release with two tabs, old-version navigation, retained workout on activation/offline reload; final built-file/HTML-only cache identity | `app-updates.e2e.ts`, `offline-shell.test.ts`, `scripts/check-shell-build.mjs` |
+| Shared shell and accessibility | Phone/desktop, short height/landscape/resizing, both engines, English/Arabic, light/dark, document and internal overflow, labels/focus/Axe | `layout-contract.ts`, `audit-product.ts`, quality/team matrices and journey tests |
+| Developer operation | Wrong project/remote/main/runtime rejection, non-destructive fresh database, serial acceptance logs and current doc links | `release-guard.test.mjs`, `verify-release.mjs`, `check-docs.mjs` |
+
+## Required review practice
+
+Inspect the entry/list state and the selected/detail state separately. Use more than one record, long labels, optional controls and no-match/error cases. Measure nested scroll containers, control containment and row spacing. Wait for data loading to finish before measuring. Review both viewport captures and full-page context; full-page images alone can make tall broken layouts appear harmless when scaled down.
+
+The broad matrix uses current synthetic preview records; isolated scenario tests supply deterministic fresh fixtures for sensitive state/retry contracts. The default R11 browser harness runs even older lifecycle tests in a disposable database; older preview pollution was not erased. Do not depend on old test records or delete the user's preview to conceal layout failures. Each new fixture should clean up only its own records.
+
+## Remaining boundaries
+
+No matrix establishes every possible record count, translation, device size, keyboard state or race. Phone-sized WebKit is not a physical iPhone. Physical keyboard/touch/suspension, assistive technology, hosted email/Storage/backup/CDN behavior, remote CI, actual notification/calendar/payment providers and human task success/retention remain separate gates. In-app Today activity, notification preferences and local intent/interception are implemented; no actual external delivery is claimed. Marketplace/AI/rankings/native remain explicitly deferred decisions.
+
+## Organization services (R9)
+
+| User task | Evidence | Remaining evidence |
+|---|---|---|
+| Admin schedules a reviewed group assessment; designated assessor records separate trainee values and correction | `tests/organization-services.test.ts`, web `tests/organization-services.e2e.ts` | Physical keyboard/touch and unaided human task observation |
+| Trainer reassignment changes roster analytics/history access while an event-specific assessor grant stays narrow | HTTP reassignment/revocation/export assertions | Hosted environment acceptance |
+| Admin and independent/organization coach interpret real operational diagrams | Report filters/definitions, chart tables, browser role checks and 104-state service audit | Hosted scale/retention evidence; R11 adds measured fixture paging |
+
+Rendered chart label readability was checked after the automated matrix; see product quality review.
+
+## Communication (R10)
+
+| User task | Evidence | Remaining evidence |
+|---|---|---|
+| Organization participants communicate without scope leaks | R10 HTTP authority/replay tests, both-engine create/send/draft/retry/inbox journey, responsive captures | Real-device keyboard/suspension remains unverified |
+| People control optional updates and reach the right workspace | Intent/preference/reminder/sink tests, generic previews, notification-to-conversation journey | Manual local dispatcher only; real mail/push acceptance is deferred |
+
+## Operations and connected refinement
+
+| User job | Evidence | Limit |
+|---|---|---|
+| Operator manages access/support with reasons | `tests/platform.test.ts`, `operations.e2e.ts` | Separate grant; no private health/message browser |
+| Select people across a large roster | `tests/scale.test.ts`, `operations.e2e.ts`, `MemberPicker` | 120 trainers/1,200 trainees; local fixture, not production SLA |
+| Restore registered bytes and clean old orphans | `tests/maintenance.test.ts`, recovery/maintenance scripts | Local coordinated-hosting snapshot still required |
+| Choose the right workspace and understand the role | `cohesion.e2e.ts`, role-specific Help, rendered entry/help sweep | Developer walkthrough, not unaided human observation |
+| Schedule while keeping selected template/people | `organization-services.e2e.ts`, HTTP per-participant history tests | Real touch/keyboard and user comprehension still require observation |
+
+## Staff dashboard quality (R13)
+
+| User job | Evidence | Limit |
+|---|---|---|
+| Choose any available timezone without memorizing IANA strings | `design-controls.test.ts`, `dashboard.e2e.ts`, scheduling/booking journeys; full browser catalog, city aliases, UTC, fractional/DST labels, keyboard/save/reload/escape | Browser ICU catalog; current label offset does not replace server validation of the event date |
+| Read activity and delivery at a glance, recover a failed refresh | Unovis axes/count ticks, tabs/presets, keyboard readout, table equivalents; dashboard mock/fault journey plus real organization-service lifecycle | UI mock is not database evidence; no invented customer/quality metrics |
+| Keep context while navigating a working dashboard | Dashboard journey covers stable sidebar, main scrolling, Back restoration, phone drawer focus; product/team/operations/cohesion audits retain existing coverage | Physical-device and unaided first-use observation remain separate |
+| Read the UI across role/locale/theme/breakpoints | `audit-dashboard.ts`: 192 paired states across independent/admin/trainer roles and both engines; all states include Axe and geometry checks | Paired combinations, not every possible cross-product or arbitrary data set |
+
+## Useful reference content (R14)
+
+| User job | Evidence | Limit |
+|---|---|---|
+| Coach turns calorie/macronutrient targets into a suggested day | Nutrition planning journey, SQL immutable versions/replay/bounds; optional helper, context-switch and held-response navigation regressions | Independent coaching only; no inferred calorie recommendation |
+| Trainee records actual source-backed portions and recovers an uncertain save | Sourced rice quantities/precision, lost acknowledgment/reload/exact replay, source kcal and unknown-value units, food lookup failure/manual fallback | Fifteen starter foods; no offline/barcode/regional completeness claim |
+| Coach/client reads an exercise demonstration without leaving the task | Independent/organization library, public routine, editor/logger component integration; continuous video/autoplay/reduced motion/ranges/retry, simultaneous SVG reference positions and cache contract | R15: 45 videos plus ten static reference sets; no full-catalog motion coverage or native renderer |
+| Maintainer expands content without runtime dependence | Catalog/provenance/hash tests, generator drift check, retained licenses and immutable keys | Each new movement/source still requires explicit review |
+
+## Exercise discovery correction (R15)
+
+- `exercise-media.e2e.ts`: full corpus count, 24-row paging/later selection, staff scopes, compound filters, video playback/retry/ranges, phone entry/detail/back, root orientation and EN/AR/themes in both engines.
+- `exercise-picker.e2e.ts`: full-source search, bounded options, category filters, query-after-Escape, persisted choices, same-kind alternatives and RTL containment.
+- `exercise-catalog.test.ts`: compound equipment membership, aliases and Arabic facet labels.
+- `exercise_catalog.sql`, `exercise_choices.sql` and programming tests: imported categories, custom validation/retry, immutable source and media references through publication/copy, own-scope authority.
+- Content checks verify pinned corpus, immutable first-import SQL, reviewed wger editorial snapshot and all committed media hashes. Fresh-install results and actual browser counts belong in the verification record.
+
+## R16 organization nutrition
+
+- API: `tests/organization-nutrition.test.ts` — separate organizations/independent roles, combined trainer/trainee, admin-only publication, reassignment/revoked replay, consent withdrawal, immutable plans/corrections, expiry, concurrent revisions, bounded histories, source validation and subject export.
+- Web: `tests/organization-nutrition.e2e.ts` — author→trainee→staff lifecycle, actual portions, sharing/removal history, scoped/closed drafts, lost publication/meal response recovery, EN/AR/themes/phone/desktop; screenshots and console/geometry/Axe checks complement actual review.
+- Regression: independent nutrition and existing organization journeys; fresh migration/install, maintained docs and configured CI/release gate. Refer to the current verification record for executed results; configured gates alone do not mean they passed.
+
+## R18–R19 organization ownership and operations
+
+- `tests/organization-assets.test.ts` and web `organization-assets.e2e.ts`: creator/tenant scope, immutable direct upload, multi-category clear/add, resource archive/reuse, pair-only attachment/replay and revocation. Backup/recovery includes asset digests.
+- `tests/organization-tasks.test.ts` and web `organization-tasks.e2e.ts`: admin assignment, current-assignee completion, reassignment/replay, concurrent revision conflicts, inactive members, search/history, closed drafts/recovery and real follow-up source lifecycles.
+- Current local results are in the ledger. Package accounting, satisfaction semantics and physical/hosted/human evidence are separate, unfinished gates.
+
+## Gym session and experience additions (R20–R21)
+
+- Package assignment → explicit calendar funding → reserved/used/released history; independent replacement leaves balances unchanged. API package tests and organization-packages.e2e cover authority/concurrency/replay/no-show choices/corrections/drafts/rendered list/detail.
+- Own completed workout or attended completed appointment → optional explicit rating → source-labelled client chart. Trainer monthly workplace response → separate admin aggregate/denominator. organization-feedback API/browser tests cover eligibility, source separation, current role scope, lost acknowledgement, corrections, own export and every analytics subtab.
+- Actual trainer delivery uses event staff, not guessed quality; renewals require an explicit successor, not a new appointment. Provider payments, native forms and physical-device outcomes remain outside local acceptance.

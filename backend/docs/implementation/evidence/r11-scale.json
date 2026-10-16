@@ -1,0 +1,149 @@
+{
+  "fixture": {
+    "trainers": 120,
+    "trainees": 1200
+  },
+  "environment": "local PostgreSQL17, Node22, unthrottled loopback; not a production budget",
+  "measurements": [
+    {
+      "path": "/v1/workspaces/:workspace?view=admin&summary=true",
+      "durationMs": 16.38,
+      "payloadBytes": 672
+    },
+    {
+      "path": "/v1/workspaces/:workspace/people?view=admin&role=trainee",
+      "durationMs": 13.85,
+      "payloadBytes": 6308
+    },
+    {
+      "path": "/v1/workspaces/:workspace/people?view=admin&role=trainee&offset=25",
+      "durationMs": 13.7,
+      "payloadBytes": 6308
+    },
+    {
+      "path": "/v1/workspaces/:workspace/people?view=admin&search=1199&selected=:fixture-id",
+      "durationMs": 12.49,
+      "payloadBytes": 556
+    },
+    {
+      "path": "/v1/workspaces/:workspace/recipients?view=admin&search=1199&selected=:fixture-id",
+      "durationMs": 16.27,
+      "payloadBytes": 294
+    },
+    {
+      "path": "/v1/workspaces/:workspace/delivery?view=admin&history=true",
+      "durationMs": 10.47,
+      "payloadBytes": 103
+    },
+    {
+      "path": "/v1/workspaces/:workspace/analytics?view=admin&from=2026-09-01&to=2026-09-30&workloadOffset=0",
+      "durationMs": 24.05,
+      "payloadBytes": 4062
+    },
+    {
+      "path": "/v1/workspaces/:workspace/analytics?view=admin&from=2026-09-01&to=2026-09-30&workloadOffset=25",
+      "durationMs": 18.7,
+      "payloadBytes": 4062
+    },
+    {
+      "path": "/v1/workspaces/:workspace/analytics?view=admin&from=2026-09-01&to=2026-09-30&workloadOffset=50",
+      "durationMs": 17.35,
+      "payloadBytes": 4062
+    },
+    {
+      "path": "/v1/workspaces/:workspace/analytics?view=admin&from=2026-09-01&to=2026-09-30&workloadOffset=75",
+      "durationMs": 17.61,
+      "payloadBytes": 4063
+    },
+    {
+      "path": "/v1/workspaces/:workspace/analytics?view=admin&from=2026-09-01&to=2026-09-30&workloadOffset=100",
+      "durationMs": 18.86,
+      "payloadBytes": 3664
+    },
+    {
+      "path": "/v1/workspaces/:workspace?view=admin&summary=true",
+      "durationMs": 13.61,
+      "payloadBytes": 9868
+    },
+    {
+      "path": "/v1/workspaces/:workspace?view=admin&summary=true&invitationOffset=25&eventOffset=30",
+      "durationMs": 11.08,
+      "payloadBytes": 2502
+    }
+  ],
+  "queryPlan": [
+    {
+      "Plan": {
+        "Node Type": "Limit",
+        "Parallel Aware": false,
+        "Async Capable": false,
+        "Startup Cost": 0.28,
+        "Total Cost": 8.29,
+        "Plan Rows": 1,
+        "Plan Width": 28,
+        "Actual Startup Time": 0.045,
+        "Actual Total Time": 0.058,
+        "Actual Rows": 25,
+        "Actual Loops": 1,
+        "Shared Hit Blocks": 5,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0,
+        "Plans": [
+          {
+            "Node Type": "Index Only Scan",
+            "Parent Relationship": "Outer",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Scan Direction": "Forward",
+            "Index Name": "workspace_members_name_page",
+            "Relation Name": "workspace_members",
+            "Alias": "workspace_members",
+            "Startup Cost": 0.28,
+            "Total Cost": 8.29,
+            "Plan Rows": 1,
+            "Plan Width": 28,
+            "Actual Startup Time": 0.044,
+            "Actual Total Time": 0.055,
+            "Actual Rows": 25,
+            "Actual Loops": 1,
+            "Index Cond": "((workspace_id = ':fixture-id'::uuid) AND (active = true))",
+            "Rows Removed by Index Recheck": 0,
+            "Heap Fetches": 25,
+            "Shared Hit Blocks": 5,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          }
+        ]
+      },
+      "Planning": {
+        "Shared Hit Blocks": 192,
+        "Shared Read Blocks": 0,
+        "Shared Dirtied Blocks": 0,
+        "Shared Written Blocks": 0,
+        "Local Hit Blocks": 0,
+        "Local Read Blocks": 0,
+        "Local Dirtied Blocks": 0,
+        "Local Written Blocks": 0,
+        "Temp Read Blocks": 0,
+        "Temp Written Blocks": 0
+      },
+      "Planning Time": 0.317,
+      "Triggers": [],
+      "Execution Time": 0.069
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+NOTICE:  PASS: public sample is readable without an account
+NOTICE:  PASS: duplicate start returns one canonical occurrence
+NOTICE:  PASS: prescribed sets are created exactly once
+NOTICE:  PASS: completion replay returns the original receipt without another transition
+NOTICE:  PASS: note correction preserves completion and history
+NOTICE:  PASS: stale write rejects without losing the acknowledged result
+NOTICE:  PASS: same operation ID cannot be reused with a different payload
+NOTICE:  PASS: unrelated client cannot read another client history
+NOTICE:  PASS: wrong client cannot start a private assignment
+NOTICE:  PASS: retrying a plan save does not create another revision
+NOTICE:  PASS: publishing a future revision does not rewrite the started prescription
+NOTICE:  PASS: old published version remains immutable
+NOTICE:  PASS: coach feedback belongs to a real result
+NOTICE:  PASS: invitation preview exposes coach context without private assignment contents
+NOTICE:  PASS: invitation preview does not disclose the client email
+NOTICE:  PASS: private invitation rejects a different verified email
+NOTICE:  PASS: invitation acceptance is atomic and idempotent
+NOTICE:  PASS: accepted invitation creates exactly one active assignment
+NOTICE:  PASS: ordinary assignment/session updates have no hidden orchestration triggers
+NOTICE:  PASS: different prescribed sessions can be performed on the same day
+NOTICE:  PASS: occurrence date follows the client timezone
+NOTICE:  PASS: preferred units convert the value, not just its label
+NOTICE:  PASS: an omitted expected version cannot bypass concurrency checks
+NOTICE:  PASS: invalid saves roll back the entire change
+NOTICE:  PASS: ordinary clients cannot bypass transactional commands
+NOTICE:  PASS: account deletion removes the auth identity
+NOTICE:  PASS: coach deletion preserves client-owned session snapshots
+NOTICE:  PASS: context save replay does not increment revision
+NOTICE:  PASS: stale context cannot overwrite notes
+NOTICE:  PASS: client cannot read private coach notes
+NOTICE:  PASS: another coach cannot read private notes
+NOTICE:  PASS: unrelated coach cannot archive a relationship
+NOTICE:  PASS: archive prevents new starts and preserves readable history
+NOTICE:  PASS: custom exercise create retries return the same record
+NOTICE:  PASS: publication captures private exercise instructions
+NOTICE:  PASS: retiring custom content does not change the published snapshot
+NOTICE:  PASS: two-week cycle projects exactly two cycles including rest days
+NOTICE:  PASS: reschedule preserves the original occurrence date
+NOTICE:  PASS: skip is explicit and does not generate a completed session
+NOTICE:  PASS: duplicate cycle slots are rejected
+NOTICE:  PASS: timed prescriptions require a positive duration
+NOTICE:  PASS: private catalog is isolated across coaches
+NOTICE:  PASS: assigned clients receive private exercise snapshots
+NOTICE:  PASS: individual targets initialize distinct actual values
+NOTICE:  PASS: timed completion requires positive seconds
+NOTICE:  PASS: mixed-result completion replays exactly once
+NOTICE:  PASS: previous performance finds each exercise independently
+NOTICE:  PASS: future or skipped occurrence cannot start today
+NOTICE:  PASS: rescheduling cannot rewrite a started occurrence
+NOTICE:  PASS: a second client gets an independent session from the same plan
+NOTICE:  PASS: two assigned clients cannot read each other’s results
+Fresh migrations, synthetic fixtures and both database suites passed in an isolated database. Preview records unchanged.
