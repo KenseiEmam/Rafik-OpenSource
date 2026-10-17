@@ -14,3 +14,12 @@ playwright-report/
 .vscode/
 
 artifacts/
+
+# Terraform local state and private operator inputs
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+terraform.tfvars
+!terraform.tfvars.example

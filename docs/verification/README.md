@@ -17,6 +17,8 @@ The remaining first-user and pre-production items are listed in [known issues](.
 
 The implementation adds PostgreSQL-backed instance name, accent, light/dark page backgrounds and optional raster logo settings. Surfaces derive from the page backgrounds and text/accent colors adjust for contrast. Only the first super admin can update the settings. Rafik attribution remains visible, the public logo endpoint serves only validated PNG/JPEG/WebP bytes up to 512 KB, and settings are included in the ordinary database backup.
 
+The founder restarted the local backend and frontend and confirmed branding persisted. This is application-service restart evidence only; a database backup/restore check remains open.
+
 ### Checks run for this change — 17 October 2026
 
 - Passed: backend and frontend typechecks.
@@ -26,7 +28,7 @@ The implementation adds PostgreSQL-backed instance name, accent, light/dark page
 
 The focused first-run palette journey passed in Chromium desktop and WebKit phone. It covered changing name/accent/light and dark backgrounds, uploading a logo, reload persistence, Arabic rendering, and axe accessibility checks. Viewport and full-page captures were visually inspected and saved under receipts. This does not establish physical-device or human usability evidence.
 
-**Founder manual check:** instance branding remained after reload in the local development app. This confirms local database persistence, not backup restore.
+**Founder manual check:** after stopping and restarting the local backend and frontend, instance branding remained available. This confirms branding survives application-service restarts against the existing local database; it does not exercise restoring a backup.
 
 After founder review, dark-mode card and soft surfaces were darkened slightly while leaving light mode unchanged. This CSS-only adjustment has not yet been rechecked in a browser.
 
@@ -44,3 +46,7 @@ A centered, accessible spinner now occupies the first render until the branding 
 - Physical-device behavior and production service delivery where applicable.
 
 Do not treat browser emulation as physical-device or human usability evidence. The [known-issues list](../known-issues/README.md) is the active record of open release gates.
+
+## Stage 6 — cloud templates
+
+Terraform is not installed in this environment, so `terraform fmt` and `terraform validate` were not run. No cloud credentials were used and no resources were created. Provider application, deployment, cost, upgrade, backup/restore and teardown remain unverified.

@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-- Recorded the founder's manual confirmation that branding persists after reload in the local app; backup/restore remains unverified.
+- Started Stage 6 with separate AWS EC2, Google Compute Engine and Azure Linux VM Terraform templates, shared Ubuntu bootstrap, provider access guides, and a dedicated home for deployment/backup/restore scripts. Templates use the current Compose stack and are not provider-validated or production-ready.
+- Updated the staged requirements, architecture, operations guide, maintainer map and verification record for Stage 6. Terraform state, plans and local tfvars are now ignored.
+- Recorded founder verification that instance branding remains after restarting the local backend and frontend.
 - Added a centered, accessible loading screen while the instance theme is fetched, preventing the app shell from appearing before branding is applied.
 - Darkened light-theme main and muted text slightly; dark-theme text colors are unchanged.
 - Darkened the derived card and soft surfaces in dark mode at the founder's request; light mode and the saved page backgrounds are unchanged.

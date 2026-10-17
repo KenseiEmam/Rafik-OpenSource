@@ -6,7 +6,9 @@ This is the operator entry point for builds, self-hosted deployment, configurati
 
 The supported deployment foundation is the self-host Docker Compose profile on a Unix server. The [infrastructure guide](../../infrastructure/README.md) is the canonical source for prerequisites, environment setup, TLS, startup, and service health checks. Use the committed example only as a template; set a unique project name and replace every secret before startup.
 
-After configuring `infrastructure/.env.selfhost`, run `bash infrastructure/deploy.sh` to build and start the stack.
+Optional AWS, Google Cloud and Azure single-VM Terraform starters are documented in the [cloud deployment guide](../../infrastructure/cloud/README.md). They retain the Compose stack and do not provision managed databases, backups or monitoring. They have not been applied to cloud accounts or validated; review provider prerequisites and cost estimates before use.
+
+After configuring `infrastructure/.env.selfhost`, run `bash infrastructure/scripts/deploy.sh` to build and start the stack.
 
 ```sh
 cp infrastructure/.env.selfhost.example infrastructure/.env.selfhost
@@ -33,9 +35,9 @@ Instance branding (name, accent, light/dark page backgrounds and optional PNG/JP
 
 ## Backup, recovery and rollback
 
-Use `bash infrastructure/backup.sh` to create checksummed PostgreSQL and private-file archives under the ignored `infrastructure/backups/` directory. Treat both archives as sensitive identity and health data. Store an encrypted copy on separate university-controlled storage and define a retention schedule.
+Use `bash infrastructure/scripts/backup.sh` to create checksummed PostgreSQL and private-file archives under the ignored `infrastructure/backups/` directory. Treat both archives as sensitive identity and health data. Store an encrypted copy on separate university-controlled storage and define a retention schedule.
 
-Restore into a clean, matching Compose instance: start PostgreSQL, apply migrations once, then run `bash infrastructure/restore.sh infrastructure/.env.selfhost /path/to/backup-directory`. Restore replaces the database and private-file volume. Confirm the target and checksums before proceeding, then validate login and authorized private-file access.
+Restore into a clean, matching Compose instance: start PostgreSQL, apply migrations once, then run `bash infrastructure/scripts/restore.sh infrastructure/.env.selfhost /path/to/backup-directory`. Restore replaces the database and private-file volume. Confirm the target and checksums before proceeding, then validate login and authorized private-file access.
 
 Rollback is not a reverse migration. Take a paired database/file backup before updating. To return to an earlier application revision, restore the matching pre-update database and private-file archive together, then start the earlier revision. The founder accepts the earlier backup/restore verification; the integrated upgrade/rollback rehearsal and production review remain open.
 

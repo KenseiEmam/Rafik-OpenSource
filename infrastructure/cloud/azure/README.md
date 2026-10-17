@@ -1,0 +1,9 @@
+# Azure starter
+
+Creates a resource group, isolated VNet/subnet, Standard static public IP, network security group, and Ubuntu 24.04 Gen2 Linux VM (`Standard_B2s`, 64 GiB Standard SSD by default). VM and disk encryption at rest use Azure platform-managed keys. Only ports 80/443 are open publicly. SSH is closed by default; the operator can use Azure Run Command, or provide a single trusted CIDR to enable SSH. A public SSH key is required for the VM account; its private half stays with the operator. The VM has a system-assigned identity with no role assignments. Run Command requires the operator's Azure role to allow `Microsoft.Compute/virtualMachines/runCommand/write`.
+
+From this directory, authenticate with `az login`, copy `terraform.tfvars.example` to `terraform.tfvars`, set the domain/email and a real public SSH key, then run `terraform init`, `terraform plan` and `terraform apply`. Point the domain A record to `public_ip`. After DNS resolves, use the `run_command` output to start Compose. If you enable SSH, use your private key and the configured admin username instead. To remove resources, first verify an off-host backup, then run `terraform destroy`.
+
+Terraform uses AzureRM 5.x. State is sensitive and must be encrypted, access-controlled and stored privately. The template does not configure DNS, managed database, object storage, backup schedules or monitoring. Verify regional VM availability and charges with Azure's calculator. Cloud apply, upgrade, restore and teardown have not been verified for this template.
+
+References: [AzureRM provider](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs), [Linux VM resource](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_virtual_machine), [Run Command](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/run-command-managed).

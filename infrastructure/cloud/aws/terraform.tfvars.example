@@ -1,0 +1,3 @@
+region     = "us-east-1"
+app_domain = "rafik.example.edu"
+acme_email = "it@example.edu"

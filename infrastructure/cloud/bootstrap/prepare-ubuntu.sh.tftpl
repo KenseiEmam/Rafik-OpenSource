@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+umask 077
+exec > >(tee -a /var/log/rafik-cloud-bootstrap.log) 2>&1
+
+app_dir=/opt/rafik
+env_file="$${app_dir}/infrastructure/.env.selfhost"
+repository_url='${repository_url}'
+git_ref='${git_ref}'
+instance_id='${instance_id}'
+app_domain='${app_domain}'
+acme_email='${acme_email}'
+
+export DEBIAN_FRONTEND=noninteractive
+apt-get update
+apt-get install -y ca-certificates curl git openssl
+install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+chmod a+r /etc/apt/keyrings/docker.asc
+architecture="$(dpkg --print-architecture)"
+codename="$(. /etc/os-release && printf '%s' "$VERSION_CODENAME")"
+printf 'deb [arch=%s signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu %s stable\n' \
+  "$architecture" "$codename" > /etc/apt/sources.list.d/docker.list
+apt-get update
+apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+systemctl enable --now docker
+
+if [[ ! -d "$app_dir/.git" ]]; then
+  git clone --depth 1 --branch "$git_ref" "$repository_url" "$app_dir"
+fi
+
+if [[ ! -f "$env_file" ]]; then
+  cat > "$env_file" <<ENV
+RAFIK_INSTANCE_ID=$instance_id
+APP_DOMAIN=$app_domain
+ACME_EMAIL=$acme_email
+POSTGRES_PASSWORD=$(openssl rand -hex 32)
+RAFIK_API_PASSWORD=$(openssl rand -hex 32)
+ENV
+  chmod 0600 "$env_file"
+fi
+
+cat > /etc/motd.rafik <<MOTD
+Rafik source: $git_ref
+Instance: $instance_id
+Domain: $app_domain
+After DNS points here, start Rafik with:
+  sudo bash $app_dir/infrastructure/scripts/deploy.sh
+Check bootstrap output in /var/log/rafik-cloud-bootstrap.log.
+MOTD

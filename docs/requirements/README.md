@@ -1,6 +1,6 @@
 # Requirements and staged migration plan
 
-**Status:** approved planning baseline, 16 October 2026. This document records the target and migration plan; it does not claim that the target has been implemented.
+**Status:** approved staged plan. Stage 6 optional cloud VM templates are in progress (17 October 2026); templates are not cloud-tested or deployment-ready evidence.
 
 ## Product goal
 
@@ -75,7 +75,7 @@ Rafik should help universities and university coaches support young athletes by 
 
 ### Stage 5 — Branding and support
 
-**Status: implementation in progress, 17 October 2026.** Support requests stay local and the UI discloses storage, recipients and sensitive-content boundaries. Instance branding has a database-backed name, accent, custom light/dark page backgrounds and validated logo, controlled by the first super admin. Surface colors derive from the page backgrounds, and text/accent colors adjust for contrast; Rafik attribution remains visible. Fresh migration and production build pass. Focused rendered acceptance passes in Chromium desktop and WebKit phone, including accessibility checks. Upgrade/restore persistence review remains open. Outbound support remains disabled. See [ADR 0022](../decisions/ADR-0022-instance-branding-and-local-support.md).
+**Status: implementation complete; first-user and production backup/restore review remain backlog, 17 October 2026.** Support requests stay local and the UI discloses storage, recipients and sensitive-content boundaries. Instance branding has a database-backed name, accent, custom light/dark page backgrounds and validated logo, controlled by the first super admin. Surface colors derive from the page backgrounds, and text/accent colors adjust for contrast; Rafik attribution remains visible. Focused rendered acceptance passes in Chromium desktop and WebKit phone. The founder confirmed branding persisted after local frontend/backend restart; database backup/restore remains unverified. Outbound support remains disabled. See [ADR 0022](../decisions/ADR-0022-instance-branding-and-local-support.md).
 
 - Provide first-super-admin controls for the instance name, accent, light/dark page backgrounds and PNG/JPEG/WebP logo. Derive surfaces and maintain text/accent contrast. Keep Rafik attribution visible and arbitrary CSS/scripts out of scope.
 - Define whether support is self-hosted/local by default or opt-in outbound. Minimize information sent to Rafik and prevent athlete health records or attachments from being included without explicit, informed action.
@@ -83,7 +83,8 @@ Rafik should help universities and university coaches support young athletes by 
 
 ### Stage 6 — Optional cloud templates
 
-- Scope AWS, Azure, and Google Cloud separately after Compose acceptance. Each provider needs independent cost, secrets, networking, storage, backup/restore, upgrade, and teardown guidance.
+- **Status: starter templates in progress, 17 October 2026.** The initial approach is one small VM per provider running the existing Compose stack, with provider-native operator access and no managed database. See [cloud deployment templates](../../infrastructure/cloud/README.md).
+- Each provider needs independent prerequisites, cost review, identity/access, networking, storage, backup/restore, upgrade and teardown guidance. These templates are not cloud-tested and do not imply production readiness.
 - Acceptance: a provider template deploys an isolated instance from a clean account using documented prerequisites and demonstrates restore and upgrade. Do not claim support for providers that have not passed their own checks.
 
 ### Stage 7 — Android field app

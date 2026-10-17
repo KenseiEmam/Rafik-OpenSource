@@ -1,0 +1,6 @@
+location            = "East US"
+app_domain          = "rafik.example.edu"
+acme_email          = "it@example.edu"
+admin_ssh_public_key = "ssh-ed25519 AAAA... operator@example.edu"
+# Optional: omit SSH ingress and use Azure Run Command.
+ssh_source_cidr = ""

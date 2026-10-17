@@ -15,7 +15,7 @@ Each university is expected to operate a separate instance and control its users
 - `apps/frontend/`: Vue 3/TypeScript web application, Vite build, feature modules, browser persistence, and web tests.
 - `apps/backend/`: TypeScript API, Prisma schema and migrations, canonical content, and API tests.
 - `packages/shared/`: shared API contracts and generated database transport types used across app workspaces.
-- `infrastructure/`: the single Compose definition, with local-development and university self-host profiles; see its [deployment guide](infrastructure/README.md).
+- `infrastructure/`: the single Compose definition, Unix operator scripts and optional cloud VM templates; see the [deployment guide](infrastructure/README.md) and [cloud templates](infrastructure/cloud/README.md).
 - `docs/`: approved product requirements, target architecture, and decisions.
 - `LICENSE`: Apache License 2.0 for project code and documentation. Bundled media and datasets can have separate terms; check their credits and source licenses before reuse.
 

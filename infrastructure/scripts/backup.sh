@@ -2,7 +2,8 @@
 set -euo pipefail
 umask 077
 
-infra_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+infra_dir="$(cd -- "$script_dir/.." && pwd)"
 env_file="${1:-$infra_dir/.env.selfhost}"
 backup_root="${2:-$infra_dir/backups}"
 compose=(docker compose --env-file "$env_file" -f "$infra_dir/compose.yaml" --profile selfhost)

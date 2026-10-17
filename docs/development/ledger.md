@@ -1,6 +1,6 @@
 # Current delivery ledger
 
-**Status, 17 October 2026:** Stage 4 prototype implementation is complete. Focused conversation and injury browser journeys pass in Chromium and WebKit phone. The founder deferred human and pre-production gates to the first-user/release backlog. Stage 5 local support and database-backed instance branding are implemented. Fresh migrations, typechecks and production build pass; focused browser acceptance passes in Chromium desktop and WebKit phone after fixing a dark-theme contrast finding. The approved stage order and gates are in [requirements](../requirements/README.md); detailed R-phase chronology is preserved in the [archive](../archive/implementation-ledger-history-2026-10-17.md).
+**Status, 17 October 2026:** Stage 4 prototype and Stage 5 branding/support implementations are complete; first-user and pre-production gates remain in the backlog. The founder confirmed branding persists after restarting local frontend/backend services. Database backup/restore persistence remains unverified. Stage 6 is in progress: startup scripts are grouped under `infrastructure/scripts/`, and AWS, Google Cloud and Azure Terraform starters prepare the same Compose VM deployment. No cloud apply, provider validation, cost review or recovery rehearsal has been performed. The [stage plan](../requirements/README.md) is authoritative; detailed R-phase chronology is preserved in the [archive](../archive/implementation-ledger-history-2026-10-17.md).
 
 ## Current state
 
@@ -13,11 +13,12 @@
 
 ## Recent work
 
-- Founder confirmed that instance branding persisted after reload in the local app. Backup/restore persistence remains a separate open verification item.
+- Founder confirmed instance branding remained available after stopping and restarting the local backend and frontend. A backup/restore rehearsal remains a separate deployment recovery check.
 - Added a centered, reduced-motion-aware theme loader and delay the app shell until instance branding has loaded or failed, avoiding an unthemed application flash.
 - Darkened light-theme main and muted text slightly at founder request; dark-theme text remains unchanged. This visual adjustment has not received a separate browser check.
 - Darkened only the derived card and soft platform surfaces in dark mode after founder review; light-mode surfaces and saved page-color settings are unchanged. This visual adjustment has not yet received a separate browser check.
-- Added `infrastructure/deploy.sh` as a short Unix helper to build and start the self-hosted Compose stack; backup remains a separate explicit operator command.
+- Grouped the self-host deploy, backup and restore Bash commands under `infrastructure/scripts/` so operator scripts have one home.
+- Added separate AWS EC2, Google Compute Engine and Azure Linux VM Terraform starter configurations, a shared Ubuntu bootstrap template and provider operation guides. The templates use small single-VM Compose deployments, static public addresses, encrypted disks and provider-native/keyless access where available. They do not provision managed data services or backups and have not been applied or validated against cloud accounts.
 - Recorded the founder's acceptance of non-code gates for prototype review while preserving coach task coverage, institution privacy/security approval, live retention alerts and production release rehearsal in the first-user/pre-production backlog. Real athlete data remains prohibited before institution approval.
 - Stage 5 policy is recorded in ADR 0022: branding belongs to the self-hosted instance, support stays local by default, and diagnostics must not include athlete data or attachments automatically.
 - Added a forward migration and admin settings for persisted instance name, accent, custom light/dark page backgrounds and an optional size-limited PNG/JPEG/WebP logo. The initial super admin is the sole branding owner; the public logo route is bounded to the validated raster asset. Fresh migration and frontend production build pass. Browser acceptance exposed and fixed dark-theme contrast against derived surfaces; the final browser run passes in Chromium desktop and WebKit phone. Viewport and full-page captures were visually inspected. Update/restore evidence remains open.

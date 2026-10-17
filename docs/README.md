@@ -25,7 +25,7 @@ This page is the index for maintained Rafik documentation. The root [README](../
 
 ## Operations and release
 
-- [Operations and deployment](operations/README.md): Compose deployment, environment/secrets, backups, recovery, rollback and retention operations.
+- [Operations and deployment](operations/README.md): Compose deployment, cloud starter templates, environment/secrets, backups, recovery, rollback and retention operations.
 - [Release checklist](operations/release-checklist.md): release prerequisites and outstanding gates.
 
 ## Architecture decisions
