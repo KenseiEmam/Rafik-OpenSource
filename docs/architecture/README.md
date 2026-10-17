@@ -1,6 +1,6 @@
 # Rafik architecture
 
-**Status: current architecture, 17 October 2026.** The university-owned Compose deployment and the first university workflows are implemented locally. Stage 3 operations/release hardening and Stage 4 university workflow and privacy acceptance remain open. The [requirements and stage gates](../requirements/README.md) define delivery status; this page describes the system as it exists and the constraints new work must preserve.
+**Status: current architecture, 17 October 2026.** The university-owned Compose deployment and Stage 4 prototype workflows are implemented locally. First-user and pre-production gates remain in the backlog; Stage 5 instance branding and local-support implementation is in progress. The [requirements and stage gates](../requirements/README.md) define delivery status; this page describes the system as it exists and the constraints new work must preserve.
 
 ## Repository components
 
@@ -41,6 +41,10 @@ Domain writes use explicit API commands. The server validates current authority 
 The self-host Compose profile keeps PostgreSQL on an internal container network. Caddy provides HTTPS ingress; the API serves authenticated operations and private-file bytes and stores files on a persistent Docker volume. On an empty instance, the first completed setup creates the super admin and institution in one transaction; setup is then closed. Password sign-in does not depend on mail. Admins create one-time invitations that expire after seven days and share them directly with invitees. Each instance has its own project name, credentials and volumes. No SMTP service, Google service-account key or cloud service credential is required. Keep the instance private until initial setup is complete.
 
 Use the [infrastructure guide](../../infrastructure/README.md) for first deployment, [development](../development/README.md) for local setup and [operations](../operations/README.md) for secrets, backups, restore, updates and retention monitoring. Production readiness still depends on the open release and university review gates.
+
+## Instance branding and support boundary
+
+Instance name, accent, custom light/dark page backgrounds and optional logo are stored in PostgreSQL so they survive image upgrades and are included in the normal database backup. Surface colors derive from the page backgrounds, and text/accent colors adjust for contrast. The initial super admin owns these settings; active institution administrators can see the branding panel but cannot change it. The API validates image signatures and permits PNG, JPEG or WebP up to 512 KB. The logo endpoint serves only the configured public brand image with a fixed content type and `nosniff`; no SVG, remote logo URL, arbitrary CSS or script is accepted. Rafik attribution remains visible. Support cases and diagnostics remain local; no telemetry or email delivery is configured.
 
 ## Data-flow boundary
 

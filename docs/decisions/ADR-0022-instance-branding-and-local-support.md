@@ -27,4 +27,4 @@ Local-only support cannot create a central Rafik support queue without an operat
 
 ## Implementation status
 
-The support page stores requests in the current installation and now discloses that there is no email or external delivery, who can read each destination, and that athlete health details or private files should not be included. Stage 5 still needs deployment-level branding and focused privacy/accessibility acceptance.
+The support page stores requests in the current installation and discloses that there is no email or external delivery, who can read each destination, and that athlete health details or private files should not be included. Instance name, accent, custom light/dark page backgrounds and optional raster logo are implemented in a forward migration, with write access limited to the initial super admin. Fresh migration, production build, and focused Chromium desktop plus WebKit phone acceptance pass, including contrast, persistence, RTL and axe checks. Upgrade/restore persistence review remains open.

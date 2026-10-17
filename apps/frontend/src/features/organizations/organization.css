@@ -140,6 +140,35 @@
 .organization-close button {
   margin-top: 16px;
 }
+.instance-branding {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid var(--line);
+}
+.instance-branding fieldset {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+.brand-color input {
+  width: 64px;
+  height: 44px;
+  padding: 4px;
+}
+.brand-preview {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.brand-preview img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+.brand-attribution {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
 .organization-events {
   list-style: none;
   padding: 0;

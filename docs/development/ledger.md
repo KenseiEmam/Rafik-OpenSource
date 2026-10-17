@@ -1,6 +1,6 @@
 # Current delivery ledger
 
-**Status, 17 October 2026:** Stage 4 prototype implementation is complete. Focused conversation and injury browser journeys pass in Chromium and WebKit phone. The founder deferred human and pre-production gates to the first-user/release backlog. Stage 5 policy is recorded; instance branding is the next implementation task. The approved stage order and gates are in [requirements](../requirements/README.md); detailed R-phase chronology is preserved in the [archive](../archive/implementation-ledger-history-2026-10-17.md).
+**Status, 17 October 2026:** Stage 4 prototype implementation is complete. Focused conversation and injury browser journeys pass in Chromium and WebKit phone. The founder deferred human and pre-production gates to the first-user/release backlog. Stage 5 local support and database-backed instance branding are implemented. Fresh migrations, typechecks and production build pass; focused browser acceptance passes in Chromium desktop and WebKit phone after fixing a dark-theme contrast finding. The approved stage order and gates are in [requirements](../requirements/README.md); detailed R-phase chronology is preserved in the [archive](../archive/implementation-ledger-history-2026-10-17.md).
 
 ## Current state
 
@@ -9,12 +9,18 @@
 - **Legacy packages:** gym-oriented session packages, prepaid allowances, renewals and no-show deductions were removed with a forward migration. Calendar and attendance remain separate from commercial entitlements.
 - **Exercise and field coverage:** source inventory and rights reconciliation are recorded in the [coach workflow backlog](../archive/coach-workflow-backlog-r7-2026-09.md) and [Stage 4 audit](../requirements/stage4-workflow-audit.md). Full sport-task taxonomy/content review with a coach remains open.
 - **Operations:** retention failure retry and an isolated database-outage/API-restart rehearsal passed. Real alert wiring/delivery remains unverified.
-- **Stage 5:** ADR 0022 records instance-local branding and local-only support defaults. Support now explains storage, recipients and data boundaries. Deployment-level logo/theme settings remain to implement; outbound support remains disabled until a separate explicit opt-in design exists.
+- **Stage 5:** ADR 0022 records instance-local branding and local-only support defaults. Support explains storage, recipients and data boundaries. Branding settings store name, accent, light/dark page backgrounds and a validated logo in PostgreSQL; surfaces and text colors derive from the selected palette, and only the initial super admin can change them. Fresh migrations and production build pass; the focused rendered branding flow passes in Chromium desktop and WebKit phone, including persistence, Arabic layout and accessibility checks. Outbound support remains disabled until a separate explicit opt-in design exists.
 
 ## Recent work
 
+- Founder confirmed that instance branding persisted after reload in the local app. Backup/restore persistence remains a separate open verification item.
+- Added a centered, reduced-motion-aware theme loader and delay the app shell until instance branding has loaded or failed, avoiding an unthemed application flash.
+- Darkened light-theme main and muted text slightly at founder request; dark-theme text remains unchanged. This visual adjustment has not received a separate browser check.
+- Darkened only the derived card and soft platform surfaces in dark mode after founder review; light-mode surfaces and saved page-color settings are unchanged. This visual adjustment has not yet received a separate browser check.
+- Added `infrastructure/deploy.sh` as a short Unix helper to build and start the self-hosted Compose stack; backup remains a separate explicit operator command.
 - Recorded the founder's acceptance of non-code gates for prototype review while preserving coach task coverage, institution privacy/security approval, live retention alerts and production release rehearsal in the first-user/pre-production backlog. Real athlete data remains prohibited before institution approval.
-- Started Stage 5 policy work in ADR 0022: branding belongs to the self-hosted instance, support stays local by default, and diagnostics must not include athlete data or attachments automatically. No branding feature is claimed as implemented yet.
+- Stage 5 policy is recorded in ADR 0022: branding belongs to the self-hosted instance, support stays local by default, and diagnostics must not include athlete data or attachments automatically.
+- Added a forward migration and admin settings for persisted instance name, accent, custom light/dark page backgrounds and an optional size-limited PNG/JPEG/WebP logo. The initial super admin is the sole branding owner; the public logo route is bounded to the validated raster asset. Fresh migration and frontend production build pass. Browser acceptance exposed and fixed dark-theme contrast against derived surfaces; the final browser run passes in Chromium desktop and WebKit phone. Viewport and full-page captures were visually inspected. Update/restore evidence remains open.
 - Made the support destination explicit in the UI: requests stay in this installation, no outbound email is sent, recipient roles are disclosed, and users are told not to include athlete health details or private files.
 - Aligned local development with the founder's Node 24 preference while retaining compatible Node 22.16 support and keeping production Docker images on Node 22.16. The root lockfile and `.nvmrc` now agree.
 - Updated the communication browser acceptance to wait for the loaded conversation list, verify a contacted athlete disappears from People, and reopen the existing thread from Conversations. The current flow now passes in Chromium and WebKit phone.
@@ -54,3 +60,4 @@
 2. Complete the sport-task and exercise discovery/content review, with source and rights checks kept distinct.
 3. Obtain university privacy/security review for consent, access, retention and deletion before real athlete data.
 4. Complete the disposable Linux upgrade/rollback rehearsal and configure/verify retention alerts.
+5. Apply the Stage 5 branding migration on a fresh database, verify rendered changes and confirm branding survives an application update and backup/restore.

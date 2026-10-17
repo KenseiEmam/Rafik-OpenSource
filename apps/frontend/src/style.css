@@ -5,16 +5,16 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  --page: #f8f8f3;
-  --surface: #fff;
-  --surface-soft: #eef0e8;
-  --ink: #23332d;
-  --muted: #626b65;
-  --line: #d9dfd5;
-  --accent: #285943;
-  --accent-hover: #1d4734;
+  --page: var(--instance-page-light, #f8f8f3);
+  --surface: color-mix(in srgb, var(--page) 90%, white);
+  --surface-soft: color-mix(in srgb, var(--page) 82%, var(--ink));
+  --ink: var(--instance-ink-light, #23332d);
+  --muted: #545d56;
+  --line: color-mix(in srgb, var(--page) 72%, var(--ink));
+  --accent: var(--instance-accent, #285943);
+  --accent-hover: color-mix(in srgb, var(--accent) 86%, var(--ink));
   --on-accent: #fff;
-  --tint: #e8eee2;
+  --tint: color-mix(in srgb, var(--page) 90%, var(--accent));
   --error: #923b30;
   --error-bg: #fff0ec;
   --radius: 12px;
@@ -22,16 +22,16 @@
   color-scheme: light;
 }
 :root[data-theme='dark'] {
-  --page: #171e1a;
-  --surface: #202923;
-  --surface-soft: #28332b;
-  --ink: #e9eee7;
+  --page: var(--instance-page-dark, #171e1a);
+  --surface: color-mix(in srgb, var(--page) 88%, white);
+  --surface-soft: color-mix(in srgb, var(--page) 78%, white);
+  --ink: var(--instance-ink-dark, #e9eee7);
   --muted: #b0bdb2;
-  --line: #3d4b3f;
-  --accent: #a8d29b;
-  --accent-hover: #c2e5b6;
+  --line: color-mix(in srgb, var(--page) 68%, white);
+  --accent: var(--instance-accent, #285943);
+  --accent-hover: color-mix(in srgb, var(--accent) 86%, var(--ink));
   --on-accent: #1c3222;
-  --tint: #2e3e2d;
+  --tint: color-mix(in srgb, var(--page) 94%, var(--accent));
   --error: #ffb9a8;
   --error-bg: #3e2825;
   --shadow: none;
@@ -39,16 +39,16 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']):not([data-theme='dark']) {
-    --page: #171e1a;
-    --surface: #202923;
-    --surface-soft: #28332b;
-    --ink: #e9eee7;
+    --page: var(--instance-page-dark, #171e1a);
+    --surface: color-mix(in srgb, var(--page) 88%, white);
+    --surface-soft: color-mix(in srgb, var(--page) 78%, white);
+    --ink: var(--instance-ink-dark, #e9eee7);
     --muted: #b0bdb2;
-    --line: #3d4b3f;
-    --accent: #a8d29b;
-    --accent-hover: #c2e5b6;
+    --line: color-mix(in srgb, var(--page) 68%, white);
+    --accent: var(--instance-accent, #285943);
+    --accent-hover: color-mix(in srgb, var(--accent) 86%, var(--ink));
     --on-accent: #1c3222;
-    --tint: #2e3e2d;
+    --tint: color-mix(in srgb, var(--page) 94%, var(--accent));
     --error: #ffb9a8;
     --error-bg: #3e2825;
     --shadow: none;
@@ -60,6 +60,35 @@
 }
 body {
   margin: 0;
+}
+.theme-loader {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 14px;
+  padding: 24px;
+  background: var(--page);
+  color: var(--ink);
+  text-align: center;
+}
+.theme-loader-spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: theme-loader-spin 800ms linear infinite;
+}
+@keyframes theme-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-loader-spinner {
+    animation: none;
+  }
 }
 button,
 input,
@@ -571,12 +600,17 @@ td:first-child {
   align-items: center;
   gap: 9px;
   flex-shrink: 0;
+  min-width: 0;
+  max-width: min(52vw, 420px);
 }
 .brand > span {
   font-size: 1.85rem;
   font-weight: 750;
-  letter-spacing: -0.09em;
+  letter-spacing: -0.035em;
   line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .brand img {
   background: transparent;
@@ -588,6 +622,14 @@ td:first-child {
 }
 .brand-period {
   color: var(--accent);
+}
+.brand > span > small {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.58rem;
+  letter-spacing: 0;
+  font-weight: 600;
+  color: var(--muted);
 }
 .header-actions {
   display: flex;
@@ -2009,6 +2051,9 @@ progress::-moz-progress-bar {
   }
   .brand > span {
     font-size: 1.65rem;
+  }
+  .brand {
+    max-width: min(48vw, 300px);
   }
   .brand img {
     width: 29px;

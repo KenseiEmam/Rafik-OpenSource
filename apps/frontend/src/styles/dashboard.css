@@ -140,10 +140,13 @@
     height: 64px;
   }
   .dashboard-frame .brand {
-    width: 168px;
+    width: auto;
+    min-width: 0;
+    max-width: min(55vw, 240px);
   }
   .dashboard-frame .brand > span {
     font-size: 1.7rem;
+    min-width: 0;
   }
   .dashboard-frame .brand img {
     width: 28px;
@@ -230,6 +233,7 @@
   }
   .dashboard-frame .brand > span {
     font-size: 1.35rem;
+    min-width: 0;
   }
   .dashboard-frame .header-actions {
     margin-inline-start: auto;

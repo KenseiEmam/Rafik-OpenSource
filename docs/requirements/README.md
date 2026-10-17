@@ -75,9 +75,9 @@ Rafik should help universities and university coaches support young athletes by 
 
 ### Stage 5 — Branding and support
 
-**Status: in progress, 17 October 2026.** Branding belongs to the instance, and support is local-only by default with no implicit outbound transfer. The support page now discloses storage, recipients, and sensitive content boundaries. See [ADR 0022](../decisions/ADR-0022-instance-branding-and-local-support.md). Deployment-level branding and focused privacy/accessibility acceptance remain.
+**Status: implementation in progress, 17 October 2026.** Support requests stay local and the UI discloses storage, recipients and sensitive-content boundaries. Instance branding has a database-backed name, accent, custom light/dark page backgrounds and validated logo, controlled by the first super admin. Surface colors derive from the page backgrounds, and text/accent colors adjust for contrast; Rafik attribution remains visible. Fresh migration and production build pass. Focused rendered acceptance passes in Chromium desktop and WebKit phone, including accessibility checks. Upgrade/restore persistence review remains open. Outbound support remains disabled. See [ADR 0022](../decisions/ADR-0022-instance-branding-and-local-support.md).
 
-- Add instance-level logo/theme configuration with Rafik defaults and a small attribution.
+- Provide first-super-admin controls for the instance name, accent, light/dark page backgrounds and PNG/JPEG/WebP logo. Derive surfaces and maintain text/accent contrast. Keep Rafik attribution visible and arbitrary CSS/scripts out of scope.
 - Define whether support is self-hosted/local by default or opt-in outbound. Minimize information sent to Rafik and prevent athlete health records or attachments from being included without explicit, informed action.
 - Acceptance: branding survives upgrades; support behavior is documented, auditable, and cannot silently export university or athlete data.
 

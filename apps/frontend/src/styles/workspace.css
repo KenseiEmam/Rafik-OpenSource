@@ -191,6 +191,7 @@
   }
   .workspace-header .brand > span {
     font-size: 1.4rem;
+    min-width: 0;
   }
   .workspace-header .brand {
     gap: 5px;

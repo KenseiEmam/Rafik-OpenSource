@@ -194,6 +194,7 @@ async function initialSetup(
         detail: { name: workspaceName, setup: true },
       },
     });
+    await tx.$queryRaw`SELECT public.claim_instance_branding(${created.id}::uuid)`;
     return created;
   });
   return session(res, actor(user));

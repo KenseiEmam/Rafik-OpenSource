@@ -17,6 +17,7 @@ import { user, profile, ready, contexts, platform } from './app/auth'
 import { language, locale, t } from './lib/i18n'
 import { localPreview } from './lib/backend'
 import { syncPending } from './lib/training'
+import { brandingLogoUrl, instanceBranding, loadBranding, syncAccentContrast } from './lib/branding'
 const route = useRoute()
 watch(
   () => route.path,
@@ -64,6 +65,7 @@ const dashboard = computed(
 )
 const dashboardBase = computed(() => currentContext.value?.path || '/workspaces')
 const menuOpen = ref(false)
+const themeReady = ref(false)
 watch(
   () => route.fullPath,
   () => {
@@ -74,20 +76,32 @@ const theme = ref(localStorage.getItem('rafik.theme') || 'dark')
 function setTheme() {
   localStorage.setItem('rafik.theme', theme.value)
   document.documentElement.dataset.theme = theme.value
+  syncAccentContrast()
 }
 watch(theme, setTheme, { immediate: true })
 const online = () => {
   if (user.value) void syncPending(user.value.id)
 }
 onMounted(async () => {
-  await ready()
+  const sessionInitialization = ready()
+  await loadBranding().catch(() => {})
+  themeReady.value = true
+  await sessionInitialization
   window.addEventListener('online', online)
   online()
 })
 onUnmounted(() => window.removeEventListener('online', online))
 </script>
 <template>
-  <div class="app-frame" :class="{ 'dashboard-frame': dashboard, 'conversation-frame': messaging }">
+  <div v-if="!themeReady" class="theme-loader" role="status" aria-live="polite" aria-busy="true">
+    <span class="theme-loader-spinner" aria-hidden="true"></span>
+    <span>{{ language('Loading your theme…', 'جارٍ تحميل المظهر…') }}</span>
+  </div>
+  <div
+    v-else
+    class="app-frame"
+    :class="{ 'dashboard-frame': dashboard, 'conversation-frame': messaging }"
+  >
     <a class="skip-link" href="#main">{{ language('Skip to content', 'انتقل إلى المحتوى') }}</a>
     <header class="site-header" :class="{ compact: focused, 'workspace-header': user && !focused }">
       <div class="header-inner">
@@ -143,9 +157,17 @@ onUnmounted(() => window.removeEventListener('online', online))
         <RouterLink
           class="brand"
           :to="user ? currentContext?.path || '/today' : '/'"
-          aria-label="Rafik home"
-          ><img src="/brand/rafik.png" alt="" width="38" height="38" /><span
-            >rafik<span class="brand-period">.</span></span
+          :aria-label="`${instanceBranding.name} home`"
+          ><img
+            :src="instanceBranding.logo_mime ? brandingLogoUrl() : '/brand/rafik.png'"
+            alt=""
+            width="38"
+            height="38"
+          /><span
+            >{{ instanceBranding.name }}<span class="brand-period">.</span
+            ><small v-if="instanceBranding.name !== 'Rafik'">{{
+              language('Powered by Rafik', 'بدعم من رفيق')
+            }}</small></span
           ></RouterLink
         >
         <div class="header-actions">

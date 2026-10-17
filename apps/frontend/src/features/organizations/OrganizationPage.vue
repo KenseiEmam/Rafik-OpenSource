@@ -14,6 +14,7 @@ import OrganizationFollowUp from './OrganizationFollowUp.vue'
 import OrganizationUpcoming from './OrganizationUpcoming.vue'
 import MemberPicker from './MemberPicker.vue'
 import OrganizationNav from './OrganizationNav.vue'
+import BrandingSettings from './BrandingSettings.vue'
 const route = useRoute(),
   router = useRouter(),
   id = String(route.params.workspace),
@@ -732,6 +733,7 @@ onMounted(async () => {
               {{ l('Close institution', 'إغلاق المؤسسة') }}
             </button>
           </details>
+          <BrandingSettings :workspace-id="id" />
         </section>
         <p v-else class="notice">
           {{

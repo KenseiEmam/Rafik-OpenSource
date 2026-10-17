@@ -84,6 +84,7 @@ model users {
   workspace_members                                              workspace_members[]
   workspace_operations                                           workspace_operations[]
   workspaces                                                     workspaces[]
+  instance_branding                                              instance_branding?
 
   @@schema("identity")
 }
@@ -547,6 +548,21 @@ model resources {
 model runtime_settings {
   id               Boolean @id @default(true)
   local_simulation Boolean @default(false)
+
+  @@schema("public")
+}
+
+model instance_branding {
+  id               Boolean  @id @default(true)
+  owner_id         String?  @unique @db.Uuid
+  name             String   @default("Rafik")
+  accent           String   @default("#285943")
+  background_light String   @default("#f8f8f3")
+  background_dark  String   @default("#171e1a")
+  logo             Bytes?
+  logo_mime        String?
+  updated_at       DateTime @default(now()) @db.Timestamptz(6)
+  users            users?   @relation(fields: [owner_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
 
   @@schema("public")
 }

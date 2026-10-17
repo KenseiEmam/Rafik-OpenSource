@@ -188,3 +188,5 @@ export function removeFile(path: string) {
 }
 
 export const programImage = (id: string) => url + '/v1/program-media/' + encodeURIComponent(id)
+export const instanceLogo = (version: string) =>
+  url + '/v1/instance/branding/logo?v=' + encodeURIComponent(version)

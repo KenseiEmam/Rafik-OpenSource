@@ -6,6 +6,8 @@ This is the operator entry point for builds, self-hosted deployment, configurati
 
 The supported deployment foundation is the self-host Docker Compose profile on a Unix server. The [infrastructure guide](../../infrastructure/README.md) is the canonical source for prerequisites, environment setup, TLS, startup, and service health checks. Use the committed example only as a template; set a unique project name and replace every secret before startup.
 
+After configuring `infrastructure/.env.selfhost`, run `bash infrastructure/deploy.sh` to build and start the stack.
+
 ```sh
 cp infrastructure/.env.selfhost.example infrastructure/.env.selfhost
 # Edit the file with the university's domain, instance name and unique secrets.
@@ -26,6 +28,8 @@ Do not expose PostgreSQL publicly. No Google service-account key or hosted-provi
 Build and validate the approved revision before deployment. Apply forward migrations as part of the Compose release flow; never reset or reseed a hosted database. Review the [release checklist](release-checklist.md) and [known release gaps](../known-issues/README.md) before enabling external use.
 
 Store the production env file outside source control with access limited to the university operators. Use unique instance secrets. Rotate secrets through a planned deployment; never paste credentials into issue trackers, logs, commits or check receipts. The self-hosted profile does not need SMTP, Google service-account keys, or hosted-provider credentials. Keep the service on a private network until the first super admin completes setup. Invitees choose their password from a single-use link that expires after seven days; no email is delivered or verified. Operators must share that link privately.
+
+Instance branding (name, accent, light/dark page backgrounds and optional PNG/JPEG/WebP logo) is stored in PostgreSQL and therefore travels with database backups and restores. UI surfaces derive from those colors; text/accent colors adjust for contrast. The first super admin controls these settings; the image is limited to 512 KB. Keep the backup protected as sensitive operational data. Branding is not supplied by environment variables and remains after application image updates.
 
 ## Backup, recovery and rollback
 

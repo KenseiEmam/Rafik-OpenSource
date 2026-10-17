@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Recorded the founder's manual confirmation that branding persists after reload in the local app; backup/restore remains unverified.
+- Added a centered, accessible loading screen while the instance theme is fetched, preventing the app shell from appearing before branding is applied.
+- Darkened light-theme main and muted text slightly; dark-theme text colors are unchanged.
+- Darkened the derived card and soft surfaces in dark mode at the founder's request; light mode and the saved page backgrounds are unchanged.
+- Added a small Unix Docker deployment helper that builds and starts the self-hosted Compose stack.
+- Stage 5 implementation: added database-backed instance branding with name, accent, custom light/dark backgrounds, derived surfaces, accessible contrast adjustment and an optional PNG/JPEG/WebP logo. Changes are restricted to the first super admin, Rafik attribution remains visible, and the logo endpoint serves bounded, validated image bytes. Branding is included in database backups.
+- Corrected stale Stage 4 status and verification notes: the accepted prototype implementation is complete, while first-user and pre-production gates remain in the backlog.
+- Stage 5 fresh migration, backend/frontend typechecks and frontend production build passed. Focused branding acceptance passes in Chromium desktop and WebKit phone after adjusting dark-theme contrast against derived surfaces. The name stays on one line on phone and desktop.
 - Local development now supports Node 24 (selected by `.nvmrc`) as well as Node 22.16; production container images remain on Node 22.16. Began Stage 5 by recording per-instance branding and local-only support defaults in ADR 0022.
 - Kept coach sport-task review, university privacy/security approval, retention alert delivery and production update/rollback review in a first-user or pre-production backlog after founder acceptance of prototype scope. This does not authorize real athlete data before institution approval.
 - Updated messaging browser acceptance to cover contact removal after opening and reuse from Conversations, and changed its notification preference assertion to the current action-specific success copy.

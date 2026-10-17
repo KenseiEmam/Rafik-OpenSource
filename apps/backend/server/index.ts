@@ -77,6 +77,12 @@ import { scoped } from "./workspaces.ts";
 import { organizationAccountData } from "./account-data.ts";
 import { getProgramMedia, putProgramMedia } from "./program-media.ts";
 import {
+  readBranding,
+  readBrandingLogo,
+  updateBranding,
+  canManageBranding,
+} from "./instance-branding.ts";
+import {
   foodCatalog,
   exerciseDatasetCatalog,
   wgerExerciseCatalog,
@@ -147,6 +153,22 @@ const server = createServer(async (req, res) => {
     if (path === "/health" && req.method === "GET") {
       await db.$queryRaw`SELECT 1`;
       send(res, 200, { ok: true, runtime: "prisma-postgresql" });
+      return;
+    }
+    if (req.method === "GET" && path === "/v1/instance/branding") {
+      send(res, 200, await readBranding());
+      return;
+    }
+    if (req.method === "GET" && path === "/v1/instance/branding/logo") {
+      const image = await readBrandingLogo();
+      res.writeHead(200, {
+        "Content-Type": image.mime,
+        "Content-Length": image.bytes.length,
+        "Cache-Control": "no-store",
+        "X-Content-Type-Options": "nosniff",
+        "Content-Security-Policy": "default-src 'none'; sandbox",
+      });
+      res.end(image.bytes);
       return;
     }
     if (req.method === "GET" && path === "/v1/catalog/foods") {
@@ -232,6 +254,26 @@ const server = createServer(async (req, res) => {
       return;
     }
     const actor = await identify(req);
+    if (req.method === "GET" && path === "/v1/instance/branding/can-manage") {
+      const workspaceId = url.searchParams.get("workspace") || "";
+      send(res, 200, await canManageBranding(requireActor(actor), workspaceId));
+      return;
+    }
+    const brandingMatch = path.match(
+      /^\/v1\/workspaces\/([a-f0-9-]{36})\/branding$/,
+    );
+    if (brandingMatch && req.method === "POST") {
+      send(
+        res,
+        200,
+        await updateBranding(
+          requireActor(actor),
+          brandingMatch[1],
+          JSON.parse((await body(req, 1024 * 1024)).toString()),
+        ),
+      );
+      return;
+    }
     if (path === "/v1/platform" && ["GET", "POST"].includes(req.method || "")) {
       send(
         res,
