@@ -1,6 +1,6 @@
 # Current delivery ledger
 
-**Status, 17 October 2026:** Stage 4 prototype and Stage 5 branding/support implementations are complete; first-user and pre-production gates remain in the backlog. The founder confirmed branding persists after restarting local frontend/backend services. Database backup/restore persistence remains unverified. Stage 6 is in progress: startup scripts are grouped under `infrastructure/scripts/`, and AWS, Google Cloud and Azure Terraform starters prepare the same Compose VM deployment. No cloud apply, provider validation, cost review or recovery rehearsal has been performed. The [stage plan](../requirements/README.md) is authoritative; detailed R-phase chronology is preserved in the [archive](../archive/implementation-ledger-history-2026-10-17.md).
+**Status, 17 October 2026:** Stage 4 prototype and Stage 5 branding/support implementations are complete; first-user and pre-production gates remain in the backlog. The founder confirmed branding persists after restarting local frontend/backend services. Database backup/restore persistence remains unverified. Stage 6 optional cloud templates are implemented; the founder deferred provider apply, validation, cost review and recovery rehearsal to user testing. The templates are not provider-verified. The [stage plan](../requirements/README.md) is authoritative; detailed R-phase chronology is preserved in the [archive](../archive/implementation-ledger-history-2026-10-17.md).
 
 ## Current state
 

@@ -83,9 +83,9 @@ Rafik should help universities and university coaches support young athletes by 
 
 ### Stage 6 — Optional cloud templates
 
-- **Status: starter templates in progress, 17 October 2026.** The initial approach is one small VM per provider running the existing Compose stack, with provider-native operator access and no managed database. See [cloud deployment templates](../../infrastructure/cloud/README.md).
+- **Status: optional starter templates implemented; provider verification deferred to user testing, 17 October 2026.** The initial approach is one small VM per provider running the existing Compose stack, with provider-native operator access and no managed database. See [cloud deployment templates](../../infrastructure/cloud/README.md).
 - Each provider needs independent prerequisites, cost review, identity/access, networking, storage, backup/restore, upgrade and teardown guidance. These templates are not cloud-tested and do not imply production readiness.
-- Acceptance: a provider template deploys an isolated instance from a clean account using documented prerequisites and demonstrates restore and upgrade. Do not claim support for providers that have not passed their own checks.
+- User-testing backlog: apply a selected template in a clean provider account, review cost and IAM/network setup, then demonstrate update, paired backup/restore and teardown. Until those checks happen, describe the files as starter templates and do not claim provider support or production readiness.
 
 ### Stage 7 — Android field app
 

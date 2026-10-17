@@ -49,4 +49,4 @@ Do not treat browser emulation as physical-device or human usability evidence. T
 
 ## Stage 6 — cloud templates
 
-Terraform is not installed in this environment, so `terraform fmt` and `terraform validate` were not run. No cloud credentials were used and no resources were created. Provider application, deployment, cost, upgrade, backup/restore and teardown remain unverified.
+Terraform is not installed in this environment, so `terraform fmt` and `terraform validate` were not run. No cloud credentials were used and no resources were created. The founder deferred provider application, deployment, cost, upgrade, backup/restore and teardown checks to user testing; these remain unverified and are not required before the optional templates are reviewed.
