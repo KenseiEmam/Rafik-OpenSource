@@ -43,6 +43,7 @@ const command = useCommand<'save'>(
       method: 'POST',
       body: JSON.stringify(args),
     }),
+  { successMessage: l('Feedback submitted.', 'تم إرسال التقييم.') },
 )
 watch(
   () => command.state.notice,
@@ -129,7 +130,7 @@ const labels = computed(() => [
           {{
             source === 'workplace'
               ? l(
-                  'How satisfied are you with working at this organization this month?',
+                  'How satisfied are you with working at this institution this month?',
                   'ما مدى رضاك عن العمل في هذه المؤسسة هذا الشهر؟',
                 )
               : l('How satisfied were you with this session?', 'ما مدى رضاك عن هذه الجلسة؟')

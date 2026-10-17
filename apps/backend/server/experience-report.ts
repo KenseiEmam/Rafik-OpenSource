@@ -22,10 +22,5 @@ export async function experienceReport(
           { score: number | null; value: number }[]
         >`SELECT f.score,count(*)::int value FROM public.workspace_members m LEFT JOIN public.organization_workplace_feedback f ON f.member_id=m.id AND f.month=${currentMonth}::date WHERE m.workspace_id=${workspace}::uuid AND m.active AND 'trainer'=ANY(m.roles) GROUP BY f.score ORDER BY f.score`
       : null;
-  const renewal = (
-    await tx.$queryRaw<
-      { ended: number; renewed: number }[]
-    >`SELECT count(*)::int ended,count(*) FILTER(WHERE EXISTS(SELECT 1 FROM public.organization_packages n WHERE n.renewed_from=p.id AND NOT n.archived AND n.created_at<${window.end}))::int renewed FROM public.organization_packages p JOIN public.workspace_members m ON m.id=p.member_id WHERE p.workspace_id=${workspace}::uuid AND NOT p.archived AND p.ends_on BETWEEN ${window.from}::date AND ${window.to}::date AND p.ends_on<(now() AT TIME ZONE p.timezone)::date AND (${trainer}::uuid IS NULL OR m.trainer_id=${trainer}::uuid) AND (${selected}::uuid IS NULL OR m.id=${selected}::uuid)`
-  )[0];
-  return { client, workplace, workplaceMonth: currentMonth, renewal };
+  return { client, workplace, workplaceMonth: currentMonth };
 }

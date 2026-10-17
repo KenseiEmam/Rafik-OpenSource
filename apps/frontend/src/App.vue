@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import WorkspaceNav from './features/workspace/WorkspaceNav.vue'
+import { useRoute } from 'vue-router'
 import DashboardNav from './features/workspace/DashboardNav.vue'
 import {
   DialogRoot,
@@ -19,25 +18,13 @@ import { language, locale, t } from './lib/i18n'
 import { localPreview } from './lib/backend'
 import { syncPending } from './lib/training'
 const route = useRoute()
-const router = useRouter()
 watch(
   () => route.path,
   (path) => {
-    if (
-      user.value &&
-      (path.startsWith('/organization/') ||
-        path.startsWith('/coach') ||
-        ['/today', '/history', '/progress', '/messages', '/checkins', '/more'].some((p) =>
-          path.startsWith(p),
-        ))
-    )
+    if (user.value && path.startsWith('/organization/'))
       localStorage.setItem(
         'rafik.workspace:' + user.value.id,
-        path.startsWith('/organization/')
-          ? path.split('/').slice(0, 4).join('/')
-          : path.startsWith('/coach')
-            ? '/coach'
-            : '/today',
+        path.split('/').slice(0, 4).join('/'),
       )
   },
 )
@@ -51,17 +38,13 @@ const currentContext = computed(
     ) ||
     contexts.value[0],
 )
-const staffContexts = computed(() =>
-  contexts.value.filter((c) => c.kind !== 'personal' && c.role !== 'trainee'),
-)
-const selectableContexts = computed(() => staffContexts.value)
-const coaching = computed(() => route.path.startsWith('/coach'))
 const messaging = computed(
   () =>
-    /^(\/coach)?\/messages(\/|$)/.test(route.path) ||
+    /^\/messages(\/|$)/.test(route.path) ||
     /^\/organization\/[^/]+\/[^/]+\/messages(\/|$)/.test(route.path),
 )
 const focused = computed(() => route.path.startsWith('/workout/'))
+const entryScreen = computed(() => ['/', '/setup', '/login'].includes(route.path))
 const product = computed(
   () =>
     user.value &&
@@ -74,19 +57,12 @@ const dashboard = computed(
   () =>
     product.value &&
     !focused.value &&
-    (coaching.value ||
-      (route.path.startsWith('/organization/') &&
-        currentContext.value?.kind === 'organization' &&
-        currentContext.value.role !== 'trainee') ||
+    ((route.path.startsWith('/organization/') && currentContext.value?.kind === 'organization') ||
       (['/settings', '/notifications', '/support'].includes(route.path) &&
-        (currentContext.value?.kind === 'independent' ||
-          (currentContext.value?.kind === 'organization' &&
-            currentContext.value.role !== 'trainee')))) &&
+        currentContext.value?.kind === 'organization')) &&
     !['/workspaces', '/platform'].includes(route.path),
 )
-const dashboardBase = computed(() =>
-  route.path.startsWith('/coach') ? '/coach' : currentContext.value?.path || '/coach',
-)
+const dashboardBase = computed(() => currentContext.value?.path || '/workspaces')
 const menuOpen = ref(false)
 watch(
   () => route.fullPath,
@@ -139,10 +115,13 @@ onUnmounted(() => window.removeEventListener('online', online))
               }}</DialogDescription
               ><DashboardNav
                 :base="dashboardBase"
-                :role="currentContext?.role || 'coach'"
+                :role="currentContext?.role || 'admin'"
                 @navigate="menuOpen = false"
               />
               <div class="dashboard-utilities">
+                <RouterLink v-if="platform" to="/platform">{{
+                  language('Platform operations', 'عمليات المنصة')
+                }}</RouterLink>
                 <RouterLink to="/help">{{ t('help') }}</RouterLink
                 ><RouterLink to="/settings">{{ t('settings') }}</RouterLink
                 ><RouterLink v-if="localPreview" to="/local-preview">{{
@@ -169,47 +148,6 @@ onUnmounted(() => window.removeEventListener('online', online))
             >rafik<span class="brand-period">.</span></span
           ></RouterLink
         >
-        <label v-if="user && !focused && selectableContexts.length > 1" class="workspace-switch"
-          ><span class="sr-only">{{ language('Workspace', 'مساحة العمل') }}</span
-          ><select
-            :aria-label="language('Workspace', 'مساحة العمل')"
-            :value="
-              ['/workspaces', '/platform'].includes(route.path) ? route.path : currentContext?.path
-            "
-            @change="router.push(($event.target as HTMLSelectElement).value)"
-          >
-            <option v-for="context in selectableContexts" :key="context.id" :value="context.path">
-              {{
-                context.kind === 'personal'
-                  ? t('training')
-                  : context.kind === 'independent'
-                    ? t('coaching')
-                    : context.name +
-                      ' · ' +
-                      language(
-                        { admin: 'Administration', trainer: 'Coaching', trainee: 'My training' }[
-                          context.role
-                        ],
-                        { admin: 'الإدارة', trainer: 'التدريب', trainee: 'تدريبي' }[context.role],
-                      )
-              }}
-            </option>
-            <option v-if="platform" value="/platform">
-              {{ language('Platform operations', 'عمليات المنصة') }}
-            </option>
-            <option value="/workspaces">
-              {{ language('Manage workspaces', 'إدارة مساحات العمل') }}
-            </option>
-          </select></label
-        >
-        <nav
-          v-else-if="!user && !focused"
-          class="main-nav"
-          :aria-label="language('Main navigation', 'التنقل الرئيسي')"
-        >
-          <RouterLink to="/#for-your-team">{{ language('For your team', 'لفريقك') }}</RouterLink
-          ><RouterLink to="/#how-it-works">{{ language('How it works', 'كيف يعمل') }}</RouterLink>
-        </nav>
         <div class="header-actions">
           <button
             class="icon-button language-button"
@@ -234,7 +172,10 @@ onUnmounted(() => window.removeEventListener('online', online))
               profile?.display_name?.split(' ')[0] || t('settings')
             }}</span>
           </RouterLink>
-          <RouterLink v-if="!user && !focused" class="button small secondary" to="/login"
+          <RouterLink
+            v-if="!user && !focused && !entryScreen"
+            class="button small secondary"
+            to="/login"
             >{{ t('signIn') }}<PhArrowUpRight :size="17" aria-hidden="true"
           /></RouterLink>
         </div>
@@ -245,12 +186,12 @@ onUnmounted(() => window.removeEventListener('online', online))
       class="dashboard-sidebar"
       :aria-label="language('Workspace sidebar', 'الشريط الجانبي لمساحة العمل')"
     >
-      <DashboardNav :base="dashboardBase" :role="currentContext?.role || 'coach'" />
+      <DashboardNav :base="dashboardBase" :role="currentContext?.role || 'admin'" />
       <div class="dashboard-utilities">
-        <RouterLink to="/support">{{ language('Support', 'الدعم') }}</RouterLink>
-        <RouterLink to="/workspaces">{{
-          language('Organizations and roles', 'المؤسسات والأدوار')
+        <RouterLink v-if="platform" to="/platform">{{
+          language('Platform operations', 'عمليات المنصة')
         }}</RouterLink>
+        <RouterLink to="/support">{{ language('Support', 'الدعم') }}</RouterLink>
         <RouterLink to="/help">{{ t('help') }}</RouterLink
         ><RouterLink to="/settings">{{ t('settings') }}</RouterLink
         ><RouterLink v-if="localPreview" to="/local-preview">{{ t('localPreview') }}</RouterLink
@@ -265,15 +206,6 @@ onUnmounted(() => window.removeEventListener('online', online))
         >
       </div>
     </aside>
-    <WorkspaceNav
-      v-if="
-        product &&
-        !dashboard &&
-        !focused &&
-        !route.path.startsWith('/organization/') &&
-        !['/workspaces', '/notifications', '/platform'].includes(route.path)
-      "
-    />
     <main id="main" :class="{ 'messages-main': messaging }" tabindex="-1">
       <RouterView
         :key="
@@ -284,7 +216,7 @@ onUnmounted(() => window.removeEventListener('online', online))
         "
       />
     </main>
-    <footer v-if="!focused && !dashboard" class="footer container">
+    <footer v-if="!focused && !dashboard && !entryScreen" class="footer container">
       <span class="footer-brand">{{
         language('A little clarity. Every session.', 'وضوح أكثر. في كل حصة.')
       }}</span>

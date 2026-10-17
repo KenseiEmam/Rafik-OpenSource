@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=22.16.0 <23"
+    "node": "^22.16.0 || ^24.0.0"
   },
   "scripts": {
     "start": "node scripts/prisma/local.mjs start",
@@ -24,7 +24,7 @@
     "dev:api": "tsx watch server/index.ts",
     "start:api": "tsx server/index.ts",
     "typecheck": "tsc --noEmit",
-    "db:up": "docker compose -f ../../infrastructure/compose.yaml up -d --wait",
+    "db:up": "docker compose -f ../../infrastructure/compose.yaml --profile local up -d --wait",
     "db:migrate": "prisma migrate deploy",
     "db:generate": "prisma generate",
     "seed:local": "node scripts/prisma/local.mjs seed",
@@ -47,8 +47,9 @@
     "test:organization-nutrition": "tsx --test tests/organization-nutrition.test.ts",
     "test:organization-assets": "tsx --test tests/organization-assets.test.ts",
     "test:organization-tasks": "tsx --test tests/organization-tasks.test.ts",
-    "test:organization-packages": "tsx --test tests/organization-packages.test.ts",
-    "test:organization-feedback": "tsx --test tests/organization-feedback.test.ts"
+    "test:organization-feedback": "tsx --test tests/organization-feedback.test.ts",
+    "test:organization-injuries": "tsx --test tests/organization-injuries.test.ts",
+    "test:injury-retention-scheduler": "tsx --test tests/organization-injury-retention-scheduler.test.ts"
   },
   "devDependencies": {
     "@types/node": "22.19.0",

@@ -1,34 +1,53 @@
 # Documentation
 
-The current delivery stage and exit gates are in [requirements and staged migration plan](requirements/README.md). Track implementation in the [ledger](implementation/ledger.md); see [verification](implementation/verification.md) for checks and known limits. Report vulnerabilities using the root [security policy](../SECURITY.md).
+This page is the index for maintained Rafik documentation. The root [README](../README.md) is the project entry point; [CONTRIBUTING](../CONTRIBUTING.md) describes contribution practice. Historical phase records and superseded material are under [archive](archive/README.md). Raw machine-generated check receipts are separate under [verification/receipts](verification/receipts/).
 
-This is the single maintained documentation tree for the Rafik monorepo. Root [README](../README.md) covers clean setup; [CONTRIBUTING](../CONTRIBUTING.md) defines change and verification practice.
+## Product and design
 
-## Product and architecture
+- [Requirements and staged plan](requirements/README.md): goals, scope, constraints, acceptance criteria and current stage gates.
+- [University role and scope audit](requirements/role-scope-audit.md): historical role findings and current organization authorization constraints.
+- [Stage 4 workflow audit](requirements/stage4-workflow-audit.md): current university workflow coverage and remaining review.
+- [Architecture](architecture/README.md): system context, components, data flow, security boundaries and integrations.
+- [Architecture decisions](decisions/README.md): active ADR index; superseded ADRs are archived.
+- [API reference](reference/api.md): transport, errors, retries and pagination.
+- [Content maintenance](reference/content-maintenance.md): canonical content generation, provenance and media rights.
+- [Known issues and release gaps](known-issues/README.md): verified product/operational gaps, impact, evidence and next steps.
 
-- [University requirements and staged plan](requirements/README.md): goals, current-state audit, acceptance criteria, risks, and privacy/security gates.
-- [Target architecture](architecture/README.md): current component boundaries and university-owned deployment model.
-- [Architecture decisions](decisions/): accepted tradeoffs, including [ADR 0001: isolated university deployments](decisions/ADR-0001-university-owned-deployments.md), [ADR 0006: the Prisma API transition](decisions/0006-prisma-api-transition.md), and the imported [runtime boundary](decisions/0016-runtime-boundary.md).
-- [Testing and verification](testing/README.md): local commands, scope, and evidence limits.
-- [API reference](reference/api.md): transport, error, retry and pagination conventions.
+## Development and quality
 
-## Engineering and operation
+- [Development setup and workflows](development/README.md): prerequisites, local setup, common change workflows and troubleshooting.
+- [Maintainer guide](development/maintainer-guide.md): repository map and implementation recipes.
+- [Current delivery ledger](development/ledger.md): current stage and recent implementation outcomes; not a phase-history archive.
+- [Testing strategy](testing/README.md): test layers, focused commands, fixtures and evidence boundaries.
+- [Feature verification map](testing/feature-verification-map.md): user jobs, lifecycle checks and coverage limits.
+- [Local coach walkthrough](testing/coach-walkthrough.md): steps for personally reviewing the current local university workflow with synthetic data.
+- [Verification summary](verification/README.md): actual checks, dates, coverage and known limits.
 
-- [Implementation ledger](implementation/ledger.md): current status and accepted phases.
-- [Current architecture](implementation/architecture.md): data ownership, API boundaries and lifecycle contracts.
-- [Maintainer guide](implementation/maintainer-guide.md): application file map and change recipes.
-- [Local operation and release runbook](implementation/runbook.md): services, recovery and release prerequisites.
-- [Verification record](implementation/verification.md): commands actually run, evidence and limits.
-- [Feature verification map](implementation/feature-verification-map.md): user jobs, lifecycle/state checks and coverage limits.
-- [Release evidence](implementation/release-evidence.md) and [release checklist](implementation/release-checklist.md): local results and outstanding gates.
-- [Content maintenance and provenance](implementation/content.md): canonical data and media rights.
+## Operations and release
 
-## Audits and historical context
+- [Operations and deployment](operations/README.md): Compose deployment, environment/secrets, backups, recovery, rollback and retention operations.
+- [Release checklist](operations/release-checklist.md): release prerequisites and outstanding gates.
 
-- [Original product and business audit](revival/README.md): preserved source review and historical rationale.
-- [Role and scope audit](implementation/role-scope-audit.md): legacy roles, workflow evidence and required authorization checks.
-- [Coverage register](implementation/revamp-coverage.md): retained, replaced, deferred and defective capabilities.
-- [Forward roadmap](implementation/forward-roadmap.md): recorded dependency and UX constraints; the root requirements document owns current stage order.
-- [Historical feature contracts](implementation/): phase records explain invariants and evidence for their stated checkpoint; they are not claims about current university workflow coverage.
+## Architecture decisions
 
-The implementation directory also contains the current runbooks, audits, accepted decisions, and dated phase evidence. Archived artifacts remain historical and do not override the university-first requirements above.
+- [ADR 0001 — University-owned deployments](decisions/ADR-0001-university-owned-deployments.md)
+- [ADR 0002 — State and command boundaries](decisions/ADR-0002-state-and-commands.md)
+- [ADR 0003 — Complete application-version updates](decisions/ADR-0003-application-updates.md)
+- [ADR 0005 — Organization and legacy independent-data boundaries](decisions/ADR-0005-organization-and-independent-scopes.md)
+- [ADR 0006 — Prisma API, identity and file boundary](decisions/ADR-0006-prisma-api-transition.md)
+- [ADR 0007 — Transactional notification intents](decisions/ADR-0007-notification-intents.md)
+- [ADR 0008 — Local operations and bounded reads](decisions/ADR-0008-local-operations-and-bounded-reads.md)
+- [ADR 0009 — Dashboard components](decisions/ADR-0009-dashboard-components.md)
+- [ADR 0010 — Reference content and nutrition](decisions/ADR-0010-reference-content-and-nutrition.md)
+- [ADR 0011 — Exercise catalog and motion](decisions/ADR-0011-exercise-catalog-and-motion.md)
+- [ADR 0012 — Organization nutrition and diary sharing](decisions/ADR-0012-organization-nutrition.md)
+- [ADR 0013 — Organization exercise media](decisions/ADR-0013-organization-exercise-media.md)
+- [ADR 0015 — Explicit feedback sources](decisions/ADR-0015-explicit-feedback-sources.md)
+- [ADR 0017 — Minimal athlete injury status](decisions/ADR-0017-injury-status-minimum.md)
+- [ADR 0018 — First-run and invitation onboarding](decisions/ADR-0018-first-run-invitation-onboarding.md)
+- [ADR 0019 — One institutional role per dashboard](decisions/ADR-0019-single-role-dashboards.md)
+- [ADR 0020 — Publish programs directly to the institution library](decisions/ADR-0020-publish-programs-to-library.md)
+- [ADR 0021 — Organization workspaces are the supported web experience](decisions/ADR-0021-organization-only-web-experience.md)
+- [ADR 0022 — Instance branding and local support](decisions/ADR-0022-instance-branding-and-local-support.md)
+
+Historical phase records and superseded documents are linked from the [archive index](archive/README.md); they are not active product or release guidance.

@@ -26,10 +26,12 @@ test('organization program authoring, reviewed delivery, recording and feedback 
     await f.call(f.client, `/v1/organization-invitations/${token}`, {})
     const base = `/organization/${id}/admin`
     await f.login(page, f.owner, base + '/plans/new')
-    await page.getByLabel('Plan name', { exact: true }).fill('Three-day foundation')
-    await expect(page.getByLabel('Goal (optional)', { exact: true })).toBeVisible()
-    await page.getByLabel('Goal (optional)', { exact: true }).fill('Build a steady training habit')
-    await page.getByLabel('Cover image (optional, up to 2 MB)', { exact: true }).setInputFiles({
+    await expect(page.locator('.editor-exercise')).toHaveCount(0)
+    await expect(page.locator('.program-empty-exercises')).toBeVisible()
+    await page.getByLabel('Program name', { exact: true }).fill('Three-day foundation')
+    await expect(page.getByLabel('Main goal', { exact: true })).toBeVisible()
+    await page.getByLabel('Main goal', { exact: true }).fill('Build a steady training habit')
+    await page.getByLabel('Upload a program cover image', { exact: true }).setInputFiles({
       name: 'cover.png',
       mimeType: 'image/png',
       buffer: Buffer.from(
@@ -44,18 +46,21 @@ test('organization program authoring, reviewed delivery, recording and feedback 
       )
       .toBe(1)
 
+    await page.getByRole('button', { name: 'Add exercise', exact: true }).click()
     await page.getByRole('button', { name: 'Duplicate session', exact: true }).click()
     await page.getByLabel('Session name', { exact: true }).fill('Full body C')
     await page.getByRole('button', { name: 'Duplicate this week', exact: true }).click()
-    await page.getByRole('button', { name: 'Client preview', exact: true }).click()
+    await page.getByRole('button', { name: 'Athlete preview', exact: true }).click()
     await expect(
       page.getByRole('heading', { name: 'Three-day foundation', exact: true }),
     ).toBeVisible()
-    await page.getByRole('button', { name: 'Edit plan', exact: true }).click()
-    await page.getByRole('button', { name: 'Publish plan', exact: true }).click()
-    await expect(page.getByRole('status').filter({ hasText: 'Published.' })).toBeVisible()
+    await page.getByRole('button', { name: 'Edit program', exact: true }).click()
+    await page.getByRole('button', { name: 'Publish program', exact: true }).click()
+    await expect(
+      page.getByRole('status').filter({ hasText: 'Published and added to the institution program library.' }),
+    ).toBeVisible()
     await page.getByRole('link', { name: 'Assign this plan', exact: true }).click()
-    await page.getByRole('checkbox', { name: /R4 Client/ }).check()
+    await page.getByRole('checkbox', { name: /R4 Athlete/ }).check()
     await page.getByRole('button', { name: /Review assignment/ }).click()
     await expect(page.getByText('First assignment', { exact: false })).toBeVisible()
     expect(await layoutIssues(page)).toEqual([])
@@ -105,7 +110,7 @@ test('organization program authoring, reviewed delivery, recording and feedback 
     await page.goto(base + '/training')
     await page
       .getByRole('link')
-      .filter({ hasText: 'R4 Client' })
+      .filter({ hasText: 'R4 Athlete' })
       .filter({ hasText: 'Three-day foundation' })
       .click()
     await expect(page.getByText('8 kg × 10', { exact: true })).toBeVisible()
@@ -115,21 +120,21 @@ test('organization program authoring, reviewed delivery, recording and feedback 
     await client.goto(workout)
     await expect(client.getByText('Keep the same load next time.', { exact: true })).toBeVisible()
     await page.goto(base + '/training')
-    await page.getByText('Filter by trainee', { exact: true }).click()
+    await page.getByText('Filter by athlete', { exact: true }).click()
     await page
       .locator('.member-picker')
-      .getByRole('checkbox', { name: 'R4 Client', exact: true })
+      .getByRole('checkbox', { name: 'R4 Athlete', exact: true })
       .check()
     await page.getByRole('link', { name: 'Adapt this program', exact: true }).click()
-    await expect(page.getByLabel('Plan name', { exact: true })).toHaveValue(
+    await expect(page.getByLabel('Program name', { exact: true })).toHaveValue(
       'Three-day foundation adapted',
     )
-    await page.getByLabel('Plan name', { exact: true }).fill('R4 Client next block')
+    await page.getByLabel('Program name', { exact: true }).fill('R4 Athlete next block')
     await page.reload()
-    await expect(page.getByLabel('Plan name', { exact: true })).toHaveValue('R4 Client next block')
-    await page.getByRole('button', { name: 'Publish plan', exact: true }).click()
+    await expect(page.getByLabel('Program name', { exact: true })).toHaveValue('R4 Athlete next block')
+    await page.getByRole('button', { name: 'Publish program', exact: true }).click()
     await page.getByRole('link', { name: 'Assign this plan', exact: true }).click()
-    await expect(page.getByRole('checkbox', { name: /R4 Client/ })).toBeChecked()
+    await expect(page.getByRole('checkbox', { name: /R4 Athlete/ })).toBeChecked()
     await page.getByRole('button', { name: /Review assignment/ }).click()
     await page.getByRole('button', { name: 'Confirm assignment', exact: true }).click()
     await expect(
@@ -148,7 +153,7 @@ test('independent coach delivers a reviewed program directly without changing an
   const f = await teamFixture()
   try {
     await f.login(page, f.owner, '/coach/deliver/' + f.version.id)
-    await page.getByRole('checkbox', { name: /R4 Client/ }).check()
+    await page.getByRole('checkbox', { name: /R4 Athlete/ }).check()
     await page.getByRole('button', { name: /Review assignment/ }).click()
     await expect(page.getByText('Replace future training', { exact: false })).toBeVisible()
     await page.getByRole('button', { name: 'Confirm assignment', exact: true }).click()

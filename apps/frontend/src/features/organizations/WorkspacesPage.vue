@@ -9,7 +9,6 @@ import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
 const router = useRouter(),
   route = useRoute(),
-  kind = ref(route.query.start === 'independent' ? 'independent' : 'organization'),
   name = ref(''),
   adding = ref(!!route.query.start),
   draftReady = ref(false),
@@ -19,9 +18,8 @@ const key = 'workspace-setup:' + user.value!.id
 let draftSequence = 0
 onMounted(async () => {
   try {
-    const draft = await getDraft<{ kind: string; name: string }>(key)
+    const draft = await getDraft<{ name: string }>(key)
     if (draft) {
-      kind.value = draft.kind
       name.value = draft.name
       adding.value = !!route.query.start || !!draft.name
     }
@@ -31,12 +29,12 @@ onMounted(async () => {
     draftReady.value = true
   }
 })
-watch([name, kind], async () => {
+watch(name, async () => {
   if (!draftReady.value) return
   const sequence = ++draftSequence
   draftSaved.value = false
   try {
-    await storeDraft(key, { name: name.value, kind: kind.value })
+    await storeDraft(key, { name: name.value })
     if (sequence === draftSequence) draftSaved.value = true
   } catch {
     draftError.value = l(
@@ -50,16 +48,17 @@ const command = useCommand<'create'>(
   async (_, result) => {
     await removeDraft(key)
     await refreshContexts()
-    const w = result as { id: string; kind: string }
-    await router.push(w.kind === 'independent' ? '/coach' : `/organization/${w.id}/admin`)
+    const w = result as { id: string }
+    await router.push(`/organization/${w.id}/admin`)
   },
   (_, args) => request('/v1/workspaces', { method: 'POST', body: JSON.stringify(args) }),
+  { successMessage: l('Institution created.', 'تم إنشاء المؤسسة.') },
 )
 const locked = computed(
   () => command.state.busy || !!command.state.pending || !command.state.ready || !draftReady.value,
 )
 function create() {
-  return command.run('create', { id: crypto.randomUUID(), kind: kind.value, name: name.value })
+  return command.run('create', { id: crypto.randomUUID(), kind: 'organization', name: name.value })
 }
 </script>
 <template>
@@ -71,8 +70,8 @@ function create() {
         <p>
           {{
             l(
-              'Each organization has its own staff, trainees and training history. Choose a staff role to continue.',
-              'لكل مؤسسة موظفوها ومتدربوها وسجلها التدريبي. اختر دورك للمتابعة.',
+              'Each institution has its own staff, athletes and training history. Choose a staff role to continue.',
+              'لكل مؤسسة موظفوها ورياضيون وسجلها التدريبي. اختر دورك للمتابعة.',
             )
           }}
         </p>
@@ -81,26 +80,26 @@ function create() {
     <p v-if="localPreview" class="notice">
       {{
         l(
-          'Local examination: trainee and legacy coaching views remain available here for testing.',
-          'معاينة محلية: عروض المتدربين والتدريب المستقل متاحة هنا للاختبار.',
+          'Local examination: organization administrators, trainers and athletes are available with sample data.',
+          'معاينة محلية: تتوفر حسابات مسؤولي المؤسسات والمدربين والرياضيين مع بيانات تجريبية.',
         )
       }}
     </p>
     <div class="form-stack">
       <RouterLink
         v-for="c in contexts.filter(
-          (c) => localPreview || (c.kind !== 'personal' && c.role !== 'trainee'),
+          (c) => c.kind === 'organization' && (localPreview || c.role !== 'trainee'),
         )"
         :key="c.id"
         :to="c.path"
         class="panel text-link"
-        >{{ c.kind === 'personal' ? l('My training', 'تدريبي') : c.name }}
+        >{{ c.name }}
         <span class="muted"
           >·
           {{
             l(
-              { admin: 'Administration', trainer: 'Coaching', trainee: 'Training' }[c.role],
-              { admin: 'الإدارة', trainer: 'التدريب', trainee: 'تدريب شخصي' }[c.role],
+              { admin: 'Administration', trainer: 'Coaching', trainee: 'Athlete training' }[c.role],
+              { admin: 'الإدارة', trainer: 'التدريب', trainee: 'تدريب الرياضي' }[c.role],
             )
           }}</span
         >
@@ -128,31 +127,15 @@ function create() {
       </p>
       <fieldset class="command-fields" :disabled="locked">
         <label
-          >{{ l('What are you setting up?', 'ماذا تريد إعداد؟')
-          }}<select v-model="kind">
-            <option value="organization">{{ l('An organization', 'مؤسسة') }}</option>
-            <option
-              v-if="localPreview && !contexts.some((c) => c.kind === 'independent')"
-              value="independent"
-            >
-              {{ l('My independent coaching', 'تدريبي المستقل') }}
-            </option>
-          </select></label
-        ><label
-          >{{ l('Name', 'الاسم')
+          >{{ l('Institution name', 'اسم المؤسسة')
           }}<input v-model="name" maxlength="100" required autocomplete="organization"
         /></label>
         <p class="muted">
           {{
-            kind === 'organization'
-              ? l(
-                  'You will be an administrator. Invite other admins, trainers and trainees when you are ready.',
-                  'ستكون مسؤولاً. ادعُ مسؤولين ومدربين ومتدربين عندما تكون جاهزاً.',
-                )
-              : l(
-                  'Start with your own plans and clients. No additional profile setup is required.',
-                  'ابدأ بخططك ومتدربيك دون إعداد ملف إضافي.',
-                )
+            l(
+              'You will be an administrator. Invite other admins, trainers and athletes when you are ready.',
+              'ستكون مسؤولاً. ادعُ مسؤولين ومدربين ورياضيين عندما تكون جاهزاً.',
+            )
           }}
         </p>
         <button class="button">{{ l('Create workspace', 'إنشاء مساحة العمل') }}</button>

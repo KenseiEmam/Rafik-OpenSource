@@ -88,7 +88,7 @@ function add() {
       <p class="subtle">
         {{
           l(
-            'Turn targets into food choices. These suggestions are separate from meals your client actually records.',
+            'Turn targets into food choices. These suggestions are separate from meals your athlete actually records.',
             'حوّل الأهداف إلى اختيارات طعام. هذه المقترحات منفصلة عن الوجبات التي يسجلها متدربك فعلياً.',
           )
         }}

@@ -141,7 +141,20 @@ export async function serviceCatalogCommand(
         return result;
       }
       const members = ids(input.members, 100, 0);
-      for (const m of members) await recipient(tx, id, self, view, m, true);
+      for (const memberId of members) {
+        const member = await tx.workspace_members.findUnique({
+          where: { id: memberId },
+        });
+        if (
+          member?.workspace_id === id &&
+          member.active &&
+          member.roles.includes("trainer")
+        ) {
+          if (view !== "admin") throw new ApiError(403, "trainer_unavailable");
+          continue;
+        }
+        await recipient(tx, id, self, view, memberId, true);
+      }
       const data = { name: textValue(input.name), archived: input.archived };
       const result = old
         ? await tx.organization_groups.update({

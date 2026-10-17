@@ -39,14 +39,15 @@ const data = ref<Organization>(),
   email = ref(''),
   roles = ref<Role[]>(['trainee']),
   inviteLink = ref(''),
+  passwordLink = ref(''),
   draftReady = ref(false),
   draftSaved = ref(false),
   draftError = ref('')
 const draftKey = `organization-invite:${user.value!.id}:${id}:${view}`
 const roleName = (role: string) =>
   l(
-    { admin: 'Administrator', trainer: 'Trainer', trainee: 'Trainee' }[role] || role,
-    { admin: 'مسؤول', trainer: 'مدرب', trainee: 'متدرب' }[role] || role,
+    { admin: 'Administrator', trainer: 'Trainer', trainee: 'Athlete' }[role] || role,
+    { admin: 'مسؤول', trainer: 'مدرب', trainee: 'رياضي' }[role] || role,
   )
 const visible = computed(() =>
   (data.value?.members || []).filter(
@@ -157,9 +158,13 @@ const command = useCommand<'organization'>(
   async (_, result, args) => {
     if (args.action === 'invite') {
       inviteLink.value = location.origin + '/organization-invite/' + args.token
+      passwordLink.value = ''
       email.value = ''
       roles.value = ['trainee']
       await removeDraft(draftKey)
+    } else if (args.action === 'password-link') {
+      passwordLink.value = location.origin + '/password-setup/' + args.token
+      inviteLink.value = ''
     }
     selected.value = undefined
     await refreshContexts()
@@ -176,11 +181,14 @@ const run = (args: Record<string, unknown>) =>
   command.run('organization', { operation: crypto.randomUUID(), ...args })
 async function select(member: Member) {
   selected.value = member
-  editRoles.value = [...member.roles]
+  const role = (['admin', 'trainer', 'trainee'] as Role[]).find((item) =>
+    member.roles.includes(item),
+  )
+  editRoles.value = role ? [role] : []
   active.value = member.active
   trainer.value = member.trainer_id || ''
   await nextTick()
-  document.querySelector<HTMLElement>('.organization-edit-heading h2')?.focus()
+  document.querySelector<HTMLElement>('.institution-edit-heading h2')?.focus()
 }
 async function closeEditor() {
   const member = selected.value?.id
@@ -201,6 +209,14 @@ function invite() {
     roles: roles.value,
     token,
   })
+}
+function resetPassword() {
+  if (!selected.value) return
+  passwordLink.value = ''
+  const token = [...crypto.getRandomValues(new Uint8Array(32))]
+    .map((x) => x.toString(16).padStart(2, '0'))
+    .join('')
+  run({ action: 'password-link', id: selected.value.id, token })
 }
 let draftSequence = 0
 async function saveInviteDraft() {
@@ -229,11 +245,11 @@ onMounted(async () => {
 </script>
 <template>
   <OrganizationNav />
-  <div class="container page organization-page">
+  <div class="container page institution-page">
     <header class="work-heading">
       <div>
         <p class="overline">{{ roleName(view) }}</p>
-        <h1>{{ data?.workspace.name || l('Organization', 'المؤسسة') }}</h1>
+        <h1>{{ data?.workspace.name || l('Institution', 'المؤسسة') }}</h1>
         <p>
           {{
             view === 'admin'
@@ -243,7 +259,7 @@ onMounted(async () => {
                 )
               : view === 'trainer'
                 ? l('Focus on the people you support.', 'ركّز على الأشخاص الذين تدعمهم.')
-                : l('Your training within this organization.', 'تدريبك ضمن هذه المؤسسة.')
+                : l('Your training within this institution.', 'تدريبك ضمن هذه المؤسسة.')
           }}
         </p>
       </div>
@@ -259,7 +275,7 @@ onMounted(async () => {
     <CommandStatus :command="command" />
     <PageState :loading="loading" :error="error" @retry="load"
       ><template v-if="data">
-        <section v-if="inviting && view === 'admin'" class="panel organization-invite">
+        <section v-if="inviting && view === 'admin'" class="panel institution-invite">
           <form class="form-stack" @submit.prevent="invite">
             <h2>
               {{
@@ -284,19 +300,22 @@ onMounted(async () => {
               /></label>
               <fieldset class="role-choices">
                 <legend>
-                  {{ l('Access within this organization', 'الصلاحيات داخل هذه المؤسسة') }}
+                  {{ l('Access within this institution', 'الصلاحيات داخل هذه المؤسسة') }}
                 </legend>
                 <label v-for="role in ['admin', 'trainer', 'trainee'] as Role[]" :key="role"
-                  ><input type="checkbox" v-model="roles" :value="role" />{{
-                    roleName(role)
-                  }}</label
+                  ><input
+                    type="radio"
+                    name="invitation-role"
+                    :checked="roles.includes(role)"
+                    @change="roles = [role]"
+                  />{{ roleName(role) }}</label
                 >
               </fieldset>
               <p class="muted">
                 {{
                   l(
-                    'Choose more than one role when needed. The invitation must be accepted using this verified email address.',
-                    'اختر أكثر من دور عند الحاجة. يجب قبول الدعوة بهذا البريد الإلكتروني الموثّق.',
+                    'Each account has one institution role. Create a separate account for another responsibility. The invited person sets a password from the one-time link; the email address is not verified.',
+                    'لكل حساب دور واحد في المؤسسة. أنشئ حساباً منفصلاً للمسؤوليات الأخرى. يعيّن المدعو كلمة المرور من الرابط لمرة واحدة؛ لا يتم التحقق من البريد الإلكتروني.',
                   )
                 }}
               </p>
@@ -319,6 +338,23 @@ onMounted(async () => {
             >{{ l('Invitation link', 'رابط الدعوة')
             }}<input
               :value="inviteLink"
+              readonly
+              @focus="($event.target as HTMLInputElement).select()"
+          /></label>
+        </div>
+        <div v-if="passwordLink" class="notice success">
+          <p>
+            {{
+              l(
+                'Password setup link ready. Share it privately; it expires in 24 hours and can be used once.',
+                'رابط إعداد كلمة المرور جاهز. شاركه بشكل خاص؛ تنتهي صلاحيته بعد ٢٤ ساعة ويستخدم مرة واحدة.',
+              )
+            }}
+          </p>
+          <label
+            >{{ l('Password setup link', 'رابط إعداد كلمة المرور')
+            }}<input
+              :value="passwordLink"
               readonly
               @focus="($event.target as HTMLInputElement).select()"
           /></label>
@@ -370,7 +406,7 @@ onMounted(async () => {
               <p class="muted">
                 {{
                   l(
-                    'Your organization manages your trainer assignment. Your personal training remains in My training.',
+                    'Your institution manages your trainer assignment. Your personal training remains in My training.',
                     'تدير مؤسستك تعيين مدربك. يبقى تدريبك الشخصي في «تدريبي».',
                   )
                 }}
@@ -380,11 +416,11 @@ onMounted(async () => {
                 {{
                   view === 'admin'
                     ? l(
-                        'Invite your staff and trainees, then give each trainee a responsible trainer. You can reassign responsibility while keeping the organization’s records together.',
+                        'Invite your staff and trainees, then give each trainee a responsible trainer. You can reassign responsibility while keeping the institution’s records together.',
                         'ادعُ موظفيك ومتدربيك وعيّن مدرباً مسؤولاً لكل متدرب. يمكنك تغيير المسؤولية مع الحفاظ على سجلات المؤسسة.',
                       )
                     : l(
-                        'Open your roster to see the trainees assigned to you. Organization administration and independent coaching are separate views.',
+                        'Open your roster to see the trainees assigned to you. Institution administration and independent coaching are separate views.',
                         'افتح القائمة للاطلاع على المتدربين المعيّنين لك. إدارة المؤسسة والتدريب المستقل عرضان منفصلان.',
                       )
                 }}
@@ -421,7 +457,7 @@ onMounted(async () => {
               <p v-if="peopleLoading" class="small-print" role="status">
                 {{ l('Finding people…', 'جارٍ البحث عن الأشخاص…') }}
               </p>
-              <p v-if="!visible.length && !peopleLoading" class="empty-state">
+              <p v-if="!visible.length && !peopleLoading" class="empty-state-note">
                 {{ l('No people match this view.', 'لا أشخاص يطابقون هذا العرض.') }}
               </p>
               <article v-for="member in visible" :key="member.id" class="organization-person">
@@ -435,6 +471,18 @@ onMounted(async () => {
                     </p>
                   </div>
                 </div>
+                <RouterLink
+                  v-if="member.active && member.roles.includes('trainee') && view !== 'trainee'"
+                  class="text-link"
+                  :to="
+                    base +
+                    '/messages?to=' +
+                    encodeURIComponent(member.id) +
+                    '&title=' +
+                    encodeURIComponent(member.name)
+                  "
+                  >{{ l('Message', 'مراسلة') }}</RouterLink
+                >
                 <RouterLink
                   v-if="member.roles.includes('trainee') && view !== 'trainee'"
                   class="text-link"
@@ -482,11 +530,14 @@ onMounted(async () => {
                   "
                 >
                   <fieldset class="role-choices">
-                    <legend>{{ l('Organization roles', 'أدوار المؤسسة') }}</legend>
+                    <legend>{{ l('Institution roles', 'أدوار المؤسسة') }}</legend>
                     <label v-for="role in ['admin', 'trainer', 'trainee'] as Role[]" :key="role"
-                      ><input type="checkbox" v-model="editRoles" :value="role" />{{
-                        roleName(role)
-                      }}</label
+                      ><input
+                        type="radio"
+                        :name="'membership-role-' + selected.id"
+                        :checked="editRoles.includes(role)"
+                        @change="editRoles = [role]"
+                      />{{ roleName(role) }}</label
                     >
                   </fieldset>
                   <label class="check-label"
@@ -503,7 +554,7 @@ onMounted(async () => {
                   >
                     {{
                       l(
-                        'Any assigned trainees will need a new trainer. Their organization records remain available. Access ends immediately when membership is deactivated.',
+                        'Any assigned trainees will need a new trainer. Their institution records remain available. Access ends immediately when membership is deactivated.',
                         'سيحتاج المتدربون المعيّنون إلى مدرب جديد. تبقى سجلاتهم بالمؤسسة. ينتهي الوصول فور إلغاء تنشيط العضوية.',
                       )
                     }}
@@ -512,9 +563,27 @@ onMounted(async () => {
                     {{ l('Save membership', 'حفظ العضوية') }}
                   </button>
                 </form>
+                <div v-if="selected.user_id && selected.active" class="form-stack">
+                  <p class="small-print">
+                    {{
+                      l(
+                        'Issue a single-use, 24-hour link so this person can choose a new password. Existing sessions will be signed out when it is used.',
+                        'أصدر رابطاً لمرة واحدة صالحاً ٢٤ ساعة ليختار هذا الشخص كلمة مرور جديدة. ستُنهى الجلسات الحالية عند استخدامه.',
+                      )
+                    }}
+                  </p>
+                  <button
+                    type="button"
+                    class="button secondary"
+                    :disabled="locked"
+                    @click="resetPassword"
+                  >
+                    {{ l('Create password setup link', 'إنشاء رابط إعداد كلمة المرور') }}
+                  </button>
+                </div>
                 <form
                   v-if="selected.active && selected.roles.includes('trainee')"
-                  class="form-stack organization-trainer-form"
+                  class="form-stack institution-trainer-form"
                   @submit.prevent="
                     run({
                       action: 'assign-trainer',
@@ -575,7 +644,7 @@ onMounted(async () => {
           </section>
         </template>
         <section v-else-if="section === 'activity' && view === 'admin'" class="panel">
-          <h2>{{ l('Recent organization changes', 'تغييرات المؤسسة الأخيرة') }}</h2>
+          <h2>{{ l('Recent institution changes', 'تغييرات المؤسسة الأخيرة') }}</h2>
           <p v-if="!data.events.length">
             {{ l('No changes recorded yet.', 'لا تغييرات مسجلة بعد.') }}
           </p>
@@ -590,11 +659,11 @@ onMounted(async () => {
                     trainer_assigned: 'Trainer responsibility updated',
                     member_roles_changed: 'Member roles updated',
                     member_removed: 'Membership deactivated',
-                    organization_created: 'Organization created',
-                    organization_renamed: 'Organization renamed',
+                    organization_created: 'Institution created',
+                    organization_renamed: 'Institution renamed',
                     nutrition_plan_published: 'Nutrition plan published',
                     nutrition_sharing_changed: 'Nutrition sharing changed',
-                  }[event.kind] || 'Organization updated',
+                  }[event.kind] || 'Institution updated',
                   {
                     member_invited: 'إنشاء دعوة',
                     invitation_revoked: 'إلغاء دعوة',
@@ -628,7 +697,7 @@ onMounted(async () => {
           </button>
         </section>
         <section v-else-if="section === 'settings' && view === 'admin'" class="panel narrow">
-          <h2>{{ l('Organization settings', 'إعدادات المؤسسة') }}</h2>
+          <h2>{{ l('Institution settings', 'إعدادات المؤسسة') }}</h2>
           <form
             class="form-stack"
             @submit.prevent="
@@ -636,22 +705,22 @@ onMounted(async () => {
             "
           >
             <label
-              >{{ l('Organization name', 'اسم المؤسسة')
+              >{{ l('Institution name', 'اسم المؤسسة')
               }}<input v-model="newName" maxlength="100" required :disabled="locked" /></label
             ><button class="button" :disabled="locked">{{ l('Save name', 'حفظ الاسم') }}</button>
           </form>
           <details class="organization-close">
-            <summary>{{ l('Close this organization', 'إغلاق هذه المؤسسة') }}</summary>
+            <summary>{{ l('Close this institution', 'إغلاق هذه المؤسسة') }}</summary>
             <p>
               {{
                 l(
-                  'This ends access for all members. Records remain preserved. Type the organization name to confirm.',
+                  'This ends access for all members. Records remain preserved. Type the institution name to confirm.',
                   'ينهي هذا الوصول لجميع الأعضاء مع الاحتفاظ بالسجلات. اكتب اسم المؤسسة للتأكيد.',
                 )
               }}
             </p>
             <label
-              >{{ l('Confirm organization name', 'تأكيد اسم المؤسسة')
+              >{{ l('Confirm institution name', 'تأكيد اسم المؤسسة')
               }}<input v-model="closeName" :disabled="locked" /></label
             ><button
               class="button secondary"
@@ -660,14 +729,14 @@ onMounted(async () => {
                 run({ action: 'close', confirm: closeName, revision: data.workspace.revision })
               "
             >
-              {{ l('Close organization', 'إغلاق المؤسسة') }}
+              {{ l('Close institution', 'إغلاق المؤسسة') }}
             </button>
           </details>
         </section>
         <p v-else class="notice">
           {{
             l(
-              'Choose an available page from the organization navigation.',
+              'Choose an available page from the institution navigation.',
               'اختر صفحة متاحة من قائمة المؤسسة.',
             )
           }}

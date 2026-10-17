@@ -12,6 +12,8 @@ import type { Organization } from './types'
 const props = defineProps<{
   workspace: string
   view: string
+  initialMembers?: string[]
+  initialTitle?: string
   initial?: {
     id: string
     title: string
@@ -20,7 +22,7 @@ const props = defineProps<{
   }
 }>()
 const emit = defineEmits<{ saved: [id: string]; close: [] }>()
-const key = `channel-editor:${user.value!.id}:${props.workspace}:${props.view}:${props.initial?.id || 'new'}`
+const key = `channel-editor:${user.value!.id}:${props.workspace}:${props.view}:${props.initial?.id || 'new'}:${[...(props.initialMembers || [])].sort().join(',')}`
 const people = ref<Organization>(),
   loading = ref(true),
   error = ref(''),
@@ -29,7 +31,7 @@ const people = ref<Organization>(),
   saved = ref(false)
 const draft = ref({
   id: props.initial?.id || crypto.randomUUID(),
-  title: props.initial?.title || '',
+  title: props.initial?.title || props.initialTitle || '',
   members: props.initial?.people.map((p) => p.id) || ([] as string[]),
   managers: props.initial?.people.filter((p) => p.manager).map((p) => p.id) || ([] as string[]),
 })
@@ -54,6 +56,7 @@ const command = useCommand<'save'>(
       method: 'POST',
       body: JSON.stringify(args),
     }),
+  { successMessage: l('Conversation details updated.', 'تم تحديث تفاصيل المحادثة.') },
 )
 const locked = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
 async function load() {
@@ -76,8 +79,14 @@ async function load() {
       })
     }
     if (!props.initial) {
-      draft.value.members = [people.value!.self.id]
+      draft.value.members = [...new Set([people.value!.self.id, ...(props.initialMembers || [])])]
       draft.value.managers = [people.value!.self.id]
+      if (props.initialMembers?.length === 1 && !draft.value.title) {
+        draft.value.title =
+          people.value!.members.find((m) => m.id === props.initialMembers![0])?.name ||
+          people.value!.names.find((m) => m.id === props.initialMembers![0])?.name ||
+          ''
+      }
     }
   } catch (e) {
     error.value = errorMessage(e)
@@ -154,7 +163,7 @@ onMounted(async () => {
                     'محادثة خاصة بهذين الشخصين. لا يستطيع الموظفون الآخرون الانضمام أو قراءة الرسائل والملفات.',
                   )
                 : l(
-                    'Only the people listed here can read and send messages. New participants can see the existing history. Organization administrators may explicitly join; they appear in this list.',
+                    'Only the people listed here can read and send messages. New participants can see the existing history. Institution administrators may explicitly join; they appear in this list.',
                     'الأشخاص المدرجون هنا فقط يستطيعون قراءة الرسائل وإرسالها. يرى المشاركون الجدد السجل السابق. يمكن لمسؤولي المؤسسة الانضمام بشكل صريح ويظهرون في هذه القائمة.',
                   )
             }}

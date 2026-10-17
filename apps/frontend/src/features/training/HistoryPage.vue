@@ -77,20 +77,65 @@ onMounted(load)
           /></RouterLink>
         </div>
       </div>
-      <section v-else class="empty-state panel">
-        <PhBarbell :size="40" aria-hidden="true" />
-        <h2>{{ t('noHistory') }}</h2>
-        <p>
-          {{
-            language(
-              'When you record a workout, you’ll find it here.',
-              'عندما تسجّل تمريناً، ستجده هنا.',
-            )
-          }}
-        </p>
+      <section v-else class="empty-state panel history-empty">
+        <span class="history-empty-icon"><PhBarbell :size="26" aria-hidden="true" /></span>
+        <div class="history-empty-copy">
+          <h2>{{ t('noHistory') }}</h2>
+          <p>
+            {{
+              language(
+                'When you record a workout, you’ll find it here.',
+                'عندما تسجّل تمريناً، ستجده هنا.',
+              )
+            }}
+          </p>
+        </div>
         <RouterLink class="button" :to="user ? '/today' : '/routine'"
           >{{ t('start') }}<PhArrowRight :size="20" class="directional" aria-hidden="true"
-        /></RouterLink></section
-    ></PageState>
+        /></RouterLink>
+      </section></PageState
+    >
   </div>
 </template>
+<style scoped>
+.history-empty {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 28px;
+}
+.history-empty-icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+  background: var(--surface-soft);
+  border-radius: 50%;
+}
+.history-empty-copy h2 {
+  margin: 0 0 6px;
+}
+.history-empty-copy p {
+  margin: 0;
+}
+.history-empty .button {
+  margin: 0;
+}
+@media (max-width: 600px) {
+  .history-empty {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 14px;
+    padding: 20px;
+  }
+  .history-empty-icon {
+    width: 44px;
+    height: 44px;
+  }
+  .history-empty .button {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+</style>

@@ -34,13 +34,12 @@ export function programContext(route: RouteLocationNormalizedLoaded) {
         catalog: await rows<Exercise>('exercises'),
       }
     },
-    command: async (action: 'save' | 'publish' | 'listing', args: Record<string, unknown>) => {
+    command: async (action: 'save' | 'publish', args: Record<string, unknown>) => {
       if (workspace)
         return request<{ plan: Plan; version?: PlanVersion }>(`${endpoint}/programs`, {
           method: 'POST',
           body: JSON.stringify({ ...args, action, view }),
         })
-      if (action === 'listing') throw Error('forbidden')
       const plan = await rpc<Plan>('save_plan', {
         p_id: args.id,
         p_title: args.title,

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { user, profile } from '../../app/auth'
 import { request } from '../../lib/backend'
@@ -26,7 +26,8 @@ const data = ref<Training>(),
   loading = ref(true),
   error = ref(''),
   busy = ref(false),
-  loadingMore = ref(false)
+  loadingMore = ref(false),
+  athleteFilter = ref<HTMLDetailsElement>()
 const today = new Intl.DateTimeFormat('en-CA', {
   timeZone: profile.value?.timezone || 'UTC',
   year: 'numeric',
@@ -66,7 +67,7 @@ async function load(append = false) {
   error.value = ''
   try {
     const result = await request<Training>(
-      `/v1/workspaces/${context.workspace}/delivery?history=true&view=${context.view}${append && data.value?.next ? '&before=' + data.value.next : ''}${selected.value ? '&member=' + selected.value : ''}`,
+      `/v1/workspaces/${context.workspace}/delivery?view=${context.view}${context.view === 'trainee' || selected.value ? '&history=true' : ''}${append && data.value?.next ? '&before=' + data.value.next : ''}${selected.value ? '&member=' + selected.value : ''}`,
     )
     if (seq !== generation) return
     if (append && data.value) result.sessions = [...data.value.sessions, ...result.sessions]
@@ -83,6 +84,11 @@ async function load(append = false) {
       loadingMore.value = false
     }
   }
+}
+async function openAthletePicker() {
+  if (athleteFilter.value) athleteFilter.value.open = true
+  await nextTick()
+  athleteFilter.value?.querySelector<HTMLInputElement>('input[type="search"]')?.focus()
 }
 watch(selected, async () => {
   await router.replace({ query: selected.value ? { member: selected.value } : {} })
@@ -117,7 +123,7 @@ onMounted(() => load())
   <div class="container page">
     <header class="work-heading">
       <div>
-        <p class="overline">{{ l('Organization training', 'تدريب المؤسسة') }}</p>
+        <p class="overline">{{ l('Institution training', 'تدريب المؤسسة') }}</p>
         <h1>
           {{
             context.view === 'trainee'
@@ -130,12 +136,12 @@ onMounted(() => load())
         v-if="context.view !== 'trainee'"
         class="button secondary"
         :to="context.base + '/plans'"
-        >{{ l('Choose a program', 'اختيار برنامج') }}</RouterLink
+        >{{ l('Programs', 'البرامج') }}</RouterLink
       >
     </header>
-    <details v-if="context.view !== 'trainee'" class="training-filter">
+    <details v-if="context.view !== 'trainee'" ref="athleteFilter" class="training-filter">
       <summary>
-        {{ l('Filter by trainee', 'تصفية حسب المتدرب')
+        {{ l('Filter by athlete', 'تصفية حسب الرياضي')
         }}{{ selected ? ' · ' + name(selected) : '' }}
       </summary>
       <MemberPicker
@@ -143,7 +149,7 @@ onMounted(() => load())
         :view="context.view"
         single
         :model-value="selected ? [selected] : []"
-        :label="l('Find a trainee', 'البحث عن متدرب')"
+        :label="l('Find an athlete', 'البحث عن رياضي')"
         @update:model-value="selected = $event[0] || ''"
         @options="
           people = Array.from(new Map([...people, ...$event].map((m) => [m.id, m])).values())
@@ -153,116 +159,166 @@ onMounted(() => load())
     <PageState :loading="loading" :error="!data ? error : ''" @retry="load()"
       ><p v-if="error && data" class="notice error" role="alert">{{ error }}</p>
       <template v-if="data"
-        ><section v-if="current" class="panel">
-          <p class="overline">{{ l('Current program', 'البرنامج الحالي') }}</p>
-          <h2>{{ current.version.title }}</h2>
-          <p>
-            {{
-              current.schedule_mode === 'cycle'
-                ? l('Follow your program cycle', 'اتبع دورة البرنامج')
-                : l('Choose a session that fits today', 'اختر الحصة المناسبة لليوم')
-            }}
-            · {{ current.start_date.slice(0, 10) }}
-          </p>
-          <div
-            v-for="day in current.version.prescription.days"
-            :key="day.id"
-            class="organization-session-row"
-          >
-            <div>
-              <strong>{{ locale === 'ar' ? day.nameAr || day.name : day.name }}</strong>
+        ><section
+          v-if="context.view !== 'trainee' && !selected"
+          class="empty-state panel training-empty"
+        >
+          <span class="training-empty-icon"><PhBarbell :size="26" aria-hidden="true" /></span>
+          <div class="training-empty-copy">
+            <h2>
+              {{ l('Choose an athlete to review their training.', 'اختر رياضياً لمراجعة تدريبه.') }}
+            </h2>
+            <p>
+              {{
+                l(
+                  'Select an athlete to see their active program, session history and assessment history.',
+                  'اختر رياضياً لعرض برنامجه النشط وسجل الحصص والتقييمات.',
+                )
+              }}
+            </p>
+          </div>
+          <button class="button" type="button" @click="openAthletePicker">
+            {{ l('Choose an athlete', 'اختيار رياضي') }}
+          </button>
+        </section>
+        <template v-else>
+          <section v-if="current" class="panel">
+            <p class="overline">{{ l('Current program', 'البرنامج الحالي') }}</p>
+            <h2>{{ current.version.title }}</h2>
+            <p>
+              {{
+                current.schedule_mode === 'cycle'
+                  ? l('Follow your program cycle', 'اتبع دورة البرنامج')
+                  : l('Choose a session that fits today', 'اختر الحصة المناسبة لليوم')
+              }}
+              · {{ current.start_date.slice(0, 10) }}
+            </p>
+            <div
+              v-for="day in current.version.prescription.days"
+              :key="day.id"
+              class="organization-session-row"
+            >
+              <div>
+                <strong>{{ locale === 'ar' ? day.nameAr || day.name : day.name }}</strong>
+                <p>
+                  {{
+                    day.restDay ? l('Recovery', 'تعافٍ') : day.minutes + ' ' + l('minutes', 'دقيقة')
+                  }}
+                  · {{ l('Week', 'الأسبوع') }} {{ day.week || 1 }} · {{ l('Day', 'اليوم') }}
+                  {{ (day.weekday || 0) + 1 }}
+                </p>
+              </div>
+              <button
+                v-if="context.view === 'trainee' && scheduled(day)"
+                class="button small"
+                :disabled="busy"
+                @click="begin(day)"
+              >
+                {{ l('Open session', 'فتح الحصة') }}
+              </button>
+            </div>
+            <RouterLink
+              v-if="context.view !== 'trainee'"
+              class="text-link"
+              :to="
+                context.base +
+                '/plans/new?source=' +
+                (current.version as PlanVersion & { program_id: string }).program_id +
+                '&member=' +
+                selected
+              "
+              >{{ l('Adapt this program', 'تكييف هذا البرنامج') }}</RouterLink
+            >
+          </section>
+          <section v-else class="empty-state panel training-empty">
+            <span class="training-empty-icon"><PhBarbell :size="26" aria-hidden="true" /></span>
+            <div class="training-empty-copy">
+              <h2>
+                {{
+                  context.view === 'trainee'
+                    ? l('No active program yet.', 'لا يوجد برنامج نشط بعد.')
+                    : l('No active program for this athlete.', 'لا يوجد برنامج نشط لهذا الرياضي.')
+                }}
+              </h2>
               <p>
                 {{
-                  day.restDay ? l('Recovery', 'تعافٍ') : day.minutes + ' ' + l('minutes', 'دقيقة')
+                  context.view === 'trainee'
+                    ? l(
+                        'Your institution will show your training here when a program is assigned.',
+                        'ستظهر تدريباتك هنا عندما تعيّن مؤسستك برنامجاً لك.',
+                      )
+                    : l(
+                        'Choose a published program to assign. Session history will appear here after the athlete starts training.',
+                        'اختر برنامجاً منشوراً لتعيينه. سيظهر سجل الحصص هنا بعد أن يبدأ الرياضي التدريب.',
+                      )
                 }}
-                · {{ l('Week', 'الأسبوع') }} {{ day.week || 1 }} · {{ l('Day', 'اليوم') }}
-                {{ (day.weekday || 0) + 1 }}
               </p>
             </div>
-            <button
-              v-if="context.view === 'trainee' && scheduled(day)"
-              class="button small"
-              :disabled="busy"
-              @click="begin(day)"
-            >
-              {{ l('Open session', 'فتح الحصة') }}
-            </button>
-          </div>
-          <RouterLink
-            v-if="context.view !== 'trainee'"
-            class="text-link"
-            :to="
-              context.base +
-              '/plans/new?source=' +
-              (current.version as PlanVersion & { program_id: string }).program_id +
-              '&member=' +
-              selected
-            "
-            >{{ l('Adapt this program', 'تكييف هذا البرنامج') }}</RouterLink
-          >
-        </section>
-        <p v-else-if="context.view === 'trainee' || selected" class="notice">
-          {{
-            l(
-              'There is no active program yet. Your organization can assign one when it is ready.',
-              'لا يوجد برنامج نشط بعد. يمكن لمؤسستك تعيينه عندما يصبح جاهزاً.',
-            )
-          }}
-        </p>
-        <section>
-          <div class="heading-actions">
-            <h2>{{ l('Session history', 'سجل الحصص') }}</h2>
             <RouterLink
-              v-if="selected || context.view === 'trainee'"
-              class="text-link"
-              :to="context.base + '/assessments/' + (selected || data.self)"
-              >{{ l('Assessment history', 'سجل التقييمات') }} ↗</RouterLink
+              v-if="context.view !== 'trainee'"
+              class="button secondary"
+              :to="context.base + '/plans'"
             >
-          </div>
-          <p v-if="!data.sessions.length" class="subtle">
-            {{
-              l(
-                'Recorded sessions will appear here, including their coach feedback.',
-                'ستظهر الحصص المسجلة هنا مع ملاحظات المدرب.',
-              )
-            }}
-          </p>
-          <RouterLink
-            v-for="s in data.sessions"
-            :key="s.id"
-            class="organization-session-row"
-            :to="
-              context.view === 'trainee'
-                ? '/workout/' + s.id + '?workspace=' + context.workspace
-                : context.base + '/review/' + s.id
-            "
-            ><div>
-              <strong>{{
-                context.view === 'trainee' ? s.prescription.name : name(s.member_id)
-              }}</strong>
-              <p>{{ s.title }} · {{ dateLabel(s.started_at) }}</p>
+              {{ l('Browse programs', 'استعراض البرامج') }}
+            </RouterLink>
+          </section>
+          <section v-if="current || data.sessions.length">
+            <div class="heading-actions">
+              <h2>{{ l('Session history', 'سجل الحصص') }}</h2>
+              <RouterLink
+                v-if="selected || context.view === 'trainee'"
+                class="text-link"
+                :to="context.base + '/assessments/' + (selected || data.self)"
+                >{{ l('Assessment history', 'سجل التقييمات') }} ↗</RouterLink
+              >
             </div>
-            <span>{{
-              s.status === 'completed'
-                ? s.reviewed_at
-                  ? l('Reviewed', 'تمت المراجعة')
-                  : l('Completed', 'مكتملة')
-                : l('In progress', 'قيد التنفيذ')
-            }}</span></RouterLink
-          >
-          <button
-            v-if="data.next"
-            class="button secondary"
-            :disabled="loadingMore"
-            @click="load(true)"
-          >
-            {{
-              loadingMore
-                ? l('Loading…', 'جارٍ التحميل…')
-                : l('Load earlier sessions', 'تحميل الحصص السابقة')
-            }}
-          </button>
-        </section></template
+            <p v-if="!data.sessions.length" class="empty-state-note">
+              {{
+                l(
+                  current
+                    ? 'No sessions have been recorded for this program yet.'
+                    : 'No sessions have been recorded for this athlete yet.',
+                  current ? 'لم تُسجّل حصص لهذا البرنامج بعد.' : 'لم تُسجّل حصص لهذا الرياضي بعد.',
+                )
+              }}
+            </p>
+            <RouterLink
+              v-for="s in data.sessions"
+              :key="s.id"
+              class="organization-session-row"
+              :to="
+                context.view === 'trainee'
+                  ? '/workout/' + s.id + '?workspace=' + context.workspace
+                  : context.base + '/review/' + s.id
+              "
+              ><div>
+                <strong>{{
+                  context.view === 'trainee' ? s.prescription.name : name(s.member_id)
+                }}</strong>
+                <p>{{ s.title }} · {{ dateLabel(s.started_at) }}</p>
+              </div>
+              <span>{{
+                s.status === 'completed'
+                  ? s.reviewed_at
+                    ? l('Reviewed', 'تمت المراجعة')
+                    : l('Completed', 'مكتملة')
+                  : l('In progress', 'قيد التنفيذ')
+              }}</span></RouterLink
+            >
+            <button
+              v-if="data.next"
+              class="button secondary"
+              :disabled="loadingMore"
+              @click="load(true)"
+            >
+              {{
+                loadingMore
+                  ? l('Loading…', 'جارٍ التحميل…')
+                  : l('Load earlier sessions', 'تحميل الحصص السابقة')
+              }}
+            </button>
+          </section></template
+        ></template
       ></PageState
     >
   </div>
@@ -296,5 +352,47 @@ onMounted(() => load())
 }
 .panel h2 {
   margin-bottom: 12px;
+}
+.training-empty {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 20px;
+  max-width: none;
+  margin: 0 0 28px;
+  padding: 24px 28px;
+}
+.training-empty-icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+  background: var(--surface-soft);
+  border-radius: 50%;
+}
+.training-empty-copy h2 {
+  margin: 0 0 6px;
+}
+.training-empty-copy p {
+  margin: 0;
+}
+.training-empty .button {
+  margin: 0;
+}
+@media (max-width: 680px) {
+  .training-empty {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 12px;
+    padding: 20px;
+  }
+  .training-empty-icon {
+    width: 40px;
+    height: 40px;
+  }
+  .training-empty .button {
+    grid-column: 2;
+    justify-self: start;
+  }
 }
 </style>

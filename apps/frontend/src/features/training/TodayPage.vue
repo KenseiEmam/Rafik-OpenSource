@@ -263,30 +263,79 @@ onMounted(load)
           /></RouterLink>
         </aside>
       </div>
-      <section v-else class="empty-state panel">
-        <p v-if="relationships.some((r) => r.state === 'archived')" class="notice">
-          {{
-            language(
-              'Your coaching relationship is paused. Your training history is still available.',
-              'علاقتك التدريبية متوقفة مؤقتاً. سجل تدريبك ما زال متاحاً.',
-            )
-          }}
-        </p>
-        <PhBarbell :size="40" weight="light" aria-hidden="true" />
-        <h2>{{ language('Your next workout starts here.', 'تمرينك القادم يبدأ هنا.') }}</h2>
-        <p>
-          {{
-            language(
-              'Open your coach’s invitation to see your plan. In the meantime, try a full-body sample.',
-              'افتح دعوة مدربك لرؤية خطتك. وحتى ذلك الحين، جرّب حصة لكامل الجسم.',
-            )
-          }}
-        </p>
-        <RouterLink class="button" to="/routine"
-          >{{ t('sample') }}<PhArrowRight :size="20" class="directional" aria-hidden="true"
-        /></RouterLink>
+      <section v-else class="empty-state panel training-empty">
+        <span class="training-empty-icon"><PhBarbell :size="28" aria-hidden="true" /></span>
+        <div>
+          <span v-if="relationships.some((r) => r.state === 'archived')" class="tag">
+            {{ language('Training paused', 'التدريب متوقف مؤقتاً') }}
+          </span>
+          <h2>
+            {{
+              relationships.some((r) => r.state === 'archived')
+                ? language('Your training relationship is paused.', 'علاقتك التدريبية متوقفة مؤقتاً.')
+                : language('Your next program will appear here.', 'سيظهر برنامجك التالي هنا.')
+            }}
+          </h2>
+          <p>
+            {{
+              relationships.some((r) => r.state === 'archived')
+                ? language(
+                    'Your training history is still available. Contact your coach when you are ready to resume.',
+                    'ما زال سجل تدريبك متاحاً. تواصل مع مدربك عندما تكون مستعداً للعودة.',
+                  )
+                : language(
+                    'When your coach assigns a program, your sessions and next steps will show here.',
+                    'عندما يعيّن مدربك برنامجاً، ستظهر حصصك وخطواتك التالية هنا.',
+                  )
+            }}
+          </p>
+          <RouterLink v-if="relationships.some((r) => r.state === 'archived')" to="/history" class="text-link">
+            {{ language('View training history', 'عرض سجل التدريب') }}
+            <PhArrowRight :size="18" class="directional" aria-hidden="true" />
+          </RouterLink>
+        </div>
       </section>
       <CoachingActivity
     /></PageState>
   </div>
 </template>
+<style scoped>
+.training-empty {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  align-items: start;
+  gap: 20px;
+  max-width: 780px;
+  margin-inline: 0;
+  padding: 28px;
+}
+.training-empty-icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+  background: var(--surface-soft);
+  border-radius: 50%;
+}
+.training-empty h2 {
+  margin: 0 0 8px;
+}
+.training-empty p {
+  margin: 0;
+}
+.training-empty .text-link {
+  margin-top: 16px;
+}
+@media (max-width: 600px) {
+  .training-empty {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 14px;
+    padding: 20px;
+  }
+  .training-empty-icon {
+    width: 44px;
+    height: 44px;
+  }
+}
+</style>

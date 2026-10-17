@@ -70,7 +70,7 @@ onMounted(() => load())
     <div class="page-heading heading-actions">
       <div>
         <p class="overline">{{ t('coaching') }}</p>
-        <h1>{{ language('Plans', 'الخطط') }}</h1>
+        <h1>{{ language('Programs', 'البرامج') }}</h1>
         <p>
           {{
             language(
@@ -122,6 +122,14 @@ onMounted(() => load())
                   : language('Adaptable', 'قابل للتكييف')
             }}
           </p>
+          <p v-if="p.listed" class="small-print">
+            {{
+              language(
+                'Shared in the institution library. Coaches can assign it to athletes they are responsible for.',
+                'تمت مشاركة البرنامج في مكتبة المؤسسة. يمكن للمدربين تعيينه للرياضيين المسؤولين عنهم.',
+              )
+            }}
+          </p>
           <p>
             {{ p.draft.days.filter((d) => !d.restDay).length }} {{ language('sessions', 'حصص') }} ·
             {{ p.draft.cycleWeeks || 1 }} {{ language('week cycle', 'أسبوع للدورة') }}
@@ -136,11 +144,11 @@ onMounted(() => load())
         ></RouterLink>
       </div>
       <section v-else-if="!search && context.view === 'trainee'" class="empty-state panel">
-        <h2>{{ language('Your organization’s program library.', 'مكتبة برامج مؤسستك.') }}</h2>
+        <h2>{{ language('Your institution’s program library.', 'مكتبة برامج مؤسستك.') }}</h2>
         <p>
           {{
             language(
-              'Programs appear here when your organization makes them available. Assigned training is in your Training workspace.',
+              'Programs appear here when your institution makes them available. Assigned training is in your Training workspace.',
               'تظهر البرامج عندما تتيحها مؤسستك. التدريب المعيّن موجود في مساحة التدريب.',
             )
           }}
@@ -150,17 +158,14 @@ onMounted(() => load())
         }}</RouterLink>
       </section>
       <section v-else-if="!search" class="empty-state panel">
-        <PhBarbell :size="40" aria-hidden="true" />
         <h2>
-          {{
-            language('A starter is better than a blank page.', 'الخطة الأولية أفضل من صفحة فارغة.')
-          }}
+          {{ language('No programs yet', 'لا توجد برامج بعد') }}
         </h2>
         <p>
           {{
             language(
-              'Your first plan begins with two simple full-body sessions. Edit it to suit your client.',
-              'ابدأ بحصتين بسيطتين لكامل الجسم، وعدّلهما لمتدربك.',
+              'Create a program using exercises from your institution library, then publish it when it is ready.',
+              'أنشئ برنامجاً باستخدام تمارين مكتبة المؤسسة، ثم انشره عندما يصبح جاهزاً.',
             )
           }}
         </p>

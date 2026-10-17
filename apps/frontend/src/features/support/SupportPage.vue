@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { getDraft, storeDraft } from '../../lib/storage'
 import { user } from '../../app/auth'
-import { rows, rpc, localPreview } from '../../lib/backend'
+import { rows, rpc } from '../../lib/backend'
 import { language as l, errorMessage, dateLabel } from '../../lib/i18n'
 import type { Database } from '@rafik/shared/database.types'
 import type { Team, Enrollment } from '../teams/types'
@@ -124,11 +124,11 @@ onMounted(async () => {
       </p>
     </header>
     <CommandStatus :command="command" /><PageState :loading="loading" :error="error" @retry="load"
-      ><p v-if="localPreview" class="notice">
+      ><p class="notice">
         {{
           l(
-            'Local support records only. No live support team or outbound email is connected.',
-            'سجلات دعم محلية فقط. لا يوجد فريق دعم مباشر أو بريد صادر متصل.',
+            'Requests stay in this installation. Nothing is emailed or sent to Rafik. Rafik-directed requests are visible to an authorized platform administrator; institution requests are visible to the selected team’s admins. Do not include athlete health details or private files.',
+            'تبقى الطلبات في هذا التثبيت. لا يتم إرسال بريد أو إرسال معلومات إلى رفيق. يمكن لمسؤول المنصة المخوّل رؤية الطلبات الموجّهة إلى رفيق، ويمكن لمسؤولي الفريق المحدد رؤية طلبات المؤسسة. لا تُدرج تفاصيل صحية للرياضيين أو ملفات خاصة.',
           )
         }}
       </p>
@@ -227,7 +227,9 @@ onMounted(async () => {
             <label
               >{{ l('Send request to', 'توجيه الطلب إلى')
               }}<select v-model="team">
-                <option value="">{{ l('Rafik support', 'دعم رفيق') }}</option>
+                <option value="">
+                  {{ l('Rafik support (local only)', 'دعم رفيق (محلي فقط)') }}
+                </option>
                 <option v-for="t in options" :key="t.id" :value="t.id">{{ t.name }}</option>
               </select></label
             >

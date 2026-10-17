@@ -1,18 +1,37 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { request } from '../../lib/backend'
-import { user, refreshContexts } from '../../app/auth'
+import { api, request } from '../../lib/backend'
+import { user, refreshContexts, refreshProfile } from '../../app/auth'
 import { language as l, errorMessage } from '../../lib/i18n'
+import { passwordPattern, strongPassword } from '@rafik/shared/password'
 const route = useRoute(),
-  router = useRouter(),
-  data = ref<{ organization: string; roles: string[]; state: string }>(),
-  error = ref(''),
+  router = useRouter()
+const data = ref<{
+  organization: string
+  email: string
+  roles: string[]
+  state: string
+  expires_at: string
+}>()
+const email = ref(''),
+  name = ref(''),
+  password = ref(''),
+  confirm = ref('')
+const error = ref(''),
   busy = ref(false)
 const path = '/v1/organization-invitations/' + route.params.token
 onMounted(async () => {
   try {
-    data.value = await request(path)
+    const invitation = await request<{
+      organization: string
+      email: string
+      roles: string[]
+      state: string
+      expires_at: string
+    }>(path)
+    data.value = invitation
+    email.value = invitation.email
   } catch (e) {
     error.value = errorMessage(e)
   }
@@ -33,6 +52,36 @@ async function accept() {
     busy.value = false
   }
 }
+async function createAccount() {
+  if (password.value !== confirm.value) {
+    error.value = l('The passwords do not match.', 'كلمتا المرور غير متطابقتين.')
+    return
+  }
+  if (!strongPassword(password.value)) {
+    error.value = l(
+      'Use 8–128 characters with an uppercase letter, a lowercase letter, a number and a symbol.',
+      'استخدم ٨–١٢٨ حرفاً، مع حرف كبير وحرف صغير ورقم ورمز.',
+    )
+    return
+  }
+  busy.value = true
+  error.value = ''
+  try {
+    const result = await api.acceptInvitation({
+      token: String(route.params.token),
+      email: email.value.trim().toLowerCase(),
+      name: name.value.trim(),
+      password: password.value,
+    })
+    user.value = result.user
+    await refreshProfile()
+    await router.replace(`/organization/${result.workspace_id}/${result.role || 'trainee'}`)
+  } catch (e) {
+    error.value = errorMessage(e)
+  } finally {
+    busy.value = false
+  }
+}
 </script>
 <template>
   <div class="container page narrow">
@@ -40,19 +89,19 @@ async function accept() {
       {{
         data
           ? l('Join ' + data.organization, 'الانضمام إلى ' + data.organization)
-          : l('Organization invitation', 'دعوة المؤسسة')
+          : l('Institution invitation', 'دعوة المؤسسة')
       }}
     </h1>
     <p v-if="error" class="notice error" role="alert">{{ error }}</p>
-    <template v-if="data"
-      ><p>
-        {{ l('Your access:', 'صلاحياتك:') }}
+    <section v-if="data" class="panel form-stack">
+      <p>
+        {{ l('Your institution access:', 'صلاحياتك في المؤسسة:') }}
         {{
           data.roles
             .map((r) =>
               l(
-                { admin: 'Administrator', trainer: 'Trainer', trainee: 'Trainee' }[r] || r,
-                { admin: 'مسؤول', trainer: 'مدرب', trainee: 'متدرب' }[r] || r,
+                { admin: 'Administrator', trainer: 'Trainer', trainee: 'Athlete' }[r] || r,
+                { admin: 'مسؤول', trainer: 'مدرب', trainee: 'رياضي' }[r] || r,
               ),
             )
             .join(' · ')
@@ -61,19 +110,74 @@ async function accept() {
       <p>
         {{
           l(
-            'This joins the organization’s training workspace. It does not share your independent coaching or personal tracking.',
-            'تنضم إلى مساحة التدريب بالمؤسسة دون مشاركة تدريبك المستقل أو بياناتك الشخصية.',
+            'This one-time invitation link expires in seven days. The email address identifies your account; it is not verified. Share this link only with its intended user.',
+            'ينتهي رابط الدعوة لمرة واحدة بعد سبعة أيام. يعرّف البريد حسابك لكنه لا يُتحقق منه. شارك الرابط مع الشخص المقصود فقط.',
           )
         }}
       </p>
-      <button v-if="user" class="button" :disabled="busy" @click="accept">
-        {{ l('Accept invitation', 'قبول الدعوة') }}</button
-      ><RouterLink
-        v-else
-        class="button"
-        :to="'/login?next=' + encodeURIComponent(route.fullPath)"
-        >{{ l('Sign in to accept', 'سجّل الدخول للقبول') }}</RouterLink
-      ></template
-    >
+      <template v-if="user">
+        <p>
+          {{ l('Signed in as', 'مسجل باسم') }} <strong dir="ltr">{{ user.email }}</strong>
+        </p>
+        <button class="button" :disabled="busy" @click="accept">
+          {{ busy ? l('Joining…', 'جارٍ الانضمام…') : l('Accept invitation', 'قبول الدعوة') }}
+        </button>
+      </template>
+      <template v-else>
+        <form class="form-stack" @submit.prevent="createAccount">
+          <h2>{{ l('Set up your account', 'إعداد حسابك') }}</h2>
+          <label for="invite-name">{{ l('Your full name', 'اسمك الكامل') }}</label>
+          <input id="invite-name" v-model="name" autocomplete="name" maxlength="80" required />
+          <label for="invite-email">{{
+            l('Sign-in email', 'البريد المستخدم لتسجيل الدخول')
+          }}</label>
+          <input
+            id="invite-email"
+            v-model="email"
+            type="email"
+            autocomplete="username"
+            maxlength="254"
+            required
+          />
+          <label for="invite-password">{{ l('Create a password', 'أنشئ كلمة مرور') }}</label>
+          <input
+            id="invite-password"
+            v-model="password"
+            type="password"
+            autocomplete="new-password"
+            minlength="8"
+            maxlength="128"
+            :pattern="passwordPattern"
+            required
+          />
+          <p class="small-print">
+            {{
+              l(
+                'Use 8–128 characters and include an uppercase letter, a lowercase letter, a number and a symbol (spaces do not count as symbols).',
+                'استخدم ٨–١٢٨ حرفاً، وأدرج حرفاً كبيراً وحرفاً صغيراً ورقماً ورمزاً (المسافة لا تُحسب رمزاً).',
+              )
+            }}
+          </p>
+          <label for="invite-confirm">{{ l('Confirm password', 'تأكيد كلمة المرور') }}</label>
+          <input
+            id="invite-confirm"
+            v-model="confirm"
+            type="password"
+            autocomplete="new-password"
+            minlength="8"
+            maxlength="128"
+            :pattern="passwordPattern"
+            required
+          />
+          <button class="button" :disabled="busy">
+            {{
+              busy
+                ? l('Creating account…', 'جارٍ إنشاء الحساب…')
+                : l('Create account and join', 'إنشاء الحساب والانضمام')
+            }}
+          </button>
+        </form>
+      </template>
+    </section>
   </div>
 </template>

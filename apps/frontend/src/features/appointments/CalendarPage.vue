@@ -252,9 +252,9 @@ onMounted(async () => {
       </div>
       <div class="progress-filters">
         <TimezonePicker v-model="viewZone" :label="l('View times in', 'عرض الأوقات حسب')" /><label
-          >{{ coach ? l('Client', 'المتدرب') : l('Coach', 'المدرب')
+          >{{ coach ? l('Athlete', 'الرياضي') : l('Coach', 'المدرب')
           }}<select v-model="relation" @change="selectRelation">
-            <option v-if="coach" value="">{{ l('All clients', 'كل المتدربين') }}</option>
+            <option v-if="coach" value="">{{ l('All athletes', 'كل المتدربين') }}</option>
             <option v-for="r in relationships" :key="r.id" :value="r.id">{{ name(r.id) }}</option>
           </select></label
         ><label class="check-label"

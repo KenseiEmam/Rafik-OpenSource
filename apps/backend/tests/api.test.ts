@@ -2,11 +2,23 @@ import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomBytes, randomUUID, createHash } from "node:crypto";
 import { db } from "../server/db.ts";
+import { passwordHash, validatePassword } from "../server/auth.ts";
 const origin = "http://127.0.0.1:55331";
 const identities: string[] = [];
 after(async () => {
   for (const id of identities) await db.users.deleteMany({ where: { id } });
   await db.$disconnect();
+});
+test("new passwords require length and character classes", () => {
+  assert.equal(validatePassword("Rafik2026!"), "Rafik2026!");
+  for (const value of [
+    "Short1!",
+    "alllowercase1!",
+    "ALLUPPERCASE1!",
+    "NoNumber!!",
+    "NoSymbol123",
+  ])
+    assert.throws(() => validatePassword(value));
 });
 async function person() {
   const id = randomUUID(),
@@ -47,21 +59,25 @@ async function call(
     cookie: response.headers.get("set-cookie") || "",
   };
 }
-test("email codes are single-use, sessions are HttpOnly and logout revokes the server session", async () => {
-  const email = `verify-${randomUUID()}@rafik.test`;
-  assert.equal((await call("/v1/auth/request-code", { email })).status, 200);
-  const mail = await db.mail_messages.findFirstOrThrow({ where: { email } });
-  const result = await call("/v1/auth/verify-code", {
-    email,
-    token: mail.body,
+test("password sign-in creates an HttpOnly session and logout revokes it", async () => {
+  const email = `password-${randomUUID()}@rafik.test`,
+    password = "University test password 2026!";
+  const created = await db.users.create({
+    data: { email, password_hash: await passwordHash(password) },
   });
+  identities.push(created.id);
+  assert.equal(
+    (
+      await call("/v1/auth/password-login", {
+        email,
+        password: "incorrect password",
+      })
+    ).status,
+    401,
+  );
+  const result = await call("/v1/auth/password-login", { email, password });
   assert.equal(result.status, 200);
   assert.match(result.cookie, /HttpOnly/);
-  identities.push(result.data.user.id);
-  assert.equal(
-    (await call("/v1/auth/verify-code", { email, token: mail.body })).status,
-    400,
-  );
   const cookie = result.cookie.split(";")[0];
   assert.equal(
     (await call("/v1/auth/session", undefined, cookie)).data.user.email,
@@ -72,21 +88,30 @@ test("email codes are single-use, sessions are HttpOnly and logout revokes the s
     (await call("/v1/auth/session", undefined, cookie)).data.user,
     null,
   );
-  await db.mail_messages.deleteMany({ where: { email } });
 });
-test("five incorrect guesses consume the challenge, and a foreign origin cannot mutate", async () => {
-  const email = `guess-${randomUUID()}@rafik.test`;
-  await call("/v1/auth/request-code", { email });
-  const mail = await db.mail_messages.findFirstOrThrow({ where: { email } });
-  const wrong = mail.body === "000000" ? "111111" : "000000";
-  for (let i = 0; i < 5; i++)
-    assert.equal(
-      (await call("/v1/auth/verify-code", { email, token: wrong })).status,
-      400,
-    );
+test("setup status closes registration after an institution exists and a foreign origin cannot mutate", async () => {
+  assert.deepEqual((await call("/v1/auth/setup-status")).data, {
+    initialized: true,
+  });
   assert.equal(
-    (await call("/v1/auth/verify-code", { email, token: mail.body })).status,
-    400,
+    (
+      await call("/v1/auth/setup", {
+        email: `setup-${randomUUID()}@rafik.test`,
+        name: "Setup Probe",
+        institution: "Setup Probe Institution",
+        password: "University test password 2026!",
+      })
+    ).status,
+    409,
+  );
+  assert.equal(
+    (
+      await call("/v1/auth/verify-code", {
+        email: "nobody@example.test",
+        token: "000000",
+      })
+    ).status,
+    404,
   );
   assert.equal(
     (
@@ -96,8 +121,6 @@ test("five incorrect guesses consume the challenge, and a foreign origin cannot 
     ).status,
     403,
   );
-  await db.mail_messages.deleteMany({ where: { email } });
-  await db.challenges.deleteMany({ where: { email } });
 });
 test("pooled transactions cannot leak actors; query and command identifiers are bounded", async () => {
   const a = await person(),

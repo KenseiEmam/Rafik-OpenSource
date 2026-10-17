@@ -5,9 +5,10 @@ export function assertLocalRelease({
   branch,
   webEnvironment,
 }) {
-  if (nodeVersion !== "v22.16.0")
-    throw Error("Use the pinned Node 22.16.0 before verification.");
-  if (!config.startsWith('name: rafik-prisma-local') || linked)
+  const [major, minor] = nodeVersion.replace(/^v/, "").split(".").map(Number);
+  if (!((major === 22 && minor >= 16) || major === 24))
+    throw Error("Use Node 22.16 or Node 24 before verification.");
+  if (!config.startsWith('name: ${RAFIK_INSTANCE_ID:-rafik-prisma-local}') || linked)
     throw Error(
       "Local identity guard failed; no linked remote project is allowed.",
     );

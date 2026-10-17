@@ -18,11 +18,6 @@ if (local) {
     );
 } else {
   const origin = process.env.RAFIK_PUBLIC_ORIGIN || "";
-  const email = process.env.RAFIK_BOOTSTRAP_EMAIL || "";
-  const smtpHost = process.env.RAFIK_SMTP_HOST || "";
-  const smtpPort = Number(process.env.RAFIK_SMTP_PORT || 0);
-  const smtpTlsMode = process.env.RAFIK_SMTP_TLS_MODE || "";
-  const sender = process.env.RAFIK_MAIL_FROM || "";
   const files = process.env.RAFIK_PRIVATE_FILES_DIR || "";
   const apiPassword = process.env.RAFIK_API_PASSWORD || "";
   const problems: string[] = [];
@@ -51,21 +46,6 @@ if (local) {
   } catch {
     problems.push("RAFIK_PUBLIC_ORIGIN");
   }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-    problems.push("RAFIK_BOOTSTRAP_EMAIL");
-  if (!/^[A-Za-z0-9.-]+$/.test(smtpHost)) problems.push("RAFIK_SMTP_HOST");
-  if (!Number.isInteger(smtpPort) || smtpPort < 1 || smtpPort > 65535)
-    problems.push("RAFIK_SMTP_PORT");
-  if (!new Set(["starttls", "implicit"]).has(smtpTlsMode))
-    problems.push("RAFIK_SMTP_TLS_MODE");
-  if (!process.env.RAFIK_SMTP_USER) problems.push("RAFIK_SMTP_USER");
-  if (!process.env.RAFIK_SMTP_PASSWORD) problems.push("RAFIK_SMTP_PASSWORD");
-  if (
-    !sender ||
-    /[\r\n]/.test(sender) ||
-    !/^(?:[^<>]*<)?[^\s<>@]+@[^\s<>@]+(?:>)?$/.test(sender)
-  )
-    problems.push("RAFIK_MAIL_FROM");
   if (!files.startsWith("/")) problems.push("RAFIK_PRIVATE_FILES_DIR");
   if (process.env.HOST !== "0.0.0.0") problems.push("HOST");
   if (problems.length)
@@ -97,6 +77,16 @@ export async function asActor<T>(
     },
     { timeout: 15000 },
   );
+}
+export async function ensureProfileInTransaction(
+  tx: Prisma.TransactionClient,
+  actor: Actor,
+  name: string,
+) {
+  await tx.$executeRawUnsafe("SET LOCAL ROLE rafik_user");
+  await tx.$queryRaw`SELECT set_config('rafik.actor',${actor.id},true),set_config('rafik.claims',${JSON.stringify({ sub: actor.id, email: actor.email })},true)`;
+  await tx.$queryRaw`SELECT public.ensure_profile(${name},'en','UTC')`;
+  await tx.$executeRawUnsafe("RESET ROLE");
 }
 export class ApiError extends Error {
   constructor(

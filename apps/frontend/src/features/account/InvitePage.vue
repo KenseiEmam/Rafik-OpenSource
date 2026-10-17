@@ -61,8 +61,8 @@ onMounted(load)
           {{ language('Coach', 'المدرب') }} <strong>{{ invite.coach_name }}</strong>
           {{
             language(
-              'has a training plan for you. Verify your email to open your private assignment.',
-              'لديه خطة تدريب لك. تحقق من بريدك لفتح خطتك الخاصة.',
+              'has a training plan for you. Sign in with the account your institution administrator created to open your private assignment.',
+              'لديه خطة تدريب لك. سجّل الدخول بالحساب الذي أنشأه مسؤول مؤسستك لفتح خطتك الخاصة.',
             )
           }}
         </p>
@@ -73,7 +73,7 @@ onMounted(load)
                 ? t('loading')
                 : user
                   ? language('Accept and open my plan', 'قبول وفتح خطتي')
-                  : language('Verify my email', 'التحقق من بريدي')
+                  : language('Sign in to accept', 'سجّل الدخول للقبول')
             }}<PhArrowRight :size="19" class="directional" aria-hidden="true" />
           </button>
           <div v-if="user" class="small-print">

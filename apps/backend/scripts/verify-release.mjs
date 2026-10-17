@@ -128,7 +128,6 @@ try {
       "test:communication",
       "test:organization-assets",
       "test:organization-tasks",
-      "test:organization-packages",
       "test:organization-feedback",
       "test:operations",
       "content:check",

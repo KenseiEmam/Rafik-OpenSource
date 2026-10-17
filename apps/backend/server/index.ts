@@ -1,7 +1,8 @@
 import type { ApiErrorBody } from "@rafik/shared/contracts";
 import { feedback, feedbackCommand } from "./organization-feedback.ts";
-import { packages, packageCommand } from "./organization-packages.ts";
 import { tasks, taskCommand, followUp } from "./organization-tasks.ts";
+import { injuries, injuryCommand } from "./organization-injuries.ts";
+import { startInjuryRetention } from "./organization-injury-retention.ts";
 import {
   putOrganizationAsset,
   getOrganizationAsset,
@@ -43,7 +44,7 @@ import {
   type IncomingMessage,
   type ServerResponse,
 } from "node:http";
-import { db, ApiError, requireActor, local } from "./db.ts";
+import { db, ApiError, requireActor } from "./db.ts";
 import { identify, authRoute } from "./auth.ts";
 import {
   command,
@@ -85,7 +86,6 @@ import {
   exerciseVideoAsset,
   videoRange,
 } from "./public-catalog.ts";
-import { localInbox } from "./local-inbox.ts";
 const origins = new Set([
   ...(process.env.RAFIK_PUBLIC_ORIGIN ? [process.env.RAFIK_PUBLIC_ORIGIN] : []),
   ...(process.env.RAFIK_TEST_ORIGINS
@@ -147,28 +147,6 @@ const server = createServer(async (req, res) => {
     if (path === "/health" && req.method === "GET") {
       await db.$queryRaw`SELECT 1`;
       send(res, 200, { ok: true, runtime: "prisma-postgresql" });
-      return;
-    }
-    if (path === "/local/inbox" && local && req.method === "GET") {
-      res.writeHead(200, {
-        "Content-Type": "text/html; charset=utf-8",
-        "Cache-Control": "no-store",
-        "Content-Security-Policy":
-          "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; frame-ancestors 'none'",
-      });
-      res.end(await localInbox());
-      return;
-    }
-    if (path === "/local/mail" && local && req.method === "GET") {
-      send(
-        res,
-        200,
-        await db.mail_messages.findMany({
-          where: { expires_at: { gt: new Date() } },
-          orderBy: { created_at: "desc" },
-          take: 100,
-        }),
-      );
       return;
     }
     if (req.method === "GET" && path === "/v1/catalog/foods") {
@@ -528,6 +506,19 @@ const server = createServer(async (req, res) => {
       );
       return;
     }
+    const injuryMatch = path.match(
+      /^\/v1\/workspaces\/([a-f0-9-]{36})\/injuries$/,
+    );
+    if (injuryMatch) {
+      const who = requireActor(actor),
+        id = injuryMatch[1];
+      if (req.method === "GET")
+        send(res, 200, await injuries(who, id, url.searchParams));
+      else if (req.method === "POST")
+        send(res, 200, await injuryCommand(who, id, input));
+      else throw new ApiError(405, "method_not_allowed");
+      return;
+    }
     const feedbackMatch = path.match(
       /^\/v1\/workspaces\/([a-f0-9-]{36})\/feedback$/,
     );
@@ -538,19 +529,6 @@ const server = createServer(async (req, res) => {
         send(res, 200, await feedback(who, id, url.searchParams));
       else if (req.method === "POST")
         send(res, 200, await feedbackCommand(who, id, input));
-      else throw new ApiError(405, "method_not_allowed");
-      return;
-    }
-    const packageMatch = path.match(
-      /^\/v1\/workspaces\/([a-f0-9-]{36})\/packages$/,
-    );
-    if (packageMatch) {
-      const who = requireActor(actor),
-        id = packageMatch[1];
-      if (req.method === "GET")
-        send(res, 200, await packages(who, id, url.searchParams));
-      else if (req.method === "POST")
-        send(res, 200, await packageCommand(who, id, input));
       else throw new ApiError(405, "method_not_allowed");
       return;
     }
@@ -720,7 +698,8 @@ const server = createServer(async (req, res) => {
     if (
       path.startsWith("/v1/auth/") &&
       (req.method === "POST" ||
-        (req.method === "GET" && path.endsWith("/session")))
+        (req.method === "GET" &&
+          (path.endsWith("/session") || path.endsWith("/setup-status"))))
     ) {
       send(res, 200, await authRoute(path.slice(9), input, req, res));
       return;
@@ -804,6 +783,7 @@ server.listen(
         (process.env.PORT || 55331),
     ),
 );
+startInjuryRetention();
 for (const signal of ["SIGINT", "SIGTERM"] as const)
   process.on(signal, () =>
     server.close(() => void db.$disconnect().then(() => process.exit(0))),

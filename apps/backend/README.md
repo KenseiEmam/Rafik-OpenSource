@@ -1,6 +1,6 @@
 # Backend application
 
-This workspace contains the TypeScript API, Prisma/PostgreSQL schema and migrations, canonical content, and backend tests. It is part of the [Rafik monorepo](../../README.md). The API still implements the existing gym/training-organization workflows; university hosting and product workflows are not yet implemented.
+This workspace contains the TypeScript API, Prisma/PostgreSQL schema and migrations, canonical content, and backend tests. It is part of the [Rafik monorepo](../../README.md). The API provides the self-hosted university web product, including first-run super-admin setup, password sign-in, one-time invitations and institution-scoped workflows.
 
 ## Local operation
 
@@ -20,8 +20,8 @@ Start the web app separately with `npm run dev`. The single local PostgreSQL Com
 
 - `prisma/schema.prisma` and `prisma/migrations/` own database structure and forward migrations.
 - `server/` owns identity/session handling, authorization, domain operations and private-file access.
-- `content/` owns canonical content and media sources. Follow the [content rights guide](../../docs/implementation/content.md) before importing material.
+- `content/` owns canonical content and media sources. Follow the [content rights guide](../../docs/reference/content-maintenance.md) before importing material.
 - `scripts/prisma/types.ts` generates shared database transport types in `packages/shared/`; do not edit them directly.
 - Shared API request/response types are in `packages/shared/src/contracts.ts`.
 
-Use the single [contributor guide](../../CONTRIBUTING.md), [architecture](../../docs/implementation/architecture.md), [maintainer guide](../../docs/implementation/maintainer-guide.md), [runbook](../../docs/implementation/runbook.md) and [verification record](../../docs/implementation/verification.md). Root scripts provide workspace commands such as `npm run backend:typecheck`, `npm run test:api`, and `npm run content:check`.
+Use the single [contributor guide](../../CONTRIBUTING.md), [current architecture](../../docs/architecture/README.md), [maintainer guide](../../docs/development/maintainer-guide.md), [runbook](../../docs/operations/README.md) and [verification record](../../docs/verification/README.md). Root scripts provide workspace commands such as `npm run backend:typecheck`, `npm run test:api`, and `npm run content:check`.

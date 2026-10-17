@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import PackageFunding from './PackageFunding.vue'
 import TimezonePicker from '../../components/TimezonePicker.vue'
 import { computed, onMounted, ref, watch, nextTick, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -20,7 +19,7 @@ const route = useRoute(),
   id = String(route.params.workspace),
   view = String(route.params.view),
   base = `/organization/${id}/${view}`,
-  key = `event-composer:${user.value!.id}:${id}:${view}:${route.query.package || route.query.makeup || 'general'}`
+  key = `event-composer:${user.value!.id}:${id}:${view}:${route.query.makeup || 'general'}`
 const stepPanel = ref<HTMLElement>()
 const data = ref<Organization>(),
   templates = ref<AssessmentTemplate[]>([]),
@@ -46,23 +45,12 @@ const draft = ref({
   count: 1,
   every: 7,
   location: '',
-  fundingMode: 'independent',
-  independentReason: 'other',
-  funding: {} as Record<string, { package_id: string | null; independent_reason: string }>,
 })
 let disposed = false,
   draftGeneration = 0
 onUnmounted(() => {
   disposed = true
 })
-watch(
-  () => draft.value.participants,
-  () => {
-    for (const member of draft.value.participants)
-      draft.value.funding[member] ||= { package_id: null, independent_reason: 'other' }
-  },
-  { deep: true },
-)
 watch(step, async () => {
   await nextTick()
   stepPanel.value?.focus()
@@ -73,7 +61,6 @@ const people = computed(
   ),
   staff = computed(() => trainerOptions.value)
 const chosen = computed(() => people.value.filter((m) => draft.value.participants.includes(m.id)))
-const fundingTitles = ref<Record<string, string>>({})
 const selectedTemplate = computed(() => templates.value.find((t) => t.id === draft.value.template))
 const templateSearch = ref(''),
   groupSearch = ref(''),
@@ -137,14 +124,20 @@ const command = useCommand<'create'>(
   },
   (_, args) =>
     request(`/v1/workspaces/${id}/calendar`, { method: 'POST', body: JSON.stringify(args) }),
+  { successMessage: l('Calendar event scheduled.', 'تمت جدولة الحدث في التقويم.') },
 )
 const locked = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
 function groupMembers() {
   const selected = groups.value.find((g) => g.id === group.value)
-  if (selected)
+  if (selected) {
     draft.value.participants = selected.members
       .filter((m) => m.active && m.roles.includes('trainee') && !draft.value.staff.includes(m.id))
       .map((m) => m.id)
+    if (view === 'admin')
+      draft.value.staff = selected.members
+        .filter((m) => m.active && m.roles.includes('trainer'))
+        .map((m) => m.id)
+  }
 }
 async function advance() {
   error.value = ''
@@ -173,21 +166,12 @@ function submit() {
     action: 'create',
     operation: crypto.randomUUID(),
     template_revision: selectedTemplate.value?.revision,
-    funding: draft.value.participants.map((member) => ({
-      member,
-      makeup_for:
-        route.query.makeup &&
-        member === String(route.query.member) &&
-        (draft.value.fundingMode === 'independent'
-          ? draft.value.independentReason === 'makeup'
-          : draft.value.funding[member]?.package_id ||
-            draft.value.funding[member]?.independent_reason === 'makeup')
-          ? String(route.query.makeup)
-          : null,
-      ...(draft.value.fundingMode === 'independent'
-        ? { package_id: null, independent_reason: draft.value.independentReason }
-        : draft.value.funding[member]),
-    })),
+    makeups: draft.value.participants
+      .filter((member) => route.query.makeup && member === String(route.query.member))
+      .map((member) => ({
+        member,
+        makeup_for: String(route.query.makeup),
+      })),
   })
 }
 const timeLabel = (value: string) =>
@@ -219,9 +203,7 @@ onMounted(async () => {
   await load()
   const stored = await getDraft<typeof draft.value>(key).catch(() => undefined)
   if (stored) {
-    draft.value = { ...draft.value, ...stored, funding: stored.funding || {} }
-    for (const member of draft.value.participants)
-      draft.value.funding[member] ||= { package_id: null, independent_reason: 'other' }
+    draft.value = { ...draft.value, ...stored }
     try {
       if (stored.template && !templates.value.some((t) => t.id === stored.template)) {
         const page = await request<{ items: AssessmentTemplate[] }>(
@@ -233,42 +215,8 @@ onMounted(async () => {
       error.value = errorMessage(e)
     }
   }
-  if (!stored && route.query.package && route.query.member) {
-    try {
-      const result = await request<{
-        item: {
-          id: string
-          member_id: string
-          title: string
-          timezone: string
-          starts_on: string
-          ends_on: string
-        }
-      }>(
-        `/v1/workspaces/${id}/packages?view=${view}&id=${encodeURIComponent(String(route.query.package))}`,
-      )
-      if (result.item.member_id !== String(route.query.member)) throw Error('package_unavailable')
-      draft.value.participants = [result.item.member_id]
-      draft.value.fundingMode = 'individual'
-      draft.value.funding[result.item.member_id] = {
-        package_id: result.item.id,
-        independent_reason: '',
-      }
-      draft.value.title = result.item.title
-      draft.value.zone = result.item.timezone
-      const tomorrow = addDays(localDate(result.item.timezone), 1)
-      draft.value.local =
-        (result.item.starts_on.slice(0, 10) > tomorrow
-          ? result.item.starts_on.slice(0, 10)
-          : tomorrow) + 'T09:00'
-    } catch (e) {
-      error.value = errorMessage(e)
-    }
-  }
   if (!stored && route.query.makeup && route.query.member) {
     draft.value.participants = [String(route.query.member)]
-    draft.value.fundingMode = 'independent'
-    draft.value.independentReason = 'makeup'
     draft.value.title = l('Makeup session', 'جلسة تعويضية')
   }
   ready.value = true
@@ -482,50 +430,6 @@ onMounted(async () => {
               :label="l('Find trainees', 'البحث عن متدربين')"
               @options="data!.members = $event"
             />
-            <h2>{{ l('Session funding', 'تمويل الجلسة') }}</h2>
-            <label
-              >{{ l('Use a package or book independently', 'استخدم باقة أو احجز بشكل مستقل')
-              }}<select v-model="draft.fundingMode">
-                <option value="independent">
-                  {{ l('Independent for everyone', 'مستقلة لجميع المشاركين') }}
-                </option>
-                <option value="individual">
-                  {{ l('Choose a package for each trainee', 'اختر باقة لكل متدرب') }}
-                </option>
-              </select></label
-            >
-            <template v-if="draft.fundingMode === 'independent'"
-              ><label
-                >{{ l('Independent session reason', 'سبب الجلسة المستقلة')
-                }}<select v-model="draft.independentReason">
-                  <option value="trial">{{ l('Trial', 'تجريبية') }}</option>
-                  <option value="makeup">{{ l('Makeup', 'تعويضية') }}</option>
-                  <option value="prize">{{ l('Prize', 'جائزة') }}</option>
-                  <option value="other">{{ l('Other', 'أخرى') }}</option>
-                </select></label
-              >
-              <p class="notice">
-                {{
-                  l(
-                    'Independent sessions do not reserve or deduct subscription sessions.',
-                    'الجلسات المستقلة لا تحجز أو تخصم جلسات من الاشتراك.',
-                  )
-                }}
-              </p></template
-            >
-            <template v-else
-              ><PackageFunding
-                v-for="member in chosen"
-                :key="member.id"
-                :workspace="id"
-                :view="view"
-                :member="member.id"
-                :name="member.name"
-                :count="draft.count"
-                :disabled="locked"
-                @title="fundingTitles[member.id] = $event"
-                v-model="draft.funding[member.id]!"
-            /></template>
           </section>
           <section
             v-else
@@ -554,18 +458,7 @@ onMounted(async () => {
             </p>
             <ul>
               <li v-for="m in chosen" :key="m.id">
-                {{ m.name }} ·
-                {{
-                  draft.fundingMode === 'individual' && draft.funding[m.id]?.package_id
-                    ? fundingTitles[m.id] +
-                      ' · ' +
-                      l('Reserve', 'حجز') +
-                      ' ' +
-                      draft.count +
-                      ' ' +
-                      (draft.count === 1 ? l('session', 'جلسة') : l('sessions', 'جلسات'))
-                    : l('Independent — no subscription deduction', 'مستقلة — دون خصم من الاشتراك')
-                }}
+                {{ m.name }}
               </li>
             </ul>
             <h3>{{ l('Dates to schedule', 'المواعيد للجدولة') }}</h3>

@@ -213,6 +213,9 @@ summary:focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 4px;
 }
+main:focus:not(:focus-visible) {
+  outline: none;
+}
 input[type='number'] {
   font-variant-numeric: tabular-nums;
 }
@@ -498,27 +501,52 @@ td:first-child {
   font-size: 0.78rem;
 }
 .empty-state {
-  max-width: 780px;
-  padding: 60px 32px;
-  text-align: center;
-  margin: 20px auto;
+  width: 100%;
+  max-width: none;
+  padding: 32px;
+  text-align: start;
+  margin: 20px 0;
 }
 .empty-state > svg {
   color: var(--accent);
-  margin-bottom: 22px;
+  margin-bottom: 12px;
 }
 .empty-state h2 {
   margin-bottom: 14px;
 }
 .empty-state p {
-  max-width: 520px;
-  margin: 12px auto 25px;
+  max-width: 56ch;
+  margin: 12px 0 0;
 }
 .empty-state h1 {
   margin-top: 20px;
 }
 .empty-state .button {
-  margin-top: 15px;
+  margin-top: 16px;
+}
+.empty-state--centered {
+  max-width: 780px;
+  margin: 20px auto;
+  text-align: center;
+}
+.empty-state--centered p {
+  margin: 12px auto 25px;
+}
+.empty-state--compact {
+  margin: 12px 0;
+  padding: 16px;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+}
+.empty-state--compact p {
+  margin: 0;
+}
+.empty-state-note {
+  max-width: 56ch;
+  margin: 16px 0;
+  padding: 0;
+  color: var(--text-muted);
+  text-align: start;
 }
 .preserve-lines {
   white-space: pre-wrap;
@@ -551,30 +579,15 @@ td:first-child {
   line-height: 1;
 }
 .brand img {
-  background: #f7f8f4;
-  border-radius: 6px;
-  padding: 3px;
-  width: 32px;
-  height: 32px;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  width: 38px;
+  height: 38px;
   object-fit: contain;
 }
 .brand-period {
   color: var(--accent);
-}
-.main-nav {
-  display: flex;
-  gap: 28px;
-  margin-inline: auto;
-  font-size: 0.82rem;
-  color: var(--muted);
-  font-weight: 600;
-}
-.main-nav a {
-  padding: 10px 0;
-}
-.main-nav a:hover,
-.main-nav .router-link-active {
-  color: var(--ink);
 }
 .header-actions {
   display: flex;
@@ -620,6 +633,10 @@ td:first-child {
 .theme-select select {
   font-size: 0.73rem;
   background: transparent;
+  background-color: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 6px;
   min-height: 36px;
   padding: 7px 25px 7px 10px;
 }
@@ -1328,6 +1345,33 @@ progress::-moz-progress-bar {
   min-height: 75vh;
   padding-block: 65px;
 }
+.auth-centered {
+  grid-template-columns: minmax(0, 500px);
+  justify-content: center;
+  gap: 25px;
+  min-height: calc(100dvh - 88px);
+  padding-block: 42px;
+}
+.auth-centered .auth-intro {
+  text-align: center;
+}
+.auth-centered .auth-intro h1,
+.auth-centered .auth-intro > p {
+  max-width: none;
+  margin-inline: auto;
+}
+.auth-centered .auth-intro h1 {
+  font-size: 2.45rem;
+}
+.auth-centered .auth-promise {
+  justify-content: center;
+  border: 0;
+  padding-top: 0;
+  margin-top: 14px;
+}
+.auth-centered .auth-form {
+  width: 100%;
+}
 .auth-intro h1 {
   max-width: 490px;
   font-size: 3.3rem;
@@ -1983,9 +2027,6 @@ progress::-moz-progress-bar {
     padding: 8px 10px;
     gap: 7px;
   }
-  .main-nav {
-    display: none;
-  }
   .account-name {
     display: none;
   }
@@ -2545,7 +2586,7 @@ progress::-moz-progress-bar {
     font-size: 1.1rem;
   }
   .empty-state {
-    padding: 35px 22px;
+    padding: 24px 20px;
   }
   .empty-state h2 {
     font-size: 1.4rem;
@@ -3514,18 +3555,25 @@ select {
   min-height: 0;
   border-inline-end: 1px solid var(--line);
 }
+.messages-page .conversation-directory {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
 .conversation-search {
   padding: 1rem;
   font-size: 0.8rem;
 }
 .messages-page .conversation-list {
-  flex: 1;
-  min-height: 0;
+  flex: none;
   min-width: 0;
-  overflow-x: hidden;
+  overflow: visible;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
   gap: 0.25rem;
   padding: 0.5rem;
 }
@@ -3745,4 +3793,46 @@ select {
 
 .app-updates p {
   margin-block: 1rem;
+}
+
+/* Keep request feedback above page content and the independently scrolling dashboard. */
+.swal2-container {
+  z-index: 10000 !important;
+}
+
+.swal2-popup.rafik-toast {
+  width: min(28rem, calc(100vw - 24px));
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 18px 48px rgb(0 0 0 / 24%);
+}
+
+.rafik-toast .swal2-title {
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 650;
+  text-align: start;
+}
+
+.rafik-toast--rtl {
+  direction: rtl;
+}
+
+.rafik-toast .swal2-timer-progress-bar {
+  background: var(--accent);
+}
+
+@media (max-width: 600px) {
+  .swal2-container.swal2-top-end,
+  .swal2-container.swal2-top-start {
+    inset-inline: 12px !important;
+    width: auto;
+  }
+
+  .swal2-popup.rafik-toast {
+    width: 100%;
+  }
 }

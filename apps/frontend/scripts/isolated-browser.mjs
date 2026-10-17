@@ -4,15 +4,21 @@ import { resolve } from 'node:path'
 const web = resolve(import.meta.dirname, '..'),
   repo = resolve(web, '../..'),
   api = resolve(repo, 'apps/backend'),
+  prismaCli = resolve(repo, 'node_modules/prisma/build/index.js'),
+  tsxCli = resolve(repo, 'node_modules/tsx/dist/cli.mjs'),
+  viteCli = resolve(repo, 'node_modules/vite/bin/vite.js'),
+  playwrightCli = resolve(repo, 'node_modules/playwright/cli.js'),
   composeFile = resolve(repo, 'infrastructure/compose.yaml'),
   stamp = Date.now(),
   database = 'rafik_browser_' + stamp,
   files = '.local/browser-' + stamp,
   out = resolve(web, 'artifacts/isolated-browser', String(stamp)),
   dist = resolve(out, 'dist')
-if (!readFileSync(composeFile, 'utf8').startsWith('name: rafik-prisma-local'))
+if (!readFileSync(composeFile, 'utf8').startsWith('name: ${RAFIK_INSTANCE_ID:-rafik-prisma-local}'))
   throw Error('Local project required')
-if (process.versions.node.split('.')[0] !== '22') throw Error('Node22 required')
+const [nodeMajor, nodeMinor] = process.versions.node.split('.').map(Number)
+if (!((nodeMajor === 22 && nodeMinor >= 16) || nodeMajor === 24))
+  throw Error('Use Node 22.16 or Node 24 for browser checks.')
 mkdirSync(out, { recursive: true })
 const env = {
   ...process.env,
@@ -26,16 +32,22 @@ const env = {
   RAFIK_TEST_DATABASE: database,
   RAFIK_TEST_FILES: files,
   RAFIK_TEST_DIST: dist,
+  RAFIK_TEST_OUTPUT: resolve(out, 'playwright-results'),
+  PLAYWRIGHT_HTML_OUTPUT_DIR: resolve(out, 'playwright-report'),
   VITE_API_URL: 'http://127.0.0.1:55341',
   VITE_LOCAL_PREVIEW: 'true',
 }
 const children = []
 let created = false
+const testArgs = process.argv.slice(2),
+  emptyDatabase = testArgs.includes('--empty-database')
 const sql = (db, input) =>
   execFileSync(
     'docker',
     [
-      'compose', '-f', composeFile,
+      'compose',
+      '-f',
+      composeFile,
       'exec',
       '-T',
       'db',
@@ -85,19 +97,21 @@ try {
   }
   sql('rafik', `CREATE DATABASE ${database};`)
   created = true
-  await run(api, resolve(repo, 'node_modules/.bin/prisma'), ['migrate', 'deploy'])
-  sql(database, readFileSync(resolve(api, 'prisma/seed.sql')))
-  const backend = service('api', api, resolve(repo, 'node_modules/.bin/tsx'), ['server/index.ts'])
+  await run(api, process.execPath, [prismaCli, 'migrate', 'deploy'])
+  if (!emptyDatabase) sql(database, readFileSync(resolve(api, 'prisma/seed.sql')))
+  const backend = service('api', api, process.execPath, [tsxCli, 'server/index.ts'])
   await ready(env.RAFIK_TEST_API + '/health', backend)
-  await run(web, resolve(repo, 'node_modules/.bin/vite'), ['build', '--outDir', dist])
-  const dev = service('web', web, resolve(repo, 'node_modules/.bin/vite'), [
+  await run(web, process.execPath, [viteCli, 'build', '--outDir', dist])
+  const dev = service('web', web, process.execPath, [
+    viteCli,
     '--host',
     '127.0.0.1',
     '--port',
     '5183',
     '--strictPort',
   ])
-  const preview = service('preview', web, resolve(repo, 'node_modules/.bin/vite'), [
+  const preview = service('preview', web, process.execPath, [
+    viteCli,
     'preview',
     '--outDir',
     dist,
@@ -110,7 +124,17 @@ try {
   await ready(env.RAFIK_TEST_WEB, dev)
   await ready(env.RAFIK_TEST_PREVIEW, preview)
   console.log('Browser acceptance uses disposable data; preview ports/database remain untouched.')
-  await run(web, resolve(repo, 'node_modules/.bin/playwright'), ['test', ...process.argv.slice(2)])
+  await run(web, process.execPath, [
+    playwrightCli,
+    'test',
+    ...testArgs.filter((arg) => arg !== '--empty-database'),
+  ])
+} catch (error) {
+  try {
+    console.error('Isolated API log (last 6000 characters):')
+    console.error(readFileSync(resolve(out, 'api.log'), 'utf8').slice(-6000))
+  } catch {}
+  throw error
 } finally {
   for (const child of children) {
     if (child.exitCode === null) {
@@ -123,5 +147,6 @@ try {
   }
   if (created) sql('rafik', `DROP DATABASE ${database} WITH (FORCE);`)
   rmSync(resolve(api, files), { recursive: true, force: true })
-  console.log('Isolated browser cleanup complete: ' + out)
+  rmSync(out, { recursive: true, force: true })
+  console.log('Isolated browser cleanup complete.')
 }

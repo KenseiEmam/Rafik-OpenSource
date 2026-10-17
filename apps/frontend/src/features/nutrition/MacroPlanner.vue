@@ -35,7 +35,7 @@ function apply() {
       <p class="subtle">
         {{
           l(
-            'Set the targets you agreed with your client. Leave any untracked nutrient blank.',
+            'Set the targets you agreed with your athlete. Leave any untracked nutrient blank.',
             'حدد الأهداف المتفق عليها مع متدربك. اترك أي عنصر لا تتابعه فارغاً.',
           )
         }}

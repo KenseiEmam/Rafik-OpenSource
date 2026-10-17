@@ -63,6 +63,12 @@ const command = useCommand<'archive'>(
       method: 'POST',
       body: JSON.stringify(args),
     }),
+  {
+    successMessage: (_, args) =>
+      args.retired
+        ? l('Resource archived.', 'تمت أرشفة المورد.')
+        : l('Resource restored.', 'تمت استعادة المورد.'),
+  },
 )
 const fileSize = (bytes: number) =>
   bytes < 1048576
@@ -95,7 +101,7 @@ onUnmounted(() => {
 </script>
 <template>
   <OrganizationNav />
-  <div class="container page organization-resources">
+  <div class="container page institution-resources">
     <header class="page-heading">
       <p class="overline">{{ l('Your coaching toolkit', 'أدواتك التدريبية') }}</p>
       <h1>{{ l('Resources', 'الموارد') }}</h1>
@@ -127,7 +133,7 @@ onUnmounted(() => {
           >
         </div>
         <p v-if="loading" role="status">{{ l('Loading files…', 'جارٍ تحميل الملفات…') }}</p>
-        <p v-if="!loading && !assets.length" class="empty-state">
+        <p v-if="!loading && !assets.length" class="empty-state-note">
           {{
             l(
               'No files here yet. Upload your first demonstration below.',
@@ -146,7 +152,7 @@ onUnmounted(() => {
               ><small
                 >{{ fileSize(a.bytes) }} ·
                 {{
-                  a.editable ? l('Your upload', 'ملفك') : l('Organization library', 'مكتبة المؤسسة')
+                  a.editable ? l('Your upload', 'ملفك') : l('Institution library', 'مكتبة المؤسسة')
                 }}</small
               >
             </button>
@@ -169,7 +175,7 @@ onUnmounted(() => {
         />
         <small>{{
           l(
-            'New uploads are private until included in an organization-shared exercise or a published assignment.',
+            'New uploads are private until included in an institution-shared exercise or a published assignment.',
             'تكون الملفات الجديدة خاصة حتى تضمينها في تمرين مشترك للمؤسسة أو تكليف منشور.',
           )
         }}</small>
@@ -195,6 +201,11 @@ onUnmounted(() => {
             selected.retired ? l('Restore file', 'استعادة الملف') : l('Archive file', 'أرشفة الملف')
           }}
         </button>
+      </section>
+      <section class="panel resource-detail" v-else>
+        <p class="empty-state-note">
+          {{ l('Select a file to view its details.', 'اختر ملفاً لعرض تفاصيله.') }}
+        </p>
       </section>
     </div>
   </div>

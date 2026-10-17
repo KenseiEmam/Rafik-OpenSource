@@ -8,7 +8,7 @@ async function fixture() {
     id = randomUUID()
   await f.call(f.owner, '/v1/workspaces', { id, kind: 'organization', name: 'Madar nutrition' })
   for (const [person, roles] of [
-    [f.coach, ['trainer', 'trainee']],
+    [f.coach, ['trainer']],
     [f.client, ['trainee']],
   ] as const) {
     const token = randomBytes(32).toString('hex')
@@ -56,7 +56,7 @@ test('organization plan publication flows through trainee portions, consent, cor
     client = await ctx.newPage()
   try {
     await f.login(page, f.owner, `${f.base}/admin/nutrition`)
-    await page.getByRole('checkbox', { name: 'R4 Client', exact: true }).click()
+    await page.getByRole('checkbox', { name: 'R4 Athlete', exact: true }).click()
     await page.getByRole('button', { name: 'Create plan', exact: true }).click()
     await page.getByRole('spinbutton', { name: 'Energy (kcal)', exact: true }).fill('2100')
     await page.getByRole('spinbutton', { name: 'Protein (g)', exact: true }).fill('130')
@@ -66,7 +66,7 @@ test('organization plan publication flows through trainee portions, consent, cor
     await page.locator('.food-results button').first().click()
     await page.getByRole('button', { name: 'Add to example day', exact: true }).click()
     await page.getByRole('button', { name: 'Review plan', exact: true }).click()
-    await expect(page.getByText('Ready to publish for R4 Client')).toBeVisible()
+    await expect(page.getByText('Ready to publish for R4 Athlete')).toBeVisible()
     await page.getByRole('button', { name: 'Publish plan', exact: true }).click()
     await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
     await expect(page.locator('.nutrition-totals')).toContainText('2100')
@@ -147,7 +147,7 @@ test('organization nutrition retains scoped drafts and replays a lost publicatio
     await page.getByRole('button', { name: 'Create plan', exact: true }).click()
     await expect(page.getByLabel('Guidance', { exact: true })).toHaveValue('')
     await page.getByRole('button', { name: 'Change trainee', exact: true }).click()
-    await page.getByRole('checkbox', { name: 'R4 Client', exact: true }).click()
+    await page.getByRole('checkbox', { name: 'R4 Athlete', exact: true }).click()
     await expect(page.getByLabel('Guidance', { exact: true })).toHaveValue('Client-specific draft')
     let drop = true
     await page.route('**/nutrition', async (route) => {

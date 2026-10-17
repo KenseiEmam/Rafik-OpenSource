@@ -97,6 +97,12 @@ const command = useCommand<'save' | 'state'>(
       method: 'POST',
       body: JSON.stringify(args),
     }),
+  {
+    successMessage: (action) =>
+      action === 'state'
+        ? l('Task status updated.', 'تم تحديث حالة المهمة.')
+        : l('Task saved.', 'تم حفظ المهمة.'),
+  },
 )
 const locked = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
 function create() {
@@ -203,7 +209,7 @@ onUnmounted(() => {
                   'Give each follow-up a clear owner and due date.',
                   'حدد مسؤولاً وموعداً لكل متابعة.',
                 )
-              : l('Tasks assigned to you by your organization.', 'المهام التي عينتها لك مؤسستك.')
+              : l('Tasks assigned to you by your institution.', 'المهام التي عينتها لك مؤسستك.')
           }}
         </p>
       </div>
@@ -303,7 +309,7 @@ onUnmounted(() => {
       >
     </div>
     <p v-if="loading" role="status">{{ l('Loading tasks…', 'جارٍ تحميل المهام…') }}</p>
-    <p v-if="!loading && !items.length" class="empty-state">
+    <p v-if="!loading && !items.length" class="empty-state-note">
       {{ l('No tasks in this view.', 'لا توجد مهام في هذا العرض.') }}
     </p>
     <div class="task-list">

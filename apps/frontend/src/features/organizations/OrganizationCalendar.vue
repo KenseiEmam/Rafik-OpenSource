@@ -38,6 +38,15 @@ const visible = computed(() =>
       (!selectedDay.value || localDate(zone, new Date(e.starts_at)) === selectedDay.value),
   ),
 )
+const weekDays = computed(() =>
+  Array.from({ length: 7 }, (_, index) => addDays(start.value, index)),
+)
+const bookingsOn = (day: string) =>
+  items.value.filter(
+    (event) =>
+      (showCancelled.value || event.state !== 'cancelled') &&
+      localDate(zone, new Date(event.starts_at)) === day,
+  ).length
 const date = (value: string) =>
   new Intl.DateTimeFormat(locale.value === 'ar' ? 'ar-AE' : 'en-GB', {
     weekday: 'short',
@@ -98,7 +107,7 @@ onMounted(() => load())
 </script>
 <template>
   <OrganizationNav />
-  <div class="container page organization-calendar">
+  <div class="container page institution-calendar">
     <header class="work-heading">
       <div>
         <p class="overline">{{ l('Plan the training day', 'خطّط ليوم التدريب') }}</p>
@@ -106,7 +115,7 @@ onMounted(() => load())
         <p>
           {{
             view === 'trainee'
-              ? l('Your organization sessions and assessments.', 'حصصك وتقييماتك في المؤسسة.')
+              ? l('Your institution sessions and assessments.', 'حصصك وتقييماتك في المؤسسة.')
               : l(
                   'Coordinate people, review attendance, and keep assessments moving.',
                   'نسّق الأشخاص وراجع الحضور وتابع التقييمات.',
@@ -118,162 +127,254 @@ onMounted(() => load())
         l('Schedule event', 'جدولة موعد')
       }}</RouterLink>
     </header>
-    <div class="actions">
-      <label
-        >{{ l('Calendar view', 'عرض التقويم')
-        }}<select
-          :aria-label="l('Calendar view', 'عرض التقويم')"
-          v-model="mode"
-          @change="changeMode"
-        >
+    <form class="calendar-toolbar" @submit.prevent="load()">
+      <label class="view-control">
+        <span>{{ l('View', 'العرض') }}</span>
+        <select :aria-label="l('Calendar view', 'عرض التقويم')" v-model="mode" @change="changeMode">
           <option value="month">{{ l('Month', 'شهر') }}</option>
           <option value="week">{{ l('Week agenda', 'جدول الأسبوع') }}</option>
-        </select></label
-      >
-    </div>
-    <form class="calendar-controls" @submit.prevent="load()">
+        </select>
+      </label>
       <button type="button" class="button secondary" @click="move(-7)" :disabled="loading">
         {{
           mode === 'month'
             ? l('Previous month', 'الشهر السابق')
             : l('Previous week', 'الأسبوع السابق')
-        }}</button
-      ><label
-        >{{ mode === 'month' ? l('Month', 'الشهر') : l('Week starting', 'أسبوع يبدأ')
-        }}<input type="date" v-model="start" required @change="changeMode()" /></label
-      ><button type="button" class="button secondary" @click="move(7)" :disabled="loading">
+        }}
+      </button>
+      <label class="date-control">
+        <span>{{ mode === 'month' ? l('Month', 'الشهر') : l('Week starting', 'أسبوع يبدأ') }}</span>
+        <input type="date" v-model="start" required @change="changeMode()" />
+      </label>
+      <button type="button" class="button secondary" @click="move(7)" :disabled="loading">
         {{ mode === 'month' ? l('Next month', 'الشهر التالي') : l('Next week', 'الأسبوع التالي') }}
       </button>
+      <label class="check-label">
+        <input type="checkbox" v-model="showCancelled" />
+        {{ l('Show cancelled', 'عرض الملغى') }}
+      </label>
+      <span class="date-range">{{ start }} — {{ end }} · {{ zone }}</span>
     </form>
-    <p class="small-print">{{ start }} — {{ end }} · {{ zone }}</p>
-    <label class="check-label"
-      ><input type="checkbox" v-model="showCancelled" />{{
-        l('Show cancelled events', 'عرض المواعيد الملغاة')
-      }}</label
-    >
-    <MonthCalendar
-      v-if="mode === 'month'"
-      :month="start"
-      :selected="selectedDay"
-      :zone="zone"
-      :events="items.filter((e) => showCancelled || e.state !== 'cancelled')"
-      @select="selectedDay = $event"
-    />
-    <p v-if="next !== null" class="notice">
-      {{
-        l(
-          'Showing loaded events. Load more below to include the rest of this month.',
-          'تظهر المواعيد المحمّلة. حمّل المزيد أدناه لعرض بقية الشهر.',
-        )
-      }}
-    </p>
-    <div class="section-heading">
-      <h2>
-        {{
-          selectedDay
-            ? date(selectedDay + 'T12:00:00')
-            : l('Booked sessions & events', 'الحصص والمواعيد المحجوزة')
-        }}
-      </h2>
-      <button v-if="selectedDay" class="text-link" @click="selectedDay = ''">
-        {{ l('Show all dates', 'عرض كل التواريخ') }}
-      </button>
-    </div>
-    <PageState :loading="loading" :error="error" @retry="load()"
-      ><section v-if="!visible.length" class="empty-state panel">
-        <h2>{{ l('No bookings for these dates', 'لا توجد حجوزات لهذه التواريخ') }}</h2>
-        <p>
-          {{ l('Choose another day or schedule a session.', 'اختر يوماً آخر أو جدول حصة.') }}
+    <div class="calendar-layout">
+      <section class="calendar-surface" :aria-label="l('Calendar dates', 'تواريخ التقويم')">
+        <MonthCalendar
+          v-if="mode === 'month'"
+          :month="start"
+          :selected="selectedDay"
+          :zone="zone"
+          :events="items.filter((e) => showCancelled || e.state !== 'cancelled')"
+          @select="selectedDay = $event"
+        />
+        <div v-else class="week-agenda">
+          <button
+            v-for="day in weekDays"
+            :key="day"
+            type="button"
+            class="week-day"
+            :class="{ selected: selectedDay === day }"
+            :aria-pressed="selectedDay === day"
+            @click="selectedDay = day"
+          >
+            <strong>{{ date(day + 'T12:00:00') }}</strong>
+            <span>{{ bookingsOn(day) }} {{ l('bookings', 'حجوزات') }}</span>
+          </button>
+        </div>
+        <p v-if="next !== null" class="notice">
+          {{
+            l(
+              'More events are available in the booked list.',
+              'تتوفر مواعيد أخرى في قائمة الحجوزات.',
+            )
+          }}
         </p>
       </section>
-      <ol v-else class="agenda-list">
-        <li v-for="e in visible" :key="e.id">
-          <RouterLink :to="base + '/calendar/' + e.id + '?from=' + start" class="agenda-event"
-            ><div class="agenda-time">
-              <strong>{{ date(e.starts_at) }}</strong
-              ><span>{{ time(e.starts_at) }} — {{ time(e.ends_at) }}</span>
-            </div>
-            <div class="agenda-content">
-              <span class="tag">{{
-                e.kind === 'assessment' ? l('Assessment', 'تقييم') : l('Training', 'تدريب')
-              }}</span>
-              <h2>{{ e.title }}</h2>
-              <p>{{ e.location || l('Location to be agreed', 'الموقع يحدد لاحقاً') }}</p>
-              <p class="small-print">
-                {{
-                  e.people
-                    ?.filter((p) => p.duty === 'staff')
-                    .map((p) => p.name)
-                    .join(' · ')
-                }}
-              </p>
-              <p v-if="e.state === 'scheduled' && missingStaff(e)" class="attention-label">
-                {{ l('Trainer reassignment needed', 'يلزم إعادة تعيين المدرب') }}
-              </p>
-            </div>
-            <span class="event-state"
-              >{{
-                e.state === 'completed'
-                  ? l('Completed', 'مكتمل')
-                  : e.state === 'cancelled'
-                    ? l('Cancelled', 'ملغي')
-                    : l('Open event', 'فتح الموعد')
-              }}
-              ↗</span
-            ></RouterLink
+      <aside class="bookings-panel">
+        <div class="section-heading">
+          <div>
+            <p class="overline">
+              {{ selectedDay ? date(selectedDay + 'T12:00:00') : l('Schedule', 'الجدول') }}
+            </p>
+            <h2>{{ l('Booked sessions', 'الحصص المحجوزة') }}</h2>
+          </div>
+          <button v-if="selectedDay" class="text-link" @click="selectedDay = ''">
+            {{ l('All dates', 'كل التواريخ') }}
+          </button>
+        </div>
+        <PageState :loading="loading" :error="error" @retry="load()">
+          <section v-if="!visible.length" class="empty-state panel">
+            <h3>{{ l('No bookings for these dates', 'لا توجد حجوزات لهذه التواريخ') }}</h3>
+            <p>
+              {{ l('Choose another day or schedule a session.', 'اختر يوماً آخر أو جدول حصة.') }}
+            </p>
+          </section>
+          <ol v-else class="agenda-list">
+            <li v-for="e in visible" :key="e.id">
+              <RouterLink :to="base + '/calendar/' + e.id + '?from=' + start" class="agenda-event">
+                <div class="agenda-time">
+                  <strong>{{ date(e.starts_at) }}</strong>
+                  <span>{{ time(e.starts_at) }} — {{ time(e.ends_at) }}</span>
+                </div>
+                <div class="agenda-content">
+                  <span class="tag">{{
+                    e.kind === 'assessment' ? l('Assessment', 'تقييم') : l('Training', 'تدريب')
+                  }}</span>
+                  <h2>{{ e.title }}</h2>
+                  <p>{{ e.location || l('Location to be agreed', 'الموقع يحدد لاحقاً') }}</p>
+                  <p class="small-print">
+                    {{
+                      e.people
+                        ?.filter((p) => p.duty === 'staff')
+                        .map((p) => p.name)
+                        .join(' · ')
+                    }}
+                  </p>
+                  <p v-if="e.state === 'scheduled' && missingStaff(e)" class="attention-label">
+                    {{ l('Trainer reassignment needed', 'يلزم إعادة تعيين المدرب') }}
+                  </p>
+                </div>
+                <span class="event-state">
+                  {{
+                    e.state === 'completed'
+                      ? l('Completed', 'مكتمل')
+                      : e.state === 'cancelled'
+                        ? l('Cancelled', 'ملغي')
+                        : l('Open event', 'فتح الموعد')
+                  }}
+                  ↗
+                </span>
+              </RouterLink>
+            </li>
+          </ol>
+          <button
+            v-if="next !== null"
+            class="button secondary load-more"
+            :disabled="loading"
+            @click="load(true)"
           >
-        </li>
-      </ol>
-      <button v-if="next !== null" class="button secondary" :disabled="loading" @click="load(true)">
-        {{ l('Load more events', 'تحميل مواعيد أخرى') }}
-      </button></PageState
-    >
+            {{ l('Load more events', 'تحميل مواعيد أخرى') }}
+          </button>
+        </PageState>
+      </aside>
+    </div>
   </div>
 </template>
 <style scoped>
-.organization-calendar {
-  max-width: 1180px;
+.institution-calendar {
+  max-width: 1440px;
 }
-.calendar-controls {
+.calendar-toolbar {
   display: flex;
-  align-items: end;
-  gap: 16px;
+  align-items: center;
+  gap: 10px;
   flex-wrap: wrap;
-  margin-block: 24px 12px;
+  margin-block: 24px 16px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
 }
-.calendar-controls label {
+.calendar-toolbar label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   min-width: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+.calendar-toolbar select,
+.calendar-toolbar input[type='date'] {
+  min-height: 40px;
+  max-width: 190px;
+}
+.date-range {
+  margin-inline-start: auto;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+.calendar-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(280px, 1fr);
+  align-items: start;
+  gap: 24px;
+}
+.calendar-surface,
+.bookings-panel {
+  min-width: 0;
+}
+.bookings-panel {
+  padding-inline-start: 20px;
+  border-inline-start: 1px solid var(--line);
+}
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.section-heading h2 {
+  margin: 4px 0 0;
+  font-size: 1.25rem;
+}
+.week-agenda {
+  display: grid;
+  gap: 8px;
+}
+.week-day {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  text-align: start;
+  padding: 12px;
+  background: var(--surface);
+}
+.week-day span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.week-day.selected {
+  border-color: var(--accent);
+  background: var(--tint);
 }
 .agenda-list {
   list-style: none;
   padding: 0;
-  margin: 24px 0;
+  margin: 0;
 }
 .agenda-event {
-  display: grid;
-  grid-template-columns: 180px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 24px;
-  padding: 24px 0;
-  border-block-start: 1px solid var(--line);
+  display: block;
+  padding: 16px;
+  margin-block: 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: inherit;
+  text-decoration: none;
+}
+.agenda-event:hover {
+  border-color: var(--accent);
 }
 .agenda-time {
-  display: grid;
-  gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin-bottom: 10px;
   font-size: 0.85rem;
 }
 .agenda-time span,
 .event-state {
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
 }
 .agenda-content {
   min-width: 0;
   overflow-wrap: anywhere;
 }
 .agenda-content h2 {
-  font-size: 1.2rem;
-  margin: 8px 0;
+  font-size: 1.05rem;
+  margin: 6px 0;
 }
 .agenda-content p {
   margin: 4px 0;
@@ -282,26 +383,75 @@ onMounted(() => load())
   color: var(--accent);
   font-weight: 650;
 }
-@media (max-width: 650px) {
-  .agenda-event {
+.event-state {
+  display: block;
+  margin-top: 12px;
+}
+.load-more {
+  width: 100%;
+}
+@media (max-width: 900px) {
+  .calendar-layout {
+    grid-template-columns: minmax(0, 1.5fr) minmax(240px, 1fr);
+    gap: 16px;
+  }
+  .bookings-panel {
+    padding-inline-start: 14px;
+  }
+}
+@media (max-width: 720px) {
+  .calendar-layout {
     grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
   }
-  .agenda-time {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 16px;
+  .bookings-panel {
+    padding: 18px 0 0;
+    border-inline-start: 0;
+    border-block-start: 1px solid var(--line);
   }
-  .calendar-controls {
-    gap: 10px;
+}
+@media (max-width: 650px) {
+  .calendar-toolbar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 10px;
   }
-  .calendar-controls label {
-    order: -1;
-    flex-basis: 100%;
+  .calendar-toolbar .view-control,
+  .calendar-toolbar .date-control,
+  .date-range {
+    grid-column: 1 / -1;
   }
-  .calendar-controls button {
+  .calendar-toolbar label {
+    justify-content: space-between;
+  }
+  .calendar-toolbar select,
+  .calendar-toolbar input[type='date'] {
+    max-width: 65%;
     flex: 1;
-    font-size: 0.8rem;
+  }
+  .calendar-toolbar button {
+    min-width: 0;
+    padding-inline: 8px;
+    font-size: 0.78rem;
+  }
+  .date-range {
+    margin-inline-start: 0;
+  }
+  .agenda-event {
+    padding: 12px;
+  }
+  .agenda-content h2 {
+    font-size: 1rem;
+  }
+}
+@media (max-width: 380px) {
+  .calendar-toolbar .check-label {
+    grid-column: 1 / -1;
+  }
+  .week-day {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
   }
 }
 </style>

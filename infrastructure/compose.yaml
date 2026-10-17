@@ -1,4 +1,4 @@
-name: ${RAFIK_INSTANCE_ID:-rafik}
+name: ${RAFIK_INSTANCE_ID:-rafik-prisma-local}
 
 services:
   db:
@@ -8,8 +8,6 @@ services:
       POSTGRES_USER: rafik_migrate
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rafik-local-migrations-only}
       POSTGRES_DB: rafik
-    ports:
-      - '${POSTGRES_BIND:-127.0.0.1}:${POSTGRES_HOST_PORT:-55332}:5432'
     volumes:
       - rafik_pg:/var/lib/postgresql/data
     healthcheck:
@@ -20,6 +18,25 @@ services:
       start_period: 10s
     networks:
       - database
+
+  # Local Node commands need a loopback database connection. Keep PostgreSQL
+  # on its isolated network and publish only this TCP forwarder on localhost.
+  db-access:
+    profiles: [local]
+    image: node:22.16.0-bookworm-slim
+    restart: unless-stopped
+    command:
+      - node
+      - -e
+      - "const net=require('node:net');net.createServer(client=>{const upstream=net.connect(5432,'db');client.pipe(upstream);upstream.pipe(client);}).listen(5432,'0.0.0.0')"
+    ports:
+      - '127.0.0.1:${POSTGRES_HOST_PORT:-55332}:5432'
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - database
+      - application
 
   migrate:
     profiles: [selfhost]
@@ -53,14 +70,7 @@ services:
       DATABASE_URL: postgresql://rafik_api:${RAFIK_API_PASSWORD:-}@db:5432/rafik
       RAFIK_API_PASSWORD: ${RAFIK_API_PASSWORD:-}
       RAFIK_PUBLIC_ORIGIN: https://${APP_DOMAIN:-}
-      RAFIK_BOOTSTRAP_EMAIL: ${RAFIK_BOOTSTRAP_EMAIL:-}
       RAFIK_PRIVATE_FILES_DIR: /data/private-files
-      RAFIK_SMTP_HOST: ${RAFIK_SMTP_HOST:-}
-      RAFIK_SMTP_PORT: ${RAFIK_SMTP_PORT:-587}
-      RAFIK_SMTP_TLS_MODE: ${RAFIK_SMTP_TLS_MODE:-starttls}
-      RAFIK_SMTP_USER: ${RAFIK_SMTP_USER:-}
-      RAFIK_SMTP_PASSWORD: ${RAFIK_SMTP_PASSWORD:-}
-      RAFIK_MAIL_FROM: ${RAFIK_MAIL_FROM:-}
     volumes:
       - rafik_private_files:/data/private-files
     depends_on:

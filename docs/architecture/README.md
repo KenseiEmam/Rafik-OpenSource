@@ -1,54 +1,69 @@
-# Architecture overview
+# Rafik architecture
 
-**Status:** target architecture proposal, 16 October 2026. The target deployment is not implemented.
+**Status: current architecture, 17 October 2026.** The university-owned Compose deployment and the first university workflows are implemented locally. Stage 3 operations/release hardening and Stage 4 university workflow and privacy acceptance remain open. The [requirements and stage gates](../requirements/README.md) define delivery status; this page describes the system as it exists and the constraints new work must preserve.
 
-## Current components
+## Repository components
 
-- `apps/frontend/` contains the Vue 3/TypeScript single-page application built with Vite. Feature modules cover training, coaching, organizations, assessments, communication, resources, nutrition, appointments, analytics, and account flows.
-- `apps/backend/` contains the TypeScript API with Prisma and PostgreSQL. It owns identity/session handling, domain authorization, database migrations, and private-file access.
-- `packages/shared/` contains transport contracts and generated database types imported by both workspaces.
-- `docs/` is the single documentation tree; `infrastructure/` contains the single local Compose definition.
-- The browser calls the API; domain writes use API commands and reads use scoped API endpoints. PostgreSQL is the durable server store. Browser IndexedDB supports recoverable drafts and workout recording; it is not a backup.
-- `infrastructure/compose.yaml` starts PostgreSQL only for local development. The web app and API are started separately. Production hosting remains deferred in `docs/implementation/runbook.md`.
+| Component                     | Responsibility                                                                                                                                                                            |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apps/frontend/`              | Vue 3 and TypeScript web application. Presents public and organization-scoped administrator, trainer and athlete tasks; stores recoverable drafts and queued commands in browser storage. |
+| `apps/backend/`               | TypeScript HTTP API, Prisma schema/client, PostgreSQL migrations, domain authorization, content sources, and private-file lifecycle.                                                      |
+| `packages/shared/`            | Shared API contracts and generated database transport types.                                                                                                                              |
+| `infrastructure/compose.yaml` | One Compose definition with local-development and self-host profiles. Production profile runs PostgreSQL, migration job, API, web and Caddy.                                              |
 
-## Target deployment boundary
+The browser calls the API; it never connects directly to PostgreSQL or receives database credentials. PostgreSQL is the durable server store. IndexedDB is for recoverable client work, not backup or acknowledged server state.
 
-Each university should operate a separate Rafik installation on infrastructure it controls. The application, API, database, identity configuration, private files, backups, and secrets belong to that installation. The software must not require a Rafik-hosted tenant, identity service, database, or file store for normal operation.
+## Identity, institution and authorization
 
-Docker Compose is the first supported deployment path. It should package web, API, database, and routing while allowing the university to configure domain, secrets, storage, and identity. Compose defaults should be safe and must not include local-preview accounts or production credentials. Cloud Terraform is separate provider-specific work after Compose is accepted.
+Each university runs a separate instance and owns its users, data, secrets, files, backups, retention and infrastructure. There is no default Rafik-hosted tenant or operator access. The supported web experience is organization-scoped. Legacy independent-coaching data and APIs remain isolated during transition, but standalone coach screens are retired; see [ADR 0021](../decisions/ADR-0021-organization-only-web-experience.md). Organization-owned training history belongs to the organization and survives a trainer reassignment.
+
+Every institutional membership has one role: administrator, trainer or athlete. Sign-in opens that role's dashboard; there is no role selector. Administrators manage people, permissions, analytics and programs; trainers receive coaching tools; athletes receive their own training and support navigation. Sidebar groups collapse so the primary navigation stays compact. The platform-administrator grant is separate and appears only for explicitly authorized operators.
+
+Every protected request is authorized against the current actor, selected organization context, resource and lifecycle state. The API derives available actions from its own capabilities; hiding a navigation link is not authorization. Assignment changes or revocations must take effect on subsequent reads, commands and retries. A forward migration reduces legacy multi-role memberships and invitations to one role, prioritizing administrator, then trainer, then athlete; it clears a trainer assignment if that membership no longer retains the athlete role. The [role and scope audit](../requirements/role-scope-audit.md), [ADR 0005](../decisions/ADR-0005-organization-and-independent-scopes.md) and [ADR 0019](../decisions/ADR-0019-single-role-dashboards.md) record this model.
+
+## Commands and durable client work
+
+Domain writes use explicit API commands. The server validates current authority and input, then records related state and its command receipt transactionally. Revision checks, stable operation identifiers and server-owned authorization prevent stale edits or replay from silently creating another result. Client persistence, request dispatch and server acknowledgment are distinct states; the UI must not report a cloud save before acknowledgment. See the [API conventions](../reference/api.md) and [Prisma API ADR](../decisions/ADR-0006-prisma-api-transition.md).
+
+## Organization data boundaries
+
+- Programs, assignments and published training history are organization-scoped. Publishing creates an immutable version and makes the program available in the institution library without a separate visibility hold; assignment is still explicit. A trainer’s access follows current assignment; reassignment does not transfer unrelated personal data.
+- Training groups are reusable scheduling rosters. Administrators can include active coaches and athletes; trainers can manage their own groups of assigned athletes. Selecting a group preselects coaches as event staff and athletes as participants, while each event keeps its own fixed roster.
+- Messages are participant-scoped. Direct conversations have one institution-wide record per participant pair; each training group has one linked conversation. The conversation list search also matches the other participant’s name in direct conversations, and reports existing pair members so they no longer appear as new People choices. Existing duplicate direct conversations are archived by the forward migration so their message history remains retained.
+- Publishing a program exposes its immutable version in the institution library. Other coaches can review it and assign it only to athletes currently assigned to them; drafts remain private to their author and administrators.
+- Assessments are assessor-led performance records with defined units and correction history. They are not clinical findings.
+- Nutrition plans and athlete-recorded actuals have separate ownership and sharing choices. Withdrawal or reassignment is checked before later reads or command replay.
+- Injury participation status is an explicitly limited, consent-gated vertical slice. Coaches see only the assigned athlete’s current status and effective date. Athletes can review, correct, close, withdraw and export their records. The product deletes closed content after 12 months. University privacy/security approval is still required before real athlete data is used. See [ADR 0017](../decisions/ADR-0017-injury-status-minimum.md) and the [Stage 4 workflow audit](../requirements/stage4-workflow-audit.md).
+- Exercise names, instructions, still images and videos have separate sources and rights. The software license does not grant rights to bundled media. Manifests pin their source, attribution, license and content hashes; unreviewed assets must not be imported.
+
+## Self-hosted operation
+
+The self-host Compose profile keeps PostgreSQL on an internal container network. Caddy provides HTTPS ingress; the API serves authenticated operations and private-file bytes and stores files on a persistent Docker volume. On an empty instance, the first completed setup creates the super admin and institution in one transaction; setup is then closed. Password sign-in does not depend on mail. Admins create one-time invitations that expire after seven days and share them directly with invitees. Each instance has its own project name, credentials and volumes. No SMTP service, Google service-account key or cloud service credential is required. Keep the instance private until initial setup is complete.
+
+Use the [infrastructure guide](../../infrastructure/README.md) for first deployment, [development](../development/README.md) for local setup and [operations](../operations/README.md) for secrets, backups, restore, updates and retention monitoring. Production readiness still depends on the open release and university review gates.
+
+## Data-flow boundary
 
 ```mermaid
 flowchart LR
-  U[University users] -->|HTTPS| P[University reverse proxy]
-  P --> W[Web application]
-  P --> A[TypeScript API]
+  U[University users] -->|HTTPS| C[Caddy ingress]
+  C --> W[Vue web app]
+  C --> A[TypeScript API]
   A --> D[(University PostgreSQL)]
-  A --> F[Private file storage]
-  A --> I[University identity adapter]
-  D -. backup and restore .-> B[University controlled backups]
-  F -. backup and restore .-> B
-  S[Optional support request] -. explicit opt in, minimized data .-> R[Rafik support]
+  A --> F[Private file volume]
+  D -. paired backup .-> B[University-controlled backup]
+  F -. paired backup .-> B
 ```
 
-## Identity and authorization boundary
+No default telemetry or outbound data transfer is configured. Optional support flows must be explicit and must not include athlete health data by default. Browser drafts and queued commands are not part of server backup; server database and private files must be backed up and restored together.
 
-The recommended initial setup is a one-time bootstrap that creates the first university administrator locally and then disables setup mode. The university controls subsequent identities. An institutional identity adapter (such as OIDC/SAML) may be an optional integration; it must not be assumed to be available in every self-hosted installation.
+## Related decisions
 
-The existing API's organization-scoped authorization and database constraints are reusable foundations. Within each installation, every request must still be authorized against the current actor, active university context, resource, and lifecycle. Sensitive health/injury reads, changes, exports, and authority changes need a defined audit trail. Administrators do not automatically receive access to private athlete health records without an explicit policy.
+- [ADR 0001: university-owned deployments](../decisions/ADR-0001-university-owned-deployments.md)
+- [ADR 0005: organization and legacy independent-data boundaries](../decisions/ADR-0005-organization-and-independent-scopes.md)
+- [ADR 0006: Prisma API, identity and file boundary](../decisions/ADR-0006-prisma-api-transition.md)
+- [ADR 0017: minimal injury-status boundary](../decisions/ADR-0017-injury-status-minimum.md)
+- [ADR 0019: one institutional role per dashboard](../decisions/ADR-0019-single-role-dashboards.md)
+- [ADR 0021: organization-only supported web experience](../decisions/ADR-0021-organization-only-web-experience.md)
 
-## Sensitive data and storage
-
-Performance assessments and attendance are distinct from medical diagnoses. Injury records require a separately reviewed model, permissions, correction history, retention, export, and audit behavior. The deployed system should document encryption for transport, database, private files, backups, and eventual mobile local storage. A database backup and private-file backup must be recoverable as a consistent set.
-
-## Support and external integrations
-
-Self-hosting should have no default telemetry or outbound data transfer. If support tickets can be sent to Rafik, the user must opt in, see what is being sent, and be able to omit athlete health/injury data. The receiving support system and its retention/authority are part of the data-flow review.
-
-## Not in the initial architecture
-
-- Multi-university shared hosting or central Rafik access to university records.
-- AWS, Azure, or Google Terraform in the initial Compose stage.
-- A native application or reliable offline assessment sync before its data/command reconciliation contract is defined.
-- Clinical diagnosis or treatment decisions based on training assessment data.
-
-See [requirements and stage gates](../requirements/README.md) and [ADR 0006](../decisions/0006-prisma-api-transition.md).
+Previous architecture notes are preserved as dated material in the [documentation archive](../archive/README.md); they are not current implementation guidance.

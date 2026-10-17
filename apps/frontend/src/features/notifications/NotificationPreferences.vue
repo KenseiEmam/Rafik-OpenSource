@@ -41,6 +41,7 @@ const command = useCommand<'save'>(
   },
   (_, args) =>
     request('/v1/notifications/preferences', { method: 'POST', body: JSON.stringify(args) }),
+  { successMessage: l('Notification preferences updated.', 'تم تحديث تفضيلات الإشعارات.') },
 )
 const locked = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
 onMounted(load)
@@ -51,7 +52,7 @@ onMounted(load)
     <p>
       {{
         l(
-          'Sign-in codes are separate. These controls only affect optional coaching updates.',
+          'Account access uses your password. These controls only affect optional coaching updates.',
           'رموز الدخول منفصلة. هذه الإعدادات تخص تحديثات التدريب الاختيارية فقط.',
         )
       }}

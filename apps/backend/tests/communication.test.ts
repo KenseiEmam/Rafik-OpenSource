@@ -39,6 +39,80 @@ test("organization conversation scope, participation, read cursors and replay re
         trainer: staff.id,
       }),
     );
+    const direct = await call(
+      trainer,
+      `/v1/workspaces/${id}/communication`,
+      operation("create", {
+        id: randomUUID(),
+        view: "trainer",
+        title: "Athlete conversation",
+        members: [staff.id, trainee.id],
+        managers: [staff.id],
+      }),
+    );
+    const duplicateDirect = await call(
+      trainer,
+      `/v1/workspaces/${id}/communication`,
+      operation("create", {
+        id: randomUUID(),
+        view: "trainer",
+        title: "Another title",
+        members: [trainee.id, staff.id],
+        managers: [staff.id],
+      }),
+    );
+    assert.equal(direct.status, 200);
+    assert.equal(duplicateDirect.status, 200);
+    assert.equal(duplicateDirect.data.id, direct.data.id);
+    const directList = await call(
+      trainer,
+      `/v1/workspaces/${id}/communication?view=trainer`,
+    );
+    assert.ok(directList.data.directPeople.includes(trainee.id));
+    const groupId = randomUUID();
+    assert.equal(
+      (
+        await call(
+          trainer,
+          `/v1/workspaces/${id}/services`,
+          operation("group", {
+            id: groupId,
+            view: "trainer",
+            name: "Tuesday squad",
+            revision: 0,
+            archived: false,
+            members: [trainee.id, second.id],
+          }),
+        )
+      ).status,
+      200,
+    );
+    const groupConversation = await call(
+      trainer,
+      `/v1/workspaces/${id}/communication`,
+      operation("open-group", { id: groupId, view: "trainer" }),
+    );
+    const repeatedGroupConversation = await call(
+      trainer,
+      `/v1/workspaces/${id}/communication`,
+      operation("open-group", { id: groupId, view: "trainer" }),
+    );
+    assert.equal(
+      groupConversation.status,
+      200,
+      JSON.stringify(groupConversation),
+    );
+    assert.equal(repeatedGroupConversation.status, 200);
+    assert.equal(repeatedGroupConversation.data.id, groupConversation.data.id);
+    assert.equal(
+      (
+        await call(
+          trainer,
+          `/v1/workspaces/${id}/communication?view=trainer&id=${groupConversation.data.id}`,
+        )
+      ).data.people.length,
+      3,
+    );
     const channel = randomUUID(),
       create = operation("create", {
         id: channel,

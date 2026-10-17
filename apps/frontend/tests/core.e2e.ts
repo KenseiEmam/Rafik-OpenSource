@@ -66,25 +66,27 @@ test('coach publishes and invites; verified client trains; coach replies', async
   browser,
   request,
 }, info) => {
-  const email = `pilot-${crypto.randomUUID()}@rafik.test`
+  const email = 'client@rafik.test'
   const title = `Steady strength ${Date.now()}`
   await page.goto('/local-preview')
   await page.getByRole('button', { name: /Laila Khoury/ }).click()
   await expect(page).toHaveURL(/\/coach$/)
   await page.goto('/coach/plans/new')
-  await page.getByLabel('Plan name', { exact: true }).fill(title)
-  await page.getByRole('button', { name: 'Client preview', exact: true }).click()
-  await expect(page.getByRole('heading', { name: 'Goblet squat', exact: true })).toBeVisible()
-  await page.getByRole('button', { name: 'Edit plan', exact: true }).click()
+  await page.getByLabel('Program name', { exact: true }).fill(title)
+  await expect(page.locator('.program-empty-exercises')).toBeVisible()
+  await page.getByRole('button', { name: 'Add exercise', exact: true }).click()
+  await page.getByRole('button', { name: 'Athlete preview', exact: true }).click()
+  await expect(page.getByRole('heading', { name: title, exact: true })).toBeVisible()
+  await page.getByRole('button', { name: 'Edit program', exact: true }).click()
   await page.screenshot({ path: `artifacts/editor-${info.project.name}.png`, fullPage: true })
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
-  await page.getByRole('button', { name: 'Publish plan', exact: true }).click()
-  await expect(page.getByRole('status').filter({ hasText: 'Published.' })).toBeVisible()
+  await page.getByRole('button', { name: 'Publish program', exact: true }).click()
+  await expect(page.getByRole('status').filter({ hasText: 'Published and added' })).toBeVisible()
   await page.goto('/coach/clients')
-  await page.getByLabel('Client email', { exact: true }).fill(email)
-  await page.getByLabel('Published plan', { exact: true }).selectOption({ label: title + ' · 1' })
+  await page.getByLabel('Athlete email', { exact: true }).fill(email)
+  await page.getByLabel('Published program', { exact: true }).selectOption({ label: title + ' · 1' })
   await page.getByRole('button', { name: 'Create invitation link' }).click()
-  const invite = page.getByRole('textbox', { name: 'Share this link with your client' })
+  const invite = page.getByRole('textbox', { name: 'Share this link with the athlete' })
   await expect(invite).toBeVisible()
   const link = await invite.inputValue()
   await page.screenshot({ path: `artifacts/clients-${info.project.name}.png`, fullPage: true })
@@ -97,22 +99,9 @@ test('coach publishes and invites; verified client trains; coach replies', async
   const client = await clientContext.newPage()
   await client.goto(link)
   await expect(client.getByText('Laila Khoury', { exact: true })).toBeVisible()
-  await client.getByRole('button', { name: 'Verify my email' }).click()
-  await client.getByLabel('Email address', { exact: true }).fill(email)
-  await client.getByRole('button', { name: 'Send me a code' }).click()
-  await expect(client.getByRole('heading', { name: 'Check your email' })).toBeVisible()
-  let code = ''
-  await expect
-    .poll(async () => {
-      const inbox = await (await request.get(testApi + '/local/mail')).json()
-      code = inbox.find((m: any) => m.email === email)?.body || ''
-      return code
-    })
-    .toMatch(/^[0-9]{6}$/)
-  expect(code).toBeTruthy()
-  await client.getByLabel('Sign-in code').fill(code)
-  await client.getByRole('button', { name: 'Continue', exact: true }).click()
-  await expect(client).toHaveURL(/\/invite\//)
+  await client.goto('/local-preview')
+  await client.getByRole('button', { name: /Amir Hassan/ }).click()
+  await client.goto(link)
   await client.getByRole('button', { name: /Accept/ }).click()
   await expect(client).toHaveURL(/\/today$/)
   await client.getByRole('button', { name: 'Start workout', exact: true }).first().click()
@@ -251,11 +240,9 @@ test('production shell reloads an opened guest workout while offline', async ({
   }
 })
 
-test('guest account save returns to the completed session and adopts it automatically', async ({
+test('guest account save directs the user to institution-managed password sign-in', async ({
   page,
-  request,
 }) => {
-  const email = `guest-${crypto.randomUUID()}@rafik.test`
   await page.goto('/routine')
   await page.getByRole('button', { name: 'Start workout', exact: true }).click()
   await page.getByRole('spinbutton', { name: 'Set 1 load', exact: true }).fill('5.5')
@@ -264,25 +251,9 @@ test('guest account save returns to the completed session and adopts it automati
   await page.getByRole('button', { name: 'Finish with recorded sets' }).click()
   const path = new URL(page.url()).pathname
   await page.getByRole('button', { name: 'Save to my account' }).click()
-  await page.getByLabel('Email address', { exact: true }).fill(email)
-  await page.getByRole('button', { name: 'Send me a code' }).click()
-  await expect(page.getByLabel('Sign-in code')).toBeVisible()
-  let code = ''
-  await expect
-    .poll(async () => {
-      const inbox = await (await request.get(testApi + '/local/mail')).json()
-      code = inbox.find((m: any) => m.email === email)?.body || ''
-      return code
-    })
-    .toMatch(/^[0-9]{6}$/)
-  await page.getByLabel('Sign-in code').fill(code)
-  await page.getByRole('button', { name: 'Continue', exact: true }).click()
-  await expect(page).toHaveURL(testWeb + path)
-  await expect(page.getByRole('heading', { name: 'Session complete.' })).toBeVisible()
-  await expect(page.getByRole('status')).toContainText('Synced with your account')
-  await expect(page.getByRole('button', { name: 'Save to my account' })).toHaveCount(0)
-  await page.getByRole('button', { name: 'Correct recorded sets' }).click()
-  await expect(page.getByRole('spinbutton', { name: 'Set 1 load', exact: true })).toHaveValue('5.5')
+  await expect(page).toHaveURL(new RegExp(`/login\\?next=${encodeURIComponent(path)}`))
+  await expect(page.getByLabel('Password', { exact: true })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Send me a code' })).toHaveCount(0)
 })
 
 test('plan drafts recover after interruption and failed publication', async ({ page }) => {
@@ -290,11 +261,11 @@ test('plan drafts recover after interruption and failed publication', async ({ p
   await page.getByRole('button', { name: /Laila Khoury/ }).click()
   await expect(page).toHaveURL(/\/coach$/)
   await page.goto('/coach/plans/new')
-  await page.getByLabel('Plan name', { exact: true }).fill('Recoverable strength plan')
-  await page.getByLabel('Plan name', { exact: true }).blur()
+  await page.getByLabel('Program name', { exact: true }).fill('Recoverable strength program')
+  await page.getByLabel('Program name', { exact: true }).blur()
   await page.reload()
-  await expect(page.getByLabel('Plan name', { exact: true })).toHaveValue(
-    'Recoverable strength plan',
+  await expect(page.getByLabel('Program name', { exact: true })).toHaveValue(
+    'Recoverable strength program',
   )
   await expect(
     page.getByText('Your local draft has been restored.', { exact: false }),
@@ -306,14 +277,15 @@ test('plan drafts recover after interruption and failed publication', async ({ p
       body: JSON.stringify({ message: 'Test connection unavailable' }),
     }),
   )
-  await page.getByRole('button', { name: 'Publish plan', exact: true }).click()
+  await page.getByRole('button', { name: 'Add exercise', exact: true }).click()
+  await page.getByRole('button', { name: 'Publish program', exact: true }).click()
   await expect(page.getByRole('alert')).toBeVisible()
-  await expect(page.getByLabel('Plan name', { exact: true })).toHaveValue(
-    'Recoverable strength plan',
+  await expect(page.getByLabel('Program name', { exact: true })).toHaveValue(
+    'Recoverable strength program',
   )
   await page.unroute('**/v1/commands/save_plan')
   await page.getByRole('button', { name: 'Retry saved change', exact: true }).click()
-  await expect(page.getByRole('status').filter({ hasText: 'Published.' })).toBeVisible()
+  await expect(page.getByRole('status').filter({ hasText: 'Published and added' })).toBeVisible()
 })
 
 test('invalid set values cannot be marked complete, and keyboard skip navigation works', async ({

@@ -12,10 +12,10 @@ const actionLabel = (kind: string) =>
     (
       {
         identity_state: 'Account access changed',
-        organization_state: 'Organization access changed',
+        organization_state: 'Institution access changed',
         support_reply: 'Support response saved',
         view_users: 'Account directory viewed',
-        view_organizations: 'Organization directory viewed',
+        view_organizations: 'Institution directory viewed',
         view_support: 'Support queue viewed',
         view_audit: 'Audit history viewed',
       } as Record<string, string>
@@ -42,7 +42,7 @@ const section = ref('organizations'),
   reason = ref(''),
   reply = ref('')
 const labels = () => ({
-  organizations: l('Organizations', 'المؤسسات'),
+  organizations: l('Institutions', 'المؤسسات'),
   users: l('Accounts', 'الحسابات'),
   support: l('Platform support', 'دعم المنصة'),
   audit: l('Audit history', 'سجل الإجراءات'),
@@ -116,7 +116,7 @@ onMounted(() => load())
         <p>
           {{
             l(
-              'Operational access is audited. Organization roles do not grant platform authority.',
+              'Operational access is audited. Institution roles do not grant platform authority.',
               'يُسجَّل الوصول التشغيلي. أدوار المؤسسات لا تمنح صلاحية إدارة المنصة.',
             )
           }}
@@ -145,7 +145,7 @@ onMounted(() => load())
         {{
           section === 'organizations'
             ? l(
-                'Closing ends access for every organization member; reopening restores their existing memberships. History is preserved.',
+                'Closing ends access for every institution member; reopening restores their existing memberships. History is preserved.',
                 'يوقف الإغلاق وصول جميع أعضاء المؤسسة وتستعيد إعادة الفتح عضوياتهم الحالية. يُحفظ السجل.',
               )
             : l(
@@ -183,7 +183,7 @@ onMounted(() => load())
             <h2 dir="auto">
               {{ item.name || item.email || item.subject || actionLabel(item.kind) }}
             </h2>
-            <p v-if="section === 'organizations'">
+            <p v-if="section === 'institutions'">
               {{ item.archived ? l('Closed', 'مغلقة') : l('Open', 'مفتوحة') }} ·
               {{ item._count.workspace_members }} {{ l('members', 'عضو') }}
             </p>
@@ -223,7 +223,7 @@ onMounted(() => load())
                 : section === 'organizations'
                   ? item.archived
                     ? l('Reopen', 'إعادة فتح')
-                    : l('Close organization', 'إغلاق المؤسسة')
+                    : l('Close institution', 'إغلاق المؤسسة')
                   : item.suspended
                     ? l('Restore access', 'استعادة الوصول')
                     : l('Suspend access', 'تعليق الوصول')

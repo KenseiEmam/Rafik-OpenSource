@@ -22,10 +22,6 @@ export type TrainingGroup = {
   archived: boolean
 }
 export type EventPerson = {
-  package_id: string | null
-  package: { id: string; title: string; available: number } | null
-  independent_reason: string
-  charge_absence: boolean | null
   session_note: string
   checked_in_at: string | null
   makeup_for: string | null

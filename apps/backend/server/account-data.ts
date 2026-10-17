@@ -79,8 +79,6 @@ export async function organizationAccountData(actor: Actor) {
     await db.$queryRaw`SELECT id,workspace_id,purpose,channel_id,filename,media_type,bytes,retired,created_at FROM public.organization_assets WHERE owner_id=ANY(${ids}::uuid[])`;
   const tasks =
     await db.$queryRaw`SELECT * FROM public.organization_tasks WHERE assigned_to=ANY(${ids}::uuid[]) OR created_by=ANY(${ids}::uuid[])`;
-  const packages =
-    await db.$queryRaw`SELECT * FROM public.organization_package_balances WHERE member_id=ANY(${ids}::uuid[])`;
   const sessionFeedback =
     await db.$queryRaw`SELECT * FROM public.organization_session_feedback WHERE member_id=ANY(${ids}::uuid[])`;
   const workplaceFeedback =
@@ -88,7 +86,6 @@ export async function organizationAccountData(actor: Actor) {
   return {
     sessionFeedback,
     workplaceFeedback,
-    packages,
     tasks,
     assets,
     nutritionPlans,

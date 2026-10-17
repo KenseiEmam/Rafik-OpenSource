@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { onUnmounted, watch } from 'vue'
 import { language as l } from '../../lib/i18n'
-withDefaults(
+const props = withDefaults(
   defineProps<{
     showNotice?: boolean
     command: {
@@ -10,6 +11,20 @@ withDefaults(
   }>(),
   { showNotice: true },
 )
+let noticeTimer: ReturnType<typeof setTimeout> | undefined
+watch(
+  () => props.command.state.notice,
+  (notice) => {
+    if (noticeTimer) clearTimeout(noticeTimer)
+    if (notice)
+      noticeTimer = setTimeout(() => {
+        if (props.command.state.notice === notice) props.command.state.notice = ''
+      }, 5000)
+  },
+)
+onUnmounted(() => {
+  if (noticeTimer) clearTimeout(noticeTimer)
+})
 </script>
 <template>
   <p v-if="command.state.error" class="notice error" role="alert">{{ command.state.error }}</p>

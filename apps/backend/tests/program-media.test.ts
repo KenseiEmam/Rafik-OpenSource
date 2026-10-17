@@ -98,22 +98,6 @@ test("private program imagery has immutable bytes, workspace publication and rev
       id: randomUUID(),
     });
     assert.equal(foreign.status, 400);
-    assert.equal(
-      (
-        await call(
-          admin,
-          `/v1/workspaces/${id}/programs`,
-          operation("listing", {
-            view: "admin",
-            id: program,
-            revision: 1,
-            record_revision: 1,
-            value: true,
-          }),
-        )
-      ).status,
-      200,
-    );
     const downloaded = await media(client, image);
     assert.equal(downloaded.status, 200);
     assert.ok(Buffer.from(await downloaded.arrayBuffer()).equals(png));

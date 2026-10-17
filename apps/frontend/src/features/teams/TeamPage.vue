@@ -54,7 +54,7 @@ const availableClients = computed(() =>
   ),
 )
 const name = (client: string) =>
-  profiles.value.find((p) => p.id === client)?.display_name || l('Client', 'متدرب')
+  profiles.value.find((p) => p.id === client)?.display_name || l('Athlete', 'رياضي')
 const roleName = (value: string) =>
   ({ owner: l('Owner', 'مالك'), admin: l('Admin', 'مدير'), coach: l('Coach', 'مدرب') })[value]
 async function load() {
@@ -133,10 +133,10 @@ const activityLabels: Record<string, [string, string]> = {
   member_coach: ['Coach role set', 'عُيّن دور مدرب'],
   member_owner: ['Ownership transferred', 'نُقلت الملكية'],
   team_closed: ['Team closed', 'أُغلق الفريق'],
-  client_proposed: ['Client enrollment requested', 'طُلب انضمام متدرب'],
+  client_proposed: ['Athlete enrollment requested', 'طُلب انضمام متدرب'],
   handoff_requested: ['Coach change requested', 'طُلب تغيير مدرب'],
-  client_accepted: ['Client approved change', 'وافق المتدرب'],
-  client_declined: ['Client declined change', 'رفض المتدرب'],
+  client_accepted: ['Athlete approved change', 'وافق المتدرب'],
+  client_declined: ['Athlete declined change', 'رفض المتدرب'],
   enrollment_closed: ['Enrollment closed', 'أُغلق انضمام'],
   plan_shared: ['Plan shared', 'شوركت خطة'],
   plan_removed: ['Shared plan removed', 'أُزيلت خطة مشتركة'],
@@ -173,7 +173,7 @@ onMounted(async () => {
         <nav class="workspace-tabs" :aria-label="l('Team sections', 'أقسام الفريق')">
           <button
             v-for="item in [
-              ['clients', 'Clients', 'المتدربون'],
+              ['clients', 'Athletes', 'المتدربون'],
               ['people', 'Staff', 'الموظفون'],
               ['groups', 'Groups', 'المجموعات'],
               ['library', 'Shared library', 'المكتبة المشتركة'],
@@ -191,7 +191,7 @@ onMounted(async () => {
             <p class="notice">
               {{
                 l(
-                  'The roster shares names and responsibilities. Coaching details remain private to each coach and client.',
+                  'The roster shares names and responsibilities. Coaching details remain private to each coach and athlete.',
                   'تشارك القائمة الأسماء والمسؤوليات. تبقى تفاصيل التدريب خاصة بالمدرب والمتدرب.',
                 )
               }}
@@ -199,7 +199,7 @@ onMounted(async () => {
             <p v-if="!data.clients.length" class="empty-review">
               {{
                 l(
-                  'No clients on your team roster yet. Ask an existing client to join.',
+                  'No athletes on your team roster yet. Ask an existing athlete to join.',
                   'لا يوجد متدربون في قائمتك بعد. اطلب من متدرب حالي الانضمام.',
                 )
               }}
@@ -207,7 +207,7 @@ onMounted(async () => {
             <article v-for="c in data.clients" :key="c.id" class="panel team-client">
               <span class="tag">{{
                 c.state === 'pending'
-                  ? l('Awaiting client approval', 'بانتظار موافقة المتدرب')
+                  ? l('Awaiting athlete approval', 'بانتظار موافقة المتدرب')
                   : l('Active', 'نشط')
               }}</span>
               <h2>{{ c.name }}</h2>
@@ -220,7 +220,7 @@ onMounted(async () => {
               >
               <p v-if="c.pending_coach_id" class="notice">
                 {{ l('Proposed coach', 'المدرب المقترح') }}: {{ c.pending_name }} ·
-                {{ l('Waiting for client approval.', 'بانتظار موافقة المتدرب.') }}
+                {{ l('Waiting for athlete approval.', 'بانتظار موافقة المتدرب.') }}
               </p>
               <form
                 v-if="admin && c.state === 'active'"
@@ -296,12 +296,12 @@ onMounted(async () => {
               })
             "
           >
-            <h2>{{ l('Invite an existing client', 'دعوة متدرب حالي') }}</h2>
+            <h2>{{ l('Invite an existing athlete', 'دعوة متدرب حالي') }}</h2>
             <fieldset class="command-fields" :disabled="locked">
               <label
-                >{{ l('Your client', 'متدربك')
+                >{{ l('Your athlete', 'متدربك')
                 }}<select v-model="relationship" required>
-                  <option value="" disabled>{{ l('Choose a client', 'اختر متدرباً') }}</option>
+                  <option value="" disabled>{{ l('Choose an athlete', 'اختر رياضياً') }}</option>
                   <option v-for="r in availableClients" :key="r.id" :value="r.id">
                     {{ name(r.client_id) }}
                   </option>
@@ -310,7 +310,7 @@ onMounted(async () => {
               <p>
                 {{
                   l(
-                    'The client approves in More → Teams. No private coaching records become visible to the whole team.',
+                    'The athlete approves in More → Teams. No private coaching records become visible to the whole team.',
                     'يوافق المتدرب من المزيد ← الفرق. لا تصبح سجلات التدريب الخاصة مرئية للفريق بأكمله.',
                   )
                 }}
@@ -320,7 +320,7 @@ onMounted(async () => {
               </button>
             </fieldset>
             <RouterLink class="text-link" to="/coach/clients">{{
-              l('Invite a new coaching client first', 'دعوة متدرب جديد أولاً')
+              l('Invite a new athlete first', 'دعوة رياضي جديد أولاً')
             }}</RouterLink>
           </form>
         </section>
@@ -461,7 +461,7 @@ onMounted(async () => {
         </section>
         <section v-if="tab === 'groups'" class="ongoing-layout">
           <div class="panel form-stack">
-            <h2>{{ l('Client groups', 'مجموعات المتدربين') }}</h2>
+            <h2>{{ l('Athlete groups', 'مجموعات المتدربين') }}</h2>
             <label
               >{{ l('Selected group', 'المجموعة المحددة')
               }}<select v-model="group" @change="chooseGroup">
@@ -493,7 +493,7 @@ onMounted(async () => {
                 </button>
               </div>
               <p v-if="!groupMembers.length">
-                {{ l('No clients in this group yet.', 'لا يوجد متدربون في المجموعة بعد.') }}
+                {{ l('No athletes in this group yet.', 'لا يوجد متدربون في المجموعة بعد.') }}
               </p>
               <form
                 v-if="admin"
@@ -507,9 +507,9 @@ onMounted(async () => {
                 "
               >
                 <label
-                  >{{ l('Add client to group', 'إضافة متدرب للمجموعة')
+                  >{{ l('Add athlete to group', 'إضافة متدرب للمجموعة')
                   }}<select v-model="groupClient" required :disabled="locked">
-                    <option value="" disabled>{{ l('Choose a client', 'اختر متدرباً') }}</option>
+                    <option value="" disabled>{{ l('Choose an athlete', 'اختر رياضياً') }}</option>
                     <option
                       v-for="c in data.clients.filter(
                         (c) => c.state === 'active' && !groupMembers.some((m) => m.id === c.id),
@@ -525,11 +525,11 @@ onMounted(async () => {
                 </button>
               </form>
               <form class="form-stack" @submit.prevent="confirm = 'assign'">
-                <h3>{{ l('Assign to selected clients', 'تعيين للمحددين') }}</h3>
+                <h3>{{ l('Assign to selected athletes', 'تعيين للمحددين') }}</h3>
                 <p>
                   {{
                     l(
-                      'You can select only clients you coach. This changes future plans; started sessions retain their snapshots.',
+                      'You can select only athletes you coach. This changes future plans; started sessions retain their snapshots.',
                       'يمكنك تحديد المتدربين الذين تدربهم فقط. تتغير الخطط المستقبلية وتبقى نسخ الحصص التي بدأت محفوظة.',
                     )
                   }}
@@ -550,7 +550,7 @@ onMounted(async () => {
                 <div v-if="confirm === 'assign'" class="notice">
                   <p>
                     {{ l('Replace future plans for', 'استبدال الخطط المستقبلية لـ') }}
-                    {{ selected.length }} {{ l('selected clients?', 'متدربين محددين؟') }}
+                    {{ selected.length }} {{ l('selected athletes?', 'متدربين محددين؟') }}
                   </p>
                   <button
                     type="button"
@@ -621,7 +621,7 @@ onMounted(async () => {
               <p>
                 {{
                   l(
-                    'Remove this group from the workspace? Client enrollments and assigned plans stay intact.',
+                    'Remove this group from the workspace? Athlete enrollments and assigned plans stay intact.',
                     'هل تريد إزالة المجموعة من مساحة العمل؟ تبقى انضمامات المتدربين وخططهم المعيّنة محفوظة.',
                   )
                 }}
@@ -685,7 +685,7 @@ onMounted(async () => {
               <p>
                 {{
                   l(
-                    'Shared with active staff. Client access is managed separately in Resources.',
+                    'Shared with active staff. Athlete access is managed separately in Resources.',
                     'مشتركة مع الموظفين النشطين. يُدار وصول المتدربين بشكل منفصل في الملفات.',
                   )
                 }}
@@ -821,7 +821,7 @@ onMounted(async () => {
               <p>
                 {{
                   l(
-                    'Close all client enrollments first. This ends team access and pending staff invitations; personal coaching and imported plans remain.',
+                    'Close all athlete enrollments first. This ends team access and pending staff invitations; personal coaching and imported plans remain.',
                     'أغلق انضمامات المتدربين أولاً. ينهي هذا وصول الفريق ودعوات الموظفين المعلقة؛ يبقى التدريب الشخصي والخطط المنسوخة.',
                   )
                 }}

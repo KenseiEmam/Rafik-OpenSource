@@ -60,7 +60,7 @@ onMounted(load)
         <p>
           {{
             l(
-              'You will see shared team material and clients assigned to you. Joining does not expose other coaches’ private conversations.',
+              'You will see shared team material and athletes assigned to you. Joining does not expose other coaches’ private conversations.',
               'سترى المواد المشتركة والمتدربين المكلّف بهم. لا يكشف الانضمام المحادثات الخاصة للمدربين الآخرين.',
             )
           }}
@@ -74,7 +74,7 @@ onMounted(load)
           {{
             user
               ? l('Accept team invitation', 'قبول دعوة الفريق')
-              : l('Verify my email', 'التحقق من بريدي')
+              : l('Sign in to accept', 'سجّل الدخول للقبول')
           }}
         </button>
         <p v-else class="notice">

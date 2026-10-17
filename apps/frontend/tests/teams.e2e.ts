@@ -50,9 +50,9 @@ test('team invitation, client consent, group assignment and handoff work with re
       .selectOption({ label: 'Morning group' })
     await page
       .getByRole('combobox', { name: 'Add client to group', exact: true })
-      .selectOption({ label: 'R4 Client' })
+      .selectOption({ label: 'R4 Athlete' })
     await page.getByRole('button', { name: 'Add to group', exact: true }).click()
-    await page.getByRole('checkbox', { name: 'R4 Client', exact: true }).check()
+    await page.getByRole('checkbox', { name: 'R4 Athlete', exact: true }).check()
     await page
       .getByRole('combobox', { name: 'Published plan for group', exact: true })
       .selectOption(f.version.id)
@@ -95,7 +95,7 @@ test('team invitation, client consent, group assignment and handoff work with re
       client.getByRole('button', { name: 'Approve coach change', exact: true }),
     ).toBeHidden()
     await staff.goto('/coach/teams/' + id)
-    await expect(staff.getByRole('heading', { name: 'R4 Client', exact: true })).toBeVisible()
+    await expect(staff.getByRole('heading', { name: 'R4 Athlete', exact: true })).toBeVisible()
     await expect(
       staff.getByRole('link', { name: 'Open coaching workspace', exact: true }),
     ).toBeVisible()

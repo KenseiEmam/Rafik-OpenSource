@@ -1,12 +1,12 @@
 # Rafik
 
-Repository name target: `KenseiEmam/Rafik-OpenSource`. The local monorepo metadata is updated; the GitHub repository itself still needs its authenticated rename.
+Repository: [`KenseiEmam/Rafik-OpenSource`](https://github.com/KenseiEmam/Rafik-OpenSource).
 
 Rafik is being redirected to help universities and university coaches support young athletes through training, attendance, performance, and relevant health workflows. The target is an open-source product that each university can deploy on infrastructure it controls, without a Rafik software subscription.
 
 ## Project status
 
-The approved migration is staged in [the requirements and acceptance plan](docs/requirements/README.md). The frontend and backend histories are consolidated as npm workspaces at `apps/frontend/` and `apps/backend/`; shared transport contracts and generated database types live in `packages/shared/`. The current application still reflects the gym and training-organization product; it is not yet a supported university deployment. The single Compose file starts PostgreSQL for local development only. Secure self-hosting, injury-history workflows, cloud templates, and native apps are not implemented.
+The approved migration is staged in [the requirements and acceptance plan](docs/requirements/README.md). The frontend and backend histories are consolidated as npm workspaces at `apps/frontend/` and `apps/backend/`; shared transport contracts and generated database types live in `packages/shared/`. The application now has a university-oriented organization foundation and a self-host Compose profile. Stage 3 deployment hardening and Stage 4 university workflow/privacy gates remain open, so this is not yet declared production-ready for real athlete data. Cloud templates and native apps are later stages.
 
 Each university is expected to operate a separate instance and control its users, data, files, secrets, backups, retention, and infrastructure. Hosting and maintenance costs are the university's responsibility.
 
@@ -15,13 +15,13 @@ Each university is expected to operate a separate instance and control its users
 - `apps/frontend/`: Vue 3/TypeScript web application, Vite build, feature modules, browser persistence, and web tests.
 - `apps/backend/`: TypeScript API, Prisma schema and migrations, canonical content, and API tests.
 - `packages/shared/`: shared API contracts and generated database transport types used across app workspaces.
-- `infrastructure/`: the one local development Compose definition; deployable university infrastructure remains a later stage.
+- `infrastructure/`: the single Compose definition, with local-development and university self-host profiles; see its [deployment guide](infrastructure/README.md).
 - `docs/`: approved product requirements, target architecture, and decisions.
 - `LICENSE`: Apache License 2.0 for project code and documentation. Bundled media and datasets can have separate terms; check their credits and source licenses before reuse.
 
 ## Local development
 
-Prerequisites: Node.js 22.16.0, npm, and Docker Desktop with Compose. Open a terminal in the repository root and install all workspaces once.
+Prerequisites: Node.js 22.16 or Node.js 24, npm, and Docker Compose. The production images use the pinned Node.js 22.16 runtime. Open a terminal in the repository root and install all workspaces once.
 
 ```sh
 npm ci
@@ -40,7 +40,19 @@ npm run start:api
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173`. Local preview accounts and the test inbox are development-only; they are not production identity or email services. For local stack details and recovery limits, read [the runbook](docs/implementation/runbook.md).
+Open `http://127.0.0.1:5173`. A new empty database opens the super-admin setup form; seeded local databases use the local preview accounts for demonstrations. For sample identities, recovery steps and verification limits, read the [development guide](./docs/development/README.md) and [operations guide](./docs/operations/README.md).
+
+## University self-hosting
+
+The repository documents a Docker Compose deployment for a Unix server controlled by the university. It uses PostgreSQL on an internal container network, the API, web app and Caddy HTTPS. First launch creates a super-admin account without email verification; invitations are shared as expiring, single-use links. Keep a new instance on a private network until setup is complete. Each university sets its own instance name, domain, secrets, backups and retention operations. Start with the [infrastructure deployment guide](infrastructure/README.md) and follow the [production runbook](./docs/operations/README.md).
+
+```sh
+cp infrastructure/.env.selfhost.example infrastructure/.env.selfhost
+# Edit the file with the university's unique instance, domain and credentials.
+docker compose --env-file infrastructure/.env.selfhost -f infrastructure/compose.yaml --profile selfhost up -d --build
+```
+
+The Compose profile is an implemented deployment foundation, not a production-readiness claim. Complete the Stage 3 upgrade/rollback and university operations gates, and obtain the Stage 4 privacy/security review before using real athlete data. Do not use local sample accounts or synthetic seed data on a hosted instance.
 
 ## Checks
 
@@ -63,17 +75,21 @@ npm run content:check
 npm run docs:check
 ```
 
-The full local acceptance chain is documented in [the runbook](docs/implementation/runbook.md). Browser emulation does not establish physical-device behavior, and local checks do not establish hosted security or operational readiness.
+The full local acceptance chain is documented in [the runbook](./docs/operations/README.md). Browser emulation does not establish physical-device behavior, and local checks do not establish hosted security or operational readiness.
 
 ## Documentation and contribution
 
 - [Documentation index](docs/README.md)
 - [Requirements, stages, and gates](docs/requirements/README.md)
 - [Target architecture](docs/architecture/README.md)
+- [Development setup and workflows](docs/development/README.md)
+- [Testing strategy](docs/testing/README.md)
+- [Operations and release](docs/operations/README.md)
+- [Known issues and release gaps](docs/known-issues/README.md)
 - [Architecture decisions](docs/decisions/)
 - [Contribution workflow](CONTRIBUTING.md)
 - [Security vulnerability reporting](SECURITY.md)
-- [Current implementation ledger](docs/implementation/ledger.md)
-- [Verification record and limitations](docs/implementation/verification.md)
+- [Current implementation ledger](./docs/development/ledger.md)
+- [Verification record and limitations](docs/verification/README.md)
 
 Work one approved stage at a time. Do not claim a feature, deployment, privacy compliance, or offline reliability until the corresponding acceptance evidence exists. Keep university legal/privacy requirements for confirmation by each institution; this project does not claim jurisdiction-specific compliance.

@@ -1,6 +1,12 @@
 import { pageOffset } from "./service-definitions.ts";
 import { createHash, randomUUID } from "node:crypto";
-import { db, asActor, ApiError, type Actor } from "./db.ts";
+import {
+  db,
+  asActor,
+  ApiError,
+  ensureProfileInTransaction,
+  type Actor,
+} from "./db.ts";
 import type { Prisma } from "./generated/prisma/client.ts";
 export type Tx = Prisma.TransactionClient;
 export type Role = "admin" | "trainer" | "trainee";
@@ -23,12 +29,16 @@ export function textValue(value: unknown, max = 100) {
 function roleList(value: unknown): Role[] {
   if (
     !Array.isArray(value) ||
-    !value.length ||
-    value.length > 3 ||
+    value.length !== 1 ||
     value.some((r) => !["admin", "trainer", "trainee"].includes(r))
   )
     throw new ApiError(400, "invalid_roles");
-  return [...new Set(value)].sort() as Role[];
+  return value as Role[];
+}
+function primaryRole(roles: readonly string[]): Role | undefined {
+  return (["admin", "trainer", "trainee"] as const).find((role) =>
+    roles.includes(role),
+  );
 }
 export async function access(
   tx: Tx,
@@ -45,7 +55,7 @@ export async function access(
     !member?.active ||
     (member.workspaces.archived && !allowArchived) ||
     member.workspaces.kind !== "organization" ||
-    (roles.length && !roles.some((r) => member.roles.includes(r)))
+    (roles.length && !roles.includes(primaryRole(member.roles)!))
   )
     throw new ApiError(403, "workspace_unavailable");
   return member;
@@ -153,30 +163,42 @@ export async function contexts(actor: Actor) {
     include: { workspaces: true },
     orderBy: { joined_at: "asc" },
   });
+  const hasMembership =
+    (await db.workspace_members.count({
+      where: { user_id: actor.id },
+    })) > 0;
   return {
-    contexts: [
-      {
-        id: "personal",
-        kind: "personal",
-        name: "My training",
-        role: "trainee",
-        path: "/today",
-      },
-      ...memberships.flatMap((m) =>
-        m.roles.map((role) => ({
-          id: m.workspace_id + ":" + role,
-          workspace_id: m.workspace_id,
-          member_id: m.id,
-          kind: m.workspaces.kind,
-          name: m.workspaces.name,
-          role,
-          path:
-            m.workspaces.kind === "independent"
-              ? "/coach"
-              : `/organization/${m.workspace_id}/${role}`,
-        })),
-      ),
-    ],
+    contexts: memberships.length
+      ? memberships.flatMap((m) => {
+          const role = primaryRole(m.roles);
+          return role
+            ? [
+                {
+                  id: m.workspace_id + ":" + role,
+                  workspace_id: m.workspace_id,
+                  member_id: m.id,
+                  kind: m.workspaces.kind,
+                  name: m.workspaces.name,
+                  role,
+                  path:
+                    m.workspaces.kind === "independent"
+                      ? "/coach"
+                      : `/organization/${m.workspace_id}/${role}`,
+                },
+              ]
+            : [];
+        })
+      : hasMembership
+        ? []
+        : [
+            {
+              id: "personal",
+              kind: "personal",
+              name: "My training",
+              role: "trainee",
+              path: "/today",
+            },
+          ],
     platform: !!(await db.platform_grants.findUnique({
       where: { user_id: actor.id },
     })),
@@ -216,12 +238,7 @@ export async function createWorkspace(
       const existing = await tx.workspaces.count({
         where: { kind: "organization" },
       });
-      if (
-        kind !== "organization" ||
-        existing !== 0 ||
-        actor.email?.toLowerCase() !==
-          process.env.RAFIK_BOOTSTRAP_EMAIL?.toLowerCase()
-      )
+      if (kind !== "organization" || existing !== 0)
         throw new ApiError(403, "initial_administrator_bootstrap_closed");
     }
     await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${actor.id},74))::text`;
@@ -392,7 +409,11 @@ export async function workspaceCommand(
   id: string,
   input: Record<string, unknown>,
 ) {
-  return mutation(actor, id, ["admin"], input, async (tx, self) => {
+  const persistedInput =
+    input.action === "invite" || input.action === "password-link"
+      ? { ...input, token: hash(String(input.token)) }
+      : input;
+  return mutation(actor, id, ["admin"], persistedInput, async (tx, self) => {
     const action = input.action;
     if (action === "invite") {
       const email = textValue(input.email, 254).toLowerCase(),
@@ -433,6 +454,28 @@ export async function workspaceCommand(
       });
       await event(tx, actor, id, "member_invited", invite, { roles });
       return { id: result.id };
+    }
+    if (action === "password-link") {
+      const member = await tx.workspace_members.findFirst({
+        where: { id: uuid(input.id), workspace_id: id, active: true },
+      });
+      const token = textValue(input.token, 64);
+      if (!member?.user_id || !/^[a-f0-9]{64}$/.test(token))
+        throw new ApiError(404, "member_unavailable");
+      await tx.password_setup_tokens.deleteMany({
+        where: { user_id: member.user_id },
+      });
+      await tx.password_setup_tokens.create({
+        data: {
+          token_hash: hash(token),
+          user_id: member.user_id,
+          workspace_id: id,
+          created_by: actor.id,
+          expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        },
+      });
+      await event(tx, actor, id, "member_password_setup_issued", member.id);
+      return { saved: true };
     }
     if (action === "revoke-invite") {
       const invite = await tx.workspace_invitations.findFirst({
@@ -562,6 +605,7 @@ export async function invitation(
   if (!accept)
     return {
       organization: invite.workspaces.name,
+      email: invite.email,
       roles: invite.roles,
       state: invite.state,
       expires_at: invite.expires_at,
@@ -635,6 +679,96 @@ export async function invitation(
       ),
     };
   });
+}
+
+export async function acceptInvitationSignup(
+  token: string,
+  email: string,
+  name: string,
+  passwordHash: string,
+) {
+  if (!/^[a-f0-9]{64}$/.test(token))
+    throw new ApiError(404, "invitation_unavailable");
+  const tokenHash = hash(token),
+    normalizedEmail = email.toLowerCase();
+  try {
+    return await db.$transaction(async (tx) => {
+      const preview = await tx.workspace_invitations.findUnique({
+        where: { token_hash: tokenHash },
+        include: { workspaces: true },
+      });
+      if (
+        !preview ||
+        preview.state !== "pending" ||
+        preview.expires_at <= new Date() ||
+        preview.workspaces.archived
+      )
+        throw new ApiError(404, "invitation_unavailable");
+      await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${preview.workspace_id},73))::text`;
+      const current = await tx.workspace_invitations.findUnique({
+        where: { id: preview.id },
+        include: { workspaces: true },
+      });
+      if (
+        !current ||
+        current.state !== "pending" ||
+        current.expires_at <= new Date() ||
+        current.workspaces.archived
+      )
+        throw new ApiError(404, "invitation_unavailable");
+      if (current.email !== normalizedEmail)
+        throw new ApiError(403, "invitation_email_mismatch");
+      if (await tx.users.findUnique({ where: { email: normalizedEmail } }))
+        throw new ApiError(409, "account_exists");
+      const user = await tx.users.create({
+        data: {
+          email: normalizedEmail,
+          password_hash: passwordHash,
+          raw_user_meta_data: { display_name: name },
+        },
+      });
+      await ensureProfileInTransaction(
+        tx,
+        {
+          id: user.id,
+          email: user.email,
+          user_metadata: { display_name: name },
+        },
+        name,
+      );
+      await tx.workspace_members.create({
+        data: {
+          id: randomUUID(),
+          workspace_id: current.workspace_id,
+          user_id: user.id,
+          roles: current.roles,
+          name,
+        },
+      });
+      await tx.workspace_invitations.update({
+        where: { id: current.id },
+        data: { state: "accepted", accepted_by: user.id },
+      });
+      const account: Actor = {
+        id: user.id,
+        email: user.email,
+        user_metadata: { display_name: name },
+      };
+      await event(tx, account, current.workspace_id, "member_joined", user.id, {
+        roles: current.roles,
+      });
+      return { user, workspace_id: current.workspace_id, roles: current.roles };
+    });
+  } catch (error) {
+    if (
+      error &&
+      typeof error === "object" &&
+      "code" in error &&
+      error.code === "P2002"
+    )
+      throw new ApiError(409, "account_exists");
+    throw error;
+  }
 }
 export async function requirePractice(actor: Actor | null) {
   if (

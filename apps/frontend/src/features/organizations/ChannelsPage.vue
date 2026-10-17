@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { request } from '../../lib/backend'
 import { language as l, errorMessage } from '../../lib/i18n'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
 import OrganizationNav from './OrganizationNav.vue'
-import ChannelEditor from './ChannelEditor.vue'
 import ChannelThread from './ChannelThread.vue'
+import type { Member, Organization } from './types'
 const route = useRoute(),
   router = useRouter(),
   workspace = String(route.params.workspace),
@@ -23,29 +23,61 @@ type Channel = {
 }
 const thread = ref<InstanceType<typeof ChannelThread>>()
 async function refresh() {
-  await Promise.all([load(), thread.value?.refresh()])
+  await Promise.all([load(), loadPeople(), thread.value?.refresh()])
 }
 const items = ref<Channel[]>([]),
+  people = ref<Member[]>([]),
+  directPeople = ref<string[]>([]),
+  workspaceSelf = ref<Organization['self']>(),
   search = ref(String(route.query.search || '')),
   next = ref<number | null>(null),
   loading = ref(true),
+  peopleLoading = ref(true),
   error = ref(''),
-  creating = ref(false),
+  peopleError = ref(''),
   manage = ref(false)
+const contacts = computed(() =>
+  people.value
+    .filter((person) => person.active && person.id !== workspaceSelf.value?.id)
+    .filter((person) => !directPeople.value.includes(person.id))
+    .filter(
+      (person) => !search.value || person.name.toLowerCase().includes(search.value.toLowerCase()),
+    )
+    .sort((a, b) => a.name.localeCompare(b.name)),
+)
 async function load(append = false) {
   loading.value = true
   error.value = ''
   try {
-    const result = await request<{ items: Channel[]; next: number | null }>(
+    const result = await request<{
+      items: Channel[]
+      next: number | null
+      directPeople: string[]
+    }>(
       `/v1/workspaces/${workspace}/communication?view=${view}&search=${encodeURIComponent(search.value)}&offset=${append ? next.value || 0 : 0}&manage=${manage.value}`,
     )
     items.value = append ? [...items.value, ...result.items] : result.items
+    directPeople.value = result.directPeople
     next.value = result.next
   } catch (e) {
     error.value = errorMessage(e)
     items.value = []
   } finally {
     loading.value = false
+  }
+}
+async function loadPeople() {
+  peopleLoading.value = true
+  peopleError.value = ''
+  try {
+    const result = await request<Organization>(`/v1/workspaces/${workspace}?view=${view}`)
+    workspaceSelf.value = result.self
+    people.value = result.members
+  } catch (e) {
+    peopleError.value = errorMessage(e)
+    people.value = []
+  } finally {
+    peopleLoading.value = false
   }
 }
 const join = useCommand<'join'>(
@@ -62,102 +94,220 @@ const join = useCommand<'join'>(
 const locked = computed(() => join.state.busy || !!join.state.pending)
 const joinConversation = (id: string) =>
   join.run('join', { id, view, action: 'join', operation: crypto.randomUUID() })
-async function opened(key: string) {
-  creating.value = false
-  await router.push(base + '/' + key)
-}
-onMounted(() => load())
+const direct = useCommand<'direct'>(
+  `channel-direct:${workspace}:${view}`,
+  async (_, result) => {
+    await router.push(base + '/' + (result as { id: string }).id)
+  },
+  (_, args) =>
+    request(`/v1/workspaces/${workspace}/communication`, {
+      method: 'POST',
+      body: JSON.stringify(args),
+    }),
+  { successToast: false },
+)
+const openDirect = (person: Member) =>
+  direct.run('direct', {
+    id: crypto.randomUUID(),
+    title: person.name,
+    members: [workspaceSelf.value!.id, person.id],
+    managers: [workspaceSelf.value!.id],
+    action: 'create',
+    view,
+    operation: crypto.randomUUID(),
+  })
+watch(
+  [() => route.query.to, () => peopleLoading.value],
+  ([target, isLoading]) => {
+    if (!target || isLoading || view === 'trainee') return
+    const person = people.value.find((member) => member.id === String(target) && member.active)
+    if (person) void openDirect(person)
+  },
+  { immediate: true },
+)
+const openGroup = useCommand<'open-group'>(
+  `channel-group:${workspace}:${view}`,
+  async (_, result) => {
+    const channel = result as { id: string }
+    await router.replace(base + '/' + channel.id)
+  },
+  (_, args) =>
+    request(`/v1/workspaces/${workspace}/communication`, {
+      method: 'POST',
+      body: JSON.stringify(args),
+    }),
+)
+watch(
+  [() => route.query.group, () => openGroup.state.ready],
+  ([group, ready]) => {
+    const groupId = String(group || '')
+    if (groupId && ready && !openGroup.state.busy)
+      void openGroup.run('open-group', {
+        id: groupId,
+        view,
+        action: 'open-group',
+        operation: crypto.randomUUID(),
+      })
+  },
+  { immediate: true },
+)
+onMounted(() => {
+  void load()
+  void loadPeople()
+})
+watch(
+  () => route.fullPath,
+  () => {
+    void load()
+  },
+)
 </script>
 <template>
   <OrganizationNav />
   <div
-    class="container page messages-page organization-messages"
-    :class="{ 'has-thread': !!id, 'is-creating': creating }"
+    class="container page messages-page institution-messages organization-messages"
+    :class="{ 'has-thread': !!id }"
   >
     <header class="messages-heading">
       <h1>{{ l('Messages', 'الرسائل') }}</h1>
       <div class="actions">
-        <button v-if="view !== 'trainee'" class="text-link" @click="creating = !creating">
-          {{ l('New conversation', 'محادثة جديدة') }}</button
-        ><button class="text-link" @click="refresh">{{ l('Refresh', 'تحديث') }}</button>
+        <button class="text-link" @click="refresh">{{ l('Refresh', 'تحديث') }}</button>
       </div>
     </header>
-    <ChannelEditor
-      v-if="creating"
-      :workspace="workspace"
-      :view="view"
-      @close="creating = false"
-      @saved="opened"
-    />
     <CommandStatus :command="join" />
+    <CommandStatus :command="openGroup" />
+    <CommandStatus :command="direct" :show-notice="false" />
     <p v-if="error" role="alert" class="notice error">
       {{ error }}
       <button class="text-link" @click="load()">{{ l('Try again', 'حاول مجدداً') }}</button>
     </p>
-    <div v-if="!creating" class="conversation-layout">
+    <div class="conversation-layout">
       <aside class="conversation-inbox">
         <form class="conversation-search" @submit.prevent="load()">
           <label
-            >{{ l('Find a conversation', 'ابحث عن محادثة')
+            >{{ l('Search people and conversations', 'ابحث عن الأشخاص والمحادثات')
             }}<input v-model="search" type="search" /></label
           ><button class="text-link">{{ l('Search', 'بحث') }}</button
           ><label v-if="view === 'admin'" class="check-label small-print"
             ><input v-model="manage" type="checkbox" @change="load()" />{{
-              l('Discover organization conversations', 'عرض محادثات المؤسسة')
+              l('Discover institution conversations', 'عرض محادثات المؤسسة')
             }}</label
           >
         </form>
-        <p v-if="loading && !items.length" role="status" class="notice">
-          {{ l('Loading…', 'جارٍ التحميل…') }}
-        </p>
-        <nav class="conversation-list" :aria-label="l('Conversations', 'المحادثات')">
-          <p v-if="!loading && !items.length" class="notice">
-            {{
-              l(
-                'No matching conversations. Your organization staff can start one with you.',
-                'لا توجد محادثات مطابقة. يستطيع موظفو المؤسسة بدء محادثة معك.',
-              )
-            }}
-          </p>
-          <template v-for="c in items" :key="c.id"
-            ><article v-if="manage" class="conversation-person">
-              <div class="grow">
-                <strong dir="auto">{{ c.title }}</strong>
-                <p>
-                  {{
-                    l(
-                      'Join to read the conversation. Your name will be visible to everyone.',
-                      'انضم لقراءة المحادثة. سيظهر اسمك للجميع.',
+        <div class="conversation-directory">
+          <section
+            v-if="view !== 'trainee'"
+            class="conversation-contacts"
+            aria-labelledby="contact-heading"
+          >
+            <h2 id="contact-heading">{{ l('People', 'الأشخاص') }}</h2>
+            <p v-if="peopleLoading" role="status" class="small-print">
+              {{ l('Loading people…', 'جارٍ تحميل الأشخاص…') }}
+            </p>
+            <p v-else-if="peopleError" role="alert" class="notice error">
+              {{ peopleError }}
+              <button class="text-link" @click="loadPeople">
+                {{ l('Try again', 'حاول مجدداً') }}
+              </button>
+            </p>
+            <p
+              v-else-if="!contacts.length && !items.length && !search && !loading"
+              class="small-print"
+            >
+              {{
+                l('No available people match this search.', 'لا يوجد أشخاص متاحون يطابقون البحث.')
+              }}
+            </p>
+            <button
+              v-for="person in contacts"
+              :key="person.id"
+              type="button"
+              class="conversation-person contact-person"
+              :disabled="direct.state.busy || !!direct.state.pending"
+              @click="openDirect(person)"
+            >
+              <span class="avatar">{{ person.name.slice(0, 1) }}</span>
+              <span class="grow">
+                <strong dir="auto">{{ person.name }}</strong>
+                <small>{{
+                  person.roles
+                    .map((role) =>
+                      l(
+                        role === 'admin'
+                          ? 'Administrator'
+                          : role === 'trainer'
+                            ? 'Coach'
+                            : 'Athlete',
+                        role === 'admin' ? 'مسؤول' : role === 'trainer' ? 'مدرب' : 'رياضي',
+                      ),
                     )
-                  }}
-                </p>
-                <button class="text-link" :disabled="locked" @click="joinConversation(c.id)">
-                  {{ l('Join conversation', 'الانضمام للمحادثة') }}
-                </button>
-              </div>
-            </article>
-            <RouterLink
-              v-else
-              :to="base + '/' + c.id + (search ? '?search=' + encodeURIComponent(search) : '')"
-              class="conversation-person"
-              :class="{ selected: c.id === id }"
-              ><span class="avatar">{{ c.title.slice(0, 1) }}</span>
-              <div class="grow">
-                <strong dir="auto">{{ c.title }}</strong>
-                <p>{{ c.last_body || l('Start a conversation', 'ابدأ محادثة') }}</p>
-                <small v-if="c.archived">{{ l('Archived', 'مؤرشفة') }}</small>
-              </div>
-              <span
-                v-if="c.unread"
-                class="count"
-                :aria-label="c.unread + ' ' + l('unread messages', 'رسائل غير مقروءة')"
-                >{{ c.unread }}</span
-              ></RouterLink
-            ></template
-          ><button v-if="next !== null" class="text-link" @click="load(true)">
-            {{ l('Load more', 'تحميل المزيد') }}
-          </button>
-        </nav>
+                    .join(' · ')
+                }}</small>
+              </span>
+            </button>
+          </section>
+          <h2 class="conversation-section-title">{{ l('Conversations', 'المحادثات') }}</h2>
+          <p v-if="loading && !items.length" role="status" class="notice">
+            {{ l('Loading…', 'جارٍ التحميل…') }}
+          </p>
+          <nav class="conversation-list" :aria-label="l('Conversations', 'المحادثات')">
+            <div v-if="!loading && !items.length" class="conversation-empty notice">
+              <p>
+                {{
+                  search
+                    ? l('No matching conversations.', 'لا توجد محادثات مطابقة.')
+                    : l('No conversations yet.', 'لا توجد محادثات بعد.')
+                }}
+              </p>
+              <p v-if="view === 'trainee'" class="small-print">
+                {{
+                  l(
+                    'Ask your coach to start a conversation with you.',
+                    'اطلب من مدربك بدء محادثة معك.',
+                  )
+                }}
+              </p>
+            </div>
+            <template v-for="c in items" :key="c.id"
+              ><article v-if="manage" class="conversation-person">
+                <div class="grow">
+                  <strong dir="auto">{{ c.title }}</strong>
+                  <p>
+                    {{
+                      l(
+                        'Join to read the conversation. Your name will be visible to everyone.',
+                        'انضم لقراءة المحادثة. سيظهر اسمك للجميع.',
+                      )
+                    }}
+                  </p>
+                  <button class="text-link" :disabled="locked" @click="joinConversation(c.id)">
+                    {{ l('Join conversation', 'الانضمام للمحادثة') }}
+                  </button>
+                </div>
+              </article>
+              <RouterLink
+                v-else
+                :to="base + '/' + c.id + (search ? '?search=' + encodeURIComponent(search) : '')"
+                class="conversation-person"
+                :class="{ selected: c.id === id }"
+                ><span class="avatar">{{ c.title.slice(0, 1) }}</span>
+                <div class="grow">
+                  <strong dir="auto">{{ c.title }}</strong>
+                  <p>{{ c.last_body || l('No messages yet', 'لا توجد رسائل بعد') }}</p>
+                  <small v-if="c.archived">{{ l('Archived', 'مؤرشفة') }}</small>
+                </div>
+                <span
+                  v-if="c.unread"
+                  class="count"
+                  :aria-label="c.unread + ' ' + l('unread messages', 'رسائل غير مقروءة')"
+                  >{{ c.unread }}</span
+                ></RouterLink
+              ></template
+            ><button v-if="next !== null" class="text-link" @click="load(true)">
+              {{ l('Load more', 'تحميل المزيد') }}
+            </button>
+          </nav>
+        </div>
       </aside>
       <ChannelThread
         ref="thread"
@@ -187,10 +337,39 @@ onMounted(() => load())
 .organization-messages {
   min-width: 0;
 }
-.organization-messages.is-creating :deep(.channel-editor) {
-  flex: none;
-  overflow: visible;
+.conversation-contacts {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+  padding: 0.5rem;
+}
+.conversation-section-title {
+  margin: 0.85rem 1rem 0.25rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.contact-person {
   width: 100%;
+  color: inherit;
+  text-align: start;
+  font: inherit;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.contact-person:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+.contact-person:focus-visible {
+  outline: 2px solid var(--focus, currentColor);
+  outline-offset: 2px;
+}
+.contact-person small {
+  display: block;
+  color: var(--muted);
 }
 .conversation-search {
   display: grid;
@@ -223,11 +402,4 @@ onMounted(() => load())
 
 <style>
 /* Short viewports may scroll the page; the footer must never cover the inbox. */
-#app:has(.organization-messages.is-creating) {
-  height: auto;
-  min-height: 100dvh;
-}
-#app:has(.organization-messages) {
-  min-height: 44rem;
-}
 </style>

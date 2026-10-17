@@ -76,11 +76,11 @@ onUnmounted(() => generation++)
       {{
         context.view === 'trainer'
           ? l(
-              'Your response is linked to your account and reported to organization administrators. It is not anonymous. Other trainers cannot view your response.',
+              'Your response is linked to your account and reported to institution administrators. It is not anonymous. Other trainers cannot view your response.',
               'ترتبط إجابتك بحسابك وتُعرض لمسؤولي المؤسسة. ليست مجهولة الهوية. لا يراها المدربون الآخرون.',
             )
           : l(
-              'Your session rating is linked to you. Organization administrators and your current trainer can use it in session-experience reports. It is not an overall trainer rating.',
+              'Your session rating is linked to you. Institution administrators and your current trainer can use it in session-experience reports. It is not an overall trainer rating.',
               'يرتبط تقييم الجلسة بك. يستخدمه مسؤولو المؤسسة ومدربك الحالي في تقارير تجربة الجلسات. ليس تقييماً عاماً للمدرب.',
             )
       }}

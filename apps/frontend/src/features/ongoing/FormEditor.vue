@@ -173,7 +173,7 @@ onMounted(load)
       <p>
         {{
           l(
-            'Ask only what will help you coach. Clients receive a short, focused form.',
+            'Ask only what will help you coach. Athletes receive a short, focused form.',
             'اسأل فقط عما يفيد التدريب. يحصل المتدرب على نموذج قصير وواضح.',
           )
         }}

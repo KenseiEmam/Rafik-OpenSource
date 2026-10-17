@@ -103,34 +103,6 @@ test('optional session and workplace feedback recover and appear as separate sou
       view: 'trainer',
       revision: 1,
     })
-    const before = new Date(Date.now() - 27 * 86400000).toISOString().slice(0, 10),
-      yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10),
-      today = new Date().toISOString().slice(0, 10)
-    const previous = await f.call(f.owner, endpoint + '/packages', {
-      operation: randomUUID(),
-      action: 'create',
-      id: randomUUID(),
-      view: 'admin',
-      member: member.id,
-      title: 'Previous monthly sessions',
-      allowance: 8,
-      starts_on: before,
-      ends_on: yesterday,
-      timezone: 'UTC',
-    })
-    await f.call(f.owner, endpoint + '/packages', {
-      operation: randomUUID(),
-      action: 'create',
-      id: randomUUID(),
-      view: 'admin',
-      member: member.id,
-      title: 'Renewed monthly sessions',
-      allowance: 8,
-      starts_on: today,
-      ends_on: tomorrow,
-      timezone: 'UTC',
-      renewed_from: previous.id,
-    })
     const base = `/organization/${workspace}`
     await f.login(client, f.client, base + '/trainee/calendar/' + id)
     await client.getByRole('link', { name: 'Rate your session (optional)', exact: true }).click()

@@ -1,4 +1,4 @@
-// Check local links across the one maintained monorepo documentation tree.
+// Check local links across current human-maintained monorepo documentation.
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs'
 import { resolve, dirname, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -8,11 +8,11 @@ const repo = resolve(dirname(fileURLToPath(import.meta.url)), '../../..')
 function markdown(dir) {
   return readdirSync(dir).flatMap((name) => {
     const path = resolve(dir, name)
-    return statSync(path).isDirectory()
-      ? markdown(path)
-      : path.endsWith('.md')
-        ? [path]
-        : []
+    const normalized = path.replaceAll('\\', '/')
+    if (normalized.includes('/docs/archive/') || normalized.includes('/docs/revival/'))
+      return []
+    if (normalized.includes('/docs/verification/receipts/')) return []
+    return statSync(path).isDirectory() ? markdown(path) : path.endsWith('.md') ? [path] : []
   })
 }
 
@@ -23,15 +23,7 @@ const files = [
   ...['apps/frontend/README.md', 'apps/backend/README.md'].map((path) =>
     resolve(repo, path),
   ),
-  ...markdown(resolve(repo, 'docs/decisions')),
-  ...markdown(resolve(repo, 'docs/reference')),
-  ...markdown(resolve(repo, 'docs/requirements')),
-  ...markdown(resolve(repo, 'docs/testing')),
-  ...markdown(resolve(repo, 'docs/architecture')),
-  ...markdown(resolve(repo, 'docs/implementation')).filter(
-    (path) => !path.replaceAll('\\', '/').includes('/evidence/'),
-  ),
-  resolve(repo, 'docs/README.md'),
+  ...markdown(resolve(repo, 'docs')),
 ]
 const failures = []
 

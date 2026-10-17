@@ -145,6 +145,12 @@ const command = useCommand<'deliver'>(
           p_end: args.end_date,
           p_mode: args.schedule_mode,
         }),
+  {
+    successMessage: l(
+      'Program assigned to the selected athletes.',
+      'تم تعيين البرنامج للرياضيين المحددين.',
+    ),
+  },
 )
 const locked = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
 function deliver() {

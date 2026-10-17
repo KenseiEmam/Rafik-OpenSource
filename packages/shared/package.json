@@ -8,6 +8,10 @@
       "types": "./src/contracts.ts",
       "default": "./src/contracts.ts"
     },
+    "./password": {
+      "types": "./src/password.ts",
+      "default": "./src/password.ts"
+    },
     "./database.types": {
       "types": "./src/database.types.ts",
       "default": "./src/database.types.ts"

@@ -7,20 +7,42 @@ import { language, t } from '../../lib/i18n'
     <p class="overline">{{ t('help') }}</p>
     <h1>{{ language('Help', 'المساعدة') }}</h1>
     <section>
-      <h2>{{ language('Sessions, packages and feedback', 'الجلسات والباقات والتقييمات') }}</h2>
+      <h2>{{ language('Messages and programs', 'الرسائل والبرامج') }}</h2>
       <p>
         {{
           language(
-            'Administrators assign session allowances in Packages. Book from a package or choose the funding when scheduling a Calendar session. Package bookings reserve a session; completing attendance uses it. Cancellations release it, and every no-show has an explicit charge or release choice. Independent trial, makeup and prize sessions never reduce a subscription.',
-            'يعيّن المسؤولون أرصدة الجلسات من الباقات. احجز من الباقة أو اختر التمويل عند جدولة جلسة في التقويم. يحجز الموعد جلسة وتستهلك عند إكمال الحضور. يلغي الإلغاء الحجز، ولكل غياب قرار صريح بالخصم أو التحرير. الجلسات المستقلة التجريبية والتعويضية وجلسات الجوائز لا تخفض الاشتراك.',
+            'Open Messages and choose a person from the People list; the conversation opens or resumes automatically. Open group conversation on a training group starts its shared conversation; using it again returns to the same conversation. Two-person conversations are reused instead of duplicated. To assign training, open Programs, publish the program, then choose Assign this program. Publishing shares it in the institution library so coaches can see it; coaches can assign it only to athletes they are responsible for.',
+            'افتح الرسائل واختر محادثة جديدة، أو استخدم مراسلة بجانب الرياضي في الأشخاص والصلاحيات. يفتح خيار محادثة المجموعة محادثة المجموعة التدريبية نفسها، ويعيدك إليها عند استخدامه مرة أخرى. يعاد استخدام المحادثات الثنائية لتجنب تكرارها. لتعيين التدريب، افتح البرامج وانشر البرنامج ثم اختر تعيين هذا البرنامج. يشارك النشر البرنامج في مكتبة المؤسسة ليتمكن المدربون من رؤيته؛ ويمكن للمدرب تعيينه فقط للرياضيين المسؤول عنهم.',
+          )
+        }}
+      </p>
+    </section>
+    <section>
+      <h2>{{ language('Injury status and privacy', 'حالة الإصابة والخصوصية') }}</h2>
+      <p>
+        {{
+          language(
+            'Athletes can share a limited participation status with their assigned coach after the institution records the required consent setup and the athlete agrees. Coaches see only the current status and effective date. Administrators manage consent prerequisites but cannot view injury records. Athletes can download a copy of their status and correction history. Do not enter diagnoses or medical details. Withdrawing stops coach access; closed records are automatically deleted after 12 months.',
+            'يمكن للرياضي مشاركة حالة مشاركة محدودة مع مدربه المعيّن بعد تسجيل إعداد الموافقة المطلوب وموافقة الرياضي. يرى المدربون الحالة الحالية وتاريخ سريانها فقط. يدير المسؤولون متطلبات الموافقة ولا يمكنهم رؤية سجلات الإصابة. يمكن للرياضي تنزيل نسخة من الحالة وسجل التصحيحات. لا تُدخل تشخيصات أو تفاصيل طبية. يؤدي سحب الموافقة إلى إيقاف وصول المدرب، وتُحذف السجلات المغلقة تلقائيًا بعد 12 شهرًا.',
+          )
+        }}
+      </p>
+    </section>
+    <section>
+      <h2>{{ language('Training sessions and feedback', 'الجلسات التدريبية والتقييمات') }}</h2>
+      <p>
+        {{
+          language(
+            'Use Calendar to schedule training and assessor-led assessments. Record attendance, check-ins and trainee-visible notes in the event. There are no session packages, allowances or commercial session limits.',
+            'استخدم التقويم لجدولة التدريب والتقييمات التي يقودها المقيمون. سجّل الحضور ووقت تسجيله والملاحظات المرئية للمتدرب ضمن الموعد. لا توجد باقات جلسات أو أرصدة أو حدود تجارية للجلسات.',
           )
         }}
       </p>
       <p>
         {{
           language(
-            'Session details hold attendance, check-in time and trainee-visible notes. The overview shows missed sessions to follow up. Analytics separates session experience, trainers’ workplace feedback and recorded renewals. Trainers use My feedback for an optional monthly workplace rating; trainees can rate completed sessions from their completion screen. Neither question has a preselected answer.',
-            'تضم تفاصيل الجلسة الحضور ووقت تسجيله وملاحظات مرئية للمتدرب. تعرض النظرة العامة الجلسات الفائتة للمتابعة. تفصل التحليلات تجربة الجلسات عن آراء المدربين في بيئة العمل والتجديدات المسجلة. يستخدم المدربون تقييماتي للتقييم الشهري الاختياري، ويمكن للمتدربين تقييم الجلسات من شاشة الإكمال. لا إجابة مختارة مسبقاً.',
+            'Session details hold attendance, check-in time and trainee-visible notes. Analytics separates trainee session experience from trainers’ workplace feedback. Trainers use My feedback for an optional monthly workplace rating; trainees can rate completed sessions from their completion screen. Neither question has a preselected answer.',
+            'تضم تفاصيل الجلسة الحضور ووقت تسجيله وملاحظات مرئية للمتدرب. تفصل التحليلات تجربة المتدربين عن آراء المدربين في بيئة العمل. يستخدم المدربون تقييماتي للتقييم الشهري الاختياري، ويمكن للمتدربين تقييم الجلسات من شاشة الإكمال. لا إجابة مختارة مسبقاً.',
           )
         }}
       </p>
@@ -30,8 +52,8 @@ import { language, t } from '../../lib/i18n'
       <p>
         {{
           language(
-            'The role selector appears when you have multiple staff roles. Use Organizations and roles to manage memberships. Each organization keeps its own people, programs and history.',
-            'يظهر محدد الأدوار عندما تملك أدوار موظفين متعددة. استخدم المؤسسات والأدوار لإدارة العضويات. تحتفظ كل مؤسسة بأشخاصها وبرامجها وسجلها.',
+            'Your account opens its assigned dashboard: administrators use People & access to manage invitations and permissions, Analytics to review recorded activity, and Programs to publish plans; trainers see their assigned coaching work; athletes see their own training. Administrators can change an account’s single institution role in People & access. Each institution keeps its own people, programs and history.',
+            'يفتح حسابك لوحة الدور المعيّن له: يدير المسؤولون الدعوات والصلاحيات في الأشخاص والصلاحيات، ويراجعون النشاط المسجل في التحليلات، وينشرون الخطط في البرامج؛ ويرى المدربون مهامهم التدريبية، ويرى الرياضيون تدريبهم. يمكن للمسؤول تغيير دور الحساب الواحد داخل المؤسسة من الأشخاص والصلاحيات. تحتفظ كل مؤسسة بأشخاصها وبرامجها وسجلها.',
           )
         }}
       </p>
@@ -39,31 +61,31 @@ import { language, t } from '../../lib/i18n'
         language('Choose your workspace', 'اختر مساحة عملك')
       }}</RouterLink>
       <details>
-        <summary>{{ language('I administer an organization', 'أنا مسؤول مؤسسة') }}</summary>
+        <summary>{{ language('I administer an institution', 'أنا مسؤول مؤسسة') }}</summary>
         <p>
           {{
             language(
-              'Start in People: invite administrators, trainers or trainees and assign a responsible trainer. In Programs, publish a plan and review who will receive it. Calendar schedules training and assessor-led assessments; the Library section contains reusable groups and assessment templates.',
-              'ابدأ في الأشخاص: ادعُ المسؤولين والمدربين والمتدربين وعيّن المدرب المسؤول. انشر خطة في البرامج وراجع المستلمين. استخدم التقويم لجدولة التدريب والتقييمات؛ ويحتوي قسم المكتبة على المجموعات وقوالب التقييم القابلة لإعادة الاستخدام.',
+              'Start in People & access: invite administrators, trainers or athletes and assign a responsible trainer. In Programs, publish a plan and review who will receive it. Calendar schedules training and assessor-led assessments; the Library section contains reusable groups and assessment templates.',
+              'ابدأ في الأشخاص والصلاحيات: ادعُ المسؤولين والمدربين والرياضيين وعيّن المدرب المسؤول. انشر خطة في البرامج وراجع المستلمين. استخدم التقويم لجدولة التدريب والتقييمات؛ ويحتوي قسم المكتبة على المجموعات وقوالب التقييم القابلة لإعادة الاستخدام.',
             )
           }}
         </p>
         <p>
           {{
             language(
-              'Analytics shows organization workload, participation and gaps. Its totals and definitions describe recorded activity. They do not rate trainer quality. Reassigning a trainer preserves the organization’s training history.',
+              'Analytics shows institution workload, participation and gaps. Its totals and definitions describe recorded activity. They do not rate trainer quality. Reassigning a trainer preserves the institution’s training history.',
               'تعرض التحليلات أعباء العمل والمشاركة والنواقص في المؤسسة. تصف الأرقام النشاط المسجّل ولا تقيّم جودة المدرب. يبقى سجل المؤسسة محفوظاً عند تغيير المدرب المسؤول.',
             )
           }}
         </p>
       </details>
       <details>
-        <summary>{{ language('I train people in an organization', 'أنا مدرب في مؤسسة') }}</summary>
+        <summary>{{ language('I train people in an institution', 'أنا مدرب في مؤسسة') }}</summary>
         <p>
           {{
             language(
-              'Choose the organization’s Coaching role. People and Training show your assigned trainees; Calendar includes events where you are designated staff. Review a completed session, leave feedback or adapt the next prescription. Analytics describes your current responsibility, and conversations have their own visible participant lists.',
-              'اختر دور التدريب في المؤسسة. يعرض الأشخاص والتدريب متدربيك المعيّنين، ويعرض التقويم المواعيد المسندة إليك. راجع الحصة المكتملة وقدّم ملاحظاتك أو عدّل التدريب القادم. تخص التحليلات مسؤوليتك الحالية، ولكل محادثة قائمة مشاركين واضحة.',
+              'Your trainer dashboard opens to your assigned coaching work. People and Training show your assigned athletes; Calendar includes events where you are designated staff. Review a completed session, leave feedback or adapt the next prescription. Analytics describes your current responsibility, and conversations have their own visible participant lists.',
+              'تفتح لوحة المدرب على مهام التدريب المسندة إليك. يعرض قسم الأشخاص والتدريب الرياضيين المعيّنين لك، ويعرض التقويم المواعيد المسندة إليك. راجع الحصة المكتملة وقدّم ملاحظاتك أو عدّل التدريب القادم. تخص التحليلات مسؤوليتك الحالية، ولكل محادثة قائمة مشاركين واضحة.',
             )
           }}
         </p>
@@ -73,7 +95,7 @@ import { language, t } from '../../lib/i18n'
         <p>
           {{
             language(
-              'Today brings together sessions and check-ins awaiting review. Plans is where you prepare and publish training; Clients is where you invite people and manage each relationship. Appointments, Resources and other tools have their own navigation links. Independent coach teams do not merge your private client records.',
+              'Today brings together sessions and check-ins awaiting review. Plans is where you prepare and publish training; Athletes is where you invite people and manage each relationship. Appointments, Resources and other tools have their own navigation links. Independent coach teams do not merge your private athlete records.',
               'يجمع اليوم الحصص والمتابعات بانتظار المراجعة. جهّز التدريب وانشره في الخطط، وادعُ المتدربين وأدر كل علاقة في المتدربين. تتوفر الجدولة والملفات والأدوات الاختيارية في قائمة التنقل. لا تدمج فرق المدربين المستقلين سجلات متدربيك الخاصة.',
             )
           }}
@@ -85,7 +107,7 @@ import { language, t } from '../../lib/i18n'
       <p>
         {{
           language(
-            'Create an exercise with multiple body areas, muscle groups and equipment. Upload its demonstration directly or reuse an uploaded file. Organization exercises are shared only inside that organization; trainer-created exercises remain private to their trainer. Published assignments preserve their instructions and demonstration.',
+            'Create an exercise with multiple body areas, muscle groups and equipment. Upload its demonstration directly or reuse an uploaded file. Institution exercises are shared only inside that institution; trainer-created exercises remain private to their trainer. Published assignments preserve their instructions and demonstration.',
             'أنشئ تمريناً بمناطق جسم ومجموعات عضلية ومعدات متعددة. ارفع الشرح مباشرة أو أعد استخدام ملف مرفوع. تشارك تمارين المؤسسة داخلها فقط، وتبقى تمارين المدرب خاصة به. تحتفظ التكليفات المنشورة بالتعليمات والشرح.',
           )
         }}
@@ -130,11 +152,11 @@ import { language, t } from '../../lib/i18n'
       </p>
     </section>
     <section>
-      <h2>{{ language('Prepare and share a plan', 'جهّز خطة وشاركها') }}</h2>
+      <h2>{{ language('Prepare and share a program', 'جهّز برنامجاً وشاركه') }}</h2>
       <p>
         {{
           language(
-            'Open Coaching → Plans. Start from the populated plan, adjust the exercises, and preview the session. Save and publish it, then create an invitation in Clients. Share the link using your usual messaging channel.',
+            'Open Coaching → Programs. Start with a blank session, add exercises from your library, and preview the result. Save a draft while you work or publish the finished program, then invite athletes from Athletes.',
             'افتح التدريب ← الخطط. ابدأ بالخطة الجاهزة، وعدّل التمارين، وعاين الحصة. احفظها وانشرها، ثم أنشئ دعوة ضمن المتدربين. شارك الرابط عبر وسيلة التواصل المعتادة.',
           )
         }}
@@ -156,7 +178,7 @@ import { language, t } from '../../lib/i18n'
       <p>
         {{
           language(
-            'A conversation lists the people who can read its history and send messages. Organization administrators join visibly. The notification bell keeps updates from different workspaces separate. In this local preview, optional email is intercepted for testing; no real email or push is sent.',
+            'A conversation lists the people who can read its history and send messages. Institution administrators join visibly. The notification bell keeps updates from different workspaces separate. In this local preview, optional email is intercepted for testing; no real email or push is sent.',
             'توضح المحادثة من يستطيع قراءة سجلها وإرسال الرسائل، ويظهر انضمام مسؤول المؤسسة. يفصل جرس الإشعارات تحديثات مساحات العمل. في هذه المعاينة المحلية تُعترض الرسائل الاختيارية للاختبار ولا يُرسل بريد أو إشعار دفع فعلي.',
           )
         }}
@@ -167,7 +189,7 @@ import { language, t } from '../../lib/i18n'
       <p>
         {{
           language(
-            'Independent coaches: open Nutrition, choose a client, enter agreed calorie/macronutrient targets and build an example day. The calculator only converts your chosen budget into grams. Save the plan to share it. Trainees: choose who can see the record, select a food or suggested meal, adjust the amount actually eaten and save. Suggested meals never count as logged food automatically. Unknown values stay blank.',
+            'Independent coaches: open Nutrition, choose an athlete, enter agreed calorie/macronutrient targets and build a suggested day. The calculator only converts your chosen budget into grams. Save the plan to share it. Athletes choose who can see a record, select food or a suggested meal, adjust the amount actually eaten and save. Suggested meals never count as logged food automatically. Unknown values stay blank.',
             'للمدرب المستقل: افتح التغذية واختر متدرباً وحدد الأهداف المتفق عليها للسعرات والمغذيات وأضف يوماً مقترحاً. تحوّل الحاسبة السعرات التي اخترتها إلى غرامات فقط. احفظ الخطة لمشاركتها. للمتدرب: حدد من يرى السجل واختر طعاماً أو وجبة مقترحة وعدّل الكمية التي تناولتها ثم احفظ. لا تُسجل المقترحات كطعام متناول تلقائياً. تبقى القيم المجهولة فارغة.',
           )
         }}
@@ -175,7 +197,7 @@ import { language, t } from '../../lib/i18n'
       <p>
         {{
           language(
-            'The food library starts with 15 sourced USDA staples. Use a label or a saved food for other choices; check the nutrient basis before changing portions. Organization admins and assigned trainers can publish scoped plans in Nutrition. Trainees decide whether to share their organization diary; personal records remain separate.',
+            'The food library starts with 15 sourced USDA staples. Use a label or a saved food for other choices; check the nutrient basis before changing portions. Institution admins and assigned trainers can publish scoped plans in Nutrition. Trainees decide whether to share their institution diary; personal records remain separate.',
             'تبدأ مكتبة الطعام بخمسة عشر طعاماً موثقاً من وزارة الزراعة الأمريكية. استخدم الملصق أو طعاماً محفوظاً للخيارات الأخرى وراجع أساس القيم قبل تعديل الكميات. يمكن لمسؤولي المؤسسة والمدربين المسند إليهم المتدربون نشر خطط في التغذية. يقرر المتدرب مشاركة سجل المؤسسة، وتبقى السجلات الشخصية منفصلة.',
           )
         }}

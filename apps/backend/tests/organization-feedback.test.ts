@@ -41,6 +41,11 @@ test("explicit session and workplace feedback stay separate, scoped and retry-sa
       day = new Date(Date.now() + 86400000).toISOString().slice(0, 10),
       today = new Date().toISOString().slice(0, 10),
       month = today.slice(0, 7) + "-01";
+    assert.equal(
+      (await call(admin, `/v1/workspaces/${workspace}/packages`, {})).status,
+      404,
+      "retired session package API is not exposed",
+    );
     const e = ok(
       await call(
         trainer,
@@ -266,46 +271,6 @@ test("explicit session and workplace feedback stay separate, scoped and retry-sa
       ).score,
       3,
     );
-    const expired = new Date(Date.now() - 86400000).toISOString().slice(0, 10),
-      from = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
-    const pack = ok(
-      await call(
-        admin,
-        `/v1/workspaces/${workspace}/packages`,
-        operation("create", {
-          view: "admin",
-          id: randomUUID(),
-          member: member.id,
-          title: "Previous entitlement",
-          allowance: 8,
-          starts_on: from,
-          ends_on: expired,
-          timezone: "UTC",
-        }),
-      ),
-    );
-    const renewed = operation("create", {
-      view: "admin",
-      id: randomUUID(),
-      member: member.id,
-      title: "Renewed entitlement",
-      allowance: 8,
-      starts_on: today,
-      ends_on: day,
-      timezone: "UTC",
-      renewed_from: pack.id,
-    });
-    ok(await call(admin, `/v1/workspaces/${workspace}/packages`, renewed));
-    const renewedReport = ok(
-      await call(
-        admin,
-        `/v1/workspaces/${workspace}/analytics?view=admin&from=${from}&to=${today}`,
-      ),
-    );
-    assert.deepEqual(renewedReport.experience.renewal, {
-      ended: 1,
-      renewed: 1,
-    });
     const exported = await organizationAccountData({ id: client.id } as any);
     assert.equal((exported.sessionFeedback as any[]).length, 2);
     assert.equal((exported.workplaceFeedback as any[]).length, 0);

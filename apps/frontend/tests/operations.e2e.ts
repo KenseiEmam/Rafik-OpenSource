@@ -84,7 +84,7 @@ test('organization trainer can create a conversation with their assigned trainee
       .evaluate((el) => ({ scroll: el.scrollHeight, box: el.clientHeight }))
     expect(editorSize.scroll).toBeLessThanOrEqual(editorSize.box + 2)
     await page.getByLabel('Conversation name', { exact: true }).fill('Weekly training questions')
-    await page.getByRole('checkbox', { name: 'R4 Client', exact: true }).check()
+    await page.getByRole('checkbox', { name: 'R4 Athlete', exact: true }).check()
     await page.getByRole('button', { name: 'Create conversation', exact: true }).click()
     await expect(page).toHaveURL(/messages\/[a-f0-9-]{36}$/)
     await page

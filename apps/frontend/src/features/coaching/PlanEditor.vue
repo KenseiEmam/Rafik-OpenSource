@@ -14,6 +14,7 @@ import {
   PhArrowDown,
   PhEye,
   PhX,
+  PhBarbell,
 } from '@phosphor-icons/vue'
 import { user, contexts } from '../../app/auth'
 import { duplicateSession, duplicateWeek } from './program-structure'
@@ -23,7 +24,6 @@ import CommandStatus from '../teams/CommandStatus.vue'
 import { clone, type Plan, type PlanVersion, type Prescription } from '../../lib/domain'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { language, locale, t, errorMessage } from '../../lib/i18n'
-import sample from '../../content/sample.json'
 import PrescriptionFields from './PrescriptionFields.vue'
 import { upgradePrescription, targetLabel } from '../../lib/prescriptions'
 import type { Exercise } from '../../lib/domain'
@@ -34,8 +34,23 @@ const context = programContext(route)
 const editable = ref(context.view !== 'trainee')
 const isNew = route.params.id === 'new'
 const id = ref(isNew ? crypto.randomUUID() : String(route.params.id))
-const title = ref(language('My training plan', 'خطتي التدريبية'))
-const draft = ref<Prescription>(upgradePrescription(clone(sample.prescription) as Prescription))
+const title = ref(language('New program', 'برنامج جديد'))
+const blankPrescription = (): Prescription => ({
+  schema: 2,
+  cycleWeeks: 1,
+  days: [
+    {
+      id: crypto.randomUUID(),
+      name: language('Session 1', 'الحصة ١'),
+      nameAr: '',
+      minutes: 30,
+      week: 1,
+      weekday: 0,
+      exercises: [],
+    },
+  ],
+})
+const draft = ref<Prescription>(blankPrescription())
 const version = ref<number | null>(null)
 const selected = ref(0)
 const loadedSuccessfully = ref(false)
@@ -45,10 +60,11 @@ const loading = ref(true),
 const error = ref(''),
   message = ref('')
 const published = ref<PlanVersion>()
-const listed = ref(false),
-  recordRevision = ref(1),
-  uploading = ref(false)
+const assignableVersionId = ref('')
+const uploading = ref(false)
 const form = ref<HTMLFormElement>()
+const coverInput = ref<HTMLInputElement>()
+const coverDrag = ref(false)
 let initialized = false
 const keyFor = (id: string) =>
   context.workspace ? `plan:${user.value!.id}:${context.key}:${id}` : `plan:${user.value!.id}:${id}`
@@ -99,7 +115,6 @@ function toggleAlternative(index: number, exerciseId: string, checked: boolean) 
 }
 function restDay() {
   if (day.value.restDay) day.value.exercises = []
-  else addExercise()
 }
 function freeSlot() {
   for (let week = 1; week <= (draft.value.cycleWeeks || 1); week++)
@@ -126,11 +141,10 @@ async function load(recover = true) {
       if (!loaded.program) throw Error('not_found')
       catalog.value = loaded.catalog
       editable.value = loaded.editable
-      listed.value = !!loaded.program.listed
-      recordRevision.value = loaded.program.revision || 1
       title.value = loaded.program.title
       draft.value = upgradePrescription(clone(loaded.program.draft))
       version.value = loaded.program.draft_version
+      assignableVersionId.value = loaded.versions[0]?.id || ''
       if (!loaded.editable) {
         preview.value = true
         initialized = true
@@ -184,25 +198,15 @@ watch(
   },
   { deep: true },
 )
-const command = useCommand<'save' | 'publish' | 'listing'>(
+const command = useCommand<'save' | 'publish'>(
   `program:${key}`,
   async (action, result) => {
     const value = result as { plan: Plan; version?: PlanVersion }
-    recordRevision.value = value.plan.revision || 1
-    listed.value = !!value.plan.listed
-    if (action === 'listing') {
-      message.value = listed.value
-        ? language('Available in the organization catalog.', 'متاح في مكتبة المؤسسة.')
-        : language(
-            'Removed from the catalog. Existing assignments remain available.',
-            'أُزيل من المكتبة. تبقى التعيينات الحالية متاحة.',
-          )
-      return
-    }
     version.value = value.plan.draft_version
     restored.value = false
     if (action === 'publish') {
       published.value = value.version
+      assignableVersionId.value = value.version?.id || assignableVersionId.value
       await removeDraft(key)
     } else
       await storeDraft(key, {
@@ -214,8 +218,8 @@ const command = useCommand<'save' | 'publish' | 'listing'>(
     message.value =
       action === 'publish'
         ? language(
-            'Published. Choose who receives this version.',
-            'تم النشر. اختر من يتلقى هذه النسخة.',
+            'Published and added to the institution program library.',
+            'تم النشر وإضافته إلى مكتبة برامج المؤسسة.',
           )
         : language(
             'Draft saved. Current assignments are unchanged.',
@@ -223,6 +227,15 @@ const command = useCommand<'save' | 'publish' | 'listing'>(
           )
   },
   (action, args) => context.command(action, args),
+  {
+    successMessage: (action) =>
+      action === 'publish'
+        ? language(
+            'Program published to the institution library.',
+            'تم نشر البرنامج في مكتبة المؤسسة.',
+          )
+        : language('Program draft saved.', 'تم حفظ مسودة البرنامج.'),
+  },
 )
 const busy = computed(
   () => uploading.value || command.state.busy || !!command.state.pending || !command.state.ready,
@@ -231,6 +244,7 @@ async function execute(action: 'save' | 'publish') {
   if (!editable.value || !form.value?.reportValidity()) return
   error.value = ''
   message.value = ''
+  const wasBusy = busy.value
   await command.run(action, {
     operation: crypto.randomUUID(),
     id: id.value,
@@ -238,27 +252,29 @@ async function execute(action: 'save' | 'publish') {
     draft: clone(draft.value),
     revision: version.value,
   })
+  if (
+    action === 'save' &&
+    !wasBusy &&
+    !command.state.busy &&
+    !command.state.pending &&
+    !command.state.error
+  ) {
+    document
+      .querySelector<HTMLElement>('.dashboard-frame > main')
+      ?.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 }
 const save = () => execute('save')
 const publish = () => execute('publish')
-async function toggleListing() {
-  message.value = ''
-  await command.run('listing', {
-    operation: crypto.randomUUID(),
-    id: id.value,
-    revision: version.value,
-    record_revision: recordRevision.value,
-    value: !listed.value,
-  })
-}
-async function uploadCover(event: Event) {
-  const file = (event.target as HTMLInputElement).files?.[0]
+async function uploadCoverFile(file?: File) {
   if (!file) return
   if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 2097152) {
     error.value = language(
       'Choose a JPG, PNG or WebP image up to 2 MB.',
       'اختر صورة JPG أو PNG أو WebP حتى ٢ ميغابايت.',
     )
+    if (coverInput.value) coverInput.value.value = ''
     return
   }
   const workspace =
@@ -279,6 +295,8 @@ async function uploadCover(event: Event) {
       method: 'PUT',
       body: file,
       headers: { 'Content-Type': file.type },
+      feedback: 'success',
+      successMessage: language('Program cover uploaded.', 'تم رفع صورة البرنامج.'),
     })
     draft.value.presentation ||= {}
     draft.value.presentation.cover = mediaId
@@ -290,15 +308,30 @@ async function uploadCover(event: Event) {
       language('Choose the same file again to retry.', 'اختر الملف نفسه لإعادة المحاولة.')
   } finally {
     uploading.value = false
-    ;(event.target as HTMLInputElement).value = ''
+    if (coverInput.value) coverInput.value.value = ''
   }
+}
+function uploadCover(event: Event) {
+  void uploadCoverFile((event.target as HTMLInputElement).files?.[0])
+}
+function dropCover(event: DragEvent) {
+  event.preventDefault()
+  coverDrag.value = false
+  void uploadCoverFile(event.dataTransfer?.files[0])
 }
 function addExercise() {
   const first = activeCatalog.value[0]
+  if (!first) {
+    error.value = language(
+      'Add an exercise to your library before building this session.',
+      'أضف تمريناً إلى مكتبتك قبل إنشاء هذه الحصة.',
+    )
+    return
+  }
   day.value.exercises.push({
     key: crypto.randomUUID(),
-    exerciseId: first?.id || 'goblet-squat',
-    kind: first?.kind || 'strength',
+    exerciseId: first.id,
+    kind: first.kind || 'strength',
     seconds: 30,
     metres: 100,
     sets: 3,
@@ -333,7 +366,6 @@ function addDay() {
   d.exercises.forEach((e) => (e.key = crypto.randomUUID()))
   draft.value.days.push(d)
   selected.value = draft.value.days.length - 1
-  if (!d.exercises.length) addExercise()
 }
 function joinPrevious(index: number) {
   const previous = day.value.exercises[index - 1]!
@@ -350,8 +382,8 @@ async function discard() {
   restored.value = false
   selected.value = 0
   if (isNew) {
-    title.value = language('My training plan', 'خطتي التدريبية')
-    draft.value = upgradePrescription(clone(sample.prescription) as Prescription)
+    title.value = language('New program', 'برنامج جديد')
+    draft.value = blankPrescription()
     version.value = null
     id.value = crypto.randomUUID()
     initialized = true
@@ -402,22 +434,26 @@ function removeDay() {
   <OrganizationNav v-if="context.workspace" />
   <div class="container page editor-page">
     <RouterLink class="back-link" :to="context.base + '/plans'"
-      ><PhArrowLeft :size="18" aria-hidden="true" class="directional" />{{ t('plans') }}</RouterLink
+      ><PhArrowLeft :size="18" aria-hidden="true" class="directional" />{{
+        language('Programs', 'البرامج')
+      }}</RouterLink
     >
     <div class="page-heading heading-actions">
       <div>
         <p class="overline">{{ language('Plan studio', 'تصميم الخطة') }}</p>
         <h1>
           {{
-            isNew ? language('Create a plan', 'إنشاء خطة') : language('Edit plan', 'تعديل الخطة')
+            isNew
+              ? language('Create a program', 'إنشاء برنامج')
+              : language('Edit program', 'تعديل البرنامج')
           }}
         </h1>
       </div>
       <button v-if="editable" class="button secondary small" @click="preview = !preview">
         <PhEye :size="18" aria-hidden="true" />{{
           preview
-            ? language('Edit plan', 'تعديل الخطة')
-            : language('Client preview', 'معاينة المتدرب')
+            ? language('Edit program', 'تعديل البرنامج')
+            : language('Athlete preview', 'معاينة الرياضي')
         }}
       </button>
     </div>
@@ -458,123 +494,132 @@ function removeDay() {
         >
       </p>
       <CommandStatus :command="command" :show-notice="false" />
+      <RouterLink
+        v-if="assignableVersionId && !published && context.view !== 'trainee'"
+        class="button secondary small"
+        :to="context.base + '/deliver/' + assignableVersionId"
+      >
+        {{ language('Assign this program', 'تعيين هذا البرنامج') }}
+      </RouterLink>
       <form ref="form" @submit.prevent="save">
         <fieldset :disabled="busy" class="form-fields">
-          <div class="editor-title" v-if="!preview">
-            <label for="plan-title">{{ language('Plan name', 'اسم الخطة') }}</label
-            ><input id="plan-title" v-model="title" required maxlength="100" class="title-input" />
-            <p class="small-print">
-              {{
-                language(
-                  'Changes are kept on this device. Save the draft to back it up to your account.',
-                  'تُحفظ التعديلات على هذا الجهاز. احفظ المسودة للاحتفاظ بها في حسابك.',
-                )
-              }}
-            </p>
-          </div>
-          <h2 v-else>{{ title }}</h2>
-          <details
-            v-if="context.workspace && editable && (published || !isNew)"
-            class="panel catalog-visibility"
-          >
-            <summary>{{ language('Organization catalog', 'مكتبة المؤسسة') }}</summary>
-            <p>
-              {{
-                language(
-                  'Catalog programs can be viewed by your organization’s members. Assignment is still an explicit step.',
-                  'يمكن لأعضاء المؤسسة مشاهدة برامج المكتبة. يبقى التعيين خطوة صريحة.',
-                )
-              }}
-            </p>
-            <button
-              type="button"
-              class="button secondary small"
-              :disabled="busy"
-              @click="toggleListing"
+          <section v-if="!preview" class="program-identity-card">
+            <div
+              class="program-cover-drop"
+              :class="{ dragging: coverDrag }"
+              @dragover.prevent="coverDrag = true"
+              @dragleave="coverDrag = false"
+              @drop="dropCover"
             >
-              {{
-                listed
-                  ? language('Remove from catalog', 'إزالة من المكتبة')
-                  : language('Make available in catalog', 'إتاحة في المكتبة')
-              }}
-            </button>
-          </details>
-          <ProgramCover
-            :id="draft.presentation?.cover"
-            :style="!preview ? { maxWidth: '220px', maxHeight: '124px' } : {}"
-          />
-          <details open v-if="!preview" class="program-description">
-            <summary>
-              {{
-                language(
-                  'Help trainees recognize this program',
-                  'مساعدة المتدربين على تمييز البرنامج',
-                )
-              }}
-            </summary>
-            <label
-              >{{ language('Goal (optional)', 'الهدف (اختياري)')
-              }}<input
-                :value="draft.presentation?.goal"
-                maxlength="160"
-                @input="
-                  draft.presentation = {
-                    ...draft.presentation,
-                    goal: ($event.target as HTMLInputElement).value,
-                  }
-                "
-            /></label>
-            <label
-              >{{ language('Experience level', 'مستوى الخبرة')
-              }}<select
-                :value="draft.presentation?.level || 'mixed'"
-                @change="
-                  draft.presentation = {
-                    ...draft.presentation,
-                    level: ($event.target as HTMLSelectElement).value as
-                      'beginner' | 'mixed' | 'experienced',
-                  }
-                "
-              >
-                <option value="mixed">{{ language('Adaptable', 'قابل للتكييف') }}</option>
-                <option value="beginner">{{ language('Getting started', 'للمبتدئين') }}</option>
-                <option value="experienced">{{ language('Experienced', 'ذوو خبرة') }}</option>
-              </select></label
-            >
-            <label
-              >{{
-                language(
-                  'Cover image (optional, up to 2 MB)',
-                  'صورة الغلاف (اختيارية، حتى ٢ ميغابايت)',
-                )
-              }}<input
+              <ProgramCover v-if="draft.presentation?.cover" :id="draft.presentation.cover" />
+              <div v-else class="cover-placeholder">
+                <PhBarbell :size="36" aria-hidden="true" />
+              </div>
+              <button type="button" class="cover-change" @click="coverInput?.click()">
+                {{
+                  draft.presentation?.cover
+                    ? language('Change cover image', 'تغيير صورة الغلاف')
+                    : language('Add a cover image', 'إضافة صورة غلاف')
+                }}
+              </button>
+              <input
+                ref="coverInput"
+                class="sr-only"
                 type="file"
                 accept="image/jpeg,image/png,image/webp"
-                @change="uploadCover" /></label
-            ><button
-              v-if="draft.presentation?.cover"
-              type="button"
-              class="text-link"
-              @click="delete draft.presentation.cover"
-            >
-              {{ language('Remove cover from this draft', 'إزالة الغلاف من المسودة') }}
-            </button>
-          </details>
-          <details open v-if="!preview" class="program-description">
-            <summary>
-              {{ language('Program description (optional)', 'وصف البرنامج (اختياري)') }}
-            </summary>
-            <label
-              >{{ language('Who it helps and what to expect', 'لمن يناسب وماذا تتوقع')
-              }}<textarea v-model="draft.description" maxlength="1000" rows="3" /></label
-            ><label
-              >{{ language('Arabic description (optional)', 'الوصف بالعربية (اختياري)')
-              }}<textarea v-model="draft.descriptionAr" maxlength="1000" rows="3" />
-            </label>
-          </details>
-          <p v-else-if="draft.description">
-            {{ locale === 'ar' ? draft.descriptionAr || draft.description : draft.description }}
-          </p>
+                :aria-label="language('Upload a program cover image', 'تحميل صورة غلاف البرنامج')"
+                @change="uploadCover"
+              />
+              <button
+                v-if="draft.presentation?.cover"
+                type="button"
+                class="text-link"
+                @click="delete draft.presentation.cover"
+              >
+                {{ language('Remove cover', 'إزالة الغلاف') }}
+              </button>
+              <small>{{
+                language(
+                  'Drop JPG, PNG or WebP · up to 2 MB',
+                  'أفلت JPG أو PNG أو WebP · حتى ٢ ميغابايت',
+                )
+              }}</small>
+            </div>
+            <div class="program-identity-fields">
+              <label for="plan-title">{{ language('Program name', 'اسم البرنامج') }}</label>
+              <input id="plan-title" v-model="title" required maxlength="100" class="title-input" />
+              <label for="program-description">{{
+                language('What athletes can expect', 'ماذا يتوقع الرياضيون')
+              }}</label>
+              <textarea
+                id="program-description"
+                v-model="draft.description"
+                maxlength="1000"
+                rows="3"
+              />
+              <label for="program-description-ar">{{
+                language('Arabic description (optional)', 'الوصف بالعربية (اختياري)')
+              }}</label>
+              <textarea
+                id="program-description-ar"
+                v-model="draft.descriptionAr"
+                maxlength="1000"
+                rows="2"
+              />
+              <div class="program-recognition-fields">
+                <label for="program-goal"
+                  >{{ language('Main goal', 'الهدف الرئيسي')
+                  }}<input
+                    id="program-goal"
+                    :value="draft.presentation?.goal"
+                    maxlength="160"
+                    @input="
+                      draft.presentation = {
+                        ...draft.presentation,
+                        goal: ($event.target as HTMLInputElement).value,
+                      }
+                    "
+                /></label>
+                <label for="program-level"
+                  >{{ language('Experience level', 'مستوى الخبرة')
+                  }}<select
+                    id="program-level"
+                    :value="draft.presentation?.level || 'mixed'"
+                    @change="
+                      draft.presentation = {
+                        ...draft.presentation,
+                        level: ($event.target as HTMLSelectElement).value as
+                          'beginner' | 'mixed' | 'experienced',
+                      }
+                    "
+                  >
+                    <option value="mixed">{{ language('Adaptable', 'قابل للتكييف') }}</option>
+                    <option value="beginner">{{ language('Getting started', 'للمبتدئين') }}</option>
+                    <option value="experienced">{{ language('Experienced', 'ذوو خبرة') }}</option>
+                  </select></label
+                >
+              </div>
+              <p class="small-print">
+                {{
+                  language(
+                    'Changes stay on this device until you save as a draft or publish.',
+                    'تبقى التغييرات على هذا الجهاز حتى تحفظها كمسودة أو تنشرها.',
+                  )
+                }}
+              </p>
+            </div>
+          </section>
+          <section v-else class="program-preview-heading">
+            <ProgramCover :id="draft.presentation?.cover" />
+            <div>
+              <p class="overline">{{ language('Program preview', 'معاينة البرنامج') }}</p>
+              <h2>{{ title }}</h2>
+              <p v-if="draft.description">
+                {{ locale === 'ar' ? draft.descriptionAr || draft.description : draft.description }}
+              </p>
+              <p v-if="draft.presentation?.goal">{{ draft.presentation.goal }}</p>
+            </div>
+          </section>
           <button
             v-if="!editable && context.view !== 'trainee'"
             type="button"
@@ -680,6 +725,23 @@ function removeDay() {
                 language('Recovery day. No workout to record.', 'يوم تعافٍ. لا يوجد تمرين للتسجيل.')
               }}
             </p>
+            <div
+              v-if="!preview && !day.restDay && !day.exercises.length"
+              class="program-empty-exercises"
+            >
+              <PhBarbell :size="30" aria-hidden="true" />
+              <div>
+                <h3>{{ language('Start with a real exercise', 'ابدأ بتمرين فعلي') }}</h3>
+                <p>
+                  {{
+                    language(
+                      'Choose an exercise from your library. Nothing is prefilled.',
+                      'اختر تمريناً من مكتبتك. لا توجد تمارين مضافة مسبقاً.',
+                    )
+                  }}
+                </p>
+              </div>
+            </div>
             <article
               v-for="(ex, i) in day.exercises"
               :key="ex.key"
@@ -771,7 +833,7 @@ function removeDay() {
                 <p class="subtle">
                   {{
                     language(
-                      'Choose up to 3 exercises with the same recording type. They use the same sets and targets; your client can adjust their recorded results.',
+                      'Choose up to 3 exercises with the same recording type. They use the same sets and targets; athletes can adjust their recorded results.',
                       'اختر حتى 3 تمارين من نوع التسجيل نفسه. تستخدم المجموعات والأهداف نفسها، ويمكن للمتدرب تعديل نتائجه المسجلة.',
                     )
                   }}
@@ -842,8 +904,8 @@ function removeDay() {
             <p>
               {{
                 language(
-                  'Publishing creates a fixed version. Existing client plans change only when you assign it.',
-                  'النشر ينشئ نسخة ثابتة. تتغير خطط المتدربين فقط عند تعيينها لهم.',
+                  'Publishing creates a fixed version and makes it available in the institution program library. Assignments remain a separate step.',
+                  'ينشئ النشر نسخة ثابتة ويتيحها في مكتبة برامج المؤسسة. يبقى التعيين خطوة منفصلة.',
                 )
               }}
             </p>
@@ -853,7 +915,7 @@ function removeDay() {
               ><button type="submit" class="button secondary" :disabled="busy">
                 {{ language('Save draft', 'حفظ المسودة') }}</button
               ><button type="button" class="button" :disabled="busy" @click="publish">
-                {{ busy ? t('loading') : language('Publish plan', 'نشر الخطة') }}
+                {{ busy ? t('loading') : language('Publish program', 'نشر البرنامج') }}
               </button>
             </div>
           </div>
@@ -864,6 +926,123 @@ function removeDay() {
 </template>
 
 <style>
+.program-identity-card {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.5fr);
+  gap: 24px;
+  align-items: start;
+  margin: 0 0 28px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  text-align: start;
+}
+.program-cover-drop {
+  display: grid;
+  justify-items: start;
+  align-content: start;
+  gap: 10px;
+  min-height: 220px;
+  padding: 12px;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  background: var(--surface-soft);
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease;
+}
+.program-cover-drop.dragging {
+  border-color: var(--accent);
+  background: var(--tint);
+}
+.program-cover-drop .program-cover {
+  width: 100%;
+  max-height: 230px;
+  margin: 0;
+}
+.cover-placeholder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 170px;
+  border-radius: 8px;
+  color: var(--muted);
+  background: var(--surface);
+}
+.cover-change {
+  padding: 0;
+  border: 0;
+  color: var(--accent);
+  background: none;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.program-cover-drop small {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+.program-identity-fields,
+.program-recognition-fields {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  text-align: start;
+}
+.program-identity-fields .title-input {
+  margin: 0 0 8px;
+}
+.program-recognition-fields {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 4px;
+}
+.program-identity-fields .small-print {
+  margin: 0;
+}
+.program-preview-heading {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.5fr);
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 28px;
+  text-align: start;
+}
+.program-preview-heading .program-cover {
+  margin: 0;
+}
+.program-empty-exercises {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding: 20px;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  color: var(--muted);
+  text-align: start;
+}
+.program-empty-exercises h3,
+.program-empty-exercises p {
+  margin: 0 0 6px;
+}
+@media (max-width: 680px) {
+  .program-identity-card,
+  .program-preview-heading {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 16px;
+  }
+  .program-cover-drop {
+    width: 100%;
+    min-height: 0;
+  }
+  .cover-placeholder {
+    min-height: 145px;
+  }
+  .program-recognition-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 .alternative-chips {
   display: flex;
   flex-wrap: wrap;

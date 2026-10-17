@@ -1,0 +1,58 @@
+# Development
+
+This page is the local development entry point. It covers setup, common changes and troubleshooting. For deployment, secrets, backups and recovery, use [operations](../operations/README.md). For check commands and their limits, use [testing](../testing/README.md).
+
+## Prerequisites
+
+- Node.js 22.16 or Node.js 24 (`.nvmrc` selects Node 24 for local development) and npm. Production containers use pinned Node 22.16 images.
+- Docker Engine with the Compose plugin, for local PostgreSQL.
+- Git, on the approved `codex/university-revamp-plan` branch.
+
+## First setup
+
+Run from the repository root. Install once from the root lockfile; do not install app workspaces separately.
+
+```sh
+nvm use
+npm ci
+npm run backend:start
+npm run seed:local # only for a new, empty local database
+npm run web-env
+```
+
+Start the API and frontend in separate terminals:
+
+```sh
+npm run start:api
+```
+
+```sh
+npm run dev
+```
+
+Open `http://127.0.0.1:5173`. `/` opens one-time super-admin setup when the database has no institution. Seeded local databases already contain an institution and use the documented sample accounts. Invitations are shared as single-use links and do not send email. Each institutional account has one role and opens its matching dashboard. Legacy `/coach` links redirect to the closest organization workflow, or to organization setup if no organization is available. Legacy independent data is preserved; this UI change does not migrate or delete it. Administrators manage invitations and role changes in **People & access**, review activity in **Analytics**, and publish programs in **Programs**. See the [root README](../../README.md) for the quick start and [operations guide](../operations/README.md) for database, sample-account and recovery details.
+
+API errors and confirmed user writes use fixed SweetAlert2 toasts so feedback remains visible while a page is scrolled. Read-like POST requests do not show success toasts. Program draft saves return the editor to its heading; the toast confirms save completion.
+
+In the app, staff can open **Messages** and select someone from the **People** list; administrators see active institution members and coaches see athletes in their authorized roster. The existing private conversation opens if one exists. Trainees can read and reply to conversations started by staff. **Open group conversation** on a training group opens its existing channel or creates the first one. To assign training, publish a program and use **Assign this program**; publication adds it to the institution library for other coaches, who can assign it to athletes under their responsibility. New account passwords use the displayed 8–128 character upper/lowercase, number and symbol rules; existing passwords remain valid for sign-in.
+
+To test the first-run screen and invitation journey without touching local preview data, run `npm run test:e2e --workspace @rafik/frontend -- onboarding.e2e.ts --empty-database`. The wrapper creates a disposable, empty migrated database and removes its database, files, logs and Playwright output when it exits.
+
+## Common workflows
+
+| Change                             | Workflow                                                                                                                                                                                |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Frontend or API behavior           | Keep the vertical workflow in its owning feature/module; derive visible actions from server capabilities and enforce authority in the API.                                              |
+| Schema or persistence              | Add a forward Prisma migration, apply it locally, regenerate Prisma and shared database types. Do not reset or reseed a database that contains data.                                    |
+| Shared API contract                | Update `packages/shared/` and both consuming workspaces as needed.                                                                                                                      |
+| Canonical exercise or food content | Edit backend canonical sources, preserve provenance and media rights, then run the documented content generator/checks. See [content maintenance](../reference/content-maintenance.md). |
+| Product or data boundary           | Update [requirements](../requirements/README.md), [architecture](../architecture/README.md), the relevant [ADR](../decisions/README.md), and current review notes as appropriate.       |
+
+The [maintainer guide](maintainer-guide.md) has the repository map and change recipes. The [ledger](ledger.md) is a short current-status record; old phase history and superseded reviews are in the archive.
+
+## Troubleshooting
+
+- If the API cannot reach PostgreSQL, confirm the local Compose database is healthy with `docker compose ps`; then use `npm run backend:start` to apply pending migrations and regenerate Prisma.
+- If an API contract/type change fails frontend checks, regenerate the shared database types from the Prisma schema and update the shared API contract before retrying the relevant workspace checks.
+- Do not use `seed:local` to repair an existing database. It is for an empty local database only.
+- Windows `spawn EPERM` failures have prevented some local Node test runners from launching child processes. The affected checks were run in the Linux API container where appropriate; see [verification](../verification/README.md). This is a local environment limitation, not evidence that a check passed on Windows.

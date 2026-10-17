@@ -249,7 +249,7 @@ function cancelDelete() {
           <p>
             {{
               language(
-                'Permanently remove your account, your plans, your uploaded files, and your own training results. Clients keep their own completed session snapshots.',
+                'Permanently remove your account, your plans, your uploaded files, and your own training results. Athletes keep their own completed session snapshots.',
                 'حذف حسابك وخططك وملفاتك المرفوعة ونتائج تدريبك نهائياً. يحتفظ المتدربون بنسخ حصصهم المكتملة.',
               )
             }}

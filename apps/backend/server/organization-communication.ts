@@ -116,10 +116,19 @@ export async function communication(
         last_sequence: bigint | null;
         unread: bigint;
       }[]
-    >`SELECT c.id,c.title,c.revision,c.archived,last.body last_body,last.sequence last_sequence,(SELECT count(*) FROM public.organization_messages m WHERE m.channel_id=c.id AND m.sender_id<>${self.id}::uuid AND m.sequence>coalesce(r.sequence,0)) unread FROM public.organization_channels c LEFT JOIN public.organization_channel_reads r ON r.channel_id=c.id AND r.member_id=${self.id}::uuid LEFT JOIN LATERAL(SELECT body,sequence FROM public.organization_messages WHERE channel_id=c.id ORDER BY sequence DESC LIMIT 1) last ON true WHERE c.workspace_id=${id}::uuid AND c.title ILIKE ${search} AND ((${manage} AND NOT c.private_pair) OR EXISTS(SELECT 1 FROM public.organization_channel_members p WHERE p.channel_id=c.id AND p.member_id=${self.id}::uuid)) ORDER BY last.sequence DESC NULLS LAST,c.id LIMIT 26 OFFSET ${offset}`;
+    >`SELECT c.id,c.title,c.revision,c.archived,last.body last_body,last.sequence last_sequence,(SELECT count(*) FROM public.organization_messages m WHERE m.channel_id=c.id AND m.sender_id<>${self.id}::uuid AND m.sequence>coalesce(r.sequence,0)) unread FROM public.organization_channels c LEFT JOIN public.organization_channel_reads r ON r.channel_id=c.id AND r.member_id=${self.id}::uuid LEFT JOIN LATERAL(SELECT body,sequence FROM public.organization_messages WHERE channel_id=c.id ORDER BY sequence DESC LIMIT 1) last ON true WHERE c.workspace_id=${id}::uuid AND (c.title ILIKE ${search} OR EXISTS(SELECT 1 FROM public.organization_channel_members search_member JOIN public.workspace_members search_person ON search_person.id=search_member.member_id WHERE search_member.channel_id=c.id AND search_member.member_id<>${self.id}::uuid AND c.private_pair AND search_person.name ILIKE ${search})) AND ((${manage} AND NOT c.private_pair) OR EXISTS(SELECT 1 FROM public.organization_channel_members p WHERE p.channel_id=c.id AND p.member_id=${self.id}::uuid)) ORDER BY last.sequence DESC NULLS LAST,c.id LIMIT 26 OFFSET ${offset}`;
+    const directPeople = await tx.$queryRaw<{ member_id: string }[]>`
+      SELECT DISTINCT other.member_id
+      FROM public.organization_channels c
+      JOIN public.organization_channel_members own
+        ON own.channel_id = c.id AND own.member_id = ${self.id}::uuid
+      JOIN public.organization_channel_members other
+        ON other.channel_id = c.id AND other.member_id <> ${self.id}::uuid
+      WHERE c.workspace_id = ${id}::uuid AND c.private_pair = true`;
     // Management discovery exposes channel metadata only; it cannot disclose message previews/counts before joining.
     return {
       self: self.id,
+      directPeople: directPeople.map((person) => person.member_id),
       items: list.slice(0, 25).map((c) => ({
         ...c,
         last_body: manage ? null : c.last_body,
@@ -194,6 +203,35 @@ export async function communicationCommand(
       return { read: true };
     });
   const authorize = async (tx: Tx, self: Self) => {
+    if (action === "open-group") {
+      const group = await tx.organization_groups.findFirst({
+        where: {
+          id: key,
+          workspace_id: id,
+          archived: false,
+          ...(view === "admin" ? {} : { created_by: self.id }),
+        },
+        include: {
+          organization_group_members: {
+            include: { workspace_members: { select: { active: true } } },
+          },
+        },
+      });
+      if (!group) throw new ApiError(404, "group_unavailable");
+      const members = [
+        self.id,
+        ...group.organization_group_members
+          .filter((member) => member.workspace_members.active)
+          .map((member) => member.member_id),
+      ];
+      if (new Set(members).size < 2)
+        throw new ApiError(400, "invalid_recipients");
+      await selectedPeople(tx, id, self, view, {
+        members,
+        managers: [self.id],
+      });
+      return;
+    }
     if (action === "create") {
       if (view === "trainee") throw new ApiError(403, "forbidden");
       await selectedPeople(tx, id, self, view, input);
@@ -213,6 +251,103 @@ export async function communicationCommand(
     [view],
     input,
     async (tx, self) => {
+      if (action === "open-group") {
+        const group = await tx.organization_groups.findFirst({
+          where: {
+            id: key,
+            workspace_id: id,
+            archived: false,
+            ...(view === "admin" ? {} : { created_by: self.id }),
+          },
+          include: {
+            organization_group_members: {
+              include: {
+                workspace_members: { select: { active: true } },
+              },
+            },
+          },
+        });
+        if (!group) throw new ApiError(404, "group_unavailable");
+        const members = [
+            self.id,
+            ...group.organization_group_members
+              .filter((member) => member.workspace_members.active)
+              .map((member) => member.member_id),
+          ],
+          { managers } = await selectedPeople(tx, id, self, view, {
+            members,
+            managers: [self.id],
+          });
+        const pairKey =
+          members.length === 2 ? [...members].sort().join(":") : null;
+        let channel = await tx.organization_channels.findFirst({
+          where: { workspace_id: id, conversation_group_id: group.id },
+        });
+        if (!channel && pairKey)
+          channel = await tx.organization_channels.findFirst({
+            where: { workspace_id: id, private_pair_key: pairKey },
+          });
+        if (channel) {
+          if (
+            channel.archived ||
+            (!channel.conversation_group_id && !channel.private_pair_key)
+          )
+            channel = await tx.organization_channels.update({
+              where: { id: channel.id },
+              data: {
+                archived: false,
+                ...(channel.conversation_group_id
+                  ? {}
+                  : { conversation_group_id: group.id }),
+                revision: { increment: 1 },
+              },
+            });
+          return channel;
+        }
+        const channelId = uuid(input.id),
+          inserted = await tx.$queryRaw<{ id: string }[]>`
+            INSERT INTO public.organization_channels
+              (id, workspace_id, title, created_by, private_pair, private_pair_key, conversation_group_id)
+            VALUES
+              (${channelId}::uuid, ${id}::uuid, ${group.name}, ${self.id}::uuid,
+               ${!!pairKey}, ${pairKey}, ${group.id}::uuid)
+            ON CONFLICT DO NOTHING
+            RETURNING id`;
+        if (inserted.length) {
+          await tx.organization_channel_members.createMany({
+            data: members.map((member_id) => ({
+              channel_id: channelId,
+              workspace_id: id,
+              member_id,
+              manager: managers.includes(member_id),
+            })),
+          });
+          await event(tx, actor, id, "conversation_created", channelId, {
+            group: group.id,
+            members,
+            managers,
+          });
+          return tx.organization_channels.findUniqueOrThrow({
+            where: { id: channelId },
+          });
+        }
+        channel = await tx.organization_channels.findFirst({
+          where: {
+            workspace_id: id,
+            OR: [
+              { conversation_group_id: group.id },
+              ...(pairKey ? [{ private_pair_key: pairKey }] : []),
+            ],
+          },
+        });
+        if (!channel) throw new ApiError(409, "conversation_conflict");
+        if (channel.archived)
+          channel = await tx.organization_channels.update({
+            where: { id: channel.id },
+            data: { archived: false, revision: { increment: 1 } },
+          });
+        return channel;
+      }
       if (action === "create") {
         const { members, managers } = await selectedPeople(
           tx,
@@ -223,12 +358,51 @@ export async function communicationCommand(
         );
         if (!members.includes(self.id) || !managers.includes(self.id))
           throw new ApiError(400, "invalid_recipients");
+        const privatePair = members.length === 2,
+          pairKey = privatePair ? [...members].sort().join(":") : null;
+        if (pairKey) {
+          const title = textValue(input.title),
+            inserted = await tx.$queryRaw<{ id: string }[]>`
+              INSERT INTO public.organization_channels
+                (id, workspace_id, title, created_by, private_pair, private_pair_key)
+              VALUES
+                (${key}::uuid, ${id}::uuid, ${title}, ${self.id}::uuid, true, ${pairKey})
+              ON CONFLICT (workspace_id, private_pair_key) DO NOTHING
+              RETURNING id`;
+          let channel = await tx.organization_channels.findFirst({
+            where: { workspace_id: id, private_pair_key: pairKey },
+          });
+          if (inserted.length) {
+            await tx.organization_channel_members.createMany({
+              data: members.map((member_id) => ({
+                channel_id: key,
+                workspace_id: id,
+                member_id,
+                manager: managers.includes(member_id),
+              })),
+            });
+            await event(tx, actor, id, "conversation_created", key, {
+              members,
+              managers,
+            });
+            channel = await tx.organization_channels.findUnique({
+              where: { id: key },
+            });
+          } else if (channel?.archived) {
+            channel = await tx.organization_channels.update({
+              where: { id: channel.id },
+              data: { archived: false, revision: { increment: 1 } },
+            });
+          }
+          if (!channel) throw new ApiError(500, "conversation_unavailable");
+          return channel;
+        }
         const channel = await tx.organization_channels.create({
           data: {
             id: key,
             workspace_id: id,
             title: textValue(input.title),
-            private_pair: members.length === 2,
+            private_pair: false,
             created_by: self.id,
           },
         });

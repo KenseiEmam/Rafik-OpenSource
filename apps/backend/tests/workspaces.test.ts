@@ -74,7 +74,7 @@ async function join(admin: Person, id: string, p: Person, roles: string[]) {
 }
 const view = (p: Person, id: string, role = "admin") =>
   call(p, `/v1/workspaces/${id}?view=${role}`);
-test("organization ownership, combined roles, cross-scope denial and stable trainer reassignment", async () => {
+test("organization ownership, single-role contexts, cross-scope denial and stable trainer reassignment", async () => {
   const admin = await person(),
     trainer = await person(),
     trainee = await person(),
@@ -82,7 +82,7 @@ test("organization ownership, combined roles, cross-scope denial and stable trai
     replacement = await person(),
     id = await create(admin),
     other = await create(otherAdmin);
-  await join(admin, id, trainer, ["trainer", "trainee"]);
+  await join(admin, id, trainer, ["trainer"]);
   await join(admin, id, trainee, ["trainee"]);
   await join(admin, id, replacement, ["trainer"]);
   await join(otherAdmin, other, trainer, ["trainer"]);
@@ -112,7 +112,7 @@ test("organization ownership, combined roles, cross-scope denial and stable trai
     ).length,
     1,
   );
-  assert.equal((await view(trainer, id, "trainee")).data.members.length, 1);
+  assert.equal((await view(trainer, id, "trainee")).status, 403);
   const foreign = (await view(otherAdmin, other)).data.members.find(
     (m: any) => m.user_id === trainer.id,
   );
@@ -161,8 +161,23 @@ test("organization ownership, combined roles, cross-scope denial and stable trai
     member.id,
   );
   const context = (await call(trainer, "/v1/contexts")).data.contexts;
-  assert.equal(context.filter((c: any) => c.workspace_id === id).length, 2);
+  assert.equal(context.filter((c: any) => c.workspace_id === id).length, 1);
   assert.equal(context.filter((c: any) => c.workspace_id === other).length, 1);
+  assert.equal(
+    context.some((c: any) => c.kind === "personal"),
+    false,
+  );
+  const multipleRoles = await call(
+    admin,
+    "/v1/workspaces/" + id,
+    operation("invite", {
+      id: randomUUID(),
+      email: `multi-${randomUUID()}@rafik.test`,
+      roles: ["admin", "trainer"],
+      token: randomBytes(32).toString("hex"),
+    }),
+  );
+  assert.equal(multipleRoles.status, 400);
   assert.equal((await call(trainee, "/v1/commands/save_plan", {})).status, 403);
   assert.equal(
     (await call(admin, "/v1/queries/workspace_members")).status,

@@ -43,6 +43,7 @@ const command = useCommand<'note'>(
       method: 'POST',
       body: JSON.stringify(args),
     }),
+  { successMessage: l('Session note updated.', 'تم تحديث ملاحظة الجلسة.') },
 )
 const locked = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
 watch(

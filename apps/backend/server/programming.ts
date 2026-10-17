@@ -222,7 +222,7 @@ export async function programCommand(actor: Actor, id: string, input: Input) {
   const action = String(input.action),
     programId = String(input.id || "");
   const authorize = async (tx: Tx, self: Member) => {
-    if (["save", "publish", "archive", "listing"].includes(action)) {
+    if (["save", "publish", "archive"].includes(action)) {
       const existing = await tx.organization_programs.findUnique({
         where: { id: uuid(programId) },
       });
@@ -398,28 +398,15 @@ export async function programCommand(actor: Actor, id: string, input: Input) {
       });
       if ((p?.draft_version || null) !== input.revision)
         throw new ApiError(409, "conflict");
-      if (
-        (action === "archive" || action === "listing") &&
-        p?.revision !== input.record_revision
-      )
+      if (action === "archive" && p?.revision !== input.record_revision)
         throw new ApiError(409, "conflict");
-      if (action === "archive" || action === "listing") {
+      if (action === "archive") {
         if (typeof input.value !== "boolean")
           throw new ApiError(400, "invalid_request");
-        if (
-          action === "listing" &&
-          input.value &&
-          !(await tx.organization_versions.count({
-            where: { program_id: programId },
-          }))
-        )
-          throw new ApiError(400, "publish_first");
         p = await tx.organization_programs.update({
           where: { id: programId },
           data: {
-            ...(action === "listing"
-              ? { listed: input.value }
-              : { archived: input.value }),
+            archived: input.value,
             revision: { increment: 1 },
             updated_at: new Date(),
           },
@@ -427,8 +414,17 @@ export async function programCommand(actor: Actor, id: string, input: Input) {
         await event(tx, actor, id, "program_" + action, programId);
         return { plan: p };
       }
-      const title = textValue(input.title, 100),
+      const title = textValue(input.title, 100);
+      let prescription: Prisma.InputJsonValue | null = null;
+      if (action === "publish")
         prescription = await snapshot(tx, id, self, input.draft);
+      else {
+        const draft = JSON.stringify(input.draft);
+        if (!draft || draft.length > 262_144)
+          throw new ApiError(400, "invalid_plan");
+        await tx.$queryRaw`SELECT public.validate_program_presentation(${draft}::jsonb,${id}::uuid)::text`;
+        await tx.$queryRaw`SELECT public.validate_program_draft(${draft}::jsonb)::text`;
+      }
       const same =
         p && p.title === title && isDeepStrictEqual(p.draft, input.draft);
       if (!same)
@@ -454,6 +450,11 @@ export async function programCommand(actor: Actor, id: string, input: Input) {
       if (!p) throw new ApiError(500, "service_unavailable");
       let version = null;
       if (action === "publish") {
+        if (!p.listed || p.archived)
+          p = await tx.organization_programs.update({
+            where: { id: p.id },
+            data: { listed: true, archived: false, revision: { increment: 1 } },
+          });
         version =
           (await tx.organization_versions.findUnique({
             where: {
@@ -469,7 +470,7 @@ export async function programCommand(actor: Actor, id: string, input: Input) {
               program_id: p.id,
               revision: p.draft_version,
               title,
-              prescription,
+              prescription: prescription!,
               created_by: self.id,
             },
           }));
@@ -590,7 +591,9 @@ export async function delivery(
       include: { organization_versions: true },
       orderBy: { created_at: "desc" },
     });
-    const cursor = query.get("before");
+    const cursor = query.get("history") === "true" ? query.get("before") : null;
+    if (query.has("before") && !cursor)
+      throw new ApiError(400, "invalid_request");
     if (cursor) {
       const previous = await tx.organization_sessions.findUnique({
         where: { id: uuid(cursor) },
@@ -602,12 +605,18 @@ export async function delivery(
       )
         throw new ApiError(400, "invalid_request");
     }
-    const page = await tx.organization_sessions.findMany({
-      where: { workspace_id: id, member_id: { in: members.map((m) => m.id) } },
-      orderBy: [{ started_at: "desc" }, { id: "asc" }],
-      take: 51,
-      ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
-    });
+    const page =
+      query.get("history") === "true"
+        ? await tx.organization_sessions.findMany({
+            where: {
+              workspace_id: id,
+              member_id: { in: members.map((m) => m.id) },
+            },
+            orderBy: [{ started_at: "desc" }, { id: "asc" }],
+            take: 51,
+            ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+          })
+        : [];
     const sessions = page.slice(0, 50);
     return {
       members,

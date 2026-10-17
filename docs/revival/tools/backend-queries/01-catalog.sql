@@ -1,9 +1,0 @@
-SELECT jsonb_build_object(
-  'server_version', current_setting('server_version'),
-  'schemas', (SELECT jsonb_agg(nspname ORDER BY nspname) FROM pg_namespace WHERE nspname !~ '^pg_' AND nspname <> 'information_schema'),
-  'extensions', (SELECT jsonb_agg(jsonb_build_object('name',e.extname,'version',e.extversion,'schema',n.nspname) ORDER BY e.extname) FROM pg_extension e JOIN pg_namespace n ON n.oid=e.extnamespace),
-  'tables', (SELECT jsonb_agg(jsonb_build_object('schema',n.nspname,'name',c.relname,'kind',c.relkind,'rls',c.relrowsecurity,'force_rls',c.relforcerowsecurity,'owner',pg_get_userbyid(c.relowner),'estimated_rows',c.reltuples::bigint,'bytes',pg_total_relation_size(c.oid),'anon_select',has_table_privilege('anon',c.oid,'SELECT'),'anon_insert',has_table_privilege('anon',c.oid,'INSERT'),'anon_update',has_table_privilege('anon',c.oid,'UPDATE'),'anon_delete',has_table_privilege('anon',c.oid,'DELETE'),'authenticated_select',has_table_privilege('authenticated',c.oid,'SELECT'),'authenticated_insert',has_table_privilege('authenticated',c.oid,'INSERT'),'authenticated_update',has_table_privilege('authenticated',c.oid,'UPDATE'),'authenticated_delete',has_table_privilege('authenticated',c.oid,'DELETE'),'options',c.reloptions) ORDER BY n.nspname,c.relname) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname IN ('public','storage') AND c.relkind IN ('r','p','v','m')),
-  'policies', (SELECT jsonb_agg(to_jsonb(p) ORDER BY p.schemaname,p.tablename,p.policyname) FROM pg_policies p WHERE p.schemaname IN ('public','storage')),
-  'publications', (SELECT jsonb_agg(jsonb_build_object('name',pubname,'all_tables',puballtables,'insert',pubinsert,'update',pubupdate,'delete',pubdelete) ORDER BY pubname) FROM pg_publication),
-  'realtime_tables', (SELECT jsonb_agg(to_jsonb(p) ORDER BY p.schemaname,p.tablename) FROM pg_publication_tables p WHERE p.pubname='supabase_realtime')
-) AS catalog;

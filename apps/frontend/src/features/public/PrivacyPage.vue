@@ -29,7 +29,7 @@ import { language, t } from '../../lib/i18n'
       <p>
         {{
           language(
-            'Email, profile preferences, plans, assignments, recorded sets, and session notes are saved in the local Supabase backend. A connected coach can read their client’s sessions and leave feedback. Other clients cannot read them.',
+            'Email, profile preferences, plans, assignments, recorded sets, and session notes are saved in the local Supabase backend. A connected coach can read their athlete sessions and leave feedback. Other athletes cannot read them.',
             'يُحفظ البريد وتفضيلات الملف والخطط والتعيينات والمجموعات المسجلة والملاحظات في Supabase المحلي. يمكن للمدرب المرتبط قراءة حصص متدربه وترك ملاحظات. لا يمكن للمتدربين الآخرين قراءتها.',
           )
         }}
@@ -40,7 +40,7 @@ import { language, t } from '../../lib/i18n'
       <p>
         {{
           language(
-            'Try the sample without signing up. Export your own training data or delete your account in Settings. If a coach deletes their account, clients retain their own completed session snapshots. No advertising or external analytics service is connected in this build.',
+            'Try the sample without signing up. Export your own training data or delete your account in Settings. If a coach deletes their account, athletes retain their own completed session snapshots. No advertising or external analytics service is connected in this build.',
             'جرّب الحصة بلا تسجيل. صدّر بيانات تدريبك أو احذف حسابك من الإعدادات. إذا حذف المدرب حسابه يحتفظ المتدربون بنسخ حصصهم المكتملة. لا توجد خدمات إعلان أو تحليلات خارجية مرتبطة بهذا الإصدار.',
           )
         }}

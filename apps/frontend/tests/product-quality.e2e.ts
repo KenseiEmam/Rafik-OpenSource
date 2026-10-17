@@ -109,7 +109,7 @@ test('approved alternative survives offline recording, completion, review and co
     ).toBeVisible()
     await page.getByRole('button', { name: 'Save draft', exact: true }).click()
     await expect(page.getByRole('status')).toContainText('Draft saved')
-    await page.getByRole('button', { name: 'Publish plan', exact: true }).click()
+    await page.getByRole('button', { name: 'Publish program', exact: true }).click()
     await expect(page.getByRole('status')).toContainText('Published')
     const versions = await f.rows(f.owner, 'plan_versions', 'plan_id', f.version.plan_id)
     const version = versions.sort((a: any, b: any) => b.revision - a.revision)[0]

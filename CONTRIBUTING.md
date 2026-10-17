@@ -11,12 +11,12 @@ This is a staged university-first revamp. Read [the requirements](docs/requireme
 - Treat athlete health and injury information as sensitive. Define actor, context, resource, lifecycle, audit, retention, and export requirements before implementation.
 - Make API/database changes with forward migrations, update generated web types from the backend, and regenerate canonical content from its sources. Do not edit generated outputs directly.
 - Keep local preview identities, test mail, local credentials, and synthetic fixtures out of production configuration.
-- Update root `CHANGELOG.md` and `docs/implementation/ledger.md` for each stage. Update README, architecture, maintainer guide, runbook, and verification records when the corresponding setup, lifecycle, or evidence changes.
+- Update root `CHANGELOG.md` and `docs/development/ledger.md` for each stage. Update README, architecture, maintainer guide, runbook, and verification records when the corresponding setup, lifecycle, or evidence changes.
 - Complete one approved stage at a time; report results and limitations, then wait for approval before starting another.
 
 ## Local setup
 
-Use Node 22.16.0, npm, and Docker Compose. Run one `npm ci` from the repository root to install all workspaces. Follow the root [README](README.md) to start the local database, API, and web app. Seed only an empty local database. `infrastructure/compose.yaml` is a development database service, not a production deployment.
+Use Node 22.16 or Node 24, npm, and Docker Compose. Run one `npm ci` from the repository root to install all workspaces. Follow the root [README](README.md) to start the local database, API, and web app. Seed only an empty local database. `infrastructure/compose.yaml` is a development database service, not a production deployment. Production containers use pinned Node 22.16 images.
 
 ## Verification
 

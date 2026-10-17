@@ -37,18 +37,20 @@ test('organization staff schedule a group assessment, recover a result, correct 
       })
       await f.call(person, `/v1/organization-invitations/${token}`, {})
     }
-    const people = await f.call(f.owner, `/v1/workspaces/${id}?view=admin`),
-      owner = people.members.find((m: any) => m.user_id === f.owner.id),
-      trainee = people.members.find((m: any) => m.user_id === f.client.id),
-      trainer = people.members.find((m: any) => m.user_id === f.coach.id)
+    const secondClient = await f.createPerson('R4 Athlete Two'),
+      secondClientToken = randomBytes(32).toString('hex')
     await f.call(f.owner, `/v1/workspaces/${id}`, {
       operation: randomUUID(),
-      action: 'member',
-      id: owner.id,
-      revision: owner.revision,
-      roles: ['admin', 'trainee'],
-      active: true,
+      action: 'invite',
+      id: randomUUID(),
+      email: secondClient.email,
+      roles: ['trainee'],
+      token: secondClientToken,
     })
+    await f.call(secondClient, `/v1/organization-invitations/${secondClientToken}`, {})
+    const people = await f.call(f.owner, `/v1/workspaces/${id}?view=admin`),
+      trainee = people.members.find((m: any) => m.user_id === f.client.id),
+      trainer = people.members.find((m: any) => m.user_id === f.coach.id)
     await f.call(f.owner, `/v1/workspaces/${id}`, {
       operation: randomUUID(),
       action: 'assign-trainer',
@@ -70,8 +72,8 @@ test('organization staff schedule a group assessment, recover a result, correct 
     await page.goto(base + '/groups')
     await page.getByRole('button', { name: 'New group', exact: true }).click()
     await page.getByLabel('Name', { exact: true }).fill('Morning group')
-    await page.getByRole('checkbox', { name: 'R4 Client', exact: true }).check()
-    await page.getByRole('checkbox', { name: 'R4 Owner', exact: true }).check()
+    await page.getByRole('checkbox', { name: 'R4 Athlete', exact: true }).check()
+    await page.getByRole('checkbox', { name: 'R4 Athlete Two', exact: true }).check()
     await page.getByRole('button', { name: 'Save group', exact: true }).click()
     await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
     await page.goto(base + '/calendar/new')
@@ -144,7 +146,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
       },
     )
     await page.reload()
-    for (const name of ['R4 Client', 'R4 Owner']) {
+    for (const name of ['R4 Athlete', 'R4 Athlete Two']) {
       const card = page
         .locator('.event-participant')
         .filter({ has: page.getByRole('heading', { name, exact: true }) })
@@ -156,7 +158,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
       await card.getByRole('button', { name: 'Record result', exact: true }).click()
       await page
         .getByRole('spinbutton', { name: 'Chair stands (reps)', exact: true })
-        .fill(name === 'R4 Client' ? '12' : '19')
+        .fill(name === 'R4 Athlete' ? '12' : '19')
       await page.getByRole('button', { name: 'Save result', exact: true }).click()
       await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
     }
@@ -164,7 +166,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
     await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
     await page
       .locator('.event-participant')
-      .filter({ has: page.getByRole('heading', { name: 'R4 Client', exact: true }) })
+      .filter({ has: page.getByRole('heading', { name: 'R4 Athlete', exact: true }) })
       .getByRole('button', { name: 'Review / correct result', exact: true })
       .click()
     await page.getByRole('spinbutton', { name: 'Chair stands (reps)', exact: true }).fill('14')

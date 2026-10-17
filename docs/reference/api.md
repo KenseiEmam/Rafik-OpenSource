@@ -4,12 +4,14 @@ The browser calls the Node API at `/v1`; root `src/lib/backend.ts` is the sole t
 
 ## Routes and authentication
 
-- `POST /v1/auth/request-code`, `verify-code`, `logout`; `GET /v1/auth/session`. Codes are single-use, expire after ten minutes and permit five guesses. Sessions are opaque HttpOnly, SameSite cookies backed by hashed tokens. Browser requests include credentials.
+- `GET /v1/auth/setup-status`, `session`; `POST /v1/auth/setup` creates the first super admin and institution atomically on an empty instance; `POST /v1/auth/password-login`; `POST /v1/auth/logout`. Sessions are opaque HttpOnly, SameSite cookies backed by hashed tokens. Browser requests include credentials.
+- `POST /v1/auth/accept-invitation` accepts a pending seven-day, single-use institution invite, creates the account with a password and starts a session. No email is sent or verified. `POST /v1/auth/complete-password-setup` consumes an admin-issued one-time password setup token (24-hour expiry) and revokes existing sessions.
+- New passwords must be 8–128 characters and include an uppercase letter, lowercase letter, number, and punctuation or symbol. Password login accepts existing credentials so older passwords remain usable.
 - `POST /v1/commands/:name`: named, granted domain function with JSON arguments. The server registry controls identifiers and casts; values are bound. Operator-only commands are unavailable.
 - `GET /v1/queries/:table`: authorized row projection through RLS. Optional `column`/`value` equality filter, `offset`, `limit` (maximum 500). Internal operation/settings tables are not exposed. The browser helper fetches pages for complete authorized lists.
 - `GET /v1/conversations/:relationship?before=<sequence>`: newest 50 messages, exclusive older cursor. Render chronologically. `GET /v1/appointments/upcoming?coach=true` returns the next three authorized bookings in seven days.
 - `PUT`, `GET`, `DELETE /v1/files/:encodedPath`: immutable upload, authorized download, recoverable byte/metadata cleanup. JSON requests are capped at 1 MiB; private files at 10 MiB. Owner registration controls type, path and size.
-- Local-only `/v1/auth/local-preview`, `/local/inbox`, `/local/mail`; `/health` checks database connectivity. These adapters cannot start in production configuration.
+- Local-only `/v1/auth/local-preview`; `/health` checks database connectivity. These adapters cannot start in production configuration.
 
 Mutation requests require `X-Rafik-Client: web` and an allowed origin. SQL actor settings are local to each transaction, never caller-supplied credentials. Direct table writes and operator actions are not browser APIs. The local operator script has a separate guarded database path.
 
@@ -31,21 +33,21 @@ Training schedules use client-local calendar dates. Appointments use UTC instant
 - `POST /v1/workspaces`: explicit creation, fixed kind/name and caller UUID.
 - `GET /v1/workspaces/:id?view=admin|trainer|trainee`: current-role projection; no personal profile disclosure.
 - `POST /v1/workspaces/:id`: `invite`, `revoke-invite`, `member`, `assign-trainer`, `rename`, `close`; operation UUID, revision where applicable, current admin authority checked before receipt replay.
-- `GET /v1/organization-invitations/:token`: minimal organization/role preview, no intended email. `POST` accepts only the verified intended identity.
+- `GET /v1/organization-invitations/:token`: invitation preview including the intended account email, granted role and expiry. The email is an account identifier; it is not verified. Unauthenticated account creation uses `POST /v1/auth/accept-invitation`; a signed-in matching account uses `POST` on the invitation route.
 
-See [membership contract](../implementation/r7a2-contract.md). These Prisma-internal tables have no generic browser row grants. Closure preserves records while removing access; an exact closure retry confirms the old result. Organizational programming and service contracts are separate subsequent work.
+See [ADR 0005](../decisions/ADR-0005-organization-and-independent-scopes.md). These Prisma-internal tables have no generic browser row grants. Closure preserves records while removing access; an exact closure retry confirms the old result.
 
 ## Scoped programming
 
-`GET /v1/workspaces/:id/programs?view=admin|trainer|trainee` supports `search`, `offset`, `program` or `version`; list pages contain 24 programs. `POST` supports explicit save/publish/archive/listing commands with operation UUID, draft revision and (for visibility/archive) separate record revision. `GET /catalog` is staff-only; exercise writes use the programs command boundary.
+`GET /v1/workspaces/:id/programs?view=admin|trainer|trainee` supports `search`, `offset`, `program` or `version`; list pages contain 24 programs. `POST` supports explicit save/publish/archive commands with an operation UUID and draft revision. Publishing creates an immutable version and makes the program available in the institution library; assignment remains a separate action. `GET /catalog` is staff-only; exercise writes use the programs command boundary.
 
-`GET /delivery` returns authorized recipients/assignments and 50 sessions (`before` is the verified session UUID cursor; `history=true` includes former trainees with retained history). `POST /delivery` atomically assigns a fixed version to 1–50 reviewed recipients with member and current-assignment revisions. Independent `deliver_plan` provides the equivalent command within independent relationships.
+`GET /delivery` returns authorized recipients/assignments. Sessions are included only when `history=true`; `before` is then a verified session UUID cursor, and history mode includes former trainees with retained history. `POST /delivery` atomically assigns a fixed version to 1–50 reviewed recipients with member and current-assignment revisions. Independent delivery APIs are retained for legacy data compatibility but have no supported standalone web screens; see [ADR 0021](../decisions/ADR-0021-organization-only-web-experience.md).
 
 `POST /sessions` starts/saves/reviews organization workouts; `/v1/organization-sessions/:id` and `/previous` supply authorized record/actual references. Publication/started snapshots and first completion time are retained. Current responsibility is checked before receipt replay. `PUT /v1/program-media/:id?workspace=:id` accepts at most 2 MiB PNG/JPEG/WebP; the authenticated GET rechecks publication/assignment/member access. `/v1/account/organizations` exports only the authenticated subject's organization records.
 
 ## Organization services and analytics
 
-- `GET /v1/workspaces/:id/services?view=&kind=templates|groups&search=&offset=&archived=`: 25-row catalog. POST explicit `template`/`group` commands, stable operation UUID and revision. Groups contain at most 100 eligible trainee memberships; templates have 1–12 typed drills.
+- `GET /v1/workspaces/:id/services?view=&kind=templates|groups&search=&offset=&archived=`: 25-row catalog. POST explicit `template`/`group` commands, stable operation UUID and revision. Groups contain at most 100 active athlete memberships; administrators may also add active coaches. Trainers may add only assigned athletes to groups they own. Templates have 1–12 typed drills.
 - `POST /calendar-preview`: local timestamp, IANA zone, integer minutes/count/every; returns actual UTC intervals. `POST /calendar` supports create, one-occurrence reschedule, admin staff replacement, cancellation, attendance, result and finish. Creation is atomic for at most eight occurrences; selected recipients are fixed.
 - `GET /calendar?view=&from=&to=&zone=&offset=`: at most 31-day window, 50 rows. `id=` returns one authorized detail with latest 100 correction entries, explicitly labelled by the UI. Trainee projections hide other trainees.
 - `GET /analytics?view=&from=&to=&member=&search=` and `/v1/coach/analytics?from=&to=&client=&search=`: separate authorized reports, date window at most 366 days, 25 matching filter subjects. Workload remains organization-wide.
@@ -55,8 +57,8 @@ All mutations validate current role/resource before exact receipt replay; revisi
 
 ## R10 communication and notification endpoints
 
-- `GET /v1/workspaces/:id/communication?view=…&search=…&offset=…`: 25 channel summaries; admin `manage=true` exposes metadata only. `id` reads an authorized channel, `before` its prior sequence page (50).
-- `POST` on that path: explicit `create`, `join`, `members`, `archive`, `rename`, `send` commands with stable operation UUID; `read` is monotonic and needs no receipt. Current role/resource permission precedes replay.
+- `GET /v1/workspaces/:id/communication?view=…&search=…&offset=…`: 25 channel summaries; admin `manage=true` exposes metadata only. Search matches channel titles and, for direct conversations, the other participant’s name. The response includes `directPeople`, the member IDs with whom the current member already has a private pair, so the UI can omit them from new-contact choices. `id` reads an authorized channel, `before` its prior sequence page (50).
+- `POST` on that path: explicit `create`, `open-group`, `join`, `members`, `archive`, `rename`, `send` commands with stable operation UUID; `read` is monotonic and needs no receipt. `open-group` reuses the single conversation linked to the training group. Two-person conversations are unique per institution and participant pair; archived direct conversations reopen on request. Current role/resource permission precedes replay.
 - `GET /v1/notifications`: latest authorized prompt per group, 25 per bounded page; `id` validates a direct link. `POST {id}` observes that group through the selected sequence.
 - `GET/POST /v1/notifications/preferences`: own four-category in-app/local-email booleans and quiet hours, revision checked.
 
@@ -85,7 +87,6 @@ These endpoints are unauthenticated and contain no user or workspace data:
 `save_nutrition_guidance` accepts optional `p_meals` (default `[]`), up to 20 suggestions / 32 KiB. Each contains name, meal, positive quantity/basis (max 10000), unit, nutrient object and source. Existing participant/revision checks and immutable receipts apply to all fields; a changed payload with the same receipt is rejected. A suggestion is not consumption; trainee `save_meal` explicitly snapshots actual values.
 
 Independent and organization exercise authoring accept `media_ref` from the reviewed catalog or null. Existing `media_url` remains optional HTTPS. Publication and copied prescriptions preserve the chosen key. Public catalog access does not grant access to private exercises, client records or organizational data.
-
 
 ### Expanded reference catalog and video assets (R15)
 
@@ -127,11 +128,9 @@ Organization message commands accept optional `asset_id`; the file must belong t
 
 `GET /v1/workspaces/:id/follow-up?view=admin|trainer` derives scoped counts and the first eight oldest review/outcome rows and alphabetic unassigned-program trainees. It is read-only and does not infer no-shows or deduct sessions.
 
-## Organization session packages
+## Retired organization session packages
 
-`GET /v1/workspaces/:id/packages?view=admin|trainer|trainee` lists scoped packages before search (24/page); `member`, `search`, `status`, `offset` narrow results. `id` reads balance and paginated linked-session history. POST actions `create` (admin, allowance/dates/timezone/member, optional renewed_from), `adjust` (revision/allowance/reason), `archive` (revision/archived) use durable operation UUIDs. Current authorization is checked before receipt replay. Account exports include own-member package data.
-
-Calendar create accepts one funding entry per trainee: `{member,package_id}` or `{member,independent_reason}` plus optional `makeup_for`. Omitted funding on older clients means independent `other`; the new UI explicitly displays funding. Repeated bookings reserve atomically. Attendance absent on a package requires `charge_absence`; completed package corrections require `reason`. `session-note` accepts member/revision/note (2000 characters). No-show charge decisions do not consume until the event completes. Historical check-in timestamp records the first present mark, not a biometric arrival or revised attendance proof.
+Session-package and allowance endpoints are retired. `GET` and `POST /v1/workspaces/:id/packages` are not registered. Calendar scheduling has no funding, reservation, allowance, or no-show deduction fields; attendance and optional event-linked makeup scheduling remain. `session-note` accepts member/revision/note (2000 characters). Historical check-in timestamp records the first present mark, not a biometric arrival or revised attendance proof.
 
 ## Organization feedback
 
@@ -139,4 +138,4 @@ Calendar create accepts one funding entry per trainee: `{member,package_id}` or 
 
 POST body: `{operation,view,source,score,revision,id? ,month?}`. Session sources are `workout` (own completed log) and `calendar` (own present participant, completed training event); use source `id`. `workplace` requires trainer view and the server’s current UTC month. Scores are explicit integers 1–5; missing responses are null, never 3. Revision is 0 for a new logical response, otherwise the acknowledged version. Current authorization/source eligibility precedes receipt replay; correction cannot create another response. Feedback appears in own account export.
 
-Analytics returns `experience`: source-specific rating buckets including null coverage, a separately scoped current UTC-month workplace distribution (admin only), and expired-package/explicit-linked-renewal counts. `performance` lists current trainers’ completed training events/present/missed participant counts, paged with workload; co-led sessions credit each event staff member. These are corrected operational records, not frozen historical snapshots or quality/payment/retention estimates.
+Analytics returns `experience`: source-specific rating buckets including null coverage and a separately scoped current UTC-month workplace distribution (admin only). `performance` lists current trainers’ completed training events/present/missed participant counts, paged with workload; co-led sessions credit each event staff member. These are corrected operational records, not frozen historical snapshots or quality/payment/retention estimates.

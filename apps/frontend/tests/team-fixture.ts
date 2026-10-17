@@ -27,7 +27,11 @@ const sql = (input: string) =>
   )
 type Person = { id: string; email: string; session: { cookie: string } }
 export async function teamFixture() {
-  if (!readFileSync(composeFile, 'utf8').startsWith('name: rafik-prisma-local'))
+  if (
+    !readFileSync(composeFile, 'utf8').startsWith(
+      'name: ${RAFIK_INSTANCE_ID:-rafik-prisma-local}',
+    )
+  )
     throw Error('Local fixture guard failed')
   const people: Person[] = [],
     teamIds: string[] = []
@@ -82,8 +86,20 @@ export async function teamFixture() {
       )
     }
   }
+  async function createPerson(name: string): Promise<Person> {
+    const id = randomUUID(),
+      email = `r4-browser-${id}@rafik.test`,
+      cookie = randomBytes(32).toString('hex')
+    sql(
+      `insert into identity.users(id,email,email_confirmed_at) values('${id}','${email}',now()); insert into identity.sessions(token_hash,user_id,expires_at) values('${createHash('sha256').update(cookie).digest('hex')}','${id}',now()+interval '1 hour');`,
+    )
+    const person = { id, email, session: { cookie } }
+    people.push(person)
+    await rpc(person, 'ensure_profile', { p_name: name })
+    return person
+  }
   try {
-    for (const name of ['R4 Owner', 'R4 Coach', 'R4 Client']) {
+    for (const name of ['R4 Owner', 'R4 Coach', 'R4 Athlete']) {
       const id = randomUUID(),
         email = `r4-browser-${id}@rafik.test`,
         cookie = randomBytes(32).toString('hex')
@@ -93,7 +109,7 @@ export async function teamFixture() {
       const person = { id, email, session: { cookie } }
       people.push(person)
       await rpc(person, 'ensure_profile', { p_name: name })
-      if (name !== 'R4 Client')
+      if (name !== 'R4 Athlete')
         await call(person, '/v1/workspaces', { id: randomUUID(), kind: 'independent', name })
     }
     const [owner, coach, client] = people as [Person, Person, Person],
@@ -124,7 +140,20 @@ export async function teamFixture() {
       ])
       await page.goto(path)
     }
-    return { owner, coach, client, call, rpc, rows, login, cleanup, teamIds, assignment, version }
+    return {
+      owner,
+      coach,
+      client,
+      createPerson,
+      call,
+      rpc,
+      rows,
+      login,
+      cleanup,
+      teamIds,
+      assignment,
+      version,
+    }
   } catch (e) {
     await cleanup()
     throw e

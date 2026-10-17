@@ -2,7 +2,7 @@
 import { language, t } from '../../lib/i18n'
 </script>
 <template>
-  <div class="container page empty-state">
+  <div class="container page empty-state empty-state--centered">
     <p class="overline">404</p>
     <h1>{{ language('That page isn’t here.', 'هذه الصفحة غير موجودة.') }}</h1>
     <p>

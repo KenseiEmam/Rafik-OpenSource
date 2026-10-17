@@ -9,8 +9,8 @@ export const words = {
   coach: ['Coach', 'المدرب'],
   coaching: ['Coaching', 'التدريب'],
   training: ['My training', 'تدريبي'],
-  clients: ['Clients', 'المتدربون'],
-  plans: ['Plans', 'الخطط'],
+  clients: ['Athletes', 'الرياضيون'],
+  plans: ['Programs', 'البرامج'],
   settings: ['Settings', 'الإعدادات'],
   help: ['Help', 'المساعدة'],
   signIn: ['Sign in', 'تسجيل الدخول'],
@@ -55,10 +55,10 @@ export const words = {
   reviewed: ['Reviewed', 'تمت المراجعة'],
   draft: ['Draft', 'مسودة'],
   published: ['Published', 'منشور'],
-  editPlan: ['Edit plan', 'تعديل الخطة'],
-  newPlan: ['New plan', 'خطة جديدة'],
-  publish: ['Publish plan', 'نشر الخطة'],
-  invite: ['Invite a client', 'دعوة متدرب'],
+  editPlan: ['Edit program', 'تعديل البرنامج'],
+  newPlan: ['New program', 'برنامج جديد'],
+  publish: ['Publish program', 'نشر البرنامج'],
+  invite: ['Invite an athlete', 'دعوة رياضي'],
   createLink: ['Create invitation link', 'إنشاء رابط الدعوة'],
   copyLink: ['Copy link', 'نسخ الرابط'],
   copied: ['Copied', 'تم النسخ'],
@@ -120,12 +120,36 @@ export function errorMessage(error: unknown): string {
         ? String(error.message)
         : String(error)
   const teamErrors: Record<string, [string, string]> = {
+    invalid_credentials: [
+      'The email or password is incorrect.',
+      'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
+    ],
+    password_length: [
+      'Use 8–128 characters with an uppercase letter, a lowercase letter, a number and a symbol.',
+      'استخدم ٨–١٢٨ حرفاً مع حرف كبير وحرف صغير ورقم ورمز.',
+    ],
+    setup_already_complete: [
+      'Institution setup is already complete. Sign in with an administrator account.',
+      'اكتمل إعداد المؤسسة. سجّل الدخول بحساب مسؤول.',
+    ],
+    account_exists: [
+      'An account already uses this email. Sign in to accept the invitation.',
+      'يوجد حساب بهذا البريد. سجّل الدخول لقبول الدعوة.',
+    ],
+    invitation_email_mismatch: [
+      'Use the email address the administrator invited.',
+      'استخدم عنوان البريد الذي دعاك إليه المسؤول.',
+    ],
+    password_setup_unavailable: [
+      'This password setup link is expired or no longer valid. Ask an administrator for a new one.',
+      'انتهت صلاحية رابط إعداد كلمة المرور أو لم يعد صالحاً. اطلب رابطاً جديداً من المسؤول.',
+    ],
     account_suspended: [
       'Sign-in access is suspended. Contact platform support.',
       'تم تعليق تسجيل الدخول. تواصل مع دعم المنصة.',
     ],
     conversation_unavailable: [
-      'This conversation is unavailable in this workspace. Refresh your conversations or contact an organization administrator.',
+      'This conversation is unavailable in this workspace. Refresh your conversations or contact an institution administrator.',
       'هذه المحادثة غير متاحة في مساحة العمل. حدّث المحادثات أو تواصل مع مسؤول المؤسسة.',
     ],
     notification_unavailable: [
@@ -159,7 +183,7 @@ export function errorMessage(error: unknown): string {
       'سجل الحضور أولاً. تتطلب النتائج تحديد المتدرب كحاضر.',
     ],
     template_unavailable: [
-      'This assessment template is unavailable. Choose an active template in this organization.',
+      'This assessment template is unavailable. Choose an active template in this institution.',
       'قالب التقييم غير متاح. اختر قالباً نشطاً في المؤسسة.',
     ],
     program_unavailable: [
@@ -174,34 +198,6 @@ export function errorMessage(error: unknown): string {
       'The feedback month has changed. Reload before submitting.',
       'تغيّر شهر التقييم. أعد التحميل قبل الإرسال.',
     ],
-    package_unavailable: [
-      'This package is no longer available for this trainee.',
-      'هذه الباقة لم تعد متاحة لهذا المتدرب.',
-    ],
-    package_capacity: [
-      'Not enough available sessions. Refresh the package balance or choose independent funding.',
-      'لا توجد جلسات متاحة كافية. حدّث رصيد الباقة أو اختر حجزاً مستقلاً.',
-    ],
-    package_date: [
-      'The session must fall within the package validity dates in its timezone.',
-      'يجب أن تكون الجلسة ضمن صلاحية الباقة في منطقتها الزمنية.',
-    ],
-    package_has_reservations: [
-      'Resolve reserved bookings before archiving this package.',
-      'حدّث الحجوزات القائمة قبل أرشفة الباقة.',
-    ],
-    package_already_renewed: [
-      'A renewal already exists. Refresh to see the current package.',
-      'يوجد تجديد بالفعل. حدّث لعرض الباقة الحالية.',
-    ],
-    invalid_funding: [
-      'Choose a package or an independent reason for each trainee.',
-      'اختر باقة أو سبب حجز مستقل لكل متدرب.',
-    ],
-    no_show_decision_required: [
-      'Choose whether to deduct or release the no-show session.',
-      'اختر خصم أو تحرير جلسة الغياب.',
-    ],
     makeup_unavailable: [
       'This session is not available for a makeup booking.',
       'هذه الجلسة غير متاحة لحجز تعويضي.',
@@ -211,7 +207,7 @@ export function errorMessage(error: unknown): string {
       'هذه المهمة لم تعد متاحة لك. حدّث قائمة المهام.',
     ],
     trainer_unavailable: [
-      'This trainer is no longer available. Choose an active organization trainer.',
+      'This trainer is no longer available. Choose an active institution trainer.',
       'هذا المدرب لم يعد متاحاً. اختر مدرباً نشطاً في المؤسسة.',
     ],
     trainee_unavailable: [
@@ -226,10 +222,6 @@ export function errorMessage(error: unknown): string {
       'Check the program description and experience level.',
       'تحقق من وصف البرنامج ومستوى الخبرة.',
     ],
-    publish_first: [
-      'Publish a program before making it available in the catalog.',
-      'انشر البرنامج قبل إتاحته في المكتبة.',
-    ],
     invalid_recipients: [
       'Select between 1 and 50 people and review the assignment again.',
       'اختر من ١ إلى ٥٠ شخصاً وراجع التعيين مجدداً.',
@@ -243,7 +235,7 @@ export function errorMessage(error: unknown): string {
       'هذه الحصة مجدولة ليوم آخر. افتح تدريب اليوم أو استأنف حصة بدأت سابقاً.',
     ],
     workspace_unavailable: [
-      'Your access to this organization or view is no longer available. Choose another workspace or contact an administrator.',
+      'Your access to this institution or view is no longer available. Choose another workspace or contact an administrator.',
       'لم يعد الوصول إلى هذه المؤسسة أو هذا العرض متاحاً. اختر مساحة أخرى أو تواصل مع المسؤول.',
     ],
     coaching_not_enabled: [
@@ -255,11 +247,11 @@ export function errorMessage(error: unknown): string {
       'أضف مسؤولاً نشطاً آخر قبل إزالة هذا المسؤول أو حذف الحساب.',
     ],
     invalid_roles: [
-      'Choose at least one organization role.',
+      'Choose at least one institution role.',
       'اختر دوراً واحداً على الأقل داخل المؤسسة.',
     ],
     invalid_trainer: [
-      'Choose an active trainer from this organization. A person cannot be their own trainer.',
+      'Choose an active trainer from this institution. A person cannot be their own trainer.',
       'اختر مدرباً نشطاً من هذه المؤسسة. لا يمكن للشخص أن يكون مدرب نفسه.',
     ],
     invitation_pending: [
@@ -304,11 +296,11 @@ export function errorMessage(error: unknown): string {
       'انقل ملكية الفريق أو أغلق الفريق أولاً.',
     ],
     reassign_clients_first: [
-      'Finish client handoffs or close their team enrollments first.',
+      'Finish athlete handoffs or close their team enrollments first.',
       'أكمل نقل المتدربين أو أغلق انضمامهم للفريق أولاً.',
     ],
     close_enrollments_first: [
-      'Close all client enrollments before closing the team.',
+      'Close all athlete enrollments before closing the team.',
       'أغلق جميع انضمامات المتدربين قبل إغلاق الفريق.',
     ],
     commercial_restricted: [
@@ -320,7 +312,7 @@ export function errorMessage(error: unknown): string {
       'وصل الفريق إلى حد الموظفين، بما في ذلك الدعوات المعلقة.',
     ],
     client_limit: [
-      'The team has reached its client admission limit.',
+      'The team has reached its athlete admission limit.',
       'وصل الفريق إلى حد انضمام المتدربين.',
     ],
     relationship_already_enrolled: [
@@ -332,16 +324,16 @@ export function errorMessage(error: unknown): string {
       'تغير هذا الانضمام. حدّث الصفحة قبل المتابعة.',
     ],
     invalid_coach: [
-      'Choose a current team coach other than the client or their current coach.',
-      'اختر مدرباً حالياً في الفريق غير المتدرب ومدربه الحالي.',
+      'Choose a current team coach other than the athlete or their current coach.',
+      'اختر مدرباً حالياً في الفريق غير الرياضي ومدربه الحالي.',
     ],
     simulation_disabled: [
       'Local simulation is disabled on this backend.',
       'المحاكاة المحلية معطلة في هذا الخادم.',
     ],
     invalid_group_assignment: [
-      'Select up to 50 of your active clients in this group.',
-      'اختر حتى ٥٠ من متدربيك النشطين في هذه المجموعة.',
+      'Select up to 50 of your active athletes in this group.',
+      'اختر حتى ٥٠ من الرياضيين النشطين في هذه المجموعة.',
     ],
   }
   const known = Object.keys(teamErrors).find((key) => raw.includes(key))
@@ -410,8 +402,8 @@ export function errorMessage(error: unknown): string {
     )
   if (raw.includes('already_submitted'))
     return language(
-      'Your client has already submitted this response. Refresh to review it.',
-      'أرسل المتدرب هذه الإجابة بالفعل. حدّث الصفحة لمراجعتها.',
+      'The athlete has already submitted this response. Refresh to review it.',
+      'أرسل الرياضي هذه الإجابة بالفعل. حدّث الصفحة لمراجعتها.',
     )
   if (raw.includes('wrong_email'))
     return language(
@@ -460,8 +452,8 @@ export function errorMessage(error: unknown): string {
     )
   if (raw.includes('rate') || raw.includes('too many'))
     return language(
-      'Please wait a moment before requesting another code.',
-      'انتظر قليلاً قبل طلب رمز آخر.',
+      'Please wait a moment before trying again.',
+      'انتظر قليلاً قبل المحاولة مجدداً.',
     )
   if (raw.includes('forbidden') || raw.includes('unauthenticated') || raw.includes('JWT'))
     return language(

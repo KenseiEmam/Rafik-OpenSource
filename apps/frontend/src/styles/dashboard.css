@@ -2,6 +2,9 @@
 .app-frame {
   min-height: 100dvh;
 }
+.dashboard-frame {
+  --dashboard-gutter: 24px;
+}
 .conversation-frame {
   display: flex;
   flex-direction: column;
@@ -14,13 +17,13 @@
 .dashboard-sidebar {
   display: none;
 }
-.dashboard-frame .organization-nav {
+.dashboard-frame .institution-nav {
   display: none;
 }
 .dashboard-frame .container {
   width: 100%;
   max-width: 1500px;
-  padding-inline: 28px;
+  padding-inline: var(--dashboard-gutter);
 }
 .dashboard-frame .page {
   min-height: 0;
@@ -33,8 +36,9 @@
 }
 .dashboard-frame .work-heading h1,
 .dashboard-frame .page-heading h1 {
-  font-size: 1.65rem;
-  line-height: 1.3;
+  font-size: 2rem;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
   margin: 0 0 8px;
 }
 .dashboard-frame .work-heading .overline,
@@ -209,11 +213,14 @@
     z-index: 30;
     background: var(--page);
   }
+  .dashboard-frame {
+    --dashboard-gutter: 18px;
+  }
   .dashboard-frame .header-inner {
     gap: 6px;
   }
   .dashboard-frame .container {
-    padding-inline: 18px;
+    padding-inline: var(--dashboard-gutter);
   }
   .dashboard-frame .page {
     padding-top: 20px;
@@ -224,9 +231,6 @@
   .dashboard-frame .brand > span {
     font-size: 1.35rem;
   }
-  .dashboard-frame .workspace-switch {
-    max-width: calc(100% - 160px);
-  }
   .dashboard-frame .header-actions {
     margin-inline-start: auto;
   }
@@ -235,7 +239,7 @@
   }
   .dashboard-frame .work-heading h1,
   .dashboard-frame .page-heading h1 {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
   }
 }
 

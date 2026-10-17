@@ -13,6 +13,61 @@ const sample = JSON.parse(
   await readFile(new URL("../content/starter.json", import.meta.url), "utf8"),
 );
 const draft = () => structuredClone(sample.prescription);
+test("program drafts may be empty while publication validates a complete prescription", async () => {
+  const f = await organizationFixture();
+  try {
+    const admin = await f.person(),
+      athlete = await f.person(),
+      id = await f.create(admin),
+      program = randomUUID(),
+      incomplete = {
+        schema: 2,
+        cycleWeeks: 1,
+        days: [
+          {
+            id: randomUUID(),
+            name: "Session 1",
+            minutes: 30,
+            week: 1,
+            weekday: 0,
+            exercises: [],
+          },
+        ],
+      };
+    const saved = await call(
+      admin,
+      `/v1/workspaces/${id}/programs`,
+      operation("save", {
+        view: "admin",
+        id: program,
+        title: "Draft in progress",
+        draft: incomplete,
+        revision: null,
+      }),
+    );
+    assert.equal(saved.status, 200, JSON.stringify(saved));
+    assert.deepEqual(saved.data.plan.draft.days[0].exercises, []);
+    await f.join(admin, id, athlete, ["trainee"]);
+    const published = await call(
+      admin,
+      `/v1/workspaces/${id}/programs`,
+      operation("publish", {
+        view: "admin",
+        id: program,
+        title: "Draft in progress",
+        draft: incomplete,
+        revision: saved.data.plan.draft_version,
+      }),
+    );
+    assert.equal(published.status, 400);
+    assert.equal(
+      (await call(athlete, `/v1/workspaces/${id}/programs?view=trainee`)).data.total,
+      0,
+    );
+  } finally {
+    await f.cleanup();
+  }
+});
 test("organization publication, actuals, reassignment and exact replay preserve owned history", async () => {
   const f = await organizationFixture();
   try {
@@ -273,6 +328,7 @@ test("bulk delivery is atomic; internal catalog never grants edit or personal ex
     });
     const published = await call(admin, `/v1/workspaces/${id}/programs`, p);
     assert.equal(published.status, 200, JSON.stringify(published));
+    assert.equal(published.data.plan.listed, true);
     const recipients = [trainee, outsider].map((m) => ({
       id: m.id,
       revision: m.revision,
@@ -292,22 +348,6 @@ test("bulk delivery is atomic; internal catalog never grants edit or personal ex
     assert.equal(
       await db.organization_assignments.count({ where: { workspace_id: id } }),
       0,
-    );
-    assert.equal(
-      (
-        await call(
-          admin,
-          `/v1/workspaces/${id}/programs`,
-          operation("listing", {
-            view: "admin",
-            id: p.id,
-            revision: 1,
-            record_revision: 1,
-            value: true,
-          }),
-        )
-      ).status,
-      200,
     );
     assert.equal(
       (

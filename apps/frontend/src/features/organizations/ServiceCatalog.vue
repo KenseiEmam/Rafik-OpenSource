@@ -29,8 +29,7 @@ const items = ref<(TrainingGroup & AssessmentTemplate)[]>([]),
   editing = ref(false),
   draftReady = ref(false),
   draftError = ref(''),
-  saved = ref(false),
-  memberSearch = ref('')
+  saved = ref(false)
 const fresh = () => ({
   id: crypto.randomUUID() as string,
   name: '',
@@ -38,20 +37,10 @@ const fresh = () => ({
   revision: 0,
   archived: false,
   members: [] as string[],
+  coaches: [] as string[],
   definition: [{ key: crypto.randomUUID(), name: '', kind: 'number', unit: '', min: 0 } as Drill],
 })
 const draft = ref(fresh())
-const members = computed(
-  () => organization.value?.members.filter((m) => m.active && m.roles.includes('trainee')) || [],
-)
-const unavailable = computed(() =>
-  draft.value.members.filter((id) => !members.value.some((m) => m.id === id)),
-)
-const visibleMembers = computed(() =>
-  members.value
-    .filter((m) => m.name.toLowerCase().includes(memberSearch.value.toLowerCase()))
-    .slice(0, 30),
-)
 async function load(append = false) {
   loading.value = true
   error.value = ''
@@ -82,6 +71,12 @@ const command = useCommand<'save'>(
   },
   (_, args) =>
     request(`/v1/workspaces/${id}/services`, { method: 'POST', body: JSON.stringify(args) }),
+  {
+    successMessage: (_, args) =>
+      args.action === 'template'
+        ? l('Assessment template saved.', 'تم حفظ قالب التقييم.')
+        : l('Training group saved.', 'تم حفظ المجموعة التدريبية.'),
+  },
 )
 const locked = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
 function addDrill() {
@@ -95,7 +90,8 @@ function edit(item?: TrainingGroup & AssessmentTemplate) {
         title: item.title || '',
         revision: item.revision,
         archived: item.archived,
-        members: item.members?.map((m) => m.id) || [],
+        members: item.members?.filter((m) => m.roles.includes('trainee')).map((m) => m.id) || [],
+        coaches: item.members?.filter((m) => m.roles.includes('trainer')).map((m) => m.id) || [],
         definition: JSON.parse(JSON.stringify(item.definition || [])),
       }
     : fresh()
@@ -109,6 +105,7 @@ async function close() {
 function save() {
   return command.run('save', {
     ...draft.value,
+    members: [...new Set([...draft.value.members, ...draft.value.coaches])],
     view,
     action: templates ? 'template' : 'group',
     operation: crypto.randomUUID(),
@@ -133,7 +130,7 @@ onMounted(async () => {
   await load()
   const stored = await getDraft<ReturnType<typeof fresh>>(key).catch(() => undefined)
   if (stored) {
-    draft.value = stored
+    draft.value = { ...fresh(), ...stored, coaches: stored.coaches || [] }
     editing.value = true
   }
   draftReady.value = true
@@ -141,10 +138,10 @@ onMounted(async () => {
 </script>
 <template>
   <OrganizationNav />
-  <div class="container page organization-service-page">
+  <div class="container page institution-service-page">
     <header class="work-heading">
       <div>
-        <p class="overline">{{ l('Organization library', 'مكتبة المؤسسة') }}</p>
+        <p class="overline">{{ l('Institution library', 'مكتبة المؤسسة') }}</p>
         <h1>
           {{
             templates
@@ -259,6 +256,19 @@ onMounted(async () => {
           :label="l('Find trainees', 'البحث عن متدربين')"
           @options="organization!.members = $event"
         />
+        <MemberPicker
+          v-if="!templates && view === 'admin'"
+          :workspace="id"
+          :view="view"
+          role="trainer"
+          v-model="draft.coaches"
+          :label="l('Add coaches to this group', 'إضافة مدربين إلى هذه المجموعة')"
+          @options="
+            organization!.members = [
+              ...new Map([...organization!.members, ...$event].map((m) => [m.id, m])).values(),
+            ]
+          "
+        />
         <label v-if="draft.revision" class="check-label"
           ><input v-model="draft.archived" type="checkbox" />{{
             l('Archive from new scheduling', 'أرشفة من الجدولة الجديدة')
@@ -303,7 +313,7 @@ onMounted(async () => {
           <h2>{{ templates ? item.title : item.name }}</h2>
           <p>
             {{ templates ? item.definition.length : item.members.length }}
-            {{ templates ? l('drills', 'اختبارات') : l('trainees', 'متدربين') }}
+            {{ templates ? l('drills', 'اختبارات') : l('people', 'أشخاص') }}
           </p>
           <p v-if="!templates" class="small-print">
             {{
@@ -313,6 +323,13 @@ onMounted(async () => {
                 .join(' · ')
             }}
           </p>
+          <RouterLink
+            v-if="!templates && !item.archived && item.members.some((m) => m.active)"
+            class="text-link"
+            :to="base + '/messages?group=' + encodeURIComponent(item.id)"
+          >
+            {{ l('Open group conversation', 'فتح محادثة المجموعة') }}
+          </RouterLink>
         </div>
         <button class="button secondary small" @click="edit(item)" :disabled="locked">
           {{ l('Edit', 'تعديل') }}

@@ -19,9 +19,9 @@ const items = computed(() => [
   { path: '/plans', name: l('Programs', 'البرامج') },
   { path: '/training', name: l('Training', 'التدريب') },
   { path: '/nutrition', name: l('Nutrition', 'التغذية') },
+  { path: '/injuries', name: l('Injury status', 'حالة الإصابة') },
   { path: '/messages', name: l('Messages', 'الرسائل') },
   { path: '/calendar', name: l('Calendar', 'التقويم') },
-  { path: '/packages', name: l('Packages', 'الباقات') },
   ...(route.params.view !== 'admin'
     ? [{ path: '/feedback', name: l('My feedback', 'تقييماتي') }]
     : []),
@@ -73,8 +73,8 @@ const current = computed(
 <template>
   <nav
     v-if="allowed"
-    class="organization-nav container"
-    :aria-label="l('Organization navigation', 'تنقل المؤسسة')"
+    class="institution-nav container"
+    :aria-label="l('Institution navigation', 'تنقل المؤسسة')"
   >
     <div class="organization-nav-links">
       <RouterLink
@@ -98,7 +98,7 @@ const current = computed(
       </details>
     </div>
     <label class="organization-nav-select"
-      ><span class="sr-only">{{ l('Organization section', 'قسم المؤسسة') }}</span
+      ><span class="sr-only">{{ l('Institution section', 'قسم المؤسسة') }}</span
       ><select
         :value="current"
         @change="router.push(base + ($event.target as HTMLSelectElement).value)"

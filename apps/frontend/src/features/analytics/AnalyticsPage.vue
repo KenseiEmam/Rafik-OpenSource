@@ -143,7 +143,7 @@ onMounted(() => load())
         <h1>
           {{
             view === 'admin'
-              ? l('Organization analytics', 'تحليلات المؤسسة')
+              ? l('Institution analytics', 'تحليلات المؤسسة')
               : l('Coaching analytics', 'تحليلات التدريب')
           }}
         </h1>
@@ -172,7 +172,7 @@ onMounted(() => load())
       <p class="report-scope">
         {{
           view === 'admin'
-            ? l('Organization overview', 'نظرة عامة على المؤسسة')
+            ? l('Institution overview', 'نظرة عامة على المؤسسة')
             : l('Your current roster', 'قائمتك الحالية')
         }}<span v-if="data">
           · {{ data.window.from }} – {{ data.window.to }} · {{ data.window.zone }}</span
@@ -231,7 +231,7 @@ onMounted(() => load())
             ><span>{{
               workspace
                 ? l('Active trainees now', 'المتدربون النشطون الآن')
-                : l('Active clients now', 'المتدربون النشطون الآن')
+                : l('Active athletes now', 'المتدربون النشطون الآن')
             }}</span
             ><strong>{{ data.summary.active }}</strong
             ><small>{{ l('View roster', 'عرض القائمة') }} ↗</small></RouterLink
@@ -269,7 +269,7 @@ onMounted(() => load())
                 : l('Follow-up', 'المتابعة')
             }}</TabsTrigger
             ><TabsTrigger v-if="workspace" value="experience">{{
-              l('Experience & renewals', 'التجربة والتجديدات')
+              l('Experience', 'التجربة')
             }}</TabsTrigger></TabsList
           >
           <TabsContent v-if="data.experience" value="experience" tabindex="0"
@@ -333,7 +333,7 @@ onMounted(() => load())
                   :title="l('Trainer responsibility', 'مسؤولية المدربين')"
                   :description="
                     l(
-                      'Current active trainees per trainer, across the organization. This is workload, not quality.',
+                      'Current active trainees per trainer, across the institution. This is workload, not quality.',
                       'المتدربون النشطون لكل مدرب في المؤسسة كاملة. هذا حجم العمل وليس الجودة.',
                     )
                   "
@@ -421,7 +421,7 @@ onMounted(() => load())
           <p>
             {{
               l(
-                'Trainer reports use current responsibility. Admins see their organization, including history preserved after reassignment. Workload always covers the whole organization, regardless of trainee filter. These counts are not adherence, health, retention or revenue scores.',
+                'Trainer reports use current responsibility. Admins see their institution, including history preserved after reassignment. Workload always covers the whole institution, regardless of trainee filter. These counts are not adherence, health, retention or revenue scores.',
                 'تقارير المدرب بحسب مسؤوليته الحالية والمسؤول يرى مؤسسته وسجلها المحفوظ بعد إعادة التعيين. حجم عمل المدربين يشمل المؤسسة كاملة بغض النظر عن مرشح المتدرب. هذه ليست درجات التزام أو صحة أو احتفاظ أو إيرادات.',
               )
             }}

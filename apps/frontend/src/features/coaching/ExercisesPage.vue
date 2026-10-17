@@ -415,7 +415,7 @@ onMounted(async () => {
                 >{{ language('Available to', 'متاح لـ')
                 }}<select v-model="editing.scope">
                   <option value="organization">
-                    {{ language('All trainers in this organization', 'كل مدربي هذه المؤسسة') }}
+                    {{ language('All trainers in this institution', 'كل مدربي هذه المؤسسة') }}
                   </option>
                   <option value="private">{{ language('Only me', 'أنا فقط') }}</option>
                 </select></label
@@ -423,7 +423,7 @@ onMounted(async () => {
               <p v-else class="small-print">
                 {{
                   editing.scope === 'organization'
-                    ? language('Shared within this organization.', 'مشترك داخل هذه المؤسسة.')
+                    ? language('Shared within this institution.', 'مشترك داخل هذه المؤسسة.')
                     : language(
                         'Only you can find this exercise in the library. Assigned trainees can see its published demonstration.',
                         'أنت فقط ترى التمرين في المكتبة. يرى المتدربون المعيّنون الشرح المنشور.',

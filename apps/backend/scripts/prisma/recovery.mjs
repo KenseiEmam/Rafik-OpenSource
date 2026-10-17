@@ -15,7 +15,7 @@ import { composeFile, dockerCompose } from "./docker.mjs";
 const root = resolve(import.meta.dirname, "../..");
 if (
   !readFileSync(composeFile, "utf8").startsWith(
-    "name: rafik-prisma-local",
+    "name: ${RAFIK_INSTANCE_ID:-rafik-prisma-local}",
   )
 )
   throw Error("Local project required");

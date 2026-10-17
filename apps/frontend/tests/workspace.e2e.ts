@@ -14,7 +14,7 @@ test('daily workspace connects named attention, filters and complete mobile navi
     })
     await f.login(page, f.owner, '/coach')
     await expect(page.locator('.attention-row')).toHaveCount(1)
-    await expect(page.locator('.attention-row')).toContainText('R4 Client')
+    await expect(page.locator('.attention-row')).toContainText('R4 Athlete')
     for (const width of [320, 390, 768, 1440]) {
       await page.setViewportSize({ width, height: width === 320 ? 568 : 850 })
       expect(await layoutIssues(page)).toEqual([])

@@ -96,9 +96,10 @@ test('custom exercise and mixed multiweek plan reach actual client recording and
   })
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
   await page.goto('/coach/plans/new')
-  await page.getByLabel('Plan name', { exact: true }).fill(title)
+  await page.getByLabel('Program name', { exact: true }).fill(title)
   await expect(page.getByLabel('Repeat every (weeks)', { exact: true })).toBeVisible()
   await page.getByLabel('Repeat every (weeks)', { exact: true }).fill('2')
+  await page.getByRole('button', { name: 'Add exercise', exact: true }).click()
   const exercises = page.locator('.editor-exercise')
   const firstExercise = exercises.nth(0).getByRole('combobox', { name: 'Exercise 1', exact: true })
   await firstExercise.fill(name)
@@ -125,6 +126,7 @@ test('custom exercise and mixed multiweek plan reach actual client recording and
     .nth(1)
     .getByLabel('Seconds', { exact: true })
     .fill('45')
+  await page.getByRole('button', { name: 'Add exercise', exact: true }).click()
   const secondExercise = exercises.nth(1).getByRole('combobox', { name: 'Exercise 2', exact: true })
   await secondExercise.fill('Brisk walk')
   await expect(
@@ -144,21 +146,21 @@ test('custom exercise and mixed multiweek plan reach actual client recording and
   await page.getByLabel('Session name', { exact: true }).fill('First cycle session')
   await page.getByLabel('Cycle week', { exact: true }).fill('1')
   await page.getByRole('combobox', { name: 'Day of cycle week', exact: true }).selectOption('0')
-  await page.getByRole('button', { name: 'Client preview', exact: true }).click()
+  await page.getByRole('button', { name: 'Athlete preview', exact: true }).click()
   await expect(page.getByRole('heading', { name, exact: true })).toBeVisible()
-  await page.getByRole('button', { name: 'Edit plan', exact: true }).click()
+  await page.getByRole('button', { name: 'Edit program', exact: true }).click()
   await page.screenshot({
     path: `artifacts/r1-plan-${info.project.name}.png`,
     fullPage: true,
     animations: 'disabled',
   })
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
-  await page.getByRole('button', { name: 'Publish plan', exact: true }).click()
-  await expect(page.getByRole('status')).toContainText('Published.')
+  await page.getByRole('button', { name: 'Publish program', exact: true }).click()
+  await expect(page.getByRole('status')).toContainText('Published and added')
   await page.goto(clientPath)
   await page.getByRole('button', { name: 'Plan & schedule', exact: true }).click()
   await page
-    .getByRole('combobox', { name: 'Published plan', exact: true })
+    .getByRole('combobox', { name: 'Published program', exact: true })
     .selectOption({ label: title + ' · 1' })
   const today = new Intl.DateTimeFormat('en-CA', {
     timeZone: 'Asia/Dubai',
@@ -227,7 +229,7 @@ test('custom exercise and mixed multiweek plan reach actual client recording and
     await page.goto(clientPath)
     await page.getByRole('button', { name: 'Plan & schedule', exact: true }).click()
     await page
-      .getByRole('combobox', { name: 'Published plan', exact: true })
+      .getByRole('combobox', { name: 'Published program', exact: true })
       .selectOption('30000000-0000-4000-8000-000000000001')
     await page.getByRole('combobox', { name: 'Schedule', exact: true }).selectOption('flexible')
     await page.getByRole('button', { name: 'Apply assignment', exact: true }).click()

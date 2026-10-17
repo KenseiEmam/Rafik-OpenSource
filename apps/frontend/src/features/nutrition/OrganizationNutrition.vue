@@ -61,7 +61,7 @@ const route = useRoute(),
 const endpoint = `/v1/workspaces/${workspace}/nutrition`
 const workspaceName = computed(
   () =>
-    contexts.value.find((c) => c.workspace_id === workspace)?.name || l('Organization', 'المؤسسة'),
+    contexts.value.find((c) => c.workspace_id === workspace)?.name || l('Institution', 'المؤسسة'),
 )
 const selected = ref(String(route.query.member || '')),
   date = ref(localDate(profile.value?.timezone || 'UTC')),
@@ -394,7 +394,7 @@ onBeforeUnmount(() => {
         <p class="subtle">
           {{
             view === 'admin'
-              ? l('Choose anyone in this organization.', 'اختر من متدربي هذه المؤسسة.')
+              ? l('Choose anyone in this institution.', 'اختر من متدربي هذه المؤسسة.')
               : l('Your assigned trainees appear here.', 'يظهر هنا المتدربون المسندون إليك.')
           }}
         </p>
@@ -519,7 +519,7 @@ onBeforeUnmount(() => {
                   <p>
                     {{
                       l(
-                        'Visible to this trainee, organization admins and their assigned trainer.',
+                        'Visible to this trainee, institution admins and their assigned trainer.',
                         'مرئية لهذا المتدرب ومسؤولي المؤسسة والمدرب المسند إليه.',
                       )
                     }}
@@ -575,13 +575,13 @@ onBeforeUnmount(() => {
                   {{ l('View example meal plan', 'عرض مثال لخطة الوجبات') }}
                 </button></template
               >
-              <div v-else class="empty-state">
+              <div v-else class="empty-state empty-state--compact">
                 <h3>{{ l('No plan for this date', 'لا توجد خطة لهذا التاريخ') }}</h3>
                 <p>
                   {{
                     trainee
                       ? l(
-                          'Your organization can publish daily targets and meal ideas here.',
+                          'Your institution can publish daily targets and meal ideas here.',
                           'يمكن لمؤسستك نشر أهداف يومية ومقترحات وجبات هنا.',
                         )
                       : l(
@@ -674,7 +674,7 @@ onBeforeUnmount(() => {
               <p>
                 <strong>{{
                   data.sharing.enabled
-                    ? l('Shared with your organization', 'مشترك مع مؤسستك')
+                    ? l('Shared with your institution', 'مشترك مع مؤسستك')
                     : l('Food records are not shared', 'سجلات الطعام غير مشتركة')
                 }}</strong>
               </p>
@@ -682,7 +682,7 @@ onBeforeUnmount(() => {
                 {{
                   trainee
                     ? l(
-                        'Sharing lets organization admins and your currently assigned trainer read all entries and corrections in this diary. Personal nutrition elsewhere stays separate.',
+                        'Sharing lets institution admins and your currently assigned trainer read all entries and corrections in this diary. Personal nutrition elsewhere stays separate.',
                         'تسمح المشاركة لمسؤولي المؤسسة ومدربك الحالي بقراءة جميع المدخلات والتصحيحات في هذا السجل. تبقى تغذيتك الشخصية منفصلة.',
                       )
                     : l(
@@ -706,7 +706,7 @@ onBeforeUnmount(() => {
                 {{
                   data.sharing.enabled
                     ? l('Stop sharing diary', 'إيقاف مشاركة السجل')
-                    : l('Share diary with organization', 'مشاركة السجل مع المؤسسة')
+                    : l('Share diary with institution', 'مشاركة السجل مع المؤسسة')
                 }}
               </button>
               <p v-if="trainee && data.sharing.enabled" class="small-print">
@@ -768,7 +768,7 @@ onBeforeUnmount(() => {
                   </div>
                 </fieldset>
               </form>
-              <p v-if="!data.meals.length" class="empty-state">
+              <p v-if="!data.meals.length" class="empty-state-note">
                 {{ l('No food recorded for this date.', 'لم يُسجل طعام لهذا التاريخ.') }}
               </p>
               <article v-for="item in data.meals" :key="item.id" class="org-food-row">
@@ -887,7 +887,7 @@ onBeforeUnmount(() => {
                 )
               }}
             </p>
-            <p v-if="!data.plans.length" class="empty-state">
+            <p v-if="!data.plans.length" class="empty-state-note">
               {{ l('No published plans yet.', 'لا توجد خطط منشورة بعد.') }}
             </p>
             <details v-for="p in data.plans" :key="p.id" class="org-plan-history">

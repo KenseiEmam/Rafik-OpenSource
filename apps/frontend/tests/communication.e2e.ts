@@ -29,15 +29,44 @@ test('organization conversations preserve scope, compact layout, drafts and exac
     })
     await f.call(f.client, `/v1/organization-invitations/${token}`, {})
     const base = `/organization/${id}/admin/messages`
+    const initialList = page.waitForResponse(
+      (response) =>
+        response.url().includes(`/v1/workspaces/${id}/communication`) &&
+        response.request().method() === 'GET',
+    )
     await f.login(page, f.owner, base)
-    await page.getByRole('button', { name: 'New conversation', exact: true }).click()
-    await page
-      .getByLabel('Conversation name', { exact: true })
-      .fill('Foundation questions and progress')
-    await page.getByRole('checkbox', { name: 'R4 Client', exact: true }).check()
-    await page.getByRole('button', { name: 'Create conversation', exact: true }).click()
+    await expect(page.getByRole('heading', { name: 'People', exact: true })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'New conversation', exact: true })).toHaveCount(0)
+    await initialList
+    const athlete = page
+      .locator('.conversation-contacts')
+      .getByRole('button', { name: /R4 Athlete/ })
+    await expect(athlete).toBeVisible()
+    // The successful click creates a conversation and removes this contact from
+    // the People list during SPA navigation. Dispatch the button's real click
+    // handler without Playwright retrying against the intentionally removed row.
+    await athlete.evaluate((element) => (element as HTMLButtonElement).click())
     await expect(page).toHaveURL(/\/messages\/[a-f0-9-]{36}$/)
+    await expect(page.locator('.swal2-toast')).toHaveCount(0)
+    await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toHaveCount(0)
+    await expect(
+      page.locator('.conversation-contacts').getByRole('button', { name: /R4 Athlete/ }),
+    ).toHaveCount(0)
+    await expect(
+      page.locator('.conversation-contacts').getByText(/No available people/),
+    ).toHaveCount(0)
     const channel = new URL(page.url()).pathname.split('/').at(-1)!
+    await page.goto(base)
+    await expect(page.locator('.conversation-directory')).toHaveCSS('overflow-y', 'auto')
+    await expect(page.locator('.conversation-list')).toHaveCSS('overflow-y', 'visible')
+    await expect(
+      page.locator('.conversation-contacts').getByRole('button', { name: /R4 Athlete/ }),
+    ).toHaveCount(0)
+    await page
+      .locator('.conversation-list')
+      .getByRole('link', { name: /R4 Athlete/ })
+      .click()
+    await expect(page).toHaveURL(new RegExp(`/messages/${channel}$`))
     await page
       .getByRole('textbox', { name: 'Write a message', exact: true })
       .fill('Let us review your first week together.')
@@ -72,12 +101,15 @@ test('organization conversations preserve scope, compact layout, drafts and exac
         .locator('.message-bubble')
         .filter({ hasText: 'Let us review your first week together.' }),
     ).toHaveCount(1)
+    await expect(page.locator('.swal2-toast')).toHaveCount(0)
     await f.login(client, f.client, '/notifications')
     await client.getByRole('button', { name: 'Notification preferences', exact: true }).click()
     await client.getByRole('combobox', { name: 'Quiet from', exact: true }).selectOption('0')
     await client.getByRole('combobox', { name: 'Until', exact: true }).selectOption('0')
     await client.getByRole('button', { name: 'Save preferences', exact: true }).click()
-    await expect(client.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
+    await expect(
+      client.getByRole('status').filter({ hasText: 'Notification preferences updated.' }),
+    ).toBeVisible()
     await client.getByRole('button', { name: 'Back to updates', exact: true }).click()
     await client.getByRole('button', { name: 'New conversation updates', exact: false }).click()
     await expect(client).toHaveURL(`/organization/${id}/trainee/messages/${channel}`)
@@ -105,9 +137,7 @@ test('organization conversations preserve scope, compact layout, drafts and exac
       fullPage: true,
     })
     await client.goto(`/organization/${id}/trainee/messages`)
-    await expect(
-      client.getByRole('link', { name: /Foundation questions and progress/ }),
-    ).toBeVisible()
+    await expect(client.getByRole('link', { name: /R4 Athlete/ })).toBeVisible()
     for (const size of [
       { width: 320, height: 568 },
       { width: 390, height: 664 },
@@ -118,7 +148,7 @@ test('organization conversations preserve scope, compact layout, drafts and exac
       expect((await client.locator('.conversation-person').boundingBox())!.height).toBeLessThan(130)
     }
     await client
-      .getByRole('searchbox', { name: 'Find a conversation', exact: true })
+      .getByRole('searchbox', { name: 'Search people and conversations', exact: true })
       .fill('no matching group')
     await client.getByRole('button', { name: 'Search', exact: true }).click()
     await expect(client.getByText(/No matching conversations/)).toBeVisible()

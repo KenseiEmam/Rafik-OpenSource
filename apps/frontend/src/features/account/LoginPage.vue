@@ -1,193 +1,85 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { PhArrowRight, PhEnvelopeSimple, PhArrowLeft } from '@phosphor-icons/vue'
-import { api, localPreview, configured } from '../../lib/backend'
-import { user, refreshProfile } from '../../app/auth'
+import { PhLockKey, PhBuildings } from '@phosphor-icons/vue'
+import { api } from '../../lib/backend'
+import { contexts, refreshProfile, user } from '../../app/auth'
 import { safeNext } from '../../app/router'
-import { language, t, errorMessage } from '../../lib/i18n'
-const route = useRoute()
-const router = useRouter()
-const email = ref('')
-const code = ref('')
-const step = ref<'email' | 'code'>('email')
-const busy = ref(false)
-const error = ref('')
-const sentAt = ref(0)
-const next = computed(() =>
-  safeNext(
-    route.query.next,
-    user.value ? localStorage.getItem('rafik.workspace:' + user.value.id) || '/today' : '/today',
-  ),
-)
-const coaching = computed(() => next.value.startsWith('/coach'))
-async function send() {
-  if (!configured) {
-    error.value = language(
-      'Local account services are not configured yet. You can still try the sample workout.',
-      'خدمات الحساب المحلية غير مهيأة بعد. يمكنك تجربة التمرين التجريبي.',
-    )
-    return
-  }
+import { language, errorMessage } from '../../lib/i18n'
+const route = useRoute(),
+  router = useRouter()
+const email = ref(''),
+  password = ref(''),
+  busy = ref(false),
+  error = ref('')
+const next = computed(() => safeNext(route.query.next, '/workspaces'))
+async function login() {
   busy.value = true
   error.value = ''
   try {
-    await api.requestCode(email.value.trim().toLowerCase())
-    step.value = 'code'
-    sentAt.value = Date.now()
-  } catch (e) {
-    error.value = errorMessage(e)
-  } finally {
-    busy.value = false
-  }
-}
-async function verify() {
-  busy.value = true
-  error.value = ''
-  try {
-    user.value = await api.verifyCode(email.value.trim().toLowerCase(), code.value.trim())
+    user.value = await api.login(email.value.trim().toLowerCase(), password.value)
     await refreshProfile()
-    await router.replace(next.value)
+    await router.replace(route.query.next ? next.value : contexts.value[0]?.path || next.value)
   } catch (e) {
     error.value = errorMessage(e)
   } finally {
     busy.value = false
   }
-}
-function changeEmail() {
-  step.value = 'email'
-  code.value = ''
 }
 </script>
 <template>
-  <div class="container auth-layout">
+  <div class="container auth-layout auth-centered">
     <section class="auth-intro">
-      <RouterLink class="back-link" to="/routine"
-        ><PhArrowLeft :size="18" class="directional" aria-hidden="true" />{{
-          t('sample')
-        }}</RouterLink
-      >
-      <h1>
-        {{
-          coaching
-            ? language('Make your next plan a useful one.', 'اجعل خطتك القادمة مفيدة.')
-            : language('Keep your training with you.', 'احتفظ بتدريبك معك.')
-        }}
-      </h1>
+      <PhBuildings :size="34" class="accent-icon" aria-hidden="true" />
+      <h1>{{ language('Institution workspace', 'مساحة المؤسسة') }}</h1>
       <p>
         {{
-          coaching
-            ? language(
-                'Start from a real plan, invite a client, and see how their session went.',
-                'ابدأ بخطة، وادعُ متدرباً، وراجع كيف كانت حصته.',
-              )
-            : language(
-                'Save your sessions, see your previous results, and open your coach’s plan.',
-                'احفظ حصصك، وشاهد نتائجك السابقة، وافتح خطة مدربك.',
-              )
+          language(
+            'Sign in to continue to your university or training institution.',
+            'سجّل الدخول للمتابعة إلى جامعتك أو مؤسستك التدريبية.',
+          )
         }}
       </p>
-      <div class="auth-promise">
-        <PhEnvelopeSimple :size="25" aria-hidden="true" />
-        <p>
-          {{
-            language(
-              'One email code. No password to remember.',
-              'رمز عبر البريد. بلا كلمة مرور تتذكرها.',
-            )
-          }}
-        </p>
-      </div>
     </section>
     <section class="auth-form panel">
-      <template v-if="step === 'email'"
-        ><h2>{{ t('signIn') }}</h2>
-        <p>
+      <PhLockKey :size="25" class="accent-icon" aria-hidden="true" />
+      <h2>{{ language('Sign in', 'تسجيل الدخول') }}</h2>
+      <form class="form-stack" @submit.prevent="login">
+        <label for="email">{{ language('Email address', 'البريد الإلكتروني') }}</label>
+        <input
+          id="email"
+          v-model="email"
+          type="email"
+          autocomplete="username"
+          maxlength="254"
+          required
+        />
+        <label for="password">{{ language('Password', 'كلمة المرور') }}</label>
+        <input
+          id="password"
+          v-model="password"
+          type="password"
+          autocomplete="current-password"
+          maxlength="128"
+          required
+        />
+        <button class="button full" :disabled="busy">
           {{
-            language(
-              'New here? The same step creates your account.',
-              'جديد هنا؟ الخطوة نفسها تنشئ حسابك.',
-            )
+            busy
+              ? language('Signing in…', 'جارٍ تسجيل الدخول…')
+              : language('Sign in', 'تسجيل الدخول')
           }}
-        </p>
-        <form @submit.prevent="send">
-          <label for="email">{{ t('email') }}</label
-          ><input
-            id="email"
-            v-model="email"
-            type="email"
-            autocomplete="email"
-            inputmode="email"
-            maxlength="254"
-            placeholder="you@example.com"
-            required
-          /><button class="button full" :disabled="busy">
-            {{ busy ? t('loading') : language('Send me a code', 'أرسل لي رمزاً')
-            }}<PhArrowRight :size="18" class="directional" aria-hidden="true" />
-          </button></form></template
-      ><template v-else
-        ><h2>{{ language('Check your email', 'تحقق من بريدك') }}</h2>
-        <p>
-          {{
-            language(
-              'Enter the six-digit code sent to',
-              'أدخل الرمز المكون من ستة أرقام المرسل إلى',
-            )
-          }}
-          <strong dir="ltr">{{ email }}</strong>
-        </p>
-        <form @submit.prevent="verify">
-          <label for="code">{{ language('Sign-in code', 'رمز الدخول') }}</label
-          ><input
-            id="code"
-            v-model="code"
-            class="code-input"
-            type="text"
-            inputmode="numeric"
-            autocomplete="one-time-code"
-            pattern="[0-9]{6}"
-            maxlength="6"
-            required
-            autofocus
-          /><button class="button full" :disabled="busy">
-            {{ busy ? t('loading') : language('Continue', 'متابعة') }}
-          </button>
-        </form>
-        <div class="auth-secondary">
-          <button class="text-link" :disabled="busy" @click="changeEmail">
-            {{ language('Use another email', 'استخدم بريداً آخر') }}</button
-          ><button class="text-link" :disabled="busy" @click="send">
-            {{ language('Resend code', 'إعادة إرسال الرمز') }}
-          </button>
-        </div></template
-      >
+        </button>
+      </form>
       <p v-if="error" class="notice error" role="alert">{{ error }}</p>
       <p class="small-print">
         {{
           language(
-            'Your workout stays on this device while you sign in.',
-            'يبقى تمرينك على هذا الجهاز أثناء تسجيل الدخول.',
+            'If you cannot sign in, contact your institution’s super admin for a password setup link.',
+            'إذا تعذر تسجيل الدخول، تواصل مع المشرف العام في مؤسستك للحصول على رابط إعداد كلمة المرور.',
           )
         }}
-        <RouterLink to="/privacy">{{ t('privacy') }}</RouterLink>
       </p>
-      <div v-if="localPreview && step === 'code'" class="local-inbox">
-        <p>
-          {{
-            language(
-              'In this local preview, sign-in emails stay in the test inbox.',
-              'في المعاينة المحلية تبقى رسائل الدخول في صندوق الاختبار.',
-            )
-          }}
-        </p>
-        <a
-          class="text-link"
-          href="http://127.0.0.1:55331/local/inbox"
-          target="_blank"
-          rel="noopener"
-          >{{ language('Open test inbox', 'فتح صندوق الاختبار') }}</a
-        >
-      </div>
     </section>
   </div>
 </template>

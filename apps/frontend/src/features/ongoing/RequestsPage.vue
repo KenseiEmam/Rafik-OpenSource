@@ -212,7 +212,7 @@ onMounted(async () => {
         <section ref="requestList" tabindex="-1" :aria-label="l('Requests', 'الطلبات')">
           <div class="roster-tools">
             <label
-              >{{ coach ? l('Client', 'المتدرب') : l('Coach', 'المدرب')
+              >{{ coach ? l('Athlete', 'الرياضي') : l('Coach', 'المدرب')
               }}<select v-model="relation" :disabled="!!pendingAssignment">
                 <option value="">{{ l('Everyone', 'الجميع') }}</option>
                 <option v-for="r in relationships" :key="r.id" :value="r.id">
@@ -242,7 +242,7 @@ onMounted(async () => {
               {{
                 coach
                   ? l(
-                      'Choose a template and client to schedule the next conversation.',
+                      'Choose a template and athlete to schedule the next conversation.',
                       'اختر قالباً ومتدرباً لجدولة المتابعة القادمة.',
                     )
                   : l(
@@ -305,7 +305,7 @@ onMounted(async () => {
             <p>
               {{
                 l(
-                  'Due dates use the client’s calendar. Repeat only as often as useful.',
+                  'Due dates use the athlete calendar. Repeat only as often as useful.',
                   'المواعيد حسب تقويم المتدرب. كرر فقط بالقدر المفيد.',
                 )
               }}
@@ -313,7 +313,7 @@ onMounted(async () => {
             <label
               >{{ l('Assign to', 'تكليف')
               }}<select v-model="relation" :disabled="!!pendingAssignment" required>
-                <option disabled value="">{{ l('Choose a client', 'اختر متدرباً') }}</option>
+                <option disabled value="">{{ l('Choose an athlete', 'اختر رياضياً') }}</option>
                 <option
                   v-for="r in relationships.filter((x) => x.state === 'active')"
                   :key="r.id"

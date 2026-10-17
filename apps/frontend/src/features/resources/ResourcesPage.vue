@@ -275,7 +275,7 @@ onMounted(async () => {
             {{
               coach
                 ? l(
-                    'No resources here yet. Upload a file to share with your clients or team.',
+                    'No resources here yet. Upload a file to share with your athletes or team.',
                     'لا توجد ملفات هنا بعد. ارفع ملفاً لمشاركته مع متدربيك أو فريقك.',
                   )
                 : l(

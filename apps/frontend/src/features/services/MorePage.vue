@@ -74,7 +74,7 @@ const coach = useRoute().path.startsWith('/coach'),
           ><span>{{
             coach
               ? l(
-                  'Coordinate staff, clients and shared material.',
+                  'Coordinate staff, athletes and shared material.',
                   'نسّق الموظفين والمتدربين والمواد المشتركة.',
                 )
               : l(

@@ -77,6 +77,14 @@ const command = useCommand<'send' | 'archive'>(
     composer.value?.focus()
   },
   (_, args) => request(endpoint, { method: 'POST', body: JSON.stringify(args) }),
+  {
+    successMessage: (name, args) =>
+      name === 'send'
+        ? false
+        : args.archived
+          ? l('Conversation archived.', 'تمت أرشفة المحادثة.')
+          : l('Conversation restored.', 'تمت استعادة المحادثة.'),
+  },
 )
 const locked = computed(
   () => uploading.value || command.state.busy || !!command.state.pending || !command.state.ready,
@@ -318,7 +326,7 @@ onUnmounted(() => {
       {{ l('New messages ↓', 'رسائل جديدة ↓') }}
     </button>
     <form v-if="data && !editing" class="message-compose" @submit.prevent="send">
-      <CommandStatus :command="command" />
+      <CommandStatus :command="command" :show-notice="false" />
       <small v-if="text && draftSaved && !locked" role="status">{{
         l('Draft saved on this device', 'حُفظت المسودة على هذا الجهاز')
       }}</small>
@@ -372,7 +380,7 @@ onUnmounted(() => {
             data.channel.private_pair
               ? l('Private to the two participants', 'خاص بالمشاركين الاثنين')
               : l(
-                  'Group conversation · organization admins can join',
+                  'Group conversation · institution admins can join',
                   'محادثة جماعية · يمكن لمديري المؤسسة الانضمام',
                 )
           }}</small

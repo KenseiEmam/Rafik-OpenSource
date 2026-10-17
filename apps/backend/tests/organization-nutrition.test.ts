@@ -31,7 +31,7 @@ test("organization nutrition respects subject, sharing, reassignment, replay and
     const id = await f.create(admin),
       other = await f.create(outsider),
       endpoint = `/v1/workspaces/${id}/nutrition`;
-    const staff = await f.join(admin, id, trainer, ["trainer", "trainee"]),
+    const staff = await f.join(admin, id, trainer, ["trainer"]),
       member = await f.join(admin, id, client, ["trainee"]),
       next = await f.join(admin, id, replacement, ["trainer"]);
     const foreign = await f.join(outsider, other, client, ["trainee"]);

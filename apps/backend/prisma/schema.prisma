@@ -32,25 +32,14 @@ model objects {
   @@schema("file_store")
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
-model challenges {
-  email      String   @id
-  code_hash  String
-  expires_at DateTime @db.Timestamptz(6)
-  sent_at    DateTime @default(now()) @db.Timestamptz(6)
-  attempts   Int      @default(0)
+model password_setup_tokens {
+  token_hash   String   @id
+  user_id      String   @db.Uuid
+  workspace_id String   @db.Uuid
+  created_by   String   @db.Uuid
+  expires_at   DateTime @db.Timestamptz(6)
 
-  @@schema("identity")
-}
-
-model mail_messages {
-  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email      String
-  subject    String
-  body       String
-  created_at DateTime @default(now()) @db.Timestamptz(6)
-  expires_at DateTime @db.Timestamptz(6)
-
+  @@index([user_id, expires_at])
   @@schema("identity")
 }
 
@@ -79,6 +68,7 @@ model users {
   id                                                             String                   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email                                                          String?                  @unique
   email_confirmed_at                                             DateTime?                @db.Timestamptz(6)
+  password_hash                                                  String?
   raw_user_meta_data                                             Json                     @default("{}")
   created_at                                                     DateTime                 @default(now()) @db.Timestamptz(6)
   sessions                                                       identity_sessions[]
@@ -915,14 +905,14 @@ model workspace_members {
   organization_events                                                                                 organization_events[]
   organization_exercises                                                                              organization_exercises[]
   organization_group_members                                                                          organization_group_members[]
+  organization_injury_permissions                                                                     organization_injury_permissions?
+  organization_injury_records                                                                         organization_injury_records[]
   organization_groups                                                                                 organization_groups[]
   organization_meals                                                                                  organization_meals[]
   organization_messages                                                                               organization_messages[]
   organization_nutrition_plans_organization_nutrition_plans_workspace_id_author_idToworkspace_members organization_nutrition_plans[]    @relation("organization_nutrition_plans_workspace_id_author_idToworkspace_members")
   organization_nutrition_plans_organization_nutrition_plans_workspace_id_member_idToworkspace_members organization_nutrition_plans[]    @relation("organization_nutrition_plans_workspace_id_member_idToworkspace_members")
   organization_nutrition_sharing                                                                      organization_nutrition_sharing?
-  organization_packages_organization_packages_workspace_id_created_byToworkspace_members              organization_packages[]           @relation("organization_packages_workspace_id_created_byToworkspace_members")
-  organization_packages_organization_packages_workspace_id_member_idToworkspace_members               organization_packages[]           @relation("organization_packages_workspace_id_member_idToworkspace_members")
   organization_programs                                                                               organization_programs[]
   organization_sessions                                                                               organization_sessions[]
   organization_tasks_organization_tasks_workspace_id_assigned_toToworkspace_members                   organization_tasks[]              @relation("organization_tasks_workspace_id_assigned_toToworkspace_members")
@@ -979,7 +969,6 @@ model workspaces {
   organization_meals             organization_meals[]
   organization_nutrition_plans   organization_nutrition_plans[]
   organization_nutrition_sharing organization_nutrition_sharing[]
-  organization_packages          organization_packages[]
   organization_programs          organization_programs[]
   organization_sessions          organization_sessions[]
   organization_tasks             organization_tasks[]
@@ -1041,6 +1030,7 @@ model organization_programs {
   draft                 Json
   draft_version         Int                     @default(1)
   archived              Boolean                 @default(false)
+  /// Legacy visibility flag: successful publication sets this automatically; there is no separate catalog hold.
   listed                Boolean                 @default(false)
   updated_at            DateTime                @default(now()) @db.Timestamptz(6)
   revision              Int                     @default(1)
@@ -1184,16 +1174,12 @@ model organization_event_people {
   duty                            String
   attendance                      String                         @default("unmarked")
   revision                        Int                            @default(1)
-  package_id                      String?                        @db.Uuid
   makeup_for                      String?                        @db.Uuid
-  independent_reason              String                         @default("other")
-  charge_absence                  Boolean?
   session_note                    String                         @default("")
   checked_in_at                   DateTime?                      @db.Timestamptz(6)
   assessment_results              assessment_results?
   organization_event_people       organization_event_people?     @relation("organization_event_peopleToorganization_event_people", fields: [makeup_for, member_id], references: [event_id, member_id], onDelete: NoAction, onUpdate: NoAction, map: "organization_event_makeup")
   other_organization_event_people organization_event_people[]    @relation("organization_event_peopleToorganization_event_people")
-  organization_packages           organization_packages?         @relation(fields: [workspace_id, member_id, package_id], references: [workspace_id, member_id, id], onDelete: NoAction, onUpdate: NoAction, map: "organization_event_package_member")
   organization_events             organization_events            @relation(fields: [workspace_id, event_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
   workspaces                      workspaces                     @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   workspace_members               workspace_members              @relation(fields: [workspace_id, member_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
@@ -1202,7 +1188,6 @@ model organization_event_people {
   @@id([event_id, member_id])
   @@unique([workspace_id, member_id, event_id], map: "organization_event_subject")
   @@index([workspace_id, member_id, event_id], map: "organization_person_agenda")
-  @@index([package_id], map: "organization_event_package", where: raw("(package_id IS NOT NULL)"))
   @@schema("public")
 }
 
@@ -1260,6 +1245,7 @@ model organization_groups {
   archived                   Boolean                      @default(false)
   revision                   Int                          @default(1)
   organization_group_members organization_group_members[]
+  organization_channels      organization_channels[]
   workspace_members          workspace_members            @relation(fields: [workspace_id, created_by], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
   workspaces                 workspaces                   @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
@@ -1305,14 +1291,18 @@ model organization_channels {
   archived                     Boolean                        @default(false)
   created_at                   DateTime                       @default(now()) @db.Timestamptz(6)
   private_pair                 Boolean                        @default(false)
+  private_pair_key             String?
+  conversation_group_id        String?                        @db.Uuid
   organization_assets          organization_assets[]
   organization_channel_members organization_channel_members[]
   organization_channel_reads   organization_channel_reads[]
+  organization_groups          organization_groups?           @relation(fields: [workspace_id, conversation_group_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
   workspace_members            workspace_members              @relation(fields: [created_by, workspace_id], references: [id, workspace_id], onDelete: NoAction, onUpdate: NoAction)
   workspaces                   workspaces                     @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   organization_messages        organization_messages[]
 
   @@unique([id, workspace_id])
+  @@unique([workspace_id, private_pair_key], map: "organization_private_pair_unique")
   @@schema("public")
 }
 
@@ -1534,34 +1524,6 @@ model organization_tasks {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
-model organization_packages {
-  id                                                                                 String                      @id @db.Uuid
-  workspace_id                                                                       String                      @db.Uuid
-  member_id                                                                          String                      @db.Uuid
-  created_by                                                                         String                      @db.Uuid
-  renewed_from                                                                       String?                     @db.Uuid
-  title                                                                              String
-  allowance                                                                          Int
-  starts_on                                                                          DateTime                    @db.Date
-  ends_on                                                                            DateTime                    @db.Date
-  timezone                                                                           String
-  archived                                                                           Boolean                     @default(false)
-  revision                                                                           Int                         @default(1)
-  created_at                                                                         DateTime                    @default(now()) @db.Timestamptz(6)
-  updated_at                                                                         DateTime                    @default(now()) @db.Timestamptz(6)
-  organization_event_people                                                          organization_event_people[]
-  workspace_members_organization_packages_workspace_id_created_byToworkspace_members workspace_members           @relation("organization_packages_workspace_id_created_byToworkspace_members", fields: [workspace_id, created_by], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
-  workspaces                                                                         workspaces                  @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  workspace_members_organization_packages_workspace_id_member_idToworkspace_members  workspace_members           @relation("organization_packages_workspace_id_member_idToworkspace_members", fields: [workspace_id, member_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
-  organization_packages                                                              organization_packages?      @relation("organization_packagesToorganization_packages", fields: [workspace_id, member_id, renewed_from], references: [workspace_id, member_id, id], onDelete: NoAction, onUpdate: NoAction)
-  other_organization_packages                                                        organization_packages?      @relation("organization_packagesToorganization_packages")
-
-  @@unique([workspace_id, member_id, id])
-  @@unique([workspace_id, member_id, renewed_from], map: "organization_package_renewal")
-  @@index([workspace_id, member_id, ends_on, id], map: "organization_packages_member")
-  @@schema("public")
-}
-
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model organization_session_feedback {
   id                        String                     @id @db.Uuid
@@ -1594,5 +1556,98 @@ model organization_workplace_feedback {
   workspace_members workspace_members @relation(fields: [workspace_id, member_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([workspace_id, member_id, month])
+  @@schema("public")
+}
+
+model organization_injury_permissions {
+  workspace_id          String            @db.Uuid
+  athlete_member_id     String            @db.Uuid
+  age_group             String
+  guardian_authorized   Boolean           @default(false)
+  guardian_verified_by  String?           @db.Uuid
+  guardian_verified_at  DateTime?         @db.Timestamptz(6)
+  athlete_assented_at   DateTime?         @db.Timestamptz(6)
+  assent_policy_version String?
+  withdrawn_at          DateTime?         @db.Timestamptz(6)
+  revision              Int               @default(1)
+  configured_at         DateTime          @default(now()) @db.Timestamptz(6)
+  configured_by         String            @db.Uuid
+  workspace_members     workspace_members @relation(fields: [workspace_id, athlete_member_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([workspace_id, athlete_member_id])
+  @@schema("public")
+}
+
+model organization_injury_records {
+  id                             String                           @id @db.Uuid
+  workspace_id                   String                           @db.Uuid
+  athlete_member_id              String                           @db.Uuid
+  participation                  String
+  effective_from                 DateTime                         @db.Date
+  state                          String                           @default("active")
+  revision                       Int                              @default(1)
+  created_at                     DateTime                         @default(now()) @db.Timestamptz(6)
+  updated_at                     DateTime                         @default(now()) @db.Timestamptz(6)
+  closed_at                      DateTime?                        @db.Timestamptz(6)
+  workspace_members              workspace_members                @relation(fields: [workspace_id, athlete_member_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
+  organization_injury_history    organization_injury_history[]
+  organization_injury_access_log organization_injury_access_log[]
+  organization_injury_operations organization_injury_operations[]
+
+  @@unique([workspace_id, id])
+  @@index([workspace_id, athlete_member_id, created_at(sort: Desc), id], map: "organization_injury_athlete_history")
+  @@schema("public")
+}
+
+model organization_injury_history {
+  id                          String                      @id @db.Uuid
+  workspace_id                String                      @db.Uuid
+  record_id                   String                      @db.Uuid
+  revision                    Int
+  action                      String
+  participation               String
+  effective_from              DateTime                    @db.Date
+  recorded_by                 String?                     @db.Uuid
+  recorded_at                 DateTime                    @default(now()) @db.Timestamptz(6)
+  organization_injury_records organization_injury_records @relation(fields: [workspace_id, record_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([record_id, revision])
+  @@schema("public")
+}
+
+model organization_injury_access_log {
+  id                          String                      @id @db.Uuid
+  workspace_id                String                      @db.Uuid
+  record_id                   String                      @db.Uuid
+  athlete_member_id           String                      @db.Uuid
+  actor_id                    String                      @db.Uuid
+  action                      String
+  created_at                  DateTime                    @default(now()) @db.Timestamptz(6)
+  organization_injury_records organization_injury_records @relation(fields: [workspace_id, record_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([workspace_id, athlete_member_id, created_at(sort: Desc)], map: "organization_injury_access_recent")
+  @@schema("public")
+}
+
+model organization_injury_operations {
+  workspace_id                String                      @db.Uuid
+  operation_id                String                      @db.Uuid
+  actor_id                    String                      @db.Uuid
+  request_hash                String
+  record_id                   String                      @db.Uuid
+  result_revision             Int
+  created_at                  DateTime                    @default(now()) @db.Timestamptz(6)
+  organization_injury_records organization_injury_records @relation(fields: [workspace_id, record_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([workspace_id, operation_id])
+  @@schema("public")
+}
+
+model organization_injury_retention_checkpoint {
+  singleton    Boolean  @id @default(true)
+  completed_at DateTime @db.Timestamptz(6)
+  closed_count Int
+  purged_count Int
+
   @@schema("public")
 }

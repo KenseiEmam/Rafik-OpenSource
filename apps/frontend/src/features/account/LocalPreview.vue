@@ -8,18 +8,7 @@ import { language, t, errorMessage } from '../../lib/i18n'
 const busy = ref('')
 const error = ref('')
 const router = useRouter()
-async function enter(
-  role:
-    | 'coach'
-    | 'client'
-    | 'coach2'
-    | 'other'
-    | 'orgadmin'
-    | 'orgtrainer'
-    | 'orgtrainee'
-    | 'orgadmin2'
-    | 'operator',
-) {
+async function enter(role: 'orgadmin' | 'orgtrainer' | 'orgtrainee' | 'orgadmin2' | 'operator') {
   busy.value = role
   error.value = ''
   try {
@@ -28,14 +17,10 @@ async function enter(
     await router.push(
       role === 'operator'
         ? '/platform'
-        : role.startsWith('org')
-          ? '/organization/12000000-0000-4000-8000-00000000000' +
+        : '/organization/12000000-0000-4000-8000-00000000000' +
             (role === 'orgadmin2' ? '2' : '1') +
             '/' +
-            (role === 'orgadmin2' ? 'admin' : role.slice(3))
-          : role.startsWith('coach')
-            ? '/coach'
-            : '/today',
+            (role === 'orgadmin2' ? 'admin' : role.slice(3)),
     )
   } catch (e) {
     error.value = errorMessage(e)
@@ -66,53 +51,12 @@ async function enter(
           }}
         </p>
       </div>
-      <h2>{{ language('Independent coaching', 'التدريب المستقل') }}</h2>
-      <div class="preview-accounts">
-        <button class="preview-account panel" :disabled="!!busy" @click="enter('coach')">
-          <span class="avatar">L</span
-          ><span
-            ><strong>Laila Khoury</strong
-            ><small>{{
-              language('Coach: plans, invitations, and review', 'مدربة: خطط ودعوات ومراجعة')
-            }}</small></span
-          ><PhArrowRight :size="22" class="directional" aria-hidden="true" /></button
-        ><button class="preview-account panel" :disabled="!!busy" @click="enter('client')">
-          <span class="avatar">A</span
-          ><span
-            ><strong>Amir Hassan</strong
-            ><small>{{
-              language(
-                'Client: train, save, and see feedback',
-                'متدرب: تمرّن واحفظ وشاهد الملاحظات',
-              )
-            }}</small></span
-          ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
-        </button>
-        <button class="preview-account panel" :disabled="!!busy" @click="enter('coach2')">
-          <span class="avatar">N</span
-          ><span
-            ><strong>Nour Mahfouz</strong
-            ><small>{{
-              language('Second coach: team collaboration', 'مدرب آخر: تعاون الفريق')
-            }}</small></span
-          ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
-        </button>
-        <button class="preview-account panel" :disabled="!!busy" @click="enter('other')">
-          <span class="avatar">D</span
-          ><span
-            ><strong>Dalia Saad</strong
-            ><small>{{
-              language('Second client: independent access', 'متدربة أخرى: وصول مستقل')
-            }}</small></span
-          ><PhArrowRight :size="22" class="directional" aria-hidden="true" />
-        </button>
-      </div>
-      <h2>{{ language('Organizations', 'المؤسسات') }}</h2>
+      <h2>{{ language('Institutions', 'المؤسسات') }}</h2>
       <p class="preview-context">
         {{
           language(
-            'Madar’s people and training belong to Madar. Omar’s Athar workspace is separate; Kareem can switch between his trainer and trainee roles.',
-            'أشخاص مدار وتدريبهم يتبعون مؤسسة مدار. مساحة عمر في أثر مستقلة؛ ويمكن لكريم التبديل بين دوري المدرب والمتدرب.',
+            'Each institution owns its people, programs and training history. Choose an administrator, trainer or athlete account to explore its workspace.',
+            'لكل مؤسسة أفرادها وبرامجها وسجلها التدريبي. اختر حساب مسؤول أو مدرب أو رياضي لاستكشاف مساحة عمله.',
           )
         }}
       </p>
@@ -127,21 +71,18 @@ async function enter(
             {
               role: 'orgtrainer' as const,
               name: 'Kareem Nasser',
-              description: language(
-                'Madar Training · Trainer and trainee',
-                'مدار للتدريب · مدرب ومتدرب',
-              ),
+              description: language('Madar Training · Trainer', 'مدار للتدريب · مدرب'),
             },
             {
               role: 'orgtrainee' as const,
               name: 'Sara Khalil',
-              description: language('Madar Training · Trainee', 'مدار للتدريب · متدربة'),
+              description: language('Madar Training · Athlete', 'مدار للتدريب · رياضية'),
             },
             {
               role: 'orgadmin2' as const,
               name: 'Omar Saleh',
               description: language(
-                'Athar Academy · Separate organization',
+                'Athar Academy · Separate institution',
                 'أكاديمية أثر · مؤسسة منفصلة',
               ),
             },
@@ -174,10 +115,7 @@ async function enter(
         </button>
       </div>
       <p v-if="busy" role="status">{{ t('loading') }}</p>
-      <p v-if="error" class="notice error" role="alert">{{ error }}</p>
-      <RouterLink class="text-link" to="/routine">{{
-        language('Or try the workout without an account', 'أو جرّب التمرين بلا حساب')
-      }}</RouterLink></template
+      <p v-if="error" class="notice error" role="alert">{{ error }}</p> </template
     ><template v-else
       ><h1>
         {{
@@ -187,8 +125,7 @@ async function enter(
           )
         }}
       </h1>
-      <RouterLink class="button" to="/routine">{{ t('sample') }}</RouterLink></template
-    >
+    </template>
   </div>
 </template>
 

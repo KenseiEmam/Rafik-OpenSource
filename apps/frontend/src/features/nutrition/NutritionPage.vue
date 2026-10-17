@@ -458,10 +458,10 @@ onBeforeUnmount(() => {
       <CommandStatus :command="guidanceCommand" :show-notice="false" />
       <fieldset class="progress-filters" :disabled="busy">
         <label
-          >{{ coach ? l('Client', 'المتدرب') : l('Record visibility', 'ظهور السجل')
+          >{{ coach ? l('Athlete', 'الرياضي') : l('Record visibility', 'ظهور السجل')
           }}<select v-model="scope" @change="selectScope">
             <option value="">
-              {{ coach ? l('Choose a client', 'اختر متدرباً') : l('Only me', 'أنا فقط') }}
+              {{ coach ? l('Choose an athlete', 'اختر رياضياً') : l('Only me', 'أنا فقط') }}
             </option>
             <option v-for="r in relationships" :key="r.id" :value="r.id">
               {{ scopeName(r) }}{{ r.state === 'archived' ? l(' · archived', ' · مؤرشف') : '' }}
@@ -521,7 +521,7 @@ onBeforeUnmount(() => {
       <p v-if="coach && !scope" class="notice">
         {{
           l(
-            'Choose a client to view their shared food record or add guidance.',
+            'Choose an athlete to view their shared food record or add guidance.',
             'اختر متدرباً لعرض سجل طعامه المشارك أو إضافة إرشادات.',
           )
         }}
@@ -597,7 +597,7 @@ onBeforeUnmount(() => {
                 {{
                   coach
                     ? l(
-                        'No meals shared by this client for this date.',
+                        'No meals shared by this athlete for this date.',
                         'لم يشارك هذا المتدرب وجبات لهذا التاريخ.',
                       )
                     : l(

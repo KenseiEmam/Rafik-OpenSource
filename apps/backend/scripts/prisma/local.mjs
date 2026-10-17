@@ -6,18 +6,18 @@ const root = resolve(import.meta.dirname, "../.."),
   command = process.argv[2];
 if (
   !readFileSync(composeFile, "utf8").startsWith(
-    "name: rafik-prisma-local",
+    "name: ${RAFIK_INSTANCE_ID:-rafik-prisma-local}",
   )
 )
   throw Error("Local compose guard failed");
 const run = (program, args, options = {}) =>
   execFileSync(program, args, { cwd: root, stdio: "inherit", ...options });
-const cli = resolve(repositoryRoot, "node_modules/.bin/prisma");
+const cli = resolve(repositoryRoot, "node_modules/prisma/build/index.js");
 if (command === "start") {
-  dockerCompose(["up", "-d", "--wait"]);
-  run(cli, ["migrate", "deploy"]);
-  run(cli, ["generate"]);
-} else if (command === "stop") dockerCompose(["stop"]);
+  dockerCompose(["--profile", "local", "up", "-d", "--wait"]);
+  run(process.execPath, [cli, "migrate", "deploy"]);
+  run(process.execPath, [cli, "generate"]);
+} else if (command === "stop") dockerCompose(["--profile", "local", "stop"]);
 else if (command === "seed") {
   const count = dockerCompose(
     [

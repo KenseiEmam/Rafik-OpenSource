@@ -4,6 +4,7 @@ export default defineConfig({
   testDir: './tests',
   testMatch: '**/*.e2e.ts',
   fullyParallel: false,
+  outputDir: process.env.RAFIK_TEST_OUTPUT,
   workers: 1,
   timeout: 45000,
   expect: { timeout: 10000 },

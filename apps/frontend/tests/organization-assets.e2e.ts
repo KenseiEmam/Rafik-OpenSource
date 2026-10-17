@@ -167,7 +167,7 @@ test('pair attachment survives reload and exact send retry and is readable by it
     await f.login(page, f.owner, base)
     await page.getByRole('button', { name: 'New conversation', exact: true }).click()
     await page.getByLabel('Conversation name', { exact: true }).fill('Form review')
-    await page.getByRole('checkbox', { name: 'R4 Client', exact: true }).check()
+    await page.getByRole('checkbox', { name: 'R4 Athlete', exact: true }).check()
     await page.getByRole('button', { name: 'Create conversation', exact: true }).click()
     await expect(page).toHaveURL(/\/messages\/[a-f0-9-]{36}$/)
     const channel = page.url().split('/').at(-1)!
