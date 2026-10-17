@@ -23,5 +23,6 @@ These numbered records explain consequential design and dependency choices, incl
 | [0020](ADR-0020-publish-programs-to-library.md)         | Publish programs directly to the institution library                      |
 | [0021](ADR-0021-organization-only-web-experience.md)    | Use organization workspaces as the supported web experience               |
 | [0022](ADR-0022-instance-branding-and-local-support.md) | Keep instance branding local and support data under university control    |
+| [0023](ADR-0023-android-coach-field-app.md)                | Build an Android-first coach field app with encrypted offline capture       |
 
 ADR 0004 (gym-first timing), ADR 0014 (session packages) and ADR 0016 (former Supabase runtime) are superseded. Their records are retained under [archived decisions](../archive/decisions/README.md) for provenance and are not current guidance. Gaps in numbering are intentional; do not renumber accepted decisions. New decisions use `ADR-NNNN-short-title.md`, a date, context, options, decision and trade-offs. Link the current implementation or superseding decision where relevant.

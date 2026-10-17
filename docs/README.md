@@ -7,6 +7,7 @@ This page is the index for maintained Rafik documentation. The root [README](../
 - [Requirements and staged plan](requirements/README.md): goals, scope, constraints, acceptance criteria and current stage gates.
 - [University role and scope audit](requirements/role-scope-audit.md): historical role findings and current organization authorization constraints.
 - [Stage 4 workflow audit](requirements/stage4-workflow-audit.md): current university workflow coverage and remaining review.
+- [Stage 7 mobile scope](requirements/stage7-mobile-scope.md): proposed Android field tasks, offline boundary, API gaps and acceptance evidence for founder review.
 - [Architecture](architecture/README.md): system context, components, data flow, security boundaries and integrations.
 - [Architecture decisions](decisions/README.md): active ADR index; superseded ADRs are archived.
 - [API reference](reference/api.md): transport, errors, retries and pagination.

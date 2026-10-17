@@ -1,6 +1,6 @@
 # Rafik architecture
 
-**Status: current architecture, 17 October 2026.** The university-owned Compose deployment and Stage 5 prototype workflows are implemented locally. Optional Stage 6 provider-specific VM templates are in progress and have not been applied to cloud accounts. The [requirements and stage gates](../requirements/README.md) define delivery status; this page describes the system as it exists and the constraints new work must preserve.
+**Status: current architecture, 17 October 2026.** The university-owned Compose deployment and Stage 5 prototype workflows are implemented locally. Optional Stage 6 provider-specific VM templates exist as unverified starters. Stage 7 has an accepted coach-first Android architecture; native authentication and app implementation have not started. The [requirements and stage gates](../requirements/README.md) define delivery status; this page describes the system as it exists and the constraints new work must preserve.
 
 ## Repository components
 
@@ -12,6 +12,8 @@
 | `infrastructure/compose.yaml` | One Compose definition with local-development and self-host profiles. Production profile runs PostgreSQL, migration job, API, web and Caddy.                                              |
 
 The browser calls the API; it never connects directly to PostgreSQL or receives database credentials. PostgreSQL is the durable server store. IndexedDB is for recoverable client work, not backup or acknowledged server state.
+
+The accepted Stage 7 Android app will call the same explicit API using a separate short-lived bearer-session boundary. Its encrypted local SQLite queue is for pending field commands only; it does not establish server acknowledgment or replace PostgreSQL. See [ADR 0023](../decisions/ADR-0023-android-coach-field-app.md). Native authentication and client code are not implemented yet.
 
 ## Identity, institution and authorization
 

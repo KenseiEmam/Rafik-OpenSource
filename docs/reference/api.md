@@ -76,6 +76,12 @@ Local dispatch is CLI-only. No public generic event emission, provider send or o
 
 Old open-client read shapes remain supported. Offset pages can shift during concurrent edits; exact writes use current revision checks and never trust displayed selection alone.
 
+## Native Android coach contract (Stage 7)
+
+The coach field API reuses the organization calendar routes described above for bounded schedule reads, event detail, attendance, assessor-led results and event completion. See the [Stage 7 scope](../requirements/stage7-mobile-scope.md) for request identity, sequencing, offline queue and conflict behavior.
+
+**Planned, not implemented yet:** native login/session/refresh/logout routes will use an Android bearer-session boundary with short-lived access tokens and rotating refresh tokens. Current `/v1/auth/*` routes issue browser cookies and are not a native credential contract. The native API will not weaken browser origin checks, accept a shared app secret, or skip current organization authorization. A generated OpenAPI specification is required before mobile developer preview.
+
 ## Public reference catalogs (R14)
 
 These endpoints are unauthenticated and contain no user or workspace data:

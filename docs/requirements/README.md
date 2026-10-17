@@ -1,6 +1,6 @@
 # Requirements and staged migration plan
 
-**Status:** approved staged plan. Stage 6 optional cloud VM templates are in progress (17 October 2026); templates are not cloud-tested or deployment-ready evidence.
+**Status:** approved staged plan. Stage 6 optional cloud VM templates are implemented as unverified starter templates. Stage 7 coach-first Android scope and architecture are accepted; implementation and security verification are in progress (17 October 2026).
 
 ## Product goal
 
@@ -89,7 +89,9 @@ Rafik should help universities and university coaches support young athletes by 
 
 ### Stage 7 — Android field app
 
-- Confirm product tasks and API contracts before choosing the complete app architecture. React Native/Android is the current proposal; iOS is optional and separate.
+- **Status: implementation in progress.** The founder confirmed a coach-first field app. The accepted task/API contract and architecture are in [the Stage 7 mobile scope](stage7-mobile-scope.md) and [ADR 0023](../decisions/ADR-0023-android-coach-field-app.md).
+- Build the Android app as an `apps/mobile/` React Native + Expo TypeScript workspace. Use encrypted SQLite and Android secure credential storage. iOS is not part of the first release.
+- Add a separate native bearer-session API. Keep web cookie authentication, origin rules and authorization behavior unchanged.
 - Specify device storage protection, queued command identity, retries, deduplication, conflict/reconciliation behavior, server authorization on replay, revocation handling, and clear per-record sync state.
 - Acceptance: API integration tests cover duplicate delivery, lost acknowledgements, retries, changed server revisions, revoked access, and multi-device conflicts. Emulator checks and physical Android checks are reported separately; offline reliability is not claimed from compilation or mocks alone.
 

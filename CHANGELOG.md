@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Began Stage 7 discovery with a proposed Android field-app scope, offline boundary, API/auth gaps and acceptance evidence. No native architecture or implementation is selected pending founder confirmation of first-use tasks.
+- Founder confirmed the coach-first field workflow. ADR 0023 selects React Native/Expo, SQLCipher-backed event/command storage, secure native credentials and foreground-driven sync; native authentication and app implementation remain pending.
 - Started Stage 6 with separate AWS EC2, Google Compute Engine and Azure Linux VM Terraform templates, shared Ubuntu bootstrap, provider access guides, and a dedicated home for deployment/backup/restore scripts. Templates use the current Compose stack and are not provider-validated or production-ready.
 - Updated the staged requirements, architecture, operations guide, maintainer map and verification record for Stage 6. Terraform state, plans and local tfvars are now ignored.
 - Recorded the founder's decision to defer optional provider deployment and recovery checks to user testing; the templates remain explicitly unverified.

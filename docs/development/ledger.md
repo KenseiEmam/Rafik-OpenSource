@@ -1,9 +1,10 @@
 # Current delivery ledger
 
-**Status, 17 October 2026:** Stage 4 prototype and Stage 5 branding/support implementations are complete; first-user and pre-production gates remain in the backlog. The founder confirmed branding persists after restarting local frontend/backend services. Database backup/restore persistence remains unverified. Stage 6 optional cloud templates are implemented; the founder deferred provider apply, validation, cost review and recovery rehearsal to user testing. The templates are not provider-verified. The [stage plan](../requirements/README.md) is authoritative; detailed R-phase chronology is preserved in the [archive](../archive/implementation-ledger-history-2026-10-17.md).
+**Status, 17 October 2026:** Stage 4 prototype and Stage 5 branding/support implementations are complete; first-user and pre-production gates remain in the backlog. The founder confirmed branding persists after restarting local frontend/backend services. Database backup/restore persistence remains unverified. Stage 6 optional cloud templates are implemented; the founder deferred provider apply, validation, cost review and recovery rehearsal to user testing. Stage 7 coach-first Android scope and React Native/Expo architecture are accepted; native auth, mobile client, and verification are not implemented yet. The [stage plan](../requirements/README.md) is authoritative; detailed R-phase chronology is preserved in the [archive](../archive/implementation-ledger-history-2026-10-17.md).
 
 ## Current state
 
+- **Stage 7 mobile scope:** founder confirmed coach-first field attendance and assessor-led results. [ADR 0023](../decisions/ADR-0023-android-coach-field-app.md) selects React Native/Expo, encrypted SQLite and foreground-driven sync. The next implementation slice is native bearer auth, followed by the event queue and coach UI. Distribution channel, minimum Android version and physical-device review remain release gates.
 - **Monorepo and Compose foundation:** frontend, Prisma/PostgreSQL API, shared package and one Compose definition are in place. Self-host startup works locally. Production upgrade/rollback rehearsal and security review remain before release.
 - **University workflows:** the first consent-gated athlete injury participation-status workflow is implemented locally. Coaches receive limited status; athletes can review, correct, close, withdraw and export. Closed sensitive content is deleted after 12 months, with an aggregate checkpoint. University privacy/security approval remains required before real athlete data.
 - **Legacy packages:** gym-oriented session packages, prepaid allowances, renewals and no-show deductions were removed with a forward migration. Calendar and attendance remain separate from commercial entitlements.
@@ -57,8 +58,12 @@
 
 ## Next acceptance evidence
 
-1. Review representative rugby/university coach and athlete tasks with the founder as the human reviewer.
-2. Complete the sport-task and exercise discovery/content review, with source and rights checks kept distinct.
-3. Obtain university privacy/security review for consent, access, retention and deletion before real athlete data.
-4. Complete the disposable Linux upgrade/rollback rehearsal and configure/verify retention alerts.
-5. Apply the Stage 5 branding migration on a fresh database, verify rendered changes and confirm branding survives an application update and backup/restore.
+1. Implement and verify native bearer login, short-lived access, rotating refresh and current-device logout/revocation without changing web cookie/origin behavior.
+2. Build the coach event package and encrypted attendance/assessment command queue, then verify crash/restart, exact retries, changed revisions, revoked assignment and account-switch recovery.
+3. Complete coach field review on Android emulator and physical devices; decide minimum Android version and distribution channel.
+4. Publish an OpenAPI contract for the supported native routes before mobile developer preview.
+5. Review representative rugby/university coach and athlete tasks with the founder as the human reviewer.
+6. Complete the sport-task and exercise discovery/content review, with source and rights checks kept distinct.
+7. Obtain university privacy/security review for consent, access, retention and deletion before real athlete data.
+8. Complete the disposable Linux upgrade/rollback rehearsal and configure/verify retention alerts.
+9. Apply the Stage 5 branding migration on a fresh database, verify rendered changes and confirm branding survives an application update and backup/restore.
