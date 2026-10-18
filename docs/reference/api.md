@@ -2,6 +2,20 @@
 
 The browser calls the Node API at `/v1`; root `src/lib/backend.ts` is the sole transport adapter. `database.types.ts` is generated from PostgreSQL signatures/row shapes by `npm run types`; domain JSON interfaces remain in feature modules. The API uses Prisma with the restricted PostgreSQL application role. Database constraints and explicit transaction functions remain authoritative.
 
+## OpenAPI / Swagger export
+
+`apps/backend/openapi.json` is the versioned OpenAPI 3.1 contract for the supported coach field API: native authentication, role contexts, bounded calendar reads, and attendance/result/event-finish commands. An updated backend exports it at `GET /v1/openapi.json` and serves Swagger UI at `/v1/docs`, without requiring authentication. This is a maintained supported subset, not an inventory of every legacy or web-only API; this document remains the broader route reference.
+
+### Open Swagger locally
+
+1. Start or restart the backend with `npm run start:api` from the repository root.
+2. Open [Swagger UI](http://127.0.0.1:55331/v1/docs) (adjust the port if configured differently).
+3. Expand the native password-login endpoint, choose **Try it out**, and use a synthetic coach account. Copy the returned `access_token` into **Authorize**, then execute the protected coach endpoints.
+
+The viewer sends `X-Rafik-Client: android`, omits browser cookies and targets only the current instance. Authorization is cleared on refresh. It loads bundled assets locally, disables the external validator and does not persist tokens. Dependency analytics are disabled during installation.
+
+For Compose self-hosting, use `/api/v1/docs` and `/api/v1/openapi.json` on the installation's web origin. With `NODE_ENV=production`, the viewer is reference-only: **Try it out** is disabled. API authentication/authorization remains enforced independently. Use synthetic data in examples. These routes require a backend revision containing this implementation; the landing site does not host this viewer.
+
 ## Routes and authentication
 
 - `GET /v1/auth/setup-status`, `session`; `POST /v1/auth/setup` creates the first super admin and institution atomically on an empty instance; `POST /v1/auth/password-login`; `POST /v1/auth/logout`. Sessions are opaque HttpOnly, SameSite cookies backed by hashed tokens. Browser requests include credentials.
@@ -76,11 +90,26 @@ Local dispatch is CLI-only. No public generic event emission, provider send or o
 
 Old open-client read shapes remain supported. Offset pages can shift during concurrent edits; exact writes use current revision checks and never trust displayed selection alone.
 
+## Native Android authentication (Stage 7)
+
+These routes require `X-Rafik-Client: android`. Passwords are sent only over HTTPS in deployed environments. Login responses and protected API responses are `no-store`. The opaque access and refresh tokens are random 256-bit hex values; the database stores only SHA-256 hashes.
+
+| Route                     | Method | Request                                             | Result                                                                         |
+| ------------------------- | ------ | --------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `/v1/mobile/auth/login`   | POST   | `{ email, password, device_name? }`                 | `{ user, access_token, access_expires_at, refresh_token, refresh_expires_at }` |
+| `/v1/mobile/auth/session` | GET    | `Authorization: Bearer <access_token>`              | `{ user }`                                                                     |
+| `/v1/mobile/auth/refresh` | POST   | `{ refresh_token }`                                 | Rotated token pair and `{ user }`                                              |
+| `/v1/mobile/auth/logout`  | POST   | `{ refresh_token? }`, current access token optional | `{ user: null }`; revokes the presented current device session                 |
+
+Access tokens last 15 minutes. Refresh tokens rotate at use, expire after 30 days of inactivity, and have a 90-day absolute session lifetime. Reuse of the immediately previous refresh token revokes that device session. Refresh must be single-flight on the client. Password login is rate limited by IP and normalized account email. Password reset revokes all mobile sessions for that account. Account suspension invalidates bearer access on subsequent requests. There is no endpoint yet to list/revoke another device; logging out revokes the current device.
+
+The native client sends the Android marker on reads as well as writes, because bearer-token identification is bound to this client boundary. It does not use browser cookies. Existing browser origin checks, cookie sessions and the `web` marker are unchanged. Native HTTP requests should not send a browser `Origin` header; if one is supplied, the normal server origin allowlist still applies.
+
 ## Native Android coach contract (Stage 7)
 
 The coach field API reuses the organization calendar routes described above for bounded schedule reads, event detail, attendance, assessor-led results and event completion. See the [Stage 7 scope](../requirements/stage7-mobile-scope.md) for request identity, sequencing, offline queue and conflict behavior.
 
-**Planned, not implemented yet:** native login/session/refresh/logout routes will use an Android bearer-session boundary with short-lived access tokens and rotating refresh tokens. Current `/v1/auth/*` routes issue browser cookies and are not a native credential contract. The native API will not weaken browser origin checks, accept a shared app secret, or skip current organization authorization. A generated OpenAPI specification is required before mobile developer preview.
+The native API does not weaken browser origin checks, accept a shared app secret, or skip current organization authorization. The supported OpenAPI subset is maintained and exported as described above. The Android attendance client persists only the minimal event/person projection and exact commands from `packages/shared/src/contracts.ts`; API availability does not imply every calendar action has a native screen. See the [Android guide](../development/android.md).
 
 ## Public reference catalogs (R14)
 

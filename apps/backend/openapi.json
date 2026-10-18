@@ -1,0 +1,411 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Rafik API — Coach Field App",
+    "version": "0.1.0",
+    "description": "Supported API surface for the coach-first Android field app. The complete backend route reference is in docs/reference/api.md. Instance URLs are university-operated; do not use a shared Rafik host."
+  },
+  "servers": [
+    {
+      "url": "https://{instance}",
+      "variables": {
+        "instance": {
+          "default": "rafik.example.edu",
+          "description": "University Rafik hostname"
+        }
+      }
+    }
+  ],
+  "tags": [{ "name": "Mobile authentication" }, { "name": "Coach field work" }],
+  "security": [{ "mobileBearer": [] }],
+  "paths": {
+    "/v1/mobile/auth/login": {
+      "post": {
+        "tags": ["Mobile authentication"],
+        "security": [],
+        "summary": "Sign in to one institution on this device",
+        "parameters": [{ "$ref": "#/components/parameters/AndroidClient" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Native session created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TokenPair" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/ApiError" },
+          "429": { "$ref": "#/components/responses/ApiError" }
+        }
+      }
+    },
+    "/v1/mobile/auth/session": {
+      "get": {
+        "tags": ["Mobile authentication"],
+        "summary": "Validate the current device session",
+        "parameters": [{ "$ref": "#/components/parameters/AndroidClient" }],
+        "responses": {
+          "200": {
+            "description": "Current account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["user"],
+                  "properties": {
+                    "user": { "$ref": "#/components/schemas/User" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/ApiError" }
+        }
+      }
+    },
+    "/v1/mobile/auth/refresh": {
+      "post": {
+        "tags": ["Mobile authentication"],
+        "security": [],
+        "summary": "Rotate the current refresh token",
+        "parameters": [{ "$ref": "#/components/parameters/AndroidClient" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["refresh_token"],
+                "properties": {
+                  "refresh_token": { "$ref": "#/components/schemas/Token" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Rotated token pair",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TokenPair" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/ApiError" }
+        }
+      }
+    },
+    "/v1/mobile/auth/logout": {
+      "post": {
+        "tags": ["Mobile authentication"],
+        "summary": "Revoke the presented device session",
+        "parameters": [{ "$ref": "#/components/parameters/AndroidClient" }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "refresh_token": { "$ref": "#/components/schemas/Token" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Current device session revoked" },
+          "401": { "$ref": "#/components/responses/ApiError" }
+        }
+      }
+    },
+    "/v1/contexts": {
+      "get": {
+        "tags": ["Coach field work"],
+        "summary": "List the current account's authorized workspaces",
+        "parameters": [{ "$ref": "#/components/parameters/AndroidClient" }],
+        "responses": {
+          "200": {
+            "description": "Role-scoped contexts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["contexts"],
+                  "properties": {
+                    "contexts": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Context" }
+                    },
+                    "platform": { "type": "boolean" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/ApiError" }
+        }
+      }
+    },
+    "/v1/workspaces/{workspace}/calendar": {
+      "parameters": [
+        { "$ref": "#/components/parameters/AndroidClient" },
+        { "$ref": "#/components/parameters/Workspace" }
+      ],
+      "get": {
+        "tags": ["Coach field work"],
+        "summary": "Read a bounded schedule or one authorized event",
+        "description": "Send view=trainer and a bounded from/to calendar-date window, or supply id to read one event detail before field work. The server checks current assignment and membership.",
+        "parameters": [
+          {
+            "name": "view",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "enum": ["trainer"] }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" }
+          },
+          {
+            "name": "zone",
+            "in": "query",
+            "schema": { "type": "string", "example": "Asia/Dubai" }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": { "type": "integer", "minimum": 0 }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Event UUID for authorized detail",
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Schedule page or event detail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "The calendar response shape depends on list versus id detail mode."
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/ApiError" },
+          "403": { "$ref": "#/components/responses/ApiError" },
+          "404": { "$ref": "#/components/responses/ApiError" }
+        }
+      },
+      "post": {
+        "tags": ["Coach field work"],
+        "summary": "Record attendance, assessment results, or finish an event",
+        "description": "Every write uses an operation UUID and the current event/participant revision. Queue dependent commands in order. Retry an uncertain result with the exact same operation and payload. Authorization and revisions are rechecked by the server.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FieldCommand" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Command result or receipt",
+            "content": {
+              "application/json": { "schema": { "type": "object" } }
+            }
+          },
+          "400": { "$ref": "#/components/responses/ApiError" },
+          "401": { "$ref": "#/components/responses/ApiError" },
+          "403": { "$ref": "#/components/responses/ApiError" },
+          "409": { "$ref": "#/components/responses/ApiError" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "mobileBearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "256-bit opaque token"
+      }
+    },
+    "parameters": {
+      "AndroidClient": {
+        "name": "X-Rafik-Client",
+        "in": "header",
+        "required": true,
+        "schema": { "type": "string", "enum": ["android"] }
+      },
+      "Workspace": {
+        "name": "workspace",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string", "format": "uuid" }
+      }
+    },
+    "schemas": {
+      "Token": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "email": { "type": "string", "format": "email" }
+        },
+        "required": ["id", "email"]
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": { "type": "string", "format": "email" },
+          "password": { "type": "string", "format": "password" },
+          "device_name": { "type": "string", "maxLength": 80 }
+        }
+      },
+      "TokenPair": {
+        "type": "object",
+        "required": [
+          "user",
+          "access_token",
+          "access_expires_at",
+          "refresh_token",
+          "refresh_expires_at"
+        ],
+        "properties": {
+          "user": { "$ref": "#/components/schemas/User" },
+          "access_token": { "$ref": "#/components/schemas/Token" },
+          "access_expires_at": { "type": "string", "format": "date-time" },
+          "refresh_token": { "$ref": "#/components/schemas/Token" },
+          "refresh_expires_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Context": {
+        "type": "object",
+        "required": ["id", "kind", "name", "role"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Composite workspace/role context ID; use workspace_id for API paths."
+          },
+          "workspace_id": { "type": "string", "format": "uuid" },
+          "member_id": { "type": "string", "format": "uuid" },
+          "kind": { "type": "string" },
+          "name": { "type": "string" },
+          "role": {
+            "type": "string",
+            "enum": ["administrator", "trainer", "athlete"]
+          },
+          "path": { "type": "string" }
+        }
+      },
+      "FieldCommand": {
+        "oneOf": [
+          {
+            "allOf": [
+              { "$ref": "#/components/schemas/FieldCommandBase" },
+              {
+                "type": "object",
+                "required": ["member", "revision", "attendance"],
+                "properties": {
+                  "action": { "const": "attendance" },
+                  "member": { "type": "string", "format": "uuid" },
+                  "revision": { "type": "integer", "minimum": 0 },
+                  "attendance": {
+                    "type": "string",
+                    "enum": ["unmarked", "present", "absent", "excused"]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "allOf": [
+              { "$ref": "#/components/schemas/FieldCommandBase" },
+              {
+                "type": "object",
+                "required": ["member", "revision", "values"],
+                "properties": {
+                  "action": { "const": "result" },
+                  "member": { "type": "string", "format": "uuid" },
+                  "revision": { "type": "integer", "minimum": 0 },
+                  "values": { "type": "object", "additionalProperties": true },
+                  "note": { "type": "string", "maxLength": 2000 }
+                }
+              }
+            ]
+          },
+          {
+            "allOf": [
+              { "$ref": "#/components/schemas/FieldCommandBase" },
+              {
+                "type": "object",
+                "required": ["revision"],
+                "properties": {
+                  "action": { "const": "finish" },
+                  "revision": { "type": "integer", "minimum": 0 }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "FieldCommandBase": {
+        "type": "object",
+        "required": ["operation", "action", "view", "id"],
+        "properties": {
+          "operation": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Stable idempotency ID; preserve the exact payload on retry."
+          },
+          "action": {
+            "type": "string",
+            "enum": ["attendance", "result", "finish"]
+          },
+          "view": { "type": "string", "enum": ["trainer"] },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Event ID."
+          }
+        }
+      },
+      "ApiError": {
+        "type": "object",
+        "required": ["message"],
+        "properties": { "message": { "type": "string" } }
+      }
+    },
+    "responses": {
+      "ApiError": {
+        "description": "Stable API error code",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ApiError" }
+          }
+        }
+      }
+    }
+  }
+}

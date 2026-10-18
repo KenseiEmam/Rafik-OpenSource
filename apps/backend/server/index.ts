@@ -44,8 +44,9 @@ import {
   type IncomingMessage,
   type ServerResponse,
 } from "node:http";
+import { serveApiDocs } from "./api-docs.ts";
 import { db, ApiError, requireActor } from "./db.ts";
-import { identify, authRoute } from "./auth.ts";
+import { identify, authRoute, mobileAuthRoute } from "./auth.ts";
 import {
   command,
   query,
@@ -103,6 +104,7 @@ const origins = new Set([
   "http://127.0.0.1:5174",
   "http://localhost:5173",
   "http://127.0.0.1:55331",
+  "http://localhost:55331",
 ]);
 function send(res: ServerResponse, status: number, value: unknown) {
   res.writeHead(status, {
@@ -138,18 +140,35 @@ const server = createServer(async (req, res) => {
     if (req.method === "OPTIONS") {
       res.writeHead(204, {
         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
-        "Access-Control-Allow-Headers": "content-type,x-rafik-client",
+        "Access-Control-Allow-Headers":
+          "authorization,content-type,x-rafik-client",
       });
       res.end();
       return;
     }
     if (
       !["GET", "HEAD"].includes(req.method || "") &&
-      req.headers["x-rafik-client"] !== "web"
+      !["web", "android"].includes(String(req.headers["x-rafik-client"] || ""))
     )
       throw new ApiError(403, "client_header_required");
     const url = new URL(req.url || "/", "http://127.0.0.1"),
       path = url.pathname.replace(/^\/api/, "");
+    if (await serveApiDocs(req, res)) return;
+    if (path.startsWith("/v1/mobile/auth/")) {
+      const route = path.slice("/v1/mobile/auth/".length),
+        method = req.method || "";
+      if (
+        (route === "session" && method !== "GET") ||
+        (route !== "session" && method !== "POST")
+      )
+        throw new ApiError(405, "method_not_allowed");
+      const input =
+        method === "POST"
+          ? JSON.parse((await body(req, 16_384)).toString())
+          : {};
+      send(res, 200, await mobileAuthRoute(route, input, req));
+      return;
+    }
     if (path === "/health" && req.method === "GET") {
       await db.$queryRaw`SELECT 1`;
       send(res, 200, { ok: true, runtime: "prisma-postgresql" });

@@ -6,12 +6,16 @@
 
 Help university staff and athletes complete useful training and field-work tasks on Android phones or tablets. The app must connect only to the user's university instance. It must preserve the server's current role, assignment, privacy, revision and audit rules.
 
-## Proposed first release tasks
+## Implementation status — 18 October 2026
 
-| User | Proposed tasks | Excluded from the first mobile release |
-| --- | --- | --- |
+Instance-bound sign-in, current coach contexts, bounded paginated schedules and an attendance slice are implemented locally. Coaches explicitly download a roster, capture attendance in SQLCipher-backed storage and replay exact commands while foregrounded. Device/sending/uncertain/acknowledged/rejected/blocked states and explicit local discard are implemented. Unresolved work remains isolated to the original account/server/workspace. Queue tests use Node SQLite; native encryption/rendering, API integration, Arabic UI, URL scanning and correction-history UI remain open. Assessment entry, raw drafts and event completion are now implemented locally with dependency/completion gates; native/API acceptance is still open. See the [Android guide](../development/android.md). The requirements below remain the full target, including unfinished work.
+
+## First release tasks
+
+| User            | Proposed tasks                                                                                                                                                                                        | Excluded from the first mobile release                                                                                   |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | Coach / trainer | See assigned field events; open an authorized event roster and assessment definition; record attendance and assessor-led performance results; finish the event; review prior results and sync status. | Administration, user invitations, program authoring, messages, analytics configuration and unrestricted athlete records. |
-| Athlete | No native role in the first release. Existing mobile web remains available for athlete training workflows. | Athlete native dashboard/workout logging, other athletes' data, and clinical or diagnostic health functionality. |
+| Athlete         | No native role in the first release. Existing mobile web remains available for athlete training workflows.                                                                                            | Athlete native dashboard/workout logging, other athletes' data, and clinical or diagnostic health functionality.         |
 
 The founder confirmed coach-first. Keep athlete-native work separate until the coach field workflow is accepted.
 
@@ -26,15 +30,15 @@ The founder confirmed coach-first. Keep athlete-native work separate until the c
 
 ## Existing API fit and gaps
 
-| Requirement | Existing support | Gap to resolve before the app |
-| --- | --- | --- |
-| Role-scoped workspaces and rosters | Organization routes return current role-scoped projections and paginated people. | Confirm mobile needs and paging/search behavior against the proposed field tasks. |
-| Attendance and assessments | Calendar routes support attendance, results, authorized detail and correction history. | Define the exact field capture flow, units, validation, conflict UI and offline payload. |
-| Workout start and save | Organization session routes provide start/save and revision-aware persistence; local web workout storage has queued retry behavior. | Extract a transport-independent command contract; web storage and service-worker behavior cannot be reused as native durability evidence. |
-| Idempotent writes | Domain operations use stable IDs, transactional receipts and reject changed payloads for a reused ID. | Document receipt retention and every mobile command's retry semantics; add integration coverage for uncertain outcomes. |
-| Authentication | Password login creates an opaque HttpOnly SameSite cookie. Mutations require the web client marker and an allowed browser origin. | Native apps need an explicitly supported auth transport, secure token/session storage, refresh/revocation behavior, and a mobile client boundary. Do not weaken browser origin checks or put long-lived secrets in the app bundle. |
-| Revocation and changed authority | Server checks current actor, role, assignment and resource before reads, writes and replay. | Define user-visible handling for queued commands after account, role, assignment or institution access changes. |
-| API discovery | The API is documented in the maintained API reference. | Confirm whether a versioned OpenAPI document/Swagger UI is maintained and generate or publish one from actual routes before asking mobile developers to rely on it. |
+| Requirement                        | Existing support                                                                                                                    | Gap to resolve before the app                                                                                                                                                                                                      |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Role-scoped workspaces and rosters | Organization routes return current role-scoped projections and paginated people.                                                    | Confirm mobile needs and paging/search behavior against the proposed field tasks.                                                                                                                                                  |
+| Attendance and assessments         | Calendar routes support attendance, results, authorized detail and correction history.                                              | Define the exact field capture flow, units, validation, conflict UI and offline payload.                                                                                                                                           |
+| Workout start and save             | Organization session routes provide start/save and revision-aware persistence; local web workout storage has queued retry behavior. | Extract a transport-independent command contract; web storage and service-worker behavior cannot be reused as native durability evidence.                                                                                          |
+| Idempotent writes                  | Domain operations use stable IDs, transactional receipts and reject changed payloads for a reused ID.                               | Document receipt retention and every mobile command's retry semantics; add integration coverage for uncertain outcomes.                                                                                                            |
+| Authentication                     | Password login creates an opaque HttpOnly SameSite cookie. Mutations require the web client marker and an allowed browser origin.   | Native apps need an explicitly supported auth transport, secure token/session storage, refresh/revocation behavior, and a mobile client boundary. Do not weaken browser origin checks or put long-lived secrets in the app bundle. |
+| Revocation and changed authority   | Server checks current actor, role, assignment and resource before reads, writes and replay.                                         | Define user-visible handling for queued commands after account, role, assignment or institution access changes.                                                                                                                    |
+| API discovery                      | The API is documented in the maintained API reference.                                                                              | Confirm whether a versioned OpenAPI document/Swagger UI is maintained and generate or publish one from actual routes before asking mobile developers to rely on it.                                                                |
 
 ## Selected architecture constraints
 
@@ -73,5 +77,4 @@ The mobile app uses the existing organization APIs; the server remains the sole 
 7. Finish the event with `action: "finish"`, event `revision` and its own stable operation UUID only after all required attendance and assessment commands are acknowledged.
 8. Replay each exact command in order. A lost acknowledgement retries the identical UUID and payload. A changed payload gets a new operation only after the prior result is known. On 403/409, stop dependent commands, refresh authorized event data when allowed, and show the exact correction/revocation state; never force-merge assessment values.
 
-The existing API already has actor-scoped transactional operation receipts and server-side role/assignment checks. The mobile-specific gap is authentication: web sessions currently use seven-day HttpOnly cookies, and mutations require the web client marker. Add a distinct Android bearer-session flow with short-lived access credentials, rotating refresh credentials, token hashes at rest, revocation and rate-limited password login. Keep browser origin checks and cookie behavior unchanged. Publish an OpenAPI contract for the supported mobile routes before a public mobile developer preview.
-
+The API has actor-scoped transactional operation receipts and current role/assignment checks. The Android bearer-session flow and supported OpenAPI subset are implemented locally; browser cookie/origin behavior is retained. Native/auth/API integration evidence remains required before developer preview. The field package now includes assessment definitions and current results. Correction-history UI and native/API acceptance remain open.

@@ -6,14 +6,17 @@ Rafik is being redirected to help universities and university coaches support yo
 
 ## Project status
 
-The approved migration is staged in [the requirements and acceptance plan](docs/requirements/README.md). The frontend and backend histories are consolidated as npm workspaces at `apps/frontend/` and `apps/backend/`; shared transport contracts and generated database types live in `packages/shared/`. The application now has a university-oriented organization foundation and a self-host Compose profile. Stage 3 deployment hardening and Stage 4 university workflow/privacy gates remain open, so this is not yet declared production-ready for real athlete data. Cloud templates and native apps are later stages.
+The approved migration is staged in [the requirements and acceptance plan](docs/requirements/README.md). The frontend, backend and early Android app are npm workspaces under `apps/`; shared transport contracts and generated database types live in `packages/shared/`. The application has a university-oriented organization foundation and a self-host Compose profile. Stage 7 Android coach workflows are in progress; first-user and pre-production gates remain open, so this is not declared production-ready for real athlete data. Optional cloud-template checks remain deferred to user testing.
 
 Each university is expected to operate a separate instance and control its users, data, files, secrets, backups, retention, and infrastructure. Hosting and maintenance costs are the university's responsibility.
 
 ## Technology and repository map
 
+Explore the supported coach API in [local Swagger UI](http://127.0.0.1:55331/v1/docs) after starting/restarting the updated backend. See the [API guide](docs/reference/api.md) for authentication and self-hosted URLs.
+
 - `apps/frontend/`: Vue 3/TypeScript web application, Vite build, feature modules, browser persistence, and web tests.
 - `apps/backend/`: TypeScript API, Prisma schema and migrations, canonical content, and API tests.
+- `apps/mobile/`: Expo/React Native coach app with a local field cache/queue; see the [Android development guide](docs/development/android.md) for current workflow and acceptance limits.
 - `packages/shared/`: shared API contracts and generated database transport types used across app workspaces.
 - `infrastructure/`: the single Compose definition, Unix operator scripts and optional cloud VM templates; see the [deployment guide](infrastructure/README.md) and [cloud templates](infrastructure/cloud/README.md).
 - `docs/`: approved product requirements, target architecture, and decisions.
@@ -75,11 +78,19 @@ npm run content:check
 npm run docs:check
 ```
 
-The full local acceptance chain is documented in [the runbook](./docs/operations/README.md). Browser emulation does not establish physical-device behavior, and local checks do not establish hosted security or operational readiness.
+Android field queue checks:
+
+```sh
+npm run typecheck --workspace @rafik/mobile
+npm run test:queue --workspace @rafik/mobile
+```
+
+The full local acceptance chain is documented in [the runbook](./docs/operations/README.md). Browser emulation and Node SQLite checks do not establish native-device behavior, and local checks do not establish hosted security or operational readiness.
 
 ## Documentation and contribution
 
 - [Documentation index](docs/README.md)
+- [Coach field OpenAPI contract](apps/backend/openapi.json), served per instance at `/v1/openapi.json` for Swagger UI imports.
 - [Requirements, stages, and gates](docs/requirements/README.md)
 - [Target architecture](docs/architecture/README.md)
 - [Development setup and workflows](docs/development/README.md)

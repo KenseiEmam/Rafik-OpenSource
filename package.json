@@ -1,6 +1,9 @@
 {
   "name": "rafik-opensource",
   "private": true,
+  "scarfSettings": {
+    "enabled": false
+  },
   "type": "module",
   "engines": {
     "node": "^22.16.0 || ^24.0.0"
@@ -8,6 +11,7 @@
   "workspaces": [
     "apps/frontend",
     "apps/backend",
+    "apps/mobile",
     "packages/shared"
   ],
   "scripts": {
@@ -22,6 +26,8 @@
     "backend:start": "npm run start --workspace @rafik/backend",
     "backend:stop": "npm run stop --workspace @rafik/backend",
     "backend:api": "npm run start:api --workspace @rafik/backend",
+    "mobile:start": "npm run start --workspace @rafik/mobile",
+    "mobile:android": "npm run android --workspace @rafik/mobile",
     "start:api": "npm run start:api --workspace @rafik/backend",
     "backend:seed-local": "npm run seed:local --workspace @rafik/backend",
     "seed:local": "npm run seed:local --workspace @rafik/backend",

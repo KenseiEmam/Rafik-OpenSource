@@ -2,6 +2,9 @@
   "name": "@rafik/backend",
   "version": "0.1.0",
   "private": true,
+  "scarfSettings": {
+    "enabled": false
+  },
   "type": "module",
   "engines": {
     "node": "^22.16.0 || ^24.0.0"
@@ -29,6 +32,7 @@
     "db:generate": "prisma generate",
     "seed:local": "node scripts/prisma/local.mjs seed",
     "test:api": "tsx --test tests/api.test.ts",
+    "test:api-docs": "tsx --test tests/api-docs.test.ts",
     "test:organizations": "tsx --test tests/workspaces.test.ts",
     "test:programming": "tsx --test tests/programming.test.ts tests/program-media.test.ts",
     "test:organization-services": "tsx --test tests/organization-services.test.ts",
@@ -57,11 +61,12 @@
     "typescript": "5.9.3"
   },
   "dependencies": {
-    "@rafik/shared": "0.1.0",
     "@prisma/adapter-pg": "7.10.1",
     "@prisma/client": "7.10.1",
-    "prisma": "7.10.1",
+    "@rafik/shared": "0.1.0",
     "pg": "8.16.3",
+    "prisma": "7.10.1",
+    "swagger-ui-dist": "5.33.3",
     "tsx": "4.20.6"
   }
 }

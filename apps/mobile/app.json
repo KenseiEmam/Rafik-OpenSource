@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "Rafik Field",
+    "slug": "rafik-field",
+    "version": "0.1.0",
+    "orientation": "default",
+    "scheme": "rafik",
+    "userInterfaceStyle": "automatic",
+    "android": {
+      "package": "org.rafik.field",
+      "allowBackup": false,
+      "softwareKeyboardLayoutMode": "resize",
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      "expo-router",
+      ["expo-sqlite", { "useSQLCipher": true }],
+      ["expo-secure-store", { "configureAndroidBackup": true }]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}

@@ -20,7 +20,7 @@ const files = [
   ...['README.md', 'AGENTS.md', 'CONTRIBUTING.md', 'CHANGELOG.md', 'SECURITY.md'].map((path) =>
     resolve(repo, path),
   ),
-  ...['apps/frontend/README.md', 'apps/backend/README.md'].map((path) =>
+  ...['apps/frontend/README.md', 'apps/backend/README.md', 'apps/mobile/README.md'].map((path) =>
     resolve(repo, path),
   ),
   ...markdown(resolve(repo, 'docs')),

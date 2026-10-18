@@ -88,6 +88,28 @@ function institutionName(value: unknown) {
   return value.trim();
 }
 export async function identify(req: IncomingMessage): Promise<Actor | null> {
+  if (req.headers["x-rafik-client"] === "android") {
+    const token = req.headers.authorization?.match(
+      /^Bearer ([a-f0-9]{64})$/,
+    )?.[1];
+    if (!token) return null;
+    const session = await db.mobile_sessions.findUnique({
+      where: { access_token_hash: hash(token) },
+      include: { users: true },
+    });
+    if (
+      !session ||
+      session.revoked_at ||
+      session.access_expires_at <= new Date() ||
+      session.expires_at <= new Date() ||
+      session.absolute_expires_at <= new Date()
+    )
+      return null;
+    const blocked = await db.platform_identity_state.findUnique({
+      where: { user_id: session.user_id },
+    });
+    return blocked?.suspended ? null : actor(session.users);
+  }
   const token = req.headers.cookie
     ?.split(";")
     .map((s) => s.trim())
@@ -132,6 +154,45 @@ async function rateLimit(key: string, limit: number, seconds: number) {
     { count: number }[]
   >`INSERT INTO identity.rate_limits(key,count,window_start) VALUES(${hash(key)},1,now()) ON CONFLICT(key) DO UPDATE SET count=CASE WHEN identity.rate_limits.window_start<now()-make_interval(secs=>${seconds}) THEN 1 ELSE identity.rate_limits.count+1 END,window_start=CASE WHEN identity.rate_limits.window_start<now()-make_interval(secs=>${seconds}) THEN now() ELSE identity.rate_limits.window_start END RETURNING count`;
   if (rows[0].count > limit) throw new ApiError(429, "rate_limited");
+}
+const mobileToken = () => randomBytes(32).toString("hex");
+const mobileTokenHash = (value: string) => hash(value);
+const bearerToken = (req: IncomingMessage) =>
+  req.headers.authorization?.match(/^Bearer ([a-f0-9]{64})$/)?.[1] || null;
+const mobileDeviceName = (value: unknown) =>
+  typeof value === "string" && value.trim()
+    ? value.trim().slice(0, 80)
+    : "Android device";
+async function createMobileSession(user: Actor, deviceName: string) {
+  const blocked = await db.platform_identity_state.findUnique({
+    where: { user_id: user.id },
+  });
+  if (blocked?.suspended) throw new ApiError(403, "account_suspended");
+  const now = new Date(),
+    access = mobileToken(),
+    refresh = mobileToken(),
+    accessExpires = new Date(now.getTime() + 15 * 60_000),
+    absoluteExpires = new Date(now.getTime() + 90 * 86400_000),
+    refreshExpires = new Date(now.getTime() + 30 * 86400_000);
+  await db.mobile_sessions.create({
+    data: {
+      id: randomUUID(),
+      user_id: user.id,
+      access_token_hash: mobileTokenHash(access),
+      refresh_token_hash: mobileTokenHash(refresh),
+      access_expires_at: accessExpires,
+      expires_at: refreshExpires,
+      absolute_expires_at: absoluteExpires,
+      device_name: deviceName,
+    },
+  });
+  return {
+    user,
+    access_token: access,
+    access_expires_at: accessExpires.toISOString(),
+    refresh_token: refresh,
+    refresh_expires_at: refreshExpires.toISOString(),
+  };
 }
 function remoteKey(req: IncomingMessage) {
   const forwarded =
@@ -304,6 +365,10 @@ export async function authRoute(
         where: { user_id: account.id },
       });
       await tx.identity_sessions.deleteMany({ where: { user_id: account.id } });
+      await tx.mobile_sessions.updateMany({
+        where: { user_id: account.id, revoked_at: null },
+        data: { revoked_at: new Date() },
+      });
       return account;
     });
     return session(res, actor(user));
@@ -328,6 +393,136 @@ export async function authRoute(
     const u = await db.users.findUnique({ where: { email } });
     if (!u) throw new ApiError(404, "preview_unavailable");
     return session(res, actor(u));
+  }
+  throw new ApiError(404, "not_found");
+}
+
+export async function mobileAuthRoute(
+  path: string,
+  body: Record<string, unknown>,
+  req: IncomingMessage,
+) {
+  if (req.headers["x-rafik-client"] !== "android")
+    throw new ApiError(403, "client_header_required");
+  if (path === "session") {
+    const user = await identify(req);
+    if (!user) throw new ApiError(401, "unauthenticated");
+    return { user };
+  }
+  if (path === "login") {
+    const email = emailOf(body.email),
+      password = validateLoginPassword(body.password),
+      remote = remoteKey(req);
+    await rateLimit(`mobile-login:ip:${remote}`, 50, 600);
+    await rateLimit(`mobile-login:account:${email}`, 10, 600);
+    const user = await db.users.findUnique({ where: { email } });
+    if (
+      !(await verifyPassword(
+        password,
+        user?.password_hash || (await dummyPasswordHash),
+      ))
+    )
+      throw new ApiError(401, "invalid_credentials");
+    return createMobileSession(
+      actor(user!),
+      mobileDeviceName(body.device_name),
+    );
+  }
+  if (path === "refresh") {
+    const refresh = body.refresh_token;
+    if (typeof refresh !== "string" || !/^[a-f0-9]{64}$/.test(refresh))
+      throw new ApiError(401, "invalid_mobile_session");
+    await rateLimit(`mobile-refresh:ip:${remoteKey(req)}`, 120, 600);
+    const incomingHash = mobileTokenHash(refresh),
+      now = new Date();
+    const result = await db.$transaction(async (tx) => {
+      const rows = await tx.$queryRaw<
+        {
+          id: string;
+          user_id: string;
+          refresh_token_hash: string;
+          previous_refresh_token_hash: string | null;
+          absolute_expires_at: Date;
+          expires_at: Date;
+          revoked_at: Date | null;
+        }[]
+      >`SELECT id,user_id,refresh_token_hash,previous_refresh_token_hash,absolute_expires_at,expires_at,revoked_at FROM identity.mobile_sessions WHERE refresh_token_hash=${incomingHash} OR previous_refresh_token_hash=${incomingHash} FOR UPDATE`;
+      const session = rows[0];
+      if (!session || session.revoked_at) return null;
+      if (
+        session.previous_refresh_token_hash === incomingHash ||
+        session.expires_at <= now ||
+        session.absolute_expires_at <= now
+      ) {
+        await tx.mobile_sessions.update({
+          where: { id: session.id },
+          data: { revoked_at: now },
+        });
+        return null;
+      }
+      const blocked = await tx.platform_identity_state.findUnique({
+        where: { user_id: session.user_id },
+      });
+      if (blocked?.suspended) {
+        await tx.mobile_sessions.update({
+          where: { id: session.id },
+          data: { revoked_at: now },
+        });
+        return null;
+      }
+      const user = await tx.users.findUnique({
+        where: { id: session.user_id },
+      });
+      if (!user) return null;
+      const access = mobileToken(),
+        nextRefresh = mobileToken(),
+        accessExpires = new Date(now.getTime() + 15 * 60_000),
+        refreshExpires = new Date(
+          Math.min(
+            now.getTime() + 30 * 86400_000,
+            session.absolute_expires_at.getTime(),
+          ),
+        );
+      await tx.mobile_sessions.update({
+        where: { id: session.id },
+        data: {
+          access_token_hash: mobileTokenHash(access),
+          previous_refresh_token_hash: session.refresh_token_hash,
+          refresh_token_hash: mobileTokenHash(nextRefresh),
+          access_expires_at: accessExpires,
+          expires_at: refreshExpires,
+          last_seen_at: now,
+        },
+      });
+      return {
+        user: actor(user),
+        access_token: access,
+        access_expires_at: accessExpires.toISOString(),
+        refresh_token: nextRefresh,
+        refresh_expires_at: refreshExpires.toISOString(),
+      };
+    });
+    if (!result) throw new ApiError(401, "invalid_mobile_session");
+    return result;
+  }
+  if (path === "logout") {
+    const access = bearerToken(req),
+      refresh = body.refresh_token;
+    const tokenHashes = [
+      ...(access ? [{ access_token_hash: mobileTokenHash(access) }] : []),
+      ...(typeof refresh === "string" && /^[a-f0-9]{64}$/.test(refresh)
+        ? [
+            { refresh_token_hash: mobileTokenHash(refresh) },
+            { previous_refresh_token_hash: mobileTokenHash(refresh) },
+          ]
+        : []),
+    ];
+    if (tokenHashes.length)
+      await db.mobile_sessions.updateMany({
+        where: { OR: tokenHashes },
+        data: { revoked_at: new Date() },
+      });
+    return { user: null };
   }
   throw new ApiError(404, "not_found");
 }

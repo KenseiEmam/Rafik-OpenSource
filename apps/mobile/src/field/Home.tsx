@@ -1,0 +1,283 @@
+import { useEffect, useRef, useState } from 'react'
+import { ActivityIndicator, ScrollView, Text, TextInput, useColorScheme, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { NativeClient, privateStore, type CoachContext } from './native'
+import { failureText } from './model'
+import type { FieldStore } from './store'
+import { Button, makeStyles, type Styles } from './ui'
+import { WorkspaceScreen } from './WorkspaceScreen'
+
+type Runtime = { client: NativeClient; store: FieldStore }
+export default function Home() {
+  const styles = makeStyles(useColorScheme() === 'light')
+  const [runtime, setRuntime] = useState<Runtime | null>(null)
+  const [restoring, setRestoring] = useState(true)
+  const [busy, setBusy] = useState(false)
+  const [base, setBase] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [message, setMessage] = useState('')
+  const alive = useRef(true)
+  const signingIn = useRef(false)
+  useEffect(() => {
+    alive.current = true
+    let cancelled = false
+    void (async () => {
+      try {
+        const client = await NativeClient.restore()
+        if (client && !cancelled) {
+          const store = await privateStore()
+          if (!cancelled) {
+            setBase(client.instance)
+            setRuntime({ client, store })
+          }
+        }
+      } catch (error) {
+        if (!cancelled) setMessage(failureText(error))
+      } finally {
+        if (!cancelled) setRestoring(false)
+      }
+    })()
+    return () => {
+      cancelled = true
+      alive.current = false
+    }
+  }, [])
+
+  async function login() {
+    if (signingIn.current) return
+    signingIn.current = true
+    setBusy(true)
+    setMessage('')
+    try {
+      const store = await privateStore()
+      const client = await NativeClient.login(base, email.trim(), password)
+      if (alive.current) {
+        setRuntime({ client, store })
+        setPassword('')
+        setBase(client.instance)
+      }
+    } catch (error) {
+      if (alive.current) setMessage(failureText(error))
+    } finally {
+      signingIn.current = false
+      if (alive.current) setBusy(false)
+    }
+  }
+  if (restoring)
+    return (
+      <SafeAreaView style={styles.safe}>
+        <ActivityIndicator accessibilityLabel="Opening encrypted field storage" />
+      </SafeAreaView>
+    )
+  if (runtime)
+    return (
+      <SignedIn
+        key={`${runtime.client.instance}:${runtime.client.user.id}`}
+        runtime={runtime}
+        styles={styles}
+        signedOut={(revoked) => {
+          setRuntime(null)
+          setMessage(
+            revoked
+              ? 'Signed out. Saved field work is retained for this account.'
+              : 'Signed out on this device. Server revocation was not confirmed. Saved work is retained; contact your institution if this device is lost.',
+          )
+        }}
+      />
+    )
+  return (
+    <SafeAreaView style={styles.safe}>
+      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+        <Text style={styles.kicker}>RAFIK FIELD</Text>
+        <Text style={styles.title}>Sign in to your institution</Text>
+        <View style={styles.card}>
+          <Text style={styles.label}>Institution API URL</Text>
+          <TextInput
+            accessibilityLabel="Institution API URL"
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="url"
+            placeholder="https://rafik.university.edu/api"
+            placeholderTextColor={styles.hint.color}
+            value={base}
+            onChangeText={setBase}
+            style={styles.input}
+            editable={!busy}
+          />
+          <Text style={styles.label}>Account email</Text>
+          <TextInput
+            accessibilityLabel="Account email"
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
+            style={styles.input}
+            editable={!busy}
+          />
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            accessibilityLabel="Password"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+            style={styles.input}
+            editable={!busy}
+            onSubmitEditing={() => void login()}
+          />
+          <Button
+            title={busy ? 'Signing in…' : 'Sign in'}
+            onPress={() => void login()}
+            disabled={busy || !base.trim() || !email.trim() || !password}
+            styles={styles}
+            primary
+          />
+          <Text style={styles.hint}>
+            Use your institution account. Each server keeps its own data and sign-in.
+          </Text>
+          <Text style={styles.hint}>
+            Saved attendance reappears only for the same account and institution server.
+          </Text>
+        </View>
+        {message ? (
+          <Text accessibilityLiveRegion="polite" style={styles.message}>
+            {message}
+          </Text>
+        ) : null}
+      </ScrollView>
+    </SafeAreaView>
+  )
+}
+
+function SignedIn({
+  runtime: { client, store },
+  styles,
+  signedOut,
+}: {
+  runtime: Runtime
+  styles: Styles
+  signedOut: (revoked: boolean) => void
+}) {
+  const [contexts, setContexts] = useState<CoachContext[]>(client.contexts)
+  const [savedWorkspaces, setSavedWorkspaces] = useState<string[]>([])
+  const [workspace, setWorkspace] = useState(client.contexts[0]?.workspace_id || '')
+  const [message, setMessage] = useState('')
+  const [closing, setClosing] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [fieldBusy, setFieldBusy] = useState(false)
+  const alive = useRef(true)
+  const loadingRef = useRef(false)
+
+  async function refreshAccess() {
+    if (loadingRef.current) return
+    loadingRef.current = true
+    setLoading(true)
+    try {
+      const saved = await store.workspaces(client.instance, client.user.id)
+      if (!alive.current) return
+      setSavedWorkspaces(saved)
+      setWorkspace((current) => current || client.contexts[0]?.workspace_id || saved[0] || '')
+      const available = await client.refreshContexts()
+      for (const id of saved.filter((id) => !available.some((c) => c.workspace_id === id))) {
+        const scope = { instance: client.instance, user: client.user.id, workspace: id }
+        for (const roster of await store.list(scope)) await store.block(scope, roster.event.id)
+      }
+      if (!alive.current) return
+      setContexts(available)
+      setWorkspace((current) => current || available[0]?.workspace_id || saved[0] || '')
+      setMessage(
+        available.length
+          ? ''
+          : 'This account currently has no institution coach access. Any saved work remains blocked for review.',
+      )
+    } catch (error) {
+      if (alive.current)
+        setMessage(
+          `${failureText(error)} Previously opened events remain available for this account.`,
+        )
+    } finally {
+      loadingRef.current = false
+      if (alive.current) setLoading(false)
+    }
+  }
+  useEffect(() => {
+    alive.current = true
+    void refreshAccess()
+    return () => {
+      alive.current = false
+    }
+  }, [])
+
+  async function logout() {
+    if (closing) return
+    setClosing(true)
+    try {
+      const revoked = await client.logout()
+      if (alive.current) signedOut(revoked)
+    } catch (error) {
+      if (alive.current) {
+        setClosing(false)
+        setMessage(failureText(error))
+      }
+    }
+  }
+  const options = [...new Set([...contexts.map((c) => c.workspace_id), ...savedWorkspaces])]
+  return (
+    <SafeAreaView style={styles.safe}>
+      <View style={styles.toolbar}>
+        <View style={styles.heading}>
+          <Text style={styles.kicker}>RAFIK FIELD</Text>
+          <Text style={styles.hint}>{client.user.email}</Text>
+        </View>
+        <Button
+          title={closing ? 'Signing out…' : 'Sign out'}
+          disabled={closing || loading || fieldBusy}
+          onPress={() => void logout()}
+          styles={styles}
+        />
+      </View>
+      {message ? (
+        <Text accessibilityLiveRegion="polite" style={[styles.message, { paddingHorizontal: 18 }]}>
+          {message}
+        </Text>
+      ) : null}
+      {options.length > 1 ? (
+        <View style={styles.toolbar}>
+          {options.map((id) => (
+            <Button
+              key={id}
+              title={`${contexts.find((c) => c.workspace_id === id)?.name || 'Saved workspace'}${workspace === id ? ' · selected' : ''}`}
+              disabled={closing || loading || fieldBusy}
+              onPress={() => setWorkspace(id)}
+              styles={styles}
+              primary={workspace === id}
+            />
+          ))}
+        </View>
+      ) : null}
+      {workspace && !loading ? (
+        <WorkspaceScreen
+          key={workspace}
+          client={client}
+          store={store}
+          workspace={workspace}
+          styles={styles}
+          closing={closing}
+          onPersisting={setFieldBusy}
+        />
+      ) : (
+        <ScrollView contentContainerStyle={styles.content}>
+          {loading ? (
+            <ActivityIndicator accessibilityLabel="Checking coach access" />
+          ) : (
+            <>
+              <Text style={styles.title}>No coach workspace</Text>
+              <Button title="Refresh access" onPress={() => void refreshAccess()} styles={styles} />
+            </>
+          )}
+        </ScrollView>
+      )}
+    </SafeAreaView>
+  )
+}

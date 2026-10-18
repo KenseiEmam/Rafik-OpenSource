@@ -7,16 +7,19 @@ This page is the index for maintained Rafik documentation. The root [README](../
 - [Requirements and staged plan](requirements/README.md): goals, scope, constraints, acceptance criteria and current stage gates.
 - [University role and scope audit](requirements/role-scope-audit.md): historical role findings and current organization authorization constraints.
 - [Stage 4 workflow audit](requirements/stage4-workflow-audit.md): current university workflow coverage and remaining review.
-- [Stage 7 mobile scope](requirements/stage7-mobile-scope.md): proposed Android field tasks, offline boundary, API gaps and acceptance evidence for founder review.
+- [Stage 7 mobile scope](requirements/stage7-mobile-scope.md): confirmed coach-first Android field tasks, offline boundary, API contract and acceptance evidence.
+- [Rafik Field app workspace](../apps/mobile/README.md): current Android prototype status, local build steps and limits.
 - [Architecture](architecture/README.md): system context, components, data flow, security boundaries and integrations.
 - [Architecture decisions](decisions/README.md): active ADR index; superseded ADRs are archived.
 - [API reference](reference/api.md): transport, errors, retries and pagination.
+- [Coach field OpenAPI contract](../apps/backend/openapi.json): OpenAPI 3.1 subset exported at `/v1/openapi.json`; bundled Swagger UI at `/v1/docs`. The [API guide](reference/api.md) explains authentication and self-hosted URLs.
 - [Content maintenance](reference/content-maintenance.md): canonical content generation, provenance and media rights.
 - [Known issues and release gaps](known-issues/README.md): verified product/operational gaps, impact, evidence and next steps.
 
 ## Development and quality
 
 - [Development setup and workflows](development/README.md): prerequisites, local setup, common change workflows and troubleshooting.
+- [Android coach field development](development/android.md): native build setup, attendance/scores, completion, exact retries, account isolation and current recovery limits.
 - [Maintainer guide](development/maintainer-guide.md): repository map and implementation recipes.
 - [Current delivery ledger](development/ledger.md): current stage and recent implementation outcomes; not a phase-history archive.
 - [Testing strategy](testing/README.md): test layers, focused commands, fixtures and evidence boundaries.

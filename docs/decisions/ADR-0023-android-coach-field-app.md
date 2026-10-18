@@ -1,22 +1,22 @@
 # ADR 0023 — Android coach field app
 
 **Date:** 17 October 2026  
-**Status:** Accepted for Stage 7 implementation  
+**Status:** Accepted and in implementation
 **Scope:** Android coach field workflows; no athlete-native release decision.
 
 ## Context
 
 Stage 7 adds a native field app after the web, API and self-hosted deployment foundation. The founder confirmed a coach-first release. Coaches need to use scheduled rosters and assessor-led results around training venues where network access may be intermittent. The app must remain compatible with university-owned deployments and preserve the API's tenant, role, assignment, audit, revision and retry rules.
 
-The current API supports organization calendar detail, attendance, assessment results and event completion. Writes use stable operation IDs and server-side transactional receipts. Authentication currently supports only browser cookies, and mutation requests require the `web` client marker. Browser local storage is not native durable-storage evidence.
+The API supports organization calendar detail, attendance, assessment results and event completion. Writes use stable operation IDs and server-side transactional receipts. The browser uses cookies and the `web` client marker; the separate native bearer-session endpoints are now implemented. Browser local storage is not native durable-storage evidence.
 
 ## Options considered
 
-| Option | Advantages | Costs and risks |
-| --- | --- | --- |
+| Option                                | Advantages                                                                                                                                                                           | Costs and risks                                                                                                                                   |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | React Native with Expo and TypeScript | Reuses the team's TypeScript skills and API contracts; supports Android-first work; Expo SQLite documents SQLCipher support and SecureStore uses Android Keystore-backed encryption. | SQLCipher requires a native build; Expo Go is insufficient. Background scheduling would need separate native integration and is excluded from v1. |
-| Native Android with Kotlin | Direct access to Android platform APIs and WorkManager; strongest fit if Android-only platform behavior dominates. | Adds Kotlin/Gradle toolchain and a second application language; duplicates API contract types and validation work. |
-| Mobile web/PWA | Reuses the existing Vue application and deploy process. | Does not meet the approved native Android field-app direction or the planned secure durable offline storage boundary. |
+| Native Android with Kotlin            | Direct access to Android platform APIs and WorkManager; strongest fit if Android-only platform behavior dominates.                                                                   | Adds Kotlin/Gradle toolchain and a second application language; duplicates API contract types and validation work.                                |
+| Mobile web/PWA                        | Reuses the existing Vue application and deploy process.                                                                                                                              | Does not meet the approved native Android field-app direction or the planned secure durable offline storage boundary.                             |
 
 ## Decision
 
@@ -26,7 +26,7 @@ The first release is for coaches/trainers. It supports a bounded schedule, an ex
 
 Sync occurs when the app is foregrounded/resumed, when the user requests retry, and when connectivity returns while the app is active. Background execution is not promised. Offline writes are encrypted and saved before the UI reports device persistence. Commands replay in order with the exact original operation UUID and payload. The server rechecks actor, role, assignment and event state on every read, command and replay; 403/409 outcomes stop dependent writes and require visible recovery. Account or institution changes must never adopt another user's queue.
 
-Add a dedicated native authentication boundary using Android bearer credentials. The API will issue short-lived access tokens and rotating refresh tokens, persist only token hashes, support explicit device-session revocation/logout and enforce login/refresh rate limits. Existing web cookie sessions, origin allowlists and client marker remain unchanged. Never embed a shared secret in the app.
+The native authentication boundary issues short-lived access tokens and rotating refresh tokens, persists token hashes, supports current-device logout/revocation and enforces login/refresh rate limits. Existing web cookie sessions, origin allowlists and client marker remain unchanged. Never embed a shared secret in the app. As of 18 October 2026, the client also implements explicitly downloaded attendance rosters and an ordered exact-command queue. Acknowledgment atomically advances participant revisions; conflicts/revocation pause replay. SQLCipher is checked at runtime, keys and instance-bound credentials use SecureStore, and Android automatic backup is disabled. Sign-out retains encrypted work for its original owner and reports unconfirmed server revocation. Completed/cancelled roster eviction occurs on successful refresh after acknowledgment. Unresolved work requires explicit review/discard; recovery export and automatic merging are absent. Assessment entry/completion are now implemented locally with durable raw drafts, result revision adoption, dependency gates and atomic completion eviction. Correction-history UI and native/API acceptance remain open. Node SQLite evidence is not Android evidence. See the [Android guide](../development/android.md).
 
 ## Trade-offs and constraints
 
@@ -46,4 +46,3 @@ Before the mobile preview, add API integration coverage for duplicate delivery, 
 - [Expo SecureStore](https://docs.expo.dev/versions/latest/sdk/securestore/): encrypted Android key-value storage backed by Android Keystore.
 - [Android Keystore](https://developer.android.com/privacy-and-security/keystore): platform-managed cryptographic key protections.
 - [Android WorkManager](https://developer.android.com/develop/background-work/background-tasks/persistent): durable background work is intentionally deferred; v1 sync remains foreground-driven.
-

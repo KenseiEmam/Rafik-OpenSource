@@ -1,6 +1,6 @@
 # Requirements and staged migration plan
 
-**Status:** approved staged plan. Stage 6 optional cloud VM templates are implemented as unverified starter templates. Stage 7 coach-first Android scope and architecture are accepted; implementation and security verification are in progress (17 October 2026).
+**Status:** approved staged plan. Stage 6 optional cloud VM templates are implemented as unverified starter templates; provider checks remain deferred to user testing and do not block Stage 7. Stage 7 coach-first Android implementation is active (17 October 2026).
 
 ## Product goal
 
@@ -11,7 +11,7 @@ Rafik should help universities and university coaches support young athletes by 
 - University and university-sport workflows replace the previous gym-first acquisition direction.
 - Canonical public repository: [`KenseiEmam/Rafik-OpenSource`](https://github.com/KenseiEmam/Rafik-OpenSource); it is public and Stage 2 has been pushed.
 - Each university runs an isolated instance on infrastructure it controls. Docker Compose self-hosting is the first deployment target. AWS, Azure, and Google Cloud templates are not part of the initial release.
-- The Android field app is optional and comes after the web/backend and deployment foundations. React Native is the proposed framework, not an implementation decision.
+- The Android field app is optional and comes after the web/backend and deployment foundations. React Native with Expo is the accepted Stage 7 framework in ADR 0023.
 - Default Rafik branding is retained, with per-install university branding and a small Rafik attribution planned.
 - The app has no marketing landing page. A fresh private instance starts with one-time super-admin and institution setup without email verification. That admin provisions institution users with expiring invitation links; invitees set passwords themselves.
 
@@ -89,7 +89,7 @@ Rafik should help universities and university coaches support young athletes by 
 
 ### Stage 7 — Android field app
 
-- **Status: implementation in progress.** The founder confirmed a coach-first field app. The accepted task/API contract and architecture are in [the Stage 7 mobile scope](stage7-mobile-scope.md) and [ADR 0023](../decisions/ADR-0023-android-coach-field-app.md).
+- **Status: implementation in progress.** The founder confirmed coach-first field workflows. Native bearer authentication, bounded schedules, attendance, assessment drafts/results and event completion with a scoped command queue are implemented locally. Node SQLite checks cover exact replay/recovery. API integration, native encryption/device acceptance and correction-history UI remain open. The supported native API subset is versioned in [OpenAPI](../../apps/backend/openapi.json) and exported from each instance at `/v1/openapi.json`. The task/API contract and architecture are in [the Stage 7 mobile scope](stage7-mobile-scope.md) and [ADR 0023](../decisions/ADR-0023-android-coach-field-app.md). Stage 6 provider validation remains an optional user-testing backlog item.
 - Build the Android app as an `apps/mobile/` React Native + Expo TypeScript workspace. Use encrypted SQLite and Android secure credential storage. iOS is not part of the first release.
 - Add a separate native bearer-session API. Keep web cookie authentication, origin rules and authorization behavior unchanged.
 - Specify device storage protection, queued command identity, retries, deduplication, conflict/reconciliation behavior, server authorization on replay, revocation handling, and clear per-record sync state.

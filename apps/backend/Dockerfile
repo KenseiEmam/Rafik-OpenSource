@@ -1,6 +1,7 @@
 FROM node:22.16.0-bookworm-slim
 
 ENV NODE_ENV=production \
+    SCARF_ANALYTICS=false \
     HOST=0.0.0.0 \
     PORT=55331
 

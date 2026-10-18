@@ -1,5 +1,11 @@
 # Verification record
 
+## Swagger viewer — 18 October 2026
+
+Documentation links passed across 48 maintained monorepo documents; `git diff --check` passed. Temporary documentation-preview services were stopped after inspection.
+
+Passed: two isolated HTTP/initializer checks with `npm run test:api-docs --workspace @rafik/backend`, and backend TypeScript. Checks cover direct/proxy paths, bundled assets, CSP, missing assets, HEAD/method handling, local versus production interaction, same-origin targets, native marker and cookie omission. The viewer rendered in the in-app browser against a separate documentation-only preview; its endpoint groups and schemas were visually inspected. This was not a responsive, bilingual or cross-engine acceptance suite. No database, API login/write, Android device or deployed installation was exercised. The owner's running backend was not restarted. [Landing PR #2](https://github.com/KenseiEmam/rafik-landing/pull/2) contains paired documentation changes; no landing build was run for these Markdown-only updates.
+
 This page records focused evidence for the current implementation and states what the evidence does not establish. See [testing](../testing/README.md) for the test strategy and commands; raw machine-readable evidence belongs under [receipts](receipts/). Earlier phase records are archived in the [verification history](../archive/verification-history-2026-10-17.md).
 
 ## Stage 4 — accepted prototype evidence
@@ -50,3 +56,28 @@ Do not treat browser emulation as physical-device or human usability evidence. T
 ## Stage 6 — cloud templates
 
 Terraform is not installed in this environment, so `terraform fmt` and `terraform validate` were not run. No cloud credentials were used and no resources were created. The founder deferred provider application, deployment, cost, upgrade, backup/restore and teardown checks to user testing; these remain unverified and are not required before the optional templates are reviewed.
+
+## Stage 7 — Android coach app foundation
+
+For the initial Stage 7 implementation on 17 October, backend and mobile TypeScript workspace checks passed. The OpenAPI JSON parsed and exposed the expected native authentication and coach calendar paths. The documentation-link check passed for 46 monorepo documents, and `git diff --check` passed after correcting trailing whitespace in ADR 0023. No API integration, database migration, emulator, physical-device or UI workflow check was run. At that point the prototype stopped at sign-in and schedule display; those checks did not establish attendance/results capture or offline reliability.
+
+### Attendance implementation — 18 October 2026
+
+The client now implements explicitly opened attendance rosters, a SQLCipher-backed event/command store, immutable command replay, atomic acknowledgment revisions, account/server/workspace isolation, visible rejected/blocked states and explicit device-copy discard. A runtime SQLCipher check refuses plaintext fallback. Native credentials are instance-bound and sign-out waits for outstanding credential writes; Android automatic backup is disabled. These implementation controls have not yet been validated on Android.
+
+- Passed: `npm run test:queue --workspace @rafik/mobile`, 11 tests using real Node SQLite. Covered identical retry after a simulated lost server response, second-edit revision adoption, on-disk close/reopen of a sending record, account/server/workspace isolation, simulated 403/409 pauses, stale-roster rejection, transaction rollback, storage failure, mismatched acknowledgments, single-flight capture during sending and runtime stop. This uses a simulated server sender, not the PostgreSQL/API integration.
+- Passed: `npm run typecheck --workspace @rafik/mobile`, including its separate Node-test TypeScript configuration.
+- Passed: `npm run docs:check`, 48 maintained documents including the mobile README.
+- Formatted the changed native sources/config and maintained guides. The React review corrected the sync runner's effect cleanup/restart and session initialization cancellation; this is source review, not rendered acceptance.
+- The first test invocation hit sandbox `spawn EPERM`; the focused test command passed with approved execution outside the sandbox. Tests removed their own temporary on-disk database and did not touch preview users or data.
+- Android SDK tools are present, but `adb devices -l` returned no connected device/emulator. No native build, SQLCipher/Keystore runtime, Android process-death/app-upgrade, visual, accessibility or physical-device check was performed. No backend/migration or full browser suites were repeated for this client slice.
+
+At the end of the attendance-only slice, assessment entry and completion were unfinished. The later slice below adds them. Native/API verification, correction-history UI, Arabic/RTL, URL scanning and recovery export/comparison remain open. The [Android guide](../development/android.md) describes the current workflow.
+
+### Assessment and completion implementation — 18 October 2026
+
+The native client now downloads an event's assessment definitions/units/limits and current results, saves raw drafts separately from submitted commands, queues results after present attendance, reviews/corrects current results using acknowledged revisions and completes an event only after its required records are confirmed. A confirmed finish atomically evicts its local package, drafts and receipts. Server correction history is preserved; the native UI currently shows current values only.
+
+Focused queue tests exercise real Node SQLite with a simulated sender, including decimal precision, blank versus zero, definition projection, attendance → result sequencing, result corrections, draft persistence/isolation, completion gates, lost score/finish responses, mismatched acknowledgments, and rollback/retry when local completion eviction fails. Native rendering, actual PostgreSQL/API behavior, SQLCipher/Keystore and Android process death are not established by those tests. Native/API and device acceptance, correction-history UI, Arabic/RTL and URL scanning remain open. No production or browser suite is required for this native-only implementation change.
+
+Final checks for this slice passed: `npm run test:queue --workspace @rafik/mobile` (18 tests), `npm run typecheck --workspace @rafik/mobile` (source plus Node tests), documentation links across 48 maintained files and `git diff --check`. Formatting covered the edited native sources/tests and guides. Test-created disk databases were removed; preview data was untouched. No emulator or physical-device claim is made.

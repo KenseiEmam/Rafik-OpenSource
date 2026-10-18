@@ -4,6 +4,8 @@ This is the operator entry point for builds, self-hosted deployment, configurati
 
 ## Deployment
 
+Updated backends include Swagger reference at `/api/v1/docs` on the self-hosted web origin, with JSON at `/api/v1/openapi.json`. Production (`NODE_ENV=production`) disables interactive viewer requests. The viewer uses bundled assets and no external validator; no additional service or Compose definition is needed. Direct backend access uses `/v1/docs`. See the [API guide](../reference/api.md) for local exploration.
+
 The supported deployment foundation is the self-host Docker Compose profile on a Unix server. The [infrastructure guide](../../infrastructure/README.md) is the canonical source for prerequisites, environment setup, TLS, startup, and service health checks. Use the committed example only as a template; set a unique project name and replace every secret before startup.
 
 Optional AWS, Google Cloud and Azure single-VM Terraform starters are documented in the [cloud deployment guide](../../infrastructure/cloud/README.md). They retain the Compose stack and do not provision managed databases, backups or monitoring. They have not been applied to cloud accounts or validated; review provider prerequisites and cost estimates before use.
@@ -34,6 +36,8 @@ Store the production env file outside source control with access limited to the 
 Instance branding (name, accent, light/dark page backgrounds and optional PNG/JPEG/WebP logo) is stored in PostgreSQL and therefore travels with database backups and restores. UI surfaces derive from those colors; text/accent colors adjust for contrast. The first super admin controls these settings; the image is limited to 512 KB. Keep the backup protected as sensitive operational data. Branding is not supplied by environment variables and remains after application image updates.
 
 ## Backup, recovery and rollback
+
+Android field queues are device-local and are not part of server backups. The app disables automatic Android app-data backup, retains encrypted field commands and score drafts after sign-out, and requires the same account/server to recover it. Loss of app data or its key can lose unsent work; no remote-wipe or recovery-export feature exists yet. A sign-out can remove local credentials while server revocation is unconfirmed. For device loss, follow institution incident procedures and suspend the account if required. See the [Android recovery guide](../development/android.md).
 
 Use `bash infrastructure/scripts/backup.sh` to create checksummed PostgreSQL and private-file archives under the ignored `infrastructure/backups/` directory. Treat both archives as sensitive identity and health data. Store an encrypted copy on separate university-controlled storage and define a retention schedule.
 

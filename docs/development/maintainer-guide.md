@@ -13,22 +13,28 @@ This guide is for current work in the Rafik monorepo. It stays focused on the ma
 
 ## Repository map
 
+`apps/backend/server/api-docs.ts` serves the canonical OpenAPI file and local Swagger assets, including proxy-prefix handling and production reference-only behavior. Use `npm run test:api-docs --workspace @rafik/backend` for isolated HTTP/initializer checks without a database. Keep the [API guide](../reference/api.md) and bilingual landing explanations aligned when changing this workflow.
+
 | Path                          | Use                                                                                                                                      |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | `apps/frontend/src/features/` | Vue feature screens and task-specific components. Keep features small and follow the existing domain boundaries.                         |
 | `apps/frontend/src/app/`      | Routing and application-level composition.                                                                                               |
 | `apps/backend/server/`        | HTTP routes and server-owned domain authorization, reads and commands.                                                                   |
+| `apps/backend/openapi.json`   | Versioned OpenAPI subset for coach field endpoints; served at `/v1/openapi.json` for Swagger-compatible tooling.                         |
+| `apps/mobile/`                | Expo/React Native Android workspace for the coach field app.                                                                             |
 | `apps/backend/prisma/`        | Prisma schema and append-only SQL migrations. SQL remains authoritative for database constraints and functions Prisma cannot represent.  |
 | `apps/backend/content/`       | Canonical imported data and media manifests. Preserve pinned source, license, attribution and hashes.                                    |
 | `packages/shared/`            | Shared API contracts and generated database transport types.                                                                             |
 | `infrastructure/compose.yaml` | The sole local/self-host Compose definition.                                                                                             |
-| `infrastructure/scripts/`      | Unix deployment, backup and restore helpers used by Compose operators.                                                                  |
-| `infrastructure/cloud/`        | Per-provider Terraform starters that prepare the existing Compose stack on one VM; not cloud-verified.                                 |
+| `infrastructure/scripts/`     | Unix deployment, backup and restore helpers used by Compose operators.                                                                   |
+| `infrastructure/cloud/`       | Per-provider Terraform starters that prepare the existing Compose stack on one VM; not cloud-verified.                                   |
 | `docs/`                       | Current product, engineering and operational documentation. Raw verification receipts are separated under `docs/verification/receipts/`. |
 
 Instance branding is managed by `apps/frontend/src/features/organizations/BrandingSettings.vue`, applied in `apps/frontend/src/App.vue`, and served by `apps/backend/server/instance-branding.ts`. The initial setup claims the single-instance branding owner; the forward migration is `apps/backend/prisma/migrations/202610171500_instance_branding/`. Keep the raster signature/size checks, super-admin scope, public image response headers and database backup behavior aligned when changing it. The supported palette is accent plus light/dark page backgrounds; surfaces derive from those colors and text/accent contrast is adjusted in `apps/frontend/src/lib/branding.ts`.
 
 Generated frontend sample/catalog files are outputs of backend content sources. Edit the canonical source, run its generator, and verify the generated output; do not hand-edit generated files.
+
+The Android attendance slice lives in `apps/mobile/src/field/`: `native.ts` binds transport/credentials and SQLCipher initialization, `store.ts` serializes local transactions, `sync.ts` replays exact commands, and the React Native screens present schedule/roster/recovery. `ScoreEditor.tsx` persists raw score drafts, displays server-defined units/limits and queues results; completion is a separate operation after acknowledgment. Preserve the attendance-only cache format when adding assessment fields. Minimal transport shapes are shared through `packages/shared/src/contracts.ts`. Use the [Android guide](android.md) for commands and lifecycle details. Do not merge typed input, device acknowledgment and server acknowledgment, and never replace a roster while its commands are unresolved. Queue tests use Node SQLite rather than Android encryption; keep that evidence boundary explicit.
 
 ## Implement a user workflow
 
