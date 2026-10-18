@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Added up to 10 ordered attachments per institution message, including multi-select upload, individual previews/removal, scoped draft recovery and atomic server writes. Added an additive migration that preserves existing single-file messages, checks every attachment's permissions, and includes every attachment in private reads and account exports. Existing single-file commands remain supported.
+
+- Message attachments now appear in a preview section above the composer, with remove controls and separate photo/paperclip upload buttons. Acknowledged sends reset the uploader and clear the queued draft; failed or uncertain sends retain the attachment for recovery.
+
 - Added instance-local Swagger UI at `/v1/docs` (self-host `/api/v1/docs`) using the canonical coach OpenAPI subset and bundled assets. Local requests use native bearer authentication without cookies; production browsing disables interactive requests. Added focused HTTP/initializer checks and disabled dependency installation analytics. [Landing PR #2](https://github.com/KenseiEmam/rafik-landing/pull/2) updates bilingual documentation; existing installations need the updated backend.
 
 - Added Android assessment drafts, server-defined metrics/units/limits, precise numeric/text score capture, current-result corrections and event completion. Result commands replay after attendance; finishing waits for confirmed attendance/results and resolved drafts. A confirmed finish atomically removes the local event package while retaining server history. Native/API and rendered-device acceptance remain open.

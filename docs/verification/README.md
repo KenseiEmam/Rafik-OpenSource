@@ -1,5 +1,13 @@
 # Verification record
 
+## Multiple message attachments — 18 October 2026
+
+The additive `202610181200_message_attachments` migration applied to the preserved local database, and Prisma client generation succeeded. Shared transport types were regenerated from that schema. Frontend and backend TypeScript passed; subsequent upload error-copy changes were formatted. No test suite was run. Actual multi-file send, ordered download/export, uncertain retry, revocation and rendered phone/desktop, Arabic/theme and keyboard acceptance remain unverified. [Landing PR #3](https://github.com/KenseiEmam/rafik-landing/pull/3) pairs English/Arabic workflow and migration guidance; no landing build was run for its Markdown-only changes.
+
+## Message attachment composer — 18 October 2026
+
+Updated the pending attachment preview, photo/file upload controls and acknowledged-send cleanup. Frontend TypeScript (`npm run typecheck`) and `git diff --check` passed; the two Vue files were formatted. Browser, keyboard, Arabic/theme, phone and send/reload recovery acceptance have not been run for this change. No test suite was run; no preview data was created or removed.
+
 ## Swagger viewer — 18 October 2026
 
 Documentation links passed across 48 maintained monorepo documents; `git diff --check` passed. Temporary documentation-preview services were stopped after inspection.

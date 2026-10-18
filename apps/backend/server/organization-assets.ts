@@ -169,7 +169,14 @@ export async function getOrganizationAsset(actor: Actor, id: string) {
     if (a.purpose === "message") {
       await channelMember(tx, a.workspace_id, self, a.channel_id!);
       const sent = await tx.organization_messages.findFirst({
-        where: { channel_id: a.channel_id!, asset_id: a.id },
+        where: {
+          channel_id: a.channel_id!,
+          workspace_id: a.workspace_id,
+          OR: [
+            { asset_id: a.id },
+            { organization_message_assets: { some: { asset_id: a.id } } },
+          ],
+        },
       });
       if (a.owner_id !== self.id && !sent) throw new ApiError(403, "forbidden");
     } else if (

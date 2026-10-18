@@ -44,6 +44,10 @@ export async function organizationAccountData(actor: Actor) {
         workspace_id: true,
         body: true,
         asset_id: true,
+        organization_message_assets: {
+          select: { asset_id: true, position: true },
+          orderBy: { position: "asc" },
+        },
         created_at: true,
       },
       orderBy: { created_at: "asc" },

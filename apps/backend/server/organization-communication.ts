@@ -12,6 +12,25 @@ import {
 import { role, recipient } from "./programming.ts";
 import { ids, pageOffset } from "./service-definitions.ts";
 type Self = Awaited<ReturnType<typeof access>>;
+function messageAssets(input: Record<string, unknown>): string[] {
+  if (
+    input.asset_ids !== undefined &&
+    (!Array.isArray(input.asset_ids) || input.asset_ids.length > 10)
+  )
+    throw new ApiError(400, "invalid_request");
+  const assets =
+    input.asset_ids !== undefined
+      ? (input.asset_ids as unknown[]).map(uuid)
+      : input.asset_id
+        ? [uuid(input.asset_id)]
+        : [];
+  if (
+    new Set(assets).size !== assets.length ||
+    (input.asset_id && assets[0] !== uuid(input.asset_id))
+  )
+    throw new ApiError(400, "invalid_request");
+  return assets;
+}
 export async function channelAccess(
   tx: Tx,
   id: string,
@@ -66,7 +85,10 @@ export async function communication(
           channel_id: c.id,
           ...(before ? { sequence: { lt: BigInt(before) } } : {}),
         },
-        include: { workspace_members: { select: { name: true } } },
+        include: {
+          workspace_members: { select: { name: true } },
+          organization_message_assets: { orderBy: { position: "asc" } },
+        },
         orderBy: { sequence: "desc" },
         take: 51,
       });
@@ -98,6 +120,8 @@ export async function communication(
             ...m,
             sequence: Number(m.sequence),
             workspace_members: undefined,
+            organization_message_assets: undefined,
+            asset_ids: m.organization_message_assets.map((a) => a.asset_id),
             name: m.workspace_members.name,
           })),
         more: messages.length > 50,
@@ -203,6 +227,21 @@ export async function communicationCommand(
       return { read: true };
     });
   const authorize = async (tx: Tx, self: Self) => {
+    if (action === "send") {
+      for (const asset of messageAssets(input)) {
+        const found = await tx.organization_assets.findFirst({
+          where: {
+            id: asset,
+            workspace_id: id,
+            channel_id: key,
+            owner_id: self.id,
+            purpose: "message",
+            retired: false,
+          },
+        });
+        if (!found) throw new ApiError(403, "resource_unavailable");
+      }
+    }
     if (action === "open-group") {
       const group = await tx.organization_groups.findFirst({
         where: {
@@ -453,13 +492,7 @@ export async function communicationCommand(
         return { joined: true };
       }
       if (action === "send") {
-        const asset = input.asset_id ? uuid(input.asset_id) : null;
-        if (asset) {
-          const found = await tx.$queryRaw<
-            { id: string }[]
-          >`SELECT id FROM public.organization_assets WHERE id=${asset}::uuid AND workspace_id=${id}::uuid AND channel_id=${key}::uuid AND owner_id=${self.id}::uuid AND purpose='message' AND NOT retired`;
-          if (!found.length) throw new ApiError(403, "resource_unavailable");
-        }
+        const assets = messageAssets(input);
         if (c.archived) throw new ApiError(400, "conversation_unavailable");
         const message = await tx.organization_messages.create({
           data: {
@@ -468,10 +501,23 @@ export async function communicationCommand(
             channel_id: key,
             sender_id: self.id,
             body: textValue(input.body, 4000),
-            asset_id: asset,
+            asset_id: assets[0] || null,
           },
         });
-        return { ...message, sequence: Number(message.sequence) };
+        if (assets.length)
+          await tx.organization_message_assets.createMany({
+            data: assets.map((asset_id, position) => ({
+              message_id: message.id,
+              workspace_id: id,
+              asset_id,
+              position,
+            })),
+          });
+        return {
+          ...message,
+          asset_ids: assets,
+          sequence: Number(message.sequence),
+        };
       }
       if (c.revision !== input.revision) throw new ApiError(409, "conflict");
       if (action === "members") {

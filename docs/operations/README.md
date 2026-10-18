@@ -4,6 +4,8 @@ This is the operator entry point for builds, self-hosted deployment, configurati
 
 ## Deployment
 
+The multiple-message-attachment update requires migration `202610181200_message_attachments` before running the updated backend. It adds ordered links and backfills existing single-file messages without removing the compatibility column. Restart the backend after migration/client generation; existing file storage and backup procedures are unchanged.
+
 Updated backends include Swagger reference at `/api/v1/docs` on the self-hosted web origin, with JSON at `/api/v1/openapi.json`. Production (`NODE_ENV=production`) disables interactive viewer requests. The viewer uses bundled assets and no external validator; no additional service or Compose definition is needed. Direct backend access uses `/v1/docs`. See the [API guide](../reference/api.md) for local exploration.
 
 The supported deployment foundation is the self-host Docker Compose profile on a Unix server. The [infrastructure guide](../../infrastructure/README.md) is the canonical source for prerequisites, environment setup, TLS, startup, and service health checks. Use the committed example only as a template; set a unique project name and replace every secret before startup.

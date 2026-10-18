@@ -157,6 +157,17 @@ export type Database = { public: { Tables: {
         target_muscle: string | null
         source_ref: string | null
     } }
+    instance_branding: { Row: {
+        id: boolean
+        owner_id: string | null
+        name: string
+        accent: string
+        background_light: string
+        background_dark: string
+        logo: string | null
+        logo_mime: string | null
+        updated_at: string
+    } }
     invitations: { Row: {
         id: string
         coach_id: string
@@ -299,6 +310,8 @@ export type Database = { public: { Tables: {
         archived: boolean
         created_at: string
         private_pair: boolean
+        private_pair_key: string | null
+        conversation_group_id: string | null
     } }
     organization_event_people: { Row: {
         workspace_id: string
@@ -430,6 +443,12 @@ export type Database = { public: { Tables: {
         removed: boolean
         created_at: string
         updated_at: string
+    } }
+    organization_message_assets: { Row: {
+        message_id: string
+        workspace_id: string
+        asset_id: string
+        position: number
     } }
     organization_messages: { Row: {
         id: string

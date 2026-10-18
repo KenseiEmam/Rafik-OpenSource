@@ -65,19 +65,19 @@ model identity_sessions {
 }
 
 model mobile_sessions {
-  id                         String    @id @db.Uuid
-  user_id                    String    @db.Uuid
-  access_token_hash          String    @unique
-  refresh_token_hash         String    @unique
-  previous_refresh_token_hash String?  @unique
-  access_expires_at          DateTime  @db.Timestamptz(6)
-  expires_at                 DateTime  @db.Timestamptz(6)
-  absolute_expires_at        DateTime  @db.Timestamptz(6)
-  created_at                 DateTime  @default(now()) @db.Timestamptz(6)
-  last_seen_at               DateTime  @default(now()) @db.Timestamptz(6)
-  revoked_at                 DateTime? @db.Timestamptz(6)
-  device_name                String    @default("Android device")
-  users                      users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id                          String    @id @db.Uuid
+  user_id                     String    @db.Uuid
+  access_token_hash           String    @unique
+  refresh_token_hash          String    @unique
+  previous_refresh_token_hash String?   @unique
+  access_expires_at           DateTime  @db.Timestamptz(6)
+  expires_at                  DateTime  @db.Timestamptz(6)
+  absolute_expires_at         DateTime  @db.Timestamptz(6)
+  created_at                  DateTime  @default(now()) @db.Timestamptz(6)
+  last_seen_at                DateTime  @default(now()) @db.Timestamptz(6)
+  revoked_at                  DateTime? @db.Timestamptz(6)
+  device_name                 String    @default("Android device")
+  users                       users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([user_id, revoked_at, expires_at])
   @@schema("identity")
@@ -1345,19 +1345,35 @@ model organization_channels {
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model organization_messages {
-  id                    String                @id @db.Uuid
-  sequence              BigInt                @unique @default(autoincrement())
-  workspace_id          String                @db.Uuid
-  channel_id            String                @db.Uuid
-  sender_id             String                @db.Uuid
-  body                  String
-  created_at            DateTime              @default(now()) @db.Timestamptz(6)
-  asset_id              String?               @db.Uuid
-  organization_channels organization_channels @relation(fields: [channel_id, workspace_id], references: [id, workspace_id], onDelete: Cascade, onUpdate: NoAction)
-  workspace_members     workspace_members     @relation(fields: [sender_id, workspace_id], references: [id, workspace_id], onDelete: NoAction, onUpdate: NoAction)
-  organization_assets   organization_assets?  @relation(fields: [workspace_id, asset_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+  id                          String                        @id @db.Uuid
+  sequence                    BigInt                        @unique @default(autoincrement())
+  workspace_id                String                        @db.Uuid
+  channel_id                  String                        @db.Uuid
+  sender_id                   String                        @db.Uuid
+  body                        String
+  created_at                  DateTime                      @default(now()) @db.Timestamptz(6)
+  asset_id                    String?                       @db.Uuid
+  organization_channels       organization_channels         @relation(fields: [channel_id, workspace_id], references: [id, workspace_id], onDelete: Cascade, onUpdate: NoAction)
+  workspace_members           workspace_members             @relation(fields: [sender_id, workspace_id], references: [id, workspace_id], onDelete: NoAction, onUpdate: NoAction)
+  organization_assets         organization_assets?          @relation(fields: [workspace_id, asset_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+  organization_message_assets organization_message_assets[]
 
+  @@unique([id, workspace_id])
   @@index([channel_id, sequence(sort: Desc)], map: "organization_messages_page")
+  @@schema("public")
+}
+
+model organization_message_assets {
+  message_id            String                @db.Uuid
+  workspace_id          String                @db.Uuid
+  asset_id              String                @db.Uuid
+  position              Int
+  organization_messages organization_messages @relation(fields: [message_id, workspace_id], references: [id, workspace_id], onDelete: Cascade, onUpdate: NoAction)
+  organization_assets   organization_assets   @relation(fields: [workspace_id, asset_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([message_id, asset_id])
+  @@unique([message_id, position])
+  @@index([workspace_id, asset_id], map: "organization_message_assets_asset")
   @@schema("public")
 }
 
@@ -1512,22 +1528,23 @@ model organization_nutrition_sharing {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model organization_assets {
-  id                    String                  @id @db.Uuid
-  workspace_id          String                  @db.Uuid
-  owner_id              String                  @db.Uuid
-  purpose               String
-  channel_id            String?                 @db.Uuid
-  filename              String
-  media_type            String
-  bytes                 Int
-  digest                String
-  retired               Boolean                 @default(false)
-  created_at            DateTime                @default(now()) @db.Timestamptz(6)
-  revision              Int                     @default(1)
-  organization_channels organization_channels?  @relation(fields: [workspace_id, channel_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
-  workspaces            workspaces              @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  workspace_members     workspace_members       @relation(fields: [workspace_id, owner_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
-  organization_messages organization_messages[]
+  id                          String                        @id @db.Uuid
+  workspace_id                String                        @db.Uuid
+  owner_id                    String                        @db.Uuid
+  purpose                     String
+  channel_id                  String?                       @db.Uuid
+  filename                    String
+  media_type                  String
+  bytes                       Int
+  digest                      String
+  retired                     Boolean                       @default(false)
+  created_at                  DateTime                      @default(now()) @db.Timestamptz(6)
+  revision                    Int                           @default(1)
+  organization_channels       organization_channels?        @relation(fields: [workspace_id, channel_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
+  workspaces                  workspaces                    @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  workspace_members           workspace_members             @relation(fields: [workspace_id, owner_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+  organization_messages       organization_messages[]
+  organization_message_assets organization_message_assets[]
 
   @@unique([workspace_id, id])
   @@index([workspace_id, owner_id, created_at(sort: Desc), id], map: "organization_assets_owner")

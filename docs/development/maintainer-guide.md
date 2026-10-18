@@ -13,6 +13,10 @@ This guide is for current work in the Rafik monorepo. It stays focused on the ma
 
 ## Repository map
 
+Institution message composition lives in `apps/frontend/src/features/organizations/ChannelThread.vue`. Its pending-attachment section uses `OrganizationAsset.vue`; `OrganizationUpload.vue` has an optional composer mode with photo/file icon pickers. Other upload consumers retain their existing labeled controls. Keep acknowledged-send cleanup ordered after draft writes, and preserve attachments on failed/uncertain sends.
+
+Multiple message attachments use ordered `organization_message_assets` links, migrated from legacy `asset_id` by `202610181200_message_attachments`. Keep communication command/read handling, byte-read authorization and account export aligned. The web composer restores both the current `attachments` draft array and old single-file drafts. Batch upload failures retain earlier successful selections and the uncertain upload ID for safe retry; message send remains one atomic operation.
+
 `apps/backend/server/api-docs.ts` serves the canonical OpenAPI file and local Swagger assets, including proxy-prefix handling and production reference-only behavior. Use `npm run test:api-docs --workspace @rafik/backend` for isolated HTTP/initializer checks without a database. Keep the [API guide](../reference/api.md) and bilingual landing explanations aligned when changing this workflow.
 
 | Path                          | Use                                                                                                                                      |

@@ -9,6 +9,7 @@ import CommandStatus from '../teams/CommandStatus.vue'
 import OrganizationUpload, { type UploadedAsset } from '../../components/OrganizationUpload.vue'
 import OrganizationAsset from '../../components/OrganizationAsset.vue'
 import ChannelEditor from './ChannelEditor.vue'
+import { PhImage, PhPaperclip, PhX } from '@phosphor-icons/vue'
 const props = defineProps<{ workspace: string; view: string; id: string; base: string }>(),
   emit = defineEmits<{ refresh: [] }>()
 type Message = {
@@ -16,6 +17,7 @@ type Message = {
   sequence: number
   sender_id: string
   asset_id?: string
+  asset_ids?: string[]
   body: string
   name: string
   created_at: string
@@ -33,7 +35,8 @@ const endpoint = `/v1/workspaces/${props.workspace}/communication`,
 const data = ref<Detail>(),
   messages = ref<Message[]>([]),
   text = ref(''),
-  attachment = ref<UploadedAsset>(),
+  attachments = ref<UploadedAsset[]>([]),
+  uploadVersion = ref(0),
   uploading = ref(false),
   error = ref(''),
   loading = ref(true),
@@ -51,6 +54,7 @@ let disposed = false,
   lastRead = 0,
   reading = false,
   poll: ReturnType<typeof setInterval>
+let draftWrite = Promise.resolve()
 const post = (args: Record<string, unknown>) =>
   request(endpoint, {
     method: 'POST',
@@ -66,10 +70,14 @@ const command = useCommand<'send' | 'archive'>(
   async (name, _, args) => {
     if (name === 'send') {
       ready.value = false
-      text.value = ''
-      attachment.value = undefined
+      await draftWrite
       await removeDraft(key)
-      ready.value = true
+      text.value = ''
+      attachments.value = []
+      uploadVersion.value++
+      draftSaved.value = false
+      draftError.value = ''
+      ready.value = !disposed
     }
     await load(false, true)
     emit('refresh')
@@ -87,7 +95,12 @@ const command = useCommand<'send' | 'archive'>(
   },
 )
 const locked = computed(
-  () => uploading.value || command.state.busy || !!command.state.pending || !command.state.ready,
+  () =>
+    !ready.value ||
+    uploading.value ||
+    command.state.busy ||
+    !!command.state.pending ||
+    !command.state.ready,
 )
 async function observe() {
   const el = log.value,
@@ -177,8 +190,13 @@ function send() {
     view: props.view,
     operation: crypto.randomUUID(),
     message: crypto.randomUUID(),
-    body: text.value.trim() || attachment.value?.filename,
-    asset_id: attachment.value?.id,
+    body:
+      text.value.trim() ||
+      attachments.value
+        .map((a) => a.filename)
+        .join(', ')
+        .slice(0, 4000),
+    asset_ids: attachments.value.map((a) => a.id),
   })
 }
 function archive() {
@@ -198,24 +216,42 @@ function stamp(value: string) {
     timeZone: profile.value?.timezone || 'UTC',
   }).format(new Date(value))
 }
-watch([text, attachment], async () => {
-  draftSaved.value = false
-  if (!ready.value) return
-  try {
-    const draft = { text: text.value, attachment: attachment.value }
-    await storeDraft(key, draft)
-    draftSaved.value = draft.text === text.value && draft.attachment?.id === attachment.value?.id
-    draftError.value = ''
-  } catch (e) {
-    draftError.value = errorMessage(e)
-  }
-})
+watch(
+  [text, attachments],
+  () => {
+    draftSaved.value = false
+    if (!ready.value) return
+    const draft = { text: text.value, attachments: attachments.value }
+    draftWrite = draftWrite.then(async () => {
+      try {
+        await storeDraft(key, draft)
+        if (disposed || !ready.value) return
+        draftSaved.value = draft.text === text.value && draft.attachments === attachments.value
+        draftError.value = ''
+      } catch (e) {
+        if (!disposed) draftError.value = errorMessage(e)
+      }
+    })
+  },
+  { flush: 'sync' },
+)
+function removeAttachment(id: string) {
+  attachments.value = attachments.value.filter((a) => a.id !== id)
+  uploadVersion.value++
+}
+function addAttachment(asset: UploadedAsset) {
+  if (attachments.value.length < 10 && !attachments.value.some((a) => a.id === asset.id))
+    attachments.value = [...attachments.value, asset]
+}
 onMounted(async () => {
-  const draft = await getDraft<string | { text: string; attachment?: UploadedAsset }>(key).catch(
-    () => undefined,
-  )
+  const draft = await getDraft<
+    string | { text: string; attachment?: UploadedAsset; attachments?: UploadedAsset[] }
+  >(key).catch(() => undefined)
   text.value = typeof draft === 'string' ? draft : draft?.text || ''
-  attachment.value = typeof draft === 'object' ? draft.attachment : undefined
+  attachments.value =
+    typeof draft === 'object'
+      ? draft.attachments || (draft.attachment ? [draft.attachment] : [])
+      : []
   ready.value = true
   await load(false, true)
   poll = setInterval(() => {
@@ -318,7 +354,14 @@ onUnmounted(() => {
           {{ message.sender_id === data.self ? l('You', 'أنت') : message.name }}
         </p>
         <p dir="auto">{{ message.body }}</p>
-        <OrganizationAsset v-if="message.asset_id" :id="message.asset_id" compact />
+        <div v-if="message.asset_ids?.length || message.asset_id" class="message-asset-list">
+          <OrganizationAsset
+            v-for="asset in message.asset_ids?.length ? message.asset_ids : [message.asset_id!]"
+            :key="asset"
+            :id="asset"
+            compact
+          />
+        </div>
         <time :datetime="message.created_at">{{ stamp(message.created_at) }}</time>
       </article>
     </div>
@@ -327,7 +370,7 @@ onUnmounted(() => {
     </button>
     <form v-if="data && !editing" class="message-compose" @submit.prevent="send">
       <CommandStatus :command="command" :show-notice="false" />
-      <small v-if="text && draftSaved && !locked" role="status">{{
+      <small v-if="(text || attachments.length) && draftSaved && !locked" role="status">{{
         l('Draft saved on this device', 'حُفظت المسودة على هذا الجهاز')
       }}</small>
       <p v-if="draftError" role="alert" class="notice error">{{ draftError }}</p>
@@ -339,8 +382,44 @@ onUnmounted(() => {
           )
         }}
       </p>
-      <template v-else
-        ><label class="sr-only" :for="'compose-' + id">{{
+      <template v-else>
+        <section
+          v-if="attachments.length"
+          class="pending-attachments"
+          :aria-label="l('Attachments', 'المرفقات')"
+        >
+          <h3>{{ l('Attachments', 'المرفقات') }} ({{ attachments.length }}/10)</h3>
+          <div class="pending-attachment-list">
+            <div v-for="attachment in attachments" :key="attachment.id" class="pending-attachment">
+              <div class="pending-attachment-name">
+                <PhImage
+                  v-if="attachment.media_type.startsWith('image/')"
+                  :size="20"
+                  aria-hidden="true"
+                />
+                <PhPaperclip v-else :size="20" aria-hidden="true" />
+                <span dir="auto">{{ attachment.filename }}</span>
+              </div>
+              <button
+                type="button"
+                class="attachment-remove"
+                :disabled="locked"
+                :aria-label="l('Remove attachment', 'إزالة المرفق')"
+                :title="l('Remove attachment', 'إزالة المرفق')"
+                @click="removeAttachment(attachment.id)"
+              >
+                <PhX :size="18" aria-hidden="true" />
+              </button>
+              <OrganizationAsset
+                :key="attachment.id"
+                :id="attachment.id"
+                :name="attachment.filename"
+                compact
+              />
+            </div>
+          </div>
+        </section>
+        <label class="sr-only" :for="'compose-' + id">{{
           l('Write a message', 'اكتب رسالة')
         }}</label
         ><textarea
@@ -352,29 +431,18 @@ onUnmounted(() => {
           rows="2"
           :placeholder="l('Write a message…', 'اكتب رسالة…')"
         />
-        <details class="attachment-controls">
-          <summary>
-            {{ attachment ? attachment.filename : l('Attach a file', 'إرفاق ملف') }}
-          </summary>
-          <OrganizationUpload
-            :workspace="workspace"
-            :view="view"
-            :channel="id"
-            purpose="message"
-            :disabled="locked"
-            @busy="uploading = $event"
-            @uploaded="attachment = $event"
-          />
-          <button
-            v-if="attachment"
-            type="button"
-            class="text-link"
-            :disabled="locked"
-            @click="attachment = undefined"
-          >
-            {{ l('Remove attachment', 'إزالة المرفق') }}
-          </button>
-        </details>
+        <OrganizationUpload
+          :key="uploadVersion"
+          :workspace="workspace"
+          :view="view"
+          :channel="id"
+          purpose="message"
+          composer
+          :remaining="10 - attachments.length"
+          :disabled="locked || attachments.length >= 10"
+          @busy="uploading = $event"
+          @uploaded="addAttachment"
+        />
         <div class="composer-actions">
           <small>{{
             data.channel.private_pair
@@ -384,7 +452,7 @@ onUnmounted(() => {
                   'محادثة جماعية · يمكن لمديري المؤسسة الانضمام',
                 )
           }}</small
-          ><button class="button" :disabled="locked || (!text.trim() && !attachment)">
+          ><button class="button" :disabled="locked || (!text.trim() && !attachments.length)">
             {{ l('Send message', 'إرسال الرسالة') }}
           </button>
         </div></template
@@ -415,5 +483,69 @@ onUnmounted(() => {
 .message-bubble p {
   overflow-wrap: anywhere;
   white-space: pre-wrap;
+}
+.pending-attachments {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+}
+.pending-attachments h3 {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.pending-attachment {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--page);
+}
+.pending-attachment-list,
+.message-asset-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: 0.5rem;
+  min-width: 0;
+}
+.pending-attachment-list {
+  max-height: 180px;
+  overflow-y: auto;
+}
+.pending-attachment-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  font-size: 0.85rem;
+}
+.pending-attachment-name svg {
+  flex: none;
+}
+.pending-attachment-name span {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.attachment-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+}
+.pending-attachment :deep(.organization-asset) {
+  grid-column: 1 / -1;
+}
+.pending-attachment :deep(img),
+.pending-attachment :deep(video) {
+  max-height: 110px;
 }
 </style>
