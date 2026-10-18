@@ -60,6 +60,74 @@ export async function eventAccess(
     throw new ApiError(403, "event_unavailable");
   return item;
 }
+/** Web staff index: scheduled group training and assessments, independent of workout logs. */
+export async function scheduledEvents(
+  actor: Actor,
+  id: string,
+  q: URLSearchParams,
+) {
+  const view = role(q.get("view"));
+  if (view === "trainee") throw new ApiError(403, "forbidden");
+  const kind = q.get("kind") || "all";
+  const state = q.get("state") || "all";
+  if (
+    !["all", "training", "assessment"].includes(kind) ||
+    !["all", "scheduled", "completed", "cancelled"].includes(state)
+  )
+    throw new ApiError(400, "invalid_request");
+  const offset = pageOffset(q.get("offset"));
+  const search = (q.get("search") || "").trim().slice(0, 100);
+  return scoped(actor, id, [view], async (tx, self) => {
+    const where = {
+      workspace_id: id,
+      ...(kind !== "all" ? { kind } : {}),
+      ...(state !== "all" ? { state } : {}),
+      ...(search
+        ? { title: { contains: search, mode: "insensitive" as const } }
+        : {}),
+      ...(view === "trainer"
+        ? {
+            organization_event_people: {
+              some: { member_id: self.id, duty: "staff" },
+            },
+          }
+        : {}),
+    };
+    const [items, total] = await Promise.all([
+      tx.organization_events.findMany({
+        where,
+        skip: offset,
+        take: 24,
+        orderBy: [{ starts_at: "desc" }, { id: "asc" }],
+        select: {
+          id: true,
+          title: true,
+          kind: true,
+          state: true,
+          starts_at: true,
+          ends_at: true,
+          timezone: true,
+          location: true,
+          _count: {
+            select: {
+              organization_event_people: { where: { duty: "trainee" } },
+            },
+          },
+        },
+      }),
+      tx.organization_events.count({ where }),
+    ]);
+    return {
+      items: items.map(({ _count, ...item }) => ({
+        ...item,
+        athlete_count: _count.organization_event_people,
+      })),
+      total,
+      next: offset + 24 < total ? offset + 24 : null,
+    };
+  });
+}
+
 export async function calendar(actor: Actor, id: string, q: URLSearchParams) {
   const view = role(q.get("view"));
   return scoped(actor, id, [view], async (tx, self) => {
@@ -82,6 +150,87 @@ export async function calendar(actor: Actor, id: string, q: URLSearchParams) {
         )
       )
         throw new ApiError(403, "forbidden");
+      if (q.get("historyOnly") === "true") {
+        if (!historyMember) throw new ApiError(400, "invalid_request");
+        const kind = q.get("historyKind") || "results";
+        if (!["attendance", "results"].includes(kind))
+          throw new ApiError(400, "invalid_request");
+        if (kind === "attendance") {
+          const rows = await tx.workspace_events.findMany({
+            where: {
+              workspace_id: id,
+              subject_id: item.id,
+              kind: "attendance_recorded",
+              detail: { path: ["member"], equals: historyMember },
+            },
+            orderBy: [{ created_at: "desc" }, { id: "desc" }],
+            skip: historyOffset,
+            take: 26,
+            select: {
+              id: true,
+              actor_id: true,
+              created_at: true,
+              detail: true,
+            },
+          });
+          const actors = await tx.workspace_members.findMany({
+            where: {
+              workspace_id: id,
+              user_id: {
+                in: rows.flatMap((r) => (r.actor_id ? [r.actor_id] : [])),
+              },
+            },
+            select: { user_id: true, id: true, name: true },
+          });
+          return {
+            items: rows.slice(0, 25).map((r) => {
+              const detail = r.detail as Record<string, unknown>;
+              const actor = actors.find((a) => a.user_id === r.actor_id);
+              return {
+                id: r.id,
+                kind,
+                member_id: historyMember,
+                recorded_at: r.created_at,
+                recorded_by: actor?.id || null,
+                recorded_name: actor?.name || null,
+                previous_attendance: detail.previous_attendance,
+                attendance: detail.attendance,
+              };
+            }),
+            next: rows.length > 25 ? historyOffset + 25 : null,
+          };
+        }
+        const rows = await tx.assessment_result_history.findMany({
+          where: { ...where, member_id: historyMember },
+          orderBy: [{ recorded_at: "desc" }, { id: "desc" }],
+          skip: historyOffset,
+          take: 26,
+        });
+        const actors = await tx.workspace_members.findMany({
+          where: {
+            workspace_id: id,
+            id: { in: rows.map((r) => r.recorded_by) },
+          },
+          select: { id: true, name: true },
+        });
+        return {
+          items: rows
+            .slice(0, 25)
+            .map((r) => ({
+              id: r.id,
+              kind,
+              member_id: r.member_id,
+              revision: r.revision,
+              recorded_at: r.recorded_at,
+              recorded_by: r.recorded_by,
+              recorded_name:
+                actors.find((a) => a.id === r.recorded_by)?.name || null,
+              values: (r.document as Record<string, unknown>).values,
+              note: (r.document as Record<string, unknown>).note,
+            })),
+          next: rows.length > 25 ? historyOffset + 25 : null,
+        };
+      }
       const history =
         q.get("summary") === "true"
           ? []
@@ -239,7 +388,12 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
       const authorized = await eventPeople(tx, id, self, view, input);
       const makeups = Array.isArray(input.makeups) ? input.makeups : [];
       for (const choice of makeups)
-        if (choice && typeof choice === "object" && "makeup_for" in choice && choice.makeup_for) {
+        if (
+          choice &&
+          typeof choice === "object" &&
+          "makeup_for" in choice &&
+          choice.makeup_for
+        ) {
           const makeup_for = uuid(String(choice.makeup_for));
           const member = uuid(String(choice.member));
           const original = (
@@ -300,13 +454,20 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
             throw new ApiError(409, "conflict");
         }
         const makeups = new Map<string, string>();
-        if (Array.isArray(input.makeups)) for (const entry of input.makeups) {
-          if (!entry || typeof entry !== "object") continue;
-          const choice = entry as Record<string, unknown>;
-          if (typeof choice.member === "string" && typeof choice.makeup_for === "string")
-            makeups.set(uuid(choice.member), uuid(choice.makeup_for));
-        }
-        if ([...makeups.keys()].some((member) => !participants.includes(member))) throw new ApiError(400, "invalid_recipients");
+        if (Array.isArray(input.makeups))
+          for (const entry of input.makeups) {
+            if (!entry || typeof entry !== "object") continue;
+            const choice = entry as Record<string, unknown>;
+            if (
+              typeof choice.member === "string" &&
+              typeof choice.makeup_for === "string"
+            )
+              makeups.set(uuid(choice.member), uuid(choice.makeup_for));
+          }
+        if (
+          [...makeups.keys()].some((member) => !participants.includes(member))
+        )
+          throw new ApiError(400, "invalid_recipients");
         const list = [];
         for (let i = 0; i < times.length; i++) {
           const start = new Date(times[i].starts_at),
@@ -357,7 +518,9 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
           });
           list.push(item);
         }
-        await event(tx, actor, id, "calendar_scheduled", key, { count: list.length });
+        await event(tx, actor, id, "calendar_scheduled", key, {
+          count: list.length,
+        });
         return list;
       }
       const item = await eventAccess(tx, id, self, view, key);

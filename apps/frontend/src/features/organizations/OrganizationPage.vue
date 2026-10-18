@@ -381,7 +381,7 @@ onMounted(async () => {
             <RouterLink class="button" :to="base + '/training'">{{
               view === 'trainee'
                 ? l('Open my training', 'فتح تدريبي')
-                : l('Review training', 'مراجعة التدريب')
+                : l('Athlete plans', 'خطط الرياضيين')
             }}</RouterLink
             ><RouterLink
               v-if="view !== 'trainee'"

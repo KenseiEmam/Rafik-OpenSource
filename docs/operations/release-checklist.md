@@ -2,7 +2,22 @@
 
 Use this checklist for a proposed self-hosted university release. Checking an item means its evidence has been reviewed for the release candidate; it does not claim that a release has occurred.
 
+## Public beta scope
+
+Institute outreach can invite evaluation of a clearly labelled public beta; an invited-tester cohort is not a prerequisite. Announce an actual tagged/packageable version with installation instructions and known limits. Do not equate a planned announcement date with completed recovery/security evidence. Real sensitive athlete records still require the institution's own approval. Cloud-provider validation and first-user field feedback remain the founder-deferred backlog.
+
 ## Build and deploy
+
+### Android Step 3 — beta packaging and installation
+
+- [ ] Build and verify the Squire `1.0.0-beta.1` APK using the [release procedure](android-release.md); record its checksum, certificate and exact source revision.
+- [ ] Back up the authorized private signing key/passwords outside the checkout.
+- [ ] Prove fresh installation and startup without Metro on a separate test device, preserving existing development data.
+- [ ] Prove offline cold startup and queued work across an actual version upgrade signed by the same key.
+- [ ] Record supported device/OS/layout/accessibility coverage and explicit beta limits.
+- [ ] Publish an annotated beta tag and matching English/Arabic landing release/install/upgrade documentation; publish download assets only after package acceptance.
+
+### Self-hosted web/API
 
 - [ ] Build from the approved revision; review migrations, shared types and bundled content/media provenance.
 - [ ] Confirm required focused tests and build checks pass on the final source. Record commands and limits in [verification](../verification/README.md).

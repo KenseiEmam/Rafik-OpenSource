@@ -663,11 +663,18 @@ onMounted(load)
   max-width: 1100px;
 }
 .event-overview {
-  padding-block: 0 24px;
-  border-bottom: 1px solid var(--line);
+  padding: 24px 28px;
+  margin-block: 20px;
+  border: 1px solid var(--line);
+  border-inline-start: 4px solid var(--accent);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 8px 24px #00000008;
+  overflow-wrap: anywhere;
 }
 .event-when {
   font-weight: 650;
+  font-size: 1.15rem;
 }
 .event-tools {
   display: flex;

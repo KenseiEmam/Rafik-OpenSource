@@ -1,0 +1,82 @@
+{
+  "date": "2026-10-18",
+  "scope": "Node SQLite queue + native HTTP against disposable migrated PostgreSQL/API",
+  "node": "24.21.0",
+  "queue": {
+    "tests": 18,
+    "passed": 18,
+    "command": "node --experimental-strip-types --test --test-isolation=none tests/attendance.test.ts"
+  },
+  "integration": {
+    "tests": 1,
+    "passed": 1,
+    "command": "npm run mobile:acceptance",
+    "covers": [
+      "native login/refresh/reuse detection/logout",
+      "lost attendance, score and completion acknowledgements against real server commits",
+      "identical receipt retry and edited UUID payload rejection",
+      "Arabic decimal score",
+      "score history pagination 25 plus 3 without duplicate entries",
+      "outside-account/wrong-participant history denial",
+      "stale revision conflict pauses queue without rewriting payload",
+      "revocation blocks exact operation replay including acknowledged receipts"
+    ],
+    "final_run": {
+      "database": "rafik_browser_1792340369509",
+      "started_at": "2026-10-18T16:19:29.511Z",
+      "finished_at": "2026-10-18T16:19:58.104Z",
+      "passed": true,
+      "cleaned": true
+    },
+    "device_fixture_run": {
+      "database": "rafik_browser_1792352387524",
+      "passed": true,
+      "cleaned": true
+    }
+  },
+  "device": {
+    "status": "focused_slice_passed",
+    "platform": "Android 14 x86_64 emulator-5554 Small_Tablet",
+    "viewport": "1280x800 landscape, density 320",
+    "profile_created": 10,
+    "profile_name": "RafikAcceptance-1792339858486",
+    "profile_removed": true,
+    "covers": [
+      "synthetic native login and encrypted-store initialization",
+      "score draft persistence feedback and offline uncertain result",
+      "force-stop temporary app, restore network for Metro, reopen and replay saved score",
+      "one acknowledged score result 12.5 at revision 1",
+      "rendered attendance and score history",
+      "acknowledged event completion and read-only summary",
+      "offline attendance recovery warning, native chooser and cancel preserving pending entry",
+      "separate server comparison read",
+      "inspected English light history and Arabic dark recovery"
+    ],
+    "encryption_evidence": "cipher_version initialization guard passed; first 16 database bytes are not plaintext SQLite header; no keys extracted",
+    "screenshots": ["2026-10-18-mobile-score-history.png", "2026-10-18-mobile-recovery-ar-dark.png"]
+  },
+  "cleanup": {
+    "isolated_API_55341": "stopped",
+    "database_rafik_browser_1792339858486": "dropped",
+    "preview_data": "untouched",
+    "database_rafik_browser_1792352387524": "dropped",
+    "temporary_Android_profile_10": "removed after exact name verification",
+    "temporary_shared_files": "removed",
+    "ignored_fixture_helpers": "removed",
+    "emulator_network": "Wi-Fi and mobile data restored",
+    "night_mode": "restored to no",
+    "owner_app": "foreground restored",
+    "runner": "noninteractive stdin was closed; verified API/runner processes manually stopped"
+  },
+  "limits": [
+    "No physical-device acceptance",
+    "Cold offline startup without Metro not exercised; network restored after force-stop for development bundle",
+    "Portrait/phone and accessibility matrix remain open",
+    "Rendered native conflict/revocation and account-switch recovery remain open",
+    "Event-staff reassignment is distinct from membership revocation and remains untested",
+    "SQLCipher header/initialization evidence is not a cryptographic/key-extraction audit",
+    "No external share destination selected or delivery claimed",
+    "No app upgrade, distributable APK or release acceptance",
+    "Initial API fixture reused a deliberately revoked session; corrected before passing runs"
+  ]
+}

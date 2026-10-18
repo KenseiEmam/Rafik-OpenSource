@@ -2,6 +2,8 @@
 
 Repository: [`KenseiEmam/Rafik-OpenSource`](https://github.com/KenseiEmam/Rafik-OpenSource).
 
+**Beta candidate: Squire 1.0.0-beta.1.** Standalone Android packaging uses `npm run mobile:release`; follow the [signing, installation and update guide](docs/operations/android-release.md). Release/device acceptance limits are tracked in [verification](docs/verification/README.md).
+
 Rafik is being redirected to help universities and university coaches support young athletes through training, attendance, performance, and relevant health workflows. The target is an open-source product that each university can deploy on infrastructure it controls, without a Rafik software subscription.
 
 ## Project status
@@ -10,7 +12,15 @@ The approved migration is staged in [the requirements and acceptance plan](docs/
 
 Each university is expected to operate a separate instance and control its users, data, files, secrets, backups, retention, and infrastructure. Hosting and maintenance costs are the university's responsibility.
 
+Staff can browse current **Athlete plans**, **Session history** and **Nutrition plans** across their authorized roster without selecting an athlete first. **Events & assessments** lists scheduled training and assessments separately from workout logs. Plan lists include optional filters and pagination. See in-app Help and the [API guide](docs/reference/api.md) for scope and date rules.
+
 ## Technology and repository map
+
+The Android prototype includes English/Arabic controls, online correction history and explicit recovery sharing; see the [Android guide](docs/development/android.md) for privacy and acceptance limits.
+
+Focused native API/queue checks: `npm run mobile:acceptance` (Node 24 and local Docker); this uses a disposable database/API and cleans up automatically. See the [Android guide](docs/development/android.md#focused-checks).
+
+Android build/install: `npm run mobile:android`; ordinary mobile JavaScript/UI development after installation: `npm run mobile:start`. The [Android guide](docs/development/android.md#windows-laptop-startup-and-rebuilds) describes the Windows path/concurrency helper and emulator requirements.
 
 Explore the supported coach API in [local Swagger UI](http://127.0.0.1:55331/v1/docs) after starting/restarting the updated backend. See the [API guide](docs/reference/api.md) for authentication and self-hosted URLs.
 

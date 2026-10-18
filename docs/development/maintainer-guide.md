@@ -2,6 +2,10 @@
 
 This guide is for current work in the Rafik monorepo. It stays focused on the maintained codebase; old phase-by-phase notes are in the [archive](../archive/README.md).
 
+Android release packaging uses `apps/mobile/scripts/release.mjs`, `android-release.gradle` and maintained release manifest/network configuration. Signing files under `apps/mobile/.signing/` are private, ignored and required for future updates. Generated `android/` files are disposable. Follow [Android release operations](../operations/android-release.md); never distribute a debug-signed APK or uninstall a user's development app to bypass a signature mismatch.
+
+Android Metro startup must explicitly target the installed native build: the mobile workspace uses `expo start --dev-client`. Do not switch the shared start script to Expo Go; SQLCipher requires the native build. See the [Android guide](android.md).
+
 ## Read these first
 
 - [Requirements and stage gates](../requirements/README.md) define approved product direction and what is not accepted yet.
@@ -12,6 +16,20 @@ This guide is for current work in the Rafik monorepo. It stays focused on the ma
 - [Verification summary](../verification/README.md) records checks actually run and their limits.
 
 ## Repository map
+
+`npm run mobile:acceptance` runs `apps/mobile/scripts/acceptance.mjs` on Node 24. It creates only a uniquely named disposable database/API on 55341, deploys migrations and runs `apps/backend/tests/field-acceptance.test.ts`. The shared fixture honors `RAFIK_TEST_API`; the field test refuses non-disposable database/API targets. Default mode cleans up automatically. `--device` retains synthetic fixtures until `done` on stdin or Ctrl+C in an interactive terminal; never interrupt a normal preview for these checks.
+
+Android `EventHistory.tsx` uses calendar `historyOnly` reads and the shared `FieldHistoryPage` contract. `RecoveryPanel.tsx` compares a fresh roster in memory and shares durable unresolved work through React Native Share; it never replaces the local roster. Keep owner scoping, no-credential projection, explicit plain-text confirmation, in-flight guards and share-size rejection/individual fallback intact.
+
+`Language.tsx` owns persisted device locale; `translations.ts` includes English-key mappings for old persisted errors. `LanguageControl.tsx` changes language without remounting field editors. `ui.tsx` sets locale direction and Android paragraph-start alignment. Keep English/Arabic labels and dynamic validation paired; preserve LTR URL/email controls and Arabic numeral normalization. Do not apply browser CSS alignment assumptions to React Native Android.
+
+`ScheduledEvents.vue` serves staff `/events`, linked from navigation, Calendar and Session history. `scheduledEvents` in `organization-calendar.ts` returns 24 rows with full totals and optional title/kind/state filters; preserve designated-staff authorization. The existing calendar endpoint and mobile OpenAPI contract are unchanged. Android completion/start-time presentation lives in `WorkspaceScreen.tsx` and semantic completed-card styles in `ui.tsx`; preserve timer cleanup, read-only completed state and server acknowledgement boundaries.
+
+Staff `/training` dispatches through `TrainingRoute.vue` to `AthletePlans.vue`; athlete training retains `OrganizationTraining.vue`. `/session-history` uses `SessionHistory.vue` and the existing delivery history API. `NutritionRoute.vue` shows `NutritionPlans.vue` until a subject is selected, then keys the existing editor by subject/version. Keep list pagination, optional subject filters, stale-response guards and server authorization together. New server reads live in `athlete-plans.ts` and `nutrition-plan-index.ts`; no schema migration is needed. Restart the API when adding these routes.
+
+Assessment-template links in `EventComposer.vue` open `ServiceCatalog.vue` in a new tab. Preserve saved drafts, the account/institution/event-scoped return message, authorized re-fetch and manual refresh fallback. Do not overwrite an event draft when refreshing templates.
+
+Android native startup is consolidated in `apps/mobile/scripts/android.mjs`, called by both root `mobile:android` and the mobile workspace's `android` script. Its Windows Gradle configuration is maintained in `apps/mobile/scripts/android-build.gradle` and applied to generated Android output on startup. Keep Ninja preflight, per-checkout temporary CMake staging, object-path hashing and compilation/Gradle worker limits documented in the [Android guide](android.md#windows-laptop-startup-and-rebuilds). Do not edit generated native files as the lasting fix.
 
 Institution message composition lives in `apps/frontend/src/features/organizations/ChannelThread.vue`. Its pending-attachment section uses `OrganizationAsset.vue`; `OrganizationUpload.vue` has an optional composer mode with photo/file icon pickers. Other upload consumers retain their existing labeled controls. Keep acknowledged-send cleanup ordered after draft writes, and preserve attachments on failed/uncertain sends.
 

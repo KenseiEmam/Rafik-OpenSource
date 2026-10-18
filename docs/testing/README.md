@@ -4,6 +4,8 @@ Use the smallest check that covers the changed behavior. Run commands from the r
 
 ## Test layers and commands
 
+Field API/queue changes use `npm run mobile:acceptance` on Node 24 with the local Docker database running. It migrates a disposable database, starts its own API, checks native auth/receipts/history/conflicts/revocation and removes its resources. It does not prove native SQLCipher, app process death, sharing or rendered usability. Use `-- --device` only for an intentional device pass and finish it with `done`/Enter. See [Android acceptance](../development/android.md#focused-checks) and [actual evidence](../verification/README.md).
+
 Swagger-only changes use `npm run test:api-docs --workspace @rafik/backend`: two isolated checks cover HTTP routes/assets/headers and viewer configuration, both URL prefixes, native request headers, cookie omission, same-origin enforcement and production reference-only behavior. This does not verify authentication against a database or native-device workflows.
 
 | Layer                     | Command                                                                                             | Coverage                                                                                                                                                                                                |

@@ -27,7 +27,7 @@
     "backend:stop": "npm run stop --workspace @rafik/backend",
     "backend:api": "npm run start:api --workspace @rafik/backend",
     "mobile:start": "npm run start --workspace @rafik/mobile",
-    "mobile:android": "npm run android --workspace @rafik/mobile",
+    "mobile:android": "node apps/mobile/scripts/android.mjs",
     "start:api": "npm run start:api --workspace @rafik/backend",
     "backend:seed-local": "npm run seed:local --workspace @rafik/backend",
     "seed:local": "npm run seed:local --workspace @rafik/backend",
@@ -67,12 +67,15 @@
     "content": "npm run content --workspace @rafik/backend",
     "content:check": "npm run content:check --workspace @rafik/backend",
     "docs:check": "npm run test:docs --workspace @rafik/backend",
-    "verify:release": "npm run verify:release --workspace @rafik/backend"
+    "verify:release": "npm run verify:release --workspace @rafik/backend",
+    "mobile:acceptance": "node apps/mobile/scripts/acceptance.mjs",
+    "mobile:release": "node apps/mobile/scripts/release.mjs"
   },
   "overrides": {
     "tar": "7.5.22",
     "deepmerge-ts": "8.0.2",
     "mysql2": "3.24.4",
     "source-map-js": "1.2.2"
-  }
+  },
+  "version": "1.0.0-beta.1"
 }

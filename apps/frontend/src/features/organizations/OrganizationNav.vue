@@ -17,11 +17,27 @@ const items = computed(() => [
         { path: '/tasks', name: l('Tasks', 'المهام') },
       ]),
   { path: '/plans', name: l('Programs', 'البرامج') },
-  { path: '/training', name: l('Training', 'التدريب') },
-  { path: '/nutrition', name: l('Nutrition', 'التغذية') },
+  {
+    path: '/training',
+    name:
+      route.params.view === 'trainee'
+        ? l('Training', 'التدريب')
+        : l('Athlete plans', 'خطط الرياضيين'),
+  },
+  { path: '/session-history', name: l('Session history', 'سجل الحصص') },
+  {
+    path: '/nutrition',
+    name:
+      route.params.view === 'trainee'
+        ? l('Nutrition', 'التغذية')
+        : l('Nutrition plans', 'خطط التغذية'),
+  },
   { path: '/injuries', name: l('Injury status', 'حالة الإصابة') },
   { path: '/messages', name: l('Messages', 'الرسائل') },
   { path: '/calendar', name: l('Calendar', 'التقويم') },
+  ...(route.params.view === 'trainee'
+    ? []
+    : [{ path: '/events', name: l('Events & assessments', 'المواعيد والتقييمات') }]),
   ...(route.params.view !== 'admin'
     ? [{ path: '/feedback', name: l('My feedback', 'تقييماتي') }]
     : []),
@@ -48,7 +64,7 @@ const items = computed(() => [
 const navPath = computed(() =>
   route.path
     .replace('/deliver/', '/plans/')
-    .replace('/review/', '/training/')
+    .replace('/review/', '/session-history/')
     .replace('/assessments/', '/training/'),
 )
 const secondary = new Set([

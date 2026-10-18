@@ -1,8 +1,14 @@
 # Android coach field development
 
-**Status, 18 October 2026:** Stage 7 implementation in progress. The native client has attendance, assessment drafts/results and event completion for explicitly opened events. Local SQLite queue checks are distinct from Android SQLCipher, API integration and rendered-device acceptance; those checks remain open. Correction-history UI, Arabic/RTL and instance URL scanning remain unfinished.
+**Status, 18 October 2026:** Stage 7 implementation in progress. Attendance, assessment drafts/results, event completion, online correction history, recovery comparison/sharing and English/Arabic UI are implemented. Focused API and Android emulator checks passed, including queued score replay after app restart and recovery share cancellation. Physical-device, cold offline startup, phone/accessibility and broader security/recovery acceptance remain open; see [verification](../verification/README.md). Instance URL scanning remains open.
 
 ## Start a development instance and native build
+
+For a standalone APK that bundles JavaScript, use the separate [Android beta release procedure](../operations/android-release.md) and `npm run mobile:release`. Ordinary `mobile:android` remains a development install requiring Metro.
+
+The founder reports successful offline attendance followed by backend restart and online sync on 18 October. This is a reported runtime walkthrough, with target/device type unconfirmed; it does not establish score capture, completion, app process-death recovery or encryption acceptance.
+
+Completed events use a distinct confirmed read-only summary and no longer ask to download another roster. Future events show the scheduled unlock time and device timezone before entry. The active app rechecks its clock every 30 seconds and on foreground return. A pending completion remains device-saved until the institution acknowledges it. Review results and correction history from the web **Events & assessments** list.
 
 Use synthetic accounts and events. From the repository root, install once with `npm ci`, then start the local backend using the [development guide](README.md). A trainer must be assigned as staff on an institution event; attendance entry opens after its scheduled start time. Administrators and athletes do not receive the coach workflow.
 
@@ -13,6 +19,26 @@ npm run mobile:android
 ```
 
 This builds and runs the native Android client. SQLCipher and Expo Crypto require a native build; Expo Go is unsupported. To restart Metro for an already installed build, use `npm run mobile:start`. Follow Expo's native-build output to connect the client.
+
+`mobile:start` explicitly selects the native development build (`expo start --dev-client`). If an older running Metro terminal offers to install Expo Go, stop it with Ctrl+C and restart `npm run mobile:start`, then press `a`. No native rebuild is needed for this command correction.
+
+### Windows laptop startup and rebuilds
+
+Use `npm run mobile:android` from the normal repository folder. The maintained launcher prepares a missing Android project with Expo, then builds/installs/runs it. Pass Expo options directly, for example `npm run mobile:android -- --device` to choose an emulator or phone. Android Studio can be closed after the emulator starts; keep the emulator, Metro and the backend running during API workflows.
+
+On Windows, the launcher limits Gradle to two workers and disables project parallelism for that invocation. Its maintained Gradle helper places app CMake staging under `<user-home>/.rf-cxx/<checkout-hash>/app` and library staging under `%TEMP%/rf-cxx/<checkout-hash>/<module>`, sets `CMAKE_OBJECT_PATH_MAX=256` to hash long object paths, and gives each Ninja build two compilation slots and one linking slot. The shorter app base leaves room for release variant names and long autolinked targets. The limit must leave space for the generated target directory, CMake's hash and the source filename; a lower limit can prevent hashing and leave the original long path in place. It checks the standard SDK CMake 3.22.1 Ninja executable when present and stops before building if it is older than 1.12. Custom toolchains still need operator review. These controls reduce build pressure; they do not impose a total RAM limit or configure emulator RAM/graphics.
+
+The launcher applies `apps/mobile/scripts/android-build.gradle` to the generated Android project. Keep this maintained helper as the source of truth; generated Android files remain ignored. A drive alias such as `R:` alone did not shorten Reanimated's canonical source/build paths in the founder's failed build. No repository move or drive mapping is required by this launcher. It leaves SDK tools, user Gradle settings, existing caches and device data untouched. Windows staging is temporary and isolated by checkout; deleting it later causes native recompilation.
+
+To inspect preparation without starting Gradle, the emulator or Metro:
+
+```sh
+npm run mobile:android -- --prepare-only
+```
+
+The first native build or a native dependency/configuration change needs `mobile:android`. For ordinary JavaScript/UI changes with the app already installed, use `npm run mobile:start`. An emulator reset or app uninstall requires installation again. On a 16 GB laptop, start with a small emulator using 2 GB RAM, two cores and hardware/automatic graphics; these are suggested settings, not verified performance guarantees.
+
+**Observed Windows failure:** the founder's Reanimated `buildCMakeDebug[x86_64][reanimated]` task failed at `ninja: error: mkdir(...CSS/interpolation/operations): No such file or directory`. The initial Ninja was 1.10.2; a later run from `R:` still used the long physical path. This is consistent with path handling; the Gradle deprecation summary was not the failing task. Update Ninja through the [official release](https://github.com/ninja-build/ninja/releases/tag/v1.12.1) if needed; the launcher does not replace installed executables. See [Reanimated's Windows guide](https://docs.swmansion.com/react-native-reanimated/docs/guides/building-on-windows/), [CMake path hashing](https://cmake.org/cmake/help/latest/variable/CMAKE_OBJECT_PATH_MAX.html) and [Android CMake staging](https://developer.android.com/reference/tools/gradle-api/8.3/com/android/build/api/dsl/Cmake). A successful native rebuild is still required to confirm recovery.
 
 Expo generates native Android/iOS projects and local Metro/type metadata. These paths are ignored; keep build configuration in `apps/mobile/app.json` and dependencies in the root lockfile. Do not commit generated build folders.
 
@@ -56,9 +82,19 @@ No assessment is auto-merged over a conflicting server revision. Native/API and 
 
 Commands replay in order within the selected account/institution workspace. A blocked or rejected head pauses later commands, including other events in that workspace; the schedule offers a link to the event needing review. A newer download cannot overwrite unresolved commands or score drafts. The server checks current authority for every replay, including exact operation retries.
 
-For conflicts or revoked access, review current records in the institution web app where authorized. The native app retains the saved values and error for review. **Remove device copy / discard pending work** requires an explicit confirmation and removes only that event's local data for this account and workspace. It does not undo a server write; an uncertain change may already have reached the server. Reopen online to download a fresh authorized roster before entering a correction. Native recovery export and in-app conflict comparison are not implemented.
+For conflicts or revoked access, review current records in the institution web app where authorized. The native app retains the saved values and error for review. **Remove device copy / discard pending work** requires an explicit confirmation and removes only that event's local data for this account and workspace. It does not undo a server write; an uncertain change may already have reached the server. Reopen online to download a fresh authorized roster before entering a correction. Use the native recovery comparison and explicit share workflow below; no automatic import or conflict merge is provided.
 
 If the session expired, sign out and sign in to the same institution URL/account, then retry. A lost refresh response can require a fresh sign-in because the server rotates refresh tokens. Do not edit or replace the pending attendance payload to repair sign-in.
+
+## Review history and recover a conflict
+
+1. Open an event and choose an athlete’s **Correction history**. Attendance and score tabs load the original entry and later corrections online, 25 at a time, newest first. History is not cached for offline viewing.
+2. For rejected/blocked work, open **Review saved work**. **Read current server records** fetches a separate comparison; it never replaces your device copy or changes queued commands. A denied read hides the fetched comparison and locks entry.
+3. For an uncertain outcome, sync the exact saved operation after connectivity/authentication recovers. Rejected/blocked operations remain paused; comparison cannot force them through.
+4. Optionally choose **Share recovery copy**. Confirm the plain-text warning and select an institution-approved Android destination. It contains durable pending operations/drafts, their involved athlete names and event metadata, without credentials or unrelated roster members. Individual-item sharing supports smaller copies; text beyond 60,000 UTF-16 code units is refused intact. No save/delivery success is inferred from the chooser.
+5. Keep any needed copy, then explicitly discard the device copy and reopen online before entering a reviewed correction. Discard does not undo a server write; uncertain work may already be recorded. Recovery JSON is for manual reconciliation and cannot be imported or replayed automatically.
+
+Use the English/العربية controls on sign-in or schedule screens. The initial choice follows the device locale, then restores the saved device preference. Switching language preserves open field drafts. Arabic supports RTL and Arabic/Persian digits with the Arabic decimal separator; instance/athlete/exercise names remain as authored. URLs and email fields stay LTR. Language-save failure has explicit feedback and retry.
 
 ## Storage and account boundaries
 
@@ -66,9 +102,60 @@ The client checks `PRAGMA cipher_version` before opening its field tables and re
 
 Every event, score draft and command is partitioned by the exact normalized institution API URL, user ID and workspace ID. Signing out removes credentials and attempts current-device server revocation; the UI states when server revocation could not be confirmed. It retains encrypted field work for the original account. Another signed-in account cannot list, replay or discard that account's records. Pending work is not transferred to another coach. Reauthenticate as the original account to review or discard it.
 
-App removal, Android clearing app data or loss of the SecureStore key can make unsent records unrecoverable. Server backups do not include the device queue. No remote wipe, biometric gate, recovery export or secure-erasure guarantee is implemented. Report a lost device to the institution; administrators should suspend the account if necessary. There is not yet a device-management screen for revoking one other device.
+App removal, Android clearing app data or loss of the SecureStore key can make unsent records unrecoverable. Server backups do not include the device queue. No remote wipe, biometric gate or secure-erasure guarantee is implemented. Recovery sharing is an explicit plain-text export, not an encrypted backup. Report a lost device to the institution; administrators should suspend the account if necessary. There is not yet a device-management screen for revoking one other device.
+
+## Standalone emulator window on Windows
+
+Android Studio is needed to install/manage the SDK and virtual devices, but it does not need to stay open while using a standalone emulator. Close any existing instance of the same virtual device first. From a PowerShell terminal:
+
+```powershell
+& "$env:LOCALAPPDATA\Android\Sdk\emulator\emulator.exe" -list-avds
+& "$env:LOCALAPPDATA\Android\Sdk\emulator\emulator.exe" -avd Small_Tablet
+```
+
+`Small_Tablet` is the founder's current AVD name; replace it with a name returned by `-list-avds` on another machine. Keep that window open and run Metro from the repository root in a separate terminal:
+
+```powershell
+npm run mobile:start
+```
+
+If Android repeatedly reports **System UI isn't responding**, close the emulator first and try this smaller display with a cold boot:
+
+```powershell
+& "$env:LOCALAPPDATA\Android\Sdk\emulator\emulator.exe" -avd Small_Tablet -skin 1280x800 -no-snapshot -no-boot-anim -memory 2048 -cores 2
+```
+
+This launch skips loading/saving Quick Boot snapshots and keeps existing app data. It reduces framebuffer size from this AVD's configured 1920×1200; it does not change the saved AVD configuration. Performance improvement is unverified. Keep the existing Metro terminal running; do not start another Metro instance or clear app storage for this retry.
+
+After Android finishes booting, press `a` in Metro to open the installed app. A stale layout bundle can use the clean-cache command below. Do not start two copies of the same AVD, clear app storage or rebuild native code just to open the development client. These instructions affect local Android development, not Unix Compose hosting.
+
+## Stale development bundle after provider changes
+
+If `LanguageProvider is required` points to an older `_layout.tsx` containing a fragment, first compare the saved source: the root layout must wrap the Stack in `LanguageProvider`. Stop Metro in its terminal, then run from the repository root:
+
+```sh
+npm run start --workspace @rafik/mobile -- --clear
+```
+
+Reload/reopen the development app. This clears Metro cache, not app credentials or field records; do not clear Android app storage to repair a stale bundle. A continuing error after a clean start needs investigation of the served project/module identity rather than another blind rebuild.
 
 ## Focused checks
+
+For repeatable native API/queue acceptance without Chrome, use Node 24 and a running local Docker database. From the repository root:
+
+```sh
+npm run mobile:acceptance
+```
+
+Expected result: the native HTTP/SQLite scenario passes and the runner reports `cleaned: true`. It migrates a separate `rafik_browser_<timestamp>` database, starts an isolated API on 55341 and removes only its own resources. It never resets or seeds the preview. This covers real-server receipt/auth/conflict behavior, not Android SQLCipher or UI.
+
+For a native session, run `npm run mobile:acceptance -- --device` in an interactive terminal (automation tools need a PTY). It keeps that isolated API and writes synthetic sign-in details to its reported ignored `.expo/acceptance/<timestamp>/fixture.json`. Enter `done` then Enter in the runner to clean up, or use Ctrl+C in an interactive terminal. A detached process with closed stdin cannot receive `done`; do not use that mode for a retained fixture. Keep the existing app account/data separate using a dedicated emulator/profile; remove only the temporary profile you created. A disconnected emulator leaves profile cleanup pending.
+
+If Windows blocks the queue test runner from spawning a child, the equivalent single-file Node 24 command from `apps/mobile/` is:
+
+```sh
+node --experimental-strip-types --test --test-isolation=none tests/attendance.test.ts
+```
 
 Run from the repository root with Node 22.16 or Node 24:
 
@@ -79,6 +166,6 @@ npm run test:queue --workspace @rafik/mobile
 
 The queue tests use real Node SQLite, including temporary on-disk restarts and transaction failures; their temporary directories are removed. They do not use the preview database, seed accounts or a device, and do not verify SQLCipher or Android process death. They cover exact retry, score precision/draft persistence, attendance → result sequencing, result corrections, completion gates and atomic eviction, stale-base protection, account/server/workspace isolation, blocked/conflicting commands, acknowledgment rollback and runtime switching.
 
-Next acceptance must exercise the native build against the real API, including server receipt/revision rules, attendance → score → completion, real-form fractional values, refresh/revocation, airplane mode, forced app stop/reopen, account switching, phone/tablet layouts, assistive technology and both themes. Arabic/RTL, correction-history UI and URL scanning remain Stage 7 implementation work. Report emulator results separately from physical-device and human field review.
+Next acceptance must exercise the native build against the real API, including server receipt/revision rules, attendance → score → completion, real-form fractional values, refresh/revocation, airplane mode, forced app stop/reopen, account switching, phone/tablet layouts, assistive technology and both themes. URL scanning remains Stage 7 implementation work; localized recovery/history UI still requires broader native acceptance. Report emulator results separately from physical-device and human field review.
 
 Native storage API references: [Expo SQLite/SQLCipher](https://docs.expo.dev/versions/v58.0.0/sdk/sqlite/) and [Expo Crypto](https://docs.expo.dev/versions/latest/sdk/crypto/).

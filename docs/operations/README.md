@@ -4,6 +4,8 @@ This is the operator entry point for builds, self-hosted deployment, configurati
 
 ## Deployment
 
+The Android history/recovery update requires the matching updated backend/OpenAPI export; no schema migration is needed for history reads. Recovery copies are user-initiated plain-text shares and are outside encrypted app storage and server retention. Institutions must choose approved recipients/storage and handle deletion of exported copies themselves; do not send athlete recovery records through the public landing contact form.
+
 The multiple-message-attachment update requires migration `202610181200_message_attachments` before running the updated backend. It adds ordered links and backfills existing single-file messages without removing the compatibility column. Restart the backend after migration/client generation; existing file storage and backup procedures are unchanged.
 
 Updated backends include Swagger reference at `/api/v1/docs` on the self-hosted web origin, with JSON at `/api/v1/openapi.json`. Production (`NODE_ENV=production`) disables interactive viewer requests. The viewer uses bundled assets and no external validator; no additional service or Compose definition is needed. Direct backend access uses `/v1/docs`. See the [API guide](../reference/api.md) for local exploration.
@@ -31,6 +33,8 @@ Do not expose PostgreSQL publicly. No Google service-account key or hosted-provi
 
 ## Release and configuration
 
+The Android candidate is **Squire 1.0.0-beta.1**. Follow [Android beta builds and updates](android-release.md) for signing, APK packaging and installation/upgrade acceptance. Private signing material is separate from institution server secrets; never include it in Compose images or public release assets.
+
 Build and validate the approved revision before deployment. Apply forward migrations as part of the Compose release flow; never reset or reseed a hosted database. Review the [release checklist](release-checklist.md) and [known release gaps](../known-issues/README.md) before enabling external use.
 
 Store the production env file outside source control with access limited to the university operators. Use unique instance secrets. Rotate secrets through a planned deployment; never paste credentials into issue trackers, logs, commits or check receipts. The self-hosted profile does not need SMTP, Google service-account keys, or hosted-provider credentials. Keep the service on a private network until the first super admin completes setup. Invitees choose their password from a single-use link that expires after seven days; no email is delivered or verified. Operators must share that link privately.
@@ -39,7 +43,7 @@ Instance branding (name, accent, light/dark page backgrounds and optional PNG/JP
 
 ## Backup, recovery and rollback
 
-Android field queues are device-local and are not part of server backups. The app disables automatic Android app-data backup, retains encrypted field commands and score drafts after sign-out, and requires the same account/server to recover it. Loss of app data or its key can lose unsent work; no remote-wipe or recovery-export feature exists yet. A sign-out can remove local credentials while server revocation is unconfirmed. For device loss, follow institution incident procedures and suspend the account if required. See the [Android recovery guide](../development/android.md).
+Android field queues are device-local and are not part of server backups. The app disables automatic Android app-data backup, retains encrypted field commands and score drafts after sign-out, and requires the same account/server to recover it. Loss of app data or its key can lose unsent work. Explicit plain-text recovery sharing is implemented; no automatic import or remote wipe exists. A sign-out can remove local credentials while server revocation is unconfirmed. For device loss, follow institution incident procedures and suspend the account if required. See the [Android recovery guide](../development/android.md).
 
 Use `bash infrastructure/scripts/backup.sh` to create checksummed PostgreSQL and private-file archives under the ignored `infrastructure/backups/` directory. Treat both archives as sensitive identity and health data. Store an encrypted copy on separate university-controlled storage and define a retention schedule.
 

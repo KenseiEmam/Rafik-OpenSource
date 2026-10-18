@@ -12,10 +12,15 @@ test-results/
 playwright-report/
 *.tsbuildinfo
 apps/mobile/.expo/
+apps/mobile/.signing/
+*.keystore
+*.jks
+*.p12
 apps/mobile/android/
 apps/mobile/ios/
 apps/mobile/expo-env.d.ts
 .vscode/
+.idea/
 
 artifacts/
 

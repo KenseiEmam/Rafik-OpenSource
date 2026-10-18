@@ -39,8 +39,14 @@ const draft = ref({
   template: '',
   staff: [] as string[],
   participants: [] as string[],
-  local: addDays(localDate(profile.value?.timezone || 'UTC'), 1) + 'T09:00',
-  zone: profile.value?.timezone || 'UTC',
+  local:
+    addDays(
+      localDate(
+        profile.value?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+      ),
+      1,
+    ) + 'T09:00',
+  zone: profile.value?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
   minutes: 60,
   count: 1,
   every: 7,
@@ -48,8 +54,42 @@ const draft = ref({
 })
 let disposed = false,
   draftGeneration = 0
+const templateChannel =
+  typeof BroadcastChannel !== 'undefined'
+    ? new BroadcastChannel(`rafik-templates:${user.value!.id}:${id}`)
+    : undefined
+async function refreshTemplates() {
+  if (disposed || catalogBusy.value.templates) return
+  await findCatalog('templates')
+}
+if (templateChannel)
+  templateChannel.onmessage = async ({ data: message }) => {
+    if (
+      disposed ||
+      !message ||
+      typeof message !== 'object' ||
+      message.event !== draft.value.id ||
+      typeof message.template !== 'string'
+    )
+      return
+    try {
+      const page = await request<{ items: AssessmentTemplate[] }>(
+        `/v1/workspaces/${id}/services?view=${view}&kind=templates&id=${encodeURIComponent(message.template)}`,
+      )
+      if (disposed) return
+      const created = page.items.find((item) => item.id === message.template)
+      if (created && !locked.value) {
+        templates.value = [created, ...templates.value.filter((item) => item.id !== created.id)]
+        draft.value.template = created.id
+      }
+    } catch (e) {
+      if (!disposed) error.value = errorMessage(e)
+    }
+  }
 onUnmounted(() => {
   disposed = true
+  window.removeEventListener('focus', refreshTemplates)
+  templateChannel?.close()
 })
 watch(step, async () => {
   await nextTick()
@@ -200,6 +240,7 @@ watch(
   { deep: true },
 )
 onMounted(async () => {
+  window.addEventListener('focus', refreshTemplates)
   await load()
   const stored = await getDraft<typeof draft.value>(key).catch(() => undefined)
   if (stored) {
@@ -312,12 +353,22 @@ onMounted(async () => {
                   {{ t.title }}
                 </option></select
               ><RouterLink
-                v-if="!templates.length"
-                :to="base + '/assessment-templates'"
+                :to="base + '/assessment-templates?create=1&forEvent=' + draft.id"
+                target="_blank"
+                rel="noopener"
                 class="text-link"
-                >{{ l('Create a template first', 'أنشئ قالباً أولاً') }}</RouterLink
+                >{{ l('Create a template ↗ (new tab)', 'إنشاء قالب ↗ (تبويب جديد)') }}</RouterLink
               ></label
             >
+            <button
+              v-if="draft.kind === 'assessment'"
+              type="button"
+              class="text-link"
+              :disabled="catalogBusy.templates"
+              @click="refreshTemplates"
+            >
+              {{ l('Refresh templates', 'تحديث القوالب') }}
+            </button>
             <div class="service-field-row">
               <label
                 >{{ l('Local date and time', 'التاريخ والوقت المحلي')
@@ -384,7 +435,7 @@ onMounted(async () => {
                 l('You are the assigned trainer for this event.', 'أنت المدرب المعيّن لهذا الموعد.')
               }}
             </p>
-            <h2>{{ l('Trainees', 'المتدربون') }}</h2>
+            <h2>{{ l('Athletes', 'الرياضيون') }}</h2>
             <details class="group-shortcut">
               <summary>{{ l('Start with a training group', 'ابدأ بمجموعة تدريب') }}</summary>
               <div class="form-fields">
@@ -552,6 +603,21 @@ onMounted(async () => {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
+  align-items: start;
+}
+.event-composer .service-field-row > label,
+.event-composer .service-field-row :deep(.timezone-picker > label) {
+  margin: 0;
+}
+.service-field-row > label,
+.service-field-row :deep(.timezone-picker) {
+  display: grid;
+  gap: 8px;
+}
+.service-field-row input[type='datetime-local'],
+.service-field-row :deep(.timezone-anchor) {
+  min-height: 48px;
+  box-sizing: border-box;
 }
 .event-composer h2 {
   font-size: 1.2rem;

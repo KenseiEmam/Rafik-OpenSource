@@ -1,6 +1,6 @@
 {
   "name": "@rafik/frontend",
-  "version": "0.1.0",
+  "version": "1.0.0-beta.1",
   "private": true,
   "type": "module",
   "engines": {
@@ -28,7 +28,7 @@
     "@fontsource-variable/manrope": "5.3.0",
     "@fontsource/noto-sans-arabic": "5.3.0",
     "@phosphor-icons/vue": "2.2.1",
-    "@rafik/shared": "0.1.0",
+    "@rafik/shared": "1.0.0-beta.1",
     "@unovis/ts": "1.7.0",
     "@unovis/vue": "1.7.0",
     "idb": "8.0.3",

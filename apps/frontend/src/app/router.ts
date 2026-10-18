@@ -84,7 +84,17 @@ const router = createRouter({
     },
     {
       path: '/organization/:workspace/:view/training',
-      component: () => import('../features/organizations/OrganizationTraining.vue'),
+      component: () => import('../features/organizations/TrainingRoute.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization/:workspace/:view/events',
+      component: () => import('../features/organizations/ScheduledEvents.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization/:workspace/:view/session-history',
+      component: () => import('../features/organizations/SessionHistory.vue'),
       meta: { private: true },
     },
     {
@@ -124,7 +134,7 @@ const router = createRouter({
     },
     {
       path: '/organization/:workspace/:view/nutrition',
-      component: () => import('../features/nutrition/OrganizationNutrition.vue'),
+      component: () => import('../features/nutrition/NutritionRoute.vue'),
       meta: { private: true },
     },
     {

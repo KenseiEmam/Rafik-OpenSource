@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text } from 'react-native'
+import { useLanguage } from './Language'
+import type { Language } from './translations'
+import { Platform, Pressable, StyleSheet, Text } from 'react-native'
 
 export type Styles = ReturnType<typeof makeStyles>
 export function Button({
@@ -14,6 +16,7 @@ export function Button({
   styles: Styles
   primary?: boolean
 }) {
+  const { t } = useLanguage()
   return (
     <Pressable
       accessibilityRole="button"
@@ -22,22 +25,32 @@ export function Button({
       onPress={onPress}
       style={[styles.button, primary && styles.primary, disabled && styles.disabled]}
     >
-      <Text style={[styles.buttonText, primary && styles.primaryText]}>{title}</Text>
+      <Text style={[styles.buttonText, primary && styles.primaryText]}>{t(title)}</Text>
     </Pressable>
   )
 }
 
-export const displayDate = (date: string) => new Date(date).toLocaleString()
+export const displayDate = (date: string, language: Language = 'en') =>
+  new Date(date).toLocaleString(language === 'ar' ? 'ar' : 'en')
 export const localDate = (date: Date) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
 
-export function makeStyles(light: boolean) {
+export function makeStyles(light: boolean, language: Language = 'en') {
+  // Android 0.88 maps 'left' to paragraph start; 'right' becomes the RTL end.
+  const textAlign =
+    Platform.OS === 'android'
+      ? ('left' as const)
+      : language === 'ar'
+        ? ('right' as const)
+        : ('left' as const)
+  const direction = language === 'ar' ? ('rtl' as const) : ('ltr' as const)
   const text = light ? '#182c2a' : '#f2f7f4'
   const muted = light ? '#455e58' : '#b1c6be'
   const accent = light ? '#08674f' : '#a0dfc8'
   return StyleSheet.create({
-    safe: { flex: 1, backgroundColor: light ? '#f2f7f4' : '#101b1d' },
+    safe: { direction, flex: 1, backgroundColor: light ? '#f2f7f4' : '#101b1d' },
     toolbar: {
+      direction,
       flexDirection: 'row',
       flexWrap: 'wrap',
       alignItems: 'center',
@@ -47,6 +60,7 @@ export function makeStyles(light: boolean) {
     },
     heading: { flexGrow: 1, flexShrink: 1 },
     content: {
+      direction,
       flexGrow: 1,
       width: '100%',
       maxWidth: 800,
@@ -55,15 +69,81 @@ export function makeStyles(light: boolean) {
       gap: 16,
       paddingBottom: 40,
     },
-    kicker: { color: accent, fontSize: 12, fontWeight: '700', letterSpacing: 2 },
-    title: { color: text, fontSize: 28, fontWeight: '700', flexShrink: 1 },
-    cardTitle: { color: text, fontSize: 18, fontWeight: '600' },
-    card: { backgroundColor: light ? '#fff' : '#1a292b', borderRadius: 16, padding: 18, gap: 10 },
-    label: { color: text, fontSize: 15, fontWeight: '600' },
-    hint: { color: muted, fontSize: 14, lineHeight: 21 },
-    message: { color: accent, fontSize: 15, lineHeight: 22 },
-    link: { color: accent, fontSize: 15, fontWeight: '600' },
+    kicker: {
+      textAlign,
+      writingDirection: direction,
+      direction,
+      color: accent,
+      fontSize: 12,
+      fontWeight: '700',
+      letterSpacing: language === 'ar' ? 0 : 2,
+    },
+    title: {
+      textAlign,
+      writingDirection: direction,
+      direction,
+      color: text,
+      fontSize: 28,
+      fontWeight: '700',
+      flexShrink: 1,
+    },
+    cardTitle: {
+      textAlign,
+      writingDirection: direction,
+      direction,
+      color: text,
+      fontSize: 18,
+      fontWeight: '600',
+    },
+    card: {
+      direction,
+      backgroundColor: light ? '#fff' : '#1a292b',
+      borderRadius: 16,
+      padding: 18,
+      gap: 10,
+    },
+    completedCard: {
+      borderWidth: 2,
+      borderColor: accent,
+      backgroundColor: light ? '#e4f4ed' : '#193c34',
+    },
+    historyRow: { gap: 8, borderTopWidth: 1, borderTopColor: muted, paddingTop: 14, marginTop: 8 },
+    label: {
+      textAlign,
+      writingDirection: direction,
+      direction,
+      color: text,
+      fontSize: 15,
+      fontWeight: '600',
+    },
+    hint: {
+      textAlign,
+      writingDirection: direction,
+      direction,
+      color: muted,
+      fontSize: 14,
+      lineHeight: 21,
+    },
+    message: {
+      textAlign,
+      writingDirection: direction,
+      direction,
+      color: accent,
+      fontSize: 15,
+      lineHeight: 22,
+    },
+    link: {
+      textAlign,
+      writingDirection: direction,
+      direction,
+      color: accent,
+      fontSize: 15,
+      fontWeight: '600',
+    },
     input: {
+      textAlign,
+      writingDirection: direction,
+      direction,
       borderWidth: 1,
       borderColor: light ? '#859b93' : '#54736b',
       borderRadius: 12,
@@ -72,7 +152,7 @@ export function makeStyles(light: boolean) {
       color: text,
       fontSize: 16,
     },
-    actions: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+    actions: { direction, flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
     button: {
       borderWidth: 1,
       borderColor: light ? '#6a8c80' : '#54736b',
@@ -84,7 +164,14 @@ export function makeStyles(light: boolean) {
       paddingHorizontal: 14,
       flexShrink: 1,
     },
-    buttonText: { color: accent, fontSize: 15, fontWeight: '600' },
+    buttonText: {
+      textAlign: 'center',
+      writingDirection: direction,
+      direction,
+      color: accent,
+      fontSize: 15,
+      fontWeight: '600',
+    },
     primary: { backgroundColor: '#116c54', borderColor: '#116c54' },
     primaryText: { color: '#fff' },
     disabled: { opacity: 0.5 },

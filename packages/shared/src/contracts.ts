@@ -79,3 +79,43 @@ export type FieldFinishCommand = {
   operation: string
 }
 export type FieldCommand = FieldAttendanceCommand | FieldResultCommand | FieldFinishCommand
+
+export type AthletePlanStatus = 'active' | 'upcoming' | 'expired' | 'ended'
+export type AthletePlanSummary = {
+  id: string
+  member_id: string
+  member_name: string
+  member_active: boolean
+  start_date: string
+  end_date: string | null
+  state: string
+  status: AthletePlanStatus
+  schedule_mode: string
+  version: {
+    id: string
+    title: string
+    revision: number
+    program_id: string
+    prescription?: unknown
+  }
+}
+export type AthletePlanPage = {
+  items: AthletePlanSummary[]
+  total: number
+  next: number | null
+  today: string
+  zone: string
+}
+
+/** Online-only participant history; never part of the offline event package. */
+export type FieldHistoryEntry = {
+  id: string
+  member_id: string
+  recorded_at: string
+  recorded_by: string | null
+  recorded_name: string | null
+} & (
+  | { kind: 'attendance'; previous_attendance: FieldAttendance; attendance: FieldAttendance }
+  | { kind: 'results'; revision: number; values: Record<string, string | number>; note: string }
+)
+export type FieldHistoryPage = { items: FieldHistoryEntry[]; next: number | null }

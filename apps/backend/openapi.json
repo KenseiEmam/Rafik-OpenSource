@@ -16,20 +16,37 @@
       }
     }
   ],
-  "tags": [{ "name": "Mobile authentication" }, { "name": "Coach field work" }],
-  "security": [{ "mobileBearer": [] }],
+  "tags": [
+    {
+      "name": "Mobile authentication"
+    },
+    {
+      "name": "Coach field work"
+    }
+  ],
+  "security": [
+    {
+      "mobileBearer": []
+    }
+  ],
   "paths": {
     "/v1/mobile/auth/login": {
       "post": {
         "tags": ["Mobile authentication"],
         "security": [],
         "summary": "Sign in to one institution on this device",
-        "parameters": [{ "$ref": "#/components/parameters/AndroidClient" }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AndroidClient"
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/LoginRequest" }
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
             }
           }
         },
@@ -38,12 +55,18 @@
             "description": "Native session created",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/TokenPair" }
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPair"
+                }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/ApiError" },
-          "429": { "$ref": "#/components/responses/ApiError" }
+          "401": {
+            "$ref": "#/components/responses/ApiError"
+          },
+          "429": {
+            "$ref": "#/components/responses/ApiError"
+          }
         }
       }
     },
@@ -51,7 +74,11 @@
       "get": {
         "tags": ["Mobile authentication"],
         "summary": "Validate the current device session",
-        "parameters": [{ "$ref": "#/components/parameters/AndroidClient" }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AndroidClient"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Current account",
@@ -61,13 +88,17 @@
                   "type": "object",
                   "required": ["user"],
                   "properties": {
-                    "user": { "$ref": "#/components/schemas/User" }
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
                   }
                 }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/ApiError" }
+          "401": {
+            "$ref": "#/components/responses/ApiError"
+          }
         }
       }
     },
@@ -76,7 +107,11 @@
         "tags": ["Mobile authentication"],
         "security": [],
         "summary": "Rotate the current refresh token",
-        "parameters": [{ "$ref": "#/components/parameters/AndroidClient" }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AndroidClient"
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -85,7 +120,9 @@
                 "type": "object",
                 "required": ["refresh_token"],
                 "properties": {
-                  "refresh_token": { "$ref": "#/components/schemas/Token" }
+                  "refresh_token": {
+                    "$ref": "#/components/schemas/Token"
+                  }
                 }
               }
             }
@@ -96,11 +133,15 @@
             "description": "Rotated token pair",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/TokenPair" }
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPair"
+                }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/ApiError" }
+          "401": {
+            "$ref": "#/components/responses/ApiError"
+          }
         }
       }
     },
@@ -108,22 +149,32 @@
       "post": {
         "tags": ["Mobile authentication"],
         "summary": "Revoke the presented device session",
-        "parameters": [{ "$ref": "#/components/parameters/AndroidClient" }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AndroidClient"
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "refresh_token": { "$ref": "#/components/schemas/Token" }
+                  "refresh_token": {
+                    "$ref": "#/components/schemas/Token"
+                  }
                 }
               }
             }
           }
         },
         "responses": {
-          "200": { "description": "Current device session revoked" },
-          "401": { "$ref": "#/components/responses/ApiError" }
+          "200": {
+            "description": "Current device session revoked"
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiError"
+          }
         }
       }
     },
@@ -131,7 +182,11 @@
       "get": {
         "tags": ["Coach field work"],
         "summary": "List the current account's authorized workspaces",
-        "parameters": [{ "$ref": "#/components/parameters/AndroidClient" }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AndroidClient"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Role-scoped contexts",
@@ -143,59 +198,121 @@
                   "properties": {
                     "contexts": {
                       "type": "array",
-                      "items": { "$ref": "#/components/schemas/Context" }
+                      "items": {
+                        "$ref": "#/components/schemas/Context"
+                      }
                     },
-                    "platform": { "type": "boolean" }
+                    "platform": {
+                      "type": "boolean"
+                    }
                   }
                 }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/ApiError" }
+          "401": {
+            "$ref": "#/components/responses/ApiError"
+          }
         }
       }
     },
     "/v1/workspaces/{workspace}/calendar": {
       "parameters": [
-        { "$ref": "#/components/parameters/AndroidClient" },
-        { "$ref": "#/components/parameters/Workspace" }
+        {
+          "$ref": "#/components/parameters/AndroidClient"
+        },
+        {
+          "$ref": "#/components/parameters/Workspace"
+        }
       ],
       "get": {
         "tags": ["Coach field work"],
         "summary": "Read a bounded schedule or one authorized event",
-        "description": "Send view=trainer and a bounded from/to calendar-date window, or supply id to read one event detail before field work. The server checks current assignment and membership.",
+        "description": "Send view=trainer and a bounded from/to calendar-date window, or supply id to read one event detail before field work. The server checks current assignment and membership. For online-only correction history, send id, historyOnly=true, historyMember, historyKind (attendance or results) and historyOffset. Each read rechecks event authority; the selected athlete must be an event participant. History returns up to 25 items and next offset; it includes the original entry and later corrections, with recorded actor, timestamp and submitted values.",
         "parameters": [
           {
             "name": "view",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "enum": ["trainer"] }
+            "schema": {
+              "type": "string",
+              "enum": ["trainer"]
+            }
           },
           {
             "name": "from",
             "in": "query",
-            "schema": { "type": "string", "format": "date" }
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
           },
           {
             "name": "to",
             "in": "query",
-            "schema": { "type": "string", "format": "date" }
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
           },
           {
             "name": "zone",
             "in": "query",
-            "schema": { "type": "string", "example": "Asia/Dubai" }
+            "schema": {
+              "type": "string",
+              "example": "Asia/Dubai"
+            }
           },
           {
             "name": "offset",
             "in": "query",
-            "schema": { "type": "integer", "minimum": 0 }
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
           },
           {
             "name": "id",
             "in": "query",
             "description": "Event UUID for authorized detail",
-            "schema": { "type": "string", "format": "uuid" }
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "historyOnly",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Return only an authorized participant history page; requires id and historyMember."
+          },
+          {
+            "name": "historyMember",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "historyKind",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["attendance", "results"],
+              "default": "results"
+            }
+          },
+          {
+            "name": "historyOffset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            }
           }
         ],
         "responses": {
@@ -204,15 +321,31 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "description": "The calendar response shape depends on list versus id detail mode."
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/FieldHistoryPage"
+                    },
+                    {
+                      "type": "object",
+                      "description": "Schedule page or full event detail when historyOnly is absent."
+                    }
+                  ]
                 }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/ApiError" },
-          "403": { "$ref": "#/components/responses/ApiError" },
-          "404": { "$ref": "#/components/responses/ApiError" }
+          "401": {
+            "$ref": "#/components/responses/ApiError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ApiError"
+          },
+          "404": {
+            "$ref": "#/components/responses/ApiError"
+          },
+          "400": {
+            "$ref": "#/components/responses/ApiError"
+          }
         }
       },
       "post": {
@@ -223,7 +356,9 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/FieldCommand" }
+              "schema": {
+                "$ref": "#/components/schemas/FieldCommand"
+              }
             }
           }
         },
@@ -231,13 +366,25 @@
           "200": {
             "description": "Command result or receipt",
             "content": {
-              "application/json": { "schema": { "type": "object" } }
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
             }
           },
-          "400": { "$ref": "#/components/responses/ApiError" },
-          "401": { "$ref": "#/components/responses/ApiError" },
-          "403": { "$ref": "#/components/responses/ApiError" },
-          "409": { "$ref": "#/components/responses/ApiError" }
+          "400": {
+            "$ref": "#/components/responses/ApiError"
+          },
+          "401": {
+            "$ref": "#/components/responses/ApiError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ApiError"
+          },
+          "409": {
+            "$ref": "#/components/responses/ApiError"
+          }
         }
       }
     }
@@ -255,22 +402,37 @@
         "name": "X-Rafik-Client",
         "in": "header",
         "required": true,
-        "schema": { "type": "string", "enum": ["android"] }
+        "schema": {
+          "type": "string",
+          "enum": ["android"]
+        }
       },
       "Workspace": {
         "name": "workspace",
         "in": "path",
         "required": true,
-        "schema": { "type": "string", "format": "uuid" }
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
       }
     },
     "schemas": {
-      "Token": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+      "Token": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
       "User": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "format": "uuid" },
-          "email": { "type": "string", "format": "email" }
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
         },
         "required": ["id", "email"]
       },
@@ -278,9 +440,18 @@
         "type": "object",
         "required": ["email", "password"],
         "properties": {
-          "email": { "type": "string", "format": "email" },
-          "password": { "type": "string", "format": "password" },
-          "device_name": { "type": "string", "maxLength": 80 }
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          },
+          "device_name": {
+            "type": "string",
+            "maxLength": 80
+          }
         }
       },
       "TokenPair": {
@@ -293,11 +464,23 @@
           "refresh_expires_at"
         ],
         "properties": {
-          "user": { "$ref": "#/components/schemas/User" },
-          "access_token": { "$ref": "#/components/schemas/Token" },
-          "access_expires_at": { "type": "string", "format": "date-time" },
-          "refresh_token": { "$ref": "#/components/schemas/Token" },
-          "refresh_expires_at": { "type": "string", "format": "date-time" }
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "access_token": {
+            "$ref": "#/components/schemas/Token"
+          },
+          "access_expires_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "refresh_token": {
+            "$ref": "#/components/schemas/Token"
+          },
+          "refresh_expires_at": {
+            "type": "string",
+            "format": "date-time"
+          }
         }
       },
       "Context": {
@@ -308,29 +491,51 @@
             "type": "string",
             "description": "Composite workspace/role context ID; use workspace_id for API paths."
           },
-          "workspace_id": { "type": "string", "format": "uuid" },
-          "member_id": { "type": "string", "format": "uuid" },
-          "kind": { "type": "string" },
-          "name": { "type": "string" },
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "member_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
           "role": {
             "type": "string",
             "enum": ["administrator", "trainer", "athlete"]
           },
-          "path": { "type": "string" }
+          "path": {
+            "type": "string"
+          }
         }
       },
       "FieldCommand": {
         "oneOf": [
           {
             "allOf": [
-              { "$ref": "#/components/schemas/FieldCommandBase" },
+              {
+                "$ref": "#/components/schemas/FieldCommandBase"
+              },
               {
                 "type": "object",
                 "required": ["member", "revision", "attendance"],
                 "properties": {
-                  "action": { "const": "attendance" },
-                  "member": { "type": "string", "format": "uuid" },
-                  "revision": { "type": "integer", "minimum": 0 },
+                  "action": {
+                    "const": "attendance"
+                  },
+                  "member": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "revision": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
                   "attendance": {
                     "type": "string",
                     "enum": ["unmarked", "present", "absent", "excused"]
@@ -341,29 +546,52 @@
           },
           {
             "allOf": [
-              { "$ref": "#/components/schemas/FieldCommandBase" },
+              {
+                "$ref": "#/components/schemas/FieldCommandBase"
+              },
               {
                 "type": "object",
                 "required": ["member", "revision", "values"],
                 "properties": {
-                  "action": { "const": "result" },
-                  "member": { "type": "string", "format": "uuid" },
-                  "revision": { "type": "integer", "minimum": 0 },
-                  "values": { "type": "object", "additionalProperties": true },
-                  "note": { "type": "string", "maxLength": 2000 }
+                  "action": {
+                    "const": "result"
+                  },
+                  "member": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "revision": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "values": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 2000
+                  }
                 }
               }
             ]
           },
           {
             "allOf": [
-              { "$ref": "#/components/schemas/FieldCommandBase" },
+              {
+                "$ref": "#/components/schemas/FieldCommandBase"
+              },
               {
                 "type": "object",
                 "required": ["revision"],
                 "properties": {
-                  "action": { "const": "finish" },
-                  "revision": { "type": "integer", "minimum": 0 }
+                  "action": {
+                    "const": "finish"
+                  },
+                  "revision": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
                 }
               }
             ]
@@ -383,7 +611,10 @@
             "type": "string",
             "enum": ["attendance", "result", "finish"]
           },
-          "view": { "type": "string", "enum": ["trainer"] },
+          "view": {
+            "type": "string",
+            "enum": ["trainer"]
+          },
           "id": {
             "type": "string",
             "format": "uuid",
@@ -394,7 +625,127 @@
       "ApiError": {
         "type": "object",
         "required": ["message"],
-        "properties": { "message": { "type": "string" } }
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "FieldHistoryEntry": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "member_id",
+              "recorded_at",
+              "recorded_by",
+              "recorded_name",
+              "kind",
+              "previous_attendance",
+              "attendance"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "member_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "recorded_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "recorded_by": {
+                "type": ["string", "null"]
+              },
+              "recorded_name": {
+                "type": ["string", "null"]
+              },
+              "kind": {
+                "const": "attendance"
+              },
+              "previous_attendance": {
+                "type": "string",
+                "enum": ["unmarked", "present", "absent", "excused"]
+              },
+              "attendance": {
+                "type": "string",
+                "enum": ["unmarked", "present", "absent", "excused"]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "member_id",
+              "recorded_at",
+              "recorded_by",
+              "recorded_name",
+              "kind",
+              "revision",
+              "values",
+              "note"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "member_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "recorded_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "recorded_by": {
+                "type": ["string", "null"]
+              },
+              "recorded_name": {
+                "type": ["string", "null"]
+              },
+              "kind": {
+                "const": "results"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "values": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": ["string", "number"]
+                }
+              },
+              "note": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "FieldHistoryPage": {
+        "type": "object",
+        "required": ["items", "next"],
+        "properties": {
+          "items": {
+            "type": "array",
+            "maxItems": 25,
+            "items": {
+              "$ref": "#/components/schemas/FieldHistoryEntry"
+            }
+          },
+          "next": {
+            "type": ["integer", "null"],
+            "minimum": 0
+          }
+        },
+        "description": "Online-only selected-participant history, including original entry and later corrections. Newest first."
       }
     },
     "responses": {
@@ -402,7 +753,9 @@
         "description": "Stable API error code",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/ApiError" }
+            "schema": {
+              "$ref": "#/components/schemas/ApiError"
+            }
           }
         }
       }

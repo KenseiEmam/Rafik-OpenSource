@@ -63,9 +63,11 @@ const groups = computed(() =>
               name: l('Institution workspace', 'مساحة المؤسسة'),
               items: [
                 ['/tasks', l('Tasks', 'المهام'), PhListChecks],
-                ['/training', l('Training review', 'مراجعة التدريب'), PhBarbell],
-                ['/nutrition', l('Nutrition', 'التغذية'), PhBowlFood],
+                ['/training', l('Athlete plans', 'خطط الرياضيين'), PhBarbell],
+                ['/session-history', l('Session history', 'سجل الحصص'), PhClockCounterClockwise],
+                ['/nutrition', l('Nutrition plans', 'خطط التغذية'), PhBowlFood],
                 ['/calendar', l('Calendar', 'التقويم'), PhCalendarBlank],
+                ['/events', l('Events & assessments', 'المواعيد والتقييمات'), PhListChecks],
                 ['/messages', l('Messages', 'الرسائل'), PhChatCircle],
               ],
             },
@@ -86,9 +88,11 @@ const groups = computed(() =>
                 ['', l('Overview', 'نظرة عامة'), PhHouse],
                 ['/people', l('People', 'الأشخاص'), PhUsers],
                 ['/tasks', l('Tasks', 'المهام'), PhListChecks],
-                ['/training', l('Training', 'التدريب'), PhBarbell],
-                ['/nutrition', l('Nutrition', 'التغذية'), PhBowlFood],
+                ['/training', l('Athlete plans', 'خطط الرياضيين'), PhBarbell],
+                ['/session-history', l('Session history', 'سجل الحصص'), PhClockCounterClockwise],
+                ['/nutrition', l('Nutrition plans', 'خطط التغذية'), PhBowlFood],
                 ['/calendar', l('Calendar', 'التقويم'), PhCalendarBlank],
+                ['/events', l('Events & assessments', 'المواعيد والتقييمات'), PhListChecks],
                 ['/messages', l('Messages', 'الرسائل'), PhChatCircle],
                 ['/analytics', l('Analytics', 'التحليلات'), PhChartLine],
                 ...(props.role === 'trainer'
@@ -141,7 +145,7 @@ const groups = computed(() =>
 function selected(path: string) {
   const current = route.path
     .replace('/deliver/', '/plans/')
-    .replace('/review/', organization.value ? '/training/' : '/clients/')
+    .replace('/review/', organization.value ? '/session-history/' : '/clients/')
     .replace('/assessments/', '/training/')
   return path
     ? current === props.base + path || current.startsWith(props.base + path + '/')
@@ -150,11 +154,9 @@ function selected(path: string) {
 function closeOtherGroups(event: Event) {
   const opened = event.currentTarget as HTMLDetailsElement
   if (!opened.open) return
-  opened.parentElement
-    ?.querySelectorAll<HTMLDetailsElement>('details[open]')
-    .forEach((group) => {
-      if (group !== opened) group.open = false
-    })
+  opened.parentElement?.querySelectorAll<HTMLDetailsElement>('details[open]').forEach((group) => {
+    if (group !== opened) group.open = false
+  })
 }
 </script>
 <template>

@@ -64,6 +64,11 @@ async function load(append = false) {
 const command = useCommand<'save'>(
   key,
   async () => {
+    if (templates && route.query.forEvent && typeof BroadcastChannel !== 'undefined') {
+      const channel = new BroadcastChannel(`rafik-templates:${user.value!.id}:${id}`)
+      channel.postMessage({ event: String(route.query.forEvent), template: draft.value.id })
+      channel.close()
+    }
     editing.value = false
     await removeDraft(key)
     draft.value = fresh()
@@ -133,6 +138,7 @@ onMounted(async () => {
     draft.value = { ...fresh(), ...stored, coaches: stored.coaches || [] }
     editing.value = true
   }
+  if (!stored && route.query.create === '1') edit()
   draftReady.value = true
 })
 </script>

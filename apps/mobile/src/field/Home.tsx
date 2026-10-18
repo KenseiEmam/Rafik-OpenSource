@@ -1,3 +1,5 @@
+import { LanguageControl } from './LanguageControl'
+import { useLanguage } from './Language'
 import { useEffect, useRef, useState } from 'react'
 import { ActivityIndicator, ScrollView, Text, TextInput, useColorScheme, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -9,7 +11,8 @@ import { WorkspaceScreen } from './WorkspaceScreen'
 
 type Runtime = { client: NativeClient; store: FieldStore }
 export default function Home() {
-  const styles = makeStyles(useColorScheme() === 'light')
+  const { t, language } = useLanguage()
+  const styles = makeStyles(useColorScheme() === 'light', language)
   const [runtime, setRuntime] = useState<Runtime | null>(null)
   const [restoring, setRestoring] = useState(true)
   const [busy, setBusy] = useState(false)
@@ -67,7 +70,8 @@ export default function Home() {
   if (restoring)
     return (
       <SafeAreaView style={styles.safe}>
-        <ActivityIndicator accessibilityLabel="Opening encrypted field storage" />
+        <LanguageControl styles={styles} />
+        <ActivityIndicator accessibilityLabel={t('Opening encrypted field storage')} />
       </SafeAreaView>
     )
   if (runtime)
@@ -88,13 +92,14 @@ export default function Home() {
     )
   return (
     <SafeAreaView style={styles.safe}>
+      <LanguageControl styles={styles} />
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        <Text style={styles.kicker}>RAFIK FIELD</Text>
-        <Text style={styles.title}>Sign in to your institution</Text>
+        <Text style={styles.kicker}>{t('RAFIK FIELD')}</Text>
+        <Text style={styles.title}>{t('Sign in to your institution')}</Text>
         <View style={styles.card}>
-          <Text style={styles.label}>Institution API URL</Text>
+          <Text style={styles.label}>{t('Institution API URL')}</Text>
           <TextInput
-            accessibilityLabel="Institution API URL"
+            accessibilityLabel={t('Institution API URL')}
             autoCapitalize="none"
             autoCorrect={false}
             keyboardType="url"
@@ -102,27 +107,27 @@ export default function Home() {
             placeholderTextColor={styles.hint.color}
             value={base}
             onChangeText={setBase}
-            style={styles.input}
+            style={[styles.input, { direction: 'ltr', writingDirection: 'ltr', textAlign: 'left' }]}
             editable={!busy}
           />
-          <Text style={styles.label}>Account email</Text>
+          <Text style={styles.label}>{t('Account email')}</Text>
           <TextInput
-            accessibilityLabel="Account email"
+            accessibilityLabel={t('Account email')}
             autoCapitalize="none"
             autoCorrect={false}
             keyboardType="email-address"
             value={email}
             onChangeText={setEmail}
-            style={styles.input}
+            style={[styles.input, { direction: 'ltr', writingDirection: 'ltr', textAlign: 'left' }]}
             editable={!busy}
           />
-          <Text style={styles.label}>Password</Text>
+          <Text style={styles.label}>{t('Password')}</Text>
           <TextInput
-            accessibilityLabel="Password"
+            accessibilityLabel={t('Password')}
             secureTextEntry
             value={password}
             onChangeText={setPassword}
-            style={styles.input}
+            style={[styles.input, { direction: 'ltr', writingDirection: 'ltr', textAlign: 'left' }]}
             editable={!busy}
             onSubmitEditing={() => void login()}
           />
@@ -134,15 +139,17 @@ export default function Home() {
             primary
           />
           <Text style={styles.hint}>
-            Use your institution account. Each server keeps its own data and sign-in.
+            {' '}
+            {t('Use your institution account. Each server keeps its own data and sign-in.')}{' '}
           </Text>
           <Text style={styles.hint}>
-            Saved attendance reappears only for the same account and institution server.
+            {' '}
+            {t('Saved attendance reappears only for the same account and institution server.')}{' '}
           </Text>
         </View>
         {message ? (
           <Text accessibilityLiveRegion="polite" style={styles.message}>
-            {message}
+            {t(message)}
           </Text>
         ) : null}
       </ScrollView>
@@ -159,6 +166,7 @@ function SignedIn({
   styles: Styles
   signedOut: (revoked: boolean) => void
 }) {
+  const { t, l } = useLanguage()
   const [contexts, setContexts] = useState<CoachContext[]>(client.contexts)
   const [savedWorkspaces, setSavedWorkspaces] = useState<string[]>([])
   const [workspace, setWorkspace] = useState(client.contexts[0]?.workspace_id || '')
@@ -225,9 +233,10 @@ function SignedIn({
   const options = [...new Set([...contexts.map((c) => c.workspace_id), ...savedWorkspaces])]
   return (
     <SafeAreaView style={styles.safe}>
+      <LanguageControl styles={styles} />
       <View style={styles.toolbar}>
         <View style={styles.heading}>
-          <Text style={styles.kicker}>RAFIK FIELD</Text>
+          <Text style={styles.kicker}>{t('RAFIK FIELD')}</Text>
           <Text style={styles.hint}>{client.user.email}</Text>
         </View>
         <Button
@@ -239,7 +248,7 @@ function SignedIn({
       </View>
       {message ? (
         <Text accessibilityLiveRegion="polite" style={[styles.message, { paddingHorizontal: 18 }]}>
-          {message}
+          {t(message)}
         </Text>
       ) : null}
       {options.length > 1 ? (
@@ -247,7 +256,7 @@ function SignedIn({
           {options.map((id) => (
             <Button
               key={id}
-              title={`${contexts.find((c) => c.workspace_id === id)?.name || 'Saved workspace'}${workspace === id ? ' · selected' : ''}`}
+              title={`${contexts.find((c) => c.workspace_id === id)?.name || t('Saved workspace')}${workspace === id ? l(' · selected', ' · محددة') : ''}`}
               disabled={closing || loading || fieldBusy}
               onPress={() => setWorkspace(id)}
               styles={styles}
@@ -269,10 +278,10 @@ function SignedIn({
       ) : (
         <ScrollView contentContainerStyle={styles.content}>
           {loading ? (
-            <ActivityIndicator accessibilityLabel="Checking coach access" />
+            <ActivityIndicator accessibilityLabel={t('Checking coach access')} />
           ) : (
             <>
-              <Text style={styles.title}>No coach workspace</Text>
+              <Text style={styles.title}>{t('No coach workspace')}</Text>
               <Button title="Refresh access" onPress={() => void refreshAccess()} styles={styles} />
             </>
           )}

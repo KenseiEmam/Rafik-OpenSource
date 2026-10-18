@@ -1,3 +1,4 @@
+import { useLanguage } from './Language'
 import { useRef, useState } from 'react'
 import { Text, TextInput, View } from 'react-native'
 import type { FieldResult, FieldResultCommand } from '@rafik/shared/contracts'
@@ -41,6 +42,7 @@ export function ScoreEditor({
   onSubmit: (payload: FieldResultCommand) => Promise<boolean>
   onClose: () => void
 }) {
+  const { t } = useLanguage()
   const [draft, setDraft] = useState<ScoreDraft>(
     () =>
       savedDraft || {
@@ -139,9 +141,12 @@ export function ScoreEditor({
   }
   return (
     <View style={styles.card}>
-      <Text style={styles.cardTitle}>{name} · Assessment scores</Text>
+      <Text style={styles.cardTitle}>
+        {name} {t('· Assessment scores')}
+      </Text>
       <Text style={styles.hint}>
-        Assessor-led performance measurements. These are not clinical findings.
+        {' '}
+        {t('Assessor-led performance measurements. These are not clinical findings.')}{' '}
       </Text>
       {definition.map((drill) => (
         <View key={drill.key} style={{ gap: 6 }}>
@@ -165,15 +170,17 @@ export function ScoreEditor({
           />
           {drill.min !== undefined || drill.max !== undefined ? (
             <Text style={styles.hint}>
-              Allowed: {drill.min ?? 'no minimum'} to {drill.max ?? 'no maximum'}
+              {' '}
+              {t('Allowed:')} {drill.min ?? t('no minimum')} {t('to')}{' '}
+              {drill.max ?? t('no maximum')}
               {drill.unit ? ` ${drill.unit}` : ''}
             </Text>
           ) : null}
         </View>
       ))}
-      <Text style={styles.label}>Assessor note (optional)</Text>
+      <Text style={styles.label}>{t('Assessor note (optional)')}</Text>
       <TextInput
-        accessibilityLabel="Assessor note"
+        accessibilityLabel={t('Assessor note')}
         value={draft.note}
         editable={!locked && !submitting}
         multiline
@@ -183,12 +190,12 @@ export function ScoreEditor({
       />
       {status ? (
         <Text accessibilityLiveRegion="polite" style={styles.hint}>
-          {status}
+          {t(status)}
         </Text>
       ) : null}
       {error ? (
         <Text accessibilityLiveRegion="polite" style={styles.message}>
-          {error}
+          {t(error)}
         </Text>
       ) : null}
       <View style={styles.actions}>

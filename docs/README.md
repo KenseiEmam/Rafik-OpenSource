@@ -19,7 +19,7 @@ This page is the index for maintained Rafik documentation. The root [README](../
 ## Development and quality
 
 - [Development setup and workflows](development/README.md): prerequisites, local setup, common change workflows and troubleshooting.
-- [Android coach field development](development/android.md): native build setup, attendance/scores, completion, exact retries, account isolation and current recovery limits.
+- [Android coach field development](development/android.md): native build setup, Windows startup helper and path/concurrency troubleshooting, attendance/scores, history, recovery sharing, English/Arabic and disposable API/queue acceptance.
 - [Maintainer guide](development/maintainer-guide.md): repository map and implementation recipes.
 - [Current delivery ledger](development/ledger.md): current stage and recent implementation outcomes; not a phase-history archive.
 - [Testing strategy](testing/README.md): test layers, focused commands, fixtures and evidence boundaries.
@@ -31,6 +31,7 @@ This page is the index for maintained Rafik documentation. The root [README](../
 
 - [Operations and deployment](operations/README.md): Compose deployment, cloud starter templates, environment/secrets, backups, recovery, rollback and retention operations.
 - [Release checklist](operations/release-checklist.md): release prerequisites and outstanding gates.
+- [Android beta builds and updates](operations/android-release.md): private signing-key ownership, signed APK builds, installation, offline-start and update checks.
 
 ## Architecture decisions
 
@@ -53,5 +54,6 @@ This page is the index for maintained Rafik documentation. The root [README](../
 - [ADR 0020 — Publish programs directly to the institution library](decisions/ADR-0020-publish-programs-to-library.md)
 - [ADR 0021 — Organization workspaces are the supported web experience](decisions/ADR-0021-organization-only-web-experience.md)
 - [ADR 0022 — Instance branding and local support](decisions/ADR-0022-instance-branding-and-local-support.md)
+- [ADR 0024 — Direct signed Android beta APK](decisions/ADR-0024-android-beta-distribution.md)
 
 Historical phase records and superseded documents are linked from the [archive index](archive/README.md); they are not active product or release guidance.

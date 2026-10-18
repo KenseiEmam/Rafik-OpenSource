@@ -2,6 +2,41 @@
 
 ## Unreleased
 
+## Squire 1.0.0-beta.1 — 2026-10-19
+
+Beta source candidate; package installation and upgrade acceptance are tracked separately. The founder authorized promotion of the cleaned university branch to main and an annotated beta tag.
+
+- Added direct signed Android APK packaging with private local key generation, no debug-signing fallback, bundled JavaScript, signature verification/checksums and ARM64/x86_64 output. Configured Android API 24 minimum; device coverage remains limited.
+- Shortened Windows app CMake staging further for longer release variant/autolinked target paths, retaining library caches and bounded compilation.
+- Set product/workspace versions to `1.0.0-beta.1` and Android versionCode to `1000001`; documented signing-key backup, fresh installation, offline startup and upgrade preservation.
+
+- Recorded focused Android emulator acceptance for offline score persistence across app restart, acknowledged replay, attendance/score history, event completion, recovery share cancellation and Arabic dark recovery. Removed isolated test resources; physical-device and broader acceptance remain open.
+
+- Fixed `mobile:start` to target the installed native development build instead of attempting to install Expo Go, which cannot run Rafik's SQLCipher configuration.
+
+- Documented a smaller-display, snapshot-free Android emulator startup for investigating System UI freezes; existing app data is retained and performance remains unverified.
+
+- Documented the Windows standalone emulator launch command and separate Metro startup, without requiring Android Studio to stay open.
+
+- Documented non-destructive Metro cache recovery when a stale layout bundle reports a missing language provider; native confirmation remains pending.
+
+- Added `mobile:acceptance`, a Node 24 disposable PostgreSQL/API runner for native authentication and real-server queue/retry/history/conflict/revocation checks. Device mode exposes synthetic credentials only in an ignored local fixture and supports explicit cleanup. No existing preview data is reset.
+
+- Added Android participant attendance/score correction history with bounded online reads, in-app server/device comparison, and explicit plain-text recovery sharing for saved operations and drafts. Pending commands retain their original IDs/payloads; exports do not resend or discard work.
+- Added persisted English/Arabic selection, localized feedback/validation, Arabic numeric entry and RTL layouts. Corrected Android paragraph-start alignment after founder screenshot review; URL/email entry remains LTR.
+
+- Fixed the Athlete plans 403 by reading profile timezone through the authenticated profile role. Added a paginated Events & assessments list for staff, with type/status/search filters and links to attendance, results and corrections.
+- Android completed events now show a distinct confirmed, read-only summary. Future events explain when field entry unlocks; controls refresh on foreground return and every 30 seconds while active.
+
+- Fixed Vue template parsing for optional athlete filters in Athlete plans and Nutrition plans.
+
+- Replaced staff athlete-first training selection with paginated Athlete plans and a separate Session history showing authorized workouts immediately. Nutrition plans now opens a paginated published-plan overview with exact-version links and active, upcoming, expired and replaced filters; food diary permissions remain separate.
+- Event creation preloads the profile/device timezone, aligns date/time controls and opens assessment-template creation in another tab with a scoped return handoff. Event overviews and calendar cards have a stronger visual hierarchy.
+
+- Corrected the Windows CMake object-path limit: the original 180-character setting left insufficient room for autolinked targets and prevented hashing. The helper now allows 256 characters; generated path inspection is separate from native build acceptance.
+
+- Consolidated Android builds behind `npm run mobile:android`: Windows Ninja preflight, shorter per-checkout CMake staging, object-path hashing and limited Gradle/native concurrency. Added `--prepare-only` and direct Expo argument forwarding. Recorded the observed Reanimated path failure; native rebuild acceptance remains open.
+
 - Added up to 10 ordered attachments per institution message, including multi-select upload, individual previews/removal, scoped draft recovery and atomic server writes. Added an additive migration that preserves existing single-file messages, checks every attachment's permissions, and includes every attachment in private reads and account exports. Existing single-file commands remain supported.
 
 - Message attachments now appear in a preview section above the composer, with remove controls and separate photo/paperclip upload buttons. Acknowledged sends reset the uploader and clear the queued draft; failed or uncertain sends retain the attachment for recovery.

@@ -1,3 +1,6 @@
+import { RecoveryPanel } from './RecoveryPanel'
+import { EventHistory } from './EventHistory'
+import { useLanguage } from './Language'
 import { useEffect, useRef, useState } from 'react'
 import {
   ActivityIndicator,
@@ -45,6 +48,7 @@ export function WorkspaceScreen({
   closing: boolean
   onPersisting: (busy: boolean) => void
 }) {
+  const { t, l, language } = useLanguage()
   const [owner] = useState<Owner>(() => ({
     instance: client.instance,
     user: client.user.id,
@@ -64,6 +68,8 @@ export function WorkspaceScreen({
   const [editor, setEditor] = useState<string | null>(null)
   const [message, setMessage] = useState('')
   const [search, setSearch] = useState('')
+  const [reviewing, setReviewing] = useState(false)
+  const [now, setNow] = useState(Date.now)
   const alive = useRef(true)
   const selectedRef = useRef<string | null>(null)
   const busyRef = useRef(false)
@@ -173,7 +179,10 @@ export function WorkspaceScreen({
         if (alive.current) setMessage(failureText(e))
       })
     const foreground = () => {
-      if (AppState.currentState === 'active') void sync()
+      if (AppState.currentState === 'active') {
+        setNow(Date.now())
+        void sync()
+      }
     }
     const subscription = AppState.addEventListener('change', foreground)
     // Retry connectivity return only while active. No background-sync guarantee.
@@ -203,6 +212,7 @@ export function WorkspaceScreen({
     setSnapshot(null)
     setOnlineRoster(null)
     setSearch('')
+    setReviewing(false)
     setEditor(null)
     try {
       const saved = await store.snapshot(owner, id)
@@ -239,6 +249,10 @@ export function WorkspaceScreen({
       busyRef.current = false
       if (alive.current) setBusy(false)
     }
+  }
+  async function accessDenied(id: string) {
+    await store.block(owner, id)
+    if (alive.current && selectedRef.current === id) await reloadLocal()
   }
   async function record(member: string, value: FieldAttendance) {
     if (!snapshot || savingRef.current || closingRef.current) return
@@ -297,12 +311,14 @@ export function WorkspaceScreen({
     if (!snapshot || savingRef.current || busyRef.current || closingRef.current) return
     const event = snapshot.roster.event
     Alert.alert(
-      'Complete this event?',
-      'All attendance and assessment results must already be confirmed. Completing clears the saved event package from this device.',
+      t('Complete this event?'),
+      t(
+        'All attendance and assessment results must already be confirmed. Completing clears the saved event package from this device.',
+      ),
       [
-        { text: 'Keep event open', style: 'cancel' },
+        { text: t('Keep event open'), style: 'cancel' },
         {
-          text: 'Complete event',
+          text: t('Complete event'),
           onPress: () => {
             if (!alive.current || selectedRef.current !== event.id) return
             void submitCommand({
@@ -321,12 +337,14 @@ export function WorkspaceScreen({
     const id = selectedRef.current
     if (!id || busyRef.current || savingRef.current || closingRef.current) return
     Alert.alert(
-      'Remove saved event from this device?',
-      'This permanently discards its pending changes and offline roster on this device. An unconfirmed change may already exist on the server. Server records are not undone.',
+      t('Remove saved event from this device?'),
+      t(
+        'This permanently discards its pending changes and offline roster on this device. An unconfirmed change may already exist on the server. Server records are not undone.',
+      ),
       [
-        { text: 'Keep saved work', style: 'cancel' },
+        { text: t('Keep saved work'), style: 'cancel' },
         {
-          text: 'Discard device copy',
+          text: t('Discard device copy'),
           style: 'destructive',
           onPress: () => {
             if (!alive.current || closingRef.current) return
@@ -361,6 +379,8 @@ export function WorkspaceScreen({
   const workspacePaused = !!queueHead && ['needs_attention', 'blocked'].includes(queueHead.state)
   const finishing = pending.some((c) => c.payload.action === 'finish')
   const completionProblems = roster ? finishProblems(roster) : []
+  const completed = roster?.event.state === 'completed'
+  const beforeStart = !!roster && Date.parse(roster.event.starts_at) > now
   const list = [
     ...events,
     ...cached.filter((c) => !events.some((e) => e.id === c.event.id)).map((c) => c.event),
@@ -373,21 +393,22 @@ export function WorkspaceScreen({
   return (
     <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
       <Text style={styles.title}>
-        {selected ? roster?.event.title || 'Event attendance' : 'Coach schedule'}
+        {selected ? roster?.event.title || t('Event attendance') : t('Coach schedule')}
       </Text>
       {message ? (
         <Text accessibilityLiveRegion="polite" style={styles.message}>
-          {message}
+          {t(message)}
         </Text>
       ) : null}
       {workspacePaused && queueHead.event_id !== selected ? (
         <View style={styles.card}>
-          <Text style={styles.label}>Saved attendance needs review</Text>
+          <Text style={styles.label}>{t('Saved attendance needs review')}</Text>
           <Text style={styles.hint}>
-            Sending is paused at{' '}
+            {' '}
+            {t('Sending is paused at')}{' '}
             {cached.find((c) => c.event.id === queueHead.event_id)?.event.title ||
-              'an earlier event'}
-            . Resolve it before sending more changes.
+              t('an earlier event')}{' '}
+            {t('. Resolve it before sending more changes.')}{' '}
           </Text>
           <Button
             title="Review saved change"
@@ -400,7 +421,9 @@ export function WorkspaceScreen({
       {!selected ? (
         <>
           <Text style={styles.hint}>
-            Upcoming 14 days · {window.zone}. Saved events remain available outside this window.
+            {' '}
+            {t('Upcoming 14 days ·')} {window.zone}
+            {t('. Saved events remain available outside this window.')}{' '}
           </Text>
           <Button
             title={busy ? 'Refreshing…' : 'Refresh schedule and sync'}
@@ -413,19 +436,26 @@ export function WorkspaceScreen({
               key={event.id}
               accessibilityRole="button"
               disabled={busy || closing}
-              accessibilityLabel={`Open ${event.title}`}
+              accessibilityLabel={`${l('Open', 'فتح')} ${event.title}`}
               onPress={() => void openEvent(event.id)}
-              style={styles.card}
+              style={[styles.card, event.state === 'completed' && styles.completedCard]}
             >
               <Text style={styles.cardTitle}>{event.title}</Text>
               <Text style={styles.hint}>
-                {displayDate(event.starts_at)} · {event.kind} · {event.state}
+                {displayDate(event.starts_at, language)} {t('·')} {t(event.kind)} {t('·')}{' '}
+                {t(event.state)}
               </Text>
               {event.location ? <Text style={styles.hint}>{event.location}</Text> : null}
               <Text style={styles.link}>
-                {cached.some((c) => c.event.id === event.id)
-                  ? 'Saved on this device · Open roster'
-                  : 'Open online to save roster'}
+                {t(
+                  event.state === 'completed'
+                    ? 'Completed · View confirmed summary online'
+                    : event.state === 'cancelled'
+                      ? 'Cancelled · View details online'
+                      : cached.some((c) => c.event.id === event.id)
+                        ? 'Saved on this device · Open roster'
+                        : 'Open online to save roster',
+                )}
               </Text>
             </Pressable>
           ))}
@@ -439,10 +469,12 @@ export function WorkspaceScreen({
           ) : null}
           {!list.length && !busy ? (
             <View style={styles.card}>
-              <Text style={styles.cardTitle}>No field events to show</Text>
+              <Text style={styles.cardTitle}>{t('No field events to show')}</Text>
               <Text style={styles.hint}>
-                Ask your institution to assign you as event staff. Open the event online before
-                heading offline.
+                {' '}
+                {t(
+                  'Ask your institution to assign you as event staff. Open the event online before heading offline.',
+                )}{' '}
               </Text>
             </View>
           ) : null}
@@ -465,73 +497,133 @@ export function WorkspaceScreen({
           {roster ? (
             <>
               <Text style={styles.hint}>
-                {displayDate(roster.event.starts_at)} · {roster.event.kind} · {roster.event.state}
+                {displayDate(roster.event.starts_at, language)} {t('·')} {t(roster.event.kind)}{' '}
+                {t('·')} {t(roster.event.state)}
               </Text>
+              {completed ? (
+                <View accessibilityLiveRegion="polite" style={[styles.card, styles.completedCard]}>
+                  <Text style={styles.cardTitle}>{t('Event completed')}</Text>
+                  <Text style={styles.hint}>
+                    {' '}
+                    {t(
+                      'Confirmed by your institution. Attendance and results below are read-only. The offline event package has been removed. Open correction history below while online.',
+                    )}{' '}
+                  </Text>
+                </View>
+              ) : beforeStart && roster.event.state === 'scheduled' ? (
+                <View accessibilityLiveRegion="polite" style={styles.card}>
+                  <Text style={styles.cardTitle}>
+                    {t('Field entry opens at the scheduled start')}
+                  </Text>
+                  <Text style={styles.hint}>
+                    {' '}
+                    {t('Attendance, scores and completion unlock')}{' '}
+                    {displayDate(roster.event.starts_at, language)} {t('(')}{' '}
+                    {Intl.DateTimeFormat().resolvedOptions().timeZone || 'device time'}
+                    {t(
+                      '). You can download and review the roster now. If the time is wrong, ask staff to reschedule the event in the web app, then refresh its roster online.',
+                    )}{' '}
+                  </Text>
+                </View>
+              ) : null}
               {snapshot ? (
                 <Text style={styles.hint}>
-                  Roster downloaded {displayDate(snapshot.roster.saved_at)}. Permission is checked
-                  again when sending.
+                  {' '}
+                  {t('Roster downloaded')} {displayDate(snapshot.roster.saved_at, language)}
+                  {t('. Permission is checked again when sending.')}{' '}
                 </Text>
               ) : null}
               {snapshot?.roster.blocked ? (
                 <Text style={styles.message}>
-                  Access blocked. Saved work is retained for explicit review or discard; attendance
-                  entry is locked.
+                  {' '}
+                  {t(
+                    'Access blocked. Saved work is retained for explicit review or discard; attendance entry is locked.',
+                  )}{' '}
                 </Text>
               ) : null}
               {paused ? (
                 <Text style={styles.message}>
-                  Sending is paused. Read the affected athlete’s status. Review current records in
-                  the institution web app, then discard this device copy before downloading a fresh
-                  roster.
+                  {' '}
+                  {t(
+                    'Sending is paused. Review the saved changes against current server records below. Keep or export what you need before explicitly discarding this device copy and reopening online.',
+                  )}{' '}
                 </Text>
               ) : null}
-              <View style={styles.actions}>
-                <Button
-                  title="Sync saved attendance"
-                  disabled={
-                    busy ||
-                    saving ||
-                    closing ||
-                    paused ||
-                    pending.some((c) => c.state === 'sending')
-                  }
-                  onPress={() => void sync()}
+              {snapshot && (paused || snapshot.roster.blocked || reviewing) ? (
+                <RecoveryPanel
+                  key={roster.event.id}
+                  owner={owner}
+                  snapshot={snapshot}
+                  client={client}
+                  store={store}
                   styles={styles}
-                  primary
-                />
-                <Button
-                  title="Refresh roster"
                   disabled={
                     busy ||
                     saving ||
                     draftSaving ||
                     closing ||
-                    !!pending.length ||
-                    !!snapshot?.drafts.length
+                    pending.some((c) => c.state === 'sending')
                   }
-                  onPress={() => void openEvent(selected)}
-                  styles={styles}
+                  onDenied={() => accessDenied(roster.event.id)}
                 />
-              </View>
+              ) : snapshot && (pending.length || snapshot.drafts.length) ? (
+                <Button
+                  title={l('Review saved work', 'مراجعة العمل المحفوظ')}
+                  onPress={() => setReviewing(true)}
+                  styles={styles}
+                  disabled={busy || saving || draftSaving || closing}
+                />
+              ) : null}
+              {!completed && roster.event.state === 'scheduled' ? (
+                <View style={styles.actions}>
+                  <Button
+                    title="Sync saved field work"
+                    disabled={
+                      busy ||
+                      saving ||
+                      closing ||
+                      paused ||
+                      pending.some((c) => c.state === 'sending')
+                    }
+                    onPress={() => void sync()}
+                    styles={styles}
+                    primary
+                  />
+                  <Button
+                    title="Refresh roster"
+                    disabled={
+                      busy ||
+                      saving ||
+                      draftSaving ||
+                      closing ||
+                      !!pending.length ||
+                      !!snapshot?.drafts.length
+                    }
+                    onPress={() => void openEvent(selected)}
+                    styles={styles}
+                  />
+                </View>
+              ) : null}
               {roster.event.kind === 'assessment' && !roster.definition?.length ? (
                 <Text style={styles.message}>
-                  This older attendance package has no assessment definition. Resolve saved
-                  attendance, then refresh online to enter scores.
+                  {' '}
+                  {t(
+                    'This older attendance package has no assessment definition. Resolve saved attendance, then refresh online to enter scores.',
+                  )}{' '}
                 </Text>
               ) : null}
               <TextInput
-                accessibilityLabel="Find athlete in this event"
+                accessibilityLabel={t('Find athlete in this event')}
                 editable={!draftSaving && !saving}
-                placeholder="Find athlete in this event"
+                placeholder={t('Find athlete in this event')}
                 placeholderTextColor={styles.hint.color}
                 value={search}
                 onChangeText={setSearch}
                 style={styles.input}
               />
               <Text style={styles.hint}>
-                {roster.people.filter((p) => p.duty === 'trainee').length} athletes in event ·{' '}
-                {filtered.length} shown
+                {roster.people.filter((p) => p.duty === 'trainee').length}{' '}
+                {t('athletes in event ·')} {filtered.length} {t('shown')}{' '}
               </Text>
               {filtered.map((person) => {
                 const latest = snapshot?.commands
@@ -569,59 +661,82 @@ export function WorkspaceScreen({
                   draftSaving ||
                   !!unsettled ||
                   roster.event.state !== 'scheduled' ||
-                  Date.parse(roster.event.starts_at) > Date.now() ||
+                  beforeStart ||
                   !person.active
                 return (
                   <View key={person.member_id} style={styles.card}>
                     <Text style={styles.cardTitle}>{person.name}</Text>
-                    <Text style={styles.label}>Attendance: {value}</Text>
-                    <Text accessibilityLiveRegion="polite" style={styles.hint}>
-                      {latest ? stateText[latest.state] : 'Downloaded server attendance'}
+                    <Text style={styles.label}>
+                      {t('Attendance:')} {t(value)}
                     </Text>
-                    {latest?.error ? <Text style={styles.message}>{latest.error}</Text> : null}
+                    <Text accessibilityLiveRegion="polite" style={styles.hint}>
+                      {t(latest ? stateText[latest.state] : 'Downloaded server attendance')}
+                    </Text>
+                    {latest?.error ? <Text style={styles.message}>{t(latest.error)}</Text> : null}
                     {!person.active ? (
-                      <Text style={styles.hint}>Inactive athlete — entry unavailable</Text>
+                      <Text style={styles.hint}>{t('Inactive athlete — entry unavailable')}</Text>
                     ) : null}
-                    <View style={styles.actions}>
-                      {(['present', 'absent', 'excused'] as const).map((mark) => (
-                        <Button
-                          key={mark}
-                          title={mark.charAt(0).toUpperCase() + mark.slice(1)}
-                          styles={styles}
-                          primary={value === mark}
-                          disabled={locked || value === mark}
-                          onPress={() => void record(person.member_id, mark)}
-                        />
-                      ))}
-                    </View>
+                    {!completed ? (
+                      <View style={styles.actions}>
+                        {(['present', 'absent', 'excused'] as const).map((mark) => (
+                          <Button
+                            key={mark}
+                            title={mark.charAt(0).toUpperCase() + mark.slice(1)}
+                            styles={styles}
+                            primary={value === mark}
+                            disabled={locked || value === mark}
+                            onPress={() => void record(person.member_id, mark)}
+                          />
+                        ))}
+                      </View>
+                    ) : null}
+                    <EventHistory
+                      key={`${roster.event.id}:${person.member_id}`}
+                      client={client}
+                      workspace={workspace}
+                      event={roster.event.id}
+                      member={person.member_id}
+                      name={person.name}
+                      definition={roster.definition}
+                      assessment={roster.event.kind === 'assessment'}
+                      styles={styles}
+                      disabled={busy || saving || draftSaving || closing}
+                      onDenied={() => accessDenied(roster.event.id)}
+                    />
                     {roster.event.kind === 'assessment' ? (
                       <>
                         {result ? (
                           <View style={{ gap: 6 }}>
                             <Text style={styles.label}>
-                              Confirmed assessment · revision {result.revision}
+                              {' '}
+                              {t('Confirmed assessment · revision')} {result.revision}
                             </Text>
                             {roster.definition?.map((drill) => (
                               <Text key={drill.key} style={styles.hint}>
-                                {drill.name}: {result.values[drill.key] ?? 'Not recorded'}
+                                {drill.name}
+                                {t(':')} {result.values[drill.key] ?? t('Not recorded')}
                                 {drill.unit ? ` ${drill.unit}` : ''}
                               </Text>
                             ))}
                             {result.note ? (
-                              <Text style={styles.hint}>Assessor note: {result.note}</Text>
+                              <Text style={styles.hint}>
+                                {t('Assessor note:')} {result.note}
+                              </Text>
                             ) : null}
                           </View>
                         ) : null}
                         {resultCommand ? (
                           <Text style={styles.hint}>
-                            Scores: {stateText[resultCommand.state]}
-                            {resultCommand.error ? ` · ${resultCommand.error}` : ''}
+                            {' '}
+                            {t('Scores:')} {t(stateText[resultCommand.state])}
+                            {resultCommand.error ? ` · ${t(resultCommand.error)}` : ''}
                           </Text>
                         ) : null}
                         {snapshot?.drafts.some((d) => d.member === person.member_id) ? (
-                          <Text style={styles.hint}>Score draft saved on device</Text>
+                          <Text style={styles.hint}>{t('Score draft saved on device')}</Text>
                         ) : null}
-                        {roster.definition?.length &&
+                        {!completed &&
+                        roster.definition?.length &&
                         (value === 'present' ||
                           result ||
                           queuedResult ||
@@ -637,6 +752,8 @@ export function WorkspaceScreen({
                                     : 'Record assessment scores'
                             }
                             disabled={
+                              completed ||
+                              beforeStart ||
                               editor === person.member_id ||
                               saving ||
                               draftSaving ||
@@ -672,7 +789,7 @@ export function WorkspaceScreen({
                               !person.active ||
                               value !== 'present' ||
                               roster.event.state !== 'scheduled' ||
-                              Date.parse(roster.event.starts_at) > Date.now()
+                              beforeStart
                             }
                             onPersisting={setDraftSaving}
                             onDraftSaved={async (discarded) => {
@@ -703,29 +820,31 @@ export function WorkspaceScreen({
               })}
               {!filtered.length ? (
                 <Text style={styles.hint}>
-                  {search ? 'No athletes match this name.' : 'This event has no athletes.'}
+                  {t(search ? 'No athletes match this name.' : 'This event has no athletes.')}
                 </Text>
               ) : null}
               {snapshot && roster.event.state === 'scheduled' ? (
                 <View style={styles.card}>
-                  <Text style={styles.cardTitle}>Complete event</Text>
+                  <Text style={styles.cardTitle}>{t('Complete event')}</Text>
                   {completionProblems.map((problem) => (
-                    <Text key={problem} style={styles.hint}>
-                      {problem}
+                    <Text key={t(problem)} style={styles.hint}>
+                      {t(problem)}
                     </Text>
                   ))}
                   {pending.length ? (
                     <Text style={styles.hint}>
-                      {pending.length} saved change(s) awaiting confirmation.
+                      {pending.length} {t('saved change(s) awaiting confirmation.')}{' '}
                     </Text>
                   ) : null}
                   {snapshot.drafts.length ? (
                     <Text style={styles.hint}>
-                      Submit or discard {snapshot.drafts.length} score draft(s) before completing.
+                      {' '}
+                      {t('Submit or discard')} {snapshot.drafts.length}{' '}
+                      {t('score draft(s) before completing.')}{' '}
                     </Text>
                   ) : null}
                   <Button
-                    title={finishing ? 'Completion waiting for confirmation' : 'Complete event'}
+                    title={finishing ? 'Completion waiting for confirmation' : t('Complete event')}
                     onPress={finish}
                     styles={styles}
                     primary
@@ -739,7 +858,7 @@ export function WorkspaceScreen({
                       !!pending.length ||
                       !!snapshot.drafts.length ||
                       !!completionProblems.length ||
-                      Date.parse(roster.event.starts_at) > Date.now()
+                      beforeStart
                     }
                   />
                 </View>
@@ -747,24 +866,35 @@ export function WorkspaceScreen({
               {snapshot ? (
                 <Button
                   title="Remove device copy / discard pending work"
-                  disabled={busy || saving || closing || pending.some((c) => c.state === 'sending')}
+                  disabled={
+                    busy ||
+                    saving ||
+                    draftSaving ||
+                    closing ||
+                    pending.some((c) => c.state === 'sending')
+                  }
                   onPress={removeCopy}
                   styles={styles}
                 />
               ) : null}
             </>
           ) : busy ? (
-            <ActivityIndicator accessibilityLabel="Opening event roster" />
+            <ActivityIndicator accessibilityLabel={t('Opening event roster')} />
           ) : (
             <Text style={styles.hint}>
-              No offline roster exists. Connect to your institution and reopen this event.
+              {' '}
+              {t(
+                'No offline roster exists. Connect to your institution and reopen this event.',
+              )}{' '}
             </Text>
           )}
         </>
       )}
       <Text style={styles.hint}>
-        Only this account’s explicitly opened rosters are stored on this device. Sync runs while the
-        app is active.
+        {' '}
+        {t(
+          'Only this account’s explicitly opened rosters are stored on this device. Sync runs while the app is active.',
+        )}{' '}
       </Text>
     </ScrollView>
   )

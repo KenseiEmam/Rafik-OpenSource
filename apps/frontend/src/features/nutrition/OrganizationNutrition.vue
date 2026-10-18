@@ -65,7 +65,7 @@ const workspaceName = computed(
 )
 const selected = ref(String(route.query.member || '')),
   date = ref(localDate(profile.value?.timezone || 'UTC')),
-  section = ref('plan'),
+  section = ref(route.query.plan ? 'history' : 'plan'),
   choosing = ref(!selected.value)
 const data = ref<Data>(),
   loading = ref(false),
@@ -177,6 +177,7 @@ async function load(reset = false, offset = 0, historyOffset = 0, removedOffset 
       removedOffset: String(removedOffset),
     })
     if (selected.value) q.set('member', selected.value)
+    if (route.query.plan && reset) q.set('plan', String(route.query.plan))
     if (historyMeal.value) q.set('meal', historyMeal.value)
     const result = await request<Data>(`${endpoint}?${q}`)
     if (disposed || stamp !== generation) return
@@ -352,6 +353,12 @@ onBeforeUnmount(() => {
     class="container page org-nutrition nutrition-workspace"
     :class="{ 'with-member': data?.member && !choosing }"
   >
+    <RouterLink
+      v-if="!trainee"
+      class="back-link"
+      :to="`/organization/${workspace}/${view}/nutrition`"
+      >{{ l('All nutrition plans', 'جميع خطط التغذية') }}</RouterLink
+    >
     <header class="page-heading">
       <div>
         <h1>{{ l('Nutrition', 'التغذية') }}</h1>
@@ -386,16 +393,16 @@ onBeforeUnmount(() => {
           :aria-expanded="choosing"
           @click="choosing = !choosing"
         >
-          {{ l('Change trainee', 'تغيير المتدرب') }}
+          {{ l('Change athlete', 'تغيير الرياضي') }}
         </button>
       </div>
       <div v-if="choosing">
-        <h2>{{ l('Choose a trainee', 'اختر متدرباً') }}</h2>
+        <h2>{{ l('Choose an athlete', 'اختر رياضياً') }}</h2>
         <p class="subtle">
           {{
             view === 'admin'
               ? l('Choose anyone in this institution.', 'اختر من متدربي هذه المؤسسة.')
-              : l('Your assigned trainees appear here.', 'يظهر هنا المتدربون المسندون إليك.')
+              : l('Your assigned athletes appear here.', 'يظهر هنا الرياضيون المسندون إليك.')
           }}
         </p>
         <MemberPicker
@@ -890,7 +897,12 @@ onBeforeUnmount(() => {
             <p v-if="!data.plans.length" class="empty-state-note">
               {{ l('No published plans yet.', 'لا توجد خطط منشورة بعد.') }}
             </p>
-            <details v-for="p in data.plans" :key="p.id" class="org-plan-history">
+            <details
+              v-for="p in data.plans"
+              :key="p.id"
+              :open="route.query.plan === p.id"
+              class="org-plan-history"
+            >
               <summary>
                 {{ l('Version', 'النسخة') }} {{ p.revision }} · {{ shortDate(p.effective_on) }} ·
                 {{ author(p.author_id) }}

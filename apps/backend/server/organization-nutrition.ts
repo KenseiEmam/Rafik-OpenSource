@@ -61,7 +61,17 @@ export async function nutrition(
       where: { member_id: member.id },
     });
     const canReadDiary = view === "trainee" || sharing?.enabled === true;
-    const offset = pageOffset(q.get("offset"));
+    let offset = pageOffset(q.get("offset"));
+    if (q.get("plan")) {
+      const selected = await tx.organization_nutrition_plans.findFirst({
+        where: { ...where, id: uuid(q.get("plan")) },
+      });
+      if (!selected) throw new ApiError(404, "resource_unavailable");
+      const newer = await tx.organization_nutrition_plans.count({
+        where: { ...where, revision: { gt: selected.revision } },
+      });
+      offset = Math.floor(newer / 10) * 10;
+    }
     const [plans, total, latest, current, meals] = await Promise.all([
       tx.organization_nutrition_plans.findMany({
         where,

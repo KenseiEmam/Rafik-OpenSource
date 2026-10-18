@@ -123,9 +123,14 @@ onMounted(() => load())
           }}
         </p>
       </div>
-      <RouterLink v-if="view !== 'trainee'" class="button" :to="base + '/calendar/new'">{{
-        l('Schedule event', 'جدولة موعد')
-      }}</RouterLink>
+      <div class="actions">
+        <RouterLink v-if="view !== 'trainee'" class="button secondary" :to="base + '/events'">{{
+          l('Events & assessments', 'المواعيد والتقييمات')
+        }}</RouterLink>
+        <RouterLink v-if="view !== 'trainee'" class="button" :to="base + '/calendar/new'">{{
+          l('Schedule event', 'جدولة موعد')
+        }}</RouterLink>
+      </div>
     </header>
     <form class="calendar-toolbar" @submit.prevent="load()">
       <label class="view-control">
@@ -208,7 +213,11 @@ onMounted(() => load())
             </p>
           </section>
           <ol v-else class="agenda-list">
-            <li v-for="e in visible" :key="e.id">
+            <li
+              v-for="e in visible"
+              :key="e.id"
+              :class="{ 'assessment-booking': e.kind === 'assessment' }"
+            >
               <RouterLink :to="base + '/calendar/' + e.id + '?from=' + start" class="agenda-event">
                 <div class="agenda-time">
                   <strong>{{ date(e.starts_at) }}</strong>
@@ -347,10 +356,14 @@ onMounted(() => load())
   padding: 16px;
   margin-block: 10px;
   border: 1px solid var(--line);
+  border-inline-start: 4px solid var(--accent);
   border-radius: 12px;
   background: var(--surface);
   color: inherit;
   text-decoration: none;
+}
+.assessment-booking .agenda-event {
+  background: var(--surface-soft);
 }
 .agenda-event:hover {
   border-color: var(--accent);

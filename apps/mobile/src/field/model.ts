@@ -180,7 +180,12 @@ export function scoreValues(definition: FieldDrill[], draft: ScoreDraft): FieldR
       values[drill.key] = raw
     } else {
       // Preserve source-backed fractional values; never truncate to integers.
-      const value = Number(raw)
+      const value = Number(
+        raw
+          .replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 0x660))
+          .replace(/[۰-۹]/g, (d) => String(d.charCodeAt(0) - 0x6f0))
+          .replace(/٫/g, '.'),
+      )
       if (
         !Number.isFinite(value) ||
         Math.abs(value) > 1e9 ||

@@ -1,0 +1,30 @@
+// Applied by android.mjs to generated native projects. Keep native sources intact.
+if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+    def checkout = rootProject.projectDir.parentFile.parentFile.parentFile.canonicalPath
+    def checkoutKey = java.security.MessageDigest.getInstance('SHA-256')
+        .digest(checkout.getBytes('UTF-8')).encodeHex().toString().substring(0, 12)
+    subprojects { nativeProject ->
+        ['com.android.application', 'com.android.library'].each { pluginId ->
+            nativeProject.pluginManager.withPlugin(pluginId) {
+                def android = nativeProject.extensions.getByName('android')
+                // The app's autolinked target names are much longer than library
+                // targets. RelWithDebInfo + arm64 needs a shorter base than TEMP
+                // to leave enough space for CMake object-path hashing.
+                def stagingBase = nativeProject.name == 'app'
+                    ? new File(System.getProperty('user.home'), '.rf-cxx')
+                    : new File(System.getProperty('java.io.tmpdir'), 'rf-cxx')
+                android.externalNativeBuild.cmake.buildStagingDirectory = new File(
+                    stagingBase, "${checkoutKey}/${nativeProject.name}"
+                )
+                android.defaultConfig.externalNativeBuild.cmake.arguments.addAll([
+                    // Autolinked target directories can already exceed 170 chars.
+                    // Leave room for CMake's 32-char hash and the source basename.
+                    '-DCMAKE_OBJECT_PATH_MAX=256',
+                    '-DCMAKE_JOB_POOLS=rafik_compile=2;rafik_link=1',
+                    '-DCMAKE_JOB_POOL_COMPILE=rafik_compile',
+                    '-DCMAKE_JOB_POOL_LINK=rafik_link'
+                ])
+            }
+        }
+    }
+}

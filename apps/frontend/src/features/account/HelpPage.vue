@@ -6,6 +6,14 @@ import { language, t } from '../../lib/i18n'
   <div class="container page prose-page">
     <p class="overline">{{ t('help') }}</p>
     <h1>{{ language('Help', 'المساعدة') }}</h1>
+    <p class="small-print">
+      {{
+        language(
+          'Use Events & assessments to browse scheduled group training and assessments without selecting an athlete. Filter by activity type or status, then open an event for attendance, results and correction history. Session history contains athletes’ recorded workouts.',
+          'استخدم المواعيد والتقييمات لتصفح التدريبات الجماعية والتقييمات المجدولة دون اختيار رياضي. رشّح حسب نوع النشاط أو حالته، ثم افتح الموعد لعرض الحضور والنتائج وتاريخ التصحيحات. يعرض سجل الحصص تمارين الرياضيين المسجلة.',
+        )
+      }}
+    </p>
     <section>
       <h2>{{ language('Messages and programs', 'الرسائل والبرامج') }}</h2>
       <p>
@@ -84,8 +92,8 @@ import { language, t } from '../../lib/i18n'
         <p>
           {{
             language(
-              'Your trainer dashboard opens to your assigned coaching work. People and Training show your assigned athletes; Calendar includes events where you are designated staff. Review a completed session, leave feedback or adapt the next prescription. Analytics describes your current responsibility, and conversations have their own visible participant lists.',
-              'تفتح لوحة المدرب على مهام التدريب المسندة إليك. يعرض قسم الأشخاص والتدريب الرياضيين المعيّنين لك، ويعرض التقويم المواعيد المسندة إليك. راجع الحصة المكتملة وقدّم ملاحظاتك أو عدّل التدريب القادم. تخص التحليلات مسؤوليتك الحالية، ولكل محادثة قائمة مشاركين واضحة.',
+              'Your coach dashboard opens to your assigned work. Athlete plans and Nutrition plans show current published assignments without choosing an athlete first. Use status filters for expired or replaced plans. Session history lists recorded workouts across your authorized athletes, with an optional athlete filter. Calendar includes events where you are designated staff. Analytics follows your current responsibility, and conversations show their participants.',
+              'تعرض خطط الرياضيين البرامج المسندة السارية مباشرة، ويعرض سجل الحصص التدريبات المسجلة لكل الرياضيين المصرّح لك بالاطلاع عليهم، دون الحاجة لاختيار رياضي أولاً. استخدم البحث والمرشحات الاختيارية لعرض الخطط القادمة أو المنتهية. تعرض خطط التغذية الخطط المنشورة دون كشف يوميات الطعام. يعرض التقويم المواعيد المسندة إليك، وتخص التحليلات مسؤوليتك الحالية. افتح الحصة لمراجعتها وتقديم ملاحظاتك.',
             )
           }}
         </p>

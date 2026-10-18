@@ -31,6 +31,7 @@ import {
 } from "./organization-catalog.ts";
 import {
   calendar,
+  scheduledEvents,
   calendarPreview,
   calendarCommand,
 } from "./organization-calendar.ts";
@@ -45,6 +46,8 @@ import {
   type ServerResponse,
 } from "node:http";
 import { serveApiDocs } from "./api-docs.ts";
+import { athletePlans } from "./athlete-plans.ts";
+import { nutritionPlanIndex } from "./nutrition-plan-index.ts";
 import { db, ApiError, requireActor } from "./db.ts";
 import { identify, authRoute, mobileAuthRoute } from "./auth.ts";
 import {
@@ -273,6 +276,51 @@ const server = createServer(async (req, res) => {
       return;
     }
     const actor = await identify(req);
+    const scheduledMatch = path.match(
+      /^\/v1\/workspaces\/([a-f0-9-]{36})\/scheduled-events$/,
+    );
+    if (scheduledMatch && req.method === "GET") {
+      send(
+        res,
+        200,
+        await scheduledEvents(
+          requireActor(actor),
+          scheduledMatch[1],
+          url.searchParams,
+        ),
+      );
+      return;
+    }
+    const nutritionIndexMatch = path.match(
+      /^\/v1\/workspaces\/([a-f0-9-]{36})\/nutrition-plans$/,
+    );
+    if (nutritionIndexMatch && req.method === "GET") {
+      send(
+        res,
+        200,
+        await nutritionPlanIndex(
+          requireActor(actor),
+          nutritionIndexMatch[1],
+          url.searchParams,
+        ),
+      );
+      return;
+    }
+    const athletePlansMatch = path.match(
+      /^\/v1\/workspaces\/([a-f0-9-]{36})\/athlete-plans$/,
+    );
+    if (athletePlansMatch && req.method === "GET") {
+      send(
+        res,
+        200,
+        await athletePlans(
+          requireActor(actor),
+          athletePlansMatch[1],
+          url.searchParams,
+        ),
+      );
+      return;
+    }
     if (req.method === "GET" && path === "/v1/instance/branding/can-manage") {
       const workspaceId = url.searchParams.get("workspace") || "";
       send(res, 200, await canManageBranding(requireActor(actor), workspaceId));

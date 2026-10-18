@@ -6,6 +6,8 @@
 
 ## Context
 
+**18 October implementation addendum:** correction history stays online-only and authorization is rechecked for each page. Recovery compares a separate server read without rewriting the local base or command payload. User-confirmed Android text sharing exports only durable unresolved work for manual reconciliation, without credentials or auto-import/replay. This avoids adding another native file-sharing dependency/build; large texts are refused intact with individual-item sharing available. Shared copies are outside SQLCipher and institution server retention, so the UI requires an explicit privacy warning. Locale is device-local metadata and changing it does not switch ownership or remount editors.
+
 Stage 7 adds a native field app after the web, API and self-hosted deployment foundation. The founder confirmed a coach-first release. Coaches need to use scheduled rosters and assessor-led results around training venues where network access may be intermittent. The app must remain compatible with university-owned deployments and preserve the API's tenant, role, assignment, audit, revision and retry rules.
 
 The API supports organization calendar detail, attendance, assessment results and event completion. Writes use stable operation IDs and server-side transactional receipts. The browser uses cookies and the `web` client marker; the separate native bearer-session endpoints are now implemented. Browser local storage is not native durable-storage evidence.

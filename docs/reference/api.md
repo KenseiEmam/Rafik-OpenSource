@@ -4,6 +4,8 @@ The browser calls the Node API at `/v1`; root `src/lib/backend.ts` is the sole t
 
 ## OpenAPI / Swagger export
 
+The supported coach calendar detail also accepts `historyOnly=true`, required `historyMember=<event athlete UUID>`, `historyKind=attendance|results` (default results) and `historyOffset` (0–100000), alongside `id` and `view=trainer`. Returns `{items,next}` with up to 25 entries, ordered newest timestamp/ID first. Attendance entries project the previous/new marks from event audit; result entries include revision, values and note. Both include recorded time and institution member attribution where available. The original entry is included, not only later corrections. Event staffing and participant visibility are rechecked on every page; athletes cannot read another participant. These reads require the updated backend and do not change write/retry semantics.
+
 `apps/backend/openapi.json` is the versioned OpenAPI 3.1 contract for the supported coach field API: native authentication, role contexts, bounded calendar reads, and attendance/result/event-finish commands. An updated backend exports it at `GET /v1/openapi.json` and serves Swagger UI at `/v1/docs`, without requiring authentication. This is a maintained supported subset, not an inventory of every legacy or web-only API; this document remains the broader route reference.
 
 ### Open Swagger locally
@@ -17,6 +19,16 @@ The viewer sends `X-Rafik-Client: android`, omits browser cookies and targets on
 For Compose self-hosting, use `/api/v1/docs` and `/api/v1/openapi.json` on the installation's web origin. With `NODE_ENV=production`, the viewer is reference-only: **Try it out** is disabled. API authentication/authorization remains enforced independently. Use synthetic data in examples. These routes require a backend revision containing this implementation; the landing site does not host this viewer.
 
 ## Routes and authentication
+
+### Staff plan indexes (web)
+
+- `GET /v1/workspaces/:id/scheduled-events?view=admin|trainer`: 24 scheduled activities per page, across dates. Optional `kind=all|training|assessment`, `state=all|scheduled|completed|cancelled`, title `search` and `offset`. Returns event summaries with `athlete_count`, full matching `total` and `next`, ordered by scheduled start descending and ID ascending. Coaches see only events where they are designated staff. Participant identities/results remain in separately authorized calendar detail reads. This web-only endpoint does not change the supported coach OpenAPI subset.
+
+- `GET /v1/workspaces/:id/athlete-plans?view=admin|trainer`: 24 assignments per page; `offset`, `search` (athlete/program), optional `member`, and `status=active|upcoming|expired|ended|all` (default active). Returns `items`, full matching `total`, `next`, `today` and viewer `zone`. Active/upcoming lists exclude inactive memberships. Dates use the viewer profile timezone; expiry is inclusive. `assignment=<uuid>` resolves one authorized immutable assigned version, including its prescription, independent of list status/search.
+- `GET /v1/workspaces/:id/nutrition-plans?view=admin|trainer`: 24 summaries per page; `offset`, `search` (athlete), optional `member`, and `status=active|upcoming|expired|superseded|all` (default active). Returns `items`, full matching `total` and `next`. Status uses each athlete's existing local-date rule. A later effective plan replaces earlier guidance once effective; higher revisions replace plans with the same effective date. Summaries contain identity, dates and revision, without meal diaries or targets.
+- Existing nutrition detail reads accept `plan=<uuid>` alongside `member` to locate that exact authorized version in ten-row revision history. Diary-sharing checks still apply independently. Existing delivery reads with `history=true` return recorded workouts across the authorized roster, with optional `member` and the existing older-page cursor.
+
+Both new indexes require administrator or trainer membership; a trainer sees only assigned athletes. These routes require an updated backend and are web API additions, outside the supported field OpenAPI subset. No database migration is required for these reads.
 
 - `GET /v1/auth/setup-status`, `session`; `POST /v1/auth/setup` creates the first super admin and institution atomically on an empty instance; `POST /v1/auth/password-login`; `POST /v1/auth/logout`. Sessions are opaque HttpOnly, SameSite cookies backed by hashed tokens. Browser requests include credentials.
 - `POST /v1/auth/accept-invitation` accepts a pending seven-day, single-use institution invite, creates the account with a password and starts a session. No email is sent or verified. `POST /v1/auth/complete-password-setup` consumes an admin-issued one-time password setup token (24-hour expiry) and revokes existing sessions.

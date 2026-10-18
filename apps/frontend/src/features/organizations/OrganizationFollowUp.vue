@@ -174,8 +174,8 @@ onUnmounted(() => {
         <RouterLink
           v-if="data.reviews.total > 8"
           class="text-link"
-          :to="context.base + '/training'"
-          >{{ l('All training', 'كل التدريب') }}</RouterLink
+          :to="context.base + '/session-history'"
+          >{{ l('Session history', 'سجل الحصص') }}</RouterLink
         >
       </section>
       <section class="panel">

@@ -5,24 +5,33 @@ import assert from "node:assert/strict";
 import { removePrivate } from "../server/private-bytes.ts";
 import { db } from "../server/db.ts";
 export type Person = { id: string; email: string; cookie: string };
-const composeFile = resolve(import.meta.dirname, "../../../infrastructure/compose.yaml");
+const composeFile = resolve(
+  import.meta.dirname,
+  "../../../infrastructure/compose.yaml",
+);
 export const dockerCompose = (args: string[], options = {}) =>
   execFileSync("docker", ["compose", "-f", composeFile, ...args], options);
-export const operation = <T extends object>(action: string, args: T) => ({
+export const operation = <T extends object, A extends string>(
+  action: A,
+  args: T,
+) => ({
   operation: randomUUID(),
   action,
   ...args,
 });
 export async function call(p: Person, path: string, input?: unknown) {
-  const r = await fetch("http://127.0.0.1:55331" + path, {
-    method: input === undefined ? "GET" : "POST",
-    headers: {
-      Cookie: p.cookie,
-      "x-rafik-client": "web",
-      "Content-Type": "application/json",
+  const r = await fetch(
+    (process.env.RAFIK_TEST_API || "http://127.0.0.1:55331") + path,
+    {
+      method: input === undefined ? "GET" : "POST",
+      headers: {
+        Cookie: p.cookie,
+        "x-rafik-client": "web",
+        "Content-Type": "application/json",
+      },
+      body: input === undefined ? undefined : JSON.stringify(input),
     },
-    body: input === undefined ? undefined : JSON.stringify(input),
-  });
+  );
   return { status: r.status, data: await r.json() };
 }
 export async function organizationFixture() {
