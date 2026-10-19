@@ -16,7 +16,7 @@ This is a staged university-first revamp. Read [the requirements](docs/requireme
 
 ## Local setup
 
-Use Node 22.16 or Node 24, npm, and Docker Compose. Run one `npm ci` from the repository root to install all workspaces. Follow the root [README](README.md) to start the local database, API, and web app. Seed only an empty local database. `infrastructure/compose.yaml` is a development database service, not a production deployment. Production containers use pinned Node 22.16 images.
+Use Node 22.16 or Node 24, npm, and Docker Compose. Run one `npm ci` from the repository root to install all workspaces. Follow the root [README](README.md) to start the local database, API, and web app. Seed only an empty local database. `infrastructure/compose.yaml` is the single Compose definition: default/local services support development; the `selfhost` profile provides the deployment foundation described in operations. Production containers use pinned Node 22.16 images.
 
 ## Verification
 

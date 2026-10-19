@@ -1,5 +1,13 @@
 # Verification record
 
+## Whole-product beta documentation review — 19 October 2026
+
+**Passed:** root `npm run build` completed Vue type checking and Vite production bundling (3,963 modules; Vite phase 9.85s). Web runtime source is unchanged from `4e4ffd3`; this follow-up changes documentation and its checker only. The build emitted a nonfatal future-native-config-loader warning for the JSON import attribute; it is recorded as P3 in known issues rather than hidden. No browser, Android rebuild or database reset was needed for this documentation pass.
+
+**Passed:** enhanced `npm run docs:check` runs two isolated regression cases and scans 55 maintained root/app/docs/infrastructure documents, including relative heading anchors. It caught the new beta-summary fragment mismatch, which was corrected. Root README npm commands were checked against their actual root/workspace scripts; the OpenAPI JSON parses as 3.1.0, contract version 0.1.0 with six supported paths. One Compose definition remains. Targeted formatting and whitespace checks passed. External URLs are outside the local link scan; official GitHub release/archive guidance was consulted separately. Fixtures removed their own temporary directory.
+
+The review corrected stale stage/API status, Compose profile descriptions, monorepo paths, default demo seeding and the health-only coach walkthrough. The [project beta decision](../operations/release-checklist.md#project-beta-readiness-19-october-2026) separates supported synthetic-data evaluation from publication actions and each institution’s live-data checks. First-user/cloud gates remain the founder-accepted backlog; no unperformed test is marked passed. Newer web browse/multi-attachment rendering, updated Android physical acceptance, signing backup execution and production recovery remain explicit limits. See the [raw receipt](receipts/2026-10-19-whole-beta-docs.json).
+
 ## Public-beta readiness fixes — 19 October 2026
 
 A final source review found a second cold-start gate: the workspace schedule refresh held the general busy lock. Cached event opening now uses its local snapshot immediately and initial schedule refresh has a separate busy state. A newer download is explicit via **Refresh roster**. This final change passed source/test TypeScript and React lifecycle review (including unmount guards, observer cleanup, separate schedule locks and selected-event response guards); the final signed build below passed, with physical UI acceptance still open.

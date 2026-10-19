@@ -23,7 +23,24 @@ npm run dev
 
 Open `http://127.0.0.1:5173`. A fresh database opens the first-run super-admin setup form; complete it with synthetic details. A database seeded with sample accounts opens sign-in instead. The first-run journey can be exercised safely with `npm run test:e2e --workspace @rafik/frontend -- onboarding.e2e.ts --empty-database`; the isolated runner creates and removes its own database. Do not run `npm run seed:local` against a database that already contains data. The [development guide](../development/README.md) covers setup and troubleshooting.
 
-## Coach walkthrough
+## Prepare accounts and access
+
+Use an empty synthetic institution or your existing local demo; do not reset another dataset. In **People & access**, invite a coach and at least two athletes using separate synthetic email identifiers. Redeem each single-use link and set passwords. Assign the coach responsibility for the athletes. Each membership has one role; use separate accounts to review different dashboards.
+
+## Training and assessment walkthrough
+
+1. As an administrator, open **Programs**, start an empty program, add real exercises and prescriptions, then publish. From its preview choose **Assign this program** for a synthetic athlete. Confirm another institution coach can find the published program but can assign only within their authorized roster.
+2. As the assigned coach, open **Athlete plans**. Confirm current assignments appear without choosing an athlete first. Try search/status filters, a later page if enough records exist, opening an assignment and returning to the list. Use **Nutrition plans** for published nutrition guidance; this is separate from actual food intake/sharing.
+3. Sign in as the athlete and open the assigned training. Record a synthetic workout and review its history/progress. Return as coach to **Session history**; distinguish recorded workouts from scheduled team events.
+4. In **Calendar**, create a group training event or assessor-led assessment. For an assessment, choose/create its template, designate the coach as event staff, select athletes and review timezone/date/time. Save and find it in **Events & assessments** without selecting an athlete first.
+5. Open the event after its start, record attendance and separate athlete results with units, correct one result, then inspect correction history. Confirm another unassigned coach cannot access the participant records. Complete the event only after required records are confirmed.
+6. In **Messages**, select an authorized person, send a synthetic message and return to the same conversation. Attach multiple harmless images/documents: inspect pending previews, send, confirm the composer clears and downloads work. Test an interrupted send/retry without duplicating the conversation or sent attachment set.
+7. As administrator, review **Analytics**, role/invitation controls and instance branding in settings. Check that athlete and coach accounts do not gain administrator actions.
+8. Repeat the main task in Arabic/dark mode and a narrow viewport. Include the keyboard, long names, no results and permission/error states. Record actual blockers and successes; a task list alone is not test evidence.
+
+For native offline attendance/results and device restart, use the separate [physical-phone guide](../operations/android-release.md#physical-phone-check-galaxy-s20-and-local-backend). This web walkthrough does not prove native persistence or offline capture.
+
+## Optional participation-status walkthrough
 
 Use a synthetic institution and athlete records. The first-run form creates the initial institution and super admin; subsequent users are added by an administrator through one-time invitation links.
 

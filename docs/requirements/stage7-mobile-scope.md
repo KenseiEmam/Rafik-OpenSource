@@ -1,46 +1,38 @@
 # Stage 7 mobile scope
 
-**Status:** coach-first scope confirmed by the founder, 17 October 2026. This records the agreed first-user direction; detailed API and release acceptance still need implementation evidence.
+**Status:** coach-first beta candidate, 19 October 2026. API and focused emulator evidence is available; physical and broader native acceptance remain open.
 
 ## Goal
 
 Help university staff and athletes complete useful training and field-work tasks on Android phones or tablets. The app must connect only to the user's university instance. It must preserve the server's current role, assignment, privacy, revision and audit rules.
 
-## Implementation status — 18 October 2026
+## Implementation status — 19 October 2026
 
-The founder reports a successful Android offline-attendance → backend-restart → online-sync journey on 18 October. Device type was not reconfirmed; scores, completion, app process-death recovery, native encryption and physical-device checks remain separate evidence gates. This report advances attendance runtime evidence without closing Stage 7.
+Coach sign-in/refresh/logout, bounded schedules, explicit event caching, attendance, assessment drafts/results, completion, online correction history, recovery comparison/sharing and English/Arabic are implemented. The supported OpenAPI contract and instance Swagger viewer are available. Isolated real-API and Node SQLite checks passed; focused Android 14 emulator checks covered encrypted-store initialization, process restart, replay, history, completion and a controlled current-format upgrade. The final feedback/cached-startup rebuild passed packaging, with physical S20+ acceptance still open. See [verification](../verification/README.md) for exact revisions and limits.
 
-Instance-bound sign-in, current coach contexts, bounded paginated schedules and an attendance slice are implemented locally. Coaches explicitly download a roster, capture attendance in SQLCipher-backed storage and replay exact commands while foregrounded. Device/sending/uncertain/acknowledged/rejected/blocked states and explicit local discard are implemented. Unresolved work remains isolated to the original account/server/workspace. Queue tests use Node SQLite; native encryption/rendering, API integration, URL scanning and broader native/API acceptance remain open; correction history and English/Arabic UI are implemented. Assessment entry, raw drafts and event completion are now implemented locally with dependency/completion gates; native/API acceptance is still open. See the [Android guide](../development/android.md). The requirements below remain the full target, including unfinished work.
+Physical hardware, broader native conflict/revocation/account-switch rendering, accessibility and full screen/theme coverage remain open. URL scanning is not implemented; entering the institution API URL manually is supported. These limitations do not imply API/auth implementation is absent.
 
 ## First release tasks
 
-| User            | Proposed tasks                                                                                                                                                                                        | Excluded from the first mobile release                                                                                   |
+| User            | Supported tasks                                                                                                                                                                                       | Excluded from the first mobile release                                                                                   |
 | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | Coach / trainer | See assigned field events; open an authorized event roster and assessment definition; record attendance and assessor-led performance results; finish the event; review prior results and sync status. | Administration, user invitations, program authoring, messages, analytics configuration and unrestricted athlete records. |
 | Athlete         | No native role in the first release. Existing mobile web remains available for athlete training workflows.                                                                                            | Athlete native dashboard/workout logging, other athletes' data, and clinical or diagnostic health functionality.         |
 
 The founder confirmed coach-first. Keep athlete-native work separate until the coach field workflow is accepted.
 
-## Offline boundary proposal
+## Offline boundary
 
 - Allow offline capture only for a field event the coach opened and whose authorized roster/assessment definition were fetched while online. No general offline roster search or offline discovery.
-- Queue each attendance, assessment or workout change locally before showing it as safely stored on the device. Show device-saved, sending, acknowledged, needs-attention and blocked/revoked states distinctly.
+- Queue each attendance or assessment change locally before showing it as safely stored on the device. Show device-saved, sending, acknowledged, needs-attention and blocked/revoked states distinctly.
 - Use an immutable operation ID and payload for retries. A lost response retries the same operation; editing creates a new operation against the latest acknowledged revision.
 - Recheck current server authorization on every replay. Never upload a pending record under another account or institution. A revoked or reassigned user's unsent work remains visibly blocked and requires an explicit recovery/export or discard decision; it must not silently change owner.
 - Do not cache conversations, private files, injury-status records or broad rosters for offline use in the first release. Evict acknowledged event/roster data after the event is completed and all operations are acknowledged; keep unresolved queue items encrypted and visible until explicit recovery or discard.
 - Encrypt app-private local records and credentials using Android platform storage protections. Define logout, account switch, device loss and app removal behavior before implementation; do not claim secure deletion beyond what the platform can demonstrate.
 
-## Existing API fit and gaps
+## API support and remaining evidence
 
-| Requirement                        | Existing support                                                                                                                    | Gap to resolve before the app                                                                                                                                                                                                      |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Role-scoped workspaces and rosters | Organization routes return current role-scoped projections and paginated people.                                                    | Confirm mobile needs and paging/search behavior against the proposed field tasks.                                                                                                                                                  |
-| Attendance and assessments         | Calendar routes support attendance, results, authorized detail and correction history.                                              | Define the exact field capture flow, units, validation, conflict UI and offline payload.                                                                                                                                           |
-| Workout start and save             | Organization session routes provide start/save and revision-aware persistence; local web workout storage has queued retry behavior. | Extract a transport-independent command contract; web storage and service-worker behavior cannot be reused as native durability evidence.                                                                                          |
-| Idempotent writes                  | Domain operations use stable IDs, transactional receipts and reject changed payloads for a reused ID.                               | Document receipt retention and every mobile command's retry semantics; add integration coverage for uncertain outcomes.                                                                                                            |
-| Authentication                     | Password login creates an opaque HttpOnly SameSite cookie. Mutations require the web client marker and an allowed browser origin.   | Native apps need an explicitly supported auth transport, secure token/session storage, refresh/revocation behavior, and a mobile client boundary. Do not weaken browser origin checks or put long-lived secrets in the app bundle. |
-| Revocation and changed authority   | Server checks current actor, role, assignment and resource before reads, writes and replay.                                         | Define user-visible handling for queued commands after account, role, assignment or institution access changes.                                                                                                                    |
-| API discovery                      | The API is documented in the maintained API reference.                                                                              | Confirm whether a versioned OpenAPI document/Swagger UI is maintained and generate or publish one from actual routes before asking mobile developers to rely on it.                                                                |
+Native bearer sessions and actor-scoped calendar/history/receipt APIs are implemented. The [canonical OpenAPI contract](../../apps/backend/openapi.json) defines the supported subset; the [API reference](../reference/api.md) explains browser/native boundaries and Swagger availability. Real-API tests cover lost acknowledgments, duplicate delivery, conflicts, history permissions and membership revocation. Native rendering of all those recovery cases remains a separate acceptance task. Workout logging continues in the web app and is not part of this native release.
 
 ## Selected architecture constraints
 
@@ -57,7 +49,7 @@ The founder confirmed coach-first. Keep athlete-native work separate until the c
 
 1. API integration tests cover duplicate delivery, lost acknowledgements, exact retry, edited retry rejection, changed revisions, revoked access, changed assignment and multi-device conflict.
 2. Device storage tests cover process death/restart, account switch, logout, app upgrade and recovery of each pending state.
-3. Emulator tests cover coach and athlete journeys, online/offline transitions, network interruption, phone/tablet layouts and accessibility. Report physical-device checks separately.
+3. Emulator checks cover coach field journeys, online/offline transitions, interruption, layouts and accessibility. Athlete web journeys are checked separately. Report physical-device checks separately.
 4. Human field review confirms the selected task flows are workable in real coaching conditions. Emulator success alone does not prove field usability.
 5. Documentation explains instance enrollment, account setup, supported offline behavior, sync/recovery states, privacy boundaries and known limits.
 
@@ -79,4 +71,4 @@ The mobile app uses the existing organization APIs; the server remains the sole 
 7. Finish the event with `action: "finish"`, event `revision` and its own stable operation UUID only after all required attendance and assessment commands are acknowledged.
 8. Replay each exact command in order. A lost acknowledgement retries the identical UUID and payload. A changed payload gets a new operation only after the prior result is known. On 403/409, stop dependent commands, refresh authorized event data when allowed, and show the exact correction/revocation state; never force-merge assessment values.
 
-The API has actor-scoped transactional operation receipts and current role/assignment checks. The Android bearer-session flow and supported OpenAPI subset are implemented locally; browser cookie/origin behavior is retained. Native/auth/API integration evidence remains required before developer preview. The field package now includes assessment definitions and current results. Correction-history UI is implemented; broader native/API acceptance remains open.
+The API has actor-scoped transactional operation receipts and current role/assignment checks. The Android bearer-session flow and supported OpenAPI subset are implemented locally; browser cookie/origin behavior is retained. Native/auth/API integration checks passed; physical and broader native rendering evidence remain required before extending device claims. The field package now includes assessment definitions and current results. Correction-history UI is implemented; broader native/API acceptance remains open.

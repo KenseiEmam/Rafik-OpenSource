@@ -1,6 +1,6 @@
 # Stage 4 workflow and security audit
 
-**Status: implementation in progress, 16 October 2026.** This audit records existing scope and the first consent-gated, non-diagnostic injury-status vertical slice. It is not privacy-policy approval or a claim that the university product is complete.
+**Status: implementation complete; first-user/pre-production backlog retained, 19 October 2026.** This audit records existing scope and the first consent-gated, non-diagnostic injury-status vertical slice. It is not privacy-policy approval or a claim that the university product is complete.
 
 ## Existing workflow coverage
 

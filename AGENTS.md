@@ -27,6 +27,8 @@
 
 - Offline connectivity feedback must recover after a fresh authenticated access check without unmounting open field editors. Never clear permission/session warnings merely because another request succeeded, and never let a UI observer turn an acknowledged write into uncertain replay. Physical offline tests must disconnect USB forwarding as well as Wi-Fi/mobile data. Keep key-backup instructions encrypted and never print signing credentials.
 
+- Keep the default quick start unseeded so first-run super-admin setup remains available; demo seeding is optional and restricted to a separate empty local database. Read the beta readiness table before reporting whole-product status. Separate per-institution/live-data checks from project implementation and accepted first-user backlog, and validate infrastructure links plus heading anchors with `npm run docs:check`.
+
 ## Engineering and product completion rules
 
 - CMake object-path limits must leave room for target directories, the hash and the filename. A too-small limit can prevent hashing. Inspect generated Ninja object paths and CMake warnings before asking for another native rebuild; a configured cache value or Gradle help alone does not establish path safety.

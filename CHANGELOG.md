@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Audited whole-product beta documentation: distinguish supported self-hosted evaluation from per-institution live-data acceptance, align completed stage/API status, correct Compose/monorepo paths, and default quick starts to unseeded super-admin setup. Expanded the coach walkthrough beyond participation status.
+- Documented GitHub Releases as the canonical download source, with landing links, explicit source/archive labels and asset/checksum provenance.
+- Expanded documentation checks to infrastructure guides and local heading anchors, with regression fixtures. Recorded a fresh web production build; retained device, rendering and operational evidence gaps explicitly.
+
 - Rebuilt and verified the signed beta evaluation APK with the fixes below, preserving the earlier qualification artifact. Final compiled source: `5d1ce76`; physical S20+ acceptance remains open.
 - Fixed stale Android offline access feedback: fresh authenticated access checks recover in the background while keeping the roster/editor mounted. Network, sign-in and throttling errors now have readable English/Arabic messages; malformed institution URLs use the intended validation.
 - Removed a second offline-start wait: cached rosters open locally, while schedule refresh has its own busy state. Newer roster data is downloaded explicitly.

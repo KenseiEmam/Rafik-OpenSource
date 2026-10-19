@@ -9,12 +9,11 @@ Run all commands from the repository root:
 ```sh
 npm ci
 npm run backend:start
-npm run seed:local # only on a new, empty local database
 npm run web-env
 npm run start:api
 ```
 
-Start the web app separately with `npm run dev`. The single local PostgreSQL Compose definition is at `infrastructure/compose.yaml`; it is not a deployment configuration. `seed:local` refuses a database that already has profiles.
+Start the web app separately with `npm run dev`. The single Compose definition is `infrastructure/compose.yaml`: its default/local services support development and its `selfhost` profile provides the deployment foundation. Leave a new instance empty for super-admin setup. Optional `npm run seed:local` creates demonstration accounts only in an empty local database and refuses existing profiles; never use it on a hosted instance.
 
 ## Ownership
 

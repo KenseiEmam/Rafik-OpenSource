@@ -8,6 +8,8 @@ Rafik helps university coaches manage athlete training, attendance and performan
 
 ## Project status
 
+**Beta evaluation, 19 October 2026:** the web/API foundation is suitable for technically supported, synthetic-data institution evaluation. The current web production build passes; prior role/workflow evidence and remaining limits are in [verification](docs/verification/README.md). See the [beta readiness table](docs/operations/release-checklist.md#project-beta-readiness-19-october-2026) for publishing actions, Android device checks and deployment responsibilities. First-user feedback and optional cloud validation remain accepted backlog items.
+
 The approved migration is staged in [the requirements and acceptance plan](docs/requirements/README.md). The frontend, backend and early Android app are npm workspaces under `apps/`; shared transport contracts and generated database types live in `packages/shared/`. The application has a university-oriented organization foundation and a self-host Compose profile. Stage 7 Android coach workflows are in progress; first-user and pre-production gates remain open, so this is not declared production-ready for real athlete data. Optional cloud-template checks remain deferred to user testing.
 
 Each university is expected to operate a separate instance and control its users, data, files, secrets, backups, retention, and infrastructure. Hosting and maintenance costs are the university's responsibility.
@@ -39,11 +41,10 @@ Prerequisites: Node.js 22.16 or Node.js 24, npm, and Docker Compose. The product
 ```sh
 npm ci
 npm run backend:start
-npm run seed:local # first empty local database only
 npm run web-env
 ```
 
-Seed only a newly created, empty local database. Do not run the seed command against a database with data you want to keep. Then start the API and web app in separate terminals:
+Leave the database unseeded to try first-run super-admin setup. For an optional sample-account demonstration only, run `npm run seed:local` before creating any users, on a separate empty local database. Never seed a hosted instance or an existing database. Start the API and web app in separate terminals:
 
 ```sh
 npm run start:api

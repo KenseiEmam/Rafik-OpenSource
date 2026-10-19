@@ -24,13 +24,18 @@ This page is the index for maintained Rafik documentation. The root [README](../
 - [Current delivery ledger](development/ledger.md): current stage and recent implementation outcomes; not a phase-history archive.
 - [Testing strategy](testing/README.md): test layers, focused commands, fixtures and evidence boundaries.
 - [Feature verification map](testing/feature-verification-map.md): user jobs, lifecycle checks and coverage limits.
-- [Local coach walkthrough](testing/coach-walkthrough.md): steps for personally reviewing the current local university workflow with synthetic data.
+- [Local coach walkthrough](testing/coach-walkthrough.md): account setup, programs/assignments, athlete recording, scheduled events/results, messages/attachments and optional participation status with synthetic data.
 - [Verification summary](verification/README.md): actual checks, dates, coverage and known limits.
 
 ## Operations and release
 
+- [Infrastructure setup](../infrastructure/README.md): local versus self-hosted Compose profiles and operator entry points.
+- [Optional cloud starters](../infrastructure/cloud/README.md): scope, costs and unverified-provider limits.
+- [AWS starter](../infrastructure/cloud/aws/README.md): EC2 prerequisites, operator access, deployment and teardown.
+- [Google Cloud starter](../infrastructure/cloud/gcp/README.md): Compute Engine/IAP setup, deployment and teardown.
+- [Azure starter](../infrastructure/cloud/azure/README.md): VM setup, operator access, deployment and teardown.
 - [Operations and deployment](operations/README.md): Compose deployment, cloud starter templates, environment/secrets, backups, recovery, rollback and retention operations.
-- [Release checklist](operations/release-checklist.md): release prerequisites and outstanding gates.
+- [Release checklist](operations/release-checklist.md): project-wide beta readiness, publishing actions and per-institution deployment gates.
 - [Android beta builds and updates](operations/android-release.md): private signing-key ownership and encrypted backup, signed APK builds, USB physical-phone acceptance, offline-start and update checks.
 
 ## Architecture decisions

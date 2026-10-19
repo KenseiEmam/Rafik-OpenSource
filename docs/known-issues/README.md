@@ -1,6 +1,6 @@
 # Known issues and release gaps
 
-This page lists verified product or operational gaps that still affect acceptance. A gap is not described as a reproduced defect unless a failure was observed. Historical gym-first issues are kept in the [archive](../archive/README.md), not treated as current university requirements.
+This page lists verified product or operational gaps that still affect acceptance. The [beta readiness table](../operations/release-checklist.md#project-beta-readiness-19-october-2026) distinguishes publishing actions, accepted first-user backlog and institution-specific live-data gates. A gap is not described as a reproduced defect unless a failure was observed. Historical gym-first issues are kept in the [archive](../archive/README.md), not treated as current university requirements.
 
 | Priority | Status and evidence                                                                                                                                                                                                                      | Impact                                                                    | Proposed next step                                                                                                                                 |
 | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -12,6 +12,12 @@ This page lists verified product or operational gaps that still affect acceptanc
 **Stale offline banner — source fix, native recheck pending (19 October 2026):** transport failures now have localized messages. The signed-in runtime rechecks access after authenticated recovery or active retry and keeps roster/editor UI mounted. The final rebuilt candidate from `5d1ce76` includes the fix and passed packaging/signature checks; its physical UI check remains open. The original APK’s emulator receipt is historical evidence. See [verification](../verification/README.md).
 
 Code-inspection hypotheses must be labeled as such and accompanied by their impact and a way to confirm them.
+
+## Web beta evidence still to collect
+
+**P2 — unverified refinements, not reproduced defects:** the 18 October athlete/nutrition-plan browsing, scheduled-events and multiple-message-attachment changes passed source/handler checks, but their complete rendered pagination, multi-file send/retry/revocation and phone/RTL journeys were not rerun. The current web build passes. The [coach walkthrough](../testing/coach-walkthrough.md) records the relevant tasks; do not advertise those checks as completed.
+
+**P3 — build-tool compatibility warning:** the current Vite build succeeds but warns that the JSON import in `apps/frontend/vite.config.ts` needs an import attribute for a future native config-loader default. This is a future toolchain compatibility issue, not an observed production-app failure. Address before adopting that default/major upgrade; do not suppress it as evidence of compatibility.
 
 ## Stage 7 implementation and acceptance gaps
 

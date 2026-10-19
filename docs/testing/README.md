@@ -2,6 +2,12 @@
 
 Use the smallest check that covers the changed behavior. Run commands from the repository root unless a step says otherwise. These checks establish local behavior only; they do not prove production readiness, legal compliance, physical-device behavior or human usability.
 
+## Documentation checks
+
+Run `npm run docs:check` from the repository root. It runs two isolated checker regression cases, then validates inline relative links and Markdown heading fragments in maintained root/app/docs/infrastructure guides. Fenced/inline code examples are excluded; external URLs are not fetched. Archives and raw receipts are excluded from the maintained-guide scan but linked local targets still must exist. Fixtures use and remove only their own temporary directory.
+
+A passing link check does not establish that commands work or that status claims are accurate. Compare setup commands with workspace scripts/Compose profiles, read current requirements against dated evidence, and preserve unperformed gates. The [release checklist](../operations/release-checklist.md) records the project-wide beta decision.
+
 ## Test layers and commands
 
 Native request/feedback changes use `npm run test:request --workspace @rafik/mobile`. These Node tests mock fetch and Expo secure storage to cover connection recovery, authorized-response observers, denial, malformed responses, URL boundaries and bilingual sign-in feedback. They do not render React Native or establish physical-device behavior. Keep the [physical-phone procedure](../operations/android-release.md#physical-phone-check-galaxy-s20-and-local-backend) separate from these checks.

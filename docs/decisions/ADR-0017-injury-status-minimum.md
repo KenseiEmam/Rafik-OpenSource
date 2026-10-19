@@ -27,3 +27,7 @@ The university workflow needs an athlete-facing way to communicate participation
 This is a narrow participation coordination feature, not a clinical record or legal compliance determination. The trade-off is that it intentionally excludes diagnoses and treatment details and depends on administrator attestation for guardian authorization. Athlete export, deletion, aggregate checkpointing and the isolated database/API restart rehearsal are implemented and locally verified. Real monitoring/alert delivery, sport-task/catalog coverage and university review remain required before Stage 4 acceptance or real athlete data.
 
 The minor-consent mechanism stores an administrator attestation rather than guardian identity evidence; each deployment must confirm that this meets its approved policy before enabling the workflow.
+
+## Acceptance clarification — 19 October 2026
+
+The founder accepted implementation stages and deferred non-code institution/sport/operational review to the first-user backlog. Earlier references to review before Stage 4 acceptance are superseded by that sequencing; they remain required before relying on sensitive live athlete data. See the [beta readiness table](../operations/release-checklist.md#project-beta-readiness-19-october-2026). This changes the acceptance sequence, not permissions, consent or retention behavior.

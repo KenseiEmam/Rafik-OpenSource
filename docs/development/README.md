@@ -8,7 +8,7 @@ This page is the local development entry point. It covers setup, common changes 
 
 - Node.js 22.16 or Node.js 24 (`.nvmrc` selects Node 24 for local development) and npm. Production containers use pinned Node 22.16 images.
 - Docker Engine with the Compose plugin, for local PostgreSQL.
-- Git, on the approved `codex/university-revamp-plan` branch.
+- Git. Use `main` or a reviewed release tag for evaluation; contributors work on `codex/` topic branches.
 
 ## First setup
 
@@ -18,9 +18,10 @@ Run from the repository root. Install once from the root lockfile; do not instal
 nvm use
 npm ci
 npm run backend:start
-npm run seed:local # only for a new, empty local database
 npm run web-env
 ```
+
+This leaves an empty instance ready for first-run super-admin setup. Optional sample accounts require `npm run seed:local` on a separate empty local database before setup; never seed an existing or hosted database.
 
 Start the API and frontend in separate terminals:
 
@@ -36,7 +37,7 @@ Open `http://127.0.0.1:5173`. `/` opens one-time super-admin setup when the data
 
 API errors and confirmed user writes use fixed SweetAlert2 toasts so feedback remains visible while a page is scrolled. Read-like POST requests do not show success toasts. Program draft saves return the editor to its heading; the toast confirms save completion.
 
-In the app, staff can open **Messages** and select someone from the **People** list; administrators see active institution members and coaches see athletes in their authorized roster. The existing private conversation opens if one exists. Trainees can read and reply to conversations started by staff. **Open group conversation** on a training group opens its existing channel or creates the first one. To assign training, publish a program and use **Assign this program**; publication adds it to the institution library for other coaches, who can assign it to athletes under their responsibility. New account passwords use the displayed 8–128 character upper/lowercase, number and symbol rules; existing passwords remain valid for sign-in.
+In the app, staff can open **Messages** and select someone from the **People** list; administrators see active institution members and coaches see athletes in their authorized roster. The existing private conversation opens if one exists. Athletes can read and reply to conversations started by staff. **Open group conversation** on a training group opens its existing channel or creates the first one. To assign training, publish a program and use **Assign this program**; publication adds it to the institution library for other coaches, who can assign it to athletes under their responsibility. New account passwords use the displayed 8–128 character upper/lowercase, number and symbol rules; existing passwords remain valid for sign-in.
 
 To test the first-run screen and invitation journey without touching local preview data, run `npm run test:e2e --workspace @rafik/frontend -- onboarding.e2e.ts --empty-database`. The wrapper creates a disposable, empty migrated database and removes its database, files, logs and Playwright output when it exits.
 

@@ -35,13 +35,23 @@ Do not expose PostgreSQL publicly. No Google service-account key or hosted-provi
 
 ## Release and configuration
 
-The Android candidate is **Squire 1.0.0-beta.1**. Follow [Android beta builds and updates](android-release.md) for signing, APK packaging and installation/upgrade acceptance. Private signing material is separate from institution server secrets; never include it in Compose images or public release assets.
+The project beta candidate is **Squire 1.0.0-beta.1** across the web/API and optional coach Android app. The [project readiness table](release-checklist.md#project-beta-readiness-19-october-2026) distinguishes evaluation readiness from publication and each installation’s live-data checks. Follow [Android beta builds and updates](android-release.md) for signing, APK packaging and installation/upgrade acceptance. Private signing material is separate from institution server secrets; never include it in Compose images or public release assets.
 
 Build and validate the approved revision before deployment. Apply forward migrations as part of the Compose release flow; never reset or reseed a hosted database. Review the [release checklist](release-checklist.md) and [known release gaps](../known-issues/README.md) before enabling external use.
 
 Store the production env file outside source control with access limited to the university operators. Use unique instance secrets. Rotate secrets through a planned deployment; never paste credentials into issue trackers, logs, commits or check receipts. The self-hosted profile does not need SMTP, Google service-account keys, or hosted-provider credentials. Keep the service on a private network until the first super admin completes setup. Invitees choose their password from a single-use link that expires after seven days; no email is delivered or verified. Operators must share that link privately.
 
 Instance branding (name, accent, light/dark page backgrounds and optional PNG/JPEG/WebP logo) is stored in PostgreSQL and therefore travels with database backups and restores. UI surfaces derive from those colors; text/accent colors adjust for contrast. The first super admin controls these settings; the image is limited to 512 KB. Keep the backup protected as sensitive operational data. Branding is not supplied by environment variables and remains after application image updates.
+
+## Release assets and landing downloads
+
+Use GitHub Releases as the canonical download host. The landing site should display release/version information and link to the matching GitHub source/archive and uploaded assets; do not copy release binaries into the landing repository or Vercel deployment. Use explicit versioned links for beta assets and enable download buttons only when those assets actually exist. See [GitHub release links](https://docs.github.com/en/repositories/releasing-projects-on-github/linking-to-releases).
+
+Label GitHub ZIP/tar.gz downloads **source code**: operators still configure secrets and build/run Compose. They are not prebuilt Docker-image bundles, database backups or an installed application. GitHub-generated archives can change compressed bytes when regenerated; pin the source commit/tag for content provenance and attach a reviewed custom source asset if fixed archive-byte checksums are needed. See [archive stability](https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives#stability-of-source-code-archives).
+
+For an accepted Android package, upload the signed APK, its `SHA256SUMS` and non-secret build metadata to the matching GitHub prerelease. Checksum entries must describe the actual uploaded files. Keep the APK's compiled source revision visible; do not describe the current follow-up candidate as built from the older source tag. Never package the working directory wholesale: signing material, local env files, backups and fixture data are not release assets.
+
+Before publication, merge the reviewed source/docs changes, select the exact release source/tag and ensure the English/Arabic landing guidance names that same version and supported behavior. This documentation update does not publish assets or change tags automatically.
 
 ## Backup, recovery and rollback
 
