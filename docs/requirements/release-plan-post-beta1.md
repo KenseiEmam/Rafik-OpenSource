@@ -1,6 +1,6 @@
 # Post-beta.1 release plan
 
-**Status:** Release 1 in progress, 19 October 2026. R0 is done and slices 1a–1d are implemented (see [verification](../verification/README.md)). Other slices are not implemented. Items marked **⚑** were provisional defaults; the [confirmed decisions](#confirmed-release-1-decisions) replace them for Release 1. Releases are implemented one slice at a time, each on its own `codex/` branch and pull request.
+**Status:** Release 1 in progress, 19 October 2026. R0 and Release 1 (slices 1a–1e) are implemented (see [verification](../verification/README.md)); release acceptance and the landing documentation remain. Release 2 and Release 3 are not implemented. Items marked **⚑** were provisional defaults; the [confirmed decisions](#confirmed-release-1-decisions) replace them for Release 1. Each release is delivered as one `codex/` branch and one pull request, with one commit per slice, so it can be reviewed and merged as a unit.
 
 ## Confirmed Release 1 decisions
 
@@ -23,7 +23,7 @@ The founder set this order on 19 October 2026:
 
 Release 1 comes first because it gives the field features a clear permissions and data model. **R0** closes the open beta.1 work and adds no new scope. Version numbers are proposals: R0 keeps `1.0.0-beta.1` assets, and Releases 1–3 are planned as `1.0.0-beta.2` to `1.0.0-beta.4`.
 
-| Release                                | Slices (one pull request each)                                                                                                                                                                             |
+| Release                                | Slices (one commit each; one pull request per release)                                                                                                                                                     |
 | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | R0 — beta.1 close-out                  | Physical acceptance, verified defect fixes, rendered web evidence                                                                                                                                          |
 | Release 1 — sports and coaching        | 1a sports and specialties → 1b coaching team and authority → 1c concurrent goal-specific plans → 1d staff athlete profile → 1e delegated workout logging (scheduling recommended; not in the founder list) |
@@ -214,6 +214,13 @@ Supporting coaches can read all of an athlete's training plans until slice 1c ad
   - Rendered empty, populated and error states, with long names, in English/Arabic and both themes, on phone and desktop.
 
 ### 1e Delegated workout logging (recommended scheduling)
+
+**Implemented, 19 October 2026.** Other differences from the outline below:
+
+- **Who may record:** a supporting coach may record only on plans labelled with their sport.
+- **No flag yet:** the athlete corrects the record directly; there is no separate flag action.
+- **Online only:** the coach recording page keeps no device queue, but still retries the exact saved command.
+- **Today only:** recording follows the plan's scheduling rules for the coach's current date.
 
 - **Outcomes:** a primary or plan-owning coach can record a session on an athlete's behalf without acting as the athlete.
 - **Data:**

@@ -2,6 +2,7 @@ import { usableExerciseAsset } from "./organization-assets.ts";
 import media from "../content/exercise-media.json" with { type: "json" };
 import videos from "../content/exercise-videos.json" with { type: "json" };
 import { isDeepStrictEqual } from "node:util";
+import { randomUUID } from "node:crypto";
 import { ApiError, db, asActor, type Actor } from "./db.ts";
 import {
   scoped,
@@ -974,6 +975,73 @@ async function endAssignment(
     },
   );
 }
+/** Session reads: the athlete, admins, the primary coach, or a supporting coach for the plan's sport. */
+async function readableSession(
+  tx: Tx,
+  s: { workspace_id: string; member_id: string; assignment_id: string },
+  self: Member,
+  view: Role,
+) {
+  const m = await recipient(
+    tx,
+    s.workspace_id,
+    self,
+    view,
+    s.member_id,
+    false,
+    "training",
+  );
+  if (view === "trainer" && m.trainer_id !== self.id) {
+    const plan = await tx.organization_assignments.findUnique({
+      where: { id: s.assignment_id },
+      select: { sport_id: true },
+    });
+    const links = await supportingLinks(tx, s.workspace_id, self.id);
+    if (
+      !links.some(
+        (l) => l.athlete_member_id === m.id && l.sport_id === plan?.sport_id,
+      )
+    )
+      throw new ApiError(403, "trainee_unavailable");
+  }
+  return m;
+}
+/** Attributed versions of one session, oldest first; readable by anyone who can read the session. */
+export async function organizationSessionHistory(
+  actor: Actor,
+  sessionId: string,
+  view: Role = "trainee",
+) {
+  const s = await db.organization_sessions.findUnique({
+    where: { id: uuid(sessionId) },
+  });
+  if (!s) throw new ApiError(404, "session_missing");
+  return scoped(actor, s.workspace_id, [view], async (tx, self) => {
+    await readableSession(tx, s, self, view);
+    const rows = await tx.organization_session_history.findMany({
+      where: { session_id: s.id },
+      orderBy: { version: "asc" },
+      take: 100,
+      include: { actor: { select: { id: true, name: true, roles: true } } },
+    });
+    return {
+      recorded_mode: s.recorded_mode,
+      recorded_by: s.recorded_by,
+      items: rows.map((r) => ({
+        version: r.version,
+        action: r.action,
+        created_at: r.created_at,
+        completed: r.completed,
+        note: r.note,
+        entries: r.entries,
+        actor: r.actor.id,
+        actor_name: r.actor.name,
+        // The athlete edited their own record, or a coach recorded on their behalf.
+        by: r.actor.id === s.member_id ? "athlete" : "coach",
+      })),
+    };
+  });
+}
 export async function organizationSession(
   actor: Actor,
   sessionId: string,
@@ -984,28 +1052,7 @@ export async function organizationSession(
   });
   if (!s) throw new ApiError(404, "session_missing");
   return scoped(actor, s.workspace_id, [view], async (tx, self) => {
-    const m = await recipient(
-      tx,
-      s.workspace_id,
-      self,
-      view,
-      s.member_id,
-      false,
-      "training",
-    );
-    if (view === "trainer" && m.trainer_id !== self.id) {
-      const plan = await tx.organization_assignments.findUnique({
-        where: { id: s.assignment_id },
-        select: { sport_id: true },
-      });
-      const links = await supportingLinks(tx, s.workspace_id, self.id);
-      if (
-        !links.some(
-          (l) => l.athlete_member_id === m.id && l.sport_id === plan?.sport_id,
-        )
-      )
-        throw new ApiError(403, "trainee_unavailable");
-    }
+    const m = await readableSession(tx, s, self, view);
     return {
       ...(s.document as object),
       client_id: m.user_id,
@@ -1034,15 +1081,33 @@ export async function sessionCommand(actor: Actor, id: string, input: Input) {
       day: "2-digit",
     }).format(new Date());
   }
+  // Delegated recording: a coach with plan authority (primary, or supporting for the plan's
+  // sport) may start and save a session for an athlete under the coach's own identity.
+  const delegate = async (tx: Tx, self: Member, assignmentId: string) => {
+    const a = await tx.organization_assignments.findUnique({
+      where: { id: assignmentId },
+    });
+    if (!a || a.workspace_id !== id)
+      throw new ApiError(403, "trainee_unavailable");
+    return planAuthority(tx, id, self, view, a.member_id, [a.sport_id]);
+  };
   const authorize = async (tx: Tx, self: Member) => {
     if (action === "start") {
-      if (view !== "trainee") throw new ApiError(403, "forbidden");
+      if (view === "trainer")
+        await delegate(tx, self, uuid(input.assignment_id));
+      else if (view !== "trainee") throw new ApiError(403, "forbidden");
       return;
     }
     const s = await tx.organization_sessions.findUnique({
       where: { id: sessionId },
     });
     if (!s || s.workspace_id !== id) throw new ApiError(403, "session_missing");
+    if (action === "save" && view === "trainer") {
+      // Coaches edit only sessions recorded on the athlete's behalf, never self-logged ones.
+      if (s.recorded_mode !== "delegated") throw new ApiError(403, "forbidden");
+      await delegate(tx, self, s.assignment_id);
+      return;
+    }
     await recipient(tx, id, self, view, s.member_id);
     if (
       (action === "save" && view !== "trainee") ||
@@ -1065,9 +1130,15 @@ export async function sessionCommand(actor: Actor, id: string, input: Input) {
         if (
           !assignment ||
           assignment.workspace_id !== id ||
-          assignment.member_id !== self.id
+          (view === "trainee" && assignment.member_id !== self.id)
         )
           throw new ApiError(403, "trainee_unavailable");
+        const delegated = view === "trainer",
+          athlete = delegated
+            ? await tx.workspace_members.findUniqueOrThrow({
+                where: { id: assignment.member_id },
+              })
+            : self;
         const existing = await tx.organization_sessions.findUnique({
           where: { id: sessionId },
         });
@@ -1111,9 +1182,13 @@ export async function sessionCommand(actor: Actor, id: string, input: Input) {
         const document = {
           id: sessionId,
           workspace_id: id,
-          member_id: self.id,
-          client_id: actor.id,
+          member_id: athlete.id,
+          // The athlete stays the subject; a delegated recorder is attributed separately.
+          client_id: delegated ? athlete.user_id : actor.id,
           coach_id: null,
+          recorded_mode: delegated ? "delegated" : "self",
+          recorded_by: delegated ? self.id : null,
+          recorded_by_name: delegated ? self.name : null,
           assignment_id: assignment.id,
           version_id: assignment.version_id,
           day_id: day.id,
@@ -1149,11 +1224,26 @@ export async function sessionCommand(actor: Actor, id: string, input: Input) {
           data: {
             id: sessionId,
             workspace_id: id,
-            member_id: self.id,
+            member_id: athlete.id,
             assignment_id: assignment.id,
             day_id: day.id,
             local_date: nowDate,
             document: json(document),
+            recorded_mode: delegated ? "delegated" : "self",
+            recorded_by: delegated ? self.id : null,
+          },
+        });
+        await tx.organization_session_history.create({
+          data: {
+            id: randomUUID(),
+            workspace_id: id,
+            session_id: sessionId,
+            version: 1,
+            actor_member_id: self.id,
+            action: "start",
+            entries: json(document.entries),
+            note: "",
+            completed: false,
           },
         });
         return document;
@@ -1205,6 +1295,21 @@ export async function sessionCommand(actor: Actor, id: string, input: Input) {
           version: { increment: 1 },
         },
       });
+      if (action === "save")
+        // Each athlete or coach save keeps an attributed version; corrections never erase history.
+        await tx.organization_session_history.create({
+          data: {
+            id: randomUUID(),
+            workspace_id: id,
+            session_id: sessionId,
+            version: s.version + 1,
+            actor_member_id: self.id,
+            action: "save",
+            entries: json(document.entries),
+            note: document.note,
+            completed: !!completed,
+          },
+        });
       return document;
     },
     authorize,

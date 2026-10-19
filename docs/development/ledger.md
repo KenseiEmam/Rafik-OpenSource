@@ -14,6 +14,11 @@
 
 ## Recent work
 
+- **19 October — Release 1e (delegated logging):**
+  - Added delegated session start and save under coach identity, attributed session history, the athlete attribution banner, the coach recording page and the `coach_recorded` analytics count.
+  - Backend and browser checks pass. Fixed a navigation-after-command race found by the browser journey.
+  - Release 1 implementation is complete; next are review and merge of the stacked pull requests and the paired English/Arabic landing documentation.
+
 - **19 October — Release 1d (athlete profile):**
   - Added a web-only staff athlete profile that composes existing scoped reads.
   - The role-matrix browser journey (primary, supporting, unlinked, admin) passes in Chromium and WebKit, including Arabic dark at 320 px.
@@ -65,7 +70,7 @@
 
 ## Next actions
 
-1. Review the slice 1a–1d pull requests, then continue Release 1 with slice 1e (delegated workout logging). Release 1's [decisions are confirmed](../requirements/release-plan-post-beta1.md#confirmed-release-1-decisions). Release 2 and Release 3 decisions (communications, player notes, field warnings) and coach ratings remain open.
+1. Review and merge the single Release 1 pull request (one commit per slice, 1a–1e), then the paired English/Arabic landing documentation. Release 2 needs founder decisions (communications, player notes, field warnings) before it starts. Release 1's [decisions are confirmed](../requirements/release-plan-post-beta1.md#confirmed-release-1-decisions). Release 2 and Release 3 decisions (communications, player notes, field warnings) and coach ratings remain open.
 2. Runtime PR #126, documentation PR #127 and CI-repair PR #128 are merged, as are landing PRs #8–#10. Align the selected release source/tag with actual published assets; use GitHub as the download host.
 3. Complete the founder’s updated S20+ install/offline/recovery walkthrough before distributing the Android candidate as accepted. Signing-key backup is founder-confirmed complete.
 4. Collect the recorded first-user, recent web refinement, privacy and Unix operational evidence from [known issues](../known-issues/README.md) as the relevant institution is evaluated. These are not invented completed checks or a request to redo accepted implementation stages.

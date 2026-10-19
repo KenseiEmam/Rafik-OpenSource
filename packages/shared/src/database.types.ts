@@ -525,6 +525,18 @@ export type Database = { public: { Tables: {
         created_at: string
         updated_at: string
     } }
+    organization_session_history: { Row: {
+        id: string
+        workspace_id: string
+        session_id: string
+        version: number
+        actor_member_id: string
+        action: string
+        entries: Json
+        note: string
+        completed: boolean
+        created_at: string
+    } }
     organization_sessions: { Row: {
         id: string
         workspace_id: string
@@ -536,6 +548,8 @@ export type Database = { public: { Tables: {
         version: number
         started_at: string
         completed_at: string | null
+        recorded_mode: string
+        recorded_by: string | null
     } }
     organization_sports: { Row: {
         id: string

@@ -77,6 +77,7 @@ import {
   delivery,
   deliveryCommand,
   organizationSession,
+  organizationSessionHistory,
   sessionCommand,
   previousOrganizationPerformance,
   role,
@@ -771,6 +772,21 @@ const server = createServer(async (req, res) => {
         );
         return;
       }
+    }
+    const sessionHistory = path.match(
+      /^\/v1\/organization-sessions\/([a-f0-9-]{36})\/history$/,
+    );
+    if (sessionHistory && req.method === "GET") {
+      send(
+        res,
+        200,
+        await organizationSessionHistory(
+          requireActor(actor),
+          sessionHistory[1],
+          role(url.searchParams.get("view") || "trainee"),
+        ),
+      );
+      return;
     }
     const orgSession = path.match(
       /^\/v1\/organization-sessions\/([a-f0-9-]{36})$/,

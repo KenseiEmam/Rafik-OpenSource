@@ -94,6 +94,16 @@ These labels describe people. On their own they grant no access; Release 1b uses
 - **Supporting coaches:** may add, replace or end only plans labelled with a sport they are linked to for that athlete. Their delivery, history, athlete-plan, session and media reads include only those plans and the sessions recorded against them. Assessment history shows them only results from events they staffed, because events carry no sport.
 - **Reads:** recipients return every active plan in `plans`, and `athlete-plans` items include `goal`, `sport` and `revision`.
 
+### Delegated workout logging (Release 1e)
+
+- **Start for an athlete:** `POST /v1/workspaces/:id/sessions` `start` with `view: "trainer"` starts a session for the athlete who owns `assignment_id`. The coach needs plan authority: primary, or supporting for the plan's sport.
+  - The session records `recorded_mode: "delegated"` and `recorded_by`/`recorded_by_name` (the coach member).
+  - The athlete stays the subject (`member_id`, `client_id`). Operation receipts carry the coach.
+- **Coach saves:** `save` with `view: "trainer"` is allowed only on delegated sessions, and authority is rechecked on every save and retry. Coaches cannot edit sessions the athlete logged.
+- **Athlete corrections:** the athlete can save (correct) any of their sessions.
+- **History:** every start and save writes an `organization_session_history` version. `GET /v1/organization-sessions/:id/history?view=` returns versions oldest first, each with `actor_name` and `by` (`athlete` or `coach`), under the same read authorization as the session.
+- **Analytics:** `summary.coach_recorded` counts completed delegated sessions in the window.
+
 See [ADR 0005](../decisions/ADR-0005-organization-and-independent-scopes.md). These Prisma-internal tables have no generic browser row grants. Closure preserves records while removing access; an exact closure retry confirms the old result.
 
 ## Scoped programming

@@ -56,6 +56,7 @@
     "test:organization-sports": "npm run test:organization-sports --workspace @rafik/backend",
     "test:coaching-team": "npm run test:coaching-team --workspace @rafik/backend",
     "test:concurrent-plans": "npm run test:concurrent-plans --workspace @rafik/backend",
+    "test:delegated-sessions": "npm run test:delegated-sessions --workspace @rafik/backend",
     "test:organization-injuries": "npm run test:organization-injuries --workspace @rafik/backend",
     "notifications:local": "npm run notifications:local --workspace @rafik/backend",
     "recovery:local": "npm run recovery:local --workspace @rafik/backend",

@@ -1,5 +1,30 @@
 # Verification record
 
+## Release 1e: delegated workout logging — 19 October 2026
+
+**Passed against disposable databases (`test:delegated-sessions`):**
+
+- Unlinked coaches, supporting coaches on unlabelled plans and administrators are refused. The primary coach, and a supporting coach on their sport's plan, can record.
+- The athlete stays the subject while `recorded_by` and receipts carry the coach. An exact save retry returns the same result.
+- Coaches cannot edit a self-logged session; the athlete can correct a delegated one.
+- History is attributed: start (coach), save (coach), save (athlete). History reads follow session scope.
+- `coach_recorded` equals 1.
+- A former primary coach is refused after reassignment.
+- Session-related suites pass, and institution deletion cascades cleanly (deferred member references).
+
+**Browser (`delegated-sessions.e2e.ts`, Chromium desktop and WebKit phone):**
+
+- The coach starts from the athlete profile and edits a set, then finishes after a lost acknowledgment and exact retry: exactly two history entries, both attributed to the coach.
+- The athlete sees "Recorded by R4 Coach on your behalf".
+- Arabic dark at 320 px, with layout and axe checks; screenshots inspected.
+- **Found and fixed:** navigating inside the start command's completion callback let the remounted page adopt the still-saved command and lock the form.
+
+**Limits:**
+
+- Coach recording is online only and for the current date.
+- There is no separate flag action.
+- Browser emulation is not physical-device evidence.
+
 ## Release 1d: staff athlete profile — 19 October 2026
 
 **Browser (`athlete-profile.e2e.ts`, isolated wrapper, Chromium desktop and WebKit phone), each role against the same athlete:**

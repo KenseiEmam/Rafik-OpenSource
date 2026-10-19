@@ -405,6 +405,14 @@ function correctSets() {
       }}</RouterLink
     ><PageState :loading="loading" :error="!row ? error : ''" @retry="load"
       ><template v-if="row && session">
+        <p v-if="session.recorded_mode === 'delegated'" class="notice" role="note" dir="auto">
+          {{
+            language(
+              `Recorded by ${session.recorded_by_name || 'your coach'} on your behalf. Check it and correct anything that is wrong; every change is kept in the record history.`,
+              `سجّلها ${session.recorded_by_name || 'مدربك'} نيابة عنك. راجعها وصحّح أي خطأ؛ يُحفظ كل تعديل في سجل التعديلات.`,
+            )
+          }}
+        </p>
         <div class="workout-heading">
           <div>
             <span class="overline">{{

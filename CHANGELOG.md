@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Release 1e:
+  - Coaches can record a workout on an athlete's behalf under their own name. The athlete sees who recorded it and can correct it, and every start, save and correction is kept with its author.
+  - Analytics counts coach-recorded sessions.
+  - Forward migration `202610191500_delegated_sessions`.
+
 - Release 1d: staff athlete profile pages. These bring together the overview, coaching team, active plans, recent sessions, assessments and, by role, nutrition and participation status, using existing authorized reads only. Linked from People and athlete plans.
 
 - Release 1c:

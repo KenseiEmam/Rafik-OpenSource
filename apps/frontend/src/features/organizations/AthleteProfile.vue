@@ -29,10 +29,16 @@ const self = ref(''),
   sports = ref<Sport[]>([]),
   overview = section<Member>(),
   plans = section<AthletePlanPage>(),
-  sessions =
-    section<
-      { id: string; title: string; started_at: string; status: string; reviewed_at?: string }[]
-    >(),
+  sessions = section<
+    {
+      id: string
+      title: string
+      started_at: string
+      status: string
+      reviewed_at?: string
+      recorded_mode?: string
+    }[]
+  >(),
   assessments = section<{ event_id: string; title: string; starts_at: string }[]>(),
   nutrition = section<{
     current: { revision: number; effective_on: string; expires_on: string | null } | null
@@ -276,6 +282,13 @@ onMounted(load)
             <span v-if="plan.goal || plan.sport" class="tag" dir="auto">{{
               [plan.goal, plan.sport].filter(Boolean).join(' · ')
             }}</span>
+            <RouterLink
+              v-if="relation === 'primary' || (relation === 'supporting' && plan.sport)"
+              class="text-link"
+              :to="base + '/record/new?assignment=' + plan.id"
+              :aria-label="l('Record a session for ', 'تسجيل حصة لـ ') + plan.version.title"
+              >{{ l('Record a session', 'تسجيل حصة') }}</RouterLink
+            >
             <small
               >{{ formatDate(plan.start_date, locale) }} —
               {{
@@ -305,7 +318,14 @@ onMounted(load)
         </p>
         <ul v-else class="profile-list">
           <li v-for="s in sessions.data" :key="s.id">
-            <RouterLink :to="base + '/review/' + s.id" dir="auto">{{ s.title }}</RouterLink>
+            <RouterLink
+              :to="base + (s.recorded_mode === 'delegated' ? '/record/' : '/review/') + s.id"
+              dir="auto"
+              >{{ s.title }}</RouterLink
+            >
+            <span v-if="s.recorded_mode === 'delegated'" class="tag">{{
+              l('Coach-recorded', 'سجّلها مدرب')
+            }}</span>
             <small
               >{{ dateLabel(s.started_at) }} ·
               {{

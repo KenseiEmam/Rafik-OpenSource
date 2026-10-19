@@ -944,6 +944,8 @@ model workspace_members {
   organization_member_sports                                                                          organization_member_sports[]
   coaching_as_athlete                                                                                 organization_coaching_links[]     @relation("coaching_athlete")
   coaching_as_coach                                                                                   organization_coaching_links[]     @relation("coaching_coach")
+  recorded_sessions                                                                                   organization_sessions[]           @relation("session_recorder")
+  session_history_entries                                                                             organization_session_history[]    @relation("session_history_actor")
   organization_injury_permissions                                                                     organization_injury_permissions?
   organization_injury_records                                                                         organization_injury_records[]
   organization_groups                                                                                 organization_groups[]
@@ -1101,6 +1103,11 @@ model organization_sessions {
   organization_assignments      organization_assignments       @relation(fields: [workspace_id, assignment_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
   workspaces                    workspaces                     @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   workspace_members             workspace_members              @relation(fields: [workspace_id, member_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+
+  recorded_mode                String                         @default("self")
+  recorded_by                  String?                        @db.Uuid
+  recorder                     workspace_members?             @relation("session_recorder", fields: [workspace_id, recorded_by], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction, map: "organization_sessions_recorded_by")
+  organization_session_history organization_session_history[]
 
   @@unique([assignment_id, local_date, day_id])
   @@unique([workspace_id, id])
@@ -1337,6 +1344,26 @@ model organization_coaching_links {
 
   @@unique([workspace_id, id])
   @@index([workspace_id, coach_member_id], map: "organization_coaching_coach", where: raw("(ended_at IS NULL)"))
+  @@schema("public")
+}
+
+/// Attributed history of every start, save and correction of an institution workout session.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model organization_session_history {
+  id                    String                @id @db.Uuid
+  workspace_id          String                @db.Uuid
+  session_id            String                @db.Uuid
+  version               Int
+  actor_member_id       String                @db.Uuid
+  action                String
+  entries               Json
+  note                  String
+  completed             Boolean
+  created_at            DateTime              @default(now()) @db.Timestamptz(6)
+  organization_sessions organization_sessions @relation(fields: [workspace_id, session_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
+  actor                 workspace_members     @relation("session_history_actor", fields: [workspace_id, actor_member_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([session_id, version])
   @@schema("public")
 }
 

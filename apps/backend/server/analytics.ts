@@ -41,7 +41,8 @@ export async function organizationAnalytics(
    (SELECT count(*)::int FROM active WHERE joined_at>=${window.start} AND joined_at<${window.end}) AS joined,
    (SELECT count(*)::int FROM completed) AS completed,
    (SELECT count(DISTINCT c.member_id)::int FROM completed c JOIN active a ON a.id=c.member_id) AS participating,
-   (SELECT count(*)::int FROM completed WHERE document->>'reviewed_at' IS NULL) AS pending_review`;
+   (SELECT count(*)::int FROM completed WHERE document->>'reviewed_at' IS NULL) AS pending_review,
+   (SELECT count(*)::int FROM completed WHERE recorded_mode='delegated') AS coach_recorded`;
     const daily = await tx.$queryRaw<
       any[]
     >`SELECT (s.completed_at AT TIME ZONE ${window.zone})::date::text AS date,count(*)::int AS value FROM public.organization_sessions s JOIN public.workspace_members m ON m.id=s.member_id WHERE s.workspace_id=${id}::uuid AND (${trainer}::uuid IS NULL OR m.trainer_id=${trainer}::uuid) AND (${selected}::uuid IS NULL OR m.id=${selected}::uuid) AND s.completed_at>=${window.start} AND s.completed_at<${window.end} GROUP BY 1 ORDER BY 1`;

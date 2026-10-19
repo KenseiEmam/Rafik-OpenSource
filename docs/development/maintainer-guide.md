@@ -78,6 +78,10 @@ Sports and coaching specialties are served by `apps/backend/server/organization-
   - Migration `202610191400_concurrent_plans` replaced the one-active-plan index with one active plan per version.
   - In the web app, `DeliverPlan.vue` offers add or replace per athlete; `OrganizationTraining.vue` lists every active plan; `AthletePlans.vue` can end a plan and links back to "Adapt this program".
   - Run `npm run test:concurrent-plans`.
+- **Delegated logging (1e):** delegated start and save checks are in `sessionCommand` (`delegate()`); history reads are in `organizationSessionHistory()`; migration `202610191500_delegated_sessions`.
+  - Coaches record on `DelegatedWorkout.vue` (`/record/new?assignment=…`, then `/record/:session`). Athletes see a banner on `WorkoutPage.vue`.
+  - After a command succeeds, navigate only once `run()` has settled. The page remounts on route changes, and navigating inside the completion callback let the new instance adopt the old saved command and lock the form.
+  - Run `npm run test:delegated-sessions`.
 - **Athlete profile (1d):** `AthleteProfile.vue` composes existing reads with `feedback: 'none'`, and each section shows its own refused or error state. Its section visibility is a convenience only, so never add a profile-only endpoint that widens access. Entry points: the **Profile** link on People cards and **Athlete profile** in the athlete-plan detail.
 - **Tests:** `npm run test:coaching-team` covers the access matrix and lifecycle. `npm run test:fresh` checks the trigger, the backfill and the mirror in a rolled-back transaction.
 
