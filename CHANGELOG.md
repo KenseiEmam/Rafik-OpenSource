@@ -6,6 +6,8 @@
 
 Beta source candidate; package installation and upgrade acceptance are tracked separately. The founder authorized promotion of the cleaned university branch to main and an annotated beta tag.
 
+- Fixed Android release lint by explicitly disabling subdomain matching on local HTTP exceptions. Retained the HTTPS default and exact localhost/emulator exceptions. Initial packaging fixes remain beta.1 by founder direction; no APK has been distributed.
+
 - Added direct signed Android APK packaging with private local key generation, no debug-signing fallback, bundled JavaScript, signature verification/checksums and ARM64/x86_64 output. Configured Android API 24 minimum; device coverage remains limited.
 - Shortened Windows app CMake staging further for longer release variant/autolinked target paths, retaining library caches and bounded compilation.
 - Set product/workspace versions to `1.0.0-beta.1` and Android versionCode to `1000001`; documented signing-key backup, fresh installation, offline startup and upgrade preservation.

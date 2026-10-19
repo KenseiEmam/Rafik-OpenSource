@@ -14,6 +14,8 @@
 
 ## Recent work
 
+- **19 October — beta.1 packaging correction:** atomically pushed cleaned main/university branch and provisional `v1.0.0-beta.1` at `9dca6f9`. Native release compilation completed, but fatal Android lint rejected missing `includeSubdomains` on three network exception domains. Added explicit `false`, retaining exact host scope. The founder directed that these initial compile/package fixes remain beta.1 / code `1000001`; update the provisional tag to the corrected candidate after packaging passes. Reuse completed native caches. No APK has been distributed.
+
 - The first release configure warned that a 190-character app object directory left too little room for CMake hashing at 256. Cancelled only the verified release process tree, kept native caches, shortened app staging to the user's `.rf-cxx/` folder and resumed the build. Library staging/concurrency remain unchanged. Closed the emulator gracefully to free laptop RAM; app data was preserved. Landing [PR #7](https://github.com/KenseiEmam/rafik-landing/pull/7) pairs beta preparation/install/upgrade guidance in English and Arabic, pending main promotion/package evidence.
 
 - **19 October — Step 3 beta preparation:** founder approved Squire `1.0.0-beta.1`, a new local Android release key, promotion of the cleaned branch to main and a beta tag. Added a maintained signed-APK build command, release manifest/network policy, consistent workspace/lockfile version and Android code `1000001`. Key material is private/ignored; the build is in progress. Installation without Metro, offline cold startup and version-upgrade acceptance remain separate gates. Do not merge legacy main history into the cleaned branch.

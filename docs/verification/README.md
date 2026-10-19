@@ -2,6 +2,8 @@
 
 ## Beta Step 3 — 19 October 2026
 
+The resumed beta.1 build completed native compilation for ARM64/x86_64 but failed `lintVitalRelease` on three missing `includeSubdomains` attributes in the network security XML. Fixed each with explicit `false`. The founder directed that initial packaging fixes remain beta.1 before APK distribution; the provisional source tag will be corrected after packaging passes. Inspection of 61 generated ARM64 app object paths after shortening staging found maximum length 254 and none over 256. Final signature/install/upgrade evidence is still pending.
+
 Release script syntax checks passed. Local RSA-3072 signing-key generation completed without printing passwords; both signing files are ignored. The first preparation attempt was blocked by sandbox process execution (`spawnSync Ninja EPERM`); the authorized SDK build started outside that restriction, prepared native configuration and reached ARM64 native compilation. Build/signature, fresh installation, cold offline startup and upgrade outcomes remain pending until recorded here. No previous emulator evidence is being counted as standalone release acceptance.
 
 ## Beta acceptance step 2 — 18 October 2026
