@@ -12,7 +12,7 @@
   "docs": {
     "command": "npm run docs:check",
     "regression_cases_passed": 2,
-    "maintained_documents": 55,
+    "maintained_documents": 53,
     "coverage": [
       "root and app guides",
       "docs excluding historical archive/raw receipts",
@@ -22,8 +22,9 @@
     ],
     "external_urls_fetched_by_checker": false,
     "fixture_cleanup": true,
-    "local_links": 325,
-    "heading_fragments": 14
+    "local_links": 313,
+    "heading_fragments": 14,
+    "documents_before_cleanup": 55
   },
   "static_review": {
     "root_readme_commands_resolve_in_declared_workspaces": true,
@@ -43,5 +44,20 @@
     "Unix update/rollback, branding restore and live alert delivery"
   ],
   "distribution": "GitHub Releases canonical; landing links versioned actual assets and identifies source archives separately",
-  "runtime_or_database_changes": false
+  "runtime_or_database_changes": false,
+  "cleanup": {
+    "active_files_archived": [
+      "docs/requirements/role-scope-audit.md",
+      "docs/testing/feature-verification-map.md"
+    ],
+    "snapshots": [
+      "docs/archive/delivery-ledger-through-2026-10-19.md",
+      "docs/archive/verification-through-2026-10-19.md"
+    ],
+    "ledger_lines": 32,
+    "verification_lines": 58,
+    "incoming_links_updated": true,
+    "raw_receipts_and_rights_records_preserved": true,
+    "reason": "Historical R-phase mappings and resolved status notes compete with maintained guidance; retain evidence in archive and keep current development/maintenance manuals active."
+  }
 }

@@ -1,3 +1,7 @@
+# Historical record — archived 19 October 2026
+
+This document preserves earlier scope or evidence mappings. Use the current [architecture](../architecture/README.md), [testing guide](../testing/README.md) and [verification](../verification/README.md) for maintained behavior and actual checks. It is not a current onboarding or release checklist.
+
 # Feature verification map
 
 This maps the implemented user jobs to executable checks. It is a coverage index, not a claim that every possible combination has been exercised. Concrete run results belong in [verification](../verification/README.md).

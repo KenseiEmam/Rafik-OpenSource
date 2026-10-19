@@ -5,7 +5,6 @@ This page is the index for maintained Rafik documentation. The root [README](../
 ## Product and design
 
 - [Requirements and staged plan](requirements/README.md): goals, scope, constraints, acceptance criteria and current stage gates.
-- [University role and scope audit](requirements/role-scope-audit.md): historical role findings and current organization authorization constraints.
 - [Stage 4 workflow audit](requirements/stage4-workflow-audit.md): current university workflow coverage and remaining review.
 - [Stage 7 mobile scope](requirements/stage7-mobile-scope.md): confirmed coach-first Android field tasks, offline boundary, API contract and acceptance evidence.
 - [Rafik Field app workspace](../apps/mobile/README.md): current Android prototype status, local build steps and limits.
@@ -23,7 +22,6 @@ This page is the index for maintained Rafik documentation. The root [README](../
 - [Maintainer guide](development/maintainer-guide.md): repository map and implementation recipes.
 - [Current delivery ledger](development/ledger.md): current stage and recent implementation outcomes; not a phase-history archive.
 - [Testing strategy](testing/README.md): test layers, focused commands, fixtures and evidence boundaries.
-- [Feature verification map](testing/feature-verification-map.md): user jobs, lifecycle checks and coverage limits.
 - [Local coach walkthrough](testing/coach-walkthrough.md): account setup, programs/assignments, athlete recording, scheduled events/results, messages/attachments and optional participation status with synthetic data.
 - [Verification summary](verification/README.md): actual checks, dates, coverage and known limits.
 

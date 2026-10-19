@@ -12,7 +12,7 @@
 | Athlete reviews assigned work and their own results             | Organization trainee workspace, delivered training and assessment history                                                                                                                                | Verify discoverability, correction visibility, export and access after leaving an organization.                                                                                                              |
 | Athlete reports and reviews limited injury status               | Athlete assent, organization consent prerequisites, coach status-only projection, correction history, access logging, athlete JSON export and automatic expiry. No health-staff role or clinical fields. | Local API lifecycle and browser acceptance passed for role boundaries, export, English/Arabic, both themes, narrow/desktop widths and Chromium/WebKit (see verification for exact per-engine source timing). |
 
-The earlier [role and scope audit](./role-scope-audit.md) remains the baseline for organization ownership and independent-practice separation. Its acceptance constraints still apply: organization membership is not blanket access to private records, platform administration is separate, and current authority must be checked on every request and retry.
+The earlier [role and scope audit](../archive/role-scope-audit-2026-09-23.md) remains the baseline for organization ownership and independent-practice separation. Its acceptance constraints still apply: organization membership is not blanket access to private records, platform administration is separate, and current authority must be checked on every request and retry.
 
 ### Preliminary sports-catalog findings
 

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Archived the historical role audit and R-phase feature map, and shortened the delivery/verification guides while preserving dated snapshots, raw receipts and required security/content decisions. Updated incoming links and documented why each item moved.
+
 - Audited whole-product beta documentation: distinguish supported self-hosted evaluation from per-institution live-data acceptance, align completed stage/API status, correct Compose/monorepo paths, and default quick starts to unseeded super-admin setup. Expanded the coach walkthrough beyond participation status.
 - Documented GitHub Releases as the canonical download source, with landing links, explicit source/archive labels and asset/checksum provenance.
 - Expanded documentation checks to infrastructure guides and local heading anchors, with regression fixtures. Recorded a fresh web production build; retained device, rendering and operational evidence gaps explicitly.
