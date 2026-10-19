@@ -1,5 +1,8 @@
 import { it, expect, vi, afterEach } from 'vitest'
 import { rows } from '../src/lib/backend'
+
+// This tests HTTP pagination, not browser locale initialization.
+vi.mock('../src/lib/i18n', () => ({ errorMessage: (error: Error) => error.message }))
 afterEach(() => vi.unstubAllGlobals())
 it('keeps history beyond the server response limit', async () => {
   const records = Array.from({ length: 503 }, (_, id) => ({ id })),

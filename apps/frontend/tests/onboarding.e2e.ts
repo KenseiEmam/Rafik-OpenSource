@@ -40,11 +40,7 @@ test('first launch creates the super admin and an invited member can join withou
 }, testInfo) => {
   test.setTimeout(90000)
   const screenshot = async (target: Page, role: string) => {
-    const stem = resolve(
-      import.meta.dirname,
-      '../../../docs/verification/receipts',
-      `stage4-dashboard-${role}-${testInfo.project.name}`,
-    )
+    const stem = testInfo.outputPath(`dashboard-${role}-${testInfo.project.name}`)
     await target.screenshot({ path: stem + '-viewport.png' })
     await target.screenshot({ path: stem + '-full-page.png', fullPage: true })
   }
@@ -98,7 +94,7 @@ test('first launch creates the super admin and an invited member can join withou
   await page.getByLabel('Your full name').fill('Rafik Setup Admin')
   await page.getByLabel('University or training institution name').fill('Rafik Test University')
   await page.getByLabel('Sign-in email address').fill('setup-admin@rafik.test')
-  await page.getByLabel('Password (12 characters minimum)').fill('First setup password 2026!')
+  await page.getByLabel('Password', { exact: true }).fill('First setup password 2026!')
   await page.getByLabel('Confirm password').fill('First setup password 2026!')
   const setupResponse = page.waitForResponse((response) =>
     response.url().endsWith('/v1/auth/setup'),
@@ -164,7 +160,7 @@ test('first launch creates the super admin and an invited member can join withou
   await invited.getByLabel('Your full name').fill('Rafik Test Coach')
   await invited.getByLabel('Sign-in email').fill('coach@rafik.test')
   await invited
-    .getByLabel('Create a password (12 characters minimum)')
+    .getByLabel('Create a password', { exact: true })
     .fill('Coach invite password 2026!')
   await invited.getByLabel('Confirm password').fill('Coach invite password 2026!')
   await invited.getByRole('button', { name: 'Create account and join' }).click()
@@ -192,7 +188,7 @@ test('first launch creates the super admin and an invited member can join withou
   await athlete.getByLabel('Your full name').fill('Rafik Test Athlete')
   await athlete.getByLabel('Sign-in email').fill('athlete@rafik.test')
   await athlete
-    .getByLabel('Create a password (12 characters minimum)')
+    .getByLabel('Create a password', { exact: true })
     .fill('Athlete invite password 2026!')
   await athlete.getByLabel('Confirm password').fill('Athlete invite password 2026!')
   await athlete.getByRole('button', { name: 'Create account and join' }).click()

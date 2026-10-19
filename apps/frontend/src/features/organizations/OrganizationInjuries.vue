@@ -374,11 +374,11 @@ onMounted(load)
 }
 .secondary {
   background: transparent;
-  color: var(--text);
+  color: var(--ink);
   border: 1px solid var(--line);
 }
 .error {
-  color: var(--danger);
+  color: var(--error);
 }
 button {
   min-height: 42px;

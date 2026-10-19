@@ -17,10 +17,12 @@ test('timezone catalog preserves valid persisted aliases and fractional/DST offs
 test('owned UI color and spacing tokens have definitions', () => {
   const root = resolve('src')
   const source = readdirSync(root, { recursive: true })
-    .filter((x) => /\.(vue|css)$/.test(String(x)))
+    .filter((x) => /\.(vue|css|ts)$/.test(String(x)))
     .map((x) => readFileSync(resolve(root, String(x)), 'utf8'))
     .join('\n')
   const defined = new Set([...source.matchAll(/(--[\w-]+)\s*:/g)].map((x) => x[1]))
+  for (const match of source.matchAll(/\.setProperty\(\s*['"](--[\w-]+)['"]/g))
+    defined.add(match[1])
   const used = new Set([...source.matchAll(/var\((--[\w-]+)/g)].map((x) => x[1]))
   expect([...used].filter((x) => !defined.has(x) && !/^--(vis|reka)-/.test(x))).toEqual([])
 })

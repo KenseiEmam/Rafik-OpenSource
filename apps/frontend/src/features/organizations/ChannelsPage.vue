@@ -364,7 +364,7 @@ watch(
   opacity: 0.7;
 }
 .contact-person:focus-visible {
-  outline: 2px solid var(--focus, currentColor);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 .contact-person small {
