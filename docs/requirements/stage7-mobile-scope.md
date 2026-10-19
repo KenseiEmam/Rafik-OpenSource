@@ -61,10 +61,10 @@ The founder confirmed coach-first. Keep athlete-native work separate until the c
 4. Human field review confirms the selected task flows are workable in real coaching conditions. Emulator success alone does not prove field usability.
 5. Documentation explains instance enrollment, account setup, supported offline behavior, sync/recovery states, privacy boundaries and known limits.
 
-## Decisions still needed
+## Distribution and device acceptance
 
-- Decide the initial distribution channel before release: signed APK for direct installation, Google Play, or both. This does not block the app/API implementation.
-- Set the minimum Android version and supported screen sizes during device verification.
+- The founder selected direct signed APK beta preparation on 19 October 2026. See [ADR 0024](../decisions/ADR-0024-android-beta-distribution.md) and [release operations](../operations/android-release.md); Google Play remains deferred.
+- The configured minimum is Android API 24 with ARM64/x86_64 builds. Supported OS versions and screen sizes still require device verification; a configured minimum is not a compatibility claim.
 
 ## Coach field API contract
 

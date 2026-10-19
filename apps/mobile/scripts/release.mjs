@@ -6,11 +6,13 @@ import { dirname, join, resolve } from 'node:path'
 const mobile = resolve(import.meta.dirname, '..')
 const repo = resolve(mobile, '../..')
 const args = process.argv.slice(2)
-if (args.some((arg) => !['--init-signing', '--prepare-only', '--help'].includes(arg)))
-  throw Error('Use --init-signing, --prepare-only, or no arguments.')
+if (
+  args.some((arg) => !['--init-signing', '--prepare-only', '--verify-only', '--help'].includes(arg))
+)
+  throw Error('Use --init-signing, --prepare-only, --verify-only, or no arguments.')
 if (args.includes('--help')) {
   console.log(
-    'npm run mobile:release -- --init-signing  Create a private local signing key once.\nnpm run mobile:release -- --prepare-only  Validate signing and prepare native configuration.\nnpm run mobile:release  Build and verify a signed ARM64/x86_64 APK; never installs or starts an emulator.',
+    'npm run mobile:release -- --init-signing  Create a private local signing key once.\nnpm run mobile:release -- --prepare-only  Validate signing and prepare native configuration.\nnpm run mobile:release -- --verify-only  Verify an existing APK; requires RAFIK_APK_SOURCE_REVISION.\nnpm run mobile:release  Build and verify a signed ARM64/x86_64 APK; never installs or starts an emulator.',
   )
   process.exit(0)
 }
@@ -123,43 +125,57 @@ try {
     )
     .digest('hex')
   const android = join(mobile, 'android')
-  if (!existsSync(join(android, 'build.gradle'))) {
-    const { createRequire } = await import('node:module')
-    const require = createRequire(import.meta.url)
+  const verifyOnly = args.includes('--verify-only')
+  if (verifyOnly && !/^[a-f0-9]{40}$/.test(process.env.RAFIK_APK_SOURCE_REVISION || ''))
+    throw Error(
+      'Verification-only requires RAFIK_APK_SOURCE_REVISION for the already compiled APK; it must not infer provenance from the current worktree.',
+    )
+  const revision = verifyOnly
+    ? process.env.RAFIK_APK_SOURCE_REVISION
+    : execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repo, encoding: 'utf8' }).trim()
+  execFileSync('git', ['cat-file', '-e', `${revision}^{commit}`], { cwd: repo })
+  const dirty = verifyOnly
+    ? null
+    : !!execFileSync('git', ['status', '--porcelain'], { cwd: repo, encoding: 'utf8' }).trim()
+  if (!verifyOnly) {
+    if (!existsSync(join(android, 'build.gradle'))) {
+      const { createRequire } = await import('node:module')
+      const require = createRequire(import.meta.url)
+      await run(
+        process.execPath,
+        [
+          join(dirname(require.resolve('expo/package.json')), 'bin/cli'),
+          'prebuild',
+          '--platform',
+          'android',
+          '--no-install',
+        ],
+        env,
+      )
+    }
+    await run(process.execPath, [join(mobile, 'scripts/android.mjs'), '--prepare-only'], env)
+    if (args.includes('--prepare-only')) {
+      console.log(
+        `Prepared Squire ${config.version} (${config.android.versionCode}); no Gradle build or installation ran.`,
+      )
+      process.exit(0)
+    }
+    // cmd.exe is needed only for the fixed Windows Gradle batch entry point. No
+    // user text, paths or signing secrets are interpolated into shell code.
+    const gradleArgs = [
+      'app:assembleRelease',
+      '--max-workers=2',
+      '--no-parallel',
+      '--build-cache',
+      '-PreactNativeArchitectures=arm64-v8a,x86_64',
+    ]
     await run(
-      process.execPath,
-      [
-        join(dirname(require.resolve('expo/package.json')), 'bin/cli'),
-        'prebuild',
-        '--platform',
-        'android',
-        '--no-install',
-      ],
+      windows ? 'cmd.exe' : './gradlew',
+      windows ? ['/d', '/c', 'gradlew.bat', ...gradleArgs] : gradleArgs,
       env,
+      android,
     )
   }
-  await run(process.execPath, [join(mobile, 'scripts/android.mjs'), '--prepare-only'], env)
-  if (args.includes('--prepare-only')) {
-    console.log(
-      `Prepared Squire ${config.version} (${config.android.versionCode}); no Gradle build or installation ran.`,
-    )
-    process.exit(0)
-  }
-  // cmd.exe is needed only for the fixed Windows Gradle batch entry point. No
-  // user text, paths or signing secrets are interpolated into shell code.
-  const gradleArgs = [
-    'app:assembleRelease',
-    '--max-workers=2',
-    '--no-parallel',
-    '--build-cache',
-    '-PreactNativeArchitectures=arm64-v8a,x86_64',
-  ]
-  await run(
-    windows ? 'cmd.exe' : './gradlew',
-    windows ? ['/d', '/c', 'gradlew.bat', ...gradleArgs] : gradleArgs,
-    env,
-    android,
-  )
   const sdk =
     process.env.ANDROID_HOME ||
     process.env.ANDROID_SDK_ROOT ||
@@ -190,10 +206,35 @@ try {
         env,
         encoding: 'utf8',
       })
-  if (!verification.includes(`Signer #1 certificate SHA-256 digest: ${expectedCertificate}`))
+  const certificates = [
+    ...verification.matchAll(
+      /^\s*(?:Signer #\d+|V[\d.]+ Signer):? certificate SHA-256 digest: ([a-f0-9]{64})\s*$/gim,
+    ),
+  ].map((match) => match[1].toLowerCase())
+  if (
+    !/Number of signers: 1\s*(?:\r?\n|$)/.test(verification) ||
+    !certificates.length ||
+    certificates.some((digest) => digest !== expectedCertificate)
+  )
     throw Error(
       'APK certificate does not match the configured release key; no artifact was published.',
     )
+  const badging = execFileSync(
+    join(tools, versions[0], windows ? 'aapt.exe' : 'aapt'),
+    ['dump', 'badging', apk],
+    { encoding: 'utf8', windowsHide: true },
+  )
+  const metadata = /^package: name='([^']+)' versionCode='(\d+)' versionName='([^']+)'/m.exec(
+    badging,
+  )
+  if (
+    !metadata ||
+    metadata[1] !== config.android.package ||
+    +metadata[2] !== config.android.versionCode ||
+    metadata[3] !== config.version ||
+    /application-debuggable/.test(badging)
+  )
+    throw Error('APK package/version/debuggable metadata does not match this release candidate.')
   const entries = execFileSync(java('jar'), ['tf', apk], {
     encoding: 'utf8',
     windowsHide: true,
@@ -214,14 +255,6 @@ try {
   copyFileSync(apk, destination)
   const digest = createHash('sha256').update(readFileSync(destination)).digest('hex')
   writeFileSync(join(output, 'SHA256SUMS'), `${digest}  ${name}\n`)
-  const revision = execFileSync('git', ['rev-parse', 'HEAD'], {
-    cwd: repo,
-    encoding: 'utf8',
-  }).trim()
-  const dirty = !!execFileSync('git', ['status', '--porcelain'], {
-    cwd: repo,
-    encoding: 'utf8',
-  }).trim()
   writeFileSync(
     join(output, 'build.json'),
     JSON.stringify(
@@ -234,6 +267,10 @@ try {
         built_at: new Date().toISOString(),
         revision,
         dirty,
+        verification_only: verifyOnly,
+        provenance: verifyOnly
+          ? 'Operator-supplied compiled source revision; verification did not rebuild.'
+          : 'Source revision captured before Gradle build.',
         certificate_sha256: expectedCertificate,
         sha256: digest,
       },

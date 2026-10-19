@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-19",
+  "version": "1.0.0-beta.1",
+  "version_code": 1000001,
+  "package": "org.rafik.field",
+  "compiled_revision": "f5a0dafc3bf5b27aa6a9c3e0157cae5d24193a49",
+  "apk_sha256": "3524f42db80790a37835e60d3aba12f14f7eb44d5f75c8f1a92ccd9aac279236",
+  "certificate_sha256": "df1a1bc534b1bd1375aaadce3048416bff65e8a02a7ad534ce7dbd76ef5d9255",
+  "build": {
+    "result": "passed",
+    "duration": "7m49s",
+    "tasks": 585,
+    "up_to_date": 528,
+    "bundle": true,
+    "abis": ["arm64-v8a", "x86_64"],
+    "debuggable": false,
+    "minimum_sdk_configured": 24
+  },
+  "device": {
+    "type": "emulator",
+    "avd": "RafikBetaAcceptance",
+    "android": 14,
+    "abi": "x86_64",
+    "pixels": [800, 1280],
+    "density": 320,
+    "language": "English",
+    "theme": "light",
+    "cpu": 2,
+    "ram_mb": 2048,
+    "limit": "Google Play services/store disabled in disposable AVD after System UI stalls"
+  },
+  "qualification": {
+    "baseline_code": 1,
+    "target_code": 1000001,
+    "method": "Same production bundle/native code; baseline manifest versionCode changed and APK re-signed with release key. Final APK unchanged.",
+    "metro": "stopped",
+    "offline": "Wi-Fi/mobile data off; no active default network after update",
+    "before_server": {
+      "attendance": "unmarked",
+      "result": null
+    },
+    "preserved": [
+      "account",
+      "cached event",
+      "uncertain attendance command",
+      "unsubmitted score draft 13.75"
+    ],
+    "after_server": {
+      "attendance": "present",
+      "score": 13.75,
+      "result_revision": 1,
+      "event": "completed"
+    },
+    "limit": "Current-format preservation; no historical release/schema migration claim"
+  },
+  "known_issue": "Raw offline access error remains visible after successful online sync",
+  "cleanup": {
+    "temporary_avd_stopped": true,
+    "runner_cleaned": true,
+    "disposable_database": "rafik_browser_1792387239544",
+    "normal_data_untouched": true,
+    "signing_key_and_release_artifacts_retained": true
+  },
+  "remaining": [
+    "physical hardware",
+    "TalkBack",
+    "full layout/theme/locale matrix",
+    "native account-switch/conflict/revocation",
+    "historical/schema migration",
+    "private signing-key backup"
+  ],
+  "screenshots": ["2026-10-19-before-upgrade.png", "2026-10-19-after-upgrade-offline.png"]
+}

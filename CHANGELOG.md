@@ -4,9 +4,12 @@
 
 ## Squire 1.0.0-beta.1 — 2026-10-19
 
-Beta source candidate; package installation and upgrade acceptance are tracked separately. The founder authorized promotion of the cleaned university branch to main and an annotated beta tag.
+Beta source candidate; signed-package build and focused emulator installation/upgrade acceptance passed. Broader device acceptance remains open. The founder authorized promotion of the cleaned university branch to main and an annotated beta tag.
+
+- Verified standalone offline startup and preservation of pending attendance plus an unsubmitted score draft through a controlled Android versionCode update, followed by acknowledged replay and completion. Recorded a stale offline-error banner as a known issue; historical/schema upgrades and physical hardware remain unverified.
 
 - Fixed Android release lint by explicitly disabling subdomain matching on local HTTP exceptions. Retained the HTTPS default and exact localhost/emulator exceptions. Initial packaging fixes remain beta.1 by founder direction; no APK has been distributed.
+- Accepted both legacy and current SDK certificate-report formats while requiring the configured signer. Added verification-only export with explicit compiled-source provenance, package/version checks and no native rebuild.
 
 - Added direct signed Android APK packaging with private local key generation, no debug-signing fallback, bundled JavaScript, signature verification/checksums and ARM64/x86_64 output. Configured Android API 24 minimum; device coverage remains limited.
 - Shortened Windows app CMake staging further for longer release variant/autolinked target paths, retaining library caches and bounded compilation.

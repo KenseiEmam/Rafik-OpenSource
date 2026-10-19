@@ -40,6 +40,15 @@ The directory is ignored. Verification checks the signer against the configured 
 
 Generated `android/` sources are not the source of truth: maintain `app.json` and `scripts/android-*.gradle`, `AndroidManifest.release.xml` and `network-security.xml`. Native dependency/plugin changes still require a native rebuild.
 
+If Gradle succeeds but a post-build verifier needs correction, avoid recompiling. After confirming the existing APK's actual source revision, PowerShell supports:
+
+```powershell
+$env:RAFIK_APK_SOURCE_REVISION = "<full 40-character commit used for that build>"
+npm run mobile:release -- --verify-only
+```
+
+Verification-only requires that explicit provenance, still checks the signer/package/version/bundle/architectures, and records that it did not compile the APK. It refuses to overwrite an existing artifact. Do not supply the current HEAD unless it actually produced that APK.
+
 ## Install and test
 
 On a clean ARM64 Android device, transfer the verified APK through a trusted channel, allow installation from that source and open **Rafik Field**. Enter the institution's HTTPS API base URL and coach account. With Compose, the base URL ends in `/api`.
@@ -63,6 +72,10 @@ The installed development app uses a different signing certificate. Do not unins
 Keep `org.rafik.field`, the same release signing key, the device database name and SecureStore identifiers. Every distributed update must increase `android.versionCode` in `apps/mobile/app.json`; the current candidate uses `1000001`. Update the app/package versions, root lockfile, changelog and English/Arabic landing guidance together. The backend OpenAPI document's `info.version` identifies the API contract independently of the product release.
 
 Install the newer signed APK over the old one using Android's update prompt, or `adb install -r <new.apk>` on the separate test device. Never uninstall, clear app data or regenerate the signing key as an upgrade workaround. Test an unsent synthetic command/draft through the actual update, then reconnect and verify acknowledgment. Reinstalling identical bytes with `-r` is only a reinstall check; it does not prove migration to a newer version. Downgrades are not a supported recovery method. Server backups do not include device queues.
+
+### Current beta qualification evidence
+
+On 19 October 2026, an isolated Android 14 x86_64 emulator passed offline cold startup without Metro and a code 1 → 1000001 in-place update preserving pending attendance and an unsubmitted score draft. The lower-code baseline used the same production bundle and release key, changing only manifest versionCode and re-signing. This checks current-format state preservation, not migration from a historical published release or an older schema. The untouched final APK then replayed attendance/results and completed the event online. See [verification](../verification/README.md) for checksums, screenshots, environment limits and the stale offline-banner issue.
 
 ## Publish
 
