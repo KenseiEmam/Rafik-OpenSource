@@ -202,7 +202,13 @@ test("organization exercises preserve private ownership, multi-category snapshot
     );
     assert.equal(r.status, 200, JSON.stringify(r));
     assert.equal((await asset(trainee, media)).status, 200);
-    assert.equal((await asset(peer, media)).status, 403);
+    const libraryMedia = await asset(peer, media);
+    assert.equal(
+      libraryMedia.status,
+      200,
+      "published library snapshots authorize their exact media",
+    );
+    assert.deepEqual(Buffer.from(await libraryMedia.arrayBuffer()), png);
     // Organization-created media and exercises are visible to staff in that tenant only.
     const sharedMedia = randomUUID();
     assert.equal((await asset(admin, sharedMedia, workspace)).status, 200);

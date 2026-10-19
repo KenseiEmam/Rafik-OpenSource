@@ -61,7 +61,8 @@ test("program drafts may be empty while publication validates a complete prescri
     );
     assert.equal(published.status, 400);
     assert.equal(
-      (await call(athlete, `/v1/workspaces/${id}/programs?view=trainee`)).data.total,
+      (await call(athlete, `/v1/workspaces/${id}/programs?view=trainee`)).data
+        .total,
       0,
     );
   } finally {
@@ -114,11 +115,29 @@ test("organization publication, actuals, reassignment and exact replay preserve 
       ).status,
       403,
     );
+    // ADR 0020 publishes immutable versions to the institution library.
+    // Athletes may read that version, but cannot edit it or browse staff's
+    // authoring catalog; unpublished drafts remain covered by the prior test.
+    const library = await call(
+      client,
+      `/v1/workspaces/${id}/programs?view=trainee&program=${pid}`,
+    );
+    assert.equal(library.status, 200, JSON.stringify(library));
+    assert.equal(library.data.editable, false);
+    assert.deepEqual(library.data.program.draft, version.prescription);
+    assert.deepEqual(library.data.catalog, []);
     assert.equal(
       (
         await call(
           client,
-          `/v1/workspaces/${id}/programs?view=trainee&program=${pid}`,
+          `/v1/workspaces/${id}/programs`,
+          operation("save", {
+            view: "trainee",
+            id: pid,
+            title: "Not authorized",
+            draft: draft(),
+            revision: r.data.plan.draft_version,
+          }),
         )
       ).status,
       403,

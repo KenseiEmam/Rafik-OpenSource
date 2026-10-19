@@ -35,6 +35,8 @@ Use `npm run format:check` only when formatting/source files changed or when the
 
 ## Browser and service prerequisites
 
+GitHub's web job runs `npm run test:e2e --workspace @rafik/frontend -- --empty-database --project=chromium onboarding.e2e.ts` after local database startup. This is the administrator/invitation smoke journey, not full browser acceptance. Native binding metadata is covered by the frontend unit suite. CI wiring and online audit practice are described in the [maintainer guide](../development/maintainer-guide.md#github-checks-and-dependency-maintenance).
+
 The isolated browser wrapper owns disposable services, fixtures and cleanup. Do not reset or reseed the shared local preview for browser tests. Keep full browser suites serial. Inspect final screenshots when a layout or visual claim is part of acceptance; generated screenshots alone are not visual review.
 
 Backend API and workflow tests use disposable local identities/records; the fresh-database harness creates its own database, applies migrations and drops only that database. Browser runs use an isolated database, files directory, API and web ports. They must not rely on sample-account pollution or remove unrelated preview data.

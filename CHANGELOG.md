@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Corrected remaining CI fixtures for configured self-host production and exact media access through published library snapshots; private unpublished media and unrelated tenant access remain denied.
+
+- Aligned program-library regression checks with ADR 0020: athletes read immutable published versions but cannot write drafts. Independent CI domain suites now report failures after API readiness instead of hiding later results behind the first failed suite.
+
+- Repaired GitHub CI: restored cross-platform native lock metadata, aligned invitation/onboarding checks, removed retired package/marketing commands and retained isolated failure diagnostics. Corrected unit setup and stale theme-token references.
+- Applied a scoped Xcode UUID 11.1.1 security override. Online audit reduced 27 findings to 19 high findings from two unpatched Expo-tooling dependencies; invalidated the earlier offline zero-advisory claim.
+
 - Recorded founder-confirmed signing-key backup to PC and cloud with 7-Zip; paired English/Arabic landing guides now cover current beta setup, evidence, limits and GitHub-hosted downloads.
 - Archived the historical role audit and R-phase feature map, and shortened the delivery/verification guides while preserving dated snapshots, raw receipts and required security/content decisions. Updated incoming links and documented why each item moved.
 
@@ -13,7 +20,7 @@
 - Fixed stale Android offline access feedback: fresh authenticated access checks recover in the background while keeping the roster/editor mounted. Network, sign-in and throttling errors now have readable English/Arabic messages; malformed institution URLs use the intended validation.
 - Removed a second offline-start wait: cached rosters open locally, while schedule refresh has its own busy state. Newer roster data is downloaded explicitly.
 - Prevented a coach from becoming stuck in a removed empty workspace after access changes, while keeping cached work selectable for review.
-- Added focused transport/authenticated-response regression checks, refreshed the dependency audit (zero known advisories), and documented encrypted signing-key backup plus physical S20+ testing through USB without a domain.
+- Added focused transport/authenticated-response regression checks, recorded an offline dependency audit (later invalidated; see current verification), and documented encrypted signing-key backup plus physical S20+ testing through USB without a domain.
 - Clarified the public beta audience, coach-only native scope, observed-performance versus clinical claims, and limits of offline revocation and background sync.
 
 ## Squire 1.0.0-beta.1 — 2026-10-19

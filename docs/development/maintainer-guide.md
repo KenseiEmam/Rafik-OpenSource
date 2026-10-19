@@ -21,6 +21,14 @@ Documentation checks are maintained in `apps/backend/scripts/check-docs.mjs` wit
 
 ## Repository map
 
+### GitHub checks and dependency maintenance
+
+`.github/workflows/check.yml` runs on pull requests and main pushes, cancelling superseded runs. Web checks use the isolated, empty-database onboarding journey rather than the retired marketing sample. Backend setup fails fast; after API health succeeds, independent domain suites continue to report their own failures without hiding later results. The job still fails if any suite fails. Backend checks retain authorization and current institution workflows; package-entitlement tests are retired. Local browser runs clean their output; failed CI runs retain diagnostics for artifact upload while still removing disposable database/files and stopping their services.
+
+`apps/frontend/tests/native-lockfile.test.ts` checks native optional-package versions using Node's ancestor resolution, including nested/hoisted bindings. Keep the root lockfile portable when installing on Windows; do not discard Linux/macOS metadata. The Xcode-only UUID override preserves its CommonJS `v4` usage without changing Expo/React Native versions.
+
+Run `npm audit --offline=false` with actual network access and inspect its exit status. Offline npm can return an empty vulnerability report; it does not establish a clean dependency tree. Keep online reports and unresolved upstream findings in verification/known issues. Do not use `npm audit fix --force` to downgrade the mobile framework.
+
 `npm run mobile:acceptance` runs `apps/mobile/scripts/acceptance.mjs` on Node 24. It creates only a uniquely named disposable database/API on 55341, deploys migrations and runs `apps/backend/tests/field-acceptance.test.ts`. The shared fixture honors `RAFIK_TEST_API`; the field test refuses non-disposable database/API targets. Default mode cleans up automatically. `--device` retains synthetic fixtures until `done` on stdin or Ctrl+C in an interactive terminal; never interrupt a normal preview for these checks.
 
 Android `EventHistory.tsx` uses calendar `historyOnly` reads and the shared `FieldHistoryPage` contract. `RecoveryPanel.tsx` compares a fresh roster in memory and shares durable unresolved work through React Native Share; it never replaces the local roster. Keep owner scoping, no-credential projection, explicit plain-text confirmation, in-flight guards and share-size rejection/individual fallback intact.
