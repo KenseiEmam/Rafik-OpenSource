@@ -41,6 +41,12 @@ These came from reading `main` at `8ae1fbf` while preparing the [post-beta.1 rel
 
 **Repaired in Release 1b:** `organizations.e2e.ts` now creates its institution through the API instead of a retired setup button. It asserts the current outcomes of primary reassignment, revocation and the last-admin refusal.
 
+**Repaired in Release 1c:**
+
+- `programming.e2e.ts` now reviews workouts from Session history and adapts programs from the athlete plan detail.
+- The independent-coach test that opened retired `/coach` screens was removed (ADR 0021).
+- Restored the coach "Adapt this program" entry point. The 18 October browse change had left it reachable only from the athlete's own view.
+
 **P3 — retry toast overlap:** a failed send shows a generic 5-second error toast. After a successful **Retry saved change**, that toast can stay visible for the rest of its timer next to the acknowledged message. **Next step:** close error toasts when the same command is acknowledged; this changes shared feedback, so regression-test every consumer.
 
 ## Stage 7 implementation and acceptance gaps

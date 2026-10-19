@@ -1,6 +1,6 @@
 # Post-beta.1 release plan
 
-**Status:** Release 1 in progress, 19 October 2026. R0 is done and slices 1a and 1b are implemented (see [verification](../verification/README.md)). Other slices are not implemented. Items marked **⚑** were provisional defaults; the [confirmed decisions](#confirmed-release-1-decisions) replace them for Release 1. Releases are implemented one slice at a time, each on its own `codex/` branch and pull request.
+**Status:** Release 1 in progress, 19 October 2026. R0 is done and slices 1a–1c are implemented (see [verification](../verification/README.md)). Other slices are not implemented. Items marked **⚑** were provisional defaults; the [confirmed decisions](#confirmed-release-1-decisions) replace them for Release 1. Releases are implemented one slice at a time, each on its own `codex/` branch and pull request.
 
 ## Confirmed Release 1 decisions
 
@@ -164,6 +164,12 @@ Supporting coaches can read all of an athlete's training plans until slice 1c ad
   - Who may link coaches? Default: admins only.
 
 ### 1c Concurrent goal-specific plans ⚑
+
+**Implemented, 19 October 2026,** with same-day overlap allowed and warned. Differences from the outline below:
+
+- **No owner column:** plans carry a goal and sport but no `owner_member_id`; who may write a plan follows the sport label and the coaching link.
+- **Overlap means overlapping dates:** flexible plans have no fixed days, so the check compares date windows.
+- **Assessments:** a supporting coach's assessment history is limited to events they staffed until events carry a sport.
 
 - **⚑ Default:** an athlete can have several active plans, each with a goal or sport label and an owning coach. Same-day sessions from different plans are allowed, with a visible conflict warning. **Alternative:** the server rejects overlapping training days.
 - **Data:**

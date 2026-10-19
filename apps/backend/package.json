@@ -54,6 +54,7 @@
     "test:organization-feedback": "tsx --test tests/organization-feedback.test.ts",
     "test:organization-sports": "tsx --test tests/organization-sports.test.ts",
     "test:coaching-team": "tsx --test tests/coaching-team.test.ts",
+    "test:concurrent-plans": "tsx --test tests/concurrent-plans.test.ts",
     "test:organization-injuries": "tsx --test tests/organization-injuries.test.ts",
     "test:injury-retention-scheduler": "tsx --test tests/organization-injury-retention-scheduler.test.ts"
   },

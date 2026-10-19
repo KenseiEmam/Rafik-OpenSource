@@ -57,12 +57,14 @@ test('organization program authoring, reviewed delivery, recording and feedback 
     await page.getByRole('button', { name: 'Edit program', exact: true }).click()
     await page.getByRole('button', { name: 'Publish program', exact: true }).click()
     await expect(
-      page.getByRole('status').filter({ hasText: 'Published and added to the institution program library.' }),
+      page
+        .getByRole('status')
+        .filter({ hasText: 'Published and added to the institution program library.' }),
     ).toBeVisible()
     await page.getByRole('link', { name: 'Assign this plan', exact: true }).click()
     await page.getByRole('checkbox', { name: /R4 Athlete/ }).check()
     await page.getByRole('button', { name: /Review assignment/ }).click()
-    await expect(page.getByText('First assignment', { exact: false })).toBeVisible()
+    await expect(page.getByText('First plan', { exact: false })).toBeVisible()
     expect(await layoutIssues(page)).toEqual([])
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
     await page.screenshot({
@@ -87,7 +89,10 @@ test('organization program authoring, reviewed delivery, recording and feedback 
       page.getByRole('heading', { name: 'Ready for their next session.', exact: true }),
     ).toBeVisible()
     await f.login(client, f.client, `/organization/${id}/trainee/training`)
-    await client.getByRole('button', { name: 'Open session', exact: true }).first().click()
+    await client
+      .getByRole('button', { name: /^Open session/ })
+      .first()
+      .click()
     await expect(client.getByRole('spinbutton', { name: 'Set 1 load', exact: true })).toBeVisible()
     let offline = true
     await client.route(`**/v1/workspaces/${id}/sessions`, async (r) => {
@@ -107,7 +112,8 @@ test('organization program authoring, reviewed delivery, recording and feedback 
     await client.reload()
     await expect(client.getByRole('status')).toContainText('Synced with your account')
     const workout = client.url()
-    await page.goto(base + '/training')
+    // Staff review recorded workouts from Session history; /training is the plan index.
+    await page.goto(base + '/session-history')
     await page
       .getByRole('link')
       .filter({ hasText: 'R4 Athlete' })
@@ -120,18 +126,20 @@ test('organization program authoring, reviewed delivery, recording and feedback 
     await client.goto(workout)
     await expect(client.getByText('Keep the same load next time.', { exact: true })).toBeVisible()
     await page.goto(base + '/training')
-    await page.getByText('Filter by athlete', { exact: true }).click()
     await page
-      .locator('.member-picker')
-      .getByRole('checkbox', { name: 'R4 Athlete', exact: true })
-      .check()
+      .locator('.athlete-plan-card')
+      .filter({ hasText: 'Three-day foundation' })
+      .getByRole('button', { name: 'View assigned plan' })
+      .click()
     await page.getByRole('link', { name: 'Adapt this program', exact: true }).click()
     await expect(page.getByLabel('Program name', { exact: true })).toHaveValue(
       'Three-day foundation adapted',
     )
     await page.getByLabel('Program name', { exact: true }).fill('R4 Athlete next block')
     await page.reload()
-    await expect(page.getByLabel('Program name', { exact: true })).toHaveValue('R4 Athlete next block')
+    await expect(page.getByLabel('Program name', { exact: true })).toHaveValue(
+      'R4 Athlete next block',
+    )
     await page.getByRole('button', { name: 'Publish program', exact: true }).click()
     await page.getByRole('link', { name: 'Assign this plan', exact: true }).click()
     await expect(page.getByRole('checkbox', { name: /R4 Athlete/ })).toBeChecked()
@@ -147,20 +155,5 @@ test('organization program authoring, reviewed delivery, recording and feedback 
     await f.cleanup()
   }
 })
-test('independent coach delivers a reviewed program directly without changing another context', async ({
-  page,
-}) => {
-  const f = await teamFixture()
-  try {
-    await f.login(page, f.owner, '/coach/deliver/' + f.version.id)
-    await page.getByRole('checkbox', { name: /R4 Athlete/ }).check()
-    await page.getByRole('button', { name: /Review assignment/ }).click()
-    await expect(page.getByText('Replace future training', { exact: false })).toBeVisible()
-    await page.getByRole('button', { name: 'Confirm assignment', exact: true }).click()
-    await expect(
-      page.getByRole('heading', { name: 'Ready for their next session.', exact: true }),
-    ).toBeVisible()
-  } finally {
-    await f.cleanup()
-  }
-})
+// The independent-coach delivery journey targeted retired /coach screens (ADR 0021); organization
+// delivery, add/replace and review are covered above and in concurrent-plans.e2e.ts.

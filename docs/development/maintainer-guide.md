@@ -72,6 +72,12 @@ Sports and coaching specialties are served by `apps/backend/server/organization-
 - **Choosing a scope:** when a new path checks a coach's access, choose the scope deliberately. The default is primary. Only plans, sessions, assessments, program media, and scheduling, groups and messaging use `training`.
 - **SQL filters:** raw SQL that filters `trainer_id = self` means the primary coach. Add the active-link `EXISTS` only for training-scope reads.
 - **Web:** `CoachingTeam.vue` manages supporting coaches in the People manage panel.
+- **Concurrent plans (1c):** `deliveryCommand` in `programming.ts` handles assign (add or explicit `replaces`) and `end`.
+  - `planAuthority()` enforces sport-labelled writes for supporting coaches.
+  - `assignmentScope()` and `sessionScope()` narrow their reads. Apply them to any new plan or session read.
+  - Migration `202610191400_concurrent_plans` replaced the one-active-plan index with one active plan per version.
+  - In the web app, `DeliverPlan.vue` offers add or replace per athlete; `OrganizationTraining.vue` lists every active plan; `AthletePlans.vue` can end a plan and links back to "Adapt this program".
+  - Run `npm run test:concurrent-plans`.
 - **Tests:** `npm run test:coaching-team` covers the access matrix and lifecycle. `npm run test:fresh` checks the trigger, the backfill and the mirror in a rolled-back transaction.
 
 Instance branding is managed by `apps/frontend/src/features/organizations/BrandingSettings.vue`, applied in `apps/frontend/src/App.vue`, and served by `apps/backend/server/instance-branding.ts`. The initial setup claims the single-instance branding owner; the forward migration is `apps/backend/prisma/migrations/202610171500_instance_branding/`. Keep the raster signature/size checks, super-admin scope, public image response headers and database backup behavior aligned when changing it. The supported palette is accent plus light/dark page backgrounds; surfaces derive from those colors and text/accent contrast is adjusted in `apps/frontend/src/lib/branding.ts`.

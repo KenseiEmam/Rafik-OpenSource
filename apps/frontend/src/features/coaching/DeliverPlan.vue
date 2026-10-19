@@ -14,6 +14,13 @@ import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 const route = useRoute(),
   context = programContext(route),
   versionId = String(route.params.id)
+type ActivePlan = {
+  id: string
+  revision: number
+  title: string
+  goal: string | null
+  sport: string | null
+}
 type Recipient = {
   id: string
   name: string
@@ -21,7 +28,11 @@ type Recipient = {
   assignment_id: string | null
   assignment_revision: number | null
   current?: string
+  /** Institution recipients list every active plan; independent coaching keeps one. */
+  plans?: ActivePlan[]
 }
+type Overlap = { id: string; title: string; goal: string | null }
+type Sport = { id: string; name: string; kind: string; archived: boolean }
 const version = ref<PlanVersion>(),
   people = ref<Recipient[]>([]),
   selected = ref<string[]>([]),
@@ -32,7 +43,13 @@ const version = ref<PlanVersion>(),
   review = ref(false),
   loading = ref(true),
   error = ref(''),
-  done = ref(false)
+  done = ref(false),
+  // Per athlete: '' adds a concurrent plan; a plan ID replaces that plan.
+  replace = ref<Record<string, string>>({}),
+  goal = ref(''),
+  sport = ref(''),
+  sports = ref<Sport[]>([]),
+  overlaps = ref<{ name: string; plans: Overlap[] }[]>([])
 const start = ref(
     new Intl.DateTimeFormat('en-CA', {
       timeZone: profile.value?.timezone || 'UTC',
@@ -56,10 +73,35 @@ watch(
         start: start.value,
         end: end.value,
         mode: mode.value,
+        replace: { ...replace.value },
+        goal: goal.value,
+        sport: sport.value,
       }).catch((e) => (error.value = errorMessage(e)))
   },
   { deep: true },
 )
+watch(
+  [replace, goal, sport],
+  () => {
+    if (initialized)
+      void storeDraft(key, {
+        selected: [...selected.value],
+        start: start.value,
+        end: end.value,
+        mode: mode.value,
+        replace: { ...replace.value },
+        goal: goal.value,
+        sport: sport.value,
+      }).catch((e) => (error.value = errorMessage(e)))
+  },
+  { deep: true },
+)
+const planLabel = (plan: ActivePlan) =>
+  [plan.title, plan.goal, sports.value.find((s) => s.id === plan.sport)?.name]
+    .filter(Boolean)
+    .join(' · ')
+const replacedPlan = (person: Recipient) =>
+  person.plans?.find((plan) => plan.id === replace.value[person.id])
 let rosterGeneration = 0,
   searchTimer: ReturnType<typeof setTimeout>
 async function loadRoster(append = false) {
@@ -108,15 +150,30 @@ async function load() {
         ).version
       : (await rows<PlanVersion>('plan_versions', 'id', versionId))[0]
     if (!version.value) throw Error('program_unavailable')
-    const local = await getDraft<{ selected: string[]; start: string; end: string; mode: string }>(
-      key,
-    )
+    const local = await getDraft<{
+      selected: string[]
+      start: string
+      end: string
+      mode: string
+      replace?: Record<string, string>
+      goal?: string
+      sport?: string
+    }>(key)
     if (local) {
       selected.value = local.selected
       start.value = local.start
       end.value = local.end
       mode.value = local.mode
+      replace.value = local.replace || {}
+      goal.value = local.goal || ''
+      sport.value = local.sport || ''
     } else if (route.query.member) selected.value = [String(route.query.member)]
+    if (context.workspace)
+      sports.value = (
+        await request<{ items: Sport[] }>(
+          `/v1/workspaces/${context.workspace}/sports?view=${context.view}`,
+        ).catch(() => ({ items: [] as Sport[] }))
+      ).items.filter((s) => !s.archived)
     await loadRoster()
     initialized = true
   } catch (e) {
@@ -127,7 +184,16 @@ async function load() {
 }
 const command = useCommand<'deliver'>(
   key,
-  async () => {
+  async (_, result) => {
+    // Concurrent plans are allowed; report overlapping dates so the coach can review them.
+    overlaps.value = Array.isArray(result)
+      ? (result as { member_id: string; overlaps?: Overlap[] }[])
+          .filter((r) => r.overlaps?.length)
+          .map((r) => ({
+            name: people.value.find((p) => p.id === r.member_id)?.name || '',
+            plans: r.overlaps!,
+          }))
+      : []
     done.value = true
     await removeDraft(key)
   },
@@ -159,15 +225,25 @@ function deliver() {
     action: 'assign',
     view: context.view,
     version_id: versionId,
-    members: recipients.value.map((p) => ({
-      id: p.id,
-      revision: p.revision,
-      assignment_id: p.assignment_id,
-      assignment_revision: p.assignment_revision,
-    })),
+    members: recipients.value.map((p) =>
+      context.workspace
+        ? {
+            id: p.id,
+            revision: p.revision,
+            replaces: replacedPlan(p)?.id || null,
+            replaces_revision: replacedPlan(p)?.revision ?? null,
+          }
+        : {
+            id: p.id,
+            revision: p.revision,
+            assignment_id: p.assignment_id,
+            assignment_revision: p.assignment_revision,
+          },
+    ),
     start_date: start.value,
     end_date: end.value || null,
     schedule_mode: mode.value,
+    ...(context.workspace ? { goal: goal.value.trim() || null, sport: sport.value || null } : {}),
   })
 }
 onMounted(load)
@@ -203,6 +279,24 @@ onMounted(load)
             )
           }}
         </p>
+        <section v-if="overlaps.length" class="notice" role="status">
+          <h3>{{ l('Overlapping plans', 'خطط متداخلة') }}</h3>
+          <p>
+            {{
+              l(
+                'These athletes have other active plans in the same period. Same-day sessions are allowed; review the combined load.',
+                'لدى هؤلاء الرياضيين خطط نشطة أخرى في الفترة نفسها. يُسمح بحصص في اليوم نفسه؛ راجع الحمل الإجمالي.',
+              )
+            }}
+          </p>
+          <ul>
+            <li v-for="item in overlaps" :key="item.name" dir="auto">
+              <strong>{{ item.name }}</strong
+              >:
+              {{ item.plans.map((p) => [p.title, p.goal].filter(Boolean).join(' · ')).join('، ') }}
+            </li>
+          </ul>
+        </section>
         <RouterLink
           class="button"
           :to="context.base + (context.workspace ? '/training' : '/clients')"
@@ -234,7 +328,10 @@ onMounted(load)
                 /><span
                   ><strong>{{ person.name }}</strong
                   ><small>{{
-                    person.current || l('No active plan', 'لا توجد خطة نشطة')
+                    person.plans
+                      ? person.plans.map(planLabel).join('، ') ||
+                        l('No active plan', 'لا توجد خطة نشطة')
+                      : person.current || l('No active plan', 'لا توجد خطة نشطة')
                   }}</small></span
                 ></label
               ><button
@@ -248,21 +345,69 @@ onMounted(load)
               <p v-if="selected.length" class="small-print">
                 {{ l('Selected people', 'الأشخاص المحددون') }}
               </p>
-              <div v-for="id in selected" :key="id" class="heading-actions">
-                <span>{{
-                  people.find((p) => p.id === id)?.name || l('Unavailable person', 'شخص غير متاح')
-                }}</span
-                ><button
-                  type="button"
-                  class="text-link"
-                  @click="selected = selected.filter((x) => x !== id)"
+              <div v-for="id in selected" :key="id" class="selected-recipient">
+                <div class="heading-actions">
+                  <span dir="auto">{{
+                    people.find((p) => p.id === id)?.name || l('Unavailable person', 'شخص غير متاح')
+                  }}</span
+                  ><button
+                    type="button"
+                    class="text-link"
+                    @click="selected = selected.filter((x) => x !== id)"
+                  >
+                    {{ l('Remove', 'إزالة') }}
+                  </button>
+                </div>
+                <label v-if="context.workspace && people.find((p) => p.id === id)?.plans?.length"
+                  >{{ l('Existing plans', 'الخطط الحالية')
+                  }}<select
+                    :value="replace[id] || ''"
+                    @change="
+                      replace = {
+                        ...replace,
+                        [id]: ($event.target as HTMLSelectElement).value,
+                      }
+                    "
+                  >
+                    <option value="">
+                      {{ l('Keep them and add this plan', 'إبقاؤها وإضافة هذه الخطة') }}
+                    </option>
+                    <option
+                      v-for="plan in people.find((p) => p.id === id)?.plans"
+                      :key="plan.id"
+                      :value="plan.id"
+                    >
+                      {{ l('Replace: ', 'استبدال: ') + planLabel(plan) }}
+                    </option>
+                  </select></label
                 >
-                  {{ l('Remove', 'إزالة') }}
-                </button>
               </div>
             </section>
             <section class="panel">
               <h2>{{ l('How should it run?', 'كيف يُنفّذ؟') }}</h2>
+              <div v-if="context.workspace" class="field-pair">
+                <label
+                  >{{ l('Goal (optional)', 'الهدف (اختياري)')
+                  }}<input
+                    v-model="goal"
+                    maxlength="80"
+                    :placeholder="l('For example: match speed', 'مثال: سرعة المباراة')" /></label
+                ><label
+                  >{{ l('Sport (optional)', 'الرياضة (اختياري)')
+                  }}<select v-model="sport">
+                    <option value="">{{ l('Not sport-specific', 'غير مرتبطة برياضة') }}</option>
+                    <option v-for="s in sports" :key="s.id" :value="s.id">{{ s.name }}</option>
+                  </select></label
+                >
+              </div>
+              <p v-if="context.workspace && context.view === 'trainer'" class="small-print">
+                {{
+                  l(
+                    'If you support an athlete for one sport, label the plan with that sport. Primary coaches can assign any plan.',
+                    'إذا كنت تدعم رياضياً في رياضة واحدة، فاربط الخطة بتلك الرياضة. يمكن للمدرب الأساسي تعيين أي خطة.',
+                  )
+                }}
+              </p>
               <label
                 >{{ l('Schedule', 'الجدول')
                 }}<select v-model="mode">
@@ -302,16 +447,25 @@ onMounted(load)
           <section v-else class="panel">
             <h2>{{ l('Review before assigning', 'راجع قبل التعيين') }}</h2>
             <p>
-              <strong>{{ version?.title }}</strong> · {{ start }}{{ end ? ' → ' + end : '' }} ·
+              <strong>{{ version?.title }}</strong
+              ><template v-if="goal.trim()"> · {{ goal.trim() }}</template
+              ><template v-if="sport"> · {{ sports.find((s) => s.id === sport)?.name }}</template> ·
+              {{ start }}{{ end ? ' → ' + end : '' }} ·
               {{ mode === 'cycle' ? l('Program cycle', 'دورة البرنامج') : l('Flexible', 'مرن') }}
             </p>
             <ul>
-              <li v-for="person in recipients" :key="person.id">
+              <li v-for="person in recipients" :key="person.id" dir="auto">
                 {{ person.name }} —
                 {{
-                  person.assignment_id
-                    ? l('Replace future training', 'استبدال التدريب القادم')
-                    : l('First assignment', 'التعيين الأول')
+                  !context.workspace
+                    ? person.assignment_id
+                      ? l('Replace future training', 'استبدال التدريب القادم')
+                      : l('First assignment', 'التعيين الأول')
+                    : replacedPlan(person)
+                      ? l('Replaces ', 'تستبدل ') + planLabel(replacedPlan(person)!)
+                      : person.plans?.length
+                        ? l('Added alongside current plans', 'تُضاف إلى الخطط الحالية')
+                        : l('First plan', 'الخطة الأولى')
                 }}
               </li>
             </ul>
@@ -364,6 +518,15 @@ onMounted(load)
 }
 .delivery-recipient small {
   color: var(--muted);
+}
+.selected-recipient {
+  display: grid;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.selected-recipient span {
+  overflow-wrap: anywhere;
 }
 .panel {
   margin-bottom: 20px;

@@ -14,6 +14,14 @@
 
 ## Recent work
 
+- **19 October — Release 1c (concurrent plans):**
+  - Removed the one-active-plan constraint and added a plan goal and sport.
+  - Explicit add, replace and end, with overlap warnings.
+  - Narrowed supporting coaches' plan, session, media and assessment reads.
+  - Multi-plan athlete training view; add or replace choice in delivery; End plan in the plan detail.
+  - Backend and browser checks pass. Restored the "Adapt this program" regression and repaired the programming spec.
+  - Next: slice 1d, the staff athlete profile.
+
 - **19 October — Release 1b (coaching team):**
   - Added primary and supporting coaching links, with a backfill and a sync trigger.
   - `recipient()` now takes an explicit scope that defaults to primary. Training-scope reads, scheduling, grouping and messaging are deliberately widened; nutrition, participation status, plan changes, review, follow-up and analytics stay primary-only.
@@ -52,7 +60,7 @@
 
 ## Next actions
 
-1. Review the slice 1a and 1b pull requests, then continue Release 1 with slice 1c (concurrent goal-specific plans). Release 1's [decisions are confirmed](../requirements/release-plan-post-beta1.md#confirmed-release-1-decisions). Release 2 and Release 3 decisions (communications, player notes, field warnings) and coach ratings remain open.
+1. Review the slice 1a–1c pull requests, then continue Release 1 with slice 1d (staff athlete profile). Release 1's [decisions are confirmed](../requirements/release-plan-post-beta1.md#confirmed-release-1-decisions). Release 2 and Release 3 decisions (communications, player notes, field warnings) and coach ratings remain open.
 2. Runtime PR #126, documentation PR #127 and CI-repair PR #128 are merged, as are landing PRs #8–#10. Align the selected release source/tag with actual published assets; use GitHub as the download host.
 3. Complete the founder’s updated S20+ install/offline/recovery walkthrough before distributing the Android candidate as accepted. Signing-key backup is founder-confirmed complete.
 4. Collect the recorded first-user, recent web refinement, privacy and Unix operational evidence from [known issues](../known-issues/README.md) as the relevant institution is evaluated. These are not invented completed checks or a request to redo accepted implementation stages.

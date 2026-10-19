@@ -81,7 +81,18 @@ These labels describe people. On their own they grant no access; Release 1b uses
 - **People:** `/people` returns each athlete's active `coaches` (`id`, `coach`, `kind`, `sport`, `revision`). A coach's roster includes athletes they support.
 - **Supporting-coach access ([ADR 0025](../decisions/ADR-0025-coaching-team.md)):**
   - Allowed: delivery and history reads, athlete plans, single-session reads, assessment history and program/session media, plus choosing the athlete for their own events, groups and messages.
-  - Primary coach only (`403` otherwise): nutrition and nutrition plans, participation status, plan assignment, workout review, follow-up and trainer analytics.
+  - Primary coach only (`403` otherwise): nutrition and nutrition plans, participation status, workout review, follow-up and trainer analytics. Plan writes follow the rules in Release 1c below.
+
+### Concurrent goal-specific plans (Release 1c)
+
+- **Assign:** `POST /v1/workspaces/:id/delivery` `assign` accepts an optional `goal` (1–80 characters) and `sport`.
+  - Each recipient may set `replaces` with `replaces_revision` to supersede one active plan; `null` adds a concurrent plan.
+  - The legacy `assignment_id`/`assignment_revision` pair still means replace.
+  - The same version cannot be active twice for an athlete (`409 already_assigned`).
+  - Each created assignment returns `overlaps`: other active plans whose dates overlap. Overlap is reported, never blocked.
+- **End:** `end` `{ assignment, revision }` archives one plan; sessions and the published version are kept.
+- **Supporting coaches:** may add, replace or end only plans labelled with a sport they are linked to for that athlete. Their delivery, history, athlete-plan, session and media reads include only those plans and the sessions recorded against them. Assessment history shows them only results from events they staffed, because events carry no sport.
+- **Reads:** recipients return every active plan in `plans`, and `athlete-plans` items include `goal`, `sport` and `revision`.
 
 See [ADR 0005](../decisions/ADR-0005-organization-and-independent-scopes.md). These Prisma-internal tables have no generic browser row grants. Closure preserves records while removing access; an exact closure retry confirms the old result.
 

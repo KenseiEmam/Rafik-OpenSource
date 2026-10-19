@@ -116,7 +116,7 @@ export async function getProgramMedia(actor: Actor, id: string) {
         return;
       const allowed = await tx.$queryRaw<
         unknown[]
-      >`SELECT v.id FROM public.organization_versions v JOIN public.organization_programs p ON p.id=v.program_id WHERE v.workspace_id=${workspace.id}::uuid AND v.prescription->'presentation'->>'cover'=${id} AND (p.listed AND NOT p.archived OR EXISTS(SELECT 1 FROM public.organization_assignments a JOIN public.workspace_members trainee ON trainee.id=a.member_id WHERE a.version_id=v.id AND (trainee.id=${m.id}::uuid OR (trainee.trainer_id=${m.id}::uuid OR EXISTS(SELECT 1 FROM public.organization_coaching_links l WHERE l.athlete_member_id=trainee.id AND l.coach_member_id=${m.id}::uuid AND l.ended_at IS NULL)) AND ${m.roles.includes("trainer")}))) LIMIT 1`;
+      >`SELECT v.id FROM public.organization_versions v JOIN public.organization_programs p ON p.id=v.program_id WHERE v.workspace_id=${workspace.id}::uuid AND v.prescription->'presentation'->>'cover'=${id} AND (p.listed AND NOT p.archived OR EXISTS(SELECT 1 FROM public.organization_assignments a JOIN public.workspace_members trainee ON trainee.id=a.member_id WHERE a.version_id=v.id AND (trainee.id=${m.id}::uuid OR (trainee.trainer_id=${m.id}::uuid OR EXISTS(SELECT 1 FROM public.organization_coaching_links l WHERE l.athlete_member_id=trainee.id AND l.coach_member_id=${m.id}::uuid AND l.ended_at IS NULL AND l.sport_id=a.sport_id)) AND ${m.roles.includes("trainer")}))) LIMIT 1`;
       if (!allowed.length) throw new ApiError(403, "forbidden");
     });
   }

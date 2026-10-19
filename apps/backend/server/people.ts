@@ -173,15 +173,32 @@ export async function organizationRecipients(
         id: true,
         revision: true,
         member_id: true,
+        goal: true,
+        sport_id: true,
+        start_date: true,
+        end_date: true,
         organization_versions: { select: { title: true } },
       },
+      orderBy: { start_date: "asc" },
     });
     const map = (m: (typeof members)[0]) => {
-      const a = assignments.find((a) => a.member_id === m.id);
+      const plans = assignments.filter((a) => a.member_id === m.id),
+        a = plans[0];
       return {
         id: m.id,
         name: m.name,
         revision: m.revision,
+        // Every active plan; replacing one is an explicit choice.
+        plans: plans.map((p) => ({
+          id: p.id,
+          revision: p.revision,
+          title: p.organization_versions.title,
+          goal: p.goal,
+          sport: p.sport_id,
+          start_date: p.start_date,
+          end_date: p.end_date,
+        })),
+        // Compatibility fields for older clients: the earliest active plan.
         assignment_id: a?.id || null,
         assignment_revision: a?.revision || null,
         current: a?.organization_versions.title,

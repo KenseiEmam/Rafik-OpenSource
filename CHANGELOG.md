@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Release 1c:
+  - Athletes can follow several active goal-specific plans. Each plan can carry a goal and sport, and assigning either adds a plan or explicitly replaces a named one.
+  - Plans can be ended individually. Overlapping dates are reported to coaches, and athletes see a same-day notice.
+  - Supporting coaches work only with plans and sessions labelled with their linked sport, and with assessments from events they staffed.
+  - Forward migration `202610191400_concurrent_plans`.
+  - Restored the coach "Adapt this program" link and repaired the programming browser spec.
+
 - Release 1b:
   - Coaching teams: each athlete has one primary coach and optional supporting coaches, each scoped to a sport or specialty ([ADR 0025](docs/decisions/ADR-0025-coaching-team.md)).
   - Supporting coaches read training records and can include the athlete in their own events, groups and messages. Nutrition, participation status, plan changes, workout review, follow-up and analytics stay with the primary coach.

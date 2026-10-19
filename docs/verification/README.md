@@ -1,5 +1,33 @@
 # Verification record
 
+## Release 1c: concurrent goal-specific plans — 19 October 2026
+
+**Passed against disposable databases:**
+
+- **`test:concurrent-plans`:**
+  - Add with goal and sport; a second plan reports date overlaps; duplicate-version (`409`) and goal-length rejection.
+  - A supporting coach can only write plans labelled with their linked sport, and cannot replace an unlabelled plan.
+  - The supporting coach's delivery, athlete-plan and history reads show only football plans and sessions; a single-session read outside the sport returns `403`. The recipients list includes every plan.
+  - An unknown replace target is a conflict; the legacy `assignment_id` path replaces.
+  - `end` is revision-checked, authorized by sport and recorded as an event.
+  - Assessment history is limited to events the supporting coach staffed.
+- **Related suites:** coaching team, programming, assets, tasks and feedback pass.
+
+**Browser (isolated wrapper, Chromium desktop and WebKit phone):**
+
+- **`concurrent-plans.e2e.ts`:**
+  - A coach keeps the existing plan and adds a second one with a goal; the review and the overlap notice are correct.
+  - The athlete sees both labelled plans, a same-day notice and per-plan session buttons.
+  - The coach ends a plan from the plan detail, then explicitly replaces one.
+  - Arabic dark at 320 px, with layout and axe checks; screenshots inspected (dates isolated as left-to-right text).
+- **`programming.e2e.ts`:** repaired and passing in both engines.
+
+**Limits:**
+
+- Overlap compares date windows, not individual training days.
+- Events carry no sport.
+- Browser emulation is not physical-device evidence.
+
 ## Release 1b: coaching team — 19 October 2026
 
 **Passed against disposable databases:** the preview database was not migrated or changed.

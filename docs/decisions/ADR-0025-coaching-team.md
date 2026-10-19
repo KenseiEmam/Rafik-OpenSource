@@ -23,7 +23,7 @@ Use option 2.
   - Each coach has at most one active link to the same athlete.
   - A supporting link names the sport or specialty it covers. The coach must cover it; for a sport, the athlete must take part in it.
 - **Primary coach:** keeps today's assigned-coach meaning, including for [ADR 0017](ADR-0017-injury-status-minimum.md). That covers plan assignment, workout review, nutrition, participation status, follow-up tasks and analytics.
-- **Supporting coach ("training" scope):** can read the athlete's training plans, workout sessions, assessment history and program media, and can include the athlete in their own events, training groups and messages. They get no nutrition, participation status, plan assignment or replacement, workout review, follow-up or analytics.
+- **Supporting coach ("training" scope):** can read the athlete's training plans, workout sessions, assessment history and program media, and can include the athlete in their own events, training groups and messages. From Release 1c they can also add, replace and end plans labelled with their linked sport. They get no nutrition, participation status, unlabelled plan changes, workout review, follow-up or analytics.
 - **Event staff authority is unchanged:** staff record attendance and results for their own events. The Android field API therefore needs no change.
 - **Who manages links:** only administrators create or end links. The primary coach still changes through `assign-trainer`.
 - **Server checks:** `recipient()` takes an explicit scope and defaults to `primary`, so any path not deliberately widened keeps the narrower meaning.
@@ -31,7 +31,7 @@ Use option 2.
 
 ## Trade-offs
 
-- **Narrow scoping for now:** until plans carry a sport (Release 1c), a supporting coach can read all of the athlete's training plans, not only those for their sport.
+- **Narrowed in Release 1c:** plans now carry an optional sport. A supporting coach reads and writes only plans, and the sessions recorded against them, labelled with their linked sport. Events still have no sport, so their assessment history is limited to events they staffed. Unlabelled plans belong to the primary coach.
 - **Two layers to keep in step:** SQL queries that filter by `trainer_id` mean the primary coach. Training-scope reads add an `EXISTS` on active links. Both must change together.
 - **Historical primary links:** links created by the backfill or trigger record the coach as creator, and links the trigger ends have no ending actor. The API records the acting administrator for its own changes.
 - **One link per coach and athlete:** a coach who covers two sports for the same athlete holds one supporting link, for the sport chosen first.

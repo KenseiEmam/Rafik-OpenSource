@@ -933,7 +933,7 @@ model workspace_members {
   assessment_templates                                                                                assessment_templates[]
   organization_assets                                                                                 organization_assets[]
   organization_assignments_organization_assignments_workspace_id_created_byToworkspace_members        organization_assignments[]        @relation("organization_assignments_workspace_id_created_byToworkspace_members")
-  organization_assignments_organization_assignments_workspace_id_member_idToworkspace_members         organization_assignments?         @relation("organization_assignments_workspace_id_member_idToworkspace_members")
+  organization_assignments_organization_assignments_workspace_id_member_idToworkspace_members         organization_assignments[]        @relation("organization_assignments_workspace_id_member_idToworkspace_members")
   organization_channel_members                                                                        organization_channel_members[]
   organization_channel_reads                                                                          organization_channel_reads[]
   organization_channels                                                                               organization_channels[]
@@ -1035,6 +1035,9 @@ model organization_assignments {
   state                                                                                 String                  @default("active")
   revision                                                                              Int                     @default(1)
   created_at                                                                            DateTime                @default(now()) @db.Timestamptz(6)
+  goal                                                                                  String?
+  sport_id                                                                              String?                 @db.Uuid
+  organization_sports                                                                   organization_sports?    @relation(fields: [workspace_id, sport_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction, map: "organization_assignments_sport")
   workspace_members_organization_assignments_workspace_id_created_byToworkspace_members workspace_members       @relation("organization_assignments_workspace_id_created_byToworkspace_members", fields: [workspace_id, created_by], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
   workspaces                                                                            workspaces              @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   workspace_members_organization_assignments_workspace_id_member_idToworkspace_members  workspace_members       @relation("organization_assignments_workspace_id_member_idToworkspace_members", fields: [workspace_id, member_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
@@ -1042,7 +1045,8 @@ model organization_assignments {
   organization_sessions                                                                 organization_sessions[]
 
   @@unique([workspace_id, id])
-  @@unique([workspace_id, member_id], map: "organization_one_active_assignment", where: raw("(state = 'active'::text)"))
+  @@unique([workspace_id, member_id, version_id], map: "organization_one_active_version", where: raw("(state = 'active'::text)"))
+  @@index([workspace_id, member_id], map: "organization_assignments_active_member", where: raw("(state = 'active'::text)"))
   @@schema("public")
 }
 
@@ -1306,6 +1310,7 @@ model organization_sports {
   created_at                  DateTime                      @default(now()) @db.Timestamptz(6)
   organization_member_sports  organization_member_sports[]
   organization_coaching_links organization_coaching_links[]
+  organization_assignments    organization_assignments[]
   workspaces                  workspaces                    @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([workspace_id, id])

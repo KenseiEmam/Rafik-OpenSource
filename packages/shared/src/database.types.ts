@@ -288,6 +288,8 @@ export type Database = { public: { Tables: {
         state: string
         revision: number
         created_at: string
+        goal: string | null
+        sport_id: string | null
     } }
     organization_channel_members: { Row: {
         channel_id: string
