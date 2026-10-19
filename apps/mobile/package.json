@@ -8,7 +8,8 @@
     "start": "expo start --dev-client",
     "android": "node scripts/android.mjs",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tests/tsconfig.json",
-    "test:queue": "node --experimental-strip-types --test tests/attendance.test.ts"
+    "test:queue": "node --experimental-strip-types --test tests/attendance.test.ts",
+    "test:request": "node --experimental-transform-types --experimental-test-module-mocks --test --test-isolation=none tests/request.test.ts tests/native.test.ts"
   },
   "dependencies": {
     "@rafik/shared": "1.0.0-beta.1",

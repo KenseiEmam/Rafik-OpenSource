@@ -1,6 +1,14 @@
 export type Language = 'en' | 'ar'
 // English keys also translate persisted messages from earlier app builds.
 const arabic: Record<string, string> = {
+  'The server returned invalid institution access. Check the API URL and server version.':
+    'أعاد الخادم بيانات صلاحيات مؤسسة غير صالحة. تحقق من عنوان API وإصدار الخادم.',
+  'Could not reach your institution. Check your connection and try again.':
+    'تعذر الوصول إلى مؤسستك. تحقق من الاتصال وأعد المحاولة.',
+  'The email or password is incorrect. Check your institution URL too.':
+    'البريد الإلكتروني أو كلمة المرور غير صحيحة. تحقق أيضاً من عنوان المؤسسة.',
+  'Too many attempts. Wait a few minutes before trying again.':
+    'محاولات كثيرة. انتظر بضع دقائق قبل المحاولة مجدداً.',
   'RAFIK FIELD': 'رفيق الميداني',
   'Opening encrypted field storage': 'جارٍ فتح التخزين الميداني المشفّر',
   'Sign in to your institution': 'سجّل الدخول إلى مؤسستك',

@@ -1,5 +1,13 @@
 # Verification record
 
+## Public-beta readiness fixes — 19 October 2026
+
+**Source checks passed:** six focused request/client cases cover raw connection-detail suppression, failure → authenticated recovery, no recovery notification for denied requests, observer cleanup/error isolation, malformed responses/context data, URL boundaries, bilingual sign-in/throttling feedback and selection after coach-access changes. Eighteen existing SQLite queue cases passed, retaining exact retries, persistence, isolation and conflict/completion semantics. Mobile source/test TypeScript passed after correcting two test typing errors. Documentation links across 50 maintained files, targeted formatting and whitespace checks passed. Node transport tests mock fetch and Expo storage; they do not render Home, prove Keystore behavior or establish native UI acceptance. The first native test invocation needed Node transform-types for an existing parameter property; the maintained command includes it.
+
+**Dependency check:** `npm audit --json` reported zero known advisories for the current lockfile tree. See the [raw registry receipt](receipts/2026-10-19-beta-dependency-audit.json). This supersedes the old install finding count; it is not a source/security audit. No dependency updates or database changes were made.
+
+Source now rechecks offline access in the background without unmounting roster/editor UI and opens cached work after local storage rather than waiting for a network timeout. Updated APK packaging and the founder’s Galaxy S20+ workflow check remain pending until recorded. No physical device, backup completion, blanket security/UX approval or new release version is claimed. Signing-backup and USB/offline test instructions were reviewed against official 7-Zip/Android guidance; operator execution is still required.
+
 ## Beta Step 3 — 19 October 2026
 
 **Build/signature passed:** the corrected build succeeded in 7m49s, 585 tasks (528 up-to-date), with native work reused. SDK 37 reports `V2 Signer`; the first post-build guard expected legacy `Signer #1` wording and rejected export even though fingerprints matched. The corrected verifier accepted the actual APK without another build, required one matching signer, checked package/version/non-debuggable metadata, embedded JavaScript and ARM64/x86_64 libraries. Compiled source: `f5a0daf`; Android code `1000001`; SHA-256 `3524f42db80790a37835e60d3aba12f14f7eb44d5f75c8f1a92ccd9aac279236`. Certificate SHA-256: `df1a1bc534b1bd1375aaadce3048416bff65e8a02a7ad534ce7dbd76ef5d9255`. Install/upgrade acceptance remains separate below; no public APK release has occurred.

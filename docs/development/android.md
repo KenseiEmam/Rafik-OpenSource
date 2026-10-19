@@ -1,6 +1,6 @@
 # Android coach field development
 
-**Status, 18 October 2026:** Stage 7 implementation in progress. Attendance, assessment drafts/results, event completion, online correction history, recovery comparison/sharing and English/Arabic UI are implemented. Focused API and Android emulator checks passed, including queued score replay after app restart and recovery share cancellation. Physical-device, cold offline startup, phone/accessibility and broader security/recovery acceptance remain open; see [verification](../verification/README.md). Instance URL scanning remains open.
+**Status, 19 October 2026:** Stage 7 implementation in progress. Attendance, assessment drafts/results, event completion, online correction history, recovery comparison/sharing and English/Arabic UI are implemented. Focused API and Android emulator checks passed, including queued score replay after app restart and recovery share cancellation. A signed emulator build also passed cold offline startup and controlled current-format versionCode upgrade preservation. Physical-device, full phone/accessibility and broader security/recovery acceptance remain open; see [verification](../verification/README.md). Instance URL scanning remains open.
 
 ## Start a development instance and native build
 
@@ -42,7 +42,7 @@ The first native build or a native dependency/configuration change needs `mobile
 
 Expo generates native Android/iOS projects and local Metro/type metadata. These paths are ignored; keep build configuration in `apps/mobile/app.json` and dependencies in the root lockfile. Do not commit generated build folders.
 
-For a standard Android emulator, enter `http://10.0.2.2:55331` as the local API URL. A self-hosted instance normally uses `https://your-instance.example/api` because the web server proxies the API under `/api`. Use the exact API base supplied by the institution. HTTPS is required for remote instances; HTTP is accepted only for localhost, `127.0.0.1` or the emulator host. A physical device needs a reachable HTTPS development endpoint; arbitrary LAN HTTP is currently unsupported.
+For a standard Android emulator, enter `http://10.0.2.2:55331` as the local API URL. A self-hosted instance normally uses `https://your-instance.example/api` because the web server proxies the API under `/api`. Use the exact API base supplied by the institution. HTTPS is required for remote instances; HTTP is accepted only for localhost, `127.0.0.1` or the emulator host. A physical device can use a reachable HTTPS endpoint or USB loopback forwarding; arbitrary LAN HTTP remains unsupported. Follow the [S20+ physical-device procedure](../operations/android-release.md#physical-phone-check-galaxy-s20-and-local-backend).
 
 ## Coach attendance walkthrough
 
@@ -138,6 +138,10 @@ npm run start --workspace @rafik/mobile -- --clear
 ```
 
 Reload/reopen the development app. This clears Metro cache, not app credentials or field records; do not clear Android app storage to repair a stale bundle. A continuing error after a clean start needs investigation of the served project/module identity rather than another blind rebuild.
+
+## Connection and access feedback
+
+Transport errors use readable English/Arabic feedback, without raw Java/network addresses. After an offline access failure, an authenticated response, foreground/resume or the active 30-second retry triggers a fresh coach-access check. Only a successful access check clears that warning; a schedule acknowledgment does not grant institution authority. Cached work opens as soon as local storage loads; background checks keep the current roster/editor mounted. **Refresh access** provides a manual retry. Session failures still require signing in again to the same account; revocation/conflict remain distinct from connectivity.
 
 ## Focused checks
 

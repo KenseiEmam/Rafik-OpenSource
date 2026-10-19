@@ -46,9 +46,17 @@ export class ApiFailure extends Error {
   }
 }
 
+export class ConnectionFailure extends Error {
+  constructor() {
+    super('Could not reach your institution. Check your connection and try again.')
+  }
+}
+
 export function failureText(error: unknown): string {
   if (error instanceof ApiFailure) {
     const messages: Record<string, string> = {
+      invalid_credentials: 'The email or password is incorrect. Check your institution URL too.',
+      rate_limited: 'Too many attempts. Wait a few minutes before trying again.',
       conflict: 'Someone changed this record. Review the server event before correcting it.',
       operation_reused: 'The server rejected this operation ID. Review before making a new change.',
       forbidden: 'Your current account no longer has permission for this event.',

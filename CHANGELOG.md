@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Fixed stale Android offline access feedback: fresh authenticated access checks recover in the background while keeping the roster/editor mounted. Network, sign-in and throttling errors now have readable English/Arabic messages; malformed institution URLs use the intended validation.
+- Prevented a coach from becoming stuck in a removed empty workspace after access changes, while keeping cached work selectable for review.
+- Added focused transport/authenticated-response regression checks, refreshed the dependency audit (zero known advisories), and documented encrypted signing-key backup plus physical S20+ testing through USB without a domain.
+- Clarified the public beta audience, coach-only native scope, observed-performance versus clinical claims, and limits of offline revocation and background sync.
+
 ## Squire 1.0.0-beta.1 — 2026-10-19
 
 Beta source candidate; signed-package build and focused emulator installation/upgrade acceptance passed. Broader device acceptance remains open. The founder authorized promotion of the cleaned university branch to main and an annotated beta tag.

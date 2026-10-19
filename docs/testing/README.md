@@ -4,6 +4,8 @@ Use the smallest check that covers the changed behavior. Run commands from the r
 
 ## Test layers and commands
 
+Native request/feedback changes use `npm run test:request --workspace @rafik/mobile`. These Node tests mock fetch and Expo secure storage to cover connection recovery, authorized-response observers, denial, malformed responses, URL boundaries and bilingual sign-in feedback. They do not render React Native or establish physical-device behavior. Keep the [physical-phone procedure](../operations/android-release.md#physical-phone-check-galaxy-s20-and-local-backend) separate from these checks.
+
 Field API/queue changes use `npm run mobile:acceptance` on Node 24 with the local Docker database running. It migrates a disposable database, starts its own API, checks native auth/receipts/history/conflicts/revocation and removes its resources. It does not prove native SQLCipher, app process death, sharing or rendered usability. Use `-- --device` only for an intentional device pass and finish it with `done`/Enter. See [Android acceptance](../development/android.md#focused-checks) and [actual evidence](../verification/README.md).
 
 Swagger-only changes use `npm run test:api-docs --workspace @rafik/backend`: two isolated checks cover HTTP routes/assets/headers and viewer configuration, both URL prefixes, native request headers, cookie omission, same-origin enforcement and production reference-only behavior. This does not verify authentication against a database or native-device workflows.

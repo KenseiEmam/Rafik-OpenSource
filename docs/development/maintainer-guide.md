@@ -6,6 +6,8 @@ Android release packaging uses `apps/mobile/scripts/release.mjs`, `android-relea
 
 Android Metro startup must explicitly target the installed native build: the mobile workspace uses `expo start --dev-client`. Do not switch the shared start script to Expo Go; SQLCipher requires the native build. See the [Android guide](android.md).
 
+`access.ts` preserves a saved workspace selection but falls back from a removed empty workspace. Refresh retained workspace IDs after the access read so downloads completed during that read are included in revocation blocking. Mobile transport is in `apps/mobile/src/field/request.ts`. `NativeClient` notifies its current runtime after successful authenticated responses; `SignedIn` rechecks previously failed access in the background, without unmounting roster/draft UI. Do not clear access warnings merely because a queue is empty or a timer fired. Test transport and callback behavior with `npm run test:request --workspace @rafik/mobile`; native rendering remains a separate check. The [release guide](../operations/android-release.md) includes encrypted signing backup and USB-only physical-phone acceptance.
+
 ## Read these first
 
 - [Requirements and stage gates](../requirements/README.md) define approved product direction and what is not accepted yet.

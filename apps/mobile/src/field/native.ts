@@ -1,8 +1,8 @@
 import * as Crypto from 'expo-crypto'
 import * as SecureStore from 'expo-secure-store'
 import * as SQLite from 'expo-sqlite'
-import { FieldStore } from './store'
-import { ApiFailure } from './model'
+import { FieldStore } from './store.ts'
+import { instanceUrl, jsonRequest } from './request.ts'
 
 type Session = {
   user: { id: string; email: string | null }
@@ -21,23 +21,6 @@ type Credentials = { instance: string; session: Session; contexts: CoachContext[
 const CREDENTIALS = 'rafik.field.credentials.v1'
 const DB_KEY = 'rafik.field.database-key.v1'
 let storeFlight: Promise<FieldStore> | null = null
-
-export function instanceUrl(input: string) {
-  const url = new URL(input.trim())
-  if (
-    !['https:', 'http:'].includes(url.protocol) ||
-    url.username ||
-    url.password ||
-    url.search ||
-    url.hash
-  )
-    throw Error('Enter your institution HTTPS API URL without credentials, a query or a fragment.')
-  if (url.protocol === 'http:' && !['localhost', '127.0.0.1', '10.0.2.2'].includes(url.hostname))
-    throw Error(
-      'Remote institutions require HTTPS. Local HTTP is limited to localhost or the Android emulator.',
-    )
-  return url.toString().replace(/\/+$/, '')
-}
 
 export const operationId = () => Crypto.randomUUID()
 
@@ -76,24 +59,6 @@ export function privateStore(): Promise<FieldStore> {
   return storeFlight
 }
 
-async function jsonRequest<T>(url: string, init: RequestInit): Promise<T> {
-  const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), 20_000)
-  try {
-    const response = await fetch(url, {
-      ...init,
-      signal: controller.signal,
-      credentials: 'omit',
-      redirect: 'error',
-    })
-    const body = await response.json().catch(() => null)
-    if (!response.ok) throw new ApiFailure(response.status, body?.message || 'request_rejected')
-    if (!body || typeof body !== 'object') throw Error('The server returned an invalid response.')
-    return body as T
-  } finally {
-    clearTimeout(timeout)
-  }
-}
 const headers = { 'content-type': 'application/json', 'x-rafik-client': 'android' }
 
 function validSession(value: Session) {
@@ -109,6 +74,7 @@ function validSession(value: Session) {
 }
 
 export class NativeClient {
+  private responseListeners = new Set<() => void>()
   private refreshFlight: Promise<void> | null = null
   private storageFlight: Promise<void> = Promise.resolve()
   private stopped = false
@@ -121,6 +87,13 @@ export class NativeClient {
   }
   get contexts() {
     return this.credentials.contexts
+  }
+
+  onAuthorizedResponse(listener: () => void) {
+    this.responseListeners.add(listener)
+    return () => {
+      this.responseListeners.delete(listener)
+    }
   }
 
   static async restore(): Promise<NativeClient | null> {
@@ -184,24 +157,43 @@ export class NativeClient {
       await this.refreshFlight
     }
     if (this.stopped) throw Error('This sign-in session is closed.')
-    return jsonRequest<T>(`${this.instance}/v1${path}`, {
+    const result = await jsonRequest<T>(`${this.instance}/v1${path}`, {
       ...init,
       headers: { ...headers, authorization: `Bearer ${this.credentials.session.access_token}` },
     })
+    if (!this.stopped)
+      for (const listener of this.responseListeners) {
+        // UI recovery must never turn an acknowledged write into a transport failure.
+        try {
+          listener()
+        } catch {
+          /* The response remains successful. */
+        }
+      }
+    return result
   }
 
   async refreshContexts() {
     const data = await this.request<{
       contexts: Array<CoachContext & { role: string; kind: string }>
     }>('/contexts')
+    if (!Array.isArray(data.contexts) || data.contexts.some((c) => !c || typeof c !== 'object'))
+      throw Error(
+        'The server returned invalid institution access. Check the API URL and server version.',
+      )
     const contexts = data.contexts
       .filter((c) => c.role === 'trainer' && c.kind === 'organization' && c.workspace_id)
-      .map(({ workspace_id, member_id, name }) => ({
-        workspace_id,
-        member_id,
-        name,
-        role: 'trainer' as const,
-      }))
+      .map(({ workspace_id, member_id, name }) => {
+        if (
+          ![workspace_id, member_id, name].every(
+            (value) => typeof value === 'string' && value.length,
+          )
+        )
+          throw Error(
+            'The server returned invalid institution access. Check the API URL and server version.',
+          )
+        return { workspace_id, member_id, name, role: 'trainer' as const }
+      })
     if (this.stopped) throw Error('This sign-in session is closed.')
     this.credentials = { ...this.credentials, contexts }
     await this.persist()

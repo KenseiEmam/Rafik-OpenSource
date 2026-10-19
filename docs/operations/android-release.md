@@ -20,6 +20,20 @@ This creates `rafik-release.p12` and `signing.json` inside that ignored director
 
 Only the APK, checksums and non-secret build metadata are distributable. Signing secrets reach keytool/Gradle through child-process environment variables, not command-line password arguments or generated Gradle files.
 
+### Back up the existing key on Windows
+
+Use [7-Zip from its official site](https://www.7-zip.org/download.html); its 7z format supports [AES-256 encryption](https://www.7-zip.org/7z.html). No paid backup service is required.
+
+1. Install the Windows x64 edition of 7-Zip. In File Explorer, open `C:\Users\moham\Desktop\RAFIK-FRONTEND\apps\mobile\.signing` on the founder machine (other maintainers use their checkout's equivalent).
+2. Select **both** `rafik-release.p12` and `signing.json`. Right-click → **Show more options** if needed → **7-Zip → Add to archive**.
+3. Choose archive format **7z**, encryption **AES-256**, and **Encrypt file names**. Name it `Rafik-Android-signing-backup.7z` and save it outside the repository. Do not select “Delete files after compression.”
+4. Set a unique long passphrase. Store it separately in a password manager or on paper in a secure place. Do not paste it into chat, shell commands or GitHub. The archive passphrase protects the backup; it does not replace the existing passwords inside `signing.json`.
+5. Open the archive with 7-Zip, enter the passphrase and confirm both filenames. Use **Test** to verify the archive decrypts and reports no errors; no extraction is needed for this check.
+6. Copy the encrypted `.7z` to two independent destinations, such as a private cloud drive and a USB drive. A copy elsewhere on the same laptop is insufficient. Test at least one copied archive too.
+7. Keep the original `.signing` folder for builds. Record the backup date and locations privately. Only mark the release-checklist backup item complete after the copied archive passes its test.
+
+For recovery on another maintainer machine, extract privately into its ignored `apps/mobile/.signing/` folder and run release preparation. Reuse the existing key; never run `--init-signing` over a restored identity. Archive integrity alone does not prove a future signing build, so retain the public certificate fingerprint from the build metadata for comparison.
+
 ## Build a candidate
 
 ```sh
@@ -66,6 +80,43 @@ The installed development app uses a different signing certificate. Do not unins
 3. Disconnect, record attendance/results, wait for device-save acknowledgment, then force-stop and reopen while still offline. Verify saved work remains visible.
 4. Reconnect and verify exact replay, server acknowledgment, history and completion.
 5. Inspect English/Arabic, both themes, portrait/landscape and reachable controls; report physical hardware separately from emulator evidence.
+
+## Physical phone check: Galaxy S20+ and local backend
+
+A phone is a valid first physical target; tablet acceptance remains separate. Record **Settings → About phone → Software information → Android version**, plus display/text-size settings. Use synthetic coach/athlete records and an event that has already started. The Android app is for coaches; administrators and athletes use the web dashboard.
+
+Use the newly built candidate for testing source fixes. An older APK does not acquire changes from Git or Metro. No emulator, Metro or running Android Studio is needed for a standalone release.
+
+### Connect without a domain
+
+If a reachable HTTPS institution already exists, install the APK through a trusted file-transfer method and enter its API URL. For the founder's local API, use a USB data cable and existing Android SDK tools instead:
+
+1. Start the backend normally on the laptop at `http://127.0.0.1:55331`. Keep it running. Prepare a synthetic coach, athlete and scheduled assessment in the web dashboard; redeem invitations to set their passwords and assign the coach as event staff.
+2. On the S20+, enable Developer options by tapping **Build number** seven times under Software information, then enable **USB debugging**. Connect the cable, unlock the phone and approve debugging from your own laptop.
+3. From the repository root in PowerShell, run:
+
+   ```powershell
+   $rafikAdb = "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe"
+   & $rafikAdb devices -l
+   & $rafikAdb -d install -r "artifacts/mobile/1.0.0-beta.1/Rafik-Squire-1.0.0-beta.1-android.apk"
+   & $rafikAdb -d reverse tcp:55331 tcp:55331
+   ```
+
+   Expected: the physical device says `device`, installation says `Success`, and forwarding completes. `-d` targets the single USB device. If multiple phones are attached, select the intended serial with `-s` instead. An `unauthorized` device needs the on-phone approval.
+
+4. Open **Rafik Field** on the phone. Enter `http://127.0.0.1:55331` and the coach account. This loopback URL reaches the laptop through USB forwarding. Do not substitute a LAN HTTP address: remote HTTP remains intentionally disallowed.
+
+References: [Android hardware-device setup](https://developer.android.com/studio/run/device) and [ADB](https://developer.android.com/tools/adb).
+
+### Run the actual field task
+
+1. Open/download the started assessment online. Verify names, units and start time. Check English/light and Arabic/dark; type a decimal score and verify the keyboard does not hide Save/Back actions.
+2. Unplug USB and turn off Wi-Fi and mobile data. **Airplane mode alone is insufficient when USB forwarding remains active.** Mark attendance, enter a fractional score and wait for device-save acknowledgment. Device saved and institution confirmed must remain distinct.
+3. Close and force-stop Rafik through Android app settings, then reopen with USB still unplugged and networking off. The cached event and unsent work must remain. Do not clear storage or uninstall.
+4. Reconnect USB, repeat the forwarding command and retry/refresh. Confirm the offline warning clears after a successful access check, without closing an open score editor. Verify each attendance/result in the web event; retries must not duplicate it.
+5. Complete the event after all required records are confirmed. Check the read-only summary and correction history. Try rotation, larger text and Android TalkBack for the primary task; record any blocked action or unreadable label.
+6. Record phone model/Android version, APK checksum, tested language/theme and pass/fail for each step. Report screenshots without real athlete data. This one phone does not establish all Android/tablet support.
+7. After every pending command is acknowledged, remove only your synthetic test records through normal application controls if appropriate. Remove the USB rule with `& $rafikAdb -d reverse --remove tcp:55331` and turn USB debugging off when finished. Keep the installed candidate for future in-place upgrade testing.
 
 ## Upgrade without losing saved work
 

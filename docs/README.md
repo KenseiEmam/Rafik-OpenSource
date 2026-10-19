@@ -31,7 +31,7 @@ This page is the index for maintained Rafik documentation. The root [README](../
 
 - [Operations and deployment](operations/README.md): Compose deployment, cloud starter templates, environment/secrets, backups, recovery, rollback and retention operations.
 - [Release checklist](operations/release-checklist.md): release prerequisites and outstanding gates.
-- [Android beta builds and updates](operations/android-release.md): private signing-key ownership, signed APK builds, installation, offline-start and update checks.
+- [Android beta builds and updates](operations/android-release.md): private signing-key ownership and encrypted backup, signed APK builds, USB physical-phone acceptance, offline-start and update checks.
 
 ## Architecture decisions
 

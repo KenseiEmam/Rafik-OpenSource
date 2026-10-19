@@ -2,6 +2,8 @@
 
 This is the operator entry point for builds, self-hosted deployment, configuration, secrets, backups, recovery and operational checks. Rafik is deployed as a separate instance on infrastructure controlled by each university.
 
+For Android maintainers, [release operations](android-release.md) includes signing-key backup with an encrypted archive and a local S20+ acceptance path using USB forwarding; no public domain or running emulator is required for that device check. Keep private signing backups outside this repository.
+
 ## Deployment
 
 The Android history/recovery update requires the matching updated backend/OpenAPI export; no schema migration is needed for history reads. Recovery copies are user-initiated plain-text shares and are outside encrypted app storage and server retention. Institutions must choose approved recipients/storage and handle deletion of exported copies themselves; do not send athlete recovery records through the public landing contact form.
