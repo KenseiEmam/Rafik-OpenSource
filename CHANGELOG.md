@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added a proposed post-beta.1 release plan in the founder's order: sports and coaching foundation, coach field dashboard, then sport-specific field tools, after a beta.1 close-out. It audits single-coach and single-plan call paths, proposes permissions and migrations, and lists open decisions. Recorded three code-inspection findings in known issues. Documentation only; no runtime change.
+
 - Corrected remaining CI fixtures for configured self-host production and exact media access through published library snapshots; private unpublished media and unrelated tenant access remain denied.
 
 - Aligned program-library regression checks with ADR 0020: athletes read immutable published versions but cannot write drafts. Independent CI domain suites now report failures after API readiness instead of hiding later results behind the first failed suite.

@@ -95,6 +95,10 @@ Rafik should help universities and university coaches support young athletes by 
 - Specify device storage protection, queued command identity, retries, deduplication, conflict/reconciliation behavior, server authorization on replay, revocation handling, and clear per-record sync state.
 - Acceptance: API integration tests cover duplicate delivery, lost acknowledgements, retries, changed server revisions, revoked access, and multi-device conflicts. Emulator checks and physical Android checks are reported separately; offline reliability is not claimed from compilation or mocks alone.
 
+### Stage 8 — Post-beta releases (proposed)
+
+- **Status: proposed, 19 October 2026; not started.** The founder ordered the next releases as sports and coaching foundation, then a coach field dashboard, then sport-specific field tools. A beta.1 close-out (R0) comes first. Scope, permissions, migrations, acceptance checks and open decisions are in the [post-beta.1 release plan](release-plan-post-beta1.md). Provisional defaults marked there need founder confirmation before the dependent slice starts; each slice is approved and delivered separately.
+
 ## Security and privacy baseline
 
 - **Ownership:** university controls its deployment, data, users, keys, storage, backup, retention, and deletion decisions. Rafik has no default access to a self-hosted instance.

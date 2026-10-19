@@ -19,6 +19,14 @@ Code-inspection hypotheses must be labeled as such and accompanied by their impa
 
 **P3 — build-tool compatibility warning:** the current Vite build succeeds but warns that the JSON import in `apps/frontend/vite.config.ts` needs an import attribute for a future native config-loader default. This is a future toolchain compatibility issue, not an observed production-app failure. Address before adopting that default/major upgrade; do not suppress it as evidence of compatibility.
 
+## Code-inspection findings — 19 October 2026
+
+These are hypotheses from reading `main` at `8ae1fbf` while preparing the [post-beta.1 release plan](../requirements/release-plan-post-beta1.md). None has been reproduced in a running app.
+
+- **P2 — D1, likely defect:** after a workout, **Rate your session** links to `/institution/{workspace}/trainee/feedback` (`apps/frontend/src/features/training/WorkoutPage.vue`). The router has no `/institution` path. **Impact:** athletes may not reach the optional feedback form from the completion screen; the navigation link still works. **Confirm:** open the link in a rendered athlete session. **Next step:** fix in R0 with a router regression check.
+- **P3 — H1, behavior to confirm:** deactivating an athlete or changing their coach does not archive the athlete's active assignment. **Impact:** a stale plan may remain active. **Confirm:** with a disposable fixture, then decide whether this is intended before Release 1 changes assignments.
+- **P3 — H2, audit gap:** `organization_injury_access_log` records sensitive reads and changes, but no screen or export reads it. **Impact:** the audit baseline expects reviewable sensitive-read records. **Next step:** founder decision on an athlete-visible access history or an operator export.
+
 ## Stage 7 implementation and acceptance gaps
 
 - **P1 — broader native acceptance open, 18 October 2026:** isolated API checks passed auth/receipt/history/conflict and membership revocation. A resumed Android emulator pass confirmed offline score replay after app force-stop, native storage initialization/header evidence, rendered history/completion, recovery share cancellation and Arabic dark recovery. Temporary-profile cleanup is complete. A later signed Android 14 emulator pass proved cold offline startup without Metro and current-format state preservation through a controlled versionCode upgrade. Physical hardware, historical/schema migration, native account switching/conflict/revocation, accessibility and broader phone coverage remain open. See [actual evidence and limits](../verification/README.md).
