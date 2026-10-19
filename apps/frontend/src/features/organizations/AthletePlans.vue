@@ -275,6 +275,9 @@ onUnmounted(() => {
               class="text-link"
               :to="context.base + '/assessments/' + detail.member_id"
               >{{ l('Assessment history', 'سجل التقييمات') }}</RouterLink
+            ><RouterLink class="text-link" :to="context.base + '/athletes/' + detail.member_id">{{
+              l('Athlete profile', 'ملف الرياضي')
+            }}</RouterLink
             ><RouterLink
               class="text-link"
               :to="

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Release 1d: staff athlete profile pages. These bring together the overview, coaching team, active plans, recent sessions, assessments and, by role, nutrition and participation status, using existing authorized reads only. Linked from People and athlete plans.
+
 - Release 1c:
   - Athletes can follow several active goal-specific plans. Each plan can carry a goal and sport, and assigning either adds a plan or explicitly replaces a named one.
   - Plans can be ended individually. Overlapping dates are reported to coaches, and athletes see a same-day notice.

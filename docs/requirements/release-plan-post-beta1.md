@@ -1,6 +1,6 @@
 # Post-beta.1 release plan
 
-**Status:** Release 1 in progress, 19 October 2026. R0 is done and slices 1a–1c are implemented (see [verification](../verification/README.md)). Other slices are not implemented. Items marked **⚑** were provisional defaults; the [confirmed decisions](#confirmed-release-1-decisions) replace them for Release 1. Releases are implemented one slice at a time, each on its own `codex/` branch and pull request.
+**Status:** Release 1 in progress, 19 October 2026. R0 is done and slices 1a–1d are implemented (see [verification](../verification/README.md)). Other slices are not implemented. Items marked **⚑** were provisional defaults; the [confirmed decisions](#confirmed-release-1-decisions) replace them for Release 1. Releases are implemented one slice at a time, each on its own `codex/` branch and pull request.
 
 ## Confirmed Release 1 decisions
 
@@ -193,6 +193,8 @@ Supporting coaches can read all of an athlete's training plans until slice 1c ad
   - Browser reload and offline recovery of a session from the second plan.
 
 ### 1d Staff athlete profile
+
+**Implemented, 19 October 2026.** The profile uses sections with jump links rather than tabs. An unlinked coach gets a refusal instead of name and sport, because the People scope already excludes athletes they don't coach. Supporting coaches see assessment results only from events they staffed.
 
 - **Outcomes:** a staff route `/organization/{workspace}/{view}/athletes/{member}` collects existing per-athlete views into tabs. Each tab calls an existing authorized endpoint. No tab adds access the API does not already grant.
 

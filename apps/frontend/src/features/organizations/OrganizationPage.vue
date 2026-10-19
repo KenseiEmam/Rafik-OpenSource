@@ -546,6 +546,13 @@ onMounted(async () => {
                   </div>
                 </div>
                 <RouterLink
+                  v-if="member.roles.includes('trainee') && view !== 'trainee'"
+                  class="text-link"
+                  :to="base + '/athletes/' + member.id"
+                  :aria-label="l('Profile for ', 'ملف ') + member.name"
+                  >{{ l('Profile', 'الملف') }}</RouterLink
+                >
+                <RouterLink
                   v-if="member.active && member.roles.includes('trainee') && view !== 'trainee'"
                   class="text-link"
                   :to="

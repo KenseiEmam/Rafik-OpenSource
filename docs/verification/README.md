@@ -1,5 +1,17 @@
 # Verification record
 
+## Release 1d: staff athlete profile — 19 October 2026
+
+**Browser (`athlete-profile.e2e.ts`, isolated wrapper, Chromium desktop and WebKit phone), each role against the same athlete:**
+
+- **Primary coach:** both plans, the current nutrition plan with an unshared-diary notice, and the athlete-recorded "Modified participation" status with the non-medical wording.
+- **Supporting coach:** only the football plan, and no nutrition or participation sections.
+- **Unlinked coach:** a refusal, with no plan data shown.
+- **Administrator:** nutrition, consent-setup and assent state, and never the status itself. Reached from the People **Profile** link.
+- Arabic dark at 320 px. Layout and axe checks ran, and screenshots were inspected.
+
+No API or schema changed; the R0 and Release 1a–1c journeys were rerun on this source.
+
 ## Release 1c: concurrent goal-specific plans — 19 October 2026
 
 **Passed against disposable databases:**
