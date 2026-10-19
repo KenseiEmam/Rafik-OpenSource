@@ -177,7 +177,7 @@ onUnmounted(() => {
               </h2>
               <p>{{ dateLabel(event.starts_at) }} — {{ dateLabel(event.ends_at) }}</p>
               <p class="small-print">
-                {{ event.athlete_count }} {{ l('athletes', 'رياضيين')
+                {{ l('Athletes:', 'الرياضيون:') }} {{ event.athlete_count
                 }}<span v-if="event.location" dir="auto"> · {{ event.location }}</span>
               </p>
             </div>

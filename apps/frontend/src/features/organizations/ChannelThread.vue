@@ -18,6 +18,7 @@ type Message = {
   sender_id: string
   asset_id?: string
   asset_ids?: string[]
+  attachments?: { id: string; filename: string; media_type: string }[]
   body: string
   name: string
   created_at: string
@@ -235,6 +236,13 @@ watch(
   },
   { flush: 'sync' },
 )
+function messageAssets(message: Message) {
+  if (message.attachments?.length) return message.attachments
+  return (message.asset_ids?.length ? message.asset_ids : [message.asset_id!]).map((id) => ({
+    id,
+    filename: undefined,
+  }))
+}
 function removeAttachment(id: string) {
   attachments.value = attachments.value.filter((a) => a.id !== id)
   uploadVersion.value++
@@ -356,9 +364,10 @@ onUnmounted(() => {
         <p dir="auto">{{ message.body }}</p>
         <div v-if="message.asset_ids?.length || message.asset_id" class="message-asset-list">
           <OrganizationAsset
-            v-for="asset in message.asset_ids?.length ? message.asset_ids : [message.asset_id!]"
-            :key="asset"
-            :id="asset"
+            v-for="asset in messageAssets(message)"
+            :key="asset.id"
+            :id="asset.id"
+            :name="asset.filename"
             compact
           />
         </div>

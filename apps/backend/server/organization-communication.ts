@@ -87,7 +87,14 @@ export async function communication(
         },
         include: {
           workspace_members: { select: { name: true } },
-          organization_message_assets: { orderBy: { position: "asc" } },
+          organization_message_assets: {
+            orderBy: { position: "asc" },
+            include: {
+              organization_assets: {
+                select: { filename: true, media_type: true },
+              },
+            },
+          },
         },
         orderBy: { sequence: "desc" },
         take: 51,
@@ -122,6 +129,12 @@ export async function communication(
             workspace_members: undefined,
             organization_message_assets: undefined,
             asset_ids: m.organization_message_assets.map((a) => a.asset_id),
+            // Same channel audience as the bytes; lets recipients identify non-image files.
+            attachments: m.organization_message_assets.map((a) => ({
+              id: a.asset_id,
+              filename: a.organization_assets.filename,
+              media_type: a.organization_assets.media_type,
+            })),
             name: m.workspace_members.name,
           })),
         more: messages.length > 50,

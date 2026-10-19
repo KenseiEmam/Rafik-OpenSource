@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- R0 beta.1 close-out:
+  - Fixed the post-workout **Rate your session** link, which went to a missing `/institution/…` route.
+  - Raised dark-theme muted text to 4.5:1 or better on soft surfaces.
+  - Sent message attachments now show their file names, and PDFs download with their original name.
+  - The events list says "Athletes: n" instead of "1 athletes".
+  - Added focused Chromium and WebKit phone journeys for later-page plan, nutrition and event browsing, and for multi-file message retry and revocation. Replaced the stale single-file attachment test.
+  - Recorded stale browser specs, the dormant assignment behavior and a local PostgreSQL image collation mismatch.
+
 - Added a proposed post-beta.1 release plan in the founder's order: sports and coaching foundation, coach field dashboard, then sport-specific field tools, after a beta.1 close-out. It audits single-coach and single-plan call paths, proposes permissions and migrations, and lists open decisions. Recorded three code-inspection findings in known issues. Documentation only; no runtime change.
 
 - Corrected remaining CI fixtures for configured self-host production and exact media access through published library snapshots; private unpublished media and unrelated tenant access remain denied.

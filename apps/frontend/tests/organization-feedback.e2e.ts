@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test'
 import { randomUUID, randomBytes } from 'node:crypto'
 import { execFileSync } from 'node:child_process'
 import { resolve } from 'node:path'
+import { readFileSync } from 'node:fs'
 import AxeBuilder from '@axe-core/playwright'
 import { teamFixture } from './team-fixture'
 import { testDatabase } from './local-config'
@@ -303,6 +304,94 @@ test('optional session and workplace feedback recover and appear as separate sou
   } finally {
     await trainerContext.close()
     await clientContext.close()
+    await f.cleanup()
+  }
+})
+
+test('a completed institution workout links to the athlete feedback form', async ({ page }) => {
+  test.setTimeout(120000)
+  const f = await teamFixture(),
+    workspace = randomUUID(),
+    endpoint = `/v1/workspaces/${workspace}`,
+    today = new Date().toISOString().slice(0, 10)
+  try {
+    await f.call(f.owner, '/v1/workspaces', {
+      id: workspace,
+      kind: 'organization',
+      name: 'Madar workout feedback',
+    })
+    for (const [person, roles] of [
+      [f.coach, ['trainer']],
+      [f.client, ['trainee']],
+    ] as const) {
+      const token = randomBytes(32).toString('hex')
+      await f.call(f.owner, endpoint, {
+        operation: randomUUID(),
+        action: 'invite',
+        id: randomUUID(),
+        email: person.email,
+        roles,
+        token,
+      })
+      await f.call(person, `/v1/organization-invitations/${token}`, {})
+    }
+    let people = await f.call(f.owner, `${endpoint}?view=admin`)
+    const staff = people.members.find((m: any) => m.user_id === f.coach.id)
+    let member = people.members.find((m: any) => m.user_id === f.client.id)
+    await f.call(f.owner, endpoint, {
+      operation: randomUUID(),
+      action: 'assign-trainer',
+      id: member.id,
+      revision: member.revision,
+      trainer: staff.id,
+    })
+    people = await f.call(f.owner, `${endpoint}?view=admin`)
+    member = people.members.find((m: any) => m.user_id === f.client.id)
+    const plan = JSON.parse(
+        readFileSync(resolve(import.meta.dirname, '../../backend/content/starter.json'), 'utf8'),
+      ).prescription,
+      published = await f.call(f.coach, endpoint + '/programs', {
+        operation: randomUUID(),
+        action: 'publish',
+        view: 'trainer',
+        id: randomUUID(),
+        title: 'Workout feedback link',
+        draft: plan,
+        revision: null,
+      }),
+      delivery = await f.call(f.coach, endpoint + '/delivery', {
+        operation: randomUUID(),
+        action: 'assign',
+        view: 'trainer',
+        version_id: published.version.id,
+        start_date: today,
+        schedule_mode: 'flexible',
+        members: [{ id: member.id, revision: member.revision }],
+      }),
+      session = randomUUID(),
+      started = await f.call(f.client, endpoint + '/sessions', {
+        operation: randomUUID(),
+        action: 'start',
+        view: 'trainee',
+        id: session,
+        assignment_id: delivery[0].id,
+        day_id: plan.days[0].id,
+      })
+    await f.call(f.client, endpoint + '/sessions', {
+      operation: randomUUID(),
+      action: 'save',
+      view: 'trainee',
+      id: session,
+      revision: 1,
+      entries: started.entries.map((e: any) => ({ ...e, completed: true })),
+      note: '',
+      complete: true,
+    })
+    await f.login(page, f.client, `/workout/${session}?workspace=${workspace}`)
+    await page.getByRole('link', { name: 'Rate your session (optional)', exact: true }).click()
+    await expect(page).toHaveURL(new RegExp(`/organization/${workspace}/trainee/feedback$`))
+    await expect(page.getByRole('radio', { name: '4 Satisfied', exact: true })).toBeVisible()
+  } finally {
     await f.cleanup()
   }
 })
