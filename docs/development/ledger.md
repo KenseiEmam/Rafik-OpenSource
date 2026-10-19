@@ -14,6 +14,8 @@
 
 ## Recent work
 
+- **19 October — post-beta.1 release plan (proposed):** audited `main` at `8ae1fbf` for single-coach (`trainer_id`, `recipient()`) and single-active-plan (`organization_one_active_assignment`) dependencies, feedback, participation status, nutrition sharing and the Android app. Wrote the [release plan](../requirements/release-plan-post-beta1.md) in the founder's order, with provisional defaults awaiting founder decisions. Logged a likely broken feedback link and two behaviors to confirm in known issues. Documentation only.
+
 - **19 October — GitHub CI repairs:** PR #127 is merged. Follow-up work repairs the cross-platform lock regression check, resolves Xcode UUID to 11.1.1 and corrects the dependency record: the sandbox offline audit was invalid, while an explicit online audit reports 19 high findings across dependent packages from two unpatched Expo-tooling dependencies. The invitation authorization suite passed five cases; Chromium first-run/admin/coach/athlete onboarding passed in a disposable database; all 28 web unit tests pass. Linux CI passed clean npm install and the complete web job; backend passed invitation authorization then exposed an outdated published-program athlete denial assertion. Corrected it to assert immutable read access and denied edits per ADR 0020; later domain suites now report independently after API readiness. A second Linux run passed programming and every later domain except two stale fixtures: the pre-Compose production error message and peer access to published snapshot media. Corrected those expectations while retaining private/unpublished/foreign denials. Remaining online audit guidance is paired in landing PR #9.
 
 - **19 October — landing alignment and owner backup:** runtime PR #126 merged; documentation follow-up is PR #127. Paired English/Arabic setup, deployment, requirements, testing, limitations, operations and release guidance updated in landing PR #8, linked to reviewed source documentation. Founder confirmed signing-key backup with 7-Zip copies on PC and cloud; recorded as owner completion, without independently inspecting the archive or claiming a restore. Updated S20+ acceptance remains open.
@@ -27,8 +29,9 @@
 
 ## Next actions
 
-1. Runtime PR #126 and documentation PR #127 are merged; review the subsequent CI-repair follow-up (PR #128) and the paired dependency notice in landing PR #9; landing PR #8 is merged. Align the selected release source/tag with actual published assets; use GitHub as the download host.
-2. Complete the founder’s updated S20+ install/offline/recovery walkthrough before distributing the Android candidate as accepted. Signing-key backup is founder-confirmed complete.
-3. Collect the recorded first-user, recent web refinement, privacy and Unix operational evidence from [known issues](../known-issues/README.md) as the relevant institution is evaluated. These are not invented completed checks or a request to redo accepted implementation stages.
+1. Review the [post-beta.1 release plan](../requirements/release-plan-post-beta1.md). Confirm or change its provisional defaults (coach model, concurrent plans, field warnings, communications, player notes, ratings, admin access to shared nutrition actuals), then approve R0 or slice 1a. Nothing in that plan has started.
+2. Runtime PR #126, documentation PR #127 and CI-repair PR #128 are merged, as are landing PRs #8–#10. Align the selected release source/tag with actual published assets; use GitHub as the download host.
+3. Complete the founder’s updated S20+ install/offline/recovery walkthrough before distributing the Android candidate as accepted. Signing-key backup is founder-confirmed complete.
+4. Collect the recorded first-user, recent web refinement, privacy and Unix operational evidence from [known issues](../known-issues/README.md) as the relevant institution is evaluated. These are not invented completed checks or a request to redo accepted implementation stages.
 
 Earlier delivery messages, failed attempts and superseded “still pending” statements are preserved in the [dated ledger snapshot](../archive/delivery-ledger-through-2026-10-19.md). Current scope is in requirements; this file is not a second setup guide.
