@@ -14,7 +14,7 @@
 
 ## Recent work
 
-- **19 October — landing alignment and owner backup:** paired English/Arabic setup, deployment, requirements, testing, limitations, operations and release guidance updated in landing PR #8, linked to reviewed source documentation. Founder confirmed signing-key backup with 7-Zip copies on PC and cloud; recorded as owner completion, without independently inspecting the archive or claiming a restore. Updated S20+ acceptance remains open.
+- **19 October — landing alignment and owner backup:** runtime PR #126 merged; documentation follow-up is PR #127. Paired English/Arabic setup, deployment, requirements, testing, limitations, operations and release guidance updated in landing PR #8, linked to reviewed source documentation. Founder confirmed signing-key backup with 7-Zip copies on PC and cloud; recorded as owner completion, without independently inspecting the archive or claiming a restore. Updated S20+ acceptance remains open.
 - **19 October — documentation cleanup:** moved the September role audit and obsolete R-phase feature map into archive, preserving incoming references. Archived full ledger/verification snapshots and kept current state, relevant evidence and next actions active. Retained operations, API/content maintenance, current requirements and ADRs because they remain needed for development and safe maintenance. Reasons are indexed in the archive; no receipts, rights records or user data were deleted.
 
 - **19 October — whole-product beta documentation audit:** reviewed requirements, web/API guides, Compose operations, workflow walkthrough and release evidence. Corrected stale stage/API status, development-only Compose descriptions and monorepo paths. Default quick starts now leave the database empty for admin setup; demo seeding is optional. Added a project beta-readiness table separating accepted first-user backlog from publishing and per-institution/live-data actions; broadened the walkthrough to programs, assignments, athlete workouts, events/results and attachments. Expanded docs validation to infrastructure/heading fragments with isolated regression fixtures. A fresh production web build passed; Vite emitted a nonfatal future config-loader warning, recorded in known issues. Use GitHub Releases for versioned downloads, with landing linking to source/accepted assets rather than rehosting them. Final documentation checks and bilingual landing alignment are recorded in verification; no product/runtime or database change occurred.
@@ -25,7 +25,7 @@
 
 ## Next actions
 
-1. Review the code/documentation follow-up in PR #126 and the paired landing guidance in PR #8. Align the selected release source/tag with actual published assets; use GitHub as the download host.
+1. Runtime PR #126 is merged; review the documentation follow-up in PR #127 and the paired landing guidance in PR #8. Align the selected release source/tag with actual published assets; use GitHub as the download host.
 2. Complete the founder’s updated S20+ install/offline/recovery walkthrough before distributing the Android candidate as accepted. Signing-key backup is founder-confirmed complete.
 3. Collect the recorded first-user, recent web refinement, privacy and Unix operational evidence from [known issues](../known-issues/README.md) as the relevant institution is evaluated. These are not invented completed checks or a request to redo accepted implementation stages.
 
