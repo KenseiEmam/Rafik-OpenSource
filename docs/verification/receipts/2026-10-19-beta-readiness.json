@@ -7,15 +7,15 @@
     "versionCode": 1000001,
     "package": "org.rafik.field",
     "architectures": ["arm64-v8a", "x86_64"],
-    "built_at": "2026-10-19T06:12:39.305Z",
-    "revision": "af41c22395449a61e649cc0fbb462efbf9813940",
+    "built_at": "2026-10-19T06:20:40.381Z",
+    "revision": "5d1ce761505b07272c6d5b43414cd1d754b41517",
     "dirty": false,
     "verification_only": false,
     "provenance": "Source revision captured before Gradle build.",
     "certificate_sha256": "df1a1bc534b1bd1375aaadce3048416bff65e8a02a7ad534ce7dbd76ef5d9255",
-    "sha256": "320ed2ebcc7840ae50de925d9f153cd110f016b81ef5a79821a7b4ee5a1afaf6",
+    "sha256": "1654e44fd6f324d2403984a6a880b3dffabf81f3615c9ac8a71c5992a417fb5e",
     "result": "passed",
-    "duration": "2m37s",
+    "duration": "2m20s",
     "tasks": 585,
     "executed": 41,
     "up_to_date": 544
@@ -44,7 +44,8 @@
       "blocking cached startup on access timeout",
       "removed empty workspace selection",
       "raw transport/sign-in/throttle error feedback",
-      "malformed URL/context validation"
+      "malformed URL/context validation",
+      "cached roster startup blocked by schedule request; separate background schedule lock and explicit newer roster download"
     ],
     "documented": [
       "encrypted signing-key backup",
@@ -63,10 +64,31 @@
     "emulator_started": false,
     "metro_dev_server_started": false,
     "preview_data_changed": false,
-    "previous_apk_preserved": true
+    "previous_apk_preserved": true,
+    "intermediate_apk_removed": true,
+    "idle_gradle_daemon_stopped": true
   },
   "pull_requests": [
     "https://github.com/KenseiEmam/Rafik-OpenSource/pull/126",
     "https://github.com/KenseiEmam/rafik-landing/pull/8"
-  ]
+  ],
+  "preceding_build": {
+    "product": "Rafik Squire",
+    "version": "1.0.0-beta.1",
+    "versionCode": 1000001,
+    "package": "org.rafik.field",
+    "architectures": ["arm64-v8a", "x86_64"],
+    "built_at": "2026-10-19T06:12:39.305Z",
+    "revision": "af41c22395449a61e649cc0fbb462efbf9813940",
+    "dirty": false,
+    "verification_only": false,
+    "provenance": "Source revision captured before Gradle build.",
+    "certificate_sha256": "df1a1bc534b1bd1375aaadce3048416bff65e8a02a7ad534ce7dbd76ef5d9255",
+    "sha256": "320ed2ebcc7840ae50de925d9f153cd110f016b81ef5a79821a7b4ee5a1afaf6",
+    "result": "passed",
+    "duration": "2m37s",
+    "tasks": 585,
+    "executed": 41,
+    "up_to_date": 544
+  }
 }
