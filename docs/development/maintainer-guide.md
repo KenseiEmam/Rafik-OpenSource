@@ -64,7 +64,15 @@ Multiple message attachments use ordered `organization_message_assets` links, mi
 | `infrastructure/cloud/`       | Per-provider Terraform starters that prepare the existing Compose stack on one VM; not cloud-verified.                                   |
 | `docs/`                       | Current product, engineering and operational documentation. Raw verification receipts are separated under `docs/verification/receipts/`. |
 
-Sports and coaching specialties are served by `apps/backend/server/organization-sports.ts` from migration `202610191200_sports_and_specialties`. The case-insensitive unique name index exists only in SQL. Admins manage them in `SportsSettings.vue` (Institution settings) and link people in `MemberSports.vue` (People manage panel). `people.ts` returns member `sports` and the `sport` filter. Keep links descriptive until Release 1b defines coaching scope. Run `npm run test:organization-sports` against a disposable migrated database.
+Sports and coaching specialties are served by `apps/backend/server/organization-sports.ts` from migration `202610191200_sports_and_specialties`. The case-insensitive unique name index exists only in SQL. Admins manage them in `SportsSettings.vue` (Institution settings) and link people in `MemberSports.vue` (People manage panel). `people.ts` returns member `sports` and the `sport` filter. Run `npm run test:organization-sports` against a disposable migrated database.
+
+**Coaching team ([ADR 0025](../decisions/ADR-0025-coaching-team.md)):**
+
+- **Where it lives:** `apps/backend/server/coaching-links.ts`, `coachedBy()` and the `recipient(…, scope)` argument in `programming.ts`, and migration `202610191300_coaching_links`, which holds the table, backfill and sync trigger.
+- **Choosing a scope:** when a new path checks a coach's access, choose the scope deliberately. The default is primary. Only plans, sessions, assessments, program media, and scheduling, groups and messaging use `training`.
+- **SQL filters:** raw SQL that filters `trainer_id = self` means the primary coach. Add the active-link `EXISTS` only for training-scope reads.
+- **Web:** `CoachingTeam.vue` manages supporting coaches in the People manage panel.
+- **Tests:** `npm run test:coaching-team` covers the access matrix and lifecycle. `npm run test:fresh` checks the trigger, the backfill and the mirror in a rolled-back transaction.
 
 Instance branding is managed by `apps/frontend/src/features/organizations/BrandingSettings.vue`, applied in `apps/frontend/src/App.vue`, and served by `apps/backend/server/instance-branding.ts`. The initial setup claims the single-instance branding owner; the forward migration is `apps/backend/prisma/migrations/202610171500_instance_branding/`. Keep the raster signature/size checks, super-admin scope, public image response headers and database backup behavior aligned when changing it. The supported palette is accent plus light/dark page backgrounds; surfaces derive from those colors and text/accent contrast is adjusted in `apps/frontend/src/lib/branding.ts`.
 

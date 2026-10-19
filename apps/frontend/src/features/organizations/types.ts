@@ -19,6 +19,14 @@ export type Member = {
   trainer_id: string | null
   /** Sport and coaching-specialty IDs; descriptive only, never an authority grant. */
   sports?: string[]
+  /** Active coaching team: one primary link plus supporting links with their sport/specialty. */
+  coaches?: {
+    id: string
+    coach: string
+    kind: 'primary' | 'supporting'
+    sport: string | null
+    revision: number
+  }[]
 }
 export type Organization = {
   invitationsNext: number | null

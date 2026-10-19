@@ -1,5 +1,36 @@
 # Verification record
 
+## Release 1b: coaching team — 19 October 2026
+
+**Passed against disposable databases:** the preview database was not migrated or changed.
+
+- **`test:coaching-team`:** an allowed/denied matrix for primary, supporting and unlinked coaches, plus lifecycle checks.
+  - Training-scope reads (delivery, athlete plans, assessment history), the roster and event participant selection.
+  - `403` for supporting coaches on nutrition, analytics and plan assignment; participation status is not exposed to them.
+  - Coverage and foreign-sport validation, and refusal of link changes by non-admins.
+  - Removing a sport ends the dependent link; a stale `end-coach-link` revision is refused; ended links lose access.
+  - Promotion from supporting to primary leaves exactly one active link.
+  - Deactivating a coach ends their links through the trigger, and `trainer_id` mirrors the primary link for every athlete.
+- **`test:fresh`:** migrations, seed and the eight SQL suites, plus a rolled-back scenario. Seeded `trainer_id` rows have mirrored primary links; the extracted backfill recreates them; deactivating coaches and clearing `trainer_id` leaves no active links.
+- **Affected domain suites:** sports, organizations, programming, communication, services, assets, nutrition, injuries, tasks and feedback all pass (22 tests).
+
+**Browser (isolated wrapper, Chromium desktop and WebKit phone):**
+
+- **`coaching-team.e2e.ts`:**
+  - An admin adds a supporting coach for a sport, and the cards show the primary and supporting coaches.
+  - The supporting coach sees the athlete with a training-only note and no nutrition link; a direct nutrition read returns `403`.
+  - Arabic dark at 320 px; removing the link takes the athlete off the supporting coach's roster.
+  - Layout and axe checks ran, and screenshots were inspected.
+- **`organizations.e2e.ts`:** repaired from stale setup, and passes for primary reassignment after a lost acknowledgment and exact retry. It leaves exactly one primary link, revocation clears `trainer_id` and links, and the last admin is protected.
+
+**Fixed:** the People count read "1 people"; it now uses a `People: n` label.
+
+**Limits:**
+
+- Supporting coaches can read all of an athlete's training plans until plans carry a sport (1c).
+- Browser emulation is not physical-device evidence.
+- The analytics workload chart still counts primary coaches only, by design.
+
 ## Release 1a: sports and coaching specialties — 19 October 2026
 
 **Passed against disposable databases:** each run migrated a new `rafik_browser_*` database, started its own API and dropped the database afterward. The preview database was not migrated or changed.

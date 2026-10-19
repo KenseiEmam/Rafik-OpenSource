@@ -69,7 +69,19 @@ Training schedules use client-local calendar dates. Appointments use UTC instant
   - `member-sports` sets `{ member, sports, previous }` for an active athlete or coach. `previous` must equal the current set, or the request returns `409`. Athletes accept sports only. Archived entries cannot be newly added, but existing links stay.
 - `GET /v1/workspaces/:id/people` returns each member's `sports` IDs and accepts an optional `sport` filter, applied inside the caller's existing People scope.
 
-These labels describe people. They do not grant access in Release 1a.
+These labels describe people. On their own they grant no access; Release 1b uses them to scope supporting coaches.
+
+### Coaching team (Release 1b)
+
+- **Supporting coaches:** `POST /v1/workspaces/:id` (administrator) accepts `link-coach` `{ id, athlete, coach, sport }` and `end-coach-link` `{ id, revision }`, each with an operation UUID.
+  - The athlete must be an active athlete and the coach an active coach.
+  - The coach must cover the sport or specialty; for a sport, the athlete must take part in it.
+  - Errors: `already_primary`, `already_linked` and `sport_not_covered`.
+- **Primary coach:** `assign-trainer` still sets it. That ends the previous primary link and any supporting link held by the new primary.
+- **People:** `/people` returns each athlete's active `coaches` (`id`, `coach`, `kind`, `sport`, `revision`). A coach's roster includes athletes they support.
+- **Supporting-coach access ([ADR 0025](../decisions/ADR-0025-coaching-team.md)):**
+  - Allowed: delivery and history reads, athlete plans, single-session reads, assessment history and program/session media, plus choosing the athlete for their own events, groups and messages.
+  - Primary coach only (`403` otherwise): nutrition and nutrition plans, participation status, plan assignment, workout review, follow-up and trainer analytics.
 
 See [ADR 0005](../decisions/ADR-0005-organization-and-independent-scopes.md). These Prisma-internal tables have no generic browser row grants. Closure preserves records while removing access; an exact closure retry confirms the old result.
 

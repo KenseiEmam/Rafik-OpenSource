@@ -25,5 +25,6 @@ These numbered records explain consequential design and dependency choices, incl
 | [0022](ADR-0022-instance-branding-and-local-support.md) | Keep instance branding local and support data under university control         |
 | [0023](ADR-0023-android-coach-field-app.md)             | Build an Android-first coach field app with encrypted offline capture          |
 | [0024](ADR-0024-android-beta-distribution.md)           | Distribute a directly signed beta APK with a persistent local signing identity |
+| [0025](ADR-0025-coaching-team.md)                       | Give athletes one primary coach and scoped supporting coaches                  |
 
 ADR 0004 (gym-first timing), ADR 0014 (session packages) and ADR 0016 (former Supabase runtime) are superseded. Their records are retained under [archived decisions](../archive/decisions/README.md) for provenance and are not current guidance. Gaps in numbering are intentional; do not renumber accepted decisions. New decisions use `ADR-NNNN-short-title.md`, a date, context, options, decision and trade-offs. Link the current implementation or superseding decision where relevant.

@@ -1,6 +1,6 @@
 # Post-beta.1 release plan
 
-**Status:** Release 1 in progress, 19 October 2026. R0 is done and slice 1a is implemented (see [verification](../verification/README.md#release-1a-sports-and-coaching-specialties--19-october-2026)). Other slices are not implemented. Items marked **⚑** were provisional defaults; the [confirmed decisions](#confirmed-release-1-decisions) replace them for Release 1. Releases are implemented one slice at a time, each on its own `codex/` branch and pull request.
+**Status:** Release 1 in progress, 19 October 2026. R0 is done and slices 1a and 1b are implemented (see [verification](../verification/README.md)). Other slices are not implemented. Items marked **⚑** were provisional defaults; the [confirmed decisions](#confirmed-release-1-decisions) replace them for Release 1. Releases are implemented one slice at a time, each on its own `codex/` branch and pull request.
 
 ## Confirmed Release 1 decisions
 
@@ -126,6 +126,13 @@ Only administrators manage sports and links, and the links grant no access.
   - Rendered in English/Arabic, light/dark, at 320 px and on desktop, with long names and an empty list.
 
 ### 1b Coaching team and authority ⚑
+
+**Implemented, 19 October 2026,** under the confirmed decisions and [ADR 0025](../decisions/ADR-0025-coaching-team.md). Two details differ from the outline below:
+
+- **No start date:** links carry created and ended times and actors, but no `starts_on`.
+- **A database trigger** keeps the `trainer_id` mirror and ends links on every write path.
+
+Supporting coaches can read all of an athlete's training plans until slice 1c adds a sport to plans. Only administrators link coaches.
 
 - **⚑ Default model: one primary coach plus scoped supporting coaches.**
   - The primary coach keeps today's assigned-coach access: plans, sessions, nutrition when shared, follow-up tasks and current participation status.

@@ -80,5 +80,7 @@ jobs:
         if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run test:organization-sports
         if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
+      - run: npm run test:coaching-team
+        if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run backend:stop
         if: always()

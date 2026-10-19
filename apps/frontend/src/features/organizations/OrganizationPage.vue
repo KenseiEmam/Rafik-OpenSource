@@ -17,6 +17,7 @@ import OrganizationNav from './OrganizationNav.vue'
 import BrandingSettings from './BrandingSettings.vue'
 import SportsSettings from './SportsSettings.vue'
 import MemberSports from './MemberSports.vue'
+import CoachingTeam from './CoachingTeam.vue'
 const route = useRoute(),
   router = useRouter(),
   id = String(route.params.workspace),
@@ -96,6 +97,19 @@ async function sportsSaved() {
   await loadPeople()
   selected.value = data.value?.members.find((m) => m.id === member)
 }
+const supportingCoaches = (member: Member) =>
+  (member.coaches || [])
+    .filter((c) => c.kind === 'supporting')
+    .map(
+      (c) =>
+        (data.value?.names.find((m) => m.id === c.coach)?.name || l('Coach', 'مدرب')) +
+        ' · ' +
+        (sports.value.find((s) => s.id === c.sport)?.name || ''),
+    )
+const myLink = (member: Member) =>
+  view === 'trainer' && member.trainer_id !== data.value?.self.id
+    ? member.coaches?.find((c) => c.coach === data.value?.self.id && c.kind === 'supporting')
+    : undefined
 const trainerName = (member: Member) =>
   data.value?.names.find((m) => m.id === member.trainer_id)?.name || l('Not assigned', 'غير معيّن')
 async function load() {
@@ -488,7 +502,7 @@ onMounted(async () => {
           </div>
           <div class="organization-people">
             <section tabindex="0" :aria-label="l('People', 'الأشخاص')">
-              <p class="muted">{{ peopleTotal }} {{ l('people', 'أشخاص') }}</p>
+              <p class="muted">{{ l('People:', 'الأشخاص:') }} {{ peopleTotal }}</p>
               <p v-if="peopleLoading" class="small-print" role="status">
                 {{ l('Finding people…', 'جارٍ البحث عن الأشخاص…') }}
               </p>
@@ -502,7 +516,18 @@ onMounted(async () => {
                     <h2>{{ member.name }}</h2>
                     <p>{{ member.roles.map(roleName).join(' · ') }}</p>
                     <p v-if="member.roles.includes('trainee')" class="muted">
-                      {{ l('Trainer', 'المدرب') }}: {{ trainerName(member) }}
+                      {{ l('Primary coach', 'المدرب الأساسي') }}: {{ trainerName(member) }}
+                    </p>
+                    <p v-if="supportingCoaches(member).length" class="muted" dir="auto">
+                      {{ l('Supporting', 'مساند') }}: {{ supportingCoaches(member).join('، ') }}
+                    </p>
+                    <p v-if="myLink(member)" class="small-print">
+                      {{
+                        l(
+                          'You support this athlete for training records only.',
+                          'تدعم هذا الرياضي في سجلات التدريب فقط.',
+                        )
+                      }}
                     </p>
                     <ul
                       v-if="sportNames(member).length"
@@ -533,7 +558,7 @@ onMounted(async () => {
                   >{{ l('Message', 'مراسلة') }}</RouterLink
                 >
                 <RouterLink
-                  v-if="member.roles.includes('trainee') && view !== 'trainee'"
+                  v-if="member.roles.includes('trainee') && view !== 'trainee' && !myLink(member)"
                   class="text-link"
                   :to="base + '/nutrition?member=' + member.id"
                   >{{ l('Nutrition', 'التغذية') }}</RouterLink
@@ -654,15 +679,23 @@ onMounted(async () => {
                     :view="view"
                     role="trainer"
                     single
-                    :label="l('Responsible trainer', 'المدرب المسؤول')"
+                    :label="l('Primary coach', 'المدرب الأساسي')"
                     :model-value="trainer ? [trainer] : []"
                     :exclude-ids="[selected.id]"
                     @update:model-value="trainer = $event[0] || ''"
                   />
                   <button class="button secondary">
-                    {{ l('Update trainer', 'تحديث المدرب') }}
+                    {{ l('Update primary coach', 'تحديث المدرب الأساسي') }}
                   </button>
                 </form>
+                <CoachingTeam
+                  v-if="selected.active && selected.roles.includes('trainee')"
+                  :workspace-id="id"
+                  :member="selected"
+                  :sports="sports"
+                  :names="data.names"
+                  @saved="sportsSaved"
+                />
               </fieldset>
             </aside>
           </div>

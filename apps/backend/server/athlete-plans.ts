@@ -1,6 +1,6 @@
 import { ApiError, asActor, type Actor } from "./db.ts";
 import { scoped, uuid } from "./workspaces.ts";
-import { role, recipient } from "./programming.ts";
+import { role, recipient, coachedBy } from "./programming.ts";
 import { pageOffset } from "./service-definitions.ts";
 
 /** Staff assignment index. Dates classify assignments without rewriting their lifecycle. */
@@ -27,7 +27,8 @@ export async function athletePlans(
     }),
   );
   return scoped(actor, workspace, [view], async (tx, self) => {
-    if (member) await recipient(tx, workspace, self, view, member);
+    if (member)
+      await recipient(tx, workspace, self, view, member, false, "training");
 
     const zone = profile?.timezone || "UTC";
     const today = new Intl.DateTimeFormat("en-CA", {
@@ -39,7 +40,7 @@ export async function athletePlans(
     const day = new Date(today + "T00:00:00Z");
     const peopleScope = {
       workspace_id: workspace,
-      ...(view === "trainer" ? { trainer_id: self.id } : {}),
+      ...(view === "trainer" ? coachedBy(self.id) : {}),
       ...(member ? { id: member } : {}),
     };
     const stateWhere =

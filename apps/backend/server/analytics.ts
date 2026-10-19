@@ -164,7 +164,15 @@ export async function assessmentHistory(
     window = await analyticWindow(actor, q);
   return scoped(actor, id, [view], async (tx, self) => {
     const member = q.get("member") || self.id;
-    const person = await recipient(tx, id, self, view, member);
+    const person = await recipient(
+      tx,
+      id,
+      self,
+      view,
+      member,
+      false,
+      "training",
+    );
     const offset = pageOffset(q.get("offset"));
     const results = await tx.$queryRaw<
       any[]

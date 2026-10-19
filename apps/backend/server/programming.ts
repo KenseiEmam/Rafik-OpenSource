@@ -95,6 +95,47 @@ async function programAccess(
   if (write && view === "trainee") throw new ApiError(403, "forbidden");
   return p;
 }
+/**
+ * Coaching scope. "primary" is the one responsible coach (mirrored in trainer_id): plans,
+ * nutrition, participation status, follow-up and analytics. "training" adds active supporting
+ * coaches for read-only training records and their own scheduling/messaging/grouping.
+ */
+export type CoachScope = "primary" | "training";
+/**
+ * Prisma member filter for athletes a coach may see in training scope. Wrapped in AND so
+ * spreading it never replaces a caller's own OR clause.
+ */
+export const coachedBy = (coach: string) => ({
+  AND: [
+    {
+      OR: [
+        { trainer_id: coach },
+        {
+          coaching_as_athlete: {
+            some: { coach_member_id: coach, ended_at: null },
+          },
+        },
+      ],
+    },
+  ],
+});
+export async function coaches(
+  tx: Tx,
+  athlete: { id: string; trainer_id: string | null },
+  coach: string,
+  scope: CoachScope,
+) {
+  if (athlete.trainer_id === coach) return true;
+  if (scope === "primary") return false;
+  return !!(await tx.organization_coaching_links.findFirst({
+    where: {
+      athlete_member_id: athlete.id,
+      coach_member_id: coach,
+      ended_at: null,
+    },
+    select: { id: true },
+  }));
+}
 export async function recipient(
   tx: Tx,
   id: string,
@@ -102,6 +143,7 @@ export async function recipient(
   view: Role,
   memberId: string,
   active = false,
+  scope: CoachScope = "primary",
 ) {
   const m = await tx.workspace_members.findUnique({
     where: { id: uuid(memberId) },
@@ -111,7 +153,7 @@ export async function recipient(
     m.workspace_id !== id ||
     (active && !m.roles.includes("trainee")) ||
     (active && !m.active) ||
-    (view === "trainer" && m.trainer_id !== self.id) ||
+    (view === "trainer" && !(await coaches(tx, m, self.id, scope))) ||
     (view === "trainee" && m.id !== self.id)
   )
     throw new ApiError(403, "trainee_unavailable");
@@ -495,14 +537,15 @@ export async function delivery(
   const view = role(query.get("view"));
   return scoped(actor, id, [view], async (tx, self) => {
     const selected = query.get("member");
-    if (selected) await recipient(tx, id, self, view, selected);
+    if (selected)
+      await recipient(tx, id, self, view, selected, false, "training");
     if (query.get("history") === "true") {
       const scope = {
         workspace_id: id,
         ...(selected
           ? { id: selected }
           : view === "trainer"
-            ? { trainer_id: self.id }
+            ? coachedBy(self.id)
             : view === "trainee"
               ? { id: self.id }
               : {}),
@@ -571,7 +614,7 @@ export async function delivery(
         ...(selected
           ? { id: selected }
           : view === "trainer"
-            ? { trainer_id: self.id }
+            ? coachedBy(self.id)
             : view === "trainee"
               ? { id: self.id }
               : {}),
@@ -724,7 +767,15 @@ export async function organizationSession(
   });
   if (!s) throw new ApiError(404, "session_missing");
   return scoped(actor, s.workspace_id, [view], async (tx, self) => {
-    const m = await recipient(tx, s.workspace_id, self, view, s.member_id);
+    const m = await recipient(
+      tx,
+      s.workspace_id,
+      self,
+      view,
+      s.member_id,
+      false,
+      "training",
+    );
     return {
       ...(s.document as object),
       client_id: m.user_id,

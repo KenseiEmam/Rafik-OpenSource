@@ -14,6 +14,14 @@
 
 ## Recent work
 
+- **19 October — Release 1b (coaching team):**
+  - Added primary and supporting coaching links, with a backfill and a sync trigger.
+  - `recipient()` now takes an explicit scope that defaults to primary. Training-scope reads, scheduling, grouping and messaging are deliberately widened; nutrition, participation status, plan changes, review, follow-up and analytics stay primary-only.
+  - Admin coaching-team UI in People.
+  - Backend matrix, fresh-database trigger and backfill checks, affected domain suites, and Chromium and WebKit browser journeys pass.
+  - Repaired the stale organizations spec; recorded the missing explanation on revocation as P3.
+  - Next: slice 1c, concurrent goal-specific plans.
+
 - **19 October — Release 1 decisions and slice 1a:**
   - Founder decisions: a primary coach plus supporting coaches scoped to a sport; participation status for the primary coach only; concurrent plans allowed with a same-day warning; admins keep reading shared nutrition actuals.
   - Implemented institution sports and coaching specialties: a forward migration, an admin-only API with receipts, People sport chips and filter, and Institution settings management.
@@ -44,7 +52,7 @@
 
 ## Next actions
 
-1. Review the slice 1a pull request, then continue Release 1 with slice 1b (coaching team and authority). Release 1's [decisions are confirmed](../requirements/release-plan-post-beta1.md#confirmed-release-1-decisions). Release 2 and Release 3 decisions (communications, player notes, field warnings) and coach ratings remain open.
+1. Review the slice 1a and 1b pull requests, then continue Release 1 with slice 1c (concurrent goal-specific plans). Release 1's [decisions are confirmed](../requirements/release-plan-post-beta1.md#confirmed-release-1-decisions). Release 2 and Release 3 decisions (communications, player notes, field warnings) and coach ratings remain open.
 2. Runtime PR #126, documentation PR #127 and CI-repair PR #128 are merged, as are landing PRs #8–#10. Align the selected release source/tag with actual published assets; use GitHub as the download host.
 3. Complete the founder’s updated S20+ install/offline/recovery walkthrough before distributing the Android candidate as accepted. Signing-key backup is founder-confirmed complete.
 4. Collect the recorded first-user, recent web refinement, privacy and Unix operational evidence from [known issues](../known-issues/README.md) as the relevant institution is evaluated. These are not invented completed checks or a request to redo accepted implementation stages.

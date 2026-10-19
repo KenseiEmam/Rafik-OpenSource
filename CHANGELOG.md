@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Release 1b:
+  - Coaching teams: each athlete has one primary coach and optional supporting coaches, each scoped to a sport or specialty ([ADR 0025](docs/decisions/ADR-0025-coaching-team.md)).
+  - Supporting coaches read training records and can include the athlete in their own events, groups and messages. Nutrition, participation status, plan changes, workout review, follow-up and analytics stay with the primary coach.
+  - Forward migration `202610191300_coaching_links` backfills primary links from `trainer_id` and adds a trigger that keeps them consistent.
+  - Administrators manage supporting coaches in People.
+  - Repaired the stale organizations browser spec, and fixed the "1 people" count.
+
 - Release 1a:
   - Administrators define institution sports and coaching specialties in Institution settings, and link athletes to sports and coaches to sports or specialties from People.
   - People shows sport chips and filters by sport or specialty within each role's existing scope. These labels grant no access.

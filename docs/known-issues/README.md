@@ -37,6 +37,10 @@ These came from reading `main` at `8ae1fbf` while preparing the [post-beta.1 rel
 
 **Impact:** these journeys have no current automated browser coverage. **Next step:** update each spec to the current UI, or retire it in favor of an equivalent journey. The stale single-file attachment test was replaced in R0.
 
+**P3 — revoked staff see no explanation:** after membership deactivation, a staff member's next load returns them to the workspace chooser without saying their access ended. Access and data are removed correctly. **Next step:** show a short notice on the chooser when the previous institution is no longer available.
+
+**Repaired in Release 1b:** `organizations.e2e.ts` now creates its institution through the API instead of a retired setup button. It asserts the current outcomes of primary reassignment, revocation and the last-admin refusal.
+
 **P3 — retry toast overlap:** a failed send shows a generic 5-second error toast. After a successful **Retry saved change**, that toast can stay visible for the rest of its timer next to the acknowledged message. **Next step:** close error toasts when the same command is acknowledged; this changes shared feedback, so regression-test every consumer.
 
 ## Stage 7 implementation and acceptance gaps

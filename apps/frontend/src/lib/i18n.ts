@@ -254,6 +254,38 @@ export function errorMessage(error: unknown): string {
       'Choose an active trainer from this institution. A person cannot be their own trainer.',
       'اختر مدرباً نشطاً من هذه المؤسسة. لا يمكن للشخص أن يكون مدرب نفسه.',
     ],
+    duplicate_sport: [
+      'A sport or specialty with this name already exists.',
+      'توجد رياضة أو تخصص بهذا الاسم مسبقاً.',
+    ],
+    kind_fixed: [
+      'A sport cannot become a specialty after it is created. Archive it and add a new one.',
+      'لا يمكن تحويل الرياضة إلى تخصص بعد إنشائها. أرشفها وأضف عنصراً جديداً.',
+    ],
+    sport_limit: [
+      'This institution has reached 200 sports and specialties. Archive or rename existing ones.',
+      'بلغت المؤسسة ٢٠٠ رياضة وتخصص. أرشف أو أعد تسمية العناصر الحالية.',
+    ],
+    invalid_sport: [
+      'Choose an active sport this person can take part in. Athletes are linked to sports only.',
+      'اختر رياضة نشطة يمكن لهذا الشخص المشاركة فيها. يُربط الرياضيون بالرياضات فقط.',
+    ],
+    invalid_member: [
+      'Choose an active athlete or coach. Administrators are not linked to sports.',
+      'اختر رياضياً أو مدرباً نشطاً. لا يُربط المسؤولون بالرياضات.',
+    ],
+    sport_not_covered: [
+      'The coach must cover this sport or specialty, and an athlete must take part in the sport. Update their sports first.',
+      'يجب أن يغطي المدرب هذه الرياضة أو التخصص، وأن يشارك الرياضي في الرياضة. حدّث رياضاتهم أولاً.',
+    ],
+    already_primary: [
+      'This coach is already the primary coach for this athlete.',
+      'هذا المدرب هو المدرب الأساسي لهذا الرياضي بالفعل.',
+    ],
+    already_linked: [
+      'This coach is already on the athlete’s coaching team. Remove the existing link first.',
+      'هذا المدرب ضمن فريق التدريب لهذا الرياضي بالفعل. أزل الربط الحالي أولاً.',
+    ],
     invitation_pending: [
       'There is already an active invitation for this email. Revoke it before creating another.',
       'توجد دعوة نشطة لهذا البريد. ألغها قبل إنشاء دعوة أخرى.',

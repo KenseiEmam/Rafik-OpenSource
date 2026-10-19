@@ -9,6 +9,7 @@ import {
 } from "./workspaces.ts";
 import { role } from "./programming.ts";
 import { ids } from "./service-definitions.ts";
+import { endLinksForRemovedSports } from "./coaching-links.ts";
 type Input = Record<string, unknown>;
 const SPORT_LIMIT = 200;
 const KINDS = ["sport", "specialty"];
@@ -143,6 +144,7 @@ export async function organizationSportsCommand(
     await tx.organization_member_sports.deleteMany({
       where: { member_id: member.id, sport_id: { in: removed } },
     });
+    await endLinksForRemovedSports(tx, id, member.id, removed, self.id);
     await tx.organization_member_sports.createMany({
       data: added.map((sport_id) => ({
         workspace_id: id,

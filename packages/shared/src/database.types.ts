@@ -313,6 +313,19 @@ export type Database = { public: { Tables: {
         private_pair_key: string | null
         conversation_group_id: string | null
     } }
+    organization_coaching_links: { Row: {
+        id: string
+        workspace_id: string
+        athlete_member_id: string
+        coach_member_id: string
+        kind: string
+        sport_id: string | null
+        created_by: string
+        created_at: string
+        ended_by: string | null
+        ended_at: string | null
+        revision: number
+    } }
     organization_event_people: { Row: {
         workspace_id: string
         event_id: string

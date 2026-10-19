@@ -59,5 +59,6 @@ This page is the index for maintained Rafik documentation. The root [README](../
 - [ADR 0021 — Organization workspaces are the supported web experience](decisions/ADR-0021-organization-only-web-experience.md)
 - [ADR 0022 — Instance branding and local support](decisions/ADR-0022-instance-branding-and-local-support.md)
 - [ADR 0024 — Direct signed Android beta APK](decisions/ADR-0024-android-beta-distribution.md)
+- [ADR 0025 — Primary and scoped supporting coaches](decisions/ADR-0025-coaching-team.md)
 
 Historical phase records and superseded documents are linked from the [archive index](archive/README.md); they are not active product or release guidance.

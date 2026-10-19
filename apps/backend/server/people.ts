@@ -27,8 +27,14 @@ export async function peoplePage(
     workspace_id: id,
     ...(view === "trainer"
       ? {
+          // Training scope: primary athletes plus active supporting links.
           OR: [
             { trainer_id: self.id },
+            {
+              coaching_as_athlete: {
+                some: { coach_member_id: self.id, ended_at: null },
+              },
+            },
             ...(includeSelf ? [{ id: self.id }] : []),
           ],
         }
@@ -67,6 +73,17 @@ export async function peoplePage(
       select: { sport_id: true },
       orderBy: { sport_id: "asc" as const },
     },
+    coaching_as_athlete: {
+      where: { ended_at: null },
+      select: {
+        id: true,
+        coach_member_id: true,
+        kind: true,
+        sport_id: true,
+        revision: true,
+      },
+      orderBy: [{ kind: "asc" as const }, { created_at: "asc" as const }],
+    },
   };
   const [items, total, chosen] = await Promise.all([
     tx.workspace_members.findMany({
@@ -91,7 +108,10 @@ export async function peoplePage(
         in: [
           ...new Set(
             [...items, ...chosen]
-              .map((m) => m.trainer_id)
+              .flatMap((m) => [
+                m.trainer_id,
+                ...m.coaching_as_athlete.map((l) => l.coach_member_id),
+              ])
               .filter((x): x is string => !!x),
           ),
         ],
@@ -100,9 +120,17 @@ export async function peoplePage(
     select: { id: true, name: true },
   });
   const withSports = (list: typeof items) =>
-    list.map(({ organization_member_sports, ...m }) => ({
+    list.map(({ organization_member_sports, coaching_as_athlete, ...m }) => ({
       ...m,
       sports: organization_member_sports.map((x) => x.sport_id),
+      // Active coaching team; supporting coaches carry the sport/specialty they cover.
+      coaches: coaching_as_athlete.map((l) => ({
+        id: l.id,
+        coach: l.coach_member_id,
+        kind: l.kind,
+        sport: l.sport_id,
+        revision: l.revision,
+      })),
     }));
   return {
     items: withSports(items),
