@@ -1,10 +1,19 @@
 import { LanguageControl } from './LanguageControl'
 import { useLanguage } from './Language'
 import { useEffect, useRef, useState } from 'react'
-import { ActivityIndicator, ScrollView, Text, TextInput, useColorScheme, View } from 'react-native'
+import {
+  ActivityIndicator,
+  AppState,
+  ScrollView,
+  Text,
+  TextInput,
+  useColorScheme,
+  View,
+} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { NativeClient, privateStore, type CoachContext } from './native'
-import { failureText } from './model'
+import { ConnectionFailure, failureText } from './model'
+import { selectedWorkspace } from './access'
 import type { FieldStore } from './store'
 import { Button, makeStyles, type Styles } from './ui'
 import { WorkspaceScreen } from './WorkspaceScreen'
@@ -176,30 +185,40 @@ function SignedIn({
   const [fieldBusy, setFieldBusy] = useState(false)
   const alive = useRef(true)
   const loadingRef = useRef(false)
+  const accessOffline = useRef(false)
+  const closingRef = useRef(closing)
+  closingRef.current = closing
 
-  async function refreshAccess() {
-    if (loadingRef.current) return
+  async function refreshAccess(background = false) {
+    if (loadingRef.current || closingRef.current || !alive.current) return
     loadingRef.current = true
-    setLoading(true)
+    if (!background) setLoading(true)
     try {
       const saved = await store.workspaces(client.instance, client.user.id)
       if (!alive.current) return
       setSavedWorkspaces(saved)
-      setWorkspace((current) => current || client.contexts[0]?.workspace_id || saved[0] || '')
+      setWorkspace((current) => selectedWorkspace(current, client.contexts, saved))
+      // Previously opened work must not wait for a network timeout on cold offline startup.
+      if (saved.length || client.contexts.length) setLoading(false)
       const available = await client.refreshContexts()
-      for (const id of saved.filter((id) => !available.some((c) => c.workspace_id === id))) {
+      // Downloads may finish during the access request; include those device packages too.
+      const retained = await store.workspaces(client.instance, client.user.id)
+      for (const id of retained.filter((id) => !available.some((c) => c.workspace_id === id))) {
         const scope = { instance: client.instance, user: client.user.id, workspace: id }
         for (const roster of await store.list(scope)) await store.block(scope, roster.event.id)
       }
       if (!alive.current) return
       setContexts(available)
-      setWorkspace((current) => current || available[0]?.workspace_id || saved[0] || '')
+      setSavedWorkspaces(retained)
+      accessOffline.current = false
+      setWorkspace((current) => selectedWorkspace(current, available, retained))
       setMessage(
         available.length
           ? ''
           : 'This account currently has no institution coach access. Any saved work remains blocked for review.',
       )
     } catch (error) {
+      accessOffline.current = error instanceof ConnectionFailure
       if (alive.current)
         setMessage(
           `${failureText(error)} Previously opened events remain available for this account.`,
@@ -211,9 +230,18 @@ function SignedIn({
   }
   useEffect(() => {
     alive.current = true
+    const retryAccess = () => {
+      if (AppState.currentState === 'active' && accessOffline.current) void refreshAccess(true)
+    }
+    const unsubscribe = client.onAuthorizedResponse(retryAccess)
+    const foreground = AppState.addEventListener('change', retryAccess)
+    const timer = setInterval(retryAccess, 30_000)
     void refreshAccess()
     return () => {
       alive.current = false
+      unsubscribe()
+      foreground.remove()
+      clearInterval(timer)
     }
   }, [])
 
@@ -247,9 +275,17 @@ function SignedIn({
         />
       </View>
       {message ? (
-        <Text accessibilityLiveRegion="polite" style={[styles.message, { paddingHorizontal: 18 }]}>
-          {t(message)}
-        </Text>
+        <View style={{ paddingHorizontal: 18 }}>
+          <Text accessibilityLiveRegion="polite" style={styles.message}>
+            {t(message)}
+          </Text>
+          <Button
+            title="Refresh access"
+            disabled={closing || loading || fieldBusy}
+            onPress={() => void refreshAccess(true)}
+            styles={styles}
+          />
+        </View>
       ) : null}
       {options.length > 1 ? (
         <View style={styles.toolbar}>

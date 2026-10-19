@@ -4,7 +4,7 @@ Repository: [`KenseiEmam/Rafik-OpenSource`](https://github.com/KenseiEmam/Rafik-
 
 **Beta candidate: Squire 1.0.0-beta.1.** Standalone Android packaging uses `npm run mobile:release`; follow the [signing, installation and update guide](docs/operations/android-release.md). Release/device acceptance limits are tracked in [verification](docs/verification/README.md).
 
-Rafik is being redirected to help universities and university coaches support young athletes through training, attendance, performance, and relevant health workflows. The target is an open-source product that each university can deploy on infrastructure it controls, without a Rafik software subscription.
+Rafik helps university coaches manage athlete training, attendance and performance in a university-operated instance. It is open source and can be deployed on infrastructure the university controls, without a Rafik software subscription. The Android field app serves coaches; administrators and athletes use the web dashboard. Performance records and limited participation status do not provide medical diagnoses or injury predictions.
 
 ## Project status
 

@@ -36,3 +36,5 @@ The coach app's supported OpenAPI subset is at [`../backend/openapi.json`](../ba
 ## Standalone beta package
 
 Squire `1.0.0-beta.1` is the packaging candidate. Use root `npm run mobile:release` after restoring/creating the private local signing material. See [Android beta builds and updates](../../docs/operations/android-release.md) for output paths, key backup, clean-device installation and upgrade checks. A successful build alone is not package acceptance.
+
+For connection/access feedback regression checks, run `npm run test:request --workspace @rafik/mobile`. See the [release guide](../../docs/operations/android-release.md) for private-key backup and physical-phone checks without an emulator or domain.

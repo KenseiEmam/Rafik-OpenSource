@@ -69,6 +69,12 @@ Use the [infrastructure guide](../../infrastructure/README.md) for first deploym
 
 Instance name, accent, custom light/dark page backgrounds and optional logo are stored in PostgreSQL so they survive image upgrades and are included in the normal database backup. Surface colors derive from the page backgrounds, and text/accent colors adjust for contrast. The initial super admin owns these settings; active institution administrators can see the branding panel but cannot change it. The API validates image signatures and permits PNG, JPEG or WebP up to 512 KB. The logo endpoint serves only the configured public brand image with a fixed content type and `nosniff`; no SVG, remote logo URL, arbitrary CSS or script is accepted. Rafik attribution remains visible. Support cases and diagnostics remain local; no telemetry or email delivery is configured.
 
+## Android connection and authority feedback
+
+Connectivity and authorization are separate. A transport failure produces localized connection feedback; HTTP denial remains a server refusal. Following an offline access failure, the signed-in runtime rechecks coach contexts after a successful authenticated response or active retry. Only the context read clears its access warning. Cached work opens after local storage loads rather than waiting for a network timeout. The check does not replace event snapshots or unmount open editors; revoked workspaces have their cached packages blocked. Saved workspace selection remains available for recovery; a removed workspace with no device package yields to the remaining authorized workspace or the no-access screen. Command acknowledgment/revision handling remains independent of this feedback and still requires the exact response to each saved command.
+
+Saved event packages open directly from device storage. With cached events present, startup schedule refresh runs separately and does not lock roster controls. **Refresh roster** explicitly downloads newer event data and remains unavailable while unsent commands/drafts need resolution. Background schedule feedback cannot replace an open event’s capture message.
+
 ## Data-flow boundary
 
 ```mermaid

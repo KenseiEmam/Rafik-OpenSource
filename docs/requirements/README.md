@@ -128,3 +128,13 @@ Still open for later stages: optional OIDC/SAML identity adapters; the Stage 5 s
 ## Verification plan
 
 The current repositories already provide frontend unit/build/format checks, frontend Playwright browser workflows, backend API/domain tests, fresh-database SQL tests, type checking, content checks, and a local release runner. Use those against the final source for applicable changes. Add focused security/lifecycle tests for each new sensitive workflow. Run deployment acceptance against disposable Docker resources, never by resetting an existing local preview. For later mobile work, distinguish API integration, emulator, physical-device, and human workflow evidence. This planning-only stage requires documentation/link/format checks, not product test suites.
+
+## Public beta audience and product boundaries
+
+The beta is for technically supported institution evaluation. One institution operates each instance; this is not a centrally hosted account network. Administrators provision roles and events through the web app, coaches use the Android field app for assigned attendance/assessments, and athletes retain their web workflows. Do not advertise the native app as the complete administrative or athlete client.
+
+Performance observations inform a coach's judgment. They do not establish injury prediction, clinical diagnosis or automated eligibility decisions. The offline package deliberately excludes injury records, conversations and files. Only explicitly downloaded events are available offline; sync runs while active, not as a guaranteed background service. Device-save feedback must not imply server acknowledgment.
+
+An unlocked device can retain previously downloaded records while offline even after server access is revoked. Server authorization stops subsequent reads/replay; it cannot remotely erase an offline device. Institutions need screen-lock/device-loss procedures and approved handling for plain-text recovery exports. This limitation is part of evaluating deployment suitability, not a promise to implement remote management in this beta.
+
+Public source, a package that runs and production readiness are separate. The first public package should have a known checksum, tested install path, readable error recovery and honest scope/known issues. Institution-specific approval, real field feedback, provider validation and operational recovery remain explicit backlog items rather than invented completed checks.
