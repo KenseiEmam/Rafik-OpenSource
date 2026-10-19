@@ -2,7 +2,9 @@
 
 ## Unreleased
 
+- Rebuilt and verified the signed beta evaluation APK with the fixes below, preserving the earlier qualification artifact. Physical S20+ acceptance remains open.
 - Fixed stale Android offline access feedback: fresh authenticated access checks recover in the background while keeping the roster/editor mounted. Network, sign-in and throttling errors now have readable English/Arabic messages; malformed institution URLs use the intended validation.
+- Removed a second offline-start wait: cached rosters open locally, while schedule refresh has its own busy state. Newer roster data is downloaded explicitly.
 - Prevented a coach from becoming stuck in a removed empty workspace after access changes, while keeping cached work selectable for review.
 - Added focused transport/authenticated-response regression checks, refreshed the dependency audit (zero known advisories), and documented encrypted signing-key backup plus physical S20+ testing through USB without a domain.
 - Clarified the public beta audience, coach-only native scope, observed-performance versus clinical claims, and limits of offline revocation and background sync.

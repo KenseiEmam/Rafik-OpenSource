@@ -12,8 +12,8 @@ Institute outreach can invite evaluation of a clearly labelled public beta; an i
 
 - [x] Build and verify the Squire `1.0.0-beta.1` APK using the [release procedure](android-release.md); record its checksum, certificate and exact source revision.
 - [ ] Back up the authorized private signing key/passwords outside the checkout.
-- [x] Prove isolated installation and startup without Metro, preserving existing development data (separate Android 14 AVD; no physical-device claim).
-- [x] Prove offline cold startup and saved work across a same-key Android versionCode upgrade (controlled current-format baseline; historical/schema migration remains open).
+- [ ] Prove installation/startup without Metro on the updated candidate. The earlier APK passed on a separate Android 14 AVD; the offline-feedback rebuild awaits the S20+ check.
+- [ ] Recheck cold offline startup and saved work on the updated candidate. The earlier APK passed a controlled same-key versionCode upgrade; historical/schema migration remains open.
 - [x] Record actual device/OS/layout/accessibility coverage and explicit beta limits in [verification](../verification/README.md).
 - [ ] Publish an annotated beta tag and matching English/Arabic landing release/install/upgrade documentation; publish download assets only after package acceptance.
 

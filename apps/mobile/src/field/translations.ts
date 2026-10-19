@@ -1,6 +1,8 @@
 export type Language = 'en' | 'ar'
 // English keys also translate persisted messages from earlier app builds.
 const arabic: Record<string, string> = {
+  'Saved event opened from this device. Refresh roster online for the latest data.':
+    'فُتح الموعد المحفوظ على هذا الجهاز. حدّث القائمة أثناء الاتصال للحصول على أحدث البيانات.',
   'The server returned invalid institution access. Check the API URL and server version.':
     'أعاد الخادم بيانات صلاحيات مؤسسة غير صالحة. تحقق من عنوان API وإصدار الخادم.',
   'Could not reach your institution. Check your connection and try again.':

@@ -143,6 +143,8 @@ Reload/reopen the development app. This clears Metro cache, not app credentials 
 
 Transport errors use readable English/Arabic feedback, without raw Java/network addresses. After an offline access failure, an authenticated response, foreground/resume or the active 30-second retry triggers a fresh coach-access check. Only a successful access check clears that warning; a schedule acknowledgment does not grant institution authority. Cached work opens as soon as local storage loads; background checks keep the current roster/editor mounted. **Refresh access** provides a manual retry. Session failures still require signing in again to the same account; revocation/conflict remain distinct from connectivity.
 
+Saved event packages open directly from device storage. With cached events present, startup schedule refresh runs separately and does not lock roster controls. **Refresh roster** explicitly downloads newer event data and remains unavailable while unsent commands/drafts need resolution. Background schedule feedback cannot replace an open event’s capture message.
+
 ## Focused checks
 
 For repeatable native API/queue acceptance without Chrome, use Node 24 and a running local Docker database. From the repository root:

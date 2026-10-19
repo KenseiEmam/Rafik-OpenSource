@@ -63,6 +63,7 @@ export function WorkspaceScreen({
   const [onlineRoster, setOnlineRoster] = useState<ReturnType<typeof fieldRoster> | null>(null)
   const [next, setNext] = useState<number | null>(null)
   const [busy, setBusy] = useState(false)
+  const [refreshingSchedule, setRefreshingSchedule] = useState(false)
   const [saving, setSaving] = useState(false)
   const [draftSaving, setDraftSaving] = useState(false)
   const [editor, setEditor] = useState<string | null>(null)
@@ -73,6 +74,7 @@ export function WorkspaceScreen({
   const alive = useRef(true)
   const selectedRef = useRef<string | null>(null)
   const busyRef = useRef(false)
+  const refreshingRef = useRef(false)
   const savingRef = useRef(false)
   const closingRef = useRef(closing)
   closingRef.current = closing
@@ -97,6 +99,7 @@ export function WorkspaceScreen({
       setQueueHead(head)
       if (selectedRef.current === id) setSnapshot(detail)
     }
+    return list
   }
   async function sync() {
     if (!alive.current || closingRef.current) return
@@ -135,10 +138,14 @@ export function WorkspaceScreen({
       if (alive.current) setMessage(failureText(error))
     }
   }
-  async function refresh(offset = 0) {
-    if (busyRef.current || closingRef.current) return
-    busyRef.current = true
-    setBusy(true)
+  async function refresh(offset = 0, background = false) {
+    if (!alive.current || busyRef.current || refreshingRef.current || closingRef.current) return
+    refreshingRef.current = true
+    setRefreshingSchedule(true)
+    if (!background) {
+      busyRef.current = true
+      setBusy(true)
+    }
     try {
       const query = new URLSearchParams({ ...window, view: 'trainer', offset: String(offset) })
       const result = await client.request<{ items: unknown[]; next: number | null }>(
@@ -150,7 +157,8 @@ export function WorkspaceScreen({
         offset ? [...prior, ...items.filter((i) => !prior.some((e) => e.id === i.id))] : items,
       )
       setNext(result.next)
-      setMessage('Schedule refreshed. Open an event online to save its attendance roster.')
+      if (!selectedRef.current)
+        setMessage('Schedule refreshed. Open an event online to save its attendance roster.')
       await sync()
     } catch (error) {
       if (error instanceof ApiFailure && error.status === 403) {
@@ -161,10 +169,15 @@ export function WorkspaceScreen({
         }
         await reloadLocal()
       }
-      if (alive.current) setMessage(`${failureText(error)} Previously opened events remain below.`)
+      if (alive.current && !selectedRef.current)
+        setMessage(`${failureText(error)} Previously opened events remain below.`)
     } finally {
-      busyRef.current = false
-      if (alive.current) setBusy(false)
+      refreshingRef.current = false
+      if (alive.current) setRefreshingSchedule(false)
+      if (!background) {
+        busyRef.current = false
+        if (alive.current) setBusy(false)
+      }
     }
   }
   useEffect(() => {
@@ -174,7 +187,7 @@ export function WorkspaceScreen({
     )
     runner.current = active
     void reloadLocal()
-      .then(() => refresh())
+      .then((saved) => refresh(0, saved.length > 0))
       .catch((e) => {
         if (alive.current) setMessage(failureText(e))
       })
@@ -202,8 +215,8 @@ export function WorkspaceScreen({
   }, [saving, draftSaving, onPersisting])
   useEffect(() => () => onPersisting(false), [onPersisting])
 
-  async function openEvent(id: string) {
-    if (busyRef.current || closingRef.current) return
+  async function openEvent(id: string, refreshRoster = false) {
+    if (!alive.current || busyRef.current || closingRef.current) return
     busyRef.current = true
     setBusy(true)
     setMessage('')
@@ -218,6 +231,13 @@ export function WorkspaceScreen({
       const saved = await store.snapshot(owner, id)
       if (!alive.current || selectedRef.current !== id) return
       setSnapshot(saved)
+      if (saved && !refreshRoster) {
+        setMessage(
+          'Saved event opened from this device. Refresh roster online for the latest data.',
+        )
+        void sync()
+        return
+      }
       if (saved?.commands.some((c) => c.state !== 'acknowledged')) {
         setMessage(
           'Saved changes are shown below. Confirm or resolve them before downloading a newer roster.',
@@ -426,8 +446,8 @@ export function WorkspaceScreen({
             {t('. Saved events remain available outside this window.')}{' '}
           </Text>
           <Button
-            title={busy ? 'Refreshing…' : 'Refresh schedule and sync'}
-            disabled={busy || saving || closing}
+            title={refreshingSchedule ? 'Refreshing…' : 'Refresh schedule and sync'}
+            disabled={busy || refreshingSchedule || saving || closing}
             onPress={() => void refresh()}
             styles={styles}
           />
@@ -462,7 +482,7 @@ export function WorkspaceScreen({
           {next !== null ? (
             <Button
               title="Load more events"
-              disabled={busy || closing}
+              disabled={busy || refreshingSchedule || closing}
               onPress={() => void refresh(next)}
               styles={styles}
             />
@@ -599,7 +619,7 @@ export function WorkspaceScreen({
                       !!pending.length ||
                       !!snapshot?.drafts.length
                     }
-                    onPress={() => void openEvent(selected)}
+                    onPress={() => void openEvent(selected, true)}
                     styles={styles}
                   />
                 </View>
