@@ -63,6 +63,15 @@ These findings come from reading the code. None has been reproduced in a running
 
 ## R0 — beta.1 close-out
 
+**Status, 19 October 2026:** web work done.
+
+- D1 is fixed.
+- H1 is confirmed as dormant behavior and deferred to slice 1c.
+- The P2 journeys passed in Chromium desktop and WebKit phone, after fixes for dark contrast, unnamed attachments and count wording.
+- The S20+ check and asset alignment remain owner actions.
+
+See [verification](../verification/README.md#r0-beta1-close-out--19-october-2026).
+
 - **Outcomes:**
   - The owner completes the updated Galaxy S20+ install, offline and recovery walkthrough.
   - The published tag and assets match the compiled source.

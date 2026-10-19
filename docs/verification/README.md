@@ -1,5 +1,36 @@
 # Verification record
 
+## R0 beta.1 close-out — 19 October 2026
+
+**Passed:** three focused browser tests in Chromium desktop and WebKit phone (iPhone 13 emulation), all six runs on the final source, through the isolated browser wrapper. A production web build also passed, with the known P3 Vite config warning. It used its own database, API and web ports and removed them afterward.
+
+- **Workout feedback link:** an athlete completes an institution workout, opens **Rate your session** and reaches the feedback form. Before the fix this run showed the link going to `/institution/…`.
+- **Later-page browsing:** a coach with 26 assigned athletes opens a page-2 athlete plan, reloads, closes it, searches and reloads again. The same check covers a page-2 nutrition plan and a page-2 training event with the activity filter, returning with Back to the same page and filter. Arabic dark at 320 px was checked on plans and events, including a long mixed-script name.
+- **Multiple message attachments:** two photos and a PDF are selected and one is removed. The draft survives reload in order. A lost acknowledgment followed by **Retry saved change** produces exactly one message with both files, and the recipient sees both, including the PDF's file name. After the recipient's membership is deactivated, reads of both files are refused.
+
+Layout-containment and axe checks ran on each captured state. Screenshots of every state were inspected, then removed.
+
+**Defects found and fixed by these checks:**
+
+- The dark-theme `--muted` text measured 4.23:1 on soft surfaces (tags, message timestamps), below the 4.5:1 minimum. Raised from `#b0bdb2` to `#bcc8be`; light theme unchanged.
+- Sent attachments showed only **Download**, with no file name, and saved as `attachment`. The thread read now returns attachment names to the same channel audience.
+- The events list read "1 athletes" (Arabic "1 رياضيين"). It now uses an `Athletes: n` label.
+
+**Also passed:**
+
+- `npm test`: 28 frontend unit tests, including token definitions.
+- Frontend and backend typecheck.
+- Prettier on the touched files.
+
+**Limits:**
+
+- Four other specs (`instance-branding.e2e.ts`, the first `organization-feedback.e2e.ts` test and both `responsive-inbox.e2e.ts` tests) fail identically on unmodified source; they are recorded as stale in [known issues](../known-issues/README.md#browser-test-maintenance). The shared token change was therefore checked through the R0 journeys' axe scans, not those specs.
+- Browser emulation is not physical-device or assistive-technology evidence.
+- The Galaxy S20+ check and release-asset alignment remain owner actions.
+- H1 was confirmed by tracing the code, not by a new automated check.
+
+**Local environment note:** this preview's PostgreSQL volume was created before Stage 3 under Debian `postgres:17.6` (glibc collation 2.41). The current Compose image `postgres:17.6-alpine` (musl) refuses to create databases from it. For this run only the `db` container used `postgres:17.6` through an untracked override; the volume, preview data and tracked Compose file were unchanged. See [development troubleshooting](../development/README.md#troubleshooting).
+
 ## GitHub check repairs — 19 October 2026
 
 The failed GitHub run stopped before web tests because Linux compiler bindings were missing, and at an obsolete invitation-preview assertion in the backend. The merged first repair restored platform metadata, corrected invitation/onboarding fixtures and stale CSS tokens, and replaced marketing/package workflow commands. Follow-up checks corrected the new lock test to follow Node's nested/hoisted package resolution and resolved the scoped Xcode UUID override.

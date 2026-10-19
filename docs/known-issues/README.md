@@ -15,17 +15,29 @@ Code-inspection hypotheses must be labeled as such and accompanied by their impa
 
 ## Web beta evidence still to collect
 
-**P2 — unverified refinements, not reproduced defects:** the 18 October athlete/nutrition-plan browsing, scheduled-events and multiple-message-attachment changes passed source/handler checks, but their complete rendered pagination, multi-file send/retry/revocation and phone/RTL journeys were not rerun. The current web build passes. The [coach walkthrough](../testing/coach-walkthrough.md) records the relevant tasks; do not advertise those checks as completed.
+**Collected in R0, 19 October 2026:** focused rendered journeys now cover later-page athlete plans, nutrition plans and events (Chromium desktop, WebKit phone, Arabic dark at 320 px), plus multi-file message send, exact retry, reload and recipient revocation. These are focused checks, not every screen, theme or device combination. See [verification](../verification/README.md#r0-beta1-close-out--19-october-2026).
 
 **P3 — build-tool compatibility warning:** the current Vite build succeeds but warns that the JSON import in `apps/frontend/vite.config.ts` needs an import attribute for a future native config-loader default. This is a future toolchain compatibility issue, not an observed production-app failure. Address before adopting that default/major upgrade; do not suppress it as evidence of compatibility.
 
 ## Code-inspection findings — 19 October 2026
 
-These are hypotheses from reading `main` at `8ae1fbf` while preparing the [post-beta.1 release plan](../requirements/release-plan-post-beta1.md). None has been reproduced in a running app.
+These came from reading `main` at `8ae1fbf` while preparing the [post-beta.1 release plan](../requirements/release-plan-post-beta1.md). R0 checked them in disposable browser and API runs; see [verification](../verification/README.md#r0-beta1-close-out--19-october-2026).
 
-- **P2 — D1, likely defect:** after a workout, **Rate your session** links to `/institution/{workspace}/trainee/feedback` (`apps/frontend/src/features/training/WorkoutPage.vue`). The router has no `/institution` path. **Impact:** athletes may not reach the optional feedback form from the completion screen; the navigation link still works. **Confirm:** open the link in a rendered athlete session. **Next step:** fix in R0 with a router regression check.
-- **P3 — H1, behavior to confirm:** deactivating an athlete or changing their coach does not archive the athlete's active assignment. **Impact:** a stale plan may remain active. **Confirm:** with a disposable fixture, then decide whether this is intended before Release 1 changes assignments.
-- **P3 — H2, audit gap:** `organization_injury_access_log` records sensitive reads and changes, but no screen or export reads it. **Impact:** the audit baseline expects reviewable sensitive-read records. **Next step:** founder decision on an athlete-visible access history or an operator export.
+- **Fixed — D1:** after a workout, **Rate your session** linked to `/institution/{workspace}/trainee/feedback`, which only the not-found route matched. Reproduced in Chromium, fixed, and covered by a browser regression check.
+- **P3 — H1, confirmed as dormant behavior:** changing an athlete's coach keeps their active assignment, which matches organization-owned history. Deactivating an athlete leaves the assignment `active`, but sign-in access, active-plan analytics, follow-up tasks and athlete-plan lists all exclude inactive members. **Impact:** a reactivated athlete gets the old plan back as active. **Next step:** the explicit end-assignment command planned in Release 1 slice 1c.
+- **P3 — H2, audit gap:** `organization_injury_access_log` records sensitive reads and changes, but no screen or export reads it. **Next step:** founder decision on an athlete-visible access history or an operator export.
+
+## Browser test maintenance
+
+**P2 — stale browser specs outside CI, observed 19 October 2026:** these fail the same way on unmodified source, so they are test debt rather than product regressions. CI runs only the onboarding journey.
+
+- `instance-branding.e2e.ts` waits for a setup field labelled **Your full name** that no longer exists.
+- The first test in `organization-feedback.e2e.ts` runs `docker compose exec` without the Compose file path.
+- Both tests in `responsive-inbox.e2e.ts` use superseded conversation and client-row selectors.
+
+**Impact:** these journeys have no current automated browser coverage. **Next step:** update each spec to the current UI, or retire it in favor of an equivalent journey. The stale single-file attachment test was replaced in R0.
+
+**P3 — retry toast overlap:** a failed send shows a generic 5-second error toast. After a successful **Retry saved change**, that toast can stay visible for the rest of its timer next to the acknowledged message. **Next step:** close error toasts when the same command is acknowledged; this changes shared feedback, so regression-test every consumer.
 
 ## Stage 7 implementation and acceptance gaps
 

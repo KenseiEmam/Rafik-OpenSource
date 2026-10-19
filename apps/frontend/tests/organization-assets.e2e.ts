@@ -1,12 +1,15 @@
 import { test, expect } from '@playwright/test'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { randomUUID, randomBytes } from 'node:crypto'
+import { randomUUID } from 'node:crypto'
 import AxeBuilder from '@axe-core/playwright'
 import { teamFixture } from './team-fixture'
 import { layoutIssues } from './layout-contract'
 const png = readFileSync(
-  resolve(import.meta.dirname, '../../backend/content/exercise-videos/wger-fff4c294-93f0-4926-b3a2-bf59ad4afaa5-623708fc-r1.webp'),
+  resolve(
+    import.meta.dirname,
+    '../../backend/content/exercise-videos/wger-fff4c294-93f0-4926-b3a2-bf59ad4afaa5-623708fc-r1.webp',
+  ),
 )
 test('organization author uploads, categorizes, filters, reuses and archives an exercise demonstration', async ({
   page,
@@ -138,74 +141,5 @@ test('organization author uploads, categorizes, filters, reuses and archives an 
     await f.cleanup()
   }
 })
-test('pair attachment survives reload and exact send retry and is readable by its recipient', async ({
-  page,
-  browser,
-}, info) => {
-  test.setTimeout(90000)
-  const f = await teamFixture(),
-    context = await browser.newContext(),
-    recipient = await context.newPage(),
-    workspace = randomUUID()
-  try {
-    await f.call(f.owner, '/v1/workspaces', {
-      id: workspace,
-      kind: 'organization',
-      name: 'Private conversations',
-    })
-    const token = randomBytes(32).toString('hex')
-    await f.call(f.owner, `/v1/workspaces/${workspace}`, {
-      action: 'invite',
-      operation: randomUUID(),
-      id: randomUUID(),
-      email: f.client.email,
-      roles: ['trainee'],
-      token,
-    })
-    await f.call(f.client, `/v1/organization-invitations/${token}`, {})
-    const base = `/organization/${workspace}/admin/messages`
-    await f.login(page, f.owner, base)
-    await page.getByRole('button', { name: 'New conversation', exact: true }).click()
-    await page.getByLabel('Conversation name', { exact: true }).fill('Form review')
-    await page.getByRole('checkbox', { name: 'R4 Athlete', exact: true }).check()
-    await page.getByRole('button', { name: 'Create conversation', exact: true }).click()
-    await expect(page).toHaveURL(/\/messages\/[a-f0-9-]{36}$/)
-    const channel = page.url().split('/').at(-1)!
-    await page.locator('.attachment-controls summary').click()
-    await page
-      .getByLabel('Attach a file', { exact: true })
-      .setInputFiles({ name: 'private-form.webp', mimeType: 'image/webp', buffer: png })
-    await expect(page.getByText('Uploaded: private-form.webp', { exact: true })).toBeVisible()
-    await page.reload()
-    await expect(page.locator('.attachment-controls summary')).toHaveText('private-form.webp')
-    let lost = false
-    await page.route(`**/v1/workspaces/${workspace}/communication`, async (route) => {
-      if (
-        !lost &&
-        route.request().method() === 'POST' &&
-        route.request().postDataJSON().action === 'send'
-      ) {
-        lost = true
-        await route.fetch()
-        await route.abort('failed')
-      } else await route.continue()
-    })
-    await page.getByRole('button', { name: 'Send message', exact: true }).click()
-    await page.getByRole('button', { name: 'Retry saved change', exact: true }).click()
-    await expect(page.locator('.message-bubble')).toHaveCount(1)
-    await f.login(recipient, f.client, `/organization/${workspace}/trainee/messages/${channel}`)
-    await expect(recipient.locator('.organization-asset img')).toBeVisible()
-    await expect(
-      recipient.getByText('Private to the two participants', { exact: true }),
-    ).toBeVisible()
-    expect(await layoutIssues(recipient)).toEqual([])
-    expect((await new AxeBuilder({ page: recipient }).analyze()).violations).toEqual([])
-    await recipient.screenshot({
-      path: `artifacts/r18-attachment-${info.project.name}.png`,
-      fullPage: true,
-    })
-  } finally {
-    await context.close()
-    await f.cleanup()
-  }
-})
+// The single-file pair attachment journey is covered by the multi-attachment reload,
+// exact-retry and revocation test in beta-web-refinements.e2e.ts.
