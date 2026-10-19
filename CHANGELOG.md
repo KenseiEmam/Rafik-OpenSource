@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Aligned program-library regression checks with ADR 0020: athletes read immutable published versions but cannot write drafts. Independent CI domain suites now report failures after API readiness instead of hiding later results behind the first failed suite.
+
 - Repaired GitHub CI: restored cross-platform native lock metadata, aligned invitation/onboarding checks, removed retired package/marketing commands and retained isolated failure diagnostics. Corrected unit setup and stale theme-token references.
 - Applied a scoped Xcode UUID 11.1.1 security override. Online audit reduced 27 findings to 19 high findings from two unpatched Expo-tooling dependencies; invalidated the earlier offline zero-advisory claim.
 

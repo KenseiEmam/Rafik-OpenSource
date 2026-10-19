@@ -44,7 +44,8 @@ jobs:
       - run: npm run docs:check
       - run: npm run backend:test
       - run: npm run start:api > /tmp/rafik-api.log 2>&1 &
-      - run: curl --retry 10 --retry-connrefused --retry-delay 1 --fail http://127.0.0.1:55331/health
+      - id: api-ready
+        run: curl --retry 10 --retry-connrefused --retry-delay 1 --fail http://127.0.0.1:55331/health
       - run: npm run content:media
       - run: npm run content:exercise-dataset:check
       - run: npm run content:wger-exercises:check
@@ -52,17 +53,30 @@ jobs:
       - run: npm run test:catalog
       - run: npm run backend:typecheck
       - run: npm run test:api
+        if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run test:services
+        if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run test:teams
+        if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run test:organizations
+        if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run test:programming
+        if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run test:operations
+        if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run test:communication
+        if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run test:organization-services
+        if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run test:organization-nutrition
+        if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run test:organization-assets
+        if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run test:organization-tasks
+        if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run test:organization-injuries
+        if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run test:organization-feedback
+        if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run backend:stop
         if: always()
