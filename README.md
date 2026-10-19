@@ -98,6 +98,8 @@ npm run test:queue --workspace @rafik/mobile
 
 The full local acceptance chain is documented in [the runbook](./docs/operations/README.md). Browser emulation and Node SQLite checks do not establish native-device behavior, and local checks do not establish hosted security or operational readiness.
 
+GitHub runs focused onboarding and institution checks; see [CI and dependency maintenance](docs/development/maintainer-guide.md#github-checks-and-dependency-maintenance). Dependency audits require online registry access; current unresolved advisories are listed in known issues.
+
 ## Documentation and contribution
 
 - [Documentation index](docs/README.md)

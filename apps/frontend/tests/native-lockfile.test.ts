@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { posix, resolve } from 'node:path'
 import { expect, test } from 'vitest'
 
 test('the root lockfile retains compiler bindings for other operating systems', () => {
@@ -17,8 +17,18 @@ test('the root lockfile retains compiler bindings for other operating systems', 
       const bindings = Object.entries(parent.optionalDependencies || {})
       expect(bindings.length, name).toBeGreaterThan(0)
       for (const [binding, version] of bindings) {
-        const nested = lock.packages[path + '/node_modules/' + binding]
-        expect((nested || lock.packages['node_modules/' + binding])?.version, binding).toBe(version)
+        // Match Node's ancestor lookup: npm may hoist a binding beside its
+        // parent package inside another dependency's node_modules directory.
+        let directory = path
+        let resolved: { version?: string } | undefined
+        while (!resolved) {
+          const key =
+            directory === '.' ? 'node_modules/' + binding : directory + '/node_modules/' + binding
+          resolved = lock.packages[key]
+          if (directory === '.') break
+          directory = posix.dirname(directory)
+        }
+        expect(resolved?.version, path + ': ' + binding).toBe(version)
       }
     }
   }
