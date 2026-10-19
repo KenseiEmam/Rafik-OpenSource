@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-test("local runtime rejects remote, unrelated local databases and production adapters", () => {
+test("local runtime rejects unrelated databases and production requires explicit self-host configuration", () => {
   for (const url of [
     "postgresql://rafik_api:x@example.com:55332/rafik",
     "postgresql://rafik_api:x@127.0.0.1:5432/rafik",
@@ -23,8 +23,15 @@ test("local runtime rejects remote, unrelated local databases and production ada
   const production = spawnSync(
     process.execPath,
     ["--import", "tsx", "-e", "import('./server/db.ts')"],
-    { env: { ...process.env, NODE_ENV: "production" }, encoding: "utf8" },
+    {
+      env: { ...process.env, NODE_ENV: "production", RAFIK_RUNTIME_MODE: "" },
+      encoding: "utf8",
+    },
   );
   assert.notEqual(production.status, 0);
-  assert.match(production.stderr, /Hosting adapters/);
+  assert.match(
+    production.stderr,
+    /Self-hosted production configuration is incomplete or invalid/,
+  );
+  assert.match(production.stderr, /RAFIK_RUNTIME_MODE/);
 });

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Corrected remaining CI fixtures for configured self-host production and exact media access through published library snapshots; private unpublished media and unrelated tenant access remain denied.
+
 - Aligned program-library regression checks with ADR 0020: athletes read immutable published versions but cannot write drafts. Independent CI domain suites now report failures after API readiness instead of hiding later results behind the first failed suite.
 
 - Repaired GitHub CI: restored cross-platform native lock metadata, aligned invitation/onboarding checks, removed retired package/marketing commands and retained isolated failure diagnostics. Corrected unit setup and stale theme-token references.
