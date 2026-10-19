@@ -1,3 +1,7 @@
+# Historical record — archived 19 October 2026
+
+This document preserves earlier scope or evidence mappings. Use the current [architecture](../architecture/README.md), [testing guide](../testing/README.md) and [verification](../verification/README.md) for maintained behavior and actual checks. It is not a current onboarding or release checklist.
+
 # Original roles, organizational scope and revamp corrections
 
 Reviewed 23 September 2026. **This is the historical role audit that corrected the R4 model.** R7A–R11 implemented separate organization memberships/ownership, programs/history, assessor-led services, scoped communication and platform operations in the local codebase. R4 independent-coach teams remain distinct. The approved university-first target adds further requirements recorded in the root docs. Use the current ledger and verification for shipped-local scope; the source findings below are retained as evidence, not a claim that those corrected gaps remain open.

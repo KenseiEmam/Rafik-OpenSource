@@ -1,5 +1,13 @@
 name: Checks
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: checks-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   web:
     runs-on: ubuntu-latest
@@ -9,17 +17,19 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
-      - run: npm ci
+      - run: npm ci --include=optional
       - run: npm test --workspace @rafik/frontend
       - run: npm run build --workspace @rafik/frontend
       - run: npx playwright install --with-deps chromium
-      - run: npm run dev --workspace @rafik/frontend > /tmp/rafik-vite.log 2>&1 &
-      - run: npm run test:e2e:running --workspace @rafik/frontend -- --project=chromium --grep 'guest reaches|Arabic sample'
+      - run: npm run backend:start
+      - run: npm run test:e2e --workspace @rafik/frontend -- --empty-database --project=chromium onboarding.e2e.ts
+      - run: npm run backend:stop
+        if: always()
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: browser-failures
-          path: apps/frontend/test-results/
+          path: apps/frontend/artifacts/
   backend:
     runs-on: ubuntu-latest
     steps:
@@ -28,7 +38,7 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
-      - run: npm ci
+      - run: npm ci --include=optional
       - run: npm run backend:start
       - run: npm run seed:local
       - run: npm run docs:check
@@ -36,8 +46,8 @@ jobs:
       - run: npm run start:api > /tmp/rafik-api.log 2>&1 &
       - run: curl --retry 10 --retry-connrefused --retry-delay 1 --fail http://127.0.0.1:55331/health
       - run: npm run content:media
-      - run: npm run content:exercise-dataset -- --check
-      - run: npm run content:wger-exercises -- --check
+      - run: npm run content:exercise-dataset:check
+      - run: npm run content:wger-exercises:check
       - run: npm run content:videos
       - run: npm run test:catalog
       - run: npm run backend:typecheck
@@ -52,7 +62,7 @@ jobs:
       - run: npm run test:organization-nutrition
       - run: npm run test:organization-assets
       - run: npm run test:organization-tasks
-      - run: npm run test:organization-packages
+      - run: npm run test:organization-injuries
       - run: npm run test:organization-feedback
       - run: npm run backend:stop
         if: always()

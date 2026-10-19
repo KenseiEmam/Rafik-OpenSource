@@ -2,6 +2,12 @@
 
 Use the smallest check that covers the changed behavior. Run commands from the repository root unless a step says otherwise. These checks establish local behavior only; they do not prove production readiness, legal compliance, physical-device behavior or human usability.
 
+## Documentation checks
+
+Run `npm run docs:check` from the repository root. It runs two isolated checker regression cases, then validates inline relative links and Markdown heading fragments in maintained root/app/docs/infrastructure guides. Fenced/inline code examples are excluded; external URLs are not fetched. Archives and raw receipts are excluded from the maintained-guide scan but linked local targets still must exist. Fixtures use and remove only their own temporary directory.
+
+A passing link check does not establish that commands work or that status claims are accurate. Compare setup commands with workspace scripts/Compose profiles, read current requirements against dated evidence, and preserve unperformed gates. The [release checklist](../operations/release-checklist.md) records the project-wide beta decision.
+
 ## Test layers and commands
 
 Native request/feedback changes use `npm run test:request --workspace @rafik/mobile`. These Node tests mock fetch and Expo secure storage to cover connection recovery, authorized-response observers, denial, malformed responses, URL boundaries and bilingual sign-in feedback. They do not render React Native or establish physical-device behavior. Keep the [physical-phone procedure](../operations/android-release.md#physical-phone-check-galaxy-s20-and-local-backend) separate from these checks.
@@ -40,5 +46,5 @@ For direct `test:e2e:running` diagnostics, first start the local API and web dev
 - Browser emulation does not prove physical phone behavior, native app behavior or assistive technology behavior on hardware.
 - Automated checks do not establish that a coach or athlete can complete a task without help. Use the [local coach walkthrough](coach-walkthrough.md) for a personal first pass; it is not a substitute for university review or external user observation.
 - Local Compose results do not establish remote CI, production alert delivery, or safe hosted upgrades/rollback.
-- The [feature verification map](feature-verification-map.md) describes workflow coverage and open evidence limits. Actual recent results are in [verification](../verification/README.md); machine-readable outputs are under [`../verification/receipts/`](../verification/receipts/).
+- Current workflow acceptance and its exact source/device limits are in [verification](../verification/README.md); machine-readable outputs stay under [`../verification/receipts/`](../verification/receipts/). The former R-phase feature map is preserved in the [archive](../archive/README.md).
 - Still needed outside automated local tests: physical phone and assistive-technology checks, university coach/athlete task observation, alert delivery, and a disposable production-profile upgrade/rollback rehearsal. See [known issues](../known-issues/README.md).

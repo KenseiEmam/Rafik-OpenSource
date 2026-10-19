@@ -4,6 +4,15 @@ This folder preserves superseded design, phase and verification records. Archive
 
 For current work, use [requirements](../requirements/README.md), [architecture](../architecture/README.md), [development](../development/README.md), [testing](../testing/README.md), [operations](../operations/README.md), [known issues](../known-issues/README.md) and [verification](../verification/README.md).
 
+## Cleanup on 19 October 2026
+
+- [Original role audit](role-scope-audit-2026-09-23.md): moved from active requirements because its September/R-phase findings are historical; current authorization rules remain in architecture and ADRs.
+- [Former feature verification map](feature-verification-map-through-2026-10-19.md): moved because it mixes earlier R-phase test mappings and superseded scope. Current commands are in testing; actual dated acceptance is in verification.
+- [Delivery snapshot](delivery-ledger-through-2026-10-19.md): preserves older progress messages and resolved build/emulator attempts while the active ledger lists current state and next actions.
+- [Verification snapshot](verification-through-2026-10-19.md): preserves earlier implementation-only/unverified claims. The active summary retains relevant current evidence and its limits, without making readers reconcile obsolete statuses.
+
+Setup, operations, API/content maintenance, current Stage 4/7 scope and consequential ADRs remain active because they guide development or safe maintenance. No raw receipts, rights records, code or user data were deleted.
+
 ## Archived groups
 
 - [R-phase contracts](implementation-phases/README.md): detailed specifications from the earlier revamp phases.

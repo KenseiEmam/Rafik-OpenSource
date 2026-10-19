@@ -1,6 +1,6 @@
 # API conventions
 
-The browser calls the Node API at `/v1`; root `src/lib/backend.ts` is the sole transport adapter. `database.types.ts` is generated from PostgreSQL signatures/row shapes by `npm run types`; domain JSON interfaces remain in feature modules. The API uses Prisma with the restricted PostgreSQL application role. Database constraints and explicit transaction functions remain authoritative.
+The browser calls the Node API at `/v1`; `apps/frontend/src/lib/backend.ts` is the sole transport adapter. `packages/shared/src/database.types.ts` is generated from the backend schema by root `npm run backend:types`; domain JSON interfaces remain in feature modules. The API uses Prisma with the restricted PostgreSQL application role. Database constraints and explicit transaction functions remain authoritative.
 
 ## OpenAPI / Swagger export
 
@@ -45,7 +45,7 @@ Mutation requests require `X-Rafik-Client: web` and an allowed origin. SQL actor
 
 Commands return JSON scalar/row or an array for a set-returning function. Errors are `{message: <stable code>}` with HTTP status: invalid values 400, unauthenticated 401, forbidden 403, unavailable 404, conflicting write 409, rate limit 429, unexpected service failure 500. Never expose SQL or credentials in responses.
 
-Compare-and-swap writes use the acknowledged revision. Stable-ID commands persist exact ID/payload before sending. Network errors and 5xx outcomes are ambiguous and preserve that command for replay. Confirmed 400/403/409/422 rejection unlocks correction. A different payload with the same receipt ID is rejected. The friendly bilingual mapping is `src/lib/i18n.ts`; do not replace contextual errors with generic success.
+Compare-and-swap writes use the acknowledged revision. Stable-ID commands persist exact ID/payload before sending. Network errors and 5xx outcomes are ambiguous and preserve that command for replay. Confirmed 400/403/409/422 rejection unlocks correction. A different payload with the same receipt ID is rejected. The friendly bilingual mapping is `apps/frontend/src/lib/i18n.ts`; do not replace contextual errors with generic success.
 
 Publications and started sessions are immutable server-selected snapshots. Preserve prior device records and history when adding optional JSON fields. Review validator, receipt, queue, editor, review/progress, export and copying together.
 

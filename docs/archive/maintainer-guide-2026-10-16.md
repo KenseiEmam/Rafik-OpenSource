@@ -14,7 +14,7 @@ Keep tracked SVG, JSON and SQL files at LF as defined in the root `.gitattribute
 
 Session-package accounting has been retired for the university product. Do not restore package routes, funding controls, renewal metrics, allowance columns or no-show deductions. Calendar scheduling, attendance, check-ins, notes and makeup scheduling remain independent of commercial balances. Apply migration `202610161400_remove_legacy_session_packages` forward and regenerate Prisma/database types when updating an installation.
 
-The implementation record now includes the in-progress R22 Stage 4 injury-status slice. Read the [ledger](../development/ledger.md), [architecture](system-architecture-2026-10-16.md), [runbook](../operations/README.md), [role audit](../requirements/role-scope-audit.md), and [Stage 4 audit](../requirements/stage4-workflow-audit.md). Existing gym/organization features remain available locally; Stage 4 and production hosting are not accepted as complete.
+The implementation record now includes the in-progress R22 Stage 4 injury-status slice. Read the [ledger](../development/ledger.md), [architecture](system-architecture-2026-10-16.md), [runbook](../operations/README.md), [role audit](role-scope-audit-2026-09-23.md), and [Stage 4 audit](../requirements/stage4-workflow-audit.md). Existing gym/organization features remain available locally; Stage 4 and production hosting are not accepted as complete.
 
 ## Runtime responsibilities
 

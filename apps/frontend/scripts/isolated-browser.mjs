@@ -38,7 +38,8 @@ const env = {
   VITE_LOCAL_PREVIEW: 'true',
 }
 const children = []
-let created = false
+let created = false,
+  passed = false
 const testArgs = process.argv.slice(2),
   emptyDatabase = testArgs.includes('--empty-database')
 const sql = (db, input) =>
@@ -129,6 +130,7 @@ try {
     'test',
     ...testArgs.filter((arg) => arg !== '--empty-database'),
   ])
+  passed = true
 } catch (error) {
   try {
     console.error('Isolated API log (last 6000 characters):')
@@ -147,6 +149,8 @@ try {
   }
   if (created) sql('rafik', `DROP DATABASE ${database} WITH (FORCE);`)
   rmSync(resolve(api, files), { recursive: true, force: true })
-  rmSync(out, { recursive: true, force: true })
+  // CI uploads failed-run diagnostics from its disposable runner. Local runs
+  // still remove their own output, and services/data are cleaned in both cases.
+  if (!process.env.CI || passed) rmSync(out, { recursive: true, force: true })
   console.log('Isolated browser cleanup complete.')
 }

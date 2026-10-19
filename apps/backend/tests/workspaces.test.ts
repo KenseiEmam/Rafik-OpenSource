@@ -184,7 +184,7 @@ test("organization ownership, single-role contexts, cross-scope denial and stabl
     400,
   );
 });
-test("verified invitation acceptance, last admin protection and revocation before receipt replay", async () => {
+test("token-scoped invitation preview, intended-account acceptance, last admin protection and revocation before receipt replay", async () => {
   const a = await person(),
     b = await person(),
     outsider = await person(),
@@ -199,7 +199,13 @@ test("verified invitation acceptance, last admin protection and revocation befor
   assert.equal((await call(a, "/v1/workspaces/" + id, invite)).status, 200);
   const preview = await call(outsider, "/v1/organization-invitations/" + token);
   assert.equal(preview.status, 200);
-  assert.equal("email" in preview.data, false);
+  // Possession of the unguessable link pre-fills signup; accepting it still
+  // requires the intended account. Email verification is not a product rule.
+  assert.equal(preview.data.email, b.email);
+  assert.equal(
+    (await call(outsider, "/v1/organization-invitations/" + randomBytes(32).toString("hex"))).status,
+    404,
+  );
   assert.equal(
     (await call(outsider, "/v1/organization-invitations/" + token, {})).status,
     403,

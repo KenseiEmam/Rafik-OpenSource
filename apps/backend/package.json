@@ -21,7 +21,7 @@
     "test:services": "node scripts/verify-services.mjs",
     "support:local": "node scripts/support-local.mjs",
     "test:teams": "node scripts/verify-teams.mjs",
-    "test:docs": "node scripts/check-docs.mjs",
+    "test:docs": "node --test --test-isolation=none scripts/check-docs.test.mjs && node scripts/check-docs.mjs",
     "verify:release": "node scripts/verify-release.mjs",
     "test:release": "node --test scripts/release-guard.test.mjs",
     "dev:api": "tsx watch server/index.ts",

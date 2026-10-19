@@ -574,7 +574,7 @@ td:first-child {
   max-width: 56ch;
   margin: 16px 0;
   padding: 0;
-  color: var(--text-muted);
+  color: var(--muted);
   text-align: start;
 }
 .preserve-lines {

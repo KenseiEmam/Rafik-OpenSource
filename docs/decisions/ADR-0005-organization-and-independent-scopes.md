@@ -4,7 +4,7 @@ Status: Retained as the historical data/API scope boundary. The standalone web e
 
 ## Context
 
-The founder explicitly requires organizations to have their own trainers, trainees and administrators, separate from ordinary coaches/trainees. The [original-role audit](../requirements/role-scope-audit.md) confirms these distinct roles and operations. R4's teams are a collaboration overlay on independent coach/client relationships and do not satisfy the requirement. ADR 0004 selects Prisma/PostgreSQL but originally delayed the transition until R11.
+The founder explicitly requires organizations to have their own trainers, trainees and administrators, separate from ordinary coaches/trainees. The [original-role audit](../archive/role-scope-audit-2026-09-23.md) confirms these distinct roles and operations. R4's teams are a collaboration overlay on independent coach/client relationships and do not satisfy the requirement. ADR 0004 selects Prisma/PostgreSQL but originally delayed the transition until R11.
 
 ## Decision
 
@@ -44,4 +44,4 @@ This adds a necessary ownership boundary and role-specific views, while avoiding
 
 Separate coach, organization trainer and organization admin analytics follow the corrected model. Platform operations receive their own capability/surface. Public marketplace publication, trainer self-allocation and optional org approval policies remain distinct product decisions; do not infer them from ineffective legacy switches.
 
-Acceptance is specified in the [role audit](../requirements/role-scope-audit.md): two organizations, independent users, one role per institutional membership, staff departure, cross-scope denied operations, immutable history, scoped analytics and rendered user journeys. Local passing tests do not establish hosting readiness or human usability.
+Acceptance is specified in the [role audit](../archive/role-scope-audit-2026-09-23.md): two organizations, independent users, one role per institutional membership, staff departure, cross-scope denied operations, immutable history, scoped analytics and rendered user journeys. Local passing tests do not establish hosting readiness or human usability.

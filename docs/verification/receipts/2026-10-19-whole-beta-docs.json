@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-19",
+  "scope": "whole-product beta documentation and build-command review",
+  "web_build": {
+    "command": "npm run build",
+    "result": "passed",
+    "web_source_revision": "4e4ffd3fdac18daf51d2e473d6d436f2ee52f285",
+    "modules": 3963,
+    "vite_seconds": 9.85,
+    "warning": "Future Vite native config loader expects import attributes on exercise-media JSON import; current build passes"
+  },
+  "docs": {
+    "command": "npm run docs:check",
+    "regression_cases_passed": 2,
+    "maintained_documents": 53,
+    "coverage": [
+      "root and app guides",
+      "docs excluding historical archive/raw receipts",
+      "infrastructure and provider guides",
+      "relative file targets",
+      "Markdown heading/explicit anchor fragments"
+    ],
+    "external_urls_fetched_by_checker": false,
+    "fixture_cleanup": true,
+    "local_links": 313,
+    "heading_fragments": 14,
+    "documents_before_cleanup": 55
+  },
+  "static_review": {
+    "root_readme_commands_resolve_in_declared_workspaces": true,
+    "openapi": "3.1.0",
+    "contract_info_version": "0.1.0",
+    "supported_paths": 6,
+    "compose_definitions": 1,
+    "stage_status_and_profile_descriptions_corrected": true,
+    "quickstart_defaults_to_empty_setup": true
+  },
+  "decision": "Suitable for technically supported self-hosted evaluation with synthetic data; publication/source alignment and per-installation live-data gates are separate.",
+  "remaining": [
+    "merge reviewed fixes/docs and align release source/artifacts",
+    "updated Android physical install/offline/recovery",
+    "recent web browse-list and multiple-attachment rendered acceptance",
+    "first institutional sport/usability/privacy feedback",
+    "Unix update/rollback, branding restore and live alert delivery"
+  ],
+  "distribution": "GitHub Releases canonical; landing links versioned actual assets and identifies source archives separately",
+  "runtime_or_database_changes": false,
+  "cleanup": {
+    "active_files_archived": [
+      "docs/requirements/role-scope-audit.md",
+      "docs/testing/feature-verification-map.md"
+    ],
+    "snapshots": [
+      "docs/archive/delivery-ledger-through-2026-10-19.md",
+      "docs/archive/verification-through-2026-10-19.md"
+    ],
+    "ledger_lines": 32,
+    "verification_lines": 58,
+    "incoming_links_updated": true,
+    "raw_receipts_and_rights_records_preserved": true,
+    "reason": "Historical R-phase mappings and resolved status notes compete with maintained guidance; retain evidence in archive and keep current development/maintenance manuals active."
+  },
+  "owner_confirmation": {
+    "signing_backup": "Complete per founder: 7-Zip copies on PC and cloud, 19 October 2026",
+    "independent_archive_or_restore_check": false
+  },
+  "landing": {
+    "pull_request": "https://github.com/KenseiEmam/rafik-landing/pull/8",
+    "paired_guides_updated": 7,
+    "checks": "frontmatter, translation keys, local guide targets; no landing runtime build"
+  }
+}

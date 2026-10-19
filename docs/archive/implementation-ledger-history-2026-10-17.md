@@ -262,7 +262,7 @@ The earlier decision to treat the broad product inventory as merely optional was
 
 The [forward roadmap](./forward-roadmap-after-r6.md) now sequences **R7 checkpoint → R7A → R8 → R9 → R10 → R11 → R12**. R7 is implemented locally below; R7A1 transport is implemented; R7A2 membership and R8 programming/history are implemented locally; R9–R12 remain in progress.
 
-1. The [original-role audit](../requirements/role-scope-audit.md) traced six roles through original web/mobile, captured deployed schema/functions and worker. The founder is correct: R4 teams do not represent organizations with their own admins, trainers and trainees. The scope correction is architectural and behavioral, not a naming or RLS patch.
+1. The [original-role audit](role-scope-audit-2026-09-23.md) traced six roles through original web/mobile, captured deployed schema/functions and worker. The founder is correct: R4 teams do not represent organizations with their own admins, trainers and trainees. The scope correction is architectural and behavioral, not a naming or RLS patch.
 2. Next implement **R7A organization/identity ownership and the Prisma/PostgreSQL API transition** under [ADR 0005](../decisions/ADR-0005-organization-and-independent-scopes.md). This moves the backend transition ahead of R8. Preserve R7's useful daily-flow work while replacing the universal role selector and personal-team ownership assumptions.
 3. R8 programming/catalog/delivery then uses explicit business contexts; R9 delivers coach services, organizational calendar/assessor-led assessments and distinct real coach/admin analytics; R10 scoped notifications; R11 operational/release and platform-admin readiness; R12 available human review/refinement. Native remains last.
 4. Unshipped R8 personal-only delivery/helper/test drafts were set aside outside the repositories at `/tmp/rafik-r8-before-role-audit` for reference. Migration 011 was never applied and is no longer in the runnable migrations directory. These drafts are not a product dependency or accepted phase.
@@ -325,7 +325,7 @@ Detailed source/operation contracts are in `architecture.md`, local/deployment i
 
 Evidence is composed from the final full browser/check run plus a corrected team-layout harness rerun and a SQL log-draining rerun; see the release summary for exact provenance.
 
-See [verification](../verification/README.md), [feature coverage](../testing/feature-verification-map.md) and [R6 contract](./implementation-phases/r6-contract.md) for scope, concrete results and remaining boundaries. This is local implementation evidence, not hosted, physical-device or business success certification.
+See [verification](../verification/README.md), [feature coverage](feature-verification-map-through-2026-10-19.md) and [R6 contract](./implementation-phases/r6-contract.md) for scope, concrete results and remaining boundaries. This is local implementation evidence, not hosted, physical-device or business success certification.
 
 ## R7 — Daily workspace checkpoint and organizational scope audit
 

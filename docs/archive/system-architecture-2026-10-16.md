@@ -18,7 +18,7 @@ Session packages, allowance accounting, package renewals and no-show session ded
 
 R7A1 replaces the transitional backend with **one Node/TypeScript API, Prisma and PostgreSQL**. The Vue application retains its accepted interaction design and durable IndexedDB queue. [ADR 0006](../decisions/ADR-0006-prisma-api-transition.md) records the transition; [API conventions](../reference/api.md) and the [maintainer guide](../development/maintainer-guide.md) specify its boundaries.
 
-**Organizational correction:** [ADR 0005](../decisions/ADR-0005-organization-and-independent-scopes.md) defines the separate independent/organization scopes partly implemented in R7A2 membership/context/responsibility; organization-owned programming/history is implemented in R8; services/calendar/assessor-led results and analytics are implemented in R9. The R4 team overlay remains an independent-coach collaboration feature, not the required organization model. Read the [role audit](../requirements/role-scope-audit.md) before changing ownership.
+**Organizational correction:** [ADR 0005](../decisions/ADR-0005-organization-and-independent-scopes.md) defines the separate independent/organization scopes partly implemented in R7A2 membership/context/responsibility; organization-owned programming/history is implemented in R8; services/calendar/assessor-led results and analytics are implemented in R9. The R4 team overlay remains an independent-coach collaboration feature, not the required organization model. Read the [role audit](role-scope-audit-2026-09-23.md) before changing ownership.
 
 ## Dashboard presentation
 
