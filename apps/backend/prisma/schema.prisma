@@ -941,6 +941,7 @@ model workspace_members {
   organization_events                                                                                 organization_events[]
   organization_exercises                                                                              organization_exercises[]
   organization_group_members                                                                          organization_group_members[]
+  organization_member_sports                                                                          organization_member_sports[]
   organization_injury_permissions                                                                     organization_injury_permissions?
   organization_injury_records                                                                         organization_injury_records[]
   organization_groups                                                                                 organization_groups[]
@@ -1002,6 +1003,7 @@ model workspaces {
   organization_exercises         organization_exercises[]
   organization_group_members     organization_group_members[]
   organization_groups            organization_groups[]
+  organization_sports            organization_sports[]
   organization_meals             organization_meals[]
   organization_nutrition_plans   organization_nutrition_plans[]
   organization_nutrition_sharing organization_nutrition_sharing[]
@@ -1286,6 +1288,38 @@ model organization_groups {
   workspaces                 workspaces                   @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([workspace_id, id])
+  @@schema("public")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// The case-insensitive unique name index organization_sports_name is defined in SQL.
+model organization_sports {
+  id                         String                       @id @db.Uuid
+  workspace_id               String                       @db.Uuid
+  name                       String
+  kind                       String
+  archived                   Boolean                      @default(false)
+  revision                   Int                          @default(1)
+  created_by                 String                       @db.Uuid
+  created_at                 DateTime                     @default(now()) @db.Timestamptz(6)
+  organization_member_sports organization_member_sports[]
+  workspaces                 workspaces                   @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([workspace_id, id])
+  @@schema("public")
+}
+
+model organization_member_sports {
+  workspace_id        String              @db.Uuid
+  member_id           String              @db.Uuid
+  sport_id            String              @db.Uuid
+  created_by          String              @db.Uuid
+  created_at          DateTime            @default(now()) @db.Timestamptz(6)
+  workspace_members   workspace_members   @relation(fields: [workspace_id, member_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
+  organization_sports organization_sports @relation(fields: [workspace_id, sport_id], references: [workspace_id, id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([member_id, sport_id])
+  @@index([workspace_id, sport_id], map: "organization_member_sports_sport")
   @@schema("public")
 }
 

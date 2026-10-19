@@ -61,6 +61,16 @@ Training schedules use client-local calendar dates. Appointments use UTC instant
 - `POST /v1/workspaces/:id`: `invite`, `revoke-invite`, `member`, `assign-trainer`, `rename`, `close`; operation UUID, revision where applicable, current admin authority checked before receipt replay.
 - `GET /v1/organization-invitations/:token`: invitation preview including the intended account email, granted role and expiry. The email is an account identifier; it is not verified. Unauthenticated account creation uses `POST /v1/auth/accept-invitation`; a signed-in matching account uses `POST` on the invitation route.
 
+### Sports and coaching specialties (Release 1a)
+
+- `GET /v1/workspaces/:id/sports?view=admin|trainer`: the institution's sports and coaching specialties (`id`, `name`, `kind` = `sport` | `specialty`, `archived`, `revision`), sports first. Athletes are refused.
+- `POST /v1/workspaces/:id/sports`, administrator only, with an operation UUID:
+  - `sport` creates or updates `{ id, name, kind, archived, revision }`. Revision is `0` for a new entry. Names are 1–80 characters and unique per institution regardless of case. `kind` cannot change after creation. An institution can have at most 200 entries.
+  - `member-sports` sets `{ member, sports, previous }` for an active athlete or coach. `previous` must equal the current set, or the request returns `409`. Athletes accept sports only. Archived entries cannot be newly added, but existing links stay.
+- `GET /v1/workspaces/:id/people` returns each member's `sports` IDs and accepts an optional `sport` filter, applied inside the caller's existing People scope.
+
+These labels describe people. They do not grant access in Release 1a.
+
 See [ADR 0005](../decisions/ADR-0005-organization-and-independent-scopes.md). These Prisma-internal tables have no generic browser row grants. Closure preserves records while removing access; an exact closure retry confirms the old result.
 
 ## Scoped programming

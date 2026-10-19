@@ -53,6 +53,7 @@
     "test:organization-assets": "npm run test:organization-assets --workspace @rafik/backend",
     "test:organization-tasks": "npm run test:organization-tasks --workspace @rafik/backend",
     "test:organization-feedback": "npm run test:organization-feedback --workspace @rafik/backend",
+    "test:organization-sports": "npm run test:organization-sports --workspace @rafik/backend",
     "test:organization-injuries": "npm run test:organization-injuries --workspace @rafik/backend",
     "notifications:local": "npm run notifications:local --workspace @rafik/backend",
     "recovery:local": "npm run recovery:local --workspace @rafik/backend",

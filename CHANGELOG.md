@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Release 1a:
+  - Administrators define institution sports and coaching specialties in Institution settings, and link athletes to sports and coaches to sports or specialties from People.
+  - People shows sport chips and filters by sport or specialty within each role's existing scope. These labels grant no access.
+  - Adds forward migration `202610191200_sports_and_specialties`.
+  - Fixes light-theme muted contrast and word-splitting in phone People cards.
+  - Records the confirmed Release 1 founder decisions.
+
 - R0 beta.1 close-out:
   - Fixed the post-workout **Rate your session** link, which went to a missing `/institution/…` route.
   - Raised dark-theme muted text to 4.5:1 or better on soft surfaces.

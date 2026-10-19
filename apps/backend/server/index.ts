@@ -15,6 +15,10 @@ import {
   organizationRecipients,
   independentRecipients,
 } from "./people.ts";
+import {
+  organizationSports,
+  organizationSportsCommand,
+} from "./organization-sports.ts";
 import { platformRead, platformCommand } from "./platform.ts";
 import {
   notificationPreferences,
@@ -625,6 +629,19 @@ const server = createServer(async (req, res) => {
         send(res, 200, await injuries(who, id, url.searchParams));
       else if (req.method === "POST")
         send(res, 200, await injuryCommand(who, id, input));
+      else throw new ApiError(405, "method_not_allowed");
+      return;
+    }
+    const sportsMatch = path.match(
+      /^\/v1\/workspaces\/([a-f0-9-]{36})\/sports$/,
+    );
+    if (sportsMatch) {
+      const who = requireActor(actor),
+        id = sportsMatch[1];
+      if (req.method === "GET")
+        send(res, 200, await organizationSports(who, id, url.searchParams));
+      else if (req.method === "POST")
+        send(res, 200, await organizationSportsCommand(who, id, input));
       else throw new ApiError(405, "method_not_allowed");
       return;
     }

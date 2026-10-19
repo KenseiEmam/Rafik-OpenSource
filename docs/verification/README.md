@@ -1,5 +1,36 @@
 # Verification record
 
+## Release 1a: sports and coaching specialties — 19 October 2026
+
+**Passed against disposable databases:** each run migrated a new `rafik_browser_*` database, started its own API and dropped the database afterward. The preview database was not migrated or changed.
+
+- **`test:organization-sports`, 2 tests:**
+  - Admin-only writes; athletes cannot read the list; trainers can read it.
+  - Exact receipt replay, case-insensitive duplicate rejection, fixed kind, stale revision, and an event per change.
+  - Athletes refuse specialties; administrators cannot be linked; another institution's sport is rejected.
+  - A stale `previous` set is a conflict; archived entries cannot be newly added but existing links stay.
+  - The People sport filter applies inside the coach's assigned scope.
+- **`test:organizations`:** 5 existing tests pass.
+- **Shared database types** were regenerated from a migrated disposable database; only the two new tables were added.
+
+**Browser (`organization-sports.e2e.ts`, isolated wrapper, Chromium desktop and WebKit phone):**
+
+- An admin adds, renames, archives and restores sports and specialties, including a long Arabic name.
+- An athlete's picker offers sports only; a coach can take specialties.
+- Sport chips appear and the People filter works, and a coach's filtered list contains only their assigned athlete.
+- Layout and axe checks ran, and screenshots were inspected, in English dark and light (desktop and phone) and Arabic dark at 320 px.
+
+**Defects found and fixed during these checks:**
+
+- Light `--muted` measured 4.39:1 on the soft surface in WebKit; it is darkened from `#545d56` to `#4d564f`. After this shared token change, the three R0 browser journeys were rerun in both engines and all six runs passed.
+- At 320 px, People cards split Arabic link words letter by letter; actions now wrap below the identity.
+
+**Limits:**
+
+- Sports grant no access yet.
+- Browser emulation is not physical-device evidence.
+- Recorded stale browser specs remain unchanged.
+
 ## R0 beta.1 close-out — 19 October 2026
 
 **Passed:** three focused browser tests in Chromium desktop and WebKit phone (iPhone 13 emulation), all six runs on the final source, through the isolated browser wrapper. A production web build also passed, with the known P3 Vite config warning. It used its own database, API and web ports and removed them afterward.

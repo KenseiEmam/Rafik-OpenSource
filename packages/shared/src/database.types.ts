@@ -444,6 +444,13 @@ export type Database = { public: { Tables: {
         created_at: string
         updated_at: string
     } }
+    organization_member_sports: { Row: {
+        workspace_id: string
+        member_id: string
+        sport_id: string
+        created_by: string
+        created_at: string
+    } }
     organization_message_assets: { Row: {
         message_id: string
         workspace_id: string
@@ -514,6 +521,16 @@ export type Database = { public: { Tables: {
         version: number
         started_at: string
         completed_at: string | null
+    } }
+    organization_sports: { Row: {
+        id: string
+        workspace_id: string
+        name: string
+        kind: string
+        archived: boolean
+        revision: number
+        created_by: string
+        created_at: string
     } }
     organization_tasks: { Row: {
         id: string

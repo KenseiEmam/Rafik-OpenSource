@@ -1,6 +1,15 @@
 # Post-beta.1 release plan
 
-**Status:** proposed, 19 October 2026. This is a planning document, not an implementation record. Nothing here is implemented. Items marked **⚑** are provisional defaults that need founder confirmation before the slice that depends on them starts. Releases are implemented one approved slice at a time, each on its own `codex/` branch and pull request.
+**Status:** Release 1 in progress, 19 October 2026. R0 is done and slice 1a is implemented (see [verification](../verification/README.md#release-1a-sports-and-coaching-specialties--19-october-2026)). Other slices are not implemented. Items marked **⚑** were provisional defaults; the [confirmed decisions](#confirmed-release-1-decisions) replace them for Release 1. Releases are implemented one slice at a time, each on its own `codex/` branch and pull request.
+
+## Confirmed Release 1 decisions
+
+The founder confirmed these on 19 October 2026:
+
+- **Coach model:** one primary coach, plus supporting coaches scoped to a sport or specialty.
+- **Participation status:** visible to the primary coach only; supporting coaches do not see it. No ADR 0017 change.
+- **Concurrent plans:** several active plans are allowed. Same-day sessions from different plans show a warning and are not blocked.
+- **Shared nutrition actuals:** current behavior is kept. Admins and the primary coach can read actuals the athlete has chosen to share.
 
 The audit below was taken from `main` at `8ae1fbf` (Squire `1.0.0-beta.1` plus CI repairs). File references point to that revision.
 
@@ -90,6 +99,13 @@ See [verification](../verification/README.md#r0-beta1-close-out--19-october-2026
 
 ### 1a Sports and coaching specialties
 
+**Implemented, 19 October 2026.** Two choices simplified the data model below:
+
+- **One table for both:** sports and general coaching specialties share `organization_sports`, with a `kind` of `sport` or `specialty`.
+- **One link table:** `organization_member_sports` links athletes to sports, and coaches to sports or specialties. It keeps no start or end dates; changes are recorded as `member_sports_changed` institution events.
+
+Only administrators manage sports and links, and the links grant no access.
+
 - **Outcomes:**
   - Admins define the institution's sports and assign athletes to them.
   - Admins record each coach's specialties: a sport, or a general specialty such as strength and conditioning.
@@ -173,8 +189,8 @@ See [verification](../verification/README.md#r0-beta1-close-out--19-october-2026
 | Plans and session history                    | Yes                                                         | Yes                     | Plans within their sport | No                  |
 | Attendance and assessments                   | Yes                                                         | Yes                     | Within their sport       | Events they staffed |
 | Nutrition plan                               | Yes                                                         | Yes                     | No                       | No                  |
-| Nutrition actuals                            | ⚑ only if shared (current behavior; confirm)                | Only if shared          | No                       | No                  |
-| Participation status                         | Consent setup only                                          | Current status and date | No (⚑)                   | No                  |
+| Nutrition actuals                            | Only if shared (confirmed: current behavior)                | Only if shared          | No                       | No                  |
+| Participation status                         | Consent setup only                                          | Current status and date | No (confirmed)           | No                  |
 | Messages                                     | Link to the viewer's own conversation; never other people's | Same                    | Same                     | Same                |
 
 - **Acceptance:**

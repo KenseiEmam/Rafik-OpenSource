@@ -14,6 +14,12 @@
 
 ## Recent work
 
+- **19 October — Release 1 decisions and slice 1a:**
+  - Founder decisions: a primary coach plus supporting coaches scoped to a sport; participation status for the primary coach only; concurrent plans allowed with a same-day warning; admins keep reading shared nutrition actuals.
+  - Implemented institution sports and coaching specialties: a forward migration, an admin-only API with receipts, People sport chips and filter, and Institution settings management.
+  - Backend and browser checks pass against disposable databases. They found, and this change fixed, light muted-text contrast and People card word-splitting.
+  - Next: slice 1b, the coaching team and authority.
+
 - **19 October — R0 beta.1 close-out (web):**
   - Reproduced the broken post-workout feedback link in Chromium and fixed it.
   - Confirmed the dormant assignment behavior (H1) by code trace.
@@ -38,7 +44,7 @@
 
 ## Next actions
 
-1. Review the R0 pull request, then the [post-beta.1 release plan](../requirements/release-plan-post-beta1.md). Confirm or change its provisional defaults (coach model, concurrent plans, field warnings, communications, player notes, ratings, admin access to shared nutrition actuals) before slice 1a. R0's web work is done; Release 1 has not started.
+1. Review the slice 1a pull request, then continue Release 1 with slice 1b (coaching team and authority). Release 1's [decisions are confirmed](../requirements/release-plan-post-beta1.md#confirmed-release-1-decisions). Release 2 and Release 3 decisions (communications, player notes, field warnings) and coach ratings remain open.
 2. Runtime PR #126, documentation PR #127 and CI-repair PR #128 are merged, as are landing PRs #8–#10. Align the selected release source/tag with actual published assets; use GitHub as the download host.
 3. Complete the founder’s updated S20+ install/offline/recovery walkthrough before distributing the Android candidate as accepted. Signing-key backup is founder-confirmed complete.
 4. Collect the recorded first-user, recent web refinement, privacy and Unix operational evidence from [known issues](../known-issues/README.md) as the relevant institution is evaluated. These are not invented completed checks or a request to redo accepted implementation stages.

@@ -19,6 +19,7 @@ export async function peoplePage(
   const offset = pageOffset(q.get("offset")),
     search = (q.get("search") || "").slice(0, 100),
     kind = q.get("role"),
+    sport = q.get("sport") ? uuid(q.get("sport")) : null,
     includeSelf = q.get("self") === "true";
   if (kind && !["admin", "trainer", "trainee"].includes(kind))
     throw new ApiError(400, "invalid_roles");
@@ -44,6 +45,9 @@ export async function peoplePage(
           ? {}
           : { active: q.get("state") !== "inactive" }),
         ...(kind ? { roles: { has: kind } } : {}),
+        ...(sport
+          ? { organization_member_sports: { some: { sport_id: sport } } }
+          : {}),
         name: { contains: search, mode: "insensitive" as const },
       },
     ],
@@ -59,6 +63,10 @@ export async function peoplePage(
     active: true,
     revision: true,
     trainer_id: true,
+    organization_member_sports: {
+      select: { sport_id: true },
+      orderBy: { sport_id: "asc" as const },
+    },
   };
   const [items, total, chosen] = await Promise.all([
     tx.workspace_members.findMany({
@@ -91,9 +99,14 @@ export async function peoplePage(
     },
     select: { id: true, name: true },
   });
+  const withSports = (list: typeof items) =>
+    list.map(({ organization_member_sports, ...m }) => ({
+      ...m,
+      sports: organization_member_sports.map((x) => x.sport_id),
+    }));
   return {
-    items,
-    selected: chosen,
+    items: withSports(items),
+    selected: withSports(chosen),
     names,
     total,
     next: offset + 25 < total ? offset + 25 : null,
