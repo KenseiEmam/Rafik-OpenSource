@@ -14,6 +14,8 @@ Android Metro startup must explicitly target the installed native build: the mob
 
 Documentation checks are maintained in `apps/backend/scripts/check-docs.mjs` with `documentation-links.mjs` and two fixture-based regression cases. Root `npm run docs:check` includes infrastructure guides and relative heading links. Keep the [release checklist](../operations/release-checklist.md) as the beta decision/operator checklist, requirements as scope and verification as dated evidence. Do not treat unchecked per-installation items as missing implementations, or a founder-accepted backlog item as a passed technical test.
 
+Beta.2 preparation follows merged PR #135. Keep application/shared versions and the root lockfile aligned, use Android versionCode `1000002` with the existing signing key, and build only from the clean final approved release commit. Follow the [beta.2 upgrade and publication checklist](../operations/README.md#beta2-upgrade-and-release-preparation). Track the application and landing PRs in the [Rafik project](https://github.com/users/KenseiEmam/projects/3); do not mark publication complete from a green feature PR alone.
+
 ## Read these first
 
 - [Requirements and stage gates](../requirements/README.md) define approved product direction and what is not accepted yet.

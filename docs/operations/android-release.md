@@ -161,7 +161,7 @@ References: [Android hardware-device setup](https://developer.android.com/studio
 
 ## Upgrade without losing saved work
 
-Keep `org.rafik.field`, the same release signing key, the device database name and SecureStore identifiers. Every distributed update must increase `android.versionCode` in `apps/mobile/app.json`; the current candidate uses `1000001`. Update the app/package versions, root lockfile, changelog and English/Arabic landing guidance together. The backend OpenAPI document's `info.version` identifies the API contract independently of the product release.
+Keep `org.rafik.field`, the same release signing key, the device database name and SecureStore identifiers. Every distributed update must increase `android.versionCode` in `apps/mobile/app.json`; the beta.2 preparation uses `1000002` (published beta.1 uses `1000001`). Update the app/package versions, root lockfile, changelog and English/Arabic landing guidance together. The backend OpenAPI document's `info.version` identifies the API contract independently of the product release.
 
 Install the newer signed APK over the old one using Android's update prompt, or `adb install -r <new.apk>` on the separate test device. Never uninstall, clear app data or regenerate the signing key as an upgrade workaround. Test an unsent synthetic command/draft through the actual update, then reconnect and verify acknowledgment. Reinstalling identical bytes with `-r` is only a reinstall check; it does not prove migration to a newer version. Downgrades are not a supported recovery method. Server backups do not include device queues.
 

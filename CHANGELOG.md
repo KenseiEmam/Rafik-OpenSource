@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## Squire 1.0.0-beta.2 — release preparation
+
+Sports and coaching foundation, merged in PR #135. Publication date, tag and Android artifacts are pending; beta.1 remains the published release. Workspace versions are `1.0.0-beta.2`; Android versionCode is `1000002`. See [upgrade and publication guidance](docs/operations/README.md#beta2-upgrade-and-release-preparation).
+
 - Release 1 review fixes:
   - Overlap warnings show other plans' title, goal and dates only, as a documented supporting-coach exception.
   - Coach-recorded timed and distance sets require actual seconds or metres, using the athlete logger's shared measurement rules.

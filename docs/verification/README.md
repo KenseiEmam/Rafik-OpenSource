@@ -1,5 +1,9 @@
 # Verification record
 
+## Beta.2 release preparation — 20 October 2026
+
+The founder reports PR #135 checks/tests passed, reviewed its fixes and merged it. The preparation branch starts from merge `949b6eb22f5d1b6f2dada57d755cef9b29870c78`. Main-branch CI run `39486013488` passed on that merge. Feature-PR results do not substitute for final release-commit CI. This change updates metadata and documentation only; no browser/native suites were repeated. `npm run docs:check` passed: 2 checker fixtures, 365 local links and 40 heading links across 55 maintained documents. Beta.2 packaging, actual beta.1-to-beta.2 Android upgrade preservation and published-byte checks have not been performed. Beta.1 acceptance remains complete.
+
 ## Release 1 review fixes (PR #135) — 20 October 2026
 
 **Changes:** the three review points.

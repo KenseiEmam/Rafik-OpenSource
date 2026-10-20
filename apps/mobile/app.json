@@ -2,7 +2,7 @@
   "expo": {
     "name": "Rafik Field",
     "slug": "rafik-field",
-    "version": "1.0.0-beta.1",
+    "version": "1.0.0-beta.2",
     "orientation": "default",
     "scheme": "rafik",
     "userInterfaceStyle": "automatic",
@@ -11,7 +11,7 @@
       "allowBackup": false,
       "softwareKeyboardLayoutMode": "resize",
       "predictiveBackGestureEnabled": false,
-      "versionCode": 1000001
+      "versionCode": 1000002
     },
     "plugins": [
       "expo-router",

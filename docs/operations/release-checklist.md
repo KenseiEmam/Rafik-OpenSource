@@ -4,6 +4,8 @@
 
 Use the remaining unchecked deployment items for each installation or future release; they do not reverse the accepted beta.1 decision.
 
+**Next release:** sports/coaching PR #135 is merged and founder-accepted. Squire `1.0.0-beta.2` is in preparation, not published. Follow the [beta.2 upgrade and publication checklist](README.md#beta2-upgrade-and-release-preparation); keep its build/upgrade evidence separate from accepted beta.1.
+
 ## Project beta readiness: 19 October 2026
 
 **Decision: suitable for a technically supported, self-hosted evaluation beta using synthetic data.** The web/API foundation has accepted Stage 2–5 implementation evidence and a fresh production web build. The Android beta has accepted founder-reported physical-phone evidence. This evaluation release does not establish every device combination or approve a live institution deployment. The founder accepted first-user/non-code gates into the backlog, and optional cloud validation does not block outreach.

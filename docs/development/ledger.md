@@ -14,6 +14,8 @@
 
 ## Recent work
 
+- **20 October — beta.2 release preparation:** the founder accepted and merged sports/coaching PR #135 including its review fixes. Prepared coordinated workspace/lockfile version `1.0.0-beta.2`, Android versionCode `1000002`, release notes and forward-migration/rollback guidance on `codex/beta2-release`. Beta.1 and its accepted APK remain unchanged. Publication, final-commit CI, a clean-source signed beta.2 package and its upgrade evidence remain separate from preparation. Paired English/Arabic landing release guidance and the [GitHub Project](https://github.com/users/KenseiEmam/projects/3) track the release. No database, signing key or source tag was changed.
+
 - **20 October — Release 1 review fixes (PR #135):**
   - Limited and documented the overlap visibility exception.
   - Added measurement-aware coach recording through a shared module.
