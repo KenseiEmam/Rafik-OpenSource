@@ -242,6 +242,18 @@ test("concurrent goal-specific plans: add, replace, end, overlap warnings and sp
     sport: football,
   });
   assert.equal(supportPlan.status, 200, JSON.stringify(supportPlan));
+  // Intentional exception: a supporting coach's overlap warning names plans outside their sport,
+  // limited to title, goal and dates; those plans stay unreadable to them (asserted below).
+  const strengthOverlap = supportPlan.data[0].overlaps.find(
+    (o: { title: string }) => o.title === "Strength block",
+  );
+  assert.deepEqual(Object.keys(strengthOverlap).sort(), [
+    "end_date",
+    "goal",
+    "start_date",
+    "title",
+  ]);
+  assert.equal(strengthOverlap.goal, "General strength");
   assert.equal(
     (await assign(support, swim, { sport: football }, second.data[0].id))
       .status,

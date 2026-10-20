@@ -32,6 +32,7 @@ Use option 2.
 ## Trade-offs
 
 - **Narrowed in Release 1c:** plans now carry an optional sport. A supporting coach reads and writes only plans, and the sessions recorded against them, labelled with their linked sport. Events still have no sport, so their assessment history is limited to events they staffed. Unlabelled plans belong to the primary coach.
+- **Intentional visibility exception (overlap warnings):** when a coach assigns a plan, the response lists every other active plan for that athlete whose dates overlap, including plans outside a supporting coach's sport. This helps coaches coordinate the athlete's combined load. The exception is limited to each plan's **title, goal, start date and end date**. It includes no plan ID, prescription, sessions or results, and does not make those plans readable through any other endpoint. A focused test asserts the exact fields.
 - **Two layers to keep in step:** SQL queries that filter by `trainer_id` mean the primary coach. Training-scope reads add an `EXISTS` on active links. Both must change together.
 - **Historical primary links:** links created by the backfill or trigger record the coach as creator, and links the trigger ends have no ending actor. The API records the acting administrator for its own changes.
 - **One link per coach and athlete:** a coach who covers two sports for the same athlete holds one supporting link, for the sport chosen first.

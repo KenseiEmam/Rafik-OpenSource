@@ -80,6 +80,8 @@ Sports and coaching specialties are served by `apps/backend/server/organization-
   - Run `npm run test:concurrent-plans`.
 - **Delegated logging (1e):** delegated start and save checks are in `sessionCommand` (`delegate()`); history reads are in `organizationSessionHistory()`; migration `202610191500_delegated_sessions`.
   - Coaches record on `DelegatedWorkout.vue` (`/record/new?assignment=…`, then `/record/:session`). Athletes see a banner on `WorkoutPage.vue`.
+  - Both screens take set measurements (fields, limits, positive-result rule) from `apps/frontend/src/lib/set-measures.ts`. Change them there, not per screen. On the coach form, timed and distance sets require a typed actual value; the prescription is only a placeholder.
+  - The start command navigates only if the screen is still mounted and its route is unchanged. The write is kept either way.
   - After a command succeeds, navigate only once `run()` has settled. The page remounts on route changes, and navigating inside the completion callback let the new instance adopt the old saved command and lock the form.
   - Run `npm run test:delegated-sessions`.
 - **Athlete profile (1d):** `AthleteProfile.vue` composes existing reads with `feedback: 'none'`, and each section shows its own refused or error state. Its section visibility is a convenience only, so never add a profile-only endpoint that widens access. Entry points: the **Profile** link on People cards and **Athlete profile** in the athlete-plan detail.

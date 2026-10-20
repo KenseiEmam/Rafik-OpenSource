@@ -1,5 +1,23 @@
 # Verification record
 
+## Release 1 review fixes (PR #135) — 20 October 2026
+
+**Changes:** the three review points.
+
+1. Overlap warnings are now limited to title, goal and dates, documented as an intentional supporting-coach exception.
+2. The coach recording form uses the athlete logger's shared measurement rules (`set-measures.ts`) for timed and distance sets.
+3. A delayed start acknowledgment no longer navigates a coach who has left.
+
+**Passed:**
+
+- **Unit:** `set-measures.test.ts`, 2 tests, plus the full frontend unit suite.
+- **Backend:** `test:concurrent-plans` asserts the exact overlap fields a supporting coach receives, including for a plan outside their sport. Related backend suites pass on a disposable database.
+- **Browser (`delegated-sessions.e2e.ts`, Chromium desktop and WebKit phone), 6/6:**
+  - Timed and distance sets show seconds or metres with the target only as a placeholder; marking done without an actual value is refused; saved entries hold the entered actuals and effort.
+  - A start response held until after the coach leaves keeps the coach where they went, and the delegated session still exists.
+  - With the navigation guard removed, the delayed-start test fails, confirming it is a real regression test.
+- **Reruns:** the athlete logger change was rechecked through the programming and workout-feedback journeys.
+
 ## Release 1e: delegated workout logging — 19 October 2026
 
 **Passed against disposable databases (`test:delegated-sessions`):**

@@ -14,6 +14,12 @@
 
 ## Recent work
 
+- **20 October — Release 1 review fixes (PR #135):**
+  - Limited and documented the overlap visibility exception.
+  - Added measurement-aware coach recording through a shared module.
+  - Guarded navigation after a delayed start acknowledgment.
+  - Added unit, backend and browser regression coverage; the delayed-start test was confirmed to fail without the guard.
+
 - **19 October — Release 1e (delegated logging):**
   - Added delegated session start and save under coach identity, attributed session history, the athlete attribution banner, the coach recording page and the `coach_recorded` analytics count.
   - Backend and browser checks pass. Fixed a navigation-after-command race found by the browser journey.

@@ -89,7 +89,8 @@ These labels describe people. On their own they grant no access; Release 1b uses
   - Each recipient may set `replaces` with `replaces_revision` to supersede one active plan; `null` adds a concurrent plan.
   - The legacy `assignment_id`/`assignment_revision` pair still means replace.
   - The same version cannot be active twice for an athlete (`409 already_assigned`).
-  - Each created assignment returns `overlaps`: other active plans whose dates overlap. Overlap is reported, never blocked.
+  - Each created assignment returns `overlaps`: every other active plan for that athlete whose dates overlap, as `{ title, goal, start_date, end_date }`. Overlap is reported, never blocked.
+  - **Intentional exception:** these entries include plans outside a supporting coach's sport, so coaches can coordinate, but they never carry a plan ID, prescription or sessions ([ADR 0025](../decisions/ADR-0025-coaching-team.md)).
 - **End:** `end` `{ assignment, revision }` archives one plan; sessions and the published version are kept.
 - **Supporting coaches:** may add, replace or end only plans labelled with a sport they are linked to for that athlete. Their delivery, history, athlete-plan, session and media reads include only those plans and the sessions recorded against them. Assessment history shows them only results from events they staffed, because events carry no sport.
 - **Reads:** recipients return every active plan in `plans`, and `athlete-plans` items include `goal`, `sport` and `revision`.
@@ -99,7 +100,7 @@ These labels describe people. On their own they grant no access; Release 1b uses
 - **Start for an athlete:** `POST /v1/workspaces/:id/sessions` `start` with `view: "trainer"` starts a session for the athlete who owns `assignment_id`. The coach needs plan authority: primary, or supporting for the plan's sport.
   - The session records `recorded_mode: "delegated"` and `recorded_by`/`recorded_by_name` (the coach member).
   - The athlete stays the subject (`member_id`, `client_id`). Operation receipts carry the coach.
-- **Coach saves:** `save` with `view: "trainer"` is allowed only on delegated sessions, and authority is rechecked on every save and retry. Coaches cannot edit sessions the athlete logged.
+- **Coach saves:** `save` with `view: "trainer"` is allowed only on delegated sessions, and authority is rechecked on every save and retry. Coaches cannot edit sessions the athlete logged. Entries use the same measurements as athlete sets: strength records `load`/`reps`; timed and distance record `seconds`/`metres`; `effort` is optional. A completed set needs a positive actual result.
 - **Athlete corrections:** the athlete can save (correct) any of their sessions.
 - **History:** every start and save writes an `organization_session_history` version. `GET /v1/organization-sessions/:id/history?view=` returns versions oldest first, each with `actor_name` and `by` (`athlete` or `coach`), under the same read authorization as the session.
 - **Analytics:** `summary.coach_recorded` counts completed delegated sessions in the window.

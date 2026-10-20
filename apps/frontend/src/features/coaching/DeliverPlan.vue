@@ -31,7 +31,7 @@ type Recipient = {
   /** Institution recipients list every active plan; independent coaching keeps one. */
   plans?: ActivePlan[]
 }
-type Overlap = { id: string; title: string; goal: string | null }
+type Overlap = { title: string; goal: string | null; start_date: string; end_date: string | null }
 type Sport = { id: string; name: string; kind: string; archived: boolean }
 const version = ref<PlanVersion>(),
   people = ref<Recipient[]>([]),

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Release 1 review fixes:
+  - Overlap warnings show other plans' title, goal and dates only, as a documented supporting-coach exception.
+  - Coach-recorded timed and distance sets require actual seconds or metres, using the athlete logger's shared measurement rules.
+  - A delayed start no longer pulls a coach back after they have left the recording screen.
+
 - Release 1e:
   - Coaches can record a workout on an athlete's behalf under their own name. The athlete sees who recorded it and can correct it, and every start, save and correction is kept with its author.
   - Analytics counts coach-recorded sessions.

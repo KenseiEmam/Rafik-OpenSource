@@ -894,6 +894,9 @@ export async function deliveryCommand(actor: Actor, id: string, input: Input) {
           },
         });
         // Concurrent plans are allowed; overlapping dates are reported, never blocked.
+        // Intentional visibility exception: so coaches can coordinate load, the warning lists every
+        // overlapping active plan for this athlete, including plans outside a supporting coach's
+        // sport. It is limited to title, goal and dates; no plan ID, prescription or sessions.
         const overlaps = await tx.organization_assignments.findMany({
           where: {
             workspace_id: id,
@@ -915,7 +918,6 @@ export async function deliveryCommand(actor: Actor, id: string, input: Input) {
         results.push({
           ...created,
           overlaps: overlaps.map((o) => ({
-            id: o.id,
             title: o.organization_versions.title,
             goal: o.goal,
             start_date: o.start_date,

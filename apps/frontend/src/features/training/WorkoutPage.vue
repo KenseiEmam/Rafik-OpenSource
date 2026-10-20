@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { measureFields, measureLimits, hasActualResult } from '../../lib/set-measures'
 import ExerciseDemo from '../../components/ExerciseDemo.vue'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
@@ -102,14 +103,8 @@ function chooseExercise(event: Event) {
       })
   })
 }
-const firstField = computed(() =>
-  current.value?.kind === 'timed'
-    ? 'seconds'
-    : current.value?.kind === 'distance'
-      ? 'metres'
-      : 'load',
-)
-const secondField = computed(() => (firstField.value === 'load' ? 'reps' : 'effort'))
+const firstField = computed(() => measureFields(current.value?.kind).first)
+const secondField = computed(() => measureFields(current.value?.kind).second)
 const fieldLabel = (field: string) =>
   field === 'seconds'
     ? language('seconds', 'ثوانٍ')
@@ -240,14 +235,7 @@ async function toggle(index: number) {
   if (hasInvalid.value) return
   const key = current.value!.key
   const entry = entries.value.find((e) => e.set_index === index)!
-  if (
-    !entry.completed &&
-    (current.value!.kind === 'timed'
-      ? (entry.seconds || 0) < 1
-      : current.value!.kind === 'distance'
-        ? (entry.metres || 0) < 1
-        : entry.reps < 1)
-  ) {
+  if (!entry.completed && !hasActualResult(entry, current.value!.kind)) {
     error.value = language(
       'Record a positive result before completing this set.',
       'سجّل نتيجة موجبة قبل إكمال المجموعة.',
@@ -611,8 +599,8 @@ function correctSets() {
                   type="number"
                   inputmode="decimal"
                   min="0"
-                  :max="firstField === 'load' ? 1000 : firstField === 'seconds' ? 86400 : 1000000"
-                  :step="firstField === 'seconds' ? 1 : 0.01"
+                  :max="measureLimits[firstField].max"
+                  :step="measureLimits[firstField].step"
                   :value="fieldDrafts[fieldKey(entry.set_index, firstField)] ?? entry[firstField]"
                   :disabled="row.conflict"
                   :aria-label="
@@ -625,9 +613,9 @@ function correctSets() {
                 /><input
                   type="number"
                   inputmode="numeric"
-                  :min="secondField === 'effort' ? 1 : 0"
-                  :max="secondField === 'effort' ? 10 : 200"
-                  :step="secondField === 'effort' ? 0.5 : 1"
+                  :min="measureLimits[secondField].min"
+                  :max="measureLimits[secondField].max"
+                  :step="measureLimits[secondField].step"
                   :value="fieldDrafts[fieldKey(entry.set_index, secondField)] ?? entry[secondField]"
                   :disabled="row.conflict"
                   :aria-label="

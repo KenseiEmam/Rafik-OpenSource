@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { AthletePlanPage } from '@rafik/shared/contracts'
 import { request } from '../../lib/backend'
 import { language as l, errorMessage, dateLabel, locale } from '../../lib/i18n'
 import { exerciseName } from '../../lib/prescriptions'
-import type { Entry, PlanDay, Prescription, Session } from '../../lib/domain'
+import {
+  measureFields,
+  measureLimits,
+  hasActualResult,
+  type MeasureField,
+} from '../../lib/set-measures'
+import type { Entry, ExerciseKind, PlanDay, Prescription, Session } from '../../lib/domain'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
 import OrganizationNav from './OrganizationNav.vue'
@@ -100,8 +106,13 @@ const locked = computed(
     starting.state.busy ||
     !!starting.state.pending,
 )
+let disposed = false
+onUnmounted(() => {
+  disposed = true
+})
 async function start(day: PlanDay) {
-  const id = crypto.randomUUID()
+  const id = crypto.randomUUID(),
+    origin = route.fullPath
   started.value = ''
   await starting.run('start', {
     operation: id,
@@ -111,12 +122,26 @@ async function start(day: PlanDay) {
     assignment_id: plan.value!.id,
     day_id: day.id,
   })
-  if (started.value && !starting.state.pending)
+  // The write stands even if the coach left; only move them if this screen is still current.
+  if (started.value && !starting.state.pending && !disposed && route.fullPath === origin)
     await router.replace(`${base}/record/${started.value}`)
 }
 watch(sessionId, load)
-const save = (complete: boolean) =>
-  saving.run('save', {
+const save = (complete: boolean) => {
+  if (
+    entries.value.some(
+      (e) =>
+        e.completed &&
+        (!hasActualResult(e, kindOf(e)) || !measured(e, measureFields(kindOf(e)).first)),
+    )
+  ) {
+    setError.value = l(
+      'Record the actual result for every completed set.',
+      'سجّل النتيجة الفعلية لكل مجموعة مكتملة.',
+    )
+    return
+  }
+  return saving.run('save', {
     operation: crypto.randomUUID(),
     action: 'save',
     view,
@@ -126,7 +151,59 @@ const save = (complete: boolean) =>
     note: note.value,
     complete,
   })
+}
 const exercises = computed(() => session.value?.prescription.exercises || [])
+const setError = ref('')
+// Timed and distance sets start from the prescription; the coach must enter the actual
+// duration or distance (or the set was already completed in a saved version).
+const entered = ref(new Set<string>())
+const entryKey = (entry: Entry, field: MeasureField) =>
+  `${entry.exercise_key}:${entry.set_index}:${field}`
+const measured = (entry: Entry, field: MeasureField) =>
+  !['seconds', 'metres'].includes(field) ||
+  entry.completed ||
+  entered.value.has(entryKey(entry, field))
+// The same measurement rules as the athlete logger: strength records load and reps (effort
+// optional); timed and distance record actual seconds or metres (effort optional).
+function setFields(kind?: ExerciseKind): MeasureField[] {
+  const { first, second } = measureFields(kind)
+  return second === 'reps' ? [first, second, 'effort'] : [first, second]
+}
+const fieldLabel = (field: MeasureField, unit: string) =>
+  field === 'load'
+    ? l('Load', 'الحمل') + ' (' + unit + ')'
+    : field === 'reps'
+      ? l('Reps', 'التكرارات')
+      : field === 'seconds'
+        ? l('Seconds', 'الثواني')
+        : field === 'metres'
+          ? l('Metres', 'الأمتار')
+          : l('Effort (RPE, optional)', 'الجهد (RPE، اختياري)')
+function setField(entry: Entry, field: MeasureField, event: Event) {
+  const raw = (event.target as HTMLInputElement).value
+  entered.value = new Set(entered.value).add(entryKey(entry, field))
+  // Clearing a measured value removes it rather than keeping the prescribed figure.
+  if (raw === '') {
+    if (field === 'reps' || field === 'load') entry[field] = 0
+    else entry[field] = null
+  } else entry[field] = Number(raw)
+  if (entry.completed && !hasActualResult(entry, kindOf(entry))) entry.completed = false
+}
+const kindOf = (entry: Entry) => exercises.value.find((e) => e.key === entry.exercise_key)?.kind
+function toggleDone(entry: Entry, kind: ExerciseKind | undefined, event: Event) {
+  const box = event.target as HTMLInputElement
+  setError.value = ''
+  const actual = measureFields(kind).first
+  if (box.checked && (!measured(entry, actual) || !hasActualResult(entry, kind))) {
+    box.checked = false
+    setError.value = l(
+      'Record the actual result for this set before marking it done.',
+      'سجّل النتيجة الفعلية لهذه المجموعة قبل تحديدها كمكتملة.',
+    )
+    return
+  }
+  entry.completed = box.checked
+}
 const dayName = (d: PlanDay) => (locale.value === 'ar' ? d.nameAr || d.name : d.name)
 onMounted(load)
 </script>
@@ -210,25 +287,38 @@ onMounted(load)
               v-for="entry in entries.filter((e) => e.exercise_key === exercise.key)"
               :key="entry.set_index"
               class="delegated-set"
+              :aria-label="
+                exerciseName(exercise) + ' · ' + l('Set', 'المجموعة') + ' ' + (entry.set_index + 1)
+              "
+              role="group"
             >
               <span>{{ l('Set', 'المجموعة') }} {{ entry.set_index + 1 }}</span>
-              <label
-                >{{ l('Reps', 'التكرارات')
-                }}<input v-model.number="entry.reps" type="number" min="0" inputmode="numeric"
-              /></label>
-              <label
-                >{{ l('Load', 'الحمل') }} ({{ entry.unit }})<input
-                  v-model.number="entry.load"
+              <label v-for="field in setFields(exercise.kind)" :key="field"
+                >{{ fieldLabel(field, entry.unit)
+                }}<input
                   type="number"
-                  min="0"
-                  step="0.5"
-                  inputmode="decimal"
+                  :inputmode="field === 'reps' ? 'numeric' : 'decimal'"
+                  :min="measureLimits[field].min"
+                  :max="measureLimits[field].max"
+                  :step="measureLimits[field].step"
+                  :value="measured(entry, field) ? (entry[field] ?? '') : ''"
+                  :placeholder="
+                    measured(entry, field) || entry[field] == null
+                      ? undefined
+                      : l('Target ', 'الهدف ') + entry[field]
+                  "
+                  @input="setField(entry, field, $event)"
               /></label>
               <label class="check-label"
-                ><input v-model="entry.completed" type="checkbox" />{{ l('Done', 'تمت') }}</label
+                ><input
+                  type="checkbox"
+                  :checked="entry.completed"
+                  @change="toggleDone(entry, exercise.kind, $event)"
+                />{{ l('Done', 'تمت') }}</label
               >
             </div>
           </section>
+          <p v-if="setError" role="alert" class="notice error">{{ setError }}</p>
           <label
             >{{ l('Note', 'ملاحظة') }}<textarea v-model="note" maxlength="2000" rows="2" />
           </label>
@@ -276,7 +366,7 @@ onMounted(load)
 }
 .delegated-set {
   display: grid;
-  grid-template-columns: minmax(64px, auto) repeat(2, minmax(0, 1fr)) auto;
+  grid-template-columns: minmax(64px, auto) repeat(auto-fit, minmax(110px, 1fr));
   gap: 10px 14px;
   align-items: end;
   padding: 10px 0;

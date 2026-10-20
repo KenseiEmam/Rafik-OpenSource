@@ -54,7 +54,7 @@ Domain writes use explicit API commands. The server validates current authority 
   - Supporting coaches read training records and include the athlete in their own events, groups and messages. Everything sensitive, and plan changes, stay with the primary coach.
 - **Concurrent plans:** an athlete may hold several active plans. Each plan has an optional goal and sport label, and only one active plan per published version is allowed.
   - Assigning either adds a plan or explicitly replaces a named one; `end` archives one. Overlapping dates are reported to staff and a same-day notice is shown to the athlete, without blocking.
-  - Workout sessions stay keyed by assignment, so history follows each plan. Supporting coaches are narrowed to plans and sessions labelled with their linked sport.
+  - Workout sessions stay keyed by assignment, so history follows each plan. Supporting coaches are narrowed to plans and sessions labelled with their linked sport. The one intentional exception: overlap warnings show them other plans' title, goal and dates only.
 - **Staff athlete profile** (`/organization/:workspace/:view/athletes/:member`): gathers what the viewer may already see about one athlete, using existing authorized endpoints only. It adds no API or access.
   - Primary coaches and admins also see nutrition. Primary coaches see current participation status; admins see consent setup only.
   - Supporting coaches see their sport's plans and sessions, and assessments from events they staffed.
