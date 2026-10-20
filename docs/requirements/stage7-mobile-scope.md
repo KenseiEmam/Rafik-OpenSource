@@ -1,6 +1,6 @@
 # Stage 7 mobile scope
 
-**Status:** coach-first beta candidate, 20 October 2026. API and focused emulator evidence is available; the founder reports the S20+ phone walkthrough passed. Broader native acceptance and exact device/build metadata remain separate.
+**Status:** coach-first beta.1 accepted and published, 20 October 2026. API and focused emulator evidence is available; the founder reports the S20+ phone walkthrough passed. Broader native acceptance and exact device/build metadata remain separate.
 
 ## Goal
 
@@ -10,7 +10,7 @@ Help university staff and athletes complete useful training and field-work tasks
 
 Coach sign-in/refresh/logout, bounded schedules, explicit event caching, attendance, assessment drafts/results, completion, online correction history, recovery comparison/sharing and English/Arabic are implemented. The supported OpenAPI contract and instance Swagger viewer are available. Isolated real-API and Node SQLite checks passed; focused Android 14 emulator checks covered encrypted-store initialization, process restart, replay, history, completion and a controlled current-format upgrade. The final feedback/cached-startup rebuild passed packaging, with the founder subsequently reporting the S20+ walkthrough passed on 20 October; exact installed-build metadata and broader coverage remain separate. See [verification](../verification/README.md) for exact revisions and limits.
 
-Physical hardware, broader native conflict/revocation/account-switch rendering, accessibility and full screen/theme coverage remain open. URL scanning is not implemented; entering the institution API URL manually is supported. These limitations do not imply API/auth implementation is absent.
+The founder accepted the Galaxy S20+ physical walkthrough. Broader native conflict/revocation/account-switch rendering, accessibility and full screen/theme coverage remain follow-up coverage, not beta.1 release blockers. URL scanning is not implemented; entering the institution API URL manually is supported. These limitations do not imply API/auth implementation is absent.
 
 ## First release tasks
 
@@ -19,7 +19,7 @@ Physical hardware, broader native conflict/revocation/account-switch rendering, 
 | Coach / trainer | See assigned field events; open an authorized event roster and assessment definition; record attendance and assessor-led performance results; finish the event; review prior results and sync status. | Administration, user invitations, program authoring, messages, analytics configuration and unrestricted athlete records. |
 | Athlete         | No native role in the first release. Existing mobile web remains available for athlete training workflows.                                                                                            | Athlete native dashboard/workout logging, other athletes' data, and clinical or diagnostic health functionality.         |
 
-The founder confirmed coach-first. Keep athlete-native work separate until the coach field workflow is accepted.
+The founder confirmed coach-first. The coach beta workflow is accepted; athlete-native work remains outside this release.
 
 ## Offline boundary
 
@@ -40,12 +40,12 @@ Native bearer sessions and actor-scoped calendar/history/receipt APIs are implem
 - Use React Native with Expo and TypeScript. It matches the existing TypeScript API/contracts and keeps the first app Android-focused without introducing another language/toolchain. Keep UI and durable storage platform-specific where needed.
 - Use Expo SQLite with SQLCipher for encrypted event cache and a durable, ordered command queue; keep its database key and native access/refresh credentials in Expo SecureStore. SQLCipher requires a development/production native build, not Expo Go. Do not claim background sync: the first release syncs on app foreground/resume, explicit retry and connectivity return while the app is active.
 - The user enters their university API URL. The app must support HTTPS self-hosted instances and local development URLs without binding to a Rafik-hosted service.
-- The user must be able to enter or scan their university instance URL. Do not bind the app to Rafik-hosted services or provider credentials.
+- Manual entry of the university instance URL is supported in beta.1; scanning is deferred follow-up scope. Do not bind the app to Rafik-hosted services or provider credentials.
 - Store no service-account key, universal API secret, or hidden operator credential in the app.
 - Keep server validation and authorization authoritative. The mobile client may validate for usability but must not duplicate business rules as its security boundary.
 - iOS is out of scope unless the founder explicitly expands it after Android acceptance.
 
-## Acceptance evidence required
+## Acceptance coverage and follow-up
 
 1. API integration tests cover duplicate delivery, lost acknowledgements, exact retry, edited retry rejection, changed revisions, revoked access, changed assignment and multi-device conflict.
 2. Device storage tests cover process death/restart, account switch, logout, app upgrade and recovery of each pending state.

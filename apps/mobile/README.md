@@ -1,6 +1,6 @@
 # Rafik Field app
 
-The Android workspace is the Stage 7 coach-first field app. Instance sign-in, bounded schedules, event downloads, attendance, assessment drafts/results and event completion are implemented locally. Online correction history, device/server comparison, explicit plain-text recovery sharing and English/Arabic UI are implemented. Broader native/API acceptance remains open. Use synthetic data only.
+The Android workspace is the Stage 7 coach-first field app. Instance sign-in, bounded schedules, event downloads, attendance, assessment drafts/results and event completion are implemented locally. Online correction history, device/server comparison, explicit plain-text recovery sharing and English/Arabic UI are implemented. Beta.1 is published and accepted for beta evaluation; broader native coverage remains follow-up work. Use synthetic data only.
 
 ## Local development
 
@@ -35,8 +35,8 @@ The coach app's supported OpenAPI subset is at [`../backend/openapi.json`](../ba
 
 ## Standalone beta package
 
-Squire `1.0.0-beta.1` is the packaging candidate. Use root `npm run mobile:release` after restoring/creating the private local signing material. See [Android beta builds and updates](../../docs/operations/android-release.md) for output paths, key backup, clean-device installation and upgrade checks. A successful build alone is not package acceptance.
+Squire `1.0.0-beta.1` is the published, accepted Android evaluation beta. Use root `npm run mobile:release` after restoring/creating the private local signing material. See [Android beta builds and updates](../../docs/operations/android-release.md) for output paths, key backup, clean-device installation and upgrade checks. A successful build alone is not package acceptance.
 
-Coaches should use the official release APK when uploaded, rather than compile the application. One APK connects to institution servers configured at sign-in. See [choose the right path](../../docs/operations/android-release.md#choose-the-right-path) and the [fresh-checkout standalone build](../../docs/operations/android-release.md#fresh-checkout-standalone-build). Independent distributions use their own signing key and maintain their own updates; Rafik's release key is private. The published beta includes an [Android ZIP bundle](https://github.com/KenseiEmam/Rafik-OpenSource/releases/download/v1.0.0-beta.1/1.0.0-beta.1.zip): extract it and open the APK. See the [phone installation steps](../../docs/operations/android-release.md#install-the-published-beta).
+Coaches can install the official APK from the published Android ZIP bundle. One APK connects to institution servers configured at sign-in. See [choose the right path](../../docs/operations/android-release.md#choose-the-right-path) and the [fresh-checkout standalone build](../../docs/operations/android-release.md#fresh-checkout-standalone-build). Independent distributions use their own signing key and maintain their own updates; Rafik's release key is private. The published beta includes an [Android ZIP bundle](https://github.com/KenseiEmam/Rafik-OpenSource/releases/download/v1.0.0-beta.1/1.0.0-beta.1.zip): extract it and open the APK. See the [phone installation steps](../../docs/operations/android-release.md#install-the-published-beta).
 
 For connection/access feedback regression checks, run `npm run test:request --workspace @rafik/mobile`. See the [release guide](../../docs/operations/android-release.md) for private-key backup and physical-phone checks without an emulator or domain.

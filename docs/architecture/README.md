@@ -1,6 +1,6 @@
 # Rafik architecture
 
-**Status: current architecture, 17 October 2026.** The university-owned Compose deployment and Stage 5 prototype workflows are implemented locally. Optional Stage 6 provider-specific VM templates exist as unverified starters; provider validation is deferred and does not block Stage 7. Stage 7 coach-first Android implementation is active. The [requirements and stage gates](../requirements/README.md) define delivery status; this page describes the system as it exists and the constraints new work must preserve.
+**Status: current architecture, 17 October 2026.** The university-owned Compose deployment and Stage 5 prototype workflows are implemented locally. Optional Stage 6 provider-specific VM templates exist as unverified starters; provider validation is deferred and does not block Stage 7. The Stage 7 coach-first Android beta.1 is accepted and published; broader coverage remains follow-up work. The [requirements and stage gates](../requirements/README.md) define delivery status; this page describes the system as it exists and the constraints new work must preserve.
 
 ## Repository components
 
@@ -22,7 +22,7 @@ The backend serves its coach OpenAPI contract and bundled Swagger UI at `/v1/ope
 | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `apps/frontend/`              | Vue 3 and TypeScript web application. Presents public and organization-scoped administrator, trainer and athlete tasks; stores recoverable drafts and queued commands in browser storage. |
 | `apps/backend/`               | TypeScript HTTP API, Prisma schema/client, PostgreSQL migrations, domain authorization, content sources, and private-file lifecycle.                                                      |
-| `apps/mobile/`                | Expo/React Native Android coach field app. Stage 7 implementation is in progress; its supported API subset is exported as OpenAPI.                                                        |
+| `apps/mobile/`                | Expo/React Native Android coach field app. Beta.1 coach scope is implemented and released; its supported API subset is exported as OpenAPI.                                               |
 | `packages/shared/`            | Shared API contracts and generated database transport types.                                                                                                                              |
 | `infrastructure/compose.yaml` | One Compose definition with local-development and self-host profiles. Production profile runs PostgreSQL, migration job, API, web and Caddy.                                              |
 
