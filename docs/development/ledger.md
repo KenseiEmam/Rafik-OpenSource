@@ -14,6 +14,8 @@
 
 ## Recent work
 
+- **20 October — Android download published:** the founder uploaded `1.0.0-beta.1.zip` to the existing GitHub prerelease. Inspected its three files without executing them; the embedded APK SHA-256 matches bundled `SHA256SUMS`, `build.json` and the existing `5d1ce76` packaging record. Added direct bundle links and phone extraction/install guidance; retained the distinct original source tag. Paired landing guidance follows in existing PR #14. No rebuild or repeat phone test.
+
 - **20 October — Android build and distribution handoff:** clarified coach installation versus development and independent signing; documented clean-source selection, standalone build outputs and beta.1 publication steps in the existing release guide, with links from root/mobile READMEs and maintainer/operations/index guides. Beta.1 close-out uses the accepted artifact and its actual source revision, preserves the published tag and leaves broader acceptance in the existing backlog. Paired EN/AR build guidance is in [landing PR #14](https://github.com/KenseiEmam/rafik-landing/pull/14), following the now-merged phone report PR #13. Documentation only; no APK rebuild or release mutation.
 
 - **20 October — public documentation coordination:** paired English/Arabic phone, testing, requirements, limitations and release updates are in [landing PR #13](https://github.com/KenseiEmam/rafik-landing/pull/13), alongside application PR #136. Verified that beta.1 is already a published GitHub prerelease with source archives and no uploaded APK asset; its tag resolves to `4ac70c8`, distinct from the local APK's `5d1ce76`. Next-release application PR #135 and landing PR #11 are open and were not changed. No release/tag mutation or rebuild was performed.

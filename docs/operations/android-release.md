@@ -1,6 +1,15 @@
 # Android beta builds and updates
 
-**Squire 1.0.0-beta.1:** the GitHub prerelease is published. As checked on 20 October 2026, it provides source archives but no uploaded APK. The founder reports the standalone Galaxy S20+ field/offline walkthrough passed. Direct signed APK distribution is the initial Android channel; Google Play and iOS are outside this workflow.
+**Squire 1.0.0-beta.1:** the GitHub prerelease includes the official [Android download bundle](https://github.com/KenseiEmam/Rafik-OpenSource/releases/download/v1.0.0-beta.1/1.0.0-beta.1.zip). On 20 October 2026, its embedded APK checksum matched both `SHA256SUMS` and `build.json`, and the recorded packaging receipt. The founder reports the standalone Galaxy S20+ field/offline walkthrough passed. Google Play and iOS are outside this workflow.
+
+## Install the published beta
+
+1. On the Android device, download the **Android download bundle** linked above. This uploaded ZIP contains the installer; GitHub's separately generated **Source code (zip/tar.gz)** archives do not.
+2. Extract the ZIP using the phone's file manager (on Samsung, **My Files → Downloads**, select the ZIP and choose **Extract**). Open its `1.0.0-beta.1` folder.
+3. Tap `Rafik-Squire-1.0.0-beta.1-android.apk`. If prompted, allow **Install unknown apps** for the file manager, then install and open **Rafik Field**. Device management policies may require the institution's administrator to permit installation.
+4. Enter the institution's HTTPS API URL (ending in `/api` for Compose) and coach credentials. No Metro, computer, USB cable or Android Studio is required with a reachable institution server.
+
+The bundle also contains `SHA256SUMS` and non-secret `build.json`. Its APK SHA-256 is `1654e44fd6f324d2403984a6a880b3dffabf81f3615c9ac8a71c5992a417fb5e`, source revision `5d1ce761505b07272c6d5b43414cd1d754b41517`. The release's source tag remains `4ac70c8`; it is distinct from this binary's recorded source. This download check verifies published bytes, not a new device test.
 
 ## Choose the right path
 
@@ -165,6 +174,8 @@ On 19 October 2026, an isolated Android 14 x86_64 emulator passed offline cold s
 For a new release, complete the relevant [release checklist](release-checklist.md), commit the candidate, create its annotated tag and publish the accepted APK, `SHA256SUMS` and non-secret `build.json`. Mark evaluation releases as prereleases and describe known limits. Update landing English/Arabic release, installation and upgrade guidance through a reviewable PR. A beta announcement does not close institution-specific privacy approval or the first-user feedback backlog.
 
 ### Close beta.1 distribution
+
+**20 October update:** the founder uploaded the APK/checksum/build metadata together as `1.0.0-beta.1.zip`. The published APK's computed checksum matches all recorded values. Download/installation guidance now links that bundle; direct uncompressed APK upload is optional convenience, not a blocker. The steps below remain the maintainer procedure.
 
 The existing beta.1 tag resolves to `4ac70c8`; the later locally packaged APK records `5d1ce76`. Keep the published tag intact. GitHub can host that APK on the existing prerelease, provided the release notes identify its exact source revision separately from the source archives. Never describe it as compiled from the older tag.
 

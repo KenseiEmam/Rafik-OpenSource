@@ -1,5 +1,11 @@
 # Verification record
 
+## Published Android bundle — 20 October 2026
+
+GitHub release metadata lists uploaded asset `1.0.0-beta.1.zip` (25,082,785 bytes), archive SHA-256 `44603df64492802454c15fc2224decd91a93dc11bb2facb336656e9632911dcd`. Downloaded that public asset to a temporary file and inspected ZIP entries without extracting or executing them. It contains only the version directory, `build.json`, `SHA256SUMS` and the APK (66,615,062 bytes). Computed the embedded APK SHA-256: `1654e44fd6f324d2403984a6a880b3dffabf81f3615c9ac8a71c5992a417fb5e`; it matches both bundled records and the prior packaging receipt. Metadata records clean source `5d1ce761505b07272c6d5b43414cd1d754b41517`, versionCode `1000001` and the previously recorded certificate fingerprint. No new signature verification or device execution was performed. The earlier no-upload snapshot below is superseded by this publication check.
+
+Documentation validation passed two fixtures, 350 local links and 34 heading links across 54 documents. Focused Markdown formatting and diff checks passed. The downloaded temporary ZIP was removed after inspection; no application tests or native build were run.
+
 ## Android build documentation handoff — 20 October 2026
 
 Reviewed standalone commands, signing initialization/restore, overwrite protection and metadata against `apps/mobile/scripts/release.mjs`; native development commands against the maintained launcher. Added installation/development/independent-distribution paths and beta.1 close-out without changing builds, keys, tags or published assets. `npm run docs:check` passed two fixtures, 348 local links and 32 heading links across 54 maintained documents. Focused Markdown formatting and `git diff --check` passed. No Android compilation or app workflow tests were needed for these documentation changes. Windows packaging evidence remains the existing record; Linux/macOS native builds remain unexercised.

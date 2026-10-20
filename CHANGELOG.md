@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Linked the published beta.1 Android ZIP bundle and documented extraction/installation on phones. Verified its embedded APK checksum against the bundled checksum, metadata and existing package receipt; no rebuild.
+
 - Made Android installation/build paths explicit: official APK for coaches, native development for contributors, private signing for independent distributions, and a fresh-checkout standalone procedure. Added the beta.1 asset-publication close-out while preserving the published source tag and accepted phone result.
 
 - Recorded founder-reported success of the Galaxy S20+ physical phone walkthrough on 20 October 2026; kept exact device/build metadata, broader native/accessibility coverage and release-asset alignment separate.
