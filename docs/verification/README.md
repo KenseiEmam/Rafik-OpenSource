@@ -4,7 +4,11 @@
 
 **Owner-reported pass:** after receiving the Galaxy S20+ standalone phone-check instructions, the founder reported: “Ran the test, and it worked as intended.” This records acceptance of the described installation and field/offline-recovery walkthrough by the person testing it; it is not an independently observed or automated run. No rebuild, database reset or test rerun was performed to record the report.
 
-**Limits:** no Android version, installed APK checksum, screenshots or per-step locale/theme/accessibility results accompanied the report. Do not attach this report to a different build or infer a historical upgrade, cryptographic audit, TalkBack acceptance, tablet/device matrix or full native recovery coverage. Existing packaging receipts remain separate; source/tag/asset alignment still precedes publication.
+**Limits:** no Android version, installed APK checksum, screenshots or per-step locale/theme/accessibility results accompanied the report. Do not attach this report to a different build or infer a historical upgrade, cryptographic audit, TalkBack acceptance, tablet/device matrix or full native recovery coverage. Existing packaging receipts remain separate.
+
+**Published release checked on 20 October:** [Squire beta.1](https://github.com/KenseiEmam/Rafik-OpenSource/releases/tag/v1.0.0-beta.1) was published on 19 October. GitHub lists source archives and no uploaded APK asset. Its annotated tag resolves to `4ac70c8`; the later locally packaged APK records `5d1ce76`. Preserve that distinction when adding any binary download. Paired English/Arabic updates are in [landing PR #13](https://github.com/KenseiEmam/rafik-landing/pull/13); next-release application PR #135 and landing PR #11 remain separate, unmerged work.
+
+**Documentation checks:** `npm run docs:check` passed two checker fixtures, 339 local links and 23 heading links across 54 maintained documents. Focused formatting and `git diff --check` passed. The five landing EN/AR pairs retain matching translation keys, order and version. GitHub release/tag/open-PR metadata was read directly; no native or browser workflow was rerun for this documentation update.
 
 ## R0 beta.1 close-out — 19 October 2026
 

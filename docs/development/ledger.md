@@ -14,6 +14,8 @@
 
 ## Recent work
 
+- **20 October — public documentation coordination:** paired English/Arabic phone, testing, requirements, limitations and release updates are in [landing PR #13](https://github.com/KenseiEmam/rafik-landing/pull/13), alongside application PR #136. Verified that beta.1 is already a published GitHub prerelease with source archives and no uploaded APK asset; its tag resolves to `4ac70c8`, distinct from the local APK's `5d1ce76`. Next-release application PR #135 and landing PR #11 are open and were not changed. No release/tag mutation or rebuild was performed.
+
 - **20 October — founder phone check:** the founder reports the instructed Galaxy S20+ installation/field/offline-recovery walkthrough worked as intended. Recorded as owner-reported success, with no automated rerun or rebuild. Android version, exact installed APK checksum and per-locale/accessibility coverage were not supplied; do not infer them or claim an observed upgrade. Release source/artifact alignment remains separate.
 
 - **19 October — R0 beta.1 close-out (web):**

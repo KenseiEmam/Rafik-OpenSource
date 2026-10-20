@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Recorded founder-reported success of the Galaxy S20+ physical phone walkthrough on 20 October 2026; kept exact device/build metadata, broader native/accessibility coverage and release-asset alignment separate.
+- Aligned the paired English/Arabic landing phone guidance through PR #13 and verified the existing published beta.1 source release separately from the locally packaged APK. Preserved the next-release work in application PR #135 and landing PR #11.
 
 - R0 beta.1 close-out:
   - Fixed the post-workout **Rate your session** link, which went to a missing `/institution/…` route.
