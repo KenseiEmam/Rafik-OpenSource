@@ -15,6 +15,8 @@ import { programContext } from '../coaching/program-context'
 import PageState from '../../components/PageState.vue'
 import MemberPicker from './MemberPicker.vue'
 import OrganizationNav from './OrganizationNav.vue'
+import { useCommand } from '../teams/commands'
+import CommandStatus from '../teams/CommandStatus.vue'
 const route = useRoute(),
   router = useRouter(),
   context = programContext(route)
@@ -122,6 +124,28 @@ watch(
   },
 )
 watch(() => route.query.assignment, loadDetail)
+const planLabel = (plan: AthletePlanSummary) => [plan.goal, plan.sport].filter(Boolean).join(' · ')
+// Ending archives one plan; recorded sessions and the published version stay in history.
+const ending = useCommand<'end-plan'>(
+  `athlete-plan-end:${context.workspace}:${context.view}`,
+  async () => {
+    await Promise.all([loadDetail(), load()])
+  },
+  (_, args) =>
+    request(`/v1/workspaces/${context.workspace}/delivery`, {
+      method: 'POST',
+      body: JSON.stringify(args),
+    }),
+  { successMessage: l('Plan ended.', 'تم إنهاء الخطة.') },
+)
+const endPlan = (plan: AthletePlanSummary) =>
+  ending.run('end-plan', {
+    operation: crypto.randomUUID(),
+    action: 'end',
+    view: context.view,
+    assignment: plan.id,
+    revision: plan.revision,
+  })
 onMounted(() => {
   void load()
   void loadDetail()
@@ -203,6 +227,7 @@ onUnmounted(() => {
       <PageState :loading="detailBusy" :error="detailError" @retry="loadDetail"
         ><template v-if="detail">
           <h2 ref="detailHeading" tabindex="-1">{{ detail.version.title }}</h2>
+          <p v-if="planLabel(detail)" class="tag" dir="auto">{{ planLabel(detail) }}</p>
           <p>
             {{ detail.member_name }} · {{ l('Version', 'النسخة') }} {{ detail.version.revision }} ·
             {{ label(detail.status) }}
@@ -250,10 +275,31 @@ onUnmounted(() => {
               class="text-link"
               :to="context.base + '/assessments/' + detail.member_id"
               >{{ l('Assessment history', 'سجل التقييمات') }}</RouterLink
+            ><RouterLink class="text-link" :to="context.base + '/athletes/' + detail.member_id">{{
+              l('Athlete profile', 'ملف الرياضي')
+            }}</RouterLink
+            ><RouterLink
+              class="text-link"
+              :to="
+                context.base +
+                '/plans/new?source=' +
+                detail.version.program_id +
+                '&member=' +
+                detail.member_id
+              "
+              >{{ l('Adapt this program', 'تكييف هذا البرنامج') }}</RouterLink
+            ><button
+              v-if="detail.state === 'active'"
+              type="button"
+              class="button secondary"
+              :disabled="ending.state.busy || !!ending.state.pending || !ending.state.ready"
+              @click="endPlan(detail)"
             >
+              {{ l('End plan', 'إنهاء الخطة') }}
+            </button>
           </div>
-        </template></PageState
-      >
+          <CommandStatus :command="ending" /> </template
+      ></PageState>
     </section>
     <PageState :loading="loading && !data" :error="!data ? error : ''" @retry="load"
       ><template v-if="data">
@@ -282,6 +328,7 @@ onUnmounted(() => {
               <span class="tag">{{ label(plan.status) }}</span>
             </div>
             <h2 dir="auto">{{ plan.version.title }}</h2>
+            <p v-if="planLabel(plan)" class="tag" dir="auto">{{ planLabel(plan) }}</p>
             <p class="small-print">
               {{ l('Version', 'النسخة') }} {{ plan.version.revision }} ·
               {{

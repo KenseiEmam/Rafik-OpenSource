@@ -15,6 +15,10 @@ import {
   organizationRecipients,
   independentRecipients,
 } from "./people.ts";
+import {
+  organizationSports,
+  organizationSportsCommand,
+} from "./organization-sports.ts";
 import { platformRead, platformCommand } from "./platform.ts";
 import {
   notificationPreferences,
@@ -73,6 +77,7 @@ import {
   delivery,
   deliveryCommand,
   organizationSession,
+  organizationSessionHistory,
   sessionCommand,
   previousOrganizationPerformance,
   role,
@@ -628,6 +633,19 @@ const server = createServer(async (req, res) => {
       else throw new ApiError(405, "method_not_allowed");
       return;
     }
+    const sportsMatch = path.match(
+      /^\/v1\/workspaces\/([a-f0-9-]{36})\/sports$/,
+    );
+    if (sportsMatch) {
+      const who = requireActor(actor),
+        id = sportsMatch[1];
+      if (req.method === "GET")
+        send(res, 200, await organizationSports(who, id, url.searchParams));
+      else if (req.method === "POST")
+        send(res, 200, await organizationSportsCommand(who, id, input));
+      else throw new ApiError(405, "method_not_allowed");
+      return;
+    }
     const feedbackMatch = path.match(
       /^\/v1\/workspaces\/([a-f0-9-]{36})\/feedback$/,
     );
@@ -754,6 +772,21 @@ const server = createServer(async (req, res) => {
         );
         return;
       }
+    }
+    const sessionHistory = path.match(
+      /^\/v1\/organization-sessions\/([a-f0-9-]{36})\/history$/,
+    );
+    if (sessionHistory && req.method === "GET") {
+      send(
+        res,
+        200,
+        await organizationSessionHistory(
+          requireActor(actor),
+          sessionHistory[1],
+          role(url.searchParams.get("view") || "trainee"),
+        ),
+      );
+      return;
     }
     const orgSession = path.match(
       /^\/v1\/organization-sessions\/([a-f0-9-]{36})$/,

@@ -1,6 +1,15 @@
 # Post-beta.1 release plan
 
-**Status:** proposed, 19 October 2026. This is a planning document, not an implementation record. Nothing here is implemented. Items marked **⚑** are provisional defaults that need founder confirmation before the slice that depends on them starts. Releases are implemented one approved slice at a time, each on its own `codex/` branch and pull request.
+**Status:** Release 1 in progress, 19 October 2026. R0 and Release 1 (slices 1a–1e) are implemented (see [verification](../verification/README.md)); release acceptance and the landing documentation remain. Release 2 and Release 3 are not implemented. Items marked **⚑** were provisional defaults; the [confirmed decisions](#confirmed-release-1-decisions) replace them for Release 1. Each release is delivered as one `codex/` branch and one pull request, with one commit per slice, so it can be reviewed and merged as a unit.
+
+## Confirmed Release 1 decisions
+
+The founder confirmed these on 19 October 2026:
+
+- **Coach model:** one primary coach, plus supporting coaches scoped to a sport or specialty.
+- **Participation status:** visible to the primary coach only; supporting coaches do not see it. No ADR 0017 change.
+- **Concurrent plans:** several active plans are allowed. Same-day sessions from different plans show a warning and are not blocked.
+- **Shared nutrition actuals:** current behavior is kept. Admins and the primary coach can read actuals the athlete has chosen to share.
 
 The audit below was taken from `main` at `8ae1fbf` (Squire `1.0.0-beta.1` plus CI repairs). File references point to that revision.
 
@@ -14,7 +23,7 @@ The founder set this order on 19 October 2026:
 
 Release 1 comes first because it gives the field features a clear permissions and data model. **R0** closes the open beta.1 work and adds no new scope. Version numbers are proposals: R0 keeps `1.0.0-beta.1` assets, and Releases 1–3 are planned as `1.0.0-beta.2` to `1.0.0-beta.4`.
 
-| Release                                | Slices (one pull request each)                                                                                                                                                                             |
+| Release                                | Slices (one commit each; one pull request per release)                                                                                                                                                     |
 | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | R0 — beta.1 close-out                  | Physical acceptance, verified defect fixes, rendered web evidence                                                                                                                                          |
 | Release 1 — sports and coaching        | 1a sports and specialties → 1b coaching team and authority → 1c concurrent goal-specific plans → 1d staff athlete profile → 1e delegated workout logging (scheduling recommended; not in the founder list) |
@@ -90,6 +99,13 @@ See [verification](../verification/README.md#r0-beta1-close-out--19-october-2026
 
 ### 1a Sports and coaching specialties
 
+**Implemented, 19 October 2026.** Two choices simplified the data model below:
+
+- **One table for both:** sports and general coaching specialties share `organization_sports`, with a `kind` of `sport` or `specialty`.
+- **One link table:** `organization_member_sports` links athletes to sports, and coaches to sports or specialties. It keeps no start or end dates; changes are recorded as `member_sports_changed` institution events.
+
+Only administrators manage sports and links, and the links grant no access.
+
 - **Outcomes:**
   - Admins define the institution's sports and assign athletes to them.
   - Admins record each coach's specialties: a sport, or a general specialty such as strength and conditioning.
@@ -110,6 +126,13 @@ See [verification](../verification/README.md#r0-beta1-close-out--19-october-2026
   - Rendered in English/Arabic, light/dark, at 320 px and on desktop, with long names and an empty list.
 
 ### 1b Coaching team and authority ⚑
+
+**Implemented, 19 October 2026,** under the confirmed decisions and [ADR 0025](../decisions/ADR-0025-coaching-team.md). Two details differ from the outline below:
+
+- **No start date:** links carry created and ended times and actors, but no `starts_on`.
+- **A database trigger** keeps the `trainer_id` mirror and ends links on every write path.
+
+Supporting coaches can read all of an athlete's training plans until slice 1c adds a sport to plans. Only administrators link coaches.
 
 - **⚑ Default model: one primary coach plus scoped supporting coaches.**
   - The primary coach keeps today's assigned-coach access: plans, sessions, nutrition when shared, follow-up tasks and current participation status.
@@ -142,6 +165,12 @@ See [verification](../verification/README.md#r0-beta1-close-out--19-october-2026
 
 ### 1c Concurrent goal-specific plans ⚑
 
+**Implemented, 19 October 2026,** with same-day overlap allowed and warned. Differences from the outline below:
+
+- **No owner column:** plans carry a goal and sport but no `owner_member_id`; who may write a plan follows the sport label and the coaching link.
+- **Overlap means overlapping dates:** flexible plans have no fixed days, so the check compares date windows.
+- **Assessments:** a supporting coach's assessment history is limited to events they staffed until events carry a sport.
+
 - **⚑ Default:** an athlete can have several active plans, each with a goal or sport label and an owning coach. Same-day sessions from different plans are allowed, with a visible conflict warning. **Alternative:** the server rejects overlapping training days.
 - **Data:**
   - Replace `organization_one_active_assignment`.
@@ -165,6 +194,8 @@ See [verification](../verification/README.md#r0-beta1-close-out--19-october-2026
 
 ### 1d Staff athlete profile
 
+**Implemented, 19 October 2026.** The profile uses sections with jump links rather than tabs. An unlinked coach gets a refusal instead of name and sport, because the People scope already excludes athletes they don't coach. Supporting coaches see assessment results only from events they staffed.
+
 - **Outcomes:** a staff route `/organization/{workspace}/{view}/athletes/{member}` collects existing per-athlete views into tabs. Each tab calls an existing authorized endpoint. No tab adds access the API does not already grant.
 
 | Tab                                          | Admin                                                       | Primary coach           | Supporting coach         | Other coach         |
@@ -173,8 +204,8 @@ See [verification](../verification/README.md#r0-beta1-close-out--19-october-2026
 | Plans and session history                    | Yes                                                         | Yes                     | Plans within their sport | No                  |
 | Attendance and assessments                   | Yes                                                         | Yes                     | Within their sport       | Events they staffed |
 | Nutrition plan                               | Yes                                                         | Yes                     | No                       | No                  |
-| Nutrition actuals                            | ⚑ only if shared (current behavior; confirm)                | Only if shared          | No                       | No                  |
-| Participation status                         | Consent setup only                                          | Current status and date | No (⚑)                   | No                  |
+| Nutrition actuals                            | Only if shared (confirmed: current behavior)                | Only if shared          | No                       | No                  |
+| Participation status                         | Consent setup only                                          | Current status and date | No (confirmed)           | No                  |
 | Messages                                     | Link to the viewer's own conversation; never other people's | Same                    | Same                     | Same                |
 
 - **Acceptance:**
@@ -183,6 +214,13 @@ See [verification](../verification/README.md#r0-beta1-close-out--19-october-2026
   - Rendered empty, populated and error states, with long names, in English/Arabic and both themes, on phone and desktop.
 
 ### 1e Delegated workout logging (recommended scheduling)
+
+**Implemented, 19 October 2026.** Other differences from the outline below:
+
+- **Who may record:** a supporting coach may record only on plans labelled with their sport.
+- **No flag yet:** the athlete corrects the record directly; there is no separate flag action.
+- **Online only:** the coach recording page keeps no device queue, but still retries the exact saved command.
+- **Today only:** recording follows the plan's scheduling rules for the coach's current date.
 
 - **Outcomes:** a primary or plan-owning coach can record a session on an athlete's behalf without acting as the athlete.
 - **Data:**

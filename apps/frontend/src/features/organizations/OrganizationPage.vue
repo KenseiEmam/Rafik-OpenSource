@@ -8,13 +8,16 @@ import { language as l, errorMessage, dateLabel } from '../../lib/i18n'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
 import PageState from '../../components/PageState.vue'
-import type { Organization, Member, Role } from './types'
+import type { Organization, Member, Role, Sport } from './types'
 import './organization.css'
 import OrganizationFollowUp from './OrganizationFollowUp.vue'
 import OrganizationUpcoming from './OrganizationUpcoming.vue'
 import MemberPicker from './MemberPicker.vue'
 import OrganizationNav from './OrganizationNav.vue'
 import BrandingSettings from './BrandingSettings.vue'
+import SportsSettings from './SportsSettings.vue'
+import MemberSports from './MemberSports.vue'
+import CoachingTeam from './CoachingTeam.vue'
 const route = useRoute(),
   router = useRouter(),
   id = String(route.params.workspace),
@@ -30,6 +33,8 @@ const data = ref<Organization>(),
   error = ref(''),
   search = ref(''),
   filter = ref(String(route.query.filter || 'all')),
+  sportFilter = ref(String(route.query.sport || '')),
+  sports = ref<Sport[]>([]),
   selected = ref<Member>(),
   editRoles = ref<Role[]>([]),
   active = ref(true),
@@ -72,6 +77,39 @@ const trainees = computed(
         (view !== 'trainer' || m.trainer_id === data.value?.self.id),
     ) || [],
 )
+const sportNames = (member: Member) =>
+  (member.sports || [])
+    .map((sport) => sports.value.find((s) => s.id === sport))
+    .filter((s): s is Sport => !!s)
+async function loadSports() {
+  if (view === 'trainee') return
+  try {
+    sports.value = (
+      await request<{ items: Sport[] }>(`/v1/workspaces/${id}/sports?view=${view}`)
+    ).items
+  } catch {
+    // Sport labels are descriptive; the roster stays usable without them.
+    sports.value = []
+  }
+}
+async function sportsSaved() {
+  const member = selected.value?.id
+  await loadPeople()
+  selected.value = data.value?.members.find((m) => m.id === member)
+}
+const supportingCoaches = (member: Member) =>
+  (member.coaches || [])
+    .filter((c) => c.kind === 'supporting')
+    .map(
+      (c) =>
+        (data.value?.names.find((m) => m.id === c.coach)?.name || l('Coach', 'مدرب')) +
+        ' · ' +
+        (sports.value.find((s) => s.id === c.sport)?.name || ''),
+    )
+const myLink = (member: Member) =>
+  view === 'trainer' && member.trainer_id !== data.value?.self.id
+    ? member.coaches?.find((c) => c.coach === data.value?.self.id && c.kind === 'supporting')
+    : undefined
 const trainerName = (member: Member) =>
   data.value?.names.find((m) => m.id === member.trainer_id)?.name || l('Not assigned', 'غير معيّن')
 async function load() {
@@ -123,6 +161,7 @@ async function loadPeople(append = false) {
       search: search.value,
       state: filter.value === 'inactive' ? 'inactive' : 'active',
       role: ['admin', 'trainer', 'trainee'].includes(filter.value) ? filter.value : '',
+      ...(sportFilter.value ? { sport: sportFilter.value } : {}),
       offset: String(append ? nextPeople.value || 0 : 0),
     })
     const page = await request<{
@@ -148,7 +187,7 @@ onUnmounted(() => {
   clearTimeout(rosterTimer)
   rosterGeneration++
 })
-watch([search, filter], () => {
+watch([search, filter, sportFilter], () => {
   rosterGeneration++
   peopleLoading.value = true
   clearTimeout(rosterTimer)
@@ -234,6 +273,7 @@ async function saveInviteDraft() {
 }
 watch([email, roles], () => void saveInviteDraft(), { deep: true })
 onMounted(async () => {
+  void loadSports()
   await load()
   const draft = await getDraft<{ email: string; roles: Role[] }>(draftKey).catch(() => undefined)
   if (draft) {
@@ -450,11 +490,19 @@ onMounted(async () => {
                 </option>
                 <option value="inactive">{{ l('Inactive people', 'الأشخاص غير النشطين') }}</option>
               </select></label
+            ><label v-if="sports.length"
+              >{{ l('Sport or specialty', 'الرياضة أو التخصص')
+              }}<select v-model="sportFilter">
+                <option value="">{{ l('All', 'الكل') }}</option>
+                <option v-for="sport in sports" :key="sport.id" :value="sport.id">
+                  {{ sport.name }}{{ sport.archived ? ' · ' + l('Archived', 'مؤرشف') : '' }}
+                </option>
+              </select></label
             >
           </div>
           <div class="organization-people">
             <section tabindex="0" :aria-label="l('People', 'الأشخاص')">
-              <p class="muted">{{ peopleTotal }} {{ l('people', 'أشخاص') }}</p>
+              <p class="muted">{{ l('People:', 'الأشخاص:') }} {{ peopleTotal }}</p>
               <p v-if="peopleLoading" class="small-print" role="status">
                 {{ l('Finding people…', 'جارٍ البحث عن الأشخاص…') }}
               </p>
@@ -468,10 +516,42 @@ onMounted(async () => {
                     <h2>{{ member.name }}</h2>
                     <p>{{ member.roles.map(roleName).join(' · ') }}</p>
                     <p v-if="member.roles.includes('trainee')" class="muted">
-                      {{ l('Trainer', 'المدرب') }}: {{ trainerName(member) }}
+                      {{ l('Primary coach', 'المدرب الأساسي') }}: {{ trainerName(member) }}
                     </p>
+                    <p v-if="supportingCoaches(member).length" class="muted" dir="auto">
+                      {{ l('Supporting', 'مساند') }}: {{ supportingCoaches(member).join('، ') }}
+                    </p>
+                    <p v-if="myLink(member)" class="small-print">
+                      {{
+                        l(
+                          'You support this athlete for training records only.',
+                          'تدعم هذا الرياضي في سجلات التدريب فقط.',
+                        )
+                      }}
+                    </p>
+                    <ul
+                      v-if="sportNames(member).length"
+                      class="person-sports"
+                      :aria-label="l('Sports and specialties', 'الرياضات والتخصصات')"
+                    >
+                      <li
+                        v-for="sport in sportNames(member)"
+                        :key="sport.id"
+                        class="tag"
+                        dir="auto"
+                      >
+                        {{ sport.name }}
+                      </li>
+                    </ul>
                   </div>
                 </div>
+                <RouterLink
+                  v-if="member.roles.includes('trainee') && view !== 'trainee'"
+                  class="text-link"
+                  :to="base + '/athletes/' + member.id"
+                  :aria-label="l('Profile for ', 'ملف ') + member.name"
+                  >{{ l('Profile', 'الملف') }}</RouterLink
+                >
                 <RouterLink
                   v-if="member.active && member.roles.includes('trainee') && view !== 'trainee'"
                   class="text-link"
@@ -485,7 +565,7 @@ onMounted(async () => {
                   >{{ l('Message', 'مراسلة') }}</RouterLink
                 >
                 <RouterLink
-                  v-if="member.roles.includes('trainee') && view !== 'trainee'"
+                  v-if="member.roles.includes('trainee') && view !== 'trainee' && !myLink(member)"
                   class="text-link"
                   :to="base + '/nutrition?member=' + member.id"
                   >{{ l('Nutrition', 'التغذية') }}</RouterLink
@@ -582,6 +662,13 @@ onMounted(async () => {
                     {{ l('Create password setup link', 'إنشاء رابط إعداد كلمة المرور') }}
                   </button>
                 </div>
+                <MemberSports
+                  v-if="selected.active && !selected.roles.includes('admin')"
+                  :workspace-id="id"
+                  :member="selected"
+                  :sports="sports"
+                  @saved="sportsSaved"
+                />
                 <form
                   v-if="selected.active && selected.roles.includes('trainee')"
                   class="form-stack institution-trainer-form"
@@ -599,15 +686,23 @@ onMounted(async () => {
                     :view="view"
                     role="trainer"
                     single
-                    :label="l('Responsible trainer', 'المدرب المسؤول')"
+                    :label="l('Primary coach', 'المدرب الأساسي')"
                     :model-value="trainer ? [trainer] : []"
                     :exclude-ids="[selected.id]"
                     @update:model-value="trainer = $event[0] || ''"
                   />
                   <button class="button secondary">
-                    {{ l('Update trainer', 'تحديث المدرب') }}
+                    {{ l('Update primary coach', 'تحديث المدرب الأساسي') }}
                   </button>
                 </form>
+                <CoachingTeam
+                  v-if="selected.active && selected.roles.includes('trainee')"
+                  :workspace-id="id"
+                  :member="selected"
+                  :sports="sports"
+                  :names="data.names"
+                  @saved="sportsSaved"
+                />
               </fieldset>
             </aside>
           </div>
@@ -733,6 +828,7 @@ onMounted(async () => {
               {{ l('Close institution', 'إغلاق المؤسسة') }}
             </button>
           </details>
+          <SportsSettings :workspace-id="id" @changed="loadSports" />
           <BrandingSettings :workspace-id="id" />
         </section>
         <p v-else class="notice">

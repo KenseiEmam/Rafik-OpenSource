@@ -14,6 +14,44 @@
 
 ## Recent work
 
+- **20 October — Release 1 review fixes (PR #135):**
+  - Limited and documented the overlap visibility exception.
+  - Added measurement-aware coach recording through a shared module.
+  - Guarded navigation after a delayed start acknowledgment.
+  - Added unit, backend and browser regression coverage; the delayed-start test was confirmed to fail without the guard.
+
+- **19 October — Release 1e (delegated logging):**
+  - Added delegated session start and save under coach identity, attributed session history, the athlete attribution banner, the coach recording page and the `coach_recorded` analytics count.
+  - Backend and browser checks pass. Fixed a navigation-after-command race found by the browser journey.
+  - Release 1 implementation is complete; next are review and merge of the stacked pull requests and the paired English/Arabic landing documentation.
+
+- **19 October — Release 1d (athlete profile):**
+  - Added a web-only staff athlete profile that composes existing scoped reads.
+  - The role-matrix browser journey (primary, supporting, unlinked, admin) passes in Chromium and WebKit, including Arabic dark at 320 px.
+  - Next: slice 1e, delegated workout logging.
+
+- **19 October — Release 1c (concurrent plans):**
+  - Removed the one-active-plan constraint and added a plan goal and sport.
+  - Explicit add, replace and end, with overlap warnings.
+  - Narrowed supporting coaches' plan, session, media and assessment reads.
+  - Multi-plan athlete training view; add or replace choice in delivery; End plan in the plan detail.
+  - Backend and browser checks pass. Restored the "Adapt this program" regression and repaired the programming spec.
+  - Next: slice 1d, the staff athlete profile.
+
+- **19 October — Release 1b (coaching team):**
+  - Added primary and supporting coaching links, with a backfill and a sync trigger.
+  - `recipient()` now takes an explicit scope that defaults to primary. Training-scope reads, scheduling, grouping and messaging are deliberately widened; nutrition, participation status, plan changes, review, follow-up and analytics stay primary-only.
+  - Admin coaching-team UI in People.
+  - Backend matrix, fresh-database trigger and backfill checks, affected domain suites, and Chromium and WebKit browser journeys pass.
+  - Repaired the stale organizations spec; recorded the missing explanation on revocation as P3.
+  - Next: slice 1c, concurrent goal-specific plans.
+
+- **19 October — Release 1 decisions and slice 1a:**
+  - Founder decisions: a primary coach plus supporting coaches scoped to a sport; participation status for the primary coach only; concurrent plans allowed with a same-day warning; admins keep reading shared nutrition actuals.
+  - Implemented institution sports and coaching specialties: a forward migration, an admin-only API with receipts, People sport chips and filter, and Institution settings management.
+  - Backend and browser checks pass against disposable databases. They found, and this change fixed, light muted-text contrast and People card word-splitting.
+  - Next: slice 1b, the coaching team and authority.
+
 - **20 October — beta.1 status alignment:** reviewed release/build/install guidance in both repositories after phone acceptance and artifact publication. Beta.1, including Android, is accepted and published for evaluation. Corrected stale candidate/physical-acceptance wording, the already-passed R0 browser checks and live-deployment versus project-release gates. Broader native/accessibility/historical-upgrade coverage and URL scanning remain follow-up work; the next release in PR #135/#11 remains separate. Review: [application PR #137](https://github.com/KenseiEmam/Rafik-OpenSource/pull/137) and [paired landing PR #15](https://github.com/KenseiEmam/rafik-landing/pull/15). No runtime, APK, key or tag changes.
 
 - **20 October — Android download published:** the founder uploaded `1.0.0-beta.1.zip` to the existing GitHub prerelease. Inspected its three files without executing them; the embedded APK SHA-256 matches bundled `SHA256SUMS`, `build.json` and the existing `5d1ce76` packaging record. Added direct bundle links and phone extraction/install guidance; retained the distinct original source tag. Paired landing guidance follows in existing PR #14. No rebuild or repeat phone test.
@@ -48,9 +86,9 @@
 
 ## Next actions
 
-1. Review the R0 pull request, then the [post-beta.1 release plan](../requirements/release-plan-post-beta1.md). Confirm or change its provisional defaults (coach model, concurrent plans, field warnings, communications, player notes, ratings, admin access to shared nutrition actuals) before slice 1a. R0's web work is done; Release 1 has not started.
-2. Runtime PR #126, documentation PR #127 and CI-repair PR #128 are merged, as are landing PRs #8–#10. Align the selected release source/tag with actual published assets; use GitHub as the download host.
-3. Keep the founder-reported S20+ pass and completed signing backup as evidence. Record the installed APK identity/device metadata when available, and align source/tag/assets before publishing downloads; broader native checks remain separate.
+1. Review and merge the single Release 1 pull request (one commit per slice, 1a–1e), then the paired English/Arabic landing documentation. Release 2 needs founder decisions (communications, player notes, field warnings) before it starts. Release 1's [decisions are confirmed](../requirements/release-plan-post-beta1.md#confirmed-release-1-decisions). Release 2 and Release 3 decisions (communications, player notes, field warnings) and coach ratings remain open.
+2. Beta.1, including the Android download (`1.0.0-beta.1.zip`), is accepted and published as a GitHub prerelease. The tag resolves to `4ac70c8`, distinct from the APK's packaged source `5d1ce76`; keep that distinction in release notes. No further beta.1 release action is pending.
+3. Keep the founder-reported S20+ pass and completed signing backup as evidence. Record installed-APK and device metadata if it becomes available. Broader native, accessibility and historical-upgrade checks remain backlog.
 4. Collect the recorded first-user, recent web refinement, privacy and Unix operational evidence from [known issues](../known-issues/README.md) as the relevant institution is evaluated. These are not invented completed checks or a request to redo accepted implementation stages.
 
 Earlier delivery messages, failed attempts and superseded “still pending” statements are preserved in the [dated ledger snapshot](../archive/delivery-ledger-through-2026-10-19.md). Current scope is in requirements; this file is not a second setup guide.

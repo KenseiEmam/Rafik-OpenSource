@@ -19,6 +19,7 @@ export async function peoplePage(
   const offset = pageOffset(q.get("offset")),
     search = (q.get("search") || "").slice(0, 100),
     kind = q.get("role"),
+    sport = q.get("sport") ? uuid(q.get("sport")) : null,
     includeSelf = q.get("self") === "true";
   if (kind && !["admin", "trainer", "trainee"].includes(kind))
     throw new ApiError(400, "invalid_roles");
@@ -26,8 +27,14 @@ export async function peoplePage(
     workspace_id: id,
     ...(view === "trainer"
       ? {
+          // Training scope: primary athletes plus active supporting links.
           OR: [
             { trainer_id: self.id },
+            {
+              coaching_as_athlete: {
+                some: { coach_member_id: self.id, ended_at: null },
+              },
+            },
             ...(includeSelf ? [{ id: self.id }] : []),
           ],
         }
@@ -44,6 +51,9 @@ export async function peoplePage(
           ? {}
           : { active: q.get("state") !== "inactive" }),
         ...(kind ? { roles: { has: kind } } : {}),
+        ...(sport
+          ? { organization_member_sports: { some: { sport_id: sport } } }
+          : {}),
         name: { contains: search, mode: "insensitive" as const },
       },
     ],
@@ -59,6 +69,21 @@ export async function peoplePage(
     active: true,
     revision: true,
     trainer_id: true,
+    organization_member_sports: {
+      select: { sport_id: true },
+      orderBy: { sport_id: "asc" as const },
+    },
+    coaching_as_athlete: {
+      where: { ended_at: null },
+      select: {
+        id: true,
+        coach_member_id: true,
+        kind: true,
+        sport_id: true,
+        revision: true,
+      },
+      orderBy: [{ kind: "asc" as const }, { created_at: "asc" as const }],
+    },
   };
   const [items, total, chosen] = await Promise.all([
     tx.workspace_members.findMany({
@@ -83,7 +108,10 @@ export async function peoplePage(
         in: [
           ...new Set(
             [...items, ...chosen]
-              .map((m) => m.trainer_id)
+              .flatMap((m) => [
+                m.trainer_id,
+                ...m.coaching_as_athlete.map((l) => l.coach_member_id),
+              ])
               .filter((x): x is string => !!x),
           ),
         ],
@@ -91,9 +119,22 @@ export async function peoplePage(
     },
     select: { id: true, name: true },
   });
+  const withSports = (list: typeof items) =>
+    list.map(({ organization_member_sports, coaching_as_athlete, ...m }) => ({
+      ...m,
+      sports: organization_member_sports.map((x) => x.sport_id),
+      // Active coaching team; supporting coaches carry the sport/specialty they cover.
+      coaches: coaching_as_athlete.map((l) => ({
+        id: l.id,
+        coach: l.coach_member_id,
+        kind: l.kind,
+        sport: l.sport_id,
+        revision: l.revision,
+      })),
+    }));
   return {
-    items,
-    selected: chosen,
+    items: withSports(items),
+    selected: withSports(chosen),
     names,
     total,
     next: offset + 25 < total ? offset + 25 : null,
@@ -132,15 +173,32 @@ export async function organizationRecipients(
         id: true,
         revision: true,
         member_id: true,
+        goal: true,
+        sport_id: true,
+        start_date: true,
+        end_date: true,
         organization_versions: { select: { title: true } },
       },
+      orderBy: { start_date: "asc" },
     });
     const map = (m: (typeof members)[0]) => {
-      const a = assignments.find((a) => a.member_id === m.id);
+      const plans = assignments.filter((a) => a.member_id === m.id),
+        a = plans[0];
       return {
         id: m.id,
         name: m.name,
         revision: m.revision,
+        // Every active plan; replacing one is an explicit choice.
+        plans: plans.map((p) => ({
+          id: p.id,
+          revision: p.revision,
+          title: p.organization_versions.title,
+          goal: p.goal,
+          sport: p.sport_id,
+          start_date: p.start_date,
+          end_date: p.end_date,
+        })),
+        // Compatibility fields for older clients: the earliest active plan.
         assignment_id: a?.id || null,
         assignment_revision: a?.revision || null,
         current: a?.organization_versions.title,

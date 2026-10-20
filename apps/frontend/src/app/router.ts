@@ -178,6 +178,16 @@ const router = createRouter({
       meta: { private: true },
     },
     {
+      path: '/organization/:workspace/:view/record/:session',
+      component: () => import('../features/organizations/DelegatedWorkout.vue'),
+      meta: { private: true },
+    },
+    {
+      path: '/organization/:workspace/:view/athletes/:member',
+      component: () => import('../features/organizations/AthleteProfile.vue'),
+      meta: { private: true },
+    },
+    {
       path: '/organization/:workspace/:view/assessments/:member',
       component: () => import('../features/organizations/AssessmentHistory.vue'),
       meta: { private: true },

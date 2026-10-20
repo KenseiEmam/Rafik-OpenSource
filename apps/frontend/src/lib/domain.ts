@@ -158,6 +158,10 @@ export interface Session {
   started_at: string
   completed_at: string | null
   version: number
+  /** Institution sessions recorded by a coach on the athlete's behalf. */
+  recorded_mode?: 'self' | 'delegated'
+  recorded_by?: string | null
+  recorded_by_name?: string | null
 }
 export interface PendingOperation {
   id: string

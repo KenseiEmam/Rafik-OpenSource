@@ -239,7 +239,11 @@ onMounted(() => load())
           <RouterLink :to="base + (workspace ? '/training' : '/clients')"
             ><span>{{ l('Completed workouts', 'التمارين المكتملة') }}</span
             ><strong>{{ data.summary.completed }}</strong
-            ><small>{{ l('In this period', 'خلال الفترة') }}</small></RouterLink
+            ><small>{{
+              data.summary.coach_recorded
+                ? l('Coach-recorded: ', 'سجّلها مدرب: ') + data.summary.coach_recorded
+                : l('In this period', 'خلال الفترة')
+            }}</small></RouterLink
           >
           <div>
             <span>{{ l('Current trainees who trained', 'متدربون حاليون تدربوا') }}</span

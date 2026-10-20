@@ -9,7 +9,8 @@
   --surface: color-mix(in srgb, var(--page) 90%, white);
   --surface-soft: color-mix(in srgb, var(--page) 82%, var(--ink));
   --ink: var(--instance-ink-light, #23332d);
-  --muted: #545d56;
+  /* 4.5:1+ on light --surface-soft (the former #545d56 measured 4.39:1 in WebKit). */
+  --muted: #4d564f;
   --line: color-mix(in srgb, var(--page) 72%, var(--ink));
   --accent: var(--instance-accent, #285943);
   --accent-hover: color-mix(in srgb, var(--accent) 86%, var(--ink));

@@ -91,6 +91,10 @@ export type AthletePlanSummary = {
   state: string
   status: AthletePlanStatus
   schedule_mode: string
+  /** Optional goal and sport label; an athlete can hold several active plans. */
+  goal: string | null
+  sport: string | null
+  revision: number
   version: {
     id: string
     title: string

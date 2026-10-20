@@ -1,5 +1,150 @@
 # Verification record
 
+## Release 1 review fixes (PR #135) — 20 October 2026
+
+**Changes:** the three review points.
+
+1. Overlap warnings are now limited to title, goal and dates, documented as an intentional supporting-coach exception.
+2. The coach recording form uses the athlete logger's shared measurement rules (`set-measures.ts`) for timed and distance sets.
+3. A delayed start acknowledgment no longer navigates a coach who has left.
+
+**Passed:**
+
+- **Unit:** `set-measures.test.ts`, 2 tests, plus the full frontend unit suite.
+- **Backend:** `test:concurrent-plans` asserts the exact overlap fields a supporting coach receives, including for a plan outside their sport. Related backend suites pass on a disposable database.
+- **Browser (`delegated-sessions.e2e.ts`, Chromium desktop and WebKit phone), 6/6:**
+  - Timed and distance sets show seconds or metres with the target only as a placeholder; marking done without an actual value is refused; saved entries hold the entered actuals and effort.
+  - A start response held until after the coach leaves keeps the coach where they went, and the delegated session still exists.
+  - With the navigation guard removed, the delayed-start test fails, confirming it is a real regression test.
+- **Reruns:** the athlete logger change was rechecked through the programming and workout-feedback journeys.
+
+## Release 1e: delegated workout logging — 19 October 2026
+
+**Passed against disposable databases (`test:delegated-sessions`):**
+
+- Unlinked coaches, supporting coaches on unlabelled plans and administrators are refused. The primary coach, and a supporting coach on their sport's plan, can record.
+- The athlete stays the subject while `recorded_by` and receipts carry the coach. An exact save retry returns the same result.
+- Coaches cannot edit a self-logged session; the athlete can correct a delegated one.
+- History is attributed: start (coach), save (coach), save (athlete). History reads follow session scope.
+- `coach_recorded` equals 1.
+- A former primary coach is refused after reassignment.
+- Session-related suites pass, and institution deletion cascades cleanly (deferred member references).
+
+**Browser (`delegated-sessions.e2e.ts`, Chromium desktop and WebKit phone):**
+
+- The coach starts from the athlete profile and edits a set, then finishes after a lost acknowledgment and exact retry: exactly two history entries, both attributed to the coach.
+- The athlete sees "Recorded by R4 Coach on your behalf".
+- Arabic dark at 320 px, with layout and axe checks; screenshots inspected.
+- **Found and fixed:** navigating inside the start command's completion callback let the remounted page adopt the still-saved command and lock the form.
+
+**Limits:**
+
+- Coach recording is online only and for the current date.
+- There is no separate flag action.
+- Browser emulation is not physical-device evidence.
+
+## Release 1d: staff athlete profile — 19 October 2026
+
+**Browser (`athlete-profile.e2e.ts`, isolated wrapper, Chromium desktop and WebKit phone), each role against the same athlete:**
+
+- **Primary coach:** both plans, the current nutrition plan with an unshared-diary notice, and the athlete-recorded "Modified participation" status with the non-medical wording.
+- **Supporting coach:** only the football plan, and no nutrition or participation sections.
+- **Unlinked coach:** a refusal, with no plan data shown.
+- **Administrator:** nutrition, consent-setup and assent state, and never the status itself. Reached from the People **Profile** link.
+- Arabic dark at 320 px. Layout and axe checks ran, and screenshots were inspected.
+
+No API or schema changed; the R0 and Release 1a–1c journeys were rerun on this source.
+
+## Release 1c: concurrent goal-specific plans — 19 October 2026
+
+**Passed against disposable databases:**
+
+- **`test:concurrent-plans`:**
+  - Add with goal and sport; a second plan reports date overlaps; duplicate-version (`409`) and goal-length rejection.
+  - A supporting coach can only write plans labelled with their linked sport, and cannot replace an unlabelled plan.
+  - The supporting coach's delivery, athlete-plan and history reads show only football plans and sessions; a single-session read outside the sport returns `403`. The recipients list includes every plan.
+  - An unknown replace target is a conflict; the legacy `assignment_id` path replaces.
+  - `end` is revision-checked, authorized by sport and recorded as an event.
+  - Assessment history is limited to events the supporting coach staffed.
+- **Related suites:** coaching team, programming, assets, tasks and feedback pass.
+
+**Browser (isolated wrapper, Chromium desktop and WebKit phone):**
+
+- **`concurrent-plans.e2e.ts`:**
+  - A coach keeps the existing plan and adds a second one with a goal; the review and the overlap notice are correct.
+  - The athlete sees both labelled plans, a same-day notice and per-plan session buttons.
+  - The coach ends a plan from the plan detail, then explicitly replaces one.
+  - Arabic dark at 320 px, with layout and axe checks; screenshots inspected (dates isolated as left-to-right text).
+- **`programming.e2e.ts`:** repaired and passing in both engines.
+
+**Limits:**
+
+- Overlap compares date windows, not individual training days.
+- Events carry no sport.
+- Browser emulation is not physical-device evidence.
+
+## Release 1b: coaching team — 19 October 2026
+
+**Passed against disposable databases:** the preview database was not migrated or changed.
+
+- **`test:coaching-team`:** an allowed/denied matrix for primary, supporting and unlinked coaches, plus lifecycle checks.
+  - Training-scope reads (delivery, athlete plans, assessment history), the roster and event participant selection.
+  - `403` for supporting coaches on nutrition, analytics and plan assignment; participation status is not exposed to them.
+  - Coverage and foreign-sport validation, and refusal of link changes by non-admins.
+  - Removing a sport ends the dependent link; a stale `end-coach-link` revision is refused; ended links lose access.
+  - Promotion from supporting to primary leaves exactly one active link.
+  - Deactivating a coach ends their links through the trigger, and `trainer_id` mirrors the primary link for every athlete.
+- **`test:fresh`:** migrations, seed and the eight SQL suites, plus a rolled-back scenario. Seeded `trainer_id` rows have mirrored primary links; the extracted backfill recreates them; deactivating coaches and clearing `trainer_id` leaves no active links.
+- **Affected domain suites:** sports, organizations, programming, communication, services, assets, nutrition, injuries, tasks and feedback all pass (22 tests).
+
+**Browser (isolated wrapper, Chromium desktop and WebKit phone):**
+
+- **`coaching-team.e2e.ts`:**
+  - An admin adds a supporting coach for a sport, and the cards show the primary and supporting coaches.
+  - The supporting coach sees the athlete with a training-only note and no nutrition link; a direct nutrition read returns `403`.
+  - Arabic dark at 320 px; removing the link takes the athlete off the supporting coach's roster.
+  - Layout and axe checks ran, and screenshots were inspected.
+- **`organizations.e2e.ts`:** repaired from stale setup, and passes for primary reassignment after a lost acknowledgment and exact retry. It leaves exactly one primary link, revocation clears `trainer_id` and links, and the last admin is protected.
+
+**Fixed:** the People count read "1 people"; it now uses a `People: n` label.
+
+**Limits:**
+
+- Supporting coaches can read all of an athlete's training plans until plans carry a sport (1c).
+- Browser emulation is not physical-device evidence.
+- The analytics workload chart still counts primary coaches only, by design.
+
+## Release 1a: sports and coaching specialties — 19 October 2026
+
+**Passed against disposable databases:** each run migrated a new `rafik_browser_*` database, started its own API and dropped the database afterward. The preview database was not migrated or changed.
+
+- **`test:organization-sports`, 2 tests:**
+  - Admin-only writes; athletes cannot read the list; trainers can read it.
+  - Exact receipt replay, case-insensitive duplicate rejection, fixed kind, stale revision, and an event per change.
+  - Athletes refuse specialties; administrators cannot be linked; another institution's sport is rejected.
+  - A stale `previous` set is a conflict; archived entries cannot be newly added but existing links stay.
+  - The People sport filter applies inside the coach's assigned scope.
+- **`test:organizations`:** 5 existing tests pass.
+- **Shared database types** were regenerated from a migrated disposable database; only the two new tables were added.
+
+**Browser (`organization-sports.e2e.ts`, isolated wrapper, Chromium desktop and WebKit phone):**
+
+- An admin adds, renames, archives and restores sports and specialties, including a long Arabic name.
+- An athlete's picker offers sports only; a coach can take specialties.
+- Sport chips appear and the People filter works, and a coach's filtered list contains only their assigned athlete.
+- Layout and axe checks ran, and screenshots were inspected, in English dark and light (desktop and phone) and Arabic dark at 320 px.
+
+**Defects found and fixed during these checks:**
+
+- Light `--muted` measured 4.39:1 on the soft surface in WebKit; it is darkened from `#545d56` to `#4d564f`. After this shared token change, the three R0 browser journeys were rerun in both engines and all six runs passed.
+- At 320 px, People cards split Arabic link words letter by letter; actions now wrap below the identity.
+
+**Limits:**
+
+- Sports grant no access yet.
+- Browser emulation is not physical-device evidence.
+- Recorded stale browser specs remain unchanged.
+
 ## Current beta.1 decision — 20 October 2026
 
 **Accepted and published for beta evaluation, including Android.** Packaging/signature evidence, founder-reported Galaxy S20+ standalone field/offline acceptance, signing backup and published-bundle checksum verification are complete. No repeat phone check or rebuild is required to close beta.1. The dated receipts below retain their original source and coverage limits; an earlier pending/no-upload statement is historical, not the current release decision.

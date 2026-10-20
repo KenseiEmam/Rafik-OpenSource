@@ -209,7 +209,8 @@ async function selectedPeople(
     throw new ApiError(400, "invalid_recipients");
   if (view === "trainer")
     for (const m of people)
-      if (m.id !== self.id) await recipient(tx, id, self, view, m.id, true);
+      if (m.id !== self.id)
+        await recipient(tx, id, self, view, m.id, true, "training");
   return { members, managers };
 }
 export async function communicationCommand(

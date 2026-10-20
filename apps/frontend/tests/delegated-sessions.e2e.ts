@@ -1,0 +1,298 @@
+import { test, expect, type Page } from '@playwright/test'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { randomUUID, randomBytes } from 'node:crypto'
+import AxeBuilder from '@axe-core/playwright'
+import { teamFixture } from './team-fixture'
+import { layoutIssues } from './layout-contract'
+
+async function inspect(page: Page, name: string, info: { project: { name: string } }) {
+  expect(await layoutIssues(page)).toEqual([])
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
+  await page.screenshot({
+    path: `artifacts/r1e-${name}-${info.project.name}.png`,
+    fullPage: true,
+    animations: 'disabled',
+  })
+}
+
+type Fixture = Awaited<ReturnType<typeof teamFixture>>
+/** Institution with a primary coach, an athlete and one assigned plan built from `days`. */
+async function institution(f: Fixture, name: string, adapt?: (plan: any) => void) {
+  const workspace = randomUUID(),
+    endpoint = `/v1/workspaces/${workspace}`,
+    today = new Date().toISOString().slice(0, 10)
+  await f.call(f.owner, '/v1/workspaces', { id: workspace, kind: 'organization', name })
+  for (const [person, roles] of [
+    [f.coach, ['trainer']],
+    [f.client, ['trainee']],
+  ] as const) {
+    const token = randomBytes(32).toString('hex')
+    await f.call(f.owner, endpoint, {
+      operation: randomUUID(),
+      action: 'invite',
+      id: randomUUID(),
+      email: person.email,
+      roles,
+      token,
+    })
+    await f.call(person, `/v1/organization-invitations/${token}`, {})
+  }
+  let people = await f.call(f.owner, `${endpoint}?view=admin`)
+  const coach = people.members.find((m: any) => m.user_id === f.coach.id)
+  let athlete = people.members.find((m: any) => m.user_id === f.client.id)
+  await f.call(f.owner, endpoint, {
+    operation: randomUUID(),
+    action: 'assign-trainer',
+    id: athlete.id,
+    revision: athlete.revision,
+    trainer: coach.id,
+  })
+  const plan = JSON.parse(
+    readFileSync(resolve(import.meta.dirname, '../../backend/content/starter.json'), 'utf8'),
+  ).prescription
+  adapt?.(plan)
+  const version = (
+    await f.call(f.coach, endpoint + '/programs', {
+      operation: randomUUID(),
+      action: 'publish',
+      view: 'trainer',
+      id: randomUUID(),
+      title: 'Track block',
+      draft: plan,
+      revision: null,
+    })
+  ).version.id
+  people = await f.call(f.owner, `${endpoint}?view=admin`)
+  athlete = people.members.find((m: any) => m.user_id === f.client.id)
+  await f.call(f.coach, endpoint + '/delivery', {
+    operation: randomUUID(),
+    action: 'assign',
+    view: 'trainer',
+    version_id: version,
+    start_date: today,
+    schedule_mode: 'flexible',
+    members: [{ id: athlete.id, revision: athlete.revision, replaces: null }],
+  })
+  return { workspace, endpoint, athlete, plan, base: `/organization/${workspace}/trainer` }
+}
+
+test('coach records a session on the athlete’s behalf with attribution, exact retry and history', async ({
+  page,
+  browser,
+}, info) => {
+  test.setTimeout(180000)
+  const f = await teamFixture(),
+    athleteContext = await browser.newContext(),
+    athletePage = await athleteContext.newPage(),
+    workspace = randomUUID(),
+    endpoint = `/v1/workspaces/${workspace}`,
+    today = new Date().toISOString().slice(0, 10)
+  try {
+    await f.call(f.owner, '/v1/workspaces', {
+      id: workspace,
+      kind: 'organization',
+      name: 'Madar delegated',
+    })
+    for (const [person, roles] of [
+      [f.coach, ['trainer']],
+      [f.client, ['trainee']],
+    ] as const) {
+      const token = randomBytes(32).toString('hex')
+      await f.call(f.owner, endpoint, {
+        operation: randomUUID(),
+        action: 'invite',
+        id: randomUUID(),
+        email: person.email,
+        roles,
+        token,
+      })
+      await f.call(person, `/v1/organization-invitations/${token}`, {})
+    }
+    let people = await f.call(f.owner, `${endpoint}?view=admin`)
+    const coach = people.members.find((m: any) => m.user_id === f.coach.id)
+    let athlete = people.members.find((m: any) => m.user_id === f.client.id)
+    await f.call(f.owner, endpoint, {
+      operation: randomUUID(),
+      action: 'assign-trainer',
+      id: athlete.id,
+      revision: athlete.revision,
+      trainer: coach.id,
+    })
+    const plan = JSON.parse(
+      readFileSync(resolve(import.meta.dirname, '../../backend/content/starter.json'), 'utf8'),
+    ).prescription
+    const version = (
+      await f.call(f.coach, endpoint + '/programs', {
+        operation: randomUUID(),
+        action: 'publish',
+        view: 'trainer',
+        id: randomUUID(),
+        title: 'Track block',
+        draft: plan,
+        revision: null,
+      })
+    ).version.id
+    people = await f.call(f.owner, `${endpoint}?view=admin`)
+    athlete = people.members.find((m: any) => m.user_id === f.client.id)
+    await f.call(f.coach, endpoint + '/delivery', {
+      operation: randomUUID(),
+      action: 'assign',
+      view: 'trainer',
+      version_id: version,
+      start_date: today,
+      schedule_mode: 'flexible',
+      members: [{ id: athlete.id, revision: athlete.revision, replaces: null }],
+    })
+
+    // Coach starts from the athlete profile and records under their own name.
+    const base = `/organization/${workspace}/trainer`
+    await f.login(page, f.coach, `${base}/athletes/${athlete.id}`)
+    await page.getByRole('link', { name: 'Record a session for Track block' }).click()
+    await expect(page.getByText('under your own name', { exact: false })).toBeVisible()
+    const firstDay = plan.days.find((d: any) => !d.restDay)
+    await page.getByRole('button', { name: 'Record ' + firstDay.name, exact: true }).click()
+    await expect(page).toHaveURL(/\/record\/[a-f0-9-]{36}$/)
+    await expect(page.getByText('Recorded on behalf of')).toBeVisible()
+    const firstSet = page.locator('.delegated-set').first()
+    await firstSet.getByLabel(/^Load/).fill('22.5')
+    await firstSet.getByRole('checkbox', { name: 'Done' }).check()
+    let lost = false,
+      saves = 0
+    await page.route(`**${endpoint}/sessions`, async (route) => {
+      const body = route.request().method() === 'POST' ? route.request().postDataJSON() : null
+      if (body?.action === 'save') saves++
+      if (!lost && body?.action === 'save') {
+        lost = true
+        await route.fetch()
+        await route.abort('failed')
+      } else await route.continue()
+    })
+    await page.getByRole('button', { name: 'Finish session', exact: true }).click()
+    await page.getByRole('button', { name: 'Retry saved change', exact: true }).click()
+    const history = page.getByRole('region', { name: 'Record history' })
+    await expect(history.getByRole('listitem')).toHaveCount(2)
+    await expect(history).toContainText('R4 Coach · started')
+    await expect(history).toContainText('R4 Coach · saved as completed')
+    expect(saves).toBe(2)
+    await inspect(page, 'record', info)
+    const recordUrl = page.url()
+    const sessionId = recordUrl.split('/').at(-1)
+
+    // The athlete sees who recorded the session and can open it to correct it.
+    await f.login(athletePage, f.client, `/workout/${sessionId}?workspace=${workspace}`)
+    await expect(
+      athletePage.getByRole('note').filter({ hasText: 'Recorded by R4 Coach on your behalf.' }),
+    ).toBeVisible()
+    await inspect(athletePage, 'athlete-banner', info)
+
+    // Arabic dark phone view of the coach record page.
+    await page.unroute(`**${endpoint}/sessions`)
+    await page.evaluate(() => {
+      localStorage.setItem('rafik.locale', 'ar')
+      localStorage.setItem('rafik.theme', 'dark')
+    })
+    await page.setViewportSize({ width: 320, height: 740 })
+    await page.goto(recordUrl)
+    await expect(page.getByRole('heading', { name: 'سجل التعديلات' })).toBeVisible()
+    await inspect(page, 'record-ar-dark-320', info)
+  } finally {
+    await athleteContext.close()
+    await f.cleanup()
+  }
+})
+
+test('coach-recorded timed and distance sets require actual seconds and metres', async ({
+  page,
+}) => {
+  test.setTimeout(180000)
+  const f = await teamFixture()
+  try {
+    const { athlete, plan, base } = await institution(f, 'Madar measured', (p) => {
+      // A conditioning day: one timed hold and one distance run alongside strength work.
+      const day = p.days[0]
+      Object.assign(day.exercises[1], { kind: 'timed', seconds: 30, reps: 1, load: 0 })
+      Object.assign(day.exercises[2], { kind: 'distance', metres: 400, reps: 1, load: 0 })
+    })
+    const day = plan.days[0]
+    await f.login(page, f.coach, `${base}/athletes/${athlete.id}`)
+    await page.getByRole('link', { name: 'Record a session for Track block' }).click()
+    await page.getByRole('button', { name: 'Record ' + day.name, exact: true }).click()
+    await expect(page).toHaveURL(/\/record\/[a-f0-9-]{36}$/)
+    const timed = page.locator('.delegated-set').nth(day.exercises[0].sets)
+    const distance = page
+      .locator('.delegated-set')
+      .nth(day.exercises[0].sets + day.exercises[1].sets)
+    // Timed and distance sets show their own measurement, empty with the target as a hint.
+    await expect(timed.getByLabel('Seconds')).toHaveValue('')
+    await expect(timed.getByLabel('Seconds')).toHaveAttribute('placeholder', 'Target 30')
+    await expect(timed.getByLabel('Reps')).toHaveCount(0)
+    await expect(timed.getByLabel(/^Load/)).toHaveCount(0)
+    await expect(distance.getByLabel('Metres')).toHaveAttribute('placeholder', 'Target 400')
+    // Completing without an actual result is refused.
+    await timed.getByRole('checkbox', { name: 'Done' }).click()
+    await expect(timed.getByRole('checkbox', { name: 'Done' })).not.toBeChecked()
+    await expect(page.getByRole('alert')).toContainText('Record the actual result')
+    await timed.getByLabel('Seconds').fill('42')
+    await timed.getByLabel('Effort (RPE, optional)').fill('7')
+    await timed.getByRole('checkbox', { name: 'Done' }).check()
+    await distance.getByLabel('Metres').fill('380')
+    await distance.getByRole('checkbox', { name: 'Done' }).check()
+    await page.getByRole('button', { name: 'Finish session', exact: true }).click()
+    await expect(page.getByRole('region', { name: 'Record history' })).toContainText(
+      'saved as completed',
+    )
+    const id = page.url().split('/').at(-1)
+    const saved = await f.call(f.coach, `/v1/organization-sessions/${id}?view=trainer`)
+    const find = (key: string) =>
+      saved.entries.find((e: any) => e.exercise_key === key && e.set_index === 0)
+    expect(find(day.exercises[1].key)).toMatchObject({ seconds: 42, effort: 7, completed: true })
+    expect(find(day.exercises[2].key)).toMatchObject({ metres: 380, completed: true })
+  } finally {
+    await f.cleanup()
+  }
+})
+
+test('a delayed start acknowledgment keeps the write but never pulls the coach back', async ({
+  page,
+}) => {
+  test.setTimeout(180000)
+  const f = await teamFixture()
+  try {
+    const { endpoint, athlete, plan, base } = await institution(f, 'Madar delayed')
+    let release!: () => void
+    const held = new Promise<void>((r) => (release = r))
+    let starts = 0
+    await page.route(`**${endpoint}/sessions`, async (route) => {
+      const body = route.request().method() === 'POST' ? route.request().postDataJSON() : null
+      if (body?.action === 'start') {
+        starts++
+        const response = await route.fetch()
+        await held
+        await route.fulfill({ response })
+      } else await route.continue()
+    })
+    await f.login(
+      page,
+      f.coach,
+      `${base}/record/new?assignment=${(await f.call(f.coach, `${endpoint}/athlete-plans?view=trainer&member=${athlete.id}`)).items[0].id}`,
+    )
+    await page.getByRole('button', { name: 'Record ' + plan.days[0].name, exact: true }).click()
+    await expect.poll(() => starts).toBe(1)
+    // The coach leaves before the acknowledgment arrives.
+    await page.getByRole('link', { name: 'Back to athlete plans' }).click()
+    await expect(page).toHaveURL(new RegExp(`${base}/training$`))
+    release()
+    await page.waitForTimeout(1500)
+    await expect(page).toHaveURL(new RegExp(`${base}/training$`))
+    // The write was preserved: the delegated session exists for the athlete.
+    const history = await f.call(
+      f.coach,
+      `${endpoint}/delivery?view=trainer&history=true&member=${athlete.id}`,
+    )
+    expect(history.sessions).toHaveLength(1)
+    expect(history.sessions[0].recorded_mode).toBe('delegated')
+  } finally {
+    await f.cleanup()
+  }
+})

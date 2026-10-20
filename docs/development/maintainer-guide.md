@@ -68,6 +68,29 @@ Multiple message attachments use ordered `organization_message_assets` links, mi
 | `infrastructure/cloud/`       | Per-provider Terraform starters that prepare the existing Compose stack on one VM; not cloud-verified.                                   |
 | `docs/`                       | Current product, engineering and operational documentation. Raw verification receipts are separated under `docs/verification/receipts/`. |
 
+Sports and coaching specialties are served by `apps/backend/server/organization-sports.ts` from migration `202610191200_sports_and_specialties`. The case-insensitive unique name index exists only in SQL. Admins manage them in `SportsSettings.vue` (Institution settings) and link people in `MemberSports.vue` (People manage panel). `people.ts` returns member `sports` and the `sport` filter. Run `npm run test:organization-sports` against a disposable migrated database.
+
+**Coaching team ([ADR 0025](../decisions/ADR-0025-coaching-team.md)):**
+
+- **Where it lives:** `apps/backend/server/coaching-links.ts`, `coachedBy()` and the `recipient(…, scope)` argument in `programming.ts`, and migration `202610191300_coaching_links`, which holds the table, backfill and sync trigger.
+- **Choosing a scope:** when a new path checks a coach's access, choose the scope deliberately. The default is primary. Only plans, sessions, assessments, program media, and scheduling, groups and messaging use `training`.
+- **SQL filters:** raw SQL that filters `trainer_id = self` means the primary coach. Add the active-link `EXISTS` only for training-scope reads.
+- **Web:** `CoachingTeam.vue` manages supporting coaches in the People manage panel.
+- **Concurrent plans (1c):** `deliveryCommand` in `programming.ts` handles assign (add or explicit `replaces`) and `end`.
+  - `planAuthority()` enforces sport-labelled writes for supporting coaches.
+  - `assignmentScope()` and `sessionScope()` narrow their reads. Apply them to any new plan or session read.
+  - Migration `202610191400_concurrent_plans` replaced the one-active-plan index with one active plan per version.
+  - In the web app, `DeliverPlan.vue` offers add or replace per athlete; `OrganizationTraining.vue` lists every active plan; `AthletePlans.vue` can end a plan and links back to "Adapt this program".
+  - Run `npm run test:concurrent-plans`.
+- **Delegated logging (1e):** delegated start and save checks are in `sessionCommand` (`delegate()`); history reads are in `organizationSessionHistory()`; migration `202610191500_delegated_sessions`.
+  - Coaches record on `DelegatedWorkout.vue` (`/record/new?assignment=…`, then `/record/:session`). Athletes see a banner on `WorkoutPage.vue`.
+  - Both screens take set measurements (fields, limits, positive-result rule) from `apps/frontend/src/lib/set-measures.ts`. Change them there, not per screen. On the coach form, timed and distance sets require a typed actual value; the prescription is only a placeholder.
+  - The start command navigates only if the screen is still mounted and its route is unchanged. The write is kept either way.
+  - After a command succeeds, navigate only once `run()` has settled. The page remounts on route changes, and navigating inside the completion callback let the new instance adopt the old saved command and lock the form.
+  - Run `npm run test:delegated-sessions`.
+- **Athlete profile (1d):** `AthleteProfile.vue` composes existing reads with `feedback: 'none'`, and each section shows its own refused or error state. Its section visibility is a convenience only, so never add a profile-only endpoint that widens access. Entry points: the **Profile** link on People cards and **Athlete profile** in the athlete-plan detail.
+- **Tests:** `npm run test:coaching-team` covers the access matrix and lifecycle. `npm run test:fresh` checks the trigger, the backfill and the mirror in a rolled-back transaction.
+
 Instance branding is managed by `apps/frontend/src/features/organizations/BrandingSettings.vue`, applied in `apps/frontend/src/App.vue`, and served by `apps/backend/server/instance-branding.ts`. The initial setup claims the single-instance branding owner; the forward migration is `apps/backend/prisma/migrations/202610171500_instance_branding/`. Keep the raster signature/size checks, super-admin scope, public image response headers and database backup behavior aligned when changing it. The supported palette is accent plus light/dark page backgrounds; surfaces derive from those colors and text/accent contrast is adjusted in `apps/frontend/src/lib/branding.ts`.
 
 Generated frontend sample/catalog files are outputs of backend content sources. Edit the canonical source, run its generator, and verify the generated output; do not hand-edit generated files.

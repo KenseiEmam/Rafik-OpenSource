@@ -1,3 +1,8 @@
+import {
+  setPrimary,
+  linkSupportingCoach,
+  endSupportingCoach,
+} from "./coaching-links.ts";
 import { pageOffset } from "./service-definitions.ts";
 import { createHash, randomUUID } from "node:crypto";
 import {
@@ -489,6 +494,10 @@ export async function workspaceCommand(
       await event(tx, actor, id, "invitation_revoked", invite.id);
       return { saved: true };
     }
+    if (action === "link-coach")
+      return linkSupportingCoach(tx, actor, id, self.id, input);
+    if (action === "end-coach-link")
+      return endSupportingCoach(tx, actor, id, self.id, input);
     if (action === "member" || action === "assign-trainer") {
       const member = await tx.workspace_members.findFirst({
         where: { id: uuid(input.id), workspace_id: id },
@@ -512,6 +521,7 @@ export async function workspaceCommand(
               });
         if ((input.trainer !== null && !trainer) || trainer?.id === member.id)
           throw new ApiError(400, "invalid_trainer");
+        await setPrimary(tx, id, member.id, trainer?.id || null, self.id);
         const result = await tx.workspace_members.update({
           where: { id: member.id },
           data: { trainer_id: trainer?.id || null, revision: { increment: 1 } },

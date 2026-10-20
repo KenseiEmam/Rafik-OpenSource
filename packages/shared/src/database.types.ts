@@ -288,6 +288,8 @@ export type Database = { public: { Tables: {
         state: string
         revision: number
         created_at: string
+        goal: string | null
+        sport_id: string | null
     } }
     organization_channel_members: { Row: {
         channel_id: string
@@ -312,6 +314,19 @@ export type Database = { public: { Tables: {
         private_pair: boolean
         private_pair_key: string | null
         conversation_group_id: string | null
+    } }
+    organization_coaching_links: { Row: {
+        id: string
+        workspace_id: string
+        athlete_member_id: string
+        coach_member_id: string
+        kind: string
+        sport_id: string | null
+        created_by: string
+        created_at: string
+        ended_by: string | null
+        ended_at: string | null
+        revision: number
     } }
     organization_event_people: { Row: {
         workspace_id: string
@@ -444,6 +459,13 @@ export type Database = { public: { Tables: {
         created_at: string
         updated_at: string
     } }
+    organization_member_sports: { Row: {
+        workspace_id: string
+        member_id: string
+        sport_id: string
+        created_by: string
+        created_at: string
+    } }
     organization_message_assets: { Row: {
         message_id: string
         workspace_id: string
@@ -503,6 +525,18 @@ export type Database = { public: { Tables: {
         created_at: string
         updated_at: string
     } }
+    organization_session_history: { Row: {
+        id: string
+        workspace_id: string
+        session_id: string
+        version: number
+        actor_member_id: string
+        action: string
+        entries: Json
+        note: string
+        completed: boolean
+        created_at: string
+    } }
     organization_sessions: { Row: {
         id: string
         workspace_id: string
@@ -514,6 +548,18 @@ export type Database = { public: { Tables: {
         version: number
         started_at: string
         completed_at: string | null
+        recorded_mode: string
+        recorded_by: string | null
+    } }
+    organization_sports: { Row: {
+        id: string
+        workspace_id: string
+        name: string
+        kind: string
+        archived: boolean
+        revision: number
+        created_by: string
+        created_at: string
     } }
     organization_tasks: { Row: {
         id: string

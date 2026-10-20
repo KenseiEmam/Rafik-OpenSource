@@ -1,6 +1,12 @@
 import { ApiError, asActor, type Actor } from "./db.ts";
 import { scoped, uuid } from "./workspaces.ts";
-import { role, recipient } from "./programming.ts";
+import {
+  role,
+  recipient,
+  coachedBy,
+  supportingLinks,
+  assignmentScope,
+} from "./programming.ts";
 import { pageOffset } from "./service-definitions.ts";
 
 /** Staff assignment index. Dates classify assignments without rewriting their lifecycle. */
@@ -27,7 +33,8 @@ export async function athletePlans(
     }),
   );
   return scoped(actor, workspace, [view], async (tx, self) => {
-    if (member) await recipient(tx, workspace, self, view, member);
+    if (member)
+      await recipient(tx, workspace, self, view, member, false, "training");
 
     const zone = profile?.timezone || "UTC";
     const today = new Intl.DateTimeFormat("en-CA", {
@@ -39,7 +46,7 @@ export async function athletePlans(
     const day = new Date(today + "T00:00:00Z");
     const peopleScope = {
       workspace_id: workspace,
-      ...(view === "trainer" ? { trainer_id: self.id } : {}),
+      ...(view === "trainer" ? coachedBy(self.id) : {}),
       ...(member ? { id: member } : {}),
     };
     const stateWhere =
@@ -63,6 +70,13 @@ export async function athletePlans(
       workspace_id: workspace,
       workspace_members_organization_assignments_workspace_id_member_idToworkspace_members:
         peopleScope,
+      // Supporting coaches see only plans labelled with their linked sport.
+      ...(view === "trainer"
+        ? assignmentScope(
+            self.id,
+            await supportingLinks(tx, workspace, self.id),
+          )
+        : {}),
     };
     const where = assignment
       ? { ...scope, id: assignment }
@@ -115,6 +129,7 @@ export async function athletePlans(
           },
           workspace_members_organization_assignments_workspace_id_member_idToworkspace_members:
             { select: { id: true, name: true, active: true } },
+          organization_sports: { select: { name: true } },
         },
       }),
       tx.organization_assignments.count({ where }),
@@ -147,6 +162,9 @@ export async function athletePlans(
           state: row.state,
           status: derived,
           schedule_mode: row.schedule_mode,
+          goal: row.goal,
+          sport: row.organization_sports?.name || null,
+          revision: row.revision,
           version: row.organization_versions,
         };
       }),

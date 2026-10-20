@@ -153,7 +153,7 @@ export async function serviceCatalogCommand(
           if (view !== "admin") throw new ApiError(403, "trainer_unavailable");
           continue;
         }
-        await recipient(tx, id, self, view, memberId, true);
+        await recipient(tx, id, self, view, memberId, true, "training");
       }
       const data = { name: textValue(input.name), archived: input.archived };
       const result = old

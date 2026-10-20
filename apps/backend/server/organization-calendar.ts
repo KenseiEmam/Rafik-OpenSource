@@ -214,20 +214,18 @@ export async function calendar(actor: Actor, id: string, q: URLSearchParams) {
           select: { id: true, name: true },
         });
         return {
-          items: rows
-            .slice(0, 25)
-            .map((r) => ({
-              id: r.id,
-              kind,
-              member_id: r.member_id,
-              revision: r.revision,
-              recorded_at: r.recorded_at,
-              recorded_by: r.recorded_by,
-              recorded_name:
-                actors.find((a) => a.id === r.recorded_by)?.name || null,
-              values: (r.document as Record<string, unknown>).values,
-              note: (r.document as Record<string, unknown>).note,
-            })),
+          items: rows.slice(0, 25).map((r) => ({
+            id: r.id,
+            kind,
+            member_id: r.member_id,
+            revision: r.revision,
+            recorded_at: r.recorded_at,
+            recorded_by: r.recorded_by,
+            recorded_name:
+              actors.find((a) => a.id === r.recorded_by)?.name || null,
+            values: (r.document as Record<string, unknown>).values,
+            note: (r.document as Record<string, unknown>).note,
+          })),
           next: rows.length > 25 ? historyOffset + 25 : null,
         };
       }
@@ -375,7 +373,7 @@ async function eventPeople(
     members.push(m);
   }
   for (const key of participants)
-    members.push(await recipient(tx, id, self, view, key, true));
+    members.push(await recipient(tx, id, self, view, key, true, "training"));
   return { staff, participants, members };
 }
 export async function calendarCommand(actor: Actor, id: string, input: Input) {

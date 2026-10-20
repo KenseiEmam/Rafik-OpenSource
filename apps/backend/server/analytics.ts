@@ -41,7 +41,8 @@ export async function organizationAnalytics(
    (SELECT count(*)::int FROM active WHERE joined_at>=${window.start} AND joined_at<${window.end}) AS joined,
    (SELECT count(*)::int FROM completed) AS completed,
    (SELECT count(DISTINCT c.member_id)::int FROM completed c JOIN active a ON a.id=c.member_id) AS participating,
-   (SELECT count(*)::int FROM completed WHERE document->>'reviewed_at' IS NULL) AS pending_review`;
+   (SELECT count(*)::int FROM completed WHERE document->>'reviewed_at' IS NULL) AS pending_review,
+   (SELECT count(*)::int FROM completed WHERE recorded_mode='delegated') AS coach_recorded`;
     const daily = await tx.$queryRaw<
       any[]
     >`SELECT (s.completed_at AT TIME ZONE ${window.zone})::date::text AS date,count(*)::int AS value FROM public.organization_sessions s JOIN public.workspace_members m ON m.id=s.member_id WHERE s.workspace_id=${id}::uuid AND (${trainer}::uuid IS NULL OR m.trainer_id=${trainer}::uuid) AND (${selected}::uuid IS NULL OR m.id=${selected}::uuid) AND s.completed_at>=${window.start} AND s.completed_at<${window.end} GROUP BY 1 ORDER BY 1`;
@@ -164,11 +165,21 @@ export async function assessmentHistory(
     window = await analyticWindow(actor, q);
   return scoped(actor, id, [view], async (tx, self) => {
     const member = q.get("member") || self.id;
-    const person = await recipient(tx, id, self, view, member);
-    const offset = pageOffset(q.get("offset"));
+    const person = await recipient(
+      tx,
+      id,
+      self,
+      view,
+      member,
+      false,
+      "training",
+    );
+    const offset = pageOffset(q.get("offset")),
+      // Events carry no sport yet: a supporting coach sees results from events they staffed.
+      everything = view !== "trainer" || person.trainer_id === self.id;
     const results = await tx.$queryRaw<
       any[]
-    >`SELECT r.event_id,r.member_id,r.values,r.note,r.revision,r.recorded_at,e.title,e.starts_at,e.template_id,e.template_revision,e.definition,p.attendance FROM public.assessment_results r JOIN public.organization_events e ON e.id=r.event_id JOIN public.organization_event_people p ON p.event_id=r.event_id AND p.member_id=r.member_id WHERE r.workspace_id=${id}::uuid AND r.member_id=${member}::uuid AND e.state<>'cancelled' AND e.starts_at>=${window.start} AND e.starts_at<${window.end} ORDER BY e.starts_at DESC,e.id LIMIT 51 OFFSET ${offset}`;
+    >`SELECT r.event_id,r.member_id,r.values,r.note,r.revision,r.recorded_at,e.title,e.starts_at,e.template_id,e.template_revision,e.definition,p.attendance FROM public.assessment_results r JOIN public.organization_events e ON e.id=r.event_id JOIN public.organization_event_people p ON p.event_id=r.event_id AND p.member_id=r.member_id WHERE r.workspace_id=${id}::uuid AND r.member_id=${member}::uuid AND e.state<>'cancelled' AND e.starts_at>=${window.start} AND e.starts_at<${window.end} AND (${everything} OR EXISTS(SELECT 1 FROM public.organization_event_people staff WHERE staff.event_id=e.id AND staff.member_id=${self.id}::uuid AND staff.duty='staff')) ORDER BY e.starts_at DESC,e.id LIMIT 51 OFFSET ${offset}`;
     return {
       window,
       person: { id: person.id, name: person.name },

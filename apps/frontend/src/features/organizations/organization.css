@@ -62,6 +62,7 @@
 }
 .organization-person {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
   align-items: center;
   justify-content: space-between;
@@ -75,6 +76,11 @@
   gap: 14px;
   align-items: center;
   min-width: 0;
+  /* Grow first; actions wrap below on narrow screens instead of splitting words. */
+  flex: 1 1 200px;
+}
+.organization-person > a {
+  white-space: nowrap;
 }
 .person-identity .avatar {
   flex-shrink: 0;
@@ -234,4 +240,16 @@
     min-height: 44px;
     width: 100%;
   }
+}
+
+.person-sports {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
+}
+.person-sports .tag {
+  overflow-wrap: anywhere;
 }

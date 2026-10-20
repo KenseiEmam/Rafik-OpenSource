@@ -17,6 +17,16 @@ export type Member = {
   active: boolean
   revision: number
   trainer_id: string | null
+  /** Sport and coaching-specialty IDs; descriptive only, never an authority grant. */
+  sports?: string[]
+  /** Active coaching team: one primary link plus supporting links with their sport/specialty. */
+  coaches?: {
+    id: string
+    coach: string
+    kind: 'primary' | 'supporting'
+    sport: string | null
+    revision: number
+  }[]
 }
 export type Organization = {
   invitationsNext: number | null
@@ -28,4 +38,11 @@ export type Organization = {
   names: { id: string; name: string }[]
   invitations: { id: string; email: string; roles: Role[]; expires_at: string }[]
   events: { id: string; kind: string; created_at: string; subject_id: string | null }[]
+}
+export type Sport = {
+  id: string
+  name: string
+  kind: 'sport' | 'specialty'
+  archived: boolean
+  revision: number
 }

@@ -2,6 +2,39 @@
 
 ## Unreleased
 
+- Release 1 review fixes:
+  - Overlap warnings show other plans' title, goal and dates only, as a documented supporting-coach exception.
+  - Coach-recorded timed and distance sets require actual seconds or metres, using the athlete logger's shared measurement rules.
+  - A delayed start no longer pulls a coach back after they have left the recording screen.
+
+- Release 1e:
+  - Coaches can record a workout on an athlete's behalf under their own name. The athlete sees who recorded it and can correct it, and every start, save and correction is kept with its author.
+  - Analytics counts coach-recorded sessions.
+  - Forward migration `202610191500_delegated_sessions`.
+
+- Release 1d: staff athlete profile pages. These bring together the overview, coaching team, active plans, recent sessions, assessments and, by role, nutrition and participation status, using existing authorized reads only. Linked from People and athlete plans.
+
+- Release 1c:
+  - Athletes can follow several active goal-specific plans. Each plan can carry a goal and sport, and assigning either adds a plan or explicitly replaces a named one.
+  - Plans can be ended individually. Overlapping dates are reported to coaches, and athletes see a same-day notice.
+  - Supporting coaches work only with plans and sessions labelled with their linked sport, and with assessments from events they staffed.
+  - Forward migration `202610191400_concurrent_plans`.
+  - Restored the coach "Adapt this program" link and repaired the programming browser spec.
+
+- Release 1b:
+  - Coaching teams: each athlete has one primary coach and optional supporting coaches, each scoped to a sport or specialty ([ADR 0025](docs/decisions/ADR-0025-coaching-team.md)).
+  - Supporting coaches read training records and can include the athlete in their own events, groups and messages. Nutrition, participation status, plan changes, workout review, follow-up and analytics stay with the primary coach.
+  - Forward migration `202610191300_coaching_links` backfills primary links from `trainer_id` and adds a trigger that keeps them consistent.
+  - Administrators manage supporting coaches in People.
+  - Repaired the stale organizations browser spec, and fixed the "1 people" count.
+
+- Release 1a:
+  - Administrators define institution sports and coaching specialties in Institution settings, and link athletes to sports and coaches to sports or specialties from People.
+  - People shows sport chips and filters by sport or specialty within each role's existing scope. These labels grant no access.
+  - Adds forward migration `202610191200_sports_and_specialties`.
+  - Fixes light-theme muted contrast and word-splitting in phone People cards.
+  - Records the confirmed Release 1 founder decisions.
+
 - Aligned release summaries with accepted, published beta.1 status across Android, requirements, operations and public English/Arabic guides. Removed stale candidate/physical-acceptance gates; retained broader coverage and institution live-data checks as separate follow-up work.
 
 - Linked the published beta.1 Android ZIP bundle and documented extraction/installation on phones. Verified its embedded APK checksum against the bundled checksum, metadata and existing package receipt; no rebuild.

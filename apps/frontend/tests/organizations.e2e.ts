@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto'
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 import { teamFixture } from './team-fixture'
@@ -13,13 +14,15 @@ test('separate institution roles and reassigns responsibility with recoverable c
     staff = await staffContext.newPage(),
     client = await clientContext.newPage()
   try {
-    await f.login(page, f.owner, '/workspaces')
-    await page.getByRole('button', { name: 'Set up a workspace', exact: true }).click()
-    await page.getByLabel('Name', { exact: true }).fill('Madar test organization')
-    await page.getByRole('button', { name: 'Create workspace', exact: true }).click()
-    await expect(page).toHaveURL(/\/organization\/[a-f0-9-]+\/admin$/)
-    const base = new URL(page.url()).pathname,
-      id = base.split('/')[2]!
+    // Institutions now come from first-run setup; create one directly for this journey.
+    const id = randomUUID(),
+      base = `/organization/${id}/admin`
+    await f.call(f.owner, '/v1/workspaces', {
+      id,
+      kind: 'organization',
+      name: 'Madar test organization',
+    })
+    await f.login(page, f.owner, base)
     await page.getByRole('button', { name: 'Invite people', exact: true }).click()
     await page.getByLabel('Email address', { exact: true }).fill(f.coach.email)
     await page.getByRole('radio', { name: 'Trainer', exact: true }).check()
@@ -43,7 +46,7 @@ test('separate institution roles and reassigns responsibility with recoverable c
     await page.goto(base + '/people')
     await page.getByRole('button', { name: 'Manage R4 Athlete', exact: true }).click()
     await page
-      .locator('.organization-trainer-form')
+      .locator('.institution-trainer-form')
       .getByRole('checkbox', { name: 'R4 Coach', exact: true })
       .check()
     let lost = false
@@ -58,13 +61,23 @@ test('separate institution roles and reassigns responsibility with recoverable c
         await route.abort('failed')
       } else await route.continue()
     })
-    await page.getByRole('button', { name: 'Update trainer', exact: true }).click()
+    await page.getByRole('button', { name: 'Update primary coach', exact: true }).click()
     await expect(
       page.getByRole('button', { name: 'Retry saved change', exact: true }),
     ).toBeVisible()
     await page.reload()
     await page.getByRole('button', { name: 'Retry saved change', exact: true }).click()
-    await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Retry saved change', exact: true })).toHaveCount(
+      0,
+    )
+    const athleteCard = page
+      .locator('.organization-person')
+      .filter({ has: page.getByRole('heading', { name: 'R4 Athlete', exact: true }) })
+    await expect(athleteCard).toContainText('Primary coach: R4 Coach')
+    // The lost acknowledgement and retry produce exactly one active primary link.
+    const roster = async () =>
+      (await f.call(f.owner, `/v1/workspaces/${id}/people?view=admin&role=trainee`)).items[0]
+    expect((await roster()).coaches.map((c: { kind: string }) => c.kind)).toEqual(['primary'])
     await staff.goto(`/organization/${id}/trainer/people`)
     await expect(staff.getByRole('heading', { name: 'R4 Athlete', exact: true })).toBeVisible()
     await expect(staff.getByRole('button', { name: /Manage/ })).toHaveCount(0)
@@ -72,14 +85,20 @@ test('separate institution roles and reassigns responsibility with recoverable c
     await page.getByRole('button', { name: 'Manage R4 Coach', exact: true }).click()
     await page.getByRole('checkbox', { name: 'Active membership', exact: true }).uncheck()
     await page.getByRole('button', { name: 'Save membership', exact: true }).click()
-    await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Manage R4 Coach', exact: true })).toHaveCount(0)
+    // Deactivating the coach ends the primary link and its trainer_id mirror together.
+    expect((await roster()).coaches).toEqual([])
+    expect((await roster()).trainer_id).toBeNull()
     await staff.reload()
-    await expect(staff.getByRole('alert')).toContainText('no longer available')
+    // Revoked staff are returned to the workspace chooser; no athlete data remains on screen.
+    await expect(staff).toHaveURL(/\/workspaces/)
     await expect(staff.getByRole('heading', { name: 'R4 Athlete', exact: true })).toHaveCount(0)
     await page.getByRole('button', { name: 'Manage R4 Owner', exact: true }).click()
     await page.getByRole('checkbox', { name: 'Active membership', exact: true }).uncheck()
     await page.getByRole('button', { name: 'Save membership', exact: true }).click()
-    await expect(page.getByRole('alert')).toContainText('another active administrator')
+    await expect(
+      page.getByRole('alert').filter({ hasText: 'another active administrator' }).first(),
+    ).toBeVisible()
     await page.goto(base + '/people')
     await expect(page.getByRole('heading', { name: 'R4 Athlete', exact: true })).toBeVisible()
     expect(await layoutIssues(page)).toEqual([])

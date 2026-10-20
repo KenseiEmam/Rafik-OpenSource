@@ -61,6 +61,50 @@ Training schedules use client-local calendar dates. Appointments use UTC instant
 - `POST /v1/workspaces/:id`: `invite`, `revoke-invite`, `member`, `assign-trainer`, `rename`, `close`; operation UUID, revision where applicable, current admin authority checked before receipt replay.
 - `GET /v1/organization-invitations/:token`: invitation preview including the intended account email, granted role and expiry. The email is an account identifier; it is not verified. Unauthenticated account creation uses `POST /v1/auth/accept-invitation`; a signed-in matching account uses `POST` on the invitation route.
 
+### Sports and coaching specialties (Release 1a)
+
+- `GET /v1/workspaces/:id/sports?view=admin|trainer`: the institution's sports and coaching specialties (`id`, `name`, `kind` = `sport` | `specialty`, `archived`, `revision`), sports first. Athletes are refused.
+- `POST /v1/workspaces/:id/sports`, administrator only, with an operation UUID:
+  - `sport` creates or updates `{ id, name, kind, archived, revision }`. Revision is `0` for a new entry. Names are 1–80 characters and unique per institution regardless of case. `kind` cannot change after creation. An institution can have at most 200 entries.
+  - `member-sports` sets `{ member, sports, previous }` for an active athlete or coach. `previous` must equal the current set, or the request returns `409`. Athletes accept sports only. Archived entries cannot be newly added, but existing links stay.
+- `GET /v1/workspaces/:id/people` returns each member's `sports` IDs and accepts an optional `sport` filter, applied inside the caller's existing People scope.
+
+These labels describe people. On their own they grant no access; Release 1b uses them to scope supporting coaches.
+
+### Coaching team (Release 1b)
+
+- **Supporting coaches:** `POST /v1/workspaces/:id` (administrator) accepts `link-coach` `{ id, athlete, coach, sport }` and `end-coach-link` `{ id, revision }`, each with an operation UUID.
+  - The athlete must be an active athlete and the coach an active coach.
+  - The coach must cover the sport or specialty; for a sport, the athlete must take part in it.
+  - Errors: `already_primary`, `already_linked` and `sport_not_covered`.
+- **Primary coach:** `assign-trainer` still sets it. That ends the previous primary link and any supporting link held by the new primary.
+- **People:** `/people` returns each athlete's active `coaches` (`id`, `coach`, `kind`, `sport`, `revision`). A coach's roster includes athletes they support.
+- **Supporting-coach access ([ADR 0025](../decisions/ADR-0025-coaching-team.md)):**
+  - Allowed: delivery and history reads, athlete plans, single-session reads, assessment history and program/session media, plus choosing the athlete for their own events, groups and messages.
+  - Primary coach only (`403` otherwise): nutrition and nutrition plans, participation status, workout review, follow-up and trainer analytics. Plan writes follow the rules in Release 1c below.
+
+### Concurrent goal-specific plans (Release 1c)
+
+- **Assign:** `POST /v1/workspaces/:id/delivery` `assign` accepts an optional `goal` (1–80 characters) and `sport`.
+  - Each recipient may set `replaces` with `replaces_revision` to supersede one active plan; `null` adds a concurrent plan.
+  - The legacy `assignment_id`/`assignment_revision` pair still means replace.
+  - The same version cannot be active twice for an athlete (`409 already_assigned`).
+  - Each created assignment returns `overlaps`: every other active plan for that athlete whose dates overlap, as `{ title, goal, start_date, end_date }`. Overlap is reported, never blocked.
+  - **Intentional exception:** these entries include plans outside a supporting coach's sport, so coaches can coordinate, but they never carry a plan ID, prescription or sessions ([ADR 0025](../decisions/ADR-0025-coaching-team.md)).
+- **End:** `end` `{ assignment, revision }` archives one plan; sessions and the published version are kept.
+- **Supporting coaches:** may add, replace or end only plans labelled with a sport they are linked to for that athlete. Their delivery, history, athlete-plan, session and media reads include only those plans and the sessions recorded against them. Assessment history shows them only results from events they staffed, because events carry no sport.
+- **Reads:** recipients return every active plan in `plans`, and `athlete-plans` items include `goal`, `sport` and `revision`.
+
+### Delegated workout logging (Release 1e)
+
+- **Start for an athlete:** `POST /v1/workspaces/:id/sessions` `start` with `view: "trainer"` starts a session for the athlete who owns `assignment_id`. The coach needs plan authority: primary, or supporting for the plan's sport.
+  - The session records `recorded_mode: "delegated"` and `recorded_by`/`recorded_by_name` (the coach member).
+  - The athlete stays the subject (`member_id`, `client_id`). Operation receipts carry the coach.
+- **Coach saves:** `save` with `view: "trainer"` is allowed only on delegated sessions, and authority is rechecked on every save and retry. Coaches cannot edit sessions the athlete logged. Entries use the same measurements as athlete sets: strength records `load`/`reps`; timed and distance record `seconds`/`metres`; `effort` is optional. A completed set needs a positive actual result.
+- **Athlete corrections:** the athlete can save (correct) any of their sessions.
+- **History:** every start and save writes an `organization_session_history` version. `GET /v1/organization-sessions/:id/history?view=` returns versions oldest first, each with `actor_name` and `by` (`athlete` or `coach`), under the same read authorization as the session.
+- **Analytics:** `summary.coach_recorded` counts completed delegated sessions in the window.
+
 See [ADR 0005](../decisions/ADR-0005-organization-and-independent-scopes.md). These Prisma-internal tables have no generic browser row grants. Closure preserves records while removing access; an exact closure retry confirms the old result.
 
 ## Scoped programming

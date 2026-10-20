@@ -82,6 +82,47 @@ ROLLBACK;`,
   console.log(
     "Legacy combined membership/invitation normalization and assigned-athlete cleanup pass (rolled back).",
   );
+  // Coaching links: the trigger mirrors seeded trainer_id rows, and the migration backfill
+  // recreates primary links from trainer_id alone.
+  const coachingMigration = readFileSync(
+    resolve(
+      root,
+      "prisma/migrations/202610191300_coaching_links/migration.sql",
+    ),
+    "utf8",
+  );
+  const backfill = coachingMigration.match(
+    /insert into public\.organization_coaching_links[\s\S]*?where m\.trainer_id is not null;/,
+  )?.[0];
+  if (!backfill) throw Error("Coaching backfill statement not found");
+  sql(
+    name,
+    `BEGIN;
+CREATE FUNCTION pg_temp.mirror_ok() RETURNS boolean LANGUAGE sql AS $$
+  SELECT NOT EXISTS(SELECT 1 FROM public.workspace_members m WHERE m.trainer_id IS NOT NULL AND NOT EXISTS(
+    SELECT 1 FROM public.organization_coaching_links l WHERE l.athlete_member_id=m.id AND l.coach_member_id=m.trainer_id AND l.kind='primary' AND l.ended_at IS NULL))
+  AND NOT EXISTS(SELECT 1 FROM public.organization_coaching_links l JOIN public.workspace_members m ON m.id=l.athlete_member_id
+    WHERE l.kind='primary' AND l.ended_at IS NULL AND m.trainer_id IS DISTINCT FROM l.coach_member_id) $$;
+DO $$ BEGIN
+  IF NOT EXISTS(SELECT 1 FROM public.workspace_members WHERE trainer_id IS NOT NULL) THEN RAISE EXCEPTION 'seed has no assigned athletes to check'; END IF;
+  IF NOT pg_temp.mirror_ok() THEN RAISE EXCEPTION 'seeded primary links do not mirror trainer_id'; END IF;
+END $$;
+ALTER TABLE public.workspace_members DISABLE TRIGGER workspace_members_sync_coaching_links;
+DELETE FROM public.organization_coaching_links;
+${backfill}
+ALTER TABLE public.workspace_members ENABLE TRIGGER workspace_members_sync_coaching_links;
+DO $$ BEGIN IF NOT pg_temp.mirror_ok() THEN RAISE EXCEPTION 'backfill did not recreate primary links'; END IF; END $$;
+UPDATE public.workspace_members SET active=false WHERE id IN (SELECT DISTINCT trainer_id FROM public.workspace_members WHERE trainer_id IS NOT NULL);
+UPDATE public.workspace_members SET trainer_id=NULL WHERE trainer_id IS NOT NULL;
+DO $$ BEGIN
+  IF EXISTS(SELECT 1 FROM public.organization_coaching_links WHERE ended_at IS NULL) THEN RAISE EXCEPTION 'deactivation or cleared trainer_id left active links'; END IF;
+  IF NOT pg_temp.mirror_ok() THEN RAISE EXCEPTION 'mirror diverged after clearing'; END IF;
+END $$;
+ROLLBACK;`,
+  );
+  console.log(
+    "Coaching links mirror seeded trainer_id, backfill recreates primaries and departures end links (rolled back).",
+  );
   for (const suite of [
     "core",
     "daily_coaching",
