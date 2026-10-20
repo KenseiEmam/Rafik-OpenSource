@@ -1,5 +1,9 @@
 # Verification record
 
+## Android build documentation handoff — 20 October 2026
+
+Reviewed standalone commands, signing initialization/restore, overwrite protection and metadata against `apps/mobile/scripts/release.mjs`; native development commands against the maintained launcher. Added installation/development/independent-distribution paths and beta.1 close-out without changing builds, keys, tags or published assets. `npm run docs:check` passed two fixtures, 348 local links and 32 heading links across 54 maintained documents. Focused Markdown formatting and `git diff --check` passed. No Android compilation or app workflow tests were needed for these documentation changes. Windows packaging evidence remains the existing record; Linux/macOS native builds remain unexercised.
+
 ## Founder physical-phone report — 20 October 2026
 
 **Owner-reported pass:** after receiving the Galaxy S20+ standalone phone-check instructions, the founder reported: “Ran the test, and it worked as intended.” This records acceptance of the described installation and field/offline-recovery walkthrough by the person testing it; it is not an independently observed or automated run. No rebuild, database reset or test rerun was performed to record the report.

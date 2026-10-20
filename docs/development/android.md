@@ -1,10 +1,10 @@
 # Android coach field development
 
-**Status, 19 October 2026:** Stage 7 implementation in progress. Attendance, assessment drafts/results, event completion, online correction history, recovery comparison/sharing and English/Arabic UI are implemented. Focused API and Android emulator checks passed, including queued score replay after app restart and recovery share cancellation. A signed emulator build also passed cold offline startup and controlled current-format versionCode upgrade preservation. Physical-device, full phone/accessibility and broader security/recovery acceptance remain open; see [verification](../verification/README.md). Instance URL scanning remains open.
+**Status, 19 October 2026:** Stage 7 implementation in progress. Attendance, assessment drafts/results, event completion, online correction history, recovery comparison/sharing and English/Arabic UI are implemented. Focused API and Android emulator checks passed, including queued score replay after app restart and recovery share cancellation. A signed emulator build also passed cold offline startup and controlled current-format versionCode upgrade preservation. The founder reports the S20+ standalone field/offline walkthrough passed on 20 October; broader device/accessibility and security/recovery coverage remain open; see [verification](../verification/README.md). Instance URL scanning remains open.
 
 ## Start a development instance and native build
 
-For a standalone APK that bundles JavaScript, use the separate [Android beta release procedure](../operations/android-release.md) and `npm run mobile:release`. Ordinary `mobile:android` remains a development install requiring Metro.
+For a standalone APK that bundles JavaScript, follow the [fresh-checkout build procedure](../operations/android-release.md#fresh-checkout-standalone-build) and `npm run mobile:release`. Coaches normally install the official APK rather than build from source; independent distributions maintain their own signing identity. Ordinary `mobile:android` remains a development install requiring Metro.
 
 The founder reports successful offline attendance followed by backend restart and online sync on 18 October. This is a reported runtime walkthrough, with target/device type unconfirmed; it does not establish score capture, completion, app process-death recovery or encryption acceptance.
 

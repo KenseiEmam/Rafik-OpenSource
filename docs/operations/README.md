@@ -4,6 +4,8 @@ This is the operator entry point for builds, self-hosted deployment, configurati
 
 For Android maintainers, [release operations](android-release.md) includes signing-key backup with an encrypted archive and a local S20+ acceptance path using USB forwarding; no public domain or running emulator is required for that device check. Keep private signing backups outside this repository.
 
+Coaches normally install the upstream signed APK and configure their institution URL; institutions do not need to compile a custom APK for each server. Independent distributions own their signing key and updates. See [build-path selection](android-release.md#choose-the-right-path), [fresh-checkout builds](android-release.md#fresh-checkout-standalone-build) and [closing beta.1 distribution](android-release.md#close-beta1-distribution).
+
 ## Deployment
 
 The Android history/recovery update requires the matching updated backend/OpenAPI export; no schema migration is needed for history reads. Recovery copies are user-initiated plain-text shares and are outside encrypted app storage and server retention. Institutions must choose approved recipients/storage and handle deletion of exported copies themselves; do not send athlete recovery records through the public landing contact form.
