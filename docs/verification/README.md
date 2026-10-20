@@ -1,5 +1,13 @@
 # Verification record
 
+## Current beta.1 decision — 20 October 2026
+
+**Accepted and published for beta evaluation, including Android.** Packaging/signature evidence, founder-reported Galaxy S20+ standalone field/offline acceptance, signing backup and published-bundle checksum verification are complete. No repeat phone check or rebuild is required to close beta.1. The dated receipts below retain their original source and coverage limits; an earlier pending/no-upload statement is historical, not the current release decision.
+
+Broader devices, accessibility, native recovery edge cases and historical upgrades remain follow-up coverage. Manual institution URL entry is supported; scanning is deferred. These do not block the accepted beta. Each institution must separately validate its hosting, recovery, privacy/security and live-data policy. Open next-release work is not included in beta.1.
+
+**Status-alignment check:** reviewed application release/build/checklist, requirements, known issues, onboarding and maintainer summaries against the recorded phone acceptance and published artifact evidence; paired the landing release, phone, limitations, testing and requirements pages in English/Arabic. `npm run docs:check` passed two fixtures, 350 local links and 34 heading links across 54 maintained documents; focused formatting and diff checks passed. Five landing language pairs retain matching translation keys, order and version. No runtime tests, native build, release mutation or new device check was performed.
+
 ## Published Android bundle — 20 October 2026
 
 GitHub release metadata lists uploaded asset `1.0.0-beta.1.zip` (25,082,785 bytes), archive SHA-256 `44603df64492802454c15fc2224decd91a93dc11bb2facb336656e9632911dcd`. Downloaded that public asset to a temporary file and inspected ZIP entries without extracting or executing them. It contains only the version directory, `build.json`, `SHA256SUMS` and the APK (66,615,062 bytes). Computed the embedded APK SHA-256: `1654e44fd6f324d2403984a6a880b3dffabf81f3615c9ac8a71c5992a417fb5e`; it matches both bundled records and the prior packaging receipt. Metadata records clean source `5d1ce761505b07272c6d5b43414cd1d754b41517`, versionCode `1000001` and the previously recorded certificate fingerprint. No new signature verification or device execution was performed. The earlier no-upload snapshot below is superseded by this publication check.

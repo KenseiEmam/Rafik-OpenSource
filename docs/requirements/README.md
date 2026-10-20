@@ -1,6 +1,6 @@
 # Requirements and staged migration plan
 
-**Status:** approved staged plan. Stage 6 optional cloud VM templates are implemented as unverified starter templates; provider checks remain deferred to user testing and do not block Stage 7. Stage 7 coach-first Android implementation and beta packaging are in progress (19 October 2026); API and focused emulator checks passed; the founder reports the first S20+ phone walkthrough passed on 20 October, with broader native acceptance still open. The [release checklist](../operations/release-checklist.md) separates project beta readiness from each institution’s setup and live-data gates.
+**Status:** approved staged plan. Stage 6 optional cloud VM templates are implemented as unverified starter templates; provider checks remain deferred to user testing and do not block Stage 7. Stage 7 coach-first Android beta.1 is published and accepted for beta evaluation on 20 October 2026; packaging, focused API/emulator checks, founder S20+ walkthrough and public APK checksum verification are complete. Broader native coverage and optional URL scanning remain follow-up work, not beta.1 release blockers. The [release checklist](../operations/release-checklist.md) separates project beta readiness from each institution’s setup and live-data gates.
 
 ## Product goal
 
@@ -19,7 +19,7 @@ Rafik should help universities and university coaches support young athletes by 
 
 - A Rafik-hosted multi-university service; each university operates its own isolated installation.
 - Managed cloud services or validated provider support. Optional single-VM templates exist as unverified starters and are not required for the beta.
-- Athlete-native and iOS applications. The optional coach-only Android app is the current Stage 7 beta candidate.
+- Athlete-native and iOS applications. The optional coach-only Android app is published in the accepted beta.1 release.
 - Gym sales features such as session packages, prepaid allowances, package renewals and no-show deductions; they were retired from the university product.
 - Diagnosis or clinical health records. The v1 injury workflow coordinates structured participation status only.
 
@@ -34,7 +34,7 @@ Rafik should help universities and university coaches support young athletes by 
 | Offline                     | Browser workout recording has durable local storage and server recovery behavior                                                                                    | Native event capture now uses a separate encrypted cache and exact-command queue; see Stage 7 evidence and remaining device limits.             |
 | Deployment                  | Local Compose services and an implemented selfhost profile with web/API/PostgreSQL, migrations, HTTPS and private files                                             | Earlier paired recovery has founder acceptance; Unix update/rollback, branding-specific restore and live alerts remain pre-production evidence. |
 | Identity and private files  | Rafik-owned identity/session tables, password sign-in, one-time first-run super-admin setup, expiring invitation links, API-mediated private files on Docker volume | Rehearse authorization, secret handling, retention, backup and file lifecycle under the self-hosted model.                                      |
-| Open source                 | Public monorepo, Apache-2.0 code/docs, original beta source tag and separately verified Android candidate                                                           | Preserve per-source media notices and publish matching source/artifact evidence; human sport-task review remains backlog.                       |
+| Open source                 | Public monorepo, Apache-2.0 code/docs, original beta source tag and published, accepted Android beta                                                                | Preserve per-source media notices and publish matching source/artifact evidence; human sport-task review remains backlog.                       |
 
 ## Stages and acceptance criteria
 
@@ -89,7 +89,7 @@ Rafik should help universities and university coaches support young athletes by 
 
 ### Stage 7 — Android field app
 
-- **Status: implementation in progress.** The founder confirmed coach-first field workflows. Native bearer authentication, bounded schedules, attendance, assessment drafts/results and event completion with a scoped command queue are implemented locally. Node SQLite checks cover exact replay/recovery. Isolated real-API integration and focused emulator storage/replay checks passed. Correction history and recovery/localization UI are implemented; the founder reports the S20+ walkthrough passed on 20 October; exact installed-build/device metadata, broader native recovery and accessibility evidence remain open. The supported native API subset is versioned in [OpenAPI](../../apps/backend/openapi.json) and exported from each instance at `/v1/openapi.json`. The task/API contract and architecture are in [the Stage 7 mobile scope](stage7-mobile-scope.md) and [ADR 0023](../decisions/ADR-0023-android-coach-field-app.md). Stage 6 provider validation remains an optional user-testing backlog item.
+- **Status: beta.1 coach-first scope accepted and published, 20 October 2026.** Broader device/accessibility coverage and URL scanning remain follow-up scope. The founder confirmed coach-first field workflows. Native bearer authentication, bounded schedules, attendance, assessment drafts/results and event completion with a scoped command queue are implemented locally. Node SQLite checks cover exact replay/recovery. Isolated real-API integration and focused emulator storage/replay checks passed. Correction history and recovery/localization UI are implemented; the founder reports the S20+ walkthrough passed on 20 October; exact installed-build/device metadata, broader native recovery and accessibility evidence remain open. The supported native API subset is versioned in [OpenAPI](../../apps/backend/openapi.json) and exported from each instance at `/v1/openapi.json`. The task/API contract and architecture are in [the Stage 7 mobile scope](stage7-mobile-scope.md) and [ADR 0023](../decisions/ADR-0023-android-coach-field-app.md). Stage 6 provider validation remains an optional user-testing backlog item.
 - Build the Android app as an `apps/mobile/` React Native + Expo TypeScript workspace. Use encrypted SQLite and Android secure credential storage. iOS is not part of the first release.
 - Add a separate native bearer-session API. Keep web cookie authentication, origin rules and authorization behavior unchanged.
 - Specify device storage protection, queued command identity, retries, deduplication, conflict/reconciliation behavior, server authorization on replay, revocation handling, and clear per-record sync state.

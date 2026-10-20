@@ -2,6 +2,8 @@
 
 This guide is for current work in the Rafik monorepo. It stays focused on the maintained codebase; old phase-by-phase notes are in the [archive](../archive/README.md).
 
+Beta.1 is accepted and published, including Android. Keep current release status at the top of the checklist and verification record; preserve dated evidence as history. Do not turn disclosed device-coverage limits or per-institution live-data checks into new beta.1 publishing gates. Apply public status corrections to English and Arabic landing docs together, and inspect open next-release PRs before editing shared guidance.
+
 Android release packaging uses `apps/mobile/scripts/release.mjs`, `android-release.gradle` and maintained release manifest/network configuration. Signing files under `apps/mobile/.signing/` are private, ignored and required for future updates. Generated `android/` files are disposable. Follow [Android release operations](../operations/android-release.md); never distribute a debug-signed APK or uninstall a user's development app to bypass a signature mismatch.
 
 Keep the [build-path guidance](../operations/android-release.md#choose-the-right-path) discoverable from root/mobile READMEs and landing EN/AR: official installation for coaches, Metro-backed native builds for contributors, standalone signing for release maintainers or independent distributions. The [beta.1 distribution close-out](../operations/android-release.md#close-beta1-distribution) preserves the published tag and identifies the later accepted APK by its actual build revision. Check open PRs before updating shared release pages.

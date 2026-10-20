@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Aligned release summaries with accepted, published beta.1 status across Android, requirements, operations and public English/Arabic guides. Removed stale candidate/physical-acceptance gates; retained broader coverage and institution live-data checks as separate follow-up work.
+
 - Linked the published beta.1 Android ZIP bundle and documented extraction/installation on phones. Verified its embedded APK checksum against the bundled checksum, metadata and existing package receipt; no rebuild.
 
 - Made Android installation/build paths explicit: official APK for coaches, native development for contributors, private signing for independent distributions, and a fresh-checkout standalone procedure. Added the beta.1 asset-publication close-out while preserving the published source tag and accepted phone result.
