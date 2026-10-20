@@ -14,7 +14,7 @@
 
 ## Recent work
 
-- **20 October — beta.1 status alignment:** reviewed release/build/install guidance in both repositories after phone acceptance and artifact publication. Beta.1, including Android, is accepted and published for evaluation. Corrected stale candidate/physical-acceptance wording, the already-passed R0 browser checks and live-deployment versus project-release gates. Broader native/accessibility/historical-upgrade coverage and URL scanning remain follow-up work; the next release in PR #135/#11 remains separate. No runtime, APK, key or tag changes.
+- **20 October — beta.1 status alignment:** reviewed release/build/install guidance in both repositories after phone acceptance and artifact publication. Beta.1, including Android, is accepted and published for evaluation. Corrected stale candidate/physical-acceptance wording, the already-passed R0 browser checks and live-deployment versus project-release gates. Broader native/accessibility/historical-upgrade coverage and URL scanning remain follow-up work; the next release in PR #135/#11 remains separate. Review: [application PR #137](https://github.com/KenseiEmam/Rafik-OpenSource/pull/137) and [paired landing PR #15](https://github.com/KenseiEmam/rafik-landing/pull/15). No runtime, APK, key or tag changes.
 
 - **20 October — Android download published:** the founder uploaded `1.0.0-beta.1.zip` to the existing GitHub prerelease. Inspected its three files without executing them; the embedded APK SHA-256 matches bundled `SHA256SUMS`, `build.json` and the existing `5d1ce76` packaging record. Added direct bundle links and phone extraction/install guidance; retained the distinct original source tag. Paired landing guidance follows in existing PR #14. No rebuild or repeat phone test.
 
