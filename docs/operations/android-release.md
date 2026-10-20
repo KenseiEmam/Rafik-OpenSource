@@ -1,12 +1,53 @@
 # Android beta builds and updates
 
-**Candidate: Squire 1.0.0-beta.1, 19 October 2026.** Direct signed APK distribution is the initial beta channel. Packaging, installation and upgrade evidence must be recorded before publishing a download. A source tag alone is not an accepted Android package. Google Play and iOS are outside this release workflow.
+**Squire 1.0.0-beta.1:** the GitHub prerelease includes the official [Android download bundle](https://github.com/KenseiEmam/Rafik-OpenSource/releases/download/v1.0.0-beta.1/1.0.0-beta.1.zip). On 20 October 2026, its embedded APK checksum matched both `SHA256SUMS` and `build.json`, and the recorded packaging receipt. The founder reports the standalone Galaxy S20+ field/offline walkthrough passed. Google Play and iOS are outside this workflow.
+
+## Install the published beta
+
+1. On the Android device, download the **Android download bundle** linked above. This uploaded ZIP contains the installer; GitHub's separately generated **Source code (zip/tar.gz)** archives do not.
+2. Extract the ZIP using the phone's file manager (on Samsung, **My Files → Downloads**, select the ZIP and choose **Extract**). Open its `1.0.0-beta.1` folder.
+3. Tap `Rafik-Squire-1.0.0-beta.1-android.apk`. If prompted, allow **Install unknown apps** for the file manager, then install and open **Rafik Field**. Device management policies may require the institution's administrator to permit installation.
+4. Enter the institution's HTTPS API URL (ending in `/api` for Compose) and coach credentials. No Metro, computer, USB cable or Android Studio is required with a reachable institution server.
+
+The bundle also contains `SHA256SUMS` and non-secret `build.json`. Its APK SHA-256 is `1654e44fd6f324d2403984a6a880b3dffabf81f3615c9ac8a71c5992a417fb5e`, source revision `5d1ce761505b07272c6d5b43414cd1d754b41517`. The release's source tag remains `4ac70c8`; it is distinct from this binary's recorded source. This download check verifies published bytes, not a new device test.
+
+## Choose the right path
+
+| Who                                               | Recommended approach                                                                                                                                                                                                                                                                                         |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Institution operator or coach                     | Install an official signed APK from the [GitHub release](https://github.com/KenseiEmam/Rafik-OpenSource/releases/tag/v1.0.0-beta.1) when an APK asset is available. Enter the institution API URL and sign in as a coach. No Android build tools are needed. Source ZIP/tar.gz downloads are not installers. |
+| Contributor changing JavaScript/UI                | Install a native development build once with `npm run mobile:android`, then use `npm run mobile:start`. See [development setup](../development/android.md).                                                                                                                                                  |
+| Rafik release maintainer                          | Build a standalone APK from a clean, approved source revision using the existing private Rafik signing key and the procedure below.                                                                                                                                                                          |
+| Institution maintaining its own distribution/fork | Build from its chosen source revision with its own private signing key. It owns binary updates and key backups. Never request Rafik's private signing key.                                                                                                                                                   |
+
+The same upstream APK connects to separate institution servers; server URL and account are entered at runtime. Server instance branding does not require an institution-specific APK build. A separately signed fork cannot update an official installation in place. Use a separate test device, or deliberately give a maintained fork a distinct Android application ID and record that change; never uninstall an app containing pending work to bypass signing checks.
+
+## Fresh-checkout standalone build
+
+Run these steps on Windows PowerShell, Linux or macOS, from the repository root. The native SDK/JDK prerequisites below apply; Docker builds the server stack, not this APK.
+
+1. Clone `https://github.com/KenseiEmam/Rafik-OpenSource.git` and enter its folder. Select the reviewed source before installing dependencies. For the published source release:
+
+   ```sh
+   git checkout --detach v1.0.0-beta.1
+   git rev-parse HEAD
+   git status --short
+   npm ci
+   ```
+
+   Expected: a full source commit ID and an empty tracked worktree. Record the ID. A tag builds that tag's code; it does not include later fixes on `main` or open PRs. For a newer approved candidate, substitute its full reviewed commit ID for the tag. Do not build an unreviewed next-release PR as beta.1.
+
+2. Configure the SDK/JDK described below. Official maintainers restore their existing private signing backup. For a genuinely independent distribution with no existing update key, run `npm run mobile:release -- --init-signing` once, then make the encrypted backup described below.
+3. Run `npm run mobile:release -- --prepare-only`, then `npm run mobile:release`. Expected: a verified signed APK, `SHA256SUMS` and `build.json` under `artifacts/mobile/<app-version>/`. No emulator or Metro is started. First native compilation can be slow; preparation alone is not a successful build.
+4. Read the non-secret `build.json`: confirm the intended revision, `dirty: false`, version, versionCode, APK checksum and signing-certificate fingerprint. Preserve the three output files together. Install and validate a newly built candidate using the steps below before distributing it. Building the same source on another machine is not promised to produce identical APK bytes.
+
+The builder refuses to overwrite an existing APK for that version. Preserve the previous output outside its destination before an intentional replacement candidate; do not delete signing material or pending device data. Distributed updates need a higher versionCode and the same signing identity.
 
 ## Requirements
 
 Run commands from the repository root after one `npm ci`. Use Node 22.16 or 24, JDK 17, Android SDK/build-tools, and the native toolchain described in the [Android development guide](../development/android.md). Set `JAVA_HOME` and `ANDROID_HOME`. Windows also requires Ninja 1.12 or newer for the configured CMake toolchain. Linux/macOS builds use the same scripts with their installed SDK/JDK. Only Windows build preparation has been exercised so far.
 
-The build targets Android API 24 or newer (Android 7.0), with ARM64 phones and x86_64 emulators. This is a configured minimum, not evidence of usability on every Android version or device size. Physical-device acceptance remains open.
+The build targets Android API 24 or newer (Android 7.0), with ARM64 phones and x86_64 emulators. This is a configured minimum, not evidence of usability on every Android version or device size. The founder reports the first S20+ walkthrough passed; broader device/accessibility coverage remains separate.
 
 ## Create and protect the signing key
 
@@ -130,6 +171,19 @@ On 19 October 2026, an isolated Android 14 x86_64 emulator passed offline cold s
 
 ## Publish
 
-Complete the relevant [release checklist](release-checklist.md), commit the candidate, create the annotated beta tag and publish the APK plus `SHA256SUMS` only after installation checks pass. Keep `build.json` as build evidence and record the exact source revision. Mark the GitHub release as a prerelease and describe known limits. Update landing English/Arabic release, phone installation and upgrade guidance through a reviewable PR. A beta announcement does not close institution-specific privacy approval or the first-user feedback backlog.
+For a new release, complete the relevant [release checklist](release-checklist.md), commit the candidate, create its annotated tag and publish the accepted APK, `SHA256SUMS` and non-secret `build.json`. Mark evaluation releases as prereleases and describe known limits. Update landing English/Arabic release, installation and upgrade guidance through a reviewable PR. A beta announcement does not close institution-specific privacy approval or the first-user feedback backlog.
+
+### Close beta.1 distribution
+
+**20 October update:** the founder uploaded the APK/checksum/build metadata together as `1.0.0-beta.1.zip`. The published APK's computed checksum matches all recorded values. Download/installation guidance now links that bundle; direct uncompressed APK upload is optional convenience, not a blocker. The steps below remain the maintainer procedure.
+
+The existing beta.1 tag resolves to `4ac70c8`; the later locally packaged APK records `5d1ce76`. Keep the published tag intact. GitHub can host that APK on the existing prerelease, provided the release notes identify its exact source revision separately from the source archives. Never describe it as compiled from the older tag.
+
+1. Merge the phone/build documentation review and its paired English/Arabic landing update. Keep next-release application PR #135 and landing PR #11 separate from beta.1.
+2. Select the preserved accepted APK and its matching checksum/build metadata. Confirm the recorded revision and certificate against the packaging receipt. This is artifact identification, not a request to repeat the founder's passed phone walkthrough. Do not rebuild just to make the APK match today's documentation commit.
+3. Upload only the APK, `SHA256SUMS` and non-secret `build.json` to the existing [beta.1 prerelease](https://github.com/KenseiEmam/Rafik-OpenSource/releases/tag/v1.0.0-beta.1). In its release notes list the APK source commit, checksum, application version/versionCode, owner-reported S20+ result and known limits. Label the automatically generated archives as source from the release tag. Do not move the published tag or generate another signing key.
+4. Verify the uploaded file's checksum against `SHA256SUMS`, then enable the exact versioned APK link in both landing languages. State the supported HTTPS API URL setup and coach-only scope. If no APK is uploaded, show source-build instructions rather than an enabled APK download.
+
+This closes the current Android distribution task. Broader devices, accessibility, historical upgrades, first-user feedback and institution-specific live-data approval stay in their existing backlog; they do not require another beta.1 packaging cycle. Any later runtime change requires a separately identified candidate and relevant verification.
 
 References: [Android signing](https://developer.android.com/studio/publish/app-signing) and [React Native release builds](https://reactnative.dev/docs/signed-apk-android.html).

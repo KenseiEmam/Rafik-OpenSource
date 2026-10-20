@@ -35,7 +35,7 @@ This page is the index for maintained Rafik documentation. The root [README](../
 - [Azure starter](../infrastructure/cloud/azure/README.md): VM setup, operator access, deployment and teardown.
 - [Operations and deployment](operations/README.md): Compose deployment, cloud starter templates, environment/secrets, backups, recovery, rollback and retention operations.
 - [Release checklist](operations/release-checklist.md): project-wide beta readiness, publishing actions and per-institution deployment gates.
-- [Android beta builds and updates](operations/android-release.md): private signing-key ownership and encrypted backup, signed APK builds, USB physical-phone acceptance, offline-start and update checks.
+- [Android beta builds and updates](operations/android-release.md): official installation versus contributor/fork builds, fresh-checkout standalone commands, private signing-key backup, installation/update checks and beta.1 distribution close-out.
 
 ## Architecture decisions
 

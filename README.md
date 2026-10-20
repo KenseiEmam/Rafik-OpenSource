@@ -24,6 +24,8 @@ Focused native API/queue checks: `npm run mobile:acceptance` (Node 24 and local 
 
 Android build/install: `npm run mobile:android`; ordinary mobile JavaScript/UI development after installation: `npm run mobile:start`. The [Android guide](docs/development/android.md#windows-laptop-startup-and-rebuilds) describes the Windows path/concurrency helper and emulator requirements.
 
+For coaches, prefer the official standalone APK when it is available on the [beta release](https://github.com/KenseiEmam/Rafik-OpenSource/releases/tag/v1.0.0-beta.1); enter your own institution API URL after installation. Source archives are not Android installers. To build a standalone APK yourself, follow the [fresh-checkout build procedure](docs/operations/android-release.md#fresh-checkout-standalone-build): `npm ci`, your distribution's signing key, then `npm run mobile:release`. No Metro or emulator is needed to use the resulting APK.
+
 Explore the supported coach API in [local Swagger UI](http://127.0.0.1:55331/v1/docs) after starting/restarting the updated backend. See the [API guide](docs/reference/api.md) for authentication and self-hosted URLs.
 
 - `apps/frontend/`: Vue 3/TypeScript web application, Vite build, feature modules, browser persistence, and web tests.

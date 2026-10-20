@@ -1,5 +1,25 @@
 # Verification record
 
+## Published Android bundle — 20 October 2026
+
+GitHub release metadata lists uploaded asset `1.0.0-beta.1.zip` (25,082,785 bytes), archive SHA-256 `44603df64492802454c15fc2224decd91a93dc11bb2facb336656e9632911dcd`. Downloaded that public asset to a temporary file and inspected ZIP entries without extracting or executing them. It contains only the version directory, `build.json`, `SHA256SUMS` and the APK (66,615,062 bytes). Computed the embedded APK SHA-256: `1654e44fd6f324d2403984a6a880b3dffabf81f3615c9ac8a71c5992a417fb5e`; it matches both bundled records and the prior packaging receipt. Metadata records clean source `5d1ce761505b07272c6d5b43414cd1d754b41517`, versionCode `1000001` and the previously recorded certificate fingerprint. No new signature verification or device execution was performed. The earlier no-upload snapshot below is superseded by this publication check.
+
+Documentation validation passed two fixtures, 350 local links and 34 heading links across 54 documents. Focused Markdown formatting and diff checks passed. The downloaded temporary ZIP was removed after inspection; no application tests or native build were run.
+
+## Android build documentation handoff — 20 October 2026
+
+Reviewed standalone commands, signing initialization/restore, overwrite protection and metadata against `apps/mobile/scripts/release.mjs`; native development commands against the maintained launcher. Added installation/development/independent-distribution paths and beta.1 close-out without changing builds, keys, tags or published assets. `npm run docs:check` passed two fixtures, 348 local links and 32 heading links across 54 maintained documents. Focused Markdown formatting and `git diff --check` passed. No Android compilation or app workflow tests were needed for these documentation changes. Windows packaging evidence remains the existing record; Linux/macOS native builds remain unexercised.
+
+## Founder physical-phone report — 20 October 2026
+
+**Owner-reported pass:** after receiving the Galaxy S20+ standalone phone-check instructions, the founder reported: “Ran the test, and it worked as intended.” This records acceptance of the described installation and field/offline-recovery walkthrough by the person testing it; it is not an independently observed or automated run. No rebuild, database reset or test rerun was performed to record the report.
+
+**Limits:** no Android version, installed APK checksum, screenshots or per-step locale/theme/accessibility results accompanied the report. Do not attach this report to a different build or infer a historical upgrade, cryptographic audit, TalkBack acceptance, tablet/device matrix or full native recovery coverage. Existing packaging receipts remain separate.
+
+**Published release checked on 20 October:** [Squire beta.1](https://github.com/KenseiEmam/Rafik-OpenSource/releases/tag/v1.0.0-beta.1) was published on 19 October. GitHub lists source archives and no uploaded APK asset. Its annotated tag resolves to `4ac70c8`; the later locally packaged APK records `5d1ce76`. Preserve that distinction when adding any binary download. Paired English/Arabic updates are in [landing PR #13](https://github.com/KenseiEmam/rafik-landing/pull/13); next-release application PR #135 and landing PR #11 remain separate, unmerged work.
+
+**Documentation checks:** `npm run docs:check` passed two checker fixtures, 339 local links and 23 heading links across 54 maintained documents. Focused formatting and `git diff --check` passed. The five landing EN/AR pairs retain matching translation keys, order and version. GitHub release/tag/open-PR metadata was read directly; no native or browser workflow was rerun for this documentation update.
+
 ## R0 beta.1 close-out — 19 October 2026
 
 **Passed:** three focused browser tests in Chromium desktop and WebKit phone (iPhone 13 emulation), all six runs on the final source, through the isolated browser wrapper. A production web build also passed, with the known P3 Vite config warning. It used its own database, API and web ports and removed them afterward.
@@ -26,7 +46,7 @@ Layout-containment and axe checks ran on each captured state. Screenshots of eve
 
 - Four other specs (`instance-branding.e2e.ts`, the first `organization-feedback.e2e.ts` test and both `responsive-inbox.e2e.ts` tests) fail identically on unmodified source; they are recorded as stale in [known issues](../known-issues/README.md#browser-test-maintenance). The shared token change was therefore checked through the R0 journeys' axe scans, not those specs.
 - Browser emulation is not physical-device or assistive-technology evidence.
-- The Galaxy S20+ check and release-asset alignment remain owner actions.
+- The S20+ walkthrough was subsequently founder-confirmed passed on 20 October; release-asset alignment remains an owner action.
 - H1 was confirmed by tracing the code, not by a new automated check.
 
 **Local environment note:** this preview's PostgreSQL volume was created before Stage 3 under Debian `postgres:17.6` (glibc collation 2.41). The current Compose image `postgres:17.6-alpine` (musl) refuses to create databases from it. For this run only the `db` container used `postgres:17.6` through an untracked override; the volume, preview data and tracked Compose file were unchanged. See [development troubleshooting](../development/README.md#troubleshooting).
@@ -57,7 +77,7 @@ A final source review found a second cold-start gate: the workspace schedule ref
 
 **Dependency correction:** the earlier [zero-result receipt](receipts/2026-10-19-beta-dependency-audit.json) was produced with npm offline mode and is invalid as an online advisory check. Explicit online audit confirmed 27 affected entries. Resolving Xcode UUID to 11.1.1 reduced this to 19 high entries from unpatched `braces` and `node-forge` in Expo tooling. See current [known issues](../known-issues/README.md) and online [before](receipts/2026-10-19-ci-audit-before.json)/[after](receipts/2026-10-19-ci-audit-after.json) reports.
 
-Source now rechecks offline access in the background without unmounting roster/editor UI and opens cached work after local storage rather than waiting for a network timeout. The updated signed APK built successfully in 2m20s (585 tasks: 41 executed, 544 up-to-date). Its package/version, bundled JavaScript, ARM64/x86_64 libraries and configured certificate passed the release verifier. Compiled source: `5d1ce761505b07272c6d5b43414cd1d754b41517`, clean at build start. SHA-256: `1654e44fd6f324d2403984a6a880b3dffabf81f3615c9ac8a71c5992a417fb5e`. The earlier APK is preserved under ignored `artifacts/mobile/prior-beta1-2026-10-19/`. This new APK includes the source fixes; the earlier emulator UI receipt does not establish their rendered acceptance. The founder’s Galaxy S20+ workflow check remains open. See the [build/check receipt](receipts/2026-10-19-beta-readiness.json). No physical-device acceptance, blanket security/UX approval or new release version is claimed. Signing-backup and USB/offline instructions were reviewed against official 7-Zip/Android guidance; the founder subsequently confirmed backup completion. Physical workflow execution remains open.
+Source now rechecks offline access in the background without unmounting roster/editor UI and opens cached work after local storage rather than waiting for a network timeout. The updated signed APK built successfully in 2m20s (585 tasks: 41 executed, 544 up-to-date). Its package/version, bundled JavaScript, ARM64/x86_64 libraries and configured certificate passed the release verifier. Compiled source: `5d1ce761505b07272c6d5b43414cd1d754b41517`, clean at build start. SHA-256: `1654e44fd6f324d2403984a6a880b3dffabf81f3615c9ac8a71c5992a417fb5e`. The earlier APK is preserved under ignored `artifacts/mobile/prior-beta1-2026-10-19/`. This new APK includes the source fixes; the earlier emulator UI receipt does not establish their rendered acceptance. The founder subsequently reported the S20+ walkthrough passed on 20 October; see the report and metadata limits above. See the [build/check receipt](receipts/2026-10-19-beta-readiness.json). No physical-device acceptance, blanket security/UX approval or new release version is claimed. Signing-backup and USB/offline instructions were reviewed against official 7-Zip/Android guidance; the founder subsequently confirmed backup completion. Physical workflow execution remains open.
 
 ## Beta Step 3 — 19 October 2026
 

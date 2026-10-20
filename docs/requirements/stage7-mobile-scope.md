@@ -1,6 +1,6 @@
 # Stage 7 mobile scope
 
-**Status:** coach-first beta candidate, 19 October 2026. API and focused emulator evidence is available; physical and broader native acceptance remain open.
+**Status:** coach-first beta candidate, 20 October 2026. API and focused emulator evidence is available; the founder reports the S20+ phone walkthrough passed. Broader native acceptance and exact device/build metadata remain separate.
 
 ## Goal
 
@@ -8,7 +8,7 @@ Help university staff and athletes complete useful training and field-work tasks
 
 ## Implementation status — 19 October 2026
 
-Coach sign-in/refresh/logout, bounded schedules, explicit event caching, attendance, assessment drafts/results, completion, online correction history, recovery comparison/sharing and English/Arabic are implemented. The supported OpenAPI contract and instance Swagger viewer are available. Isolated real-API and Node SQLite checks passed; focused Android 14 emulator checks covered encrypted-store initialization, process restart, replay, history, completion and a controlled current-format upgrade. The final feedback/cached-startup rebuild passed packaging, with physical S20+ acceptance still open. See [verification](../verification/README.md) for exact revisions and limits.
+Coach sign-in/refresh/logout, bounded schedules, explicit event caching, attendance, assessment drafts/results, completion, online correction history, recovery comparison/sharing and English/Arabic are implemented. The supported OpenAPI contract and instance Swagger viewer are available. Isolated real-API and Node SQLite checks passed; focused Android 14 emulator checks covered encrypted-store initialization, process restart, replay, history, completion and a controlled current-format upgrade. The final feedback/cached-startup rebuild passed packaging, with the founder subsequently reporting the S20+ walkthrough passed on 20 October; exact installed-build metadata and broader coverage remain separate. See [verification](../verification/README.md) for exact revisions and limits.
 
 Physical hardware, broader native conflict/revocation/account-switch rendering, accessibility and full screen/theme coverage remain open. URL scanning is not implemented; entering the institution API URL manually is supported. These limitations do not imply API/auth implementation is absent.
 
