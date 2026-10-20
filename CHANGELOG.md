@@ -35,6 +35,15 @@
   - Fixes light-theme muted contrast and word-splitting in phone People cards.
   - Records the confirmed Release 1 founder decisions.
 
+- Aligned release summaries with accepted, published beta.1 status across Android, requirements, operations and public English/Arabic guides. Removed stale candidate/physical-acceptance gates; retained broader coverage and institution live-data checks as separate follow-up work.
+
+- Linked the published beta.1 Android ZIP bundle and documented extraction/installation on phones. Verified its embedded APK checksum against the bundled checksum, metadata and existing package receipt; no rebuild.
+
+- Made Android installation/build paths explicit: official APK for coaches, native development for contributors, private signing for independent distributions, and a fresh-checkout standalone procedure. Added the beta.1 asset-publication close-out while preserving the published source tag and accepted phone result.
+
+- Recorded founder-reported success of the Galaxy S20+ physical phone walkthrough on 20 October 2026; kept exact device/build metadata, broader native/accessibility coverage and release-asset alignment separate.
+- Aligned the paired English/Arabic landing phone guidance through PR #13 and verified the existing published beta.1 source release separately from the locally packaged APK. Preserved the next-release work in application PR #135 and landing PR #11.
+
 - R0 beta.1 close-out:
   - Fixed the post-workout **Rate your session** link, which went to a missing `/institution/…` route.
   - Raised dark-theme muted text to 4.5:1 or better on soft surfaces.

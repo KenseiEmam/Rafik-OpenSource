@@ -4,6 +4,8 @@ This is the operator entry point for builds, self-hosted deployment, configurati
 
 For Android maintainers, [release operations](android-release.md) includes signing-key backup with an encrypted archive and a local S20+ acceptance path using USB forwarding; no public domain or running emulator is required for that device check. Keep private signing backups outside this repository.
 
+Coaches normally install the upstream signed APK and configure their institution URL; institutions do not need to compile a custom APK for each server. Independent distributions own their signing key and updates. See [build-path selection](android-release.md#choose-the-right-path), [fresh-checkout builds](android-release.md#fresh-checkout-standalone-build) and [closing beta.1 distribution](android-release.md#close-beta1-distribution).
+
 ## Deployment
 
 The Android history/recovery update requires the matching updated backend/OpenAPI export; no schema migration is needed for history reads. Recovery copies are user-initiated plain-text shares and are outside encrypted app storage and server retention. Institutions must choose approved recipients/storage and handle deletion of exported copies themselves; do not send athlete recovery records through the public landing contact form.
@@ -35,7 +37,7 @@ Do not expose PostgreSQL publicly. No Google service-account key or hosted-provi
 
 ## Release and configuration
 
-The project beta candidate is **Squire 1.0.0-beta.1** across the web/API and optional coach Android app. The [project readiness table](release-checklist.md#project-beta-readiness-19-october-2026) distinguishes evaluation readiness from publication and each installation’s live-data checks. Follow [Android beta builds and updates](android-release.md) for signing, APK packaging and installation/upgrade acceptance. Private signing material is separate from institution server secrets; never include it in Compose images or public release assets.
+The published, accepted evaluation beta is **Squire 1.0.0-beta.1** across the web/API and optional coach Android app. The [project readiness table](release-checklist.md#project-beta-readiness-19-october-2026) distinguishes evaluation readiness from publication and each installation’s live-data checks. Follow [Android beta builds and updates](android-release.md) for signing, APK packaging and installation/upgrade acceptance. Private signing material is separate from institution server secrets; never include it in Compose images or public release assets.
 
 Build and validate the approved revision before deployment. Apply forward migrations as part of the Compose release flow; never reset or reseed a hosted database. Review the [release checklist](release-checklist.md) and [known release gaps](../known-issues/README.md) before enabling external use.
 
@@ -49,7 +51,7 @@ Use GitHub Releases as the canonical download host. The landing site should disp
 
 Label GitHub ZIP/tar.gz downloads **source code**: operators still configure secrets and build/run Compose. They are not prebuilt Docker-image bundles, database backups or an installed application. GitHub-generated archives can change compressed bytes when regenerated; pin the source commit/tag for content provenance and attach a reviewed custom source asset if fixed archive-byte checksums are needed. See [archive stability](https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives#stability-of-source-code-archives).
 
-For an accepted Android package, upload the signed APK, its `SHA256SUMS` and non-secret build metadata to the matching GitHub prerelease. Checksum entries must describe the actual uploaded files. Keep the APK's compiled source revision visible; do not describe the current follow-up candidate as built from the older source tag. Never package the working directory wholesale: signing material, local env files, backups and fixture data are not release assets.
+For an accepted Android package, upload the signed APK, its `SHA256SUMS` and non-secret build metadata to the matching GitHub prerelease. Checksum entries must describe the actual uploaded files. Keep the APK's compiled source revision visible; do not describe the published APK as built from the older source tag. Never package the working directory wholesale: signing material, local env files, backups and fixture data are not release assets.
 
 Before publication, merge the reviewed source/docs changes, select the exact release source/tag and ensure the English/Arabic landing guidance names that same version and supported behavior. This documentation update does not publish assets or change tags automatically.
 

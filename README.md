@@ -2,7 +2,7 @@
 
 Repository: [`KenseiEmam/Rafik-OpenSource`](https://github.com/KenseiEmam/Rafik-OpenSource).
 
-**Beta candidate: Squire 1.0.0-beta.1.** Standalone Android packaging uses `npm run mobile:release`; follow the [signing, installation and update guide](docs/operations/android-release.md). Release/device acceptance limits are tracked in [verification](docs/verification/README.md).
+**Published evaluation beta: Squire 1.0.0-beta.1.** Standalone Android packaging uses `npm run mobile:release`; follow the [signing, installation and update guide](docs/operations/android-release.md). Release/device acceptance limits are tracked in [verification](docs/verification/README.md).
 
 Rafik helps university coaches manage athlete training, attendance and performance in a university-operated instance. It is open source and can be deployed on infrastructure the university controls, without a Rafik software subscription. The Android field app serves coaches; administrators and athletes use the web dashboard. Performance records and limited participation status do not provide medical diagnoses or injury predictions.
 
@@ -10,7 +10,7 @@ Rafik helps university coaches manage athlete training, attendance and performan
 
 **Beta evaluation, 19 October 2026:** the web/API foundation is suitable for technically supported, synthetic-data institution evaluation. The current web production build passes; prior role/workflow evidence and remaining limits are in [verification](docs/verification/README.md). See the [beta readiness table](docs/operations/release-checklist.md#project-beta-readiness-19-october-2026) for publishing actions, Android device checks and deployment responsibilities. First-user feedback and optional cloud validation remain accepted backlog items.
 
-The approved migration is staged in [the requirements and acceptance plan](docs/requirements/README.md). The frontend, backend and early Android app are npm workspaces under `apps/`; shared transport contracts and generated database types live in `packages/shared/`. The application has a university-oriented organization foundation and a self-host Compose profile. Stage 7 Android coach workflows are in progress; first-user and pre-production gates remain open, so this is not declared production-ready for real athlete data. Optional cloud-template checks remain deferred to user testing.
+The approved migration is staged in [the requirements and acceptance plan](docs/requirements/README.md). The frontend, backend and early Android app are npm workspaces under `apps/`; shared transport contracts and generated database types live in `packages/shared/`. The application has a university-oriented organization foundation and a self-host Compose profile. The coach Android beta is published and accepted; broader coverage remains follow-up work; first-user and pre-production gates remain open, so this is not declared production-ready for real athlete data. Optional cloud-template checks remain deferred to user testing.
 
 Each university is expected to operate a separate instance and control its users, data, files, secrets, backups, retention, and infrastructure. Hosting and maintenance costs are the university's responsibility.
 
@@ -23,6 +23,8 @@ The Android prototype includes English/Arabic controls, online correction histor
 Focused native API/queue checks: `npm run mobile:acceptance` (Node 24 and local Docker); this uses a disposable database/API and cleans up automatically. See the [Android guide](docs/development/android.md#focused-checks).
 
 Android build/install: `npm run mobile:android`; ordinary mobile JavaScript/UI development after installation: `npm run mobile:start`. The [Android guide](docs/development/android.md#windows-laptop-startup-and-rebuilds) describes the Windows path/concurrency helper and emulator requirements.
+
+For coaches, install the official APK from the Android ZIP bundle on the [beta release](https://github.com/KenseiEmam/Rafik-OpenSource/releases/tag/v1.0.0-beta.1); enter your own institution API URL after installation. Source archives are not Android installers. To build a standalone APK yourself, follow the [fresh-checkout build procedure](docs/operations/android-release.md#fresh-checkout-standalone-build): `npm ci`, your distribution's signing key, then `npm run mobile:release`. No Metro or emulator is needed to use the resulting APK.
 
 Explore the supported coach API in [local Swagger UI](http://127.0.0.1:55331/v1/docs) after starting/restarting the updated backend. See the [API guide](docs/reference/api.md) for authentication and self-hosted URLs.
 
