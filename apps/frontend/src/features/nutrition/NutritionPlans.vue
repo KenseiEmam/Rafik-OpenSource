@@ -176,7 +176,7 @@ function create(ids: string[]) {
     </p>
     <PageState :loading="loading && !data" :error="!data ? error : ''" @retry="load"
       ><template v-if="data">
-        <p class="small-print">{{ data.total }} {{ l('matching plans', 'خطط مطابقة') }}</p>
+        <p class="list-summary">{{ data.total }} {{ l('matching plans', 'خطط مطابقة') }}</p>
         <section v-if="!data.items.length" class="empty-state panel">
           <PhTray :size="28" aria-hidden="true" />
           <h2>{{ l('No plans match this view.', 'لا توجد خطط مطابقة لهذا العرض.') }}</h2>

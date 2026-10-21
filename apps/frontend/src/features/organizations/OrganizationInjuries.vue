@@ -258,12 +258,12 @@ onMounted(load)
     </template>
 
     <section v-else-if="view === 'trainer'" class="panel">
-      <h2>{{ l('Assigned trainees', 'المتدربون المعيّنون') }}</h2>
+      <h2>{{ l('Assigned athletes', 'الرياضيون المعيّنون') }}</h2>
       <p>
         {{
           l(
-            'Only active status and effective date for your assigned trainees are shown. No medical details or history are available.',
-            'تظهر الحالة الفعالة وتاريخ سريانها للمتدربين المعيّنين إليك فقط. لا تتوفر تفاصيل طبية أو سجل سابق.',
+            'Only active status and effective date for your assigned athletes are shown. No medical details or history are available.',
+            'تظهر الحالة الفعالة وتاريخ سريانها للرياضيين المعيّنين إليك فقط. لا تتوفر تفاصيل طبية أو سجل سابق.',
           )
         }}
       </p>

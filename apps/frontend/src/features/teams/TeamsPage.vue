@@ -190,7 +190,7 @@ onMounted(load)
               {{
                 l(
                   'Start with a name. Invite staff and add athletes only when you are ready.',
-                  'ابدأ باسم. ادعُ الموظفين وأضف المتدربين عندما تكون جاهزاً.',
+                  'ابدأ باسم. ادعُ الموظفين وأضف الرياضيين عندما تكون جاهزاً.',
                 )
               }}
             </p>

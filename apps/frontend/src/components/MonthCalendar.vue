@@ -85,9 +85,10 @@ function keyboard(event: KeyboardEvent) {
         dir="auto"
         >{{ e.title }}</span
       >
-      <small v-if="cell.events.length > 2">+{{ cell.events.length - 2 }}</small>
+      <small v-if="cell.events.length > 2" class="month-more">+{{ cell.events.length - 2 }}</small>
       <span v-if="cell.events.length" class="month-count"
-        >{{ cell.events.length }} {{ l('events', 'مواعيد') }}</span
+        >{{ cell.events.length }}
+        {{ cell.events.length === 1 ? l('event', 'موعد') : l('events', 'مواعيد') }}</span
       >
     </button>
   </div>
@@ -131,7 +132,12 @@ function keyboard(event: KeyboardEvent) {
   box-shadow: inset 0 0 0 2px var(--accent);
 }
 .month-day:disabled {
-  opacity: 0.38;
+  /* The global disabled opacity would expose the grid-line background. */
+  opacity: 1;
+  background: var(--page);
+}
+.month-day:disabled > * {
+  opacity: 0.5;
 }
 .day-number {
   font-variant-numeric: tabular-nums;
@@ -164,7 +170,8 @@ function keyboard(event: KeyboardEvent) {
     min-height: 68px;
     padding: 6px 3px;
   }
-  .month-event {
+  .month-event,
+  .month-more {
     display: none;
   }
   .month-count {

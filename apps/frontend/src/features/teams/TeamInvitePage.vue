@@ -61,7 +61,7 @@ onMounted(load)
           {{
             l(
               'You will see shared team material and athletes assigned to you. Joining does not expose other coaches’ private conversations.',
-              'سترى المواد المشتركة والمتدربين المكلّف بهم. لا يكشف الانضمام المحادثات الخاصة للمدربين الآخرين.',
+              'سترى المواد المشتركة والرياضيين المكلّف بهم. لا يكشف الانضمام المحادثات الخاصة للمدربين الآخرين.',
             )
           }}
         </p>

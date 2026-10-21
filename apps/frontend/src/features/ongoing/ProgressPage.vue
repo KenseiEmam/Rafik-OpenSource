@@ -179,7 +179,7 @@ onMounted(load)
 <template>
   <div class="container page">
     <RouterLink v-if="coach" class="back-link" :to="'/coach/clients/' + relationship"
-      >← {{ l('Athlete workspace', 'مساحة المتدرب') }}</RouterLink
+      >← {{ l('Athlete workspace', 'مساحة الرياضي') }}</RouterLink
     >
     <PageHeading class="page-heading"
       ><div>

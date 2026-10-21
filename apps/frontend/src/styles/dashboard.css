@@ -172,12 +172,7 @@
   .dashboard-frame > main:has(.organization-messages.is-creating) {
     overflow: auto;
   }
-  .dashboard-frame .organization-people > section:first-child {
-    max-height: calc(100dvh - 330px);
-    min-height: 220px;
-    overflow-y: auto;
-    padding-inline-end: 12px;
-  }
+  /* The paginated directory scrolls with the workspace; no nested list scroller. */
   .dashboard-frame .organization-people aside {
     max-height: calc(100dvh - 180px);
     overflow-y: auto;

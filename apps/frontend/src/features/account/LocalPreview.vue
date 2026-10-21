@@ -58,7 +58,7 @@ async function enter(role: 'orgadmin' | 'orgtrainer' | 'orgtrainee' | 'orgadmin2
       <p class="preview-context">
         {{
           language(
-            'Each institution owns its people, programs and training history. Choose an administrator, trainer or athlete account to explore its workspace.',
+            'Each institution owns its people, programs and training history. Choose an administrator, coach or athlete account to explore its workspace.',
             'لكل مؤسسة أفرادها وبرامجها وسجلها التدريبي. اختر حساب مسؤول أو مدرب أو رياضي لاستكشاف مساحة عمله.',
           )
         }}
@@ -74,7 +74,7 @@ async function enter(role: 'orgadmin' | 'orgtrainer' | 'orgtrainee' | 'orgadmin2
             {
               role: 'orgtrainer' as const,
               name: 'Kareem Nasser',
-              description: language('Madar Training · Trainer', 'مدار للتدريب · مدرب'),
+              description: language('Madar Training · Coach', 'مدار للتدريب · مدرب'),
             },
             {
               role: 'orgtrainee' as const,

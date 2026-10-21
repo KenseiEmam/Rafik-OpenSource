@@ -653,11 +653,10 @@ onMounted(load)
 </template>
 <style scoped>
 .athlete-profile {
-  max-width: 1120px;
+  max-width: none;
 }
 .athlete-profile .panel {
   margin-bottom: 20px;
-  min-height: 300px;
 }
 .profile-facts {
   display: grid;
@@ -700,16 +699,13 @@ onMounted(load)
 .profile-tab-panel {
   outline-offset: 4px;
 }
+/* Compact in-panel empty state: start-aligned text, no nested card. */
 .profile-empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  min-height: 160px;
-  padding: 24px;
-  border: 1px dashed var(--line);
-  border-radius: 12px;
+  margin: 0;
+  padding: 16px 0;
+  max-width: 60ch;
   color: var(--muted);
+  line-height: 1.65;
 }
 .profile-metric {
   font-size: 1.65rem;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PhTray } from '@phosphor-icons/vue'
+import { PhCaretLeft, PhCaretRight, PhTray } from '@phosphor-icons/vue'
 import ScheduleViewSwitch from '../../components/ScheduleViewSwitch.vue'
 import ListPagination from '../../components/ListPagination.vue'
 import PageHeading from '../../components/PageHeading.vue'
@@ -68,6 +68,21 @@ const time = (value: string) =>
     minute: '2-digit',
     timeZone: zone,
   }).format(new Date(value))
+const periodLabel = computed(() =>
+  mode.value === 'month'
+    ? new Intl.DateTimeFormat(locale.value === 'ar' ? 'ar-AE' : 'en-GB', {
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'UTC',
+      }).format(new Date(start.value + 'T12:00:00Z'))
+    : l('Week of', 'أسبوع') +
+      ' ' +
+      new Intl.DateTimeFormat(locale.value === 'ar' ? 'ar-AE' : 'en-GB', {
+        day: 'numeric',
+        month: 'short',
+        timeZone: 'UTC',
+      }).format(new Date(start.value + 'T12:00:00Z')),
+)
 const missingStaff = (e: CalendarEvent) =>
   !e.people?.some((p) => p.duty === 'staff' && p.active && p.roles.includes('trainer'))
 let generation = 0
@@ -176,20 +191,47 @@ onMounted(() => load())
               }}</label
             >
           </div>
-          <div class="calendar-period-actions">
-            <button type="button" class="button secondary" @click="move(-7)" :disabled="loading">
-              {{
+          <div
+            class="calendar-period-actions"
+            role="group"
+            :aria-label="l('Change period', 'تغيير الفترة')"
+          >
+            <button
+              type="button"
+              class="button secondary period-button"
+              :aria-label="
                 mode === 'month'
                   ? l('Previous month', 'الشهر السابق')
                   : l('Previous week', 'الأسبوع السابق')
-              }}
+              "
+              :title="
+                mode === 'month'
+                  ? l('Previous month', 'الشهر السابق')
+                  : l('Previous week', 'الأسبوع السابق')
+              "
+              @click="move(-7)"
+              :disabled="loading"
+            >
+              <PhCaretLeft :size="18" class="directional" aria-hidden="true" />
             </button>
-            <button type="button" class="button secondary" @click="move(7)" :disabled="loading">
-              {{
+            <span class="period-label" aria-live="polite">{{ periodLabel }}</span>
+            <button
+              type="button"
+              class="button secondary period-button"
+              :aria-label="
                 mode === 'month'
                   ? l('Next month', 'الشهر التالي')
                   : l('Next week', 'الأسبوع التالي')
-              }}
+              "
+              :title="
+                mode === 'month'
+                  ? l('Next month', 'الشهر التالي')
+                  : l('Next week', 'الأسبوع التالي')
+              "
+              @click="move(7)"
+              :disabled="loading"
+            >
+              <PhCaretRight :size="18" class="directional" aria-hidden="true" />
             </button>
           </div>
         </form>
@@ -259,7 +301,9 @@ onMounted(() => load())
                     e.kind === 'assessment' ? l('Assessment', 'تقييم') : l('Training', 'تدريب')
                   }}</span>
                   <h2>{{ e.title }}</h2>
-                  <p>{{ e.location || l('Location to be agreed', 'الموقع يحدد لاحقاً') }}</p>
+                  <p class="agenda-location" dir="auto">
+                    {{ e.location || l('Location to be agreed', 'الموقع يحدد لاحقاً') }}
+                  </p>
                   <p class="small-print">
                     {{
                       e.people
@@ -269,7 +313,7 @@ onMounted(() => load())
                     }}
                   </p>
                   <p v-if="e.state === 'scheduled' && missingStaff(e)" class="attention-label">
-                    {{ l('Trainer reassignment needed', 'يلزم إعادة تعيين المدرب') }}
+                    {{ l('Coach reassignment needed', 'يلزم إعادة تعيين المدرب') }}
                   </p>
                 </div>
                 <span class="event-state">
@@ -448,7 +492,7 @@ onMounted(() => load())
   align-items: end;
   flex-wrap: wrap;
   gap: 16px 24px;
-  margin-block: 24px 12px;
+  margin-block: 16px 12px;
 }
 .calendar-filters {
   display: flex;
@@ -484,9 +528,23 @@ onMounted(() => load())
   gap: 8px;
   margin-inline-start: auto;
 }
-.calendar-period-actions .button {
+.calendar-period-actions .period-button {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
   min-height: 44px;
+  padding: 0;
   margin: 0;
+}
+.period-label {
+  min-width: 9.5em;
+  text-align: center;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.agenda-location {
+  color: var(--muted);
+  font-size: var(--text-small);
 }
 .date-range {
   color: var(--muted);
@@ -510,10 +568,7 @@ onMounted(() => load())
   .calendar-period-actions {
     width: 100%;
     margin: 0;
-  }
-  .calendar-period-actions .button {
-    flex: 1;
-    padding-inline: 10px;
+    justify-content: space-between;
   }
 }
 </style>

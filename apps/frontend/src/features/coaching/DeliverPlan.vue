@@ -319,8 +319,8 @@ onMounted(load)
               <p v-if="!people.length" class="notice">
                 {{
                   l(
-                    'Invite a trainee first. Trainers can assign only to the people they are responsible for.',
-                    'ادعُ متدرباً أولاً. يمكن للمدرب تعيين البرامج فقط لمن يتولى مسؤوليتهم.',
+                    'Invite an athlete first. Coaches can assign only to the people they are responsible for.',
+                    'ادعُ رياضياً أولاً. يمكن للمدرب تعيين البرامج فقط لمن يتولى مسؤوليتهم.',
                   )
                 }}
               </p>
@@ -437,7 +437,7 @@ onMounted(load)
                 {{
                   l(
                     'Dates follow each athlete’s timezone. Cycle day 1 is the start date; unfilled days are recovery days.',
-                    'التواريخ بحسب المنطقة الزمنية للمتدرب. اليوم الأول هو تاريخ البداية والأيام الفارغة للتعافي.',
+                    'التواريخ بحسب المنطقة الزمنية للرياضي. اليوم الأول هو تاريخ البداية والأيام الفارغة للتعافي.',
                   )
                 }}
               </p>
@@ -477,7 +477,7 @@ onMounted(load)
             <p>
               {{
                 l(
-                  'Existing started sessions retain their original prescription. This does not edit the program for other trainees.',
+                  'Existing started sessions retain their original prescription. This does not edit the program for other athletes.',
                   'تحتفظ الحصص التي بدأت بتعليماتها الأصلية. لا يتغير برنامج الرياضيين الآخرين.',
                 )
               }}

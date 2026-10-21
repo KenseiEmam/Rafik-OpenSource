@@ -835,7 +835,7 @@ function removeDay() {
                   {{
                     language(
                       'Choose up to 3 exercises with the same recording type. They use the same sets and targets; athletes can adjust their recorded results.',
-                      'اختر حتى 3 تمارين من نوع التسجيل نفسه. تستخدم المجموعات والأهداف نفسها، ويمكن للمتدرب تعديل نتائجه المسجلة.',
+                      'اختر حتى 3 تمارين من نوع التسجيل نفسه. تستخدم المجموعات والأهداف نفسها، ويمكن للرياضي تعديل نتائجه المسجلة.',
                     )
                   }}
                 </p>
@@ -885,9 +885,9 @@ function removeDay() {
               </p>
               <p v-if="preview && ex.note" class="coach-prescription">{{ ex.note }}</p>
               <details v-if="!preview">
-                <summary>{{ language('Add a coaching cue', 'إضافة توجيه للمتدرب') }}</summary>
+                <summary>{{ language('Add a coaching cue', 'إضافة توجيه للرياضي') }}</summary>
                 <label
-                  ><span class="sr-only">{{ language('Coaching cue', 'توجيه المتدرب') }}</span
+                  ><span class="sr-only">{{ language('Coaching cue', 'توجيه الرياضي') }}</span
                   ><textarea v-model="ex.note" maxlength="500" rows="2"></textarea>
                 </label>
               </details>

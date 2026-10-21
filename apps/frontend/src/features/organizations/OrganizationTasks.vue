@@ -335,7 +335,7 @@ onUnmounted(() => {
             single
             :max="1"
             v-model="draft.members"
-            :label="l('Assign to trainer', 'تعيين للمدرب')"
+            :label="l('Assign to coach', 'تعيين للمدرب')"
             :disabled="locked"
           />
           <div class="field-pair">
@@ -438,7 +438,7 @@ onUnmounted(() => {
             <p v-if="!task.trainer_active" class="notice">
               {{
                 l(
-                  'Trainer inactive. Reassign this task to continue.',
+                  'Coach inactive. Reassign this task to continue.',
                   'المدرب غير نشط. أعد تعيين المهمة للمتابعة.',
                 )
               }}

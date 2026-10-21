@@ -64,7 +64,7 @@ const command = useCommand<'review'>(
     await load()
     message.value = language(
       'Review saved. Your athlete can see this feedback in their session.',
-      'حُفظت المراجعة. يمكن لمتدربك رؤية الملاحظات ضمن حصته.',
+      'حُفظت المراجعة. يمكن لرياضيك رؤية الملاحظات ضمن حصته.',
     )
   },
   (_, args) =>
@@ -171,7 +171,7 @@ onMounted(async () => {
               >{{ language('Discuss this workout', 'مناقشة هذه الحصة') }}</RouterLink
             >
             <section v-if="session.note" class="panel">
-              <h2>{{ language('Athlete note', 'ملاحظة المتدرب') }}</h2>
+              <h2>{{ language('Athlete note', 'ملاحظة الرياضي') }}</h2>
               <p class="preserve-lines">{{ session.note }}</p>
             </section>
             <form class="panel feedback-form" @submit.prevent="save">

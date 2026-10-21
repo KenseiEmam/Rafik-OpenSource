@@ -403,7 +403,7 @@ onBeforeUnmount(() => {
         <p class="subtle">
           {{
             view === 'admin'
-              ? l('Choose anyone in this institution.', 'اختر من متدربي هذه المؤسسة.')
+              ? l('Choose anyone in this institution.', 'اختر من رياضيي هذه المؤسسة.')
               : l('Your assigned athletes appear here.', 'يظهر هنا الرياضيون المسندون إليك.')
           }}
         </p>
@@ -484,8 +484,8 @@ onBeforeUnmount(() => {
                 <p class="subtle">
                   {{
                     l(
-                      'Publishing creates a new version for this trainee. Earlier versions stay in history.',
-                      'ينشئ النشر نسخة جديدة لهذا المتدرب. تبقى النسخ السابقة في السجل.',
+                      'Publishing creates a new version for this athlete. Earlier versions stay in history.',
+                      'ينشئ النشر نسخة جديدة لهذا الرياضي. تبقى النسخ السابقة في السجل.',
                     )
                   }}
                 </p>
@@ -528,8 +528,8 @@ onBeforeUnmount(() => {
                   <p>
                     {{
                       l(
-                        'Visible to this trainee, institution admins and their assigned trainer.',
-                        'مرئية لهذا المتدرب ومسؤولي المؤسسة والمدرب المسند إليه.',
+                        'Visible to this athlete, institution admins and their assigned coach.',
+                        'مرئية لهذا الرياضي ومسؤولي المؤسسة والمدرب المسند إليه.',
                       )
                     }}
                   </p>
@@ -595,8 +595,8 @@ onBeforeUnmount(() => {
                           'يمكن لمؤسستك نشر أهداف يومية ومقترحات وجبات هنا.',
                         )
                       : l(
-                          'Set daily targets and practical food suggestions for this trainee. Scheduled and past plans are in Plan history.',
-                          'حدّد أهدافاً يومية ومقترحات طعام عملية لهذا المتدرب. الخطط المجدولة والسابقة في سجل الخطط.',
+                          'Set daily targets and practical food suggestions for this athlete. Scheduled and past plans are in Plan history.',
+                          'حدّد أهدافاً يومية ومقترحات طعام عملية لهذا الرياضي. الخطط المجدولة والسابقة في سجل الخطط.',
                         )
                   }}
                 </p>
@@ -692,12 +692,12 @@ onBeforeUnmount(() => {
                 {{
                   trainee
                     ? l(
-                        'Sharing lets institution admins and your currently assigned trainer read all entries and corrections in this diary. Personal nutrition elsewhere stays separate.',
+                        'Sharing lets institution admins and your currently assigned coach read all entries and corrections in this diary. Personal nutrition elsewhere stays separate.',
                         'تسمح المشاركة لمسؤولي المؤسسة ومدربك الحالي بقراءة جميع المدخلات والتصحيحات في هذا السجل. تبقى تغذيتك الشخصية منفصلة.',
                       )
                     : l(
-                        'Only the trainee can change sharing or record food. No entries is not proof that no food was eaten.',
-                        'المتدرب وحده يغيّر المشاركة أو يسجل الطعام. عدم وجود سجلات لا يعني عدم تناول الطعام.',
+                        'Only the athlete can change sharing or record food. No entries is not proof that no food was eaten.',
+                        'الرياضي وحده يغيّر المشاركة أو يسجل الطعام. عدم وجود سجلات لا يعني عدم تناول الطعام.',
                       )
                 }}
               </p>
@@ -892,7 +892,7 @@ onBeforeUnmount(() => {
             <p class="subtle">
               {{
                 l(
-                  'Published versions are kept unchanged, including after trainer reassignment.',
+                  'Published versions are kept unchanged, including after coach reassignment.',
                   'تبقى النسخ المنشورة دون تغيير، حتى عند إعادة تعيين المدرب.',
                 )
               }}

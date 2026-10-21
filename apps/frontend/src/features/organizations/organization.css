@@ -88,7 +88,10 @@
 }
 .organization-person p {
   margin: 4px 0;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
+}
+.organization-person .person-meta {
+  color: var(--muted);
 }
 .organization-person button {
   flex-shrink: 0;
@@ -146,9 +149,8 @@
   align-items: start;
   gap: 24px;
 }
-.institution-settings-column {
-  display: grid;
-  gap: 24px;
+.institution-settings-wide {
+  grid-column: 1 / -1;
   min-width: 0;
 }
 .institution-branding-column {

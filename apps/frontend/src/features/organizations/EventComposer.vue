@@ -174,10 +174,16 @@ function groupMembers() {
     draft.value.participants = selected.members
       .filter((m) => m.active && m.roles.includes('trainee') && !draft.value.staff.includes(m.id))
       .map((m) => m.id)
+    // Add the group's coaches; never drop a coach already chosen for this event.
     if (view === 'admin')
-      draft.value.staff = selected.members
-        .filter((m) => m.active && m.roles.includes('trainer'))
-        .map((m) => m.id)
+      draft.value.staff = [
+        ...new Set([
+          ...draft.value.staff,
+          ...selected.members
+            .filter((m) => m.active && m.roles.includes('trainer'))
+            .map((m) => m.id),
+        ]),
+      ]
   }
 }
 async function advance() {
@@ -353,14 +359,15 @@ onMounted(async () => {
                 <option value="" disabled>{{ l('Choose a template', 'اختر قالباً') }}</option>
                 <option v-for="t in templates" :key="t.id" :value="t.id">
                   {{ t.title }}
-                </option></select
-              ><RouterLink
-                :to="base + '/assessment-templates/new?forEvent=' + draft.id"
-                target="_blank"
-                rel="noopener"
-                class="text-link"
-                >{{ l('Create a template ↗ (new tab)', 'إنشاء قالب ↗ (تبويب جديد)') }}</RouterLink
-              ></label
+                </option>
+              </select></label
+            ><RouterLink
+              v-if="draft.kind === 'assessment'"
+              :to="base + '/assessment-templates/new?forEvent=' + draft.id"
+              target="_blank"
+              rel="noopener"
+              class="text-link"
+              >{{ l('Create a template ↗ (new tab)', 'إنشاء قالب ↗ (تبويب جديد)') }}</RouterLink
             >
             <button
               v-if="draft.kind === 'assessment'"
@@ -434,7 +441,7 @@ onMounted(async () => {
             />
             <p v-else>
               {{
-                l('You are the assigned trainer for this event.', 'أنت المدرب المعيّن لهذا الموعد.')
+                l('You are the assigned coach for this event.', 'أنت المدرب المعيّن لهذا الموعد.')
               }}
             </p>
             <h2>{{ l('Athletes', 'الرياضيون') }}</h2>
@@ -481,7 +488,7 @@ onMounted(async () => {
               role="trainee"
               v-model="draft.participants"
               :exclude-ids="draft.staff"
-              :label="l('Find trainees', 'البحث عن متدربين')"
+              :label="l('Find athletes', 'البحث عن رياضيين')"
               @options="data!.members = $event"
             />
           </section>
@@ -564,7 +571,7 @@ onMounted(async () => {
               }}
             </button>
           </div>
-          <p class="small-print" role="status">
+          <p class="small-print draft-status" role="status">
             {{
               saved
                 ? l('Draft saved on this device.', 'حُفظت المسودة على هذا الجهاز.')

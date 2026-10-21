@@ -312,7 +312,7 @@ onUnmounted(() => {
     </section>
     <PageState :loading="loading && !data" :error="!data ? error : ''" @retry="load"
       ><template v-if="data">
-        <p class="small-print">
+        <p class="list-summary">
           {{ data.total }} {{ l('matching assignments', 'خطط مطابقة') }} · {{ data.today }} ·
           {{ data.zone }}
         </p>
@@ -334,11 +334,11 @@ onUnmounted(() => {
         <div v-else class="athlete-plan-grid">
           <article v-for="plan in data.items" :key="plan.id" class="athlete-plan-card">
             <div class="heading-actions">
-              <p class="overline" dir="auto">{{ plan.member_name }}</p>
+              <p class="plan-athlete" dir="auto">{{ plan.member_name }}</p>
               <span class="tag">{{ label(plan.status) }}</span>
             </div>
             <h2 dir="auto">{{ plan.version.title }}</h2>
-            <p v-if="planLabel(plan)" class="tag" dir="auto">{{ planLabel(plan) }}</p>
+            <p v-if="planLabel(plan)" class="tag plan-sport" dir="auto">{{ planLabel(plan) }}</p>
             <p class="small-print">
               {{ l('Version', 'النسخة') }} {{ plan.version.revision }} ·
               {{
@@ -408,9 +408,16 @@ onUnmounted(() => {
   margin-block: 12px 4px;
   overflow-wrap: anywhere;
 }
-.athlete-plan-card .overline {
+.plan-athlete {
   margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
   overflow-wrap: anywhere;
+}
+.plan-sport {
+  align-self: flex-start;
+  max-width: 100%;
+  margin-block: 4px;
 }
 .athlete-plan-card dl {
   display: flex;

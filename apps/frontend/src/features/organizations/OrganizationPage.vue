@@ -532,7 +532,7 @@ onMounted(async () => {
               <p class="muted">
                 {{
                   l(
-                    'Your institution manages your trainer assignment. Your personal training remains in My training.',
+                    'Your institution manages your coach assignment. Your personal training remains in My training.',
                     'تدير مؤسستك تعيين مدربك. يبقى تدريبك الشخصي في «تدريبي».',
                   )
                 }}
@@ -542,12 +542,12 @@ onMounted(async () => {
                 {{
                   view === 'admin'
                     ? l(
-                        'Invite your staff and trainees, then give each trainee a responsible trainer. You can reassign responsibility while keeping the institution’s records together.',
-                        'ادعُ موظفيك ومتدربيك وعيّن مدرباً مسؤولاً لكل متدرب. يمكنك تغيير المسؤولية مع الحفاظ على سجلات المؤسسة.',
+                        'Invite your staff and athletes, then give each athlete a responsible coach. You can reassign responsibility while keeping the institution’s records together.',
+                        'ادعُ موظفيك ورياضييك وعيّن مدرباً مسؤولاً لكل رياضي. يمكنك تغيير المسؤولية مع الحفاظ على سجلات المؤسسة.',
                       )
                     : l(
-                        'Open your roster to see the trainees assigned to you. Institution administration and independent coaching are separate views.',
-                        'افتح القائمة للاطلاع على المتدربين المعيّنين لك. إدارة المؤسسة والتدريب المستقل عرضان منفصلان.',
+                        'Open your roster to see the athletes assigned to you. Institution administration and independent coaching are separate views.',
+                        'افتح القائمة للاطلاع على الرياضيين المعيّنين لك. إدارة المؤسسة والتدريب المستقل عرضان منفصلان.',
                       )
                 }}
               </p>
@@ -619,7 +619,7 @@ onMounted(async () => {
               </div>
               <div class="organization-people">
                 <section tabindex="0" :aria-label="l('People', 'الأشخاص')">
-                  <p class="muted">{{ l('People:', 'الأشخاص:') }} {{ peopleTotal }}</p>
+                  <p class="list-summary">{{ l('People:', 'الأشخاص:') }} {{ peopleTotal }}</p>
                   <p v-if="peopleLoading" class="small-print" role="status">
                     {{ l('Finding people…', 'جارٍ البحث عن الأشخاص…') }}
                   </p>
@@ -645,9 +645,12 @@ onMounted(async () => {
                       <span class="avatar">{{ member.name.slice(0, 1) }}</span>
                       <div>
                         <h2>{{ member.name }}</h2>
-                        <p>{{ member.roles.map(roleName).join(' · ') }}</p>
-                        <p v-if="member.roles.includes('trainee')" class="muted">
-                          {{ l('Primary coach', 'المدرب الأساسي') }}: {{ trainerName(member) }}
+                        <p class="person-meta">
+                          {{ member.roles.map(roleName).join(' · ')
+                          }}<template v-if="member.roles.includes('trainee')">
+                            · {{ l('Primary coach', 'المدرب الأساسي') }}:
+                            <bdi>{{ trainerName(member) }}</bdi></template
+                          >
                         </p>
                         <p v-if="supportingCoaches(member).length" class="muted" dir="auto">
                           {{ l('Supporting', 'مساند') }}: {{ supportingCoaches(member).join('، ') }}
@@ -770,7 +773,7 @@ onMounted(async () => {
                     member_invited: 'Invitation created',
                     invitation_revoked: 'Invitation revoked',
                     member_joined: 'Member joined',
-                    trainer_assigned: 'Trainer responsibility updated',
+                    trainer_assigned: 'Coach responsibility updated',
                     member_roles_changed: 'Member roles updated',
                     member_removed: 'Membership deactivated',
                     organization_created: 'Institution created',
@@ -815,103 +818,101 @@ onMounted(async () => {
           class="institution-settings"
         >
           <div class="institution-settings-grid">
-            <div class="institution-settings-column">
-              <section class="panel">
-                <h2>{{ l('General settings', 'الإعدادات العامة') }}</h2>
-                <form
-                  class="form-stack"
-                  @submit.prevent="
-                    run({ action: 'rename', name: newName, revision: data.workspace.revision })
-                  "
-                >
-                  <label
-                    >{{ l('Institution name', 'اسم المؤسسة')
-                    }}<input v-model="newName" maxlength="100" required :disabled="locked" /></label
-                  ><button class="button" :disabled="locked">
-                    {{ l('Save name', 'حفظ الاسم') }}
-                  </button>
-                </form>
-              </section>
-              <section class="panel">
-                <SportsSettings :workspace-id="id" @changed="loadSports" />
-              </section>
-              <section class="panel institution-danger-zone">
-                <h2>{{ l('Close this institution', 'إغلاق هذه المؤسسة') }}</h2>
-                <p>
-                  {{
-                    l(
-                      'End institution access for every member. Existing records are preserved.',
-                      'إنهاء وصول جميع الأعضاء إلى المؤسسة مع الاحتفاظ بالسجلات الحالية.',
-                    )
-                  }}
-                </p>
-                <DialogRoot v-model:open="closeDialog" @update:open="closeName = ''">
-                  <DialogTrigger as-child
-                    ><button
-                      type="button"
-                      class="button institution-danger-button"
-                      :disabled="locked"
-                    >
-                      {{ l('Close institution', 'إغلاق المؤسسة') }}
-                    </button></DialogTrigger
-                  >
-                  <DialogPortal>
-                    <DialogOverlay class="institution-dialog-overlay" />
-                    <DialogContent
-                      class="institution-close-dialog"
-                      :dir="locale === 'ar' ? 'rtl' : 'ltr'"
-                      @interact-outside="locked && $event.preventDefault()"
-                      @escape-key-down="locked && $event.preventDefault()"
-                    >
-                      <DialogTitle>{{
-                        l('Close this institution?', 'إغلاق هذه المؤسسة؟')
-                      }}</DialogTitle>
-                      <DialogDescription>
-                        {{
-                          l(
-                            'This ends access for all members. Records remain preserved. Type the institution name to confirm.',
-                            'ينهي هذا الوصول لجميع الأعضاء مع الاحتفاظ بالسجلات. اكتب اسم المؤسسة للتأكيد.',
-                          )
-                        }}
-                      </DialogDescription>
-                      <p class="institution-confirm-name" dir="auto">{{ data.workspace.name }}</p>
-                      <CommandStatus
-                        v-if="command.state.error || command.state.pending"
-                        :command="command"
-                      />
-                      <form
-                        class="form-stack"
-                        @submit.prevent="
-                          run({
-                            action: 'close',
-                            confirm: closeName,
-                            revision: data.workspace.revision,
-                          })
-                        "
-                      >
-                        <label
-                          >{{ l('Confirm institution name', 'تأكيد اسم المؤسسة')
-                          }}<input v-model="closeName" :disabled="locked" /></label
-                        ><button
-                          class="button institution-danger-button"
-                          :disabled="locked || closeName !== data.workspace.name"
-                        >
-                          {{ l('Close institution', 'إغلاق المؤسسة') }}
-                        </button>
-                        <DialogClose as-child
-                          ><button type="button" class="button secondary" :disabled="locked">
-                            {{ l('Cancel', 'إلغاء') }}
-                          </button></DialogClose
-                        >
-                      </form>
-                    </DialogContent>
-                  </DialogPortal>
-                </DialogRoot>
-              </section>
-            </div>
+            <section class="panel">
+              <h2>{{ l('General settings', 'الإعدادات العامة') }}</h2>
+              <form
+                class="form-stack"
+                @submit.prevent="
+                  run({ action: 'rename', name: newName, revision: data.workspace.revision })
+                "
+              >
+                <label
+                  >{{ l('Institution name', 'اسم المؤسسة')
+                  }}<input v-model="newName" maxlength="100" required :disabled="locked" /></label
+                ><button class="button" :disabled="locked">
+                  {{ l('Save name', 'حفظ الاسم') }}
+                </button>
+              </form>
+            </section>
             <div class="panel institution-branding-column">
               <BrandingSettings :workspace-id="id" />
             </div>
+            <section class="panel institution-settings-wide">
+              <SportsSettings :workspace-id="id" @changed="loadSports" />
+            </section>
+            <section class="panel institution-danger-zone institution-settings-wide">
+              <h2>{{ l('Close this institution', 'إغلاق هذه المؤسسة') }}</h2>
+              <p>
+                {{
+                  l(
+                    'End institution access for every member. Existing records are preserved.',
+                    'إنهاء وصول جميع الأعضاء إلى المؤسسة مع الاحتفاظ بالسجلات الحالية.',
+                  )
+                }}
+              </p>
+              <DialogRoot v-model:open="closeDialog" @update:open="closeName = ''">
+                <DialogTrigger as-child
+                  ><button
+                    type="button"
+                    class="button institution-danger-button"
+                    :disabled="locked"
+                  >
+                    {{ l('Close institution', 'إغلاق المؤسسة') }}
+                  </button></DialogTrigger
+                >
+                <DialogPortal>
+                  <DialogOverlay class="institution-dialog-overlay" />
+                  <DialogContent
+                    class="institution-close-dialog"
+                    :dir="locale === 'ar' ? 'rtl' : 'ltr'"
+                    @interact-outside="locked && $event.preventDefault()"
+                    @escape-key-down="locked && $event.preventDefault()"
+                  >
+                    <DialogTitle>{{
+                      l('Close this institution?', 'إغلاق هذه المؤسسة؟')
+                    }}</DialogTitle>
+                    <DialogDescription>
+                      {{
+                        l(
+                          'This ends access for all members. Records remain preserved. Type the institution name to confirm.',
+                          'ينهي هذا الوصول لجميع الأعضاء مع الاحتفاظ بالسجلات. اكتب اسم المؤسسة للتأكيد.',
+                        )
+                      }}
+                    </DialogDescription>
+                    <p class="institution-confirm-name" dir="auto">{{ data.workspace.name }}</p>
+                    <CommandStatus
+                      v-if="command.state.error || command.state.pending"
+                      :command="command"
+                    />
+                    <form
+                      class="form-stack"
+                      @submit.prevent="
+                        run({
+                          action: 'close',
+                          confirm: closeName,
+                          revision: data.workspace.revision,
+                        })
+                      "
+                    >
+                      <label
+                        >{{ l('Confirm institution name', 'تأكيد اسم المؤسسة')
+                        }}<input v-model="closeName" :disabled="locked" /></label
+                      ><button
+                        class="button institution-danger-button"
+                        :disabled="locked || closeName !== data.workspace.name"
+                      >
+                        {{ l('Close institution', 'إغلاق المؤسسة') }}
+                      </button>
+                      <DialogClose as-child
+                        ><button type="button" class="button secondary" :disabled="locked">
+                          {{ l('Cancel', 'إلغاء') }}
+                        </button></DialogClose
+                      >
+                    </form>
+                  </DialogContent>
+                </DialogPortal>
+              </DialogRoot>
+            </section>
           </div>
         </section>
         <p v-else class="notice">

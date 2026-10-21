@@ -28,7 +28,7 @@ const average = (items: { score: number | null; value: number }[]) => {
       :aria-label="l('Experience report sections', 'أقسام تقرير التجربة')"
       ><TabsTrigger value="clients">{{ l('Athlete experience', 'تجربة الرياضيين') }}</TabsTrigger
       ><TabsTrigger v-if="report.workplace" value="workplace">{{
-        l('Trainer workplace', 'بيئة عمل المدربين')
+        l('Coach workplace', 'بيئة عمل المدربين')
       }}</TabsTrigger></TabsList
     >
     <TabsContent value="clients">
@@ -37,7 +37,7 @@ const average = (items: { score: number | null; value: number }[]) => {
         <p>
           {{
             l(
-              'Ratings from completed sessions in the selected dates, for the current roster. Optional responses are shown separately by source; they are not an overall trainer score.',
+              'Ratings from completed sessions in the selected dates, for the current roster. Optional responses are shown separately by source; they are not an overall coach score.',
               'تقييمات الجلسات المكتملة ضمن الفترة المحددة للقائمة الحالية. تُعرض الإجابات الاختيارية حسب المصدر؛ ليست تقييماً عاماً للمدرب.',
             )
           }}
@@ -112,7 +112,7 @@ const average = (items: { score: number | null; value: number }[]) => {
             )
           "
           :items="count(report.workplace, true) ? ratings(report.workplace) : []"
-          :unit="l('trainers', 'مدرب')"
+          :unit="l('coaches', 'مدرب')"
         /></section></TabsContent
   ></TabsRoot>
 </template>

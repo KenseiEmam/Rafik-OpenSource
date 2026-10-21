@@ -317,7 +317,7 @@ onMounted(load)
           >
             {{
               l(
-                'A trainer is no longer active in this role. An administrator can reassign this event below.',
+                'A coach is no longer active in this role. An administrator can reassign this event below.',
                 'لم يعد أحد المدربين نشطاً بهذا الدور. يمكن للمسؤول إعادة تعيين الموعد أدناه.',
               )
             }}
@@ -416,7 +416,7 @@ onMounted(load)
           @submit.prevent="run({ action: 'staff', staff: newStaff })"
         >
           <fieldset :disabled="locked" class="form-fields">
-            <h2>{{ l('Assign active trainers', 'تعيين مدربين نشطين') }}</h2>
+            <h2>{{ l('Assign active coaches', 'تعيين مدربين نشطين') }}</h2>
             <MemberPicker
               :workspace="id"
               view="admin"
@@ -499,7 +499,7 @@ onMounted(load)
               <p class="small-print">
                 {{
                   l(
-                    'This trainee sees their own result. Your institution retains the result and correction history.',
+                    'This athlete sees their own result. Your institution retains the result and correction history.',
                     'يرى الرياضي نتيجته فقط. تحتفظ مؤسستك بالنتيجة وسجل التصحيحات.',
                   )
                 }}
@@ -625,7 +625,7 @@ onMounted(load)
               <p class="small-print">
                 {{
                   l(
-                    'Saved revisions for this trainee, newest first.',
+                    'Saved revisions for this athlete, newest first.',
                     'النسخ المحفوظة لهذا الرياضي، الأحدث أولاً.',
                   )
                 }}

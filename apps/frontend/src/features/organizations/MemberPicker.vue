@@ -207,15 +207,31 @@ onUnmounted(() => {
 }
 .member-search label {
   flex: 1;
+  display: grid;
+  gap: 8px;
   min-width: 0;
   margin: 0;
 }
+.member-search input,
+.member-search .button {
+  height: 44px;
+  min-height: 44px;
+  margin: 0;
+}
+/* A bounded, visibly framed list so partially scrolled rows do not look clipped. */
 .member-options {
   max-height: 300px;
   overflow: auto;
   display: grid;
-  gap: 10px;
-  padding: 8px 0;
+  gap: 4px;
+  margin-block: 8px;
+  padding: 4px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.member-options:empty {
+  display: none;
 }
 .chosen-members {
   display: flex;

@@ -41,16 +41,16 @@ import { language, t } from '../../lib/i18n'
       <p>
         {{
           language(
-            'Use Calendar to schedule training and assessor-led assessments. Record attendance, check-ins and trainee-visible notes in the event. There are no session packages, allowances or commercial session limits.',
-            'استخدم التقويم لجدولة التدريب والتقييمات التي يقودها المقيمون. سجّل الحضور ووقت تسجيله والملاحظات المرئية للمتدرب ضمن الموعد. لا توجد باقات جلسات أو أرصدة أو حدود تجارية للجلسات.',
+            'Use Calendar to schedule training and assessor-led assessments. Record attendance, check-ins and athlete-visible notes in the event. There are no session packages, allowances or commercial session limits.',
+            'استخدم التقويم لجدولة التدريب والتقييمات التي يقودها المقيمون. سجّل الحضور ووقت تسجيله والملاحظات المرئية للرياضي ضمن الموعد. لا توجد باقات جلسات أو أرصدة أو حدود تجارية للجلسات.',
           )
         }}
       </p>
       <p>
         {{
           language(
-            'Session details hold attendance, check-in time and trainee-visible notes. Analytics separates trainee session experience from trainers’ workplace feedback. Trainers use My feedback for an optional monthly workplace rating; trainees can rate completed sessions from their completion screen. Neither question has a preselected answer.',
-            'تضم تفاصيل الجلسة الحضور ووقت تسجيله وملاحظات مرئية للمتدرب. تفصل التحليلات تجربة المتدربين عن آراء المدربين في بيئة العمل. يستخدم المدربون تقييماتي للتقييم الشهري الاختياري، ويمكن للمتدربين تقييم الجلسات من شاشة الإكمال. لا إجابة مختارة مسبقاً.',
+            'Session details hold attendance, check-in time and athlete-visible notes. Analytics separates athlete session experience from coaches’ workplace feedback. Coaches use My feedback for an optional monthly workplace rating; athletes can rate completed sessions from their completion screen. Neither question has a preselected answer.',
+            'تضم تفاصيل الجلسة الحضور ووقت تسجيله وملاحظات مرئية للرياضي. تفصل التحليلات تجربة الرياضيين عن آراء المدربين في بيئة العمل. يستخدم المدربون تقييماتي للتقييم الشهري الاختياري، ويمكن للرياضيين تقييم الجلسات من شاشة الإكمال. لا إجابة مختارة مسبقاً.',
           )
         }}
       </p>
@@ -60,7 +60,7 @@ import { language, t } from '../../lib/i18n'
       <p>
         {{
           language(
-            'Your account opens its assigned dashboard: administrators use People & access to manage invitations and permissions, Analytics to review recorded activity, and Programs to publish plans; trainers see their assigned coaching work; athletes see their own training. Administrators can change an account’s single institution role in People & access. Each institution keeps its own people, programs and history.',
+            'Your account opens its assigned dashboard: administrators use People & access to manage invitations and permissions, Analytics to review recorded activity, and Programs to publish plans; coaches see their assigned coaching work; athletes see their own training. Administrators can change an account’s single institution role in People & access. Each institution keeps its own people, programs and history.',
             'يفتح حسابك لوحة الدور المعيّن له: يدير المسؤولون الدعوات والصلاحيات في الأشخاص والصلاحيات، ويراجعون النشاط المسجل في التحليلات، وينشرون الخطط في البرامج؛ ويرى المدربون مهامهم التدريبية، ويرى الرياضيون تدريبهم. يمكن للمسؤول تغيير دور الحساب الواحد داخل المؤسسة من الأشخاص والصلاحيات. تحتفظ كل مؤسسة بأشخاصها وبرامجها وسجلها.',
           )
         }}
@@ -73,7 +73,7 @@ import { language, t } from '../../lib/i18n'
         <p>
           {{
             language(
-              'Start in People & access: invite administrators, trainers or athletes and assign a responsible trainer. In Programs, publish a plan and review who will receive it. Calendar schedules training and assessor-led assessments; the Library section contains reusable groups and assessment templates.',
+              'Start in People & access: invite administrators, coaches or athletes and assign a responsible coach. In Programs, publish a plan and review who will receive it. Calendar schedules training and assessor-led assessments; the Library section contains reusable groups and assessment templates.',
               'ابدأ في الأشخاص والصلاحيات: ادعُ المسؤولين والمدربين والرياضيين وعيّن المدرب المسؤول. انشر خطة في البرامج وراجع المستلمين. استخدم التقويم لجدولة التدريب والتقييمات؛ ويحتوي قسم المكتبة على المجموعات وقوالب التقييم القابلة لإعادة الاستخدام.',
             )
           }}
@@ -81,7 +81,7 @@ import { language, t } from '../../lib/i18n'
         <p>
           {{
             language(
-              'Analytics shows institution workload, participation and gaps. Its totals and definitions describe recorded activity. They do not rate trainer quality. Reassigning a trainer preserves the institution’s training history.',
+              'Analytics shows institution workload, participation and gaps. Its totals and definitions describe recorded activity. They do not rate coach quality. Reassigning a coach preserves the institution’s training history.',
               'تعرض التحليلات أعباء العمل والمشاركة والنواقص في المؤسسة. تصف الأرقام النشاط المسجّل ولا تقيّم جودة المدرب. يبقى سجل المؤسسة محفوظاً عند تغيير المدرب المسؤول.',
             )
           }}
@@ -104,7 +104,7 @@ import { language, t } from '../../lib/i18n'
           {{
             language(
               'Today brings together sessions and check-ins awaiting review. Plans is where you prepare and publish training; Athletes is where you invite people and manage each relationship. Appointments, Resources and other tools have their own navigation links. Independent coach teams do not merge your private athlete records.',
-              'يجمع اليوم الحصص والمتابعات بانتظار المراجعة. جهّز التدريب وانشره في الخطط، وادعُ المتدربين وأدر كل علاقة في المتدربين. تتوفر الجدولة والملفات والأدوات الاختيارية في قائمة التنقل. لا تدمج فرق المدربين المستقلين سجلات متدربيك الخاصة.',
+              'يجمع اليوم الحصص والمتابعات بانتظار المراجعة. جهّز التدريب وانشره في الخطط، وادعُ الرياضيين وأدر كل علاقة في الرياضيين. تتوفر الجدولة والملفات والأدوات الاختيارية في قائمة التنقل. لا تدمج فرق المدربين المستقلين سجلات رياضييك الخاصة.',
             )
           }}
         </p>
@@ -115,7 +115,7 @@ import { language, t } from '../../lib/i18n'
       <p>
         {{
           language(
-            'Create an exercise with multiple body areas, muscle groups and equipment. Upload its demonstration directly or reuse an uploaded file. Institution exercises are shared only inside that institution; trainer-created exercises remain private to their trainer. Published assignments preserve their instructions and demonstration.',
+            'Create an exercise with multiple body areas, muscle groups and equipment. Upload its demonstration directly or reuse an uploaded file. Institution exercises are shared only inside that institution; coach-created exercises remain private to their coach. Published assignments preserve their instructions and demonstration.',
             'أنشئ تمريناً بمناطق جسم ومجموعات عضلية ومعدات متعددة. ارفع الشرح مباشرة أو أعد استخدام ملف مرفوع. تشارك تمارين المؤسسة داخلها فقط، وتبقى تمارين المدرب خاصة به. تحتفظ التكليفات المنشورة بالتعليمات والشرح.',
           )
         }}
@@ -165,7 +165,7 @@ import { language, t } from '../../lib/i18n'
         {{
           language(
             'Open Coaching → Programs. Start with a blank session, add exercises from your library, and preview the result. Save a draft while you work or publish the finished program, then invite athletes from Athletes.',
-            'افتح التدريب ← الخطط. ابدأ بالخطة الجاهزة، وعدّل التمارين، وعاين الحصة. احفظها وانشرها، ثم أنشئ دعوة ضمن المتدربين. شارك الرابط عبر وسيلة التواصل المعتادة.',
+            'افتح التدريب ← الخطط. ابدأ بالخطة الجاهزة، وعدّل التمارين، وعاين الحصة. احفظها وانشرها، ثم أنشئ دعوة ضمن الرياضيين. شارك الرابط عبر وسيلة التواصل المعتادة.',
           )
         }}
       </p>
@@ -198,15 +198,15 @@ import { language, t } from '../../lib/i18n'
         {{
           language(
             'Independent coaches: open Nutrition, choose an athlete, enter agreed calorie/macronutrient targets and build a suggested day. The calculator only converts your chosen budget into grams. Save the plan to share it. Athletes choose who can see a record, select food or a suggested meal, adjust the amount actually eaten and save. Suggested meals never count as logged food automatically. Unknown values stay blank.',
-            'للمدرب المستقل: افتح التغذية واختر متدرباً وحدد الأهداف المتفق عليها للسعرات والمغذيات وأضف يوماً مقترحاً. تحوّل الحاسبة السعرات التي اخترتها إلى غرامات فقط. احفظ الخطة لمشاركتها. للمتدرب: حدد من يرى السجل واختر طعاماً أو وجبة مقترحة وعدّل الكمية التي تناولتها ثم احفظ. لا تُسجل المقترحات كطعام متناول تلقائياً. تبقى القيم المجهولة فارغة.',
+            'للمدرب المستقل: افتح التغذية واختر رياضياً وحدد الأهداف المتفق عليها للسعرات والمغذيات وأضف يوماً مقترحاً. تحوّل الحاسبة السعرات التي اخترتها إلى غرامات فقط. احفظ الخطة لمشاركتها. للرياضي: حدد من يرى السجل واختر طعاماً أو وجبة مقترحة وعدّل الكمية التي تناولتها ثم احفظ. لا تُسجل المقترحات كطعام متناول تلقائياً. تبقى القيم المجهولة فارغة.',
           )
         }}
       </p>
       <p>
         {{
           language(
-            'The food library starts with 15 sourced USDA staples. Use a label or a saved food for other choices; check the nutrient basis before changing portions. Institution admins and assigned trainers can publish scoped plans in Nutrition. Trainees decide whether to share their institution diary; personal records remain separate.',
-            'تبدأ مكتبة الطعام بخمسة عشر طعاماً موثقاً من وزارة الزراعة الأمريكية. استخدم الملصق أو طعاماً محفوظاً للخيارات الأخرى وراجع أساس القيم قبل تعديل الكميات. يمكن لمسؤولي المؤسسة والمدربين المسند إليهم المتدربون نشر خطط في التغذية. يقرر المتدرب مشاركة سجل المؤسسة، وتبقى السجلات الشخصية منفصلة.',
+            'The food library starts with 15 sourced USDA staples. Use a label or a saved food for other choices; check the nutrient basis before changing portions. Institution admins and assigned coaches can publish scoped plans in Nutrition. Athletes decide whether to share their institution diary; personal records remain separate.',
+            'تبدأ مكتبة الطعام بخمسة عشر طعاماً موثقاً من وزارة الزراعة الأمريكية. استخدم الملصق أو طعاماً محفوظاً للخيارات الأخرى وراجع أساس القيم قبل تعديل الكميات. يمكن لمسؤولي المؤسسة والمدربين المسند إليهم الرياضيون نشر خطط في التغذية. يقرر الرياضي مشاركة سجل المؤسسة، وتبقى السجلات الشخصية منفصلة.',
           )
         }}
       </p>

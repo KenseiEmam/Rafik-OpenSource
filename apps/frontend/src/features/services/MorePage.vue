@@ -78,7 +78,7 @@ const coach = useRoute().path.startsWith('/coach'),
             coach
               ? l(
                   'Coordinate staff, athletes and shared material.',
-                  'نسّق الموظفين والمتدربين والمواد المشتركة.',
+                  'نسّق الموظفين والرياضيين والمواد المشتركة.',
                 )
               : l(
                   'Review team invitations and proposed coach changes.',

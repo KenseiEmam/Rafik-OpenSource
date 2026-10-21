@@ -184,7 +184,7 @@ onMounted(() => load())
         <div class="person-filter-panel">
           <form @submit.prevent="load()">
             <label
-              >{{ l('Find an athlete', 'البحث عن متدرب')
+              >{{ l('Find an athlete', 'البحث عن رياضي')
               }}<input
                 :placeholder="l('Search athlete names…', 'ابحث بأسماء الرياضيين…')"
                 type="search"
@@ -195,7 +195,7 @@ onMounted(() => load())
             </button>
           </form>
           <label
-            >{{ l('Trainee', 'الرياضي')
+            >{{ l('Athlete', 'الرياضي')
             }}<select v-model="selected" @change="selectPerson">
               <option value="">{{ l('Everyone in this scope', 'الجميع في هذا النطاق') }}</option>
               <option v-for="person in people" :key="person.id" :value="person.id">
@@ -251,7 +251,7 @@ onMounted(() => load())
             }}</small></RouterLink
           >
           <div>
-            <span>{{ l('Current athletes who trained', 'متدربون حاليون تدربوا') }}</span
+            <span>{{ l('Current athletes who trained', 'رياضيون حاليون تدربوا') }}</span
             ><strong dir="ltr"
               >{{ data.summary.participating }}<small> / {{ data.summary.active }}</small></strong
             ><small>{{ l('From the active roster', 'من القائمة النشطة') }}</small>
@@ -324,14 +324,14 @@ onMounted(() => load())
               <h2>{{ l('Where to follow up', 'ما يحتاج المتابعة') }}</h2>
               <RouterLink v-if="data.summary.unassigned" :to="base + '/people'" class="text-link"
                 >{{ data.summary.unassigned }}
-                {{ l('trainees need a responsible trainer', 'متدربين يحتاجون مدرباً مسؤولاً') }}
+                {{ l('athletes need a responsible coach', 'رياضيين يحتاجون مدرباً مسؤولاً') }}
                 ↗</RouterLink
               ><RouterLink
                 v-if="data.summary.without_program"
                 :to="base + (workspace ? '/training' : '/clients')"
                 class="text-link"
                 >{{ data.summary.without_program }}
-                {{ l('active trainees have no current program', 'متدربين نشطين بلا برنامج حالي') }}
+                {{ l('active athletes have no current program', 'رياضيين نشطين بلا برنامج حالي') }}
                 ↗</RouterLink
               >
             </section>
@@ -339,10 +339,10 @@ onMounted(() => load())
               <div v-if="view === 'admin'" class="chart-page">
                 <MetricChart
                   counts
-                  :title="l('Trainer responsibility', 'مسؤولية المدربين')"
+                  :title="l('Coach responsibility', 'مسؤولية المدربين')"
                   :description="
                     l(
-                      'Current active trainees per trainer, across the institution. This is workload, not quality.',
+                      'Current active athletes per coach, across the institution. This is workload, not quality.',
                       'الرياضيون النشطون لكل مدرب في المؤسسة كاملة. هذا حجم العمل وليس الجودة.',
                     )
                   "
@@ -353,7 +353,7 @@ onMounted(() => load())
                   class="text-link"
                   @click="load('workload')"
                 >
-                  {{ l('Load more trainers', 'تحميل المزيد من المدربين') }}
+                  {{ l('Load more coaches', 'تحميل المزيد من المدربين') }}
                 </button>
               </div>
               <div v-if="workspace" class="chart-page">
@@ -430,7 +430,7 @@ onMounted(() => load())
           <p>
             {{
               l(
-                'Trainer reports use current responsibility. Admins see their institution, including history preserved after reassignment. Workload always covers the whole institution, regardless of trainee filter. These counts are not adherence, health, retention or revenue scores.',
+                'Coach reports use current responsibility. Admins see their institution, including history preserved after reassignment. Workload always covers the whole institution, regardless of athlete filter. These counts are not adherence, health, retention or revenue scores.',
                 'تقارير المدرب بحسب مسؤوليته الحالية والمسؤول يرى مؤسسته وسجلها المحفوظ بعد إعادة التعيين. حجم عمل المدربين يشمل المؤسسة كاملة بغض النظر عن مرشح الرياضي. هذه ليست درجات التزام أو صحة أو احتفاظ أو إيرادات.',
               )
             }}

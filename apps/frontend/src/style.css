@@ -7,7 +7,8 @@
   -webkit-font-smoothing: antialiased;
   --page: var(--instance-page-light, #f8f8f3);
   --surface: color-mix(in srgb, var(--page) 90%, white);
-  --surface-soft: color-mix(in srgb, var(--page) 82%, var(--ink));
+  /* Restrained chip/selection fill; the former 18% ink mix read as a heavy grey block. */
+  --surface-soft: color-mix(in srgb, var(--page) 89%, var(--ink));
   --ink: var(--instance-ink-light, #23332d);
   /* 4.5:1+ on light --surface-soft (the former #545d56 measured 4.39:1 in WebKit). */
   --muted: #4d564f;
@@ -1694,8 +1695,11 @@ progress::-moz-progress-bar {
 .plan-card p {
   font-size: 0.8rem;
 }
-.plan-card p span {
-  margin-inline-start: 16px;
+.plan-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
 }
 .plan-card-bottom {
   display: flex;

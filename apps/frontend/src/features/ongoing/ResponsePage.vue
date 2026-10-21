@@ -139,7 +139,7 @@ async function review() {
       p_feedback: feedback.value,
     })
     notifySuccess(
-      l('Review saved and shared with your athlete.', 'حُفظت المراجعة ومشاركتها مع المتدرب.'),
+      l('Review saved and shared with your athlete.', 'حُفظت المراجعة ومشاركتها مع الرياضي.'),
     )
   } catch (e) {
     error.value = errorMessage(e)
@@ -297,12 +297,12 @@ onMounted(() => load())
             {{
               q.cancelled
                 ? l('No response is expected.', 'لا توجد إجابة منتظرة.')
-                : l('Waiting for your athlete to submit.', 'بانتظار إرسال المتدرب.')
+                : l('Waiting for your athlete to submit.', 'بانتظار إرسال الرياضي.')
             }}
           </p>
           <form v-if="q.submitted_at" class="panel form-stack review-form" @submit.prevent="review">
             <label
-              >{{ l('Feedback for your athlete', 'ملاحظات للمتدرب')
+              >{{ l('Feedback for your athlete', 'ملاحظات للرياضي')
               }}<textarea v-model="feedback" rows="4" maxlength="2000"></textarea></label
             ><button class="button" :disabled="busy">{{ l('Save review', 'حفظ المراجعة') }}</button>
           </form>

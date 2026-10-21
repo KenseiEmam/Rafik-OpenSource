@@ -134,8 +134,8 @@ function resetPassword() {
         >
           {{
             l(
-              'Any assigned trainees will need a new trainer. Their institution records remain available. Access ends immediately when membership is deactivated.',
-              'سيحتاج المتدربون المعيّنون إلى مدرب جديد. تبقى سجلاتهم بالمؤسسة. ينتهي الوصول فور إلغاء تنشيط العضوية.',
+              'Any assigned athletes will need a new coach. Their institution records remain available. Access ends immediately when membership is deactivated.',
+              'سيحتاج الرياضيون المعيّنون إلى مدرب جديد. تبقى سجلاتهم بالمؤسسة. ينتهي الوصول فور إلغاء تنشيط العضوية.',
             )
           }}
         </p>

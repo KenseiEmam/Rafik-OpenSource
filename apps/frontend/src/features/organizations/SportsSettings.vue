@@ -85,7 +85,7 @@ onMounted(load)
       "
     />
     <CommandStatus :command="command" />
-    <form class="form-stack" @submit.prevent="add">
+    <form class="sports-add" @submit.prevent="add">
       <label
         >{{ l('Name', 'الاسم') }}<input v-model="name" maxlength="80" required :disabled="locked"
       /></label>
@@ -112,7 +112,7 @@ onMounted(load)
         {{ l('Retry', 'إعادة المحاولة') }}
       </button>
     </p>
-    <template v-else>
+    <div v-else class="sports-groups">
       <section v-for="group in groups" :key="group.kind" :aria-label="group.title">
         <h3>{{ group.title }} ({{ group.items.length }})</h3>
         <p v-if="!group.items.length" class="small-print">
@@ -167,10 +167,55 @@ onMounted(load)
           </li>
         </ul>
       </section>
-    </template>
+    </div>
   </section>
 </template>
 <style scoped>
+.sports-add {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) auto auto;
+  align-items: end;
+  gap: 16px;
+  margin: 0;
+}
+.sports-add > label {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  min-width: 0;
+}
+.sports-add input:not([type='radio']),
+.sports-add > .button {
+  height: 44px;
+  min-height: 44px;
+  margin: 0;
+}
+.sports-add .role-choices {
+  /* A shared form rule spans role choices across the row; keep this one inline. */
+  grid-column: auto;
+  margin: 0;
+}
+.sports-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 16px 32px;
+  align-items: start;
+}
+.sports-groups h3 {
+  margin: 0 0 8px;
+}
+@media (max-width: 700px) {
+  .sports-add {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sports-add > .button {
+    justify-self: start;
+  }
+  .sports-add > label,
+  .sports-add .role-choices {
+    grid-column: 1 / -1;
+  }
+}
 .sports-list {
   list-style: none;
   padding: 0;

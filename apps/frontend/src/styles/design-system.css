@@ -45,6 +45,10 @@
 .form-stack > p {
   margin: 0;
 }
+/* The stack gap owns spacing; inherited button margins doubled it. */
+.form-stack > .button {
+  margin-block: 0;
+}
 .dashboard-frame .injury-page > header {
   display: grid;
   gap: var(--space-2);
@@ -352,6 +356,30 @@ input[type='radio'] {
   }
 }
 
+/* Editor save row: the primary action and its device-draft status read as one group. */
+.editor-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin-block-start: 8px;
+  padding-block-start: 20px;
+  border-block-start: 1px solid var(--line);
+}
+.editor-footer > .button {
+  margin: 0;
+}
+.editor-footer > p {
+  margin: 0;
+}
+.draft-status {
+  margin-block: 8px 0;
+}
+.add-drill {
+  justify-self: start;
+  margin-block-end: 8px;
+}
+
 /* List toolbars share available space; controls wrap rather than compress search. */
 .list-toolbar {
   display: flex;
@@ -367,6 +395,12 @@ input[type='radio'] {
   grid-template-columns: minmax(180px, 1fr) minmax(140px, 180px) auto;
   align-items: end;
   gap: 12px;
+}
+.list-summary {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
 }
 .list-toolbar-pagination {
   min-width: 0;

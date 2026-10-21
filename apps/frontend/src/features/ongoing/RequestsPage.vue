@@ -242,7 +242,7 @@ onMounted(async () => {
                 coach
                   ? l(
                       'Choose a template and athlete to schedule the next conversation.',
-                      'اختر قالباً ومتدرباً لجدولة المتابعة القادمة.',
+                      'اختر قالباً ورياضياً لجدولة المتابعة القادمة.',
                     )
                   : l(
                       'Your coach’s requests will appear here. You can message them at any time.',
@@ -305,7 +305,7 @@ onMounted(async () => {
               {{
                 l(
                   'Due dates use the athlete calendar. Repeat only as often as useful.',
-                  'المواعيد حسب تقويم المتدرب. كرر فقط بالقدر المفيد.',
+                  'المواعيد حسب تقويم الرياضي. كرر فقط بالقدر المفيد.',
                 )
               }}
             </p>

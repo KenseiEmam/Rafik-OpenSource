@@ -335,7 +335,7 @@ onMounted(initialize)
           </section>
           <button
             type="button"
-            class="button secondary"
+            class="button secondary add-drill"
             :disabled="draft.definition.length >= 12"
             @click="addDrill"
           >
@@ -348,7 +348,7 @@ onMounted(initialize)
           :view="view"
           role="trainee"
           v-model="draft.members"
-          :label="l('Find trainees', 'البحث عن متدربين')"
+          :label="l('Find athletes', 'البحث عن رياضيين')"
           @options="organization!.members = $event"
         />
         <MemberPicker
@@ -369,21 +369,23 @@ onMounted(initialize)
             l('Archive from new scheduling', 'أرشفة من الجدولة الجديدة')
           }}</label
         >
-        <p class="small-print">
-          {{
-            l(
-              saved
-                ? 'Draft saved on this device.'
-                : 'Changes are saved on this device as you type.',
-              saved
-                ? 'حُفظت المسودة على هذا الجهاز.'
-                : 'تُحفظ التغييرات على هذا الجهاز أثناء الكتابة.',
-            )
-          }}
-        </p>
-        <button class="button">
-          {{ templates ? l('Save template', 'حفظ القالب') : l('Save group', 'حفظ المجموعة') }}
-        </button>
+        <div class="editor-footer">
+          <button class="button">
+            {{ templates ? l('Save template', 'حفظ القالب') : l('Save group', 'حفظ المجموعة') }}
+          </button>
+          <p class="small-print" role="status">
+            {{
+              l(
+                saved
+                  ? 'Draft saved on this device.'
+                  : 'Changes are saved on this device as you type.',
+                saved
+                  ? 'حُفظت المسودة على هذا الجهاز.'
+                  : 'تُحفظ التغييرات على هذا الجهاز أثناء الكتابة.',
+              )
+            }}
+          </p>
+        </div>
       </fieldset>
     </form>
     <template v-if="!editor">
@@ -415,7 +417,7 @@ onMounted(initialize)
               type="search" /></label
           ><label class="check-label"
             ><input v-model="archived" type="checkbox" />{{ l('Archived', 'مؤرشف') }}</label
-          ><button class="button secondary" :disabled="loading">{{ l('Find', 'بحث') }}</button>
+          ><button class="button secondary" :disabled="loading">{{ l('Search', 'بحث') }}</button>
         </form>
         <div class="list-toolbar-pagination">
           <ListPagination
@@ -450,7 +452,15 @@ onMounted(initialize)
               <h2>{{ templates ? item.title : item.name }}</h2>
               <p>
                 {{ templates ? item.definition.length : item.members.length }}
-                {{ templates ? l('drills', 'اختبارات') : l('people', 'أشخاص') }}
+                {{
+                  templates
+                    ? item.definition.length === 1
+                      ? l('drill', 'اختبار')
+                      : l('drills', 'اختبارات')
+                    : item.members.length === 1
+                      ? l('person', 'شخص')
+                      : l('people', 'أشخاص')
+                }}
               </p>
               <p v-if="!templates" class="small-print">
                 {{

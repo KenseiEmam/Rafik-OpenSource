@@ -291,7 +291,7 @@ onUnmounted(() => {
           <h2 dir="auto">{{ current.name }}</h2>
         </div>
         <RouterLink v-if="coach" :to="'/coach/clients/' + id" class="text-link">{{
-          l('Athlete workspace', 'مساحة المتدرب')
+          l('Athlete workspace', 'مساحة الرياضي')
         }}</RouterLink>
       </header>
       <p v-if="error && current.state !== 'active' && !pending" class="notice error" role="alert">

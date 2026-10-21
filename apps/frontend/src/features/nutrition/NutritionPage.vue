@@ -525,7 +525,7 @@ onBeforeUnmount(() => {
         {{
           l(
             'Choose an athlete to view their shared food record or add guidance.',
-            'اختر متدرباً لعرض سجل طعامه المشارك أو إضافة إرشادات.',
+            'اختر رياضياً لعرض سجل طعامه المشارك أو إضافة إرشادات.',
           )
         }}
       </p>
@@ -601,7 +601,7 @@ onBeforeUnmount(() => {
                   coach
                     ? l(
                         'No meals shared by this athlete for this date.',
-                        'لم يشارك هذا المتدرب وجبات لهذا التاريخ.',
+                        'لم يشارك هذا الرياضي وجبات لهذا التاريخ.',
                       )
                     : l(
                         'No meals recorded for this date. An empty log does not mean you ate nothing.',

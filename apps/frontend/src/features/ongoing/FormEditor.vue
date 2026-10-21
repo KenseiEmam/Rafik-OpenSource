@@ -176,7 +176,7 @@ onMounted(load)
           {{
             l(
               'Ask only what will help you coach. Athletes receive a short, focused form.',
-              'اسأل فقط عما يفيد التدريب. يحصل المتدرب على نموذج قصير وواضح.',
+              'اسأل فقط عما يفيد التدريب. يحصل الرياضي على نموذج قصير وواضح.',
             )
           }}
         </p>

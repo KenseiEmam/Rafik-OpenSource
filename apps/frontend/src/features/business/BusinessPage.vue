@@ -126,7 +126,7 @@ onMounted(load)
                 <dd>{{ account.staff_limit }}</dd>
               </div>
               <div>
-                <dt>{{ l('Athlete admission limit', 'حد انضمام المتدربين') }}</dt>
+                <dt>{{ l('Athlete admission limit', 'حد انضمام الرياضيين') }}</dt>
                 <dd>{{ account.client_limit }}</dd>
               </div>
             </dl>
@@ -135,7 +135,7 @@ onMounted(load)
                 team
                   ? l(
                       'Restrictions stop new admissions, new shared material and group assignment. Existing training, history, export and athlete handoffs remain available. Lowering a limit never removes people.',
-                      'توقف القيود الانضمامات والمواد المشتركة الجديدة وتعيين المجموعات. يبقى التدريب الحالي والسجل والتصدير ونقل المتدربين متاحاً. خفض الحد لا يزيل الأشخاص.',
+                      'توقف القيود الانضمامات والمواد المشتركة الجديدة وتعيين المجموعات. يبقى التدريب الحالي والسجل والتصدير ونقل الرياضيين متاحاً. خفض الحد لا يزيل الأشخاص.',
                     )
                   : l(
                       'Personal subscription state is recorded for local testing. Solo coaching is not paywalled in this build.',
@@ -204,7 +204,7 @@ onMounted(load)
                       max="1000"
                       required /></label
                   ><label
-                    >{{ l('Athlete limit', 'حد المتدربين')
+                    >{{ l('Athlete limit', 'حد الرياضيين')
                     }}<input type="number" v-model.number="clients" min="1" max="100000" required
                   /></label>
                 </div>

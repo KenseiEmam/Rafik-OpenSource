@@ -15,12 +15,13 @@ const page = computed(() => Math.floor(props.offset / props.pageSize) + 1),
 </script>
 <template>
   <nav
+    v-if="total > 0 || offset > 0"
     class="list-pagination"
     :dir="locale === 'ar' ? 'rtl' : 'ltr'"
     :aria-label="label || l('Pagination', 'التنقل بين الصفحات')"
   >
     <label v-if="sizes?.length" class="pagination-size"
-      >{{ l('Records fetched:', 'عدد السجلات:') }}
+      >{{ l('Per page', 'لكل صفحة') }}
       <select
         :value="pageSize"
         :disabled="disabled"
@@ -30,47 +31,48 @@ const page = computed(() => Math.floor(props.offset / props.pageSize) + 1),
         <option v-for="size in sizes" :key="size" :value="size">{{ size }}</option>
       </select>
     </label>
-    <span dir="ltr" class="pagination-range" aria-live="polite"
-      >{{ total ? offset + 1 : 0 }}–{{ Math.min(offset + pageSize, total) }} / {{ total }}</span
-    ><button
-      type="button"
-      class="pagination-button"
-      :disabled="disabled || offset === 0"
-      :aria-label="l('Previous page', 'الصفحة السابقة')"
-      @click="emit('page', Math.max(0, offset - pageSize))"
-    >
-      <svg
-        viewBox="0 0 20 20"
-        width="18"
-        height="18"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.8"
-        aria-hidden="true"
+    <span class="pagination-steps"
+      ><span dir="ltr" class="pagination-range" aria-live="polite"
+        >{{ total ? offset + 1 : 0 }}–{{ Math.min(offset + pageSize, total) }} / {{ total }}</span
+      ><button
+        type="button"
+        class="pagination-button"
+        :disabled="disabled || offset === 0"
+        :aria-label="l('Previous page', 'الصفحة السابقة')"
+        @click="emit('page', Math.max(0, offset - pageSize))"
       >
-        <path :d="locale === 'ar' ? 'm7 4 6 6-6 6' : 'm13 4-6 6 6 6'" />
-      </svg></button
-    ><span class="pagination-page"
-      >{{ l('Page', 'صفحة') }} <bdi dir="ltr">{{ page }} / {{ pages }}</bdi></span
-    ><button
-      type="button"
-      class="pagination-button"
-      :disabled="disabled || offset + pageSize >= total"
-      :aria-label="l('Next page', 'الصفحة التالية')"
-      @click="emit('page', offset + pageSize)"
-    >
-      <svg
-        viewBox="0 0 20 20"
-        width="18"
-        height="18"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.8"
-        aria-hidden="true"
+        <svg
+          viewBox="0 0 20 20"
+          width="18"
+          height="18"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          aria-hidden="true"
+        >
+          <path :d="locale === 'ar' ? 'm7 4 6 6-6 6' : 'm13 4-6 6 6 6'" />
+        </svg></button
+      ><span class="pagination-page"
+        >{{ l('Page', 'صفحة') }} <bdi dir="ltr">{{ page }} / {{ pages }}</bdi></span
+      ><button
+        type="button"
+        class="pagination-button"
+        :disabled="disabled || offset + pageSize >= total"
+        :aria-label="l('Next page', 'الصفحة التالية')"
+        @click="emit('page', offset + pageSize)"
       >
-        <path :d="locale === 'ar' ? 'm13 4-6 6 6 6' : 'm7 4 6 6-6 6'" />
-      </svg>
-    </button>
+        <svg
+          viewBox="0 0 20 20"
+          width="18"
+          height="18"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          aria-hidden="true"
+        >
+          <path :d="locale === 'ar' ? 'm13 4-6 6 6 6' : 'm7 4 6 6-6 6'" />
+        </svg></button
+    ></span>
   </nav>
 </template>
 <style scoped>
@@ -81,7 +83,7 @@ const page = computed(() => Math.floor(props.offset / props.pageSize) + 1),
   justify-content: flex-end;
   gap: 8px;
   flex-wrap: wrap;
-  font-size: 0.82rem;
+  font-size: 0.875rem;
   flex-shrink: 0;
 }
 .pagination-size {
@@ -93,11 +95,18 @@ const page = computed(() => Math.floor(props.offset / props.pageSize) + 1),
 }
 .pagination-size select {
   width: auto;
-  min-width: 128px;
+  min-width: 80px;
   min-height: 44px;
   margin: 0;
-  margin-inline-end: 32px;
-  padding: 8px;
+  margin-inline-end: 12px;
+  padding-block: 8px;
+}
+.pagination-steps {
+  /* Range and previous/next stay together; only the size control wraps away. */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
 }
 .pagination-range {
   color: var(--muted);

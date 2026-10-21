@@ -98,11 +98,11 @@ onUnmounted(() => {
     </PageHeading>
     <div class="list-controls">
       <label v-if="search || plans.some((p) => !p.archived)" class="plan-search"
-        >{{ language('Find a plan', 'ابحث عن خطة')
+        >{{ language('Search programs', 'البحث في البرامج')
         }}<input
           v-model="search"
           type="search"
-          :placeholder="language('Search by title', 'ابحث بالعنوان')"
+          :placeholder="language('Search program titles…', 'ابحث في عناوين البرامج…')"
       /></label>
       <ListPagination
         :offset="offset"
@@ -128,11 +128,14 @@ onUnmounted(() => {
           class="plan-card panel"
           ><ProgramCover :id="p.draft.presentation?.cover" />
           <div class="plan-card-top">
-            <PhBarbell :size="28" aria-hidden="true" /><span class="tag">{{
-              versions.some((v) => v.plan_id === p.id && v.revision === p.draft_version)
-                ? t('published')
-                : t('draft')
-            }}</span>
+            <PhBarbell :size="28" aria-hidden="true" /><span class="plan-card-tags"
+              ><span v-if="p.listed" class="tag">{{ language('In library', 'في المكتبة') }}</span
+              ><span class="tag">{{
+                versions.some((v) => v.plan_id === p.id && v.revision === p.draft_version)
+                  ? t('published')
+                  : t('draft')
+              }}</span></span
+            >
           </div>
           <h2>{{ p.title }}</h2>
           <p v-if="p.draft.presentation?.goal">{{ p.draft.presentation.goal }}</p>
@@ -145,21 +148,11 @@ onUnmounted(() => {
                   : language('Adaptable', 'قابل للتكييف')
             }}
           </p>
-          <p v-if="p.listed" class="small-print">
-            {{
-              language(
-                'Shared in the institution library. Coaches can assign it to athletes they are responsible for.',
-                'تمت مشاركة البرنامج في مكتبة المؤسسة. يمكن للمدربين تعيينه للرياضيين المسؤولين عنهم.',
-              )
-            }}
-          </p>
           <p>
             {{ p.draft.days.filter((d) => !d.restDay).length }} {{ language('sessions', 'حصص') }} ·
-            {{ p.draft.cycleWeeks || 1 }} {{ language('week cycle', 'أسبوع للدورة') }}
-            <span
-              >{{ p.draft.days.reduce((n, d) => n + d.exercises.length, 0) }}
-              {{ t('exercises') }}</span
-            >
+            {{ p.draft.cycleWeeks || 1 }} {{ language('week cycle', 'أسبوع للدورة') }} ·
+            {{ p.draft.days.reduce((n, d) => n + d.exercises.length, 0) }}
+            {{ t('exercises') }}
           </p>
           <div class="plan-card-bottom">
             <small>{{ language('Updated', 'تم التحديث') }} {{ dateLabel(p.updated_at) }}</small

@@ -6,7 +6,9 @@ import PageHeading from '../../components/PageHeading.vue'
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { request } from '../../lib/backend'
-import { language as l, dateLabel, errorMessage } from '../../lib/i18n'
+import { language as l, errorMessage, locale } from '../../lib/i18n'
+import { profile } from '../../app/auth'
+import { localDate } from '../../lib/dates'
 import OrganizationNav from './OrganizationNav.vue'
 import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
@@ -16,6 +18,20 @@ const route = useRoute(),
 const workspace = String(route.params.workspace),
   view = String(route.params.view)
 const base = `/organization/${workspace}/${view}`
+const zone = profile.value?.timezone || 'UTC'
+const format = (value: string, parts: Intl.DateTimeFormatOptions) =>
+  new Intl.DateTimeFormat(locale.value === 'ar' ? 'ar-AE' : 'en-GB', {
+    ...parts,
+    timeZone: zone,
+  }).format(new Date(value))
+/** Same-day events show one date and a time range; longer events show both ends. */
+function when(event: Pick<CalendarEvent, 'starts_at' | 'ends_at'>) {
+  const day = { weekday: 'short', day: 'numeric', month: 'short' } as const,
+    clock = { hour: '2-digit', minute: '2-digit' } as const
+  return localDate(zone, new Date(event.starts_at)) === localDate(zone, new Date(event.ends_at))
+    ? `${format(event.starts_at, day)} · ${format(event.starts_at, clock)}–${format(event.ends_at, clock)}`
+    : `${format(event.starts_at, { ...day, ...clock })} — ${format(event.ends_at, { ...day, ...clock })}`
+}
 type Page = {
   items: (Pick<
     CalendarEvent,
@@ -179,7 +195,7 @@ onUnmounted(() => {
     </p>
     <PageState :loading="loading && !data" :error="!data ? error : ''" @retry="load">
       <template v-if="data">
-        <p class="small-print">{{ data.total }} {{ l('matching activities', 'أنشطة مطابقة') }}</p>
+        <p class="list-summary">{{ data.total }} {{ l('matching activities', 'أنشطة مطابقة') }}</p>
         <section v-if="!data.items.length" class="empty-state panel">
           <PhTray :size="28" aria-hidden="true" />
           <h2>{{ l('No events match this view.', 'لا توجد مواعيد مطابقة لهذا العرض.') }}</h2>
@@ -209,7 +225,9 @@ onUnmounted(() => {
               <h2 dir="auto">
                 <RouterLink :to="base + '/calendar/' + event.id">{{ event.title }}</RouterLink>
               </h2>
-              <p>{{ dateLabel(event.starts_at) }} — {{ dateLabel(event.ends_at) }}</p>
+              <p class="event-when">
+                <bdi>{{ when(event) }}</bdi>
+              </p>
               <p class="small-print">
                 {{ l('Athletes:', 'الرياضيون:') }} {{ event.athlete_count
                 }}<span v-if="event.location" dir="auto"> · {{ event.location }}</span>
@@ -231,22 +249,16 @@ onUnmounted(() => {
   </div>
 </template>
 <style scoped>
-.event-filters {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr)) auto;
-  gap: 16px;
-  align-items: end;
-}
 .event-filters label {
   min-width: 0;
   margin: 0;
 }
 .event-list {
   list-style: none;
-  margin: 20px 0;
+  margin: 0 0 24px;
   padding: 0;
   display: grid;
-  gap: 16px;
+  gap: 12px;
 }
 .event-list li {
   display: flex;
@@ -254,10 +266,15 @@ onUnmounted(() => {
   justify-content: space-between;
   gap: 16px;
   border: 1px solid var(--line);
-  border-inline-start: 4px solid var(--accent);
-  border-radius: 16px;
-  padding: 22px;
+  border-inline-start: 3px solid var(--accent);
+  border-radius: var(--radius-panel);
+  padding: 16px 20px;
   background: var(--surface);
+}
+.event-when {
+  margin: 0 0 4px;
+  font-size: var(--text-small);
+  font-variant-numeric: tabular-nums;
 }
 .event-list li.assessment {
   background: var(--surface-soft);
@@ -267,17 +284,14 @@ onUnmounted(() => {
   overflow-wrap: anywhere;
 }
 .event-list h2 {
-  font-size: 1.15rem;
-  margin: 4px 0 12px;
+  font-size: 1.125rem;
+  margin: 4px 0 8px;
 }
 .event-list .tag {
   flex-shrink: 0;
 }
 
 @media (max-width: 700px) {
-  .event-filters {
-    grid-template-columns: minmax(0, 1fr);
-  }
   .event-list li {
     flex-direction: column;
     padding: 18px;

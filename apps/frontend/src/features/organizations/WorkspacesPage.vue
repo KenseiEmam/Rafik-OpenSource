@@ -81,7 +81,7 @@ function create() {
     <p v-if="localPreview" class="notice">
       {{
         l(
-          'Local examination: organization administrators, trainers and athletes are available with sample data.',
+          'Local examination: organization administrators, coaches and athletes are available with sample data.',
           'معاينة محلية: تتوفر حسابات مسؤولي المؤسسات والمدربين والرياضيين مع بيانات تجريبية.',
         )
       }}
@@ -134,7 +134,7 @@ function create() {
         <p class="muted">
           {{
             l(
-              'You will be an administrator. Invite other admins, trainers and athletes when you are ready.',
+              'You will be an administrator. Invite other admins, coaches and athletes when you are ready.',
               'ستكون مسؤولاً. ادعُ مسؤولين ومدربين ورياضيين عندما تكون جاهزاً.',
             )
           }}
