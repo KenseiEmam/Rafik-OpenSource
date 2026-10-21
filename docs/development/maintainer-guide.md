@@ -18,6 +18,8 @@ Documentation checks are maintained in `apps/backend/scripts/check-docs.mjs` wit
 
 People uses `OrganizationPage.vue` for role tabs and the shared profile route for detail tabs. `MemberManagement.vue` owns administrator edits, with per-member durable command keys. `people.ts` owns scoped profile reads and labelled staff activity; never expose staff analytics by trusting a frontend tab. Invitation sports require migration `202610210100_invitation_sports` and Prisma/type regeneration. Keep sport choices in invitation drafts; switching to administrator clears them.
 
+Beta.2 preparation follows merged PR #135. Keep application/shared versions and the root lockfile aligned, use Android versionCode `1000002` with the existing signing key, and build only from the clean final approved release commit. Follow the [beta.2 upgrade and publication checklist](../operations/README.md#beta2-upgrade-and-release-preparation). Track the application and landing PRs in the [Rafik project](https://github.com/users/KenseiEmam/projects/3); do not mark publication complete from a green feature PR alone.
+
 ## Read these first
 
 - [Requirements and stage gates](../requirements/README.md) define approved product direction and what is not accepted yet.

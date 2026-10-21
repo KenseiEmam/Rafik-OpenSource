@@ -10,7 +10,7 @@ This page is the index for maintained Rafik documentation. The root [README](../
 - [Requirements and staged plan](requirements/README.md): goals, scope, constraints, acceptance criteria and current stage gates.
 - [Stage 4 workflow audit](requirements/stage4-workflow-audit.md): current university workflow coverage and remaining review.
 - [Stage 7 mobile scope](requirements/stage7-mobile-scope.md): confirmed coach-first Android field tasks, offline boundary, API contract and acceptance evidence.
-- [Post-beta.1 release plan](requirements/release-plan-post-beta1.md): proposed founder-ordered releases (sports and coaching foundation, coach field dashboard, sport-specific field tools), audit findings and open decisions. Not implemented.
+- [Post-beta.1 release plan](requirements/release-plan-post-beta1.md): founder-ordered releases, with the sports/coaching foundation merged for beta.2 preparation and the later field-dashboard and sport-specific releases still planned.
 - [Rafik Field app workspace](../apps/mobile/README.md): current Android prototype status, local build steps and limits.
 - [Architecture](architecture/README.md): system context, components, data flow, security boundaries and integrations.
 - [Architecture decisions](decisions/README.md): active ADR index; superseded ADRs are archived.

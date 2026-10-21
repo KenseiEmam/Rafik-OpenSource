@@ -67,6 +67,51 @@ Restore into a clean, matching Compose instance: start PostgreSQL, apply migrati
 
 Rollback is not a reverse migration. Take a paired database/file backup before updating. To return to an earlier application revision, restore the matching pre-update database and private-file archive together, then start the earlier revision. The founder accepts the earlier backup/restore verification; the integrated upgrade/rollback rehearsal and production review remain open.
 
+## Beta.2 upgrade and release preparation
+
+**Status, 20 October 2026:** sports and coaching foundation PR #135 is merged and founder-accepted. Squire `1.0.0-beta.2` is being prepared; beta.1 remains the published release until the new tag and artifacts exist. No new mail service or hosting resource is required. The coach field OpenAPI subset retains its independent API version; the new web workflows do not expand the Android field API.
+
+### What changes
+
+- Institution sports and coaching specialties, primary/supporting coaching teams, concurrent goal-specific plans, staff athlete profiles and attributed coach-recorded workouts.
+- Supporting coaches stay scoped to linked sport plans/sessions. Overlap warnings intentionally disclose other plans' titles, goals and dates for coordination; they do not grant plan-detail/edit access. Nutrition and participation status remain primary-coach-only, subject to the existing athlete-sharing and consent rules; administrators retain their existing shared-nutrition access.
+- Coach-recorded timed/distance sets require actual measurements. Delegated logging is online-only, for the current date, and belongs to the web app, not the native field queue.
+
+### Upgrade an existing Compose instance
+
+Run from the repository root on the Unix host with Docker access and the existing `infrastructure/.env.selfhost`. Arrange a maintenance window and retain the current source revision and environment securely.
+
+1. Before changing source, take a paired backup:
+
+   ```sh
+   git rev-parse HEAD
+   bash infrastructure/scripts/backup.sh
+   ```
+
+   Expected: a backup directory containing PostgreSQL, private files and `SHA256SUMS`. Protect an encrypted copy separately. Server backups do not include unsent Android work.
+
+2. **After beta.2 is published**, select its tag and deploy:
+
+   ```sh
+   git fetch origin --tags
+   git checkout --detach v1.0.0-beta.2
+   bash infrastructure/scripts/deploy.sh
+   ```
+
+   Do not run this selection while the tag is still pending. For a review environment, use the explicitly approved full candidate commit instead. Compose runs forward migrations before starting the API. The four new migrations are `202610191200_sports_and_specialties`, `202610191300_coaching_links`, `202610191400_concurrent_plans` and `202610191500_delegated_sessions`. Existing assigned coaches become primary links; existing plans and history are retained. Never reset or reseed an existing instance.
+
+3. Inspect service/migration logs and check sign-in, People/coaching links, an existing plan/history and authorized private-file access. Use synthetic records to inspect concurrent assignment and measured coach logging. Fresh installations remain unseeded and use first-run setup.
+4. If recovery is needed, stop writes and restore the pre-update database **and** files with the earlier application revision, using the existing recovery procedure above. Reverting code alone does not reverse these migrations. Institution-specific upgrade/rollback rehearsal remains the operator's responsibility.
+
+### Finish publication
+
+- [ ] Merge the reviewable release-metadata PR and confirm required CI on the exact final `main` commit. Do not move the beta.1 tag.
+- [ ] Build the signed beta.2 APK from that clean commit with `npm run mobile:release`, using the existing key, package ID and versionCode `1000002`. Keep `build.json`, APK and `SHA256SUMS` together. Do not relabel the beta.1 APK as beta.2.
+- [ ] Check the actual in-place beta.1 → beta.2 update with synthetic pending work before claiming upgrade preservation. Keep beta.1's accepted phone evidence; no repeat beta.1 qualification is required.
+- [ ] Create an annotated `v1.0.0-beta.2` tag on the approved release commit and publish a GitHub **prerelease** with release notes, signed Android bundle/checksums/build metadata and the source archives. Record compiled revision and verify uploaded bytes. Never publish signing files.
+- [ ] Merge the paired English/Arabic landing release/status/upgrade PR, using GitHub Release links. State any artifact still pending honestly; do not send users to a nonexistent beta.2 download.
+- [ ] Update the [Rafik GitHub Project](https://github.com/users/KenseiEmam/projects/3) with linked application/landing PRs and publication evidence; close release preparation only after publication is confirmed. Later email work and field-dashboard scope stay separate.
+
 ## Retention operations
 
 The API performs a retention pass at startup and daily after success; a failure retries after 15 minutes. The deployment-wide checkpoint contains only completion time and aggregate closed/purged counts. Alert if it is missing after startup or older than 48 hours:
@@ -82,3 +127,7 @@ An isolated Docker database/API outage-and-restart rehearsal passed on 17 Octobe
 ## Local development and verification
 
 Use [development setup](../development/README.md) for local PostgreSQL, API, web and sample-account access. Use [testing](../testing/README.md) for focused commands and prerequisites, and [verification](../verification/README.md) for checks actually performed and their limits.
+
+### Beta.2 candidate member-management migration
+
+The web refinements in PR #138 additionally require `202610210100_invitation_sports`. Run the normal forward-migration deployment after the database/private-file backup. Existing invitations gain an empty sport list; new role-compatible choices are applied on acceptance. Keep the signed APK compiled-source checksum separate from later web-only source commits; no mobile behavior changed in these refinements.

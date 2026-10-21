@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## Squire 1.0.0-beta.2 — release preparation
+
+Sports and coaching foundation, merged in PR #135. Publication date, tag and Android artifacts are pending; beta.1 remains the published release. Workspace versions are `1.0.0-beta.2`; Android versionCode is `1000002`. See [upgrade and publication guidance](docs/operations/README.md#beta2-upgrade-and-release-preparation).
+
 - Added the approved web design system and categorized UI audit. Introduced shared spacing/type/motion tokens, section headers, localized password visibility controls and responsive sports management. Refined picker accessibility, heading hierarchy, permission-denial feedback and institution privacy copy. Android and remaining page migrations are follow-up work.
 
 - Refined member management into aligned identity, coaching, sports and recovery cards with accessible role buttons and sport-aware coach choices. Institution settings now use the available width, with branding alongside general settings; closure requires a name-confirmation dialog.

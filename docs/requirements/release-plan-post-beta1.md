@@ -1,6 +1,6 @@
 # Post-beta.1 release plan
 
-**Status:** Release 1 in progress, 19 October 2026. R0 and Release 1 (slices 1a–1e) are implemented (see [verification](../verification/README.md)); release acceptance and the landing documentation remain. Release 2 and Release 3 are not implemented. Items marked **⚑** were provisional defaults; the [confirmed decisions](#confirmed-release-1-decisions) replace them for Release 1. Each release is delivered as one `codex/` branch and one pull request, with one commit per slice, so it can be reviewed and merged as a unit.
+**Status, 20 October 2026:** Release 1 (slices 1a–1e) and its review fixes are merged and founder-accepted in application PR #135. Squire `1.0.0-beta.2` publication is being prepared; no beta.2 tag or package has been published. Paired feature documentation is merged in landing PR #11; release-status alignment follows separately. R0 is complete (see [verification](../verification/README.md)). Release 2 and Release 3 are not implemented. Items marked **⚑** were provisional defaults; the [confirmed decisions](#confirmed-release-1-decisions) replace them for Release 1. Each release is delivered as one `codex/` branch and one pull request, with one commit per slice, so it can be reviewed and merged as a unit.
 
 ## Confirmed Release 1 decisions
 
