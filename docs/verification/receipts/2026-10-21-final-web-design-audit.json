@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-21",
+  "branch": "codex/web-design-final",
+  "base": "3c5b00d41c164c3085b72ab02321d7e1e6c1e559 (PR #138 head)",
+  "environment": "Disposable rafik_browser_<timestamp> database, API 55341, Vite dev 5183; dropped after the audit. Founder/preview data untouched.",
+  "fixture": {
+    "athletes": 15,
+    "coaches": 3,
+    "sports_and_specialties": 6,
+    "plan_assignments": 12,
+    "nutrition_plans": 11,
+    "assessment_templates": 7,
+    "groups": 4,
+    "events": 9,
+    "notes": "Mixed English/Arabic names and labels, long names, five bookings on the current day."
+  },
+  "inspected_viewport_images": {
+    "before_chromium_en_light_1440": ["people", "programs", "athlete-plans", "nutrition", "session-history (empty)", "schedule-calendar", "schedule-list", "groups", "assessment-templates", "overview", "athlete-profile", "coach-profile", "institution-settings", "analytics", "event-new", "template-new", "group-new"],
+    "after_chromium_en_light_1440": ["schedule-calendar", "people", "institution-settings", "schedule-list", "athlete-plans", "template-new", "group-new"],
+    "after_chromium_ar_dark_390": ["people (viewport and full page)", "schedule-calendar (full page)", "institution-settings (full page)", "schedule-list", "athlete-profile", "assessment-templates"],
+    "after_chromium_en_dark": ["schedule-calendar 768 with reduced motion", "overview 1440"],
+    "after_webkit": ["schedule-calendar en light 1440", "schedule-calendar ar light 390"],
+    "in_app_browser_checks": ["out-of-month calendar cell computed opacity/background", "settings add-form grid placement", "Arabic pagination range glyph order", "overview task-queue empty list height"]
+  },
+  "captured_not_inspected": ["activity", "exercises", "resources", "messages", "program-new", "assignment", "injuries", "feedback", "several WebKit desktop captures"],
+  "not_covered": ["Tasks (deferred by founder)", "open dropdown/modal set beyond earlier focused checks", "custom institution palettes", "physical devices", "human usability observation"]
+}

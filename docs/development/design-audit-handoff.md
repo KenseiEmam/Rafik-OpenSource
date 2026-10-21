@@ -1,6 +1,6 @@
 # Claude handoff: final web design audit
 
-**Status: temporary work, not release ready. Founder direction: 21 October 2026.**
+**Status: historical handoff prompt. Claude completed the final audit on 21 October 2026 on `codex/web-design-final`; results and remaining limits are in [verification](../verification/README.md#final-web-design-audit--21-october-2026) and the [audit report](../known-issues/ui-ux-audit.md#final-claude-audit--21-october).**
 
 ## Copyable prompt
 

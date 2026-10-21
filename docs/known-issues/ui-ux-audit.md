@@ -1,6 +1,6 @@
 # Web UI/UX audit and standardization plan
 
-**Audit date: 21 October 2026. Status: implementation handoff; NOT release ready.** Scope is the web dashboard first. Android is a separate follow-up. The current uncommitted People/profile/settings changes predate this audit request and form part of the baseline; they are not evidence that the proposed platform-wide design system has been implemented.
+**Audit date: 21 October 2026. Status: final Claude audit applied; candidate release PR open, see the final audit section for remaining limits.** Scope is the web dashboard first. Android is a separate follow-up. The current uncommitted People/profile/settings changes predate this audit request and form part of the baseline; they are not evidence that the proposed platform-wide design system has been implemented.
 
 The [design system proposal](../DESIGN_SYSTEM.md) is the one proposed visual specification. This report records problems and sequencing, not a competing style guide. Business rules, API contracts, routing, permission boundaries and persistence behavior must remain intact.
 
@@ -137,3 +137,23 @@ Both baseline engines reported missing exercise popup semantics and an unfocusab
 Stop further Codex design auditing. Keep application PR #138 as a temporary draft, not a release approval. Claude should audit and refine the final interface and open a separate release-ready PR afterward. The final Schedule toolbar groups its controls within the calendar column, with adjacent previous/next buttons aligned above the calendar edge. This last layout has not been visually accepted.
 
 The broader rollout browser collector did not reach final acceptance: fixture revision/time collisions were corrected; a subsequent isolated run ended with a fetch ECONNRESET. No confirmed product root cause was established. The WebKit editor journey remains unverified. Earlier focused checks retain only their named source/state coverage.
+
+## Final Claude audit — 21 October
+
+Branch `codex/web-design-final`, started from PR #138's head. A disposable seeded institution (15 athletes, 3 coaches, mixed English/Arabic names and labels, 6 sports/specialties, 12 plan assignments, 11 nutrition plans, 7 templates, 4 groups, 9 events) was rendered and the screenshots inspected before and after changes.
+
+| ID    | Priority | Rendered finding                                                                                                            | Resolution                                                                                         |
+| ----- | -------- | --------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| UX-19 | P2       | Calendar previous/next buttons wrapped onto a second row below the filters at 1440px.                                     | Chevron buttons around a visible month label; one row, inline end of the calendar column.          |
+| UX-20 | P2       | Out-of-month days rendered grey because the global disabled opacity exposed the grid-line background.                     | Local opacity reset and page-coloured background for those cells.                                  |
+| UX-21 | P3       | Light `--surface-soft` (18% ink) made chips, tabs and weekday headers read as heavy grey blocks.                          | 11% ink mix; muted text contrast on it improves.                                                   |
+| UX-22 | P2       | "Records fetched:" pagination took ~520px, squeezing People/Schedule search; phone wrapping orphaned the next button; empty lists showed "0–0 / 0". | "Per page", narrower select, grouped range/buttons, hidden when empty.                             |
+| UX-23 | P2       | Athlete-plan sport tags stretched across the card; athlete names were uppercase-tracked, including Arabic names.          | Content-sized tag; plain semibold name.                                                            |
+| UX-24 | P2       | People rows used four lines and a nested scroll container inside the scrolling workspace.                                 | Role and primary coach on one line; nested scroller removed (pagination bounds the list).          |
+| UX-25 | P2       | Settings left sports/specialties in a half-width card beside an empty column.                                              | Two-column general/branding row; full-width sports with side-by-side groups and a one-row add form. |
+| UX-26 | P2       | Schedule list showed "27 Oct — 27 Oct" without times; phone filters stacked one per row.                                  | Weekday, date and time range; two-column phone filters.                                            |
+| UX-27 | P2       | Template/group editors stacked Add drill, draft status and Save with 4px gaps; picker search button misaligned and its scroll list looked clipped. | `.editor-footer`; aligned 44px search; framed scroll list.                                          |
+| UX-28 | P3       | Repeated library boilerplate on every program card; "1 drills"; Find vs Search labels; trainee/trainer copy (UX-13).      | "In library" tag, plurals, consistent Search, athlete/coach wording in both languages.             |
+| UX-29 | P2       | Profile used a narrower centred container and dashed centred empty boxes inside panels.                                   | Workspace edges and compact start-aligned empty text.                                              |
+
+Rendered coverage and the checks that ran are recorded in [verification](../verification/README.md). Not covered: Tasks (deferred by founder direction), messages/resources/analytics beyond a desktop glance, the full dropdown/modal set, custom institution palettes, and physical devices.

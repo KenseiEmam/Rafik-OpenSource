@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+- Final web design audit (Claude, 21 October), reviewed in rendered English/Arabic, light/dark, desktop/tablet/phone states in Chromium and WebKit:
+  - Schedule calendar toolbar fits one row: View, Month and Show cancelled share the 44px control row; adjacent previous/next chevrons around a visible month label sit at the calendar column's inline end and stay paired on phones.
+  - Out-of-month calendar days no longer turn grey through the global disabled opacity; the light chip/selection fill is lighter and keeps readable muted text.
+  - Shared pagination reads "Per page", takes less width so search fields fill the toolbar, keeps range and previous/next together when wrapping, and is hidden when a list has no records.
+  - Consistent list summaries above results; athlete-plan cards show the athlete name without uppercase tracking and sport tags no longer stretch across the card.
+  - People rows combine role and primary coach on one line and no longer use a nested scroll container; profiles align with the workspace edges and use compact in-panel empty text.
+  - Institution settings put general settings beside branding, with sports/specialties and closure full width; sports and specialties list side by side, and the add form is one aligned row.
+  - Schedule list shows weekday, date and time range for same-day events; its phone filters pair in two columns.
+  - Editor save rows group the primary action with draft status; member pickers have aligned search buttons and a framed scroll list.
+  - Program cards replace repeated library boilerplate with an "In library" tag; templates pluralize drills; group and template searches use "Search".
+  - Remaining "trainee/trainer" interface copy now says athlete/coach in English and Arabic.
+  - Event scheduling: choosing a training group adds its coaches instead of clearing the coach already selected; the "Create a template" link no longer pollutes the template select's accessible name.
+  - Repaired browser specs that still targeted pre-#138 screens (inline People management, "Trainer" invitation radio, CommandStatus success text, labelled timezone popup, phone exercise list→detail, retired `/coach/analytics`). The CI onboarding spec passes again.
+
 - Standardized directory search/pagination alignment and changed assessment templates to a responsive card grid.
 
 - Session history replaces its expandable athlete filter with the shared inline athlete-name search.

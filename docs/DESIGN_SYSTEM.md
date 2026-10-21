@@ -208,6 +208,8 @@ Calendar and list filter toolbars are unboxed wrapping flex layouts. Controls al
 
 Calendar toolbar grouping: View, period input and cancelled visibility form one aligned control group. Previous/next period buttons are adjacent in a second group, aligned to the desktop inline end with space between groups. Inputs/buttons are 44px high and lower edges align. Date-range metadata sits below the toolbar, not on a competing baseline. Phone layouts wrap the filter group and place the paired period buttons on their own row.
 
+Previous/next are 44px chevron buttons with localized accessible names and tooltips ("Previous month"), placed either side of the visible period label ("October 2026"). Chevrons mirror in Arabic. This keeps the filter group and period group on one desktop row inside the calendar column.
+
 On desktop the calendar toolbar occupies only the calendar column. Its adjacent previous/next buttons align to the calendar grid’s inline end, not the booking sidebar or page edge. The toolbar and calendar use the same responsive column proportions.
 
 Search-toolbar alignment: persistent labels sit above inputs with an 8px gap. Inputs, status selectors and submit buttons share a 44px row height and zero external margins; pagination aligns with that control row rather than the labels. Athlete plans contains exactly one athlete-name search and one plan-status selector.
@@ -221,3 +223,15 @@ Groups and assessment templates follow the shared search/pagination toolbar with
 People keeps role tabs above its search/membership/sport toolbar; pagination aligns beside those controls. Shared pagination has zero external block margin so it cannot sit above search fields in Programs or other lists. Tasks need no additional visual polish in this handoff; the founder may remove the feature later.
 
 Assessment templates use an adaptive card grid because each item has a short title and drill count; place the edit action consistently at the bottom. Use 24 records by default and the shared grid-size options. Groups remain rows because membership details need horizontal room. Cards stack naturally on phones.
+
+## Final audit conventions — 21 October
+
+- `ListPagination` labels its size control "Per page", keeps its range and previous/next buttons together when wrapping, and renders nothing when a list has no records; the empty state explains the list instead.
+- Result counts above a list use `.list-summary` (muted 14px, 16px before the results).
+- Editor save rows use `.editor-footer`: a divider, the primary save action and the device-draft status on one line. Separate draft notes use `.draft-status`.
+- Personal names are never shown with uppercase tracking (`.overline`); use a 14px semibold label.
+- Chips (`.tag`) size to their content inside flex columns (`align-self: flex-start`).
+- Disabled cells or controls that sit over a grid-line background must not rely on the global disabled opacity.
+- Paginated directories scroll with the workspace; do not add a nested scroll container around a paginated list.
+- Settings place short related panels in two columns and give multi-group sections (sports/specialties, closure) the full width.
+- Same-day events display one date with a time range; multi-day events show both ends.
