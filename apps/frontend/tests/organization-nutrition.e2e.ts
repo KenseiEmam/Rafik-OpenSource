@@ -142,11 +142,11 @@ test('organization nutrition retains scoped drafts and replays a lost publicatio
     await page.reload()
     await page.getByRole('button', { name: 'Continue draft', exact: true }).click()
     await expect(page.getByLabel('Guidance', { exact: true })).toHaveValue('Client-specific draft')
-    await page.getByRole('button', { name: 'Change trainee', exact: true }).click()
+    await page.getByRole('button', { name: 'Change athlete', exact: true }).click()
     await page.getByRole('checkbox', { name: 'R4 Coach', exact: true }).click()
     await page.getByRole('button', { name: 'Create plan', exact: true }).click()
     await expect(page.getByLabel('Guidance', { exact: true })).toHaveValue('')
-    await page.getByRole('button', { name: 'Change trainee', exact: true }).click()
+    await page.getByRole('button', { name: 'Change athlete', exact: true }).click()
     await page.getByRole('checkbox', { name: 'R4 Athlete', exact: true }).click()
     await expect(page.getByLabel('Guidance', { exact: true })).toHaveValue('Client-specific draft')
     let drop = true

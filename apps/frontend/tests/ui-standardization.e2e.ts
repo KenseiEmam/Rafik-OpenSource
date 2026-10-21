@@ -195,6 +195,8 @@ test('dedicated editors preserve drafts, acknowledge writes, return to lists and
       .getByRole('searchbox', { name: 'Search exercises', exact: true })
       .fill('Controlled preseason row')
     await expect(page.locator('.catalog-choice')).toHaveCount(1)
+    // Phones show the catalog as list → detail; opening the result reveals its actions.
+    await page.locator('.catalog-choice').click()
     await page.getByRole('button', { name: 'Edit exercise', exact: true }).click()
     await expect(page.getByLabel('Exercise name', { exact: true })).toHaveValue(
       'Controlled preseason row',

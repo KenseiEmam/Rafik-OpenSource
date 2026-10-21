@@ -87,34 +87,43 @@ test('admin defines sports and specialties, links people, and the coach filter s
     await inspect(page, 'settings', info)
 
     // People: athletes see sports only; coaches can also take specialties.
+    // Member management lives on the profile's Manage tab, opened from the directory icon.
     await page.goto(base + '/people')
-    await page.getByRole('button', { name: 'Manage R4 Athlete', exact: true }).click()
+    await page.getByRole('link', { name: 'Manage R4 Athlete', exact: true }).click()
+    await expect(page).toHaveURL(/\?tab=manage/)
+    const athleteManage = page.url()
     const athleteSports = page.getByRole('group', { name: 'Sports', exact: true })
     await expect(athleteSports.getByRole('checkbox', { name: /Strength/ })).toHaveCount(0)
     await expect(athleteSports.getByRole('checkbox', { name: /Archery/ })).toHaveCount(0)
     await athleteSports.getByRole('checkbox', { name: 'Football' }).check()
     await page.getByRole('button', { name: 'Save sports', exact: true }).click()
+    await expect(page.locator('.rafik-toast').last()).toBeVisible()
+    await page.goto(base + '/people')
     await expect(
       page
         .locator('.organization-person')
         .filter({ has: page.getByRole('heading', { name: 'R4 Athlete', exact: true }) })
         .getByRole('list', { name: 'Sports and specialties' }),
     ).toHaveText('Football')
-    await page.getByRole('button', { name: 'Close', exact: true }).click()
-    await page.getByRole('button', { name: 'Manage R4 Coach', exact: true }).click()
+    await page.getByRole('tab', { name: 'Coaches', exact: true }).click()
+    await page.getByRole('link', { name: 'Manage R4 Coach', exact: true }).click()
     const coachSports = page.getByRole('group', { name: 'Sports and specialties' })
     await coachSports.getByRole('checkbox', { name: /Strength & conditioning/ }).check()
     await coachSports.getByRole('checkbox', { name: 'Football' }).check()
     await page.getByRole('button', { name: 'Save sports', exact: true }).click()
+    await expect(page.locator('.rafik-toast').last()).toBeVisible()
+    await page.goto(base + '/people')
+    await page.getByRole('tab', { name: 'Coaches', exact: true }).click()
     await expect(
       page
         .locator('.organization-person')
         .filter({ has: page.getByRole('heading', { name: 'R4 Coach', exact: true }) })
         .locator('.person-sports li'),
     ).toHaveCount(2)
-    await page.getByRole('button', { name: 'Close', exact: true }).click()
+    // Role tabs separate athletes from coaches; the sport filter narrows the athlete tab.
+    await page.getByRole('tab', { name: 'Athletes', exact: true }).click()
     await page.getByLabel('Sport or specialty').selectOption({ label: 'Football' })
-    await expect(page.locator('.organization-person')).toHaveCount(2)
+    await expect(page.locator('.organization-person')).toHaveCount(1)
     await expect(
       page.locator('.organization-person').filter({ hasText: 'Second Athlete' }),
     ).toHaveCount(0)
@@ -137,7 +146,7 @@ test('admin defines sports and specialties, links people, and the coach filter s
     await coachPage.getByLabel('Sport or specialty').selectOption({ label: 'Football' })
     await expect(coachPage.locator('.organization-person')).toHaveCount(1)
     await expect(coachPage.locator('.organization-person')).toContainText('R4 Athlete')
-    await expect(coachPage.getByRole('button', { name: /^Manage/ })).toHaveCount(0)
+    await expect(coachPage.getByRole('link', { name: /^Manage/ })).toHaveCount(0)
 
     // English light keeps chips and archived labels readable.
     await page.evaluate(() => localStorage.setItem('rafik.theme', 'light'))
@@ -157,7 +166,7 @@ test('admin defines sports and specialties, links people, and the coach filter s
     await inspect(page, 'settings-ar-dark-320', info)
     await page.goto(base + '/people')
     await expect(page.locator('.person-sports').first()).toBeVisible()
-    await page.getByRole('button', { name: /R4 Athlete$/ }).click()
+    await page.goto(athleteManage)
     await expect(page.getByRole('group', { name: 'الرياضات', exact: true })).toBeVisible()
     await inspect(page, 'people-ar-dark-320', info)
   } finally {

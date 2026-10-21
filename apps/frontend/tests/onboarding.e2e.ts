@@ -144,7 +144,7 @@ test('first launch creates the super admin and an invited member can join withou
 
   await page.getByRole('button', { name: 'Invite people' }).click()
   await page.getByLabel('Email address').fill('coach@rafik.test')
-  await page.getByRole('radio', { name: 'Trainer' }).check()
+  await page.getByRole('radio', { name: 'Coach' }).check()
   await page.getByRole('button', { name: 'Create invitation' }).click()
   const link = page.getByLabel('Invitation link')
   await expect(link).toBeVisible()
