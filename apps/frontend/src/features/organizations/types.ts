@@ -12,6 +12,7 @@ export type Member = {
   id: string
   user_id: string | null
   name: string
+  joined_at?: string
   email?: string
   roles: Role[]
   active: boolean

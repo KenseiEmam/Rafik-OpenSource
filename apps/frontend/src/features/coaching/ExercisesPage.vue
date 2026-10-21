@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ListPagination from '../../components/ListPagination.vue'
 import { request } from '../../lib/backend'
 import MultiChoice from '../../components/MultiChoice.vue'
 import OrganizationUpload, { type UploadedAsset } from '../../components/OrganizationUpload.vue'
@@ -713,30 +714,13 @@ onMounted(async () => {
               <PhArrowRight class="catalog-arrow" :size="17" aria-hidden="true" />
             </button>
           </div>
-          <nav
-            class="catalog-pagination"
-            :aria-label="language('Exercise pages', 'صفحات التمارين')"
-          >
-            <button
-              class="icon-button"
-              type="button"
-              :disabled="page === 0"
-              :aria-label="language('Previous exercises', 'التمارين السابقة')"
-              @click="changePage(-1)"
-            >
-              <PhArrowLeft :size="18" />
-            </button>
-            <span>{{ page + 1 }} / {{ pageCount }}</span>
-            <button
-              class="icon-button"
-              type="button"
-              :disabled="page + 1 >= pageCount"
-              :aria-label="language('Next exercises', 'التمارين التالية')"
-              @click="changePage(1)"
-            >
-              <PhArrowRight :size="18" />
-            </button>
-          </nav>
+          <ListPagination
+            :offset="page * pageSize"
+            :page-size="pageSize"
+            :total="visible.length"
+            :label="language('Exercise pages', 'صفحات التمارين')"
+            @page="(offset) => changePage(offset / pageSize - page)"
+          />
         </section>
         <section
           v-if="selectedExercise"
@@ -944,15 +928,7 @@ onMounted(async () => {
   flex-shrink: 0;
   color: var(--muted);
 }
-.catalog-pagination {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-top: 1px solid var(--line);
-  font-size: 0.8rem;
-}
+
 .catalog-detail {
   padding: 24px;
   overflow: auto;

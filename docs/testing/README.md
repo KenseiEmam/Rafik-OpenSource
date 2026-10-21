@@ -1,5 +1,15 @@
 # Testing
 
+## Opt-in web design audit
+
+From the repository root, with Node 24 (or 22.16+) and the local Docker database running:
+
+```sh
+RAFIK_UI_AUDIT=1 npm run test:e2e --workspace @rafik/frontend -- ui-audit.e2e.ts --project chromium
+```
+
+In PowerShell, set `$env:RAFIK_UI_AUDIT='1'` before the npm command. Run WebKit separately with `--project webkit-phone`; keep browser runs serial. The collector is skipped in ordinary browser runs. It uses the isolation wrapper, creates a synthetic institution and removes its records/services after the run; it never resets the preview database. It writes screenshots and observations to ignored `artifacts/ui-audit/2026-10-21/`. Observed Axe/layout defects are collected rather than asserted away, so a passing collector is **not** a clean UI verdict. Inspect images, record the reviewed states and move only concise durable receipts into verification. A missing first-run/valid-token/platform-grant fixture remains a coverage gap, not a passing page.
+
 Use the smallest check that covers the changed behavior. Run commands from the repository root unless a step says otherwise. These checks establish local behavior only; they do not prove production readiness, legal compliance, physical-device behavior or human usability.
 
 ## Documentation checks
@@ -50,3 +60,11 @@ For direct `test:e2e:running` diagnostics, first start the local API and web dev
 - Local Compose results do not establish remote CI, production alert delivery, or safe hosted upgrades/rollback.
 - Current workflow acceptance and its exact source/device limits are in [verification](../verification/README.md); machine-readable outputs stay under [`../verification/receipts/`](../verification/receipts/). The former R-phase feature map is preserved in the [archive](../archive/README.md).
 - Still needed outside automated local tests: physical phone and assistive-technology checks, university coach/athlete task observation, alert delivery, and a disposable production-profile upgrade/rollback rehearsal. See [known issues](../known-issues/README.md).
+
+## People, profiles and list pagination
+
+The focused `athlete-profile.e2e.ts` journeys cover administrator versus primary/supporting/unlinked-coach profiles, real tabs, member rename, invitation sport compatibility, role directories, ten-row next/previous/reload/detail-return navigation, keyboard controls, Arabic/dark 320 px and scoped accessibility/layout assertions. `beta-web-refinements.e2e.ts` has a separate later-page browsing journey for athlete plans, nutrition and events; use `--grep "coach browses"` to select it without running attachment cases. Run through the isolated wrapper, not a seeded preview. These browser checks do not establish physical Android or human usability acceptance.
+
+## Focused design audit modes
+
+From the repository root, set `RAFIK_UI_AUDIT=1` and run `npm run test:e2e --workspace @rafik/frontend -- ui-audit.e2e.ts --grep inventory`. This opt-in baseline collector records observations; it is not a clean-UI gate. Add `RAFIK_UI_AUDIT_CONTROLS=1` for the five-state popup/password regression, or `RAFIK_UI_AUDIT_LAYOUTS=1` for member management/settings in English light desktop and Arabic dark 320px. These focused modes assert no recorded layout or Axe violations. Run them serially and inspect generated images under ignored `artifacts/ui-audit/2026-10-21/`. Unset these variables afterward. The separate bootstrap collector requires `--empty-database --project chromium --grep bootstrap` and `RAFIK_UI_AUDIT_BOOTSTRAP=1`; it has not yet been accepted as rendered evidence.

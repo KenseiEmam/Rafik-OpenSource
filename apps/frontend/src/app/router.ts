@@ -183,7 +183,8 @@ const router = createRouter({
       meta: { private: true },
     },
     {
-      path: '/organization/:workspace/:view/athletes/:member',
+      path: '/organization/:workspace/:view/members/:member',
+      alias: '/organization/:workspace/:view/athletes/:member',
       component: () => import('../features/organizations/AthleteProfile.vue'),
       meta: { private: true },
     },

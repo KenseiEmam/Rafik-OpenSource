@@ -125,8 +125,8 @@ onUnmounted(() => {
         <p class="small-print">
           {{
             l(
-              'Review with the trainee before arranging a replacement. A missed session does not automatically grant a free session.',
-              'راجع مع المتدرب قبل ترتيب جلسة بديلة. الجلسة الفائتة لا تمنح جلسة مجانية تلقائياً.',
+              'Review attendance with the athlete before scheduling a replacement.',
+              'راجع الحضور مع الرياضي قبل جدولة حصة بديلة.',
             )
           }}
         </p>

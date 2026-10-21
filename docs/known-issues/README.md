@@ -1,5 +1,7 @@
 # Known issues and release gaps
 
+The [web UI/UX audit](ui-ux-audit.md) records design inconsistencies, rendered/source evidence, remaining review coverage and the proposed standardization sequence. The [design system](../DESIGN_SYSTEM.md) awaits founder approval; these proposals are not release claims.
+
 Beta.1, including Android, is published and accepted for beta evaluation. This page lists remaining product limitations, follow-up coverage and per-installation operational checks; these are not all beta.1 release blockers. The [beta readiness table](../operations/release-checklist.md#project-beta-readiness-19-october-2026) distinguishes publishing actions, accepted first-user backlog and institution-specific live-data gates. A gap is not described as a reproduced defect unless a failure was observed. Historical gym-first issues are kept in the [archive](../archive/README.md), not treated as current university requirements.
 
 | Priority | Status and evidence                                                                                                                                                                                                                      | Impact                                                                    | Proposed next step                                                                                                                                 |

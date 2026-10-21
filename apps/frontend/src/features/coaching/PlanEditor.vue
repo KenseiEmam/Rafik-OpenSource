@@ -731,7 +731,7 @@ function removeDay() {
             >
               <PhBarbell :size="30" aria-hidden="true" />
               <div>
-                <h3>{{ language('Start with a real exercise', 'ابدأ بتمرين فعلي') }}</h3>
+                <h2>{{ language('Start with a real exercise', 'ابدأ بتمرين فعلي') }}</h2>
                 <p>
                   {{
                     language(

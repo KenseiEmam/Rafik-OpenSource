@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { user } from '../../app/auth'
 import { request } from '../../lib/backend'
@@ -8,6 +8,7 @@ import { language as l, errorMessage } from '../../lib/i18n'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
 import MemberPicker from './MemberPicker.vue'
+import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
 import OrganizationNav from './OrganizationNav.vue'
 import type { Organization } from './types'
@@ -23,7 +24,8 @@ const items = ref<(TrainingGroup & AssessmentTemplate)[]>([]),
   organization = ref<Organization>(),
   loading = ref(true),
   error = ref(''),
-  next = ref<number | null>(null),
+  offset = ref(0),
+  total = ref(0),
   search = ref(''),
   archived = ref(false),
   editing = ref(false),
@@ -41,18 +43,32 @@ const fresh = () => ({
   definition: [{ key: crypto.randomUUID(), name: '', kind: 'number', unit: '', min: 0 } as Drill],
 })
 const draft = ref(fresh())
-async function load(append = false) {
+let generation = 0,
+  disposed = false
+onUnmounted(() => {
+  disposed = true
+  generation++
+})
+async function load(page = 0) {
+  if (disposed) return
+  const current = ++generation
   loading.value = true
   error.value = ''
   try {
     const [result, people] = await Promise.all([
-      request<{ items: (TrainingGroup & AssessmentTemplate)[]; next: number | null }>(
-        `/v1/workspaces/${id}/services?view=${view}&kind=${kind}&search=${encodeURIComponent(search.value)}&archived=${archived.value}&offset=${append ? next.value || 0 : 0}`,
+      request<{
+        items: (TrainingGroup & AssessmentTemplate)[]
+        next: number | null
+        total: number
+      }>(
+        `/v1/workspaces/${id}/services?view=${view}&kind=${kind}&search=${encodeURIComponent(search.value)}&archived=${archived.value}&limit=10&offset=${page}`,
       ),
       request<Organization>(`/v1/workspaces/${id}?view=${view}&summary=true`),
     ])
-    items.value = append ? [...items.value, ...result.items] : result.items
-    next.value = result.next
+    if (disposed || current !== generation) return
+    items.value = result.items
+    offset.value = page
+    total.value = result.total
     organization.value = people
   } catch (e) {
     error.value = errorMessage(e)
@@ -297,6 +313,18 @@ onMounted(async () => {
         </button>
       </fieldset>
     </form>
+    <div class="list-controls">
+      <h2 class="list-section-label">
+        {{ templates ? l('Templates', 'القوالب') : l('Groups', 'المجموعات') }}
+      </h2>
+      <ListPagination
+        :offset="offset"
+        :page-size="10"
+        :total="total"
+        :disabled="loading"
+        @page="load"
+      />
+    </div>
     <form class="organization-toolbar" @submit.prevent="load()">
       <label
         >{{ l('Search library', 'البحث في المكتبة')
@@ -341,9 +369,7 @@ onMounted(async () => {
           {{ l('Edit', 'تعديل') }}
         </button>
       </article>
-      <button v-if="next !== null" class="button secondary" @click="load(true)">
-        {{ l('Load more', 'تحميل المزيد') }}</button
-      ><RouterLink :to="base + '/calendar/new'" class="text-link"
+      <RouterLink :to="base + '/calendar/new'" class="text-link"
         >{{ l('Schedule an event', 'جدولة موعد') }} ↗</RouterLink
       ></PageState
     >

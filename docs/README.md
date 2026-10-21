@@ -4,6 +4,9 @@ This page is the index for maintained Rafik documentation. The root [README](../
 
 ## Product and design
 
+- [Design system proposal](DESIGN_SYSTEM.md): existing brand foundation and proposed typography, spacing, components, responsive, accessibility and RTL standards; founder approval required before broad implementation.
+- [Web UI/UX audit and rollout plan](known-issues/ui-ux-audit.md): categorized findings, root causes, coverage/evidence limits and prioritized implementation slices. Android is follow-up scope.
+
 - [Requirements and staged plan](requirements/README.md): goals, scope, constraints, acceptance criteria and current stage gates.
 - [Stage 4 workflow audit](requirements/stage4-workflow-audit.md): current university workflow coverage and remaining review.
 - [Stage 7 mobile scope](requirements/stage7-mobile-scope.md): confirmed coach-first Android field tasks, offline boundary, API contract and acceptance evidence.
@@ -20,7 +23,7 @@ This page is the index for maintained Rafik documentation. The root [README](../
 
 - [Development setup and workflows](development/README.md): prerequisites, local setup, common change workflows and troubleshooting.
 - [Android coach field development](development/android.md): native build setup, Windows startup helper and path/concurrency troubleshooting, attendance/scores, history, recovery sharing, English/Arabic and disposable API/queue acceptance.
-- [Maintainer guide](development/maintainer-guide.md): repository map and implementation recipes.
+- [Maintainer guide](development/maintainer-guide.md): repository map, profile/invitation workflows and shared pagination conventions.
 - [Current delivery ledger](development/ledger.md): current stage and recent implementation outcomes; not a phase-history archive.
 - [Testing strategy](testing/README.md): test layers, focused commands, fixtures and evidence boundaries.
 - [Local coach walkthrough](testing/coach-walkthrough.md): account setup, programs/assignments, athlete recording, scheduled events/results, messages/attachments and optional participation status with synthetic data.

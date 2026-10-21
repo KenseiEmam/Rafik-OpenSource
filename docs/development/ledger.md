@@ -14,6 +14,12 @@
 
 ## Recent work
 
+- **21 October — Web design audit requested:** founder requested a comprehensive audit, one design-system document and approval before broad implementation. Scope clarified as web first, Android later. Added a proposed design system and categorized audit/rollout plan; existing People/settings work is the baseline. Source inventory and an opt-in rendered observation collector separate source findings, automated observations, inspected images and remaining states. The founder subsequently approved implementation and pushing to PR #138. Shared presentation tokens, section headers, password visibility controls, responsive sport settings and picker accessibility refinements are implemented; remaining page migrations stay in the audit backlog.
+
+- **21 October — Settings and management layout:** member management uses a full-width identity section, paired coaching cards, and sports/recovery at the bottom. Role choices retain single-select radio semantics with button styling. Supporting-coach selection starts with the sport/specialty and filters the authorized coach directory. Institution settings place general settings and sports alongside installation branding, stacking on phones. Closure opens a keyboard-accessible dialog and requires the exact institution name; cancellation never sends a closure command. Vite ignores generated browser artifacts after a locked trace file crashed its development watcher during verification.
+
+- **21 October — People and member profiles:** founder requested role-specific directories (athletes by default), full profiles for every role, real content tabs, profile-based administration, SVG actions and messaging across administrator-visible roles. Clarified that coaches browse only their scoped athletes; athletes cannot browse staff. Invitations now accept optional sports for athletes and sports/specialties for coaches, never administrators. Added a forward migration and scoped profile read; membership display-name edits affect institution records, not the account email or global identity. Implementation is on `codex/people-profiles`; release/tag publication remains separate. Focused browser/type evidence is recorded in verification.
+
 - **20 October — Release 1 review fixes (PR #135):**
   - Limited and documented the overlap visibility exception.
   - Added measurement-aware coach recording through a shared module.

@@ -38,13 +38,13 @@ export async function nutritionPlanIndex(
       AND (${status !== "active" && status !== "upcoming"} OR member_active))`;
     const [items, counts] = await Promise.all([
       tx.$queryRaw(
-        Prisma.sql`${prefix} SELECT * FROM filtered ORDER BY effective_on DESC, member_id, revision DESC, id LIMIT 24 OFFSET ${offset}`,
+        Prisma.sql`${prefix} SELECT * FROM filtered ORDER BY effective_on DESC, member_id, revision DESC, id LIMIT 10 OFFSET ${offset}`,
       ),
       tx.$queryRaw<{ total: number }[]>(
         Prisma.sql`${prefix} SELECT count(*)::int total FROM filtered`,
       ),
     ]);
     const total = counts[0].total;
-    return { items, total, next: offset + 24 < total ? offset + 24 : null };
+    return { items, total, next: offset + 10 < total ? offset + 10 : null };
   });
 }

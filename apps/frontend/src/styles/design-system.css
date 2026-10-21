@@ -1,0 +1,263 @@
+/* Shared presentation contract; domain components retain their state and authority. */
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --text-caption: 0.8125rem;
+  --text-small: 0.875rem;
+  --text-body: 1rem;
+  --text-panel: 1.125rem;
+  --text-section: 1.25rem;
+  --text-page: 2rem;
+  --radius-control: 8px;
+  --radius-panel: 12px;
+  --control-height: 48px;
+  --motion-fast: 150ms;
+  --motion-panel: 200ms;
+  --motion-ease: ease-out;
+  --danger-action: #b42332;
+  --on-danger: #fff;
+  --success: var(--accent);
+  --success-bg: var(--tint);
+  --warning: light-dark(#795208, #f0cb7a);
+  --warning-bg: light-dark(#fff6df, #342d1b);
+  --info: light-dark(#245a7a, #a5d4ed);
+  --info-bg: light-dark(#edf5fa, #21313a);
+}
+.dashboard-frame .panel {
+  padding: var(--space-6);
+}
+.dashboard-frame .work-heading,
+.dashboard-frame .page-heading {
+  margin-block-end: var(--space-6);
+}
+.dashboard-frame .work-heading h1,
+.dashboard-frame .page-heading h1 {
+  font-size: var(--text-page);
+}
+.dashboard-frame .panel h2,
+.dashboard-frame .panel h3 {
+  font-size: var(--text-panel);
+  line-height: 1.4;
+}
+.form-stack {
+  gap: var(--space-4);
+  align-content: start;
+}
+.form-stack > h2,
+.form-stack > h3 {
+  margin: 0;
+}
+.form-stack > p {
+  margin: 0;
+}
+.dashboard-frame .injury-page > header {
+  display: grid;
+  gap: var(--space-2);
+  margin-block-end: var(--space-6);
+}
+.dashboard-frame .injury-page > header h1 {
+  font-size: var(--text-page);
+  line-height: 1.3;
+  letter-spacing: normal;
+}
+.auth-layout h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+.auth-layout form > label {
+  margin-block-end: calc(-1 * var(--space-2));
+}
+.form-stack label,
+.timezone-picker > label {
+  line-height: 1.5;
+}
+.small-print,
+small {
+  font-size: var(--text-caption);
+}
+.button {
+  border-radius: var(--radius-control);
+  transition:
+    background-color var(--motion-fast) var(--motion-ease),
+    border-color var(--motion-fast) var(--motion-ease),
+    color var(--motion-fast) var(--motion-ease);
+}
+input[type='checkbox'],
+input[type='radio'] {
+  accent-color: var(--accent);
+}
+.role-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+.role-choices legend {
+  margin-block-end: var(--space-2);
+  font-size: var(--text-small);
+}
+.role-choices label:has(input[type='radio']) {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  cursor: pointer;
+}
+.role-choices label:has(input[type='radio']:checked) {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+.role-choices label:has(input[type='radio']:focus-visible) {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+.role-choices input[type='radio'] {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  min-height: 0;
+}
+.role-choices label:has(input:disabled) {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+.institution-settings-grid .panel {
+  margin: 0;
+}
+.institution-settings-column {
+  gap: var(--space-6);
+}
+.institution-settings-grid .form-stack > h2 + p {
+  margin-block-start: calc(-1 * var(--space-2));
+}
+.institution-settings-grid .panel h2,
+.institution-settings-grid .panel h3 {
+  margin-block-end: var(--space-2);
+}
+.institution-close-dialog .institution-danger-button {
+  background: var(--danger-action);
+  color: var(--on-danger);
+}
+.member-management .management-card {
+  padding: var(--space-6);
+}
+.member-management .management-card > h2 {
+  margin-block-end: 0;
+}
+.member-management .primary-coach-card > .small-print {
+  padding: 0;
+  margin-block-start: calc(-1 * var(--space-2));
+}
+.member-management .member-picker {
+  margin-block: 0;
+}
+.coaching-team {
+  gap: var(--space-4);
+}
+.coaching-team > h2 + p {
+  margin-block-start: calc(-1 * var(--space-2));
+}
+.sports-settings {
+  gap: var(--space-4);
+}
+.sports-settings > h2 + p {
+  margin-block-start: calc(-1 * var(--space-2));
+}
+.sports-settings > form {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  padding-block-end: var(--space-6);
+  border-block-end: 1px solid var(--line);
+}
+.sports-settings > form > .role-choices {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+.sports-settings > form > .button {
+  grid-column: 2;
+  grid-row: 1;
+}
+.sports-settings > section > h3 {
+  margin-block-end: var(--space-3);
+}
+.sports-list li {
+  padding-block: var(--space-3);
+  border-block-end: 1px solid var(--line);
+  align-items: center;
+}
+.sports-list li:last-child {
+  border-block-end: 0;
+}
+.sports-actions button {
+  min-height: 40px;
+}
+.sports-edit {
+  width: 100%;
+}
+.timezone-picker > label {
+  display: block;
+  margin-block-end: var(--space-2);
+  line-height: 1.5;
+}
+.prose-page {
+  max-width: 800px;
+}
+.prose-page h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+@media (max-width: 600px) {
+  .dashboard-frame {
+    --dashboard-gutter: 16px;
+  }
+  .dashboard-frame .panel,
+  .member-management .management-card {
+    padding: var(--space-4);
+  }
+  .dashboard-frame .work-heading h1,
+  .dashboard-frame .page-heading h1 {
+    font-size: 1.75rem;
+  }
+  .button.small,
+  .text-link,
+  .sports-actions button {
+    min-height: 44px;
+  }
+  .sports-settings > form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sports-settings > form > .button {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .sports-actions {
+    width: 100%;
+    margin-inline-start: 0;
+    gap: var(--space-4);
+  }
+  .sports-list li {
+    align-items: start;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+  }
+}

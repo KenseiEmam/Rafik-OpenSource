@@ -1,5 +1,7 @@
 # Maintainer guide
 
+Member management lives in `MemberManagement.vue`: keep identity first, coaching next, and sports/account recovery at the bottom. Institution settings use two responsive columns for general settings and branding. The closure dialog is a confirmation step; server revision and exact-name checks remain authoritative. Development file watching excludes generated test artifacts so browser traces cannot trigger reloads or locked-file crashes.
+
 This guide is for current work in the Rafik monorepo. It stays focused on the maintained codebase; old phase-by-phase notes are in the [archive](../archive/README.md).
 
 Beta.1 is accepted and published, including Android. Keep current release status at the top of the checklist and verification record; preserve dated evidence as history. Do not turn disclosed device-coverage limits or per-institution live-data checks into new beta.1 publishing gates. Apply public status corrections to English and Arabic landing docs together, and inspect open next-release PRs before editing shared guidance.
@@ -13,6 +15,8 @@ Android Metro startup must explicitly target the installed native build: the mob
 `WorkspaceScreen.tsx` opens saved event packages locally and refreshes the startup schedule with a separate busy state; **Refresh roster** explicitly downloads newer data. Keep schedule responses from replacing open event feedback. `access.ts` preserves a saved workspace selection but falls back from a removed empty workspace. Refresh retained workspace IDs after the access read so downloads completed during that read are included in revocation blocking. Mobile transport is in `apps/mobile/src/field/request.ts`. `NativeClient` notifies its current runtime after successful authenticated responses; `SignedIn` rechecks previously failed access in the background, without unmounting roster/draft UI. Do not clear access warnings merely because a queue is empty or a timer fired. Test transport and callback behavior with `npm run test:request --workspace @rafik/mobile`; native rendering remains a separate check. The [release guide](../operations/android-release.md) includes encrypted signing backup and USB-only physical-phone acceptance.
 
 Documentation checks are maintained in `apps/backend/scripts/check-docs.mjs` with `documentation-links.mjs` and two fixture-based regression cases. Root `npm run docs:check` includes infrastructure guides and relative heading links. Keep the [release checklist](../operations/release-checklist.md) as the beta decision/operator checklist, requirements as scope and verification as dated evidence. Do not treat unchecked per-installation items as missing implementations, or a founder-accepted backlog item as a passed technical test.
+
+People uses `OrganizationPage.vue` for role tabs and the shared profile route for detail tabs. `MemberManagement.vue` owns administrator edits, with per-member durable command keys. `people.ts` owns scoped profile reads and labelled staff activity; never expose staff analytics by trusting a frontend tab. Invitation sports require migration `202610210100_invitation_sports` and Prisma/type regeneration. Keep sport choices in invitation drafts; switching to administrator clears them.
 
 ## Read these first
 
@@ -127,6 +131,8 @@ Use one root `npm ci`. Start the local PostgreSQL Compose profile and apply migr
 
 ## Focused verification and cleanup
 
+For visual standardization, read the proposed [design system](../DESIGN_SYSTEM.md) and [audit plan](../known-issues/ui-ux-audit.md) first. Broad changes require founder approval. The opt-in `ui-audit.e2e.ts` collector records observations and screenshots using disposable data; it deliberately does not assert that an existing design is defect-free. Use [the testing procedure](../testing/README.md#opt-in-web-design-audit), inspect actual images, and label source-only and unverified states honestly.
+
 - Run the smallest relevant check for the changed behavior; do not rerun unrelated suites or a full browser matrix by default.
 - Run typecheck/build for the workspace whose compilation or generated output changed. Run documentation-link checks after moving or adding docs.
 - Run browser acceptance when rendered behavior changes; use the local isolation wrapper and do not reset or reseed the preserved preview.
@@ -139,3 +145,13 @@ Use one root `npm ci`. Start the local PostgreSQL Compose profile and apply migr
 The approved product is university-first. Session packages, prepaid allowances, package renewals and no-show session deductions are retired gym features; do not add them back to active UI, API, analytics or schema. Calendar, attendance, assessor-led performance records and independent makeup scheduling remain separate from commercial entitlements.
 
 Do not claim production readiness, privacy compliance, human usability or physical-device behavior from local checks. Stage acceptance and remaining external review are recorded in the requirements and verification summary.
+
+## Directory pagination convention
+
+Use `ListPagination.vue` for page-based directories. Place it in `.list-controls` beside role tabs or the section heading, with flex-end alignment; stack on phones. Show the record range and current/total pages, disable unavailable actions, and preserve applied offsets until new data arrives. Numeric ranges remain LTR inside Arabic controls. People, nutrition, session history, events and groups/templates use 10 rows. Institution program and assigned-plan grids and the exercise grid use 24; the retired independent program list retains 12. Main directories replace rows when changing pages rather than appending. Member pickers retain incremental loading (25 by default), and conversation/assessment timelines keep their intentional earlier-history controls. Do not paginate message threads as record directories.
+
+`people?limit=10` opts the directory into ten rows; existing picker requests retain 25. Services use `limit=10` similarly so event pickers retain their existing response size. Session history adds a scoped total and offset paging, while retaining cursor compatibility for existing clients.
+
+## Shared web presentation
+
+Use the approved [design system](../DESIGN_SYSTEM.md). `src/styles/design-system.css` defines shared presentation tokens after the existing theme/shell styles. Use `SectionHeader.vue` for a title and short description, `PasswordField.vue` for password inputs, and `ListPagination.vue` for record directories. Keep native input attributes and submission behavior intact. The audit report distinguishes implemented patterns from remaining migrations.

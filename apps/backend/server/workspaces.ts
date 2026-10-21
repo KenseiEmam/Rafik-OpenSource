@@ -409,6 +409,75 @@ export async function workspaceView(
     };
   });
 }
+async function invitationSports(
+  tx: Tx,
+  workspace: string,
+  roles: string[],
+  value: unknown,
+) {
+  if (value === undefined) return [] as string[];
+  if (!Array.isArray(value) || value.length > 100)
+    throw new ApiError(400, "invalid_request");
+  const ids = value.map(uuid);
+  if (
+    new Set(ids).size !== ids.length ||
+    (roles.includes("admin") && ids.length)
+  )
+    throw new ApiError(400, "invalid_request");
+  const found = await tx.organization_sports.findMany({
+    where: {
+      workspace_id: workspace,
+      id: { in: ids },
+      archived: false,
+      ...(roles.includes("trainee") ? { kind: "sport" } : {}),
+    },
+    select: { id: true },
+  });
+  if (found.length !== ids.length) throw new ApiError(400, "sport_unavailable");
+  return ids;
+}
+async function applyInvitationSports(
+  tx: Tx,
+  invite: {
+    workspace_id: string;
+    roles: string[];
+    sport_ids: string[];
+    created_by?: string | null;
+  },
+  member: string,
+) {
+  const sports = await tx.organization_sports.findMany({
+    where: {
+      workspace_id: invite.workspace_id,
+      id: { in: invite.sport_ids },
+      ...(invite.roles.includes("trainee") ? { kind: "sport" } : {}),
+    },
+    select: { id: true },
+  });
+  if (sports.length !== invite.sport_ids.length)
+    throw new ApiError(400, "sport_unavailable");
+  await tx.organization_member_sports.deleteMany({
+    where: { workspace_id: invite.workspace_id, member_id: member },
+  });
+  const inviter = invite.created_by
+    ? await tx.workspace_members.findFirst({
+        where: {
+          workspace_id: invite.workspace_id,
+          user_id: invite.created_by,
+        },
+        select: { id: true },
+      })
+    : null;
+  if (sports.length)
+    await tx.organization_member_sports.createMany({
+      data: sports.map((s) => ({
+        workspace_id: invite.workspace_id,
+        member_id: member,
+        sport_id: s.id,
+        created_by: inviter?.id || member,
+      })),
+    });
+}
 export async function workspaceCommand(
   actor: Actor,
   id: string,
@@ -447,17 +516,22 @@ export async function workspaceCommand(
         })
       )
         throw new ApiError(409, "invitation_pending");
+      const sportIds = await invitationSports(tx, id, roles, input.sports);
       const result = await tx.workspace_invitations.create({
         data: {
           id: invite,
           workspace_id: id,
           email,
           roles,
+          sport_ids: sportIds,
           token_hash: hash(token),
           created_by: actor.id,
         },
       });
-      await event(tx, actor, id, "member_invited", invite, { roles });
+      await event(tx, actor, id, "member_invited", invite, {
+        roles,
+        sports: sportIds,
+      });
       return { id: result.id };
     }
     if (action === "password-link") {
@@ -555,6 +629,9 @@ export async function workspaceCommand(
         data: {
           roles,
           active,
+          ...(input.name === undefined
+            ? {}
+            : { name: textValue(input.name, 120) }),
           trainer_id:
             active && roles.includes("trainee") ? member.trainer_id : null,
           revision: { increment: 1 },
@@ -566,7 +643,7 @@ export async function workspaceCommand(
         id,
         active ? "member_roles_changed" : "member_removed",
         member.id,
-        { roles },
+        { roles, ...(input.name === undefined ? {} : { name: result.name }) },
       );
       return result;
     }
@@ -654,7 +731,7 @@ export async function invitation(
     }
     // An invitation is enrollment, never a silent edit to an already active member's roles.
     if (prior?.active) throw new ApiError(409, "already_member");
-    await tx.workspace_members.upsert({
+    const joinedMember = await tx.workspace_members.upsert({
       where: {
         workspace_id_user_id: {
           workspace_id: invite.workspace_id,
@@ -675,6 +752,7 @@ export async function invitation(
         revision: { increment: 1 },
       },
     });
+    await applyInvitationSports(tx, current, joinedMember.id);
     await tx.workspace_invitations.update({
       where: { id: invite.id },
       data: { state: "accepted", accepted_by: actor.id },
@@ -746,7 +824,7 @@ export async function acceptInvitationSignup(
         },
         name,
       );
-      await tx.workspace_members.create({
+      const joinedMember = await tx.workspace_members.create({
         data: {
           id: randomUUID(),
           workspace_id: current.workspace_id,
@@ -755,6 +833,7 @@ export async function acceptInvitationSignup(
           name,
         },
       });
+      await applyInvitationSports(tx, current, joinedMember.id);
       await tx.workspace_invitations.update({
         where: { id: current.id },
         data: { state: "accepted", accepted_by: user.id },

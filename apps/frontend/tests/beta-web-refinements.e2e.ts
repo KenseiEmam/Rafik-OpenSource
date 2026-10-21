@@ -172,8 +172,9 @@ test('coach browses later pages of athlete plans, nutrition plans and events, th
     await expect(page.locator('.athlete-plan-card, article')).not.toHaveCount(0)
     const pages = page.getByRole('navigation', { name: 'Nutrition plan pages' })
     await pages.getByRole('button', { name: 'Next' }).click()
-    await expect(page).toHaveURL(/offset=24/)
-    await expect(page.locator('article h2')).toHaveCount(2)
+    await expect(page).toHaveURL(/offset=10/)
+    await expect(pages.locator('.pagination-range')).toContainText('11–20')
+    await expect(page.locator('article h2')).toHaveCount(10)
     const laterNutrition = page.getByRole('link', { name: 'View nutrition plan' }).first()
     const nutritionAthlete = (await page.locator('article h2').first().textContent())!.trim()
     const nutritionUrl = page.url()
@@ -182,7 +183,7 @@ test('coach browses later pages of athlete plans, nutrition plans and events, th
     await expect(page.getByRole('navigation', { name: 'Nutrition plan pages' })).toHaveCount(0)
     await expect(page.getByText(nutritionAthlete).first()).toBeVisible()
     await page.goBack()
-    await expect(page).toHaveURL(/offset=24/)
+    await expect(page).toHaveURL(/offset=10/)
     await expect(page.locator('article h2').first()).toHaveText(nutritionAthlete)
     await inspect(page, 'nutrition-plans-later-page', info)
 
@@ -195,8 +196,11 @@ test('coach browses later pages of athlete plans, nutrition plans and events, th
       .getByRole('navigation', { name: 'Event pages' })
       .getByRole('button', { name: 'Next' })
       .click()
-    await expect(page).toHaveURL(/offset=24/)
-    await expect(page.locator('.event-list > li')).toHaveCount(2)
+    await expect(page).toHaveURL(/offset=10/)
+    await expect(page.locator('.event-list > li')).toHaveCount(10)
+    await expect(
+      page.getByRole('navigation', { name: 'Event pages' }).locator('.pagination-range'),
+    ).toContainText('11–20')
     await expect(page.locator('.event-list > li').first()).toContainText('Athletes: 1')
     const eventLink = page.locator('.event-list h2 a').first()
     const eventTitle = (await eventLink.textContent())!.trim()
@@ -204,7 +208,7 @@ test('coach browses later pages of athlete plans, nutrition plans and events, th
     await expect(page).toHaveURL(/\/calendar\/[a-f0-9-]{36}$/)
     await expect(page.getByRole('heading', { level: 1, name: eventTitle })).toBeVisible()
     await page.goBack()
-    await expect(page).toHaveURL(/offset=24/)
+    await expect(page).toHaveURL(/offset=10/)
     await expect(page).toHaveURL(/kind=training/)
     await expect(page.locator('.event-list h2 a').first()).toHaveText(eventTitle)
 

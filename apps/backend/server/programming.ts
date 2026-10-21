@@ -1,3 +1,4 @@
+import { pageOffset } from "./service-definitions.ts";
 import { usableExerciseAsset } from "./organization-assets.ts";
 import media from "../content/exercise-media.json" with { type: "json" };
 import videos from "../content/exercise-videos.json" with { type: "json" };
@@ -654,10 +655,12 @@ export async function delivery(
           workspace_members: { select: { id: true, name: true, active: true } },
         },
         orderBy: [{ started_at: "desc" }, { id: "asc" }],
-        take: 51,
-        ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+        take: 11,
+        ...(cursor
+          ? { cursor: { id: cursor }, skip: 1 }
+          : { skip: pageOffset(query.get("offset")) }),
       });
-      const sessions = page.slice(0, 50),
+      const sessions = page.slice(0, 10),
         member = selected || (view === "trainee" ? self.id : null);
       const assignments = member
         ? await tx.organization_assignments.findMany({
@@ -670,7 +673,11 @@ export async function delivery(
             include: { organization_versions: true },
           })
         : [];
+      const total = await tx.organization_sessions.count({
+        where: { workspace_id: id, workspace_members: scope, ...workouts },
+      });
       return {
+        total,
         members: Array.from(
           new Map(
             sessions.map((s) => [s.member_id, s.workspace_members]),
@@ -688,7 +695,7 @@ export async function delivery(
           completed_at: s.completed_at,
         })),
         self: self.id,
-        next: page.length > 50 ? sessions.at(-1)!.id : null,
+        next: page.length > 10 ? sessions.at(-1)!.id : null,
       };
     }
     const members = await tx.workspace_members.findMany({

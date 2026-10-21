@@ -7,7 +7,6 @@ import {
   ComboboxTrigger,
   ComboboxPortal,
   ComboboxContent,
-  ComboboxViewport,
   ComboboxItem,
   ComboboxItemIndicator,
   ComboboxEmpty,
@@ -48,6 +47,7 @@ const options = computed(() =>
       <ComboboxPortal
         ><section role="region" :aria-label="label + ' · ' + l('Options', 'الخيارات')">
           <ComboboxContent
+            :aria-label="label"
             :dir="locale === 'ar' ? 'rtl' : 'ltr'"
             class="timezone-options"
             position="popper"
@@ -62,7 +62,7 @@ const options = computed(() =>
                 )
               }}
             </p>
-            <ComboboxViewport class="timezone-viewport">
+            <div class="timezone-viewport" role="group" :aria-label="label" tabindex="0">
               <ComboboxEmpty class="timezone-empty">{{
                 l(
                   'No timezone found. Try a city such as London.',
@@ -79,7 +79,7 @@ const options = computed(() =>
                 <span dir="ltr">{{ option.label }}</span
                 ><ComboboxItemIndicator><PhCheck :size="16" /></ComboboxItemIndicator>
               </ComboboxItem>
-            </ComboboxViewport>
+            </div>
           </ComboboxContent></section
       ></ComboboxPortal>
     </ComboboxRoot>

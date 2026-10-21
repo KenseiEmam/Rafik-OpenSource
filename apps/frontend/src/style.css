@@ -2955,7 +2955,7 @@ h3 {
   display: grid;
   gap: 1.2rem;
 }
-.form-stack label,
+.form-stack label:where(:not(.check-label):not(.role-button)),
 .progress-filters label,
 .message-compose label {
   display: grid;

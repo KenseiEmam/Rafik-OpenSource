@@ -8,6 +8,8 @@ Coaches normally install the upstream signed APK and configure their institution
 
 ## Deployment
 
+The People/profile update requires forward migration `202610210100_invitation_sports` before the updated API starts. Existing pending invitations have no sports by default and remain usable. Use the existing paired-backup and Compose deployment process; do not reset/reseed. No native app, signing-key, mail or hosting configuration change is required.
+
 The Android history/recovery update requires the matching updated backend/OpenAPI export; no schema migration is needed for history reads. Recovery copies are user-initiated plain-text shares and are outside encrypted app storage and server retention. Institutions must choose approved recipients/storage and handle deletion of exported copies themselves; do not send athlete recovery records through the public landing contact form.
 
 The multiple-message-attachment update requires migration `202610181200_message_attachments` before running the updated backend. It adds ordered links and backfills existing single-file messages without removing the compatibility column. Restart the backend after migration/client generation; existing file storage and backup procedures are unchanged.
@@ -43,7 +45,7 @@ Build and validate the approved revision before deployment. Apply forward migrat
 
 Store the production env file outside source control with access limited to the university operators. Use unique instance secrets. Rotate secrets through a planned deployment; never paste credentials into issue trackers, logs, commits or check receipts. The self-hosted profile does not need SMTP, Google service-account keys, or hosted-provider credentials. Keep the service on a private network until the first super admin completes setup. Invitees choose their password from a single-use link that expires after seven days; no email is delivered or verified. Operators must share that link privately.
 
-Instance branding (name, accent, light/dark page backgrounds and optional PNG/JPEG/WebP logo) is stored in PostgreSQL and therefore travels with database backups and restores. UI surfaces derive from those colors; text/accent colors adjust for contrast. The first super admin controls these settings; the image is limited to 512 KB. Keep the backup protected as sensitive operational data. Branding is not supplied by environment variables and remains after application image updates.
+Instance branding (name, accent, light/dark page backgrounds and optional PNG/JPEG/WebP logo) is stored in PostgreSQL and therefore travels with database backups and restores. UI surfaces derive from those colors; text/accent colors adjust for contrast. The first super admin controls these settings; the image is limited to 512 KB. Keep the backup protected as sensitive operational data. Branding is not supplied by environment variables and remains after application image updates. In Institution settings, branding sits alongside general settings on wide screens and stacks below them on phones. Closing an institution requires opening the red action and entering its exact current name in the confirmation dialog; closure ends member access while preserving records.
 
 ## Release assets and landing downloads
 

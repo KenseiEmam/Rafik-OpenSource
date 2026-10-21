@@ -7,6 +7,7 @@ import type { Session } from '../../lib/domain'
 import { programContext } from '../coaching/program-context'
 import OrganizationNav from './OrganizationNav.vue'
 import MemberPicker from './MemberPicker.vue'
+import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
 const route = useRoute(),
   router = useRouter(),
@@ -14,15 +15,17 @@ const route = useRoute(),
 type History = {
   members: { id: string; name: string; active: boolean }[]
   sessions: (Session & { member_id: string })[]
+  total: number
   next: string | null
 }
 const data = ref<History>(),
+  offset = ref(0),
   loading = ref(false),
   error = ref(''),
   member = ref(String(route.query.member || ''))
 let generation = 0,
   disposed = false
-async function load(append = false) {
+async function load() {
   const current = ++generation
   loading.value = true
   error.value = ''
@@ -30,20 +33,13 @@ async function load(append = false) {
     view: context.view,
     history: 'true',
     ...(member.value ? { member: member.value } : {}),
-    ...(append && data.value?.next ? { before: data.value.next } : {}),
+    offset: String(Math.max(0, Number(route.query.offset) || 0)),
   })
   try {
     const result = await request<History>(`/v1/workspaces/${context.workspace}/delivery?${query}`)
     if (disposed || current !== generation) return
-    if (append && data.value) {
-      result.sessions = Array.from(
-        new Map([...data.value.sessions, ...result.sessions].map((s) => [s.id, s])).values(),
-      )
-      result.members = Array.from(
-        new Map([...data.value.members, ...result.members].map((m) => [m.id, m])).values(),
-      )
-    }
     data.value = result
+    offset.value = Math.max(0, Number(route.query.offset) || 0)
   } catch (e) {
     if (!disposed && current === generation) {
       error.value = errorMessage(e)
@@ -58,7 +54,7 @@ function choose(ids: string[]) {
   return router.push({ query: member.value ? { member: member.value } : {} })
 }
 watch(
-  () => route.query.member,
+  () => [route.query.member, route.query.offset],
   () => {
     member.value = String(route.query.member || '')
     void load()
@@ -102,6 +98,17 @@ const name = (id: string) =>
         }}</RouterLink>
       </div>
     </header>
+    <div class="list-controls">
+      <h2 class="list-section-label">{{ l('Recorded sessions', 'الحصص المسجلة') }}</h2>
+      <ListPagination
+        :label="l('Session pages', 'صفحات الحصص')"
+        :offset="offset"
+        :page-size="10"
+        :total="data?.total || 0"
+        :disabled="loading"
+        @page="(offset) => router.push({ query: { ...route.query, offset: offset || undefined } })"
+      />
+    </div>
     <details v-if="context.view !== 'trainee'" class="history-filter">
       <summary>{{ l('Filter by athlete (optional)', 'تصفية حسب الرياضي (اختياري)') }}</summary>
       <MemberPicker
@@ -165,9 +172,6 @@ const name = (id: string) =>
             </RouterLink>
           </li>
         </ol>
-        <button v-if="data.next" class="button secondary" :disabled="loading" @click="load(true)">
-          {{ l('Load earlier sessions', 'تحميل الحصص السابقة') }}
-        </button>
       </template></PageState
     >
   </div>

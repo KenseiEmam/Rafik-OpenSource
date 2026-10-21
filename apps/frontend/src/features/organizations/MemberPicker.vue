@@ -9,6 +9,7 @@ const props = withDefaults(
     view: string
     modelValue: string[]
     role?: string
+    sport?: string
     includeSelf?: boolean
     label?: string
     single?: boolean
@@ -19,6 +20,7 @@ const props = withDefaults(
   }>(),
   {
     role: '',
+    sport: '',
     includeSelf: false,
     single: false,
     disabled: false,
@@ -44,6 +46,7 @@ async function load(append = false) {
     const q = new URLSearchParams({
       view: props.view,
       role: props.role,
+      sport: props.sport,
       search: search.value,
       self: String(props.includeSelf),
       offset: String(append ? next.value || 0 : 0),
@@ -103,7 +106,7 @@ watch(
   },
 )
 watch(
-  () => props.role,
+  () => [props.role, props.sport],
   () => load(),
 )
 onMounted(() => load())
@@ -173,8 +176,9 @@ onUnmounted(() => {
             excludeIds.includes(m.id) ||
             (!modelValue.includes(m.id) && modelValue.length >= max)
           "
-          @change="toggle(m.id)" />{{ m.name }}<slot :member="m"
-      /></label>
+          @change="toggle(m.id)" /><span class="member-option-details"
+          >{{ m.name }}<slot :member="m" /></span
+      ></label>
     </div>
     <p v-if="!items.length && !loading" class="small-print">
       {{ l('No matching people.', 'لا يوجد أشخاص مطابقون.') }}
@@ -231,6 +235,18 @@ onUnmounted(() => {
 .member-options label {
   overflow-wrap: anywhere;
   min-width: 0;
+}
+.member-option-details {
+  min-width: 0;
+}
+.member-options label:has(.member-option-details small) {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  align-items: start;
+}
+.member-options label:has(input:checked) {
+  background: var(--surface-soft);
 }
 @media (max-width: 600px) {
   .member-search {

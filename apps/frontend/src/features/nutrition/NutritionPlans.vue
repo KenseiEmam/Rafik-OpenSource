@@ -6,6 +6,7 @@ import { language as l, errorMessage, locale } from '../../lib/i18n'
 import { formatDate } from '../../lib/dates'
 import OrganizationNav from '../organizations/OrganizationNav.vue'
 import MemberPicker from '../organizations/MemberPicker.vue'
+import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
 const route = useRoute(),
   router = useRouter(),
@@ -131,6 +132,17 @@ function create(ids: string[]) {
         @update:model-value="create"
       />
     </section>
+    <div class="list-controls">
+      <h2 class="list-section-label">{{ l('Results', 'النتائج') }}</h2>
+      <ListPagination
+        :label="l('Nutrition plan pages', 'صفحات خطط التغذية')"
+        :offset="offset"
+        :page-size="10"
+        :total="data?.total || 0"
+        :disabled="loading"
+        @page="navigate"
+      />
+    </div>
     <form class="nutrition-plan-filters" @submit.prevent="navigate()">
       <label
         >{{ l('Search athletes', 'البحث عن رياضيين')
@@ -219,28 +231,6 @@ function create(ids: string[]) {
             >
           </article>
         </div>
-        <nav
-          v-if="data.total > 24 || offset"
-          class="nutrition-plan-pagination"
-          :aria-label="l('Nutrition plan pages', 'صفحات خطط التغذية')"
-        >
-          <button
-            class="button secondary"
-            :disabled="loading || !offset"
-            @click="navigate(Math.max(0, offset - 24))"
-          >
-            {{ l('Previous', 'السابق') }}</button
-          ><span
-            >{{ Math.min(offset + 1, data.total) }}–{{ Math.min(offset + 24, data.total) }} /
-            {{ data.total }}</span
-          ><button
-            class="button secondary"
-            :disabled="loading || data.next === null"
-            @click="navigate(data.next!)"
-          >
-            {{ l('Next', 'التالي') }}
-          </button>
-        </nav>
       </template></PageState
     >
   </div>
@@ -295,14 +285,7 @@ function create(ids: string[]) {
   margin-top: auto;
   align-self: start;
 }
-.nutrition-plan-pagination {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-block: 24px;
-}
+
 @media (max-width: 650px) {
   .nutrition-plan-filters {
     grid-template-columns: minmax(0, 1fr);

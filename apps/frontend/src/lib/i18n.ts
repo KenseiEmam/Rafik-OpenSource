@@ -487,7 +487,12 @@ export function errorMessage(error: unknown): string {
       'Please wait a moment before trying again.',
       'انتظر قليلاً قبل المحاولة مجدداً.',
     )
-  if (raw.includes('forbidden') || raw.includes('unauthenticated') || raw.includes('JWT'))
+  if (raw.includes('forbidden'))
+    return language(
+      'You do not have permission to open this record or perform this action. Contact your institution administrator if you need access.',
+      'ليس لديك إذن لفتح هذا السجل أو تنفيذ هذا الإجراء. تواصل مع مسؤول مؤسستك إذا كنت تحتاج إلى الوصول.',
+    )
+  if (raw.includes('unauthenticated') || raw.includes('JWT'))
     return language(
       'Please sign in again to continue. Your work on this device is still here.',
       'سجّل الدخول مجدداً للمتابعة. عملك على هذا الجهاز ما زال محفوظاً.',

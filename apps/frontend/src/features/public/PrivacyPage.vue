@@ -4,12 +4,12 @@ import { language, t } from '../../lib/i18n'
 <template>
   <div class="container page prose-page">
     <p class="overline">{{ t('privacy') }}</p>
-    <h1>{{ language('Your data in this local preview.', 'بياناتك في المعاينة المحلية.') }}</h1>
+    <h1>{{ language('Your data in your institution’s instance.', 'بياناتك في نسخة مؤسستك.') }}</h1>
     <p class="lead">
       {{
         language(
-          'This describes the rebuilt product running locally. A hosted release needs its own published policy and operator contact details.',
-          'هذا وصف للمنتج الجديد العامل محلياً. يحتاج الإصدار المنشور إلى سياسة خاصة وبيانات اتصال المشغّل.',
+          'Your institution operates this installation and controls its infrastructure. Ask its administrator for the institution’s privacy policy and operator contact details.',
+          'تدير مؤسستك هذا التثبيت وتتحكم في بنيته التحتية. اطلب من المسؤول سياسة الخصوصية وبيانات التواصل الخاصة بالمشغّل.',
         )
       }}
     </p>
@@ -18,8 +18,8 @@ import { language, t } from '../../lib/i18n'
       <p>
         {{
           language(
-            'Guest workouts, recoverable drafts, language, appearance, and a small log of save events are stored on this device. Signing in stores a session token. Clearing browser data removes unsynced drafts.',
-            'تُحفظ التمارين التجريبية والمسودات واللغة والمظهر وسجل صغير لأحداث الحفظ على الجهاز. يُحفظ رمز الجلسة عند الدخول. مسح بيانات المتصفح يزيل المسودات غير المتزامنة.',
+            'Recoverable drafts, language, appearance and local save diagnostics can remain on this device. Sign-in uses an HTTP-only session cookie. Clearing browser data can remove unsynced work; a device save is not a server backup.',
+            'قد تبقى المسودات واللغة والمظهر وبيانات تشخيص الحفظ على هذا الجهاز. يستخدم الدخول ملف ارتباط للجلسة لا تتيحه JavaScript. قد يؤدي مسح بيانات المتصفح إلى فقدان العمل غير المتزامن؛ الحفظ على الجهاز ليس نسخة احتياطية للخادم.',
           )
         }}
       </p>
@@ -29,8 +29,8 @@ import { language, t } from '../../lib/i18n'
       <p>
         {{
           language(
-            'Email, profile preferences, plans, assignments, recorded sets, and session notes are saved in the local Supabase backend. A connected coach can read their athlete sessions and leave feedback. Other athletes cannot read them.',
-            'يُحفظ البريد وتفضيلات الملف والخطط والتعيينات والمجموعات المسجلة والملاحظات في Supabase المحلي. يمكن للمدرب المرتبط قراءة حصص متدربه وترك ملاحظات. لا يمكن للمتدربين الآخرين قراءتها.',
+            'Accounts and institution records are stored through the server API in PostgreSQL. Private files are held by this installation. Server permissions restrict access by institution, role and coaching assignment; a supporting coach does not receive unrestricted access to nutrition or participation records.',
+            'تُحفظ الحسابات وسجلات المؤسسة عبر واجهة الخادم في PostgreSQL. يحتفظ هذا التثبيت بالملفات الخاصة. يقيّد الخادم الوصول حسب المؤسسة والدور والتكليف التدريبي؛ لا يحصل المدرب المساند على وصول غير مقيّد إلى التغذية أو سجلات المشاركة.',
           )
         }}
       </p>
@@ -40,8 +40,8 @@ import { language, t } from '../../lib/i18n'
       <p>
         {{
           language(
-            'Try the sample without signing up. Export your own training data or delete your account in Settings. If a coach deletes their account, athletes retain their own completed session snapshots. No advertising or external analytics service is connected in this build.',
-            'جرّب الحصة بلا تسجيل. صدّر بيانات تدريبك أو احذف حسابك من الإعدادات. إذا حذف المدرب حسابه يحتفظ المتدربون بنسخ حصصهم المكتملة. لا توجد خدمات إعلان أو تحليلات خارجية مرتبطة بهذا الإصدار.',
+            'Settings provides account export and deletion controls. Institution records have their own retention rules. Participation sharing requires consent; withdrawing it stops coach access, and sensitive content in closed injury records is deleted after 12 months. Do not enter diagnoses or treatment details. No advertising or external analytics service is enabled by default.',
+            'توفّر الإعدادات أدوات تصدير الحساب وحذفه، ولسجلات المؤسسة قواعد احتفاظ مستقلة. تتطلب مشاركة حالة المشاركة موافقة؛ يوقف سحبها وصول المدرب، ويُحذف المحتوى الحساس لسجلات الإصابة المغلقة بعد ١٢ شهراً. لا تدخل تشخيصاً أو تفاصيل علاج. لا تُفعّل خدمات إعلانية أو تحليلات خارجية افتراضياً.',
           )
         }}
       </p>

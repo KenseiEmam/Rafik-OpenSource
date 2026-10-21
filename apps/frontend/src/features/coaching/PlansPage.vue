@@ -1,23 +1,24 @@
 <script setup lang="ts">
 import ProgramCover from './ProgramCover.vue'
 import OrganizationNav from '../organizations/OrganizationNav.vue'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { PhPlus, PhArrowRight, PhBarbell } from '@phosphor-icons/vue'
 import { user } from '../../app/auth'
 import { rows, request } from '../../lib/backend'
 import { useRoute } from 'vue-router'
 import { programContext } from './program-context'
 const context = programContext(useRoute())
-const next = ref<number | null>(null)
+const offset = ref(0),
+  total = ref(0)
 let loadSequence = 0
 import type { Plan, PlanVersion } from '../../lib/domain'
 import { language, t, errorMessage, dateLabel } from '../../lib/i18n'
+import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
-const search = ref(''),
-  limit = ref(12)
+const search = ref('')
 watch(search, () => {
-  limit.value = 12
-  if (context.workspace) void load(false, true)
+  offset.value = 0
+  if (context.workspace) void load(0, true)
 })
 const filtered = computed(() =>
   plans.value.filter(
@@ -28,7 +29,7 @@ const plans = ref<Plan[]>([])
 const versions = ref<PlanVersion[]>([])
 const loading = ref(true)
 const error = ref('')
-async function load(append = false, background = false) {
+async function load(page = offset.value, background = false) {
   const sequence = ++loadSequence
   if (!background) loading.value = true
   error.value = ''
@@ -37,19 +38,17 @@ async function load(append = false, background = false) {
       const result = await request<{
         items: (Plan & { version?: PlanVersion })[]
         next: number | null
+        total: number
       }>(
-        `/v1/workspaces/${context.workspace}/programs?view=${context.view}&search=${encodeURIComponent(search.value)}&offset=${append ? next.value || 0 : 0}`,
+        `/v1/workspaces/${context.workspace}/programs?view=${context.view}&search=${encodeURIComponent(search.value)}&offset=${page}`,
       )
       if (sequence !== loadSequence) return
-      plans.value = append ? [...plans.value, ...result.items] : result.items
-      versions.value = append
-        ? [
-            ...versions.value,
-            ...result.items.flatMap((p) => (p.version ? [{ ...p.version, plan_id: p.id }] : [])),
-          ]
-        : result.items.flatMap((p) => (p.version ? [{ ...p.version, plan_id: p.id }] : []))
-      next.value = result.next
-      limit.value = plans.value.length
+      plans.value = result.items
+      versions.value = result.items.flatMap((p) =>
+        p.version ? [{ ...p.version, plan_id: p.id }] : [],
+      )
+      total.value = result.total
+      offset.value = page
     } else
       [plans.value, versions.value] = await Promise.all([
         rows<Plan>('plans', 'coach_id', user.value!.id),
@@ -63,6 +62,9 @@ async function load(append = false, background = false) {
   }
 }
 onMounted(() => load())
+onUnmounted(() => {
+  loadSequence++
+})
 </script>
 <template>
   <OrganizationNav v-if="context.workspace" />
@@ -84,6 +86,16 @@ onMounted(() => load())
         ><PhPlus :size="18" aria-hidden="true" />{{ t('newPlan') }}</RouterLink
       >
     </div>
+    <div class="list-controls">
+      <h2 class="list-section-label">{{ language('Library', 'المكتبة') }}</h2>
+      <ListPagination
+        :offset="offset"
+        :page-size="context.workspace ? 24 : 12"
+        :total="context.workspace ? total : filtered.length"
+        :disabled="loading"
+        @page="(page) => (context.workspace ? load(page) : (offset = page))"
+      />
+    </div>
     <PageState :loading="loading" :error="error" @retry="load()"
       ><label v-if="search || plans.some((p) => !p.archived)" class="plan-search"
         >{{ language('Find a plan', 'ابحث عن خطة')
@@ -99,7 +111,7 @@ onMounted(() => load())
       </p>
       <div v-if="filtered.length" class="plans-grid">
         <RouterLink
-          v-for="p in filtered.slice(0, limit)"
+          v-for="p in context.workspace ? filtered : filtered.slice(offset, offset + 12)"
           :key="p.id"
           :to="context.base + '/plans/' + p.id"
           class="plan-card panel"
@@ -176,16 +188,6 @@ onMounted(() => load())
           >{{ t('newPlan') }}</RouterLink
         >
       </section>
-      <button v-if="next !== null" class="button secondary" @click="load(true)">
-        {{ language('Show more plans', 'عرض خطط أخرى') }}
-      </button>
-      <button
-        v-if="!context.workspace && filtered.length > limit"
-        class="button secondary"
-        @click="limit += 12"
-      >
-        {{ language('Show more plans', 'عرض خطط أخرى') }}
-      </button></PageState
-    >
+    </PageState>
   </div>
 </template>

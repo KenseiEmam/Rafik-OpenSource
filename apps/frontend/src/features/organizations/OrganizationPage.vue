@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, nextTick, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { user, refreshContexts, contexts } from '../../app/auth'
 import { request } from '../../lib/backend'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
-import { language as l, errorMessage, dateLabel } from '../../lib/i18n'
+import { language as l, errorMessage, dateLabel, locale } from '../../lib/i18n'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
 import PageState from '../../components/PageState.vue'
@@ -12,12 +12,23 @@ import type { Organization, Member, Role, Sport } from './types'
 import './organization.css'
 import OrganizationFollowUp from './OrganizationFollowUp.vue'
 import OrganizationUpcoming from './OrganizationUpcoming.vue'
-import MemberPicker from './MemberPicker.vue'
 import OrganizationNav from './OrganizationNav.vue'
 import BrandingSettings from './BrandingSettings.vue'
 import SportsSettings from './SportsSettings.vue'
-import MemberSports from './MemberSports.vue'
-import CoachingTeam from './CoachingTeam.vue'
+import { TabsRoot, TabsList, TabsTrigger, TabsContent } from 'reka-ui'
+import ListPagination from '../../components/ListPagination.vue'
+import PersonActionIcon from './PersonActionIcon.vue'
+import {
+  DialogRoot,
+  DialogTrigger,
+  DialogPortal,
+  DialogOverlay,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from 'reka-ui'
+const closeDialog = ref(false)
 const route = useRoute(),
   router = useRouter(),
   id = String(route.params.workspace),
@@ -26,57 +37,53 @@ const route = useRoute(),
   section = computed(() => String(route.params.section || 'overview'))
 const peopleLoading = ref(false),
   extraLoading = ref(false)
-const nextPeople = ref<number | null>(null),
-  peopleTotal = ref(0)
+const peopleOffset = ref(Math.max(0, Number(route.query.offset) || 0))
+const peopleTotal = ref(0)
 const data = ref<Organization>(),
   loading = ref(true),
   error = ref(''),
-  search = ref(''),
-  filter = ref(String(route.query.filter || 'all')),
+  search = ref(String(route.query.search || '')),
+  filter = ref(
+    view === 'trainer'
+      ? 'trainee'
+      : ['admin', 'trainer', 'trainee'].includes(String(route.query.filter))
+        ? String(route.query.filter)
+        : 'trainee',
+  ),
+  memberState = ref(
+    route.query.filter === 'inactive' || route.query.state === 'inactive' ? 'inactive' : 'active',
+  ),
   sportFilter = ref(String(route.query.sport || '')),
   sports = ref<Sport[]>([]),
-  selected = ref<Member>(),
-  editRoles = ref<Role[]>([]),
-  active = ref(true),
-  trainer = ref(''),
   newName = ref(''),
   closeName = ref(''),
   inviting = ref(false),
   email = ref(''),
   roles = ref<Role[]>(['trainee']),
+  inviteSports = ref<string[]>([]),
   inviteLink = ref(''),
-  passwordLink = ref(''),
   draftReady = ref(false),
   draftSaved = ref(false),
   draftError = ref('')
+const invitationSports = computed(() =>
+  sports.value.filter(
+    (s) => !s.archived && (!roles.value.includes('trainee') || s.kind === 'sport'),
+  ),
+)
+watch(roles, (current, previous) => {
+  if (current.includes('admin')) inviteSports.value = []
+  else if (previous.includes('trainer') && current.includes('trainee'))
+    inviteSports.value = inviteSports.value.filter(
+      (id) => !sports.value.some((sport) => sport.id === id && sport.kind === 'specialty'),
+    )
+})
 const draftKey = `organization-invite:${user.value!.id}:${id}:${view}`
 const roleName = (role: string) =>
   l(
-    { admin: 'Administrator', trainer: 'Trainer', trainee: 'Athlete' }[role] || role,
+    { admin: 'Administrator', trainer: 'Coach', trainee: 'Athlete' }[role] || role,
     { admin: 'مسؤول', trainer: 'مدرب', trainee: 'رياضي' }[role] || role,
   )
-const visible = computed(() =>
-  (data.value?.members || []).filter(
-    (m) =>
-      (filter.value === 'inactive'
-        ? !m.active
-        : m.active && (filter.value === 'all' || m.roles.includes(filter.value as Role))) &&
-      (!search.value ||
-        `${m.name} ${m.email || ''}`.toLowerCase().includes(search.value.toLowerCase())),
-  ),
-)
-const trainers = computed(
-  () => data.value?.members.filter((m) => m.active && m.roles.includes('trainer')) || [],
-)
-const trainees = computed(
-  () =>
-    data.value?.members.filter(
-      (m) =>
-        m.active &&
-        m.roles.includes('trainee') &&
-        (view !== 'trainer' || m.trainer_id === data.value?.self.id),
-    ) || [],
-)
+const visible = computed(() => data.value?.members || [])
 const sportNames = (member: Member) =>
   (member.sports || [])
     .map((sport) => sports.value.find((s) => s.id === sport))
@@ -91,11 +98,6 @@ async function loadSports() {
     // Sport labels are descriptive; the roster stays usable without them.
     sports.value = []
   }
-}
-async function sportsSaved() {
-  const member = selected.value?.id
-  await loadPeople()
-  selected.value = data.value?.members.find((m) => m.id === member)
 }
 const supportingCoaches = (member: Member) =>
   (member.coaches || [])
@@ -152,17 +154,18 @@ async function loadExtra(kind: 'invitations' | 'events') {
 }
 let rosterGeneration = 0,
   rosterTimer: ReturnType<typeof setTimeout>
-async function loadPeople(append = false) {
+async function loadPeople(offset = peopleOffset.value) {
   const current = ++rosterGeneration
   peopleLoading.value = true
   try {
     const q = new URLSearchParams({
       view,
+      limit: '10',
       search: search.value,
-      state: filter.value === 'inactive' ? 'inactive' : 'active',
+      state: memberState.value,
       role: ['admin', 'trainer', 'trainee'].includes(filter.value) ? filter.value : '',
       ...(sportFilter.value ? { sport: sportFilter.value } : {}),
-      offset: String(append ? nextPeople.value || 0 : 0),
+      offset: String(offset),
     })
     const page = await request<{
       items: Member[]
@@ -171,12 +174,24 @@ async function loadPeople(append = false) {
       total: number
     }>(`/v1/workspaces/${id}/people?${q}`)
     if (current !== rosterGeneration || !data.value) return
-    data.value.members = append ? [...data.value.members, ...page.items] : page.items
+    peopleOffset.value = offset
     data.value.names = Array.from(
       new Map([...data.value.names, ...page.names].map((m) => [m.id, m])).values(),
     )
-    nextPeople.value = page.next
     peopleTotal.value = page.total
+    if (section.value === 'people')
+      await router.replace({
+        query: {
+          ...route.query,
+          filter: filter.value === 'trainee' ? undefined : filter.value,
+          state: memberState.value === 'active' ? undefined : memberState.value,
+          search: search.value || undefined,
+          sport: sportFilter.value || undefined,
+          offset: offset || undefined,
+        },
+      })
+    if (current !== rosterGeneration || !data.value) return
+    data.value.members = page.items
   } catch (e) {
     if (current === rosterGeneration) error.value = errorMessage(e)
   } finally {
@@ -187,26 +202,67 @@ onUnmounted(() => {
   clearTimeout(rosterTimer)
   rosterGeneration++
 })
-watch([search, filter, sportFilter], () => {
-  rosterGeneration++
-  peopleLoading.value = true
-  clearTimeout(rosterTimer)
-  rosterTimer = setTimeout(() => void loadPeople(), 180)
+watch(filter, () => {
+  if (data.value) data.value.members = []
+  peopleOffset.value = 0
+  peopleTotal.value = 0
 })
+let syncingPeople = false
+watch(
+  [search, filter, memberState, sportFilter],
+  () => {
+    if (syncingPeople) return
+    rosterGeneration++
+    peopleOffset.value = 0
+    peopleLoading.value = true
+    clearTimeout(rosterTimer)
+    rosterTimer = setTimeout(() => void loadPeople(0), 180)
+  },
+  { flush: 'sync' },
+)
+watch(
+  () => route.query,
+  (q) => {
+    if (section.value !== 'people') return
+    const offset = Math.max(0, Number(q.offset) || 0),
+      role =
+        view === 'trainer'
+          ? 'trainee'
+          : ['admin', 'trainer', 'trainee'].includes(String(q.filter))
+            ? String(q.filter)
+            : 'trainee',
+      state = q.state === 'inactive' || q.filter === 'inactive' ? 'inactive' : 'active',
+      term = String(q.search || ''),
+      sport = String(q.sport || '')
+    if (
+      offset === peopleOffset.value &&
+      role === filter.value &&
+      state === memberState.value &&
+      term === search.value &&
+      sport === sportFilter.value
+    )
+      return
+    syncingPeople = true
+    filter.value = role
+    memberState.value = state
+    search.value = term
+    sportFilter.value = sport
+    peopleOffset.value = offset
+    syncingPeople = false
+    void loadPeople(offset)
+  },
+)
+
 const command = useCommand<'organization'>(
   `organization:${id}:${view}`,
   async (_, result, args) => {
     if (args.action === 'invite') {
       inviteLink.value = location.origin + '/organization-invite/' + args.token
-      passwordLink.value = ''
       email.value = ''
       roles.value = ['trainee']
+      inviteSports.value = []
       await removeDraft(draftKey)
-    } else if (args.action === 'password-link') {
-      passwordLink.value = location.origin + '/password-setup/' + args.token
-      inviteLink.value = ''
     }
-    selected.value = undefined
     await refreshContexts()
     if (!contexts.value.some((c) => c.path === base)) {
       await router.push('/workspaces')
@@ -219,24 +275,6 @@ const command = useCommand<'organization'>(
 const locked = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
 const run = (args: Record<string, unknown>) =>
   command.run('organization', { operation: crypto.randomUUID(), ...args })
-async function select(member: Member) {
-  selected.value = member
-  const role = (['admin', 'trainer', 'trainee'] as Role[]).find((item) =>
-    member.roles.includes(item),
-  )
-  editRoles.value = role ? [role] : []
-  active.value = member.active
-  trainer.value = member.trainer_id || ''
-  await nextTick()
-  document.querySelector<HTMLElement>('.institution-edit-heading h2')?.focus()
-}
-async function closeEditor() {
-  const member = selected.value?.id
-  selected.value = undefined
-  await nextTick()
-  if (member) document.querySelector<HTMLElement>(`[data-member="${member}"]`)?.focus()
-}
-
 function invite() {
   inviteLink.value = ''
   const token = [...crypto.getRandomValues(new Uint8Array(32))]
@@ -247,16 +285,9 @@ function invite() {
     id: crypto.randomUUID(),
     email: email.value,
     roles: roles.value,
+    sports: roles.value.includes('admin') ? [] : inviteSports.value,
     token,
   })
-}
-function resetPassword() {
-  if (!selected.value) return
-  passwordLink.value = ''
-  const token = [...crypto.getRandomValues(new Uint8Array(32))]
-    .map((x) => x.toString(16).padStart(2, '0'))
-    .join('')
-  run({ action: 'password-link', id: selected.value.id, token })
 }
 let draftSequence = 0
 async function saveInviteDraft() {
@@ -265,20 +296,27 @@ async function saveInviteDraft() {
   draftSaved.value = false
   draftError.value = ''
   try {
-    await storeDraft(draftKey, { email: email.value, roles: [...roles.value] })
+    await storeDraft(draftKey, {
+      email: email.value,
+      roles: [...roles.value],
+      sports: [...inviteSports.value],
+    })
     if (sequence === draftSequence) draftSaved.value = true
   } catch (e) {
     if (sequence === draftSequence) draftError.value = errorMessage(e)
   }
 }
-watch([email, roles], () => void saveInviteDraft(), { deep: true })
+watch([email, roles, inviteSports], () => void saveInviteDraft(), { deep: true })
 onMounted(async () => {
   void loadSports()
   await load()
-  const draft = await getDraft<{ email: string; roles: Role[] }>(draftKey).catch(() => undefined)
+  const draft = await getDraft<{ email: string; roles: Role[]; sports?: string[] }>(draftKey).catch(
+    () => undefined,
+  )
   if (draft) {
     email.value = draft.email
     roles.value = draft.roles
+    inviteSports.value = draft.roles.includes('admin') ? [] : draft.sports || []
     inviting.value = !!draft.email
   }
   draftReady.value = true
@@ -290,8 +328,19 @@ onMounted(async () => {
     <header class="work-heading">
       <div>
         <p class="overline">{{ roleName(view) }}</p>
-        <h1>{{ data?.workspace.name || l('Institution', 'المؤسسة') }}</h1>
-        <p>
+        <h1>
+          {{
+            section === 'people'
+              ? l('People', 'الأشخاص')
+              : section === 'settings'
+                ? l('Institution settings', 'إعدادات المؤسسة')
+                : section === 'activity'
+                  ? l('Institution activity', 'نشاط المؤسسة')
+                  : data?.workspace.name || l('Institution', 'المؤسسة')
+          }}
+        </h1>
+        <p v-if="section !== 'overview'" dir="auto">{{ data?.workspace.name }}</p>
+        <p v-else>
           {{
             view === 'admin'
               ? l(
@@ -305,7 +354,7 @@ onMounted(async () => {
         </p>
       </div>
       <button
-        v-if="data && view === 'admin'"
+        v-if="data && view === 'admin' && ['overview', 'people'].includes(section)"
         class="button"
         @click="inviting = !inviting"
         :aria-expanded="inviting"
@@ -352,6 +401,32 @@ onMounted(async () => {
                   />{{ roleName(role) }}</label
                 >
               </fieldset>
+              <fieldset v-if="!roles.includes('admin')" class="invite-sports">
+                <legend>
+                  {{
+                    roles.includes('trainer')
+                      ? l(
+                          'Sports and coaching specialties (optional)',
+                          'الرياضات والتخصصات التدريبية (اختياري)',
+                        )
+                      : l('Sports (optional)', 'الرياضات (اختياري)')
+                  }}
+                </legend>
+                <p v-if="!invitationSports.length" class="small-print">
+                  {{
+                    l(
+                      'Add sports in institution settings first, or assign them from the profile later.',
+                      'أضف الرياضات في إعدادات المؤسسة أولاً، أو عيّنها لاحقاً من الملف.',
+                    )
+                  }}
+                </p>
+                <label v-for="sport in invitationSports" :key="sport.id" class="check-label"
+                  ><input type="checkbox" v-model="inviteSports" :value="sport.id" /><span
+                    dir="auto"
+                    >{{ sport.name }}</span
+                  ></label
+                >
+              </fieldset>
               <p class="muted">
                 {{
                   l(
@@ -383,38 +458,21 @@ onMounted(async () => {
               @focus="($event.target as HTMLInputElement).select()"
           /></label>
         </div>
-        <div v-if="passwordLink" class="notice success">
-          <p>
-            {{
-              l(
-                'Password setup link ready. Share it privately; it expires in 24 hours and can be used once.',
-                'رابط إعداد كلمة المرور جاهز. شاركه بشكل خاص؛ تنتهي صلاحيته بعد ٢٤ ساعة ويستخدم مرة واحدة.',
-              )
-            }}
-          </p>
-          <label
-            >{{ l('Password setup link', 'رابط إعداد كلمة المرور')
-            }}<input
-              :value="passwordLink"
-              readonly
-              @focus="($event.target as HTMLInputElement).select()"
-          /></label>
-        </div>
         <template v-if="section === 'overview'">
           <div v-if="view !== 'trainee'" class="organization-summary">
             <RouterLink :to="base + '/people'"
               ><strong>{{ data.summary.trainees }}</strong
               ><span>{{
                 view === 'admin'
-                  ? l('Active trainees', 'المتدربون النشطون')
+                  ? l('Active athletes', 'الرياضيون النشطون')
                   : l('Assigned to you', 'المعيّنون لك')
               }}</span></RouterLink
             ><RouterLink v-if="view === 'admin'" :to="base + '/people?filter=trainer'"
               ><strong>{{ data.summary.trainers }}</strong
-              ><span>{{ l('Trainers', 'المدربون') }}</span></RouterLink
+              ><span>{{ l('Coaches', 'المدربون') }}</span></RouterLink
             ><RouterLink v-if="view === 'admin'" :to="base + '/people'"
               ><strong>{{ data.summary.unassigned }}</strong
-              ><span>{{ l('Need a trainer', 'بحاجة إلى مدرب') }}</span></RouterLink
+              ><span>{{ l('Need a coach', 'بحاجة إلى مدرب') }}</span></RouterLink
             >
           </div>
           <div class="actions">
@@ -439,7 +497,7 @@ onMounted(async () => {
                   ? l('Keep everyone supported', 'امنح الجميع الدعم')
                   : view === 'trainer'
                     ? l('Your next coaching step', 'خطوتك التدريبية التالية')
-                    : l('Your trainer', 'مدربك')
+                    : l('Your coach', 'مدربك')
               }}
             </h2>
             <template v-if="view === 'trainee'"
@@ -473,239 +531,158 @@ onMounted(async () => {
           </section>
         </template>
         <template v-else-if="section === 'people'">
-          <div class="organization-toolbar">
-            <label
-              >{{ l('Find a person', 'البحث عن شخص')
-              }}<input type="search" v-model="search" /></label
-            ><label
-              >{{ l('Show people', 'عرض الأشخاص')
-              }}<select v-model="filter">
-                <option value="all">{{ l('Active people', 'الأشخاص النشطون') }}</option>
-                <option
-                  v-for="role in ['admin', 'trainer', 'trainee'] as Role[]"
-                  :key="role"
-                  :value="role"
+          <TabsRoot
+            v-model="filter"
+            :dir="locale === 'ar' ? 'rtl' : 'ltr'"
+            class="people-role-tabs"
+          >
+            <div class="list-controls">
+              <TabsList class="report-tabs" :aria-label="l('People by role', 'الأشخاص حسب الدور')">
+                <TabsTrigger value="trainee">{{ l('Athletes', 'الرياضيون') }}</TabsTrigger>
+                <TabsTrigger v-if="view === 'admin'" value="trainer">{{
+                  l('Coaches', 'المدربون')
+                }}</TabsTrigger>
+                <TabsTrigger v-if="view === 'admin'" value="admin">{{
+                  l('Administrators', 'المسؤولون')
+                }}</TabsTrigger> </TabsList
+              ><ListPagination
+                :offset="peopleOffset"
+                :page-size="10"
+                :total="peopleTotal"
+                :label="l('People pages', 'صفحات الأشخاص')"
+                :disabled="peopleLoading"
+                @page="loadPeople"
+              />
+            </div>
+            <TabsContent :value="filter" class="people-directory-panel">
+              <div class="organization-toolbar">
+                <label
+                  >{{ l('Find a person', 'البحث عن شخص') }}<input type="search" v-model="search"
+                /></label>
+                <label
+                  >{{ l('Membership', 'العضوية')
+                  }}<select v-model="memberState">
+                    <option value="active">{{ l('Active', 'نشط') }}</option>
+                    <option value="inactive">{{ l('Inactive', 'غير نشط') }}</option>
+                  </select></label
                 >
-                  {{ roleName(role) }}
-                </option>
-                <option value="inactive">{{ l('Inactive people', 'الأشخاص غير النشطين') }}</option>
-              </select></label
-            ><label v-if="sports.length"
-              >{{ l('Sport or specialty', 'الرياضة أو التخصص')
-              }}<select v-model="sportFilter">
-                <option value="">{{ l('All', 'الكل') }}</option>
-                <option v-for="sport in sports" :key="sport.id" :value="sport.id">
-                  {{ sport.name }}{{ sport.archived ? ' · ' + l('Archived', 'مؤرشف') : '' }}
-                </option>
-              </select></label
-            >
-          </div>
-          <div class="organization-people">
-            <section tabindex="0" :aria-label="l('People', 'الأشخاص')">
-              <p class="muted">{{ l('People:', 'الأشخاص:') }} {{ peopleTotal }}</p>
-              <p v-if="peopleLoading" class="small-print" role="status">
-                {{ l('Finding people…', 'جارٍ البحث عن الأشخاص…') }}
-              </p>
-              <p v-if="!visible.length && !peopleLoading" class="empty-state-note">
-                {{ l('No people match this view.', 'لا أشخاص يطابقون هذا العرض.') }}
-              </p>
-              <article v-for="member in visible" :key="member.id" class="organization-person">
-                <div class="person-identity">
-                  <span class="avatar">{{ member.name.slice(0, 1) }}</span>
-                  <div>
-                    <h2>{{ member.name }}</h2>
-                    <p>{{ member.roles.map(roleName).join(' · ') }}</p>
-                    <p v-if="member.roles.includes('trainee')" class="muted">
-                      {{ l('Primary coach', 'المدرب الأساسي') }}: {{ trainerName(member) }}
-                    </p>
-                    <p v-if="supportingCoaches(member).length" class="muted" dir="auto">
-                      {{ l('Supporting', 'مساند') }}: {{ supportingCoaches(member).join('، ') }}
-                    </p>
-                    <p v-if="myLink(member)" class="small-print">
+                <label v-if="sports.length"
+                  >{{ l('Sport or specialty', 'الرياضة أو التخصص')
+                  }}<select v-model="sportFilter">
+                    <option value="">{{ l('All', 'الكل') }}</option>
+                    <option v-for="sport in sports" :key="sport.id" :value="sport.id">
+                      {{ sport.name }}{{ sport.archived ? ' · ' + l('Archived', 'مؤرشف') : '' }}
+                    </option>
+                  </select></label
+                >
+              </div>
+              <div class="organization-people">
+                <section tabindex="0" :aria-label="l('People', 'الأشخاص')">
+                  <p class="muted">{{ l('People:', 'الأشخاص:') }} {{ peopleTotal }}</p>
+                  <p v-if="peopleLoading" class="small-print" role="status">
+                    {{ l('Finding people…', 'جارٍ البحث عن الأشخاص…') }}
+                  </p>
+                  <div v-if="!visible.length && !peopleLoading" class="directory-empty">
+                    <PersonActionIcon kind="profile" />
+                    <h2>{{ l('No people in this view', 'لا يوجد أشخاص في هذا العرض') }}</h2>
+                    <p>
                       {{
-                        l(
-                          'You support this athlete for training records only.',
-                          'تدعم هذا الرياضي في سجلات التدريب فقط.',
-                        )
+                        search || sportFilter
+                          ? l(
+                              'Try another name or clear the sport filter.',
+                              'جرّب اسماً آخر أو أزل مرشح الرياضة.',
+                            )
+                          : l(
+                              'People appear here after accepting their invitation.',
+                              'يظهر الأشخاص هنا بعد قبول دعوتهم.',
+                            )
                       }}
                     </p>
-                    <ul
-                      v-if="sportNames(member).length"
-                      class="person-sports"
-                      :aria-label="l('Sports and specialties', 'الرياضات والتخصصات')"
-                    >
-                      <li
-                        v-for="sport in sportNames(member)"
-                        :key="sport.id"
-                        class="tag"
-                        dir="auto"
-                      >
-                        {{ sport.name }}
-                      </li>
-                    </ul>
                   </div>
-                </div>
-                <RouterLink
-                  v-if="member.roles.includes('trainee') && view !== 'trainee'"
-                  class="text-link"
-                  :to="base + '/athletes/' + member.id"
-                  :aria-label="l('Profile for ', 'ملف ') + member.name"
-                  >{{ l('Profile', 'الملف') }}</RouterLink
-                >
-                <RouterLink
-                  v-if="member.active && member.roles.includes('trainee') && view !== 'trainee'"
-                  class="text-link"
-                  :to="
-                    base +
-                    '/messages?to=' +
-                    encodeURIComponent(member.id) +
-                    '&title=' +
-                    encodeURIComponent(member.name)
-                  "
-                  >{{ l('Message', 'مراسلة') }}</RouterLink
-                >
-                <RouterLink
-                  v-if="member.roles.includes('trainee') && view !== 'trainee' && !myLink(member)"
-                  class="text-link"
-                  :to="base + '/nutrition?member=' + member.id"
-                  >{{ l('Nutrition', 'التغذية') }}</RouterLink
-                >
-                <button
-                  v-if="view === 'admin'"
-                  class="button small secondary"
-                  :disabled="peopleLoading"
-                  @click="select(member)"
-                  :data-member="member.id"
-                  :aria-label="l('Manage ', 'إدارة ') + member.name"
-                >
-                  {{ l('Manage', 'إدارة') }}
-                </button>
-              </article>
-              <button
-                v-if="nextPeople !== null"
-                class="button secondary"
-                :disabled="peopleLoading"
-                @click="loadPeople(true)"
-              >
-                {{ l('Show more people', 'عرض المزيد') }}
-              </button>
-            </section>
-            <aside v-if="selected && view === 'admin'" class="panel form-stack">
-              <header class="organization-edit-heading">
-                <h2 tabindex="-1">{{ selected.name }}</h2>
-                <button class="text-link" @click="closeEditor">
-                  {{ l('Close', 'إغلاق') }}
-                </button>
-              </header>
-              <fieldset class="command-fields" :disabled="locked">
-                <form
-                  class="form-stack"
-                  @submit.prevent="
-                    run({
-                      action: 'member',
-                      id: selected.id,
-                      revision: selected.revision,
-                      roles: editRoles,
-                      active,
-                    })
-                  "
-                >
-                  <fieldset class="role-choices">
-                    <legend>{{ l('Institution roles', 'أدوار المؤسسة') }}</legend>
-                    <label v-for="role in ['admin', 'trainer', 'trainee'] as Role[]" :key="role"
-                      ><input
-                        type="radio"
-                        :name="'membership-role-' + selected.id"
-                        :checked="editRoles.includes(role)"
-                        @change="editRoles = [role]"
-                      />{{ roleName(role) }}</label
-                    >
-                  </fieldset>
-                  <label class="check-label"
-                    ><input type="checkbox" v-model="active" />{{
-                      l('Active membership', 'عضوية نشطة')
-                    }}</label
-                  >
-                  <p
-                    v-if="
-                      !active ||
-                      (!editRoles.includes('trainer') && selected.roles.includes('trainer'))
-                    "
-                    class="notice"
-                  >
-                    {{
-                      l(
-                        'Any assigned trainees will need a new trainer. Their institution records remain available. Access ends immediately when membership is deactivated.',
-                        'سيحتاج المتدربون المعيّنون إلى مدرب جديد. تبقى سجلاتهم بالمؤسسة. ينتهي الوصول فور إلغاء تنشيط العضوية.',
-                      )
-                    }}
-                  </p>
-                  <button class="button" :disabled="!editRoles.length">
-                    {{ l('Save membership', 'حفظ العضوية') }}
-                  </button>
-                </form>
-                <div v-if="selected.user_id && selected.active" class="form-stack">
-                  <p class="small-print">
-                    {{
-                      l(
-                        'Issue a single-use, 24-hour link so this person can choose a new password. Existing sessions will be signed out when it is used.',
-                        'أصدر رابطاً لمرة واحدة صالحاً ٢٤ ساعة ليختار هذا الشخص كلمة مرور جديدة. ستُنهى الجلسات الحالية عند استخدامه.',
-                      )
-                    }}
-                  </p>
-                  <button
-                    type="button"
-                    class="button secondary"
-                    :disabled="locked"
-                    @click="resetPassword"
-                  >
-                    {{ l('Create password setup link', 'إنشاء رابط إعداد كلمة المرور') }}
-                  </button>
-                </div>
-                <MemberSports
-                  v-if="selected.active && !selected.roles.includes('admin')"
-                  :workspace-id="id"
-                  :member="selected"
-                  :sports="sports"
-                  @saved="sportsSaved"
-                />
-                <form
-                  v-if="selected.active && selected.roles.includes('trainee')"
-                  class="form-stack institution-trainer-form"
-                  @submit.prevent="
-                    run({
-                      action: 'assign-trainer',
-                      id: selected.id,
-                      revision: selected.revision,
-                      trainer: trainer || null,
-                    })
-                  "
-                >
-                  <MemberPicker
-                    :workspace="id"
-                    :view="view"
-                    role="trainer"
-                    single
-                    :label="l('Primary coach', 'المدرب الأساسي')"
-                    :model-value="trainer ? [trainer] : []"
-                    :exclude-ids="[selected.id]"
-                    @update:model-value="trainer = $event[0] || ''"
-                  />
-                  <button class="button secondary">
-                    {{ l('Update primary coach', 'تحديث المدرب الأساسي') }}
-                  </button>
-                </form>
-                <CoachingTeam
-                  v-if="selected.active && selected.roles.includes('trainee')"
-                  :workspace-id="id"
-                  :member="selected"
-                  :sports="sports"
-                  :names="data.names"
-                  @saved="sportsSaved"
-                />
-              </fieldset>
-            </aside>
-          </div>
+                  <article v-for="member in visible" :key="member.id" class="organization-person">
+                    <div class="person-identity">
+                      <span class="avatar">{{ member.name.slice(0, 1) }}</span>
+                      <div>
+                        <h2>{{ member.name }}</h2>
+                        <p>{{ member.roles.map(roleName).join(' · ') }}</p>
+                        <p v-if="member.roles.includes('trainee')" class="muted">
+                          {{ l('Primary coach', 'المدرب الأساسي') }}: {{ trainerName(member) }}
+                        </p>
+                        <p v-if="supportingCoaches(member).length" class="muted" dir="auto">
+                          {{ l('Supporting', 'مساند') }}: {{ supportingCoaches(member).join('، ') }}
+                        </p>
+                        <p v-if="myLink(member)" class="small-print">
+                          {{
+                            l(
+                              'You support this athlete for training records only.',
+                              'تدعم هذا الرياضي في سجلات التدريب فقط.',
+                            )
+                          }}
+                        </p>
+                        <ul
+                          v-if="sportNames(member).length"
+                          class="person-sports"
+                          :aria-label="l('Sports and specialties', 'الرياضات والتخصصات')"
+                        >
+                          <li
+                            v-for="sport in sportNames(member)"
+                            :key="sport.id"
+                            class="tag"
+                            dir="auto"
+                          >
+                            {{ sport.name }}
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="person-actions">
+                      <RouterLink
+                        class="person-action"
+                        :to="
+                          base +
+                          '/members/' +
+                          member.id +
+                          '?returnTo=' +
+                          encodeURIComponent(route.fullPath)
+                        "
+                        :aria-label="l('Profile for ', 'ملف ') + member.name"
+                        :title="l('Open profile', 'فتح الملف')"
+                        ><PersonActionIcon kind="profile"
+                      /></RouterLink>
+                      <RouterLink
+                        v-if="member.active && member.user_id && member.id !== data.self.id"
+                        class="person-action"
+                        :to="
+                          base +
+                          '/messages?to=' +
+                          encodeURIComponent(member.id) +
+                          '&title=' +
+                          encodeURIComponent(member.name)
+                        "
+                        :aria-label="l('Message ', 'مراسلة ') + member.name"
+                        :title="l('Message', 'مراسلة')"
+                        ><PersonActionIcon kind="message"
+                      /></RouterLink>
+                      <RouterLink
+                        v-if="view === 'admin'"
+                        class="person-action"
+                        :to="
+                          base +
+                          '/members/' +
+                          member.id +
+                          '?tab=manage&returnTo=' +
+                          encodeURIComponent(route.fullPath)
+                        "
+                        :aria-label="l('Manage ', 'إدارة ') + member.name"
+                        :title="l('Manage details', 'إدارة البيانات')"
+                        ><PersonActionIcon kind="manage"
+                      /></RouterLink>
+                    </div>
+                  </article>
+                </section>
+              </div>
+            </TabsContent>
+          </TabsRoot>
           <section v-if="view === 'admin' && data.invitations.length" class="panel">
             <h2>{{ l('Waiting for acceptance', 'بانتظار القبول') }}</h2>
             <article
@@ -792,44 +769,109 @@ onMounted(async () => {
             {{ l('Earlier activity', 'نشاط أقدم') }}
           </button>
         </section>
-        <section v-else-if="section === 'settings' && view === 'admin'" class="panel narrow">
-          <h2>{{ l('Institution settings', 'إعدادات المؤسسة') }}</h2>
-          <form
-            class="form-stack"
-            @submit.prevent="
-              run({ action: 'rename', name: newName, revision: data.workspace.revision })
-            "
-          >
-            <label
-              >{{ l('Institution name', 'اسم المؤسسة')
-              }}<input v-model="newName" maxlength="100" required :disabled="locked" /></label
-            ><button class="button" :disabled="locked">{{ l('Save name', 'حفظ الاسم') }}</button>
-          </form>
-          <details class="organization-close">
-            <summary>{{ l('Close this institution', 'إغلاق هذه المؤسسة') }}</summary>
-            <p>
-              {{
-                l(
-                  'This ends access for all members. Records remain preserved. Type the institution name to confirm.',
-                  'ينهي هذا الوصول لجميع الأعضاء مع الاحتفاظ بالسجلات. اكتب اسم المؤسسة للتأكيد.',
-                )
-              }}
-            </p>
-            <label
-              >{{ l('Confirm institution name', 'تأكيد اسم المؤسسة')
-              }}<input v-model="closeName" :disabled="locked" /></label
-            ><button
-              class="button secondary"
-              :disabled="locked || closeName !== data.workspace.name"
-              @click="
-                run({ action: 'close', confirm: closeName, revision: data.workspace.revision })
-              "
-            >
-              {{ l('Close institution', 'إغلاق المؤسسة') }}
-            </button>
-          </details>
-          <SportsSettings :workspace-id="id" @changed="loadSports" />
-          <BrandingSettings :workspace-id="id" />
+        <section
+          v-else-if="section === 'settings' && view === 'admin'"
+          class="institution-settings"
+        >
+          <div class="institution-settings-grid">
+            <div class="institution-settings-column">
+              <section class="panel">
+                <h2>{{ l('General settings', 'الإعدادات العامة') }}</h2>
+                <form
+                  class="form-stack"
+                  @submit.prevent="
+                    run({ action: 'rename', name: newName, revision: data.workspace.revision })
+                  "
+                >
+                  <label
+                    >{{ l('Institution name', 'اسم المؤسسة')
+                    }}<input v-model="newName" maxlength="100" required :disabled="locked" /></label
+                  ><button class="button" :disabled="locked">
+                    {{ l('Save name', 'حفظ الاسم') }}
+                  </button>
+                </form>
+              </section>
+              <section class="panel">
+                <SportsSettings :workspace-id="id" @changed="loadSports" />
+              </section>
+              <section class="panel institution-danger-zone">
+                <h2>{{ l('Close this institution', 'إغلاق هذه المؤسسة') }}</h2>
+                <p>
+                  {{
+                    l(
+                      'End institution access for every member. Existing records are preserved.',
+                      'إنهاء وصول جميع الأعضاء إلى المؤسسة مع الاحتفاظ بالسجلات الحالية.',
+                    )
+                  }}
+                </p>
+                <DialogRoot v-model:open="closeDialog" @update:open="closeName = ''">
+                  <DialogTrigger as-child
+                    ><button
+                      type="button"
+                      class="button institution-danger-button"
+                      :disabled="locked"
+                    >
+                      {{ l('Close institution', 'إغلاق المؤسسة') }}
+                    </button></DialogTrigger
+                  >
+                  <DialogPortal>
+                    <DialogOverlay class="institution-dialog-overlay" />
+                    <DialogContent
+                      class="institution-close-dialog"
+                      :dir="locale === 'ar' ? 'rtl' : 'ltr'"
+                      @interact-outside="locked && $event.preventDefault()"
+                      @escape-key-down="locked && $event.preventDefault()"
+                    >
+                      <DialogTitle>{{
+                        l('Close this institution?', 'إغلاق هذه المؤسسة؟')
+                      }}</DialogTitle>
+                      <DialogDescription>
+                        {{
+                          l(
+                            'This ends access for all members. Records remain preserved. Type the institution name to confirm.',
+                            'ينهي هذا الوصول لجميع الأعضاء مع الاحتفاظ بالسجلات. اكتب اسم المؤسسة للتأكيد.',
+                          )
+                        }}
+                      </DialogDescription>
+                      <p class="institution-confirm-name" dir="auto">{{ data.workspace.name }}</p>
+                      <CommandStatus
+                        v-if="command.state.error || command.state.pending"
+                        :command="command"
+                      />
+                      <form
+                        class="form-stack"
+                        @submit.prevent="
+                          run({
+                            action: 'close',
+                            confirm: closeName,
+                            revision: data.workspace.revision,
+                          })
+                        "
+                      >
+                        <label
+                          >{{ l('Confirm institution name', 'تأكيد اسم المؤسسة')
+                          }}<input v-model="closeName" :disabled="locked" /></label
+                        ><button
+                          class="button institution-danger-button"
+                          :disabled="locked || closeName !== data.workspace.name"
+                        >
+                          {{ l('Close institution', 'إغلاق المؤسسة') }}
+                        </button>
+                        <DialogClose as-child
+                          ><button type="button" class="button secondary" :disabled="locked">
+                            {{ l('Cancel', 'إلغاء') }}
+                          </button></DialogClose
+                        >
+                      </form>
+                    </DialogContent>
+                  </DialogPortal>
+                </DialogRoot>
+              </section>
+            </div>
+            <div class="panel institution-branding-column">
+              <BrandingSettings :workspace-id="id" />
+            </div>
+          </div>
         </section>
         <p v-else class="notice">
           {{

@@ -12,6 +12,7 @@ import { formatDate } from '../../lib/dates'
 import { exerciseName, targetLabel } from '../../lib/prescriptions'
 import type { Prescription } from '../../lib/domain'
 import { programContext } from '../coaching/program-context'
+import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
 import MemberPicker from './MemberPicker.vue'
 import OrganizationNav from './OrganizationNav.vue'
@@ -181,6 +182,17 @@ onUnmounted(() => {
         }}</RouterLink>
       </div>
     </header>
+    <div class="list-controls">
+      <h2 class="list-section-label">{{ l('Results', 'النتائج') }}</h2>
+      <ListPagination
+        :label="l('Plan pages', 'صفحات الخطط')"
+        :offset="appliedOffset"
+        :page-size="24"
+        :total="data?.total || 0"
+        :disabled="loading"
+        @page="navigate"
+      />
+    </div>
     <form class="plan-filters" @submit.prevent="navigate()">
       <label
         >{{ l('Search athlete or program', 'ابحث عن رياضي أو برنامج')
@@ -361,30 +373,6 @@ onUnmounted(() => {
             </button>
           </article>
         </div>
-        <nav
-          v-if="data.total > 24 || appliedOffset"
-          class="plan-pagination"
-          :aria-label="l('Plan pages', 'صفحات الخطط')"
-        >
-          <button
-            class="button secondary"
-            :disabled="loading || appliedOffset === 0"
-            @click="navigate(Math.max(0, appliedOffset - 24))"
-          >
-            {{ l('Previous', 'السابق') }}</button
-          ><span
-            >{{ Math.min(appliedOffset + 1, data.total) }}–{{
-              Math.min(appliedOffset + 24, data.total)
-            }}
-            / {{ data.total }}</span
-          ><button
-            class="button secondary"
-            :disabled="loading || data.next === null"
-            @click="navigate(data.next!)"
-          >
-            {{ l('Next', 'التالي') }}
-          </button>
-        </nav>
       </template></PageState
     >
   </div>
@@ -443,14 +431,7 @@ onUnmounted(() => {
   margin-top: auto;
   align-self: start;
 }
-.plan-pagination {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-block: 24px;
-}
+
 .assigned-plan-detail {
   margin-block: 24px;
   min-width: 0;

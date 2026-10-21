@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { request } from '../../lib/backend'
 import { language as l, dateLabel, errorMessage } from '../../lib/i18n'
 import OrganizationNav from './OrganizationNav.vue'
+import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
 import type { CalendarEvent } from './service-types'
 const route = useRoute(),
@@ -110,6 +111,17 @@ onUnmounted(() => {
         }}</RouterLink>
       </div>
     </header>
+    <div class="list-controls">
+      <h2 class="list-section-label">{{ l('Events', 'المواعيد') }}</h2>
+      <ListPagination
+        :label="l('Event pages', 'صفحات المواعيد')"
+        :offset="offset"
+        :page-size="10"
+        :total="data?.total || 0"
+        :disabled="loading"
+        @page="navigate"
+      />
+    </div>
     <form class="event-filters" @submit.prevent="navigate()">
       <label
         >{{ l('Search events', 'البحث في المواعيد') }}<input v-model="search" type="search"
@@ -184,28 +196,6 @@ onUnmounted(() => {
             <span class="tag">{{ stateLabel(event.state) }}</span>
           </li>
         </ol>
-        <nav
-          v-if="data.total > 24 || offset"
-          class="event-pagination"
-          :aria-label="l('Event pages', 'صفحات المواعيد')"
-        >
-          <button
-            class="button secondary"
-            :disabled="loading || !offset"
-            @click="navigate(Math.max(0, offset - 24))"
-          >
-            {{ l('Previous', 'السابق') }}</button
-          ><span
-            >{{ Math.min(offset + 1, data.total) }}–{{ Math.min(offset + 24, data.total) }} /
-            {{ data.total }}</span
-          ><button
-            class="button secondary"
-            :disabled="loading || data.next === null"
-            @click="navigate(data.next!)"
-          >
-            {{ l('Next', 'التالي') }}
-          </button>
-        </nav>
       </template>
     </PageState>
     <p class="small-print">
@@ -261,14 +251,7 @@ onUnmounted(() => {
 .event-list .tag {
   flex-shrink: 0;
 }
-.event-pagination {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
-  margin-block: 24px;
-}
+
 @media (max-width: 700px) {
   .event-filters {
     grid-template-columns: minmax(0, 1fr);

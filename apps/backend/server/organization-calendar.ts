@@ -97,7 +97,7 @@ export async function scheduledEvents(
       tx.organization_events.findMany({
         where,
         skip: offset,
-        take: 24,
+        take: 10,
         orderBy: [{ starts_at: "desc" }, { id: "asc" }],
         select: {
           id: true,
@@ -123,7 +123,7 @@ export async function scheduledEvents(
         athlete_count: _count.organization_event_people,
       })),
       total,
-      next: offset + 24 < total ? offset + 24 : null,
+      next: offset + 10 < total ? offset + 10 : null,
     };
   });
 }

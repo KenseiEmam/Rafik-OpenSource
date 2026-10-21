@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { PhBarbell } from '@phosphor-icons/vue'
 import { useRoute, useRouter } from 'vue-router'
 import { user, profile } from '../../app/auth'
 import { request } from '../../lib/backend'

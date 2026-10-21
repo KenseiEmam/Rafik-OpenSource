@@ -104,6 +104,8 @@ GitHub runs focused onboarding and institution checks; see [CI and dependency ma
 
 ## Documentation and contribution
 
+Web interface standardization is approved and underway. See the [design system](docs/DESIGN_SYSTEM.md) and [audit and implementation plan](docs/known-issues/ui-ux-audit.md).
+
 - [Documentation index](docs/README.md)
 - [Coach field OpenAPI contract](apps/backend/openapi.json), served per instance at `/v1/openapi.json` for Swagger UI imports.
 - [Requirements, stages, and gates](docs/requirements/README.md)

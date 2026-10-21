@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Added the approved web design system and categorized UI audit. Introduced shared spacing/type/motion tokens, section headers, localized password visibility controls and responsive sports management. Refined picker accessibility, heading hierarchy, permission-denial feedback and institution privacy copy. Android and remaining page migrations are follow-up work.
+
+- Refined member management into aligned identity, coaching, sports and recovery cards with accessible role buttons and sport-aware coach choices. Institution settings now use the available width, with branding alongside general settings; closure requires a name-confirmation dialog.
+
+- Standardized main-directory pagination with shared, accessible previous/next controls, page/range feedback and mobile/RTL layouts. People, nutrition, sessions, events and groups/templates show 10 rows; program/plan/exercise grids retain their existing sizes. People page/filter state survives reload and returning from a profile.
+
+- Reworked People into athlete-first role tabs with membership/sport filters and labelled SVG actions. Coaches retain only their scoped athlete directory; administrators can open profiles and message active members of every role.
+- Replaced profile jump links with real tab panels. Added administrator-visible staff profiles, current roster counts and 30-day coach activity counts; moved membership, display-name, password-link, sport and coaching management from the directory into the profile.
+- Invitations can carry optional athlete sports or coach sports/specialties; administrator invitations cannot carry sports. Forward migration `202610210100_invitation_sports` preserves existing invitations and applies new labels atomically on acceptance.
+
 - Release 1 review fixes:
   - Overlap warnings show other plans' title, goal and dates only, as a documented supporting-coach exception.
   - Coach-recorded timed and distance sets require actual seconds or metres, using the athlete logger's shared measurement rules.

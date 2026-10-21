@@ -16,6 +16,7 @@ export async function peoplePage(
   view: Role,
   q: URLSearchParams,
 ) {
+  const take = q.get("limit") === "10" ? 10 : 25;
   const offset = pageOffset(q.get("offset")),
     search = (q.get("search") || "").slice(0, 100),
     kind = q.get("role"),
@@ -91,7 +92,7 @@ export async function peoplePage(
       select,
       orderBy: [{ name: "asc" }, { id: "asc" }],
       skip: offset,
-      take: 25,
+      take,
     }),
     tx.workspace_members.count({ where: filter }),
     selected.length
@@ -137,7 +138,7 @@ export async function peoplePage(
     selected: withSports(chosen),
     names,
     total,
-    next: offset + 25 < total ? offset + 25 : null,
+    next: offset + take < total ? offset + take : null,
   };
 }
 export async function organizationPeople(
@@ -234,6 +235,110 @@ export async function independentRecipients(actor: Actor, q: URLSearchParams) {
       items: rows.slice(0, 25),
       selected: chosen,
       next: rows.length > 25 ? offset + 25 : null,
+    };
+  });
+}
+
+/** Member identity uses the same roster scope; staff analytics are administrator-only. */
+export async function organizationMemberProfile(
+  actor: Actor,
+  id: string,
+  memberId: string,
+  q: URLSearchParams,
+) {
+  const view = role(q.get("view"));
+  uuid(memberId);
+  return scoped(actor, id, [view], async (tx, self) => {
+    const page = await peoplePage(
+      tx,
+      id,
+      self,
+      view,
+      new URLSearchParams({ selected: memberId, state: "all", self: "true" }),
+    );
+    const member = page.selected[0];
+    if (!member) throw new ApiError(403, "forbidden");
+    const details = await tx.workspace_members.findFirstOrThrow({
+      where: { workspace_id: id, id: member.id },
+      select: {
+        joined_at: true,
+        ...(view === "admin" ? { users: { select: { email: true } } } : {}),
+      },
+    });
+    let analytics = null;
+    if (view === "admin" && member.roles.includes("trainer")) {
+      const from = new Date(Date.now() - 30 * 86400000),
+        to = new Date();
+      const [
+        primary,
+        supporting,
+        completedEvents,
+        upcomingEvents,
+        recordedWorkouts,
+      ] = await Promise.all([
+        tx.workspace_members.count({
+          where: {
+            workspace_id: id,
+            active: true,
+            roles: { has: "trainee" },
+            trainer_id: member.id,
+          },
+        }),
+        tx.organization_coaching_links.count({
+          where: {
+            workspace_id: id,
+            coach_member_id: member.id,
+            kind: "supporting",
+            ended_at: null,
+          },
+        }),
+        tx.organization_event_people.count({
+          where: {
+            workspace_id: id,
+            member_id: member.id,
+            duty: "staff",
+            organization_events: {
+              state: "completed",
+              ends_at: { gte: from, lte: to },
+            },
+          },
+        }),
+        tx.organization_event_people.count({
+          where: {
+            workspace_id: id,
+            member_id: member.id,
+            duty: "staff",
+            organization_events: { state: "scheduled", starts_at: { gte: to } },
+          },
+        }),
+        tx.organization_sessions.count({
+          where: {
+            workspace_id: id,
+            recorded_by: member.id,
+            recorded_mode: "delegated",
+            completed_at: { gte: from, lte: to },
+          },
+        }),
+      ]);
+      analytics = {
+        from: from.toISOString(),
+        to: to.toISOString(),
+        primary_athletes: primary,
+        supporting_links: supporting,
+        completed_events: completedEvents,
+        upcoming_events: upcomingEvents,
+        recorded_workouts: recordedWorkouts,
+      };
+    }
+    return {
+      member: {
+        ...member,
+        joined_at: details.joined_at,
+        ...(view === "admin" ? { email: details.users?.email } : {}),
+      },
+      names: page.names,
+      self: self.id,
+      analytics,
     };
   });
 }

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import SectionHeader from '../../components/SectionHeader.vue'
+import { computed, ref, watch } from 'vue'
 import { request } from '../../lib/backend'
 import { language as l } from '../../lib/i18n'
 import { useCommand } from '../teams/commands'
@@ -15,6 +16,9 @@ const props = defineProps<{
 const emit = defineEmits<{ saved: [] }>()
 const coach = ref(''),
   sport = ref('')
+watch(sport, () => {
+  coach.value = ''
+})
 const supporting = computed(() =>
   (props.member.coaches || []).filter((c) => c.kind === 'supporting'),
 )
@@ -59,15 +63,16 @@ const remove = (link: { id: string; revision: number }) =>
 </script>
 <template>
   <section class="form-stack coaching-team" aria-labelledby="supporting-coaches-heading">
-    <h3 id="supporting-coaches-heading">{{ l('Supporting coaches', 'المدربون المساندون') }}</h3>
-    <p class="small-print">
-      {{
+    <SectionHeader
+      id="supporting-coaches-heading"
+      :title="l('Supporting coaches', 'المدربون المساندون')"
+      :description="
         l(
-          'Supporting coaches see this athlete’s training plans, sessions, attendance and assessments, and can include them in their own events, groups and messages. Nutrition, participation status, plan changes and follow-up stay with the primary coach.',
-          'يطّلع المدربون المساندون على خطط تدريب هذا الرياضي وحصصه وحضوره وتقييماته، ويمكنهم إشراكه في مواعيدهم ومجموعاتهم ورسائلهم. تبقى التغذية وحالة المشاركة وتغيير الخطط والمتابعة لدى المدرب الأساسي.',
+          'Choose a sport or specialty, then a coach who covers it. Supporting coaches manage plans within their scope and can see cross-plan scheduling conflicts. Nutrition and participation status remain with the primary coach.',
+          'اختر الرياضة أو التخصص، ثم مدرباً يغطيه. يدير المدربون المساندون الخطط ضمن نطاقهم ويطّلعون على تعارضات جداول الخطط. تبقى التغذية وحالة المشاركة لدى المدرب الأساسي.',
         )
-      }}
-    </p>
+      "
+    />
     <CommandStatus :command="command" />
     <p v-if="!supporting.length" class="small-print">{{ l('None yet.', 'لا يوجد بعد.') }}</p>
     <ul v-else class="coaching-links">
@@ -87,7 +92,16 @@ const remove = (link: { id: string; revision: number }) =>
     </ul>
     <form class="form-stack" @submit.prevent="add">
       <fieldset class="command-fields" :disabled="locked">
+        <label
+          >{{ l('Sport or specialty they cover', 'الرياضة أو التخصص الذي يغطيه')
+          }}<select v-model="sport" required>
+            <option value="" disabled>{{ l('Choose…', 'اختر…') }}</option>
+            <option v-for="s in choices" :key="s.id" :value="s.id">{{ s.name }}</option>
+          </select></label
+        >
         <MemberPicker
+          v-if="sport"
+          :sport="sport"
           :workspace="workspaceId"
           view="admin"
           role="trainer"
@@ -100,15 +114,14 @@ const remove = (link: { id: string; revision: number }) =>
             ...supporting.map((c) => c.coach),
           ]"
           @update:model-value="coach = $event[0] || ''"
-        />
-        <label
-          >{{ l('Sport or specialty they cover', 'الرياضة أو التخصص الذي يغطيه')
-          }}<select v-model="sport" required>
-            <option value="" disabled>{{ l('Choose…', 'اختر…') }}</option>
-            <option v-for="s in choices" :key="s.id" :value="s.id">
-              {{ s.name }}{{ s.kind === 'specialty' ? ' · ' + l('Specialty', 'تخصص') : '' }}
-            </option>
-          </select></label
+          ><template #default="{ member: person }"
+            ><small style="display: block; color: var(--muted)">{{
+              (person.sports || [])
+                .map((id) => sports.find((s) => s.id === id)?.name)
+                .filter(Boolean)
+                .join(' · ')
+            }}</small></template
+          ></MemberPicker
         >
         <p v-if="!choices.length" class="small-print">
           {{
@@ -126,6 +139,10 @@ const remove = (link: { id: string; revision: number }) =>
   </section>
 </template>
 <style scoped>
+.coaching-team h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
 .coaching-links {
   list-style: none;
   padding: 0;

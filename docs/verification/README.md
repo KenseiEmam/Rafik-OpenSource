@@ -1,5 +1,9 @@
 # Verification record
 
+## People/profile and invitation update — 21 October 2026
+
+Changed the directory, profile tabs and administrator management surfaces; added scoped staff profile activity and optional invitation sport metadata. The disposable browser database applied the new forward migration successfully, the production browser build passed, and shared transport types were regenerated from that migrated database. Backend typecheck passed. Focused profile/invitation checks completed with three passes and one WebKit long-journey timeout; separate WebKit directory pagination passed. The timeout does not establish complete profile acceptance. No preview reset or native build was used. The design audit collected 63 Chromium and 46 WebKit states; all 63 Chromium viewport images and selected WebKit popup images were inspected. Three Chromium captures contained transient loading states and do not establish settled-data acceptance. Final focused control checks passed in Chromium desktop and WebKit phone (2 tests, 4.7 minutes): invitation form, close dialog, timezone and exercise popups, keyboard exercise selection, and password show/hide without changing the value. All ten viewport captures were inspected; these states reported no layout, Axe or Vue runtime warnings. Disposable database cleanup completed. This is focused acceptance, not whole-platform visual approval. See the [web audit receipt](receipts/2026-10-21-web-ui-audit.json).
+
 ## Release 1 review fixes (PR #135) — 20 October 2026
 
 **Changes:** the three review points.
