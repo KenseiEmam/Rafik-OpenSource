@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import ExerciseDemo from '../../components/ExerciseDemo.vue'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -38,18 +39,20 @@ async function start() {
     <RouterLink class="back-link" to="/"
       ><PhArrowLeft :size="18" class="directional" aria-hidden="true" />{{ t('home') }}</RouterLink
     >
-    <div class="page-heading">
-      <span class="tag">{{ t('sample') }}</span>
-      <h1>{{ t('contentTitle') }}</h1>
-      <p>
-        {{
-          language(
-            'A balanced full-body plan. Familiar movements, clear sets, and space to go at your pace.',
-            'خطة متوازنة لكامل الجسم. حركات واضحة ومجموعات محددة وبالوتيرة التي تناسبك.',
-          )
-        }}
-      </p>
-    </div>
+    <PageHeading class="page-heading"
+      ><div>
+        <span class="tag">{{ t('sample') }}</span>
+        <h1>{{ t('contentTitle') }}</h1>
+        <p>
+          {{
+            language(
+              'A balanced full-body plan. Familiar movements, clear sets, and space to go at your pace.',
+              'خطة متوازنة لكامل الجسم. حركات واضحة ومجموعات محددة وبالوتيرة التي تناسبك.',
+            )
+          }}
+        </p>
+      </div></PageHeading
+    >
     <div class="routine-layout">
       <section class="routine-main">
         <div class="segmented" :aria-label="language('Choose a session', 'اختر حصة')">

@@ -1,3 +1,4 @@
+import { pageSize } from "./pagination.ts";
 import { ApiError, asActor, type Actor } from "./db.ts";
 import { scoped, uuid } from "./workspaces.ts";
 import {
@@ -20,6 +21,7 @@ export async function athletePlans(
   const status = query.get("status") || "active";
   if (!["active", "upcoming", "expired", "ended", "all"].includes(status))
     throw new ApiError(400, "invalid_request");
+  const take = pageSize(query, 24);
   const offset = pageOffset(query.get("offset"));
   const member = query.get("member");
   const assignment = query.get("assignment");
@@ -115,7 +117,7 @@ export async function athletePlans(
       tx.organization_assignments.findMany({
         where,
         skip: assignment ? 0 : offset,
-        take: assignment ? 1 : 24,
+        take: assignment ? 1 : take,
         orderBy: [{ created_at: "desc" }, { id: "asc" }],
         include: {
           organization_versions: {
@@ -140,7 +142,7 @@ export async function athletePlans(
       today,
       zone,
       total,
-      next: !assignment && offset + 24 < total ? offset + 24 : null,
+      next: !assignment && offset + take < total ? offset + take : null,
       items: rows.map((row) => {
         const person =
           row.workspace_members_organization_assignments_workspace_id_member_idToworkspace_members;

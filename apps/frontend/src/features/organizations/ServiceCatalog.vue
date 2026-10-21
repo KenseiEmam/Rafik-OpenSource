@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import { useListPageSize } from '../../lib/list-page-size'
+import EmptyState from '../../components/EmptyState.vue'
+import { loadEditorDraft } from '../../lib/editor-draft'
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { user } from '../../app/auth'
 import { request } from '../../lib/backend'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
@@ -14,12 +18,19 @@ import OrganizationNav from './OrganizationNav.vue'
 import type { Organization } from './types'
 import type { Drill, TrainingGroup, AssessmentTemplate } from './service-types'
 const route = useRoute(),
+  router = useRouter(),
+  editor = String(route.params.editor || ''),
+  initialPath = route.path,
+  forEvent = String(route.query.forEvent || ''),
   id = String(route.params.workspace),
   view = String(route.params.view),
   base = `/organization/${id}/${view}`,
-  templates = route.path.endsWith('/assessment-templates'),
+  templates = route.path.includes('/assessment-templates'),
   kind = templates ? 'templates' : 'groups',
   key = `service-catalog:${user.value!.id}:${id}:${view}:${kind}`
+const listPath = base + (templates ? '/assessment-templates' : '/groups'),
+  draftKey = key + ':' + (editor || 'new'),
+  resume = ref('')
 const items = ref<(TrainingGroup & AssessmentTemplate)[]>([]),
   organization = ref<Organization>(),
   loading = ref(true),
@@ -49,6 +60,12 @@ onUnmounted(() => {
   disposed = true
   generation++
 })
+const { recordLimit, appliedLimit, pageSizes, acceptLimit, changeLimit } = useListPageSize(
+  templates ? 24 : 10,
+  () => {
+    void load(0)
+  },
+)
 async function load(page = 0) {
   if (disposed) return
   const current = ++generation
@@ -61,7 +78,7 @@ async function load(page = 0) {
         next: number | null
         total: number
       }>(
-        `/v1/workspaces/${id}/services?view=${view}&kind=${kind}&search=${encodeURIComponent(search.value)}&archived=${archived.value}&limit=10&offset=${page}`,
+        `/v1/workspaces/${id}/services?view=${view}&kind=${kind}&search=${encodeURIComponent(search.value)}&archived=${archived.value}&limit=${recordLimit.value}&offset=${page}`,
       ),
       request<Organization>(`/v1/workspaces/${id}?view=${view}&summary=true`),
     ])
@@ -69,6 +86,7 @@ async function load(page = 0) {
     items.value = result.items
     offset.value = page
     total.value = result.total
+    acceptLimit()
     organization.value = people
   } catch (e) {
     error.value = errorMessage(e)
@@ -77,18 +95,20 @@ async function load(page = 0) {
     loading.value = false
   }
 }
+const returnToList = ref(false)
 const command = useCommand<'save'>(
   key,
   async () => {
-    if (templates && route.query.forEvent && typeof BroadcastChannel !== 'undefined') {
+    if (templates && forEvent && typeof BroadcastChannel !== 'undefined') {
       const channel = new BroadcastChannel(`rafik-templates:${user.value!.id}:${id}`)
-      channel.postMessage({ event: String(route.query.forEvent), template: draft.value.id })
+      channel.postMessage({ event: forEvent, template: draft.value.id })
       channel.close()
     }
     editing.value = false
-    await removeDraft(key)
+    await removeDraft(draftKey)
     draft.value = fresh()
-    await load()
+    if (!disposed && route.path === initialPath && editor) returnToList.value = true
+    else if (!disposed) await load()
   },
   (_, args) =>
     request(`/v1/workspaces/${id}/services`, { method: 'POST', body: JSON.stringify(args) }),
@@ -99,11 +119,31 @@ const command = useCommand<'save'>(
         : l('Training group saved.', 'تم حفظ المجموعة التدريبية.'),
   },
 )
+watch(
+  () => command.state.busy,
+  (busy) => {
+    if (
+      !busy &&
+      !command.state.pending &&
+      returnToList.value &&
+      !disposed &&
+      route.path === initialPath
+    )
+      void router.replace(listPath)
+  },
+)
 const locked = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
 function addDrill() {
   draft.value.definition.push({ key: crypto.randomUUID(), name: '', kind: 'number', unit: '' })
 }
 function edit(item?: TrainingGroup & AssessmentTemplate) {
+  if (!editor) {
+    void router.push({
+      path: listPath + '/' + (item?.id || 'new'),
+      query: { ...(forEvent ? { forEvent } : {}), ...(item?.archived ? { archived: '1' } : {}) },
+    })
+    return
+  }
   draft.value = item
     ? {
         id: item.id,
@@ -120,8 +160,9 @@ function edit(item?: TrainingGroup & AssessmentTemplate) {
 }
 async function close() {
   editing.value = false
-  await removeDraft(key)
+  await removeDraft(draftKey)
   draft.value = fresh()
+  if (!disposed && editor && route.path === initialPath) await router.push(listPath)
 }
 function save() {
   return command.run('save', {
@@ -138,7 +179,7 @@ watch(
     if (!draftReady.value || !editing.value) return
     try {
       saved.value = false
-      await storeDraft(key, draft.value)
+      await storeDraft(draftKey, draft.value)
       saved.value = true
       draftError.value = ''
     } catch (e) {
@@ -147,28 +188,59 @@ watch(
   },
   { deep: true },
 )
-onMounted(async () => {
+async function initialize() {
   await load()
-  const stored = await getDraft<ReturnType<typeof fresh>>(key).catch(() => undefined)
-  if (stored) {
+  if (disposed) return
+  const stored = await loadEditorDraft<ReturnType<typeof fresh>>(key, editor).catch(() => undefined)
+  if (disposed) return
+  if (!editor) {
+    resume.value = stored ? (stored.revision ? stored.id : 'new') : ''
+    if (route.query.create === '1')
+      await router.replace({ path: listPath + '/new', query: forEvent ? { forEvent } : {} })
+  } else if (stored && (editor === 'new' ? !stored.revision : stored.id === editor)) {
     draft.value = { ...fresh(), ...stored, coaches: stored.coaches || [] }
     editing.value = true
+  } else if (editor === 'new') edit()
+  else {
+    try {
+      const result = await request<{ items: (TrainingGroup & AssessmentTemplate)[] }>(
+        `/v1/workspaces/${id}/services?view=${view}&kind=${kind}&id=${encodeURIComponent(editor)}&archived=${route.query.archived === '1'}`,
+      )
+      if (disposed) return
+      if (!result.items[0]) throw Error(l('This item is unavailable.', 'هذا العنصر غير متاح.'))
+      edit(result.items[0])
+    } catch (e) {
+      if (!disposed) error.value = errorMessage(e)
+    }
   }
-  if (!stored && route.query.create === '1') edit()
   draftReady.value = true
-})
+}
+onMounted(initialize)
 </script>
 <template>
   <OrganizationNav />
   <div class="container page institution-service-page">
-    <header class="work-heading">
+    <RouterLink v-if="editor" class="back-link" :to="listPath">{{
+      templates
+        ? l('Back to templates', 'العودة إلى القوالب')
+        : l('Back to groups', 'العودة إلى المجموعات')
+    }}</RouterLink>
+    <PageHeading class="work-heading">
       <div>
         <p class="overline">{{ l('Institution library', 'مكتبة المؤسسة') }}</p>
         <h1>
           {{
-            templates
-              ? l('Assessment templates', 'قوالب التقييم')
-              : l('Training groups', 'مجموعات التدريب')
+            editor
+              ? templates
+                ? editor === 'new'
+                  ? l('Create assessment template', 'إنشاء قالب تقييم')
+                  : l('Edit assessment template', 'تعديل قالب تقييم')
+                : editor === 'new'
+                  ? l('Create training group', 'إنشاء مجموعة تدريبية')
+                  : l('Edit training group', 'تعديل مجموعة تدريبية')
+              : templates
+                ? l('Assessment templates', 'قوالب التقييم')
+                : l('Training groups', 'مجموعات التدريب')
           }}
         </h1>
         <p>
@@ -185,11 +257,12 @@ onMounted(async () => {
           }}
         </p>
       </div>
-      <button class="button" @click="edit()" :disabled="locked || !organization">
+      <button v-if="!editor" class="button" @click="edit()" :disabled="locked || !organization">
         {{ templates ? l('New template', 'قالب جديد') : l('New group', 'مجموعة جديدة') }}
       </button>
-    </header>
+    </PageHeading>
     <CommandStatus :command="command" />
+    <PageState v-if="editor && !editing" :loading="loading" :error="error" @retry="initialize" />
     <p v-if="draftError" role="alert" class="notice error">{{ draftError }}</p>
     <form v-if="editing && organization" class="panel service-editor" @submit.prevent="save">
       <fieldset class="form-fields" :disabled="locked">
@@ -200,7 +273,7 @@ onMounted(async () => {
             }}
           </h2>
           <button type="button" class="text-link" @click="close">
-            {{ l('Close editor', 'إغلاق المحرر') }}
+            {{ l('Discard changes', 'تجاهل التغييرات') }}
           </button>
         </div>
         <label
@@ -313,71 +386,102 @@ onMounted(async () => {
         </button>
       </fieldset>
     </form>
-    <div class="list-controls">
-      <h2 class="list-section-label">
-        {{ templates ? l('Templates', 'القوالب') : l('Groups', 'المجموعات') }}
-      </h2>
-      <ListPagination
-        :offset="offset"
-        :page-size="10"
-        :total="total"
-        :disabled="loading"
-        @page="load"
-      />
-    </div>
-    <form class="organization-toolbar" @submit.prevent="load()">
-      <label
-        >{{ l('Search library', 'البحث في المكتبة')
-        }}<input v-model="search" type="search" /></label
-      ><label class="check-label"
-        ><input v-model="archived" type="checkbox" />{{ l('Archived', 'مؤرشف') }}</label
-      ><button class="button secondary" :disabled="loading">{{ l('Find', 'بحث') }}</button>
-    </form>
-    <PageState :loading="loading" :error="error" @retry="load()"
-      ><p v-if="!items.length" class="notice">
+    <template v-if="!editor">
+      <p v-if="resume" class="notice">
         {{
           l(
-            'Nothing here yet. Create one above or adjust your search.',
-            'لا يوجد شيء هنا بعد. أنشئ عنصراً أو عدّل البحث.',
+            'An unfinished draft is saved on this device.',
+            'توجد مسودة غير مكتملة محفوظة على هذا الجهاز.',
           )
         }}
+        <RouterLink class="text-link" :to="listPath + '/' + resume">{{
+          l('Continue draft', 'متابعة المسودة')
+        }}</RouterLink>
       </p>
-      <article v-for="item in items" :key="item.id" class="service-library-row">
-        <div>
-          <h2>{{ templates ? item.title : item.name }}</h2>
-          <p>
-            {{ templates ? item.definition.length : item.members.length }}
-            {{ templates ? l('drills', 'اختبارات') : l('people', 'أشخاص') }}
-          </p>
-          <p v-if="!templates" class="small-print">
-            {{
-              item.members
-                .slice(0, 4)
-                .map((m) => m.name)
-                .join(' · ')
-            }}
-          </p>
-          <RouterLink
-            v-if="!templates && !item.archived && item.members.some((m) => m.active)"
-            class="text-link"
-            :to="base + '/messages?group=' + encodeURIComponent(item.id)"
-          >
-            {{ l('Open group conversation', 'فتح محادثة المجموعة') }}
-          </RouterLink>
+      <div class="list-toolbar">
+        <form class="catalog-search-form" @submit.prevent="load()">
+          <label
+            >{{
+              templates
+                ? l('Search templates', 'البحث في القوالب')
+                : l('Search groups', 'البحث في المجموعات')
+            }}<input
+              :placeholder="
+                templates
+                  ? l('Search template names…', 'ابحث بأسماء القوالب…')
+                  : l('Search group names…', 'ابحث بأسماء المجموعات…')
+              "
+              v-model="search"
+              type="search" /></label
+          ><label class="check-label"
+            ><input v-model="archived" type="checkbox" />{{ l('Archived', 'مؤرشف') }}</label
+          ><button class="button secondary" :disabled="loading">{{ l('Find', 'بحث') }}</button>
+        </form>
+        <div class="list-toolbar-pagination">
+          <ListPagination
+            :offset="offset"
+            :page-size="appliedLimit"
+            :sizes="pageSizes"
+            @page-size="changeLimit"
+            :total="total"
+            :disabled="loading"
+            @page="load"
+          />
         </div>
-        <button class="button secondary small" @click="edit(item)" :disabled="locked">
-          {{ l('Edit', 'تعديل') }}
-        </button>
-      </article>
-      <RouterLink :to="base + '/calendar/new'" class="text-link"
-        >{{ l('Schedule an event', 'جدولة موعد') }} ↗</RouterLink
-      ></PageState
-    >
+      </div>
+      <PageState :loading="loading" :error="error" @retry="load()"
+        ><EmptyState
+          v-if="!items.length"
+          :title="
+            templates
+              ? l('No assessment templates', 'لا توجد قوالب تقييم')
+              : l('No training groups', 'لا توجد مجموعات تدريبية')
+          "
+          :description="
+            l(
+              'Create your first item or adjust the search and archive filter.',
+              'أنشئ أول عنصر أو عدّل البحث ومرشح الأرشفة.',
+            )
+          "
+        />
+        <div :class="{ 'assessment-template-grid': templates }">
+          <article v-for="item in items" :key="item.id" class="service-library-row">
+            <div>
+              <h2>{{ templates ? item.title : item.name }}</h2>
+              <p>
+                {{ templates ? item.definition.length : item.members.length }}
+                {{ templates ? l('drills', 'اختبارات') : l('people', 'أشخاص') }}
+              </p>
+              <p v-if="!templates" class="small-print">
+                {{
+                  item.members
+                    .slice(0, 4)
+                    .map((m) => m.name)
+                    .join(' · ')
+                }}
+              </p>
+              <RouterLink
+                v-if="!templates && !item.archived && item.members.some((m) => m.active)"
+                class="text-link"
+                :to="base + '/messages?group=' + encodeURIComponent(item.id)"
+              >
+                {{ l('Open group conversation', 'فتح محادثة المجموعة') }}
+              </RouterLink>
+            </div>
+            <button class="button secondary small" @click="edit(item)" :disabled="locked">
+              {{ l('Edit', 'تعديل') }}
+            </button>
+          </article>
+        </div>
+        <RouterLink :to="base + '/calendar/new'" class="text-link"
+          >{{ l('Schedule an event', 'جدولة موعد') }} ↗</RouterLink
+        ></PageState
+      >
+    </template>
   </div>
 </template>
 <style scoped>
 .service-editor {
-  max-width: 780px;
   margin-bottom: 28px;
 }
 .service-editor label {
@@ -424,6 +528,35 @@ onMounted(async () => {
 @media (max-width: 550px) {
   .service-field-row {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.assessment-template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: 16px;
+  margin-block: 20px;
+}
+.assessment-template-grid .service-library-row {
+  align-items: stretch;
+  flex-direction: column;
+  gap: 20px;
+  margin: 0;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+}
+.assessment-template-grid h2 {
+  font-size: var(--text-panel);
+}
+.assessment-template-grid .button {
+  align-self: start;
+  margin-top: auto;
+}
+@media (max-width: 600px) {
+  .assessment-template-grid .service-library-row {
+    padding: 16px;
   }
 }
 </style>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { PhBarbell } from '@phosphor-icons/vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -142,7 +143,7 @@ onMounted(() => {
 <template>
   <OrganizationNav />
   <div class="container page">
-    <header class="work-heading">
+    <PageHeading class="work-heading">
       <div>
         <p class="overline">{{ l('Institution training', 'تدريب المؤسسة') }}</p>
         <h1>
@@ -159,7 +160,7 @@ onMounted(() => {
         :to="context.base + '/plans'"
         >{{ l('Programs', 'البرامج') }}</RouterLink
       >
-    </header>
+    </PageHeading>
     <details v-if="context.view !== 'trainee'" ref="athleteFilter" class="training-filter">
       <summary>
         {{ l('Filter by athlete', 'تصفية حسب الرياضي')

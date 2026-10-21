@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { PhTray } from '@phosphor-icons/vue'
+import AthleteSearch from '../../components/AthleteSearch.vue'
+import { useListPageSize } from '../../lib/list-page-size'
+import PageHeading from '../../components/PageHeading.vue'
 import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type {
@@ -14,7 +18,6 @@ import type { Prescription } from '../../lib/domain'
 import { programContext } from '../coaching/program-context'
 import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
-import MemberPicker from './MemberPicker.vue'
 import OrganizationNav from './OrganizationNav.vue'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
@@ -27,7 +30,6 @@ const data = ref<AthletePlanPage>(),
   appliedOffset = ref(0)
 const search = ref(String(route.query.search || '')),
   status = ref(String(route.query.status || 'active')),
-  member = ref(String(route.query.member || '')),
   detail = ref<AthletePlanSummary>(),
   detailError = ref(''),
   detailBusy = ref(false),
@@ -43,6 +45,12 @@ const labels: Record<AthletePlanStatus, [string, string]> = {
 }
 const label = (value: AthletePlanStatus) => l(...labels[value])
 const prescription = () => detail.value?.version.prescription as Prescription | undefined
+const { recordLimit, appliedLimit, pageSizes, acceptLimit, changeLimit } = useListPageSize(
+  24,
+  () => {
+    void load()
+  },
+)
 async function load() {
   const current = ++generation
   loading.value = true
@@ -52,8 +60,8 @@ async function load() {
     view: context.view,
     status: String(route.query.status || 'active'),
     search: String(route.query.search || ''),
+    limit: String(recordLimit.value),
     offset: String(offset),
-    ...(route.query.member ? { member: String(route.query.member) } : {}),
   })
   try {
     const result = await request<AthletePlanPage>(
@@ -61,6 +69,7 @@ async function load() {
     )
     if (disposed || current !== generation) return
     data.value = result
+    acceptLimit()
     appliedOffset.value = offset
   } catch (e) {
     if (!disposed && current === generation) {
@@ -71,16 +80,12 @@ async function load() {
     if (!disposed && current === generation) loading.value = false
   }
 }
-function chooseMember(ids: string[]) {
-  member.value = ids[0] || ''
-  return navigate()
-}
 function navigate(offset = 0) {
   return router.push({
     query: {
+      limit: route.query.limit,
       ...(search.value.trim() ? { search: search.value.trim() } : {}),
       ...(status.value !== 'active' ? { status: status.value } : {}),
-      ...(member.value ? { member: member.value } : {}),
       ...(offset ? { offset } : {}),
       ...(route.query.assignment ? { assignment: route.query.assignment } : {}),
     },
@@ -116,11 +121,10 @@ function selectAssignment(id?: string) {
   return router.push({ query })
 }
 watch(
-  () => [route.query.status, route.query.search, route.query.member, route.query.offset],
+  () => [route.query.status, route.query.search, route.query.offset],
   () => {
     status.value = String(route.query.status || 'active')
     search.value = String(route.query.search || '')
-    member.value = String(route.query.member || '')
     void load()
   },
 )
@@ -160,7 +164,7 @@ onUnmounted(() => {
 <template>
   <OrganizationNav />
   <div class="container page athlete-plans-page">
-    <header class="work-heading">
+    <PageHeading class="work-heading">
       <div>
         <p class="overline">{{ l('Assigned programs', 'البرامج المعيّنة') }}</p>
         <h1>{{ l('Athlete plans', 'خطط الرياضيين') }}</h1>
@@ -181,46 +185,39 @@ onUnmounted(() => {
           l('Assign a program', 'تعيين برنامج')
         }}</RouterLink>
       </div>
-    </header>
-    <div class="list-controls">
-      <h2 class="list-section-label">{{ l('Results', 'النتائج') }}</h2>
-      <ListPagination
-        :label="l('Plan pages', 'صفحات الخطط')"
-        :offset="appliedOffset"
-        :page-size="24"
-        :total="data?.total || 0"
-        :disabled="loading"
-        @page="navigate"
-      />
+    </PageHeading>
+    <div class="list-toolbar">
+      <form class="plan-filters" @submit.prevent="navigate()">
+        <AthleteSearch v-model="search" />
+        <label
+          >{{ l('Plan status', 'حالة الخطة') }}
+          <select v-model="status" @change="navigate()">
+            <option
+              v-for="value in ['active', 'upcoming', 'expired', 'ended'] as const"
+              :key="value"
+              :value="value"
+            >
+              {{ label(value) }}
+            </option>
+            <option value="all">{{ l('All plans', 'جميع الخطط') }}</option>
+          </select>
+        </label>
+        <button class="button secondary" :disabled="loading">{{ l('Search', 'بحث') }}</button>
+      </form>
+      <div class="list-toolbar-pagination">
+        <ListPagination
+          :label="l('Plan pages', 'صفحات الخطط')"
+          :offset="appliedOffset"
+          :page-size="appliedLimit"
+          :sizes="pageSizes"
+          @page-size="changeLimit"
+          :total="data?.total || 0"
+          :disabled="loading"
+          @page="navigate"
+        />
+      </div>
     </div>
-    <form class="plan-filters" @submit.prevent="navigate()">
-      <label
-        >{{ l('Search athlete or program', 'ابحث عن رياضي أو برنامج')
-        }}<input v-model="search" type="search"
-      /></label>
-      <label
-        >{{ l('Plan status', 'حالة الخطة')
-        }}<select v-model="status" @change="navigate()">
-          <option value="active">{{ label('active') }}</option>
-          <option value="upcoming">{{ label('upcoming') }}</option>
-          <option value="expired">{{ label('expired') }}</option>
-          <option value="ended">{{ label('ended') }}</option>
-          <option value="all">{{ l('All plans', 'جميع الخطط') }}</option>
-        </select></label
-      >
-      <button class="button secondary" :disabled="loading">{{ l('Search', 'بحث') }}</button>
-    </form>
-    <details class="athlete-filter">
-      <summary>{{ l('Filter by athlete (optional)', 'تصفية حسب الرياضي (اختياري)') }}</summary>
-      <MemberPicker
-        :workspace="context.workspace"
-        :view="context.view"
-        single
-        :model-value="member ? [member] : []"
-        :label="l('Athlete', 'الرياضي')"
-        @update:model-value="chooseMember"
-      />
-    </details>
+
     <p v-if="loading && data" role="status" class="small-print">
       {{ l('Updating plans…', 'جارٍ تحديث الخطط…') }}
     </p>
@@ -320,6 +317,7 @@ onUnmounted(() => {
           {{ data.zone }}
         </p>
         <section v-if="!data.items.length" class="empty-state panel">
+          <PhTray :size="28" aria-hidden="true" />
           <h2>{{ l('No plans match this view.', 'لا توجد خطط مطابقة لهذا العرض.') }}</h2>
           <p>
             {{
@@ -399,14 +397,14 @@ onUnmounted(() => {
 .athlete-plan-card {
   display: flex;
   flex-direction: column;
-  padding: 24px;
+  padding: var(--space-6);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: var(--radius-panel);
   background: var(--surface);
   min-width: 0;
 }
 .athlete-plan-card h2 {
-  font-size: 1.2rem;
+  font-size: var(--text-panel);
   margin-block: 12px 4px;
   overflow-wrap: anywhere;
 }

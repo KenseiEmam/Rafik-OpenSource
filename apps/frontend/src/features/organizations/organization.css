@@ -317,28 +317,6 @@
 .people-role-tabs {
   min-width: 0;
 }
-.people-role-tabs .report-tabs {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 12px;
-  margin-bottom: 20px;
-}
-.people-role-tabs .report-tabs button {
-  padding: 10px 18px;
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: var(--muted);
-  font: inherit;
-  font-weight: 650;
-  cursor: pointer;
-}
-.people-role-tabs .report-tabs button[data-state='active'] {
-  background: var(--surface-soft);
-  color: var(--accent);
-}
 .people-directory-panel {
   min-height: 340px;
   outline-offset: 4px;
@@ -363,31 +341,6 @@
   color: var(--accent);
   border-color: var(--accent);
 }
-.directory-empty {
-  display: grid;
-  justify-items: center;
-  gap: 10px;
-  text-align: center;
-  padding: 48px 20px;
-  min-height: 260px;
-  border: 1px dashed var(--line);
-  border-radius: 16px;
-  margin-block: 18px;
-}
-.directory-empty h2 {
-  font-size: 1.15rem;
-  margin: 0;
-}
-.directory-empty p {
-  max-width: 46ch;
-  margin: 0;
-  color: var(--muted);
-}
-.directory-empty > svg {
-  width: 32px;
-  height: 32px;
-  color: var(--muted);
-}
 .invite-sports {
   display: flex;
   flex-direction: column;
@@ -410,9 +363,6 @@
   }
   .organization-person {
     gap: 14px;
-  }
-  .people-role-tabs .report-tabs button {
-    padding: 10px 12px;
   }
 }
 

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { PhTray } from '@phosphor-icons/vue'
+import { useListPageSize } from '../../lib/list-page-size'
+import PageHeading from '../../components/PageHeading.vue'
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { request } from '../../lib/backend'
@@ -6,7 +9,7 @@ import { language as l, dateLabel, errorMessage } from '../../lib/i18n'
 import type { Session } from '../../lib/domain'
 import { programContext } from '../coaching/program-context'
 import OrganizationNav from './OrganizationNav.vue'
-import MemberPicker from './MemberPicker.vue'
+import AthleteSearch from '../../components/AthleteSearch.vue'
 import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
 const route = useRoute(),
@@ -22,9 +25,15 @@ const data = ref<History>(),
   offset = ref(0),
   loading = ref(false),
   error = ref(''),
-  member = ref(String(route.query.member || ''))
+  search = ref(String(route.query.search || ''))
 let generation = 0,
   disposed = false
+const { recordLimit, appliedLimit, pageSizes, acceptLimit, changeLimit } = useListPageSize(
+  10,
+  () => {
+    void load()
+  },
+)
 async function load() {
   const current = ++generation
   loading.value = true
@@ -32,13 +41,15 @@ async function load() {
   const query = new URLSearchParams({
     view: context.view,
     history: 'true',
-    ...(member.value ? { member: member.value } : {}),
+    search: String(route.query.search || ''),
+    limit: String(recordLimit.value),
     offset: String(Math.max(0, Number(route.query.offset) || 0)),
   })
   try {
     const result = await request<History>(`/v1/workspaces/${context.workspace}/delivery?${query}`)
     if (disposed || current !== generation) return
     data.value = result
+    acceptLimit()
     offset.value = Math.max(0, Number(route.query.offset) || 0)
   } catch (e) {
     if (!disposed && current === generation) {
@@ -49,14 +60,19 @@ async function load() {
     if (!disposed && current === generation) loading.value = false
   }
 }
-function choose(ids: string[]) {
-  member.value = ids[0] || ''
-  return router.push({ query: member.value ? { member: member.value } : {} })
+function navigate(page = 0) {
+  return router.push({
+    query: {
+      limit: route.query.limit,
+      ...(search.value.trim() ? { search: search.value.trim() } : {}),
+      ...(page ? { offset: page } : {}),
+    },
+  })
 }
 watch(
-  () => [route.query.member, route.query.offset],
+  () => [route.query.search, route.query.offset],
   () => {
-    member.value = String(route.query.member || '')
+    search.value = String(route.query.search || '')
     void load()
   },
 )
@@ -71,7 +87,7 @@ const name = (id: string) =>
 <template>
   <OrganizationNav />
   <div class="container page session-history-page">
-    <header class="work-heading">
+    <PageHeading class="work-heading">
       <div>
         <p class="overline">{{ l('Recorded workouts', 'التمارين المسجّلة') }}</p>
         <h1>{{ l('Session history', 'سجل الحصص') }}</h1>
@@ -89,7 +105,7 @@ const name = (id: string) =>
           v-if="context.view !== 'trainee'"
           class="button secondary"
           :to="context.base + '/events'"
-          >{{ l('Events & assessments', 'المواعيد والتقييمات') }}</RouterLink
+          >{{ l('Schedule', 'الجدول') }}</RouterLink
         >
         <RouterLink class="button secondary" :to="context.base + '/training'">{{
           context.view === 'trainee'
@@ -97,29 +113,30 @@ const name = (id: string) =>
             : l('Athlete plans', 'خطط الرياضيين')
         }}</RouterLink>
       </div>
-    </header>
-    <div class="list-controls">
-      <h2 class="list-section-label">{{ l('Recorded sessions', 'الحصص المسجلة') }}</h2>
-      <ListPagination
-        :label="l('Session pages', 'صفحات الحصص')"
-        :offset="offset"
-        :page-size="10"
-        :total="data?.total || 0"
-        :disabled="loading"
-        @page="(offset) => router.push({ query: { ...route.query, offset: offset || undefined } })"
-      />
+    </PageHeading>
+    <div class="list-toolbar">
+      <form
+        v-if="context.view !== 'trainee'"
+        class="history-search-form"
+        @submit.prevent="navigate()"
+      >
+        <AthleteSearch v-model="search" />
+        <button class="button secondary" :disabled="loading">{{ l('Search', 'بحث') }}</button>
+      </form>
+      <h2 v-else class="list-section-label">{{ l('Recorded sessions', 'الحصص المسجلة') }}</h2>
+      <div class="list-toolbar-pagination">
+        <ListPagination
+          :label="l('Session pages', 'صفحات الحصص')"
+          :offset="offset"
+          :page-size="appliedLimit"
+          :sizes="pageSizes"
+          @page-size="changeLimit"
+          :total="data?.total || 0"
+          :disabled="loading"
+          @page="navigate"
+        />
+      </div>
     </div>
-    <details v-if="context.view !== 'trainee'" class="history-filter">
-      <summary>{{ l('Filter by athlete (optional)', 'تصفية حسب الرياضي (اختياري)') }}</summary>
-      <MemberPicker
-        :workspace="context.workspace"
-        :view="context.view"
-        single
-        :model-value="member ? [member] : []"
-        :label="l('Athlete', 'الرياضي')"
-        @update:model-value="choose"
-      />
-    </details>
     <p v-if="loading && data" role="status" class="small-print">
       {{ l('Updating sessions…', 'جارٍ تحديث الحصص…') }}
     </p>
@@ -130,12 +147,23 @@ const name = (id: string) =>
     <PageState :loading="loading && !data" :error="!data ? error : ''" @retry="load()"
       ><template v-if="data">
         <section v-if="!data.sessions.length" class="empty-state panel">
-          <h2>{{ l('No recorded sessions yet.', 'لا توجد حصص مسجّلة بعد.') }}</h2>
+          <PhTray :size="28" aria-hidden="true" />
+          <h2>
+            {{
+              search
+                ? l('No sessions match this search.', 'لا توجد حصص مطابقة لهذا البحث.')
+                : l('No recorded sessions yet.', 'لا توجد حصص مسجّلة بعد.')
+            }}
+          </h2>
           <p>
             {{
               l(
-                'Workouts appear here once an athlete starts an assigned session. Scheduled events stay in Calendar.',
-                'تظهر التمارين هنا عندما يبدأ الرياضي حصة معيّنة. تبقى المواعيد المجدولة في التقويم.',
+                search
+                  ? 'Try another athlete name or clear the search.'
+                  : 'Workouts appear here once an athlete starts an assigned session. Scheduled events stay in Schedule.',
+                search
+                  ? 'جرّب اسم رياضي آخر أو امسح البحث.'
+                  : 'تظهر التمارين هنا عندما يبدأ الرياضي حصة معيّنة. تبقى المواعيد المجدولة في الجدول.',
               )
             }}
           </p>
@@ -192,12 +220,12 @@ const name = (id: string) =>
   flex-wrap: wrap;
   gap: 18px;
   align-items: center;
-  padding: 22px;
+  padding: var(--space-6);
   color: var(--ink);
   text-decoration: none;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: var(--radius-panel);
 }
 .session-row:hover {
   border-color: var(--accent);
@@ -209,7 +237,7 @@ const name = (id: string) =>
 }
 .session-row h2 {
   margin: 6px 0;
-  font-size: 1.1rem;
+  font-size: var(--text-panel);
 }
 .session-row p {
   margin: 0;

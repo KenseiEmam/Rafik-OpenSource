@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import TimezonePicker from '../../components/TimezonePicker.vue'
 import { computed, onMounted, ref, watch, nextTick, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -269,7 +270,7 @@ onMounted(async () => {
     <RouterLink class="back-link" :to="base + '/calendar'">{{
       l('Back to calendar', 'العودة للتقويم')
     }}</RouterLink>
-    <header class="work-heading">
+    <PageHeading class="work-heading">
       <div>
         <h1>{{ l('Schedule an event', 'جدولة موعد') }}</h1>
         <p>
@@ -278,7 +279,7 @@ onMounted(async () => {
           }}
         </p>
       </div>
-    </header>
+    </PageHeading>
     <ol class="composer-steps" :aria-label="l('Scheduling steps', 'خطوات الجدولة')">
       <li
         v-for="(label, index) in [
@@ -324,6 +325,7 @@ onMounted(async () => {
                 <label
                   >{{ l('Find an assessment template', 'البحث عن قالب تقييم')
                   }}<input
+                    :placeholder="l('Type to search…', 'اكتب للبحث…')"
                     v-model="templateSearch"
                     type="search"
                     @keydown.enter.prevent="findCatalog('templates')" /></label
@@ -353,7 +355,7 @@ onMounted(async () => {
                   {{ t.title }}
                 </option></select
               ><RouterLink
-                :to="base + '/assessment-templates?create=1&forEvent=' + draft.id"
+                :to="base + '/assessment-templates/new?forEvent=' + draft.id"
                 target="_blank"
                 rel="noopener"
                 class="text-link"
@@ -427,7 +429,7 @@ onMounted(async () => {
               :max="8"
               v-model="draft.staff"
               :exclude-ids="draft.participants"
-              :label="l('Trainers / assessors', 'المدربون / المقيمون')"
+              :label="l('Coaches / assessors', 'المدربون / المقيمون')"
               @options="trainerOptions = $event"
             />
             <p v-else>
@@ -442,6 +444,7 @@ onMounted(async () => {
                 <label
                   >{{ l('Find a group (optional)', 'البحث عن مجموعة (اختياري)')
                   }}<input
+                    :placeholder="l('Type to search…', 'اكتب للبحث…')"
                     v-model="groupSearch"
                     type="search"
                     @keydown.enter.prevent="findCatalog('groups')" /></label
@@ -497,7 +500,7 @@ onMounted(async () => {
             </p>
             <h3>{{ l('People', 'الأشخاص') }}</h3>
             <p>
-              {{ l('Trainers / assessors', 'المدربون / المقيمون') }}:
+              {{ l('Coaches / assessors', 'المدربون / المقيمون') }}:
               {{
                 view === 'trainer'
                   ? profile?.display_name
@@ -578,7 +581,6 @@ onMounted(async () => {
 </template>
 <style scoped>
 .event-composer {
-  max-width: 880px;
 }
 .composer-steps {
   list-style: none;

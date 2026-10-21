@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { contexts, refreshContexts, user } from '../../app/auth'
@@ -63,7 +64,7 @@ function create() {
 </script>
 <template>
   <div class="container page narrow">
-    <header class="work-heading">
+    <PageHeading class="work-heading">
       <div>
         <p class="overline">{{ l('Your work, in its place', 'عملك في مكانه') }}</p>
         <h1>{{ l('Choose where to work', 'اختر مساحة العمل') }}</h1>
@@ -76,7 +77,7 @@ function create() {
           }}
         </p>
       </div>
-    </header>
+    </PageHeading>
     <p v-if="localPreview" class="notice">
       {{
         l(

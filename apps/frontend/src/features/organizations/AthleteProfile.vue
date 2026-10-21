@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { PhTray } from '@phosphor-icons/vue'
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import type { AthletePlanPage } from '@rafik/shared/contracts'
@@ -219,6 +221,7 @@ onMounted(load)
       {{ l('Loading profile…', 'جارٍ تحميل الملف…') }}
     </p>
     <section v-else-if="overview.denied" class="empty-state panel">
+      <PhTray :size="28" aria-hidden="true" />
       <h1>{{ l('This profile is not available to you.', 'هذا الملف غير متاح لك.') }}</h1>
       <p>
         {{
@@ -236,7 +239,7 @@ onMounted(load)
       </button>
     </p>
     <template v-else-if="member">
-      <header class="work-heading">
+      <PageHeading class="work-heading">
         <div>
           <p class="overline">{{ title }}</p>
           <h1 dir="auto">{{ member.name }}</h1>
@@ -261,13 +264,13 @@ onMounted(load)
           "
           >{{ l('Message', 'مراسلة') }}</RouterLink
         >
-      </header>
+      </PageHeading>
       <TabsRoot
         v-model="activeTab"
         :dir="locale === 'ar' ? 'rtl' : 'ltr'"
         class="member-profile-tabs"
       >
-        <TabsList class="profile-tabs" :aria-label="l('Profile sections', 'أقسام الملف')">
+        <TabsList class="profile-tabs ui-tabs" :aria-label="l('Profile sections', 'أقسام الملف')">
           <TabsTrigger value="overview">{{ l('Overview', 'نظرة عامة') }}</TabsTrigger>
           <template v-if="athlete && view !== 'trainee'">
             <TabsTrigger value="plans">{{ l('Plans', 'الخطط') }}</TabsTrigger
@@ -656,12 +659,6 @@ onMounted(load)
   margin-bottom: 20px;
   min-height: 300px;
 }
-.profile-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 18px;
-  margin: 0 0 20px;
-}
 .profile-facts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -703,24 +700,6 @@ onMounted(load)
 .profile-tab-panel {
   outline-offset: 4px;
 }
-.profile-tabs {
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 12px;
-}
-.profile-tabs button {
-  border: 0;
-  border-radius: 10px;
-  padding: 10px 16px;
-  background: transparent;
-  color: var(--muted);
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-}
-.profile-tabs button[data-state='active'] {
-  background: var(--surface-soft);
-  color: var(--accent);
-}
 .profile-empty {
   display: flex;
   align-items: center;
@@ -740,12 +719,6 @@ onMounted(load)
   padding-block: 12px;
 }
 @media (max-width: 540px) {
-  .profile-tabs {
-    gap: 6px;
-  }
-  .profile-tabs button {
-    padding: 9px 11px;
-  }
   .profile-facts {
     grid-template-columns: 1fr;
   }

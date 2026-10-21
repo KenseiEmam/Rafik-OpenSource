@@ -23,6 +23,7 @@ This page is the index for maintained Rafik documentation. The root [README](../
 
 - [Development setup and workflows](development/README.md): prerequisites, local setup, common change workflows and troubleshooting.
 - [Android coach field development](development/android.md): native build setup, Windows startup helper and path/concurrency troubleshooting, attendance/scores, history, recovery sharing, English/Arabic and disposable API/queue acceptance.
+- [Claude design-audit handoff](development/design-audit-handoff.md): copyable prompt, approved decisions, temporary PR scope and outstanding rendered review.
 - [Maintainer guide](development/maintainer-guide.md): repository map, profile/invitation workflows and shared pagination conventions.
 - [Current delivery ledger](development/ledger.md): current stage and recent implementation outcomes; not a phase-history archive.
 - [Testing strategy](testing/README.md): test layers, focused commands, fixtures and evidence boundaries.

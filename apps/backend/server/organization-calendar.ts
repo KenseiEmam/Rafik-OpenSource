@@ -1,3 +1,4 @@
+import { pageSize } from "./pagination.ts";
 import { ApiError, type Actor } from "./db.ts";
 import {
   scoped,
@@ -75,6 +76,7 @@ export async function scheduledEvents(
     !["all", "scheduled", "completed", "cancelled"].includes(state)
   )
     throw new ApiError(400, "invalid_request");
+  const take = pageSize(q, 10);
   const offset = pageOffset(q.get("offset"));
   const search = (q.get("search") || "").trim().slice(0, 100);
   return scoped(actor, id, [view], async (tx, self) => {
@@ -97,7 +99,7 @@ export async function scheduledEvents(
       tx.organization_events.findMany({
         where,
         skip: offset,
-        take: 10,
+        take,
         orderBy: [{ starts_at: "desc" }, { id: "asc" }],
         select: {
           id: true,
@@ -123,7 +125,7 @@ export async function scheduledEvents(
         athlete_count: _count.organization_event_people,
       })),
       total,
-      next: offset + 10 < total ? offset + 10 : null,
+      next: offset + take < total ? offset + take : null,
     };
   });
 }

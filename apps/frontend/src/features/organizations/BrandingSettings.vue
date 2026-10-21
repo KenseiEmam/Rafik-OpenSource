@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FileDropzone from '../../components/FileDropzone.vue'
 import { onMounted, ref } from 'vue'
 import { language as l } from '../../lib/i18n'
 import { request } from '../../lib/backend'
@@ -124,14 +125,13 @@ async function save() {
           >{{ l('Dark theme background', 'خلفية الوضع الداكن')
           }}<input v-model="backgroundDark" type="color"
         /></label>
-        <label
-          >{{
-            l(
-              'Logo (PNG, JPEG or WebP, up to 512 KB)',
-              'الشعار (PNG أو JPEG أو WebP، حتى 512 كيلوبايت)',
-            )
-          }}<input type="file" accept="image/png,image/jpeg,image/webp" @change="selectLogo"
-        /></label>
+        <FileDropzone
+          :label="l('Institution logo', 'شعار المؤسسة')"
+          :hint="l('PNG, JPEG or WebP · up to 512 KB', 'PNG أو JPEG أو WebP · حتى 512 كيلوبايت')"
+          accept="image/png,image/jpeg,image/webp"
+          :disabled="saving"
+          @change="selectLogo"
+        />
         <div v-if="logoPreview" class="brand-preview">
           <img :src="logoPreview" alt="" /><button
             type="button"

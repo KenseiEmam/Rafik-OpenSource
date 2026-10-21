@@ -1,3 +1,4 @@
+import { pageSize } from "./pagination.ts";
 import { ApiError, type Actor } from "./db.ts";
 import {
   scoped,
@@ -49,6 +50,8 @@ export async function tasks(actor: Actor, id: string, q: URLSearchParams) {
   const state = q.get("state") || "open";
   if (!["open", "completed", "cancelled"].includes(state))
     throw new ApiError(400, "invalid_request");
+  const take = pageSize(q, 24);
+  const taskId = q.get("id") ? uuid(q.get("id")) : null;
   const offset = pageOffset(q.get("offset")),
     search = "%" + (q.get("search") || "").slice(0, 100) + "%",
     today = calendarDate(
@@ -57,15 +60,19 @@ export async function tasks(actor: Actor, id: string, q: URLSearchParams) {
   return scoped(actor, id, [view], async (tx, self) => {
     const rows = await tx.$queryRaw<
       (Task & { trainer_name: string; trainer_active: boolean })[]
-    >`SELECT t.*,m.name trainer_name,m.active trainer_active FROM public.organization_tasks t JOIN public.workspace_members m ON m.id=t.assigned_to WHERE t.workspace_id=${id}::uuid AND (${view === "admin"} OR t.assigned_to=${self.id}::uuid) AND t.state=${state} AND (t.title ILIKE ${search} OR m.name ILIKE ${search}) ORDER BY (t.priority='high') DESC,t.due_date ASC NULLS LAST,t.created_at,t.id LIMIT 25 OFFSET ${offset}`;
+    >`SELECT t.*,m.name trainer_name,m.active trainer_active FROM public.organization_tasks t JOIN public.workspace_members m ON m.id=t.assigned_to WHERE t.workspace_id=${id}::uuid AND (${view === "admin"} OR t.assigned_to=${self.id}::uuid) AND (${taskId !== null} OR t.state=${state}) AND (${taskId === null} OR t.id=${taskId}::uuid) AND (t.title ILIKE ${search} OR m.name ILIKE ${search}) ORDER BY (t.priority='high') DESC,t.due_date ASC NULLS LAST,t.created_at,t.id LIMIT ${take + 1} OFFSET ${offset}`;
     const counts = (
       await tx.$queryRaw<
         { open: number; overdue: number; completed: number }[]
       >`SELECT count(*) FILTER(WHERE state='open')::int open,count(*) FILTER(WHERE state='open' AND due_date<${today}::date)::int overdue,count(*) FILTER(WHERE state='completed')::int completed FROM public.organization_tasks WHERE workspace_id=${id}::uuid AND (${view === "admin"} OR assigned_to=${self.id}::uuid)`
     )[0];
+    const totals = await tx.$queryRaw<
+      { total: number }[]
+    >`SELECT count(*)::int total FROM public.organization_tasks t JOIN public.workspace_members m ON m.id=t.assigned_to WHERE t.workspace_id=${id}::uuid AND (${view === "admin"} OR t.assigned_to=${self.id}::uuid) AND (${taskId !== null} OR t.state=${state}) AND (${taskId === null} OR t.id=${taskId}::uuid) AND (t.title ILIKE ${search} OR m.name ILIKE ${search})`;
     return {
-      items: rows.slice(0, 24),
-      next: rows.length > 24 ? offset + 24 : null,
+      total: totals[0].total,
+      items: rows.slice(0, take),
+      next: rows.length > take ? offset + take : null,
       counts,
     };
   });

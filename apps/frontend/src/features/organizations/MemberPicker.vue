@@ -120,6 +120,7 @@ onUnmounted(() => {
       <label
         >{{ label || l('Find people', 'البحث عن أشخاص')
         }}<input
+          :placeholder="l('Search by name…', 'ابحث بالاسم…')"
           v-model="search"
           type="search"
           :disabled="disabled"

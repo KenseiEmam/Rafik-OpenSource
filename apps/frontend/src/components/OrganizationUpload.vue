@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FileDropzone from './FileDropzone.vue'
 import { ref, onUnmounted } from 'vue'
 import { request } from '../lib/backend'
 import { getDraft, storeDraft, removeDraft } from '../lib/storage'
@@ -138,27 +139,29 @@ async function upload(event: Event) {
         @change="upload"
       />
     </template>
-    <label v-else
-      >{{
+    <FileDropzone
+      v-else
+      :label="
         purpose === 'exercise'
           ? l('Upload demonstration', 'رفع شرح التمرين')
           : l('Attach a file', 'إرفاق ملف')
-      }}
-      <input
-        type="file"
-        :disabled="disabled || busy"
-        :accept="
-          purpose === 'exercise'
-            ? 'image/png,image/jpeg,image/webp,image/gif,video/mp4'
-            : 'image/png,image/jpeg,image/webp,image/gif,video/mp4,application/pdf'
-        "
-        @change="upload"
-      />
-    </label>
-    <small v-if="!composer"
-      >{{ l('Image, GIF or MP4 · up to 25 MB', 'صورة أو GIF أو MP4 · حتى 25 ميغابايت')
-      }}{{ purpose === 'message' ? l(' · PDF also supported', ' · يدعم PDF أيضاً') : '' }}</small
-    >
+      "
+      :hint="
+        purpose === 'exercise'
+          ? l(
+              'PNG, JPEG, WebP, GIF or MP4 · up to 25 MB',
+              'PNG أو JPEG أو WebP أو GIF أو MP4 · حتى 25 ميغابايت',
+            )
+          : l('Image, MP4 or PDF · up to 25 MB', 'صورة أو MP4 أو PDF · حتى 25 ميغابايت')
+      "
+      :accept="
+        purpose === 'exercise'
+          ? 'image/png,image/jpeg,image/webp,image/gif,video/mp4'
+          : 'image/png,image/jpeg,image/webp,image/gif,video/mp4,application/pdf'
+      "
+      :disabled="disabled || busy"
+      @change="upload"
+    />
     <p v-if="busy" role="status">
       {{ l('Uploading… Keep this page open.', 'جارٍ الرفع… أبقِ الصفحة مفتوحة.') }}
     </p>

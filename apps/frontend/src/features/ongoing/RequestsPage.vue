@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { notifySuccess } from '../../lib/feedback'
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { user, profile } from '../../app/auth'
@@ -141,9 +143,11 @@ async function assign() {
     search.value = f.title
     view.value = 'all'
     page.value = 0
-    notice.value = l(
-      'Assigned. Each date has its own response; questions are preserved.',
-      'تم التكليف. لكل تاريخ إجابة مستقلة، وتُحفظ الأسئلة كما هي.',
+    notifySuccess(
+      l(
+        'Assigned. Each date has its own response; questions are preserved.',
+        'تم التكليف. لكل تاريخ إجابة مستقلة، وتُحفظ الأسئلة كما هي.',
+      ),
     )
   } catch (e) {
     if (commandRejected(e)) {
@@ -172,7 +176,7 @@ onMounted(async () => {
 </script>
 <template>
   <div class="container page">
-    <header class="page-heading heading-actions">
+    <PageHeading class="page-heading heading-actions">
       <div>
         <p class="overline">
           {{ coach ? l('Ongoing coaching', 'متابعة التدريب') : l('With your coach', 'مع مدربك') }}
@@ -197,17 +201,12 @@ onMounted(async () => {
           l('Create template', 'إنشاء قالب')
         }}</RouterLink>
       </div>
-    </header>
+    </PageHeading>
     <PageState :loading="loading" :error="loading ? error : ''" @retry="load">
       <p v-if="error" class="notice error" role="alert">
         {{ error }} <button class="text-link" @click="load">{{ l('Refresh', 'تحديث') }}</button>
       </p>
-      <p v-if="notice" class="notice success" role="status">
-        {{ notice }}
-        <RouterLink v-if="assignedFirst" :to="base + '/' + assignedFirst" class="text-link">{{
-          l('View scheduled request', 'عرض الطلب المجدول')
-        }}</RouterLink>
-      </p>
+
       <div class="ongoing-layout">
         <section ref="requestList" tabindex="-1" :aria-label="l('Requests', 'الطلبات')">
           <div class="roster-tools">
@@ -369,7 +368,10 @@ onMounted(async () => {
             </p>
             <label v-if="forms.length > 6"
               >{{ l('Find a template', 'ابحث عن قالب')
-              }}<input v-model="templateSearch" type="search"
+              }}<input
+                :placeholder="l('Type to search…', 'اكتب للبحث…')"
+                v-model="templateSearch"
+                type="search"
             /></label>
             <p v-if="forms.length > 12" class="subtle">
               {{

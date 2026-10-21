@@ -242,3 +242,9 @@ Administrator `invite` commands optionally accept `sports: string[]` (up to 100 
 ### Directory page sizes
 
 People and service-catalog requests accept `limit=10` for main directories; existing picker requests retain 25. Nutrition and scheduled-event lists return 10 rows. Session `delivery?history=true` returns 10 records plus a scoped `total`; `offset` supports previous/next directory navigation, while `before` remains the compatibility cursor. Program/athlete-plan grids retain 24. API authorization and total-count filters use the same institution/coach scope as the records.
+
+## Optional list sizing and task lookup
+
+The web directory reads for People, services, programs, athlete plans, nutrition plans, session history and scheduled events accept `limit` as an integer from 1 to 100. Invalid or absent values retain their endpoint’s existing default; filtering and institution/role scope are unchanged. Task lists also accept bounded `limit`, expose the matching `total`, and accept an optional task `id`. An ID narrows the authorized set and ignores the list status filter so completed records can be opened; administrators retain institution scope and coaches retain only their assigned tasks. This is web API scope, not a new addition to the coach field OpenAPI subset.
+
+Session-history delivery reads accept optional case-insensitive athlete-name search via search, applied inside the existing authorized membership scope and to the matching total. Member-ID compatibility reads remain supported by the API; the main history UI uses name search.

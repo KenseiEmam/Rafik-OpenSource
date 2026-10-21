@@ -1,3 +1,4 @@
+import { pageSize } from "./pagination.ts";
 import { ApiError, type Actor } from "./db.ts";
 import {
   scoped,
@@ -22,7 +23,7 @@ export async function serviceCatalog(
   const view = role(q.get("view"));
   if (view === "trainee") throw new ApiError(403, "forbidden");
   return scoped(actor, id, [view], async (tx, self) => {
-    const take = q.get("limit") === "10" ? 10 : 25;
+    const take = pageSize(q, 25);
     const page = Math.max(0, Math.min(10000, Number(q.get("offset")) || 0)),
       search = (q.get("search") || "").slice(0, 100),
       kind = q.get("kind");

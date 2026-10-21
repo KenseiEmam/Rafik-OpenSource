@@ -173,3 +173,51 @@ Target WCAG 2.2 AA behavior: 4.5:1 normal text, 3:1 large text and meaningful co
 6. Update this document, audit status, maintained docs and actual verification evidence in the same change. Coordinate public workflow documentation in English/Arabic after implementation is approved.
 
 **Approved rollout:** the founder approved these guidelines and implementation on 21 October. Preserve existing product behavior and security boundaries throughout the remaining slices. Shared presentation tokens now live in `apps/frontend/src/styles/design-system.css`; `SectionHeader.vue` and `PasswordField.vue` establish reusable section and password controls. Remaining view migrations are tracked in the audit report.
+
+## Approved workflow refinements — 21 October
+
+Substantial entities use dedicated create/edit pages: assessment templates, training groups, exercises and tasks. Small invitation and settings controls remain inline. Save returns to the list only after acknowledgement and local pending-command cleanup; leaving during a request must not pull the person back. A back link preserves the device draft; an explicitly labelled discard action removes that editor’s draft. Drafts are scoped to account, institution, role and record. Older drafts migrate only after the new copy is durable.
+
+A standalone panel occupies the available workspace width. Do not reserve an empty companion column. Resource details appear beside the file list only when selected; an empty support inbox does not force the new-request form into half the page. Readable prose may retain an internal character measure.
+
+Every search input has a useful localized hint as well as its persistent label. Standalone file uploads use `FileDropzone.vue`, with requirements, a keyboard-accessible chooser, drag feedback and existing validation; message attachments retain compact photo/file actions. Subtitles explain the screen’s purpose rather than repeating the product name.
+
+`ListPagination.vue` exposes records per page beside navigation: 10/25/50/100 for lists and 12/24/48/96 for grids. Defaults remain 10 and the established grid size. The choice is URL-persisted; changing it resets the offset. Keep old rows and their applied range until the replacement arrives. The exercise catalog remains an authorized local catalog with presentation paging; other main directories send the bounded limit to the API.
+
+Routine success uses existing action-specific toasts. `CommandStatus` hides success notices by default, uses compact in-progress text, and retains error and uncertain-write recovery. Device-save indicators and a generated invitation/password link are task state, not redundant success confirmations.
+
+## Empty states, loading and search conventions
+
+Use one full-width, start-aligned empty panel for an empty primary collection. Use a compact, borderless icon-and-text state inside an existing card, tab or picker; never nest an empty card inside another card. Both variants use a decorative 28px SVG tray icon, a short heading and an explanation or permitted next action. Do not use decorative illustrations or fixed viewport-height blank areas.
+
+Primary states use 24px padding and vertical spacing (16px padding on phones). Compact states use 16px vertical padding. The surface fills available width; explanatory text is limited to 60 characters per line approximately, using 60ch. Headings use the shared section typography. Empty states grow with their content rather than enforcing a minimum height.
+
+Show a first-use state only after an authorized, successful read returns no records. Filtered no-results states explain how to change or clear the search; they must not claim the institution has no records. Do not display empty states during loading, on failed requests, or for hidden companion panes. Preserve existing results during refresh. Errors retain a retry action and their recovery context. A conversation list containing existing threads does not need an additional empty people panel.
+
+First loads use the shared PageState skeleton. Skeletons pulse gently over 1.5 seconds; reduced-motion users get static placeholders. Refresh uses compact busy text instead of replacing existing content. Pulsing never implies server acknowledgement or completed persistence.
+
+Nutrition plans and athlete programs use the same AthleteSearch control and athlete-name placeholder. Remove the duplicate expandable athlete filter; keep the plan-status selector. Historical member-filter URLs no longer silently restrict these lists. Search fills remaining toolbar space. Pagination sits alongside when space permits, wraps beneath on narrower screens, and never compresses the input into an unusable width. Program-library search follows the same width convention.
+
+## Schedule views
+
+Schedule is one navigation destination, represented by the existing calendar SVG. Calendar and list are alternate views selected by one navigation-style button labelled with the destination view and its SVG icon; legacy event URLs remain valid and highlight Schedule. Both group sessions and assessments share the list. Calendar opens on today’s institution-timezone date and displays at most four booking cards, with the shared previous/next controls when needed. Selecting another date or changing the period resets card pagination. Read all pages of the displayed calendar period before reporting its counts; do not silently omit today’s bookings behind an API page. Existing date/view/filter query values survive view switching.
+
+The Schedule view button changes its label and icon to the destination view. Use a restrained 160ms opacity/3px transition for the label and standard hover transitions; reduced-motion preferences remove movement. Do not add a separate segmented navigation bar for these two views.
+
+Calendar and list filter toolbars are unboxed wrapping flex layouts. Controls align at their lower edge; labels remain attached to inputs. Do not place a card background or border around ordinary filter/pagination controls. On narrow screens allow whole controls to wrap without shrinking touch targets.
+
+Calendar toolbar grouping: View, period input and cancelled visibility form one aligned control group. Previous/next period buttons are adjacent in a second group, aligned to the desktop inline end with space between groups. Inputs/buttons are 44px high and lower edges align. Date-range metadata sits below the toolbar, not on a competing baseline. Phone layouts wrap the filter group and place the paired period buttons on their own row.
+
+On desktop the calendar toolbar occupies only the calendar column. Its adjacent previous/next buttons align to the calendar grid’s inline end, not the booking sidebar or page edge. The toolbar and calendar use the same responsive column proportions.
+
+Search-toolbar alignment: persistent labels sit above inputs with an 8px gap. Inputs, status selectors and submit buttons share a 44px row height and zero external margins; pagination aligns with that control row rather than the labels. Athlete plans contains exactly one athlete-name search and one plan-status selector.
+
+Simple filters are visible inline on desktop. Do not hide a single athlete-name search or a small status/type set in a disclosure. Dense advanced filter sets may use progressive disclosure, especially on phones; ordinary controls should wrap naturally. Session history shares the same athlete-name search and has no expandable athlete picker.
+
+The Schedule list uses the same unboxed search/filter/pagination toolbar and 44px control alignment. Do not add a competing “Events” section heading above its shared collection.
+
+Groups and assessment templates follow the shared search/pagination toolbar with their archive checkbox visible inline. Use contextual labels (Search groups/Search templates), not a generic library label.
+
+People keeps role tabs above its search/membership/sport toolbar; pagination aligns beside those controls. Shared pagination has zero external block margin so it cannot sit above search fields in Programs or other lists. Tasks need no additional visual polish in this handoff; the founder may remove the feature later.
+
+Assessment templates use an adaptive card grid because each item has a short title and drill count; place the edit action consistently at the bottom. Use 24 records by default and the shared grid-size options. Groups remain rows because membership details need horizontal room. Cards stack naturally on phones.

@@ -24,17 +24,16 @@ const average = (items: { score: number | null; value: number }[]) => {
 <template>
   <TabsRoot activation-mode="manual" default-value="clients" class="experience-report">
     <TabsList
-      class="experience-tabs"
+      class="experience-tabs ui-tabs"
       :aria-label="l('Experience report sections', 'أقسام تقرير التجربة')"
-      ><TabsTrigger value="clients">{{ l('Athlete experience', 'تجربة المتدربين') }}</TabsTrigger
+      ><TabsTrigger value="clients">{{ l('Athlete experience', 'تجربة الرياضيين') }}</TabsTrigger
       ><TabsTrigger v-if="report.workplace" value="workplace">{{
         l('Trainer workplace', 'بيئة عمل المدربين')
-      }}</TabsTrigger
-      ></TabsList
+      }}</TabsTrigger></TabsList
     >
     <TabsContent value="clients">
       <section class="experience-section">
-        <h2>{{ l('Athlete session experience', 'تجربة جلسات المتدربين') }}</h2>
+        <h2>{{ l('Athlete session experience', 'تجربة جلسات الرياضيين') }}</h2>
         <p>
           {{
             l(
@@ -86,13 +85,13 @@ const average = (items: { score: number | null; value: number }[]) => {
       </section> </TabsContent
     ><TabsContent v-if="report.workplace" value="workplace"
       ><section class="experience-section">
-        <h2>{{ l('Trainer workplace satisfaction', 'رضا المدربين عن بيئة العمل') }}</h2>
+        <h2>{{ l('Coach workplace satisfaction', 'رضا المدربين عن بيئة العمل') }}</h2>
         <p>
           {{ l('Current month', 'الشهر الحالي') }}: {{ report.workplaceMonth.slice(0, 7) }} (UTC).
           {{
             l(
-              'One optional response per current active trainer. Separate from athlete feedback and the trainee/date filters above.',
-              'إجابة اختيارية لكل مدرب نشط حالياً. منفصلة عن تقييمات المتدربين ومرشحات الفترة والمتدرب أعلاه.',
+              'One optional response per current active coach. Separate from athlete feedback and the trainee/date filters above.',
+              'إجابة اختيارية لكل مدرب نشط حالياً. منفصلة عن تقييمات الرياضيين ومرشحات الفترة والرياضي أعلاه.',
             )
           }}
         </p>
@@ -100,7 +99,7 @@ const average = (items: { score: number | null; value: number }[]) => {
           <strong>{{ average(report.workplace) }} / 5</strong
           ><span
             >{{ count(report.workplace, true) }} / {{ count(report.workplace) }}
-            {{ l('active trainers responded', 'مدرب نشط أجاب') }}</span
+            {{ l('active coaches responded', 'مدرب نشط أجاب') }}</span
           >
         </p>
         <MetricChart
@@ -114,29 +113,10 @@ const average = (items: { score: number | null; value: number }[]) => {
           "
           :items="count(report.workplace, true) ? ratings(report.workplace) : []"
           :unit="l('trainers', 'مدرب')"
-        />
-      </section></TabsContent></TabsRoot
-  >
+        /></section></TabsContent
+  ></TabsRoot>
 </template>
 <style scoped>
-.experience-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-.experience-tabs :deep(button) {
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--muted);
-  padding: 0.6rem 0.9rem;
-  cursor: pointer;
-}
-.experience-tabs :deep(button[data-state='active']) {
-  background: var(--tint);
-  color: var(--ink);
-  border-color: var(--accent);
-}
 .experience-report {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

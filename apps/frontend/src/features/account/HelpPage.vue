@@ -9,8 +9,8 @@ import { language, t } from '../../lib/i18n'
     <p class="small-print">
       {{
         language(
-          'Use Events & assessments to browse scheduled group training and assessments without selecting an athlete. Filter by activity type or status, then open an event for attendance, results and correction history. Session history contains athletes’ recorded workouts.',
-          'استخدم المواعيد والتقييمات لتصفح التدريبات الجماعية والتقييمات المجدولة دون اختيار رياضي. رشّح حسب نوع النشاط أو حالته، ثم افتح الموعد لعرض الحضور والنتائج وتاريخ التصحيحات. يعرض سجل الحصص تمارين الرياضيين المسجلة.',
+          'Use Schedule to browse scheduled group training and assessments without selecting an athlete. Filter by activity type or status, then open an event for attendance, results and correction history. Session history contains athletes’ recorded workouts.',
+          'استخدم الجدول لتصفح التدريبات الجماعية والتقييمات المجدولة دون اختيار رياضي. رشّح حسب نوع النشاط أو حالته، ثم افتح الموعد لعرض الحضور والنتائج وتاريخ التصحيحات. يعرض سجل الحصص تمارين الرياضيين المسجلة.',
         )
       }}
     </p>

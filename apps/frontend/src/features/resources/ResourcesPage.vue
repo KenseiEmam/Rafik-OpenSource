@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { user } from '../../app/auth'
@@ -238,21 +239,23 @@ onMounted(async () => {
     <RouterLink class="back-link" :to="coach ? '/coach/more' : '/more'"
       >← {{ l('More tools', 'أدوات إضافية') }}</RouterLink
     >
-    <header class="page-heading">
-      <p class="overline">{{ l('Useful things, in one place', 'أشياء مفيدة في مكان واحد') }}</p>
-      <h1>{{ l('Private resources', 'موارد خاصة') }}</h1>
-      <p>
-        {{
-          l(
-            'Keep a guide, a reference or a photo. Share it only with the people who need it.',
-            'احتفظ بدليل أو مرجع أو صورة. وشاركها مع من يحتاجها فقط.',
-          )
-        }}
-      </p>
-      <a class="button small secondary" href="#resource-upload">{{
-        l('Add a resource', 'إضافة مورد')
-      }}</a>
-    </header>
+    <PageHeading class="page-heading"
+      ><div>
+        <p class="overline">{{ l('Useful things, in one place', 'أشياء مفيدة في مكان واحد') }}</p>
+        <h1>{{ l('Private resources', 'موارد خاصة') }}</h1>
+        <p>
+          {{
+            l(
+              'Keep a guide, a reference or a photo. Share it only with the people who need it.',
+              'احتفظ بدليل أو مرجع أو صورة. وشاركها مع من يحتاجها فقط.',
+            )
+          }}
+        </p>
+        <a class="button small secondary" href="#resource-upload">{{
+          l('Add a resource', 'إضافة مورد')
+        }}</a>
+      </div></PageHeading
+    >
     <PageState :loading="loading" :error="''" @retry="load"
       ><p v-if="error" class="notice error" role="alert">{{ error }}</p>
       <p v-if="notice" class="notice success" role="status">{{ notice }}</p>
@@ -261,7 +264,10 @@ onMounted(async () => {
           <div class="roster-tools">
             <label
               >{{ l('Search resources', 'البحث في الموارد')
-              }}<input v-model="search" type="search" /></label
+              }}<input
+                :placeholder="l('Search filenames…', 'ابحث بأسماء الملفات…')"
+                v-model="search"
+                type="search" /></label
             ><label
               >{{ l('Show resources', 'عرض الموارد')
               }}<select v-model="filter">

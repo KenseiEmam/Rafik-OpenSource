@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import ExerciseDemo from '../../components/ExerciseDemo.vue'
 import ExercisePicker from '../../components/ExercisePicker.vue'
 import ProgramCover from './ProgramCover.vue'
@@ -438,7 +439,7 @@ function removeDay() {
         language('Programs', 'البرامج')
       }}</RouterLink
     >
-    <div class="page-heading heading-actions">
+    <PageHeading class="page-heading heading-actions">
       <div>
         <p class="overline">{{ language('Plan studio', 'تصميم الخطة') }}</p>
         <h1>
@@ -456,7 +457,7 @@ function removeDay() {
             : language('Athlete preview', 'معاينة الرياضي')
         }}
       </button>
-    </div>
+    </PageHeading>
     <PageState :loading="loading" :error="!loadedSuccessfully ? error : ''" @retry="load()"
       ><p v-if="restored" class="notice">
         {{ language('Your local draft has been restored.', 'تم استرداد مسودتك المحلية.') }}

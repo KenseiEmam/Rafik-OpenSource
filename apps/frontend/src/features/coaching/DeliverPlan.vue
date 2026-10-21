@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { user, profile } from '../../app/auth'
@@ -254,7 +255,7 @@ onMounted(load)
     <RouterLink class="back-link" :to="context.base + '/plans'">{{
       l('Back to programs', 'العودة للبرامج')
     }}</RouterLink>
-    <header class="work-heading">
+    <PageHeading class="work-heading">
       <div>
         <p class="overline">{{ l('Program delivery', 'تعيين البرنامج') }}</p>
         <h1>{{ version?.title || l('Assign a program', 'تعيين برنامج') }}</h1>
@@ -267,7 +268,7 @@ onMounted(load)
           }}
         </p>
       </div>
-    </header>
+    </PageHeading>
     <CommandStatus :command="command" /><PageState :loading="loading" :error="error" @retry="load"
       ><section v-if="done" class="panel">
         <h2>{{ l('Ready for their next session.', 'جاهز للحصة القادمة.') }}</h2>
@@ -309,7 +310,11 @@ onMounted(load)
             ><section class="panel">
               <h2>{{ l('Who is this for?', 'لمن هذا البرنامج؟') }}</h2>
               <label
-                >{{ l('Find a person', 'البحث عن شخص') }}<input v-model="search" type="search"
+                >{{ l('Find a person', 'البحث عن شخص')
+                }}<input
+                  :placeholder="l('Type to search…', 'اكتب للبحث…')"
+                  v-model="search"
+                  type="search"
               /></label>
               <p v-if="!people.length" class="notice">
                 {{
@@ -431,7 +436,7 @@ onMounted(load)
               <p class="small-print">
                 {{
                   l(
-                    'Dates follow each trainee’s timezone. Cycle day 1 is the start date; unfilled days are recovery days.',
+                    'Dates follow each athlete’s timezone. Cycle day 1 is the start date; unfilled days are recovery days.',
                     'التواريخ بحسب المنطقة الزمنية للمتدرب. اليوم الأول هو تاريخ البداية والأيام الفارغة للتعافي.',
                   )
                 }}
@@ -473,7 +478,7 @@ onMounted(load)
               {{
                 l(
                   'Existing started sessions retain their original prescription. This does not edit the program for other trainees.',
-                  'تحتفظ الحصص التي بدأت بتعليماتها الأصلية. لا يتغير برنامج المتدربين الآخرين.',
+                  'تحتفظ الحصص التي بدأت بتعليماتها الأصلية. لا يتغير برنامج الرياضيين الآخرين.',
                 )
               }}
             </p>
@@ -495,7 +500,6 @@ onMounted(load)
 </template>
 <style scoped>
 .delivery-page {
-  max-width: 900px;
 }
 .delivery-recipient {
   display: flex;

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { notifySuccess } from '../../lib/feedback'
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { user, profile } from '../../app/auth'
@@ -150,7 +152,7 @@ async function save() {
     })
     reset()
     await load()
-    notice.value = l('Measurement saved.', 'حُفظ القياس.')
+    notifySuccess(l('Measurement saved.', 'حُفظ القياس.'))
   } catch (e) {
     error.value = errorMessage(e)
   } finally {
@@ -179,20 +181,22 @@ onMounted(load)
     <RouterLink v-if="coach" class="back-link" :to="'/coach/clients/' + relationship"
       >← {{ l('Athlete workspace', 'مساحة المتدرب') }}</RouterLink
     >
-    <header class="page-heading">
-      <p class="overline">
-        {{ coach ? person?.display_name : l('Your training over time', 'تدريبك مع الوقت') }}
-      </p>
-      <h1>{{ l('Progress', 'التقدم') }}</h1>
-      <p>
-        {{
-          l(
-            'Completed work, recorded results, and optional measurements.',
-            'عمل مكتمل ونتائج مسجلة وقياسات اختيارية.',
-          )
-        }}
-      </p>
-    </header>
+    <PageHeading class="page-heading"
+      ><div>
+        <p class="overline">
+          {{ coach ? person?.display_name : l('Your training over time', 'تدريبك مع الوقت') }}
+        </p>
+        <h1>{{ l('Progress', 'التقدم') }}</h1>
+        <p>
+          {{
+            l(
+              'Completed work, recorded results, and optional measurements.',
+              'عمل مكتمل ونتائج مسجلة وقياسات اختيارية.',
+            )
+          }}
+        </p>
+      </div></PageHeading
+    >
     <form class="progress-filters" @submit.prevent="load">
       <label>{{ l('From', 'من') }}<input v-model="from" type="date" required :max="to" /></label
       ><label>{{ l('To', 'إلى') }}<input v-model="to" type="date" required :min="from" /></label
@@ -202,7 +206,7 @@ onMounted(load)
     </form>
     <PageState :loading="loading" :error="''" @retry="load"
       ><p v-if="error" class="notice error" role="alert">{{ error }}</p>
-      <p v-if="notice" class="notice success" role="status">{{ notice }}</p>
+
       <div class="progress-summary">
         <strong>{{ sessions.length }}</strong
         ><span>{{ l('completed sessions in this range', 'حصة مكتملة في هذه الفترة') }}</span>

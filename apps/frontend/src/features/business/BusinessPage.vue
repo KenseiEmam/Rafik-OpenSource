@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { onMounted, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { user } from '../../app/auth'
@@ -88,19 +89,21 @@ onMounted(load)
       >←
       {{ team ? l('Team workspace', 'مساحة الفريق') : l('More tools', 'أدوات إضافية') }}</RouterLink
     >
-    <header class="page-heading">
-      <h1>
-        {{ team ? l('Team subscription', 'اشتراك الفريق') : l('Business account', 'حساب العمل') }}
-      </h1>
-      <p>
-        {{
-          l(
-            'Clear account status. Training history stays separate.',
-            'حالة حساب واضحة. يبقى سجل التدريب مستقلاً.',
-          )
-        }}
-      </p>
-    </header>
+    <PageHeading class="page-heading"
+      ><div>
+        <h1>
+          {{ team ? l('Team subscription', 'اشتراك الفريق') : l('Business account', 'حساب العمل') }}
+        </h1>
+        <p>
+          {{
+            l(
+              'Clear account status. Training history stays separate.',
+              'حالة حساب واضحة. يبقى سجل التدريب مستقلاً.',
+            )
+          }}
+        </p>
+      </div></PageHeading
+    >
     <CommandStatus :command="command" /><PageState :loading="loading" :error="error" @retry="load"
       ><div class="ongoing-layout">
         <section class="panel">

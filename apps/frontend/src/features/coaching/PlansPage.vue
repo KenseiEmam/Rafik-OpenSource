@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { PhTray } from '@phosphor-icons/vue'
+import { useListPageSize } from '../../lib/list-page-size'
+import PageHeading from '../../components/PageHeading.vue'
 import ProgramCover from './ProgramCover.vue'
 import OrganizationNav from '../organizations/OrganizationNav.vue'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
@@ -29,6 +32,12 @@ const plans = ref<Plan[]>([])
 const versions = ref<PlanVersion[]>([])
 const loading = ref(true)
 const error = ref('')
+const { recordLimit, appliedLimit, pageSizes, acceptLimit, changeLimit } = useListPageSize(
+  context.workspace ? 24 : 12,
+  () => {
+    void load(0)
+  },
+)
 async function load(page = offset.value, background = false) {
   const sequence = ++loadSequence
   if (!background) loading.value = true
@@ -40,7 +49,7 @@ async function load(page = offset.value, background = false) {
         next: number | null
         total: number
       }>(
-        `/v1/workspaces/${context.workspace}/programs?view=${context.view}&search=${encodeURIComponent(search.value)}&offset=${page}`,
+        `/v1/workspaces/${context.workspace}/programs?view=${context.view}&search=${encodeURIComponent(search.value)}&offset=${page}&limit=${recordLimit.value}`,
       )
       if (sequence !== loadSequence) return
       plans.value = result.items
@@ -49,6 +58,7 @@ async function load(page = offset.value, background = false) {
       )
       total.value = result.total
       offset.value = page
+      acceptLimit()
     } else
       [plans.value, versions.value] = await Promise.all([
         rows<Plan>('plans', 'coach_id', user.value!.id),
@@ -69,7 +79,7 @@ onUnmounted(() => {
 <template>
   <OrganizationNav v-if="context.workspace" />
   <div class="container page">
-    <div class="page-heading heading-actions">
+    <PageHeading class="page-heading heading-actions">
       <div>
         <p class="overline">{{ t('coaching') }}</p>
         <h1>{{ language('Programs', 'البرامج') }}</h1>
@@ -85,25 +95,26 @@ onUnmounted(() => {
       <RouterLink v-if="context.view !== 'trainee'" class="button" :to="context.base + '/plans/new'"
         ><PhPlus :size="18" aria-hidden="true" />{{ t('newPlan') }}</RouterLink
       >
-    </div>
+    </PageHeading>
     <div class="list-controls">
-      <h2 class="list-section-label">{{ language('Library', 'المكتبة') }}</h2>
-      <ListPagination
-        :offset="offset"
-        :page-size="context.workspace ? 24 : 12"
-        :total="context.workspace ? total : filtered.length"
-        :disabled="loading"
-        @page="(page) => (context.workspace ? load(page) : (offset = page))"
-      />
-    </div>
-    <PageState :loading="loading" :error="error" @retry="load()"
-      ><label v-if="search || plans.some((p) => !p.archived)" class="plan-search"
+      <label v-if="search || plans.some((p) => !p.archived)" class="plan-search"
         >{{ language('Find a plan', 'ابحث عن خطة')
         }}<input
           v-model="search"
           type="search"
           :placeholder="language('Search by title', 'ابحث بالعنوان')"
       /></label>
+      <ListPagination
+        :offset="offset"
+        :page-size="appliedLimit"
+        :sizes="pageSizes"
+        @page-size="changeLimit"
+        :total="context.workspace ? total : filtered.length"
+        :disabled="loading"
+        @page="(page) => (context.workspace ? load(page) : (offset = page))"
+      />
+    </div>
+    <PageState :loading="loading" :error="error" @retry="load()">
       <p v-if="search && !filtered.length" class="notice">
         {{
           language('No matching plans. Try another title.', 'لا توجد خطط مطابقة. جرّب عنواناً آخر.')
@@ -111,7 +122,7 @@ onUnmounted(() => {
       </p>
       <div v-if="filtered.length" class="plans-grid">
         <RouterLink
-          v-for="p in context.workspace ? filtered : filtered.slice(offset, offset + 12)"
+          v-for="p in context.workspace ? filtered : filtered.slice(offset, offset + recordLimit)"
           :key="p.id"
           :to="context.base + '/plans/' + p.id"
           class="plan-card panel"
@@ -156,6 +167,7 @@ onUnmounted(() => {
         ></RouterLink>
       </div>
       <section v-else-if="!search && context.view === 'trainee'" class="empty-state panel">
+        <PhTray :size="28" aria-hidden="true" />
         <h2>{{ language('Your institution’s program library.', 'مكتبة برامج مؤسستك.') }}</h2>
         <p>
           {{
@@ -170,6 +182,7 @@ onUnmounted(() => {
         }}</RouterLink>
       </section>
       <section v-else-if="!search" class="empty-state panel">
+        <PhTray :size="28" aria-hidden="true" />
         <h2>
           {{ language('No programs yet', 'لا توجد برامج بعد') }}
         </h2>

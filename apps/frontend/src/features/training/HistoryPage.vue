@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, ref } from 'vue'
 import { PhArrowRight, PhBarbell, PhCheckCircle } from '@phosphor-icons/vue'
 import { user } from '../../app/auth'
@@ -34,18 +35,20 @@ onMounted(load)
 </script>
 <template>
   <div class="container page">
-    <div class="page-heading">
-      <p class="overline">{{ t('training') }}</p>
-      <h1>{{ language('The work you put in.', 'ما أنجزته من تدريب.') }}</h1>
-      <p>
-        {{
-          language(
-            'Your sessions, as they happened. Small steps count.',
-            'حصصك كما أنجزتها. الخطوات الصغيرة مهمة.',
-          )
-        }}
-      </p>
-    </div>
+    <PageHeading class="page-heading"
+      ><div>
+        <p class="overline">{{ t('training') }}</p>
+        <h1>{{ language('The work you put in.', 'ما أنجزته من تدريب.') }}</h1>
+        <p>
+          {{
+            language(
+              'Your sessions, as they happened. Small steps count.',
+              'حصصك كما أنجزتها. الخطوات الصغيرة مهمة.',
+            )
+          }}
+        </p>
+      </div></PageHeading
+    >
     <PageState :loading="loading" :error="error" @retry="load"
       ><div v-if="sessions.length">
         <div class="history-summary">
@@ -92,9 +95,8 @@ onMounted(load)
         </div>
         <RouterLink class="button" :to="user ? '/today' : '/routine'"
           >{{ t('start') }}<PhArrowRight :size="20" class="directional" aria-hidden="true"
-        /></RouterLink>
-      </section></PageState
-    >
+        /></RouterLink></section
+    ></PageState>
   </div>
 </template>
 <style scoped>

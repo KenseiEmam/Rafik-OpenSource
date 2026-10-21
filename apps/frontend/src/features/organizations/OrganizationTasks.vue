@@ -1,6 +1,11 @@
 <script setup lang="ts">
+import { useListPageSize } from '../../lib/list-page-size'
+import ListPagination from '../../components/ListPagination.vue'
+import EmptyState from '../../components/EmptyState.vue'
+import { loadEditorDraft } from '../../lib/editor-draft'
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { programContext } from '../coaching/program-context'
 import { user, profile } from '../../app/auth'
 import { request } from '../../lib/backend'
@@ -11,9 +16,15 @@ import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
 import MemberPicker from './MemberPicker.vue'
 import OrganizationNav from './OrganizationNav.vue'
-const context = programContext(useRoute()),
+const route = useRoute(),
+  router = useRouter(),
+  editor = String(route.params.editor || ''),
+  initialPath = route.path,
+  context = programContext(route),
   key = `trainer-tasks:${user.value!.id}:${context.key}`,
   today = localDate(profile.value?.timezone || 'UTC')
+const listPath = context.base + '/tasks',
+  draftKey = key + ':' + (editor || 'new')
 type Task = {
   id: string
   title: string
@@ -51,7 +62,15 @@ let serial = 0,
   disposed = false,
   timer: ReturnType<typeof setTimeout>,
   draftWrite = 0
-async function load(more = false) {
+const total = ref(0),
+  offset = ref(0)
+const { recordLimit, appliedLimit, pageSizes, acceptLimit, changeLimit } = useListPageSize(
+  10,
+  () => {
+    void load(0)
+  },
+)
+async function load(page = Math.max(0, Number(route.query.offset) || 0)) {
   const current = ++serial
   loading.value = true
   error.value = ''
@@ -59,6 +78,7 @@ async function load(more = false) {
     const result = await request<{
       items: Task[]
       next: number | null
+      total: number
       counts: typeof counts.value
     }>(
       `/v1/workspaces/${context.workspace}/tasks?` +
@@ -67,11 +87,16 @@ async function load(more = false) {
           today,
           state: state.value,
           search: search.value,
-          offset: String(more ? next.value || 0 : 0),
+          offset: String(page),
+          limit: String(recordLimit.value),
+          ...(editor && editor !== 'new' ? { id: editor } : {}),
         }),
     )
     if (disposed || current !== serial) return
-    items.value = more ? [...items.value, ...result.items] : result.items
+    items.value = result.items
+    total.value = result.total
+    offset.value = page
+    acceptLimit()
     counts.value = result.counts
     next.value = result.next
   } catch (e) {
@@ -80,6 +105,7 @@ async function load(more = false) {
     if (!disposed && current === serial) loading.value = false
   }
 }
+const returnToList = ref(false)
 const command = useCommand<'save' | 'state'>(
   key,
   async (action) => {
@@ -87,8 +113,9 @@ const command = useCommand<'save' | 'state'>(
       ready.value = false
       draft.value = undefined
       editing.value = false
-      await removeDraft(key)
+      await removeDraft(draftKey)
       ready.value = true
+      if (!disposed && editor && route.path === initialPath) returnToList.value = true
     }
     await load()
   },
@@ -104,8 +131,25 @@ const command = useCommand<'save' | 'state'>(
         : l('Task saved.', 'تم حفظ المهمة.'),
   },
 )
+watch(
+  () => command.state.busy,
+  (busy) => {
+    if (
+      !busy &&
+      !command.state.pending &&
+      returnToList.value &&
+      !disposed &&
+      route.path === initialPath
+    )
+      void router.replace(listPath)
+  },
+)
 const locked = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
 function create() {
+  if (!editor) {
+    void router.push(listPath + '/new')
+    return
+  }
   draft.value = {
     id: crypto.randomUUID(),
     title: '',
@@ -118,6 +162,10 @@ function create() {
   editing.value = true
 }
 function edit(task: Task) {
+  if (!editor) {
+    void router.push(listPath + '/' + task.id)
+    return
+  }
   draft.value = {
     id: task.id,
     title: task.title,
@@ -134,6 +182,7 @@ async function discard() {
   draft.value = undefined
   editing.value = false
   draftSaved.value = false
+  if (!disposed && editor && route.path === initialPath) await router.push(listPath)
 }
 function save() {
   if (!draft.value) return
@@ -162,7 +211,7 @@ watch(
     const generation = ++draftWrite
     draftSaved.value = false
     try {
-      await storeDraft(key, JSON.parse(JSON.stringify(draft.value)))
+      await storeDraft(draftKey, JSON.parse(JSON.stringify(draft.value)))
       if (generation === draftWrite) {
         draftSaved.value = true
         draftError.value = ''
@@ -177,12 +226,22 @@ watch([search, state], () => {
   serial++
   loading.value = true
   clearTimeout(timer)
-  timer = setTimeout(() => load(), 180)
+  timer = setTimeout(() => load(0), 180)
 })
 onMounted(async () => {
   await load()
-  draft.value = await getDraft<Draft>(key).catch(() => undefined)
-  draftSaved.value = !!draft.value
+  if (disposed) return
+  const stored = await loadEditorDraft<Draft>(key, editor).catch(() => undefined)
+  if (disposed) return
+  if (stored && (!editor || (editor === 'new' ? !stored.revision : stored.id === editor)))
+    draft.value = stored
+  if (editor && context.view === 'admin') {
+    if (draft.value) editing.value = true
+    else if (editor === 'new') create()
+    else if (items.value[0]) edit(items.value[0])
+    else error.value ||= l('This task is unavailable.', 'هذه المهمة غير متاحة.')
+  }
+  draftSaved.value = !!stored
   ready.value = true
 })
 onUnmounted(() => {
@@ -194,12 +253,21 @@ onUnmounted(() => {
 <template>
   <OrganizationNav />
   <div class="container page trainer-tasks">
-    <header class="page-heading heading-actions">
+    <RouterLink v-if="editor" class="back-link" :to="listPath">{{
+      l('Back to tasks', 'العودة إلى المهام')
+    }}</RouterLink>
+    <PageHeading class="page-heading heading-actions">
       <div>
         <p class="overline">{{ l('Daily work', 'العمل اليومي') }}</p>
         <h1>
           {{
-            context.view === 'admin' ? l('Trainer tasks', 'مهام المدربين') : l('My tasks', 'مهامي')
+            editor
+              ? editor === 'new'
+                ? l('Assign a task', 'تعيين مهمة')
+                : l('Edit task', 'تعديل المهمة')
+              : context.view === 'admin'
+                ? l('Coach tasks', 'مهام المدربين')
+                : l('My tasks', 'مهامي')
           }}
         </h1>
         <p>
@@ -214,20 +282,20 @@ onUnmounted(() => {
         </p>
       </div>
       <button
-        v-if="context.view === 'admin' && !draft"
+        v-if="!editor && context.view === 'admin' && !draft"
         class="button"
         :disabled="locked"
         @click="create"
       >
         {{ l('Assign a task', 'تعيين مهمة') }}
       </button>
-    </header>
+    </PageHeading>
     <CommandStatus :command="command" />
     <p v-if="error" class="notice error" role="alert">
       {{ error }}
       <button class="text-link" @click="load()">{{ l('Retry', 'إعادة المحاولة') }}</button>
     </p>
-    <p class="task-summary">
+    <p v-if="!editor" class="task-summary">
       {{ counts.open }} {{ l('open', 'مفتوحة') }} · {{ counts.overdue }}
       {{ l('overdue', 'متأخرة') }} · {{ counts.completed }} {{ l('completed', 'مكتملة') }}
     </p>
@@ -235,7 +303,11 @@ onUnmounted(() => {
       <span>{{
         l('Unfinished task saved on this device.', 'مهمة غير مكتملة محفوظة على الجهاز.')
       }}</span>
-      <button class="text-link" :disabled="locked" @click="editing = true">
+      <button
+        class="text-link"
+        :disabled="locked"
+        @click="router.push(listPath + '/' + (draft?.revision ? draft.id : 'new'))"
+      >
         {{ l('Continue draft', 'متابعة المسودة') }}
       </button>
       <button class="text-link" :disabled="locked" @click="discard">
@@ -245,7 +317,7 @@ onUnmounted(() => {
     <section v-if="draft && editing && context.view === 'admin'" class="panel task-editor">
       <div class="section-heading">
         <h2>{{ draft.revision ? l('Edit task', 'تعديل المهمة') : l('New task', 'مهمة جديدة') }}</h2>
-        <button class="text-link" :disabled="locked" @click="editing = false">
+        <button class="text-link" :disabled="locked" @click="router.push(listPath)">
           {{ l('Close editor', 'إغلاق المحرر') }}
         </button>
       </div>
@@ -296,76 +368,107 @@ onUnmounted(() => {
         </fieldset>
       </form>
     </section>
-    <div class="task-filters">
-      <label
-        >{{ l('Search tasks', 'البحث في المهام') }}<input type="search" v-model="search" /></label
-      ><label
-        >{{ l('Task status', 'حالة المهمة')
-        }}<select v-model="state">
-          <option value="open">{{ l('Open', 'مفتوحة') }}</option>
-          <option value="completed">{{ l('Completed', 'مكتملة') }}</option>
-          <option value="cancelled">{{ l('Cancelled', 'ملغاة') }}</option>
-        </select></label
-      >
-    </div>
-    <p v-if="loading" role="status">{{ l('Loading tasks…', 'جارٍ تحميل المهام…') }}</p>
-    <p v-if="!loading && !items.length" class="empty-state-note">
-      {{ l('No tasks in this view.', 'لا توجد مهام في هذا العرض.') }}
-    </p>
-    <div class="task-list">
-      <article v-for="task in items" :key="task.id" class="panel task-card">
-        <div class="task-description">
-          <div class="task-tags">
-            <span v-if="task.priority === 'high'" class="status-label">{{
-              l('High priority', 'أولوية عالية')
-            }}</span
-            ><span
-              v-if="task.state === 'open' && task.due_date && task.due_date.slice(0, 10) < today"
-              class="status-label overdue"
-              >{{ l('Overdue', 'متأخرة') }}</span
+    <template v-if="!editor">
+      <div class="list-controls">
+        <h2 class="list-section-label">{{ l('Tasks', 'المهام') }}</h2>
+        <ListPagination
+          :offset="offset"
+          :page-size="appliedLimit"
+          :sizes="pageSizes"
+          :total="total"
+          :disabled="loading"
+          @page-size="changeLimit"
+          @page="
+            async (page) => {
+              await router.replace({ query: { ...route.query, offset: page || undefined } })
+              await load(page)
+            }
+          "
+        />
+      </div>
+      <div class="task-filters">
+        <label
+          >{{ l('Search tasks', 'البحث في المهام')
+          }}<input
+            :placeholder="l('Search tasks or coach names…', 'ابحث بالمهام أو أسماء المدربين…')"
+            type="search"
+            v-model="search" /></label
+        ><label
+          >{{ l('Task status', 'حالة المهمة')
+          }}<select v-model="state">
+            <option value="open">{{ l('Open', 'مفتوحة') }}</option>
+            <option value="completed">{{ l('Completed', 'مكتملة') }}</option>
+            <option value="cancelled">{{ l('Cancelled', 'ملغاة') }}</option>
+          </select></label
+        >
+      </div>
+      <p v-if="loading" role="status">{{ l('Loading tasks…', 'جارٍ تحميل المهام…') }}</p>
+      <EmptyState
+        v-if="!loading && !items.length"
+        :title="l('No tasks in this view', 'لا توجد مهام في هذا العرض')"
+        :description="
+          l(
+            'Try another status or search. New tasks appear here when assigned.',
+            'جرّب حالة أو بحثاً آخر. تظهر المهام الجديدة هنا عند تعيينها.',
+          )
+        "
+      />
+      <div class="task-list">
+        <article v-for="task in items" :key="task.id" class="panel task-card">
+          <div class="task-description">
+            <div class="task-tags">
+              <span v-if="task.priority === 'high'" class="status-label">{{
+                l('High priority', 'أولوية عالية')
+              }}</span
+              ><span
+                v-if="task.state === 'open' && task.due_date && task.due_date.slice(0, 10) < today"
+                class="status-label overdue"
+                >{{ l('Overdue', 'متأخرة') }}</span
+              >
+            </div>
+            <h2>{{ task.title }}</h2>
+            <p class="small-print">
+              {{ task.trainer_name }} ·
+              {{
+                task.due_date
+                  ? dateLabel(task.due_date.slice(0, 10))
+                  : l('No due date', 'دون موعد نهائي')
+              }}
+            </p>
+            <p v-if="!task.trainer_active" class="notice">
+              {{
+                l(
+                  'Trainer inactive. Reassign this task to continue.',
+                  'المدرب غير نشط. أعد تعيين المهمة للمتابعة.',
+                )
+              }}
+            </p>
+            <p v-if="task.description" class="task-instructions" dir="auto">
+              {{ task.description }}
+            </p>
+          </div>
+          <div class="task-actions" v-if="task.state !== 'cancelled' || context.view === 'admin'">
+            <button
+              class="button secondary small"
+              :disabled="locked"
+              @click="update(task, task.state !== 'open' ? 'open' : 'completed')"
+            >
+              {{
+                task.state !== 'open'
+                  ? l('Reopen', 'إعادة فتح')
+                  : l('Mark complete', 'إتمام المهمة')
+              }}</button
+            ><template v-if="context.view === 'admin' && task.state !== 'cancelled'"
+              ><button class="text-link" :disabled="locked || !!draft" @click="edit(task)">
+                {{ l('Edit', 'تعديل') }}</button
+              ><button class="text-link" :disabled="locked" @click="update(task, 'cancelled')">
+                {{ l('Cancel task', 'إلغاء المهمة') }}
+              </button></template
             >
           </div>
-          <h2>{{ task.title }}</h2>
-          <p class="small-print">
-            {{ task.trainer_name }} ·
-            {{
-              task.due_date
-                ? dateLabel(task.due_date.slice(0, 10))
-                : l('No due date', 'دون موعد نهائي')
-            }}
-          </p>
-          <p v-if="!task.trainer_active" class="notice">
-            {{
-              l(
-                'Trainer inactive. Reassign this task to continue.',
-                'المدرب غير نشط. أعد تعيين المهمة للمتابعة.',
-              )
-            }}
-          </p>
-          <p v-if="task.description" class="task-instructions" dir="auto">{{ task.description }}</p>
-        </div>
-        <div class="task-actions" v-if="task.state !== 'cancelled' || context.view === 'admin'">
-          <button
-            class="button secondary small"
-            :disabled="locked"
-            @click="update(task, task.state !== 'open' ? 'open' : 'completed')"
-          >
-            {{
-              task.state !== 'open' ? l('Reopen', 'إعادة فتح') : l('Mark complete', 'إتمام المهمة')
-            }}</button
-          ><template v-if="context.view === 'admin' && task.state !== 'cancelled'"
-            ><button class="text-link" :disabled="locked || !!draft" @click="edit(task)">
-              {{ l('Edit', 'تعديل') }}</button
-            ><button class="text-link" :disabled="locked" @click="update(task, 'cancelled')">
-              {{ l('Cancel task', 'إلغاء المهمة') }}
-            </button></template
-          >
-        </div>
-      </article>
-    </div>
-    <button v-if="next !== null" class="button secondary" :disabled="loading" @click="load(true)">
-      {{ l('More tasks', 'المزيد من المهام') }}
-    </button>
+        </article>
+      </div>
+    </template>
   </div>
 </template>
 <style scoped>
@@ -422,7 +525,6 @@ onUnmounted(() => {
   color: var(--error);
 }
 .task-editor {
-  max-width: 840px;
 }
 @media (max-width: 760px) {
   .task-card {

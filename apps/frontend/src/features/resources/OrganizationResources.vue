@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import EmptyState from '../../components/EmptyState.vue'
+import PageHeading from '../../components/PageHeading.vue'
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { programContext } from '../coaching/program-context'
@@ -102,28 +104,34 @@ onUnmounted(() => {
 <template>
   <OrganizationNav />
   <div class="container page institution-resources">
-    <header class="page-heading">
-      <p class="overline">{{ l('Your coaching toolkit', 'أدواتك التدريبية') }}</p>
-      <h1>{{ l('Resources', 'الموارد') }}</h1>
-      <p>
-        {{
-          l(
-            'Manage exercise media here, or upload while creating an exercise. Private conversation files stay in their conversation.',
-            'أدر وسائط التمارين هنا أو ارفعها أثناء إنشاء تمرين. تبقى ملفات المحادثات الخاصة في محادثاتها.',
-          )
-        }}
-      </p>
-    </header>
+    <PageHeading class="page-heading"
+      ><div>
+        <p class="overline">{{ l('Your coaching toolkit', 'أدواتك التدريبية') }}</p>
+        <h1>{{ l('Resources', 'الموارد') }}</h1>
+        <p>
+          {{
+            l(
+              'Manage exercise media here, or upload while creating an exercise. Private conversation files stay in their conversation.',
+              'أدر وسائط التمارين هنا أو ارفعها أثناء إنشاء تمرين. تبقى ملفات المحادثات الخاصة في محادثاتها.',
+            )
+          }}
+        </p>
+      </div></PageHeading
+    >
     <CommandStatus :command="command" />
     <p v-if="error" role="alert" class="notice error">
       {{ error }}
       <button class="text-link" @click="load()">{{ l('Retry', 'إعادة المحاولة') }}</button>
     </p>
-    <div class="resource-columns">
+    <div class="resource-columns" :class="{ 'with-selection': !!selected }">
       <section class="panel resource-list">
         <div class="field-pair">
           <label
-            >{{ l('Search files', 'البحث عن ملف') }}<input v-model="search" type="search" /></label
+            >{{ l('Search files', 'البحث عن ملف')
+            }}<input
+              :placeholder="l('Search filenames…', 'ابحث بأسماء الملفات…')"
+              v-model="search"
+              type="search" /></label
           ><label
             >{{ l('Show', 'عرض')
             }}<select v-model="archived">
@@ -133,15 +141,18 @@ onUnmounted(() => {
           >
         </div>
         <p v-if="loading" role="status">{{ l('Loading files…', 'جارٍ تحميل الملفات…') }}</p>
-        <p v-if="!loading && !assets.length" class="empty-state-note">
-          {{
+        <EmptyState
+          v-if="!loading && !assets.length"
+          compact
+          :title="l('No files in this view', 'لا توجد ملفات في هذا العرض')"
+          :description="
             l(
-              'No files here yet. Upload your first demonstration below.',
-              'لا توجد ملفات بعد. ارفع أول شرح أدناه.',
+              'Upload a demonstration below, or adjust the search and archive filter.',
+              'ارفع شرحاً أدناه أو عدّل البحث ومرشح الأرشفة.',
             )
-          }}
-        </p>
-        <ul class="resource-items">
+          "
+        />
+        <ul class="resource-items" tabindex="0" :aria-label="l('Files', 'الملفات')">
           <li v-for="a in assets" :key="a.id">
             <button
               class="resource-row"
@@ -202,11 +213,6 @@ onUnmounted(() => {
           }}
         </button>
       </section>
-      <section class="panel resource-detail" v-else>
-        <p class="empty-state-note">
-          {{ l('Select a file to view its details.', 'اختر ملفاً لعرض تفاصيله.') }}
-        </p>
-      </section>
     </div>
   </div>
 </template>
@@ -216,9 +222,12 @@ onUnmounted(() => {
 }
 .resource-columns {
   display: grid;
-  grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
   min-height: 0;
+}
+.resource-columns.with-selection {
+  grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr);
 }
 .resource-list,
 .resource-detail {
@@ -254,7 +263,8 @@ h2 {
   font-size: 1.2rem;
 }
 @media (max-width: 760px) {
-  .resource-columns {
+  .resource-columns,
+  .resource-columns.with-selection {
     grid-template-columns: minmax(0, 1fr);
   }
 }

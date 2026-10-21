@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { PhTray } from '@phosphor-icons/vue'
+import { useListPageSize } from '../../lib/list-page-size'
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { user, refreshContexts, contexts } from '../../app/auth'
@@ -154,13 +157,19 @@ async function loadExtra(kind: 'invitations' | 'events') {
 }
 let rosterGeneration = 0,
   rosterTimer: ReturnType<typeof setTimeout>
+const { recordLimit, appliedLimit, pageSizes, acceptLimit, changeLimit } = useListPageSize(
+  10,
+  () => {
+    void loadPeople(0)
+  },
+)
 async function loadPeople(offset = peopleOffset.value) {
   const current = ++rosterGeneration
   peopleLoading.value = true
   try {
     const q = new URLSearchParams({
       view,
-      limit: '10',
+      limit: String(recordLimit.value),
       search: search.value,
       state: memberState.value,
       role: ['admin', 'trainer', 'trainee'].includes(filter.value) ? filter.value : '',
@@ -179,6 +188,7 @@ async function loadPeople(offset = peopleOffset.value) {
       new Map([...data.value.names, ...page.names].map((m) => [m.id, m])).values(),
     )
     peopleTotal.value = page.total
+    acceptLimit()
     if (section.value === 'people')
       await router.replace({
         query: {
@@ -325,7 +335,7 @@ onMounted(async () => {
 <template>
   <OrganizationNav />
   <div class="container page institution-page">
-    <header class="work-heading">
+    <PageHeading class="work-heading">
       <div>
         <p class="overline">{{ roleName(view) }}</p>
         <h1>
@@ -339,7 +349,24 @@ onMounted(async () => {
                   : data?.workspace.name || l('Institution', 'المؤسسة')
           }}
         </h1>
-        <p v-if="section !== 'overview'" dir="auto">{{ data?.workspace.name }}</p>
+        <p v-if="section !== 'overview'">
+          {{
+            section === 'people'
+              ? l(
+                  'Manage members, roles and coaching assignments.',
+                  'أدر الأعضاء والأدوار وتعيينات التدريب.',
+                )
+              : section === 'settings'
+                ? l(
+                    'Manage your institution’s identity, sports and appearance.',
+                    'أدر هوية مؤسستك ورياضاتها ومظهرها.',
+                  )
+                : l(
+                    'Recent membership and configuration changes.',
+                    'أحدث تغييرات العضوية والإعدادات.',
+                  )
+          }}
+        </p>
         <p v-else>
           {{
             view === 'admin'
@@ -361,7 +388,7 @@ onMounted(async () => {
       >
         {{ l('Invite people', 'دعوة أشخاص') }}
       </button>
-    </header>
+    </PageHeading>
     <CommandStatus :command="command" />
     <PageState :loading="loading" :error="error" @retry="load"
       ><template v-if="data">
@@ -537,44 +564,58 @@ onMounted(async () => {
             class="people-role-tabs"
           >
             <div class="list-controls">
-              <TabsList class="report-tabs" :aria-label="l('People by role', 'الأشخاص حسب الدور')">
+              <TabsList
+                class="report-tabs ui-tabs"
+                :aria-label="l('People by role', 'الأشخاص حسب الدور')"
+              >
                 <TabsTrigger value="trainee">{{ l('Athletes', 'الرياضيون') }}</TabsTrigger>
                 <TabsTrigger v-if="view === 'admin'" value="trainer">{{
                   l('Coaches', 'المدربون')
                 }}</TabsTrigger>
                 <TabsTrigger v-if="view === 'admin'" value="admin">{{
                   l('Administrators', 'المسؤولون')
-                }}</TabsTrigger> </TabsList
-              ><ListPagination
-                :offset="peopleOffset"
-                :page-size="10"
-                :total="peopleTotal"
-                :label="l('People pages', 'صفحات الأشخاص')"
-                :disabled="peopleLoading"
-                @page="loadPeople"
-              />
+                }}</TabsTrigger>
+              </TabsList>
             </div>
             <TabsContent :value="filter" class="people-directory-panel">
-              <div class="organization-toolbar">
-                <label
-                  >{{ l('Find a person', 'البحث عن شخص') }}<input type="search" v-model="search"
-                /></label>
-                <label
-                  >{{ l('Membership', 'العضوية')
-                  }}<select v-model="memberState">
-                    <option value="active">{{ l('Active', 'نشط') }}</option>
-                    <option value="inactive">{{ l('Inactive', 'غير نشط') }}</option>
-                  </select></label
-                >
-                <label v-if="sports.length"
-                  >{{ l('Sport or specialty', 'الرياضة أو التخصص')
-                  }}<select v-model="sportFilter">
-                    <option value="">{{ l('All', 'الكل') }}</option>
-                    <option v-for="sport in sports" :key="sport.id" :value="sport.id">
-                      {{ sport.name }}{{ sport.archived ? ' · ' + l('Archived', 'مؤرشف') : '' }}
-                    </option>
-                  </select></label
-                >
+              <div class="list-toolbar">
+                <div class="people-search-filters">
+                  <label
+                    >{{ l('Find a person', 'البحث عن شخص')
+                    }}<input
+                      :placeholder="l('Search member names…', 'ابحث بأسماء الأعضاء…')"
+                      type="search"
+                      v-model="search"
+                  /></label>
+                  <label
+                    >{{ l('Membership', 'العضوية')
+                    }}<select v-model="memberState">
+                      <option value="active">{{ l('Active', 'نشط') }}</option>
+                      <option value="inactive">{{ l('Inactive', 'غير نشط') }}</option>
+                    </select></label
+                  >
+                  <label v-if="sports.length"
+                    >{{ l('Sport or specialty', 'الرياضة أو التخصص')
+                    }}<select v-model="sportFilter">
+                      <option value="">{{ l('All', 'الكل') }}</option>
+                      <option v-for="sport in sports" :key="sport.id" :value="sport.id">
+                        {{ sport.name }}{{ sport.archived ? ' · ' + l('Archived', 'مؤرشف') : '' }}
+                      </option>
+                    </select></label
+                  >
+                </div>
+                <div class="list-toolbar-pagination">
+                  <ListPagination
+                    :offset="peopleOffset"
+                    :page-size="appliedLimit"
+                    :sizes="pageSizes"
+                    @page-size="changeLimit"
+                    :total="peopleTotal"
+                    :label="l('People pages', 'صفحات الأشخاص')"
+                    :disabled="peopleLoading"
+                    @page="loadPeople"
+                  />
+                </div>
               </div>
               <div class="organization-people">
                 <section tabindex="0" :aria-label="l('People', 'الأشخاص')">
@@ -582,7 +623,7 @@ onMounted(async () => {
                   <p v-if="peopleLoading" class="small-print" role="status">
                     {{ l('Finding people…', 'جارٍ البحث عن الأشخاص…') }}
                   </p>
-                  <div v-if="!visible.length && !peopleLoading" class="directory-empty">
+                  <div v-if="!visible.length && !peopleLoading" class="empty-state panel">
                     <PersonActionIcon kind="profile" />
                     <h2>{{ l('No people in this view', 'لا يوجد أشخاص في هذا العرض') }}</h2>
                     <p>

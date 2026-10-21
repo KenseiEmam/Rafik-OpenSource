@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { onMounted, ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { PhArrowLeft, PhCheckCircle } from '@phosphor-icons/vue'
@@ -107,14 +108,16 @@ onMounted(async () => {
       }}</RouterLink
     ><PageState :loading="loading" :error="!session ? error : ''" @retry="load"
       ><template v-if="session"
-        ><div class="page-heading">
-          <p class="overline">{{ language('Session review', 'مراجعة الحصة') }}</p>
-          <h1>{{ person?.display_name }}</h1>
-          <p>
-            {{ session.prescription.name }} ·
-            {{ dateLabel(session.completed_at || session.started_at) }}
-          </p>
-        </div>
+        ><PageHeading class="page-heading"
+          ><div>
+            <p class="overline">{{ language('Session review', 'مراجعة الحصة') }}</p>
+            <h1>{{ person?.display_name }}</h1>
+            <p>
+              {{ session.prescription.name }} ·
+              {{ dateLabel(session.completed_at || session.started_at) }}
+            </p>
+          </div></PageHeading
+        >
         <CommandStatus :command="command" :show-notice="false" />
         <div class="review-layout">
           <section>

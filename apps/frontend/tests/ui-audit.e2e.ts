@@ -2,6 +2,7 @@ import { test, expect, type Page } from '@playwright/test'
 import { mkdirSync, writeFileSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { randomUUID, randomBytes } from 'node:crypto'
+import { execFileSync } from 'node:child_process'
 import AxeBuilder from '@axe-core/playwright'
 import { teamFixture } from './team-fixture'
 import { layoutIssues } from './layout-contract'
@@ -18,11 +19,13 @@ test('web design audit inventory', async ({ page }, info) => {
   const output = resolve(
     '../../artifacts/ui-audit/2026-10-21',
     info.project.name,
-    process.env.RAFIK_UI_AUDIT_LAYOUTS === '1'
-      ? 'focused-layouts'
-      : controlsOnly
-        ? 'focused-controls'
-        : '.',
+    process.env.RAFIK_UI_AUDIT_ROLLOUT === '1'
+      ? 'rollout-matrix'
+      : process.env.RAFIK_UI_AUDIT_LAYOUTS === '1'
+        ? 'focused-layouts'
+        : controlsOnly
+          ? 'focused-controls'
+          : '.',
   )
   mkdirSync(output, { recursive: true })
   const observations: unknown[] = [],
@@ -39,6 +42,7 @@ test('web design audit inventory', async ({ page }, info) => {
       await expect(page.locator('main')).toBeVisible()
       await expect(page.locator('.loading-state')).toHaveCount(0, { timeout: 20000 })
       await expect(page.locator('main h1').first()).toBeVisible({ timeout: 15000 })
+      await page.evaluate(() => document.fonts.ready)
       await expect(page.getByText(/^(Loading upcoming events|تحميل المواعيد القادمة)/)).toHaveCount(
         0,
         { timeout: 20000 },
@@ -241,6 +245,249 @@ test('web design audit inventory', async ({ page }, info) => {
       localStorage.setItem('rafik.theme', 'light')
     })
     await page.reload()
+    if (process.env.RAFIK_UI_AUDIT_ROLLOUT === '1') {
+      const own = data.members.find((m: any) => m.user_id === f.owner.id)
+      const channel = randomUUID(),
+        pastEvent = randomUUID()
+      await f.call(f.owner, endpoint + '/communication', {
+        action: 'create',
+        id: channel,
+        operation: randomUUID(),
+        view: 'admin',
+        title: 'Preseason coordination · تنسيق الإعداد للموسم',
+        members: [own.id, athlete.id],
+        managers: [own.id],
+      })
+      for (let i = 0; i < 8; i++)
+        await f.call(f.owner, endpoint + '/communication', {
+          action: 'send',
+          id: channel,
+          message: randomUUID(),
+          operation: randomUUID(),
+          view: 'admin',
+          body: `Practice note ${i + 1}: keep the next session controlled and review readiness. ملاحظة تدريبية: راجع الجاهزية قبل الحصة القادمة.`,
+        })
+      await f.call(f.owner, endpoint + '/tasks', {
+        action: 'save',
+        id: randomUUID(),
+        operation: randomUUID(),
+        view: 'admin',
+        revision: 0,
+        title:
+          'Review the squad’s readiness before the next training session · مراجعة جاهزية الفريق',
+        description: 'Discuss attendance and upcoming assessments with the coaching team.',
+        assigned_to: coach.id,
+        priority: 'high',
+        due_date: today,
+      })
+      await f.call(f.owner, endpoint + '/calendar', {
+        action: 'create',
+        id: pastEvent,
+        operation: randomUUID(),
+        view: 'admin',
+        title: 'Completed field practice · تدريب ميداني مكتمل',
+        kind: 'training',
+        staff: [coach.id],
+        participants: [athlete.id],
+        local: tomorrow + 'T09:00',
+        zone: 'UTC',
+        minutes: 30,
+        count: 1,
+        every: 7,
+      })
+      execFileSync(
+        'docker',
+        [
+          'compose',
+          '-f',
+          resolve('../../infrastructure/compose.yaml'),
+          'exec',
+          '-T',
+          'db',
+          'psql',
+          '-U',
+          'rafik_migrate',
+          '-d',
+          testDatabase,
+          '-v',
+          'ON_ERROR_STOP=1',
+        ],
+        {
+          input: `update public.organization_events set starts_at=now()-interval '2 hours', ends_at=now()-interval '1 hour' where id='${pastEvent}' and workspace_id='${workspace}';`,
+          stdio: ['pipe', 'pipe', 'pipe'],
+        },
+      )
+      const beforeAttendance = await f.call(
+        f.owner,
+        endpoint + '/calendar?view=admin&id=' + pastEvent,
+      )
+      await f.call(f.owner, endpoint + '/calendar', {
+        action: 'attendance',
+        id: pastEvent,
+        member: athlete.id,
+        revision: beforeAttendance.people.find(
+          (p: { member_id: string }) => p.member_id === athlete.id,
+        ).revision,
+        attendance: 'present',
+        operation: randomUUID(),
+        view: 'admin',
+      })
+      const past = await f.call(f.owner, endpoint + '/calendar?view=admin&id=' + pastEvent)
+      await f.call(f.owner, endpoint + '/calendar', {
+        action: 'finish',
+        id: pastEvent,
+        revision: past.event.revision,
+        operation: randomUUID(),
+        view: 'admin',
+      })
+      for (let i = 0; i < 5; i++) {
+        await f.call(f.owner, endpoint + '/calendar', {
+          action: 'create',
+          id: randomUUID(),
+          operation: randomUUID(),
+          view: 'admin',
+          title: 'Today card ' + (i + 1),
+          kind: 'training',
+          staff: [coach.id],
+          participants: [athlete.id],
+          local: tomorrow + 'T' + String(11 + i).padStart(2, '0') + ':00',
+          zone: 'UTC',
+          minutes: 30,
+          count: 1,
+          every: 7,
+        })
+      }
+      execFileSync(
+        'docker',
+        [
+          'compose',
+          '-f',
+          resolve('../../infrastructure/compose.yaml'),
+          'exec',
+          '-T',
+          'db',
+          'psql',
+          '-U',
+          'rafik_migrate',
+          '-d',
+          testDatabase,
+          '-v',
+          'ON_ERROR_STOP=1',
+        ],
+        {
+          input: `update public.organization_events set starts_at=date_trunc('day',now())+interval '12 hours', ends_at=date_trunc('day',now())+interval '13 hours' where workspace_id='${workspace}' and title like 'Today card %';`,
+          stdio: ['pipe', 'pipe', 'pipe'],
+        },
+      )
+      const views = [
+        ['programs', '/plans'],
+        ['program-new', '/plans/new'],
+        ['assignment', '/deliver/' + published.version.id],
+        ['athlete-plans', '/training'],
+        ['sessions', '/session-history'],
+        ['calendar', '/calendar'],
+        ['schedule-list', '/events'],
+        ['event-new', '/calendar/new'],
+        ['event-detail', '/calendar/' + pastEvent],
+        ['template-new', '/assessment-templates/new'],
+        ['group-new', '/groups/new'],
+        ['tasks', '/tasks'],
+        ['task-new', '/tasks/new'],
+        ['resources', '/resources'],
+        ['analytics', '/analytics'],
+        ['messages', '/messages/' + channel],
+        ['nutrition', '/nutrition'],
+        ['nutrition-athlete', '/nutrition?member=' + athlete.id],
+      ]
+      for (const config of [
+        { locale: 'en', theme: 'light', width: 1440, height: 1000 },
+        { locale: 'ar', theme: 'dark', width: 320, height: 640 },
+        { locale: 'en', theme: 'dark', width: 768, height: 1024 },
+        { locale: 'ar', theme: 'light', width: 1024, height: 768 },
+      ]) {
+        await page.setViewportSize({ width: config.width, height: config.height })
+        await page.evaluate((c) => {
+          localStorage.setItem('rafik.locale', c.locale)
+          localStorage.setItem('rafik.theme', c.theme)
+        }, config)
+        await page.emulateMedia({
+          reducedMotion: config.width === 768 ? 'reduce' : 'no-preference',
+        })
+        const subset =
+          info.project.name === 'webkit-phone' || config.width === 768 || config.width === 1024
+            ? views.filter(([name]) =>
+                [
+                  'event-new',
+                  'analytics',
+                  'messages',
+                  'calendar',
+                  'schedule-list',
+                  'athlete-plans',
+                  'nutrition',
+                ].includes(name),
+              )
+            : config.width === 320
+              ? views.filter(([name]) =>
+                  [
+                    'calendar',
+                    'schedule-list',
+                    'athlete-plans',
+                    'nutrition',
+                    'program-new',
+                    'assignment',
+                    'event-new',
+                    'template-new',
+                    'task-new',
+                    'resources',
+                    'analytics',
+                    'messages',
+                  ].includes(name),
+                )
+              : views
+        for (const [name, path] of subset) {
+          await capture(
+            `${config.locale}-${config.theme}-${config.width}-${name}`,
+            base + path,
+            ['template-new', 'analytics', 'messages', 'event-new', 'resources'].includes(name),
+          )
+          if (name === 'calendar' && config.locale === 'en') {
+            await expect(page.locator('.agenda-list > li')).toHaveCount(4)
+            await page
+              .getByRole('navigation', { name: 'Booked session pages', exact: true })
+              .getByRole('button', { name: 'Next page', exact: true })
+              .click()
+            await expect(page.locator('.agenda-list > li')).toHaveCount(2)
+          }
+          if (name === 'athlete-plans' || name === 'nutrition') {
+            await expect(page.locator('.athlete-search input')).toHaveCount(1)
+            await expect(
+              page.locator('details.athlete-filter,details.nutrition-athlete-filter'),
+            ).toHaveCount(0)
+          }
+          if (name === 'messages') {
+            await expect(page.locator('.message-bubble')).toHaveCount(8)
+            await expect(
+              page.getByRole('button', {
+                name: config.locale === 'ar' ? 'إرسال الرسالة' : 'Send message',
+                exact: true,
+              }),
+            ).toBeVisible()
+          }
+          if (name === 'analytics' && config.width === 1440) {
+            await page.getByRole('tab', { name: 'Delivery & capacity', exact: true }).click()
+            await capture('en-light-analytics-delivery', base + path, true, true)
+            await page.getByRole('tab', { name: 'Experience', exact: true }).click()
+            await capture('en-light-analytics-experience', base + path, true, true)
+          }
+        }
+      }
+      expect(
+        (observations as { error?: string; layout?: string[]; accessibility?: unknown[] }[]).filter(
+          (x) => x.error || x.layout?.length || x.accessibility?.length,
+        ),
+      ).toEqual([])
+      return
+    }
     if (process.env.RAFIK_UI_AUDIT_LAYOUTS === '1') {
       for (const config of [
         { locale: 'en', theme: 'light', width: 1440 },

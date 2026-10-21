@@ -295,7 +295,7 @@ function track(_x?: number | Date, _point?: Point, index?: number) {
   padding: 20px;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: var(--radius-panel);
   --vis-font-family: inherit;
   --vis-donut-central-label-text-color: var(--ink);
   --vis-donut-central-label-font-size: 30px;
@@ -311,7 +311,7 @@ function track(_x?: number | Date, _point?: Point, index?: number) {
 }
 .metric-heading p {
   margin: 0;
-  font-size: 0.78rem;
+  font-size: var(--text-small);
   line-height: 1.6;
 }
 .chart-plot {
@@ -327,7 +327,7 @@ function track(_x?: number | Date, _point?: Point, index?: number) {
   min-height: 46px;
   padding: 8px 0;
   border-top: 1px solid var(--line);
-  font-size: 0.8rem;
+  font-size: var(--text-small);
 }
 .chart-inspector > span {
   display: flex;
@@ -345,12 +345,12 @@ function track(_x?: number | Date, _point?: Point, index?: number) {
   flex-shrink: 0;
 }
 .chart-inspector button {
-  width: 34px;
-  min-height: 36px;
+  width: 44px;
+  min-height: 44px;
 }
 .chart-table {
   margin-top: 10px;
-  font-size: 0.8rem;
+  font-size: var(--text-small);
 }
 .chart-table summary {
   color: var(--accent);
@@ -407,7 +407,7 @@ tbody th {
   margin: 0;
   display: grid;
   gap: 16px;
-  font-size: 0.8rem;
+  font-size: var(--text-small);
 }
 .chart-legend li {
   display: grid;
@@ -447,7 +447,7 @@ tbody th {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
-  font-size: 0.75rem;
+  font-size: var(--text-caption);
   align-items: center;
   margin-top: 12px;
 }

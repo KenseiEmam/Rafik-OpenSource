@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { PhTray } from '@phosphor-icons/vue'
+import { useListPageSize } from '../../lib/list-page-size'
+import ScheduleViewSwitch from '../../components/ScheduleViewSwitch.vue'
+import PageHeading from '../../components/PageHeading.vue'
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { request } from '../../lib/backend'
@@ -35,6 +39,12 @@ const stateLabel = (value: string) =>
     : value === 'cancelled'
       ? l('Cancelled', 'ملغى')
       : l('Scheduled', 'مجدول')
+const { recordLimit, appliedLimit, pageSizes, acceptLimit, changeLimit } = useListPageSize(
+  10,
+  () => {
+    void load()
+  },
+)
 async function load() {
   const stamp = ++generation
   loading.value = true
@@ -45,12 +55,14 @@ async function load() {
     kind: String(route.query.kind || 'all'),
     state: String(route.query.state || 'all'),
     search: String(route.query.search || ''),
+    limit: String(recordLimit.value),
     offset: String(page),
   })
   try {
     const result = await request<Page>(`/v1/workspaces/${workspace}/scheduled-events?${query}`)
     if (disposed || stamp !== generation) return
     data.value = result
+    acceptLimit()
     offset.value = page
   } catch (e) {
     if (!disposed && stamp === generation) {
@@ -64,6 +76,10 @@ async function load() {
 function navigate(page = 0) {
   return router.push({
     query: {
+      from: route.query.from,
+      day: route.query.day,
+      mode: route.query.mode,
+      limit: route.query.limit,
       ...(search.value.trim() ? { search: search.value.trim() } : {}),
       ...(kind.value !== 'all' ? { kind: kind.value } : {}),
       ...(state.value !== 'all' ? { state: state.value } : {}),
@@ -89,10 +105,10 @@ onUnmounted(() => {
 <template>
   <OrganizationNav />
   <div class="container page scheduled-events-page">
-    <header class="work-heading">
+    <PageHeading class="work-heading">
       <div>
         <p class="overline">{{ l('Scheduled activity', 'النشاط المجدول') }}</p>
-        <h1>{{ l('Events & assessments', 'المواعيد والتقييمات') }}</h1>
+        <h1>{{ l('Schedule', 'الجدول') }}</h1>
         <p>
           {{
             l(
@@ -103,52 +119,57 @@ onUnmounted(() => {
         </p>
       </div>
       <div class="actions">
-        <RouterLink class="button secondary" :to="base + '/calendar'">{{
-          l('Calendar', 'التقويم')
-        }}</RouterLink
-        ><RouterLink class="button" :to="base + '/calendar/new'">{{
+        <ScheduleViewSwitch :base="base" view="list" />
+        <RouterLink class="button" :to="base + '/calendar/new'">{{
           l('Schedule event', 'جدولة موعد')
         }}</RouterLink>
       </div>
-    </header>
-    <div class="list-controls">
-      <h2 class="list-section-label">{{ l('Events', 'المواعيد') }}</h2>
-      <ListPagination
-        :label="l('Event pages', 'صفحات المواعيد')"
-        :offset="offset"
-        :page-size="10"
-        :total="data?.total || 0"
-        :disabled="loading"
-        @page="navigate"
-      />
+    </PageHeading>
+    <div class="list-toolbar">
+      <form class="event-filters schedule-list-filters" @submit.prevent="navigate()">
+        <label
+          >{{ l('Search schedule', 'البحث في الجدول')
+          }}<input
+            :placeholder="l('Search event titles…', 'ابحث بعناوين المواعيد…')"
+            v-model="search"
+            type="search"
+        /></label>
+        <label
+          >{{ l('Activity type', 'نوع النشاط')
+          }}<select v-model="kind" @change="navigate()">
+            <option value="all">{{ l('All activities', 'جميع الأنشطة') }}</option>
+            <option value="training">{{ l('Training sessions', 'حصص التدريب') }}</option>
+            <option value="assessment">{{ l('Assessments', 'التقييمات') }}</option>
+          </select></label
+        >
+        <label
+          >{{ l('Status', 'الحالة')
+          }}<select v-model="state" @change="navigate()">
+            <option value="all">{{ l('All statuses', 'جميع الحالات') }}</option>
+            <option
+              v-for="value in ['scheduled', 'completed', 'cancelled']"
+              :key="value"
+              :value="value"
+            >
+              {{ stateLabel(value) }}
+            </option>
+          </select></label
+        >
+        <button class="button secondary" :disabled="loading">{{ l('Search', 'بحث') }}</button>
+      </form>
+      <div class="list-toolbar-pagination">
+        <ListPagination
+          :label="l('Schedule pages', 'صفحات الجدول')"
+          :offset="offset"
+          :page-size="appliedLimit"
+          :sizes="pageSizes"
+          @page-size="changeLimit"
+          :total="data?.total || 0"
+          :disabled="loading"
+          @page="navigate"
+        />
+      </div>
     </div>
-    <form class="event-filters" @submit.prevent="navigate()">
-      <label
-        >{{ l('Search events', 'البحث في المواعيد') }}<input v-model="search" type="search"
-      /></label>
-      <label
-        >{{ l('Activity type', 'نوع النشاط')
-        }}<select v-model="kind" @change="navigate()">
-          <option value="all">{{ l('All activities', 'جميع الأنشطة') }}</option>
-          <option value="training">{{ l('Training sessions', 'حصص التدريب') }}</option>
-          <option value="assessment">{{ l('Assessments', 'التقييمات') }}</option>
-        </select></label
-      >
-      <label
-        >{{ l('Status', 'الحالة')
-        }}<select v-model="state" @change="navigate()">
-          <option value="all">{{ l('All statuses', 'جميع الحالات') }}</option>
-          <option
-            v-for="value in ['scheduled', 'completed', 'cancelled']"
-            :key="value"
-            :value="value"
-          >
-            {{ stateLabel(value) }}
-          </option>
-        </select></label
-      >
-      <button class="button secondary" :disabled="loading">{{ l('Search', 'بحث') }}</button>
-    </form>
     <p v-if="loading && data" role="status" class="small-print">
       {{ l('Updating events…', 'جارٍ تحديث المواعيد…') }}
     </p>
@@ -158,8 +179,9 @@ onUnmounted(() => {
     </p>
     <PageState :loading="loading && !data" :error="!data ? error : ''" @retry="load">
       <template v-if="data">
-        <p class="small-print">{{ data.total }} {{ l('matching events', 'مواعيد مطابقة') }}</p>
+        <p class="small-print">{{ data.total }} {{ l('matching activities', 'أنشطة مطابقة') }}</p>
         <section v-if="!data.items.length" class="empty-state panel">
+          <PhTray :size="28" aria-hidden="true" />
           <h2>{{ l('No events match this view.', 'لا توجد مواعيد مطابقة لهذا العرض.') }}</h2>
           <p>
             {{

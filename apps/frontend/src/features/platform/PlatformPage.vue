@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { ref, onMounted } from 'vue'
 import { user } from '../../app/auth'
 import { request } from '../../lib/backend'
@@ -109,7 +110,7 @@ onMounted(() => load())
 </script>
 <template>
   <div class="container page platform-page">
-    <header class="work-heading">
+    <PageHeading class="work-heading">
       <div>
         <p class="overline">{{ l('Platform operations', 'عمليات المنصة') }}</p>
         <h1>{{ l('Keep Rafik running well', 'إدارة عمليات رفيق') }}</h1>
@@ -122,7 +123,7 @@ onMounted(() => load())
           }}
         </p>
       </div>
-    </header>
+    </PageHeading>
     <form class="platform-filters" @submit.prevent="load()">
       <label
         >{{ l('Area', 'القسم')
@@ -130,7 +131,11 @@ onMounted(() => load())
           <option v-for="(label, key) in labels()" :key="key" :value="key">{{ label }}</option>
         </select></label
       ><label v-if="section !== 'audit'"
-        >{{ l('Search', 'بحث') }}<input v-model="search" type="search" /></label
+        >{{ l('Search', 'بحث')
+        }}<input
+          :placeholder="l('Search records…', 'ابحث في السجلات…')"
+          v-model="search"
+          type="search" /></label
       ><label v-if="section === 'audit'" class="check-label"
         ><input v-model="includeReads" type="checkbox" @change="load()" />{{
           l('Include directory access', 'تضمين الوصول إلى القوائم')

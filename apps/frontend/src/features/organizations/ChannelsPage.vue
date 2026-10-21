@@ -186,7 +186,10 @@ watch(
         <form class="conversation-search" @submit.prevent="load()">
           <label
             >{{ l('Search people and conversations', 'ابحث عن الأشخاص والمحادثات')
-            }}<input v-model="search" type="search" /></label
+            }}<input
+              :placeholder="l('Search people and conversations…', 'ابحث عن أشخاص ومحادثات…')"
+              v-model="search"
+              type="search" /></label
           ><button class="text-link">{{ l('Search', 'بحث') }}</button
           ><label v-if="view === 'admin'" class="check-label small-print"
             ><input v-model="manage" type="checkbox" @change="load()" />{{

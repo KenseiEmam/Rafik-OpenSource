@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { user } from '../../app/auth'
@@ -157,7 +158,7 @@ onMounted(async () => {
     <RouterLink class="back-link" to="/coach/teams">← {{ l('Teams', 'الفرق') }}</RouterLink
     ><CommandStatus :command="command" /><PageState :loading="loading" :error="error" @retry="load"
       ><template v-if="data"
-        ><header class="page-heading heading-actions">
+        ><PageHeading class="page-heading heading-actions">
           <div>
             <p class="overline">{{ roleName(data.team.role) }}</p>
             <h1>{{ data.team.name }}</h1>
@@ -169,7 +170,7 @@ onMounted(async () => {
             :to="'/coach/business?team=' + id"
             >{{ l('Team subscription', 'اشتراك الفريق') }}</RouterLink
           >
-        </header>
+        </PageHeading>
         <nav class="workspace-tabs" :aria-label="l('Team sections', 'أقسام الفريق')">
           <button
             v-for="item in [

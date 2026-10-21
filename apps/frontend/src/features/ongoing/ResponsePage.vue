@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { notifySuccess } from '../../lib/feedback'
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { user } from '../../app/auth'
@@ -105,17 +107,22 @@ async function save(submit: boolean) {
     await removeDraft(key)
     restored.value = false
     ready = true
-    notice.value = submit
-      ? l(
-          'Response submitted. Your coach can review it now.',
-          'أُرسلت الإجابة. يمكن لمدربك مراجعتها الآن.',
-        )
-      : result.submitted_at
+    notifySuccess(
+      submit
         ? l(
-            'Correction saved. Your coach will review the updated response.',
-            'حُفظ التصحيح. سيراجع مدربك الإجابة المحدثة.',
+            'Response submitted. Your coach can review it now.',
+            'أُرسلت الإجابة. يمكن لمدربك مراجعتها الآن.',
           )
-        : l('Draft saved. Submit when you are ready.', 'حُفظت المسودة. أرسلها عندما تكون جاهزاً.')
+        : result.submitted_at
+          ? l(
+              'Correction saved. Your coach will review the updated response.',
+              'حُفظ التصحيح. سيراجع مدربك الإجابة المحدثة.',
+            )
+          : l(
+              'Draft saved. Submit when you are ready.',
+              'حُفظت المسودة. أرسلها عندما تكون جاهزاً.',
+            ),
+    )
   } catch (e) {
     error.value = errorMessage(e)
   } finally {
@@ -131,9 +138,8 @@ async function review() {
       p_revision: q.value!.revision,
       p_feedback: feedback.value,
     })
-    notice.value = l(
-      'Review saved and shared with your athlete.',
-      'حُفظت المراجعة ومشاركتها مع المتدرب.',
+    notifySuccess(
+      l('Review saved and shared with your athlete.', 'حُفظت المراجعة ومشاركتها مع المتدرب.'),
     )
   } catch (e) {
     error.value = errorMessage(e)
@@ -182,22 +188,24 @@ onMounted(() => load())
     >
     <PageState :loading="loading" :error="!q ? error : ''" @retry="load()"
       ><template v-if="q">
-        <header class="page-heading">
-          <p class="overline">
-            {{ q.kind === 'assessment' ? l('Assessment', 'تقييم') : l('Check-in', 'متابعة') }} ·
-            {{ l('Due', 'الموعد') }} {{ dateLabel(q.due_date) }}
-          </p>
-          <h1>{{ q.title }}</h1>
-          <p>
-            {{
-              q.cancelled
-                ? l('This request was cancelled.', 'أُلغي هذا الطلب.')
-                : q.submitted_at
-                  ? l('Submitted', 'أُرسل') + ' ' + dateLabel(q.submitted_at)
-                  : l('A few useful details for your next step.', 'تفاصيل مفيدة لخطوتك التالية.')
-            }}
-          </p>
-        </header>
+        <PageHeading class="page-heading"
+          ><div>
+            <p class="overline">
+              {{ q.kind === 'assessment' ? l('Assessment', 'تقييم') : l('Check-in', 'متابعة') }} ·
+              {{ l('Due', 'الموعد') }} {{ dateLabel(q.due_date) }}
+            </p>
+            <h1>{{ q.title }}</h1>
+            <p>
+              {{
+                q.cancelled
+                  ? l('This request was cancelled.', 'أُلغي هذا الطلب.')
+                  : q.submitted_at
+                    ? l('Submitted', 'أُرسل') + ' ' + dateLabel(q.submitted_at)
+                    : l('A few useful details for your next step.', 'تفاصيل مفيدة لخطوتك التالية.')
+              }}
+            </p>
+          </div></PageHeading
+        >
         <p v-if="restored" class="notice">
           {{ l('Your device draft is restored.', 'استُعيدت مسودة جهازك.') }}
         </p>
@@ -207,7 +215,7 @@ onMounted(() => load())
             {{ l('Discard local edits & load latest', 'تجاهل التعديلات المحلية وتحميل الأحدث') }}
           </button>
         </p>
-        <p v-if="notice" class="notice success" role="status">{{ notice }}</p>
+
         <div v-if="q.reviewed_at" class="coach-feedback">
           <span class="overline">{{ l('Coach’s feedback', 'ملاحظات المدرب') }}</span>
           <p>{{ q.feedback || l('Reviewed by your coach.', 'راجعها مدربك.') }}</p>

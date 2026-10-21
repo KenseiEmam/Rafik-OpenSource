@@ -1,3 +1,4 @@
+import { pageSize } from "./pagination.ts";
 import { ApiError, asActor, type Actor } from "./db.ts";
 import {
   scoped,
@@ -16,7 +17,7 @@ export async function peoplePage(
   view: Role,
   q: URLSearchParams,
 ) {
-  const take = q.get("limit") === "10" ? 10 : 25;
+  const take = pageSize(q, 25);
   const offset = pageOffset(q.get("offset")),
     search = (q.get("search") || "").slice(0, 100),
     kind = q.get("role"),

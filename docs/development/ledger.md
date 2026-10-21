@@ -14,6 +14,8 @@
 
 ## Recent work
 
+- **21 October — Remaining approved web rollout:** migrated workspace headings and tabs to shared patterns, standardized card geometry and standalone widths, removed unused resource detail columns, added search hints/dropzones and selectable page sizes. Founder confirmed dedicated pages for substantial editors, inline small settings, no duplicate success cards, and task-specific subtitles. Implemented dedicated template/group/task/exercise routes, record-scoped draft migration and active-command tracking across remounts. Founder requested a Claude design-audit handoff. PR #138 is a temporary draft; do not treat source changes as rendered acceptance.
+
 - **21 October — Web design audit requested:** founder requested a comprehensive audit, one design-system document and approval before broad implementation. Scope clarified as web first, Android later. Added a proposed design system and categorized audit/rollout plan; existing People/settings work is the baseline. Source inventory and an opt-in rendered observation collector separate source findings, automated observations, inspected images and remaining states. The founder subsequently approved implementation and pushing to PR #138. Shared presentation tokens, section headers, password visibility controls, responsive sport settings and picker accessibility refinements are implemented; remaining page migrations stay in the audit backlog.
 
 - **21 October — Settings and management layout:** member management uses a full-width identity section, paired coaching cards, and sports/recovery at the bottom. Role choices retain single-select radio semantics with button styling. Supporting-coach selection starts with the sport/specialty and filters the authorized coach directory. Institution settings place general settings and sports alongside installation branding, stacking on phones. Closure opens a keyboard-accessible dialog and requires the exact institution name; cancellation never sends a closure command. Vite ignores generated browser artifacts after a locked trace file crashed its development watcher during verification.
@@ -102,3 +104,25 @@
 Earlier delivery messages, failed attempts and superseded “still pending” statements are preserved in the [dated ledger snapshot](../archive/delivery-ledger-through-2026-10-19.md). Current scope is in requirements; this file is not a second setup guide.
 
 - **21 October — Approved UI verification:** focused controls passed Chromium/WebKit (2 tests); management/settings English-light desktop and Arabic-dark 320px passed (2 tests) after correcting a settings heading skip. Recorded actual image review and gaps in the audit receipt. The prior landing PR #27 was already merged; new paired administration guidance is in landing PR #29; application work targets PR #138.
+
+### Shared search and empty-state conventions — 21 October 2026
+
+Unified athlete-name search across nutrition and athlete plans, removed duplicate athlete-filter disclosures, and expanded library search into available toolbar space. Standardized existing empty collection surfaces with SVG icons, full-width panels versus compact nested states, and motion-aware pulsing skeletons. Detailed rules are maintained in the design system. Final rendered verification is deferred to Claude.
+
+Schedule refinement: unified calendar/list navigation and icon, today-selected booking cards with four-card pagination, and complete period reads. Existing calendar/event routes and authorization remain unchanged.
+
+### Claude design handoff — 21 October
+
+Founder directed Codex to stop further design auditing, document the decisions and preserve this work as a temporary draft PR. Claude will perform the final rendered audit and prepare a separate release-ready PR. See [the handoff prompt](design-audit-handoff.md). No tag, release, mobile rebuild or main-branch update is authorized by this handoff.
+
+Final handoff cleanup: removed the duplicated athlete search, restored the plan-status control, and aligned search/select/button and pagination rows to a shared 44px lower edge. Final rendered review remains delegated to Claude.
+
+Final founder direction: simple desktop filters remain visible inline; session history now shares athlete-name search with nutrition and athlete plans. Backend history search retains existing authorization and count scope.
+
+Schedule list cleanup: removed the competing Events heading and grouped search/type/status with aligned pagination using the shared toolbar.
+
+Groups and assessment templates now use the shared aligned toolbar too, with contextual search hints and a visible archive checkbox.
+
+People search/membership/sport and pagination now share a lower-aligned toolbar under role tabs. Removed inherited pagination block margins responsible for Programs misalignment. Founder deferred additional Tasks polish.
+
+Assessment templates now use the founder-requested responsive card grid with title, drill count and aligned edit action; groups retain rows. Template grids use the shared 24-record grid default.

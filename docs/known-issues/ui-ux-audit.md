@@ -1,6 +1,6 @@
 # Web UI/UX audit and standardization plan
 
-**Audit date: 21 October 2026. Status: baseline collected; founder approved implementation.** Scope is the web dashboard first. Android is a separate follow-up. The current uncommitted People/profile/settings changes predate this audit request and form part of the baseline; they are not evidence that the proposed platform-wide design system has been implemented.
+**Audit date: 21 October 2026. Status: implementation handoff; NOT release ready.** Scope is the web dashboard first. Android is a separate follow-up. The current uncommitted People/profile/settings changes predate this audit request and form part of the baseline; they are not evidence that the proposed platform-wide design system has been implemented.
 
 The [design system proposal](../DESIGN_SYSTEM.md) is the one proposed visual specification. This report records problems and sequencing, not a competing style guide. Business rules, API contracts, routing, permission boundaries and persistence behavior must remain intact.
 
@@ -126,8 +126,14 @@ Each slice is a reviewable change with focused tests, before/after screenshots, 
 
 ## Implementation status
 
-The founder approved implementation on 21 October. Shared spacing, type, surface, control and motion tokens are implemented in `styles/design-system.css`. `SectionHeader` is used by primary/supporting coach and sport settings sections; `PasswordField` provides localized visibility controls for login, first setup, invitation and password setup. People/profile/settings refinements, responsive sports grouping, permission-denial copy, privacy wording and heading fixes are implemented. Exercise and timezone popup accessibility fixes passed focused Chromium/WebKit checks, including visible options and keyboard exercise selection. Password reveal retained the entered value and hid it again. The remaining planning, communication and report migrations are follow-up slices; this pass does not claim every page or state is visually accepted.
+The founder approved implementation on 21 October. Shared spacing, type, surface, control and motion tokens are implemented in `styles/design-system.css`. `SectionHeader` is used by primary/supporting coach and sport settings sections; `PasswordField` provides localized visibility controls for login, first setup, invitation and password setup. People/profile/settings refinements, responsive sports grouping, permission-denial copy, privacy wording and heading fixes are implemented. Exercise and timezone popup accessibility fixes passed focused Chromium/WebKit checks, including visible options and keyboard exercise selection. Password reveal retained the entered value and hid it again. Planning, communication, reporting and account views now use the shared heading/tab/surface patterns in source. Dedicated editors, shared search/upload/pagination and Schedule refinements are implemented. The final cross-platform visual review is delegated to Claude; these source migrations are not full rendered acceptance. See the [handoff](../development/design-audit-handoff.md).
 
 ## Additional confirmed control findings
 
 Both baseline engines reported missing exercise popup semantics and an unfocusable timezone scroll region. The final controls use a labelled composite exercise dialog with a separate listbox, and a keyboard-focusable timezone option group. Final focused checks passed with no Axe violations in the five checked states per engine. The missing `PhBarbell` import in the training view was also corrected. Baseline WebKit access-control cancellation messages remain unverified; they are not classified as a confirmed server CORS defect.
+
+## Founder handoff — 21 October
+
+Stop further Codex design auditing. Keep application PR #138 as a temporary draft, not a release approval. Claude should audit and refine the final interface and open a separate release-ready PR afterward. The final Schedule toolbar groups its controls within the calendar column, with adjacent previous/next buttons aligned above the calendar edge. This last layout has not been visually accepted.
+
+The broader rollout browser collector did not reach final acceptance: fixture revision/time collisions were corrected; a subsequent isolated run ended with a fetch ECONNRESET. No confirmed product root cause was established. The WebKit editor journey remains unverified. Earlier focused checks retain only their named source/state coverage.

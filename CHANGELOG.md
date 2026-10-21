@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Standardized directory search/pagination alignment and changed assessment templates to a responsive card grid.
+
+- Session history replaces its expandable athlete filter with the shared inline athlete-name search.
+
+- Web UI refinement: shared athlete search, responsive search/pagination toolbars, consistent icon-led empty states and reduced-motion-aware pulsing loading skeletons.
+- Schedule now combines calendar and event-list navigation, opens booking cards on today, and pages booking cards four at a time.
+
+- Continued the approved web design rollout: shared page headings across workspaces, unified tabs and empty-state treatment, full-width standalone editors, contextual subtitles, bilingual search hints, reusable upload dropzones and selectable URL-persisted record counts.
+- Assessment templates, groups, tasks and exercises now use dedicated create/edit routes with record-scoped draft recovery and guarded save-to-list navigation. Active commands remain in progress across remounts; routine success uses toasts without duplicate status cards. Optional bounded list limits and scoped task-by-ID reads support the new controls.
+
 ## Squire 1.0.0-beta.2 — release preparation
 
 Sports and coaching foundation, merged in PR #135. Publication date, tag and Android artifacts are pending; beta.1 remains the published release. Workspace versions are `1.0.0-beta.2`; Android versionCode is `1000002`. See [upgrade and publication guidance](docs/operations/README.md#beta2-upgrade-and-release-preparation).

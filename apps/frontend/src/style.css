@@ -442,18 +442,18 @@ td:first-child {
 .panel {
   background: var(--surface);
   border: 1px solid var(--line);
-  padding: 28px;
-  border-radius: var(--radius);
+  padding: var(--space-6, 24px);
+  border-radius: var(--radius-panel, 12px);
 }
 .panel h2,
 .panel h3 {
   margin-bottom: 12px;
 }
-.panel p + .button,
-.panel p + .text-link {
+:where(.panel):not(.form-stack) > p + .button,
+:where(.panel):not(.form-stack) > p + .text-link {
   margin-top: 22px;
 }
-.panel + .panel {
+:where(.panel) + .panel {
   margin-top: 22px;
 }
 .tag {

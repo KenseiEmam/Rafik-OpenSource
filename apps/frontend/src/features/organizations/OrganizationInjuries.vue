@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { programContext } from '../coaching/program-context'
@@ -135,10 +136,12 @@ onMounted(load)
 <template>
   <OrganizationNav />
   <section class="container page injury-page" aria-labelledby="injury-title">
-    <header>
-      <p class="eyebrow">{{ l('Health and participation', 'الصحة والمشاركة') }}</p>
-      <h1 id="injury-title">{{ l('Injury status', 'حالة الإصابة') }}</h1>
-    </header>
+    <PageHeading class="page-heading"
+      ><div>
+        <p class="eyebrow">{{ l('Health and participation', 'الصحة والمشاركة') }}</p>
+        <h1 id="injury-title">{{ l('Injury status', 'حالة الإصابة') }}</h1>
+      </div></PageHeading
+    >
     <p class="notice" role="note">
       {{
         l(
@@ -323,10 +326,6 @@ onMounted(load)
 
 <style scoped>
 .injury-page {
-  max-width: 860px;
-}
-.injury-page header {
-  margin-block: 24px;
 }
 .eyebrow {
   color: var(--muted);

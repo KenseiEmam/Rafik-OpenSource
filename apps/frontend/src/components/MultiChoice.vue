@@ -38,7 +38,11 @@ const visible = computed(() =>
         }}</span>
       </summary>
       <label v-if="options.length > 12" class="choice-search"
-        >{{ l('Filter ', 'تصفية ') + label.toLowerCase() }}<input type="search" v-model="search"
+        >{{ l('Filter ', 'تصفية ') + label.toLowerCase()
+        }}<input
+          :placeholder="l('Type to filter options…', 'اكتب لتصفية الخيارات…')"
+          type="search"
+          v-model="search"
       /></label>
       <div class="choice-options">
         <label v-for="option in visible" :key="option.value"

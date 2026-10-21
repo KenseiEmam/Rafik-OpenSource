@@ -29,32 +29,9 @@
   min-height: 0;
   padding-block: 24px 32px;
 }
-.dashboard-frame .work-heading,
-.dashboard-frame .page-heading {
-  margin-bottom: 22px;
-  max-width: none;
-}
-.dashboard-frame .work-heading h1,
-.dashboard-frame .page-heading h1 {
-  font-size: 2rem;
-  line-height: 1.2;
-  letter-spacing: -0.04em;
-  margin: 0 0 8px;
-}
 .dashboard-frame .work-heading .overline,
 .dashboard-frame .page-heading .overline {
   display: none;
-}
-.dashboard-frame .page-heading p,
-.dashboard-frame .work-heading p {
-  font-size: 0.85rem;
-  margin: 0;
-}
-.dashboard-frame .page-heading > p:last-child {
-  margin-top: 8px;
-}
-.dashboard-frame .panel {
-  padding: 22px;
 }
 .dashboard-frame .organization-summary {
   margin-block: 18px 24px;

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { PhTray } from '@phosphor-icons/vue'
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, onBeforeUnmount, ref, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { user, profile, contexts } from '../../app/auth'
@@ -359,7 +361,7 @@ onBeforeUnmount(() => {
       :to="`/organization/${workspace}/${view}/nutrition`"
       >{{ l('All nutrition plans', 'جميع خطط التغذية') }}</RouterLink
     >
-    <header class="page-heading">
+    <PageHeading class="page-heading">
       <div>
         <h1>{{ l('Nutrition', 'التغذية') }}</h1>
         <p class="subtle">
@@ -374,7 +376,7 @@ onBeforeUnmount(() => {
       <button class="button small secondary" :disabled="locked" @click="load()">
         {{ l('Refresh', 'تحديث') }}
       </button>
-    </header>
+    </PageHeading>
     <CommandStatus v-if="!loading" :command="command" />
     <p v-if="!draftError && (hasPlanDraft || hasMealDraft)" class="small-print" role="status">
       {{
@@ -583,6 +585,7 @@ onBeforeUnmount(() => {
                 </button></template
               >
               <div v-else class="empty-state empty-state--compact">
+                <PhTray :size="28" aria-hidden="true" />
                 <h3>{{ l('No plan for this date', 'لا توجد خطة لهذا التاريخ') }}</h3>
                 <p>
                   {{

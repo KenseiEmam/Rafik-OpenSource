@@ -228,7 +228,6 @@ onMounted(async () => {
 </template>
 <style scoped>
 .channel-editor {
-  max-width: 760px;
   margin-block: 20px;
 }
 .channel-editor h2 {

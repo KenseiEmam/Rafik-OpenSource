@@ -6,9 +6,10 @@ const props = defineProps<{
   pageSize: number
   total: number
   disabled?: boolean
+  sizes?: number[]
   label?: string
 }>()
-const emit = defineEmits<{ page: [offset: number] }>()
+const emit = defineEmits<{ page: [offset: number]; pageSize: [size: number] }>()
 const page = computed(() => Math.floor(props.offset / props.pageSize) + 1),
   pages = computed(() => Math.max(1, Math.ceil(props.total / props.pageSize)))
 </script>
@@ -18,6 +19,17 @@ const page = computed(() => Math.floor(props.offset / props.pageSize) + 1),
     :dir="locale === 'ar' ? 'rtl' : 'ltr'"
     :aria-label="label || l('Pagination', 'التنقل بين الصفحات')"
   >
+    <label v-if="sizes?.length" class="pagination-size"
+      >{{ l('Records fetched:', 'عدد السجلات:') }}
+      <select
+        :value="pageSize"
+        :disabled="disabled"
+        :aria-label="l('Records per page', 'عدد السجلات لكل صفحة')"
+        @change="emit('pageSize', Number(($event.target as HTMLSelectElement).value))"
+      >
+        <option v-for="size in sizes" :key="size" :value="size">{{ size }}</option>
+      </select>
+    </label>
     <span dir="ltr" class="pagination-range" aria-live="polite"
       >{{ total ? offset + 1 : 0 }}–{{ Math.min(offset + pageSize, total) }} / {{ total }}</span
     ><button
@@ -63,6 +75,7 @@ const page = computed(() => Math.floor(props.offset / props.pageSize) + 1),
 </template>
 <style scoped>
 .list-pagination {
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -70,6 +83,21 @@ const page = computed(() => Math.floor(props.offset / props.pageSize) + 1),
   flex-wrap: wrap;
   font-size: 0.82rem;
   flex-shrink: 0;
+}
+.pagination-size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-weight: 400;
+}
+.pagination-size select {
+  width: auto;
+  min-width: 128px;
+  min-height: 44px;
+  margin: 0;
+  margin-inline-end: 32px;
+  padding: 8px;
 }
 .pagination-range {
   color: var(--muted);
@@ -84,8 +112,8 @@ const page = computed(() => Math.floor(props.offset / props.pageSize) + 1),
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 40px;
-  min-height: 40px;
+  min-width: 44px;
+  min-height: 44px;
   border: 1px solid var(--line);
   border-radius: 10px;
   background: var(--surface);

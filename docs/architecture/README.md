@@ -115,3 +115,9 @@ No default telemetry or outbound data transfer is configured. Optional support f
 - [ADR 0021: organization-only supported web experience](../decisions/ADR-0021-organization-only-web-experience.md)
 
 Previous architecture notes are preserved as dated material in the [documentation archive](../archive/README.md); they are not current implementation guidance.
+
+## Web list and editor lifecycle
+
+Operational lists accept an optional bounded `limit` (1–100), retaining each API’s existing default when absent or invalid. The web exposes curated choices and URL persistence; matching totals remain server-scoped. Task `id` reads use the same institution/assignee authorization as the list and can resolve completed records independently of the active status filter. No new grant is introduced.
+
+Dedicated template/group/task/exercise editor routes preserve the existing command payloads and server authority. Device drafts are isolated by account, institution, role and entity; legacy drafts move only after durable storage of the scoped copy. A small in-memory active-dispatch registry prevents another mount of the same command scope from offering replay while the original runs. Reload after process loss still uses the durable exact command. Successful navigation waits for settlement and checks that the original screen is still mounted.
