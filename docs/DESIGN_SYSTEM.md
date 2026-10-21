@@ -1,6 +1,6 @@
 # Rafik design system
 
-**Status: founder approved, implementation underway, 21 October 2026.** This is the single visual and interaction specification for the web dashboard. It describes the existing foundation and the proposed standard separately. Proposed tokens and components below are not implemented merely because they appear here. Android is a follow-up audit; this document does not establish native acceptance. The [audit and rollout plan](known-issues/ui-ux-audit.md) records findings, evidence and priorities.
+**Status: founder approved, implementation underway, 21 October 2026.** This is the single visual and interaction specification for the web dashboard. It distinguishes the existing foundation, implemented shared controls and remaining migrations. A guideline does not establish acceptance of every consumer. Android is a follow-up audit; this document does not establish native acceptance. The [audit and rollout plan](known-issues/ui-ux-audit.md) records findings, evidence and priorities.
 
 ## Purpose and boundaries
 
@@ -42,7 +42,7 @@ The original default accent is `#285943`; default page colors are `#f8f8f3` and 
 
 ### Proposed additions
 
-Introduce semantic success, warning, information and danger-action foreground/background/border pairs. These are **proposed**, not existing token names. Resolve final values against both default and customized palettes during implementation. Success can use the green family; warning uses restrained amber, information a muted blue, danger a readable red. Meaning must also appear as text or an icon.
+Shared success, warning, information and danger-action colors now live in `styles/design-system.css` (`--success`, `--success-bg`, `--warning`, `--warning-bg`, `--info`, `--info-bg`, `--danger-action`, `--on-danger`). Wider consumer migration and customized-palette validation remain follow-up work. Success can use the green family; warning uses restrained amber, information a muted blue, danger a readable red. Meaning must also appear as text or an icon.
 
 Use ordinary opaque surfaces for most content. Use a subtle gradient only for a small header, selected emphasis or onboarding highlight. Glass treatment is optional for floating shell elements/overlays, with an opaque fallback and verified contrast. Never blur a form, table, athlete record or primary reading surface.
 

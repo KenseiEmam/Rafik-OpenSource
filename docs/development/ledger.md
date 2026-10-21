@@ -100,3 +100,5 @@
 4. Collect the recorded first-user, recent web refinement, privacy and Unix operational evidence from [known issues](../known-issues/README.md) as the relevant institution is evaluated. These are not invented completed checks or a request to redo accepted implementation stages.
 
 Earlier delivery messages, failed attempts and superseded “still pending” statements are preserved in the [dated ledger snapshot](../archive/delivery-ledger-through-2026-10-19.md). Current scope is in requirements; this file is not a second setup guide.
+
+- **21 October — Approved UI verification:** focused controls passed Chromium/WebKit (2 tests); management/settings English-light desktop and Arabic-dark 320px passed (2 tests) after correcting a settings heading skip. Recorded actual image review and gaps in the audit receipt. The prior landing PR #27 was already merged; new paired administration guidance is in landing PR #29; application work targets PR #138.

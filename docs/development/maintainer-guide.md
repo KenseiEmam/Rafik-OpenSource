@@ -133,7 +133,7 @@ Use one root `npm ci`. Start the local PostgreSQL Compose profile and apply migr
 
 ## Focused verification and cleanup
 
-For visual standardization, read the proposed [design system](../DESIGN_SYSTEM.md) and [audit plan](../known-issues/ui-ux-audit.md) first. Broad changes require founder approval. The opt-in `ui-audit.e2e.ts` collector records observations and screenshots using disposable data; it deliberately does not assert that an existing design is defect-free. Use [the testing procedure](../testing/README.md#opt-in-web-design-audit), inspect actual images, and label source-only and unverified states honestly.
+For visual standardization, read the approved [design system](../DESIGN_SYSTEM.md) and [audit plan](../known-issues/ui-ux-audit.md) first. The founder approved the current slice plan on 21 October; preserve the agreed boundaries. The opt-in `ui-audit.e2e.ts` collector records observations and screenshots using disposable data; it deliberately does not assert that an existing design is defect-free. Use [the testing procedure](../testing/README.md#opt-in-web-design-audit), inspect actual images, and label source-only and unverified states honestly.
 
 - Run the smallest relevant check for the changed behavior; do not rerun unrelated suites or a full browser matrix by default.
 - Run typecheck/build for the workspace whose compilation or generated output changed. Run documentation-link checks after moving or adding docs.

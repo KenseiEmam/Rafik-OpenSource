@@ -4,7 +4,7 @@ This page is the index for maintained Rafik documentation. The root [README](../
 
 ## Product and design
 
-- [Design system proposal](DESIGN_SYSTEM.md): existing brand foundation and proposed typography, spacing, components, responsive, accessibility and RTL standards; founder approval required before broad implementation.
+- [Design system](DESIGN_SYSTEM.md): approved brand, typography, spacing, component, responsive, accessibility and RTL standards; implementation status is tracked in the audit.
 - [Web UI/UX audit and rollout plan](known-issues/ui-ux-audit.md): categorized findings, root causes, coverage/evidence limits and prioritized implementation slices. Android is follow-up scope.
 
 - [Requirements and staged plan](requirements/README.md): goals, scope, constraints, acceptance criteria and current stage gates.
