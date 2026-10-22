@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Beta.2 release preparation: patch Vite to 8.3.5 and Vitest to 5.0.5; preserve founder-provided Android launcher PNGs as maintained assets and apply them to regular/round launcher resources during native preparation.
+
 - Final web design audit (Claude, 21 October), reviewed in rendered English/Arabic, light/dark, desktop/tablet/phone states in Chromium and WebKit:
   - Schedule calendar toolbar fits one row: View, Month and Show cancelled share the 44px control row; adjacent previous/next chevrons around a visible month label sit at the calendar column's inline end and stay paired on phones.
   - Out-of-month calendar days no longer turn grey through the global disabled opacity; the light chip/selection fill is lighter and keeps readable muted text.

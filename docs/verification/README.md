@@ -1,5 +1,9 @@
 # Verification record
 
+## Beta.2 final packaging preparation — 22 October 2026
+
+Merged base: 15e94dec6e250de9076b1139e9fd5a6ce4decd82. Registry audit before: 22 affected-package entries; after Vite 8.3.5/Vitest 5.0.5: 19 high entries tracing to braces/node-forge, with no patched upstream release at review time. The deployed backend dependency scope reports zero findings. All 33 frontend unit tests pass with the patched Vitest. Native release preparation passes using the existing signing material and maintained founder-provided launcher PNGs. Signed compilation and artifact verification are recorded separately after completion. No new device/upgrade acceptance is claimed.
+
 ## Final web design audit — 21 October 2026
 
 **Candidate, not a published release.** Branch `codex/web-design-final` from PR #138's head (`3c5b00d`). A disposable seeded institution (15 athletes, 3 coaches, mixed English/Arabic names, 6 sports/specialties, plans, nutrition, templates, groups and events) ran on its own database and ports; the database was dropped afterwards and no preview or institution data was touched. Rendered states were inspected as images before and after the changes: English light 1440px (17 views), Arabic dark 390px (People, Schedule calendar/list, settings, profile, templates), English dark 768px with reduced motion and 1440px, and WebKit desktop/phone calendars. Computed-style checks in the in-app browser confirmed the calendar cell, settings form grid, Arabic pagination glyph order and overview list height. See the [receipt](receipts/2026-10-21-final-web-design-audit.json) for exact coverage.

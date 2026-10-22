@@ -187,3 +187,7 @@ The existing beta.1 tag resolves to `4ac70c8`; the later locally packaged APK re
 This closes the current Android distribution task. Broader devices, accessibility, historical upgrades, first-user feedback and institution-specific live-data approval stay in their existing backlog; they do not require another beta.1 packaging cycle. Any later runtime change requires a separately identified candidate and relevant verification.
 
 References: [Android signing](https://developer.android.com/studio/publish/app-signing) and [React Native release builds](https://reactnative.dev/docs/signed-apk-android.html).
+
+## Maintained launcher artwork
+
+Founder-provided density-specific PNGs live in `apps/mobile/assets/android-icons/`. The highest-density PNG is also the Expo icon source. `android.mjs` copies the maintained PNG at each density to both regular and round launcher resource names after native preparation, removing only conflicting generated WebP files with those exact names. Edit the maintained artwork rather than only `android/app/src/main/res`: generated resources are not committed and may be recreated. Launcher changes require a signed native rebuild; ordinary JavaScript refresh cannot update an installed launcher icon.

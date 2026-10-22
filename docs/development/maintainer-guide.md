@@ -163,3 +163,7 @@ Use the approved [design system](../DESIGN_SYSTEM.md). `src/styles/design-system
 Use `PageHeading.vue` for operational page titles, `SectionHeader.vue` for grouped section copy, `EmptyState.vue` for list emptiness and `FileDropzone.vue` for standalone uploads. Reka tab lists use the shared `ui-tabs` skin. Keep existing field and upload validation in their owners. Main directory page-size state uses `useListPageSize`; call `acceptLimit` only after installing the matching response, and retain `limit` in filter navigation.
 
 Entity editors use `/:editor` (`new` or an existing ID) beneath templates, groups, tasks and exercises. The main router remounts on path changes. Keep draft keys record-scoped through `loadEditorDraft`; do not restore one entity’s work into another. Save navigation waits for command settlement and checks the original mounted route. The command helper tracks active dispatches by account and scope so a remount cannot offer replay before the original finishes.
+
+### Android launcher assets
+
+Density-specific launcher PNGs are maintained under `apps/mobile/assets/android-icons/` and installed by `apps/mobile/scripts/android.mjs` during preparation. Keep app.json’s icon reference and those assets together. Generated native resources alone are not durable source.
