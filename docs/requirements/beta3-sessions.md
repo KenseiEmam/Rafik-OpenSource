@@ -61,12 +61,12 @@ Prefer extending existing institutional event and workout records over replacing
 
 If the additive event changes cannot preserve current query/receipt behavior cleanly, revisit storage before implementation; do not create a competing second session subsystem simply to avoid that review.
 
-### Progression recommendations for review
+### Approved progression and lifecycle policies
 
 - Completing or staff-skipping an occurrence advances its linked assignment position once in the same transaction. Add a resolution ledger/unique position constraint so retries and two devices cannot advance it twice.
-- At the end of the published cycle, repeat from the beginning while the assignment remains active and within its configured dates. Preserve cycle/position identity so another cycle is not mistaken for a duplicate of the first. This repeat policy is proposed for approval.
-- A later correction edits actual results and appends history without silently rolling back progression or deleting a successor. Reopening progression should require a separately designed explicit action; do not expose it as an incidental result edit. This correction policy is proposed for approval.
-- Ending/replacing an assignment cancels unstarted future occurrences, preserves completed history and pauses an in-progress occurrence for explicit staff disposition. Do not automatically declare it completed or erase offline results. This end/replacement policy is proposed for approval.
+- At the end of the published cycle, repeat from the beginning while the assignment remains active and within its configured dates. Preserve cycle/position identity so another cycle is not mistaken for a duplicate of the first. The founder approved this repeat policy on 22 October 2026. Repetition does not automatically increase load, difficulty or change the published prescription.
+- A later correction edits actual results and appends history without silently rolling back progression or deleting a successor. Reopening progression should require a separately designed explicit action; do not expose it as an incidental result edit. The founder approved this correction policy on 22 October 2026.
+- Ending/replacing an assignment cancels unstarted future occurrences, preserves completed history and pauses an in-progress occurrence for explicit staff disposition. Do not automatically declare it completed or erase offline results. The founder approved this end/replacement policy on 22 October 2026.
 - An explicit skip requires a staff actor and a reason; absence alone is not a skip. Recurrence cannot manufacture several replacements for the unresolved position. A blocked future slot links back to the original overdue work.
 
 ### Canonical API and old-client handling
@@ -87,15 +87,15 @@ Attendance, workout results and event finish must have explicit dependencies. A 
 
 ## Proposed lifecycle and transaction rules
 
-| Record               | States / transition rule                                                                                                                                                                                  |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Occurrence           | Planned → in progress → completed; planned work can be cancelled. Overdue and blocked should be derived where possible, not mutually contradictory permanent states.                                      |
-| Participant workout  | Ready → in progress → completed, or explicitly skipped. Cancellation of the occurrence is not proof of completion.                                                                                        |
-| Individual sequence  | Pending predecessor prevents another actionable successor. Completion/skip advances atomically once; correction history remains visible. The precise effect of reopening a completed result needs review. |
-| Recurrence           | Bounded weekly rule in the institution timezone, with exceptions for one occurrence versus the remaining series. Define DST behavior before implementation.                                               |
-| Worker               | Safe to rerun and safe under concurrent workers. Enforce uniqueness and assignment locking in the database; cron timing is not the integrity boundary.                                                    |
-| Concurrent recording | Athlete/coach/device edits retain revision checks, exact operation IDs and attributed correction history.                                                                                                 |
-| End/replacement      | Proposed: cancel unstarted future work immediately, preserve completed history and require explicit handling of an in-progress record. This edge case is not yet an approved lifecycle rule.              |
+| Record               | States / transition rule                                                                                                                                                                                                                      |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Occurrence           | Planned → in progress → completed; planned work can be cancelled. Overdue and blocked should be derived where possible, not mutually contradictory permanent states.                                                                          |
+| Participant workout  | Ready → in progress → completed, or explicitly skipped. Cancellation of the occurrence is not proof of completion.                                                                                                                            |
+| Individual sequence  | Pending predecessor prevents another actionable successor. Completion/skip advances atomically once; correction history remains visible. Corrections do not rewind progression; a separate progression-reopen action is outside this release. |
+| Recurrence           | Bounded weekly rule in the institution timezone, with exceptions for one occurrence versus the remaining series. Define DST behavior before implementation.                                                                                   |
+| Worker               | Safe to rerun and safe under concurrent workers. Enforce uniqueness and assignment locking in the database; cron timing is not the integrity boundary.                                                                                        |
+| Concurrent recording | Athlete/coach/device edits retain revision checks, exact operation IDs and attributed correction history.                                                                                                                                     |
+| End/replacement      | Approved: cancel unstarted future work immediately, preserve completed history and pause in-progress work for explicit staff disposition.                                                                                                     |
 
 Recheck current authority and participation restrictions when generating, starting and replaying work. Keep sensitive injury reasons out of shared calendars, group rosters, notifications and supporting-coach responses. A general blocked explanation must not grant access to the underlying health record. Do not reinterpret historic attendance or recorded workout completion as each other.
 
@@ -131,6 +131,36 @@ This is a family-level starting inventory from [server/index.ts](../../apps/back
 For each operation, record web/mobile/worker/contract callers, pending durable payloads, permission checks, data/export dependencies, proposed replacement and removal evidence. Remove exclusive services/tests/docs with genuinely retired endpoints. Keep forward migrations immutable. Delete old storage only through an explicit reviewed migration, not by dropping whatever a retired handler references.
 
 Changing the app permits a coordinated API transition; it does not make old offline commands disappear. **Proposed rollout:** additive database migration and a receipt-compatible adapter for supported queued v1 commands, then upgraded web/APK, then removal of redundant adapters after the supported-client policy is agreed. If a breaking API version is preferable, define capability negotiation, upgrade instructions and how old pending work is recovered. Do not silently redirect/rewrite a write into a different operation or clear a queue to complete an upgrade.
+
+## Operation-level inventory and migration dependencies
+
+Source inventory, 22 October 2026. This identifies current callers and required replacement order; it is not an implemented allowlist or a claim that every database function has been retired.
+
+| Generic operation                             | Actual current caller                                                                  | Required disposition                                                                                 |
+| --------------------------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `ensure_profile`                              | `app/auth.ts`, initial session/profile refresh                                         | Preserve sign-in/profile initialization; migrate to a named profile service before blocking it.      |
+| `update_profile`                              | Account Settings                                                                       | Preserve own name, locale, units and timezone editing.                                               |
+| `session_document`                            | Account export and `lib/training.ts` historical session read/conflict reload           | Keep authorized historical reads until replacement export and pending-work recovery are proven.      |
+| `save_session`                                | `lib/training.ts` exact replay for previously stored non-institution workout documents | Narrow replay compatibility; do not substitute a new session/operation ID or enable legacy creation. |
+| `account_deletion_ready`, `delete_my_account` | Account Settings deletion preflight and execution                                      | Preserve lifecycle/privacy function and its failure handling before gateway removal.                 |
+| `retire_resource`, `remove_resource_record`   | `features/account/resource-cleanup.ts` during account deletion                         | Preserve byte/metadata cleanup ordering and owned-file checks.                                       |
+| `create_support_case`, `update_support_case`  | Support's default `useCommand` dispatch                                                | Preserve local support/reporting with exact retry; move to an explicit support service.              |
+
+Most institutional `useCommand` callers provide their own explicit `request()` dispatch, so action names such as `save`, `review`, `archive` and `deliver` are not SQL gateway operations. The shared composable's default dispatch is still used by Support; inspecting only direct `rpc()` calls would miss it.
+
+Generic reads remain in Account export for `sessions`, `plans`, `exercises`, `client_context`, `coach_clients`, `assignments`, `schedule_exceptions`, `coaching_forms`, `coaching_requests`, `measurements`, `messages`, `conversation_reads`, `nutrition_guidance`, `saved_foods`, `meal_entries`, `appointment_slots`, `appointments`, `resources`, `resource_shares`, `teams`, `team_members`, `team_clients`, `team_groups`, `team_group_members`, `team_plans`, `team_resource_shares`, `team_assignments`, `team_activity`, `business_accounts`, `business_events` and `support_cases`. Support also reads `support_cases`, and account resource cleanup reads `resources`. These are historical export/cleanup dependencies, not supported standalone product screens.
+
+Before retiring `/v1/queries`, implement an equivalent own-account export projection and confirm every preserved field/relationship. Do not silently shrink the export because its sources have old names. Use a dedicated paginated local-support read instead of retaining a generic table gateway solely for that one active screen. Verify RLS/ownership and file-reference lifecycle on both new services and any temporary adapter.
+
+### Concrete migration checkpoints
+
+1. **Read-only preflight:** count assignments, workout documents/history, event participants/results, receipts and source kinds; report existing duplicate/ambiguous relationships. No repair or deletion of preview data.
+2. **Additive constraints:** introduce occurrence/participant/source and sequence-resolution identities while old code still reads existing fields. Keep an existing assignment-backed workout's ID and assignment relation unchanged. New additional group workouts need their own valid source, not a fake assignment.
+3. **Explicit backfill:** derive historical individual occurrences from stable workout assignment/day/local-date identity. Preserve the old `assignment_id/local_date/day_id` uniqueness until replacement generation/replay invariants are proven. Never merge a separate group event by coincidental date/title.
+4. **Typed transition:** change fixed-time assumptions in calendar reads, analytics, notifications, native cache DTOs and OpenAPI together before enabling day-only records. Old native calendar adapters return only the fixed-time forms they understand.
+5. **Write cutover:** bind/start/save/resolve through one transactional domain service; keep original operation receipts compatible. Database uniqueness and assignment locking prevent two workers/devices from allocating the same position.
+6. **Reconciliation:** verify IDs, history versions, feedback links, result values, participant totals and exact receipt responses; test rollback via the complete matching application/database/files backup rather than an unsafe down migration.
+7. **Retirement:** remove unused independent handlers and exclusive services/tests. Remove generic endpoints only after the explicit profile/support/export/lifecycle replacements and historical replay policy are implemented and tested.
 
 ## Migration and release acceptance proposal
 

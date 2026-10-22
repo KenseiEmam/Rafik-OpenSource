@@ -1,5 +1,13 @@
 # Verification record
 
+## Lifecycle approval and operation inventory — 22 October 2026
+
+Recorded founder approval of all three lifecycle policies. Source tracing covered direct RPC/table consumers, Support's default `useCommand` dispatcher, current assignment-backed session start/save authority and fixed-time calendar/participant relationships. The specification now lists the ten required generic operations and historical export/cleanup read dependencies. No deployed contract inventory, data backfill, native migration or runtime change has been executed; documentation checks are the applicable validation.
+
+## Cycle policy clarification — 22 October 2026
+
+Recorded founder approval of repeating the published cycle within the active assignment/date range, without automatic load or difficulty increases. Documentation-only change; no runtime implementation or testing is implied.
+
 ## Beta.3 technical review — 22 October 2026
 
 Source review covered `programming.ts` session start/save/history, `commands.ts` privilege-based contract discovery, event/workout schema constraints and native field model/store/sync. The technical specification labels additive storage and lifecycle recommendations as proposals. No runtime tests, data migration or native build was performed for these documentation changes; documentation links are the applicable check.

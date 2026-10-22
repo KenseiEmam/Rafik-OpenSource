@@ -4,6 +4,10 @@
 
 ### Beta.3 planning
 
+- Confirm correction/history and ended-assignment lifecycle policies; inventory the ten currently required generic command operations and historical export dependencies before API retirement.
+
+- Confirm repeating the published workout cycle while its assignment remains active; no automatic prescription progression.
+
 - Add a concrete technical review of event/participant storage, cycle/correction policies, explicit API allowlists and native queue migration; recommendations remain pending approval.
 
 - Record accepted individual session progression, bounded weekly scheduling and group additional-training rules.
