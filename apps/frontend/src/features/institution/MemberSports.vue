@@ -2,8 +2,8 @@
 import { computed, ref, watch } from 'vue'
 import { request } from '../../lib/backend'
 import { language as l } from '../../lib/i18n'
-import { useCommand } from '../teams/commands'
-import CommandStatus from '../teams/CommandStatus.vue'
+import { useCommand } from '../../lib/commands'
+import CommandStatus from '../../components/CommandStatus.vue'
 import type { Member, Sport } from './types'
 const props = defineProps<{ workspaceId: string; member: Member; sports: Sport[] }>()
 const emit = defineEmits<{ saved: [] }>()

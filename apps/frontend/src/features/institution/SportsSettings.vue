@@ -3,8 +3,8 @@ import SectionHeader from '../../components/SectionHeader.vue'
 import { computed, onMounted, ref } from 'vue'
 import { request } from '../../lib/backend'
 import { language as l, errorMessage } from '../../lib/i18n'
-import { useCommand } from '../teams/commands'
-import CommandStatus from '../teams/CommandStatus.vue'
+import { useCommand } from '../../lib/commands'
+import CommandStatus from '../../components/CommandStatus.vue'
 import type { Sport } from './types'
 const props = defineProps<{ workspaceId: string }>()
 const emit = defineEmits<{ changed: [] }>()

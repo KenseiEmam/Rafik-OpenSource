@@ -1,11 +1,11 @@
 import { onMounted, shallowReactive } from 'vue'
-import { user } from '../../app/auth'
-import { rpc } from '../../lib/backend'
+import { user } from '../app/auth'
+import { rpc } from './backend'
 import type { Database } from '@rafik/shared/database.types'
-import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
-import { errorMessage } from '../../lib/i18n'
-import { commandRejected } from '../ongoing/helpers'
-import { notifyErrorOnce, notifySuccess } from '../../lib/feedback'
+import { getDraft, storeDraft, removeDraft } from './storage'
+import { errorMessage } from './i18n'
+import { commandRejected } from './command-errors'
+import { notifyErrorOnce, notifySuccess } from './feedback'
 // A remounted screen must wait for the original dispatch before offering replay.
 const activeCommands = new Map<string, Promise<void>>()
 type Name = keyof Database['public']['Functions']

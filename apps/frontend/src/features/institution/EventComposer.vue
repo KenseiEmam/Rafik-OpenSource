@@ -10,11 +10,11 @@ import { request } from '../../lib/backend'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { localDate, addDays } from '../../lib/dates'
 import { language as l, errorMessage, locale } from '../../lib/i18n'
-import { useCommand } from '../teams/commands'
-import CommandStatus from '../teams/CommandStatus.vue'
+import { useCommand } from '../../lib/commands'
+import CommandStatus from '../../components/CommandStatus.vue'
 import MemberPicker from './MemberPicker.vue'
 import PageState from '../../components/PageState.vue'
-import InstitutionNav from './InstitutionNav.vue'
+import SectionNav from './SectionNav.vue'
 import type { Institution } from './types'
 import type { TrainingGroup, AssessmentTemplate, CalendarEvent } from './service-types'
 const route = useRoute(),
@@ -273,7 +273,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <InstitutionNav />
+  <SectionNav />
   <div class="container page event-composer">
     <RouterLink class="back-link" :to="base + '/schedule'">{{
       l('Back to calendar', 'العودة للتقويم')

@@ -42,7 +42,7 @@ Coach ratings are not in the founder list. Defer them until after Release 1, bec
 - Institution tables have no row-level security. All coach authority is enforced in server TypeScript.
 - The central check is `recipient()` in `apps/backend/server/programming.ts`. It rejects a trainer whose ID is not the athlete's `trainer_id`. Programs, assignments, workout review, nutrition, athlete plans, analytics, assessment history, message recipients, groups and event participant selection all call it.
 - Direct `trainer_id = self` SQL filters also exist. They are in `workspaces.ts` (People view, `assign-trainer`, unassigned counts), `people.ts`, `athlete-plans.ts`, `nutrition-plan-index.ts`, `program-media.ts`, `organization-assets.ts`, `organization-injuries.ts`, `organization-tasks.ts`, `organization-catalog.ts`, `analytics.ts` and `experience-report.ts`.
-- The frontend assumes a single coach in `InstitutionPage.vue` (the "Responsible trainer" picker and the unassigned summary), `features/institution/types.ts` and `AnalyticsPage.vue` (workload copy).
+- The frontend assumes a single coach in `DashboardPage.vue` (the "Responsible trainer" picker and the unassigned summary), `features/institution/types.ts` and `AnalyticsPage.vue` (workload copy).
 - **Event staff is a separate authority.** `organization_event_people.duty = 'staff'` governs attendance, results, completion and history after an event is created. The whole Android field API depends on event staff, not `trainer_id`. Event staff can record results for athletes they don't coach; this is intended.
 
 ### Program assignment
@@ -50,7 +50,7 @@ Coach ratings are not in the founder list. Defer them until after Release 1, bec
 - The partial unique index `organization_one_active_assignment` (`202609230160_organization_programming`) allows one active assignment per institution and athlete. Because of it, Prisma generates the back-relation on `workspace_members` as a single record.
 - `deliveryCommand` `assign` in `programming.ts` archives the current active assignment and creates a new one under an assignment revision check. There is no separate unassign or end command.
 - Workout sessions snapshot the immutable program version and are already unique per `(assignment_id, local_date, day_id)`. That suits several concurrent plans.
-- The frontend assumes one current assignment in `InstitutionTraining.vue` (`current`), `DeliverPlan.vue` (one assignment and revision per recipient, with "Replace future training") and `AthletePlans.vue`.
+- The frontend assumes one current assignment in `AthleteTraining.vue` (`current`), `DeliverPlan.vue` (one assignment and revision per recipient, with "Replace future training") and `AthletePlans.vue`.
 
 ### Workout logging, feedback and sensitive data
 

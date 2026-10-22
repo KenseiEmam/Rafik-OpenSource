@@ -13,7 +13,7 @@ import { localDate, addDays } from '../../lib/dates'
 import { language as l, errorMessage, locale } from '../../lib/i18n'
 import MonthCalendar from '../../components/MonthCalendar.vue'
 import PageState from '../../components/PageState.vue'
-import InstitutionNav from './InstitutionNav.vue'
+import SectionNav from './SectionNav.vue'
 import type { CalendarEvent } from './service-types'
 const route = useRoute(),
   router = useRouter(),
@@ -142,7 +142,7 @@ watch(selectedDay, () => {
 onMounted(() => load())
 </script>
 <template>
-  <InstitutionNav />
+  <SectionNav />
   <div class="container page institution-calendar">
     <PageHeading class="work-heading">
       <div>

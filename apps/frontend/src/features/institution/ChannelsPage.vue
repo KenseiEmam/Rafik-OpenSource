@@ -5,9 +5,9 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { request } from '../../lib/backend'
 import { language as l, errorMessage } from '../../lib/i18n'
-import { useCommand } from '../teams/commands'
-import CommandStatus from '../teams/CommandStatus.vue'
-import InstitutionNav from './InstitutionNav.vue'
+import { useCommand } from '../../lib/commands'
+import CommandStatus from '../../components/CommandStatus.vue'
+import SectionNav from './SectionNav.vue'
 import ChannelThread from './ChannelThread.vue'
 import type { Member, Institution } from './types'
 const route = useRoute(),
@@ -165,7 +165,7 @@ watch(
 )
 </script>
 <template>
-  <InstitutionNav />
+  <SectionNav />
   <div
     class="container page messages-page institution-messages organization-messages"
     :class="{ 'has-thread': !!id }"

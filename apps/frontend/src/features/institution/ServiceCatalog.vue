@@ -11,12 +11,12 @@ import { user } from '../../app/auth'
 import { request } from '../../lib/backend'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { language as l, errorMessage } from '../../lib/i18n'
-import { useCommand } from '../teams/commands'
-import CommandStatus from '../teams/CommandStatus.vue'
+import { useCommand } from '../../lib/commands'
+import CommandStatus from '../../components/CommandStatus.vue'
 import MemberPicker from './MemberPicker.vue'
 import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
-import InstitutionNav from './InstitutionNav.vue'
+import SectionNav from './SectionNav.vue'
 import type { Institution } from './types'
 import type { Drill, TrainingGroup, AssessmentTemplate } from './service-types'
 const route = useRoute(),
@@ -220,7 +220,7 @@ async function initialize() {
 onMounted(initialize)
 </script>
 <template>
-  <InstitutionNav />
+  <SectionNav />
   <div class="container page institution-service-page">
     <RouterLink v-if="editor" class="back-link" :to="listPath">{{
       templates

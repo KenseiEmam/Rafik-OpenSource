@@ -4,6 +4,10 @@
 
 ### Institution cleanup
 
+- Consolidate supported screens under plain feature names; remove 20 obsolete/duplicate Vue implementations and restore Resources/Nutrition routing.
+- Move shared commands out of retired feature folders; remove independent review/analytics/program API fallbacks.
+- Add a frontend view-graph guard against orphaned Vue files and missing supported routes.
+
 - Remove retired-feature routes outright; use the normal missing-page state, with no Tasks retirement page or workspace-chooser redirect.
 - Rename frontend institution/navigation folders, all institution-specific UI components/types, and associated styles; preserve database, asset and Android API compatibility identifiers.
 - Fix local recovery and orphan cleanup to use the API’s validated database/file target, including isolated tests.

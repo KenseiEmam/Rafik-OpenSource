@@ -3,13 +3,13 @@ import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { user, profile } from '../../app/auth'
-import { request, rows, rpc } from '../../lib/backend'
-import type { PlanVersion, Relationship, Profile, Assignment } from '../../lib/domain'
+import { request } from '../../lib/backend'
+import type { PlanVersion } from '../../lib/domain'
 import { language as l, errorMessage, locale } from '../../lib/i18n'
 import { programContext } from './program-context'
-import { useCommand } from '../teams/commands'
-import CommandStatus from '../teams/CommandStatus.vue'
-import InstitutionNav from '../institution/InstitutionNav.vue'
+import { useCommand } from '../../lib/commands'
+import CommandStatus from '../../components/CommandStatus.vue'
+import SectionNav from '../institution/SectionNav.vue'
 import PageState from '../../components/PageState.vue'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { PhCheck, PhMagnifyingGlass, PhPlus, PhSwap, PhX } from '@phosphor-icons/vue'
@@ -44,7 +44,7 @@ type Recipient = {
   current?: string
   /** Administrators only: account email to tell same-named athletes apart. */
   email?: string | null
-  /** Institution recipients list every active plan; independent coaching keeps one. */
+  /** Recipients list every active plan. */
   plans?: ActivePlan[]
 }
 type Overlap = { title: string; goal: string | null; start_date: string; end_date: string | null }
@@ -83,7 +83,7 @@ const key = `delivery:${user.value!.id}:${context.key}:${versionId}`
 const MATCHES = 5,
   MAX_RECIPIENTS = 50
 const visible = computed(() => pagePeople.value.slice(0, MATCHES))
-const emailSearch = computed(() => !!context.workspace && context.view === 'admin')
+const emailSearch = computed(() => context.view === 'admin')
 const currentPlans = (person: Recipient) =>
   person.plans
     ? person.plans.map(planLabel).join('، ') || l('No active plan', 'لا توجد خطة نشطة')
@@ -224,13 +224,7 @@ async function loadRoster() {
       items: Recipient[]
       selected: Recipient[]
       next: number | null
-    }>(
-      (context.workspace
-        ? `/v1/workspaces/${context.workspace}/recipients`
-        : '/v1/coach/recipients') +
-        '?' +
-        q,
-    )
+    }>(`/v1/workspaces/${context.workspace}/recipients` + '?' + q)
     if (current !== rosterGeneration) return
     // Nothing is listed until someone types; selected athletes always resolve.
     pagePeople.value = query ? result.items.slice(0, MATCHES) : []
@@ -257,13 +251,11 @@ async function load() {
   loading.value = true
   error.value = ''
   try {
-    version.value = context.workspace
-      ? (
-          await request<{ version: PlanVersion }>(
-            `/v1/workspaces/${context.workspace}/programs?view=${context.view}&version=${versionId}`,
-          )
-        ).version
-      : (await rows<PlanVersion>('plan_versions', 'id', versionId))[0]
+    version.value = (
+      await request<{ version: PlanVersion }>(
+        `/v1/workspaces/${context.workspace}/programs?view=${context.view}&version=${versionId}`,
+      )
+    ).version
     if (!version.value) throw Error('program_unavailable')
     const local = await getDraft<{
       selected: string[]
@@ -284,12 +276,11 @@ async function load() {
       sport.value = local.sport || ''
     } else if (route.query.member) selected.value = [String(route.query.member)]
     const preselected = !local && !!route.query.member
-    if (context.workspace)
-      sports.value = (
-        await request<{ items: Sport[] }>(
-          `/v1/workspaces/${context.workspace}/sports?view=${context.view}`,
-        ).catch(() => ({ items: [] as Sport[] }))
-      ).items.filter((s) => !s.archived)
+    sports.value = (
+      await request<{ items: Sport[] }>(
+        `/v1/workspaces/${context.workspace}/sports?view=${context.view}`,
+      ).catch(() => ({ items: [] as Sport[] }))
+    ).items.filter((s) => !s.archived)
     await loadRoster()
     if (preselected) selected.value.forEach(preferUpdate)
     initialized = true
@@ -315,19 +306,10 @@ const command = useCommand<'deliver'>(
     await removeDraft(key)
   },
   (_, args) =>
-    context.workspace
-      ? request(`/v1/workspaces/${context.workspace}/delivery`, {
-          method: 'POST',
-          body: JSON.stringify(args),
-        })
-      : rpc('deliver_plan', {
-          p_operation: args.operation,
-          p_version: args.version_id,
-          p_recipients: args.members,
-          p_start: args.start_date,
-          p_end: args.end_date,
-          p_mode: args.schedule_mode,
-        }),
+    request(`/v1/workspaces/${context.workspace}/delivery`, {
+      method: 'POST',
+      body: JSON.stringify(args),
+    }),
   {
     successMessage: l(
       'Program assigned to the selected athletes.',
@@ -342,31 +324,23 @@ function deliver() {
     action: 'assign',
     view: context.view,
     version_id: versionId,
-    members: recipients.value.map((p) =>
-      context.workspace
-        ? {
-            id: p.id,
-            revision: p.revision,
-            replaces: replacedPlan(p)?.id || null,
-            replaces_revision: replacedPlan(p)?.revision ?? null,
-          }
-        : {
-            id: p.id,
-            revision: p.revision,
-            assignment_id: p.assignment_id,
-            assignment_revision: p.assignment_revision,
-          },
-    ),
+    members: recipients.value.map((p) => ({
+      id: p.id,
+      revision: p.revision,
+      replaces: replacedPlan(p)?.id || null,
+      replaces_revision: replacedPlan(p)?.revision ?? null,
+    })),
     start_date: start.value,
     end_date: end.value || null,
     schedule_mode: mode.value,
-    ...(context.workspace ? { goal: goal.value.trim() || null, sport: sport.value || null } : {}),
+    goal: goal.value.trim() || null,
+    sport: sport.value || null,
   })
 }
 onMounted(load)
 </script>
 <template>
-  <InstitutionNav v-if="context.workspace" />
+  <SectionNav />
   <div class="container page delivery-page">
     <RouterLink class="back-link" :to="context.base + '/plans'">{{
       l('Back to programs', 'العودة للبرامج')
@@ -417,11 +391,9 @@ onMounted(load)
             </li>
           </ul>
         </section>
-        <RouterLink
-          class="button"
-          :to="context.base + (context.workspace ? '/training' : '/clients')"
-          >{{ l('Open training workspace', 'فتح مساحة التدريب') }}</RouterLink
-        >
+        <RouterLink class="button" :to="context.base + '/training'">{{
+          l('Open training workspace', 'فتح مساحة التدريب')
+        }}</RouterLink>
       </section>
       <form v-else @submit.prevent="review ? deliver() : (review = true)">
         <fieldset class="form-fields" :disabled="locked">
@@ -459,7 +431,7 @@ onMounted(load)
                 ><label
                   >{{ l('End date (optional)', 'تاريخ النهاية (اختياري)')
                   }}<input v-model="end" type="date" :min="start" /></label
-                ><template v-if="context.workspace"
+                ><template
                   ><label
                     >{{ l('Goal (optional)', 'الهدف (اختياري)')
                     }}<input
@@ -475,7 +447,7 @@ onMounted(load)
                   ></template
                 >
               </div>
-              <p v-if="context.workspace && context.view === 'trainer'" class="small-print">
+              <p v-if="context.view === 'trainer'" class="small-print">
                 {{
                   l(
                     'If you support an athlete for one sport, label the plan with that sport. Primary coaches can assign any plan.',
@@ -680,11 +652,7 @@ onMounted(load)
                           : outcome(personOf(id)!)
                       }}</span
                       ><button
-                        v-if="
-                          context.workspace &&
-                          personOf(id)?.plans?.length &&
-                          !onThisVersion(personOf(id))
-                        "
+                        v-if="personOf(id)?.plans?.length && !onThisVersion(personOf(id))"
                         type="button"
                         class="button secondary small"
                         :aria-label="
@@ -750,13 +718,7 @@ onMounted(load)
             <ul class="review-list">
               <li v-for="person in recipients" :key="person.id" dir="auto">
                 {{ person.name }} —
-                {{
-                  !context.workspace
-                    ? person.assignment_id
-                      ? l('Replace future training', 'استبدال التدريب القادم')
-                      : l('First assignment', 'التعيين الأول')
-                    : outcome(person)
-                }}
+                {{ outcome(person) }}
               </li>
             </ul>
             <p class="small-print">

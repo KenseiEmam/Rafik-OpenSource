@@ -8,7 +8,7 @@ import { request } from '../../lib/backend'
 import { language as l, dateLabel, errorMessage } from '../../lib/i18n'
 import type { Session } from '../../lib/domain'
 import { programContext } from '../coaching/program-context'
-import InstitutionNav from './InstitutionNav.vue'
+import SectionNav from './SectionNav.vue'
 import AthleteSearch from '../../components/AthleteSearch.vue'
 import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
@@ -85,7 +85,7 @@ const name = (id: string) =>
   data.value?.members.find((m) => m.id === id)?.name || l('Former member', 'عضو سابق')
 </script>
 <template>
-  <InstitutionNav />
+  <SectionNav />
   <div class="container page session-history-page">
     <PageHeading class="work-heading">
       <div>

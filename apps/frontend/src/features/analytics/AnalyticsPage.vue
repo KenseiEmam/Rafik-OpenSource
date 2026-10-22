@@ -9,7 +9,7 @@ import { request } from '../../lib/backend'
 import { language as l, errorMessage } from '../../lib/i18n'
 import { localDate, addDays } from '../../lib/dates'
 import PageState from '../../components/PageState.vue'
-import InstitutionNav from '../institution/InstitutionNav.vue'
+import SectionNav from '../institution/SectionNav.vue'
 import MetricChart from './MetricChart.vue'
 import TrainerDelivery from './TrainerDelivery.vue'
 import ExperienceReport, { type Experience } from './ExperienceReport.vue'
@@ -73,7 +73,7 @@ async function load(part?: 'workload' | 'program') {
   error.value = ''
   try {
     const result = await request<Report>(
-      `${workspace ? '/v1/workspaces/' + workspace + '/analytics' : '/v1/coach/analytics'}?view=${view}&from=${from.value}&to=${to.value}&${workspace ? 'member' : 'client'}=${selected.value}&search=${encodeURIComponent(search.value)}&workloadOffset=${part === 'workload' ? data.value?.workloadNext || 0 : 0}&programOffset=${part === 'program' ? data.value?.programNext || 0 : 0}`,
+      `${'/v1/workspaces/' + workspace + '/analytics'}?view=${view}&from=${from.value}&to=${to.value}&member=${selected.value}&search=${encodeURIComponent(search.value)}&workloadOffset=${part === 'workload' ? data.value?.workloadNext || 0 : 0}&programOffset=${part === 'program' ? data.value?.programNext || 0 : 0}`,
     )
     if (current !== generation) return
     if (part && data.value) {
@@ -102,7 +102,7 @@ const trend = computed(() => {
     result.push({
       label: day,
       value: values.get(day) || 0,
-      href: base + (workspace ? '/training' : '/clients'),
+      href: base + '/training',
     })
   return result
 })
@@ -139,7 +139,7 @@ const attendance = computed(
 onMounted(() => load())
 </script>
 <template>
-  <InstitutionNav v-if="workspace" />
+  <SectionNav />
   <div class="container page analytics-page">
     <PageHeading class="work-heading">
       <div>
@@ -243,7 +243,7 @@ onMounted(() => load())
             ><strong>{{ data.summary.active }}</strong
             ><small>{{ l('View roster', 'عرض القائمة') }} ↗</small></RouterLink
           >
-          <RouterLink :to="base + (workspace ? '/training' : '/clients')"
+          <RouterLink :to="base + '/training'"
             ><span>{{ l('Completed workouts', 'التمارين المكتملة') }}</span
             ><strong>{{ data.summary.completed }}</strong
             ><small>{{
@@ -258,7 +258,7 @@ onMounted(() => load())
               >{{ data.summary.participating }}<small> / {{ data.summary.active }}</small></strong
             ><small>{{ l('From the active roster', 'من القائمة النشطة') }}</small>
           </div>
-          <RouterLink :to="base + (workspace ? '/training' : '/clients')"
+          <RouterLink :to="base + '/training'"
             ><span>{{ l('Session reviews outstanding', 'حصص بانتظار المراجعة') }}</span
             ><strong>{{ data.summary.pending_review }}</strong
             ><small>{{ l('Review training', 'مراجعة التدريب') }} ↗</small></RouterLink
@@ -279,7 +279,7 @@ onMounted(() => load())
                 ? l('Delivery & capacity', 'التدريب وقدرة الفريق')
                 : l('Follow-up', 'المتابعة')
             }}</TabsTrigger
-            ><TabsTrigger v-if="workspace" value="experience">{{
+            ><TabsTrigger value="experience">{{
               l('Experience', 'التجربة')
             }}</TabsTrigger></TabsList
           >
@@ -330,7 +330,7 @@ onMounted(() => load())
                 ↗</RouterLink
               ><RouterLink
                 v-if="data.summary.without_program"
-                :to="base + (workspace ? '/training' : '/clients')"
+                :to="base + '/training'"
                 class="text-link"
                 >{{ data.summary.without_program }}
                 {{ l('active athletes have no current program', 'رياضيين نشطين بلا برنامج حالي') }}
@@ -358,7 +358,7 @@ onMounted(() => load())
                   {{ l('Load more coaches', 'تحميل المزيد من المدربين') }}
                 </button>
               </div>
-              <div v-if="workspace" class="chart-page">
+              <div class="chart-page">
                 <MetricChart
                   counts
                   :title="l('Programs in use', 'البرامج المستخدمة')"
@@ -378,44 +378,6 @@ onMounted(() => load())
                   {{ l('Load more programs', 'تحميل المزيد من البرامج') }}
                 </button>
               </div>
-              <template v-else
-                ><MetricChart
-                  counts
-                  :title="l('Check-in response', 'الرد على المتابعات')"
-                  :description="
-                    l(
-                      'Requests due in this period. Late submissions count; cancelled requests do not.',
-                      'الطلبات المستحقة في الفترة. تحتسب الردود المتأخرة وتستبعد الطلبات الملغاة.',
-                    )
-                  "
-                  :items="
-                    data.summary.requests
-                      ? [
-                          { label: l('Submitted', 'تم التقديم'), value: data.summary.submitted },
-                          {
-                            label: l('Awaiting response', 'بانتظار الرد'),
-                            value: Math.max(0, data.summary.requests - data.summary.submitted),
-                          },
-                        ]
-                      : []
-                  "
-                  donut
-                />
-                <div class="report-next">
-                  <h2>{{ l('Turn insight into follow-up', 'حوّل المعرفة إلى متابعة') }}</h2>
-                  <p>
-                    {{
-                      l(
-                        'Read responses, review completed work, and reply in context.',
-                        'اقرأ الردود وراجع الحصص المكتملة وردّ في سياقها.',
-                      )
-                    }}
-                  </p>
-                  <RouterLink :to="base + '/checkins'" class="button secondary">{{
-                    l('Open check-ins', 'فتح المتابعات')
-                  }}</RouterLink>
-                </div></template
-              >
             </div>
           </TabsContent>
         </TabsRoot>

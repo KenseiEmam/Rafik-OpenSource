@@ -17,7 +17,7 @@ Each installation belongs to its native institution. Workspace selection, extra-
 
 Choose option 2. First-run setup is the only institution creation flow in every runtime mode. It already serializes creation and refuses a second institution, including when the existing one is archived. Remove `POST /v1/workspaces`, the chooser and the generic creation service. Keep institution memberships, invitations, auditing and scoped services. Legacy independent data remains stored but is not an available account context.
 
-Frontend code lives under `features/institution/` and navigation under `features/navigation/`; institution components use the `Institution` prefix. Internal schema, private-object keys and supported API identifiers keep their compatibility names.
+Frontend code lives under `features/institution/` and navigation under `features/navigation/`; components use plain feature names. Internal schema, private-object keys and supported API identifiers keep their compatibility names.
 
 Canonical browser routes include `/dashboard`, `/people`, `/plans`, `/schedule`, `/workouts`, `/messages` and `/institution-settings`. `/settings` remains personal account settings. Resolve institution and role from authenticated membership, preserving account/institution/role/entity draft and command keys. Browser contexts reject ambiguous multiple-institution memberships rather than choosing silently.
 
@@ -36,3 +36,5 @@ The migration stops transactionally before Tasks deletion when multiple institut
 Privileged isolated security fixtures may still construct multiple institutions to verify scope boundaries and old-client compatibility; they are not an available runtime creation flow. Local demo seeding removes the historical second institution; the default quick start remains unseeded.
 
 Future assessment/training areas need their own requirements; retain no speculative hidden screens or services. Workout scheduling is separate approved planning, not implemented by this cleanup.
+
+The supported web entrypoint must reach every checked-in Vue component. `tests/view-consolidation.test.ts` guards that tree and the required Resources/Nutrition routes. Legacy account-data export/deletion remains for stored-data compatibility; it does not expose a legacy view.

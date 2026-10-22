@@ -98,17 +98,6 @@ import { language, t } from '../../lib/i18n'
           }}
         </p>
       </details>
-      <details>
-        <summary>{{ language('I coach independently', 'أنا مدرب مستقل') }}</summary>
-        <p>
-          {{
-            language(
-              'Today brings together sessions and check-ins awaiting review. Plans is where you prepare and publish training; Athletes is where you invite people and manage each relationship. Appointments, Resources and other tools have their own navigation links. Independent coach teams do not merge your private athlete records.',
-              'يجمع اليوم الحصص والمتابعات بانتظار المراجعة. جهّز التدريب وانشره في الخطط، وادعُ الرياضيين وأدر كل علاقة في الرياضيين. تتوفر الجدولة والملفات والأدوات الاختيارية في قائمة التنقل. لا تدمج فرق المدربين المستقلين سجلات رياضييك الخاصة.',
-            )
-          }}
-        </p>
-      </details>
     </section>
     <section>
       <h2>{{ language('Exercises and uploaded files', 'التمارين والملفات المرفوعة') }}</h2>

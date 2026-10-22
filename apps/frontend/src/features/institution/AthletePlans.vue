@@ -18,9 +18,9 @@ import type { Prescription } from '../../lib/domain'
 import { programContext } from '../coaching/program-context'
 import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
-import InstitutionNav from './InstitutionNav.vue'
-import { useCommand } from '../teams/commands'
-import CommandStatus from '../teams/CommandStatus.vue'
+import SectionNav from './SectionNav.vue'
+import { useCommand } from '../../lib/commands'
+import CommandStatus from '../../components/CommandStatus.vue'
 const route = useRoute(),
   router = useRouter(),
   context = programContext(route)
@@ -162,7 +162,7 @@ onUnmounted(() => {
 })
 </script>
 <template>
-  <InstitutionNav />
+  <SectionNav />
   <div class="container page athlete-plans-page">
     <PageHeading class="work-heading">
       <div>

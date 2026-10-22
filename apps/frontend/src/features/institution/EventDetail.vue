@@ -10,11 +10,11 @@ import { user } from '../../app/auth'
 import { request } from '../../lib/backend'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { language as l, errorMessage, locale } from '../../lib/i18n'
-import { useCommand } from '../teams/commands'
-import CommandStatus from '../teams/CommandStatus.vue'
+import { useCommand } from '../../lib/commands'
+import CommandStatus from '../../components/CommandStatus.vue'
 import MemberPicker from './MemberPicker.vue'
 import PageState from '../../components/PageState.vue'
-import InstitutionNav from './InstitutionNav.vue'
+import SectionNav from './SectionNav.vue'
 import type { EventDetail, EventPerson } from './service-types'
 import type { Institution } from './types'
 const route = useRoute(),
@@ -273,7 +273,7 @@ watch(
 onMounted(load)
 </script>
 <template>
-  <InstitutionNav />
+  <SectionNav />
   <div class="container page event-detail">
     <RouterLink
       class="back-link"

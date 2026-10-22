@@ -4,8 +4,8 @@ import { ref, onMounted } from 'vue'
 import { user } from '../../app/auth'
 import { request } from '../../lib/backend'
 import { language as l, errorMessage, dateLabel } from '../../lib/i18n'
-import { useCommand } from '../teams/commands'
-import CommandStatus from '../teams/CommandStatus.vue'
+import { useCommand } from '../../lib/commands'
+import CommandStatus from '../../components/CommandStatus.vue'
 import PageState from '../../components/PageState.vue'
 const includeReads = ref(false)
 const actionLabel = (kind: string) =>

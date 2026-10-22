@@ -2,8 +2,8 @@
 import { computed, onMounted, ref } from 'vue'
 import { request } from '../../lib/backend'
 import { language as l, errorMessage } from '../../lib/i18n'
-import { useCommand } from '../teams/commands'
-import CommandStatus from '../teams/CommandStatus.vue'
+import { useCommand } from '../../lib/commands'
+import CommandStatus from '../../components/CommandStatus.vue'
 import PageState from '../../components/PageState.vue'
 const categories = ['messages', 'feedback', 'checkins', 'calendar'] as const
 type Pref = {

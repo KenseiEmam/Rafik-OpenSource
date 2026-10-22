@@ -4,27 +4,26 @@ import { onMounted, ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { PhArrowLeft, PhCheckCircle } from '@phosphor-icons/vue'
 import { user } from '../../app/auth'
-import { rpc, rows, request } from '../../lib/backend'
-import type { Session, Profile, Relationship } from '../../lib/domain'
+import { request } from '../../lib/backend'
+import type { Session } from '../../lib/domain'
 import { language, locale, t, errorMessage, dateLabel } from '../../lib/i18n'
 import { exerciseName, targetLabel, actualLabel, performedExercise } from '../../lib/prescriptions'
 import PageState from '../../components/PageState.vue'
 import { programContext } from './program-context'
-import InstitutionNav from '../institution/InstitutionNav.vue'
-import { useCommand } from '../teams/commands'
-import CommandStatus from '../teams/CommandStatus.vue'
+import SectionNav from '../institution/SectionNav.vue'
+import { useCommand } from '../../lib/commands'
+import CommandStatus from '../../components/CommandStatus.vue'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 const route = useRoute()
 const context = programContext(route)
 const draftKey = `review:${user.value!.id}:${context.key}:${route.params.id}`
 const id = String(route.params.id)
 const back = {
-  path: context.workspace ? context.base + '/training' : '/coach',
+  path: context.base + '/training',
   query: { view: String(route.query.view || 'all'), search: route.query.search },
 }
 const session = ref<Session>(),
   person = ref<{ display_name: string }>()
-const relationship = ref('')
 const note = ref(''),
   error = ref(''),
   message = ref('')
@@ -33,24 +32,12 @@ async function load() {
   loading.value = true
   error.value = ''
   try {
-    if (context.workspace) {
-      const s = await request<Session & { member_name: string }>(
-        `/v1/organization-sessions/${id}?view=${context.view}`,
-      )
-      session.value = s
-      person.value = { display_name: s.member_name }
-      note.value = s.coach_note
-      return
-    }
-    const s = await rpc<Session>('session_document', { p_id: id })
-    if (!s || s.coach_id !== user.value!.id) throw Error('forbidden')
-    session.value = s
-    relationship.value =
-      (await rows<Relationship>('coach_clients', 'client_id', s.client_id)).find(
-        (r) => r.coach_id === user.value!.id,
-      )?.id || ''
-    note.value = s.coach_note
-    person.value = (await rows<Profile>('profiles', 'id', s.client_id))[0]
+    const result = await request<Session & { member_name: string }>(
+      `/v1/organization-sessions/${id}?view=${context.view}`,
+    )
+    session.value = result
+    person.value = { display_name: result.member_name }
+    note.value = result.coach_note
   } catch (e) {
     error.value = errorMessage(e)
   } finally {
@@ -68,12 +55,10 @@ const command = useCommand<'review'>(
     )
   },
   (_, args) =>
-    context.workspace
-      ? request(`/v1/workspaces/${context.workspace}/sessions`, {
-          method: 'POST',
-          body: JSON.stringify(args),
-        })
-      : rpc('review_session', { p_id: id, p_note: args.note }),
+    request(`/v1/workspaces/${context.workspace}/sessions`, {
+      method: 'POST',
+      body: JSON.stringify(args),
+    }),
 )
 const busy = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
 async function save() {
@@ -100,7 +85,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <InstitutionNav v-if="context.workspace" />
+  <SectionNav />
   <div class="container page">
     <RouterLink :to="back" class="back-link"
       ><PhArrowLeft :size="18" class="directional" />{{
@@ -164,12 +149,6 @@ onMounted(async () => {
             </article>
           </section>
           <aside>
-            <RouterLink
-              v-if="relationship"
-              class="button secondary full"
-              :to="'/coach/messages/' + relationship + '?session=' + id"
-              >{{ language('Discuss this workout', 'مناقشة هذه الحصة') }}</RouterLink
-            >
             <section v-if="session.note" class="panel">
               <h2>{{ language('Athlete note', 'ملاحظة الرياضي') }}</h2>
               <p class="preserve-lines">{{ session.note }}</p>

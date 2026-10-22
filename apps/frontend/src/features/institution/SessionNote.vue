@@ -5,8 +5,8 @@ import { user } from '../../app/auth'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { request } from '../../lib/backend'
 import { language as l, errorMessage } from '../../lib/i18n'
-import { useCommand } from '../teams/commands'
-import CommandStatus from '../teams/CommandStatus.vue'
+import { useCommand } from '../../lib/commands'
+import CommandStatus from '../../components/CommandStatus.vue'
 const props = defineProps<{
     workspace: string
     view: string

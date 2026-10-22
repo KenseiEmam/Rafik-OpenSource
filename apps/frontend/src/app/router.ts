@@ -94,8 +94,18 @@ const router = createRouter({
       meta: { private: true, institution: true },
     },
     {
+      path: '/resources',
+      component: () => import('../features/resources/ResourcesPage.vue'),
+      meta: { private: true, institution: true },
+    },
+    {
+      path: '/nutrition',
+      component: () => import('../features/nutrition/NutritionRoute.vue'),
+      meta: { private: true, institution: true },
+    },
+    {
       path: '/injuries',
-      component: () => import('../features/institution/InstitutionInjuries.vue'),
+      component: () => import('../features/institution/InjuryStatus.vue'),
       meta: { private: true, institution: true },
     },
     {
@@ -110,7 +120,7 @@ const router = createRouter({
     },
     {
       path: '/schedule',
-      component: () => import('../features/institution/InstitutionCalendar.vue'),
+      component: () => import('../features/institution/ScheduleCalendar.vue'),
       meta: { private: true, institution: true },
     },
     {
@@ -163,12 +173,12 @@ const router = createRouter({
     },
     {
       path: '/dashboard',
-      component: () => import('../features/institution/InstitutionPage.vue'),
+      component: () => import('../features/institution/DashboardPage.vue'),
       meta: { private: true, institution: true },
     },
     ...(['people', 'activity', 'institution-settings'] as const).map((section) => ({
       path: '/' + section,
-      component: () => import('../features/institution/InstitutionPage.vue'),
+      component: () => import('../features/institution/DashboardPage.vue'),
       meta: {
         private: true,
         institution: true,
@@ -192,17 +202,17 @@ const router = createRouter({
     },
     {
       path: '/organization/:workspace/:view/:legacy(.*)*',
-      component: () => import('../features/account/InstitutionAccess.vue'),
+      component: () => import('../features/account/AccessPage.vue'),
       meta: { private: true, legacyInstitution: true },
     },
     {
       path: '/access',
-      component: () => import('../features/account/InstitutionAccess.vue'),
+      component: () => import('../features/account/AccessPage.vue'),
       meta: { private: true },
     },
     {
       path: '/organization-invite/:token',
-      component: () => import('../features/institution/InstitutionInvite.vue'),
+      component: () => import('../features/institution/InvitationPage.vue'),
     },
     { path: '/', component: () => import('../features/account/EntryPage.vue') },
     { path: '/setup', component: () => import('../features/account/SetupPage.vue') },

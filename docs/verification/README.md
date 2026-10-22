@@ -1,5 +1,11 @@
 # Verification record
 
+## View consolidation — 22 October 2026
+
+Removed 20 obsolete or duplicate Vue implementations, promoted the supported Resources/Nutrition screens to plain names, and moved shared command handling out of retired feature folders. A source-graph guard verifies every maintained Vue file is reachable and checks the two supported routes. Historical account-file cleanup remains for stored-data compatibility.
+
+Focused checks: 33 frontend unit tests passed; isolated Chromium checks passed for Resources, staff/athlete Nutrition and the existing program authoring → assignment → athlete recording → coach feedback workflow (2 browser tests). Disposable services and fixture data were cleaned. These browser checks preceded the final removal of unreachable program/exercise fallback branches; Final frontend typecheck, production build and the 33-test unit suite passed after those edits. Documentation checks passed 399 local links and 45 anchors across 59 maintained documents. No full visual audit, browser matrix or native rebuild was performed.
+
 ## Cleanup follow-up — 22 October 2026
 
 Founder requested removal of retirement/omitted-feature routes and clearer source names. Removed the Tasks tombstone, workspace-chooser redirect and omitted standalone coach/check-in/team routes. Renamed frontend `features/organizations` to `features/institution`, `features/workspace` to `features/navigation`, and all institution-specific UI components/types, including shared upload/assets and sibling resource/nutrition views; API/schema/object-path identifiers remain compatible. Historical archive records retain their original names.

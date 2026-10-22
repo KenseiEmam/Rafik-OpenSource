@@ -4,7 +4,7 @@ import ExerciseDemo from '../../components/ExerciseDemo.vue'
 import ExercisePicker from '../../components/ExercisePicker.vue'
 import ProgramCover from './ProgramCover.vue'
 import { request } from '../../lib/backend'
-import InstitutionNav from '../institution/InstitutionNav.vue'
+import SectionNav from '../institution/SectionNav.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
@@ -21,8 +21,8 @@ import {
 import { user, contexts } from '../../app/auth'
 import { duplicateSession, duplicateWeek } from './program-structure'
 import { programContext } from './program-context'
-import { useCommand } from '../teams/commands'
-import CommandStatus from '../teams/CommandStatus.vue'
+import { useCommand } from '../../lib/commands'
+import CommandStatus from '../../components/CommandStatus.vue'
 import { clone, type Plan, type PlanVersion, type Prescription } from '../../lib/domain'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { language, locale, t, errorMessage } from '../../lib/i18n'
@@ -68,8 +68,7 @@ const form = ref<HTMLFormElement>()
 const coverInput = ref<HTMLInputElement>()
 const coverDrag = ref(false)
 let initialized = false
-const keyFor = (id: string) =>
-  context.workspace ? `plan:${user.value!.id}:${context.key}:${id}` : `plan:${user.value!.id}:${id}`
+const keyFor = (id: string) => `plan:${user.value!.id}:${context.key}:${id}`
 const key =
   keyFor(String(route.params.id)) +
   (route.query.source ? `:source:${route.query.source}:member:${route.query.member || ''}` : '')
@@ -279,8 +278,7 @@ async function uploadCoverFile(file?: File) {
     if (coverInput.value) coverInput.value.value = ''
     return
   }
-  const workspace =
-    context.workspace || contexts.value.find((c) => c.kind === 'independent')?.workspace_id
+  const workspace = context.workspace
   if (!workspace) return
   uploading.value = true
   error.value = ''
@@ -433,7 +431,7 @@ function removeDay() {
 }
 </script>
 <template>
-  <InstitutionNav v-if="context.workspace" />
+  <SectionNav />
   <div class="container page editor-page">
     <RouterLink class="back-link" :to="context.base + '/plans'"
       ><PhArrowLeft :size="18" aria-hidden="true" class="directional" />{{

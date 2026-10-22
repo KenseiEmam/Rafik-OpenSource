@@ -10,14 +10,14 @@ import { user, refreshContexts, contexts } from '../../app/auth'
 import { request } from '../../lib/backend'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { language as l, errorMessage, dateLabel, locale } from '../../lib/i18n'
-import { useCommand } from '../teams/commands'
-import CommandStatus from '../teams/CommandStatus.vue'
+import { useCommand } from '../../lib/commands'
+import CommandStatus from '../../components/CommandStatus.vue'
 import PageState from '../../components/PageState.vue'
 import type { Institution, Member, Role, Sport } from './types'
 import './institution.css'
-import InstitutionFollowUp from './InstitutionFollowUp.vue'
-import InstitutionUpcoming from './InstitutionUpcoming.vue'
-import InstitutionNav from './InstitutionNav.vue'
+import FollowUpPanel from './FollowUpPanel.vue'
+import UpcomingSessions from './UpcomingSessions.vue'
+import SectionNav from './SectionNav.vue'
 import BrandingSettings from './BrandingSettings.vue'
 import SportsSettings from './SportsSettings.vue'
 import { TabsRoot, TabsList, TabsTrigger, TabsContent } from 'reka-ui'
@@ -335,7 +335,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <InstitutionNav />
+  <SectionNav />
   <div class="container page institution-page">
     <PageHeading class="work-heading">
       <div>
@@ -517,8 +517,8 @@ onMounted(async () => {
               >{{ l('View analytics', 'عرض التحليلات') }}</RouterLink
             >
           </div>
-          <InstitutionFollowUp v-if="view !== 'trainee'" />
-          <InstitutionUpcoming />
+          <FollowUpPanel v-if="view !== 'trainee'" />
+          <UpcomingSessions />
           <section v-if="view === 'trainee' || !data.summary.trainees" class="panel">
             <h2>
               {{
@@ -548,8 +548,8 @@ onMounted(async () => {
                         'ادعُ موظفيك ورياضييك وعيّن مدرباً مسؤولاً لكل رياضي. يمكنك تغيير المسؤولية مع الحفاظ على سجلات المؤسسة.',
                       )
                     : l(
-                        'Open your roster to see the athletes assigned to you. Institution administration and independent coaching are separate views.',
-                        'افتح القائمة للاطلاع على الرياضيين المعيّنين لك. إدارة المؤسسة والتدريب المستقل عرضان منفصلان.',
+                        'Open your roster to review your assigned athletes and their training.',
+                        'افتح القائمة لمراجعة الرياضيين المعيّنين لك وتدريبهم.',
                       )
                 }}
               </p>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onUnmounted, watch } from 'vue'
-import { language as l } from '../../lib/i18n'
+import { language as l } from '../lib/i18n'
 const props = withDefaults(
   defineProps<{
     showNotice?: boolean
