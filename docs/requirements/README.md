@@ -9,7 +9,7 @@ Rafik should help universities and university coaches support young athletes by 
 ## Confirmed direction
 
 - University and university-sport workflows replace the previous gym-first acquisition direction.
-- Canonical public repository: [`KenseiEmam/Rafik-OpenSource`](https://github.com/KenseiEmam/Rafik-OpenSource); it is public and Stage 2 has been pushed.
+- Canonical public repository: [`Rafik-Athlete-Managment/Rafik-OpenSource`](https://github.com/Rafik-Athlete-Managment/Rafik-OpenSource); it is public and Stage 2 has been pushed.
 - Each university runs an isolated instance on infrastructure it controls. Docker Compose self-hosting is the first deployment target. AWS, Azure, and Google Cloud templates are not part of the initial release.
 - The Android field app is optional and comes after the web/backend and deployment foundations. React Native with Expo is the accepted Stage 7 framework in ADR 0023.
 - Default Rafik branding is retained, with implemented per-instance university branding and a visible Rafik attribution.
@@ -46,7 +46,7 @@ Rafik should help universities and university coaches support young athletes by 
 
 ### Stage 2 — Public monorepo and release foundation
 
-**Status: complete (16 October 2026).** The root-lockfile install, focused workspace checks, release build, dependency/license inventory, third-party content rights review, and disposable fresh-database migration rehearsal passed under Node 22.16.0. The repository was renamed to `KenseiEmam/Rafik-OpenSource`, made public, and the Stage 2 commit was pushed. The formatter still reports existing style differences in 167 frontend files; they were not bulk-reformatted. No relevant GitHub Actions run was available. The tracked Vercel config is removed in Stage 3; its separate hosted Git integration is not a Docker acceptance gate. See [the verification record](../verification/README.md). Stage 3 implementation was subsequently completed; its pre-production backlog is recorded below.
+**Status: complete (16 October 2026).** The root-lockfile install, focused workspace checks, release build, dependency/license inventory, third-party content rights review, and disposable fresh-database migration rehearsal passed under Node 22.16.0. The repository was renamed to `Rafik-Athlete-Managment/Rafik-OpenSource`, made public, and the Stage 2 commit was pushed. The formatter still reports existing style differences in 167 frontend files; they were not bulk-reformatted. No relevant GitHub Actions run was available. The tracked Vercel config is removed in Stage 3; its separate hosted Git integration is not a Docker acceptance gate. See [the verification record](../verification/README.md). Stage 3 implementation was subsequently completed; its pre-production backlog is recorded below.
 
 - Combine frontend and backend under the confirmed GitHub repository, preserving useful history and documenting the new tree.
 - Apply the selected Apache-2.0 software license, contributor workflow, version/release conventions, and a clean-checkout development path.

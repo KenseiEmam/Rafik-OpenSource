@@ -42,7 +42,7 @@ variable "acme_email" {
 }
 variable "repository_url" {
   type    = string
-  default = "https://github.com/KenseiEmam/Rafik-OpenSource.git"
+  default = "https://github.com/Rafik-Athlete-Managment/Rafik-OpenSource.git"
   validation {
     condition     = can(regex("^https://github\\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\\.git$", var.repository_url))
     error_message = "Use a public GitHub HTTPS clone URL in owner/repository.git form."

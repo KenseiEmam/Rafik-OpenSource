@@ -135,3 +135,7 @@ The web refinements in PR #138 additionally require `202610210100_invitation_spo
 ### Beta.2 final package
 
 The final launcher/tooling fixes are in release-preparation PR #140, based on the merged design audit. The rebuilt signed bundle, exact source and checksums are in the [Android release guide](android-release.md#beta2-upload-bundle--22-october-2026). Use that new ZIP rather than the earlier unpublished beta.2 build. Founder handles upload and prerelease creation; actual publication/upgrade evidence remains separate.
+
+### GitHub organization repository
+
+Application source, release tags/assets and cloud-template clone defaults use `https://github.com/Rafik-Athlete-Managment/Rafik-OpenSource`. Existing checkouts can update their remote with `git remote set-url origin https://github.com/Rafik-Athlete-Managment/Rafik-OpenSource.git` from the repository root. Published versions and uploaded bytes are unchanged by this repository transfer. Landing is maintained separately under KenseiEmam.
