@@ -9,7 +9,7 @@ You are taking over Rafik's web UI/UX audit and refinement from Codex. The found
 ### Start from the working PR
 
 1. Read root AGENTS.md, CONTRIBUTING.md, docs/README.md, docs/DESIGN_SYSTEM.md, docs/known-issues/ui-ux-audit.md and docs/verification/README.md.
-2. Fetch application PR #138: https://github.com/KenseiEmam/Rafik-OpenSource/pull/138 (head codex/beta2-release). It is deliberately a temporary draft, not ready to merge or release. Start a new topic branch from its latest head, preserving all accepted functional and release-preparation changes. Do not start from main alone or merge historical pre-cleanup main history.
+2. Fetch application PR #138: https://github.com/Rafik-Athlete-Managment/Rafik-OpenSource/pull/138 (head codex/beta2-release). It is deliberately a temporary draft, not ready to merge or release. Start a new topic branch from its latest head, preserving all accepted functional and release-preparation changes. Do not start from main alone or merge historical pre-cleanup main history.
 3. Review the actual diff and running app before changing styles. Do not assume existing tests or screenshots establish final acceptance. Do not recreate the design guidelines in another competing document.
 4. Keep the existing Project tracker open: https://github.com/KenseiEmam/rafik-landing/issues/16 in https://github.com/users/KenseiEmam/projects/3.
 

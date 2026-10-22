@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Updated application repository, release, issue/PR and cloud-template links to Rafik-Athlete-Managment/Rafik-OpenSource following the GitHub organization transfer. Landing remains under KenseiEmam.
+
 - Rebuilt and verified the signed beta.2 Android bundle with the existing update key and new launcher artwork; publication-ready English/Arabic landing release and installation guidance accompanies it.
 
 - Beta.2 release preparation: patch Vite to 8.3.5 and Vitest to 5.0.5; preserve founder-provided Android launcher PNGs as maintained assets and apply them to regular/round launcher resources during native preparation.
@@ -258,7 +260,7 @@ Beta source candidate; signed-package build and focused emulator installation/up
 
 ## Monorepo foundation — 2026-10-16
 
-- Set the canonical repository/package name to `KenseiEmam/Rafik-OpenSource` / `rafik-opensource`; the hosted GitHub rename still requires an authorized GitHub connection.
+- Set the canonical repository/package name to `Rafik-Athlete-Managment/Rafik-OpenSource` / `rafik-opensource`; the hosted GitHub rename still requires an authorized GitHub connection.
 - Imported the companion API repository under `apps/backend/`, retaining its branch history as a second parent in the monorepo merge.
 - Applied Apache-2.0 to project code/documentation and retained separate content/media license boundaries.
 - Reshaped the repository as npm workspaces under `apps/frontend`, `apps/backend` and `packages/shared`, with one root `AGENTS.md`, one `docs/` tree, and one Compose file in `infrastructure/`.

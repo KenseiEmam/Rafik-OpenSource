@@ -418,7 +418,7 @@ The local foundation can be reviewed, but broader product implementation remains
 
 - `npm run docs:check`: passed; checked local links in 67 monorepo documents, including the new root security policy.
 - `git diff --check`: passed. Git reported only expected LF-to-CRLF working-copy conversion warnings.
-- GitHub confirmed the repository is public as `KenseiEmam/Rafik-OpenSource`; commit `61432fc` (`completed stage 2`) is on `codex/university-revamp-plan`. No relevant GitHub Actions run was available. The tracked Vercel frontend config is removed locally; dashboard cleanup is deferred by founder direction. The founder revoked the historical Google service-account key; purging it from public Git history remains required. Stage 3 implementation is in progress; see [requirements](../requirements/README.md) and the [ledger](../development/ledger.md).
+- GitHub confirmed the repository is public as `Rafik-Athlete-Managment/Rafik-OpenSource`; commit `61432fc` (`completed stage 2`) is on `codex/university-revamp-plan`. No relevant GitHub Actions run was available. The tracked Vercel frontend config is removed locally; dashboard cleanup is deferred by founder direction. The founder revoked the historical Google service-account key; purging it from public Git history remains required. Stage 3 implementation is in progress; see [requirements](../requirements/README.md) and the [ledger](../development/ledger.md).
 
 ## Stage 3 self-host implementation — 2026-10-16
 

@@ -1,5 +1,7 @@
 # Maintainer guide
 
+The canonical application repository is [Rafik-Athlete-Managment/Rafik-OpenSource](https://github.com/Rafik-Athlete-Managment/Rafik-OpenSource). Clone/fetch and open application issues, PRs and releases there. The landing repository and existing GitHub Project remain under KenseiEmam until the founder directs otherwise.
+
 Member management lives in `MemberManagement.vue`: keep identity first, coaching next, and sports/account recovery at the bottom. Institution settings use two responsive columns for general settings and branding. The closure dialog is a confirmation step; server revision and exact-name checks remain authoritative. Development file watching excludes generated test artifacts so browser traces cannot trigger reloads or locked-file crashes.
 
 This guide is for current work in the Rafik monorepo. It stays focused on the maintained codebase; old phase-by-phase notes are in the [archive](../archive/README.md).
