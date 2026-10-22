@@ -4,6 +4,8 @@
 
 ### Beta.3 planning
 
+- Add a concrete technical review of event/participant storage, cycle/correction policies, explicit API allowlists and native queue migration; recommendations remain pending approval.
+
 - Record accepted individual session progression, bounded weekly scheduling and group additional-training rules.
 - Include offline individual/group workout recording in Android scope; propose cache/queue migration, coordinated API retirement and historical-data reconciliation before implementation.
 

@@ -150,3 +150,7 @@ Groups and assessment templates now use the shared aligned toolbar too, with con
 People search/membership/sport and pagination now share a lower-aligned toolbar under role tabs. Removed inherited pagination block margins responsible for Programs misalignment. Founder deferred additional Tasks polish.
 
 Assessment templates now use the founder-requested responsive card grid with title, drill count and aligned edit action; groups retain rows. Template grids use the shared 24-record grid default.
+
+## Beta.3 technical review — 22 October 2026
+
+Reviewed the actual assignment-required workout relation, fixed-time event fields, session command handler, SQL privilege-discovered gateway and native serialized calendar queue. Expanded the beta.3 specification with a preferred additive event/participant model, explicit progression identity, proposed repeat/correction/end policies, a receipt-compatible old-client adapter and versioned offline command/cache migration. These technical recommendations need review before runtime implementation; accepted product scope and offline capture remain unchanged. No database, application code, release version or native build changed.

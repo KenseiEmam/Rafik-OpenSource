@@ -1,5 +1,9 @@
 # Verification record
 
+## Beta.3 technical review — 22 October 2026
+
+Source review covered `programming.ts` session start/save/history, `commands.ts` privilege-based contract discovery, event/workout schema constraints and native field model/store/sync. The technical specification labels additive storage and lifecycle recommendations as proposals. No runtime tests, data migration or native build was performed for these documentation changes; documentation links are the applicable check.
+
 ## Beta.3 planning — 22 October 2026
 
 Inspected the current route registry, workout/event schema and native calendar request/queue paths to inform the beta.3 specification. Backend disposition is a family-level proposal; individual allowed RPC operations and every account/file dependency have not yet been exhaustively traced. Founder accepted offline workout recording. No runtime changes, data migrations, new native build or implementation acceptance were performed in this planning pass. Documentation checks passed: 1,060 local links and 45 anchors across 65 maintained documents. No runtime suite was needed for this planning-only change.

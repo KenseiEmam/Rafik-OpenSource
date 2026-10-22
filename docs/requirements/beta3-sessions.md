@@ -44,6 +44,47 @@ flowchart LR
 
 Exact table names and whether existing event/session tables are extended are proposals to settle after migration design. Existing `organization_events` hold scheduled attendance/assessments; `organization_sessions` hold per-assignment exercise documents and history. Their current schemas are separate, and the latter currently requires an assignment. Group additional training therefore needs an explicit source model rather than a fabricated individual assignment.
 
+## Technical review proposal
+
+Reviewed 22 October 2026 against the current event/workout schema, session command handler, native queue/store and SQL gateway. The following is a concrete implementation recommendation, not implemented or yet approved architecture.
+
+### Storage and source identity
+
+Prefer extending existing institutional event and workout records over replacing their IDs/history:
+
+1. A training event becomes the common session occurrence for one or many athlete participants; assessments retain their distinct kind and score model.
+2. Add an explicit institution-local training date and timed/day-only mode. Day-only worker sessions have no invented midnight appointment. The existing event table currently requires start/end timestamps, so constraints, calendar queries, analytics and client contracts must all be migrated together before day-only events are written.
+3. Reuse participant workout records, preserving existing workout IDs, actuals, feedback and correction history. Add an occurrence/participant link and allow an assignment to be absent only for explicit additional training with an immutable workout source snapshot. Enforce that source distinction in database constraints, not an unchecked nullable assignment.
+4. Enforce one current workout record per occurrence/athlete, with audited revisions. Freeze the roster, shared prescription and participant adaptations; current group membership is not the historical roster.
+5. Store an assignment progression cursor and an explicit sequence position on its actionable occurrence. Lock the assignment when binding or resolving a position. A calendar slot is not itself a consumed sequence position.
+6. Preserve existing IDs while backfilling individual historical occurrences with evidence from their assignment/day/date. Do not attach historical group attendance to an exercise record merely because dates or names match. A dry-run reconciliation must identify ambiguous records before migration.
+
+If the additive event changes cannot preserve current query/receipt behavior cleanly, revisit storage before implementation; do not create a competing second session subsystem simply to avoid that review.
+
+### Progression recommendations for review
+
+- Completing or staff-skipping an occurrence advances its linked assignment position once in the same transaction. Add a resolution ledger/unique position constraint so retries and two devices cannot advance it twice.
+- At the end of the published cycle, repeat from the beginning while the assignment remains active and within its configured dates. Preserve cycle/position identity so another cycle is not mistaken for a duplicate of the first. This repeat policy is proposed for approval.
+- A later correction edits actual results and appends history without silently rolling back progression or deleting a successor. Reopening progression should require a separately designed explicit action; do not expose it as an incidental result edit. This correction policy is proposed for approval.
+- Ending/replacing an assignment cancels unstarted future occurrences, preserves completed history and pauses an in-progress occurrence for explicit staff disposition. Do not automatically declare it completed or erase offline results. This end/replacement policy is proposed for approval.
+- An explicit skip requires a staff actor and a reason; absence alone is not a skip. Recurrence cannot manufacture several replacements for the unresolved position. A blocked future slot links back to the original overdue work.
+
+### Canonical API and old-client handling
+
+Propose explicit session/participant/workout operations, with institution and role derived from authenticated membership. Route spelling and DTOs must be reviewed with the OpenAPI change before implementation; a prefix rename alone is not consolidation.
+
+Keep the currently shipped attendance/assessment command shapes and receipt lookup working through a narrow adapter during beta.3. It calls the same domain services as the new session API and does not create a second write implementation. Preserve saved operation IDs, request meaning, actor/resource scope and replay authorization. Document that older APKs retain existing fixed-time attendance/assessment functionality; new day-only sessions and workout capture require the new APK. Agree a later adapter-removal policy after upgrade/pending-work evidence exists; do not use an arbitrary expiry that strands a queued record.
+
+Add server capability discovery for new mobile capture and distinguish an older server from a connection failure. Unsupported server/app combinations must leave saved work reviewable and explain the required upgrade. Capability checks never substitute for command authorization.
+
+The SQL gateway currently discovers callable functions and readable tables from database privileges in `loadContracts()`. RLS still applies; this finding is not proof of a permission bypass. Nevertheless, changing a database grant should not silently publish another legacy workflow as supported HTTP API. Inventory live web calls and pending historical commands, then use an explicit HTTP operation/table allowlist during gateway retirement. Replace profile/account operations with named services where appropriate; retain only the exact legacy replay adapters supported by policy. Do not remove account export, file cleanup or historical receipts by association.
+
+### Native queue evolution
+
+Add an explicit payload/command kind version and cache schema migration. Existing rows keep their original serialized payload, operation ID, owner key, ordering and event ID. New workout commands carry the exact occurrence/participant/workout identity, expected revision, prescription version and actual measurement fields (reps/load/time/distance/effort). Do not regenerate an old operation while upgrading it.
+
+Attendance, workout results and event finish must have explicit dependencies. A locally marked finish cannot bypass unsent participant results. Show device-persisted work separately from acknowledged results, and preserve conflicts/revocations for recovery. Migration acceptance must open a beta.2-format database with queued, sending/uncertain and acknowledged records, upgrade, restart and replay against the upgraded API; tests must inspect the actual native encrypted store as well as the disposable API.
+
 ## Proposed lifecycle and transaction rules
 
 | Record               | States / transition rule                                                                                                                                                                                  |
