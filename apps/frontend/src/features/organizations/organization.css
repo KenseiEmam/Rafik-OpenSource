@@ -143,11 +143,32 @@
 .organization-close button {
   margin-top: 16px;
 }
+/* One full-width section per row: role-dependent panels (an editable branding
+   form for the super admin, a short notice for other admins) never leave an
+   empty companion column. */
 .institution-settings-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
   gap: 24px;
+}
+.settings-inline-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 16px;
+  max-width: 720px;
+}
+.settings-inline-form > label {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  min-width: 0;
+}
+.settings-inline-form input,
+.settings-inline-form > .button {
+  height: 44px;
+  min-height: 44px;
+  margin: 0;
 }
 .institution-settings-wide {
   grid-column: 1 / -1;
@@ -208,9 +229,12 @@
   background: var(--surface-soft);
   border-radius: 8px;
 }
-@media (max-width: 850px) {
-  .institution-settings-grid {
+@media (max-width: 600px) {
+  .settings-inline-form {
     grid-template-columns: minmax(0, 1fr);
+  }
+  .settings-inline-form > .button {
+    justify-self: start;
   }
 }
 .instance-branding {
@@ -222,6 +246,50 @@
   min-width: 0;
   padding: 0;
   border: 0;
+}
+.brand-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 24px 32px;
+}
+.brand-fields,
+.brand-logo {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.brand-fields > label {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+.brand-colors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+}
+.brand-colors label {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+.brand-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 16px;
+  padding-block-start: 20px;
+  border-block-start: 1px solid var(--line);
+}
+.brand-footer > .button {
+  margin: 0;
+}
+@media (max-width: 800px) {
+  .brand-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 .brand-color input {
   width: 64px;

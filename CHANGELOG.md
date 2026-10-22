@@ -8,7 +8,7 @@
   - Shared pagination reads "Per page", takes less width so search fields fill the toolbar, keeps range and previous/next together when wrapping, and is hidden when a list has no records.
   - Consistent list summaries above results; athlete-plan cards show the athlete name without uppercase tracking and sport tags no longer stretch across the card.
   - People rows combine role and primary coach on one line and no longer use a nested scroll container; profiles align with the workspace edges and use compact in-panel empty text.
-  - Institution settings put general settings beside branding, with sports/specialties and closure full width; sports and specialties list side by side, and the add form is one aligned row.
+  - Institution settings use one full-width section per row: General settings is a single name/save row; the super admin's branding form puts name and colours beside the logo upload; sports and specialties list side by side; closure stays last. No section leaves an empty companion column, whatever the viewer's role.
   - Schedule list shows weekday, date and time range for same-day events; its phone filters pair in two columns.
   - Editor save rows group the primary action with draft status; member pickers have aligned search buttons and a framed scroll list.
   - Program cards replace repeated library boilerplate with an "In library" tag; templates pluralize drills; group and template searches use "Search".

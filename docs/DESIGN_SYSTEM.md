@@ -233,5 +233,5 @@ Assessment templates use an adaptive card grid because each item has a short tit
 - Chips (`.tag`) size to their content inside flex columns (`align-self: flex-start`).
 - Disabled cells or controls that sit over a grid-line background must not rely on the global disabled opacity.
 - Paginated directories scroll with the workspace; do not add a nested scroll container around a paginated list.
-- Settings place short related panels in two columns and give multi-group sections (sports/specialties, closure) the full width.
+- Settings use one full-width section per row. Do not pair panels whose height depends on the viewer's role (the branding form is editable only for the installation super admin); lay fields out inside the wider section instead.
 - Same-day events display one date with a time range; multi-day events show both ends.

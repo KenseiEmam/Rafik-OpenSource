@@ -111,40 +111,53 @@ async function save() {
     <form v-if="canManage" class="form-stack" @submit.prevent="save">
       <fieldset class="form-stack" :disabled="loading || saving">
         <legend class="sr-only">{{ l('Branding options', 'خيارات الهوية') }}</legend>
-        <label
-          >{{ l('Installation name', 'اسم التثبيت') }}<input v-model="name" maxlength="60" required
-        /></label>
-        <label class="brand-color"
-          >{{ l('Accent color', 'اللون الأساسي') }}<input v-model="accent" type="color"
-        /></label>
-        <label class="brand-color"
-          >{{ l('Light theme background', 'خلفية الوضع الفاتح')
-          }}<input v-model="backgroundLight" type="color"
-        /></label>
-        <label class="brand-color"
-          >{{ l('Dark theme background', 'خلفية الوضع الداكن')
-          }}<input v-model="backgroundDark" type="color"
-        /></label>
-        <FileDropzone
-          :label="l('Institution logo', 'شعار المؤسسة')"
-          :hint="l('PNG, JPEG or WebP · up to 512 KB', 'PNG أو JPEG أو WebP · حتى 512 كيلوبايت')"
-          accept="image/png,image/jpeg,image/webp"
-          :disabled="saving"
-          @change="selectLogo"
-        />
-        <div v-if="logoPreview" class="brand-preview">
-          <img :src="logoPreview" alt="" /><button
-            type="button"
-            class="text-link"
-            @click="removeLogo"
-          >
-            {{ l('Remove custom logo', 'إزالة الشعار المخصص') }}
-          </button>
+        <div class="brand-layout">
+          <div class="brand-fields">
+            <label
+              >{{ l('Installation name', 'اسم التثبيت')
+              }}<input v-model="name" maxlength="60" required
+            /></label>
+            <div class="brand-colors">
+              <label class="brand-color"
+                >{{ l('Accent color', 'اللون الأساسي') }}<input v-model="accent" type="color"
+              /></label>
+              <label class="brand-color"
+                >{{ l('Light theme background', 'خلفية الوضع الفاتح')
+                }}<input v-model="backgroundLight" type="color"
+              /></label>
+              <label class="brand-color"
+                >{{ l('Dark theme background', 'خلفية الوضع الداكن')
+                }}<input v-model="backgroundDark" type="color"
+              /></label>
+            </div>
+          </div>
+          <div class="brand-logo">
+            <FileDropzone
+              :label="l('Institution logo', 'شعار المؤسسة')"
+              :hint="
+                l('PNG, JPEG or WebP · up to 512 KB', 'PNG أو JPEG أو WebP · حتى 512 كيلوبايت')
+              "
+              accept="image/png,image/jpeg,image/webp"
+              :disabled="saving"
+              @change="selectLogo"
+            />
+            <div v-if="logoPreview" class="brand-preview">
+              <img :src="logoPreview" alt="" /><button
+                type="button"
+                class="text-link"
+                @click="removeLogo"
+              >
+                {{ l('Remove custom logo', 'إزالة الشعار المخصص') }}
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="brand-attribution">{{ l('Powered by Rafik', 'بدعم من رفيق') }}</div>
-        <button class="button" :disabled="loading || saving">
-          {{ saving ? l('Saving…', 'جارٍ الحفظ…') : l('Save branding', 'حفظ الهوية') }}
-        </button>
+        <div class="brand-footer">
+          <button class="button" :disabled="loading || saving">
+            {{ saving ? l('Saving…', 'جارٍ الحفظ…') : l('Save branding', 'حفظ الهوية') }}
+          </button>
+          <div class="brand-attribution">{{ l('Powered by Rafik', 'بدعم من رفيق') }}</div>
+        </div>
       </fieldset>
     </form>
   </section>

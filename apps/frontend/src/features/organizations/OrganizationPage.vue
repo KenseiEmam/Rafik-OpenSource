@@ -821,7 +821,7 @@ onMounted(async () => {
             <section class="panel">
               <h2>{{ l('General settings', 'الإعدادات العامة') }}</h2>
               <form
-                class="form-stack"
+                class="settings-inline-form"
                 @submit.prevent="
                   run({ action: 'rename', name: newName, revision: data.workspace.revision })
                 "
