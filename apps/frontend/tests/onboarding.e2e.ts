@@ -159,9 +159,7 @@ test('first launch creates the super admin and an invited member can join withou
   ).toBeVisible()
   await invited.getByLabel('Your full name').fill('Rafik Test Coach')
   await invited.getByLabel('Sign-in email').fill('coach@rafik.test')
-  await invited
-    .getByLabel('Create a password', { exact: true })
-    .fill('Coach invite password 2026!')
+  await invited.getByLabel('Create a password', { exact: true }).fill('Coach invite password 2026!')
   await invited.getByLabel('Confirm password').fill('Coach invite password 2026!')
   await invited.getByRole('button', { name: 'Create account and join' }).click()
   await expect(invited).toHaveURL(/\/organization\/[^/]+\/trainer/)

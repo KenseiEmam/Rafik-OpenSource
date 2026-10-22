@@ -84,7 +84,9 @@ test('coach publishes and invites; verified client trains; coach replies', async
   await expect(page.getByRole('status').filter({ hasText: 'Published and added' })).toBeVisible()
   await page.goto('/coach/clients')
   await page.getByLabel('Athlete email', { exact: true }).fill(email)
-  await page.getByLabel('Published program', { exact: true }).selectOption({ label: title + ' · 1' })
+  await page
+    .getByLabel('Published program', { exact: true })
+    .selectOption({ label: title + ' · 1' })
   await page.getByRole('button', { name: 'Create invitation link' }).click()
   const invite = page.getByRole('textbox', { name: 'Share this link with the athlete' })
   await expect(invite).toBeVisible()
