@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rebuilt and verified the signed beta.2 Android bundle with the existing update key and new launcher artwork; publication-ready English/Arabic landing release and installation guidance accompanies it.
+
 - Beta.2 release preparation: patch Vite to 8.3.5 and Vitest to 5.0.5; preserve founder-provided Android launcher PNGs as maintained assets and apply them to regular/round launcher resources during native preparation.
 
 - Final web design audit (Claude, 21 October), reviewed in rendered English/Arabic, light/dark, desktop/tablet/phone states in Chromium and WebKit:
