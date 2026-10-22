@@ -1801,22 +1801,6 @@ progress::-moz-progress-bar {
   font-size: 0.88rem;
   margin-bottom: 13px;
 }
-.editor-savebar {
-  border-top: 1px solid var(--line);
-  display: flex;
-  gap: 30px;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 35px;
-  padding-top: 26px;
-}
-.editor-savebar > p {
-  font-size: 0.78rem;
-  max-width: 340px;
-}
-.editor-savebar .actions {
-  justify-content: flex-end;
-}
 .clients-layout {
   display: grid;
   grid-template-columns: 1fr 380px;
@@ -2598,19 +2582,6 @@ progress::-moz-progress-bar {
   .exercise-fields input,
   .exercise-fields select {
     font-size: 0.87rem;
-  }
-  .editor-savebar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 20px;
-  }
-  .editor-savebar .actions {
-    justify-content: flex-start;
-    gap: 12px;
-  }
-  .editor-savebar .button {
-    flex: 1;
-    font-size: 0.76rem;
   }
   .editor-title input {
     font-size: 1.1rem;

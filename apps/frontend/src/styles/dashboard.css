@@ -91,6 +91,9 @@
   font-size: 1rem;
   margin: 0;
 }
+.dashboard-frame {
+  --dashboard-header-height: 64px;
+}
 @media (min-width: 1024px) {
   #app:has(.dashboard-frame) {
     height: 100dvh;
@@ -186,7 +189,16 @@
     position: sticky;
     top: 0;
     z-index: 30;
+    /* Same height as desktop so sticky page toolbars can sit directly below it. */
+    height: var(--dashboard-header-height);
+    min-height: 0;
     background: var(--page);
+  }
+  .dashboard-frame .header-inner {
+    height: 100%;
+  }
+  .dashboard-frame {
+    --dashboard-sticky-top: var(--dashboard-header-height);
   }
   .dashboard-frame {
     --dashboard-gutter: 18px;

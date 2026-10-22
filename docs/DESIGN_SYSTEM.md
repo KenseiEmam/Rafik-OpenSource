@@ -235,3 +235,5 @@ Assessment templates use an adaptive card grid because each item has a short tit
 - Paginated directories scroll with the workspace; do not add a nested scroll container around a paginated list.
 - Settings use one full-width section per row. Do not pair panels whose height depends on the viewer's role (the branding form is editable only for the installation super admin); lay fields out inside the wider section instead.
 - Same-day events display one date with a time range; multi-day events show both ends.
+- Pickers over a potentially large roster search first: list nothing until the user types, return a small top-N result set with an Add action, and keep the selection in its own section (with context, removal and undo) below the search.
+- Long editors keep their save/publish actions in one top action bar, pinned below the 64px dashboard header from 601px up. Do not duplicate the same named action elsewhere on the page.

@@ -156,4 +156,7 @@ Branch `codex/web-design-final`, started from PR #138's head. A disposable seede
 | UX-28 | P3       | Repeated library boilerplate on every program card; "1 drills"; Find vs Search labels; trainee/trainer copy (UX-13).      | "In library" tag, plurals, consistent Search, athlete/coach wording in both languages.             |
 | UX-29 | P2       | Profile used a narrower centred container and dashed centred empty boxes inside panels.                                   | Workspace edges and compact start-aligned empty text.                                              |
 
+| UX-30 | P2       | Founder review: the assignment page listed every athlete with a checkbox, which does not scale to 1,000–2,000 athletes. | Search-first top-5 matches with Add; separate selected section with plans, replace choice, Remove/Undo and confirmed Remove all. Admin email search. |
+| UX-31 | P2       | Founder review: "Assign this program" sat alone under the title, and save/publish were only at the bottom of a long editor. | One top action bar holding all program actions, pinned on tablet and desktop. |
+
 Rendered coverage and the checks that ran are recorded in [verification](../verification/README.md). Not covered: Tasks (deferred by founder direction), messages/resources/analytics beyond a desktop glance, the full dropdown/modal set, custom institution palettes, and physical devices.

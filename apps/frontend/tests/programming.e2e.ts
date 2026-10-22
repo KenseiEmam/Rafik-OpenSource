@@ -62,7 +62,12 @@ test('organization program authoring, reviewed delivery, recording and feedback 
         .filter({ hasText: 'Published and added to the institution program library.' }),
     ).toBeVisible()
     await page.getByRole('link', { name: 'Assign this plan', exact: true }).click()
-    await page.getByRole('checkbox', { name: /R4 Athlete/ }).check()
+    // Recipients are found by search (top matches) and added to a separate selection.
+    await page.getByRole('searchbox', { name: 'Find athletes', exact: true }).fill('R4 Athlete')
+    await page.getByRole('button', { name: 'Add R4 Athlete', exact: true }).click()
+    await expect(
+      page.getByRole('region', { name: 'Selected athletes', exact: true }),
+    ).toContainText('R4 Athlete')
     await page.getByRole('button', { name: /Review assignment/ }).click()
     await expect(page.getByText('First plan', { exact: false })).toBeVisible()
     expect(await layoutIssues(page)).toEqual([])
@@ -142,7 +147,9 @@ test('organization program authoring, reviewed delivery, recording and feedback 
     )
     await page.getByRole('button', { name: 'Publish program', exact: true }).click()
     await page.getByRole('link', { name: 'Assign this plan', exact: true }).click()
-    await expect(page.getByRole('checkbox', { name: /R4 Athlete/ })).toBeChecked()
+    await expect(
+      page.getByRole('region', { name: 'Selected athletes', exact: true }),
+    ).toContainText('R4 Athlete')
     await page.getByRole('button', { name: /Review assignment/ }).click()
     await page.getByRole('button', { name: 'Confirm assignment', exact: true }).click()
     await expect(

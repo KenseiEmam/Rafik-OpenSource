@@ -29,6 +29,8 @@ type Recipient = {
   assignment_id: string | null
   assignment_revision: number | null
   current?: string
+  /** Administrators only: account email to tell same-named athletes apart. */
+  email?: string | null
   /** Institution recipients list every active plan; independent coaching keeps one. */
   plans?: ActivePlan[]
 }
@@ -38,9 +40,11 @@ const version = ref<PlanVersion>(),
   people = ref<Recipient[]>([]),
   selected = ref<string[]>([]),
   search = ref(''),
-  limit = ref(20),
   pagePeople = ref<Recipient[]>([]),
-  nextPeople = ref<number | null>(null),
+  searching = ref(false),
+  // Last removal, kept briefly so a mistaken Remove can be undone.
+  removed = ref<{ id: string; name: string; replace: string } | null>(null),
+  confirmClear = ref(false),
   review = ref(false),
   loading = ref(true),
   error = ref(''),
@@ -62,7 +66,41 @@ const start = ref(
   end = ref(''),
   mode = ref('flexible')
 const key = `delivery:${user.value!.id}:${context.key}:${versionId}`
-const visible = computed(() => pagePeople.value)
+/** Large institutions: search returns only the top matches; the selection lives below. */
+const MATCHES = 5,
+  MAX_RECIPIENTS = 50
+const visible = computed(() => pagePeople.value.slice(0, MATCHES))
+const emailSearch = computed(() => !!context.workspace && context.view === 'admin')
+const currentPlans = (person: Recipient) =>
+  person.plans
+    ? person.plans.map(planLabel).join('، ') || l('No active plan', 'لا توجد خطة نشطة')
+    : person.current || l('No active plan', 'لا توجد خطة نشطة')
+const nameOf = (id: string) =>
+  people.value.find((p) => p.id === id)?.name || l('Unavailable person', 'شخص غير متاح')
+function add(id: string) {
+  if (selected.value.includes(id) || selected.value.length >= MAX_RECIPIENTS) return
+  selected.value = [...selected.value, id]
+  removed.value = null
+}
+function remove(id: string) {
+  removed.value = { id, name: nameOf(id), replace: replace.value[id] || '' }
+  selected.value = selected.value.filter((x) => x !== id)
+  const { [id]: _, ...rest } = replace.value
+  replace.value = rest
+}
+function undoRemove() {
+  const last = removed.value
+  if (!last || selected.value.length >= MAX_RECIPIENTS) return
+  selected.value = [...selected.value, last.id]
+  if (last.replace) replace.value = { ...replace.value, [last.id]: last.replace }
+  removed.value = null
+}
+function clearAll() {
+  selected.value = []
+  replace.value = {}
+  removed.value = null
+  confirmClear.value = false
+}
 const recipients = computed(() => people.value.filter((p) => selected.value.includes(p.id)))
 let initialized = false
 watch(
@@ -105,14 +143,17 @@ const replacedPlan = (person: Recipient) =>
   person.plans?.find((plan) => plan.id === replace.value[person.id])
 let rosterGeneration = 0,
   searchTimer: ReturnType<typeof setTimeout>
-async function loadRoster(append = false) {
+async function loadRoster() {
   const current = ++rosterGeneration
+  const query = search.value.trim()
   const q = new URLSearchParams({
     view: context.view,
-    search: search.value,
+    search: query,
     selected: selected.value.join(','),
-    offset: String(append ? nextPeople.value || 0 : 0),
+    limit: String(MATCHES),
+    ...(emailSearch.value ? { email: 'true' } : {}),
   })
+  searching.value = !!query
   try {
     const result = await request<{
       items: Recipient[]
@@ -126,13 +167,21 @@ async function loadRoster(append = false) {
         q,
     )
     if (current !== rosterGeneration) return
-    pagePeople.value = append ? [...pagePeople.value, ...result.items] : result.items
+    // Nothing is listed until someone types; selected athletes always resolve.
+    pagePeople.value = query ? result.items.slice(0, MATCHES) : []
     people.value = Array.from(
-      new Map([...result.selected, ...pagePeople.value].map((m) => [m.id, m])).values(),
+      new Map(
+        [
+          ...people.value.filter((p) => selected.value.includes(p.id)),
+          ...result.selected,
+          ...pagePeople.value,
+        ].map((m) => [m.id, m]),
+      ).values(),
     )
-    nextPeople.value = result.next
   } catch (e) {
     error.value = errorMessage(e)
+  } finally {
+    if (current === rosterGeneration) searching.value = false
   }
 }
 watch(search, () => {
@@ -309,84 +358,152 @@ onMounted(load)
           <template v-if="!review"
             ><section class="panel">
               <h2>{{ l('Who is this for?', 'لمن هذا البرنامج؟') }}</h2>
-              <label
-                >{{ l('Find a person', 'البحث عن شخص')
+              <label class="recipient-search"
+                >{{ l('Find athletes', 'البحث عن رياضيين')
                 }}<input
-                  :placeholder="l('Type to search…', 'اكتب للبحث…')"
+                  :placeholder="
+                    emailSearch
+                      ? l('Search by name or email…', 'ابحث بالاسم أو البريد الإلكتروني…')
+                      : l('Search by name…', 'ابحث بالاسم…')
+                  "
                   v-model="search"
                   type="search"
+                  aria-describedby="recipient-search-hint"
               /></label>
-              <p v-if="!people.length" class="notice">
+              <p id="recipient-search-hint" class="small-print">
                 {{
                   l(
-                    'Invite an athlete first. Coaches can assign only to the people they are responsible for.',
-                    'ادعُ رياضياً أولاً. يمكن للمدرب تعيين البرامج فقط لمن يتولى مسؤوليتهم.',
+                    `Shows the top ${MATCHES} matches. Coaches can assign only to the athletes they are responsible for.`,
+                    `تظهر أفضل ${MATCHES} نتائج. يمكن للمدرب التعيين فقط للرياضيين الذين يتولى مسؤوليتهم.`,
                   )
                 }}
               </p>
-              <label v-for="person in visible" :key="person.id" class="delivery-recipient"
-                ><input
-                  v-model="selected"
-                  type="checkbox"
-                  :value="person.id"
-                  :disabled="selected.length >= 50 && !selected.includes(person.id)"
-                /><span
-                  ><strong>{{ person.name }}</strong
-                  ><small>{{
-                    person.plans
-                      ? person.plans.map(planLabel).join('، ') ||
-                        l('No active plan', 'لا توجد خطة نشطة')
-                      : person.current || l('No active plan', 'لا توجد خطة نشطة')
-                  }}</small></span
-                ></label
-              ><button
-                v-if="nextPeople !== null"
-                type="button"
-                class="text-link"
-                @click="loadRoster(true)"
+              <ul
+                v-if="search.trim()"
+                class="recipient-matches"
+                :aria-label="l('Matching athletes', 'الرياضيون المطابقون')"
+                :aria-busy="searching"
               >
-                {{ l('Show more', 'عرض المزيد') }}
-              </button>
-              <p v-if="selected.length" class="small-print">
-                {{ l('Selected people', 'الأشخاص المحددون') }}
-              </p>
-              <div v-for="id in selected" :key="id" class="selected-recipient">
-                <div class="heading-actions">
-                  <span dir="auto">{{
-                    people.find((p) => p.id === id)?.name || l('Unavailable person', 'شخص غير متاح')
-                  }}</span
+                <li v-for="person in visible" :key="person.id">
+                  <span class="recipient-identity"
+                    ><strong dir="auto">{{ person.name }}</strong
+                    ><small v-if="person.email" dir="ltr">{{ person.email }}</small
+                    ><small>{{ currentPlans(person) }}</small></span
                   ><button
                     type="button"
-                    class="text-link"
-                    @click="selected = selected.filter((x) => x !== id)"
+                    class="button secondary small"
+                    :disabled="selected.includes(person.id) || selected.length >= MAX_RECIPIENTS"
+                    :aria-label="l('Add ', 'إضافة ') + person.name"
+                    @click="add(person.id)"
                   >
-                    {{ l('Remove', 'إزالة') }}
+                    {{ selected.includes(person.id) ? l('Added', 'أُضيف') : l('Add', 'إضافة') }}
+                  </button>
+                </li>
+                <li v-if="!visible.length && !searching" class="recipient-empty">
+                  {{
+                    l(
+                      'No matching athletes. Check the spelling or invite the athlete first.',
+                      'لا يوجد رياضيون مطابقون. تحقق من الكتابة أو ادعُ الرياضي أولاً.',
+                    )
+                  }}
+                </li>
+              </ul>
+              <p v-if="selected.length >= MAX_RECIPIENTS" class="notice" role="status">
+                {{
+                  l(
+                    `One assignment can include up to ${MAX_RECIPIENTS} athletes.`,
+                    `يمكن أن يشمل التعيين الواحد حتى ${MAX_RECIPIENTS} رياضياً.`,
+                  )
+                }}
+              </p>
+              <section
+                class="selected-recipients"
+                :aria-label="l('Selected athletes', 'الرياضيون المحددون')"
+              >
+                <div class="heading-actions">
+                  <h3>
+                    {{ l('Selected athletes', 'الرياضيون المحددون') }} ({{ selected.length }})
+                  </h3>
+                  <button
+                    v-if="selected.length > 1 && !confirmClear"
+                    type="button"
+                    class="text-link"
+                    @click="confirmClear = true"
+                  >
+                    {{ l('Remove all', 'إزالة الكل') }}
                   </button>
                 </div>
-                <label v-if="context.workspace && people.find((p) => p.id === id)?.plans?.length"
-                  >{{ l('Existing plans', 'الخطط الحالية')
-                  }}<select
-                    :value="replace[id] || ''"
-                    @change="
-                      replace = {
-                        ...replace,
-                        [id]: ($event.target as HTMLSelectElement).value,
-                      }
-                    "
-                  >
-                    <option value="">
-                      {{ l('Keep them and add this plan', 'إبقاؤها وإضافة هذه الخطة') }}
-                    </option>
-                    <option
-                      v-for="plan in people.find((p) => p.id === id)?.plans"
-                      :key="plan.id"
-                      :value="plan.id"
+                <p v-if="confirmClear" class="notice" role="alert">
+                  {{
+                    l(
+                      `Remove all ${selected.length} selected athletes and their plan choices?`,
+                      `إزالة جميع الرياضيين المحددين (${selected.length}) واختيارات خططهم؟`,
+                    )
+                  }}
+                  <button type="button" class="text-link" @click="clearAll">
+                    {{ l('Remove all', 'إزالة الكل') }}</button
+                  ><button type="button" class="text-link" @click="confirmClear = false">
+                    {{ l('Keep them', 'الإبقاء عليهم') }}
+                  </button>
+                </p>
+                <p v-if="removed" class="small-print" role="status">
+                  {{ l('Removed', 'أُزيل') }} <bdi>{{ removed.name }}</bdi
+                  >.
+                  <button type="button" class="text-link" @click="undoRemove">
+                    {{ l('Undo', 'تراجع') }}
+                  </button>
+                </p>
+                <p v-if="!selected.length" class="small-print">
+                  {{
+                    l(
+                      'Search above and add the athletes who should receive this program.',
+                      'ابحث أعلاه وأضف الرياضيين الذين سيحصلون على هذا البرنامج.',
+                    )
+                  }}
+                </p>
+                <div v-for="id in selected" :key="id" class="selected-recipient">
+                  <div class="heading-actions">
+                    <span dir="auto"
+                      >{{ nameOf(id)
+                      }}<small v-if="people.find((p) => p.id === id)?.email" dir="ltr">
+                        {{ people.find((p) => p.id === id)?.email }}</small
+                      ><small v-if="people.find((p) => p.id === id)">{{
+                        currentPlans(people.find((p) => p.id === id)!)
+                      }}</small></span
+                    ><button
+                      type="button"
+                      class="text-link"
+                      :aria-label="l('Remove ', 'إزالة ') + nameOf(id)"
+                      @click="remove(id)"
                     >
-                      {{ l('Replace: ', 'استبدال: ') + planLabel(plan) }}
-                    </option>
-                  </select></label
-                >
-              </div>
+                      {{ l('Remove', 'إزالة') }}
+                    </button>
+                  </div>
+                  <label v-if="context.workspace && people.find((p) => p.id === id)?.plans?.length"
+                    >{{ l('Existing plans', 'الخطط الحالية')
+                    }}<select
+                      :value="replace[id] || ''"
+                      @change="
+                        replace = {
+                          ...replace,
+                          [id]: ($event.target as HTMLSelectElement).value,
+                        }
+                      "
+                    >
+                      <option value="">
+                        {{ l('Keep them and add this plan', 'إبقاؤها وإضافة هذه الخطة') }}
+                      </option>
+                      <option
+                        v-for="plan in people.find((p) => p.id === id)?.plans"
+                        :key="plan.id"
+                        :value="plan.id"
+                      >
+                        {{ l('Replace: ', 'استبدال: ') + planLabel(plan) }}
+                      </option>
+                    </select></label
+                  >
+                </div>
+              </section>
             </section>
             <section class="panel">
               <h2>{{ l('How should it run?', 'كيف يُنفّذ؟') }}</h2>
@@ -501,27 +618,56 @@ onMounted(load)
 <style scoped>
 .delivery-page {
 }
-.delivery-recipient {
+.recipient-search {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+.recipient-matches {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 4px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.recipient-matches li {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--line);
+  padding: 12px 0;
 }
-.delivery-recipient input {
-  width: 20px;
-  min-height: 20px;
-  height: 20px;
+.recipient-matches li + li {
+  border-top: 1px solid var(--line);
+}
+.recipient-matches .button {
+  margin: 0;
   flex-shrink: 0;
 }
-.delivery-recipient span {
+.recipient-identity {
   display: grid;
-  gap: 4px;
+  gap: 2px;
   min-width: 0;
   overflow-wrap: anywhere;
 }
-.delivery-recipient small {
+.recipient-identity small,
+.selected-recipient small,
+.recipient-empty {
   color: var(--muted);
+}
+.selected-recipient small {
+  display: block;
+  font-size: var(--text-small);
+}
+.selected-recipients {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.selected-recipients h3 {
+  margin: 0;
+  font-size: var(--text-panel, 1.125rem);
 }
 .selected-recipient {
   display: grid;

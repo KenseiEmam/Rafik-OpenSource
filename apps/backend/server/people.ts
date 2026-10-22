@@ -56,7 +56,20 @@ export async function peoplePage(
         ...(sport
           ? { organization_member_sports: { some: { sport_id: sport } } }
           : {}),
-        name: { contains: search, mode: "insensitive" as const },
+        // Administrators may also match account email (opt-in per request);
+        // coaches never see member email, so they search names only.
+        ...(view === "admin" && q.get("email") === "true" && search
+          ? {
+              OR: [
+                { name: { contains: search, mode: "insensitive" as const } },
+                {
+                  users: {
+                    email: { contains: search, mode: "insensitive" as const },
+                  },
+                },
+              ],
+            }
+          : { name: { contains: search, mode: "insensitive" as const } }),
       },
     ],
   };
@@ -71,6 +84,7 @@ export async function peoplePage(
     active: true,
     revision: true,
     trainer_id: true,
+    ...(view === "admin" ? { users: { select: { email: true } } } : {}),
     organization_member_sports: {
       select: { sport_id: true },
       orderBy: { sport_id: "asc" as const },
@@ -122,18 +136,24 @@ export async function peoplePage(
     select: { id: true, name: true },
   });
   const withSports = (list: typeof items) =>
-    list.map(({ organization_member_sports, coaching_as_athlete, ...m }) => ({
-      ...m,
-      sports: organization_member_sports.map((x) => x.sport_id),
-      // Active coaching team; supporting coaches carry the sport/specialty they cover.
-      coaches: coaching_as_athlete.map((l) => ({
-        id: l.id,
-        coach: l.coach_member_id,
-        kind: l.kind,
-        sport: l.sport_id,
-        revision: l.revision,
-      })),
-    }));
+    list.map((row) => {
+      const { organization_member_sports, coaching_as_athlete, users, ...m } =
+        row as typeof row & { users?: { email: string | null } | null };
+      return {
+        ...m,
+        // Selected only for administrators; flattened so no nested identity row leaks.
+        ...(users !== undefined ? { email: users?.email ?? null } : {}),
+        sports: organization_member_sports.map((x) => x.sport_id),
+        // Active coaching team; supporting coaches carry the sport/specialty they cover.
+        coaches: coaching_as_athlete.map((l) => ({
+          id: l.id,
+          coach: l.coach_member_id,
+          kind: l.kind,
+          sport: l.sport_id,
+          revision: l.revision,
+        })),
+      };
+    });
   return {
     items: withSports(items),
     selected: withSports(chosen),
@@ -190,6 +210,8 @@ export async function organizationRecipients(
         id: m.id,
         name: m.name,
         revision: m.revision,
+        // Administrators can tell same-named athletes apart by account email.
+        ...("email" in m ? { email: m.email } : {}),
         // Every active plan; replacing one is an explicit choice.
         plans: plans.map((p) => ({
           id: p.id,

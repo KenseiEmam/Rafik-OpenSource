@@ -450,14 +450,58 @@ function removeDay() {
           }}
         </h1>
       </div>
-      <button v-if="editable" class="button secondary small" @click="preview = !preview">
+    </PageHeading>
+    <!-- One sticky action bar keeps preview, assign, save and publish reachable while editing. -->
+    <div
+      v-if="!loading && (editable || (assignableVersionId && context.view !== 'trainee'))"
+      class="editor-toolbar"
+      role="toolbar"
+      :aria-label="language('Program actions', 'إجراءات البرنامج')"
+    >
+      <button
+        v-if="editable"
+        type="button"
+        class="button secondary small"
+        @click="preview = !preview"
+      >
         <PhEye :size="18" aria-hidden="true" />{{
           preview
             ? language('Edit program', 'تعديل البرنامج')
             : language('Athlete preview', 'معاينة الرياضي')
         }}
       </button>
-    </PageHeading>
+      <div class="editor-toolbar-actions">
+        <RouterLink
+          v-if="assignableVersionId && !published && context.view !== 'trainee'"
+          class="button secondary small"
+          :to="context.base + '/deliver/' + assignableVersionId"
+        >
+          {{ language('Assign this program', 'تعيين هذا البرنامج') }}
+        </RouterLink>
+        <template v-if="editable">
+          <button v-if="!isNew" type="button" class="text-link" :disabled="busy" @click="duplicate">
+            {{ language('Duplicate', 'إنشاء نسخة') }}</button
+          ><button
+            type="submit"
+            form="program-editor-form"
+            class="button secondary small"
+            :disabled="busy"
+          >
+            {{ language('Save draft', 'حفظ المسودة') }}</button
+          ><button type="button" class="button small" :disabled="busy" @click="publish">
+            {{ busy ? t('loading') : language('Publish program', 'نشر البرنامج') }}
+          </button>
+        </template>
+      </div>
+    </div>
+    <p v-if="editable && !loading" class="small-print editor-publish-note">
+      {{
+        language(
+          'Publishing creates a fixed version and makes it available in the institution program library. Assignments remain a separate step.',
+          'ينشئ النشر نسخة ثابتة ويتيحها في مكتبة برامج المؤسسة. يبقى التعيين خطوة منفصلة.',
+        )
+      }}
+    </p>
     <PageState :loading="loading" :error="!loadedSuccessfully ? error : ''" @retry="load()"
       ><p v-if="restored" class="notice">
         {{ language('Your local draft has been restored.', 'تم استرداد مسودتك المحلية.') }}
@@ -495,14 +539,7 @@ function removeDay() {
         >
       </p>
       <CommandStatus :command="command" :show-notice="false" />
-      <RouterLink
-        v-if="assignableVersionId && !published && context.view !== 'trainee'"
-        class="button secondary small"
-        :to="context.base + '/deliver/' + assignableVersionId"
-      >
-        {{ language('Assign this program', 'تعيين هذا البرنامج') }}
-      </RouterLink>
-      <form ref="form" @submit.prevent="save">
+      <form id="program-editor-form" ref="form" @submit.prevent="save">
         <fieldset :disabled="busy" class="form-fields">
           <section v-if="!preview" class="program-identity-card">
             <div
@@ -901,25 +938,6 @@ function removeDay() {
               <PhPlus :size="18" />{{ language('Add exercise', 'إضافة تمرين') }}
             </button>
           </section>
-          <div v-if="editable" class="editor-savebar">
-            <p>
-              {{
-                language(
-                  'Publishing creates a fixed version and makes it available in the institution program library. Assignments remain a separate step.',
-                  'ينشئ النشر نسخة ثابتة ويتيحها في مكتبة برامج المؤسسة. يبقى التعيين خطوة منفصلة.',
-                )
-              }}
-            </p>
-            <div class="actions">
-              <button v-if="!isNew" type="button" class="text-link" @click="duplicate">
-                {{ language('Duplicate', 'إنشاء نسخة') }}</button
-              ><button type="submit" class="button secondary" :disabled="busy">
-                {{ language('Save draft', 'حفظ المسودة') }}</button
-              ><button type="button" class="button" :disabled="busy" @click="publish">
-                {{ busy ? t('loading') : language('Publish program', 'نشر البرنامج') }}
-              </button>
-            </div>
-          </div>
         </fieldset>
       </form></PageState
     >
@@ -927,6 +945,42 @@ function removeDay() {
 </template>
 
 <style>
+.editor-toolbar {
+  position: sticky;
+  /* Below the sticky phone/tablet header; 0 where the workspace itself scrolls. */
+  top: var(--dashboard-sticky-top, 0);
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 16px;
+  margin-block: 0 8px;
+  padding: 12px 0;
+  border-block-end: 1px solid var(--line);
+  background: var(--page);
+}
+.editor-toolbar .button {
+  margin: 0;
+}
+.editor-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px 12px;
+  margin-inline-start: auto;
+}
+@media (max-width: 600px) {
+  /* The wrapped phone bar would cover a fifth of the screen; keep it at the top, unpinned. */
+  .editor-toolbar {
+    position: static;
+  }
+}
+.editor-publish-note {
+  max-width: 72ch;
+  margin: 0 0 20px;
+}
 .program-identity-card {
   display: grid;
   grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.5fr);
