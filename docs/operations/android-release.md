@@ -187,3 +187,13 @@ The existing beta.1 tag resolves to `4ac70c8`; the later locally packaged APK re
 This closes the current Android distribution task. Broader devices, accessibility, historical upgrades, first-user feedback and institution-specific live-data approval stay in their existing backlog; they do not require another beta.1 packaging cycle. Any later runtime change requires a separately identified candidate and relevant verification.
 
 References: [Android signing](https://developer.android.com/studio/publish/app-signing) and [React Native release builds](https://reactnative.dev/docs/signed-apk-android.html).
+
+## Maintained launcher artwork
+
+Founder-provided density-specific PNGs live in `apps/mobile/assets/android-icons/`. The highest-density PNG is also the Expo icon source. `android.mjs` copies the maintained PNG at each density to both regular and round launcher resource names after native preparation, removing only conflicting generated WebP files with those exact names. Edit the maintained artwork rather than only `android/app/src/main/res`: generated resources are not committed and may be recreated. Launcher changes require a signed native rebuild; ordinary JavaScript refresh cannot update an installed launcher icon.
+
+## Beta.2 upload bundle — 22 October 2026
+
+The rebuilt bundle is `artifacts/mobile/1.0.0-beta.2.zip`. It contains the `1.0.0-beta.2/` folder with signed APK, SHA256SUMS and build.json. Compiled source: `4b6cb380369882b76caa5306c9949fdf5a96a8d9` (clean); Android code 1000002; signer matches beta.1. APK SHA-256: `566d9387caf73d671ee9a03479271f3965acc7c3b9a58c14eeb121cadbf0f589`. ZIP SHA-256: `8cd3a5556bb6414faa72f0bac7d2a68fc15acef152f90d0957d990d3bc56c9f3`. This replaces the earlier unpublished beta.2 package; do not upload an older local copy.
+
+Merge the final release-preparation PR before tagging the approved beta.2 source, then upload this ZIP to the GitHub prerelease. Later documentation-only commits do not change the APK compiled-source revision in build.json. Landing copy is publication-ready on the founder’s explicit instruction to assume their forthcoming upload; this is not independent evidence that the upload occurred. No device upgrade or published-byte check is claimed.

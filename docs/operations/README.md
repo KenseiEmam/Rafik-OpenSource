@@ -131,3 +131,7 @@ Use [development setup](../development/README.md) for local PostgreSQL, API, web
 ### Beta.2 candidate member-management migration
 
 The web refinements in PR #138 additionally require `202610210100_invitation_sports`. Run the normal forward-migration deployment after the database/private-file backup. Existing invitations gain an empty sport list; new role-compatible choices are applied on acceptance. Keep the signed APK compiled-source checksum separate from later web-only source commits; no mobile behavior changed in these refinements.
+
+### Beta.2 final package
+
+The final launcher/tooling fixes are in release-preparation PR #140, based on the merged design audit. The rebuilt signed bundle, exact source and checksums are in the [Android release guide](android-release.md#beta2-upload-bundle--22-october-2026). Use that new ZIP rather than the earlier unpublished beta.2 build. Founder handles upload and prerelease creation; actual publication/upgrade evidence remains separate.

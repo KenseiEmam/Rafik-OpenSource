@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, writeFileSync, mkdirSync, copyFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync, mkdirSync, copyFileSync, rmSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createRequire } from 'node:module'
@@ -92,6 +92,18 @@ try {
     const destination = join(mobile, 'android/app', target)
     mkdirSync(dirname(destination), { recursive: true })
     copyFileSync(join(mobile, 'scripts', source), destination)
+  }
+  // Maintained launcher assets override generated placeholders after every prebuild.
+  for (const density of ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi']) {
+    const source = join(mobile, 'assets/android-icons', 'mipmap-' + density, 'ic_launcher.png')
+    if (!existsSync(source)) throw Error('Missing maintained launcher icon: ' + source)
+    const resource = join(mobile, 'android/app/src/main/res', 'mipmap-' + density)
+    mkdirSync(resource, { recursive: true })
+    for (const name of ['ic_launcher', 'ic_launcher_round']) {
+      // AAPT cannot keep PNG and WebP resources with the same resource name.
+      rmSync(join(resource, name + '.webp'), { force: true })
+      copyFileSync(source, join(resource, name + '.png'))
+    }
   }
   if (prepareOnly) {
     console.log('Android build configuration prepared. No build, emulator or Metro was started.')

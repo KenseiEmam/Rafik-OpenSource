@@ -31,6 +31,7 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "icon": "./assets/android-icons/mipmap-xxxhdpi/ic_launcher.png"
   }
 }

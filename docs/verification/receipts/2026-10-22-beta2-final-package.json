@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-22",
+  "compiled": {
+    "product": "Rafik Squire",
+    "version": "1.0.0-beta.2",
+    "versionCode": 1000002,
+    "package": "org.rafik.field",
+    "architectures": ["arm64-v8a", "x86_64"],
+    "built_at": "2026-10-22T04:55:16.069Z",
+    "revision": "4b6cb380369882b76caa5306c9949fdf5a96a8d9",
+    "dirty": false,
+    "verification_only": false,
+    "provenance": "Source revision captured before Gradle build.",
+    "certificate_sha256": "df1a1bc534b1bd1375aaadce3048416bff65e8a02a7ad534ce7dbd76ef5d9255",
+    "sha256": "566d9387caf73d671ee9a03479271f3965acc7c3b9a58c14eeb121cadbf0f589"
+  },
+  "apkVerification": {
+    "signerMatchesAcceptedBeta1": true,
+    "architectures": ["arm64-v8a", "x86_64"],
+    "bundledJavaScript": true,
+    "fatalReleaseLint": "passed",
+    "launcher": "Founder PNG extracted from optimized APK and visually inspected; regular and round resource names present"
+  },
+  "zip": {
+    "path": "artifacts/mobile/1.0.0-beta.2.zip",
+    "sha256": "8cd3a5556bb6414faa72f0bac7d2a68fc15acef152f90d0957d990d3bc56c9f3"
+  },
+  "dependencyAudit": {
+    "registry": true,
+    "before": {
+      "info": 0,
+      "low": 0,
+      "moderate": 2,
+      "high": 20,
+      "critical": 0,
+      "total": 22
+    },
+    "after": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 19,
+      "critical": 0,
+      "total": 19
+    },
+    "backendProduction": 0,
+    "unpatchedUnderlying": ["GHSA-vfj7-8cjw-p6xm", "GHSA-86w9-cpqp-85rv"]
+  },
+  "checks": {
+    "units": 33,
+    "webBuild": "passed Vite 8.3.5",
+    "linuxInstall": "clean Node 22.16 container, Linux Rolldown/Tailwind binaries resolve",
+    "docs": "389 links, 44 anchors, 58 documents",
+    "landing": "6 content/versioning cases passed"
+  },
+  "limits": [
+    "No physical install or beta.1-to-beta.2 upgrade tested",
+    "Founder will upload and publish; uploaded bytes not verified in advance"
+  ]
+}
