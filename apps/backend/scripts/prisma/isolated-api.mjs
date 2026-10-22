@@ -1,5 +1,6 @@
 import { spawn, execFileSync } from "node:child_process";
 import { resolve } from "node:path";
+import { readFileSync, rmSync } from "node:fs";
 import { backendRoot, repositoryRoot, dockerCompose } from "./docker.mjs";
 
 const database = "rafik_browser_" + Date.now(),
@@ -26,6 +27,7 @@ const env = {
   PORT: String(port),
   RAFIK_TEST_API: api,
   DATABASE_URL: `postgresql://rafik_api:rafik-local-api-only@127.0.0.1:55332/${database}`,
+  RAFIK_TEST_FILES: ".local/browser-" + database.slice("rafik_browser_".length),
   MIGRATION_DATABASE_URL: `postgresql://rafik_migrate:rafik-local-migrations-only@127.0.0.1:55332/${database}`,
 };
 let created = false,
@@ -50,6 +52,12 @@ try {
     { cwd: backendRoot, env, stdio: "pipe" },
   );
   const tsx = resolve(repositoryRoot, "node_modules/tsx/dist/cli.mjs");
+  // Preserve the canonical reference fixture expected by existing domain suites.
+  sql(
+    database,
+    readFileSync(resolve(backendRoot, "prisma/seed.sql"), "utf8") +
+      "\nDELETE FROM public.workspaces WHERE id='12000000-0000-4000-8000-000000000002';",
+  );
   server = spawn(process.execPath, [tsx, "server/index.ts"], {
     cwd: backendRoot,
     env,
@@ -91,4 +99,15 @@ try {
     });
   }
   if (created) sql("rafik", `DROP DATABASE ${database} WITH (FORCE);`);
+  const files = resolve(backendRoot, env.RAFIK_TEST_FILES);
+  if (
+    files !==
+    resolve(
+      backendRoot,
+      ".local",
+      "browser-" + database.slice("rafik_browser_".length),
+    )
+  )
+    throw Error("Unexpected fixture directory");
+  rmSync(files, { recursive: true, force: true });
 }

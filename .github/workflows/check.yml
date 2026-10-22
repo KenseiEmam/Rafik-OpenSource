@@ -72,7 +72,7 @@ jobs:
         if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run test:organization-assets
         if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
-      - run: npm run test:organization-tasks
+      - run: npm run test:institution-cleanup
         if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run test:organization-injuries
         if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
