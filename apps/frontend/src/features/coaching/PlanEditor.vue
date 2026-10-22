@@ -16,6 +16,7 @@ import {
   PhEye,
   PhX,
   PhBarbell,
+  PhCopy,
 } from '@phosphor-icons/vue'
 import { user, contexts } from '../../app/auth'
 import { duplicateSession, duplicateWeek } from './program-structure'
@@ -458,18 +459,25 @@ function removeDay() {
       role="toolbar"
       :aria-label="language('Program actions', 'إجراءات البرنامج')"
     >
-      <button
-        v-if="editable"
-        type="button"
-        class="button secondary small"
-        @click="preview = !preview"
-      >
-        <PhEye :size="18" aria-hidden="true" />{{
-          preview
-            ? language('Edit program', 'تعديل البرنامج')
-            : language('Athlete preview', 'معاينة الرياضي')
-        }}
-      </button>
+      <!-- View and copy tools sit apart from the save/assign/publish flow. -->
+      <div v-if="editable" class="editor-toolbar-tools">
+        <button type="button" class="button secondary small" @click="preview = !preview">
+          <PhEye :size="18" aria-hidden="true" />{{
+            preview
+              ? language('Edit program', 'تعديل البرنامج')
+              : language('Athlete preview', 'معاينة الرياضي')
+          }}
+        </button>
+        <button
+          v-if="!isNew"
+          type="button"
+          class="button secondary small"
+          :disabled="busy"
+          @click="duplicate"
+        >
+          <PhCopy :size="18" aria-hidden="true" />{{ language('Duplicate', 'إنشاء نسخة') }}
+        </button>
+      </div>
       <div class="editor-toolbar-actions">
         <RouterLink
           v-if="assignableVersionId && !published && context.view !== 'trainee'"
@@ -479,9 +487,7 @@ function removeDay() {
           {{ language('Assign this program', 'تعيين هذا البرنامج') }}
         </RouterLink>
         <template v-if="editable">
-          <button v-if="!isNew" type="button" class="text-link" :disabled="busy" @click="duplicate">
-            {{ language('Duplicate', 'إنشاء نسخة') }}</button
-          ><button
+          <button
             type="submit"
             form="program-editor-form"
             class="button secondary small"
@@ -962,6 +968,12 @@ function removeDay() {
 }
 .editor-toolbar .button {
   margin: 0;
+}
+.editor-toolbar-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
 }
 .editor-toolbar-actions {
   display: flex;
