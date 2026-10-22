@@ -25,12 +25,17 @@ test('platform operator has a separate audited account workflow and private deep
       .getByRole('textbox', { name: 'Reason for this action', exact: true })
       .fill('Local browser acceptance of suspension')
     await page.getByRole('button', { name: 'Confirm action', exact: true }).click()
-    await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
+    await expect(
+      page.locator('.rafik-toast').filter({ hasText: 'Access suspended.' }).last(),
+    ).toBeVisible()
     await page.getByRole('button', { name: 'Restore access', exact: true }).click()
     await page
       .getByRole('textbox', { name: 'Reason for this action', exact: true })
       .fill(restoreReason)
     await page.getByRole('button', { name: 'Confirm action', exact: true }).click()
+    await expect(
+      page.locator('.rafik-toast').filter({ hasText: 'Access restored.' }).last(),
+    ).toBeVisible()
     await expect(page.getByRole('button', { name: 'Suspend access', exact: true })).toBeVisible()
     await page.getByRole('combobox', { name: 'Area', exact: true }).selectOption('audit')
     await expect(page.getByText(restoreReason, { exact: true })).toBeVisible()
@@ -41,7 +46,7 @@ test('platform operator has a separate audited account workflow and private deep
     await f.cleanup()
   }
 })
-test('organization trainer can create a conversation with their assigned trainee and keeps the required own participant', async ({
+test('organization coach starts a private conversation with their assigned athlete from People and stays a participant', async ({
   page,
 }) => {
   const f = await teamFixture(),
@@ -78,15 +83,17 @@ test('organization trainer can create a conversation with their assigned trainee
     })
     await f.login(page, f.coach, `/organization/${id}/trainer/messages`)
     await page.setViewportSize({ width: 320, height: 568 })
-    await page.getByRole('button', { name: 'New conversation', exact: true }).click()
-    const editorSize = await page
-      .locator('.channel-editor')
-      .evaluate((el) => ({ scroll: el.scrollHeight, box: el.clientHeight }))
-    expect(editorSize.scroll).toBeLessThanOrEqual(editorSize.box + 2)
-    await page.getByLabel('Conversation name', { exact: true }).fill('Weekly training questions')
-    await page.getByRole('checkbox', { name: 'R4 Athlete', exact: true }).check()
-    await page.getByRole('button', { name: 'Create conversation', exact: true }).click()
+    // Conversations start from the People directory; the coach is always one of the two participants.
+    await page
+      .getByRole('region', { name: 'People', exact: true })
+      .getByRole('button', { name: /R4 Athlete/ })
+      .click()
     await expect(page).toHaveURL(/messages\/[a-f0-9-]{36}$/)
+    await page.getByRole('button', { name: 'Participants (2)', exact: true }).click()
+    const participants = page.locator('.channel-people')
+    await expect(participants).toContainText('R4 Coach')
+    await expect(participants).toContainText('R4 Athlete')
+    await page.getByRole('button', { name: 'Participants (2)', exact: true }).click()
     await page
       .getByRole('textbox', { name: 'Write a message', exact: true })
       .fill('What would help with the next session?')

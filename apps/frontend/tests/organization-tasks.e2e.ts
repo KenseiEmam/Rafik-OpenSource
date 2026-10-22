@@ -47,6 +47,8 @@ test('admin assigns a recoverable task and trainer completes it from the daily q
       .fill('Check the session plan before the next appointment.')
     await expect(page.getByText('Draft saved on this device', { exact: true })).toBeVisible()
     await page.getByRole('button', { name: 'Close editor', exact: true }).click()
+    // Reload only after closing has reached the list; reloading /tasks/new would reopen the editor.
+    await expect(page).toHaveURL(new RegExp(`/organization/${workspace}/admin/tasks$`))
     await page.reload()
     await page.getByRole('button', { name: 'Continue draft', exact: true }).click()
     await expect(page.getByLabel('Task title', { exact: true })).toHaveValue(
@@ -74,7 +76,9 @@ test('admin assigns a recoverable task and trainer completes it from the daily q
     )
     await trainer.getByRole('link', { name: 'My tasks', exact: true }).click()
     await trainer.getByRole('button', { name: 'Mark complete', exact: true }).click()
-    await expect(trainer.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
+    await expect(
+      trainer.locator('.rafik-toast').filter({ hasText: 'Task status updated.' }).last(),
+    ).toBeVisible()
     await trainer
       .getByRole('combobox', { name: 'Task status', exact: true })
       .selectOption('completed')
@@ -82,7 +86,9 @@ test('admin assigns a recoverable task and trainer completes it from the daily q
       'Review upcoming training with the team',
     )
     await trainer.getByRole('button', { name: 'Reopen', exact: true }).click()
-    await expect(trainer.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
+    await expect(
+      trainer.locator('.rafik-toast').filter({ hasText: 'Task status updated.' }).last(),
+    ).toBeVisible()
     await trainer.getByRole('combobox', { name: 'Task status', exact: true }).selectOption('open')
     await expect(trainer.locator('.task-card')).toHaveCount(1)
     for (const width of [320, 1280])

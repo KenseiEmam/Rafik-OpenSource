@@ -108,7 +108,10 @@ test('organization conversations preserve scope, compact layout, drafts and exac
     await client.getByRole('combobox', { name: 'Until', exact: true }).selectOption('0')
     await client.getByRole('button', { name: 'Save preferences', exact: true }).click()
     await expect(
-      client.getByRole('status').filter({ hasText: 'Notification preferences updated.' }),
+      client
+        .locator('.rafik-toast')
+        .filter({ hasText: 'Notification preferences updated.' })
+        .last(),
     ).toBeVisible()
     await client.getByRole('button', { name: 'Back to updates', exact: true }).click()
     await client.getByRole('button', { name: 'New conversation updates', exact: false }).click()

@@ -82,6 +82,19 @@ const command = useCommand<'apply'>(
     await load()
   },
   (_, args) => request('/v1/platform', { method: 'POST', body: JSON.stringify(args) }),
+  {
+    // Name the audited change once the server acknowledges it.
+    successMessage: (_, args) =>
+      args.action === 'identity_state'
+        ? args.value
+          ? l('Access suspended.', 'تم إيقاف الوصول.')
+          : l('Access restored.', 'تمت استعادة الوصول.')
+        : args.action === 'organization_state'
+          ? args.value
+            ? l('Institution archived.', 'تمت أرشفة المؤسسة.')
+            : l('Institution restored.', 'تمت استعادة المؤسسة.')
+          : l('Support reply sent.', 'تم إرسال رد الدعم.'),
+  },
 )
 function choose(item: any) {
   selected.value = item
