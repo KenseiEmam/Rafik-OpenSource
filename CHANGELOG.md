@@ -2,6 +2,52 @@
 
 ## Unreleased
 
+- Final web design audit (Claude, 21 October), reviewed in rendered English/Arabic, light/dark, desktop/tablet/phone states in Chromium and WebKit:
+  - Schedule calendar toolbar fits one row: View, Month and Show cancelled share the 44px control row; adjacent previous/next chevrons around a visible month label sit at the calendar column's inline end and stay paired on phones.
+  - Out-of-month calendar days no longer turn grey through the global disabled opacity; the light chip/selection fill is lighter and keeps readable muted text.
+  - Shared pagination reads "Per page", takes less width so search fields fill the toolbar, keeps range and previous/next together when wrapping, and is hidden when a list has no records.
+  - Consistent list summaries above results; athlete-plan cards show the athlete name without uppercase tracking and sport tags no longer stretch across the card.
+  - People rows combine role and primary coach on one line and no longer use a nested scroll container; profiles align with the workspace edges and use compact in-panel empty text.
+  - Institution settings use one full-width section per row: General settings is a single name/save row; the super admin's branding form puts name and colours beside the logo upload; sports and specialties list side by side; closure stays last. No section leaves an empty companion column, whatever the viewer's role.
+  - Schedule list shows weekday, date and time range for same-day events; its phone filters pair in two columns.
+  - Editor save rows group the primary action with draft status; member pickers have aligned search buttons and a framed scroll list.
+  - Program cards replace repeated library boilerplate with an "In library" tag; templates pluralize drills; group and template searches use "Search".
+  - Remaining "trainee/trainer" interface copy now says athlete/coach in English and Arabic.
+  - Program assignment scales to large rosters: nothing is listed until you search, search returns the top 5 matches (administrators can also search by email, which is shown to tell same-named athletes apart), and selected athletes sit in their own section with current plans, the keep/replace choice, Remove with Undo and a confirmed Remove all. Athletes already on this program version are greyed out and cannot be added. The page was redesigned as three numbered cards: plan settings at the top, then search (compact name cards that add on click, with a plus icon) beside the separate selected list, and a sticky Review bar. An athlete on an earlier version of the same program, even after a rename, is recognized and moved to the new version by default instead of being stacked; replacing a plan is chosen in a dialog instead of a per-athlete dropdown.
+  - Every shared people picker (groups, events, tasks, nutrition, coaching team, channels, primary coach) fetches only the 5 closest matches and shows them as compact name cards with a plus/check, instead of a paged list with Load more; administrators can also search by email. Selected people stay listed as chips across searches.
+  - Nutrition: Create a plan opens a dialog to choose the athlete instead of pushing a card above the list; the plan panel grows with its form instead of scrolling inside a fixed-height box; Edit meal plan on the Example tab now opens just the example-meal editor there (it previously opened the full target editor on the Plan tab).
+  - The program editor has one action bar at the top: Athlete preview and Duplicate (now a bordered button with a copy icon instead of a bare text link) on the start side; Assign this program, Save draft and Publish program on the end side. It stays pinned below the header while scrolling on tablet and desktop; phones keep it at the top unpinned. The dashboard header is 64px at every width.
+  - Event scheduling: choosing a training group adds its coaches instead of clearing the coach already selected; the "Create a template" link no longer pollutes the template select's accessible name.
+  - Platform operator actions confirm what changed ("Access suspended.", "Access restored.", institution archive/restore, support reply) instead of showing nothing.
+  - Repaired the remaining stale browser specs: `organization-tasks` (reload raced the editor close; action toasts), `communication` (toast), `operations` operator (toasts) and conversation journey (conversations now start from People), and `teams` now checks that retired team/business links land in the institution workspace instead of driving the removed screens.
+  - `npm run content:check` passes again: the sample-data fixture no longer gives one member a combined coach/athlete role (the generated seed already had the single role).
+  - `npm run format:check` passes again: the frontend's Prettier ignore list moved from the repository root to `apps/frontend/.prettierignore`, where its `src/content/...` paths apply, so generated content is no longer reported; four hand-written files were formatted.
+  - Repaired browser specs that still targeted pre-#138 screens (inline People management, "Trainer" invitation radio, CommandStatus success text, labelled timezone popup, phone exercise list→detail, retired `/coach/analytics`). The CI onboarding spec passes again.
+
+- Standardized directory search/pagination alignment and changed assessment templates to a responsive card grid.
+
+- Session history replaces its expandable athlete filter with the shared inline athlete-name search.
+
+- Web UI refinement: shared athlete search, responsive search/pagination toolbars, consistent icon-led empty states and reduced-motion-aware pulsing loading skeletons.
+- Schedule now combines calendar and event-list navigation, opens booking cards on today, and pages booking cards four at a time.
+
+- Continued the approved web design rollout: shared page headings across workspaces, unified tabs and empty-state treatment, full-width standalone editors, contextual subtitles, bilingual search hints, reusable upload dropzones and selectable URL-persisted record counts.
+- Assessment templates, groups, tasks and exercises now use dedicated create/edit routes with record-scoped draft recovery and guarded save-to-list navigation. Active commands remain in progress across remounts; routine success uses toasts without duplicate status cards. Optional bounded list limits and scoped task-by-ID reads support the new controls.
+
+## Squire 1.0.0-beta.2 — release preparation
+
+Sports and coaching foundation, merged in PR #135. Publication date, tag and Android artifacts are pending; beta.1 remains the published release. Workspace versions are `1.0.0-beta.2`; Android versionCode is `1000002`. See [upgrade and publication guidance](docs/operations/README.md#beta2-upgrade-and-release-preparation).
+
+- Added the approved web design system and categorized UI audit. Introduced shared spacing/type/motion tokens, section headers, localized password visibility controls and responsive sports management. Refined picker accessibility, heading hierarchy, permission-denial feedback and institution privacy copy. Android and remaining page migrations are follow-up work.
+
+- Refined member management into aligned identity, coaching, sports and recovery cards with accessible role buttons and sport-aware coach choices. Institution settings now use the available width, with branding alongside general settings; closure requires a name-confirmation dialog.
+
+- Standardized main-directory pagination with shared, accessible previous/next controls, page/range feedback and mobile/RTL layouts. People, nutrition, sessions, events and groups/templates show 10 rows; program/plan/exercise grids retain their existing sizes. People page/filter state survives reload and returning from a profile.
+
+- Reworked People into athlete-first role tabs with membership/sport filters and labelled SVG actions. Coaches retain only their scoped athlete directory; administrators can open profiles and message active members of every role.
+- Replaced profile jump links with real tab panels. Added administrator-visible staff profiles, current roster counts and 30-day coach activity counts; moved membership, display-name, password-link, sport and coaching management from the directory into the profile.
+- Invitations can carry optional athlete sports or coach sports/specialties; administrator invitations cannot carry sports. Forward migration `202610210100_invitation_sports` preserves existing invitations and applies new labels atomically on acceptance.
+
 - Release 1 review fixes:
   - Overlap warnings show other plans' title, goal and dates only, as a documented supporting-coach exception.
   - Coach-recorded timed and distance sets require actual seconds or metres, using the athlete logger's shared measurement rules.

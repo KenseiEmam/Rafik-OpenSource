@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PasswordField from '../../components/PasswordField.vue'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { api, request } from '../../lib/backend'
@@ -140,10 +141,9 @@ async function createAccount() {
             required
           />
           <label for="invite-password">{{ l('Create a password', 'أنشئ كلمة مرور') }}</label>
-          <input
+          <PasswordField
             id="invite-password"
             v-model="password"
-            type="password"
             autocomplete="new-password"
             minlength="8"
             maxlength="128"
@@ -159,10 +159,9 @@ async function createAccount() {
             }}
           </p>
           <label for="invite-confirm">{{ l('Confirm password', 'تأكيد كلمة المرور') }}</label>
-          <input
+          <PasswordField
             id="invite-confirm"
             v-model="confirm"
-            type="password"
             autocomplete="new-password"
             minlength="8"
             maxlength="128"

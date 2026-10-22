@@ -122,6 +122,12 @@ const router = createRouter({
       component: () => import('../features/organizations/OrganizationTasks.vue'),
       meta: { private: true },
     },
+
+    {
+      path: '/organization/:workspace/:view/tasks/:editor',
+      component: () => import('../features/organizations/OrganizationTasks.vue'),
+      meta: { private: true },
+    },
     {
       path: '/organization/:workspace/:view/resources',
       component: () => import('../features/resources/OrganizationResources.vue'),
@@ -129,6 +135,12 @@ const router = createRouter({
     },
     {
       path: '/organization/:workspace/:view/exercises',
+      component: () => import('../features/coaching/ExercisesPage.vue'),
+      meta: { private: true },
+    },
+
+    {
+      path: '/organization/:workspace/:view/exercises/:editor',
       component: () => import('../features/coaching/ExercisesPage.vue'),
       meta: { private: true },
     },
@@ -172,8 +184,20 @@ const router = createRouter({
       component: () => import('../features/organizations/ServiceCatalog.vue'),
       meta: { private: true },
     },
+
+    {
+      path: '/organization/:workspace/:view/groups/:editor',
+      component: () => import('../features/organizations/ServiceCatalog.vue'),
+      meta: { private: true },
+    },
     {
       path: '/organization/:workspace/:view/assessment-templates',
+      component: () => import('../features/organizations/ServiceCatalog.vue'),
+      meta: { private: true },
+    },
+
+    {
+      path: '/organization/:workspace/:view/assessment-templates/:editor',
       component: () => import('../features/organizations/ServiceCatalog.vue'),
       meta: { private: true },
     },
@@ -183,7 +207,8 @@ const router = createRouter({
       meta: { private: true },
     },
     {
-      path: '/organization/:workspace/:view/athletes/:member',
+      path: '/organization/:workspace/:view/members/:member',
+      alias: '/organization/:workspace/:view/athletes/:member',
       component: () => import('../features/organizations/AthleteProfile.vue'),
       meta: { private: true },
     },

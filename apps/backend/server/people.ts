@@ -1,3 +1,4 @@
+import { pageSize } from "./pagination.ts";
 import { ApiError, asActor, type Actor } from "./db.ts";
 import {
   scoped,
@@ -16,6 +17,7 @@ export async function peoplePage(
   view: Role,
   q: URLSearchParams,
 ) {
+  const take = pageSize(q, 25);
   const offset = pageOffset(q.get("offset")),
     search = (q.get("search") || "").slice(0, 100),
     kind = q.get("role"),
@@ -54,7 +56,20 @@ export async function peoplePage(
         ...(sport
           ? { organization_member_sports: { some: { sport_id: sport } } }
           : {}),
-        name: { contains: search, mode: "insensitive" as const },
+        // Administrators may also match account email (opt-in per request);
+        // coaches never see member email, so they search names only.
+        ...(view === "admin" && q.get("email") === "true" && search
+          ? {
+              OR: [
+                { name: { contains: search, mode: "insensitive" as const } },
+                {
+                  users: {
+                    email: { contains: search, mode: "insensitive" as const },
+                  },
+                },
+              ],
+            }
+          : { name: { contains: search, mode: "insensitive" as const } }),
       },
     ],
   };
@@ -69,6 +84,7 @@ export async function peoplePage(
     active: true,
     revision: true,
     trainer_id: true,
+    ...(view === "admin" ? { users: { select: { email: true } } } : {}),
     organization_member_sports: {
       select: { sport_id: true },
       orderBy: { sport_id: "asc" as const },
@@ -91,7 +107,7 @@ export async function peoplePage(
       select,
       orderBy: [{ name: "asc" }, { id: "asc" }],
       skip: offset,
-      take: 25,
+      take,
     }),
     tx.workspace_members.count({ where: filter }),
     selected.length
@@ -120,24 +136,30 @@ export async function peoplePage(
     select: { id: true, name: true },
   });
   const withSports = (list: typeof items) =>
-    list.map(({ organization_member_sports, coaching_as_athlete, ...m }) => ({
-      ...m,
-      sports: organization_member_sports.map((x) => x.sport_id),
-      // Active coaching team; supporting coaches carry the sport/specialty they cover.
-      coaches: coaching_as_athlete.map((l) => ({
-        id: l.id,
-        coach: l.coach_member_id,
-        kind: l.kind,
-        sport: l.sport_id,
-        revision: l.revision,
-      })),
-    }));
+    list.map((row) => {
+      const { organization_member_sports, coaching_as_athlete, users, ...m } =
+        row as typeof row & { users?: { email: string | null } | null };
+      return {
+        ...m,
+        // Selected only for administrators; flattened so no nested identity row leaks.
+        ...(users !== undefined ? { email: users?.email ?? null } : {}),
+        sports: organization_member_sports.map((x) => x.sport_id),
+        // Active coaching team; supporting coaches carry the sport/specialty they cover.
+        coaches: coaching_as_athlete.map((l) => ({
+          id: l.id,
+          coach: l.coach_member_id,
+          kind: l.kind,
+          sport: l.sport_id,
+          revision: l.revision,
+        })),
+      };
+    });
   return {
     items: withSports(items),
     selected: withSports(chosen),
     names,
     total,
-    next: offset + 25 < total ? offset + 25 : null,
+    next: offset + take < total ? offset + take : null,
   };
 }
 export async function organizationPeople(
@@ -177,7 +199,9 @@ export async function organizationRecipients(
         sport_id: true,
         start_date: true,
         end_date: true,
-        organization_versions: { select: { title: true } },
+        organization_versions: {
+          select: { id: true, program_id: true, revision: true, title: true },
+        },
       },
       orderBy: { start_date: "asc" },
     });
@@ -188,11 +212,17 @@ export async function organizationRecipients(
         id: m.id,
         name: m.name,
         revision: m.revision,
+        // Administrators can tell same-named athletes apart by account email.
+        ...("email" in m ? { email: m.email } : {}),
         // Every active plan; replacing one is an explicit choice.
         plans: plans.map((p) => ({
           id: p.id,
           revision: p.revision,
           title: p.organization_versions.title,
+          // Lets the assignment page mark athletes already on this program/version.
+          version_id: p.organization_versions.id,
+          program_id: p.organization_versions.program_id,
+          version_revision: p.organization_versions.revision,
           goal: p.goal,
           sport: p.sport_id,
           start_date: p.start_date,
@@ -234,6 +264,110 @@ export async function independentRecipients(actor: Actor, q: URLSearchParams) {
       items: rows.slice(0, 25),
       selected: chosen,
       next: rows.length > 25 ? offset + 25 : null,
+    };
+  });
+}
+
+/** Member identity uses the same roster scope; staff analytics are administrator-only. */
+export async function organizationMemberProfile(
+  actor: Actor,
+  id: string,
+  memberId: string,
+  q: URLSearchParams,
+) {
+  const view = role(q.get("view"));
+  uuid(memberId);
+  return scoped(actor, id, [view], async (tx, self) => {
+    const page = await peoplePage(
+      tx,
+      id,
+      self,
+      view,
+      new URLSearchParams({ selected: memberId, state: "all", self: "true" }),
+    );
+    const member = page.selected[0];
+    if (!member) throw new ApiError(403, "forbidden");
+    const details = await tx.workspace_members.findFirstOrThrow({
+      where: { workspace_id: id, id: member.id },
+      select: {
+        joined_at: true,
+        ...(view === "admin" ? { users: { select: { email: true } } } : {}),
+      },
+    });
+    let analytics = null;
+    if (view === "admin" && member.roles.includes("trainer")) {
+      const from = new Date(Date.now() - 30 * 86400000),
+        to = new Date();
+      const [
+        primary,
+        supporting,
+        completedEvents,
+        upcomingEvents,
+        recordedWorkouts,
+      ] = await Promise.all([
+        tx.workspace_members.count({
+          where: {
+            workspace_id: id,
+            active: true,
+            roles: { has: "trainee" },
+            trainer_id: member.id,
+          },
+        }),
+        tx.organization_coaching_links.count({
+          where: {
+            workspace_id: id,
+            coach_member_id: member.id,
+            kind: "supporting",
+            ended_at: null,
+          },
+        }),
+        tx.organization_event_people.count({
+          where: {
+            workspace_id: id,
+            member_id: member.id,
+            duty: "staff",
+            organization_events: {
+              state: "completed",
+              ends_at: { gte: from, lte: to },
+            },
+          },
+        }),
+        tx.organization_event_people.count({
+          where: {
+            workspace_id: id,
+            member_id: member.id,
+            duty: "staff",
+            organization_events: { state: "scheduled", starts_at: { gte: to } },
+          },
+        }),
+        tx.organization_sessions.count({
+          where: {
+            workspace_id: id,
+            recorded_by: member.id,
+            recorded_mode: "delegated",
+            completed_at: { gte: from, lte: to },
+          },
+        }),
+      ]);
+      analytics = {
+        from: from.toISOString(),
+        to: to.toISOString(),
+        primary_athletes: primary,
+        supporting_links: supporting,
+        completed_events: completedEvents,
+        upcoming_events: upcomingEvents,
+        recorded_workouts: recordedWorkouts,
+      };
+    }
+    return {
+      member: {
+        ...member,
+        joined_at: details.joined_at,
+        ...(view === "admin" ? { email: details.users?.email } : {}),
+      },
+      names: page.names,
+      self: self.id,
+      analytics,
     };
   });
 }

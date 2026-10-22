@@ -9,7 +9,7 @@ const props = withDefaults(
       run: () => Promise<void>
     }
   }>(),
-  { showNotice: true },
+  { showNotice: false },
 )
 let noticeTimer: ReturnType<typeof setTimeout> | undefined
 watch(
@@ -31,7 +31,7 @@ onUnmounted(() => {
   <p v-if="command.state.notice && showNotice !== false" class="notice success" role="status">
     {{ command.state.notice }}
   </p>
-  <p v-if="command.state.busy" class="notice" role="status">
+  <p v-if="command.state.busy" class="command-progress" role="status">
     {{ l('Saving change…', 'جارٍ حفظ التعديل…') }}
   </p>
   <div v-else-if="command.state.pending" class="notice">

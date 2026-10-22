@@ -1,3 +1,4 @@
+import { pageSize } from "./pagination.ts";
 import { Prisma } from "./generated/prisma/client.ts";
 import { ApiError, type Actor } from "./db.ts";
 import { scoped, uuid } from "./workspaces.ts";
@@ -10,6 +11,7 @@ export async function nutritionPlanIndex(
   workspace: string,
   query: URLSearchParams,
 ) {
+  const take = pageSize(query, 10);
   const view = role(query.get("view"));
   if (view === "trainee") throw new ApiError(403, "forbidden");
   const status = query.get("status") || "active";
@@ -38,13 +40,13 @@ export async function nutritionPlanIndex(
       AND (${status !== "active" && status !== "upcoming"} OR member_active))`;
     const [items, counts] = await Promise.all([
       tx.$queryRaw(
-        Prisma.sql`${prefix} SELECT * FROM filtered ORDER BY effective_on DESC, member_id, revision DESC, id LIMIT 24 OFFSET ${offset}`,
+        Prisma.sql`${prefix} SELECT * FROM filtered ORDER BY effective_on DESC, member_id, revision DESC, id LIMIT ${take} OFFSET ${offset}`,
       ),
       tx.$queryRaw<{ total: number }[]>(
         Prisma.sql`${prefix} SELECT count(*)::int total FROM filtered`,
       ),
     ]);
     const total = counts[0].total;
-    return { items, total, next: offset + 24 < total ? offset + 24 : null };
+    return { items, total, next: offset + take < total ? offset + take : null };
   });
 }

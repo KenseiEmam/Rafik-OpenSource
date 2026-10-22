@@ -12,6 +12,7 @@ import {
 import { nutrition, nutritionCommand } from "./organization-nutrition.ts";
 import {
   organizationPeople,
+  organizationMemberProfile,
   organizationRecipients,
   independentRecipients,
 } from "./people.ts";
@@ -412,6 +413,22 @@ const server = createServer(async (req, res) => {
         res,
         200,
         await independentRecipients(requireActor(actor), url.searchParams),
+      );
+      return;
+    }
+    const memberProfileMatch = path.match(
+      /^\/v1\/workspaces\/([a-f0-9-]+)\/people\/([a-f0-9-]+)$/,
+    );
+    if (memberProfileMatch && req.method === "GET") {
+      send(
+        res,
+        200,
+        await organizationMemberProfile(
+          requireActor(actor),
+          memberProfileMatch[1],
+          memberProfileMatch[2],
+          url.searchParams,
+        ),
       );
       return;
     }

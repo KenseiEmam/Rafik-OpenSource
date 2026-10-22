@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { user } from '../../app/auth'
@@ -133,10 +134,10 @@ const activityLabels: Record<string, [string, string]> = {
   member_coach: ['Coach role set', 'عُيّن دور مدرب'],
   member_owner: ['Ownership transferred', 'نُقلت الملكية'],
   team_closed: ['Team closed', 'أُغلق الفريق'],
-  client_proposed: ['Athlete enrollment requested', 'طُلب انضمام متدرب'],
+  client_proposed: ['Athlete enrollment requested', 'طُلب انضمام رياضي'],
   handoff_requested: ['Coach change requested', 'طُلب تغيير مدرب'],
-  client_accepted: ['Athlete approved change', 'وافق المتدرب'],
-  client_declined: ['Athlete declined change', 'رفض المتدرب'],
+  client_accepted: ['Athlete approved change', 'وافق الرياضي'],
+  client_declined: ['Athlete declined change', 'رفض الرياضي'],
   enrollment_closed: ['Enrollment closed', 'أُغلق انضمام'],
   plan_shared: ['Plan shared', 'شوركت خطة'],
   plan_removed: ['Shared plan removed', 'أُزيلت خطة مشتركة'],
@@ -157,7 +158,7 @@ onMounted(async () => {
     <RouterLink class="back-link" to="/coach/teams">← {{ l('Teams', 'الفرق') }}</RouterLink
     ><CommandStatus :command="command" /><PageState :loading="loading" :error="error" @retry="load"
       ><template v-if="data"
-        ><header class="page-heading heading-actions">
+        ><PageHeading class="page-heading heading-actions">
           <div>
             <p class="overline">{{ roleName(data.team.role) }}</p>
             <h1>{{ data.team.name }}</h1>
@@ -169,7 +170,7 @@ onMounted(async () => {
             :to="'/coach/business?team=' + id"
             >{{ l('Team subscription', 'اشتراك الفريق') }}</RouterLink
           >
-        </header>
+        </PageHeading>
         <nav class="workspace-tabs" :aria-label="l('Team sections', 'أقسام الفريق')">
           <button
             v-for="item in [
@@ -192,7 +193,7 @@ onMounted(async () => {
               {{
                 l(
                   'The roster shares names and responsibilities. Coaching details remain private to each coach and athlete.',
-                  'تشارك القائمة الأسماء والمسؤوليات. تبقى تفاصيل التدريب خاصة بالمدرب والمتدرب.',
+                  'تشارك القائمة الأسماء والمسؤوليات. تبقى تفاصيل التدريب خاصة بالمدرب والرياضي.',
                 )
               }}
             </p>
@@ -200,14 +201,14 @@ onMounted(async () => {
               {{
                 l(
                   'No athletes on your team roster yet. Ask an existing athlete to join.',
-                  'لا يوجد متدربون في قائمتك بعد. اطلب من متدرب حالي الانضمام.',
+                  'لا يوجد رياضيون في قائمتك بعد. اطلب من رياضي حالي الانضمام.',
                 )
               }}
             </p>
             <article v-for="c in data.clients" :key="c.id" class="panel team-client">
               <span class="tag">{{
                 c.state === 'pending'
-                  ? l('Awaiting athlete approval', 'بانتظار موافقة المتدرب')
+                  ? l('Awaiting athlete approval', 'بانتظار موافقة الرياضي')
                   : l('Active', 'نشط')
               }}</span>
               <h2>{{ c.name }}</h2>
@@ -220,7 +221,7 @@ onMounted(async () => {
               >
               <p v-if="c.pending_coach_id" class="notice">
                 {{ l('Proposed coach', 'المدرب المقترح') }}: {{ c.pending_name }} ·
-                {{ l('Waiting for athlete approval.', 'بانتظار موافقة المتدرب.') }}
+                {{ l('Waiting for athlete approval.', 'بانتظار موافقة الرياضي.') }}
               </p>
               <form
                 v-if="admin && c.state === 'active'"
@@ -296,7 +297,7 @@ onMounted(async () => {
               })
             "
           >
-            <h2>{{ l('Invite an existing athlete', 'دعوة متدرب حالي') }}</h2>
+            <h2>{{ l('Invite an existing athlete', 'دعوة رياضي حالي') }}</h2>
             <fieldset class="command-fields" :disabled="locked">
               <label
                 >{{ l('Your athlete', 'متدربك')
@@ -311,7 +312,7 @@ onMounted(async () => {
                 {{
                   l(
                     'The athlete approves in More → Teams. No private coaching records become visible to the whole team.',
-                    'يوافق المتدرب من المزيد ← الفرق. لا تصبح سجلات التدريب الخاصة مرئية للفريق بأكمله.',
+                    'يوافق الرياضي من المزيد ← الفرق. لا تصبح سجلات التدريب الخاصة مرئية للفريق بأكمله.',
                   )
                 }}
               </p>
@@ -461,7 +462,7 @@ onMounted(async () => {
         </section>
         <section v-if="tab === 'groups'" class="ongoing-layout">
           <div class="panel form-stack">
-            <h2>{{ l('Athlete groups', 'مجموعات المتدربين') }}</h2>
+            <h2>{{ l('Athlete groups', 'مجموعات الرياضيين') }}</h2>
             <label
               >{{ l('Selected group', 'المجموعة المحددة')
               }}<select v-model="group" @change="chooseGroup">
@@ -493,7 +494,7 @@ onMounted(async () => {
                 </button>
               </div>
               <p v-if="!groupMembers.length">
-                {{ l('No athletes in this group yet.', 'لا يوجد متدربون في المجموعة بعد.') }}
+                {{ l('No athletes in this group yet.', 'لا يوجد رياضيون في المجموعة بعد.') }}
               </p>
               <form
                 v-if="admin"
@@ -507,7 +508,7 @@ onMounted(async () => {
                 "
               >
                 <label
-                  >{{ l('Add athlete to group', 'إضافة متدرب للمجموعة')
+                  >{{ l('Add athlete to group', 'إضافة رياضي للمجموعة')
                   }}<select v-model="groupClient" required :disabled="locked">
                     <option value="" disabled>{{ l('Choose an athlete', 'اختر رياضياً') }}</option>
                     <option
@@ -530,7 +531,7 @@ onMounted(async () => {
                   {{
                     l(
                       'You can select only athletes you coach. This changes future plans; started sessions retain their snapshots.',
-                      'يمكنك تحديد المتدربين الذين تدربهم فقط. تتغير الخطط المستقبلية وتبقى نسخ الحصص التي بدأت محفوظة.',
+                      'يمكنك تحديد الرياضيين الذين تدربهم فقط. تتغير الخطط المستقبلية وتبقى نسخ الحصص التي بدأت محفوظة.',
                     )
                   }}
                 </p>
@@ -550,7 +551,7 @@ onMounted(async () => {
                 <div v-if="confirm === 'assign'" class="notice">
                   <p>
                     {{ l('Replace future plans for', 'استبدال الخطط المستقبلية لـ') }}
-                    {{ selected.length }} {{ l('selected athletes?', 'متدربين محددين؟') }}
+                    {{ selected.length }} {{ l('selected athletes?', 'رياضيين محددين؟') }}
                   </p>
                   <button
                     type="button"
@@ -622,7 +623,7 @@ onMounted(async () => {
                 {{
                   l(
                     'Remove this group from the workspace? Athlete enrollments and assigned plans stay intact.',
-                    'هل تريد إزالة المجموعة من مساحة العمل؟ تبقى انضمامات المتدربين وخططهم المعيّنة محفوظة.',
+                    'هل تريد إزالة المجموعة من مساحة العمل؟ تبقى انضمامات الرياضيين وخططهم المعيّنة محفوظة.',
                   )
                 }}
               </p>
@@ -686,7 +687,7 @@ onMounted(async () => {
                 {{
                   l(
                     'Shared with active staff. Athlete access is managed separately in Resources.',
-                    'مشتركة مع الموظفين النشطين. يُدار وصول المتدربين بشكل منفصل في الملفات.',
+                    'مشتركة مع الموظفين النشطين. يُدار وصول الرياضيين بشكل منفصل في الملفات.',
                   )
                 }}
               </p>
@@ -822,7 +823,7 @@ onMounted(async () => {
                 {{
                   l(
                     'Close all athlete enrollments first. This ends team access and pending staff invitations; personal coaching and imported plans remain.',
-                    'أغلق انضمامات المتدربين أولاً. ينهي هذا وصول الفريق ودعوات الموظفين المعلقة؛ يبقى التدريب الشخصي والخطط المنسوخة.',
+                    'أغلق انضمامات الرياضيين أولاً. ينهي هذا وصول الفريق ودعوات الموظفين المعلقة؛ يبقى التدريب الشخصي والخطط المنسوخة.',
                   )
                 }}
               </p>

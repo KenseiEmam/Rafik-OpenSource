@@ -1,3 +1,4 @@
+import { pageSize } from "./pagination.ts";
 import { ApiError, type Actor } from "./db.ts";
 import {
   scoped,
@@ -22,6 +23,7 @@ export async function serviceCatalog(
   const view = role(q.get("view"));
   if (view === "trainee") throw new ApiError(403, "forbidden");
   return scoped(actor, id, [view], async (tx, self) => {
+    const take = pageSize(q, 25);
     const page = Math.max(0, Math.min(10000, Number(q.get("offset")) || 0)),
       search = (q.get("search") || "").slice(0, 100),
       kind = q.get("kind");
@@ -39,13 +41,13 @@ export async function serviceCatalog(
       const [items, total] = await Promise.all([
         tx.assessment_templates.findMany({
           where: filter,
-          take: 25,
+          take,
           skip: page,
           orderBy: [{ title: "asc" }, { id: "asc" }],
         }),
         tx.assessment_templates.count({ where: filter }),
       ]);
-      return { items, next: page + 25 < total ? page + 25 : null };
+      return { items, total, next: page + take < total ? page + take : null };
     }
     const filter = {
       ...where,
@@ -54,7 +56,7 @@ export async function serviceCatalog(
     const [items, total] = await Promise.all([
       tx.organization_groups.findMany({
         where: filter,
-        take: 25,
+        take,
         skip: page,
         orderBy: [{ name: "asc" }, { id: "asc" }],
         include: {
@@ -81,7 +83,8 @@ export async function serviceCatalog(
         organization_group_members: undefined,
         members: g.organization_group_members.map((x) => x.workspace_members),
       })),
-      next: page + 25 < total ? page + 25 : null,
+      total,
+      next: page + take < total ? page + take : null,
     };
   });
 }

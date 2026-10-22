@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SectionHeader from '../../components/SectionHeader.vue'
 import { computed, onMounted, ref } from 'vue'
 import { request } from '../../lib/backend'
 import { language as l, errorMessage } from '../../lib/i18n'
@@ -73,17 +74,18 @@ onMounted(load)
 </script>
 <template>
   <section class="sports-settings form-stack" aria-labelledby="sports-settings-heading">
-    <h2 id="sports-settings-heading">{{ l('Sports and specialties', 'الرياضات والتخصصات') }}</h2>
-    <p class="small-print">
-      {{
+    <SectionHeader
+      id="sports-settings-heading"
+      :title="l('Sports and specialties', 'الرياضات والتخصصات')"
+      :description="
         l(
-          'Athletes are linked to the sports they take part in; coaches to the sports or specialties they cover. These labels describe people and do not change their role or access.',
-          'يُربط الرياضيون بالرياضات التي يمارسونها، والمدربون بالرياضات أو التخصصات التي يغطونها. هذه تسميات وصفية ولا تغيّر الدور أو الصلاحيات.',
+          'Athletes take part in sports; coaches cover sports or specialties. These labels do not change permissions.',
+          'يمارس الرياضيون الرياضات، ويغطي المدربون الرياضات أو التخصصات. لا تغيّر هذه التسميات الصلاحيات.',
         )
-      }}
-    </p>
+      "
+    />
     <CommandStatus :command="command" />
-    <form class="form-stack" @submit.prevent="add">
+    <form class="sports-add" @submit.prevent="add">
       <label
         >{{ l('Name', 'الاسم') }}<input v-model="name" maxlength="80" required :disabled="locked"
       /></label>
@@ -110,7 +112,7 @@ onMounted(load)
         {{ l('Retry', 'إعادة المحاولة') }}
       </button>
     </p>
-    <template v-else>
+    <div v-else class="sports-groups">
       <section v-for="group in groups" :key="group.kind" :aria-label="group.title">
         <h3>{{ group.title }} ({{ group.items.length }})</h3>
         <p v-if="!group.items.length" class="small-print">
@@ -165,14 +167,54 @@ onMounted(load)
           </li>
         </ul>
       </section>
-    </template>
+    </div>
   </section>
 </template>
 <style scoped>
-.sports-settings {
-  margin-top: 28px;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
+.sports-add {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) auto auto;
+  align-items: end;
+  gap: 16px;
+  margin: 0;
+}
+.sports-add > label {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  min-width: 0;
+}
+.sports-add input:not([type='radio']),
+.sports-add > .button {
+  height: 44px;
+  min-height: 44px;
+  margin: 0;
+}
+.sports-add .role-choices {
+  /* A shared form rule spans role choices across the row; keep this one inline. */
+  grid-column: auto;
+  margin: 0;
+}
+.sports-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 16px 32px;
+  align-items: start;
+}
+.sports-groups h3 {
+  margin: 0 0 8px;
+}
+@media (max-width: 700px) {
+  .sports-add {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sports-add > .button {
+    justify-self: start;
+  }
+  .sports-add > label,
+  .sports-add .role-choices {
+    grid-column: 1 / -1;
+  }
 }
 .sports-list {
   list-style: none;

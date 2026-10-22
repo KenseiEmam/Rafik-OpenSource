@@ -33,7 +33,7 @@ const groups = computed(() =>
               ['', l('Overview', 'نظرة عامة'), PhHouse],
               ['/plans', l('Programs', 'البرامج'), PhClipboardText],
               ['/training', l('Training', 'التدريب'), PhBarbell],
-              ['/calendar', l('Calendar', 'التقويم'), PhCalendarBlank],
+              ['/calendar', l('Schedule', 'الجدول'), PhCalendarBlank],
             ],
           },
           {
@@ -66,8 +66,7 @@ const groups = computed(() =>
                 ['/training', l('Athlete plans', 'خطط الرياضيين'), PhBarbell],
                 ['/session-history', l('Session history', 'سجل الحصص'), PhClockCounterClockwise],
                 ['/nutrition', l('Nutrition plans', 'خطط التغذية'), PhBowlFood],
-                ['/calendar', l('Calendar', 'التقويم'), PhCalendarBlank],
-                ['/events', l('Events & assessments', 'المواعيد والتقييمات'), PhListChecks],
+                ['/calendar', l('Schedule', 'الجدول'), PhCalendarBlank],
                 ['/messages', l('Messages', 'الرسائل'), PhChatCircle],
               ],
             },
@@ -91,8 +90,7 @@ const groups = computed(() =>
                 ['/training', l('Athlete plans', 'خطط الرياضيين'), PhBarbell],
                 ['/session-history', l('Session history', 'سجل الحصص'), PhClockCounterClockwise],
                 ['/nutrition', l('Nutrition plans', 'خطط التغذية'), PhBowlFood],
-                ['/calendar', l('Calendar', 'التقويم'), PhCalendarBlank],
-                ['/events', l('Events & assessments', 'المواعيد والتقييمات'), PhListChecks],
+                ['/calendar', l('Schedule', 'الجدول'), PhCalendarBlank],
                 ['/messages', l('Messages', 'الرسائل'), PhChatCircle],
                 ['/analytics', l('Analytics', 'التحليلات'), PhChartLine],
                 ...(props.role === 'trainer'
@@ -144,6 +142,7 @@ const groups = computed(() =>
 )
 function selected(path: string) {
   const current = route.path
+    .replace('/events', '/calendar')
     .replace('/deliver/', '/plans/')
     .replace('/review/', organization.value ? '/session-history/' : '/clients/')
     .replace('/assessments/', '/training/')

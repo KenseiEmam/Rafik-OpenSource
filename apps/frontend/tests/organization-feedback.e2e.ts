@@ -156,11 +156,11 @@ test('optional session and workplace feedback recover and appear as separate sou
     await f.login(page, f.owner, base + '/admin/analytics')
     await page.getByRole('tab', { name: 'Experience & renewals', exact: true }).click()
     await expect(page.locator('.response-summary').first()).toContainText('4.0 / 5')
-    await page.getByRole('tab', { name: 'Trainer workplace', exact: true }).focus()
+    await page.getByRole('tab', { name: 'Coach workplace', exact: true }).focus()
     await expect(page.locator('.response-summary').first()).toContainText('4.0 / 5')
-    await page.getByRole('tab', { name: 'Trainer workplace', exact: true }).press('Enter')
+    await page.getByRole('tab', { name: 'Coach workplace', exact: true }).press('Enter')
     await expect(
-      page.getByRole('heading', { name: 'Trainer workplace satisfaction', exact: true }),
+      page.getByRole('heading', { name: 'Coach workplace satisfaction', exact: true }),
     ).toBeVisible()
     for (const width of [320, 1280])
       for (const lang of ['en', 'ar'])
@@ -190,7 +190,7 @@ test('optional session and workplace feedback recover and appear as separate sou
           })
           await page
             .getByRole('tab', {
-              name: lang === 'en' ? 'Trainer workplace' : 'بيئة عمل المدربين',
+              name: lang === 'en' ? 'Coach workplace' : 'بيئة عمل المدربين',
               exact: true,
             })
             .click()
@@ -221,7 +221,7 @@ test('optional session and workplace feedback recover and appear as separate sou
             })
             .click()
           await page
-            .getByText(lang === 'en' ? 'Attendance by trainer' : 'الحضور حسب المدرب', {
+            .getByText(lang === 'en' ? 'Attendance by coach' : 'الحضور حسب المدرب', {
               exact: true,
             })
             .click()
@@ -237,9 +237,9 @@ test('optional session and workplace feedback recover and appear as separate sou
     await page.goto(base + '/admin/analytics')
     await page.getByRole('tab', { name: 'Delivery & capacity', exact: true }).click()
     await expect(
-      page.getByRole('heading', { name: 'Trainer session delivery', exact: true }),
+      page.getByRole('heading', { name: 'Coach session delivery', exact: true }),
     ).toBeVisible()
-    await page.getByText('Attendance by trainer', { exact: true }).click()
+    await page.getByText('Attendance by coach', { exact: true }).click()
     await expect(
       page
         .getByRole('table', {
@@ -258,7 +258,7 @@ test('optional session and workplace feedback recover and appear as separate sou
     await trainer.goto(base + '/trainer/analytics')
     await trainer.getByRole('tab', { name: 'Experience & renewals', exact: true }).click()
     await expect(
-      trainer.getByRole('heading', { name: 'Trainer workplace satisfaction', exact: true }),
+      trainer.getByRole('heading', { name: 'Coach workplace satisfaction', exact: true }),
     ).toHaveCount(0)
     for (const width of [320, 1280])
       for (const lang of ['en', 'ar'])

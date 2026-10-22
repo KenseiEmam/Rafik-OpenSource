@@ -34,10 +34,7 @@ const items = computed(() => [
   },
   { path: '/injuries', name: l('Injury status', 'حالة الإصابة') },
   { path: '/messages', name: l('Messages', 'الرسائل') },
-  { path: '/calendar', name: l('Calendar', 'التقويم') },
-  ...(route.params.view === 'trainee'
-    ? []
-    : [{ path: '/events', name: l('Events & assessments', 'المواعيد والتقييمات') }]),
+  { path: '/calendar', name: l('Schedule', 'الجدول') },
   ...(route.params.view !== 'admin'
     ? [{ path: '/feedback', name: l('My feedback', 'تقييماتي') }]
     : []),
@@ -63,6 +60,7 @@ const items = computed(() => [
 ])
 const navPath = computed(() =>
   route.path
+    .replace('/events', '/calendar')
     .replace('/deliver/', '/plans/')
     .replace('/review/', '/session-history/')
     .replace('/assessments/', '/training/'),

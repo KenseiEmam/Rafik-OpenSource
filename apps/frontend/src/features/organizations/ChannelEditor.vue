@@ -204,7 +204,7 @@ onMounted(async () => {
               {{ l('Remove', 'إزالة') }}
             </button>
           </p>
-          <p role="status" class="small-print">
+          <p role="status" class="small-print draft-status">
             {{
               saved
                 ? l('Draft saved on this device.', 'حُفظت المسودة على هذا الجهاز.')
@@ -228,7 +228,6 @@ onMounted(async () => {
 </template>
 <style scoped>
 .channel-editor {
-  max-width: 760px;
   margin-block: 20px;
 }
 .channel-editor h2 {

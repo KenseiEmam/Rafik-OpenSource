@@ -25,12 +25,17 @@ test('platform operator has a separate audited account workflow and private deep
       .getByRole('textbox', { name: 'Reason for this action', exact: true })
       .fill('Local browser acceptance of suspension')
     await page.getByRole('button', { name: 'Confirm action', exact: true }).click()
-    await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
+    await expect(
+      page.locator('.rafik-toast').filter({ hasText: 'Access suspended.' }).last(),
+    ).toBeVisible()
     await page.getByRole('button', { name: 'Restore access', exact: true }).click()
     await page
       .getByRole('textbox', { name: 'Reason for this action', exact: true })
       .fill(restoreReason)
     await page.getByRole('button', { name: 'Confirm action', exact: true }).click()
+    await expect(
+      page.locator('.rafik-toast').filter({ hasText: 'Access restored.' }).last(),
+    ).toBeVisible()
     await expect(page.getByRole('button', { name: 'Suspend access', exact: true })).toBeVisible()
     await page.getByRole('combobox', { name: 'Area', exact: true }).selectOption('audit')
     await expect(page.getByText(restoreReason, { exact: true })).toBeVisible()
@@ -41,7 +46,7 @@ test('platform operator has a separate audited account workflow and private deep
     await f.cleanup()
   }
 })
-test('organization trainer can create a conversation with their assigned trainee and keeps the required own participant', async ({
+test('organization coach starts a private conversation with their assigned athlete from People and stays a participant', async ({
   page,
 }) => {
   const f = await teamFixture(),
@@ -78,15 +83,17 @@ test('organization trainer can create a conversation with their assigned trainee
     })
     await f.login(page, f.coach, `/organization/${id}/trainer/messages`)
     await page.setViewportSize({ width: 320, height: 568 })
-    await page.getByRole('button', { name: 'New conversation', exact: true }).click()
-    const editorSize = await page
-      .locator('.channel-editor')
-      .evaluate((el) => ({ scroll: el.scrollHeight, box: el.clientHeight }))
-    expect(editorSize.scroll).toBeLessThanOrEqual(editorSize.box + 2)
-    await page.getByLabel('Conversation name', { exact: true }).fill('Weekly training questions')
-    await page.getByRole('checkbox', { name: 'R4 Athlete', exact: true }).check()
-    await page.getByRole('button', { name: 'Create conversation', exact: true }).click()
+    // Conversations start from the People directory; the coach is always one of the two participants.
+    await page
+      .getByRole('region', { name: 'People', exact: true })
+      .getByRole('button', { name: /R4 Athlete/ })
+      .click()
     await expect(page).toHaveURL(/messages\/[a-f0-9-]{36}$/)
+    await page.getByRole('button', { name: 'Participants (2)', exact: true }).click()
+    const participants = page.locator('.channel-people')
+    await expect(participants).toContainText('R4 Coach')
+    await expect(participants).toContainText('R4 Athlete')
+    await page.getByRole('button', { name: 'Participants (2)', exact: true }).click()
     await page
       .getByRole('textbox', { name: 'Write a message', exact: true })
       .fill('What would help with the next session?')
@@ -121,6 +128,8 @@ test('large member selection searches the full roster and keeps reviewed choices
       'docker',
       [
         'compose',
+        '-f',
+        resolve(import.meta.dirname, '../../../infrastructure/compose.yaml'),
         'exec',
         '-T',
         'db',
@@ -141,19 +150,18 @@ test('large member selection searches the full roster and keeps reviewed choices
     await f.login(page, f.owner, `/organization/${id}/admin/groups`)
     await page.getByRole('button', { name: 'New group', exact: true }).click()
     await page.getByLabel('Name', { exact: true }).fill('Reviewed roster selection')
-    const picker = page.locator('.member-picker')
-    await expect(picker.getByRole('checkbox')).toHaveCount(25)
+    const picker = page.locator('.member-picker').first()
+    // Large rosters: only the five closest matches are listed; choices survive new searches.
+    await expect(picker.getByRole('checkbox')).toHaveCount(5)
     await picker.getByRole('checkbox', { name: people[0]!.name, exact: true }).check()
-    await picker.getByRole('button', { name: 'Load more people', exact: true }).click()
-    await expect(picker.getByRole('checkbox')).toHaveCount(50)
+    await picker.getByRole('searchbox').fill('049')
+    await expect(picker.getByRole('checkbox')).toHaveCount(1)
     await picker.getByRole('checkbox', { name: people[49]!.name, exact: true }).check()
     await expect(picker.locator('.chosen-members')).toContainText(people[49]!.name)
-    await expect(picker.getByRole('checkbox')).toHaveCount(50)
     await expect(
       picker.getByRole('checkbox', { name: people[49]!.name, exact: true }),
     ).toBeChecked()
     await picker.getByRole('searchbox').fill('060')
-    await picker.getByRole('button', { name: 'Search people', exact: true }).click()
     await picker.getByRole('checkbox', { name: people[60]!.name, exact: true }).check()
     await expect(picker.locator('.chosen-members')).toContainText(people[0]!.name)
     await expect(page.getByText('Draft saved on this device.', { exact: true })).toBeVisible()

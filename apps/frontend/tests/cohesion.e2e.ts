@@ -19,7 +19,7 @@ test('coach and organization entry keeps context through sign-in and explains di
   await expect(page).toHaveURL(/\/admin$/)
   await page.goto('/help')
   await page.getByText('I administer an organization', { exact: true }).click()
-  await expect(page.getByText(/Reassigning a trainer preserves/)).toBeVisible()
+  await expect(page.getByText(/Reassigning a coach preserves/)).toBeVisible()
   expect(await layoutIssues(page)).toEqual([])
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
   await page.screenshot({ path: info.outputPath('workspace-help.png'), fullPage: true })

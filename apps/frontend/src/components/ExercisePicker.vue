@@ -10,7 +10,6 @@ import {
   ComboboxPortal,
   ComboboxRoot,
   ComboboxTrigger,
-  ComboboxViewport,
 } from 'reka-ui'
 import { PhCaretDown, PhCheck } from '@phosphor-icons/vue'
 import type { Exercise, ExerciseKind } from '../lib/domain'
@@ -58,6 +57,7 @@ const emit = defineEmits<{ 'update:modelValue': [string] }>()
 const generatedId = useId()
 const inputId = computed(() => props.id || `exercise-picker-${generatedId}`)
 const hintId = computed(() => `${inputId.value}-hint`)
+const listId = computed(() => `${inputId.value}-options`)
 const open = ref(false)
 const query = ref('')
 const equipment = ref('')
@@ -244,6 +244,8 @@ function select(value: unknown) {
           :id="inputId"
           :display-value="displayValue"
           :aria-describedby="open ? hintId : undefined"
+          :aria-controls="open ? listId : undefined"
+          aria-haspopup="dialog"
           :placeholder="placeholder || language('Search exercises', 'ابحث عن تمرين')"
           autocomplete="off"
           @input.capture="captureInput"
@@ -260,6 +262,11 @@ function select(value: unknown) {
           :aria-label="label + ' · ' + language('Options', 'الخيارات')"
         >
           <ComboboxContent
+            role="dialog"
+            :id="listId"
+            :aria-label="label + ' · ' + language('Options', 'الخيارات')"
+            :aria-orientation="undefined"
+            :aria-multiselectable="undefined"
             :dir="locale === 'ar' ? 'rtl' : 'ltr'"
             class="exercise-picker-options"
             position="popper"
@@ -316,7 +323,7 @@ function select(value: unknown) {
                 </label>
               </div>
               <p :id="hintId" class="exercise-picker-hint">{{ resultsHint }}</p>
-              <ComboboxViewport class="exercise-picker-viewport">
+              <div role="listbox" :aria-label="label" class="exercise-picker-viewport" tabindex="0">
                 <ComboboxEmpty class="exercise-picker-empty">
                   {{
                     language(
@@ -343,7 +350,7 @@ function select(value: unknown) {
                     ><PhCheck :size="17" aria-hidden="true"
                   /></ComboboxItemIndicator>
                 </ComboboxItem>
-              </ComboboxViewport>
+              </div>
             </div>
           </ComboboxContent>
         </section>

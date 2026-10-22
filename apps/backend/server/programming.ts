@@ -1,3 +1,5 @@
+import { pageSize } from "./pagination.ts";
+import { pageOffset } from "./service-definitions.ts";
 import { usableExerciseAsset } from "./organization-assets.ts";
 import media from "../content/exercise-media.json" with { type: "json" };
 import videos from "../content/exercise-videos.json" with { type: "json" };
@@ -290,7 +292,7 @@ export async function programs(
         catalog: view === "trainee" ? [] : await catalog(tx, id, self),
       };
     }
-    const take = 24,
+    const take = pageSize(query, 24),
       offset = Math.max(0, Math.min(100000, Number(query.get("offset")) || 0));
     const where = {
       workspace_id: id,
@@ -625,8 +627,12 @@ export async function delivery(
       plans = links ? assignmentScope(self.id, links) : {},
       workouts = links ? sessionScope(self.id, links) : {};
     if (query.get("history") === "true") {
+      const search = (query.get("search") || "").trim().slice(0, 100);
       const scope = {
         workspace_id: id,
+        ...(search
+          ? { name: { contains: search, mode: "insensitive" as const } }
+          : {}),
         ...(selected
           ? { id: selected }
           : view === "trainer"
@@ -648,16 +654,19 @@ export async function delivery(
         }))
       )
         throw new ApiError(400, "invalid_request");
+      const take = pageSize(query, 10);
       const page = await tx.organization_sessions.findMany({
         where: { workspace_id: id, workspace_members: scope, ...workouts },
         include: {
           workspace_members: { select: { id: true, name: true, active: true } },
         },
         orderBy: [{ started_at: "desc" }, { id: "asc" }],
-        take: 51,
-        ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+        take: take + 1,
+        ...(cursor
+          ? { cursor: { id: cursor }, skip: 1 }
+          : { skip: pageOffset(query.get("offset")) }),
       });
-      const sessions = page.slice(0, 50),
+      const sessions = page.slice(0, take),
         member = selected || (view === "trainee" ? self.id : null);
       const assignments = member
         ? await tx.organization_assignments.findMany({
@@ -670,7 +679,11 @@ export async function delivery(
             include: { organization_versions: true },
           })
         : [];
+      const total = await tx.organization_sessions.count({
+        where: { workspace_id: id, workspace_members: scope, ...workouts },
+      });
       return {
+        total,
         members: Array.from(
           new Map(
             sessions.map((s) => [s.member_id, s.workspace_members]),
@@ -688,7 +701,7 @@ export async function delivery(
           completed_at: s.completed_at,
         })),
         self: self.id,
-        next: page.length > 50 ? sessions.at(-1)!.id : null,
+        next: page.length > take ? sessions.at(-1)!.id : null,
       };
     }
     const members = await tx.workspace_members.findMany({

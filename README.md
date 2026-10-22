@@ -2,7 +2,7 @@
 
 Repository: [`KenseiEmam/Rafik-OpenSource`](https://github.com/KenseiEmam/Rafik-OpenSource).
 
-**Published evaluation beta: Squire 1.0.0-beta.1.** Standalone Android packaging uses `npm run mobile:release`; follow the [signing, installation and update guide](docs/operations/android-release.md). Release/device acceptance limits are tracked in [verification](docs/verification/README.md).
+**Preparing Squire 1.0.0-beta.2; published evaluation beta: Squire 1.0.0-beta.1.** Sports and coaching changes are merged; see the [beta.2 upgrade notes](docs/operations/README.md#beta2-upgrade-and-release-preparation). Standalone Android packaging uses `npm run mobile:release`; follow the [signing, installation and update guide](docs/operations/android-release.md). Release/device acceptance limits are tracked in [verification](docs/verification/README.md).
 
 Rafik helps university coaches manage athlete training, attendance and performance in a university-operated instance. It is open source and can be deployed on infrastructure the university controls, without a Rafik software subscription. The Android field app serves coaches; administrators and athletes use the web dashboard. Performance records and limited participation status do not provide medical diagnoses or injury predictions.
 
@@ -103,6 +103,8 @@ The full local acceptance chain is documented in [the runbook](./docs/operations
 GitHub runs focused onboarding and institution checks; see [CI and dependency maintenance](docs/development/maintainer-guide.md#github-checks-and-dependency-maintenance). Dependency audits require online registry access; current unresolved advisories are listed in known issues.
 
 ## Documentation and contribution
+
+Web interface standardization is approved and underway. See the [design system](docs/DESIGN_SYSTEM.md) and [audit and implementation plan](docs/known-issues/ui-ux-audit.md).
 
 - [Documentation index](docs/README.md)
 - [Coach field OpenAPI contract](apps/backend/openapi.json), served per instance at `/v1/openapi.json` for Swagger UI imports.

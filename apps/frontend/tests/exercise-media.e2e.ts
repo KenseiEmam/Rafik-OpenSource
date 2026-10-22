@@ -26,7 +26,7 @@ test('full library categories, bounded pages and later-page selection work acros
       Number((await page.locator('.catalog-summary').innerText()).replace(/[^0-9]/g, '')),
     )
     .toBeGreaterThanOrEqual(1384)
-  await page.getByRole('button', { name: 'Next exercises', exact: true }).click()
+  await page.getByRole('button', { name: 'Next page', exact: true }).click()
   const later = page.locator('.catalog-choice').nth(15)
   const label = await later.locator('strong').innerText()
   await later.click()

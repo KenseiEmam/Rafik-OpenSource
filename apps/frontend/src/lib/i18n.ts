@@ -175,12 +175,12 @@ export function errorMessage(error: unknown): string {
       'لهذا الموعد نتائج مسجلة. صحّح النتائج بدلاً من إلغائه.',
     ],
     results_required: [
-      'Record results for every present trainee before finishing.',
-      'سجل نتائج كل متدرب حاضر قبل الإنهاء.',
+      'Record results for every present athlete before finishing.',
+      'سجل نتائج كل رياضي حاضر قبل الإنهاء.',
     ],
     attendance_required: [
-      'Record attendance first. Results require the trainee to be marked present.',
-      'سجل الحضور أولاً. تتطلب النتائج تحديد المتدرب كحاضر.',
+      'Record attendance first. Results require the athlete to be marked present.',
+      'سجل الحضور أولاً. تتطلب النتائج تحديد الرياضي كحاضر.',
     ],
     template_unavailable: [
       'This assessment template is unavailable. Choose an active template in this institution.',
@@ -207,12 +207,12 @@ export function errorMessage(error: unknown): string {
       'هذه المهمة لم تعد متاحة لك. حدّث قائمة المهام.',
     ],
     trainer_unavailable: [
-      'This trainer is no longer available. Choose an active institution trainer.',
+      'This coach is no longer available. Choose an active institution coach.',
       'هذا المدرب لم يعد متاحاً. اختر مدرباً نشطاً في المؤسسة.',
     ],
     trainee_unavailable: [
-      'This trainee is no longer in your assigned scope. Refresh the people list before continuing.',
-      'لم يعد هذا المتدرب ضمن مسؤوليتك. حدّث قائمة الأشخاص قبل المتابعة.',
+      'This athlete is no longer in your assigned scope. Refresh the people list before continuing.',
+      'لم يعد هذا الرياضي ضمن مسؤوليتك. حدّث قائمة الأشخاص قبل المتابعة.',
     ],
     invalid_program_cover: [
       'Use a JPG, PNG or WebP image up to 2 MB from this workspace.',
@@ -251,7 +251,7 @@ export function errorMessage(error: unknown): string {
       'اختر دوراً واحداً على الأقل داخل المؤسسة.',
     ],
     invalid_trainer: [
-      'Choose an active trainer from this institution. A person cannot be their own trainer.',
+      'Choose an active coach from this institution. A person cannot be their own coach.',
       'اختر مدرباً نشطاً من هذه المؤسسة. لا يمكن للشخص أن يكون مدرب نفسه.',
     ],
     duplicate_sport: [
@@ -329,11 +329,11 @@ export function errorMessage(error: unknown): string {
     ],
     reassign_clients_first: [
       'Finish athlete handoffs or close their team enrollments first.',
-      'أكمل نقل المتدربين أو أغلق انضمامهم للفريق أولاً.',
+      'أكمل نقل الرياضيين أو أغلق انضمامهم للفريق أولاً.',
     ],
     close_enrollments_first: [
       'Close all athlete enrollments before closing the team.',
-      'أغلق جميع انضمامات المتدربين قبل إغلاق الفريق.',
+      'أغلق جميع انضمامات الرياضيين قبل إغلاق الفريق.',
     ],
     commercial_restricted: [
       'New team activity is paused. Review the team subscription; existing coaching remains available.',
@@ -345,7 +345,7 @@ export function errorMessage(error: unknown): string {
     ],
     client_limit: [
       'The team has reached its athlete admission limit.',
-      'وصل الفريق إلى حد انضمام المتدربين.',
+      'وصل الفريق إلى حد انضمام الرياضيين.',
     ],
     relationship_already_enrolled: [
       'This coaching relationship already belongs to a team. Close that enrollment first.',
@@ -487,7 +487,12 @@ export function errorMessage(error: unknown): string {
       'Please wait a moment before trying again.',
       'انتظر قليلاً قبل المحاولة مجدداً.',
     )
-  if (raw.includes('forbidden') || raw.includes('unauthenticated') || raw.includes('JWT'))
+  if (raw.includes('forbidden'))
+    return language(
+      'You do not have permission to open this record or perform this action. Contact your institution administrator if you need access.',
+      'ليس لديك إذن لفتح هذا السجل أو تنفيذ هذا الإجراء. تواصل مع مسؤول مؤسستك إذا كنت تحتاج إلى الوصول.',
+    )
+  if (raw.includes('unauthenticated') || raw.includes('JWT'))
     return language(
       'Please sign in again to continue. Your work on this device is still here.',
       'سجّل الدخول مجدداً للمتابعة. عملك على هذا الجهاز ما زال محفوظاً.',

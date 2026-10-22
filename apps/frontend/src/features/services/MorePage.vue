@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { useRoute } from 'vue-router'
 import { language as l } from '../../lib/i18n'
 const coach = useRoute().path.startsWith('/coach'),
@@ -6,13 +7,15 @@ const coach = useRoute().path.startsWith('/coach'),
 </script>
 <template>
   <div class="container page more-page">
-    <header class="page-heading">
-      <p class="overline">{{ l('Alongside your training', 'إلى جانب تدريبك') }}</p>
-      <h1>{{ l('Your tools', 'أدواتك') }}</h1>
-      <p>
-        {{ l('Everything you need, when you need it.', 'كل ما تحتاجه، حين تحتاجه.') }}
-      </p>
-    </header>
+    <PageHeading class="page-heading"
+      ><div>
+        <p class="overline">{{ l('Alongside your training', 'إلى جانب تدريبك') }}</p>
+        <h1>{{ l('Your tools', 'أدواتك') }}</h1>
+        <p>
+          {{ l('Everything you need, when you need it.', 'كل ما تحتاجه، حين تحتاجه.') }}
+        </p>
+      </div></PageHeading
+    >
     <nav class="tool-shortcuts" :aria-label="l('Daily tools', 'الأدوات اليومية')">
       <template v-if="coach"
         ><RouterLink to="/coach/plans">{{ l('Plans', 'الخطط') }} ↗</RouterLink
@@ -75,7 +78,7 @@ const coach = useRoute().path.startsWith('/coach'),
             coach
               ? l(
                   'Coordinate staff, athletes and shared material.',
-                  'نسّق الموظفين والمتدربين والمواد المشتركة.',
+                  'نسّق الموظفين والرياضيين والمواد المشتركة.',
                 )
               : l(
                   'Review team invitations and proposed coach changes.',

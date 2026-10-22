@@ -4,10 +4,13 @@ This page is the index for maintained Rafik documentation. The root [README](../
 
 ## Product and design
 
+- [Design system](DESIGN_SYSTEM.md): approved brand, typography, spacing, component, responsive, accessibility and RTL standards; implementation status is tracked in the audit.
+- [Web UI/UX audit and rollout plan](known-issues/ui-ux-audit.md): categorized findings, root causes, coverage/evidence limits and prioritized implementation slices. Android is follow-up scope.
+
 - [Requirements and staged plan](requirements/README.md): goals, scope, constraints, acceptance criteria and current stage gates.
 - [Stage 4 workflow audit](requirements/stage4-workflow-audit.md): current university workflow coverage and remaining review.
 - [Stage 7 mobile scope](requirements/stage7-mobile-scope.md): confirmed coach-first Android field tasks, offline boundary, API contract and acceptance evidence.
-- [Post-beta.1 release plan](requirements/release-plan-post-beta1.md): proposed founder-ordered releases (sports and coaching foundation, coach field dashboard, sport-specific field tools), audit findings and open decisions. Not implemented.
+- [Post-beta.1 release plan](requirements/release-plan-post-beta1.md): founder-ordered releases, with the sports/coaching foundation merged for beta.2 preparation and the later field-dashboard and sport-specific releases still planned.
 - [Rafik Field app workspace](../apps/mobile/README.md): current Android prototype status, local build steps and limits.
 - [Architecture](architecture/README.md): system context, components, data flow, security boundaries and integrations.
 - [Architecture decisions](decisions/README.md): active ADR index; superseded ADRs are archived.
@@ -20,7 +23,8 @@ This page is the index for maintained Rafik documentation. The root [README](../
 
 - [Development setup and workflows](development/README.md): prerequisites, local setup, common change workflows and troubleshooting.
 - [Android coach field development](development/android.md): native build setup, Windows startup helper and path/concurrency troubleshooting, attendance/scores, history, recovery sharing, English/Arabic and disposable API/queue acceptance.
-- [Maintainer guide](development/maintainer-guide.md): repository map and implementation recipes.
+- [Claude design-audit handoff](development/design-audit-handoff.md): copyable prompt, approved decisions, temporary PR scope and outstanding rendered review.
+- [Maintainer guide](development/maintainer-guide.md): repository map, profile/invitation workflows and shared pagination conventions.
 - [Current delivery ledger](development/ledger.md): current stage and recent implementation outcomes; not a phase-history archive.
 - [Testing strategy](testing/README.md): test layers, focused commands, fixtures and evidence boundaries.
 - [Local coach walkthrough](testing/coach-walkthrough.md): account setup, programs/assignments, athlete recording, scheduled events/results, messages/attachments and optional participation status with synthetic data.

@@ -8,6 +8,7 @@ import './style.css'
 import './styles/workspace.css'
 import './styles/dashboard.css'
 import './styles/nutrition.css'
+import './styles/design-system.css'
 import App from './App.vue'
 import router from './app/router'
 createApp(App).use(router).mount('#app')

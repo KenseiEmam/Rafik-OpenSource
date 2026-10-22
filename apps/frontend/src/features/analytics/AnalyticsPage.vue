@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, ref, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { profile } from '../../app/auth'
@@ -138,7 +139,7 @@ onMounted(() => load())
 <template>
   <OrganizationNav v-if="workspace" />
   <div class="container page analytics-page">
-    <header class="work-heading">
+    <PageHeading class="work-heading">
       <div>
         <h1>
           {{
@@ -167,7 +168,7 @@ onMounted(() => load())
           <option value="custom">{{ l('Custom dates', 'تواريخ مخصصة') }}</option>
         </select></label
       >
-    </header>
+    </PageHeading>
     <div class="analytics-toolbar">
       <p class="report-scope">
         {{
@@ -179,18 +180,22 @@ onMounted(() => load())
         >
       </p>
       <details class="analytics-person-filter">
-        <summary>{{ selectedPerson?.name || l('Filter by trainee', 'تصفية حسب المتدرب') }}</summary>
+        <summary>{{ selectedPerson?.name || l('Filter by athlete', 'تصفية حسب الرياضي') }}</summary>
         <div class="person-filter-panel">
           <form @submit.prevent="load()">
             <label
-              >{{ l('Find a trainee', 'البحث عن متدرب')
-              }}<input type="search" v-model="search" maxlength="100" /></label
+              >{{ l('Find an athlete', 'البحث عن رياضي')
+              }}<input
+                :placeholder="l('Search athlete names…', 'ابحث بأسماء الرياضيين…')"
+                type="search"
+                v-model="search"
+                maxlength="100" /></label
             ><button class="button small secondary" :disabled="loading">
               {{ l('Find', 'بحث') }}
             </button>
           </form>
           <label
-            >{{ l('Trainee', 'المتدرب')
+            >{{ l('Athlete', 'الرياضي')
             }}<select v-model="selected" @change="selectPerson">
               <option value="">{{ l('Everyone in this scope', 'الجميع في هذا النطاق') }}</option>
               <option v-for="person in people" :key="person.id" :value="person.id">
@@ -230,8 +235,8 @@ onMounted(() => load())
           <RouterLink :to="base + (workspace ? '/people' : '/clients')"
             ><span>{{
               workspace
-                ? l('Active trainees now', 'المتدربون النشطون الآن')
-                : l('Active athletes now', 'المتدربون النشطون الآن')
+                ? l('Active athletes now', 'الرياضيون النشطون الآن')
+                : l('Active athletes now', 'الرياضيون النشطون الآن')
             }}</span
             ><strong>{{ data.summary.active }}</strong
             ><small>{{ l('View roster', 'عرض القائمة') }} ↗</small></RouterLink
@@ -246,7 +251,7 @@ onMounted(() => load())
             }}</small></RouterLink
           >
           <div>
-            <span>{{ l('Current trainees who trained', 'متدربون حاليون تدربوا') }}</span
+            <span>{{ l('Current athletes who trained', 'رياضيون حاليون تدربوا') }}</span
             ><strong dir="ltr"
               >{{ data.summary.participating }}<small> / {{ data.summary.active }}</small></strong
             ><small>{{ l('From the active roster', 'من القائمة النشطة') }}</small>
@@ -263,7 +268,7 @@ onMounted(() => load())
           default-value="activity"
           class="analytics-sections"
         >
-          <TabsList class="report-tabs" :aria-label="l('Analytics views', 'عروض التحليلات')"
+          <TabsList class="report-tabs ui-tabs" :aria-label="l('Analytics views', 'عروض التحليلات')"
             ><TabsTrigger value="activity">{{
               l('Training activity', 'النشاط التدريبي')
             }}</TabsTrigger
@@ -319,14 +324,14 @@ onMounted(() => load())
               <h2>{{ l('Where to follow up', 'ما يحتاج المتابعة') }}</h2>
               <RouterLink v-if="data.summary.unassigned" :to="base + '/people'" class="text-link"
                 >{{ data.summary.unassigned }}
-                {{ l('trainees need a responsible trainer', 'متدربين يحتاجون مدرباً مسؤولاً') }}
+                {{ l('athletes need a responsible coach', 'رياضيين يحتاجون مدرباً مسؤولاً') }}
                 ↗</RouterLink
               ><RouterLink
                 v-if="data.summary.without_program"
                 :to="base + (workspace ? '/training' : '/clients')"
                 class="text-link"
                 >{{ data.summary.without_program }}
-                {{ l('active trainees have no current program', 'متدربين نشطين بلا برنامج حالي') }}
+                {{ l('active athletes have no current program', 'رياضيين نشطين بلا برنامج حالي') }}
                 ↗</RouterLink
               >
             </section>
@@ -334,11 +339,11 @@ onMounted(() => load())
               <div v-if="view === 'admin'" class="chart-page">
                 <MetricChart
                   counts
-                  :title="l('Trainer responsibility', 'مسؤولية المدربين')"
+                  :title="l('Coach responsibility', 'مسؤولية المدربين')"
                   :description="
                     l(
-                      'Current active trainees per trainer, across the institution. This is workload, not quality.',
-                      'المتدربون النشطون لكل مدرب في المؤسسة كاملة. هذا حجم العمل وليس الجودة.',
+                      'Current active athletes per coach, across the institution. This is workload, not quality.',
+                      'الرياضيون النشطون لكل مدرب في المؤسسة كاملة. هذا حجم العمل وليس الجودة.',
                     )
                   "
                   :items="data.workload.map((x) => ({ ...x, href: base + '/people' }))"
@@ -348,7 +353,7 @@ onMounted(() => load())
                   class="text-link"
                   @click="load('workload')"
                 >
-                  {{ l('Load more trainers', 'تحميل المزيد من المدربين') }}
+                  {{ l('Load more coaches', 'تحميل المزيد من المدربين') }}
                 </button>
               </div>
               <div v-if="workspace" class="chart-page">
@@ -425,8 +430,8 @@ onMounted(() => load())
           <p>
             {{
               l(
-                'Trainer reports use current responsibility. Admins see their institution, including history preserved after reassignment. Workload always covers the whole institution, regardless of trainee filter. These counts are not adherence, health, retention or revenue scores.',
-                'تقارير المدرب بحسب مسؤوليته الحالية والمسؤول يرى مؤسسته وسجلها المحفوظ بعد إعادة التعيين. حجم عمل المدربين يشمل المؤسسة كاملة بغض النظر عن مرشح المتدرب. هذه ليست درجات التزام أو صحة أو احتفاظ أو إيرادات.',
+                'Coach reports use current responsibility. Admins see their institution, including history preserved after reassignment. Workload always covers the whole institution, regardless of athlete filter. These counts are not adherence, health, retention or revenue scores.',
+                'تقارير المدرب بحسب مسؤوليته الحالية والمسؤول يرى مؤسسته وسجلها المحفوظ بعد إعادة التعيين. حجم عمل المدربين يشمل المؤسسة كاملة بغض النظر عن مرشح الرياضي. هذه ليست درجات التزام أو صحة أو احتفاظ أو إيرادات.',
               )
             }}
           </p>
@@ -545,25 +550,6 @@ onMounted(() => load())
 }
 .analytics-numbers strong small {
   font-size: 1.1rem;
-}
-.report-tabs {
-  display: flex;
-  gap: 20px;
-  border-bottom: 1px solid var(--line);
-  margin-bottom: 20px;
-}
-.report-tabs button {
-  border: 0;
-  border-bottom: 2px solid transparent;
-  background: none;
-  color: var(--muted);
-  padding: 12px 0;
-  font-size: 0.85rem;
-}
-.report-tabs button[data-state='active'] {
-  color: var(--accent);
-  border-color: var(--accent);
-  font-weight: 750;
 }
 .analytics-charts {
   display: grid;

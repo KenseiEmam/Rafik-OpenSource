@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PasswordField from '../../components/PasswordField.vue'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { api } from '../../lib/backend'
@@ -53,10 +54,9 @@ async function save() {
       <h2>{{ language('Choose your password', 'اختر كلمة المرور') }}</h2>
       <form class="form-stack" @submit.prevent="save">
         <label for="password">{{ language('Password', 'كلمة المرور') }}</label>
-        <input
+        <PasswordField
           id="password"
           v-model="password"
-          type="password"
           autocomplete="new-password"
           minlength="8"
           maxlength="128"
@@ -72,10 +72,9 @@ async function save() {
           }}
         </p>
         <label for="confirm">{{ language('Confirm password', 'تأكيد كلمة المرور') }}</label>
-        <input
+        <PasswordField
           id="confirm"
           v-model="confirm"
-          type="password"
           autocomplete="new-password"
           minlength="8"
           maxlength="128"

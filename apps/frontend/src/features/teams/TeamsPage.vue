@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { rows, rpc } from '../../lib/backend'
@@ -43,22 +44,24 @@ onMounted(load)
     <RouterLink class="back-link" :to="coach ? '/coach/more' : '/more'"
       >← {{ l('More tools', 'أدوات إضافية') }}</RouterLink
     >
-    <header class="page-heading">
-      <h1>{{ l('Teams', 'الفرق') }}</h1>
-      <p>
-        {{
-          coach
-            ? l(
-                'Work together when you need to. Solo coaching stays simple.',
-                'تعاون عند الحاجة. يبقى التدريب الفردي بسيطاً.',
-              )
-            : l(
-                'Choose the people who help with your training.',
-                'اختر الأشخاص الذين يدعمون تدريبك.',
-              )
-        }}
-      </p>
-    </header>
+    <PageHeading class="page-heading"
+      ><div>
+        <h1>{{ l('Teams', 'الفرق') }}</h1>
+        <p>
+          {{
+            coach
+              ? l(
+                  'Work together when you need to. Solo coaching stays simple.',
+                  'تعاون عند الحاجة. يبقى التدريب الفردي بسيطاً.',
+                )
+              : l(
+                  'Choose the people who help with your training.',
+                  'اختر الأشخاص الذين يدعمون تدريبك.',
+                )
+          }}
+        </p>
+      </div></PageHeading
+    >
     <CommandStatus :command="command" /><PageState :loading="loading" :error="error" @retry="load"
       ><div class="ongoing-layout">
         <section class="form-stack">
@@ -187,7 +190,7 @@ onMounted(load)
               {{
                 l(
                   'Start with a name. Invite staff and add athletes only when you are ready.',
-                  'ابدأ باسم. ادعُ الموظفين وأضف المتدربين عندما تكون جاهزاً.',
+                  'ابدأ باسم. ادعُ الموظفين وأضف الرياضيين عندما تكون جاهزاً.',
                 )
               }}
             </p>

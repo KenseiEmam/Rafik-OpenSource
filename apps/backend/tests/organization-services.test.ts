@@ -265,8 +265,11 @@ test("organization agenda and assessor-led results preserve each participant, co
       ),
     );
     assert.equal((await call(two, historyPath)).status, 403);
+    // The event above started two hours ago; between 00:00 and 02:00 UTC that
+    // is yesterday, so the range starts on the event's own date.
     const today = new Date().toISOString().slice(0, 10),
-      params = `from=${today}&to=${today}`;
+      eventDay = new Date(Date.now() - 7200000).toISOString().slice(0, 10),
+      params = `from=${eventDay}&to=${today}`;
     const adminReport = await call(
         admin,
         `/v1/workspaces/${id}/analytics?view=admin&${params}`,

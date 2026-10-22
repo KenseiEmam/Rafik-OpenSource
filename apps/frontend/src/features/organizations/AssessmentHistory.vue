@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { profile } from '../../app/auth'
@@ -100,7 +101,7 @@ onMounted(() => load())
     <RouterLink class="back-link" :to="base + '/training?member=' + member">{{
       l('Back to training', 'العودة للتدريب')
     }}</RouterLink>
-    <header class="work-heading">
+    <PageHeading class="work-heading">
       <div>
         <p class="overline">{{ name }}</p>
         <h1>{{ l('Assessment history', 'سجل التقييمات') }}</h1>
@@ -113,7 +114,7 @@ onMounted(() => load())
           }}
         </p>
       </div>
-    </header>
+    </PageHeading>
     <form class="history-filters" @submit.prevent="load()">
       <label>{{ l('From', 'من') }}<input type="date" v-model="from" :max="to" required /></label
       ><label
@@ -183,7 +184,6 @@ onMounted(() => load())
 </template>
 <style scoped>
 .assessment-history {
-  max-width: 940px;
 }
 .history-filters {
   display: flex;

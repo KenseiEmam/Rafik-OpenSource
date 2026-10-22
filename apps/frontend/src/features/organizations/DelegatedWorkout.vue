@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { AthletePlanPage } from '@rafik/shared/contracts'
@@ -221,13 +222,13 @@ onMounted(load)
       </button>
     </p>
     <template v-else-if="sessionId === 'new' && plan">
-      <header class="work-heading">
+      <PageHeading class="work-heading">
         <div>
           <p class="recording-for">{{ l('Record on behalf of', 'تسجيل نيابة عن') }}</p>
           <h1 dir="auto">{{ plan.member_name }}</h1>
           <p dir="auto">{{ plan.version.title }}</p>
         </div>
-      </header>
+      </PageHeading>
       <p class="notice">
         {{
           l(
@@ -257,7 +258,7 @@ onMounted(load)
       </section>
     </template>
     <template v-else-if="session">
-      <header class="work-heading">
+      <PageHeading class="work-heading">
         <div>
           <p class="recording-for">
             {{
@@ -269,7 +270,7 @@ onMounted(load)
           <h1 dir="auto">{{ session.member_name }}</h1>
           <p dir="auto">{{ session.title }} · {{ session.prescription.name }}</p>
         </div>
-      </header>
+      </PageHeading>
       <p v-if="session.recorded_mode !== 'delegated'" class="notice">
         {{
           l(
@@ -355,7 +356,6 @@ onMounted(load)
 </template>
 <style scoped>
 .delegated-workout {
-  max-width: 880px;
 }
 .recording-for {
   margin: 0 0 4px;

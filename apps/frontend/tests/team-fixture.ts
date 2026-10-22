@@ -11,7 +11,9 @@ const sql = (input: string) =>
   execFileSync(
     'docker',
     [
-      'compose', '-f', composeFile,
+      'compose',
+      '-f',
+      composeFile,
       'exec',
       '-T',
       'db',
@@ -28,9 +30,7 @@ const sql = (input: string) =>
 type Person = { id: string; email: string; session: { cookie: string } }
 export async function teamFixture() {
   if (
-    !readFileSync(composeFile, 'utf8').startsWith(
-      'name: ${RAFIK_INSTANCE_ID:-rafik-prisma-local}',
-    )
+    !readFileSync(composeFile, 'utf8').startsWith('name: ${RAFIK_INSTANCE_ID:-rafik-prisma-local}')
   )
     throw Error('Local fixture guard failed')
   const people: Person[] = [],

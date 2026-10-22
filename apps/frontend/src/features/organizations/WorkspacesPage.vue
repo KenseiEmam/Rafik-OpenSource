@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { contexts, refreshContexts, user } from '../../app/auth'
@@ -63,7 +64,7 @@ function create() {
 </script>
 <template>
   <div class="container page narrow">
-    <header class="work-heading">
+    <PageHeading class="work-heading">
       <div>
         <p class="overline">{{ l('Your work, in its place', 'عملك في مكانه') }}</p>
         <h1>{{ l('Choose where to work', 'اختر مساحة العمل') }}</h1>
@@ -76,11 +77,11 @@ function create() {
           }}
         </p>
       </div>
-    </header>
+    </PageHeading>
     <p v-if="localPreview" class="notice">
       {{
         l(
-          'Local examination: organization administrators, trainers and athletes are available with sample data.',
+          'Local examination: organization administrators, coaches and athletes are available with sample data.',
           'معاينة محلية: تتوفر حسابات مسؤولي المؤسسات والمدربين والرياضيين مع بيانات تجريبية.',
         )
       }}
@@ -133,7 +134,7 @@ function create() {
         <p class="muted">
           {{
             l(
-              'You will be an administrator. Invite other admins, trainers and athletes when you are ready.',
+              'You will be an administrator. Invite other admins, coaches and athletes when you are ready.',
               'ستكون مسؤولاً. ادعُ مسؤولين ومدربين ورياضيين عندما تكون جاهزاً.',
             )
           }}

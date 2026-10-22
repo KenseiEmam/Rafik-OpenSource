@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import SessionNote from './SessionNote.vue'
 import TimezonePicker from '../../components/TimezonePicker.vue'
 import { computed, onMounted, ref, watch, nextTick, onUnmounted } from 'vue'
@@ -277,7 +278,7 @@ onMounted(load)
       :to="base + '/calendar' + (route.query.from ? '?from=' + route.query.from : '')"
       >{{ l('Back to calendar', 'العودة للتقويم') }}</RouterLink
     >
-    <header class="work-heading">
+    <PageHeading class="work-heading">
       <div>
         <p class="overline">
           {{
@@ -288,7 +289,7 @@ onMounted(load)
         </p>
         <h1>{{ data?.event.title || l('Event', 'الموعد') }}</h1>
       </div>
-    </header>
+    </PageHeading>
     <CommandStatus :command="command" />
     <PageState :loading="loading" :error="error" @retry="load"
       ><template v-if="data">
@@ -298,7 +299,7 @@ onMounted(load)
           </p>
           <p>{{ data.event.location || l('Location to be agreed', 'الموقع يحدد لاحقاً') }}</p>
           <p>
-            {{ l('Trainers / assessors', 'المدربون / المقيمون') }}:
+            {{ l('Coaches / assessors', 'المدربون / المقيمون') }}:
             {{
               data.people
                 .filter((p) => p.duty === 'staff')
@@ -316,7 +317,7 @@ onMounted(load)
           >
             {{
               l(
-                'A trainer is no longer active in this role. An administrator can reassign this event below.',
+                'A coach is no longer active in this role. An administrator can reassign this event below.',
                 'لم يعد أحد المدربين نشطاً بهذا الدور. يمكن للمسؤول إعادة تعيين الموعد أدناه.',
               )
             }}
@@ -415,7 +416,7 @@ onMounted(load)
           @submit.prevent="run({ action: 'staff', staff: newStaff })"
         >
           <fieldset :disabled="locked" class="form-fields">
-            <h2>{{ l('Assign active trainers', 'تعيين مدربين نشطين') }}</h2>
+            <h2>{{ l('Assign active coaches', 'تعيين مدربين نشطين') }}</h2>
             <MemberPicker
               :workspace="id"
               view="admin"
@@ -498,8 +499,8 @@ onMounted(load)
               <p class="small-print">
                 {{
                   l(
-                    'This trainee sees their own result. Your institution retains the result and correction history.',
-                    'يرى المتدرب نتيجته فقط. تحتفظ مؤسستك بالنتيجة وسجل التصحيحات.',
+                    'This athlete sees their own result. Your institution retains the result and correction history.',
+                    'يرى الرياضي نتيجته فقط. تحتفظ مؤسستك بالنتيجة وسجل التصحيحات.',
                   )
                 }}
               </p>
@@ -624,8 +625,8 @@ onMounted(load)
               <p class="small-print">
                 {{
                   l(
-                    'Saved revisions for this trainee, newest first.',
-                    'النسخ المحفوظة لهذا المتدرب، الأحدث أولاً.',
+                    'Saved revisions for this athlete, newest first.',
+                    'النسخ المحفوظة لهذا الرياضي، الأحدث أولاً.',
                   )
                 }}
               </p>
@@ -660,14 +661,13 @@ onMounted(load)
 </template>
 <style scoped>
 .event-detail {
-  max-width: 1100px;
 }
 .event-overview {
   padding: 24px 28px;
   margin-block: 20px;
   border: 1px solid var(--line);
   border-inline-start: 4px solid var(--accent);
-  border-radius: 16px;
+  border-radius: var(--radius-panel);
   background: var(--surface);
   box-shadow: 0 8px 24px #00000008;
   overflow-wrap: anywhere;

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { notifySuccess } from '../../lib/feedback'
+import PageHeading from '../../components/PageHeading.vue'
 import TimezonePicker from '../../components/TimezonePicker.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -158,7 +160,7 @@ async function execute(command?: Command) {
     rescheduling.value = ''
     confirmCancel.value = ''
     await load()
-    notice.value = l('Calendar updated.', 'حُدّث التقويم.')
+    notifySuccess(l('Calendar updated.', 'حُدّث التقويم.'))
   } catch (e) {
     if (commandRejected(e)) {
       pending.value = undefined
@@ -193,7 +195,7 @@ async function withdraw(s: Slot) {
   try {
     await rpc('withdraw_availability', { p_id: s.id })
     await load()
-    notice.value = l('Availability withdrawn.', 'سُحبت الإتاحة.')
+    notifySuccess(l('Availability withdrawn.', 'سُحبت الإتاحة.'))
   } catch (e) {
     error.value = errorMessage(e)
   } finally {
@@ -214,21 +216,23 @@ onMounted(async () => {
     <RouterLink class="back-link" :to="coach ? '/coach/more' : '/more'"
       >← {{ l('More tools', 'أدوات إضافية') }}</RouterLink
     >
-    <header class="page-heading">
-      <p class="overline">{{ l('Make time to connect', 'وقت للتواصل') }}</p>
-      <h1>{{ l('Appointments', 'المواعيد') }}</h1>
-      <p>
-        {{
-          l(
-            'Book a conversation. Keep training and meeting schedules separate.',
-            'احجز جلسة متابعة. تبقى مواعيد الاجتماعات منفصلة عن جدول التدريب.',
-          )
-        }}
-      </p>
-      <a v-if="coach" class="button small secondary" href="#availability-editor">{{
-        l('Offer availability', 'إضافة إتاحة')
-      }}</a>
-    </header>
+    <PageHeading class="page-heading"
+      ><div>
+        <p class="overline">{{ l('Make time to connect', 'وقت للتواصل') }}</p>
+        <h1>{{ l('Appointments', 'المواعيد') }}</h1>
+        <p>
+          {{
+            l(
+              'Book a conversation. Keep training and meeting schedules separate.',
+              'احجز جلسة متابعة. تبقى مواعيد الاجتماعات منفصلة عن جدول التدريب.',
+            )
+          }}
+        </p>
+        <a v-if="coach" class="button small secondary" href="#availability-editor">{{
+          l('Offer availability', 'إضافة إتاحة')
+        }}</a>
+      </div></PageHeading
+    >
     <PageState :loading="loading" :error="''" @retry="load"
       ><p v-if="error" class="notice error" role="alert">
         {{ error }}
@@ -236,7 +240,7 @@ onMounted(async () => {
           {{ l('Refresh calendar', 'تحديث التقويم') }}
         </button>
       </p>
-      <p v-if="notice" class="notice success" role="status">{{ notice }}</p>
+
       <div v-if="pending" class="notice">
         <p>
           {{
@@ -254,7 +258,7 @@ onMounted(async () => {
         <TimezonePicker v-model="viewZone" :label="l('View times in', 'عرض الأوقات حسب')" /><label
           >{{ coach ? l('Athlete', 'الرياضي') : l('Coach', 'المدرب')
           }}<select v-model="relation" @change="selectRelation">
-            <option v-if="coach" value="">{{ l('All athletes', 'كل المتدربين') }}</option>
+            <option v-if="coach" value="">{{ l('All athletes', 'كل الرياضيين') }}</option>
             <option v-for="r in relationships" :key="r.id" :value="r.id">{{ name(r.id) }}</option>
           </select></label
         ><label class="check-label"

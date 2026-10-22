@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { user, profile } from '../../app/auth'
@@ -416,28 +417,30 @@ onBeforeUnmount(() => {
     <RouterLink class="back-link" :to="coach ? '/coach/more' : '/more'"
       >← {{ l('More tools', 'أدوات إضافية') }}</RouterLink
     >
-    <header class="page-heading">
-      <p class="overline">{{ l('Optional support', 'دعم اختياري') }}</p>
-      <h1>
-        {{ coach ? l('Nutrition', 'التغذية') : l('Nutrition', 'التغذية') }}
-      </h1>
-      <p>
-        {{
-          coach
-            ? l(
-                'Set clear daily targets, turn them into meal ideas, and review shared food records.',
-                'حدد أهدافاً يومية واضحة وحوّلها إلى مقترحات وجبات وراجع سجلات الطعام المشاركة.',
-              )
-            : l(
-                'Keep a simple food record, with as much detail as you find useful.',
-                'احتفظ بسجل طعام بسيط، بالتفاصيل التي تفيدك.',
-              )
-        }}
-      </p>
-      <a v-if="!coach" class="button small secondary" href="#meal-editor">{{
-        l('Record a meal', 'تسجيل وجبة')
-      }}</a>
-    </header>
+    <PageHeading class="page-heading"
+      ><div>
+        <p class="overline">{{ l('Optional support', 'دعم اختياري') }}</p>
+        <h1>
+          {{ coach ? l('Nutrition', 'التغذية') : l('Nutrition', 'التغذية') }}
+        </h1>
+        <p>
+          {{
+            coach
+              ? l(
+                  'Set clear daily targets, turn them into meal ideas, and review shared food records.',
+                  'حدد أهدافاً يومية واضحة وحوّلها إلى مقترحات وجبات وراجع سجلات الطعام المشاركة.',
+                )
+              : l(
+                  'Keep a simple food record, with as much detail as you find useful.',
+                  'احتفظ بسجل طعام بسيط، بالتفاصيل التي تفيدك.',
+                )
+          }}
+        </p>
+        <a v-if="!coach" class="button small secondary" href="#meal-editor">{{
+          l('Record a meal', 'تسجيل وجبة')
+        }}</a>
+      </div></PageHeading
+    >
     <PageState :loading="loading" :error="''" @retry="load"
       ><p v-if="error" class="notice error" role="alert">
         {{ error }}
@@ -522,7 +525,7 @@ onBeforeUnmount(() => {
         {{
           l(
             'Choose an athlete to view their shared food record or add guidance.',
-            'اختر متدرباً لعرض سجل طعامه المشارك أو إضافة إرشادات.',
+            'اختر رياضياً لعرض سجل طعامه المشارك أو إضافة إرشادات.',
           )
         }}
       </p>
@@ -598,7 +601,7 @@ onBeforeUnmount(() => {
                   coach
                     ? l(
                         'No meals shared by this athlete for this date.',
-                        'لم يشارك هذا المتدرب وجبات لهذا التاريخ.',
+                        'لم يشارك هذا الرياضي وجبات لهذا التاريخ.',
                       )
                     : l(
                         'No meals recorded for this date. An empty log does not mean you ate nothing.',

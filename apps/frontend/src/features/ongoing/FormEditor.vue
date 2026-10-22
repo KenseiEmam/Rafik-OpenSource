@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { user } from '../../app/auth'
@@ -165,20 +166,22 @@ onMounted(load)
     <RouterLink class="back-link" to="/coach/checkins"
       >← {{ l('Check-ins & assessments', 'المتابعات والتقييمات') }}</RouterLink
     >
-    <header class="page-heading">
-      <p class="overline">
-        {{ l('Reusable coaching tools', 'أدوات تدريب قابلة لإعادة الاستخدام') }}
-      </p>
-      <h1>{{ isNew ? l('Create a template', 'إنشاء قالب') : form.title }}</h1>
-      <p>
-        {{
-          l(
-            'Ask only what will help you coach. Athletes receive a short, focused form.',
-            'اسأل فقط عما يفيد التدريب. يحصل المتدرب على نموذج قصير وواضح.',
-          )
-        }}
-      </p>
-    </header>
+    <PageHeading class="page-heading"
+      ><div>
+        <p class="overline">
+          {{ l('Reusable coaching tools', 'أدوات تدريب قابلة لإعادة الاستخدام') }}
+        </p>
+        <h1>{{ isNew ? l('Create a template', 'إنشاء قالب') : form.title }}</h1>
+        <p>
+          {{
+            l(
+              'Ask only what will help you coach. Athletes receive a short, focused form.',
+              'اسأل فقط عما يفيد التدريب. يحصل الرياضي على نموذج قصير وواضح.',
+            )
+          }}
+        </p>
+      </div></PageHeading
+    >
     <PageState :loading="loading" :error="!form.fields.length ? error : ''" @retry="load">
       <p v-if="restored" class="notice">
         {{ l('Device draft restored.', 'استُعيدت مسودة الجهاز.') }}

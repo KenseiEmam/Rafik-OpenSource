@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { onMounted, ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { PhArrowLeft, PhCheckCircle } from '@phosphor-icons/vue'
@@ -63,7 +64,7 @@ const command = useCommand<'review'>(
     await load()
     message.value = language(
       'Review saved. Your athlete can see this feedback in their session.',
-      'حُفظت المراجعة. يمكن لمتدربك رؤية الملاحظات ضمن حصته.',
+      'حُفظت المراجعة. يمكن لرياضيك رؤية الملاحظات ضمن حصته.',
     )
   },
   (_, args) =>
@@ -107,14 +108,16 @@ onMounted(async () => {
       }}</RouterLink
     ><PageState :loading="loading" :error="!session ? error : ''" @retry="load"
       ><template v-if="session"
-        ><div class="page-heading">
-          <p class="overline">{{ language('Session review', 'مراجعة الحصة') }}</p>
-          <h1>{{ person?.display_name }}</h1>
-          <p>
-            {{ session.prescription.name }} ·
-            {{ dateLabel(session.completed_at || session.started_at) }}
-          </p>
-        </div>
+        ><PageHeading class="page-heading"
+          ><div>
+            <p class="overline">{{ language('Session review', 'مراجعة الحصة') }}</p>
+            <h1>{{ person?.display_name }}</h1>
+            <p>
+              {{ session.prescription.name }} ·
+              {{ dateLabel(session.completed_at || session.started_at) }}
+            </p>
+          </div></PageHeading
+        >
         <CommandStatus :command="command" :show-notice="false" />
         <div class="review-layout">
           <section>
@@ -168,7 +171,7 @@ onMounted(async () => {
               >{{ language('Discuss this workout', 'مناقشة هذه الحصة') }}</RouterLink
             >
             <section v-if="session.note" class="panel">
-              <h2>{{ language('Athlete note', 'ملاحظة المتدرب') }}</h2>
+              <h2>{{ language('Athlete note', 'ملاحظة الرياضي') }}</h2>
               <p class="preserve-lines">{{ session.note }}</p>
             </section>
             <form class="panel feedback-form" @submit.prevent="save">

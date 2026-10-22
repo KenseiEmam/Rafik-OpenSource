@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { PhArrowRight } from '@phosphor-icons/vue'
@@ -32,30 +33,32 @@ async function enter(role: 'orgadmin' | 'orgtrainer' | 'orgtrainee' | 'orgadmin2
 <template>
   <div class="container page narrow">
     <template v-if="localPreview"
-      ><div class="page-heading">
-        <span class="tag">{{ language('Local preview', 'معاينة محلية') }}</span>
-        <h1>
-          {{
-            language(
-              'Choose a role. Explore the whole workflow.',
-              'اختر دوراً واستكشف رحلة العمل كاملة.',
-            )
-          }}
-        </h1>
-        <p>
-          {{
-            language(
-              'These are synthetic accounts in the local database. Use them to try planning, training, and reviewing without sending any real email.',
-              'هذه حسابات تجريبية في قاعدة البيانات المحلية. جرّب التخطيط والتدريب والمراجعة بلا رسائل حقيقية.',
-            )
-          }}
-        </p>
-      </div>
+      ><PageHeading class="page-heading"
+        ><div>
+          <span class="tag">{{ language('Local preview', 'معاينة محلية') }}</span>
+          <h1>
+            {{
+              language(
+                'Choose a role. Explore the whole workflow.',
+                'اختر دوراً واستكشف رحلة العمل كاملة.',
+              )
+            }}
+          </h1>
+          <p>
+            {{
+              language(
+                'These are synthetic accounts in the local database. Use them to try planning, training, and reviewing without sending any real email.',
+                'هذه حسابات تجريبية في قاعدة البيانات المحلية. جرّب التخطيط والتدريب والمراجعة بلا رسائل حقيقية.',
+              )
+            }}
+          </p>
+        </div></PageHeading
+      >
       <h2>{{ language('Institutions', 'المؤسسات') }}</h2>
       <p class="preview-context">
         {{
           language(
-            'Each institution owns its people, programs and training history. Choose an administrator, trainer or athlete account to explore its workspace.',
+            'Each institution owns its people, programs and training history. Choose an administrator, coach or athlete account to explore its workspace.',
             'لكل مؤسسة أفرادها وبرامجها وسجلها التدريبي. اختر حساب مسؤول أو مدرب أو رياضي لاستكشاف مساحة عمله.',
           )
         }}
@@ -71,7 +74,7 @@ async function enter(role: 'orgadmin' | 'orgtrainer' | 'orgtrainee' | 'orgadmin2
             {
               role: 'orgtrainer' as const,
               name: 'Kareem Nasser',
-              description: language('Madar Training · Trainer', 'مدار للتدريب · مدرب'),
+              description: language('Madar Training · Coach', 'مدار للتدريب · مدرب'),
             },
             {
               role: 'orgtrainee' as const,

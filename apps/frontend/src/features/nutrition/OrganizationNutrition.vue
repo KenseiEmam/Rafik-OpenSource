@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { PhTray } from '@phosphor-icons/vue'
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, onBeforeUnmount, ref, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { user, profile, contexts } from '../../app/auth'
@@ -72,6 +74,8 @@ const data = ref<Data>(),
   error = ref(''),
   editor = ref(false),
   mealEditor = ref(false),
+  // Which tab hosts the plan editor: full targets (Plan) or only the example meals (Example).
+  editFocus = ref<'plan' | 'meals'>('plan'),
   restored = ref(false),
   savingDraft = ref(false),
   draftError = ref(''),
@@ -114,11 +118,12 @@ function snapshot() {
     plan: plan.value,
     meal: meal.value,
     editor: editor.value,
+    editFocus: editFocus.value,
     mealEditor: mealEditor.value,
   })
 }
 watch(
-  [plan, meal, editor, mealEditor, hasPlanDraft, hasMealDraft],
+  [plan, meal, editor, editFocus, mealEditor, hasPlanDraft, hasMealDraft],
   () => {
     if (!ready) return
     const key = keyFor(),
@@ -189,6 +194,7 @@ async function load(reset = false, offset = 0, historyOffset = 0, removedOffset 
       plan.value = freshPlan()
       meal.value = { id: crypto.randomUUID(), revision: 0, food: initialFood(), note: '' }
       editor.value = false
+      editFocus.value = 'plan'
       mealEditor.value = false
       restored.value = false
       const draft = result.member ? await getDraft<ReturnType<typeof snapshot>>(keyFor()) : null
@@ -199,6 +205,7 @@ async function load(reset = false, offset = 0, historyOffset = 0, removedOffset 
         plan.value = draft.plan
         meal.value = draft.meal
         editor.value = draft.editor
+        editFocus.value = draft.editFocus || 'plan'
         mealEditor.value = draft.mealEditor
         restored.value = true
       }
@@ -249,6 +256,19 @@ const command = useCommand<string>(
     await load(false)
   },
   (_name, args) => request(endpoint, { method: 'POST', body: JSON.stringify(args) }),
+  {
+    // Action-specific confirmation once the server acknowledges the change.
+    successMessage: (name) =>
+      name === 'publish'
+        ? l('Nutrition plan published.', 'تم نشر خطة التغذية.')
+        : name === 'meal'
+          ? l('Food entry saved.', 'تم حفظ مدخل الطعام.')
+          : name === 'remove'
+            ? l('Food entry removed.', 'تمت إزالة مدخل الطعام.')
+            : name === 'sharing'
+              ? l('Diary sharing updated.', 'تم تحديث مشاركة السجل.')
+              : false,
+  },
 )
 const locked = computed(
   () => !command.state.ready || command.state.busy || !!command.state.pending || loading.value,
@@ -303,12 +323,15 @@ watch(
   },
   { deep: true, flush: 'sync' },
 )
-function editPlan(source = data.value?.current) {
+function editPlan(source = data.value?.current, focus: 'plan' | 'meals' = 'plan') {
   if (!hasPlanDraft.value) plan.value = freshPlan(source)
   hasPlanDraft.value = true
   editor.value = true
+  editFocus.value = focus
+  section.value = focus === 'meals' ? 'example' : 'plan'
   review.value = false
 }
+const editorSection = computed(() => (editFocus.value === 'meals' ? 'example' : 'plan'))
 async function editMeal(item?: Meal, food?: PlannedFood) {
   if (item || food || !hasMealDraft.value)
     meal.value = item
@@ -359,7 +382,7 @@ onBeforeUnmount(() => {
       :to="`/organization/${workspace}/${view}/nutrition`"
       >{{ l('All nutrition plans', 'جميع خطط التغذية') }}</RouterLink
     >
-    <header class="page-heading">
+    <PageHeading class="page-heading">
       <div>
         <h1>{{ l('Nutrition', 'التغذية') }}</h1>
         <p class="subtle">
@@ -374,7 +397,7 @@ onBeforeUnmount(() => {
       <button class="button small secondary" :disabled="locked" @click="load()">
         {{ l('Refresh', 'تحديث') }}
       </button>
-    </header>
+    </PageHeading>
     <CommandStatus v-if="!loading" :command="command" />
     <p v-if="!draftError && (hasPlanDraft || hasMealDraft)" class="small-print" role="status">
       {{
@@ -401,7 +424,7 @@ onBeforeUnmount(() => {
         <p class="subtle">
           {{
             view === 'admin'
-              ? l('Choose anyone in this institution.', 'اختر من متدربي هذه المؤسسة.')
+              ? l('Choose anyone in this institution.', 'اختر من رياضيي هذه المؤسسة.')
               : l('Your assigned athletes appear here.', 'يظهر هنا الرياضيون المسندون إليك.')
           }}
         </p>
@@ -459,146 +482,144 @@ onBeforeUnmount(() => {
         <p v-if="restored && (editor || mealEditor)" class="small-print" role="status">
           {{ l('Draft restored from this device.', 'استُعيدت المسودة من هذا الجهاز.') }}
         </p>
-        <div
-          class="org-nutrition-panel"
-          tabindex="0"
-          :aria-label="l('Nutrition details', 'تفاصيل التغذية')"
-        >
-          <template v-if="section === 'plan'">
-            <form
-              v-if="editor && !trainee"
-              class="form-stack org-plan-editor"
-              @submit.prevent="review = true"
-              @invalid.capture="revealInvalid"
-            >
-              <fieldset :disabled="locked">
-                <legend class="sr-only">{{ l('Nutrition plan', 'خطة التغذية') }}</legend>
-                <div class="section-header">
-                  <h2>{{ l('Update nutrition plan', 'تحديث خطة التغذية') }}</h2>
-                  <button class="text-link" type="button" @click="closePlanEditor">
-                    {{ l('Close editor', 'إغلاق المحرر') }}
-                  </button>
-                </div>
-                <p class="subtle">
+        <div class="org-nutrition-panel">
+          <form
+            v-if="editor && !trainee && section === editorSection"
+            class="form-stack org-plan-editor"
+            @submit.prevent="review = true"
+            @invalid.capture="revealInvalid"
+          >
+            <fieldset :disabled="locked">
+              <legend class="sr-only">{{ l('Nutrition plan', 'خطة التغذية') }}</legend>
+              <div class="section-header">
+                <h2>
+                  {{
+                    editFocus === 'meals'
+                      ? l('Edit example meal plan', 'تعديل مثال خطة الوجبات')
+                      : l('Update nutrition plan', 'تحديث خطة التغذية')
+                  }}
+                </h2>
+                <button class="text-link" type="button" @click="closePlanEditor">
+                  {{ l('Close editor', 'إغلاق المحرر') }}
+                </button>
+              </div>
+              <p class="subtle">
+                {{
+                  l(
+                    'Publishing creates a new version for this athlete. Earlier versions stay in history.',
+                    'ينشئ النشر نسخة جديدة لهذا الرياضي. تبقى النسخ السابقة في السجل.',
+                  )
+                }}
+              </p>
+              <div class="org-nutrition-fields">
+                <label
+                  >{{ l('Starts on', 'يبدأ في')
+                  }}<input
+                    v-model="plan.effective_on"
+                    type="date"
+                    :min="data.today"
+                    required
+                    @input="review = false" /></label
+                ><label
+                  >{{ l('Ends on (optional)', 'ينتهي في (اختياري)')
+                  }}<input
+                    v-model="plan.expires_on"
+                    type="date"
+                    :min="plan.effective_on"
+                    @input="review = false"
+                /></label>
+              </div>
+              <MacroPlanner v-if="editFocus === 'plan'" v-model="plan.targets" />
+              <MealPlanEditor v-model="plan.meals" />
+              <label v-if="editFocus === 'plan'"
+                >{{ l('Guidance', 'إرشادات')
+                }}<textarea v-model="plan.guidance" rows="3" maxlength="4000" />
+              </label>
+              <div v-if="review" class="notice">
+                <strong
+                  >{{ l('Ready to publish for', 'جاهز للنشر إلى') }} {{ data.member.name }}</strong
+                >
+                <p>
+                  {{ shortDate(plan.effective_on)
+                  }}<template v-if="plan.expires_on"> — {{ shortDate(plan.expires_on) }}</template>
+                  · {{ plan.meals.length }} {{ l('suggested foods', 'أطعمة مقترحة') }}
+                </p>
+                <p>
                   {{
                     l(
-                      'Publishing creates a new version for this trainee. Earlier versions stay in history.',
-                      'ينشئ النشر نسخة جديدة لهذا المتدرب. تبقى النسخ السابقة في السجل.',
+                      'Visible to this athlete, institution admins and their assigned coach.',
+                      'مرئية لهذا الرياضي ومسؤولي المؤسسة والمدرب المسند إليه.',
                     )
                   }}
                 </p>
-                <div class="org-nutrition-fields">
-                  <label
-                    >{{ l('Starts on', 'يبدأ في')
-                    }}<input
-                      v-model="plan.effective_on"
-                      type="date"
-                      :min="data.today"
-                      required
-                      @input="review = false" /></label
-                  ><label
-                    >{{ l('Ends on (optional)', 'ينتهي في (اختياري)')
-                    }}<input
-                      v-model="plan.expires_on"
-                      type="date"
-                      :min="plan.effective_on"
-                      @input="review = false"
-                  /></label>
-                </div>
-                <MacroPlanner v-model="plan.targets" />
-                <MealPlanEditor v-model="plan.meals" />
-                <label
-                  >{{ l('Guidance', 'إرشادات')
-                  }}<textarea v-model="plan.guidance" rows="3" maxlength="4000" />
-                </label>
-                <div v-if="review" class="notice">
-                  <strong
-                    >{{ l('Ready to publish for', 'جاهز للنشر إلى') }}
-                    {{ data.member.name }}</strong
-                  >
-                  <p>
-                    {{ shortDate(plan.effective_on)
-                    }}<template v-if="plan.expires_on">
-                      — {{ shortDate(plan.expires_on) }}</template
-                    >
-                    · {{ plan.meals.length }} {{ l('suggested foods', 'أطعمة مقترحة') }}
-                  </p>
-                  <p>
-                    {{
-                      l(
-                        'Visible to this trainee, institution admins and their assigned trainer.',
-                        'مرئية لهذا المتدرب ومسؤولي المؤسسة والمدرب المسند إليه.',
-                      )
-                    }}
-                  </p>
-                  <button type="button" class="button" @click="publish">
-                    {{ l('Publish plan', 'نشر الخطة') }}
-                  </button>
-                </div>
-                <button v-else class="button" type="submit">
-                  {{ l('Review plan', 'مراجعة الخطة') }}
-                </button>
-                <button type="button" class="text-link" @click="discardPlan">
-                  {{ l('Discard draft and load latest plan', 'تجاهل المسودة وتحميل أحدث خطة') }}
-                </button>
-              </fieldset>
-            </form>
-            <template v-else>
-              <div class="section-header">
-                <h2>{{ l('Daily targets', 'الأهداف اليومية') }}</h2>
-                <button
-                  v-if="!trainee && canWrite"
-                  class="button small"
-                  :disabled="locked"
-                  @click="editPlan()"
-                >
-                  {{
-                    hasPlanDraft
-                      ? l('Continue draft', 'متابعة المسودة')
-                      : data.current
-                        ? l('Update plan', 'تحديث الخطة')
-                        : l('Create plan', 'إنشاء خطة')
-                  }}
+                <button type="button" class="button" @click="publish">
+                  {{ l('Publish plan', 'نشر الخطة') }}
                 </button>
               </div>
-              <template v-if="data.current"
-                ><p class="subtle">
-                  {{ l('Version', 'النسخة') }} {{ data.current.revision }} · {{ l('From', 'من') }}
-                  {{ shortDate(data.current.effective_on)
-                  }}<template v-if="data.current.expires_on">
-                    · {{ l('Through', 'حتى') }} {{ shortDate(data.current.expires_on) }}</template
-                  >
-                </p>
-                <div class="nutrition-totals">
-                  <div v-for="key in nutrientKeys" :key="key">
-                    <span>{{ label(key) }}</span
-                    ><strong
-                      >{{ data.current.targets[key] ?? '—' }} <small>{{ unit(key) }}</small></strong
-                    >
-                  </div>
-                </div>
-                <p class="org-guidance" v-if="data.current.guidance">{{ data.current.guidance }}</p>
-                <button class="text-link" @click="section = 'example'">
-                  {{ l('View example meal plan', 'عرض مثال لخطة الوجبات') }}
-                </button></template
+              <button v-else class="button" type="submit">
+                {{ l('Review plan', 'مراجعة الخطة') }}
+              </button>
+              <button type="button" class="text-link" @click="discardPlan">
+                {{ l('Discard draft and load latest plan', 'تجاهل المسودة وتحميل أحدث خطة') }}
+              </button>
+            </fieldset>
+          </form>
+          <template v-else-if="section === 'plan'">
+            <div class="section-header">
+              <h2>{{ l('Daily targets', 'الأهداف اليومية') }}</h2>
+              <button
+                v-if="!trainee && canWrite"
+                class="button small"
+                :disabled="locked"
+                @click="editPlan()"
               >
-              <div v-else class="empty-state empty-state--compact">
-                <h3>{{ l('No plan for this date', 'لا توجد خطة لهذا التاريخ') }}</h3>
-                <p>
-                  {{
-                    trainee
-                      ? l(
-                          'Your institution can publish daily targets and meal ideas here.',
-                          'يمكن لمؤسستك نشر أهداف يومية ومقترحات وجبات هنا.',
-                        )
-                      : l(
-                          'Set daily targets and practical food suggestions for this trainee. Scheduled and past plans are in Plan history.',
-                          'حدّد أهدافاً يومية ومقترحات طعام عملية لهذا المتدرب. الخطط المجدولة والسابقة في سجل الخطط.',
-                        )
-                  }}
-                </p>
+                {{
+                  hasPlanDraft
+                    ? l('Continue draft', 'متابعة المسودة')
+                    : data.current
+                      ? l('Update plan', 'تحديث الخطة')
+                      : l('Create plan', 'إنشاء خطة')
+                }}
+              </button>
+            </div>
+            <template v-if="data.current"
+              ><p class="subtle">
+                {{ l('Version', 'النسخة') }} {{ data.current.revision }} · {{ l('From', 'من') }}
+                {{ shortDate(data.current.effective_on)
+                }}<template v-if="data.current.expires_on">
+                  · {{ l('Through', 'حتى') }} {{ shortDate(data.current.expires_on) }}</template
+                >
+              </p>
+              <div class="nutrition-totals">
+                <div v-for="key in nutrientKeys" :key="key">
+                  <span>{{ label(key) }}</span
+                  ><strong
+                    >{{ data.current.targets[key] ?? '—' }} <small>{{ unit(key) }}</small></strong
+                  >
+                </div>
               </div>
-            </template>
+              <p class="org-guidance" v-if="data.current.guidance">{{ data.current.guidance }}</p>
+              <button class="text-link" @click="section = 'example'">
+                {{ l('View example meal plan', 'عرض مثال لخطة الوجبات') }}
+              </button></template
+            >
+            <div v-else class="empty-state empty-state--compact">
+              <PhTray :size="28" aria-hidden="true" />
+              <h3>{{ l('No plan for this date', 'لا توجد خطة لهذا التاريخ') }}</h3>
+              <p>
+                {{
+                  trainee
+                    ? l(
+                        'Your institution can publish daily targets and meal ideas here.',
+                        'يمكن لمؤسستك نشر أهداف يومية ومقترحات وجبات هنا.',
+                      )
+                    : l(
+                        'Set daily targets and practical food suggestions for this athlete. Scheduled and past plans are in Plan history.',
+                        'حدّد أهدافاً يومية ومقترحات طعام عملية لهذا الرياضي. الخطط المجدولة والسابقة في سجل الخطط.',
+                      )
+                }}
+              </p>
+            </div>
           </template>
           <template v-else-if="section === 'example'">
             <div class="section-header">
@@ -607,7 +628,7 @@ onBeforeUnmount(() => {
                 v-if="!trainee && canWrite"
                 class="button small"
                 :disabled="locked"
-                @click="editPlan()"
+                @click="editPlan(undefined, 'meals')"
               >
                 {{ l('Edit meal plan', 'تعديل خطة الوجبات') }}
               </button>
@@ -689,12 +710,12 @@ onBeforeUnmount(() => {
                 {{
                   trainee
                     ? l(
-                        'Sharing lets institution admins and your currently assigned trainer read all entries and corrections in this diary. Personal nutrition elsewhere stays separate.',
+                        'Sharing lets institution admins and your currently assigned coach read all entries and corrections in this diary. Personal nutrition elsewhere stays separate.',
                         'تسمح المشاركة لمسؤولي المؤسسة ومدربك الحالي بقراءة جميع المدخلات والتصحيحات في هذا السجل. تبقى تغذيتك الشخصية منفصلة.',
                       )
                     : l(
-                        'Only the trainee can change sharing or record food. No entries is not proof that no food was eaten.',
-                        'المتدرب وحده يغيّر المشاركة أو يسجل الطعام. عدم وجود سجلات لا يعني عدم تناول الطعام.',
+                        'Only the athlete can change sharing or record food. No entries is not proof that no food was eaten.',
+                        'الرياضي وحده يغيّر المشاركة أو يسجل الطعام. عدم وجود سجلات لا يعني عدم تناول الطعام.',
                       )
                 }}
               </p>
@@ -889,7 +910,7 @@ onBeforeUnmount(() => {
             <p class="subtle">
               {{
                 l(
-                  'Published versions are kept unchanged, including after trainer reassignment.',
+                  'Published versions are kept unchanged, including after coach reassignment.',
                   'تبقى النسخ المنشورة دون تغيير، حتى عند إعادة تعيين المدرب.',
                 )
               }}

@@ -36,7 +36,7 @@ function apply() {
         {{
           l(
             'Set the targets you agreed with your athlete. Leave any untracked nutrient blank.',
-            'حدد الأهداف المتفق عليها مع متدربك. اترك أي عنصر لا تتابعه فارغاً.',
+            'حدد الأهداف المتفق عليها مع رياضيك. اترك أي عنصر لا تتابعه فارغاً.',
           )
         }}
       </p>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { notifySuccess } from '../../lib/feedback'
+import PageHeading from '../../components/PageHeading.vue'
 import TimezonePicker from '../../components/TimezonePicker.vue'
 import AppUpdates from '../../components/AppUpdates.vue'
 import { onMounted, ref } from 'vue'
@@ -32,7 +34,7 @@ async function save() {
       p_timezone: zone.value,
     })
     await refreshProfile()
-    message.value = t('saved')
+    notifySuccess(language('Account settings saved.', 'تم حفظ إعدادات الحساب.'))
   } catch (e) {
     error.value = errorMessage(e)
   } finally {
@@ -147,12 +149,14 @@ function cancelDelete() {
 </script>
 <template>
   <div class="container page settings-page">
-    <div class="page-heading">
-      <p class="overline">{{ t('settings') }}</p>
-      <h1>{{ language('Settings', 'الإعدادات') }}</h1>
-    </div>
+    <PageHeading class="page-heading"
+      ><div>
+        <p class="overline">{{ t('settings') }}</p>
+        <h1>{{ language('Settings', 'الإعدادات') }}</h1>
+      </div></PageHeading
+    >
     <p v-if="error" class="notice error" role="alert">{{ error }}</p>
-    <p v-if="message" class="notice success" role="status">{{ message }}</p>
+
     <div class="settings-layout">
       <form class="panel" @submit.prevent="save">
         <h2>{{ language('Your profile', 'ملفك الشخصي') }}</h2>
@@ -250,7 +254,7 @@ function cancelDelete() {
             {{
               language(
                 'Permanently remove your account, your plans, your uploaded files, and your own training results. Athletes keep their own completed session snapshots.',
-                'حذف حسابك وخططك وملفاتك المرفوعة ونتائج تدريبك نهائياً. يحتفظ المتدربون بنسخ حصصهم المكتملة.',
+                'حذف حسابك وخططك وملفاتك المرفوعة ونتائج تدريبك نهائياً. يحتفظ الرياضيون بنسخ حصصهم المكتملة.',
               )
             }}
           </p>

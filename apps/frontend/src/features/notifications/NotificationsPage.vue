@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { request } from '../../lib/backend'
@@ -80,7 +81,7 @@ onMounted(() => load())
 </script>
 <template>
   <div class="container page notifications-page">
-    <header class="work-heading">
+    <PageHeading class="work-heading">
       <div>
         <p class="overline">{{ l('Your updates', 'تحديثاتك') }}</p>
         <h1>{{ l('Notifications', 'الإشعارات') }}</h1>
@@ -100,7 +101,7 @@ onMounted(() => load())
             : l('Notification preferences', 'تفضيلات الإشعارات')
         }}
       </button>
-    </header>
+    </PageHeading>
     <NotificationPreferences v-if="preferences" /><template v-else
       ><div class="heading-actions">
         <p class="small-print">

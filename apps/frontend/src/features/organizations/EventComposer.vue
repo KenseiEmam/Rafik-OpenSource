@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import TimezonePicker from '../../components/TimezonePicker.vue'
 import { computed, onMounted, ref, watch, nextTick, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -173,10 +174,16 @@ function groupMembers() {
     draft.value.participants = selected.members
       .filter((m) => m.active && m.roles.includes('trainee') && !draft.value.staff.includes(m.id))
       .map((m) => m.id)
+    // Add the group's coaches; never drop a coach already chosen for this event.
     if (view === 'admin')
-      draft.value.staff = selected.members
-        .filter((m) => m.active && m.roles.includes('trainer'))
-        .map((m) => m.id)
+      draft.value.staff = [
+        ...new Set([
+          ...draft.value.staff,
+          ...selected.members
+            .filter((m) => m.active && m.roles.includes('trainer'))
+            .map((m) => m.id),
+        ]),
+      ]
   }
 }
 async function advance() {
@@ -269,7 +276,7 @@ onMounted(async () => {
     <RouterLink class="back-link" :to="base + '/calendar'">{{
       l('Back to calendar', 'العودة للتقويم')
     }}</RouterLink>
-    <header class="work-heading">
+    <PageHeading class="work-heading">
       <div>
         <h1>{{ l('Schedule an event', 'جدولة موعد') }}</h1>
         <p>
@@ -278,7 +285,7 @@ onMounted(async () => {
           }}
         </p>
       </div>
-    </header>
+    </PageHeading>
     <ol class="composer-steps" :aria-label="l('Scheduling steps', 'خطوات الجدولة')">
       <li
         v-for="(label, index) in [
@@ -324,6 +331,7 @@ onMounted(async () => {
                 <label
                   >{{ l('Find an assessment template', 'البحث عن قالب تقييم')
                   }}<input
+                    :placeholder="l('Type to search…', 'اكتب للبحث…')"
                     v-model="templateSearch"
                     type="search"
                     @keydown.enter.prevent="findCatalog('templates')" /></label
@@ -351,14 +359,15 @@ onMounted(async () => {
                 <option value="" disabled>{{ l('Choose a template', 'اختر قالباً') }}</option>
                 <option v-for="t in templates" :key="t.id" :value="t.id">
                   {{ t.title }}
-                </option></select
-              ><RouterLink
-                :to="base + '/assessment-templates?create=1&forEvent=' + draft.id"
-                target="_blank"
-                rel="noopener"
-                class="text-link"
-                >{{ l('Create a template ↗ (new tab)', 'إنشاء قالب ↗ (تبويب جديد)') }}</RouterLink
-              ></label
+                </option>
+              </select></label
+            ><RouterLink
+              v-if="draft.kind === 'assessment'"
+              :to="base + '/assessment-templates/new?forEvent=' + draft.id"
+              target="_blank"
+              rel="noopener"
+              class="text-link"
+              >{{ l('Create a template ↗ (new tab)', 'إنشاء قالب ↗ (تبويب جديد)') }}</RouterLink
             >
             <button
               v-if="draft.kind === 'assessment'"
@@ -427,12 +436,12 @@ onMounted(async () => {
               :max="8"
               v-model="draft.staff"
               :exclude-ids="draft.participants"
-              :label="l('Trainers / assessors', 'المدربون / المقيمون')"
+              :label="l('Coaches / assessors', 'المدربون / المقيمون')"
               @options="trainerOptions = $event"
             />
             <p v-else>
               {{
-                l('You are the assigned trainer for this event.', 'أنت المدرب المعيّن لهذا الموعد.')
+                l('You are the assigned coach for this event.', 'أنت المدرب المعيّن لهذا الموعد.')
               }}
             </p>
             <h2>{{ l('Athletes', 'الرياضيون') }}</h2>
@@ -442,6 +451,7 @@ onMounted(async () => {
                 <label
                   >{{ l('Find a group (optional)', 'البحث عن مجموعة (اختياري)')
                   }}<input
+                    :placeholder="l('Type to search…', 'اكتب للبحث…')"
                     v-model="groupSearch"
                     type="search"
                     @keydown.enter.prevent="findCatalog('groups')" /></label
@@ -478,7 +488,7 @@ onMounted(async () => {
               role="trainee"
               v-model="draft.participants"
               :exclude-ids="draft.staff"
-              :label="l('Find trainees', 'البحث عن متدربين')"
+              :label="l('Find athletes', 'البحث عن رياضيين')"
               @options="data!.members = $event"
             />
           </section>
@@ -497,7 +507,7 @@ onMounted(async () => {
             </p>
             <h3>{{ l('People', 'الأشخاص') }}</h3>
             <p>
-              {{ l('Trainers / assessors', 'المدربون / المقيمون') }}:
+              {{ l('Coaches / assessors', 'المدربون / المقيمون') }}:
               {{
                 view === 'trainer'
                   ? profile?.display_name
@@ -561,7 +571,7 @@ onMounted(async () => {
               }}
             </button>
           </div>
-          <p class="small-print" role="status">
+          <p class="small-print draft-status" role="status">
             {{
               saved
                 ? l('Draft saved on this device.', 'حُفظت المسودة على هذا الجهاز.')
@@ -578,7 +588,6 @@ onMounted(async () => {
 </template>
 <style scoped>
 .event-composer {
-  max-width: 880px;
 }
 .composer-steps {
   list-style: none;

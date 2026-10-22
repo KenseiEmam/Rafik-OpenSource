@@ -68,14 +68,14 @@ test('organization staff schedule a group assessment, recover a result, correct 
     await page.reload()
     await expect(page.getByLabel('Drill name', { exact: true })).toHaveValue('Chair stands')
     await page.getByRole('button', { name: 'Save template', exact: true }).click()
-    await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
+    await expect(page.locator('.rafik-toast').filter({ hasText: /saved/i }).last()).toBeVisible()
     await page.goto(base + '/groups')
     await page.getByRole('button', { name: 'New group', exact: true }).click()
     await page.getByLabel('Name', { exact: true }).fill('Morning group')
     await page.getByRole('checkbox', { name: 'R4 Athlete', exact: true }).check()
     await page.getByRole('checkbox', { name: 'R4 Athlete Two', exact: true }).check()
     await page.getByRole('button', { name: 'Save group', exact: true }).click()
-    await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
+    await expect(page.locator('.rafik-toast').filter({ hasText: /saved/i }).last()).toBeVisible()
     await page.goto(base + '/calendar/new')
     await page.getByLabel('Event name', { exact: true }).fill('Morning assessment')
     await page.getByRole('combobox', { name: 'Event type', exact: true }).selectOption('assessment')
@@ -92,8 +92,8 @@ test('organization staff schedule a group assessment, recover a result, correct 
         .getByRole('combobox', { name: 'Assessment template', exact: true })
         .locator('option:checked'),
     ).toHaveText('Movement baseline')
-    await page.getByLabel('Timezone', { exact: true }).click()
-    await page.getByLabel('Timezone', { exact: true }).fill('UTC')
+    await page.getByRole('combobox', { name: 'Timezone', exact: true }).click()
+    await page.getByRole('combobox', { name: 'Timezone', exact: true }).fill('UTC')
     await page.getByRole('option', { name: 'UTC · UTC', exact: true }).click()
     await page.getByRole('button', { name: 'Choose people', exact: true }).click()
     await expect(page.locator('section[aria-label="Choose people"]')).toBeFocused()
@@ -128,6 +128,8 @@ test('organization staff schedule a group assessment, recover a result, correct 
       'docker',
       [
         'compose',
+        '-f',
+        resolve('../../infrastructure/compose.yaml'),
         'exec',
         '-T',
         'db',
@@ -154,16 +156,22 @@ test('organization staff schedule a group assessment, recover a result, correct 
         .getByRole('combobox', { name: 'Attendance for ' + name, exact: true })
         .selectOption('present')
       await card.getByRole('button', { name: 'Save attendance', exact: true }).click()
-      await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
+      await expect(
+        page.locator('.rafik-toast').filter({ hasText: 'Attendance recorded.' }).last(),
+      ).toBeVisible()
       await card.getByRole('button', { name: 'Record result', exact: true }).click()
       await page
         .getByRole('spinbutton', { name: 'Chair stands (reps)', exact: true })
         .fill(name === 'R4 Athlete' ? '12' : '19')
       await page.getByRole('button', { name: 'Save result', exact: true }).click()
-      await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
+      await expect(
+        page.locator('.rafik-toast').filter({ hasText: 'Assessment result saved.' }).last(),
+      ).toBeVisible()
     }
     await page.getByRole('button', { name: 'Finish event', exact: true }).click()
-    await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
+    await expect(
+      page.locator('.rafik-toast').filter({ hasText: 'Session completed.' }).last(),
+    ).toBeVisible()
     await page
       .locator('.event-participant')
       .filter({ has: page.getByRole('heading', { name: 'R4 Athlete', exact: true }) })
@@ -185,7 +193,9 @@ test('organization staff schedule a group assessment, recover a result, correct 
     ).toBeEnabled()
     await page.reload()
     await page.getByRole('button', { name: 'Retry saved change', exact: true }).click()
-    await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
+    await expect(
+      page.locator('.rafik-toast').filter({ hasText: 'Assessment result saved.' }).last(),
+    ).toBeVisible()
     await expect(page.getByText('14 reps', { exact: true })).toBeVisible()
     await expect(page.getByText('19 reps', { exact: true })).toBeVisible()
     await f.login(client, f.client, `/organization/${id}/trainee/calendar/${eid}`)
@@ -194,7 +204,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
     await page.goto(base + '/analytics')
     await page.getByRole('tab', { name: 'Delivery & capacity', exact: true }).click()
     await expect(
-      page.getByRole('heading', { name: 'Trainer responsibility', exact: true }),
+      page.getByRole('heading', { name: 'Coach responsibility', exact: true }),
     ).toBeVisible()
     await expect(page.locator('.analytics-numbers').getByText('2', { exact: true })).toBeVisible()
     expect(await layoutIssues(page)).toEqual([])
@@ -222,12 +232,14 @@ test('organization staff schedule a group assessment, recover a result, correct 
     await calendarRequest
     const navigation = page.getByRole('button', { name: 'Open navigation', exact: true })
     if (await navigation.isVisible()) await navigation.click()
-    await page
-      .getByRole('navigation', { name: 'Workspace navigation' })
-      .getByRole('link', { name: 'Analytics', exact: true })
-      .click()
+    // Sidebar groups collapse to the current section; open Administration to reach Analytics.
+    const workspaceNav = page.getByRole('navigation', { name: 'Workspace navigation' })
+    const analyticsLink = workspaceNav.getByRole('link', { name: 'Analytics', exact: true })
+    if (!(await analyticsLink.isVisible()))
+      await workspaceNav.locator('summary').filter({ hasText: 'Administration' }).click()
+    await analyticsLink.click()
     await expect(
-      page.getByRole('heading', { name: 'Organization analytics', exact: true }),
+      page.getByRole('heading', { name: 'Institution analytics', exact: true }),
     ).toBeVisible()
     const calendarResponse = page.waitForResponse((r) =>
       r.url().includes(`/v1/workspaces/${id}/calendar?`),
@@ -247,15 +259,10 @@ test('organization staff schedule a group assessment, recover a result, correct 
       page.getByRole('heading', { name: 'Coaching analytics', exact: true }),
     ).toBeVisible()
     await expect(
-      page.getByRole('heading', { name: 'Trainer responsibility', exact: true }),
+      page.getByRole('heading', { name: 'Coach responsibility', exact: true }),
     ).toHaveCount(0)
     await page.goto(`/organization/${id}/trainer/assessments/${trainee.id}`)
     await expect(page.getByRole('definition').filter({ hasText: '14 reps' })).toBeVisible()
-    await page.goto('/coach/analytics')
-    await page.getByRole('tab', { name: 'Follow-up', exact: true }).click()
-    await expect(
-      page.getByRole('heading', { name: 'Check-in response', exact: true }),
-    ).toBeVisible()
   } finally {
     await clientContext.close()
     await f.cleanup()

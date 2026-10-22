@@ -1,6 +1,6 @@
 {
   "name": "@rafik/mobile",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "private": true,
   "type": "module",
   "main": "expo-router/entry",
@@ -12,7 +12,7 @@
     "test:request": "node --experimental-transform-types --experimental-test-module-mocks --test --test-isolation=none tests/request.test.ts tests/native.test.ts"
   },
   "dependencies": {
-    "@rafik/shared": "1.0.0-beta.1",
+    "@rafik/shared": "1.0.0-beta.2",
     "expo": "~58.0.14",
     "expo-constants": "~58.0.12",
     "expo-crypto": "~58.0.7",

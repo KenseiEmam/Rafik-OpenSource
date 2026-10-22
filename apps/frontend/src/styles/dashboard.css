@@ -29,32 +29,9 @@
   min-height: 0;
   padding-block: 24px 32px;
 }
-.dashboard-frame .work-heading,
-.dashboard-frame .page-heading {
-  margin-bottom: 22px;
-  max-width: none;
-}
-.dashboard-frame .work-heading h1,
-.dashboard-frame .page-heading h1 {
-  font-size: 2rem;
-  line-height: 1.2;
-  letter-spacing: -0.04em;
-  margin: 0 0 8px;
-}
 .dashboard-frame .work-heading .overline,
 .dashboard-frame .page-heading .overline {
   display: none;
-}
-.dashboard-frame .page-heading p,
-.dashboard-frame .work-heading p {
-  font-size: 0.85rem;
-  margin: 0;
-}
-.dashboard-frame .page-heading > p:last-child {
-  margin-top: 8px;
-}
-.dashboard-frame .panel {
-  padding: 22px;
 }
 .dashboard-frame .organization-summary {
   margin-block: 18px 24px;
@@ -113,6 +90,9 @@
 .drawer-heading h2 {
   font-size: 1rem;
   margin: 0;
+}
+.dashboard-frame {
+  --dashboard-header-height: 64px;
 }
 @media (min-width: 1024px) {
   #app:has(.dashboard-frame) {
@@ -195,12 +175,7 @@
   .dashboard-frame > main:has(.organization-messages.is-creating) {
     overflow: auto;
   }
-  .dashboard-frame .organization-people > section:first-child {
-    max-height: calc(100dvh - 330px);
-    min-height: 220px;
-    overflow-y: auto;
-    padding-inline-end: 12px;
-  }
+  /* The paginated directory scrolls with the workspace; no nested list scroller. */
   .dashboard-frame .organization-people aside {
     max-height: calc(100dvh - 180px);
     overflow-y: auto;
@@ -214,7 +189,16 @@
     position: sticky;
     top: 0;
     z-index: 30;
+    /* Same height as desktop so sticky page toolbars can sit directly below it. */
+    height: var(--dashboard-header-height);
+    min-height: 0;
     background: var(--page);
+  }
+  .dashboard-frame .header-inner {
+    height: 100%;
+  }
+  .dashboard-frame {
+    --dashboard-sticky-top: var(--dashboard-header-height);
   }
   .dashboard-frame {
     --dashboard-gutter: 18px;

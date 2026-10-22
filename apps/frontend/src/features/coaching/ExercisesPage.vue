@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { useListPageSize } from '../../lib/list-page-size'
+import { loadEditorDraft } from '../../lib/editor-draft'
+import PageHeading from '../../components/PageHeading.vue'
+import ListPagination from '../../components/ListPagination.vue'
 import { request } from '../../lib/backend'
 import MultiChoice from '../../components/MultiChoice.vue'
 import OrganizationUpload, { type UploadedAsset } from '../../components/OrganizationUpload.vue'
@@ -18,14 +22,24 @@ import {
   equipmentLabel,
 } from '../../lib/exercise-catalog'
 import OrganizationNav from '../organizations/OrganizationNav.vue'
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { PhArrowLeft, PhArrowRight, PhBarbell } from '@phosphor-icons/vue'
 import { user } from '../../app/auth'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
 import { programContext } from './program-context'
-const context = programContext(useRoute())
+const route = useRoute(),
+  router = useRouter(),
+  editor = String(route.params.editor || ''),
+  initialPath = route.path,
+  context = programContext(route)
+const listPath = context.base + '/exercises'
+let disposed = false
+onUnmounted(() => {
+  disposed = true
+  resourceRead++
+})
 import { clone, type Exercise } from '../../lib/domain'
 import { language, locale, errorMessage, t } from '../../lib/i18n'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
@@ -44,7 +58,9 @@ const loading = ref(true),
   message = ref(''),
   editing = ref<Exercise>(),
   restored = ref(false)
-const key = `exercise-draft:${user.value!.id}:${context.key}`
+const commandKey = `exercise-draft:${user.value!.id}:${context.key}`
+const key = commandKey + ':' + (editor || 'new')
+const availableDraft = ref('')
 const visible = computed(() =>
   exercises.value
     .filter(
@@ -84,10 +100,19 @@ const page = ref(0),
   selectedId = ref(''),
   mobileDetail = ref(false)
 const detailHeading = ref<HTMLElement>()
-const pageSize = 24
-const pageCount = computed(() => Math.max(1, Math.ceil(visible.value.length / pageSize)))
+const {
+  recordLimit: pageSize,
+  appliedLimit,
+  pageSizes,
+  acceptLimit,
+  changeLimit,
+} = useListPageSize(24, () => {
+  page.value = 0
+  acceptLimit()
+})
+const pageCount = computed(() => Math.max(1, Math.ceil(visible.value.length / pageSize.value)))
 const pageItems = computed(() =>
-  visible.value.slice(page.value * pageSize, (page.value + 1) * pageSize),
+  visible.value.slice(page.value * pageSize.value, (page.value + 1) * pageSize.value),
 )
 const selectedExercise = computed(
   () => pageItems.value.find((e) => e.id === selectedId.value) || pageItems.value[0],
@@ -151,7 +176,9 @@ async function load() {
   loading.value = true
   error.value = ''
   try {
-    exercises.value = await context.catalog()
+    const catalog = await context.catalog()
+    if (disposed) return
+    exercises.value = catalog
     authorized.value = true
   } catch (e) {
     authorized.value = false
@@ -161,6 +188,10 @@ async function load() {
   }
 }
 function create() {
+  if (!editor && context.workspace) {
+    void router.push(listPath + '/new')
+    return
+  }
   editing.value = {
     id: (context.workspace ? 'org-' : 'custom-') + crypto.randomUUID(),
     name: '',
@@ -186,6 +217,10 @@ function create() {
   restored.value = false
 }
 function edit(e: Exercise) {
+  if (!editor && context.workspace) {
+    void router.push(listPath + '/' + encodeURIComponent(e.id))
+    return
+  }
   editing.value = clone(e)
   editing.value.scope = e.scope || 'organization'
   editing.value.body_parts = exerciseAreas(e)
@@ -193,10 +228,11 @@ function edit(e: Exercise) {
   editing.value.equipment_items = equipmentCategories(e)
   restored.value = false
 }
-async function close() {
+async function close(navigate = true) {
   editing.value = undefined
   restored.value = false
   await removeDraft(key)
+  if (navigate && !disposed && editor && route.path === initialPath) await router.push(listPath)
 }
 watch(
   editing,
@@ -208,15 +244,13 @@ watch(
   },
   { deep: true },
 )
+const returnToList = ref(false)
 const command = useCommand<'save' | 'active'>(
-  key,
+  commandKey,
   async () => {
-    await close()
+    await close(false)
     await load()
-    message.value = language(
-      'Exercise library updated. Published instructions are preserved.',
-      'تم تحديث المكتبة. تبقى التعليمات المنشورة محفوظة.',
-    )
+    if (!disposed && editor && route.path === initialPath) returnToList.value = true
   },
   (action, args) =>
     action === 'save'
@@ -227,6 +261,25 @@ const command = useCommand<'save' | 'active'>(
           String(args.operation),
         )
       : context.exerciseActive(args.exercise as Exercise, String(args.operation)),
+  {
+    successMessage: (action) =>
+      action === 'save'
+        ? language('Exercise saved.', 'تم حفظ التمرين.')
+        : language('Exercise availability updated.', 'تم تحديث إتاحة التمرين.'),
+  },
+)
+watch(
+  () => command.state.busy,
+  (busy) => {
+    if (
+      !busy &&
+      !command.state.pending &&
+      returnToList.value &&
+      !disposed &&
+      route.path === initialPath
+    )
+      void router.replace(listPath)
+  },
 )
 const resourceFiles = ref<UploadedAsset[]>([]),
   resourceSearch = ref(''),
@@ -318,8 +371,20 @@ async function archive(e: Exercise) {
 onMounted(async () => {
   await load()
   if (!authorized.value) return
-  const draft = await getDraft<Exercise>(key)
-  if (draft) {
+  const draft = await loadEditorDraft<Exercise>(commandKey, editor)
+  if (disposed) return
+  availableDraft.value = draft ? (draft.revision ? draft.id : 'new') : ''
+  if (editor) {
+    if (draft && (editor === 'new' ? !draft.revision : draft.id === editor)) {
+      editing.value = draft
+      restored.value = true
+    } else if (editor === 'new') create()
+    else {
+      const item = exercises.value.find((e) => e.id === editor && context.editableExercise(e))
+      if (item) edit(item)
+      else error.value = language('This exercise cannot be edited.', 'لا يمكن تعديل هذا التمرين.')
+    }
+  } else if (!context.workspace && draft) {
     editing.value = draft
     restored.value = true
   }
@@ -331,10 +396,21 @@ onMounted(async () => {
     class="container page exercise-page"
     :class="{ 'mobile-detail': mobileDetail, 'filters-open': filtersOpen }"
   >
-    <header class="page-heading heading-actions">
+    <RouterLink v-if="editor" class="back-link" :to="listPath">{{
+      language('Back to exercises', 'العودة إلى التمارين')
+    }}</RouterLink>
+    <PageHeading class="page-heading heading-actions">
       <div>
         <p class="overline">{{ language('Your coaching toolkit', 'أدواتك التدريبية') }}</p>
-        <h1>{{ language('Exercises', 'التمارين') }}</h1>
+        <h1>
+          {{
+            editor
+              ? editor === 'new'
+                ? language('Create exercise', 'إنشاء تمرين')
+                : language('Edit exercise', 'تعديل التمرين')
+              : language('Exercises', 'التمارين')
+          }}
+        </h1>
         <p>
           {{
             language(
@@ -344,12 +420,27 @@ onMounted(async () => {
           }}
         </p>
       </div>
-      <button class="button" v-if="!editing && authorized" :disabled="busy" @click="create">
+      <button
+        class="button"
+        v-if="!editor && !editing && authorized"
+        :disabled="busy"
+        @click="create"
+      >
         {{ language('Create exercise', 'إنشاء تمرين') }}
       </button>
-    </header>
+    </PageHeading>
     <p v-if="error" class="notice error" role="alert">{{ error }}</p>
-    <p v-if="message" class="notice success" role="status">{{ message }}</p>
+    <p v-if="!editor && availableDraft" class="notice">
+      {{
+        language(
+          'An unfinished exercise is saved on this device.',
+          'يوجد تمرين غير مكتمل محفوظ على هذا الجهاز.',
+        )
+      }}
+      <RouterLink class="text-link" :to="listPath + '/' + availableDraft">{{
+        language('Continue draft', 'متابعة المسودة')
+      }}</RouterLink>
+    </p>
     <CommandStatus :command="command" :show-notice="false" />
     <section v-if="editing && authorized" class="panel exercise-editor">
       <form class="context-form" @submit.prevent="save">
@@ -362,7 +453,7 @@ onMounted(async () => {
                   : language('New exercise', 'تمرين جديد')
               }}
             </h2>
-            <button type="button" class="text-link" :disabled="busy" @click="close">
+            <button type="button" class="text-link" :disabled="busy" @click="close()">
               {{ language('Discard and close', 'تجاهل وإغلاق') }}
             </button>
           </div>
@@ -372,8 +463,8 @@ onMounted(async () => {
           <p>
             {{
               language(
-                'Assigned trainees see the instructions captured when you publish a plan. Library sharing is shown below.',
-                'يرى المتدرب التعليمات المحفوظة عند نشر الخطة. نطاق مشاركة المكتبة موضح أدناه.',
+                'Assigned athletes see the instructions captured when you publish a plan. Library sharing is shown below.',
+                'يرى الرياضي التعليمات المحفوظة عند نشر الخطة. نطاق مشاركة المكتبة موضح أدناه.',
               )
             }}
           </p>
@@ -415,7 +506,7 @@ onMounted(async () => {
                 >{{ language('Available to', 'متاح لـ')
                 }}<select v-model="editing.scope">
                   <option value="organization">
-                    {{ language('All trainers in this institution', 'كل مدربي هذه المؤسسة') }}
+                    {{ language('All coaches in this institution', 'كل مدربي هذه المؤسسة') }}
                   </option>
                   <option value="private">{{ language('Only me', 'أنا فقط') }}</option>
                 </select></label
@@ -425,8 +516,8 @@ onMounted(async () => {
                   editing.scope === 'organization'
                     ? language('Shared within this institution.', 'مشترك داخل هذه المؤسسة.')
                     : language(
-                        'Only you can find this exercise in the library. Assigned trainees can see its published demonstration.',
-                        'أنت فقط ترى التمرين في المكتبة. يرى المتدربون المعيّنون الشرح المنشور.',
+                        'Only you can find this exercise in the library. Assigned athletes can see its published demonstration.',
+                        'أنت فقط ترى التمرين في المكتبة. يرى الرياضيون المعيّنون الشرح المنشور.',
                       )
                 }}
               </p>
@@ -482,7 +573,11 @@ onMounted(async () => {
               <summary>{{ language('Choose an uploaded file', 'اختر ملفاً مرفوعاً') }}</summary>
               <label
                 >{{ language('Search uploaded files', 'البحث في الملفات المرفوعة')
-                }}<input type="search" v-model="resourceSearch" @input="findResources()"
+                }}<input
+                  :placeholder="language('Search uploaded files…', 'ابحث في الملفات المرفوعة…')"
+                  type="search"
+                  v-model="resourceSearch"
+                  @input="findResources()"
               /></label>
               <p v-if="resourceError" role="alert">{{ resourceError }}</p>
               <div class="uploaded-options">
@@ -578,7 +673,7 @@ onMounted(async () => {
         </fieldset>
       </form>
     </section>
-    <PageState v-if="!editing" :loading="loading" @retry="load">
+    <PageState v-if="!editor && !editing" :loading="loading" @retry="load">
       <div class="catalog-controls">
         <button
           type="button"
@@ -591,7 +686,15 @@ onMounted(async () => {
         <div class="library-tools">
           <label class="grow"
             >{{ language('Search exercises', 'البحث عن تمرين')
-            }}<input v-model="search" type="search" /></label
+            }}<input
+              :placeholder="
+                language(
+                  'Search exercises, equipment or muscles…',
+                  'ابحث عن تمرين أو معدات أو عضلات…',
+                )
+              "
+              v-model="search"
+              type="search" /></label
           ><label
             >{{ language('Library', 'المكتبة')
             }}<select v-model="scope">
@@ -713,30 +816,15 @@ onMounted(async () => {
               <PhArrowRight class="catalog-arrow" :size="17" aria-hidden="true" />
             </button>
           </div>
-          <nav
-            class="catalog-pagination"
-            :aria-label="language('Exercise pages', 'صفحات التمارين')"
-          >
-            <button
-              class="icon-button"
-              type="button"
-              :disabled="page === 0"
-              :aria-label="language('Previous exercises', 'التمارين السابقة')"
-              @click="changePage(-1)"
-            >
-              <PhArrowLeft :size="18" />
-            </button>
-            <span>{{ page + 1 }} / {{ pageCount }}</span>
-            <button
-              class="icon-button"
-              type="button"
-              :disabled="page + 1 >= pageCount"
-              :aria-label="language('Next exercises', 'التمارين التالية')"
-              @click="changePage(1)"
-            >
-              <PhArrowRight :size="18" />
-            </button>
-          </nav>
+          <ListPagination
+            :offset="page * pageSize"
+            :page-size="appliedLimit"
+            :sizes="pageSizes"
+            @page-size="changeLimit"
+            :total="visible.length"
+            :label="language('Exercise pages', 'صفحات التمارين')"
+            @page="(offset) => changePage(offset / pageSize - page)"
+          />
         </section>
         <section
           v-if="selectedExercise"
@@ -944,15 +1032,7 @@ onMounted(async () => {
   flex-shrink: 0;
   color: var(--muted);
 }
-.catalog-pagination {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-top: 1px solid var(--line);
-  font-size: 0.8rem;
-}
+
 .catalog-detail {
   padding: 24px;
   overflow: auto;

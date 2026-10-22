@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { getDraft, storeDraft } from '../../lib/storage'
@@ -112,17 +113,19 @@ onMounted(async () => {
     <RouterLink class="back-link" :to="coach ? '/coach/more' : '/more'"
       >← {{ l('More tools', 'أدوات إضافية') }}</RouterLink
     >
-    <header class="page-heading">
-      <h1>{{ l('Support', 'الدعم') }}</h1>
-      <p>
-        {{
-          l(
-            'Explain the issue once. Keep the response with it.',
-            'اشرح المشكلة مرة واحدة واحتفظ بالرد معها.',
-          )
-        }}
-      </p>
-    </header>
+    <PageHeading class="page-heading"
+      ><div>
+        <h1>{{ l('Support', 'الدعم') }}</h1>
+        <p>
+          {{
+            l(
+              'Explain the issue once. Keep the response with it.',
+              'اشرح المشكلة مرة واحدة واحتفظ بالرد معها.',
+            )
+          }}
+        </p>
+      </div></PageHeading
+    >
     <CommandStatus :command="command" /><PageState :loading="loading" :error="error" @retry="load"
       ><p class="notice">
         {{
@@ -132,7 +135,7 @@ onMounted(async () => {
           )
         }}
       </p>
-      <div class="ongoing-layout">
+      <div class="ongoing-layout support-layout" :class="{ 'without-cases': !cases.length }">
         <section class="form-stack">
           <label
             >{{ l('Show cases', 'عرض الطلبات')
@@ -254,3 +257,15 @@ onMounted(async () => {
     >
   </div>
 </template>
+
+<style scoped>
+.support-layout.without-cases {
+  grid-template-columns: minmax(0, 1fr);
+}
+.support-layout.without-cases > section {
+  gap: var(--space-3);
+}
+.support-layout.without-cases .support-list:empty {
+  display: none;
+}
+</style>

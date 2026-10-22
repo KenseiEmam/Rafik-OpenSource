@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { programContext } from '../coaching/program-context'
@@ -50,37 +51,39 @@ onUnmounted(() => generation++)
 <template>
   <OrganizationNav />
   <div class="container page feedback-page">
-    <header class="page-heading">
-      <h1>
-        {{
-          context.view === 'trainer'
-            ? l('Workplace feedback', 'تقييم بيئة العمل')
-            : l('Session feedback', 'تقييم الجلسات')
-        }}
-      </h1>
-      <p>
-        {{
-          context.view === 'trainer'
-            ? l(
-                'How is working here going for you? One optional response each month.',
-                'كيف تسير تجربة العمل هنا؟ إجابة اختيارية واحدة كل شهر.',
-              )
-            : l(
-                'Tell us how your completed training felt. Every response is optional.',
-                'أخبرنا عن تجربتك في التدريب المكتمل. كل إجابة اختيارية.',
-              )
-        }}
-      </p>
-    </header>
+    <PageHeading class="page-heading"
+      ><div>
+        <h1>
+          {{
+            context.view === 'trainer'
+              ? l('Workplace feedback', 'تقييم بيئة العمل')
+              : l('Session feedback', 'تقييم الجلسات')
+          }}
+        </h1>
+        <p>
+          {{
+            context.view === 'trainer'
+              ? l(
+                  'How is working here going for you? One optional response each month.',
+                  'كيف تسير تجربة العمل هنا؟ إجابة اختيارية واحدة كل شهر.',
+                )
+              : l(
+                  'Tell us how your completed training felt. Every response is optional.',
+                  'أخبرنا عن تجربتك في التدريب المكتمل. كل إجابة اختيارية.',
+                )
+          }}
+        </p>
+      </div></PageHeading
+    >
     <p class="notice">
       {{
         context.view === 'trainer'
           ? l(
-              'Your response is linked to your account and reported to institution administrators. It is not anonymous. Other trainers cannot view your response.',
+              'Your response is linked to your account and reported to institution administrators. It is not anonymous. Other coaches cannot view your response.',
               'ترتبط إجابتك بحسابك وتُعرض لمسؤولي المؤسسة. ليست مجهولة الهوية. لا يراها المدربون الآخرون.',
             )
           : l(
-              'Your session rating is linked to you. Institution administrators and your current trainer can use it in session-experience reports. It is not an overall trainer rating.',
+              'Your session rating is linked to you. Institution administrators and your current coach can use it in session-experience reports. It is not an overall coach rating.',
               'يرتبط تقييم الجلسة بك. يستخدمه مسؤولو المؤسسة ومدربك الحالي في تقارير تجربة الجلسات. ليس تقييماً عاماً للمدرب.',
             )
       }}
@@ -167,7 +170,6 @@ onUnmounted(() => generation++)
 </template>
 <style scoped>
 .feedback-page {
-  max-width: 860px;
 }
 .feedback-page > .notice {
   margin-bottom: 1.5rem;

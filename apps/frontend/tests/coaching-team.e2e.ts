@@ -81,17 +81,20 @@ test('admin builds a coaching team; a supporting coach sees training only until 
 
     const base = `/organization/${workspace}/admin`
     await f.login(page, f.owner, base + '/people')
-    await page.getByRole('button', { name: 'Manage R4 Athlete', exact: true }).click()
+    // Management lives on the profile's Manage tab; the directory icon opens it directly.
+    await page.getByRole('link', { name: 'Manage R4 Athlete', exact: true }).click()
+    await expect(page).toHaveURL(new RegExp(`/members/${athlete.id}\\?tab=manage`))
+    const manageUrl = page.url()
     const team = page.locator('.coaching-team')
     await expect(team.getByText('None yet.')).toBeVisible()
-    await team
-      .getByRole('checkbox', { name: 'Supporting Coach With A Long Name', exact: true })
-      .check()
+    // The sport comes first; the coach list is then filtered to coaches who cover it.
     await team.getByLabel('Sport or specialty they cover').selectOption({ label: 'Football' })
+    await team.getByRole('checkbox', { name: /^Supporting Coach With A Long Name/ }).check()
     await team.getByRole('button', { name: 'Add supporting coach', exact: true }).click()
     await expect(team.locator('.coaching-links li')).toContainText(
       'Supporting Coach With A Long Name · Football',
     )
+    await page.goto(base + '/people')
     const card = page
       .locator('.organization-person')
       .filter({ has: page.getByRole('heading', { name: 'R4 Athlete', exact: true }) })
@@ -120,8 +123,7 @@ test('admin builds a coaching team; a supporting coach sees training only until 
       localStorage.setItem('rafik.theme', 'dark')
     })
     await page.setViewportSize({ width: 320, height: 740 })
-    await page.reload()
-    await page.getByRole('button', { name: /R4 Athlete$/ }).click()
+    await page.goto(manageUrl)
     await expect(page.getByRole('heading', { name: 'المدربون المساندون' })).toBeVisible()
     await inspect(page, 'admin-team-ar-dark-320', info)
 

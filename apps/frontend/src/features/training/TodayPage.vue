@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageHeading from '../../components/PageHeading.vue'
 import UpcomingAppointments from '../appointments/UpcomingAppointments.vue'
 import CoachingActivity from '../ongoing/CoachingActivity.vue'
 import { computed, onMounted, ref } from 'vue'
@@ -109,7 +110,7 @@ onMounted(load)
 </script>
 <template>
   <div class="container page">
-    <div class="work-heading">
+    <PageHeading class="work-heading">
       <div>
         <p class="overline">{{ t('training') }}</p>
         <h1>
@@ -125,7 +126,7 @@ onMounted(load)
           }}
         </p>
       </div>
-    </div>
+    </PageHeading>
     <PageState :loading="loading" :error="loading || !active.length ? error : ''" @retry="load"
       ><div v-if="open.length" class="resume-banner">
         <PhClock :size="25" aria-hidden="true" />
@@ -272,7 +273,10 @@ onMounted(load)
           <h2>
             {{
               relationships.some((r) => r.state === 'archived')
-                ? language('Your training relationship is paused.', 'علاقتك التدريبية متوقفة مؤقتاً.')
+                ? language(
+                    'Your training relationship is paused.',
+                    'علاقتك التدريبية متوقفة مؤقتاً.',
+                  )
                 : language('Your next program will appear here.', 'سيظهر برنامجك التالي هنا.')
             }}
           </h2>
@@ -289,7 +293,11 @@ onMounted(load)
                   )
             }}
           </p>
-          <RouterLink v-if="relationships.some((r) => r.state === 'archived')" to="/history" class="text-link">
+          <RouterLink
+            v-if="relationships.some((r) => r.state === 'archived')"
+            to="/history"
+            class="text-link"
+          >
             {{ language('View training history', 'عرض سجل التدريب') }}
             <PhArrowRight :size="18" class="directional" aria-hidden="true" />
           </RouterLink>

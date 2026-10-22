@@ -72,18 +72,17 @@ test('coach adds a concurrent goal-specific plan, the athlete sees both, then pl
     const plan = JSON.parse(
       readFileSync(resolve(import.meta.dirname, '../../backend/content/starter.json'), 'utf8'),
     ).prescription
-    const publish = async (title: string) =>
-      (
-        await f.call(f.coach, endpoint + '/programs', {
-          operation: randomUUID(),
-          action: 'publish',
-          view: 'trainer',
-          id: randomUUID(),
-          title,
-          draft: plan,
-          revision: null,
-        })
-      ).version.id as string
+    const release = (title: string, id = randomUUID(), revision: number | null = null) =>
+      f.call(f.coach, endpoint + '/programs', {
+        operation: randomUUID(),
+        action: 'publish',
+        view: 'trainer',
+        id,
+        title,
+        draft: plan,
+        revision,
+      })
+    const publish = async (title: string) => (await release(title)).version.id as string
     const speed = await publish('Speed block'),
       strength = await publish('Strength block'),
       mobility = await publish('Mobility block')
@@ -107,7 +106,8 @@ test('coach adds a concurrent goal-specific plan, the athlete sees both, then pl
     await expect(
       page.getByText('Speed block · Match speed · Football', { exact: true }),
     ).toBeVisible()
-    await expect(page.getByLabel('Existing plans')).toHaveValue('')
+    const chosen = page.getByRole('region', { name: 'Selected athletes', exact: true })
+    await expect(chosen).toContainText('Added alongside current plans')
     await page.getByLabel('Goal (optional)').fill('General strength')
     await page.getByRole('button', { name: /^Review assignment/ }).click()
     await expect(page.getByText('R4 Athlete — Added alongside current plans')).toBeVisible()
@@ -115,6 +115,19 @@ test('coach adds a concurrent goal-specific plan, the athlete sees both, then pl
     await page.getByRole('button', { name: 'Confirm assignment', exact: true }).click()
     const overlap = page.getByRole('status').filter({ hasText: 'Overlapping plans' })
     await expect(overlap).toContainText('R4 Athlete: Speed block · Match speed')
+
+    // Searching the same program again greys out an athlete who is already on it.
+    await page.goto(`${base}/deliver/${strength}`)
+    await page.getByRole('searchbox', { name: 'Find athletes', exact: true }).fill('R4 Athlete')
+    const already = page.getByRole('button', {
+      name: 'R4 Athlete: already on this program',
+      exact: true,
+    })
+    await expect(already).toBeDisabled()
+    await expect(already).toContainText('Already on this program')
+    await page.goto(`${base}/deliver/${strength}?member=${athlete.id}`)
+    await expect(page.getByRole('alert')).toContainText('Already on this program')
+    await expect(page.getByRole('button', { name: /^Review assignment/ })).toBeDisabled()
 
     // The athlete sees both plans, their labels and a same-day notice.
     await f.login(athletePage, f.client, `/organization/${workspace}/trainee/training`)
@@ -143,8 +156,15 @@ test('coach adds a concurrent goal-specific plan, the athlete sees both, then pl
     // Replacing is an explicit per-athlete choice.
     await page.goto(`${base}/deliver/${mobility}?member=${athlete.id}`)
     await page
-      .getByLabel('Existing plans')
-      .selectOption({ label: 'Replace: Strength block · General strength' })
+      .getByRole('button', { name: 'Change plan choice for R4 Athlete', exact: true })
+      .click()
+    const dialog = page.getByRole('dialog')
+    await dialog.getByRole('radio', { name: /Replace Strength block · General strength/ }).check()
+    await dialog.getByRole('button', { name: 'Apply', exact: true }).click()
+    await expect(dialog).toHaveCount(0)
+    await expect(
+      page.getByRole('region', { name: 'Selected athletes', exact: true }),
+    ).toContainText('Replaces Strength block · General strength')
     await page.getByRole('button', { name: /^Review assignment/ }).click()
     await expect(
       page.getByText('R4 Athlete — Replaces Strength block · General strength'),
@@ -155,6 +175,37 @@ test('coach adds a concurrent goal-specific plan, the athlete sees both, then pl
     await expect(athletePage.getByRole('heading', { name: 'Mobility block' })).toBeVisible()
     await expect(athletePage.getByRole('heading', { name: 'Strength block' })).toHaveCount(0)
     await expect(athletePage.getByRole('heading', { name: 'Speed block' })).toHaveCount(0)
+
+    // A renamed, republished version of the athlete's program is the same program: adding moves them.
+    const tempo = randomUUID(),
+      first = await release('Tempo block', tempo)
+    await f.call(f.coach, endpoint + '/delivery', {
+      operation: randomUUID(),
+      action: 'assign',
+      view: 'trainer',
+      version_id: first.version.id,
+      start_date: today,
+      schedule_mode: 'flexible',
+      members: [{ id: athlete.id, revision: athlete.revision, replaces: null }],
+    })
+    const second = await release('Tempo block II', tempo, first.plan.draft_version)
+    await page.goto(`${base}/deliver/${second.version.id}`)
+    await page.getByRole('searchbox', { name: 'Find athletes', exact: true }).fill('R4 Athlete')
+    const move = page.getByRole('button', { name: 'Add R4 Athlete', exact: true })
+    await expect(move).toContainText('On version 1 · will move to this version')
+    await move.click()
+    await expect(
+      page.getByRole('region', { name: 'Selected athletes', exact: true }),
+    ).toContainText('Moves from version 1 to this version')
+    await page.getByRole('button', { name: /^Review assignment/ }).click()
+    await expect(page.getByText('R4 Athlete — Moves from version 1 to this version')).toBeVisible()
+    await page.getByRole('button', { name: 'Confirm assignment', exact: true }).click()
+    await expect(page.getByRole('heading', { name: 'Ready for their next session.' })).toBeVisible()
+    await athletePage.reload()
+    await expect(athletePage.getByRole('heading', { name: 'Tempo block II' })).toBeVisible()
+    await expect(
+      athletePage.getByRole('heading', { name: 'Tempo block', exact: true }),
+    ).toHaveCount(0)
 
     // Arabic dark phone view of two plans.
     await f.call(f.coach, endpoint + '/delivery', {

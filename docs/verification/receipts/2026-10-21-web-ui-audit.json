@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-21",
+  "scope": "Web dashboard; Android excluded",
+  "baseline": {
+    "chromium": {
+      "states": 63,
+      "viewportImagesInspected": 63
+    },
+    "webkitPhone": {
+      "states": 46,
+      "inspection": "Selected popup images only"
+    },
+    "limits": [
+      "Three Chromium screenshots contained transient loading states",
+      "Platform administrator and populated report/history/thread states not fully reviewed",
+      "No physical-device or institution live-data acceptance"
+    ]
+  },
+  "finalControls": {
+    "command": "RAFIK_UI_AUDIT=1 RAFIK_UI_AUDIT_CONTROLS=1 npm run test:e2e --workspace @rafik/frontend -- ui-audit.e2e.ts --grep inventory",
+    "result": "2 passed (4.7m)",
+    "engines": ["chromium", "webkit-phone"],
+    "statesPerEngine": [
+      "Invitation open",
+      "Close institution dialog",
+      "Timezone open",
+      "Exercise picker open and keyboard selection",
+      "Password show/hide"
+    ],
+    "layoutIssues": 0,
+    "axeViolations": 0,
+    "viewportImagesInspected": 10,
+    "cleanup": "Isolated browser cleanup complete"
+  },
+  "priorProfileTests": {
+    "passed": 3,
+    "failed": 1,
+    "failure": "WebKit long profile journey timed out at 180 seconds; not full acceptance",
+    "additional": "Separate WebKit later-page directory navigation passed"
+  },
+  "docs": {
+    "links": 380,
+    "headingLinks": 41,
+    "documents": 57,
+    "unitTests": 2
+  },
+  "landing": {
+    "contentTests": 3,
+    "result": "passed",
+    "runtime": "root Vitest 5.0.1; landing checkout configuration",
+    "pr": "https://github.com/KenseiEmam/rafik-landing/pull/29"
+  },
+  "finalLayouts": {
+    "result": "2 passed (2.9m)",
+    "engines": ["chromium", "webkit-phone"],
+    "states": [
+      "English/light 1440px member management",
+      "English/light 1440px institution settings",
+      "Arabic/dark 320px member management",
+      "Arabic/dark 320px institution settings"
+    ],
+    "layoutIssues": 0,
+    "axeViolations": 0,
+    "imagesInspected": "Four per engine: desktop viewports and phone full-page captures",
+    "regression": "Initial focused run failed heading-order in General settings in both engines; h3 corrected to h2, then passed",
+    "cleanup": "Isolated browser cleanup complete"
+  },
+  "format": {
+    "changedFiles": "passed",
+    "wholeFrontend": "123 warnings in unchanged files; no changed frontend file among warnings"
+  }
+}

@@ -7,9 +7,12 @@ async function fixture() {
   const f = await teamFixture(),
     id = randomUUID()
   await f.call(f.owner, '/v1/workspaces', { id, kind: 'organization', name: 'Madar nutrition' })
+  // A second athlete: drafts must stay scoped when staff switch between athletes.
+  const second = await f.createPerson('R4 Second Athlete')
   for (const [person, roles] of [
     [f.coach, ['trainer']],
     [f.client, ['trainee']],
+    [second, ['trainee']],
   ] as const) {
     const token = randomBytes(32).toString('hex')
     await f.call(f.owner, `/v1/workspaces/${id}`, {
@@ -56,8 +59,18 @@ test('organization plan publication flows through trainee portions, consent, cor
     client = await ctx.newPage()
   try {
     await f.login(page, f.owner, `${f.base}/admin/nutrition`)
-    await page.getByRole('checkbox', { name: 'R4 Athlete', exact: true }).click()
+    // A new plan starts by choosing the athlete in a dialog limited to the closest matches.
+    await page.getByRole('button', { name: 'Create a plan', exact: true }).first().click()
+    const chooser = page.getByRole('dialog', { name: 'Create a nutrition plan' })
+    await expect(chooser.getByRole('checkbox')).toHaveCount(2)
+    await chooser.getByRole('checkbox', { name: 'R4 Athlete', exact: true }).click()
     await page.getByRole('button', { name: 'Create plan', exact: true }).click()
+    // The editor grows with its form; the panel is not a fixed-height scroller.
+    await expect
+      .poll(() =>
+        page.locator('.org-nutrition-panel').evaluate((e) => getComputedStyle(e).overflowY),
+      )
+      .toBe('visible')
     await page.getByRole('spinbutton', { name: 'Energy (kcal)', exact: true }).fill('2100')
     await page.getByRole('spinbutton', { name: 'Protein (g)', exact: true }).fill('130')
     await page.getByLabel('Guidance', { exact: true }).fill('Adjust portions to your routine.')
@@ -68,20 +81,34 @@ test('organization plan publication flows through trainee portions, consent, cor
     await page.getByRole('button', { name: 'Review plan', exact: true }).click()
     await expect(page.getByText('Ready to publish for R4 Athlete')).toBeVisible()
     await page.getByRole('button', { name: 'Publish plan', exact: true }).click()
-    await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
+    await expect(
+      page.locator('.rafik-toast').filter({ hasText: 'Nutrition plan published.' }).last(),
+    ).toBeVisible()
     await expect(page.locator('.nutrition-totals')).toContainText('2100')
+    // Editing the example day opens only the meal editor, on the Example tab.
+    await page.getByRole('button', { name: 'Example meal plan', exact: true }).click()
+    await page.getByRole('button', { name: 'Edit meal plan', exact: true }).click()
+    await expect(page.getByRole('heading', { name: 'Edit example meal plan' })).toBeVisible()
+    await expect(page.getByRole('spinbutton', { name: 'Energy (kcal)', exact: true })).toHaveCount(
+      0,
+    )
+    await expect(page.getByText('Add food to example day', { exact: true })).toBeVisible()
+    await page.getByRole('button', { name: 'Close editor', exact: true }).click()
+    await page.getByRole('button', { name: 'Plan', exact: true }).click()
     await page.screenshot({ path: `artifacts/r16-plan-${info.project.name}.png` })
     await f.login(client, f.client, `${f.base}/trainee/nutrition`)
     await client.getByRole('button', { name: 'Example meal plan', exact: true }).click()
     await client.getByRole('button', { name: 'Record this food', exact: true }).click()
     await client.getByRole('spinbutton', { name: 'Amount eaten', exact: true }).fill('75')
     await client.getByRole('button', { name: 'Save food entry', exact: true }).click()
-    await expect(client.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
+    await expect(
+      client.locator('.rafik-toast').filter({ hasText: 'Food entry saved.' }).last(),
+    ).toBeVisible()
     await page.getByRole('button', { name: 'Food diary', exact: true }).click()
     await page.getByRole('button', { name: 'Refresh', exact: true }).click()
     await expect(page.getByText('Food records are not shared', { exact: true })).toBeVisible()
     await expect(page.locator('.org-food-row')).toHaveCount(0)
-    await client.getByRole('button', { name: 'Share diary with organization', exact: true }).click()
+    await client.getByRole('button', { name: 'Share diary with institution', exact: true }).click()
     await expect(
       client.getByRole('button', { name: 'Stop sharing diary', exact: true }),
     ).toBeEnabled()
@@ -98,7 +125,7 @@ test('organization plan publication flows through trainee portions, consent, cor
     await expect(page.locator('.org-sharing').last()).toContainText('90 g')
     await client.getByRole('button', { name: 'Stop sharing diary', exact: true }).click()
     await expect(
-      client.getByRole('button', { name: 'Share diary with organization', exact: true }),
+      client.getByRole('button', { name: 'Share diary with institution', exact: true }),
     ).toBeEnabled()
     await page.getByRole('button', { name: 'Refresh', exact: true }).click()
     await expect(page.locator('.org-food-row')).toHaveCount(0)
@@ -142,11 +169,11 @@ test('organization nutrition retains scoped drafts and replays a lost publicatio
     await page.reload()
     await page.getByRole('button', { name: 'Continue draft', exact: true }).click()
     await expect(page.getByLabel('Guidance', { exact: true })).toHaveValue('Client-specific draft')
-    await page.getByRole('button', { name: 'Change trainee', exact: true }).click()
-    await page.getByRole('checkbox', { name: 'R4 Coach', exact: true }).click()
+    await page.getByRole('button', { name: 'Change athlete', exact: true }).click()
+    await page.getByRole('checkbox', { name: 'R4 Second Athlete', exact: true }).click()
     await page.getByRole('button', { name: 'Create plan', exact: true }).click()
     await expect(page.getByLabel('Guidance', { exact: true })).toHaveValue('')
-    await page.getByRole('button', { name: 'Change trainee', exact: true }).click()
+    await page.getByRole('button', { name: 'Change athlete', exact: true }).click()
     await page.getByRole('checkbox', { name: 'R4 Athlete', exact: true }).click()
     await expect(page.getByLabel('Guidance', { exact: true })).toHaveValue('Client-specific draft')
     let drop = true
@@ -164,7 +191,9 @@ test('organization nutrition retains scoped drafts and replays a lost publicatio
     ).toBeVisible()
     await page.reload()
     await page.getByRole('button', { name: 'Retry saved change', exact: true }).click()
-    await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
+    await expect(
+      page.locator('.rafik-toast').filter({ hasText: 'Nutrition plan published.' }).last(),
+    ).toBeVisible()
     const data = await f.call(f.owner, `${f.endpoint}?view=admin&member=${f.member.id}`)
     expect(data.plans).toHaveLength(1)
     expect(data.current.guidance).toBe('Client-specific draft')
@@ -210,10 +239,12 @@ test('organization nutrition entry, editor and diary stay readable in both langu
           await page.reload()
           await expect(page.locator('.nutrition-totals')).toBeVisible()
           await expect.poll(() => layoutIssues(page)).toEqual([])
-          if (width >= 1024)
-            expect(
-              await page.locator('#main').evaluate((el) => el.scrollHeight <= el.clientHeight + 1),
-            ).toBe(true)
+          // The panel grows with its content; it never becomes an inner scroller.
+          expect(
+            await page
+              .locator('.org-nutrition-panel')
+              .evaluate((el) => el.scrollHeight <= el.clientHeight + 1),
+          ).toBe(true)
           expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
           await page.screenshot({
             path: `artifacts/r16-${info.project.name}-${width}-${lang}-${theme}.png`,
@@ -293,7 +324,9 @@ test('trainee food draft survives date changes and an uncertain save without dup
     ).toBeVisible()
     await page.reload()
     await page.getByRole('button', { name: 'Retry saved change', exact: true }).click()
-    await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible()
+    await expect(
+      page.locator('.rafik-toast').filter({ hasText: 'Food entry saved.' }).last(),
+    ).toBeVisible()
     await page.getByRole('button', { name: 'Food diary', exact: true }).click()
     await expect(page.locator('.org-food-row')).toHaveCount(1)
     await expect(page.locator('.org-food-row')).toContainText('Home lunch')

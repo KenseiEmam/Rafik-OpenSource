@@ -903,6 +903,7 @@ model workspace_invitations {
   workspace_id                                   String     @db.Uuid
   email                                          String
   roles                                          String[]
+  sport_ids                                      String[] @default([]) @db.Uuid
   token_hash                                     String     @unique
   created_by                                     String?    @db.Uuid
   expires_at                                     DateTime   @default(dbgenerated("(now() + '7 days'::interval)")) @db.Timestamptz(6)

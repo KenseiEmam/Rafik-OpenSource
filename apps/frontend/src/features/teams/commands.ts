@@ -6,6 +6,8 @@ import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { errorMessage } from '../../lib/i18n'
 import { commandRejected } from '../ongoing/helpers'
 import { notifyErrorOnce, notifySuccess } from '../../lib/feedback'
+// A remounted screen must wait for the original dispatch before offering replay.
+const activeCommands = new Map<string, Promise<void>>()
 type Name = keyof Database['public']['Functions']
 type Pending<N extends string> = { name: N; args: Record<string, unknown> }
 // One explicit user command, persisted before dispatch. This is not a background queue.
@@ -30,14 +32,20 @@ export function useCommand<N extends string = Name>(
   let noticeTimer: ReturnType<typeof setTimeout> | undefined
   onMounted(async () => {
     try {
+      const active = activeCommands.get(key)
+      if (active) {
+        state.busy = true
+        await active.catch(() => undefined)
+      }
       state.pending = (await getDraft<Pending<N>>(key)) || null
     } catch (e) {
       state.error = errorMessage(e)
     } finally {
       state.ready = true
+      state.busy = false
     }
   })
-  async function run(name?: N, args: Record<string, unknown> = {}) {
+  async function execute(name?: N, args: Record<string, unknown> = {}) {
     if (state.busy || !state.ready) return
     state.busy = true
     state.error = ''
@@ -74,6 +82,16 @@ export function useCommand<N extends string = Name>(
     } finally {
       state.busy = false
     }
+  }
+  function run(name?: N, args: Record<string, unknown> = {}): Promise<void> {
+    if (activeCommands.has(key)) return Promise.resolve()
+    const work = execute(name, args)
+    activeCommands.set(key, work)
+    const clear = () => {
+      if (activeCommands.get(key) === work) activeCommands.delete(key)
+    }
+    void work.then(clear, clear)
+    return work
   }
   return { state, run }
 }

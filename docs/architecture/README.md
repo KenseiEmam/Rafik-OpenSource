@@ -55,6 +55,8 @@ Domain writes use explicit API commands. The server validates current authority 
 - **Concurrent plans:** an athlete may hold several active plans. Each plan has an optional goal and sport label, and only one active plan per published version is allowed.
   - Assigning either adds a plan or explicitly replaces a named one; `end` archives one. Overlapping dates are reported to staff and a same-day notice is shown to the athlete, without blocking.
   - Workout sessions stay keyed by assignment, so history follows each plan. Supporting coaches are narrowed to plans and sessions labelled with their linked sport. The one intentional exception: overlap warnings show them other plans' title, goal and dates only.
+- **Member profiles:** `/organization/:workspace/:view/members/:member` is the shared profile route; old athlete links remain aliases. Its identity read uses existing roster scope (administrators: institution members; coaches: coaching-linked athletes and self; athletes: self). Staff activity is administrator-only: current primary roster/supporting-link/upcoming-event counts and completed staffed events/coach-recorded workouts over the last 30 days. These are activity counts, not ratings. Account email is returned only to administrators. Profile management preserves existing administrator-only commands and optimistic revisions; display names are institution-local.
+- **Invitation sports:** `workspace_invitations.sport_ids` records optional descriptive labels selected by administrators. Issuance validates institution, active metadata and role compatibility; acceptance applies links in the same transaction as membership creation/reactivation. Athletes take sports only; coaches may also take specialties; administrators carry none. Pre-existing invitations default to no labels. Archived labels already issued on a valid invitation remain descriptive on acceptance; they grant no coaching access.
 - **Staff athlete profile** (`/organization/:workspace/:view/athletes/:member`): gathers what the viewer may already see about one athlete, using existing authorized endpoints only. It adds no API or access.
   - Primary coaches and admins also see nutrition. Primary coaches see current participation status; admins see consent setup only.
   - Supporting coaches see their sport's plans and sessions, and assessments from events they staffed.
@@ -113,3 +115,9 @@ No default telemetry or outbound data transfer is configured. Optional support f
 - [ADR 0021: organization-only supported web experience](../decisions/ADR-0021-organization-only-web-experience.md)
 
 Previous architecture notes are preserved as dated material in the [documentation archive](../archive/README.md); they are not current implementation guidance.
+
+## Web list and editor lifecycle
+
+Operational lists accept an optional bounded `limit` (1–100), retaining each API’s existing default when absent or invalid. The web exposes curated choices and URL persistence; matching totals remain server-scoped. Task `id` reads use the same institution/assignee authorization as the list and can resolve completed records independently of the active status filter. No new grant is introduced.
+
+Dedicated template/group/task/exercise editor routes preserve the existing command payloads and server authority. Device drafts are isolated by account, institution, role and entity; legacy drafts move only after durable storage of the scoped copy. A small in-memory active-dispatch registry prevents another mount of the same command scope from offering replay while the original runs. Reload after process loss still uses the durable exact command. Successful navigation waits for settlement and checks that the original screen is still mounted.

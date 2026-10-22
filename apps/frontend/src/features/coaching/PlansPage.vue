@@ -1,23 +1,27 @@
 <script setup lang="ts">
+import { PhTray } from '@phosphor-icons/vue'
+import { useListPageSize } from '../../lib/list-page-size'
+import PageHeading from '../../components/PageHeading.vue'
 import ProgramCover from './ProgramCover.vue'
 import OrganizationNav from '../organizations/OrganizationNav.vue'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { PhPlus, PhArrowRight, PhBarbell } from '@phosphor-icons/vue'
 import { user } from '../../app/auth'
 import { rows, request } from '../../lib/backend'
 import { useRoute } from 'vue-router'
 import { programContext } from './program-context'
 const context = programContext(useRoute())
-const next = ref<number | null>(null)
+const offset = ref(0),
+  total = ref(0)
 let loadSequence = 0
 import type { Plan, PlanVersion } from '../../lib/domain'
 import { language, t, errorMessage, dateLabel } from '../../lib/i18n'
+import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
-const search = ref(''),
-  limit = ref(12)
+const search = ref('')
 watch(search, () => {
-  limit.value = 12
-  if (context.workspace) void load(false, true)
+  offset.value = 0
+  if (context.workspace) void load(0, true)
 })
 const filtered = computed(() =>
   plans.value.filter(
@@ -28,7 +32,13 @@ const plans = ref<Plan[]>([])
 const versions = ref<PlanVersion[]>([])
 const loading = ref(true)
 const error = ref('')
-async function load(append = false, background = false) {
+const { recordLimit, appliedLimit, pageSizes, acceptLimit, changeLimit } = useListPageSize(
+  context.workspace ? 24 : 12,
+  () => {
+    void load(0)
+  },
+)
+async function load(page = offset.value, background = false) {
   const sequence = ++loadSequence
   if (!background) loading.value = true
   error.value = ''
@@ -37,19 +47,18 @@ async function load(append = false, background = false) {
       const result = await request<{
         items: (Plan & { version?: PlanVersion })[]
         next: number | null
+        total: number
       }>(
-        `/v1/workspaces/${context.workspace}/programs?view=${context.view}&search=${encodeURIComponent(search.value)}&offset=${append ? next.value || 0 : 0}`,
+        `/v1/workspaces/${context.workspace}/programs?view=${context.view}&search=${encodeURIComponent(search.value)}&offset=${page}&limit=${recordLimit.value}`,
       )
       if (sequence !== loadSequence) return
-      plans.value = append ? [...plans.value, ...result.items] : result.items
-      versions.value = append
-        ? [
-            ...versions.value,
-            ...result.items.flatMap((p) => (p.version ? [{ ...p.version, plan_id: p.id }] : [])),
-          ]
-        : result.items.flatMap((p) => (p.version ? [{ ...p.version, plan_id: p.id }] : []))
-      next.value = result.next
-      limit.value = plans.value.length
+      plans.value = result.items
+      versions.value = result.items.flatMap((p) =>
+        p.version ? [{ ...p.version, plan_id: p.id }] : [],
+      )
+      total.value = result.total
+      offset.value = page
+      acceptLimit()
     } else
       [plans.value, versions.value] = await Promise.all([
         rows<Plan>('plans', 'coach_id', user.value!.id),
@@ -63,11 +72,14 @@ async function load(append = false, background = false) {
   }
 }
 onMounted(() => load())
+onUnmounted(() => {
+  loadSequence++
+})
 </script>
 <template>
   <OrganizationNav v-if="context.workspace" />
   <div class="container page">
-    <div class="page-heading heading-actions">
+    <PageHeading class="page-heading heading-actions">
       <div>
         <p class="overline">{{ t('coaching') }}</p>
         <h1>{{ language('Programs', 'البرامج') }}</h1>
@@ -83,15 +95,26 @@ onMounted(() => load())
       <RouterLink v-if="context.view !== 'trainee'" class="button" :to="context.base + '/plans/new'"
         ><PhPlus :size="18" aria-hidden="true" />{{ t('newPlan') }}</RouterLink
       >
-    </div>
-    <PageState :loading="loading" :error="error" @retry="load()"
-      ><label v-if="search || plans.some((p) => !p.archived)" class="plan-search"
-        >{{ language('Find a plan', 'ابحث عن خطة')
+    </PageHeading>
+    <div class="list-controls">
+      <label v-if="search || plans.some((p) => !p.archived)" class="plan-search"
+        >{{ language('Search programs', 'البحث في البرامج')
         }}<input
           v-model="search"
           type="search"
-          :placeholder="language('Search by title', 'ابحث بالعنوان')"
+          :placeholder="language('Search program titles…', 'ابحث في عناوين البرامج…')"
       /></label>
+      <ListPagination
+        :offset="offset"
+        :page-size="appliedLimit"
+        :sizes="pageSizes"
+        @page-size="changeLimit"
+        :total="context.workspace ? total : filtered.length"
+        :disabled="loading"
+        @page="(page) => (context.workspace ? load(page) : (offset = page))"
+      />
+    </div>
+    <PageState :loading="loading" :error="error" @retry="load()">
       <p v-if="search && !filtered.length" class="notice">
         {{
           language('No matching plans. Try another title.', 'لا توجد خطط مطابقة. جرّب عنواناً آخر.')
@@ -99,17 +122,20 @@ onMounted(() => load())
       </p>
       <div v-if="filtered.length" class="plans-grid">
         <RouterLink
-          v-for="p in filtered.slice(0, limit)"
+          v-for="p in context.workspace ? filtered : filtered.slice(offset, offset + recordLimit)"
           :key="p.id"
           :to="context.base + '/plans/' + p.id"
           class="plan-card panel"
           ><ProgramCover :id="p.draft.presentation?.cover" />
           <div class="plan-card-top">
-            <PhBarbell :size="28" aria-hidden="true" /><span class="tag">{{
-              versions.some((v) => v.plan_id === p.id && v.revision === p.draft_version)
-                ? t('published')
-                : t('draft')
-            }}</span>
+            <PhBarbell :size="28" aria-hidden="true" /><span class="plan-card-tags"
+              ><span v-if="p.listed" class="tag">{{ language('In library', 'في المكتبة') }}</span
+              ><span class="tag">{{
+                versions.some((v) => v.plan_id === p.id && v.revision === p.draft_version)
+                  ? t('published')
+                  : t('draft')
+              }}</span></span
+            >
           </div>
           <h2>{{ p.title }}</h2>
           <p v-if="p.draft.presentation?.goal">{{ p.draft.presentation.goal }}</p>
@@ -122,21 +148,11 @@ onMounted(() => load())
                   : language('Adaptable', 'قابل للتكييف')
             }}
           </p>
-          <p v-if="p.listed" class="small-print">
-            {{
-              language(
-                'Shared in the institution library. Coaches can assign it to athletes they are responsible for.',
-                'تمت مشاركة البرنامج في مكتبة المؤسسة. يمكن للمدربين تعيينه للرياضيين المسؤولين عنهم.',
-              )
-            }}
-          </p>
           <p>
             {{ p.draft.days.filter((d) => !d.restDay).length }} {{ language('sessions', 'حصص') }} ·
-            {{ p.draft.cycleWeeks || 1 }} {{ language('week cycle', 'أسبوع للدورة') }}
-            <span
-              >{{ p.draft.days.reduce((n, d) => n + d.exercises.length, 0) }}
-              {{ t('exercises') }}</span
-            >
+            {{ p.draft.cycleWeeks || 1 }} {{ language('week cycle', 'أسبوع للدورة') }} ·
+            {{ p.draft.days.reduce((n, d) => n + d.exercises.length, 0) }}
+            {{ t('exercises') }}
           </p>
           <div class="plan-card-bottom">
             <small>{{ language('Updated', 'تم التحديث') }} {{ dateLabel(p.updated_at) }}</small
@@ -144,6 +160,7 @@ onMounted(() => load())
         ></RouterLink>
       </div>
       <section v-else-if="!search && context.view === 'trainee'" class="empty-state panel">
+        <PhTray :size="28" aria-hidden="true" />
         <h2>{{ language('Your institution’s program library.', 'مكتبة برامج مؤسستك.') }}</h2>
         <p>
           {{
@@ -158,6 +175,7 @@ onMounted(() => load())
         }}</RouterLink>
       </section>
       <section v-else-if="!search" class="empty-state panel">
+        <PhTray :size="28" aria-hidden="true" />
         <h2>
           {{ language('No programs yet', 'لا توجد برامج بعد') }}
         </h2>
@@ -176,16 +194,6 @@ onMounted(() => load())
           >{{ t('newPlan') }}</RouterLink
         >
       </section>
-      <button v-if="next !== null" class="button secondary" @click="load(true)">
-        {{ language('Show more plans', 'عرض خطط أخرى') }}
-      </button>
-      <button
-        v-if="!context.workspace && filtered.length > limit"
-        class="button secondary"
-        @click="limit += 12"
-      >
-        {{ language('Show more plans', 'عرض خطط أخرى') }}
-      </button></PageState
-    >
+    </PageState>
   </div>
 </template>

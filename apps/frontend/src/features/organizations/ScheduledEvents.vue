@@ -1,9 +1,16 @@
 <script setup lang="ts">
+import { PhTray } from '@phosphor-icons/vue'
+import { useListPageSize } from '../../lib/list-page-size'
+import ScheduleViewSwitch from '../../components/ScheduleViewSwitch.vue'
+import PageHeading from '../../components/PageHeading.vue'
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { request } from '../../lib/backend'
-import { language as l, dateLabel, errorMessage } from '../../lib/i18n'
+import { language as l, errorMessage, locale } from '../../lib/i18n'
+import { profile } from '../../app/auth'
+import { localDate } from '../../lib/dates'
 import OrganizationNav from './OrganizationNav.vue'
+import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
 import type { CalendarEvent } from './service-types'
 const route = useRoute(),
@@ -11,6 +18,20 @@ const route = useRoute(),
 const workspace = String(route.params.workspace),
   view = String(route.params.view)
 const base = `/organization/${workspace}/${view}`
+const zone = profile.value?.timezone || 'UTC'
+const format = (value: string, parts: Intl.DateTimeFormatOptions) =>
+  new Intl.DateTimeFormat(locale.value === 'ar' ? 'ar-AE' : 'en-GB', {
+    ...parts,
+    timeZone: zone,
+  }).format(new Date(value))
+/** Same-day events show one date and a time range; longer events show both ends. */
+function when(event: Pick<CalendarEvent, 'starts_at' | 'ends_at'>) {
+  const day = { weekday: 'short', day: 'numeric', month: 'short' } as const,
+    clock = { hour: '2-digit', minute: '2-digit' } as const
+  return localDate(zone, new Date(event.starts_at)) === localDate(zone, new Date(event.ends_at))
+    ? `${format(event.starts_at, day)} · ${format(event.starts_at, clock)}–${format(event.ends_at, clock)}`
+    : `${format(event.starts_at, { ...day, ...clock })} — ${format(event.ends_at, { ...day, ...clock })}`
+}
 type Page = {
   items: (Pick<
     CalendarEvent,
@@ -34,6 +55,12 @@ const stateLabel = (value: string) =>
     : value === 'cancelled'
       ? l('Cancelled', 'ملغى')
       : l('Scheduled', 'مجدول')
+const { recordLimit, appliedLimit, pageSizes, acceptLimit, changeLimit } = useListPageSize(
+  10,
+  () => {
+    void load()
+  },
+)
 async function load() {
   const stamp = ++generation
   loading.value = true
@@ -44,12 +71,14 @@ async function load() {
     kind: String(route.query.kind || 'all'),
     state: String(route.query.state || 'all'),
     search: String(route.query.search || ''),
+    limit: String(recordLimit.value),
     offset: String(page),
   })
   try {
     const result = await request<Page>(`/v1/workspaces/${workspace}/scheduled-events?${query}`)
     if (disposed || stamp !== generation) return
     data.value = result
+    acceptLimit()
     offset.value = page
   } catch (e) {
     if (!disposed && stamp === generation) {
@@ -63,6 +92,10 @@ async function load() {
 function navigate(page = 0) {
   return router.push({
     query: {
+      from: route.query.from,
+      day: route.query.day,
+      mode: route.query.mode,
+      limit: route.query.limit,
       ...(search.value.trim() ? { search: search.value.trim() } : {}),
       ...(kind.value !== 'all' ? { kind: kind.value } : {}),
       ...(state.value !== 'all' ? { state: state.value } : {}),
@@ -88,10 +121,10 @@ onUnmounted(() => {
 <template>
   <OrganizationNav />
   <div class="container page scheduled-events-page">
-    <header class="work-heading">
+    <PageHeading class="work-heading">
       <div>
         <p class="overline">{{ l('Scheduled activity', 'النشاط المجدول') }}</p>
-        <h1>{{ l('Events & assessments', 'المواعيد والتقييمات') }}</h1>
+        <h1>{{ l('Schedule', 'الجدول') }}</h1>
         <p>
           {{
             l(
@@ -102,41 +135,57 @@ onUnmounted(() => {
         </p>
       </div>
       <div class="actions">
-        <RouterLink class="button secondary" :to="base + '/calendar'">{{
-          l('Calendar', 'التقويم')
-        }}</RouterLink
-        ><RouterLink class="button" :to="base + '/calendar/new'">{{
+        <ScheduleViewSwitch :base="base" view="list" />
+        <RouterLink class="button" :to="base + '/calendar/new'">{{
           l('Schedule event', 'جدولة موعد')
         }}</RouterLink>
       </div>
-    </header>
-    <form class="event-filters" @submit.prevent="navigate()">
-      <label
-        >{{ l('Search events', 'البحث في المواعيد') }}<input v-model="search" type="search"
-      /></label>
-      <label
-        >{{ l('Activity type', 'نوع النشاط')
-        }}<select v-model="kind" @change="navigate()">
-          <option value="all">{{ l('All activities', 'جميع الأنشطة') }}</option>
-          <option value="training">{{ l('Training sessions', 'حصص التدريب') }}</option>
-          <option value="assessment">{{ l('Assessments', 'التقييمات') }}</option>
-        </select></label
-      >
-      <label
-        >{{ l('Status', 'الحالة')
-        }}<select v-model="state" @change="navigate()">
-          <option value="all">{{ l('All statuses', 'جميع الحالات') }}</option>
-          <option
-            v-for="value in ['scheduled', 'completed', 'cancelled']"
-            :key="value"
-            :value="value"
-          >
-            {{ stateLabel(value) }}
-          </option>
-        </select></label
-      >
-      <button class="button secondary" :disabled="loading">{{ l('Search', 'بحث') }}</button>
-    </form>
+    </PageHeading>
+    <div class="list-toolbar">
+      <form class="event-filters schedule-list-filters" @submit.prevent="navigate()">
+        <label
+          >{{ l('Search schedule', 'البحث في الجدول')
+          }}<input
+            :placeholder="l('Search event titles…', 'ابحث بعناوين المواعيد…')"
+            v-model="search"
+            type="search"
+        /></label>
+        <label
+          >{{ l('Activity type', 'نوع النشاط')
+          }}<select v-model="kind" @change="navigate()">
+            <option value="all">{{ l('All activities', 'جميع الأنشطة') }}</option>
+            <option value="training">{{ l('Training sessions', 'حصص التدريب') }}</option>
+            <option value="assessment">{{ l('Assessments', 'التقييمات') }}</option>
+          </select></label
+        >
+        <label
+          >{{ l('Status', 'الحالة')
+          }}<select v-model="state" @change="navigate()">
+            <option value="all">{{ l('All statuses', 'جميع الحالات') }}</option>
+            <option
+              v-for="value in ['scheduled', 'completed', 'cancelled']"
+              :key="value"
+              :value="value"
+            >
+              {{ stateLabel(value) }}
+            </option>
+          </select></label
+        >
+        <button class="button secondary" :disabled="loading">{{ l('Search', 'بحث') }}</button>
+      </form>
+      <div class="list-toolbar-pagination">
+        <ListPagination
+          :label="l('Schedule pages', 'صفحات الجدول')"
+          :offset="offset"
+          :page-size="appliedLimit"
+          :sizes="pageSizes"
+          @page-size="changeLimit"
+          :total="data?.total || 0"
+          :disabled="loading"
+          @page="navigate"
+        />
+      </div>
+    </div>
     <p v-if="loading && data" role="status" class="small-print">
       {{ l('Updating events…', 'جارٍ تحديث المواعيد…') }}
     </p>
@@ -146,8 +195,9 @@ onUnmounted(() => {
     </p>
     <PageState :loading="loading && !data" :error="!data ? error : ''" @retry="load">
       <template v-if="data">
-        <p class="small-print">{{ data.total }} {{ l('matching events', 'مواعيد مطابقة') }}</p>
+        <p class="list-summary">{{ data.total }} {{ l('matching activities', 'أنشطة مطابقة') }}</p>
         <section v-if="!data.items.length" class="empty-state panel">
+          <PhTray :size="28" aria-hidden="true" />
           <h2>{{ l('No events match this view.', 'لا توجد مواعيد مطابقة لهذا العرض.') }}</h2>
           <p>
             {{
@@ -175,7 +225,9 @@ onUnmounted(() => {
               <h2 dir="auto">
                 <RouterLink :to="base + '/calendar/' + event.id">{{ event.title }}</RouterLink>
               </h2>
-              <p>{{ dateLabel(event.starts_at) }} — {{ dateLabel(event.ends_at) }}</p>
+              <p class="event-when">
+                <bdi>{{ when(event) }}</bdi>
+              </p>
               <p class="small-print">
                 {{ l('Athletes:', 'الرياضيون:') }} {{ event.athlete_count
                 }}<span v-if="event.location" dir="auto"> · {{ event.location }}</span>
@@ -184,28 +236,6 @@ onUnmounted(() => {
             <span class="tag">{{ stateLabel(event.state) }}</span>
           </li>
         </ol>
-        <nav
-          v-if="data.total > 24 || offset"
-          class="event-pagination"
-          :aria-label="l('Event pages', 'صفحات المواعيد')"
-        >
-          <button
-            class="button secondary"
-            :disabled="loading || !offset"
-            @click="navigate(Math.max(0, offset - 24))"
-          >
-            {{ l('Previous', 'السابق') }}</button
-          ><span
-            >{{ Math.min(offset + 1, data.total) }}–{{ Math.min(offset + 24, data.total) }} /
-            {{ data.total }}</span
-          ><button
-            class="button secondary"
-            :disabled="loading || data.next === null"
-            @click="navigate(data.next!)"
-          >
-            {{ l('Next', 'التالي') }}
-          </button>
-        </nav>
       </template>
     </PageState>
     <p class="small-print">
@@ -219,22 +249,16 @@ onUnmounted(() => {
   </div>
 </template>
 <style scoped>
-.event-filters {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr)) auto;
-  gap: 16px;
-  align-items: end;
-}
 .event-filters label {
   min-width: 0;
   margin: 0;
 }
 .event-list {
   list-style: none;
-  margin: 20px 0;
+  margin: 0 0 24px;
   padding: 0;
   display: grid;
-  gap: 16px;
+  gap: 12px;
 }
 .event-list li {
   display: flex;
@@ -242,10 +266,15 @@ onUnmounted(() => {
   justify-content: space-between;
   gap: 16px;
   border: 1px solid var(--line);
-  border-inline-start: 4px solid var(--accent);
-  border-radius: 16px;
-  padding: 22px;
+  border-inline-start: 3px solid var(--accent);
+  border-radius: var(--radius-panel);
+  padding: 16px 20px;
   background: var(--surface);
+}
+.event-when {
+  margin: 0 0 4px;
+  font-size: var(--text-small);
+  font-variant-numeric: tabular-nums;
 }
 .event-list li.assessment {
   background: var(--surface-soft);
@@ -255,24 +284,14 @@ onUnmounted(() => {
   overflow-wrap: anywhere;
 }
 .event-list h2 {
-  font-size: 1.15rem;
-  margin: 4px 0 12px;
+  font-size: 1.125rem;
+  margin: 4px 0 8px;
 }
 .event-list .tag {
   flex-shrink: 0;
 }
-.event-pagination {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
-  margin-block: 24px;
-}
+
 @media (max-width: 700px) {
-  .event-filters {
-    grid-template-columns: minmax(0, 1fr);
-  }
   .event-list li {
     flex-direction: column;
     padding: 18px;

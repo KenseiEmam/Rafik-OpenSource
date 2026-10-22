@@ -305,6 +305,26 @@ test("concurrent goal-specific plans: add, replace, end, overlap warnings and sp
       .sort(),
     ["Agility", "General strength", "Match speed"],
   );
+  // Recipient search is bounded; only administrators may match (and see) account email.
+  const emailPart = athlete.email.split("@")[0];
+  const byEmail = await call(
+    admin,
+    `${ws}/recipients?view=admin&email=true&limit=5&search=${encodeURIComponent(emailPart)}`,
+  );
+  assert.equal(byEmail.status, 200, JSON.stringify(byEmail));
+  assert.deepEqual(
+    byEmail.data.items.map((x: { email?: string }) => x.email),
+    [athlete.email],
+  );
+  const coachByEmail = await call(
+    primary,
+    `${ws}/recipients?view=trainer&email=true&limit=5&search=${encodeURIComponent(emailPart)}`,
+  );
+  assert.equal(coachByEmail.data.items.length, 0);
+  assert.ok(
+    recipients.data.items.every((x: object) => !("email" in x)),
+    "coaches never receive member email",
+  );
 
   // Sessions follow their plan's sport.
   const start = async (assignment: string) => {

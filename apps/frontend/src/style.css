@@ -7,7 +7,8 @@
   -webkit-font-smoothing: antialiased;
   --page: var(--instance-page-light, #f8f8f3);
   --surface: color-mix(in srgb, var(--page) 90%, white);
-  --surface-soft: color-mix(in srgb, var(--page) 82%, var(--ink));
+  /* Restrained chip/selection fill; the former 18% ink mix read as a heavy grey block. */
+  --surface-soft: color-mix(in srgb, var(--page) 89%, var(--ink));
   --ink: var(--instance-ink-light, #23332d);
   /* 4.5:1+ on light --surface-soft (the former #545d56 measured 4.39:1 in WebKit). */
   --muted: #4d564f;
@@ -442,18 +443,18 @@ td:first-child {
 .panel {
   background: var(--surface);
   border: 1px solid var(--line);
-  padding: 28px;
-  border-radius: var(--radius);
+  padding: var(--space-6, 24px);
+  border-radius: var(--radius-panel, 12px);
 }
 .panel h2,
 .panel h3 {
   margin-bottom: 12px;
 }
-.panel p + .button,
-.panel p + .text-link {
+:where(.panel):not(.form-stack) > p + .button,
+:where(.panel):not(.form-stack) > p + .text-link {
   margin-top: 22px;
 }
-.panel + .panel {
+:where(.panel) + .panel {
   margin-top: 22px;
 }
 .tag {
@@ -1694,8 +1695,11 @@ progress::-moz-progress-bar {
 .plan-card p {
   font-size: 0.8rem;
 }
-.plan-card p span {
-  margin-inline-start: 16px;
+.plan-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
 }
 .plan-card-bottom {
   display: flex;
@@ -1796,22 +1800,6 @@ progress::-moz-progress-bar {
 .editor-exercise > p {
   font-size: 0.88rem;
   margin-bottom: 13px;
-}
-.editor-savebar {
-  border-top: 1px solid var(--line);
-  display: flex;
-  gap: 30px;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 35px;
-  padding-top: 26px;
-}
-.editor-savebar > p {
-  font-size: 0.78rem;
-  max-width: 340px;
-}
-.editor-savebar .actions {
-  justify-content: flex-end;
 }
 .clients-layout {
   display: grid;
@@ -2595,19 +2583,6 @@ progress::-moz-progress-bar {
   .exercise-fields select {
     font-size: 0.87rem;
   }
-  .editor-savebar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 20px;
-  }
-  .editor-savebar .actions {
-    justify-content: flex-start;
-    gap: 12px;
-  }
-  .editor-savebar .button {
-    flex: 1;
-    font-size: 0.76rem;
-  }
   .editor-title input {
     font-size: 1.1rem;
   }
@@ -2955,7 +2930,7 @@ h3 {
   display: grid;
   gap: 1.2rem;
 }
-.form-stack label,
+.form-stack label:where(:not(.check-label):not(.role-button)),
 .progress-filters label,
 .message-compose label {
   display: grid;

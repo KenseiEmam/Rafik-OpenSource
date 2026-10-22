@@ -143,8 +143,8 @@ function save() {
         <p class="small-print">
           {{
             l(
-              'Visible to this trainee and authorized session staff.',
-              'مرئية لهذا المتدرب وموظفي الجلسة المصرح لهم.',
+              'Visible to this athlete and authorized session staff.',
+              'مرئية لهذا الرياضي وموظفي الجلسة المصرح لهم.',
             )
           }}
         </p>

@@ -89,7 +89,7 @@ function add() {
         {{
           l(
             'Turn targets into food choices. These suggestions are separate from meals your athlete actually records.',
-            'حوّل الأهداف إلى اختيارات طعام. هذه المقترحات منفصلة عن الوجبات التي يسجلها متدربك فعلياً.',
+            'حوّل الأهداف إلى اختيارات طعام. هذه المقترحات منفصلة عن الوجبات التي يسجلها رياضيك فعلياً.',
           )
         }}
       </p>

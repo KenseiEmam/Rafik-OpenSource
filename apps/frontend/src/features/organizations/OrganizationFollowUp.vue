@@ -74,7 +74,7 @@ onUnmounted(() => {
       </div>
       <RouterLink class="button secondary small" :to="context.base + '/tasks'">{{
         context.view === 'admin'
-          ? l('Assign trainer tasks', 'تعيين مهام المدربين')
+          ? l('Assign coach tasks', 'تعيين مهام المدربين')
           : l('My tasks', 'مهامي')
       }}</RouterLink>
     </div>
@@ -125,8 +125,8 @@ onUnmounted(() => {
         <p class="small-print">
           {{
             l(
-              'Review with the trainee before arranging a replacement. A missed session does not automatically grant a free session.',
-              'راجع مع المتدرب قبل ترتيب جلسة بديلة. الجلسة الفائتة لا تمنح جلسة مجانية تلقائياً.',
+              'Review attendance with the athlete before scheduling a replacement.',
+              'راجع الحضور مع الرياضي قبل جدولة حصة بديلة.',
             )
           }}
         </p>
@@ -211,11 +211,11 @@ onUnmounted(() => {
       </section>
       <section class="panel">
         <h3>
-          {{ l('Trainees without a plan', 'متدربون بلا خطة') }}
+          {{ l('Athletes without a plan', 'رياضيون بلا خطة') }}
           <span class="count">{{ data.unplanned.total }}</span>
         </h3>
         <p v-if="!data.unplanned.total" class="small-print">
-          {{ l('Every active trainee has a program assignment.', 'لكل متدرب نشط تكليف ببرنامج.') }}
+          {{ l('Every active athlete has a program assignment.', 'لكل رياضي نشط تكليف ببرنامج.') }}
         </p>
         <ul>
           <li v-for="m in data.unplanned.items" :key="m.id">
@@ -245,6 +245,9 @@ onUnmounted(() => {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
+}
+.overview-task-queue ul:empty {
+  display: none;
 }
 .overview-task-queue li + li {
   border: 0;

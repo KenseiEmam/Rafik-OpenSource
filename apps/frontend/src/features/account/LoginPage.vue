@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PasswordField from '../../components/PasswordField.vue'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { PhLockKey, PhBuildings } from '@phosphor-icons/vue'
@@ -55,10 +56,9 @@ async function login() {
           required
         />
         <label for="password">{{ language('Password', 'كلمة المرور') }}</label>
-        <input
+        <PasswordField
           id="password"
           v-model="password"
-          type="password"
           autocomplete="current-password"
           maxlength="128"
           required
