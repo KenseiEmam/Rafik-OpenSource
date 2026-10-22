@@ -116,6 +116,19 @@ test('coach adds a concurrent goal-specific plan, the athlete sees both, then pl
     const overlap = page.getByRole('status').filter({ hasText: 'Overlapping plans' })
     await expect(overlap).toContainText('R4 Athlete: Speed block · Match speed')
 
+    // Searching the same program again greys out an athlete who is already on it.
+    await page.goto(`${base}/deliver/${strength}`)
+    await page.getByRole('searchbox', { name: 'Find athletes', exact: true }).fill('R4 Athlete')
+    const already = page.getByRole('button', {
+      name: 'R4 Athlete: already on this program',
+      exact: true,
+    })
+    await expect(already).toBeDisabled()
+    await expect(already).toHaveText('Already on this program')
+    await page.goto(`${base}/deliver/${strength}?member=${athlete.id}`)
+    await expect(page.getByRole('alert')).toContainText('Already on this program')
+    await expect(page.getByRole('button', { name: /^Review assignment/ })).toBeDisabled()
+
     // The athlete sees both plans, their labels and a same-day notice.
     await f.login(athletePage, f.client, `/organization/${workspace}/trainee/training`)
     await expect(athletePage.getByRole('heading', { name: 'Speed block' })).toBeVisible()

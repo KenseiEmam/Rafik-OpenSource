@@ -19,6 +19,9 @@ type ActivePlan = {
   id: string
   revision: number
   title: string
+  version_id?: string
+  program_id?: string
+  version_revision?: number
   goal: string | null
   sport: string | null
 }
@@ -75,6 +78,19 @@ const currentPlans = (person: Recipient) =>
   person.plans
     ? person.plans.map(planLabel).join('، ') || l('No active plan', 'لا توجد خطة نشطة')
     : person.current || l('No active plan', 'لا توجد خطة نشطة')
+/** Already on this exact version: the server would refuse it (409), so it cannot be added. */
+const onThisVersion = (person?: Recipient) =>
+  !!person?.plans?.some((plan) => plan.version_id === versionId)
+/** On an older version of the same program: allowed, but replacing it is usually intended. */
+const earlierVersion = (person?: Recipient) => {
+  const program = (version.value as { program_id?: string } | undefined)?.program_id
+  return program && !onThisVersion(person)
+    ? person?.plans?.find((plan) => plan.program_id === program)
+    : undefined
+}
+const blocked = computed(() =>
+  selected.value.filter((id) => onThisVersion(people.value.find((p) => p.id === id))),
+)
 const nameOf = (id: string) =>
   people.value.find((p) => p.id === id)?.name || l('Unavailable person', 'شخص غير متاح')
 function add(id: string) {
@@ -384,19 +400,45 @@ onMounted(load)
                 :aria-label="l('Matching athletes', 'الرياضيون المطابقون')"
                 :aria-busy="searching"
               >
-                <li v-for="person in visible" :key="person.id">
+                <li
+                  v-for="person in visible"
+                  :key="person.id"
+                  :class="{ 'is-assigned': onThisVersion(person) }"
+                >
                   <span class="recipient-identity"
                     ><strong dir="auto">{{ person.name }}</strong
                     ><small v-if="person.email" dir="ltr">{{ person.email }}</small
-                    ><small>{{ currentPlans(person) }}</small></span
+                    ><small>{{ currentPlans(person) }}</small
+                    ><small v-if="earlierVersion(person)" class="recipient-note">{{
+                      l(
+                        `On version ${earlierVersion(person)!.version_revision} of this program. After adding, choose Replace to move them to this version.`,
+                        `على النسخة ${earlierVersion(person)!.version_revision} من هذا البرنامج. بعد الإضافة اختر الاستبدال لنقله إلى هذه النسخة.`,
+                      )
+                    }}</small></span
                   ><button
                     type="button"
                     class="button secondary small"
-                    :disabled="selected.includes(person.id) || selected.length >= MAX_RECIPIENTS"
-                    :aria-label="l('Add ', 'إضافة ') + person.name"
+                    :disabled="
+                      onThisVersion(person) ||
+                      selected.includes(person.id) ||
+                      selected.length >= MAX_RECIPIENTS
+                    "
+                    :aria-label="
+                      onThisVersion(person)
+                        ? person.name +
+                          ': ' +
+                          l('already on this program', 'على هذا البرنامج بالفعل')
+                        : l('Add ', 'إضافة ') + person.name
+                    "
                     @click="add(person.id)"
                   >
-                    {{ selected.includes(person.id) ? l('Added', 'أُضيف') : l('Add', 'إضافة') }}
+                    {{
+                      onThisVersion(person)
+                        ? l('Already on this program', 'على هذا البرنامج بالفعل')
+                        : selected.includes(person.id)
+                          ? l('Added', 'أُضيف')
+                          : l('Add', 'إضافة')
+                    }}
                   </button>
                 </li>
                 <li v-if="!visible.length && !searching" class="recipient-empty">
@@ -452,6 +494,15 @@ onMounted(load)
                   <button type="button" class="text-link" @click="undoRemove">
                     {{ l('Undo', 'تراجع') }}
                   </button>
+                </p>
+                <p v-if="blocked.length" class="notice error" role="alert">
+                  {{
+                    l(
+                      'Already on this program: remove them to continue.',
+                      'على هذا البرنامج بالفعل: أزلهم للمتابعة.',
+                    )
+                  }}
+                  <bdi>{{ blocked.map(nameOf).join('، ') }}</bdi>
                 </p>
                 <p v-if="!selected.length" class="small-print">
                   {{
@@ -561,7 +612,9 @@ onMounted(load)
             </section>
             <button
               class="button"
-              :disabled="!recipients.length || recipients.length !== selected.length"
+              :disabled="
+                !recipients.length || recipients.length !== selected.length || !!blocked.length
+              "
             >
               {{ l('Review assignment', 'مراجعة التعيين') }} · {{ recipients.length }}
             </button></template
@@ -604,7 +657,9 @@ onMounted(load)
                 {{ l('Back to selection', 'العودة للاختيار') }}</button
               ><button
                 class="button"
-                :disabled="!recipients.length || recipients.length !== selected.length"
+                :disabled="
+                  !recipients.length || recipients.length !== selected.length || !!blocked.length
+                "
               >
                 {{ l('Confirm assignment', 'تأكيد التعيين') }}
               </button>
@@ -640,6 +695,12 @@ onMounted(load)
 }
 .recipient-matches li + li {
   border-top: 1px solid var(--line);
+}
+.recipient-matches li.is-assigned .recipient-identity {
+  opacity: 0.6;
+}
+.recipient-note {
+  color: var(--ink);
 }
 .recipient-matches .button {
   margin: 0;

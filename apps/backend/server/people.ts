@@ -199,7 +199,9 @@ export async function organizationRecipients(
         sport_id: true,
         start_date: true,
         end_date: true,
-        organization_versions: { select: { title: true } },
+        organization_versions: {
+          select: { id: true, program_id: true, revision: true, title: true },
+        },
       },
       orderBy: { start_date: "asc" },
     });
@@ -217,6 +219,10 @@ export async function organizationRecipients(
           id: p.id,
           revision: p.revision,
           title: p.organization_versions.title,
+          // Lets the assignment page mark athletes already on this program/version.
+          version_id: p.organization_versions.id,
+          program_id: p.organization_versions.program_id,
+          version_revision: p.organization_versions.revision,
           goal: p.goal,
           sport: p.sport_id,
           start_date: p.start_date,
