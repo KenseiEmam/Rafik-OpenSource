@@ -1,8 +1,8 @@
 # Post-beta.1 release plan
 
-**Status, 22 October 2026:** Squire `1.0.0-beta.2` is published. Release 1 and the Claude web audit are accepted. The next release starts with single-institution routing and Tasks retirement ([ADR 0026](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md)), then the separately planned individual workout scheduling model. Keep the release branch and paired landing documentation PR unmerged until the release is complete. The audit below is historical beta.1 source analysis; its Tasks references and old route names are not current product guidance.
+**Status, 22 October 2026:** Squire `1.0.0-beta.2` is published. Release 1 and the Claude web audit are accepted. The next release starts with single-institution routing and Tasks retirement ([ADR 0026](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md)), then [beta.3 session/workout consolidation](beta3-sessions.md), including group training, offline Android workout recording and a coordinated legacy backend review. Keep the release branch and paired landing documentation PR unmerged until the release is complete. The audit below is historical beta.1 source analysis; its Tasks references and old route names are not current product guidance.
 
-The coach field dashboard and sport-specific field tools remain planned. Tasks is removed from future mobile scope. Workout scheduling must distinguish planned occurrences, timed sessions and actual workout records; it is not implemented by the cleanup.
+The broader coach field dashboard and sport-specific field tools remain later work; beta.3 is not that entire mobile expansion. Tasks is removed from future mobile scope. Scheduling must distinguish planned occurrences, attendance and actual workout records; it is not implemented by the cleanup. The historical Release 2/3 labels below do not reserve beta.3/beta.4 version numbers; the beta.3 specification supersedes that provisional version mapping.
 
 ## Confirmed Release 1 decisions
 

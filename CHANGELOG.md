@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Beta.3 planning
+
+- Record accepted individual session progression, bounded weekly scheduling and group additional-training rules.
+- Include offline individual/group workout recording in Android scope; propose cache/queue migration, coordinated API retirement and historical-data reconciliation before implementation.
+
 ### Frontend source audit
 
 - Document all local Vue components, routed/embedded views, access boundaries and incoming/outgoing navigation with Mermaid maps and a repeatable inventory check.

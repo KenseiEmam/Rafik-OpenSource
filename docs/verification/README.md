@@ -1,5 +1,9 @@
 # Verification record
 
+## Beta.3 planning — 22 October 2026
+
+Inspected the current route registry, workout/event schema and native calendar request/queue paths to inform the beta.3 specification. Backend disposition is a family-level proposal; individual allowed RPC operations and every account/file dependency have not yet been exhaustively traced. Founder accepted offline workout recording. No runtime changes, data migrations, new native build or implementation acceptance were performed in this planning pass. Documentation checks passed: 1,060 local links and 45 anchors across 65 maintained documents. No runtime suite was needed for this planning-only change.
+
 ## Frontend source and navigation audit — 22 October 2026
 
 The improved audit prompt and maintained source reference cover 86 Vue files, 46 routed/embedded screen files and 49 route records. The generator records component consumers, route flags, role/resource descriptions, navigation expressions, dynamic entries and Mermaid maps. Source inspection traced the necessary notification and role/subject backend paths; this is not an exhaustive backend authorization audit.
