@@ -7,7 +7,6 @@ import { request } from '../../lib/backend'
 import { language as l, errorMessage } from '../../lib/i18n'
 import { useCommand } from '../../lib/commands'
 import CommandStatus from '../../components/CommandStatus.vue'
-import SectionNav from './SectionNav.vue'
 import ChannelThread from './ChannelThread.vue'
 import type { Member, Institution } from './types'
 const route = useRoute(),
@@ -165,7 +164,6 @@ watch(
 )
 </script>
 <template>
-  <SectionNav />
   <div
     class="container page messages-page institution-messages organization-messages"
     :class="{ 'has-thread': !!id }"

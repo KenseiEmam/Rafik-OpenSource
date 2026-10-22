@@ -224,8 +224,11 @@ function cancelDelete() {
               )
             }}
           </p>
-          <RouterLink class="text-link" to="/history">{{
-            language('Open history to retry a save', 'افتح السجل لإعادة محاولة الحفظ')
+          <RouterLink class="text-link" to="/training">{{
+            language(
+              'Open training to retry a workout save',
+              'افتح التدريب لإعادة محاولة حفظ التمرين',
+            )
           }}</RouterLink>
           <p class="small-print">
             {{

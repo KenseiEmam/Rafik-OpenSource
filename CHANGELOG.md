@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Frontend source audit
+
+- Document all local Vue components, routed/embedded views, access boundaries and incoming/outgoing navigation with Mermaid maps and a repeatable inventory check.
+- Remove duplicated hidden per-page navigation, broken history/clients links and guest recorder/adoption UI; require institutional sign-in and owner scope for recording.
+- Highlight profile and delegated recording navigation consistently; suppress notifications into retired independent screens without deleting historical source data.
+- Retire the obsolete guest/standalone browser spec; keep focused institutional recorder coverage and document remaining acceptance limits.
+
 ### Institution cleanup
 
 - Consolidate supported screens under plain feature names; remove 20 obsolete/duplicate Vue implementations and restore Resources/Nutrition routing.

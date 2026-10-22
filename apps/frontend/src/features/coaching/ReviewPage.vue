@@ -10,7 +10,6 @@ import { language, locale, t, errorMessage, dateLabel } from '../../lib/i18n'
 import { exerciseName, targetLabel, actualLabel, performedExercise } from '../../lib/prescriptions'
 import PageState from '../../components/PageState.vue'
 import { programContext } from './program-context'
-import SectionNav from '../institution/SectionNav.vue'
 import { useCommand } from '../../lib/commands'
 import CommandStatus from '../../components/CommandStatus.vue'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
@@ -85,7 +84,6 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <SectionNav />
   <div class="container page">
     <RouterLink :to="back" class="back-link"
       ><PhArrowLeft :size="18" class="directional" />{{

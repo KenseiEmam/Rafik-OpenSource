@@ -1,5 +1,23 @@
 # Verification record
 
+## Frontend source and navigation audit — 22 October 2026
+
+The improved audit prompt and maintained source reference cover 86 Vue files, 46 routed/embedded screen files and 49 route records. The generator records component consumers, route flags, role/resource descriptions, navigation expressions, dynamic entries and Mermaid maps. Source inspection traced the necessary notification and role/subject backend paths; this is not an exhaustive backend authorization audit.
+
+Final evidence:
+
+- `npm run frontend:inventory:check`: complete local Vue coverage, rendered consumer/import checks, registered/intentional entries and known targets, generated catalogs current. Added to the existing web CI job.
+- `npm test`: 44 tests in 14 files passed, including 11 sidebar/detail-route ownership cases.
+- Frontend and backend typechecks passed. Production web compilation passed through the isolated browser wrapper.
+- Isolated Chromium: Resources plus staff/athlete Nutrition and absence of duplicate per-page navigation passed; anonymous workout URL redirects to institutional sign-in passed. The full program journey passed separately (1.7 minutes): author/publication/assignment and lost-acknowledgment recovery, athlete recording, blocked sync, completion/reload, synchronization, coach review, adaptation and reassignment with historical feedback preserved.
+- First program attempt hit the existing 90-second total test budget at its final assignment assertion. The focused rerun uses 150 seconds for the whole multistep journey; individual assertion waits remain unchanged. Only that journey was repeated.
+- Final isolated notification suite: 2 tests passed, including suppression of six retired independent source kinds and an institutional inbox that remains visible when 26 newer retired records exist. Institutional preferences, quiet hours, dispatch interception, retry and read isolation remain covered. The earlier notification run preceded the added pagination regression; final results above supersede it.
+- Final documentation checks passed 1,048 local links and 45 heading anchors across 64 maintained documents. English/Arabic landing content/version checks passed 6 tests; paired upcoming-release guidance is in landing PR #34, commit f0166d9.
+
+Cleanup: each wrapper removed its disposable database, services, private fixture files and own browser output. This run's diagnostic logs are removed after recording results; unrelated prior artifacts and preview data remain untouched.
+
+Limits: the catalogs account for all checked-in local Vue files and route declarations, but conditional link visibility and prop/server-generated paths use reviewed semantic records. Source coverage is not proof that every screen, dialog, role, viewport, RTL/theme state or failure is visually accepted. No full browser matrix, physical/native test, cloud deployment, external URL scan or general backend/schema audit was repeated. Existing whole-product release/deployment gaps remain separate. The obsolete guest/standalone core browser spec was removed; current institutional workout fault coverage comes from the focused program journey rather than those retired fixtures.
+
 ## View consolidation — 22 October 2026
 
 Removed 20 obsolete or duplicate Vue implementations, promoted the supported Resources/Nutrition screens to plain names, and moved shared command handling out of retired feature folders. A source-graph guard verifies every maintained Vue file is reachable and checks the two supported routes. Historical account-file cleanup remains for stored-data compatibility.

@@ -20,6 +20,7 @@ export async function startWorkout(
   scheduledDate?: string,
   workspace?: string,
 ) {
+  if (owner === 'guest' || !workspace) throw new Error('institution_required')
   const existing = (await localSessions(owner)).find(
     (x) =>
       x.session.status === 'in_progress' &&
@@ -32,55 +33,17 @@ export async function startWorkout(
   const startKey = `start:${owner}:${assignmentId || versionId}:${day.id}:${scheduledDate || 'flexible'}`
   const id = (await getDraft<string>(startKey)) || crypto.randomUUID()
   await storeDraft(startKey, id)
-  let session: Session
-  if (owner === 'guest')
-    session = {
+  const session = await request<Session>(`/v1/workspaces/${workspace}/sessions`, {
+    method: 'POST',
+    body: JSON.stringify({
+      operation: id,
+      action: 'start',
+      view: 'trainee',
       id,
-      client_id: 'guest',
-      coach_id: null,
-      assignment_id: null,
-      version_id: versionId,
+      assignment_id: assignmentId,
       day_id: day.id,
-      title,
-      prescription: clone(day),
-      status: 'in_progress',
-      entries: day.exercises.flatMap((e) =>
-        Array.from({ length: e.sets }, (_, i) => ({
-          exercise_key: e.key,
-          set_index: i,
-          reps: e.reps,
-          load: e.load,
-          unit: e.unit,
-          completed: false,
-        })),
-      ),
-      note: '',
-      coach_note: '',
-      reviewed_at: null,
-      started_at: new Date().toISOString(),
-      completed_at: null,
-      version: 1,
-    }
-  else if (workspace)
-    session = await request<Session>(`/v1/workspaces/${workspace}/sessions`, {
-      method: 'POST',
-      body: JSON.stringify({
-        operation: id,
-        action: 'start',
-        view: 'trainee',
-        id,
-        assignment_id: assignmentId,
-        day_id: day.id,
-      }),
-    })
-  else
-    session = await rpc<Session>('start_session', {
-      p_id: id,
-      p_version_id: versionId,
-      p_day_id: day.id,
-      p_assignment_id: assignmentId || null,
-      p_scheduled_date: scheduledDate || null,
-    })
+    }),
+  })
   const current = await getLocalSession(session.id)
   if (current?.owner === owner) return current
   const row: LocalSession = {
@@ -98,13 +61,8 @@ export async function startWorkout(
 }
 export async function loadWorkout(id: string, owner: string, workspace?: string) {
   const local = await getLocalSession(id)
-  if (local && (local.owner === owner || local.owner === 'guest')) {
-    if (
-      local.owner === 'guest' ||
-      local.pending ||
-      local.localRevision > local.syncedRevision ||
-      !navigator.onLine
-    )
+  if (local && local.owner === owner) {
+    if (local.pending || local.localRevision > local.syncedRevision || !navigator.onLine)
       return local
     try {
       const remote = await readSession(id, workspace || local.session.workspace_id)
@@ -229,23 +187,6 @@ export async function syncWorkout(id: string, owner: string) {
   } finally {
     syncing.delete(id)
   }
-}
-export async function adoptGuest(id: string, owner: string) {
-  const row = await getLocalSession(id)
-  if (!row || row.owner !== 'guest') throw new Error('invalid_session')
-  const remote = await rpc<Session>('start_session', {
-    p_id: id,
-    p_version_id: row.session.version_id,
-    p_day_id: row.session.day_id,
-  })
-  await editLocalSession(id, (r) => {
-    r.owner = owner
-    r.session.client_id = owner
-    r.session.version = remote.version
-    r.localRevision++
-    r.pending = undefined
-  })
-  return syncWorkout(id, owner)
 }
 export async function reloadServerSession(id: string, owner: string) {
   const previous = await getLocalSession(id)

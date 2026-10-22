@@ -9,7 +9,6 @@ import { language as l, errorMessage, locale } from '../../lib/i18n'
 import { programContext } from './program-context'
 import { useCommand } from '../../lib/commands'
 import CommandStatus from '../../components/CommandStatus.vue'
-import SectionNav from '../institution/SectionNav.vue'
 import PageState from '../../components/PageState.vue'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { PhCheck, PhMagnifyingGlass, PhPlus, PhSwap, PhX } from '@phosphor-icons/vue'
@@ -340,7 +339,6 @@ function deliver() {
 onMounted(load)
 </script>
 <template>
-  <SectionNav />
   <div class="container page delivery-page">
     <RouterLink class="back-link" :to="context.base + '/plans'">{{
       l('Back to programs', 'العودة للبرامج')

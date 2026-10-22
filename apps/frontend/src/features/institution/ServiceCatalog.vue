@@ -16,7 +16,6 @@ import CommandStatus from '../../components/CommandStatus.vue'
 import MemberPicker from './MemberPicker.vue'
 import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
-import SectionNav from './SectionNav.vue'
 import type { Institution } from './types'
 import type { Drill, TrainingGroup, AssessmentTemplate } from './service-types'
 const route = useRoute(),
@@ -220,7 +219,6 @@ async function initialize() {
 onMounted(initialize)
 </script>
 <template>
-  <SectionNav />
   <div class="container page institution-service-page">
     <RouterLink v-if="editor" class="back-link" :to="listPath">{{
       templates

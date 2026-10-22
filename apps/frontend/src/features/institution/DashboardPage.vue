@@ -17,7 +17,6 @@ import type { Institution, Member, Role, Sport } from './types'
 import './institution.css'
 import FollowUpPanel from './FollowUpPanel.vue'
 import UpcomingSessions from './UpcomingSessions.vue'
-import SectionNav from './SectionNav.vue'
 import BrandingSettings from './BrandingSettings.vue'
 import SportsSettings from './SportsSettings.vue'
 import { TabsRoot, TabsList, TabsTrigger, TabsContent } from 'reka-ui'
@@ -335,7 +334,6 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <SectionNav />
   <div class="container page institution-page">
     <PageHeading class="work-heading">
       <div>

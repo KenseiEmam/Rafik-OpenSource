@@ -201,90 +201,9 @@ export async function notificationTarget(
     }
     return null;
   }
-  return asRecipient(tx, n.user_id, async () => {
-    if (n.source_kind === "message") {
-      const m = await tx.messages.findUnique({
-          where: { id: n.source_id },
-          include: { coach_clients: true },
-        }),
-        c = m?.coach_clients;
-      if (
-        !m ||
-        !c ||
-        c.state !== "active" ||
-        ![c.coach_id, c.client_id].includes(n.user_id)
-      )
-        return null;
-      return {
-        href: (c.coach_id === n.user_id ? "/coach" : "") + "/messages/" + c.id,
-        context: "independent",
-      };
-    }
-    if (n.source_kind === "workout") {
-      const s = await tx.public_sessions.findUnique({
-        where: { id: n.source_id },
-      });
-      if (!s || s.client_id !== n.user_id) return null;
-      if (
-        s.coach_id &&
-        !(await tx.coach_clients.findFirst({
-          where: {
-            coach_id: s.coach_id,
-            client_id: n.user_id,
-            state: "active",
-          },
-        }))
-      )
-        return null;
-      return { href: "/workout/" + s.id, context: "independent" };
-    }
-    if (n.source_kind === "checkin_due" || n.source_kind === "form_feedback") {
-      const r = await tx.coaching_requests.findUnique({
-        where: { id: n.source_id },
-        include: { coach_clients: true },
-      });
-      if (
-        !r ||
-        r.cancelled ||
-        r.coach_clients.client_id !== n.user_id ||
-        r.coach_clients.state !== "active" ||
-        (n.source_kind === "checkin_due" && r.submitted_at)
-      )
-        return null;
-      return { href: "/checkins/" + r.id, context: "independent" };
-    }
-    if (
-      n.source_kind === "appointment_change" ||
-      n.source_kind === "appointment_reminder"
-    ) {
-      const a = await tx.appointments.findUnique({
-        where: { id: n.source_id },
-        include: { coach_clients: true },
-      });
-      if (
-        !a ||
-        a.coach_clients.state !== "active" ||
-        ![a.coach_clients.coach_id, a.coach_clients.client_id].includes(
-          n.user_id,
-        ) ||
-        a.revision !== n.source_revision
-      )
-        return null;
-      if (
-        n.source_kind === "appointment_reminder" &&
-        (a.state !== "booked" || a.starts_at <= new Date())
-      )
-        return null;
-      return {
-        href:
-          (a.coach_clients.coach_id === n.user_id ? "/coach" : "") +
-          "/appointments?client=" +
-          a.relationship_id,
-        context: "independent",
-      };
-    }
-    return null;
-  });
+  // Independent sources have no supported browser destination in an institutional installation.
+  // Keep historical records for account lifecycle/export; never issue links into retired screens.
+  return null;
 }
 
 export async function notificationInbox(actor: Actor, q: URLSearchParams) {
@@ -321,7 +240,7 @@ export async function notificationInbox(actor: Actor, q: URLSearchParams) {
     // One visible prompt per source thread/event. A new message updates the group, not the domain message history.
     const candidates = await tx.$queryRaw<
       Notification[]
-    >`SELECT * FROM (SELECT DISTINCT ON (category,source_group) * FROM public.notification_events WHERE user_id=${actor.id}::uuid AND category=ANY(${enabled}::text[]) AND expires_at>now() ORDER BY category,source_group,sequence DESC) n ORDER BY sequence DESC LIMIT 26 OFFSET ${offset}`;
+    >`SELECT * FROM (SELECT DISTINCT ON (category,source_group) * FROM public.notification_events WHERE user_id=${actor.id}::uuid AND workspace_id IS NOT NULL AND category=ANY(${enabled}::text[]) AND expires_at>now() ORDER BY category,source_group,sequence DESC) n ORDER BY sequence DESC LIMIT 26 OFFSET ${offset}`;
     const items = [];
     for (const n of candidates.slice(0, 25)) {
       const target = await notificationTarget(tx, n);

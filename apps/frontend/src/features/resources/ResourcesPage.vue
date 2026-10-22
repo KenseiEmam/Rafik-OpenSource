@@ -4,7 +4,6 @@ import PageHeading from '../../components/PageHeading.vue'
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { programContext } from '../coaching/program-context'
-import SectionNav from '../institution/SectionNav.vue'
 import ResourceUpload from '../../components/ResourceUpload.vue'
 import ResourceAsset from '../../components/ResourceAsset.vue'
 import { request } from '../../lib/backend'
@@ -102,7 +101,6 @@ onUnmounted(() => {
 })
 </script>
 <template>
-  <SectionNav />
   <div class="container page institution-resources">
     <PageHeading class="page-heading"
       ><div>

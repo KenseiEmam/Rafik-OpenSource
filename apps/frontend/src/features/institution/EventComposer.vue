@@ -14,7 +14,6 @@ import { useCommand } from '../../lib/commands'
 import CommandStatus from '../../components/CommandStatus.vue'
 import MemberPicker from './MemberPicker.vue'
 import PageState from '../../components/PageState.vue'
-import SectionNav from './SectionNav.vue'
 import type { Institution } from './types'
 import type { TrainingGroup, AssessmentTemplate, CalendarEvent } from './service-types'
 const route = useRoute(),
@@ -273,7 +272,6 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <SectionNav />
   <div class="container page event-composer">
     <RouterLink class="back-link" :to="base + '/schedule'">{{
       l('Back to calendar', 'العودة للتقويم')

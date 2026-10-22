@@ -3,7 +3,6 @@ import { PhTray } from '@phosphor-icons/vue'
 import { useListPageSize } from '../../lib/list-page-size'
 import PageHeading from '../../components/PageHeading.vue'
 import ProgramCover from './ProgramCover.vue'
-import SectionNav from '../institution/SectionNav.vue'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { PhPlus, PhArrowRight, PhBarbell } from '@phosphor-icons/vue'
 import { request } from '../../lib/backend'
@@ -70,7 +69,6 @@ onUnmounted(() => {
 })
 </script>
 <template>
-  <SectionNav />
   <div class="container page">
     <PageHeading class="page-heading heading-actions">
       <div>

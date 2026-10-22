@@ -13,7 +13,6 @@ import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { useCommand } from '../../lib/commands'
 import CommandStatus from '../../components/CommandStatus.vue'
 import MemberPicker from '../institution/MemberPicker.vue'
-import SectionNav from '../institution/SectionNav.vue'
 import PageState from '../../components/PageState.vue'
 import MacroPlanner from './MacroPlanner.vue'
 import MealPlanEditor from './MealPlanEditor.vue'
@@ -373,7 +372,6 @@ onBeforeUnmount(() => {
 })
 </script>
 <template>
-  <SectionNav />
   <section
     class="container page org-nutrition nutrition-workspace"
     :class="{ 'with-member': data?.member && !choosing }"

@@ -10,7 +10,6 @@ import { request } from '../../lib/backend'
 import { language as l, errorMessage, dateLabel } from '../../lib/i18n'
 import { formatDate } from '../../lib/dates'
 import { locale } from '../../lib/i18n'
-import SectionNav from './SectionNav.vue'
 import { TabsRoot, TabsList, TabsTrigger, TabsContent } from 'reka-ui'
 import MemberManagement from './MemberManagement.vue'
 import type { Member, Sport } from './types'
@@ -214,7 +213,6 @@ const showParticipation = computed(() => relation.value === 'admin' || relation.
 onMounted(load)
 </script>
 <template>
-  <SectionNav />
   <div class="container page athlete-profile">
     <RouterLink class="back-link" :to="backPath">{{
       l('Back to people', 'العودة إلى الأشخاص')

@@ -9,7 +9,6 @@ import { request } from '../../lib/backend'
 import { localDate, addDays } from '../../lib/dates'
 import { language as l, errorMessage, locale } from '../../lib/i18n'
 import PageState from '../../components/PageState.vue'
-import SectionNav from './SectionNav.vue'
 import MetricChart from '../analytics/MetricChart.vue'
 import type { Drill, AssessmentResult } from './service-types'
 type Result = AssessmentResult & {
@@ -98,7 +97,6 @@ async function load(append = false) {
 onMounted(() => load())
 </script>
 <template>
-  <SectionNav />
   <div class="container page assessment-history">
     <RouterLink class="back-link" :to="base + '/training?member=' + member">{{
       l('Back to training', 'العودة للتدريب')

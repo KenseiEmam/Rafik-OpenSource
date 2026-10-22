@@ -21,7 +21,6 @@ import {
   equipmentCategories,
   equipmentLabel,
 } from '../../lib/exercise-catalog'
-import SectionNav from '../institution/SectionNav.vue'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { PhArrowLeft, PhArrowRight, PhBarbell } from '@phosphor-icons/vue'
 import { user } from '../../app/auth'
@@ -382,7 +381,6 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <SectionNav />
   <div
     class="container page exercise-page"
     :class="{ 'mobile-detail': mobileDetail, 'filters-open': filtersOpen }"

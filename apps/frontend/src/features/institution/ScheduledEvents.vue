@@ -11,7 +11,6 @@ import { request } from '../../lib/backend'
 import { language as l, errorMessage, locale } from '../../lib/i18n'
 import { profile } from '../../app/auth'
 import { localDate } from '../../lib/dates'
-import SectionNav from './SectionNav.vue'
 import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
 import type { CalendarEvent } from './service-types'
@@ -121,7 +120,6 @@ onUnmounted(() => {
 })
 </script>
 <template>
-  <SectionNav />
   <div class="container page scheduled-events-page">
     <PageHeading class="work-heading">
       <div>

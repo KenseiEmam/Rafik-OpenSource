@@ -225,7 +225,11 @@ const router = createRouter({
       component: () => import('../features/notifications/NotificationsPage.vue'),
       meta: { private: true },
     },
-    { path: '/workout/:id', component: () => import('../features/training/WorkoutPage.vue') },
+    {
+      path: '/workout/:id',
+      component: () => import('../features/training/WorkoutPage.vue'),
+      meta: { private: true, institution: true },
+    },
     { path: '/login', component: () => import('../features/account/LoginPage.vue') },
     {
       path: '/settings',

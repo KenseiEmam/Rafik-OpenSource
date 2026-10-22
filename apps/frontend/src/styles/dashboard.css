@@ -17,9 +17,6 @@
 .dashboard-sidebar {
   display: none;
 }
-.dashboard-frame .institution-nav {
-  display: none;
-}
 .dashboard-frame .container {
   width: 100%;
   max-width: 1500px;

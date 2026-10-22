@@ -30,9 +30,7 @@ const entryScreen = computed(() => ['/', '/setup', '/login'].includes(route.path
 const product = computed(
   () =>
     user.value &&
-    !['/', '/login', '/routine', '/privacy', '/help', '/local-preview'].includes(route.path) &&
-    !route.path.startsWith('/invite/') &&
-    !route.path.startsWith('/team-invite/') &&
+    !['/', '/login', '/privacy', '/help', '/local-preview'].includes(route.path) &&
     !route.path.startsWith('/organization-invite/'),
 )
 const dashboard = computed(

@@ -9,7 +9,6 @@ import { request } from '../../lib/backend'
 import { language as l, errorMessage } from '../../lib/i18n'
 import { localDate, addDays } from '../../lib/dates'
 import PageState from '../../components/PageState.vue'
-import SectionNav from '../institution/SectionNav.vue'
 import MetricChart from './MetricChart.vue'
 import TrainerDelivery from './TrainerDelivery.vue'
 import ExperienceReport, { type Experience } from './ExperienceReport.vue'
@@ -139,7 +138,6 @@ const attendance = computed(
 onMounted(() => load())
 </script>
 <template>
-  <SectionNav />
   <div class="container page analytics-page">
     <PageHeading class="work-heading">
       <div>
@@ -234,12 +232,8 @@ onMounted(() => load())
     <PageState :loading="loading && !data" :error="!data ? error : ''" @retry="load()">
       <template v-if="data">
         <div v-if="section !== 'experience'" class="analytics-numbers">
-          <RouterLink :to="base + (workspace ? '/people' : '/clients')"
-            ><span>{{
-              workspace
-                ? l('Active athletes now', 'الرياضيون النشطون الآن')
-                : l('Active athletes now', 'الرياضيون النشطون الآن')
-            }}</span
+          <RouterLink :to="base + '/people'"
+            ><span>{{ l('Active athletes now', 'الرياضيون النشطون الآن') }}</span
             ><strong>{{ data.summary.active }}</strong
             ><small>{{ l('View roster', 'عرض القائمة') }} ↗</small></RouterLink
           >

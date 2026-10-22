@@ -4,7 +4,6 @@ import ExerciseDemo from '../../components/ExerciseDemo.vue'
 import ExercisePicker from '../../components/ExercisePicker.vue'
 import ProgramCover from './ProgramCover.vue'
 import { request } from '../../lib/backend'
-import SectionNav from '../institution/SectionNav.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
@@ -431,7 +430,6 @@ function removeDay() {
 }
 </script>
 <template>
-  <SectionNav />
   <div class="container page editor-page">
     <RouterLink class="back-link" :to="context.base + '/plans'"
       ><PhArrowLeft :size="18" aria-hidden="true" class="directional" />{{

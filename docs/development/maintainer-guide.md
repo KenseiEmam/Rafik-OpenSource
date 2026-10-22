@@ -178,6 +178,10 @@ The single-institution migration regression lives in `apps/backend/scripts/prism
 
 Local recovery/orphan cleanup resolve the same database and file directory through `scripts/prisma/local-storage-target.mjs`. Test database/file stamps must match; malformed or mixed preview/test targets fail before reading or deleting files. Operator defaults remain the local `rafik` database and `.local/files`.
 
-Frontend naming is consistent across feature folders: supported components use plain names: ResourcesPage, NutritionPage, SectionNav, ResourceAsset and ResourceUpload; obsolete standalone variants are removed. Navigation styles use `styles/navigation.css`; nutrition styles use `institution-nutrition.css`. Lowercase wire/schema/storage identifiers retain their compatible names.
+Frontend naming is consistent across feature folders: supported components use plain names: ResourcesPage, NutritionPage, ResourceAsset and ResourceUpload; obsolete standalone variants are removed. Navigation styles use `styles/navigation.css`; nutrition styles use `institution-nutrition.css`. Lowercase wire/schema/storage identifiers retain their compatible names.
 
 The supported web entrypoint must reach every checked-in Vue component. `tests/view-consolidation.test.ts` guards that tree and the required Resources/Nutrition routes. Legacy account-data export/deletion remains for stored-data compatibility; it does not expose a legacy view.
+
+## Frontend inventory and route audit
+
+The [frontend reference](../reference/frontend/README.md) inventories every local Vue file and route. Run `npm run frontend:inventory` after a route/component change, review the diff, and run `npm run frontend:inventory:check`. Update the script-side purpose/access metadata and reviewed dynamic navigation in the same PR. `DashboardNav.vue` is the single institutional navigation component for both sidebar and phone drawer; `section-path.ts` associates detail/edit routes with their parent sections. Do not restore per-page hidden navigation or guest acquisition/recording screens. Token, recovery, compatibility and DEV-only entries have explicit classifications in the reference.

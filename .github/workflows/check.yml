@@ -18,6 +18,7 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci --include=optional
+      - run: npm run frontend:inventory:check
       - run: npm test --workspace @rafik/frontend
       - run: npm run build --workspace @rafik/frontend
       - run: npx playwright install --with-deps chromium

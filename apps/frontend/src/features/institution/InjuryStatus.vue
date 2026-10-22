@@ -7,7 +7,6 @@ import { profile } from '../../app/auth'
 import { request } from '../../lib/backend'
 import { errorMessage, language as l } from '../../lib/i18n'
 import { localDate } from '../../lib/dates'
-import SectionNav from './SectionNav.vue'
 
 const context = programContext(useRoute()),
   endpoint = `/v1/workspaces/${context.workspace}/injuries`,
@@ -134,7 +133,6 @@ onMounted(load)
 </script>
 
 <template>
-  <SectionNav />
   <section class="container page injury-page" aria-labelledby="injury-title">
     <PageHeading class="page-heading"
       ><div>

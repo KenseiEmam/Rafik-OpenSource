@@ -17,16 +17,10 @@ import PageState from '../../components/PageState.vue'
 import { user } from '../../app/auth'
 import { language, locale, t, errorMessage } from '../../lib/i18n'
 import { clone, convertLoad, type LocalSession, type Session, type Unit } from '../../lib/domain'
-import {
-  loadWorkout,
-  changeWorkout,
-  syncWorkout,
-  adoptGuest,
-  reloadServerSession,
-} from '../../lib/training'
+import { loadWorkout, changeWorkout, syncWorkout, reloadServerSession } from '../../lib/training'
 import { editLocalSession, getLocalSession } from '../../lib/storage'
-import { rpc, request } from '../../lib/backend'
-import sample from '../../content/sample.json'
+import { request } from '../../lib/backend'
+import { institutionContext } from '../../app/institution'
 import {
   exerciseInfo,
   exerciseName,
@@ -54,11 +48,9 @@ const noteDraft = ref<string>()
 onBeforeRouteLeave(async () => {
   await mutation
 })
-const owner = computed(() => user.value?.id || 'guest')
+const owner = computed(() => user.value!.id)
 const session = computed(() => row.value?.session)
-const returnPath = computed(() =>
-  session.value?.workspace_id ? '/training' : user.value ? '/dashboard' : '/',
-)
+const returnPath = '/training'
 const current = computed(() => session.value?.prescription.exercises[selected.value])
 const groupBounds = computed(() => {
   const list = session.value?.prescription.exercises || [],
@@ -125,34 +117,28 @@ const status = computed(() =>
     ? language('Saving on this device…', 'جارٍ الحفظ على الجهاز…')
     : !row.value
       ? ''
-      : row.value.owner === 'guest'
-        ? t('localSave')
-        : syncing.value
-          ? t('syncing')
-          : row.value.syncError
-            ? t('syncFailed')
-            : row.value.localRevision > row.value.syncedRevision
-              ? t('waiting')
-              : t('synced'),
+      : syncing.value
+        ? t('syncing')
+        : row.value.syncError
+          ? t('syncFailed')
+          : row.value.localRevision > row.value.syncedRevision
+            ? t('waiting')
+            : t('synced'),
 )
 async function load() {
   loading.value = true
   error.value = ''
   try {
-    row.value = await loadWorkout(
-      id,
-      owner.value,
-      route.query.workspace ? String(route.query.workspace) : undefined,
-    )
-    if (row.value.owner === 'guest' && user.value && route.query.save === '1') {
-      await adoptGuest(id, user.value.id)
-      row.value = await getLocalSession(id)
-      await router.replace(route.path)
+    row.value = await loadWorkout(id, owner.value, institutionContext().workspace)
+    if (
+      row.value.owner !== owner.value ||
+      row.value.session.workspace_id !== institutionContext().workspace
+    ) {
+      row.value = undefined
+      throw new Error('forbidden')
     }
-    if (row.value?.owner !== 'guest') {
-      void sync()
-      void getPrevious()
-    }
+    void sync()
+    void getPrevious()
   } catch (e) {
     error.value = errorMessage(e)
   } finally {
@@ -285,21 +271,6 @@ async function finish() {
   working.value = false
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
-async function saveAccount() {
-  if (!user.value) {
-    await router.push({ path: '/login', query: { next: route.path + '?save=1' } })
-    return
-  }
-  working.value = true
-  try {
-    await adoptGuest(id, user.value.id)
-    row.value = await getLocalSession(id)
-  } catch (e) {
-    error.value = errorMessage(e)
-  } finally {
-    working.value = false
-  }
-}
 async function latest() {
   working.value = true
   try {
@@ -341,20 +312,9 @@ const previous = ref<Record<string, string>>({})
 async function getPrevious() {
   if (!user.value || !session.value) return
   try {
-    const results = session.value.workspace_id
-      ? await request<
-          { exercise_id: string; prescription: PrescriptionExercise; entries: Entry[] }[]
-        >(`/v1/organization-sessions/${id}/previous`)
-      : await rpc<{ exercise_id: string; prescription: PrescriptionExercise; entries: Entry[] }[]>(
-          'previous_performance',
-          {
-            p_exercises: session.value.prescription.exercises.flatMap((e) => [
-              e.exerciseId,
-              ...(e.alternatives || []).map((a) => a.exerciseId),
-            ]),
-            p_before: session.value.started_at,
-          },
-        )
+    const results = await request<
+      { exercise_id: string; prescription: PrescriptionExercise; entries: Entry[] }[]
+    >(`/v1/organization-sessions/${id}/previous`)
     previous.value = Object.fromEntries(
       results.map((r) => [
         r.exercise_id,
@@ -384,9 +344,7 @@ function correctSets() {
 <template>
   <div class="container page workout-page">
     <RouterLink class="back-link" :to="returnPath"
-      ><PhArrowLeft :size="18" class="directional" aria-hidden="true" />{{
-        user ? t('today') : t('sample')
-      }}</RouterLink
+      ><PhArrowLeft :size="18" class="directional" aria-hidden="true" />{{ t('today') }}</RouterLink
     ><PageState :loading="loading" :error="!row ? error : ''" @retry="load"
       ><template v-if="row && session">
         <p v-if="session.recorded_mode === 'delegated'" class="notice" role="note" dir="auto">
@@ -399,9 +357,7 @@ function correctSets() {
         </p>
         <div class="workout-heading">
           <div>
-            <span class="overline">{{
-              session.title === sample.title ? t('contentTitle') : session.title
-            }}</span>
+            <span class="overline">{{ session.title }}</span>
             <h1>
               {{
                 finished
@@ -413,11 +369,11 @@ function correctSets() {
             </h1>
           </div>
           <span class="save-status" role="status"
-            ><PhCloudSlash
-              v-if="row.owner === 'guest' || row.syncError"
+            ><PhCloudSlash v-if="row.syncError" :size="19" aria-hidden="true" /><PhCloudCheck
+              v-else
               :size="19"
               aria-hidden="true"
-            /><PhCloudCheck v-else :size="19" aria-hidden="true" />{{ status }}</span
+            />{{ status }}</span
           >
         </div>
         <div v-if="error" class="notice error" role="alert">{{ error }}</div>
@@ -776,11 +732,7 @@ function correctSets() {
             <div class="panel">
               <label for="session-note"
                 ><h3>
-                  {{
-                    row.owner === 'guest'
-                      ? language('A note for next time', 'ملاحظة للمرة القادمة')
-                      : t('note')
-                  }}
+                  {{ t('note') }}
                 </h3>
                 <span class="subtle">{{ t('optional') }}</span></label
               ><textarea
@@ -801,20 +753,6 @@ function correctSets() {
             <div v-if="session.coach_note" class="panel feedback-panel">
               <h3>{{ t('feedback') }}</h3>
               <p>{{ session.coach_note }}</p>
-            </div>
-            <div v-if="row.owner === 'guest'" class="panel tinted">
-              <h3>{{ language('Keep this session with you.', 'احتفظ بهذه الحصة.') }}</h3>
-              <p>
-                {{
-                  language(
-                    'Save to an account for a backed-up history. Your workout stays here while you sign in.',
-                    'احفظها بحساب للاحتفاظ بسجلك. سيبقى تمرينك هنا أثناء تسجيل الدخول.',
-                  )
-                }}
-              </p>
-              <button class="button full" :disabled="working" @click="saveAccount">
-                {{ language('Save to my account', 'حفظ في حسابي') }}
-              </button>
             </div>
           </aside>
         </section>

@@ -29,6 +29,7 @@ test('one Resources screen and role-aware Nutrition resolve through the supporte
     const resources = page.waitForResponse((r) => r.url().includes(`/v1/workspaces/${id}/assets?`))
     await f.login(page, f.owner, '/resources')
     expect((await resources).status()).toBe(200)
+    await expect(page.locator('.institution-nav')).toHaveCount(0)
     await expect(page.getByRole('heading', { name: 'Resources', exact: true })).toBeVisible()
     await expect(
       page.getByRole('heading', { name: 'No files in this view', exact: true }),
@@ -52,4 +53,16 @@ test('one Resources screen and role-aware Nutrition resolve through the supporte
   } finally {
     await f.cleanup()
   }
+})
+
+test('workout recording requires institutional sign-in rather than a guest entry', async ({
+  page,
+}) => {
+  const id = randomUUID()
+  await page.goto(`/workout/${id}`)
+  await expect(page).toHaveURL(new RegExp(`/login\\?next=/workout/${id}$`))
+  await expect(
+    page.getByRole('heading', { name: 'Institution workspace', exact: true }),
+  ).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Save to my account', exact: true })).toHaveCount(0)
 })

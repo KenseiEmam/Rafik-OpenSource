@@ -14,7 +14,6 @@ import { useCommand } from '../../lib/commands'
 import CommandStatus from '../../components/CommandStatus.vue'
 import MemberPicker from './MemberPicker.vue'
 import PageState from '../../components/PageState.vue'
-import SectionNav from './SectionNav.vue'
 import type { EventDetail, EventPerson } from './service-types'
 import type { Institution } from './types'
 const route = useRoute(),
@@ -273,7 +272,6 @@ watch(
 onMounted(load)
 </script>
 <template>
-  <SectionNav />
   <div class="container page event-detail">
     <RouterLink
       class="back-link"

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { sectionPath } from './section-path'
 import {
   PhHouse,
   PhUsers,
@@ -105,11 +106,7 @@ const groups = computed(() =>
         ],
 )
 function selected(path: string) {
-  const current = route.path
-    .replace('/events', '/schedule')
-    .replace('/deliver/', '/plans/')
-    .replace('/review/', '/workouts/')
-    .replace('/assessments/', '/training/')
+  const current = sectionPath(route.path)
   return path
     ? current === props.base + path || current.startsWith(props.base + path + '/')
     : current === props.base

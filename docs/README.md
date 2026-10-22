@@ -19,6 +19,14 @@ This page is the index for maintained Rafik documentation. The root [README](../
 - [Content maintenance](reference/content-maintenance.md): canonical content generation, provenance and media rights.
 - [Known issues and release gaps](known-issues/README.md): verified product/operational gaps, impact, evidence and next steps.
 
+## Frontend development reference
+
+- [Frontend audit, scope and findings](reference/frontend/README.md): source coverage, architectural ownership, cleanup decisions, deliberate exceptions and refresh commands.
+- [View inventory](reference/frontend/views.md): every routed/embedded screen, purpose, access and navigation.
+- [Component catalog](reference/frontend/components.md): all local Vue components and direct/transitive consuming views.
+- [Route registry and maps](reference/frontend/navigation.md): routes, redirects, navigation relationships, Mermaid maps and source evidence.
+- [Reusable frontend audit prompt](development/frontend-audit-prompt.md): improved instructions for subsequent contributor audits.
+
 ## Development and quality
 
 - [Development setup and workflows](development/README.md): prerequisites, local setup, common change workflows and troubleshooting.

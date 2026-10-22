@@ -73,7 +73,9 @@
     "verify:release": "npm run verify:release --workspace @rafik/backend",
     "mobile:acceptance": "node apps/mobile/scripts/acceptance.mjs",
     "mobile:release": "node apps/mobile/scripts/release.mjs",
-    "test:institution-cleanup": "npm run test:institution-cleanup --workspace @rafik/backend"
+    "test:institution-cleanup": "npm run test:institution-cleanup --workspace @rafik/backend",
+    "frontend:inventory": "node apps/frontend/scripts/frontend-inventory.mjs",
+    "frontend:inventory:check": "node apps/frontend/scripts/frontend-inventory.mjs --check"
   },
   "overrides": {
     "tar": "7.5.22",

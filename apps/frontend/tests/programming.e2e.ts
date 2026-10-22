@@ -7,7 +7,8 @@ test('organization program authoring, reviewed delivery, recording and feedback 
   page,
   browser,
 }, info) => {
-  test.setTimeout(90000)
+  // Two publications/assignments plus offline/reload/review; individual expectations remain bounded.
+  test.setTimeout(150000)
   const f = await teamFixture(),
     clientContext = await browser.newContext(),
     client = await clientContext.newPage(),

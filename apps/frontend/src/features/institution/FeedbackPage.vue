@@ -5,7 +5,6 @@ import { useRoute } from 'vue-router'
 import { programContext } from '../coaching/program-context'
 import { request } from '../../lib/backend'
 import { language as l, errorMessage, dateLabel } from '../../lib/i18n'
-import SectionNav from './SectionNav.vue'
 import RatingForm from './RatingForm.vue'
 const context = programContext(useRoute()),
   endpoint = `/v1/workspaces/${context.workspace}/feedback`
@@ -49,7 +48,6 @@ onMounted(() => load())
 onUnmounted(() => generation++)
 </script>
 <template>
-  <SectionNav />
   <div class="container page feedback-page">
     <PageHeading class="page-heading"
       ><div>

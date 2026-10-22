@@ -6,6 +6,10 @@ Each installation serves one institution. Browser routes resolve membership rath
 
 **Status: current architecture, 17 October 2026.** The university-owned Compose deployment and Stage 5 prototype workflows are implemented locally. Optional Stage 6 provider-specific VM templates exist as unverified starters; provider validation is deferred and does not block Stage 7. The Stage 7 coach-first Android beta.1 is accepted and published; broader coverage remains follow-up work. The [requirements and stage gates](../requirements/README.md) define delivery status; this page describes the system as it exists and the constraints new work must preserve.
 
+## Web frontend reference
+
+The [frontend inventory](../reference/frontend/README.md) records every local Vue screen/component, role/resource boundary and route, with incoming/outgoing links and visual maps. One role-aware DashboardNav supplies sidebar and phone navigation. Detail/editor routes normalize to the parent navigation section. The workout recorder requires current sign-in, institution membership and matching local owner/institution before rendering. Guest adoption is retired; historical account-owned pending data and export/deletion compatibility remain. Notifications no longer expose independent-coaching destinations after the corresponding web screens were retired. No native API contract or stored historical data was removed by this audit.
+
 ## Repository components
 
 Android beta distribution uses a directly signed APK with bundled JavaScript, package ID `org.rafik.field` and a persistent private signing key. Release manifest/network rules allow HTTPS plus only the existing local-development HTTP addresses. The configured native minimum is API 24. Signing files stay outside Git and runtime/server images; artifact installation/upgrade evidence is separate from source/API evidence. See [ADR 0024](../decisions/ADR-0024-android-beta-distribution.md).
