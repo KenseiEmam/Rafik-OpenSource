@@ -12,6 +12,15 @@ import OrganizationNav from '../organizations/OrganizationNav.vue'
 import MemberPicker from '../organizations/MemberPicker.vue'
 import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
+import {
+  DialogRoot,
+  DialogPortal,
+  DialogOverlay,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from 'reka-ui'
 const route = useRoute(),
   router = useRouter(),
   workspace = String(route.params.workspace),
@@ -122,21 +131,43 @@ function create(ids: string[]) {
           }}
         </p>
       </div>
-      <button class="button" :aria-expanded="creating" @click="creating = !creating">
+      <button class="button" aria-haspopup="dialog" @click="creating = true">
         {{ l('Create a plan', 'إنشاء خطة') }}
       </button>
     </PageHeading>
-    <section v-if="creating" class="panel">
-      <MemberPicker
-        :workspace="workspace"
-        :view="view"
-        role="trainee"
-        single
-        :model-value="[]"
-        :label="l('Who is this new plan for?', 'لمن هذه الخطة الجديدة؟')"
-        @update:model-value="create"
-      />
-    </section>
+    <!-- Choosing the athlete is a short, focused step: a dialog, not a card pushed onto the list. -->
+    <DialogRoot v-model:open="creating">
+      <DialogPortal>
+        <DialogOverlay class="ui-dialog-overlay" />
+        <DialogContent class="ui-dialog" :dir="locale === 'ar' ? 'rtl' : 'ltr'">
+          <DialogTitle>{{ l('Create a nutrition plan', 'إنشاء خطة تغذية') }}</DialogTitle>
+          <DialogDescription>
+            {{
+              l(
+                'Choose the athlete. You will set targets and example meals on the next page.',
+                'اختر الرياضي. ستحدد الأهداف وأمثلة الوجبات في الصفحة التالية.',
+              )
+            }}
+          </DialogDescription>
+          <MemberPicker
+            :workspace="workspace"
+            :view="view"
+            role="trainee"
+            single
+            :model-value="[]"
+            :label="l('Who is this new plan for?', 'لمن هذه الخطة الجديدة؟')"
+            @update:model-value="create"
+          />
+          <div class="ui-dialog-actions">
+            <DialogClose as-child
+              ><button type="button" class="button secondary">
+                {{ l('Cancel', 'إلغاء') }}
+              </button></DialogClose
+            >
+          </div>
+        </DialogContent>
+      </DialogPortal>
+    </DialogRoot>
     <div class="list-toolbar">
       <form class="nutrition-plan-filters" @submit.prevent="navigate()">
         <AthleteSearch v-model="search" /><label

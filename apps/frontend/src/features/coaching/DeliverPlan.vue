@@ -785,8 +785,8 @@ onMounted(load)
     >
     <DialogRoot :open="!!choosing" @update:open="(open) => !open && (choosing = '')">
       <DialogPortal>
-        <DialogOverlay class="plan-choice-overlay" />
-        <DialogContent class="plan-choice-dialog" :dir="locale === 'ar' ? 'rtl' : 'ltr'">
+        <DialogOverlay class="ui-dialog-overlay" />
+        <DialogContent class="ui-dialog" :dir="locale === 'ar' ? 'rtl' : 'ltr'">
           <DialogTitle
             >{{ l('Current plans', 'الخطط الحالية') }} ·
             <bdi>{{ nameOf(choosing) }}</bdi></DialogTitle
@@ -821,7 +821,7 @@ onMounted(load)
               ></label
             >
           </fieldset>
-          <div class="actions">
+          <div class="ui-dialog-actions">
             <DialogClose as-child
               ><button type="button" class="button secondary">
                 {{ l('Cancel', 'إلغاء') }}
@@ -1118,38 +1118,6 @@ onMounted(load)
   gap: var(--space-2);
   padding-inline-start: var(--space-5);
 }
-.plan-choice-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  background: #0009;
-}
-.plan-choice-dialog {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  z-index: 101;
-  width: min(520px, calc(100vw - 32px));
-  max-height: calc(100dvh - 32px);
-  overflow: auto;
-  padding: var(--space-6);
-  transform: translate(-50%, -50%);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-panel, 12px);
-  background: var(--surface);
-  color: var(--ink);
-}
-.plan-choice-dialog h2 {
-  margin: 0 0 var(--space-2);
-  font-size: var(--text-panel);
-  overflow-wrap: anywhere;
-}
-.plan-choice-dialog > p {
-  margin: 0 0 var(--space-4);
-  color: var(--muted);
-  font-size: var(--text-small);
-  line-height: 1.6;
-}
 .plan-choices {
   display: grid;
   gap: var(--space-2);
@@ -1184,15 +1152,6 @@ onMounted(load)
 }
 .plan-choice small {
   color: var(--muted);
-}
-.plan-choice-dialog .actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: var(--space-3);
-}
-.plan-choice-dialog .actions .button {
-  margin: 0;
 }
 @media (max-width: 980px) {
   .delivery-setup {

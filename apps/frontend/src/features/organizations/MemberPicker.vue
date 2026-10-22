@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch, computed } from 'vue'
+import { onMounted, onUnmounted, ref, watch, computed, useId } from 'vue'
 import { request } from '../../lib/backend'
 import { language as l, errorMessage } from '../../lib/i18n'
+import { PhCheck, PhMagnifyingGlass, PhPlus } from '@phosphor-icons/vue'
 import type { Member } from './types'
 const props = withDefaults(
   defineProps<{
@@ -29,16 +30,27 @@ const props = withDefaults(
     excludeIds: () => [],
   },
 )
+/** Large institutions: show only the closest matches; selected people always resolve. */
+const MATCHES = 5
+const uid = useId()
 const emit = defineEmits<{ 'update:modelValue': [string[]]; options: [Member[]] }>()
 const search = ref(''),
   items = ref<Member[]>([]),
   chosen = ref<Member[]>([]),
-  next = ref<number | null>(null),
   loading = ref(false),
-  error = ref(''),
-  total = ref(0)
-let generation = 0
-async function load(append = false) {
+  error = ref('')
+let generation = 0,
+  searchTimer: ReturnType<typeof setTimeout> | undefined
+const emailSearch = computed(() => props.view === 'admin')
+const initials = (name: string) =>
+  name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join('')
+    .toUpperCase()
+async function load() {
   const current = ++generation
   loading.value = true
   error.value = ''
@@ -49,8 +61,9 @@ async function load(append = false) {
       sport: props.sport,
       search: search.value,
       self: String(props.includeSelf),
-      offset: String(append ? next.value || 0 : 0),
+      limit: String(MATCHES),
       selected: props.modelValue.join(','),
+      ...(emailSearch.value ? { email: 'true' } : {}),
     })
     const data = await request<{
       items: Member[]
@@ -59,12 +72,8 @@ async function load(append = false) {
       total: number
     }>(`/v1/workspaces/${props.workspace}/people?${q}`)
     if (current !== generation) return
-    items.value = append
-      ? Array.from(new Map([...items.value, ...data.items].map((m) => [m.id, m])).values())
-      : data.items
+    items.value = data.items.slice(0, MATCHES)
     chosen.value = data.selected
-    next.value = data.next
-    total.value = data.total
     emit(
       'options',
       Array.from(new Map([...chosen.value, ...items.value].map((m) => [m.id, m])).values()),
@@ -105,6 +114,10 @@ watch(
     } else void load()
   },
 )
+watch(search, () => {
+  clearTimeout(searchTimer)
+  searchTimer = setTimeout(() => void load(), 180)
+})
 watch(
   () => [props.role, props.sport],
   () => load(),
@@ -112,43 +125,44 @@ watch(
 onMounted(() => load())
 onUnmounted(() => {
   generation++
+  clearTimeout(searchTimer)
 })
 </script>
 <template>
   <section class="member-picker">
-    <div class="member-search">
-      <label
-        >{{ label || l('Find people', 'البحث عن أشخاص')
-        }}<input
-          :placeholder="l('Search by name…', 'ابحث بالاسم…')"
+    <label class="member-search"
+      ><span>{{ label || l('Find people', 'البحث عن أشخاص') }}</span
+      ><span class="member-search-field"
+        ><PhMagnifyingGlass :size="18" aria-hidden="true" /><input
+          :placeholder="
+            emailSearch
+              ? l('Search by name or email…', 'ابحث بالاسم أو البريد الإلكتروني…')
+              : l('Search by name…', 'ابحث بالاسم…')
+          "
           v-model="search"
           type="search"
           :disabled="disabled"
-          @keydown.enter.prevent="load()" /></label
-      ><button
-        type="button"
-        class="button small secondary"
-        :disabled="disabled || loading"
-        @click="load()"
-      >
-        {{ l('Search people', 'البحث عن أشخاص') }}
-      </button>
-    </div>
+          @keydown.enter.prevent="load()" /></span
+    ></label>
+    <p class="small-print">
+      {{
+        l(
+          `Shows the ${MATCHES} closest matches · ${modelValue.length} selected`,
+          `تظهر أقرب ${MATCHES} نتائج · ${modelValue.length} محدد`,
+        )
+      }}
+    </p>
     <p v-if="error" class="notice error" role="alert">
       {{ error }}
       <button type="button" class="text-link" @click="load()">
         {{ l('Try again', 'حاول مجدداً') }}
       </button>
     </p>
-    <p class="small-print">
-      {{ modelValue.length }} {{ l('selected', 'محدد') }} · {{ total }}
-      {{ l('matching active people', 'شخص نشط مطابق') }}
-    </p>
     <div v-if="modelValue.length" class="chosen-members">
       <span v-for="id in modelValue" :key="id"
-        ><span>{{
+        ><bdi>{{
           chosen.find((m) => m.id === id)?.name || l('Unavailable person', 'شخص غير متاح')
-        }}</span
+        }}</bdi
         ><button
           type="button"
           :disabled="disabled || requiredIds.includes(id)"
@@ -165,34 +179,44 @@ onUnmounted(() => {
         l('Remove unavailable people before continuing.', 'أزل الأشخاص غير المتاحين قبل المتابعة.')
       }}
     </p>
-    <div class="member-options" :aria-busy="loading">
-      <label v-for="m in items" :key="m.id" class="check-label"
-        ><input
-          type="checkbox"
-          :checked="modelValue.includes(m.id)"
-          :disabled="
-            disabled ||
-            loading ||
-            requiredIds.includes(m.id) ||
-            excludeIds.includes(m.id) ||
-            (!modelValue.includes(m.id) && modelValue.length >= max)
-          "
-          @change="toggle(m.id)" /><span class="member-option-details"
-          >{{ m.name }}<slot :member="m" /></span
-      ></label>
-    </div>
+    <!-- Compact name cards: the whole card toggles a real checkbox; plus/check shows the state. -->
+    <ul class="member-options" :aria-busy="loading">
+      <li v-for="m in items" :key="m.id">
+        <label class="member-match" :class="{ 'is-chosen': modelValue.includes(m.id) }"
+          ><input
+            type="checkbox"
+            class="member-match-input"
+            :aria-labelledby="`${uid}-${m.id}`"
+            :aria-describedby="m.email ? `${uid}-${m.id}-email` : undefined"
+            :checked="modelValue.includes(m.id)"
+            :disabled="
+              disabled ||
+              loading ||
+              requiredIds.includes(m.id) ||
+              excludeIds.includes(m.id) ||
+              (!single && !modelValue.includes(m.id) && modelValue.length >= max)
+            "
+            @change="toggle(m.id)" /><span class="avatar small" aria-hidden="true">{{
+            initials(m.name)
+          }}</span
+          ><span class="member-option-details"
+            ><span :id="`${uid}-${m.id}`" class="member-option-name"
+              ><bdi>{{ m.name }}</bdi
+              ><slot :member="m" /></span
+            ><small v-if="m.email" :id="`${uid}-${m.id}-email`"
+              ><bdi dir="ltr">{{ m.email }}</bdi></small
+            ></span
+          ><span class="member-match-icon" aria-hidden="true"
+            ><PhCheck v-if="modelValue.includes(m.id)" :size="16" weight="bold" /><PhPlus
+              v-else
+              :size="16"
+              weight="bold" /></span
+        ></label>
+      </li>
+    </ul>
     <p v-if="!items.length && !loading" class="small-print">
       {{ l('No matching people.', 'لا يوجد أشخاص مطابقون.') }}
     </p>
-    <button
-      v-if="next !== null"
-      type="button"
-      class="text-link"
-      :disabled="loading || disabled"
-      @click="load(true)"
-    >
-      {{ l('Load more people', 'تحميل المزيد من الأشخاص') }}
-    </button>
   </section>
 </template>
 <style scoped>
@@ -201,44 +225,120 @@ onUnmounted(() => {
   margin: 16px 0;
 }
 .member-search {
-  display: flex;
-  gap: 12px;
-  align-items: end;
-}
-.member-search label {
-  flex: 1;
   display: grid;
   gap: 8px;
+  margin: 0;
   min-width: 0;
-  margin: 0;
 }
-.member-search input,
-.member-search .button {
-  height: 44px;
+.member-search-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   min-height: 44px;
-  margin: 0;
-}
-/* A bounded, visibly framed list so partially scrolled rows do not look clipped. */
-.member-options {
-  max-height: 300px;
-  overflow: auto;
-  display: grid;
-  gap: 4px;
-  margin-block: 8px;
-  padding: 4px 12px;
+  padding-inline: 14px;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface);
+  border-radius: var(--radius-control, 8px);
+  background: var(--page);
+  color: var(--muted);
+}
+.member-search-field:focus-within {
+  border-color: var(--accent);
+  outline: 2px solid color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.member-search-field input {
+  flex: 1;
+  min-width: 0;
+  min-height: 42px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  outline: none;
+}
+.member-options {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0;
+  padding: 0;
+  list-style: none;
 }
 .member-options:empty {
   display: none;
+}
+.member-match {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control, 8px);
+  background: var(--page);
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.member-match:hover:not(:has(input:disabled)) {
+  border-color: var(--accent);
+}
+.member-match:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.member-match.is-chosen {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 16%, var(--page));
+}
+.member-match:has(input:disabled):not(.is-chosen) {
+  cursor: default;
+  opacity: 0.55;
+}
+/* Visually hidden but still the accessible, keyboard-operable control. */
+.member-match-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  min-height: 0;
+  margin: 0;
+  opacity: 0;
+}
+.member-option-details {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+  min-width: 0;
+  font-weight: 600;
+}
+.member-option-name {
+  display: block;
+}
+.member-option-details small {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+.member-match-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.member-match:has(input:disabled):not(.is-chosen) .member-match-icon {
+  background: var(--surface-soft);
+  color: var(--muted);
 }
 .chosen-members {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-block: 8px;
 }
 .chosen-members > span {
+  font-size: var(--text-small);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -248,30 +348,5 @@ onUnmounted(() => {
   border-radius: 8px;
   max-width: 100%;
   overflow-wrap: anywhere;
-}
-.member-options label {
-  overflow-wrap: anywhere;
-  min-width: 0;
-}
-.member-option-details {
-  min-width: 0;
-}
-.member-options label:has(.member-option-details small) {
-  padding: 12px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  align-items: start;
-}
-.member-options label:has(input:checked) {
-  background: var(--surface-soft);
-}
-@media (max-width: 600px) {
-  .member-search {
-    align-items: stretch;
-    flex-direction: column;
-  }
-  .member-search button {
-    align-self: start;
-  }
 }
 </style>

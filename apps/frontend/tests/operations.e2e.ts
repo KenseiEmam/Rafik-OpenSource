@@ -121,6 +121,8 @@ test('large member selection searches the full roster and keeps reviewed choices
       'docker',
       [
         'compose',
+        '-f',
+        resolve(import.meta.dirname, '../../../infrastructure/compose.yaml'),
         'exec',
         '-T',
         'db',
@@ -141,19 +143,18 @@ test('large member selection searches the full roster and keeps reviewed choices
     await f.login(page, f.owner, `/organization/${id}/admin/groups`)
     await page.getByRole('button', { name: 'New group', exact: true }).click()
     await page.getByLabel('Name', { exact: true }).fill('Reviewed roster selection')
-    const picker = page.locator('.member-picker')
-    await expect(picker.getByRole('checkbox')).toHaveCount(25)
+    const picker = page.locator('.member-picker').first()
+    // Large rosters: only the five closest matches are listed; choices survive new searches.
+    await expect(picker.getByRole('checkbox')).toHaveCount(5)
     await picker.getByRole('checkbox', { name: people[0]!.name, exact: true }).check()
-    await picker.getByRole('button', { name: 'Load more people', exact: true }).click()
-    await expect(picker.getByRole('checkbox')).toHaveCount(50)
+    await picker.getByRole('searchbox').fill('049')
+    await expect(picker.getByRole('checkbox')).toHaveCount(1)
     await picker.getByRole('checkbox', { name: people[49]!.name, exact: true }).check()
     await expect(picker.locator('.chosen-members')).toContainText(people[49]!.name)
-    await expect(picker.getByRole('checkbox')).toHaveCount(50)
     await expect(
       picker.getByRole('checkbox', { name: people[49]!.name, exact: true }),
     ).toBeChecked()
     await picker.getByRole('searchbox').fill('060')
-    await picker.getByRole('button', { name: 'Search people', exact: true }).click()
     await picker.getByRole('checkbox', { name: people[60]!.name, exact: true }).check()
     await expect(picker.locator('.chosen-members')).toContainText(people[0]!.name)
     await expect(page.getByText('Draft saved on this device.', { exact: true })).toBeVisible()

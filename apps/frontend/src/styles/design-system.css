@@ -586,3 +586,51 @@ input[type='radio'] {
     grid-column: 1 / -1;
   }
 }
+
+/* Shared modal dialog (Reka DialogContent): centred, bounded, scrolls inside on short screens. */
+.ui-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #0009;
+}
+.ui-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 101;
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  padding: var(--space-6);
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+  color: var(--ink);
+}
+.ui-dialog > h2 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-panel);
+  overflow-wrap: anywhere;
+}
+.ui-dialog > p {
+  margin: 0 0 var(--space-4);
+  color: var(--muted);
+  font-size: var(--text-small);
+  line-height: 1.6;
+}
+.ui-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+.ui-dialog-actions .button {
+  margin: 0;
+}
+@media (max-width: 600px) {
+  .ui-dialog {
+    padding: var(--space-4);
+  }
+}
