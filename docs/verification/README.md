@@ -1,5 +1,13 @@
 # Verification record
 
+## Cleanup follow-up — 22 October 2026
+
+Founder requested removal of retirement/omitted-feature routes and clearer source names. Removed the Tasks tombstone, workspace-chooser redirect and omitted standalone coach/check-in/team routes. Renamed frontend `features/organizations` to `features/institution`, `features/workspace` to `features/navigation`, and all institution-specific UI components/types, including shared upload/assets and sibling resource/nutrition views; API/schema/object-path identifiers remain compatible. Historical archive records retain their original names.
+
+The reported maintenance regression was a mixed target: API bytes used the isolated directory while the test, recovery and orphan-cleanup scripts used `.local/files` and the preview database. `local-storage-target.mjs` now validates matching database/file scope for both scripts. The exact recovery/orphan-grace integration test passes in a disposable database, including restored content/metadata and preservation of referenced/recent bytes. Its backup and files are cleaned with that test's directory. Ordinary operator defaults are unchanged. Broader audits/native builds are outside this follow-up.
+
+Follow-up checks: recovery/orphan integration 1 passed; storage-target checks 3 passed; Chromium route checks 2 passed; frontend/backend typechecks; production build; documentation checker (399 local links, 45 anchors, 59 documents). Landing content/version tests: 6 passed. The onboarding assertion now expects the removed `/today` route to be unavailable, then continues through `/dashboard`; the whole onboarding suite was not repeated. No design audit or full platform matrix was run.
+
 ## Single-institution cleanup — 22 October 2026
 
 Unreleased branch `codex/single-institution-cleanup`; keep its application PR and [landing PR #34](https://github.com/KenseiEmam/rafik-landing/pull/34) unmerged until the release is complete.
@@ -10,7 +18,7 @@ Passed on the cleanup source:
 - Isolated API: 10 tests for institution authorization, membership lifecycle, exact replay, hidden independent contexts, removed creation/Tasks endpoints, notifications and bundled Swagger compatibility.
 - A further 4 program/media API cases passed with canonical reference fixtures and a unique disposable file directory. The retired Tasks CI step now runs the migration cleanup check.
 - Frontend: 33 unit tests; frontend/backend typechecks; production build through the isolated browser wrapper.
-- Final routing journey: Chromium desktop and WebKit iPhone emulation, 2/2. Flat routes, old institution IDs and role segments, preserved search/limit query, institution/account settings separation, retired Tasks page, wrong-institution recovery, hidden chooser, trainer restrictions, and removal of only the current account's retired drafts/commands. Unrelated/other-account drafts remain. English/light flows and Arabic/dark schedule/layout inspected; final settled Arabic screenshots inspected in both engines. The separate Help journey passed in both engines before the final draft-cleanup addition; reused for unaffected Help behavior.
+- Final routing journey: Chromium desktop and WebKit iPhone emulation, 2/2. Flat routes, old institution IDs and role segments, preserved search/limit query, institution/account settings separation, retired URL handling, wrong-institution recovery, hidden chooser, trainer restrictions, and removal of only the current account's retired drafts/commands. Unrelated/other-account drafts remain. English/light flows and Arabic/dark schedule/layout inspected; final settled Arabic screenshots inspected in both engines. The separate Help journey passed in both engines before the final draft-cleanup addition; reused for unaffected Help behavior.
 - Documentation checker: 2 fixtures, 399 local links and 45 heading anchors across 59 maintained documents. Landing paired content/version tests: 6 passed.
 
 Earlier attempts exposed a phone-sidebar visibility assertion, an accidentally changed fixture expectation (restored), and fixture HTTP ECONNRESET. The final fixture disables idle-socket reuse without write retries. A temporary migration database name first failed the existing local guard; an allowed disposable name completed generation. Sandbox subprocess restrictions required elevated test execution. These failed attempts are not counted as passing acceptance.

@@ -38,7 +38,7 @@
     "test:organization-services": "node scripts/prisma/isolated-api.mjs tests/organization-services.test.ts",
     "test:communication": "node scripts/prisma/isolated-api.mjs tests/communication.test.ts tests/notifications.test.ts",
     "notifications:local": "tsx scripts/dispatch-notifications.ts",
-    "test:operations": "node scripts/prisma/isolated-api.mjs tests/platform.test.ts tests/scale.test.ts tests/maintenance.test.ts tests/local-boundary.test.ts",
+    "test:operations": "node --test --test-isolation=none scripts/prisma/local-storage-target.test.mjs && node scripts/prisma/isolated-api.mjs tests/platform.test.ts tests/scale.test.ts tests/maintenance.test.ts tests/local-boundary.test.ts",
     "recovery:local": "node scripts/prisma/recovery.mjs",
     "files:maintenance": "node scripts/prisma/cleanup-private.mjs",
     "test:catalog": "node scripts/prisma/isolated-api.mjs tests/public-catalog.test.ts tests/exercise-video.test.ts",

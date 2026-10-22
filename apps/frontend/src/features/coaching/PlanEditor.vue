@@ -4,7 +4,7 @@ import ExerciseDemo from '../../components/ExerciseDemo.vue'
 import ExercisePicker from '../../components/ExercisePicker.vue'
 import ProgramCover from './ProgramCover.vue'
 import { request } from '../../lib/backend'
-import OrganizationNav from '../organizations/OrganizationNav.vue'
+import InstitutionNav from '../institution/InstitutionNav.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
@@ -433,7 +433,7 @@ function removeDay() {
 }
 </script>
 <template>
-  <OrganizationNav v-if="context.workspace" />
+  <InstitutionNav v-if="context.workspace" />
   <div class="container page editor-page">
     <RouterLink class="back-link" :to="context.base + '/plans'"
       ><PhArrowLeft :size="18" aria-hidden="true" class="directional" />{{

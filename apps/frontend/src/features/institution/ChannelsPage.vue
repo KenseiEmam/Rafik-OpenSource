@@ -7,9 +7,9 @@ import { request } from '../../lib/backend'
 import { language as l, errorMessage } from '../../lib/i18n'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
-import OrganizationNav from './OrganizationNav.vue'
+import InstitutionNav from './InstitutionNav.vue'
 import ChannelThread from './ChannelThread.vue'
-import type { Member, Organization } from './types'
+import type { Member, Institution } from './types'
 const route = useRoute(),
   router = useRouter(),
   workspace = institutionContext().workspace,
@@ -30,7 +30,7 @@ async function refresh() {
 const items = ref<Channel[]>([]),
   people = ref<Member[]>([]),
   directPeople = ref<string[]>([]),
-  workspaceSelf = ref<Organization['self']>(),
+  workspaceSelf = ref<Institution['self']>(),
   search = ref(String(route.query.search || '')),
   next = ref<number | null>(null),
   loading = ref(true),
@@ -72,7 +72,7 @@ async function loadPeople() {
   peopleLoading.value = true
   peopleError.value = ''
   try {
-    const result = await request<Organization>(`/v1/workspaces/${workspace}?view=${view}`)
+    const result = await request<Institution>(`/v1/workspaces/${workspace}?view=${view}`)
     workspaceSelf.value = result.self
     people.value = result.members
   } catch (e) {
@@ -165,7 +165,7 @@ watch(
 )
 </script>
 <template>
-  <OrganizationNav />
+  <InstitutionNav />
   <div
     class="container page messages-page institution-messages organization-messages"
     :class="{ 'has-thread': !!id }"

@@ -5,7 +5,7 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { contexts } from '../../app/auth'
 import { language as l } from '../../lib/i18n'
-import './organization.css'
+import './institution.css'
 const route = useRoute(),
   router = useRouter()
 const base = computed(() => '')

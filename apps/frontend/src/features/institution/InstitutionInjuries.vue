@@ -7,7 +7,7 @@ import { profile } from '../../app/auth'
 import { request } from '../../lib/backend'
 import { errorMessage, language as l } from '../../lib/i18n'
 import { localDate } from '../../lib/dates'
-import OrganizationNav from './OrganizationNav.vue'
+import InstitutionNav from './InstitutionNav.vue'
 
 const context = programContext(useRoute()),
   endpoint = `/v1/workspaces/${context.workspace}/injuries`,
@@ -134,7 +134,7 @@ onMounted(load)
 </script>
 
 <template>
-  <OrganizationNav />
+  <InstitutionNav />
   <section class="container page injury-page" aria-labelledby="injury-title">
     <PageHeading class="page-heading"
       ><div>

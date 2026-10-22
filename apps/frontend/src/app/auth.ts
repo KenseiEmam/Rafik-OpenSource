@@ -1,7 +1,7 @@
 import { shallowRef, ref } from 'vue'
 import { api, configured, rpc, request, type ApiUser } from '../lib/backend'
 import type { Profile } from '../lib/domain'
-import type { Context } from '../features/organizations/types'
+import type { Context } from '../features/institution/types'
 import { removeRetiredTaskDrafts } from '../lib/storage'
 import { locale } from '../lib/i18n'
 export const user = shallowRef<ApiUser | null>(null)

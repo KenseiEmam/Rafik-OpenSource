@@ -14,9 +14,9 @@ import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
 import MemberPicker from './MemberPicker.vue'
 import PageState from '../../components/PageState.vue'
-import OrganizationNav from './OrganizationNav.vue'
+import InstitutionNav from './InstitutionNav.vue'
 import type { EventDetail, EventPerson } from './service-types'
-import type { Organization } from './types'
+import type { Institution } from './types'
 const route = useRoute(),
   id = institutionContext().workspace,
   view = institutionContext().view,
@@ -25,7 +25,7 @@ const route = useRoute(),
   endpoint = `/v1/workspaces/${id}/calendar`,
   scope = `event:${id}:${eid}:${view}`
 const data = ref<EventDetail>(),
-  organization = ref<Organization>(),
+  organization = ref<Institution>(),
   loading = ref(true),
   error = ref(''),
   attendance = ref<Record<string, string>>({}),
@@ -145,7 +145,7 @@ async function load() {
       (Date.parse(data.value.event.ends_at) - Date.parse(data.value.event.starts_at)) / 60000
     newStaff.value = data.value.people.filter((p) => p.duty === 'staff').map((p) => p.member_id)
     if (view === 'admin')
-      organization.value = await request<Organization>(
+      organization.value = await request<Institution>(
         `/v1/workspaces/${id}?view=admin&summary=true`,
       )
     newStaff.value = newStaff.value.filter((id) =>
@@ -273,7 +273,7 @@ watch(
 onMounted(load)
 </script>
 <template>
-  <OrganizationNav />
+  <InstitutionNav />
   <div class="container page event-detail">
     <RouterLink
       class="back-link"

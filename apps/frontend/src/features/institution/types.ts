@@ -29,7 +29,7 @@ export type Member = {
     revision: number
   }[]
 }
-export type Organization = {
+export type Institution = {
   invitationsNext: number | null
   eventsNext: number | null
   summary: { trainees: number; trainers: number; unassigned: number }

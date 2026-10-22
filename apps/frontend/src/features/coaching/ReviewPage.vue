@@ -10,7 +10,7 @@ import { language, locale, t, errorMessage, dateLabel } from '../../lib/i18n'
 import { exerciseName, targetLabel, actualLabel, performedExercise } from '../../lib/prescriptions'
 import PageState from '../../components/PageState.vue'
 import { programContext } from './program-context'
-import OrganizationNav from '../organizations/OrganizationNav.vue'
+import InstitutionNav from '../institution/InstitutionNav.vue'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
@@ -100,7 +100,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <OrganizationNav v-if="context.workspace" />
+  <InstitutionNav v-if="context.workspace" />
   <div class="container page">
     <RouterLink :to="back" class="back-link"
       ><PhArrowLeft :size="18" class="directional" />{{

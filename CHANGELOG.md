@@ -4,6 +4,10 @@
 
 ### Institution cleanup
 
+- Remove retired-feature routes outright; use the normal missing-page state, with no Tasks retirement page or workspace-chooser redirect.
+- Rename frontend institution/navigation folders, all institution-specific UI components/types, and associated styles; preserve database, asset and Android API compatibility identifiers.
+- Fix local recovery and orphan cleanup to use the API’s validated database/file target, including isolated tests.
+
 - Retire Tasks, its API and data through a guarded forward migration.
 - Remove workspace selection and additional-institution creation; retain institution permissions and native API compatibility.
 - Introduce flat role-derived browser routes, authorized legacy redirects and separate account/institution settings.

@@ -126,8 +126,10 @@ test('first launch creates the super admin and an invited member can join withou
   if (await page.getByRole('button', { name: 'Close navigation' }).isVisible())
     await page.getByRole('button', { name: 'Close navigation' }).click()
 
-  // A legacy athlete route cannot replace the role-specific admin dashboard.
+  // Omitted legacy athlete routes are unavailable; return through the canonical dashboard.
   await page.goto('/today')
+  await expect(page.getByRole('heading', { name: 'That page isn’t here.' })).toBeVisible()
+  await page.goto('/dashboard')
   await expect(page).toHaveURL(/\/dashboard$/)
   await expect(page.getByRole('combobox', { name: 'Workspace' })).toHaveCount(0)
   await expect(page.locator('.workspace-nav')).toHaveCount(0)

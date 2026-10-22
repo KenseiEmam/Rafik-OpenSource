@@ -4,9 +4,9 @@ import PageHeading from '../../components/PageHeading.vue'
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { programContext } from '../coaching/program-context'
-import OrganizationNav from '../organizations/OrganizationNav.vue'
-import OrganizationUpload from '../../components/OrganizationUpload.vue'
-import OrganizationAsset from '../../components/OrganizationAsset.vue'
+import InstitutionNav from '../institution/InstitutionNav.vue'
+import InstitutionUpload from '../../components/InstitutionUpload.vue'
+import InstitutionAsset from '../../components/InstitutionAsset.vue'
 import { request } from '../../lib/backend'
 import { language as l, errorMessage } from '../../lib/i18n'
 import { user } from '../../app/auth'
@@ -102,7 +102,7 @@ onUnmounted(() => {
 })
 </script>
 <template>
-  <OrganizationNav />
+  <InstitutionNav />
   <div class="container page institution-resources">
     <PageHeading class="page-heading"
       ><div>
@@ -177,7 +177,7 @@ onUnmounted(() => {
         >
           {{ l('More files', 'المزيد من الملفات') }}
         </button>
-        <OrganizationUpload
+        <InstitutionUpload
           :workspace="context.workspace"
           :view="context.view"
           purpose="exercise"
@@ -193,7 +193,7 @@ onUnmounted(() => {
       </section>
       <section class="panel resource-detail" v-if="selected">
         <h2>{{ selected.filename }}</h2>
-        <OrganizationAsset :id="selected.id" :name="selected.filename" />
+        <InstitutionAsset :id="selected.id" :name="selected.filename" />
         <p class="small-print">
           {{
             l(

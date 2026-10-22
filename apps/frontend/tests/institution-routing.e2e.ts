@@ -1,8 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { randomUUID, randomBytes } from 'node:crypto'
 import { teamFixture } from './team-fixture'
-import { mkdirSync } from 'node:fs'
-import { resolve } from 'node:path'
 import { layoutIssues } from './layout-contract'
 
 test('flat routes preserve legacy bookmarks, derive roles and retire Tasks', async ({
@@ -89,14 +87,16 @@ test('flat routes preserve legacy bookmarks, derive roles and retire Tasks', asy
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
     await page.goto(`/organization/${id}/admin/tasks/new`)
     await expect(page).toHaveURL(/\/tasks\/new$/)
-    await expect(page.getByRole('heading', { name: 'Tasks has been retired' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'That page isn’t here.' })).toBeVisible()
     await page.goto(`/organization/${randomUUID()}/admin/people`)
     await expect(page).toHaveURL(/\/access$/)
     await expect(page.getByRole('heading', { name: 'Institution access' })).toBeVisible()
     await page.getByRole('button', { name: 'Retry', exact: true }).click()
     await expect(page).toHaveURL(/\/dashboard$/)
-    await page.goto('/workspaces')
-    await expect(page).toHaveURL(/\/dashboard$/)
+    for (const path of ['/workspaces', '/tasks', '/coach/forms', '/checkins', '/teams']) {
+      await page.goto(path)
+      await expect(page.getByRole('heading', { name: 'That page isn’t here.' })).toBeVisible()
+    }
     await f.login(page, f.coach, `/organization/${id}/admin/schedule`)
     await expect(page).toHaveURL(/\/schedule$/)
     await expect(page.locator('.dashboard-navigation a[href="/institution-settings"]')).toHaveCount(
@@ -113,12 +113,6 @@ test('flat routes preserve legacy bookmarks, derive roles and retire Tasks', asy
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
     await expect(page.locator('.loading-state')).toHaveCount(0)
     expect(await layoutIssues(page)).toEqual([])
-    const inspection = resolve('../../artifacts/institution-cleanup-review')
-    mkdirSync(inspection, { recursive: true })
-    await page.screenshot({
-      path: resolve(inspection, info.project.name + '-schedule-ar-dark.png'),
-      fullPage: true,
-    })
   } finally {
     await f.cleanup()
   }

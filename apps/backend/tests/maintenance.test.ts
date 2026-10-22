@@ -46,7 +46,8 @@ test("local recovery restores private bytes with metadata; orphan cleanup honors
     );
     const hash = (value: string) =>
         createHash("sha256").update(value).digest("hex"),
-      location = (value: string) => resolve(".local/files", hash(value)),
+      location = (value: string) =>
+        resolve(process.env.RAFIK_TEST_FILES || ".local/files", hash(value)),
       old = new Date(Date.now() - 2 * 86400000);
     await writePrivate(orphan, Buffer.from("old unreferenced test file"));
     await writePrivate(recent, Buffer.from("new unreferenced test file"));

@@ -3,7 +3,7 @@ import { PhTray } from '@phosphor-icons/vue'
 import { useListPageSize } from '../../lib/list-page-size'
 import PageHeading from '../../components/PageHeading.vue'
 import ProgramCover from './ProgramCover.vue'
-import OrganizationNav from '../organizations/OrganizationNav.vue'
+import InstitutionNav from '../institution/InstitutionNav.vue'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { PhPlus, PhArrowRight, PhBarbell } from '@phosphor-icons/vue'
 import { user } from '../../app/auth'
@@ -77,7 +77,7 @@ onUnmounted(() => {
 })
 </script>
 <template>
-  <OrganizationNav v-if="context.workspace" />
+  <InstitutionNav v-if="context.workspace" />
   <div class="container page">
     <PageHeading class="page-heading heading-actions">
       <div>

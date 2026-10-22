@@ -57,7 +57,7 @@ Publications and started sessions are immutable server-selected snapshots. Prese
 
 Training schedules use client-local calendar dates. Appointments use UTC instants plus original IANA timezone. Analytics compare actual values of the same kind with explicit units/denominators. Messages are participant-scoped; foreground polling is not external notification delivery. API responses/private bytes are `no-store`; the service worker caches only static assets.
 
-## Organization membership API (R7A2)
+## Institution membership API (R7A2)
 
 - `GET /v1/contexts`: current authorized personal/independent/organization role destinations and separate operator grant.
 - `POST /v1/workspaces`: explicit creation, fixed kind/name and caller UUID.
@@ -119,7 +119,7 @@ See [ADR 0005](../decisions/ADR-0005-organization-and-independent-scopes.md). Th
 
 `POST /sessions` starts/saves/reviews organization workouts; `/v1/organization-sessions/:id` and `/previous` supply authorized record/actual references. Publication/started snapshots and first completion time are retained. Current responsibility is checked before receipt replay. `PUT /v1/program-media/:id?workspace=:id` accepts at most 2 MiB PNG/JPEG/WebP; the authenticated GET rechecks publication/assignment/member access. `/v1/account/organizations` exports only the authenticated subject's organization records.
 
-## Organization services and analytics
+## Institution services and analytics
 
 - `GET /v1/workspaces/:id/services?view=&kind=templates|groups&search=&offset=&archived=`: 25-row catalog. POST explicit `template`/`group` commands, stable operation UUID and revision. Groups contain at most 100 active athlete memberships; administrators may also add active coaches. Trainers may add only assigned athletes to groups they own. Templates have 1–12 typed drills.
 - `POST /calendar-preview`: local timestamp, IANA zone, integer minutes/count/every; returns actual UTC intervals. `POST /calendar` supports create, one-occurrence reschedule, admin staff replacement, cancellation, attendance, result and finish. Creation is atomic for at most eight occurrences; selected recipients are fixed.
@@ -147,7 +147,7 @@ Local dispatch is CLI-only. No public generic event emission, provider send or o
 - `GET /v1/workspaces/:id/people?view=&role=&state=&search=&offset=&selected=&self=`: 25 scoped memberships, full filtered `total`, `next`, separately resolved selected people and responsible trainer names. Name search is case-insensitive. `selected` contains at most 100 UUIDs. Trainer scope is current responsibility; `self=true` also resolves the trainer's own channel participation.
 - `GET /v1/workspaces/:id/recipients` and `GET /v1/coach/recipients`: bounded selected/available recipients with current assignment IDs/revisions/title. Independent selection max 50. Commands still validate each recipient at commit time. The institution route accepts `limit` (1–100; the web assignment page asks for the top 5 matches). With `view=admin&email=true`, `search` also matches account email and items include `email`. Coaches search names only and never receive member email. Each item's `plans` include `version_id`, `program_id` and `version_revision` so clients can mark athletes already on a program.
 - Workspace `summary=true` avoids downloading the roster; `invitationOffset` and `eventOffset` page 25 invitations/30 events. Modern web uses summary + people APIs.
-- Organization delivery `history=true` returns 50 sessions and a verified continuation cursor; member names and current assignment are limited to the viewed history/person. Analytics `workloadOffset`/`programOffset` page 25 breakdown rows without changing full-scope totals.
+- Institution delivery `history=true` returns 50 sessions and a verified continuation cursor; member names and current assignment are limited to the viewed history/person. Analytics `workloadOffset`/`programOffset` page 25 breakdown rows without changing full-scope totals.
 - Calendar detail `summary=true` avoids the initial correction log; `historyMember` plus `historyOffset` returns 25 revisions and `historyNext` for an authorized event participant. A trainee cannot select another trainee's history.
 
 Old open-client read shapes remain supported. Offset pages can shift during concurrent edits; exact writes use current revision checks and never trust displayed selection alone.
@@ -194,7 +194,7 @@ Independent and organization exercise authoring accept `media_ref` from the revi
 
 Shared exercise records additionally contain nullable `category`, `body_part`, `target_muscle` and immutable `source_ref`. Custom authoring may set the facets; clients cannot forge the source reference. Existing prescription snapshots and media keys remain valid.
 
-## Organization nutrition (R16)
+## Institution nutrition (R16)
 
 `GET /v1/workspaces/:id/nutrition?view=admin|trainer|trainee&member=:membership&date=YYYY-MM-DD` returns authorized subject metadata, current plan for the date, latest revision, ten plan versions/next offset and authors. Trainee view resolves its own membership and rejects a different supplied member; staff use an explicit authorized membership. Omitting staff member returns `{member:null}`. Date defaults to the subject's local date.
 
@@ -209,15 +209,15 @@ The response includes `{sharing:{enabled,revision},canReadDiary,meals,removed,re
 
 Current membership/role/responsibility checks precede receipt lookup, so revoked staff cannot replay. `GET /v1/account/organizations` additionally includes the subject's `nutritionPlans`, `nutritionSharing` and `nutritionMeals` with `organization_meal_history`. Generic browser table queries do not expose these tables. These contracts are available to a later native client; no native/offline diary implementation is claimed.
 
-## Organization assets
+## Institution assets
 
 `PUT /v1/organization-assets/:id?workspace=:uuid&view=admin|trainer|trainee&purpose=exercise|message&filename=:name[&channel=:uuid]` uploads raw bytes with an allowed Content-Type, maximum 25 MB. Message purpose requires current channel participation; exercise purpose requires a staff role. The ID, owner, digest, MIME, purpose, name and channel are immutable. An identical retry succeeds; conflicting reuse returns 409.
 
 `GET /v1/organization-assets/:id` rechecks membership and exact purpose/reference permissions. MP4 accepts a single byte range. `GET /v1/workspaces/:id/assets?view=admin|trainer&search=&offset=0&archived=false` returns 24 authorized exercise assets plus `next`; message files are excluded. `POST` to the same collection accepts the standard operation ID, `action: archive`, asset `id`, `revision`, `view` and boolean `retired`. Archive affects new selections, not existing published reads.
 
-Organization message commands accept optional `asset_id`; the file must belong to the sender and that channel. `private_pair` on the channel makes participant changes and nonparticipant admin access unavailable.
+Institution message commands accept optional `asset_id`; the file must belong to the sender and that channel. `private_pair` on the channel makes participant changes and nonparticipant admin access unavailable.
 
-## Organization trainer tasks
+## Institution trainer tasks
 
 `GET /v1/workspaces/:id/tasks?view=admin|trainer&state=open|completed|cancelled&search=&offset=0&today=YYYY-MM-DD` returns 24 scoped rows, next offset and open/overdue/completed counts. The date-only `today` aligns the due-date count with the caller's calendar day. Trainers see only tasks assigned to their membership; admins see the organization queue.
 
@@ -229,7 +229,7 @@ Organization message commands accept optional `asset_id`; the file must belong t
 
 Session-package and allowance endpoints are retired. `GET` and `POST /v1/workspaces/:id/packages` are not registered. Calendar scheduling has no funding, reservation, allowance, or no-show deduction fields; attendance and optional event-linked makeup scheduling remain. `session-note` accepts member/revision/note (2000 characters). Historical check-in timestamp records the first present mark, not a biometric arrival or revised attendance proof.
 
-## Organization feedback
+## Institution feedback
 
 `GET /v1/workspaces/:id/feedback?view=trainee` returns eligible completed own workouts/training appointments with optional score/revision, 24/page using `offset`. Trainer view returns the server’s current UTC `month`, `own` current-month response, and 24/page prior own monthly ratings. Admins use aggregate Analytics; no arbitrary member parameter grants response access.
 

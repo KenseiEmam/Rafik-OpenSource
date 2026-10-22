@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import DashboardNav from './features/workspace/DashboardNav.vue'
+import DashboardNav from './features/navigation/DashboardNav.vue'
 import {
   DialogRoot,
   DialogTrigger,
@@ -132,7 +132,7 @@ onUnmounted(() => window.removeEventListener('online', online))
         </DialogRoot>
         <RouterLink
           class="brand"
-          :to="user ? currentContext?.path || '/today' : '/'"
+          :to="user ? currentContext?.path || '/dashboard' : '/'"
           :aria-label="`${instanceBranding.name} home`"
           ><img
             :src="instanceBranding.logo_mime ? brandingLogoUrl() : '/brand/rafik.png'"

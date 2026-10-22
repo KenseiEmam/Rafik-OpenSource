@@ -9,7 +9,7 @@ import { language as l, errorMessage, locale } from '../../lib/i18n'
 import { programContext } from './program-context'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
-import OrganizationNav from '../organizations/OrganizationNav.vue'
+import InstitutionNav from '../institution/InstitutionNav.vue'
 import PageState from '../../components/PageState.vue'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { PhCheck, PhMagnifyingGlass, PhPlus, PhSwap, PhX } from '@phosphor-icons/vue'
@@ -366,7 +366,7 @@ function deliver() {
 onMounted(load)
 </script>
 <template>
-  <OrganizationNav v-if="context.workspace" />
+  <InstitutionNav v-if="context.workspace" />
   <div class="container page delivery-page">
     <RouterLink class="back-link" :to="context.base + '/plans'">{{
       l('Back to programs', 'العودة للبرامج')

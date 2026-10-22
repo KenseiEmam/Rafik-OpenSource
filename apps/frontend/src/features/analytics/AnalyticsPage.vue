@@ -9,7 +9,7 @@ import { request } from '../../lib/backend'
 import { language as l, errorMessage } from '../../lib/i18n'
 import { localDate, addDays } from '../../lib/dates'
 import PageState from '../../components/PageState.vue'
-import OrganizationNav from '../organizations/OrganizationNav.vue'
+import InstitutionNav from '../institution/InstitutionNav.vue'
 import MetricChart from './MetricChart.vue'
 import TrainerDelivery from './TrainerDelivery.vue'
 import ExperienceReport, { type Experience } from './ExperienceReport.vue'
@@ -139,7 +139,7 @@ const attendance = computed(
 onMounted(() => load())
 </script>
 <template>
-  <OrganizationNav v-if="workspace" />
+  <InstitutionNav v-if="workspace" />
   <div class="container page analytics-page">
     <PageHeading class="work-heading">
       <div>

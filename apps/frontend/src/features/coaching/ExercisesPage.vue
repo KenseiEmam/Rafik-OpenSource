@@ -5,7 +5,7 @@ import PageHeading from '../../components/PageHeading.vue'
 import ListPagination from '../../components/ListPagination.vue'
 import { request } from '../../lib/backend'
 import MultiChoice from '../../components/MultiChoice.vue'
-import OrganizationUpload, { type UploadedAsset } from '../../components/OrganizationUpload.vue'
+import InstitutionUpload, { type UploadedAsset } from '../../components/InstitutionUpload.vue'
 import ExerciseDemo from '../../components/ExerciseDemo.vue'
 import { exerciseVideos, videoForExercise, exerciseAssetUrl } from '../../lib/exercise-media'
 import media from '../../content/exercise-media.json'
@@ -21,7 +21,7 @@ import {
   equipmentCategories,
   equipmentLabel,
 } from '../../lib/exercise-catalog'
-import OrganizationNav from '../organizations/OrganizationNav.vue'
+import InstitutionNav from '../institution/InstitutionNav.vue'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { PhArrowLeft, PhArrowRight, PhBarbell } from '@phosphor-icons/vue'
 import { user } from '../../app/auth'
@@ -391,7 +391,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <OrganizationNav v-if="context.workspace" />
+  <InstitutionNav v-if="context.workspace" />
   <div
     class="container page exercise-page"
     :class="{ 'mobile-detail': mobileDetail, 'filters-open': filtersOpen }"
@@ -558,7 +558,7 @@ onMounted(async () => {
               >{{ language('Demonstration link (optional, HTTPS)', 'رابط الشرح (اختياري، HTTPS)')
               }}<input v-model="editing.media_url" type="url" pattern="https://.*" maxlength="500"
             /></label>
-            <OrganizationUpload
+            <InstitutionUpload
               v-if="context.workspace"
               :workspace="context.workspace"
               :view="context.view"

@@ -39,10 +39,10 @@ Coach ratings are not in the founder list. Defer them until after Release 1, bec
 ### Coach responsibility
 
 - Each athlete membership has one optional responsible coach: `workspace_members.trainer_id`. It was created in `202609230130_workspaces` with a composite key to the same institution, a check that only athletes may have one, and the partial index `workspace_members_trainer`.
-- Organization tables have no row-level security. All coach authority is enforced in server TypeScript.
+- Institution tables have no row-level security. All coach authority is enforced in server TypeScript.
 - The central check is `recipient()` in `apps/backend/server/programming.ts`. It rejects a trainer whose ID is not the athlete's `trainer_id`. Programs, assignments, workout review, nutrition, athlete plans, analytics, assessment history, message recipients, groups and event participant selection all call it.
 - Direct `trainer_id = self` SQL filters also exist. They are in `workspaces.ts` (People view, `assign-trainer`, unassigned counts), `people.ts`, `athlete-plans.ts`, `nutrition-plan-index.ts`, `program-media.ts`, `organization-assets.ts`, `organization-injuries.ts`, `organization-tasks.ts`, `organization-catalog.ts`, `analytics.ts` and `experience-report.ts`.
-- The frontend assumes a single coach in `OrganizationPage.vue` (the "Responsible trainer" picker and the unassigned summary), `features/organizations/types.ts` and `AnalyticsPage.vue` (workload copy).
+- The frontend assumes a single coach in `InstitutionPage.vue` (the "Responsible trainer" picker and the unassigned summary), `features/institution/types.ts` and `AnalyticsPage.vue` (workload copy).
 - **Event staff is a separate authority.** `organization_event_people.duty = 'staff'` governs attendance, results, completion and history after an event is created. The whole Android field API depends on event staff, not `trainer_id`. Event staff can record results for athletes they don't coach; this is intended.
 
 ### Program assignment
@@ -50,7 +50,7 @@ Coach ratings are not in the founder list. Defer them until after Release 1, bec
 - The partial unique index `organization_one_active_assignment` (`202609230160_organization_programming`) allows one active assignment per institution and athlete. Because of it, Prisma generates the back-relation on `workspace_members` as a single record.
 - `deliveryCommand` `assign` in `programming.ts` archives the current active assignment and creates a new one under an assignment revision check. There is no separate unassign or end command.
 - Workout sessions snapshot the immutable program version and are already unique per `(assignment_id, local_date, day_id)`. That suits several concurrent plans.
-- The frontend assumes one current assignment in `OrganizationTraining.vue` (`current`), `DeliverPlan.vue` (one assignment and revision per recipient, with "Replace future training") and `AthletePlans.vue`.
+- The frontend assumes one current assignment in `InstitutionTraining.vue` (`current`), `DeliverPlan.vue` (one assignment and revision per recipient, with "Replace future training") and `AthletePlans.vue`.
 
 ### Workout logging, feedback and sensitive data
 
@@ -153,7 +153,7 @@ Supporting coaches can read all of an athlete's training plans until slice 1c ad
 - **Lifecycle:**
   - Linking, ending and reassigning a coach are audited admin commands.
   - Ending a link takes effect on the next read, command and retry, including a stale browser tab.
-  - Organization-owned training history stays with the athlete and is not transferred with the coach.
+  - Institution-owned training history stays with the athlete and is not transferred with the coach.
 - **Analytics:** workload counts primary athletes. Supporting links are counted separately. Reports follow the athlete, not a former coach.
 - **Mobile and OpenAPI:** no contract change. The field API keeps its event-staff authority. Check that trainer contexts are unchanged.
 - **Acceptance:**

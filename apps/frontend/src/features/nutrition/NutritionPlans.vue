@@ -10,8 +10,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { request } from '../../lib/backend'
 import { language as l, errorMessage, locale } from '../../lib/i18n'
 import { formatDate } from '../../lib/dates'
-import OrganizationNav from '../organizations/OrganizationNav.vue'
-import MemberPicker from '../organizations/MemberPicker.vue'
+import InstitutionNav from '../institution/InstitutionNav.vue'
+import MemberPicker from '../institution/MemberPicker.vue'
 import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
 import {
@@ -116,7 +116,7 @@ function create(ids: string[]) {
 }
 </script>
 <template>
-  <OrganizationNav />
+  <InstitutionNav />
   <div class="container page nutrition-plans-page">
     <PageHeading class="work-heading">
       <div>

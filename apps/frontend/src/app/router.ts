@@ -2,37 +2,6 @@ import { nextTick } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { ready, user, contexts, refreshContexts } from './auth'
 const workspaceScroll = new Map<string, number>()
-const legacyCoachSections: Record<string, string> = {
-  clients: '/people',
-  plans: '/plans',
-  exercises: '/exercises',
-  analytics: '/analytics',
-  review: '/training',
-  deliver: '/plans',
-  checkins: '/tasks',
-  forms: '/tasks',
-  messages: '/messages',
-  appointments: '/schedule',
-  nutrition: '/nutrition',
-  resources: '/resources',
-  teams: '/groups',
-  business: '/institution-settings',
-  support: '/more',
-  more: '/institution-settings',
-}
-function organizationRouteForLegacyCoach(path: string, base: string) {
-  const parts = path
-    .replace(/^\/coach\/?/, '')
-    .split('/')
-    .filter(Boolean)
-  if (!parts.length) return base
-  const target = legacyCoachSections[parts[0]!]
-  if (!target) return base
-  if (parts[0] === 'plans' && parts[1] === 'new') return base + '/plans/new'
-  if (parts[0] === 'appointments' && parts[1] === 'new') return base + '/schedule/new'
-  if (parts[0] === 'review' && parts[1]) return base + '/review/' + encodeURIComponent(parts[1])
-  return base + target
-}
 let cancelScrollRestore = () => {}
 // Returning routes load asynchronously: don't clamp a saved position to the loading skeleton.
 function restoreWorkspaceScroll(main: HTMLElement, top: number) {
@@ -79,17 +48,17 @@ const router = createRouter({
     },
     {
       path: '/training',
-      component: () => import('../features/organizations/TrainingRoute.vue'),
+      component: () => import('../features/institution/TrainingRoute.vue'),
       meta: { private: true, institution: true },
     },
     {
       path: '/events',
-      component: () => import('../features/organizations/ScheduledEvents.vue'),
+      component: () => import('../features/institution/ScheduledEvents.vue'),
       meta: { private: true, institution: true },
     },
     {
       path: '/workouts',
-      component: () => import('../features/organizations/SessionHistory.vue'),
+      component: () => import('../features/institution/SessionHistory.vue'),
       meta: { private: true, institution: true },
     },
     {
@@ -109,7 +78,7 @@ const router = createRouter({
     },
     {
       path: '/feedback',
-      component: () => import('../features/organizations/FeedbackPage.vue'),
+      component: () => import('../features/institution/FeedbackPage.vue'),
       meta: { private: true, institution: true },
     },
 
@@ -126,7 +95,7 @@ const router = createRouter({
     },
     {
       path: '/injuries',
-      component: () => import('../features/organizations/OrganizationInjuries.vue'),
+      component: () => import('../features/institution/InstitutionInjuries.vue'),
       meta: { private: true, institution: true },
     },
     {
@@ -136,70 +105,70 @@ const router = createRouter({
     },
     {
       path: '/messages/:channel?',
-      component: () => import('../features/organizations/ChannelsPage.vue'),
+      component: () => import('../features/institution/ChannelsPage.vue'),
       meta: { private: true, institution: true },
     },
     {
       path: '/schedule',
-      component: () => import('../features/organizations/OrganizationCalendar.vue'),
+      component: () => import('../features/institution/InstitutionCalendar.vue'),
       meta: { private: true, institution: true },
     },
     {
       path: '/schedule/new',
-      component: () => import('../features/organizations/EventComposer.vue'),
+      component: () => import('../features/institution/EventComposer.vue'),
       meta: { private: true, institution: true },
     },
     {
       path: '/schedule/:id',
-      component: () => import('../features/organizations/EventDetail.vue'),
+      component: () => import('../features/institution/EventDetail.vue'),
       meta: { private: true, institution: true },
     },
     {
       path: '/groups',
-      component: () => import('../features/organizations/ServiceCatalog.vue'),
+      component: () => import('../features/institution/ServiceCatalog.vue'),
       meta: { private: true, institution: true },
     },
 
     {
       path: '/groups/:editor',
-      component: () => import('../features/organizations/ServiceCatalog.vue'),
+      component: () => import('../features/institution/ServiceCatalog.vue'),
       meta: { private: true, institution: true },
     },
     {
       path: '/assessment-templates',
-      component: () => import('../features/organizations/ServiceCatalog.vue'),
+      component: () => import('../features/institution/ServiceCatalog.vue'),
       meta: { private: true, institution: true },
     },
 
     {
       path: '/assessment-templates/:editor',
-      component: () => import('../features/organizations/ServiceCatalog.vue'),
+      component: () => import('../features/institution/ServiceCatalog.vue'),
       meta: { private: true, institution: true },
     },
     {
       path: '/record/:session',
-      component: () => import('../features/organizations/DelegatedWorkout.vue'),
+      component: () => import('../features/institution/DelegatedWorkout.vue'),
       meta: { private: true, institution: true },
     },
     {
       path: '/members/:member',
       alias: '/athletes/:member',
-      component: () => import('../features/organizations/AthleteProfile.vue'),
+      component: () => import('../features/institution/AthleteProfile.vue'),
       meta: { private: true, institution: true },
     },
     {
       path: '/assessments/:member',
-      component: () => import('../features/organizations/AssessmentHistory.vue'),
+      component: () => import('../features/institution/AssessmentHistory.vue'),
       meta: { private: true, institution: true },
     },
     {
       path: '/dashboard',
-      component: () => import('../features/organizations/OrganizationPage.vue'),
+      component: () => import('../features/institution/InstitutionPage.vue'),
       meta: { private: true, institution: true },
     },
     ...(['people', 'activity', 'institution-settings'] as const).map((section) => ({
       path: '/' + section,
-      component: () => import('../features/organizations/OrganizationPage.vue'),
+      component: () => import('../features/institution/InstitutionPage.vue'),
       meta: {
         private: true,
         institution: true,
@@ -207,7 +176,6 @@ const router = createRouter({
         adminOnly: section !== 'people',
       },
     })),
-    { path: '/workspaces', redirect: '/dashboard' },
     {
       path: '/calendar/:rest(.*)*',
       redirect: (to) => ({
@@ -233,13 +201,8 @@ const router = createRouter({
       meta: { private: true },
     },
     {
-      path: '/tasks/:legacy(.*)*',
-      component: () => import('../features/account/TasksRetired.vue'),
-      meta: { private: true },
-    },
-    {
       path: '/organization-invite/:token',
-      component: () => import('../features/organizations/OrganizationInvite.vue'),
+      component: () => import('../features/institution/InstitutionInvite.vue'),
     },
     { path: '/', component: () => import('../features/account/EntryPage.vue') },
     { path: '/setup', component: () => import('../features/account/SetupPage.vue') },
@@ -247,7 +210,6 @@ const router = createRouter({
       path: '/password-setup/:token',
       component: () => import('../features/account/PasswordSetupPage.vue'),
     },
-    { path: '/routine', component: () => import('../features/training/RoutinePage.vue') },
     {
       path: '/notifications',
       component: () => import('../features/notifications/NotificationsPage.vue'),
@@ -255,56 +217,15 @@ const router = createRouter({
     },
     { path: '/workout/:id', component: () => import('../features/training/WorkoutPage.vue') },
     { path: '/login', component: () => import('../features/account/LoginPage.vue') },
-    { path: '/invite/:token', component: () => import('../features/account/InvitePage.vue') },
-    {
-      path: '/today',
-      component: () => import('../features/training/TodayPage.vue'),
-      meta: { private: true },
-    },
-    { path: '/history', component: () => import('../features/training/HistoryPage.vue') },
     {
       path: '/settings',
       component: () => import('../features/account/SettingsPage.vue'),
       meta: { private: true },
     },
     {
-      path: '/progress',
-      component: () => import('../features/ongoing/ProgressPage.vue'),
-      meta: { private: true },
-    },
-    {
-      path: '/checkins',
-      component: () => import('../features/ongoing/RequestsPage.vue'),
-      meta: { private: true },
-    },
-    {
-      path: '/checkins/:id',
-      component: () => import('../features/ongoing/ResponsePage.vue'),
-      meta: { private: true },
-    },
-    {
-      path: '/more',
-      component: () => import('../features/services/MorePage.vue'),
-      meta: { private: true },
-    },
-    {
-      path: '/appointments',
-      component: () => import('../features/appointments/CalendarPage.vue'),
-      meta: { private: true },
-    },
-    {
-      path: '/teams',
-      component: () => import('../features/teams/TeamsPage.vue'),
-      meta: { private: true },
-    },
-    {
       path: '/support',
       component: () => import('../features/support/SupportPage.vue'),
       meta: { private: true },
-    },
-    {
-      path: '/team-invite/:token',
-      component: () => import('../features/teams/TeamInvitePage.vue'),
     },
     ...(import.meta.env.DEV
       ? [
@@ -316,11 +237,6 @@ const router = createRouter({
       : []),
     { path: '/help', component: () => import('../features/account/HelpPage.vue') },
     { path: '/privacy', component: () => import('../features/public/PrivacyPage.vue') },
-    {
-      path: '/coach/:pathMatch(.*)*',
-      component: () => import('../features/public/NotFound.vue'),
-      meta: { private: true },
-    },
     { path: '/privacy-policy', redirect: '/privacy' },
     { path: '/privacy_policy', redirect: '/privacy' },
     { path: '/:pathMatch(.*)*', component: () => import('../features/public/NotFound.vue') },
@@ -350,11 +266,8 @@ router.beforeEach(async (to, from) => {
   await ready()
   if (to.meta.private && !user.value) return { path: '/login', query: { next: to.fullPath } }
   if (!user.value) return
-  const institutionRoute =
-    to.meta.institution || to.meta.legacyInstitution || to.path.startsWith('/coach')
-  const personalLegacy =
-    /^\/(today|history|progress|checkins|more|appointments|teams|business)(\/|$)/.test(to.path)
-  if (institutionRoute || personalLegacy) {
+  const institutionRoute = to.meta.institution || to.meta.legacyInstitution
+  if (institutionRoute) {
     // Do not reuse stale membership after a failed authorization read.
     try {
       await refreshContexts()
@@ -380,17 +293,9 @@ router.beforeEach(async (to, from) => {
             : '/dashboard'
       return { path, query: to.query, hash: to.hash, replace: true }
     }
-    if (to.path.startsWith('/coach'))
-      return {
-        path: organizationRouteForLegacyCoach(to.path, '') || '/dashboard',
-        query: to.query,
-        hash: to.hash,
-        replace: true,
-      }
-    if (personalLegacy) return '/dashboard'
   }
 })
-export const safeNext = (value: unknown, fallback = '/today') =>
+export const safeNext = (value: unknown, fallback = '/dashboard') =>
   typeof value === 'string' &&
   value.startsWith('/') &&
   !value.startsWith('//') &&

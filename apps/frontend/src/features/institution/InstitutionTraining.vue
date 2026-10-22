@@ -9,7 +9,7 @@ import { language as l, errorMessage, dateLabel, locale } from '../../lib/i18n'
 import type { Assignment, PlanVersion, Session, PlanDay } from '../../lib/domain'
 import { programContext } from '../coaching/program-context'
 import { startWorkout } from '../../lib/training'
-import OrganizationNav from './OrganizationNav.vue'
+import InstitutionNav from './InstitutionNav.vue'
 import MemberPicker from './MemberPicker.vue'
 import PageState from '../../components/PageState.vue'
 const route = useRoute(),
@@ -141,7 +141,7 @@ onMounted(() => {
 })
 </script>
 <template>
-  <OrganizationNav />
+  <InstitutionNav />
   <div class="container page">
     <PageHeading class="work-heading">
       <div>

@@ -13,11 +13,11 @@ import { language as l, errorMessage, dateLabel, locale } from '../../lib/i18n'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
 import PageState from '../../components/PageState.vue'
-import type { Organization, Member, Role, Sport } from './types'
-import './organization.css'
-import OrganizationFollowUp from './OrganizationFollowUp.vue'
-import OrganizationUpcoming from './OrganizationUpcoming.vue'
-import OrganizationNav from './OrganizationNav.vue'
+import type { Institution, Member, Role, Sport } from './types'
+import './institution.css'
+import InstitutionFollowUp from './InstitutionFollowUp.vue'
+import InstitutionUpcoming from './InstitutionUpcoming.vue'
+import InstitutionNav from './InstitutionNav.vue'
 import BrandingSettings from './BrandingSettings.vue'
 import SportsSettings from './SportsSettings.vue'
 import { TabsRoot, TabsList, TabsTrigger, TabsContent } from 'reka-ui'
@@ -44,7 +44,7 @@ const peopleLoading = ref(false),
   extraLoading = ref(false)
 const peopleOffset = ref(Math.max(0, Number(route.query.offset) || 0))
 const peopleTotal = ref(0)
-const data = ref<Organization>(),
+const data = ref<Institution>(),
   loading = ref(true),
   error = ref(''),
   search = ref(String(route.query.search || '')),
@@ -123,7 +123,7 @@ async function load() {
   loading.value = true
   error.value = ''
   try {
-    const loaded = await request<Organization>(
+    const loaded = await request<Institution>(
       `/v1/workspaces/${id}?view=${view}&summary=${view !== 'trainee'}`,
     )
     data.value = loaded
@@ -141,7 +141,7 @@ async function loadExtra(kind: 'invitations' | 'events') {
   if (!data.value || extraLoading.value) return
   extraLoading.value = true
   try {
-    const result = await request<Organization>(
+    const result = await request<Institution>(
       `/v1/workspaces/${id}?view=${view}&summary=true&${kind === 'events' ? 'eventOffset' : 'invitationOffset'}=${kind === 'events' ? data.value.eventsNext : data.value.invitationsNext}`,
     )
     if (kind === 'events') {
@@ -335,7 +335,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <OrganizationNav />
+  <InstitutionNav />
   <div class="container page institution-page">
     <PageHeading class="work-heading">
       <div>
@@ -517,8 +517,8 @@ onMounted(async () => {
               >{{ l('View analytics', 'عرض التحليلات') }}</RouterLink
             >
           </div>
-          <OrganizationFollowUp v-if="view !== 'trainee'" />
-          <OrganizationUpcoming />
+          <InstitutionFollowUp v-if="view !== 'trainee'" />
+          <InstitutionUpcoming />
           <section v-if="view === 'trainee' || !data.summary.trainees" class="panel">
             <h2>
               {{

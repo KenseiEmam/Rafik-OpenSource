@@ -12,6 +12,8 @@ import {
 import { resolve } from "node:path";
 import { createHash } from "node:crypto";
 import { composeFile, dockerCompose } from "./docker.mjs";
+import { localStorageTarget } from "./local-storage-target.mjs";
+const target = localStorageTarget();
 const root = resolve(import.meta.dirname, "../..");
 if (
   !readFileSync(composeFile, "utf8").startsWith(
@@ -21,7 +23,7 @@ if (
   throw Error("Local project required");
 const stamp = Date.now(),
   database = "rafik_restore_" + stamp,
-  out = resolve(root, ".local/backups", String(stamp));
+  out = resolve(target.backups, String(stamp));
 const docker = (args, options = {}) =>
   dockerCompose(["exec", "-T", "db", ...args], {
     maxBuffer: 256 * 1024 * 1024,
@@ -35,10 +37,10 @@ const sql = (db, input) =>
 mkdirSync(resolve(out, "files"), { recursive: true, mode: 0o700 });
 writeFileSync(
   resolve(out, "database.dump"),
-  docker(["pg_dump", "-U", "rafik_migrate", "-d", "rafik", "-Fc"]),
+  docker(["pg_dump", "-U", "rafik_migrate", "-d", target.database, "-Fc"]),
   { mode: 0o600 },
 );
-const files = resolve(root, ".local/files"),
+const files = target.files,
   manifest = [];
 for (const name of existsSync(files) ? readdirSync(files) : []) {
   if (!/^[a-f0-9]{64}$/.test(name) || !lstatSync(resolve(files, name)).isFile())
@@ -53,7 +55,7 @@ for (const name of existsSync(files) ? readdirSync(files) : []) {
 }
 let created = false;
 try {
-  sql("rafik", `CREATE DATABASE ${database};`);
+  sql(target.database, `CREATE DATABASE ${database};`);
   created = true;
   docker(
     ["pg_restore", "-U", "rafik_migrate", "-d", database, "--exit-on-error"],
@@ -120,5 +122,5 @@ try {
     }),
   );
 } finally {
-  if (created) sql("rafik", `DROP DATABASE ${database} WITH (FORCE);`);
+  if (created) sql(target.database, `DROP DATABASE ${database} WITH (FORCE);`);
 }

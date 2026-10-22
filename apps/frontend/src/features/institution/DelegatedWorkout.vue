@@ -17,7 +17,7 @@ import {
 import type { Entry, ExerciseKind, PlanDay, Prescription, Session } from '../../lib/domain'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
-import OrganizationNav from './OrganizationNav.vue'
+import InstitutionNav from './InstitutionNav.vue'
 
 /**
  * A coach records a workout on an athlete's behalf. Every write uses the coach's own session
@@ -211,7 +211,7 @@ const dayName = (d: PlanDay) => (locale.value === 'ar' ? d.nameAr || d.name : d.
 onMounted(load)
 </script>
 <template>
-  <OrganizationNav />
+  <InstitutionNav />
   <div class="container page delegated-workout">
     <RouterLink class="back-link" :to="base + '/training'">{{
       l('Back to athlete plans', 'العودة إلى خطط الرياضيين')

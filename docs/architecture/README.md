@@ -38,7 +38,7 @@ The attendance queue commits device persistence before reporting it, then sends 
 
 ## Identity, institution and authorization
 
-Each university runs a separate instance and owns its users, data, secrets, files, backups, retention and infrastructure. There is no default Rafik-hosted tenant or operator access. The supported web experience is organization-scoped. Legacy independent-coaching data and APIs remain isolated during transition, but standalone coach screens are retired; see [ADR 0021](../decisions/ADR-0021-organization-only-web-experience.md). Organization-owned training history belongs to the organization and survives a trainer reassignment.
+Each university runs a separate instance and owns its users, data, secrets, files, backups, retention and infrastructure. There is no default Rafik-hosted tenant or operator access. The supported web experience is organization-scoped. Legacy independent-coaching data and APIs remain isolated during transition, but standalone coach screens are retired; see [ADR 0021](../decisions/ADR-0021-organization-only-web-experience.md). Institution-owned training history belongs to the organization and survives a trainer reassignment.
 
 Every institutional membership has one role: administrator, trainer or athlete. Sign-in opens that role's dashboard; there is no role selector. Administrators manage people, permissions, analytics and programs; trainers receive coaching tools; athletes receive their own training and support navigation. Sidebar groups collapse so the primary navigation stays compact. The platform-administrator grant is separate and appears only for explicitly authorized operators.
 
@@ -48,7 +48,7 @@ Every protected request is authorized against the current actor, selected organi
 
 Domain writes use explicit API commands. The server validates current authority and input, then records related state and its command receipt transactionally. Revision checks, stable operation identifiers and server-owned authorization prevent stale edits or replay from silently creating another result. Client persistence, request dispatch and server acknowledgment are distinct states; the UI must not report a cloud save before acknowledgment. See the [API conventions](../reference/api.md) and [Prisma API ADR](../decisions/ADR-0006-prisma-api-transition.md).
 
-## Organization data boundaries
+## Institution data boundaries
 
 - Programs, assignments and published training history are organization-scoped. Publishing creates an immutable version and makes the program available in the institution library without a separate visibility hold; assignment is still explicit. A trainer’s access follows current assignment; reassignment does not transfer unrelated personal data.
 - Sports and coaching specialties are institution metadata in `organization_sports`, with a kind of `sport` or `specialty`. They are linked to athletes and coaches through `organization_member_sports`. They are separate from the single system role and grant no access on their own. Only administrators change them, and each change is recorded as an institution event.
@@ -125,3 +125,18 @@ Previous architecture notes are preserved as dated material in the [documentatio
 Operational lists accept an optional bounded `limit` (1–100), retaining each API’s existing default when absent or invalid. The web exposes curated choices and URL persistence; matching totals remain server-scoped. Task `id` reads use the same institution/assignee authorization as the list and can resolve completed records independently of the active status filter. No new grant is introduced.
 
 Dedicated template/group/exercise editor routes preserve the existing command payloads and server authority. Device drafts are isolated by account, institution, role and entity; legacy drafts move only after durable storage of the scoped copy. A small in-memory active-dispatch registry prevents another mount of the same command scope from offering replay while the original runs. Reload after process loss still uses the durable exact command. Successful navigation waits for settlement and checks that the original screen is still mounted.
+
+## Coaching follow-up after Tasks retirement
+
+The dashboard reads `/v1/workspaces/:id/follow-up`; it derives outstanding work from existing records, not a Tasks table or cron-generated assignments. It returns up to eight rows and the full count per category.
+
+| Category        | Appears when                                                                                           | Leaves the category when                                                                               |
+| --------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| Workout reviews | An active athlete has a completed workout with no `reviewed_at`                                        | The workout receives a review                                                                          |
+| Event outcomes  | A scheduled event has passed its end time                                                              | Staff complete or cancel it                                                                            |
+| Missed training | An active athlete was absent/excused from completed training, with no non-cancelled linked replacement | Attendance is corrected or a replacement is linked; cancelling that replacement exposes the item again |
+| Plan coverage   | An active athlete has no assignment marked `active`                                                    | An assignment is marked active                                                                         |
+
+Administrators see institution-wide results. Coaches see their primary athletes for reviews, missed training and plan coverage, and events where they are designated staff for outcomes. Athletes cannot read this staff endpoint. Results refresh when the dashboard loads or its read is retried; they are not persisted task assignments, automatic notifications or a realtime queue. Plan coverage currently checks assignment state, not assignment date validity.
+
+The cleanup migration deletes the legacy Tasks table, attributable saved-command results and `trainer_task_*` audit events. It retains scheduled activities, attendance, workout records, reviews and unrelated institution audit history. The `workspace_events` audit table and `organization_events` schedule table serve different purposes; neither retains the retired task workflow. Existing Task rows are purged when the guarded upgrade migration runs, rather than modifying developer preview data during verification.

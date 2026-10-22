@@ -6,8 +6,8 @@ import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { language as l, errorMessage, locale } from '../../lib/i18n'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
-import OrganizationUpload, { type UploadedAsset } from '../../components/OrganizationUpload.vue'
-import OrganizationAsset from '../../components/OrganizationAsset.vue'
+import InstitutionUpload, { type UploadedAsset } from '../../components/InstitutionUpload.vue'
+import InstitutionAsset from '../../components/InstitutionAsset.vue'
 import ChannelEditor from './ChannelEditor.vue'
 import { PhImage, PhPaperclip, PhX } from '@phosphor-icons/vue'
 const props = defineProps<{ workspace: string; view: string; id: string; base: string }>(),
@@ -363,7 +363,7 @@ onUnmounted(() => {
         </p>
         <p dir="auto">{{ message.body }}</p>
         <div v-if="message.asset_ids?.length || message.asset_id" class="message-asset-list">
-          <OrganizationAsset
+          <InstitutionAsset
             v-for="asset in messageAssets(message)"
             :key="asset.id"
             :id="asset.id"
@@ -419,7 +419,7 @@ onUnmounted(() => {
               >
                 <PhX :size="18" aria-hidden="true" />
               </button>
-              <OrganizationAsset
+              <InstitutionAsset
                 :key="attachment.id"
                 :id="attachment.id"
                 :name="attachment.filename"
@@ -440,7 +440,7 @@ onUnmounted(() => {
           rows="2"
           :placeholder="l('Write a message…', 'اكتب رسالة…')"
         />
-        <OrganizationUpload
+        <InstitutionUpload
           :key="uploadVersion"
           :workspace="workspace"
           :view="view"

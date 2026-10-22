@@ -16,8 +16,8 @@ import CommandStatus from '../teams/CommandStatus.vue'
 import MemberPicker from './MemberPicker.vue'
 import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
-import OrganizationNav from './OrganizationNav.vue'
-import type { Organization } from './types'
+import InstitutionNav from './InstitutionNav.vue'
+import type { Institution } from './types'
 import type { Drill, TrainingGroup, AssessmentTemplate } from './service-types'
 const route = useRoute(),
   router = useRouter(),
@@ -34,7 +34,7 @@ const listPath = base + (templates ? '/assessment-templates' : '/groups'),
   draftKey = key + ':' + (editor || 'new'),
   resume = ref('')
 const items = ref<(TrainingGroup & AssessmentTemplate)[]>([]),
-  organization = ref<Organization>(),
+  organization = ref<Institution>(),
   loading = ref(true),
   error = ref(''),
   offset = ref(0),
@@ -82,7 +82,7 @@ async function load(page = 0) {
       }>(
         `/v1/workspaces/${id}/services?view=${view}&kind=${kind}&search=${encodeURIComponent(search.value)}&archived=${archived.value}&limit=${recordLimit.value}&offset=${page}`,
       ),
-      request<Organization>(`/v1/workspaces/${id}?view=${view}&summary=true`),
+      request<Institution>(`/v1/workspaces/${id}?view=${view}&summary=true`),
     ])
     if (disposed || current !== generation) return
     items.value = result.items
@@ -220,7 +220,7 @@ async function initialize() {
 onMounted(initialize)
 </script>
 <template>
-  <OrganizationNav />
+  <InstitutionNav />
   <div class="container page institution-service-page">
     <RouterLink v-if="editor" class="back-link" :to="listPath">{{
       templates

@@ -57,7 +57,7 @@ onBeforeRouteLeave(async () => {
 const owner = computed(() => user.value?.id || 'guest')
 const session = computed(() => row.value?.session)
 const returnPath = computed(() =>
-  session.value?.workspace_id ? '/training' : user.value ? '/today' : '/routine',
+  session.value?.workspace_id ? '/training' : user.value ? '/dashboard' : '/',
 )
 const current = computed(() => session.value?.prescription.exercises[selected.value])
 const groupBounds = computed(() => {

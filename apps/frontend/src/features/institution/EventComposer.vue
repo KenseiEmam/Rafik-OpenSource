@@ -14,8 +14,8 @@ import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
 import MemberPicker from './MemberPicker.vue'
 import PageState from '../../components/PageState.vue'
-import OrganizationNav from './OrganizationNav.vue'
-import type { Organization } from './types'
+import InstitutionNav from './InstitutionNav.vue'
+import type { Institution } from './types'
 import type { TrainingGroup, AssessmentTemplate, CalendarEvent } from './service-types'
 const route = useRoute(),
   router = useRouter(),
@@ -24,7 +24,7 @@ const route = useRoute(),
   base = '',
   key = `event-composer:${user.value!.id}:${id}:${view}:${route.query.makeup || 'general'}`
 const stepPanel = ref<HTMLElement>()
-const data = ref<Organization>(),
+const data = ref<Institution>(),
   templates = ref<AssessmentTemplate[]>([]),
   groups = ref<TrainingGroup[]>([]),
   loading = ref(true),
@@ -98,7 +98,7 @@ watch(step, async () => {
   await nextTick()
   stepPanel.value?.focus()
 })
-const trainerOptions = ref<Organization['members']>([])
+const trainerOptions = ref<Institution['members']>([])
 const people = computed(
     () => data.value?.members.filter((m) => m.active && m.roles.includes('trainee')) || [],
   ),
@@ -149,7 +149,7 @@ async function load() {
   loading.value = true
   loadError.value = ''
   try {
-    data.value = await request<Organization>(`/v1/workspaces/${id}?view=${view}&summary=true`)
+    data.value = await request<Institution>(`/v1/workspaces/${id}?view=${view}&summary=true`)
     await Promise.all([catalogPage('templates'), catalogPage('groups')])
     if (view === 'trainer') draft.value.staff = [data.value.self.id]
   } catch (e) {
@@ -273,7 +273,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <OrganizationNav />
+  <InstitutionNav />
   <div class="container page event-composer">
     <RouterLink class="back-link" :to="base + '/schedule'">{{
       l('Back to calendar', 'العودة للتقويم')

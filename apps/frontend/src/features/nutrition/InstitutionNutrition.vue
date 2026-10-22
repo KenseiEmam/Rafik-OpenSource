@@ -12,14 +12,14 @@ import { localDate } from '../../lib/dates'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
-import MemberPicker from '../organizations/MemberPicker.vue'
-import OrganizationNav from '../organizations/OrganizationNav.vue'
+import MemberPicker from '../institution/MemberPicker.vue'
+import InstitutionNav from '../institution/InstitutionNav.vue'
 import PageState from '../../components/PageState.vue'
 import MacroPlanner from './MacroPlanner.vue'
 import MealPlanEditor from './MealPlanEditor.vue'
-import OrganizationMealFields from './OrganizationMealFields.vue'
+import InstitutionMealFields from './InstitutionMealFields.vue'
 import { nutrientKeys, nutrientTotals, type Nutrients, type PlannedFood } from './model'
-import './organization-nutrition.css'
+import './institution-nutrition.css'
 type Plan = {
   id: string
   revision: number
@@ -373,7 +373,7 @@ onBeforeUnmount(() => {
 })
 </script>
 <template>
-  <OrganizationNav />
+  <InstitutionNav />
   <section
     class="container page org-nutrition nutrition-workspace"
     :class="{ 'with-member': data?.member && !choosing }"
@@ -782,7 +782,7 @@ onBeforeUnmount(() => {
                       }}
                     </h3>
                   </legend>
-                  <OrganizationMealFields v-model="meal.food" /><label
+                  <InstitutionMealFields v-model="meal.food" /><label
                     >{{ l('Note (optional)', 'ملاحظة (اختياري)')
                     }}<textarea v-model="meal.note" rows="2" maxlength="2000" />
                   </label>

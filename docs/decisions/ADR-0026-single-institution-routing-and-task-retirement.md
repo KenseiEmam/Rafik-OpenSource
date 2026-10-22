@@ -17,9 +17,11 @@ Each installation belongs to its native institution. Workspace selection, extra-
 
 Choose option 2. First-run setup is the only institution creation flow in every runtime mode. It already serializes creation and refuses a second institution, including when the existing one is archived. Remove `POST /v1/workspaces`, the chooser and the generic creation service. Keep institution memberships, invitations, auditing and scoped services. Legacy independent data remains stored but is not an available account context.
 
+Frontend code lives under `features/institution/` and navigation under `features/navigation/`; institution components use the `Institution` prefix. Internal schema, private-object keys and supported API identifiers keep their compatibility names.
+
 Canonical browser routes include `/dashboard`, `/people`, `/plans`, `/schedule`, `/workouts`, `/messages` and `/institution-settings`. `/settings` remains personal account settings. Resolve institution and role from authenticated membership, preserving account/institution/role/entity draft and command keys. Browser contexts reject ambiguous multiple-institution memberships rather than choosing silently.
 
-Old institution bookmarks are checked against current membership before redirecting, preserving the record suffix, query and fragment. A role in an old URL cannot grant access. Old Tasks bookmarks show a short retirement explanation; Tasks API routes are removed. Legacy `/workspaces` links lead to the dashboard. Revoked, closed or unreachable institutions show a retry/sign-out screen.
+Old institution bookmarks are checked against current membership before redirecting, preserving the record suffix, query and fragment. A role in an old URL cannot grant access. Tasks and workspace-chooser routes are removed outright, with no retirement page or dashboard redirect. Omitted standalone coach/check-in/team routes are also removed; unavailable URLs use the ordinary missing-page state. Tasks API routes are removed. Revoked, closed or unreachable institutions show a retry/sign-out screen.
 
 On sign-in, best-effort browser cleanup deletes only the signed-in account’s retired `trainer-tasks` drafts and pending-command keys. Unrelated drafts remain. If browser storage is unavailable, sign-in continues; account-local data removal remains available in account settings.
 

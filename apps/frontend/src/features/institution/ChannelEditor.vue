@@ -8,7 +8,7 @@ import { useCommand } from '../teams/commands'
 import CommandStatus from '../teams/CommandStatus.vue'
 import MemberPicker from './MemberPicker.vue'
 import PageState from '../../components/PageState.vue'
-import type { Organization } from './types'
+import type { Institution } from './types'
 const props = defineProps<{
   workspace: string
   view: string
@@ -23,7 +23,7 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ saved: [id: string]; close: [] }>()
 const key = `channel-editor:${user.value!.id}:${props.workspace}:${props.view}:${props.initial?.id || 'new'}:${[...(props.initialMembers || [])].sort().join(',')}`
-const people = ref<Organization>(),
+const people = ref<Institution>(),
   loading = ref(true),
   error = ref(''),
   search = ref(''),
