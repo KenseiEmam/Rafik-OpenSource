@@ -1,3 +1,4 @@
+import { apiOrigin } from "./test-target.ts";
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
@@ -22,7 +23,7 @@ async function media(
   type = "image/png",
 ) {
   return fetch(
-    `http://127.0.0.1:55331/v1/program-media/${id}${workspace ? "?workspace=" + workspace : ""}`,
+    `${apiOrigin}/v1/program-media/${id}${workspace ? "?workspace=" + workspace : ""}`,
     {
       method: workspace ? "PUT" : "GET",
       headers: {

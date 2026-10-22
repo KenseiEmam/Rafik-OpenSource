@@ -178,8 +178,8 @@ onUnmounted(() => {
         </p>
       </div>
       <div class="actions">
-        <RouterLink class="button secondary" :to="context.base + '/session-history'">{{
-          l('Session history', 'سجل الحصص')
+        <RouterLink class="button secondary" :to="context.base + '/workouts'">{{
+          l('Workout history', 'سجل التمارين')
         }}</RouterLink
         ><RouterLink class="button" :to="context.base + '/plans'">{{
           l('Assign a program', 'تعيين برنامج')
@@ -278,8 +278,8 @@ onUnmounted(() => {
           <div class="actions">
             <RouterLink
               class="button secondary"
-              :to="context.base + '/session-history?member=' + detail.member_id"
-              >{{ l('Session history', 'سجل الحصص') }}</RouterLink
+              :to="context.base + '/workouts?member=' + detail.member_id"
+              >{{ l('Workout history', 'سجل التمارين') }}</RouterLink
             ><RouterLink
               class="text-link"
               :to="context.base + '/assessments/' + detail.member_id"

@@ -1,5 +1,9 @@
 # API conventions
 
+## Next-release compatibility
+
+Unreleased: `POST /v1/workspaces` and Tasks endpoints are removed. Create the installation’s institution through first-run setup only. Existing scoped `/v1/workspaces/:id/...` services, native authentication and command replay retain their contracts. Browser URLs are independent of API scope names. See [ADR 0026](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md).
+
 The browser calls the Node API at `/v1`; `apps/frontend/src/lib/backend.ts` is the sole transport adapter. `packages/shared/src/database.types.ts` is generated from the backend schema by root `npm run backend:types`; domain JSON interfaces remain in feature modules. The API uses Prisma with the restricted PostgreSQL application role. Database constraints and explicit transaction functions remain authoritative.
 
 ## OpenAPI / Swagger export

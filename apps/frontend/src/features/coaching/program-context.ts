@@ -1,11 +1,12 @@
+import { institutionContext } from '../../app/institution'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import { request, rpc, rows } from '../../lib/backend'
 import { user, contexts } from '../../app/auth'
 import type { Exercise, Plan, PlanVersion } from '../../lib/domain'
 export function programContext(route: RouteLocationNormalizedLoaded) {
-  const workspace = route.params.workspace ? String(route.params.workspace) : ''
-  const view = String(route.params.view || 'trainer')
-  const base = workspace ? `/organization/${workspace}/${view}` : '/coach'
+  const workspace = institutionContext().workspace
+  const view = institutionContext().view
+  const base = ''
   const endpoint = `/v1/workspaces/${workspace}`
   const key = workspace ? `${workspace}:${view}` : 'independent'
   const self = () =>

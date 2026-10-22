@@ -114,7 +114,7 @@ test('first launch creates the super admin and an invited member can join withou
         ? `setup error: ${await alert.innerText()}; cookies: ${cookieNames.join(',')}`
         : page.url()
     })
-    .toMatch(/\/organization\/[^/]+\/admin/)
+    .toMatch(/\/dashboard$/)
   await expect.poll(() => page.locator('body').innerText()).toContain('Rafik Test University')
   const initialPeopleLink = page.getByRole('link', { name: 'People & access' }).first()
   if (!(await initialPeopleLink.isVisible()))
@@ -128,7 +128,7 @@ test('first launch creates the super admin and an invited member can join withou
 
   // A legacy athlete route cannot replace the role-specific admin dashboard.
   await page.goto('/today')
-  await expect(page).toHaveURL(/\/organization\/[^/]+\/admin$/)
+  await expect(page).toHaveURL(/\/dashboard$/)
   await expect(page.getByRole('combobox', { name: 'Workspace' })).toHaveCount(0)
   await expect(page.locator('.workspace-nav')).toHaveCount(0)
   await expect(page.locator('.organization-nav')).toBeHidden()
@@ -162,7 +162,7 @@ test('first launch creates the super admin and an invited member can join withou
   await invited.getByLabel('Create a password', { exact: true }).fill('Coach invite password 2026!')
   await invited.getByLabel('Confirm password').fill('Coach invite password 2026!')
   await invited.getByRole('button', { name: 'Create account and join' }).click()
-  await expect(invited).toHaveURL(/\/organization\/[^/]+\/trainer/)
+  await expect(invited).toHaveURL(/\/dashboard$/)
   await expect(invited.getByRole('heading', { name: 'Rafik Test University' })).toBeVisible()
   await waitForDashboardData(invited, 'trainer')
   await expect(invited.locator('.workspace-nav')).toHaveCount(0)
@@ -190,7 +190,7 @@ test('first launch creates the super admin and an invited member can join withou
     .fill('Athlete invite password 2026!')
   await athlete.getByLabel('Confirm password').fill('Athlete invite password 2026!')
   await athlete.getByRole('button', { name: 'Create account and join' }).click()
-  await expect(athlete).toHaveURL(/\/organization\/[^/]+\/trainee/)
+  await expect(athlete).toHaveURL(/\/dashboard$/)
   await expect(athlete.locator('.institution-nav')).toBeHidden()
   await waitForDashboardData(athlete, 'athlete')
   const athleteNavigation = athlete.locator('.dashboard-navigation:visible').first()

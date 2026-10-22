@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { institutionContext } from '../../app/institution'
+
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { request } from '../../lib/backend'
@@ -10,10 +12,10 @@ import ChannelThread from './ChannelThread.vue'
 import type { Member, Organization } from './types'
 const route = useRoute(),
   router = useRouter(),
-  workspace = String(route.params.workspace),
-  view = String(route.params.view),
+  workspace = institutionContext().workspace,
+  view = institutionContext().view,
   id = computed(() => String(route.params.channel || '')),
-  base = `/organization/${workspace}/${view}/messages`
+  base = '/messages'
 type Channel = {
   id: string
   title: string

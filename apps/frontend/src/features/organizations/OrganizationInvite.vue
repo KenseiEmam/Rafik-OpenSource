@@ -46,7 +46,7 @@ async function accept() {
       body: '{}',
     })
     await refreshContexts()
-    await router.push(`/organization/${result.workspace_id}/${result.role}`)
+    await router.push('/dashboard')
   } catch (e) {
     error.value = errorMessage(e)
   } finally {
@@ -76,7 +76,7 @@ async function createAccount() {
     })
     user.value = result.user
     await refreshProfile()
-    await router.replace(`/organization/${result.workspace_id}/${result.role || 'trainee'}`)
+    await router.replace('/dashboard')
   } catch (e) {
     error.value = errorMessage(e)
   } finally {

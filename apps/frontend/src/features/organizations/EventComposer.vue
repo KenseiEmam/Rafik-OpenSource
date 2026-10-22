@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { institutionContext } from '../../app/institution'
+
 import PageHeading from '../../components/PageHeading.vue'
 import TimezonePicker from '../../components/TimezonePicker.vue'
 import { computed, onMounted, ref, watch, nextTick, onUnmounted } from 'vue'
@@ -17,9 +19,9 @@ import type { Organization } from './types'
 import type { TrainingGroup, AssessmentTemplate, CalendarEvent } from './service-types'
 const route = useRoute(),
   router = useRouter(),
-  id = String(route.params.workspace),
-  view = String(route.params.view),
-  base = `/organization/${id}/${view}`,
+  id = institutionContext().workspace,
+  view = institutionContext().view,
+  base = '',
   key = `event-composer:${user.value!.id}:${id}:${view}:${route.query.makeup || 'general'}`
 const stepPanel = ref<HTMLElement>()
 const data = ref<Organization>(),
@@ -161,7 +163,7 @@ const command = useCommand<'create'>(
   async (_, result) => {
     ready.value = false
     await removeDraft(key)
-    if (!disposed) await router.push(base + '/calendar/' + (result as CalendarEvent[])[0]!.id)
+    if (!disposed) await router.push(base + '/schedule/' + (result as CalendarEvent[])[0]!.id)
   },
   (_, args) =>
     request(`/v1/workspaces/${id}/calendar`, { method: 'POST', body: JSON.stringify(args) }),
@@ -273,7 +275,7 @@ onMounted(async () => {
 <template>
   <OrganizationNav />
   <div class="container page event-composer">
-    <RouterLink class="back-link" :to="base + '/calendar'">{{
+    <RouterLink class="back-link" :to="base + '/schedule'">{{
       l('Back to calendar', 'العودة للتقويم')
     }}</RouterLink>
     <PageHeading class="work-heading">

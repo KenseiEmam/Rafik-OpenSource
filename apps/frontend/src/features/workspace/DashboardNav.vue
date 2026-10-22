@@ -12,8 +12,6 @@ import {
   PhListChecks,
   PhFolder,
   PhGear,
-  PhLifebuoy,
-  PhReceipt,
   PhBowlFood,
   PhClockCounterClockwise,
   PhCaretDown,
@@ -22,129 +20,95 @@ import { language as l } from '../../lib/i18n'
 const props = defineProps<{ base: string; role: string }>()
 const emit = defineEmits<{ navigate: [] }>()
 const route = useRoute()
-const organization = computed(() => props.base.startsWith('/organization'))
 const groups = computed(() =>
-  organization.value
-    ? props.role === 'trainee'
+  props.role === 'trainee'
+    ? [
+        {
+          name: l('My training', 'تدريبي'),
+          items: [
+            ['/dashboard', l('Overview', 'نظرة عامة'), PhHouse],
+            ['/plans', l('Programs', 'البرامج'), PhClipboardText],
+            ['/training', l('Training', 'التدريب'), PhBarbell],
+            ['/schedule', l('Schedule', 'الجدول'), PhCalendarBlank],
+          ],
+        },
+        {
+          name: l('My support', 'الدعم الخاص بي'),
+          items: [
+            ['/nutrition', l('Nutrition', 'التغذية'), PhBowlFood],
+            ['/injuries', l('Injury status', 'حالة الإصابة'), PhListChecks],
+            ['/feedback', l('My feedback', 'تقييماتي'), PhClipboardText],
+            ['/messages', l('Messages', 'الرسائل'), PhChatCircle],
+          ],
+        },
+      ]
+    : props.role === 'admin'
       ? [
           {
-            name: l('My training', 'تدريبي'),
+            name: l('Administration', 'الإدارة'),
             items: [
-              ['', l('Overview', 'نظرة عامة'), PhHouse],
+              ['/dashboard', l('Overview', 'نظرة عامة'), PhHouse],
+              ['/people', l('People & access', 'الأشخاص والصلاحيات'), PhUsers],
+              ['/analytics', l('Analytics', 'التحليلات'), PhChartLine],
               ['/plans', l('Programs', 'البرامج'), PhClipboardText],
-              ['/training', l('Training', 'التدريب'), PhBarbell],
-              ['/calendar', l('Schedule', 'الجدول'), PhCalendarBlank],
+              ['/activity', l('Activity', 'النشاط'), PhClockCounterClockwise],
+              ['/institution-settings', l('Institution settings', 'إعدادات المؤسسة'), PhGear],
             ],
           },
           {
-            name: l('My support', 'الدعم الخاص بي'),
+            name: l('Institution', 'المؤسسة'),
             items: [
-              ['/nutrition', l('Nutrition', 'التغذية'), PhBowlFood],
-              ['/injuries', l('Injury status', 'حالة الإصابة'), PhListChecks],
-              ['/feedback', l('My feedback', 'تقييماتي'), PhClipboardText],
+              ['/training', l('Athlete plans', 'خطط الرياضيين'), PhBarbell],
+              ['/workouts', l('Workout history', 'سجل التمارين'), PhClockCounterClockwise],
+              ['/nutrition', l('Nutrition plans', 'خطط التغذية'), PhBowlFood],
+              ['/schedule', l('Schedule', 'الجدول'), PhCalendarBlank],
               ['/messages', l('Messages', 'الرسائل'), PhChatCircle],
             ],
           },
+          {
+            name: l('Library', 'المكتبة'),
+            items: [
+              ['/exercises', l('Exercises', 'التمارين'), PhBarbell],
+              ['/resources', l('Resources', 'الموارد'), PhFolder],
+              ['/groups', l('Groups', 'المجموعات'), PhUsers],
+              ['/assessment-templates', l('Assessment templates', 'قوالب التقييم'), PhListChecks],
+            ],
+          },
         ]
-      : props.role === 'admin'
-        ? [
-            {
-              name: l('Administration', 'الإدارة'),
-              items: [
-                ['', l('Overview', 'نظرة عامة'), PhHouse],
-                ['/people', l('People & access', 'الأشخاص والصلاحيات'), PhUsers],
-                ['/analytics', l('Analytics', 'التحليلات'), PhChartLine],
-                ['/plans', l('Programs', 'البرامج'), PhClipboardText],
-                ['/activity', l('Activity', 'النشاط'), PhClockCounterClockwise],
-                ['/settings', l('Institution settings', 'إعدادات المؤسسة'), PhGear],
-              ],
-            },
-            {
-              name: l('Institution workspace', 'مساحة المؤسسة'),
-              items: [
-                ['/tasks', l('Tasks', 'المهام'), PhListChecks],
-                ['/training', l('Athlete plans', 'خطط الرياضيين'), PhBarbell],
-                ['/session-history', l('Session history', 'سجل الحصص'), PhClockCounterClockwise],
-                ['/nutrition', l('Nutrition plans', 'خطط التغذية'), PhBowlFood],
-                ['/calendar', l('Schedule', 'الجدول'), PhCalendarBlank],
-                ['/messages', l('Messages', 'الرسائل'), PhChatCircle],
-              ],
-            },
-            {
-              name: l('Library', 'المكتبة'),
-              items: [
-                ['/exercises', l('Exercises', 'التمارين'), PhBarbell],
-                ['/resources', l('Resources', 'الموارد'), PhFolder],
-                ['/groups', l('Groups', 'المجموعات'), PhUsers],
-                ['/assessment-templates', l('Assessment templates', 'قوالب التقييم'), PhListChecks],
-              ],
-            },
-          ]
-        : [
-            {
-              name: l('Workspace', 'مساحة العمل'),
-              items: [
-                ['', l('Overview', 'نظرة عامة'), PhHouse],
-                ['/people', l('People', 'الأشخاص'), PhUsers],
-                ['/tasks', l('Tasks', 'المهام'), PhListChecks],
-                ['/training', l('Athlete plans', 'خطط الرياضيين'), PhBarbell],
-                ['/session-history', l('Session history', 'سجل الحصص'), PhClockCounterClockwise],
-                ['/nutrition', l('Nutrition plans', 'خطط التغذية'), PhBowlFood],
-                ['/calendar', l('Schedule', 'الجدول'), PhCalendarBlank],
-                ['/messages', l('Messages', 'الرسائل'), PhChatCircle],
-                ['/analytics', l('Analytics', 'التحليلات'), PhChartLine],
-                ...(props.role === 'trainer'
-                  ? [['/feedback', l('My feedback', 'تقييماتي'), PhClipboardText]]
-                  : []),
-              ],
-            },
-            {
-              name: l('Library', 'المكتبة'),
-              items: [
-                ['/plans', l('Programs', 'البرامج'), PhClipboardText],
-                ['/exercises', l('Exercises', 'التمارين'), PhBarbell],
-                ['/resources', l('Resources', 'الموارد'), PhFolder],
-                ['/groups', l('Groups', 'المجموعات'), PhUsers],
-                ['/assessment-templates', l('Assessment templates', 'قوالب التقييم'), PhListChecks],
-              ],
-            },
-          ]
-    : [
-        {
-          name: l('Workspace', 'مساحة العمل'),
-          items: [
-            ['', l('Today', 'اليوم'), PhHouse],
-            ['/clients', l('Athletes', 'الرياضيون'), PhUsers],
-            ['/appointments', l('Appointments', 'المواعيد'), PhCalendarBlank],
-            ['/checkins', l('Check-ins', 'المتابعات'), PhListChecks],
-            ['/messages', l('Messages', 'الرسائل'), PhChatCircle],
-            ['/analytics', l('Analytics', 'التحليلات'), PhChartLine],
-          ],
-        },
-        {
-          name: l('Library & services', 'المكتبة والخدمات'),
-          items: [
-            ['/plans', l('Plans', 'الخطط'), PhClipboardText],
-            ['/exercises', l('Exercises', 'التمارين'), PhBarbell],
-            ['/nutrition', l('Nutrition', 'التغذية'), PhBowlFood],
-            ['/resources', l('Resources', 'الموارد'), PhFolder],
-          ],
-        },
-        {
-          name: l('Practice', 'الممارسة'),
-          items: [
-            ['/teams', l('Teams', 'الفرق'), PhUsers],
-            ['/business', l('Business', 'الاشتراك'), PhReceipt],
-            ['/support', l('Support', 'الدعم'), PhLifebuoy],
-          ],
-        },
-      ],
+      : [
+          {
+            name: l('Coaching', 'التدريب'),
+            items: [
+              ['/dashboard', l('Overview', 'نظرة عامة'), PhHouse],
+              ['/people', l('People', 'الأشخاص'), PhUsers],
+              ['/training', l('Athlete plans', 'خطط الرياضيين'), PhBarbell],
+              ['/workouts', l('Workout history', 'سجل التمارين'), PhClockCounterClockwise],
+              ['/nutrition', l('Nutrition plans', 'خطط التغذية'), PhBowlFood],
+              ['/schedule', l('Schedule', 'الجدول'), PhCalendarBlank],
+              ['/messages', l('Messages', 'الرسائل'), PhChatCircle],
+              ['/analytics', l('Analytics', 'التحليلات'), PhChartLine],
+              ...(props.role === 'trainer'
+                ? [['/feedback', l('My feedback', 'تقييماتي'), PhClipboardText]]
+                : []),
+            ],
+          },
+          {
+            name: l('Library', 'المكتبة'),
+            items: [
+              ['/plans', l('Programs', 'البرامج'), PhClipboardText],
+              ['/exercises', l('Exercises', 'التمارين'), PhBarbell],
+              ['/resources', l('Resources', 'الموارد'), PhFolder],
+              ['/groups', l('Groups', 'المجموعات'), PhUsers],
+              ['/assessment-templates', l('Assessment templates', 'قوالب التقييم'), PhListChecks],
+            ],
+          },
+        ],
 )
 function selected(path: string) {
   const current = route.path
-    .replace('/events', '/calendar')
+    .replace('/events', '/schedule')
     .replace('/deliver/', '/plans/')
-    .replace('/review/', organization.value ? '/session-history/' : '/clients/')
+    .replace('/review/', '/workouts/')
     .replace('/assessments/', '/training/')
   return path
     ? current === props.base + path || current.startsWith(props.base + path + '/')
@@ -159,7 +123,7 @@ function closeOtherGroups(event: Event) {
 }
 </script>
 <template>
-  <nav class="dashboard-navigation" :aria-label="l('Workspace navigation', 'تنقل مساحة العمل')">
+  <nav class="dashboard-navigation" :aria-label="l('Institution navigation', 'تنقل المؤسسة')">
     <details
       v-for="group in groups"
       :key="group.name"

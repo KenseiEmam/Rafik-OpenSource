@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { institutionContext } from '../../app/institution'
+
 import { PhTray } from '@phosphor-icons/vue'
 import AthleteSearch from '../../components/AthleteSearch.vue'
 import { useListPageSize } from '../../lib/list-page-size'
@@ -23,9 +25,9 @@ import {
 } from 'reka-ui'
 const route = useRoute(),
   router = useRouter(),
-  workspace = String(route.params.workspace),
-  view = String(route.params.view),
-  base = `/organization/${workspace}/${view}`
+  workspace = institutionContext().workspace,
+  view = institutionContext().view,
+  base = ''
 type Plan = {
   id: string
   member_id: string

@@ -127,7 +127,6 @@ try {
       "test:organization-nutrition",
       "test:communication",
       "test:organization-assets",
-      "test:organization-tasks",
       "test:organization-feedback",
       "test:operations",
       "content:check",

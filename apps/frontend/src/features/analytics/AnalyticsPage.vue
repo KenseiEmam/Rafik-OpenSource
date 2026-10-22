@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { institutionContext } from '../../app/institution'
+
 import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, ref, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
@@ -13,9 +15,9 @@ import TrainerDelivery from './TrainerDelivery.vue'
 import ExperienceReport, { type Experience } from './ExperienceReport.vue'
 import { TabsRoot, TabsList, TabsTrigger, TabsContent } from 'reka-ui'
 const route = useRoute(),
-  workspace = String(route.params.workspace || ''),
-  view = String(route.params.view || 'coach'),
-  base = workspace ? `/organization/${workspace}/${view}` : '/coach'
+  workspace = institutionContext().workspace,
+  view = institutionContext().view,
+  base = ''
 const from = ref(addDays(localDate(profile.value?.timezone || 'UTC'), -27)),
   to = ref(localDate(profile.value?.timezone || 'UTC')),
   loading = ref(true),

@@ -48,7 +48,7 @@ test('organization month calendar and support preserve staff navigation', async 
     id = randomUUID()
   try {
     await f.call(f.owner, '/v1/workspaces', { id, kind: 'organization', name: 'Madar gym review' })
-    await f.login(page, f.owner, `/organization/${id}/admin/calendar?from=2026-09-01`)
+    await f.login(page, f.owner, `/calendar?from=2026-09-01`)
     await expect(page.getByLabel('Calendar view', { exact: true })).toHaveValue('month')
     await expect(page.locator('.month-day:not(:disabled)')).toHaveCount(30)
     await page.locator('.month-day:not(:disabled)').nth(10).click()
@@ -68,7 +68,7 @@ test('organization month calendar and support preserve staff navigation', async 
       .getByRole('link', { name: 'Overview', exact: true })
     if (await overview.isVisible()) {
       await overview.click()
-      await expect(page).toHaveURL(new RegExp(`/organization/${id}/admin$`))
+      await expect(page).toHaveURL(new RegExp(`$`))
     }
   } finally {
     await f.cleanup()

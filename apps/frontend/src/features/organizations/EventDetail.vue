@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { institutionContext } from '../../app/institution'
+
 import PageHeading from '../../components/PageHeading.vue'
 import SessionNote from './SessionNote.vue'
 import TimezonePicker from '../../components/TimezonePicker.vue'
@@ -16,10 +18,10 @@ import OrganizationNav from './OrganizationNav.vue'
 import type { EventDetail, EventPerson } from './service-types'
 import type { Organization } from './types'
 const route = useRoute(),
-  id = String(route.params.workspace),
-  view = String(route.params.view),
+  id = institutionContext().workspace,
+  view = institutionContext().view,
   eid = String(route.params.id),
-  base = `/organization/${id}/${view}`,
+  base = '',
   endpoint = `/v1/workspaces/${id}/calendar`,
   scope = `event:${id}:${eid}:${view}`
 const data = ref<EventDetail>(),
@@ -275,7 +277,7 @@ onMounted(load)
   <div class="container page event-detail">
     <RouterLink
       class="back-link"
-      :to="base + '/calendar' + (route.query.from ? '?from=' + route.query.from : '')"
+      :to="base + '/schedule' + (route.query.from ? '?from=' + route.query.from : '')"
       >{{ l('Back to calendar', 'العودة للتقويم') }}</RouterLink
     >
     <PageHeading class="work-heading">
@@ -590,7 +592,7 @@ onMounted(load)
                 ['absent', 'excused'].includes(p.attendance)
               "
               class="text-link"
-              :to="base + '/calendar/new?makeup=' + eid + '&member=' + p.member_id"
+              :to="base + '/schedule/new?makeup=' + eid + '&member=' + p.member_id"
               >{{ l('Book an independent makeup session', 'حجز جلسة تعويضية مستقلة') }}</RouterLink
             >
           </article>

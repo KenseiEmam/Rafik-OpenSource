@@ -168,7 +168,7 @@ test('athlete profile shows each staff role only what it is allowed to see', asy
       effective_from: today,
       revision: 0,
     })
-    const profile = (view: string) => `/organization/${workspace}/${view}/athletes/${athlete.id}`
+    const profile = (view: string) => `/athletes/${athlete.id}`
 
     // Primary coach: everything for their athlete, including participation status.
     await f.login(primaryPage, f.coach, profile('trainer'))
@@ -255,7 +255,7 @@ test('athlete profile shows each staff role only what it is allowed to see', asy
     ).toBeVisible()
 
     // Entry point from People, then Arabic dark at phone width.
-    await page.goto(`/organization/${workspace}/admin/people`)
+    await page.goto(`/people`)
     await page.getByRole('link', { name: 'Profile for R4 Athlete' }).click()
     await expect(page).toHaveURL(new RegExp('/members/' + athlete.id))
     await page.evaluate(() => {

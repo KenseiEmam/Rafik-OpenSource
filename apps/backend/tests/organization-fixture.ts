@@ -1,3 +1,5 @@
+import { apiOrigin } from "./test-target.ts";
+import { fixtureInstitution } from "./institution-fixture.ts";
 import { randomUUID, randomBytes, createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
@@ -20,18 +22,17 @@ export const operation = <T extends object, A extends string>(
   ...args,
 });
 export async function call(p: Person, path: string, input?: unknown) {
-  const r = await fetch(
-    (process.env.RAFIK_TEST_API || "http://127.0.0.1:55331") + path,
-    {
-      method: input === undefined ? "GET" : "POST",
-      headers: {
-        Cookie: p.cookie,
-        "x-rafik-client": "web",
-        "Content-Type": "application/json",
-      },
-      body: input === undefined ? undefined : JSON.stringify(input),
+  if (path === "/v1/workspaces" && input)
+    return fixtureInstitution(p, input as Record<string, unknown>);
+  const r = await fetch(apiOrigin + path, {
+    method: input === undefined ? "GET" : "POST",
+    headers: {
+      Cookie: p.cookie,
+      "x-rafik-client": "web",
+      "Content-Type": "application/json",
     },
-  );
+    body: input === undefined ? undefined : JSON.stringify(input),
+  });
   return { status: r.status, data: await r.json() };
 }
 export async function organizationFixture() {

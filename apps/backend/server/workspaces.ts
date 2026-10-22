@@ -164,14 +164,14 @@ export async function mutation(
 }
 export async function contexts(actor: Actor) {
   const memberships = await db.workspace_members.findMany({
-    where: { user_id: actor.id, active: true, workspaces: { archived: false } },
+    where: {
+      user_id: actor.id,
+      active: true,
+      workspaces: { archived: false, kind: "organization" },
+    },
     include: { workspaces: true },
     orderBy: { joined_at: "asc" },
   });
-  const hasMembership =
-    (await db.workspace_members.count({
-      where: { user_id: actor.id },
-    })) > 0;
   return {
     contexts: memberships.length
       ? memberships.flatMap((m) => {
@@ -193,17 +193,7 @@ export async function contexts(actor: Actor) {
               ]
             : [];
         })
-      : hasMembership
-        ? []
-        : [
-            {
-              id: "personal",
-              kind: "personal",
-              name: "My training",
-              role: "trainee",
-              path: "/today",
-            },
-          ],
+      : [],
     platform: !!(await db.platform_grants.findUnique({
       where: { user_id: actor.id },
     })),
@@ -222,74 +212,6 @@ async function ownName(actor: Actor) {
       actor.email?.split("@")[0] ||
       "Member",
   );
-}
-export async function createWorkspace(
-  actor: Actor,
-  input: Record<string, unknown>,
-) {
-  const id = uuid(input.id),
-    kind =
-      input.kind === "independent"
-        ? "independent"
-        : input.kind === "organization"
-          ? "organization"
-          : null;
-  if (!kind) throw new ApiError(400, "invalid_request");
-  const name = textValue(input.name);
-  const memberName = await ownName(actor);
-  return db.$transaction(async (tx) => {
-    if (process.env.RAFIK_RUNTIME_MODE === "self-hosted-university") {
-      await tx.$queryRaw`SELECT pg_advisory_xact_lock(1179406164,3)`;
-      const existing = await tx.workspaces.count({
-        where: { kind: "organization" },
-      });
-      if (kind !== "organization" || existing !== 0)
-        throw new ApiError(403, "initial_administrator_bootstrap_closed");
-    }
-    await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${actor.id},74))::text`;
-    const prior = await tx.workspaces.findUnique({ where: { id } });
-    if (prior) {
-      if (
-        prior.created_by !== actor.id ||
-        prior.kind !== kind ||
-        prior.name !== name
-      )
-        throw new ApiError(409, "operation_reused");
-      if (
-        prior.archived ||
-        !(await tx.workspace_members.findFirst({
-          where: { workspace_id: id, user_id: actor.id, active: true },
-        }))
-      )
-        throw new ApiError(403, "workspace_unavailable");
-      return prior;
-    }
-    if (
-      kind === "independent" &&
-      (await tx.workspace_members.findFirst({
-        where: {
-          user_id: actor.id,
-          active: true,
-          workspaces: { kind, archived: false },
-        },
-      }))
-    )
-      throw new ApiError(409, "practice_exists");
-    const workspace = await tx.workspaces.create({
-      data: { id, kind, name, created_by: actor.id },
-    });
-    await tx.workspace_members.create({
-      data: {
-        id: randomUUID(),
-        workspace_id: id,
-        user_id: actor.id,
-        roles: [kind === "independent" ? "trainer" : "admin"],
-        name: memberName,
-      },
-    });
-    await event(tx, actor, id, "organization_created", null, { name });
-    return workspace;
-  });
 }
 export async function workspaceView(
   actor: Actor,

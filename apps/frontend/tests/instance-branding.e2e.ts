@@ -53,7 +53,7 @@ test('the first super admin can set persistent and safe instance branding', asyn
   await expect(page).toHaveURL(/\/organization\/[a-f0-9-]{36}\/admin/)
   const workspaceId = page.url().match(/\/organization\/([a-f0-9-]{36})\//)?.[1]
   expect(workspaceId).toBeTruthy()
-  await page.goto(`/organization/${workspaceId}/admin/settings`)
+  await page.goto(`/settings`)
   if (arabic) await page.getByRole('button', { name: 'Switch to Arabic' }).click()
   await expect(
     page.getByRole('heading', { name: arabic ? 'هوية التثبيت' : 'Instance branding' }),

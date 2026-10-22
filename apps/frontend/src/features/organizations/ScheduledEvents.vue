@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { institutionContext } from '../../app/institution'
+
 import { PhTray } from '@phosphor-icons/vue'
 import { useListPageSize } from '../../lib/list-page-size'
 import ScheduleViewSwitch from '../../components/ScheduleViewSwitch.vue'
@@ -15,9 +17,9 @@ import PageState from '../../components/PageState.vue'
 import type { CalendarEvent } from './service-types'
 const route = useRoute(),
   router = useRouter()
-const workspace = String(route.params.workspace),
-  view = String(route.params.view)
-const base = `/organization/${workspace}/${view}`
+const workspace = institutionContext().workspace,
+  view = institutionContext().view
+const base = ''
 const zone = profile.value?.timezone || 'UTC'
 const format = (value: string, parts: Intl.DateTimeFormatOptions) =>
   new Intl.DateTimeFormat(locale.value === 'ar' ? 'ar-AE' : 'en-GB', {
@@ -136,7 +138,7 @@ onUnmounted(() => {
       </div>
       <div class="actions">
         <ScheduleViewSwitch :base="base" view="list" />
-        <RouterLink class="button" :to="base + '/calendar/new'">{{
+        <RouterLink class="button" :to="base + '/schedule/new'">{{
           l('Schedule event', 'جدولة موعد')
         }}</RouterLink>
       </div>
@@ -223,7 +225,7 @@ onUnmounted(() => {
                 }}
               </p>
               <h2 dir="auto">
-                <RouterLink :to="base + '/calendar/' + event.id">{{ event.title }}</RouterLink>
+                <RouterLink :to="base + '/schedule/' + event.id">{{ event.title }}</RouterLink>
               </h2>
               <p class="event-when">
                 <bdi>{{ when(event) }}</bdi>
@@ -239,7 +241,7 @@ onUnmounted(() => {
       </template>
     </PageState>
     <p class="small-print">
-      <RouterLink :to="base + '/session-history'">{{
+      <RouterLink :to="base + '/workouts'">{{
         l(
           'Looking for athletes’ recorded workouts? Open Session history.',
           'هل تبحث عن تمارين الرياضيين المسجلة؟ افتح سجل الحصص.',

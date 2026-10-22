@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { institutionContext } from '../../app/institution'
+
 import { PhTray } from '@phosphor-icons/vue'
 import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, onBeforeUnmount, ref, watch, nextTick } from 'vue'
@@ -57,8 +59,8 @@ type Data = {
 }
 const route = useRoute(),
   router = useRouter(),
-  workspace = String(route.params.workspace),
-  view = String(route.params.view),
+  workspace = institutionContext().workspace,
+  view = institutionContext().view,
   trainee = view === 'trainee'
 const endpoint = `/v1/workspaces/${workspace}/nutrition`
 const workspaceName = computed(
@@ -376,12 +378,9 @@ onBeforeUnmount(() => {
     class="container page org-nutrition nutrition-workspace"
     :class="{ 'with-member': data?.member && !choosing }"
   >
-    <RouterLink
-      v-if="!trainee"
-      class="back-link"
-      :to="`/organization/${workspace}/${view}/nutrition`"
-      >{{ l('All nutrition plans', 'جميع خطط التغذية') }}</RouterLink
-    >
+    <RouterLink v-if="!trainee" class="back-link" :to="'/nutrition'">{{
+      l('All nutrition plans', 'جميع خطط التغذية')
+    }}</RouterLink>
     <PageHeading class="page-heading">
       <div>
         <h1>{{ l('Nutrition', 'التغذية') }}</h1>

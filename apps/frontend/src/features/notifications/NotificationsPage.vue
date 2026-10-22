@@ -131,8 +131,8 @@ onMounted(() => load())
               )
             }}
           </p>
-          <RouterLink to="/workspaces" class="text-link">{{
-            l('Open your workspaces', 'فتح مساحات عملك')
+          <RouterLink to="/dashboard" class="text-link">{{
+            l('Open dashboard', 'فتح لوحة التحكم')
           }}</RouterLink>
         </section>
         <article

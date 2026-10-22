@@ -57,11 +57,7 @@ onBeforeRouteLeave(async () => {
 const owner = computed(() => user.value?.id || 'guest')
 const session = computed(() => row.value?.session)
 const returnPath = computed(() =>
-  session.value?.workspace_id
-    ? `/organization/${session.value.workspace_id}/trainee/training`
-    : user.value
-      ? '/today'
-      : '/routine',
+  session.value?.workspace_id ? '/training' : user.value ? '/today' : '/routine',
 )
 const current = computed(() => session.value?.prescription.exercises[selected.value])
 const groupBounds = computed(() => {
@@ -768,12 +764,9 @@ function correctSets() {
                 >
               </div>
             </div>
-            <RouterLink
-              v-if="session.workspace_id"
-              :to="`/organization/${session.workspace_id}/trainee/feedback`"
-              class="text-link"
-              >{{ language('Rate your session (optional)', 'قيّم جلستك (اختياري)') }}</RouterLink
-            >
+            <RouterLink v-if="session.workspace_id" :to="'/feedback'" class="text-link">{{
+              language('Rate your session (optional)', 'قيّم جلستك (اختياري)')
+            }}</RouterLink>
             <RouterLink :to="returnPath" class="button secondary"
               >{{ language('Back to training', 'العودة إلى التدريب')
               }}<PhArrowRight :size="19" class="directional" aria-hidden="true"

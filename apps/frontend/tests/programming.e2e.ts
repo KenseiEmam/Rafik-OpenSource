@@ -24,7 +24,7 @@ test('organization program authoring, reviewed delivery, recording and feedback 
       token,
     })
     await f.call(f.client, `/v1/organization-invitations/${token}`, {})
-    const base = `/organization/${id}/admin`
+    const base = ``
     await f.login(page, f.owner, base + '/plans/new')
     await expect(page.locator('.editor-exercise')).toHaveCount(0)
     await expect(page.locator('.program-empty-exercises')).toBeVisible()
@@ -93,7 +93,7 @@ test('organization program authoring, reviewed delivery, recording and feedback 
     await expect(
       page.getByRole('heading', { name: 'Ready for their next session.', exact: true }),
     ).toBeVisible()
-    await f.login(client, f.client, `/organization/${id}/trainee/training`)
+    await f.login(client, f.client, `/training`)
     await client
       .getByRole('button', { name: /^Open session/ })
       .first()
@@ -118,7 +118,7 @@ test('organization program authoring, reviewed delivery, recording and feedback 
     await expect(client.getByRole('status')).toContainText('Synced with your account')
     const workout = client.url()
     // Staff review recorded workouts from Session history; /training is the plan index.
-    await page.goto(base + '/session-history')
+    await page.goto(base + '/workouts')
     await page
       .getByRole('link')
       .filter({ hasText: 'R4 Athlete' })

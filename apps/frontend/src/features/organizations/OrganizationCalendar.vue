@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { institutionContext } from '../../app/institution'
+
 import { PhCaretLeft, PhCaretRight, PhTray } from '@phosphor-icons/vue'
 import ScheduleViewSwitch from '../../components/ScheduleViewSwitch.vue'
 import ListPagination from '../../components/ListPagination.vue'
@@ -15,9 +17,9 @@ import OrganizationNav from './OrganizationNav.vue'
 import type { CalendarEvent } from './service-types'
 const route = useRoute(),
   router = useRouter(),
-  id = String(route.params.workspace),
-  view = String(route.params.view),
-  base = `/organization/${id}/${view}`,
+  id = institutionContext().workspace,
+  view = institutionContext().view,
+  base = '',
   zone = profile.value?.timezone || 'UTC'
 const today = localDate(zone),
   start = ref(String(route.query.from || today.slice(0, 7) + '-01')),
@@ -159,7 +161,7 @@ onMounted(() => load())
       </div>
       <div class="actions">
         <ScheduleViewSwitch v-if="view !== 'trainee'" :base="base" view="calendar" />
-        <RouterLink v-if="view !== 'trainee'" class="button" :to="base + '/calendar/new'">{{
+        <RouterLink v-if="view !== 'trainee'" class="button" :to="base + '/schedule/new'">{{
           l('Schedule event', 'جدولة موعد')
         }}</RouterLink>
       </div>
@@ -291,7 +293,7 @@ onMounted(() => load())
               :key="e.id"
               :class="{ 'assessment-booking': e.kind === 'assessment' }"
             >
-              <RouterLink :to="base + '/calendar/' + e.id + '?from=' + start" class="agenda-event">
+              <RouterLink :to="base + '/schedule/' + e.id + '?from=' + start" class="agenda-event">
                 <div class="agenda-time">
                   <strong>{{ date(e.starts_at) }}</strong>
                   <span>{{ time(e.starts_at) }} — {{ time(e.ends_at) }}</span>

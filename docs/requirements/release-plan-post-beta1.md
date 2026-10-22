@@ -1,6 +1,8 @@
 # Post-beta.1 release plan
 
-**Status, 20 October 2026:** Release 1 (slices 1a–1e) and its review fixes are merged and founder-accepted in application PR #135. Squire `1.0.0-beta.2` publication is being prepared; no beta.2 tag or package has been published. Paired feature documentation is merged in landing PR #11; release-status alignment follows separately. R0 is complete (see [verification](../verification/README.md)). Release 2 and Release 3 are not implemented. Items marked **⚑** were provisional defaults; the [confirmed decisions](#confirmed-release-1-decisions) replace them for Release 1. Each release is delivered as one `codex/` branch and one pull request, with one commit per slice, so it can be reviewed and merged as a unit.
+**Status, 22 October 2026:** Squire `1.0.0-beta.2` is published. Release 1 and the Claude web audit are accepted. The next release starts with single-institution routing and Tasks retirement ([ADR 0026](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md)), then the separately planned individual workout scheduling model. Keep the release branch and paired landing documentation PR unmerged until the release is complete. The audit below is historical beta.1 source analysis; its Tasks references and old route names are not current product guidance.
+
+The coach field dashboard and sport-specific field tools remain planned. Tasks is removed from future mobile scope. Workout scheduling must distinguish planned occurrences, timed sessions and actual workout records; it is not implemented by the cleanup.
 
 ## Confirmed Release 1 decisions
 
@@ -18,7 +20,7 @@ The audit below was taken from `main` at `8ae1fbf` (Squire `1.0.0-beta.1` plus C
 The founder set this order on 19 October 2026:
 
 1. **Sports and coaching foundation:** sports, coach responsibilities, multiple coaches, concurrent goal-specific plans and athlete profiles.
-2. **Coach field dashboard:** navigation/settings, calendar, tasks, communications and useful summaries.
+2. **Coach field dashboard:** navigation/settings, calendar, communications and useful summaries.
 3. **Sport-specific field tools:** game events, formations, player notes and recorded participation warnings.
 
 Release 1 comes first because it gives the field features a clear permissions and data model. **R0** closes the open beta.1 work and adds no new scope. Version numbers are proposals: R0 keeps `1.0.0-beta.1` assets, and Releases 1–3 are planned as `1.0.0-beta.2` to `1.0.0-beta.4`.
@@ -27,7 +29,7 @@ Release 1 comes first because it gives the field features a clear permissions an
 | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | R0 — beta.1 close-out                  | Physical acceptance, verified defect fixes, rendered web evidence                                                                                                                                          |
 | Release 1 — sports and coaching        | 1a sports and specialties → 1b coaching team and authority → 1c concurrent goal-specific plans → 1d staff athlete profile → 1e delegated workout logging (scheduling recommended; not in the founder list) |
-| Release 2 — coach field dashboard      | 2a navigation, settings and branding → 2b calendar and summaries → 2c tasks → 2d communications                                                                                                            |
+| Release 2 — coach field dashboard      | 2a navigation, settings and branding → 2b calendar and summaries → 2c communications                                                                                                                       |
 | Release 3 — sport-specific field tools | 3a game events and line-ups → 3b formations → 3c player notes → 3d recorded participation warnings                                                                                                         |
 
 Coach ratings are not in the founder list. Defer them until after Release 1, because a rating needs a named coaching link. See [deferred and unscheduled](#deferred-and-unscheduled).

@@ -56,7 +56,7 @@ import { language, t } from '../../lib/i18n'
       </p>
     </section>
     <section class="help-workspaces">
-      <h2>{{ language('Start in the right workspace', 'ابدأ في مساحة العمل المناسبة') }}</h2>
+      <h2>{{ language('Your institution dashboard', 'لوحة مؤسستك') }}</h2>
       <p>
         {{
           language(
@@ -65,8 +65,8 @@ import { language, t } from '../../lib/i18n'
           )
         }}
       </p>
-      <RouterLink class="text-link" to="/workspaces">{{
-        language('Choose your workspace', 'اختر مساحة عملك')
+      <RouterLink class="text-link" to="/dashboard">{{
+        language('Open your dashboard', 'افتح لوحة التحكم')
       }}</RouterLink>
       <details>
         <summary>{{ language('I administer an institution', 'أنا مسؤول مؤسسة') }}</summary>
@@ -186,7 +186,7 @@ import { language, t } from '../../lib/i18n'
       <p>
         {{
           language(
-            'A conversation lists the people who can read its history and send messages. Institution administrators join visibly. The notification bell keeps updates from different workspaces separate. In this local preview, optional email is intercepted for testing; no real email or push is sent.',
+            'A conversation lists the people who can read its history and send messages. Institution administrators join visibly. The notification bell keeps updates grouped by their source. In this local preview, optional email is intercepted for testing; no real email or push is sent.',
             'توضح المحادثة من يستطيع قراءة سجلها وإرسال الرسائل، ويظهر انضمام مسؤول المؤسسة. يفصل جرس الإشعارات تحديثات مساحات العمل. في هذه المعاينة المحلية تُعترض الرسائل الاختيارية للاختبار ولا يُرسل بريد أو إشعار دفع فعلي.',
           )
         }}

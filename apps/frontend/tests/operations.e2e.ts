@@ -81,7 +81,7 @@ test('organization coach starts a private conversation with their assigned athle
       revision: client.revision,
       trainer: coach.id,
     })
-    await f.login(page, f.coach, `/organization/${id}/trainer/messages`)
+    await f.login(page, f.coach, `/messages`)
     await page.setViewportSize({ width: 320, height: 568 })
     // Conversations start from the People directory; the coach is always one of the two participants.
     await page
@@ -147,7 +147,7 @@ test('large member selection searches the full roster and keeps reviewed choices
         stdio: 'pipe',
       },
     )
-    await f.login(page, f.owner, `/organization/${id}/admin/groups`)
+    await f.login(page, f.owner, `/groups`)
     await page.getByRole('button', { name: 'New group', exact: true }).click()
     await page.getByLabel('Name', { exact: true }).fill('Reviewed roster selection')
     const picker = page.locator('.member-picker').first()

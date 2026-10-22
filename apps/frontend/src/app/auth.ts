@@ -2,6 +2,7 @@ import { shallowRef, ref } from 'vue'
 import { api, configured, rpc, request, type ApiUser } from '../lib/backend'
 import type { Profile } from '../lib/domain'
 import type { Context } from '../features/organizations/types'
+import { removeRetiredTaskDrafts } from '../lib/storage'
 import { locale } from '../lib/i18n'
 export const user = shallowRef<ApiUser | null>(null)
 export const profile = ref<Profile | null>(null)
@@ -16,7 +17,14 @@ export async function refreshContexts() {
   }
   const data = await request<{ contexts: Context[]; platform: boolean }>('/v1/contexts')
   if (user.value?.id === id) {
+    if (data.contexts.filter((c) => c.kind === 'organization').length > 1) {
+      contexts.value = []
+      platform.value = data.platform
+      throw new Error('multiple_institutions_not_supported')
+    }
     contexts.value = data.contexts
+      .filter((c) => c.kind === 'organization')
+      .map((c) => ({ ...c, path: '/dashboard' }))
     platform.value = data.platform
   }
 }
@@ -35,6 +43,10 @@ export async function refreshProfile() {
     p_timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
   })
   if (user.value?.id === id) {
+    // Storage can be unavailable in restricted browsers; never block sign-in on cleanup.
+    await removeRetiredTaskDrafts(id).catch(() => {})
+    if (user.value?.id !== id) return
+    localStorage.removeItem('rafik.workspace:' + id)
     profile.value = p
     await refreshContexts()
   }

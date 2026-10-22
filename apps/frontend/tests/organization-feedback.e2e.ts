@@ -52,7 +52,7 @@ test('optional session and workplace feedback recover and appear as separate sou
     const endpoint = `/v1/workspaces/${workspace}`,
       id = randomUUID(),
       tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 10)
-    await f.call(f.coach, endpoint + '/calendar', {
+    await f.call(f.coach, endpoint + '/schedule', {
       operation: randomUUID(),
       action: 'create',
       id,
@@ -88,7 +88,7 @@ test('optional session and workplace feedback recover and appear as separate sou
         stdio: ['pipe', 'pipe', 'pipe'],
       },
     )
-    await f.call(f.coach, endpoint + '/calendar', {
+    await f.call(f.coach, endpoint + '/schedule', {
       operation: randomUUID(),
       action: 'attendance',
       id,
@@ -97,7 +97,7 @@ test('optional session and workplace feedback recover and appear as separate sou
       revision: 1,
       attendance: 'present',
     })
-    await f.call(f.coach, endpoint + '/calendar', {
+    await f.call(f.coach, endpoint + '/schedule', {
       operation: randomUUID(),
       action: 'finish',
       id,
@@ -389,7 +389,7 @@ test('a completed institution workout links to the athlete feedback form', async
     })
     await f.login(page, f.client, `/workout/${session}?workspace=${workspace}`)
     await page.getByRole('link', { name: 'Rate your session (optional)', exact: true }).click()
-    await expect(page).toHaveURL(new RegExp(`/organization/${workspace}/trainee/feedback$`))
+    await expect(page).toHaveURL(new RegExp(`/feedback$`))
     await expect(page.getByRole('radio', { name: '4 Satisfied', exact: true })).toBeVisible()
   } finally {
     await f.cleanup()

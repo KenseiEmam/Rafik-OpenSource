@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { institutionContext } from '../../app/institution'
+
 import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -38,9 +40,9 @@ type Version = {
 }
 const route = useRoute(),
   router = useRouter(),
-  workspace = String(route.params.workspace),
-  view = String(route.params.view),
-  base = `/organization/${workspace}/${view}`,
+  workspace = institutionContext().workspace,
+  view = institutionContext().view,
+  base = '',
   ws = `/v1/workspaces/${workspace}`
 const sessionId = computed(() => String(route.params.session))
 const loading = ref(true),

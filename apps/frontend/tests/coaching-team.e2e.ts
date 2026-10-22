@@ -79,7 +79,7 @@ test('admin builds a coaching team; a supporting coach sees training only until 
       trainer: primary.id,
     })
 
-    const base = `/organization/${workspace}/admin`
+    const base = ``
     await f.login(page, f.owner, base + '/people')
     // Management lives on the profile's Manage tab; the directory icon opens it directly.
     await page.getByRole('link', { name: 'Manage R4 Athlete', exact: true }).click()
@@ -103,7 +103,7 @@ test('admin builds a coaching team; a supporting coach sees training only until 
     await inspect(page, 'admin-team', info)
 
     // The supporting coach sees the athlete, flagged as training-only, without nutrition.
-    await f.login(supportPage, support, `/organization/${workspace}/trainer/people`)
+    await f.login(supportPage, support, `/people`)
     const supportCard = supportPage
       .locator('.organization-person')
       .filter({ has: supportPage.getByRole('heading', { name: 'R4 Athlete', exact: true }) })

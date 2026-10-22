@@ -1,5 +1,21 @@
 # Verification record
 
+## Single-institution cleanup — 22 October 2026
+
+Unreleased branch `codex/single-institution-cleanup`; keep its application PR and [landing PR #34](https://github.com/KenseiEmam/rafik-landing/pull/34) unmerged until the release is complete.
+
+Passed on the cleanup source:
+
+- Migration check: fresh 58-migration installation; populated Tasks deletion and attributable receipt/event cleanup; unrelated receipt/event preservation; multiple institutions stop atomically before deletion. Shared transport types regenerated from that disposable database. No local preview migration/reset was performed.
+- Isolated API: 10 tests for institution authorization, membership lifecycle, exact replay, hidden independent contexts, removed creation/Tasks endpoints, notifications and bundled Swagger compatibility.
+- Frontend: 33 unit tests; frontend/backend typechecks; production build through the isolated browser wrapper.
+- Final routing journey: Chromium desktop and WebKit iPhone emulation, 2/2. Flat routes, old institution IDs and role segments, preserved search/limit query, institution/account settings separation, retired Tasks page, wrong-institution recovery, hidden chooser, trainer restrictions, and removal of only the current account's retired drafts/commands. Unrelated/other-account drafts remain. English/light flows and Arabic/dark schedule/layout inspected; final settled Arabic screenshots inspected in both engines. The separate Help journey passed in both engines before the final draft-cleanup addition; reused for unaffected Help behavior.
+- Documentation checker: 2 fixtures, 399 local links and 45 heading anchors across 59 maintained documents. Landing paired content/version tests: 6 passed.
+
+Earlier attempts exposed a phone-sidebar visibility assertion, an accidentally changed fixture expectation (restored), and fixture HTTP ECONNRESET. The final fixture disables idle-socket reuse without write retries. A temporary migration database name first failed the existing local guard; an allowed disposable name completed generation. Sandbox subprocess restrictions required elevated test execution. These failed attempts are not counted as passing acceptance.
+
+Limits: no full application browser matrix, every editor's historical draft, populated calendar dataset, physical phone, Android rebuild, cloud deployment or production backup restoration was repeated. Supported Android API paths and durable native keys were retained; native upgrade acceptance is not newly established. Browser storage cleanup is best-effort when IndexedDB is unavailable. Backend tests now use disposable services rather than preview targets. Test databases/services and generated browser output were cleaned; reviewed captures/logs are removed after recording this evidence. Workout scheduling remains separate work.
+
 ## GitHub organization link update — 22 October 2026
 
 Updated tracked application repository references and Terraform clone defaults to Rafik-Athlete-Managment/Rafik-OpenSource; preserved landing and personal Project links. GitHub API confirms the transferred canonical repository and main default branch. A tracked-file scan found no old application owner/name references. docs:check passed two fixtures, 391 local links and 45 anchors across 58 maintained documents; external links were not exhaustively fetched. No runtime tests, cloud apply or Android rebuild was needed for these address-only changes.

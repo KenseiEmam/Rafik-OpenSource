@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { institutionContext } from '../../app/institution'
+
 import { useListPageSize } from '../../lib/list-page-size'
 import EmptyState from '../../components/EmptyState.vue'
 import { loadEditorDraft } from '../../lib/editor-draft'
@@ -22,9 +24,9 @@ const route = useRoute(),
   editor = String(route.params.editor || ''),
   initialPath = route.path,
   forEvent = String(route.query.forEvent || ''),
-  id = String(route.params.workspace),
-  view = String(route.params.view),
-  base = `/organization/${id}/${view}`,
+  id = institutionContext().workspace,
+  view = institutionContext().view,
+  base = '',
   templates = route.path.includes('/assessment-templates'),
   kind = templates ? 'templates' : 'groups',
   key = `service-catalog:${user.value!.id}:${id}:${view}:${kind}`
@@ -483,7 +485,7 @@ onMounted(initialize)
             </button>
           </article>
         </div>
-        <RouterLink :to="base + '/calendar/new'" class="text-link"
+        <RouterLink :to="base + '/schedule/new'" class="text-link"
           >{{ l('Schedule an event', 'جدولة موعد') }} ↗</RouterLink
         ></PageState
       >

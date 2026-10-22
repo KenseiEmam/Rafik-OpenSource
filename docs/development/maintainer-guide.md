@@ -1,5 +1,9 @@
 # Maintainer guide
 
+## Next-release route conventions
+
+Use flat browser URLs and `app/institution.ts` for current institution/role. Keep `/settings` personal and `/institution-settings` administrative. Keep durable draft keys institution/role-scoped even though URLs are flat. Never infer authority from an old URL role. Tasks is removed; useful overview follow-up lives in `organization-follow-up.ts`. API `/v1/workspaces/:id` names and native scope identifiers remain compatible. See [ADR 0026](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md).
+
 The canonical application repository is [Rafik-Athlete-Managment/Rafik-OpenSource](https://github.com/Rafik-Athlete-Managment/Rafik-OpenSource). Clone/fetch and open application issues, PRs and releases there. The landing repository and existing GitHub Project remain under KenseiEmam until the founder directs otherwise.
 
 Member management lives in `MemberManagement.vue`: keep identity first, coaching next, and sports/account recovery at the bottom. Institution settings use two responsive columns for general settings and branding. The closure dialog is a confirmation step; server revision and exact-name checks remain authoritative. Development file watching excludes generated test artifacts so browser traces cannot trigger reloads or locked-file crashes.
@@ -164,8 +168,10 @@ Use the approved [design system](../DESIGN_SYSTEM.md). `src/styles/design-system
 
 Use `PageHeading.vue` for operational page titles, `SectionHeader.vue` for grouped section copy, `EmptyState.vue` for list emptiness and `FileDropzone.vue` for standalone uploads. Reka tab lists use the shared `ui-tabs` skin. Keep existing field and upload validation in their owners. Main directory page-size state uses `useListPageSize`; call `acceptLimit` only after installing the matching response, and retain `limit` in filter navigation.
 
-Entity editors use `/:editor` (`new` or an existing ID) beneath templates, groups, tasks and exercises. The main router remounts on path changes. Keep draft keys record-scoped through `loadEditorDraft`; do not restore one entity’s work into another. Save navigation waits for command settlement and checks the original mounted route. The command helper tracks active dispatches by account and scope so a remount cannot offer replay before the original finishes.
+Entity editors use `/:editor` (`new` or an existing ID) beneath templates, groups and exercises. The main router remounts on path changes. Keep draft keys record-scoped through `loadEditorDraft`; do not restore one entity’s work into another. Save navigation waits for command settlement and checks the original mounted route. The command helper tracks active dispatches by account and scope so a remount cannot offer replay before the original finishes.
 
 ### Android launcher assets
 
 Density-specific launcher PNGs are maintained under `apps/mobile/assets/android-icons/` and installed by `apps/mobile/scripts/android.mjs` during preparation. Keep app.json’s icon reference and those assets together. Generated native resources alone are not durable source.
+
+The single-institution migration regression lives in `apps/backend/scripts/prisma/verify-institution-cleanup.mjs`. Backend integration scripts use `scripts/prisma/isolated-api.mjs`; legacy scope fixtures use privileged test setup rather than the removed institution creation API. Demo seeding removes the historical second institution; isolated security fixtures retain their own multi-scope data.

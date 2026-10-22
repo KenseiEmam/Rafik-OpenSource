@@ -1,3 +1,4 @@
+import { apiOrigin } from "./test-target.ts";
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
@@ -22,7 +23,7 @@ const asset = (
   bytes = png,
 ) =>
   fetch(
-    `http://127.0.0.1:55331/v1/organization-assets/${id}` +
+    `${apiOrigin}/v1/organization-assets/${id}` +
       (workspace
         ? "?" +
           new URLSearchParams({

@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Institution cleanup
+
+- Retire Tasks, its API and data through a guarded forward migration.
+- Remove workspace selection and additional-institution creation; retain institution permissions and native API compatibility.
+- Introduce flat role-derived browser routes, authorized legacy redirects and separate account/institution settings.
+
+### Previously recorded changes
+
 - Updated application repository, release, issue/PR and cloud-template links to Rafik-Athlete-Managment/Rafik-OpenSource following the GitHub organization transfer. Landing remains under KenseiEmam.
 
 - Rebuilt and verified the signed beta.2 Android bundle with the existing update key and new launcher artwork; publication-ready English/Arabic landing release and installation guidance accompanies it.

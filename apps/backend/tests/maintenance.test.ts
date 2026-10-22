@@ -1,3 +1,4 @@
+import { apiOrigin } from "./test-target.ts";
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID, createHash } from "node:crypto";
@@ -27,7 +28,7 @@ test("local recovery restores private bytes with metadata; orphan cleanup honors
     assert.equal(registered.status, 200, JSON.stringify(registered));
     path = registered.data.object_path;
     const uploaded = await fetch(
-      "http://127.0.0.1:55331/v1/files/" + encodeURIComponent(path),
+      apiOrigin + "/v1/files/" + encodeURIComponent(path),
       {
         method: "PUT",
         headers: {

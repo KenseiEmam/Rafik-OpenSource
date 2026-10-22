@@ -28,7 +28,7 @@ test('organization conversations preserve scope, compact layout, drafts and exac
       token,
     })
     await f.call(f.client, `/v1/organization-invitations/${token}`, {})
-    const base = `/organization/${id}/admin/messages`
+    const base = `/messages`
     const initialList = page.waitForResponse(
       (response) =>
         response.url().includes(`/v1/workspaces/${id}/communication`) &&
@@ -115,7 +115,7 @@ test('organization conversations preserve scope, compact layout, drafts and exac
     ).toBeVisible()
     await client.getByRole('button', { name: 'Back to updates', exact: true }).click()
     await client.getByRole('button', { name: 'New conversation updates', exact: false }).click()
-    await expect(client).toHaveURL(`/organization/${id}/trainee/messages/${channel}`)
+    await expect(client).toHaveURL(`/messages/${channel}`)
     await expect(
       client
         .locator('.message-bubble')
@@ -139,7 +139,7 @@ test('organization conversations preserve scope, compact layout, drafts and exac
       path: info.outputPath('organization-conversation.png'),
       fullPage: true,
     })
-    await client.goto(`/organization/${id}/trainee/messages`)
+    await client.goto(`/messages`)
     await expect(client.getByRole('link', { name: /R4 Athlete/ })).toBeVisible()
     for (const size of [
       { width: 320, height: 568 },

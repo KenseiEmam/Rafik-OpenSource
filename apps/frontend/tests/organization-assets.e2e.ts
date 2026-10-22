@@ -17,7 +17,7 @@ test('organization author uploads, categorizes, filters, reuses and archives an 
   test.setTimeout(90000)
   const f = await teamFixture(),
     workspace = randomUUID(),
-    base = `/organization/${workspace}/admin`
+    base = ``
   try {
     await f.call(f.owner, '/v1/workspaces', {
       id: workspace,

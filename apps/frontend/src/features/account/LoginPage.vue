@@ -13,7 +13,7 @@ const email = ref(''),
   password = ref(''),
   busy = ref(false),
   error = ref('')
-const next = computed(() => safeNext(route.query.next, '/workspaces'))
+const next = computed(() => safeNext(route.query.next, '/access'))
 async function login() {
   busy.value = true
   error.value = ''

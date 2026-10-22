@@ -113,7 +113,7 @@ test('coach browses later pages of athlete plans, nutrition plans and events, th
         guidance: 'Regular meals around training',
         meals: [],
       })
-      await f.call(f.coach, endpoint + '/calendar', {
+      await f.call(f.coach, endpoint + '/schedule', {
         operation: randomUUID(),
         action: 'create',
         id: randomUUID(),
@@ -129,7 +129,7 @@ test('coach browses later pages of athlete plans, nutrition plans and events, th
         every: 7,
       })
     }
-    const base = `/organization/${workspace}/trainer`
+    const base = ``
 
     // Athlete plans: a record from the later page stays selected through reload and close.
     await f.login(page, f.coach, base + '/training')
@@ -241,7 +241,7 @@ test('multiple message attachments survive reload, exact retry and recipient rev
   try {
     const { workspace, endpoint, join } = await institution(f, 'Madar attachments')
     await join(f.client, ['trainee'])
-    await f.login(page, f.owner, `/organization/${workspace}/admin/messages`)
+    await f.login(page, f.owner, `/messages`)
     await page.getByRole('button', { name: /R4 Athlete/ }).click()
     await expect(page).toHaveURL(/\/messages\/[a-f0-9-]{36}$/)
     const channel = page.url().split('/').at(-1)!
@@ -294,7 +294,7 @@ test('multiple message attachments survive reload, exact retry and recipient rev
     expect(sends).toBe(2)
     await inspect(page, 'attachments-sent', info)
 
-    await f.login(recipient, f.client, `/organization/${workspace}/trainee/messages/${channel}`)
+    await f.login(recipient, f.client, `/messages/${channel}`)
     const bubble = recipient.locator('.message-bubble')
     await expect(bubble).toHaveCount(1)
     await expect(bubble.locator('.organization-asset')).toHaveCount(2)

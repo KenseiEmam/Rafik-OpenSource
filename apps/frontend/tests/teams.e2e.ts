@@ -13,14 +13,14 @@ test('retired team and business links route into the institution workspace', asy
       kind: 'organization',
       name: 'Legacy link institution',
     })
-    const base = `/organization/${id}/admin`
+    const base = ``
     await f.login(page, f.owner, '/coach/teams')
     await expect(page).toHaveURL(base + '/groups')
     await expect(page.getByLabel('Team name', { exact: true })).toHaveCount(0)
     await page.goto('/coach/teams/' + randomUUID())
     await expect(page).toHaveURL(base + '/groups')
     await page.goto('/coach/business')
-    await expect(page).toHaveURL(base + '/settings')
+    await expect(page).toHaveURL(base + '/institution-settings')
     await expect(page.getByText('Local provider simulation', { exact: true })).toHaveCount(0)
     await page.goto('/teams')
     await expect(page).toHaveURL(new RegExp(`^[^?]*/organization/${id}/`))

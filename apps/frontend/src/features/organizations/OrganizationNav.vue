@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { institutionContext } from '../../app/institution'
+
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { contexts } from '../../app/auth'
@@ -6,63 +8,60 @@ import { language as l } from '../../lib/i18n'
 import './organization.css'
 const route = useRoute(),
   router = useRouter()
-const base = computed(() => `/organization/${route.params.workspace}/${route.params.view}`)
-const allowed = computed(() => contexts.value.some((c) => c.path === base.value))
+const base = computed(() => '')
+const allowed = computed(() => contexts.value.some((c) => c.kind === 'organization'))
 const items = computed(() => [
-  { path: '', name: l('Overview', 'نظرة عامة') },
-  ...(route.params.view === 'trainee'
+  { path: '/dashboard', name: l('Overview', 'نظرة عامة') },
+  ...(institutionContext().view === 'trainee'
     ? []
-    : [
-        { path: '/people', name: l('People', 'الأشخاص') },
-        { path: '/tasks', name: l('Tasks', 'المهام') },
-      ]),
+    : [{ path: '/people', name: l('People', 'الأشخاص') }]),
   { path: '/plans', name: l('Programs', 'البرامج') },
   {
     path: '/training',
     name:
-      route.params.view === 'trainee'
+      institutionContext().view === 'trainee'
         ? l('Training', 'التدريب')
         : l('Athlete plans', 'خطط الرياضيين'),
   },
-  { path: '/session-history', name: l('Session history', 'سجل الحصص') },
+  { path: '/workouts', name: l('Workout history', 'سجل التمارين') },
   {
     path: '/nutrition',
     name:
-      route.params.view === 'trainee'
+      institutionContext().view === 'trainee'
         ? l('Nutrition', 'التغذية')
         : l('Nutrition plans', 'خطط التغذية'),
   },
   { path: '/injuries', name: l('Injury status', 'حالة الإصابة') },
   { path: '/messages', name: l('Messages', 'الرسائل') },
-  { path: '/calendar', name: l('Schedule', 'الجدول') },
-  ...(route.params.view !== 'admin'
+  { path: '/schedule', name: l('Schedule', 'الجدول') },
+  ...(institutionContext().view !== 'admin'
     ? [{ path: '/feedback', name: l('My feedback', 'تقييماتي') }]
     : []),
-  ...(route.params.view === 'trainee'
+  ...(institutionContext().view === 'trainee'
     ? []
     : [
         { path: '/analytics', name: l('Analytics', 'التحليلات') },
         { path: '/groups', name: l('Groups', 'المجموعات') },
         { path: '/assessment-templates', name: l('Assessment templates', 'قوالب التقييم') },
       ]),
-  ...(route.params.view === 'trainee'
+  ...(institutionContext().view === 'trainee'
     ? []
     : [
         { path: '/exercises', name: l('Exercises', 'التمارين') },
         { path: '/resources', name: l('Resources', 'الموارد') },
       ]),
-  ...(route.params.view === 'admin'
+  ...(institutionContext().view === 'admin'
     ? [
         { path: '/activity', name: l('Activity', 'النشاط') },
-        { path: '/settings', name: l('Settings', 'الإعدادات') },
+        { path: '/institution-settings', name: l('Settings', 'الإعدادات') },
       ]
     : []),
 ])
 const navPath = computed(() =>
   route.path
-    .replace('/events', '/calendar')
+    .replace('/events', '/schedule')
     .replace('/deliver/', '/plans/')
-    .replace('/review/', '/session-history/')
+    .replace('/review/', '/workouts/')
     .replace('/assessments/', '/training/'),
 )
 const secondary = new Set([
@@ -71,7 +70,7 @@ const secondary = new Set([
   '/exercises',
   '/resources',
   '/activity',
-  '/settings',
+  '/institution-settings',
 ])
 const current = computed(
   () =>

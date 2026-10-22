@@ -1,5 +1,9 @@
 # Testing
 
+## Next-release cleanup checks
+
+Use the isolated browser wrapper for `tests/institution-routing.e2e.ts`. It covers flat routes, legacy bookmarks, server-derived roles and Tasks retirement. Privileged fixture setup replaces the removed runtime creation endpoint and must use a disposable test database. Keep multi-institution security fixtures distinct from supported deployment behavior.
+
 ## Opt-in web design audit
 
 From the repository root, with Node 24 (or 22.16+) and the local Docker database running:
@@ -72,3 +76,5 @@ From the repository root, set `RAFIK_UI_AUDIT=1` and run `npm run test:e2e --wor
 ### Remaining web standardization checks
 
 `ui-standardization.e2e.ts` checks dedicated template/group/task/exercise routes, record drafts, acknowledgement/uncertain retry, upload and page-size persistence. The opt-in audit collector’s `RAFIK_UI_AUDIT_ROLLOUT=1` mode adds populated task, attendance and private-conversation fixtures to representative planning/nutrition/reporting layouts. With that variable, the Chromium functional journey is skipped to reuse its recorded passing evidence; WebKit adds the missing engine coverage. Run the wrapper serially and inspect screenshots. `command-navigation.test.ts` covers active-command remount/replay and legacy draft isolation. None of these checks resets preview data or establishes Android/device acceptance.
+
+Backend `test:*` integration commands now use `apps/backend/scripts/prisma/isolated-api.mjs`: a fresh migrated database and API on port 55343, with cleanup on completion. Do not point fixture setup at preview. `npm run test:institution-cleanup` checks migration stop/deletion/preservation and regenerates shared database types from its disposable database.

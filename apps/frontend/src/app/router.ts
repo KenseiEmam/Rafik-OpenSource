@@ -12,13 +12,13 @@ const legacyCoachSections: Record<string, string> = {
   checkins: '/tasks',
   forms: '/tasks',
   messages: '/messages',
-  appointments: '/calendar',
+  appointments: '/schedule',
   nutrition: '/nutrition',
   resources: '/resources',
   teams: '/groups',
-  business: '/settings',
+  business: '/institution-settings',
   support: '/more',
-  more: '/settings',
+  more: '/institution-settings',
 }
 function organizationRouteForLegacyCoach(path: string, base: string) {
   const parts = path
@@ -29,7 +29,7 @@ function organizationRouteForLegacyCoach(path: string, base: string) {
   const target = legacyCoachSections[parts[0]!]
   if (!target) return base
   if (parts[0] === 'plans' && parts[1] === 'new') return base + '/plans/new'
-  if (parts[0] === 'appointments' && parts[1] === 'new') return base + '/calendar/new'
+  if (parts[0] === 'appointments' && parts[1] === 'new') return base + '/schedule/new'
   if (parts[0] === 'review' && parts[1]) return base + '/review/' + encodeURIComponent(parts[1])
   return base + target
 }
@@ -73,153 +73,168 @@ const router = createRouter({
       meta: { private: true },
     },
     {
-      path: '/workspaces',
-      component: () => import('../features/organizations/WorkspacesPage.vue'),
-      meta: { private: true },
-    },
-    {
-      path: '/organization/:workspace/:view/deliver/:id',
+      path: '/deliver/:id',
       component: () => import('../features/coaching/DeliverPlan.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/training',
+      path: '/training',
       component: () => import('../features/organizations/TrainingRoute.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/events',
+      path: '/events',
       component: () => import('../features/organizations/ScheduledEvents.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/session-history',
+      path: '/workouts',
       component: () => import('../features/organizations/SessionHistory.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/review/:id',
+      path: '/review/:id',
       component: () => import('../features/coaching/ReviewPage.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/plans',
+      path: '/plans',
       component: () => import('../features/coaching/PlansPage.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/plans/:id',
+      path: '/plans/:id',
       component: () => import('../features/coaching/PlanEditor.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/feedback',
+      path: '/feedback',
       component: () => import('../features/organizations/FeedbackPage.vue'),
-      meta: { private: true },
-    },
-    {
-      path: '/organization/:workspace/:view/tasks',
-      component: () => import('../features/organizations/OrganizationTasks.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
 
     {
-      path: '/organization/:workspace/:view/tasks/:editor',
-      component: () => import('../features/organizations/OrganizationTasks.vue'),
-      meta: { private: true },
-    },
-    {
-      path: '/organization/:workspace/:view/resources',
-      component: () => import('../features/resources/OrganizationResources.vue'),
-      meta: { private: true },
-    },
-    {
-      path: '/organization/:workspace/:view/exercises',
+      path: '/exercises',
       component: () => import('../features/coaching/ExercisesPage.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
 
     {
-      path: '/organization/:workspace/:view/exercises/:editor',
+      path: '/exercises/:editor',
       component: () => import('../features/coaching/ExercisesPage.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/nutrition',
-      component: () => import('../features/nutrition/NutritionRoute.vue'),
-      meta: { private: true },
-    },
-    {
-      path: '/organization/:workspace/:view/injuries',
+      path: '/injuries',
       component: () => import('../features/organizations/OrganizationInjuries.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/analytics',
+      path: '/analytics',
       component: () => import('../features/analytics/AnalyticsPage.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/messages/:channel?',
+      path: '/messages/:channel?',
       component: () => import('../features/organizations/ChannelsPage.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/calendar',
+      path: '/schedule',
       component: () => import('../features/organizations/OrganizationCalendar.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/calendar/new',
+      path: '/schedule/new',
       component: () => import('../features/organizations/EventComposer.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/calendar/:id',
+      path: '/schedule/:id',
       component: () => import('../features/organizations/EventDetail.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/groups',
+      path: '/groups',
       component: () => import('../features/organizations/ServiceCatalog.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
 
     {
-      path: '/organization/:workspace/:view/groups/:editor',
+      path: '/groups/:editor',
       component: () => import('../features/organizations/ServiceCatalog.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/assessment-templates',
+      path: '/assessment-templates',
       component: () => import('../features/organizations/ServiceCatalog.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
 
     {
-      path: '/organization/:workspace/:view/assessment-templates/:editor',
+      path: '/assessment-templates/:editor',
       component: () => import('../features/organizations/ServiceCatalog.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/record/:session',
+      path: '/record/:session',
       component: () => import('../features/organizations/DelegatedWorkout.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/members/:member',
-      alias: '/organization/:workspace/:view/athletes/:member',
+      path: '/members/:member',
+      alias: '/athletes/:member',
       component: () => import('../features/organizations/AthleteProfile.vue'),
-      meta: { private: true },
+      meta: { private: true, institution: true },
     },
     {
-      path: '/organization/:workspace/:view/assessments/:member',
+      path: '/assessments/:member',
       component: () => import('../features/organizations/AssessmentHistory.vue'),
+      meta: { private: true, institution: true },
+    },
+    {
+      path: '/dashboard',
+      component: () => import('../features/organizations/OrganizationPage.vue'),
+      meta: { private: true, institution: true },
+    },
+    ...(['people', 'activity', 'institution-settings'] as const).map((section) => ({
+      path: '/' + section,
+      component: () => import('../features/organizations/OrganizationPage.vue'),
+      meta: {
+        private: true,
+        institution: true,
+        section: section === 'institution-settings' ? 'settings' : section,
+        adminOnly: section !== 'people',
+      },
+    })),
+    { path: '/workspaces', redirect: '/dashboard' },
+    {
+      path: '/calendar/:rest(.*)*',
+      redirect: (to) => ({
+        path:
+          '/schedule/' +
+          (Array.isArray(to.params.rest) ? to.params.rest.join('/') : to.params.rest || ''),
+        query: to.query,
+        hash: to.hash,
+      }),
+    },
+    {
+      path: '/session-history',
+      redirect: (to) => ({ path: '/workouts', query: to.query, hash: to.hash }),
+    },
+    {
+      path: '/organization/:workspace/:view/:legacy(.*)*',
+      component: () => import('../features/account/InstitutionAccess.vue'),
+      meta: { private: true, legacyInstitution: true },
+    },
+    {
+      path: '/access',
+      component: () => import('../features/account/InstitutionAccess.vue'),
       meta: { private: true },
     },
     {
-      path: '/organization/:workspace/:view/:section?',
-      component: () => import('../features/organizations/OrganizationPage.vue'),
+      path: '/tasks/:legacy(.*)*',
+      component: () => import('../features/account/TasksRetired.vue'),
       meta: { private: true },
     },
     {
@@ -268,28 +283,13 @@ const router = createRouter({
       meta: { private: true },
     },
     {
-      path: '/messages/:id?',
-      component: () => import('../features/ongoing/MessagesPage.vue'),
-      meta: { private: true },
-    },
-    {
       path: '/more',
       component: () => import('../features/services/MorePage.vue'),
       meta: { private: true },
     },
     {
-      path: '/nutrition',
-      component: () => import('../features/nutrition/NutritionPage.vue'),
-      meta: { private: true },
-    },
-    {
       path: '/appointments',
       component: () => import('../features/appointments/CalendarPage.vue'),
-      meta: { private: true },
-    },
-    {
-      path: '/resources',
-      component: () => import('../features/resources/ResourcesPage.vue'),
       meta: { private: true },
     },
     {
@@ -349,36 +349,45 @@ router.beforeEach(async (to, from) => {
   }
   await ready()
   if (to.meta.private && !user.value) return { path: '/login', query: { next: to.fullPath } }
-  if (
-    user.value &&
-    /^\/(today|history|progress|checkins|messages|more|nutrition|appointments|resources|teams|business)(\/|$)/.test(
-      to.path,
-    )
-  ) {
-    await refreshContexts().catch(() => {})
-    const organization = contexts.value.find((context) => context.kind === 'organization')
-    return organization?.path || '/workspaces?start=organization'
-  }
-  if (user.value && (to.path.startsWith('/coach') || to.path.startsWith('/organization/'))) {
-    await refreshContexts().catch(() => {})
-    if (to.path.startsWith('/coach')) {
-      const staffWorkspace =
-        contexts.value.find((c) => c.kind === 'organization' && c.role === 'trainer') ||
-        contexts.value.find((c) => c.kind === 'organization' && c.role === 'admin')
-      const organization = contexts.value.find((c) => c.kind === 'organization')
-      return staffWorkspace
-        ? organizationRouteForLegacyCoach(to.path, staffWorkspace.path)
-        : organization?.path || '/workspaces?start=organization'
+  if (!user.value) return
+  const institutionRoute =
+    to.meta.institution || to.meta.legacyInstitution || to.path.startsWith('/coach')
+  const personalLegacy =
+    /^\/(today|history|progress|checkins|more|appointments|teams|business)(\/|$)/.test(to.path)
+  if (institutionRoute || personalLegacy) {
+    // Do not reuse stale membership after a failed authorization read.
+    try {
+      await refreshContexts()
+    } catch {
+      return { path: '/access', query: { reason: 'connection' } }
     }
-    if (
-      to.path.startsWith('/organization/') &&
-      !contexts.value.some(
-        (context) =>
-          context.kind === 'organization' &&
-          (to.path === context.path || to.path.startsWith(context.path + '/')),
-      )
-    )
-      return contexts.value[0]?.path || '/workspaces'
+    const institution = contexts.value.find((c) => c.kind === 'organization')
+    if (!institution) return '/access'
+    if (to.meta.adminOnly && institution.role !== 'admin') return '/dashboard'
+    if (to.meta.legacyInstitution) {
+      if (String(to.params.workspace) !== institution.workspace_id) return '/access'
+      const tail = Array.isArray(to.params.legacy)
+        ? to.params.legacy.join('/')
+        : String(to.params.legacy || '')
+      const canonical = tail
+        .replace(/^calendar(?=\/|$)/, 'schedule')
+        .replace(/^session-history(?=\/|$)/, 'workouts')
+      const path =
+        canonical === 'settings'
+          ? '/institution-settings'
+          : canonical
+            ? '/' + canonical
+            : '/dashboard'
+      return { path, query: to.query, hash: to.hash, replace: true }
+    }
+    if (to.path.startsWith('/coach'))
+      return {
+        path: organizationRouteForLegacyCoach(to.path, '') || '/dashboard',
+        query: to.query,
+        hash: to.hash,
+        replace: true,
+      }
+    if (personalLegacy) return '/dashboard'
   }
 })
 export const safeNext = (value: unknown, fallback = '/today') =>

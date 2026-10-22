@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { institutionContext } from '../../app/institution'
+
 import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -19,10 +21,10 @@ type Result = AssessmentResult & {
   attendance: string
 }
 const route = useRoute(),
-  id = String(route.params.workspace),
-  view = String(route.params.view),
+  id = institutionContext().workspace,
+  view = institutionContext().view,
   member = String(route.params.member || ''),
-  base = `/organization/${id}/${view}`
+  base = ''
 const from = ref(addDays(localDate(profile.value?.timezone || 'UTC'), -89)),
   to = ref(localDate(profile.value?.timezone || 'UTC')),
   items = ref<Result[]>([]),

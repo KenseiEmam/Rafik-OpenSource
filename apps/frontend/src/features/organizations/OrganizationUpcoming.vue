@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { institutionContext } from '../../app/institution'
+
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { profile } from '../../app/auth'
@@ -7,9 +9,9 @@ import { localDate, addDays } from '../../lib/dates'
 import { language as l, errorMessage, locale } from '../../lib/i18n'
 import type { CalendarEvent } from './service-types'
 const route = useRoute(),
-  id = String(route.params.workspace),
-  view = String(route.params.view),
-  base = `/organization/${id}/${view}`,
+  id = institutionContext().workspace,
+  view = institutionContext().view,
+  base = '',
   zone = profile.value?.timezone || 'UTC',
   today = localDate(zone)
 const events = ref<CalendarEvent[]>([]),
@@ -41,7 +43,7 @@ onMounted(async () => {
   <section class="organization-upcoming">
     <div class="heading-actions">
       <h2>{{ l('Coming up', 'القادم') }}</h2>
-      <RouterLink :to="base + '/calendar'" class="text-link"
+      <RouterLink :to="base + '/schedule'" class="text-link"
         >{{ l('Open calendar', 'فتح التقويم') }} ↗</RouterLink
       >
     </div>
@@ -56,7 +58,7 @@ onMounted(async () => {
       v-for="e in events"
       :key="e.id"
       class="upcoming-event"
-      :to="base + '/calendar/' + e.id"
+      :to="base + '/schedule/' + e.id"
       ><span
         ><strong>{{ e.title }}</strong
         ><small>{{ label(e.starts_at) }} · {{ zone }}</small></span

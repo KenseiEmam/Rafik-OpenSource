@@ -65,3 +65,12 @@ export async function removeAccountLocalData(owner: string) {
     if (row.key.includes(owner)) await tx.objectStore('drafts').delete(row.key)
   await tx.done
 }
+
+// Remove only retired Tasks drafts and exact pending command scopes for this account.
+export async function removeRetiredTaskDrafts(owner: string) {
+  const tx = (await db).transaction('drafts', 'readwrite')
+  const prefixes = [`trainer-tasks:${owner}:`, `r4-command:${owner}:trainer-tasks:${owner}:`]
+  for (const key of await tx.store.getAllKeys())
+    if (prefixes.some((prefix) => key.startsWith(prefix))) await tx.store.delete(key)
+  await tx.done
+}

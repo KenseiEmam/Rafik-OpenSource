@@ -220,7 +220,7 @@ The Schedule list uses the same unboxed search/filter/pagination toolbar and 44p
 
 Groups and assessment templates follow the shared search/pagination toolbar with their archive checkbox visible inline. Use contextual labels (Search groups/Search templates), not a generic library label.
 
-People keeps role tabs above its search/membership/sport toolbar; pagination aligns beside those controls. Shared pagination has zero external block margin so it cannot sit above search fields in Programs or other lists. Tasks need no additional visual polish in this handoff; the founder may remove the feature later.
+People keeps role tabs above its search/membership/sport toolbar; pagination aligns beside those controls. Shared pagination has zero external block margin so it cannot sit above search fields in Programs or other lists. Tasks is retired in the upcoming release; its historical audit evidence is retained.
 
 Assessment templates use an adaptive card grid because each item has a short title and drill count; place the edit action consistently at the bottom. Use 24 records by default and the shared grid-size options. Groups remain rows because membership details need horizontal room. Cards stack naturally on phones.
 

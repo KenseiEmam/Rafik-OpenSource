@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { institutionContext } from '../../app/institution'
+
 import { PhTray } from '@phosphor-icons/vue'
 import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
@@ -18,10 +20,10 @@ import type { Member, Sport } from './types'
  * are a convenience, never the permission boundary (the API refuses anything out of scope).
  */
 const route = useRoute(),
-  workspace = String(route.params.workspace),
-  view = String(route.params.view),
+  workspace = institutionContext().workspace,
+  view = institutionContext().view,
   memberId = String(route.params.member),
-  base = `/organization/${workspace}/${view}`,
+  base = '',
   ws = `/v1/workspaces/${workspace}`
 // Sections report refusals inline, so these reads never raise global error toasts.
 const backPath = computed(() => {
@@ -393,8 +395,8 @@ onMounted(load)
           ><section id="profile-sessions" class="panel" aria-labelledby="sessions-heading">
             <div class="heading-actions">
               <h2 id="sessions-heading">{{ l('Recent sessions', 'الحصص الأخيرة') }}</h2>
-              <RouterLink class="text-link" :to="base + '/session-history?member=' + member.id">{{
-                l('Session history', 'سجل الحصص')
+              <RouterLink class="text-link" :to="base + '/workouts?member=' + member.id">{{
+                l('Workout history', 'سجل التمارين')
               }}</RouterLink>
             </div>
             <p v-if="sessions.loading" role="status">{{ l('Loading…', 'جارٍ التحميل…') }}</p>

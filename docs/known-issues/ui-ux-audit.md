@@ -78,7 +78,7 @@ The route sweep and source review cover these workflow families. Rendered status
 | Athlete work         | Active/expired plans, session history, review/delegated recording, athlete logger                            | Measurement controls, empty/history data, interruptions and confirmation                     |
 | Calendar/assessments | Calendar, event index/new/detail, group/assessment templates and result history                              | Inline controls, timezone/date popup, roster, forms, correction states                       |
 | Nutrition            | Plan index, coach editor, athlete diary/current plan                                                         | Dense numeric fields, empty/unknown values, revision/uncertain save                          |
-| Communication/tasks  | Conversation list/thread/attachments, tasks, resources, notifications                                        | No-match, populated thread, scroll, long attachments, errors and keyboard                    |
+| Communication        | Conversation list/thread/attachments, resources, notifications                                               | No-match, populated thread, scroll, long attachments, errors and keyboard                    |
 | Reports/privacy      | Analytics, feedback, injuries/consent, platform admin, privacy and not-found                                 | Charts/tables, sensitive/denied states, report tabs, explicit platform grant                 |
 
 **Limits:** first-run setup needs its own empty-instance state. A missing/invalid token does not establish the valid invitation/password form. Platform administration requires its separate explicit grant. No institution live data or physical device is used. Native Android rendering is outside this audit. Populated workflow fixtures and open-control states must be named explicitly in the final coverage receipt.
@@ -109,7 +109,7 @@ The route sweep and source review cover these workflow families. Rendered status
 
 ### Slice 4: communication, reports and remaining routes
 
-- Align messages/tasks/resources feedback and scroll boundaries; preserve mounted conversation navigation and draft isolation.
+- Align messages/resources feedback and scroll boundaries; preserve mounted conversation navigation and draft isolation.
 - Standardize report headings, chart labels/table equivalents, privacy/consent states and account/help views.
 - Finish keyboard/reduced-motion/contrast review and remove superseded CSS only after named consumers migrate.
 

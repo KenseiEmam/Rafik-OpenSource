@@ -316,7 +316,7 @@ onMounted(() => {
           </section>
           <section v-if="plans.length || data.sessions.length">
             <div class="heading-actions">
-              <h2>{{ l('Session history', 'سجل الحصص') }}</h2>
+              <h2>{{ l('Workout history', 'سجل التمارين') }}</h2>
               <RouterLink
                 v-if="selected || context.view === 'trainee'"
                 class="text-link"

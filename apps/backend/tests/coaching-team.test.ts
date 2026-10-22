@@ -1,9 +1,11 @@
+import { apiOrigin } from "./test-target.ts";
+import { fixtureInstitution } from "./institution-fixture.ts";
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID, randomBytes, createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { db } from "../server/db.ts";
-const base = "http://127.0.0.1:55331",
+const base = apiOrigin,
   people: string[] = [],
   spaces: string[] = [];
 type Person = { id: string; email: string; cookie: string };
@@ -32,6 +34,8 @@ async function person(name: string): Promise<Person> {
   return p;
 }
 async function call(p: Person, path: string, input?: unknown) {
+  if (path === "/v1/workspaces" && input)
+    return fixtureInstitution(p, input as Record<string, unknown>);
   const r = await fetch(base + path, {
     method: input === undefined ? "GET" : "POST",
     headers: {

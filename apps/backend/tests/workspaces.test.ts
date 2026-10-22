@@ -1,8 +1,10 @@
+import { apiOrigin } from "./test-target.ts";
+import { fixtureInstitution } from "./institution-fixture.ts";
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID, randomBytes, createHash } from "node:crypto";
 import { db } from "../server/db.ts";
-const base = "http://127.0.0.1:55331",
+const base = apiOrigin,
   people: string[] = [],
   spaces: string[] = [];
 type Person = { id: string; email: string; cookie: string };
@@ -33,6 +35,8 @@ async function person(): Promise<Person> {
   return p;
 }
 async function call(p: Person, path: string, input?: unknown) {
+  if (path === "/v1/workspaces" && input)
+    return fixtureInstitution(p, input as Record<string, unknown>);
   const r = await fetch(base + path, {
     method: input === undefined ? "GET" : "POST",
     headers: {
@@ -203,7 +207,12 @@ test("token-scoped invitation preview, intended-account acceptance, last admin p
   // requires the intended account. Email verification is not a product rule.
   assert.equal(preview.data.email, b.email);
   assert.equal(
-    (await call(outsider, "/v1/organization-invitations/" + randomBytes(32).toString("hex"))).status,
+    (
+      await call(
+        outsider,
+        "/v1/organization-invitations/" + randomBytes(32).toString("hex"),
+      )
+    ).status,
     404,
   );
   assert.equal(
@@ -330,10 +339,10 @@ test("deleting a departed person preserves their membership record without retai
   assert.equal(retained.name, "Former member");
 });
 
-test("independent coaching is explicit and two concurrent admins cannot both leave", async () => {
+test("legacy independent memberships stay hidden and two concurrent admins cannot both leave", async () => {
   const a = await person(),
     b = await person();
-  assert.equal((await call(a, "/v1/contexts")).data.contexts.length, 1);
+  assert.equal((await call(a, "/v1/contexts")).data.contexts.length, 0);
   const practice = randomUUID();
   spaces.push(practice);
   assert.equal(
@@ -350,7 +359,7 @@ test("independent coaching is explicit and two concurrent admins cannot both lea
     (await call(a, "/v1/contexts")).data.contexts.filter(
       (c: any) => c.kind === "independent",
     ).length,
-    1,
+    0,
   );
   const id = await create(a);
   await join(a, id, b, ["admin"]);
@@ -377,4 +386,27 @@ test("independent coaching is explicit and two concurrent admins cannot both lea
     }),
     1,
   );
+});
+
+test("runtime institution creation and Tasks endpoints are removed", async () => {
+  const p = await person();
+  for (const path of [
+    "/v1/workspaces",
+    "/v1/workspaces/12000000-0000-4000-8000-000000000001/tasks",
+  ]) {
+    const response = await fetch(base + path, {
+      method: "POST",
+      headers: {
+        Cookie: p.cookie,
+        "x-rafik-client": "web",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: randomUUID(),
+        kind: "organization",
+        name: "Forbidden creation",
+      }),
+    });
+    assert.equal(response.status, 404);
+  }
 });

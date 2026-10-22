@@ -54,7 +54,7 @@ async function setup() {
     const admin = contexts.value.find(
       (context) => context.kind === 'organization' && context.role === 'admin',
     )
-    await router.replace(admin?.path || '/workspaces')
+    await router.replace(admin?.path || '/access')
   } catch (e) {
     error.value = errorMessage(e)
   } finally {

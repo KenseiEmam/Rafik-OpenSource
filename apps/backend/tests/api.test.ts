@@ -1,9 +1,10 @@
+import { apiOrigin } from "./test-target.ts";
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomBytes, randomUUID, createHash } from "node:crypto";
 import { db } from "../server/db.ts";
 import { passwordHash, validatePassword } from "../server/auth.ts";
-const origin = "http://127.0.0.1:55331";
+const origin = apiOrigin;
 const identities: string[] = [];
 after(async () => {
   for (const id of identities) await db.users.deleteMany({ where: { id } });

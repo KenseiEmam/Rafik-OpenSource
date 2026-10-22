@@ -66,3 +66,5 @@ This page is the index for maintained Rafik documentation. The root [README](../
 - [ADR 0025 — Primary and scoped supporting coaches](decisions/ADR-0025-coaching-team.md)
 
 Historical phase records and superseded documents are linked from the [archive index](archive/README.md); they are not active product or release guidance.
+
+- [ADR 0026 — Single-institution routing and Tasks retirement](decisions/ADR-0026-single-institution-routing-and-task-retirement.md): upcoming-release route, migration and native compatibility decisions.

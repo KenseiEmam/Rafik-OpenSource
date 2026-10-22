@@ -36,9 +36,26 @@ export async function teamFixture() {
   const people: Person[] = [],
     teamIds: string[] = []
   async function call(who: Person, path: string, args?: Record<string, unknown>) {
+    if (path === '/v1/workspaces' && args) {
+      if (!/^rafik_browser_\d+$/.test(testDatabase))
+        throw Error('Disposable browser database required')
+      const id = String(args.id),
+        kind = String(args.kind),
+        name = String(args.name)
+      if (!/^[-a-f0-9]{36}$/.test(id) || !['organization', 'independent'].includes(kind))
+        throw Error('Invalid fixture')
+      const quote = (value: string) => "'" + value.replaceAll("'", "''") + "'"
+      sql(
+        `BEGIN; INSERT INTO public.workspaces(id,kind,name,created_by) VALUES (${quote(id)},${quote(kind)},${quote(name)},${quote(who.id)}); INSERT INTO public.workspace_members(id,workspace_id,user_id,roles,name) VALUES ('${randomUUID()}',${quote(id)},${quote(who.id)},ARRAY['${kind === 'organization' ? 'admin' : 'trainer'}'],${quote(name)}); COMMIT;`,
+      )
+      return { id, kind, name }
+    }
     const response = await fetch(url + path, {
       method: args ? 'POST' : 'GET',
       headers: {
+        // Synchronous Docker fixture setup can outlive an idle HTTP socket.
+        // Do not reuse that socket or retry a possibly acknowledged write.
+        Connection: 'close',
         'x-rafik-client': 'web',
         'Content-Type': 'application/json',
         Cookie: 'rafik_session=' + who.session.cookie,

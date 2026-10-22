@@ -1,3 +1,4 @@
+import { testDatabase } from "./test-target.ts";
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
@@ -22,7 +23,7 @@ test("platform grant, audited operational lifecycle, exact replay and identity r
         "-U",
         "rafik_migrate",
         "-d",
-        "rafik",
+        testDatabase,
         "-v",
         "ON_ERROR_STOP=1",
       ],

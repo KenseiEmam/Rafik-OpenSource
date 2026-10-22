@@ -1,5 +1,9 @@
 # Requirements and staged migration plan
 
+## Next release — institution cleanup
+
+Approved 22 October 2026; not part of published beta.2. Remove Tasks and its data, hide no speculative workspace modules, serve one institution per installation, and simplify browser URLs with authorized legacy redirects. Preserve Android v1 API compatibility and institution security boundaries. Workout scheduling follows separately. See [ADR 0026](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md).
+
 **Status:** approved staged plan. Stage 6 optional cloud VM templates are implemented as unverified starter templates; provider checks remain deferred to user testing and do not block Stage 7. Stage 7 coach-first Android beta.1 is published and accepted for beta evaluation on 20 October 2026; packaging, focused API/emulator checks, founder S20+ walkthrough and public APK checksum verification are complete. Broader native coverage and optional URL scanning remain follow-up work, not beta.1 release blockers. The [release checklist](../operations/release-checklist.md) separates project beta readiness from each institution’s setup and live-data gates.
 
 ## Product goal

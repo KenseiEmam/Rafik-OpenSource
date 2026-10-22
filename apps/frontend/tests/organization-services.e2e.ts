@@ -58,7 +58,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
       revision: trainee.revision,
       trainer: trainer.id,
     })
-    const base = `/organization/${id}/admin`
+    const base = ``
     await f.login(page, f.owner, base + '/assessment-templates')
     await page.getByRole('button', { name: 'New template', exact: true }).click()
     await page.getByLabel('Name', { exact: true }).fill('Movement baseline')
@@ -76,7 +76,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
     await page.getByRole('checkbox', { name: 'R4 Athlete Two', exact: true }).check()
     await page.getByRole('button', { name: 'Save group', exact: true }).click()
     await expect(page.locator('.rafik-toast').filter({ hasText: /saved/i }).last()).toBeVisible()
-    await page.goto(base + '/calendar/new')
+    await page.goto(base + '/schedule/new')
     await page.getByLabel('Event name', { exact: true }).fill('Morning assessment')
     await page.getByRole('combobox', { name: 'Event type', exact: true }).selectOption('assessment')
     await page
@@ -198,7 +198,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
     ).toBeVisible()
     await expect(page.getByText('14 reps', { exact: true })).toBeVisible()
     await expect(page.getByText('19 reps', { exact: true })).toBeVisible()
-    await f.login(client, f.client, `/organization/${id}/trainee/calendar/${eid}`)
+    await f.login(client, f.client, `/calendar/${eid}`)
     await expect(client.getByText('14 reps', { exact: true })).toBeVisible()
     await expect(client.getByText('19 reps', { exact: true })).toHaveCount(0)
     await page.goto(base + '/analytics')
@@ -228,7 +228,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
       await pendingCalendar
       await r.fulfill({ response })
     })
-    await page.goto(base + '/calendar')
+    await page.goto(base + '/schedule')
     await calendarRequest
     const navigation = page.getByRole('button', { name: 'Open navigation', exact: true })
     if (await navigation.isVisible()) await navigation.click()
@@ -254,14 +254,14 @@ test('organization staff schedule a group assessment, recover a result, correct 
     )
     await expect(page).toHaveURL(base + '/analytics')
     await page.unroute(`**/v1/workspaces/${id}/calendar?**`)
-    await f.login(page, f.coach, `/organization/${id}/trainer/analytics`)
+    await f.login(page, f.coach, `/analytics`)
     await expect(
       page.getByRole('heading', { name: 'Coaching analytics', exact: true }),
     ).toBeVisible()
     await expect(
       page.getByRole('heading', { name: 'Coach responsibility', exact: true }),
     ).toHaveCount(0)
-    await page.goto(`/organization/${id}/trainer/assessments/${trainee.id}`)
+    await page.goto(`/assessments/${trainee.id}`)
     await expect(page.getByRole('definition').filter({ hasText: '14 reps' })).toBeVisible()
   } finally {
     await clientContext.close()

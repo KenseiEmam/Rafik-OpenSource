@@ -90,7 +90,7 @@ const name = (id: string) =>
     <PageHeading class="work-heading">
       <div>
         <p class="overline">{{ l('Recorded workouts', 'التمارين المسجّلة') }}</p>
-        <h1>{{ l('Session history', 'سجل الحصص') }}</h1>
+        <h1>{{ l('Workout history', 'سجل التمارين') }}</h1>
         <p>
           {{
             l(

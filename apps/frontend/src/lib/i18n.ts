@@ -202,10 +202,6 @@ export function errorMessage(error: unknown): string {
       'This session is not available for a makeup booking.',
       'هذه الجلسة غير متاحة لحجز تعويضي.',
     ],
-    task_unavailable: [
-      'This task is no longer available to you. Refresh the task list.',
-      'هذه المهمة لم تعد متاحة لك. حدّث قائمة المهام.',
-    ],
     trainer_unavailable: [
       'This coach is no longer available. Choose an active institution coach.',
       'هذا المدرب لم يعد متاحاً. اختر مدرباً نشطاً في المؤسسة.',

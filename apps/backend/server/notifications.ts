@@ -126,7 +126,7 @@ export async function notificationTarget(
         : m.roles.includes("trainee")
           ? "trainee"
           : "admin",
-      base = `/organization/${n.workspace_id}/${view}`,
+      base = "",
       context = m.workspaces.name;
     if (n.source_kind === "organization_message") {
       const message = await tx.organization_messages.findUnique({
@@ -187,7 +187,7 @@ export async function notificationTarget(
       )
         return null;
       return {
-        href: `/organization/${n.workspace_id}/${p.duty === "staff" ? "trainer" : "trainee"}/calendar/${event.id}`,
+        href: `/schedule/${event.id}`,
         context,
       };
     }

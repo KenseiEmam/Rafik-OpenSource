@@ -74,7 +74,7 @@ async function institution(f: Fixture, name: string, adapt?: (plan: any) => void
     schedule_mode: 'flexible',
     members: [{ id: athlete.id, revision: athlete.revision, replaces: null }],
   })
-  return { workspace, endpoint, athlete, plan, base: `/organization/${workspace}/trainer` }
+  return { workspace, endpoint, athlete, plan, base: `` }
 }
 
 test('coach records a session on the athlete’s behalf with attribution, exact retry and history', async ({
@@ -146,7 +146,7 @@ test('coach records a session on the athlete’s behalf with attribution, exact 
     })
 
     // Coach starts from the athlete profile and records under their own name.
-    const base = `/organization/${workspace}/trainer`
+    const base = ``
     await f.login(page, f.coach, `${base}/athletes/${athlete.id}`)
     await page.getByRole('link', { name: 'Record a session for Track block' }).click()
     await expect(page.getByText('under your own name', { exact: false })).toBeVisible()

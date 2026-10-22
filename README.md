@@ -1,5 +1,7 @@
 # Rafik
 
+**Upcoming release:** one institution per installation; Tasks is retired. Browser navigation uses `/dashboard`, `/people`, `/plans`, `/schedule` and `/workouts`. Account settings remain `/settings`; administration uses `/institution-settings`. See [upgrade precautions](docs/operations/README.md#next-release-cleanup-upgrade).
+
 Repository: [`Rafik-Athlete-Managment/Rafik-OpenSource`](https://github.com/Rafik-Athlete-Managment/Rafik-OpenSource).
 
 **Preparing Squire 1.0.0-beta.2; published evaluation beta: Squire 1.0.0-beta.1.** Sports and coaching changes are merged; see the [beta.2 upgrade notes](docs/operations/README.md#beta2-upgrade-and-release-preparation). Standalone Android packaging uses `npm run mobile:release`; follow the [signing, installation and update guide](docs/operations/android-release.md). Release/device acceptance limits are tracked in [verification](docs/verification/README.md).

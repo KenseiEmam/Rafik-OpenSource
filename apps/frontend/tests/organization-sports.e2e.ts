@@ -59,8 +59,8 @@ test('admin defines sports and specialties, links people, and the coach filter s
     })
 
     // Settings: add a sport, a specialty and a long Arabic sport; rename one and archive one.
-    const base = `/organization/${workspace}/admin`
-    await f.login(page, f.owner, base + '/settings')
+    const base = ``
+    await f.login(page, f.owner, base + '/institution-settings')
     const settings = page.getByRole('region', { name: 'Sports and specialties' })
     const add = async (name: string, kind: 'Sport' | 'Coaching specialty') => {
       await settings.getByLabel('Name', { exact: true }).first().fill(name)
@@ -142,7 +142,7 @@ test('admin defines sports and specialties, links people, and the coach filter s
       ],
       previous: [],
     })
-    await f.login(coachPage, f.coach, `/organization/${workspace}/trainer/people`)
+    await f.login(coachPage, f.coach, `/people`)
     await coachPage.getByLabel('Sport or specialty').selectOption({ label: 'Football' })
     await expect(coachPage.locator('.organization-person')).toHaveCount(1)
     await expect(coachPage.locator('.organization-person')).toContainText('R4 Athlete')
@@ -150,7 +150,7 @@ test('admin defines sports and specialties, links people, and the coach filter s
 
     // English light keeps chips and archived labels readable.
     await page.evaluate(() => localStorage.setItem('rafik.theme', 'light'))
-    await page.goto(base + '/settings')
+    await page.goto(base + '/institution-settings')
     await expect(page.getByText('Football', { exact: true })).toBeVisible()
     await inspect(page, 'settings-light', info)
 
@@ -160,7 +160,7 @@ test('admin defines sports and specialties, links people, and the coach filter s
       localStorage.setItem('rafik.theme', 'dark')
     })
     await page.setViewportSize({ width: 320, height: 740 })
-    await page.goto(base + '/settings')
+    await page.goto(base + '/institution-settings')
     await expect(page.getByText('كرة الطائرة الشاطئية للفرق الجامعية المتقدمة')).toBeVisible()
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
     await inspect(page, 'settings-ar-dark-320', info)

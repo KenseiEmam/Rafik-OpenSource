@@ -1,6 +1,6 @@
 import type { ApiErrorBody } from "@rafik/shared/contracts";
 import { feedback, feedbackCommand } from "./organization-feedback.ts";
-import { tasks, taskCommand, followUp } from "./organization-tasks.ts";
+import { followUp } from "./organization-follow-up.ts";
 import { injuries, injuryCommand } from "./organization-injuries.ts";
 import { startInjuryRetention } from "./organization-injury-retention.ts";
 import {
@@ -65,7 +65,6 @@ import {
 import { fileOperation } from "./files.ts";
 import {
   contexts,
-  createWorkspace,
   workspaceView,
   workspaceCommand,
   invitation,
@@ -625,10 +624,7 @@ const server = createServer(async (req, res) => {
       send(res, 200, await contexts(requireActor(actor)));
       return;
     }
-    if (path === "/v1/workspaces" && req.method === "POST") {
-      send(res, 200, await createWorkspace(requireActor(actor), input));
-      return;
-    }
+
     if (path === "/v1/coach/analytics" && req.method === "GET") {
       send(
         res,
@@ -676,23 +672,16 @@ const server = createServer(async (req, res) => {
       else throw new ApiError(405, "method_not_allowed");
       return;
     }
-    const taskMatch = path.match(
-      /^\/v1\/workspaces\/([a-f0-9-]{36})\/(tasks|follow-up)$/,
+    const followUpMatch = path.match(
+      /^\/v1\/workspaces\/([a-f0-9-]{36})\/follow-up$/,
     );
-    if (taskMatch) {
-      const who = requireActor(actor),
-        id = taskMatch[1];
-      if (req.method === "GET")
-        send(
-          res,
-          200,
-          await (taskMatch[2] === "tasks"
-            ? tasks(who, id, url.searchParams)
-            : followUp(who, id, url.searchParams)),
-        );
-      else if (req.method === "POST" && taskMatch[2] === "tasks")
-        send(res, 200, await taskCommand(who, id, input));
-      else throw new ApiError(405, "method_not_allowed");
+    if (followUpMatch) {
+      if (req.method !== "GET") throw new ApiError(405, "method_not_allowed");
+      send(
+        res,
+        200,
+        await followUp(requireActor(actor), followUpMatch[1], url.searchParams),
+      );
       return;
     }
     const nutritionMatch = path.match(

@@ -2,8 +2,6 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { programContext } from '../coaching/program-context'
-import { profile } from '../../app/auth'
-import { localDate } from '../../lib/dates'
 import { request } from '../../lib/backend'
 import { language as l, errorMessage, dateLabel } from '../../lib/i18n'
 const context = programContext(useRoute()),
@@ -22,31 +20,15 @@ type Result = {
   unplanned: { total: number; items: { id: string; name: string }[] }
 }
 const data = ref<Result>()
-const queue = ref<{
-  items: {
-    id: string
-    title: string
-    trainer_name: string
-    due_date: string | null
-    priority: string
-  }[]
-  counts: { open: number; overdue: number }
-}>()
 let disposed = false
 async function load() {
   loading.value = true
   error.value = ''
   try {
-    const [result, tasks] = await Promise.all([
-      request<Result>(`/v1/workspaces/${context.workspace}/follow-up?view=${context.view}`),
-      request<NonNullable<typeof queue.value>>(
-        `/v1/workspaces/${context.workspace}/tasks?view=${context.view}&today=${localDate(profile.value?.timezone || 'UTC')}`,
-      ),
-    ])
-    if (!disposed) {
-      data.value = result
-      queue.value = tasks
-    }
+    const result = await request<Result>(
+      `/v1/workspaces/${context.workspace}/follow-up?view=${context.view}`,
+    )
+    if (!disposed) data.value = result
   } catch (e) {
     if (!disposed) error.value = errorMessage(e)
   } finally {
@@ -72,50 +54,12 @@ onUnmounted(() => {
           }}
         </p>
       </div>
-      <RouterLink class="button secondary small" :to="context.base + '/tasks'">{{
-        context.view === 'admin'
-          ? l('Assign coach tasks', 'تعيين مهام المدربين')
-          : l('My tasks', 'مهامي')
-      }}</RouterLink>
     </div>
     <p v-if="loading" role="status">{{ l('Checking recent activity…', 'جارٍ مراجعة النشاط…') }}</p>
     <p v-if="error" class="notice error" role="alert">
       {{ error }}
       <button class="text-link" @click="load">{{ l('Retry', 'إعادة المحاولة') }}</button>
     </p>
-    <section v-if="queue" class="panel overview-task-queue">
-      <h3>
-        {{
-          context.view === 'admin'
-            ? l('Team task queue', 'قائمة مهام الفريق')
-            : l('Your task queue', 'قائمة مهامك')
-        }}
-        · {{ queue.counts.open }}
-      </h3>
-      <p class="small-print" v-if="!queue.items.length">
-        {{ l('No open tasks.', 'لا توجد مهام مفتوحة.') }}
-      </p>
-      <ul>
-        <li v-for="task in queue.items.slice(0, 3)" :key="task.id">
-          <RouterLink :to="context.base + '/tasks'"
-            ><strong>{{ task.title }}</strong
-            ><small
-              >{{ task.trainer_name }} ·
-              {{
-                task.due_date
-                  ? dateLabel(task.due_date.slice(0, 10))
-                  : l('No due date', 'دون موعد نهائي')
-              }}{{
-                task.priority === 'high' ? ' · ' + l('High priority', 'أولوية عالية') : ''
-              }}</small
-            ></RouterLink
-          >
-        </li>
-      </ul>
-      <RouterLink v-if="queue.counts.open > 3" class="text-link" :to="context.base + '/tasks'">{{
-        l('All tasks', 'كل المهام')
-      }}</RouterLink>
-    </section>
     <div v-if="data" class="followup-columns">
       <section class="panel">
         <h3>
@@ -136,7 +80,7 @@ onUnmounted(() => {
         <ul>
           <li v-for="s in data.missed.items" :key="s.id + s.member_id">
             <RouterLink
-              :to="context.base + '/calendar/new?makeup=' + s.id + '&member=' + s.member_id"
+              :to="context.base + '/schedule/new?makeup=' + s.id + '&member=' + s.member_id"
               ><strong>{{ s.name }}</strong
               ><span>{{ s.title }}</span
               ><small>{{ l('Arrange a replacement', 'ترتيب جلسة بديلة') }}</small></RouterLink
@@ -146,7 +90,7 @@ onUnmounted(() => {
         <RouterLink
           v-if="data.missed.total > 8"
           class="text-link"
-          :to="context.base + '/calendar'"
+          :to="context.base + '/schedule'"
           >{{ l('Open calendar', 'فتح التقويم') }}</RouterLink
         >
       </section>
@@ -174,8 +118,8 @@ onUnmounted(() => {
         <RouterLink
           v-if="data.reviews.total > 8"
           class="text-link"
-          :to="context.base + '/session-history'"
-          >{{ l('Session history', 'سجل الحصص') }}</RouterLink
+          :to="context.base + '/workouts'"
+          >{{ l('Workout history', 'سجل التمارين') }}</RouterLink
         >
       </section>
       <section class="panel">
@@ -196,7 +140,7 @@ onUnmounted(() => {
         </p>
         <ul>
           <li v-for="s in data.outcomes.items" :key="s.id">
-            <RouterLink :to="context.base + '/calendar/' + s.id"
+            <RouterLink :to="context.base + '/schedule/' + s.id"
               ><strong>{{ s.title }}</strong
               ><small>{{ dateLabel(s.ends_at) }}</small></RouterLink
             >
@@ -205,7 +149,7 @@ onUnmounted(() => {
         <RouterLink
           v-if="data.outcomes.total > 8"
           class="text-link"
-          :to="context.base + '/calendar'"
+          :to="context.base + '/schedule'"
           >{{ l('Open calendar', 'فتح التقويم') }}</RouterLink
         >
       </section>
@@ -238,25 +182,6 @@ onUnmounted(() => {
   </section>
 </template>
 <style scoped>
-.overview-task-queue {
-  margin-block: 1rem;
-}
-.overview-task-queue ul {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-}
-.overview-task-queue ul:empty {
-  display: none;
-}
-.overview-task-queue li + li {
-  border: 0;
-}
-@media (max-width: 760px) {
-  .overview-task-queue ul {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
 .daily-followup {
   margin-block: 1.5rem;
 }

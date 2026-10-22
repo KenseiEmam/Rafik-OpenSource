@@ -1,3 +1,4 @@
+import { testDatabase } from "./test-target.ts";
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
@@ -241,7 +242,7 @@ test("independent reminders suppress answered forms and cancelled appointments; 
         "-U",
         "rafik_migrate",
         "-d",
-        "rafik",
+        testDatabase,
         "-v",
         "ON_ERROR_STOP=1",
       ],

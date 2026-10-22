@@ -1,9 +1,14 @@
+import { testDatabase } from "./test-target.ts";
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { db } from "../server/db.ts";
-import { organizationFixture, call, dockerCompose } from "./organization-fixture.ts";
+import {
+  organizationFixture,
+  call,
+  dockerCompose,
+} from "./organization-fixture.ts";
 after(() => db.$disconnect());
 test("large organization reads page actual scope without truncating search or aggregate totals", async () => {
   const f = await organizationFixture();
@@ -136,7 +141,7 @@ test("large organization reads page actual scope without truncating search or ag
         "-U",
         "rafik_migrate",
         "-d",
-        "rafik",
+        testDatabase,
         "-Atc",
         `EXPLAIN (ANALYZE,BUFFERS,FORMAT JSON) SELECT id,name FROM public.workspace_members WHERE workspace_id='${id}' AND active ORDER BY name,id LIMIT 25`,
       ],

@@ -52,8 +52,8 @@ const command = useCommand<'member'>(
       passwordLink.value = location.origin + '/password-setup/' + args.token
     await refreshContexts()
     if (!mounted) return
-    if (!contexts.value.some((c) => c.path === '/organization/' + props.workspaceId + '/admin')) {
-      await router.replace('/workspaces')
+    if (!contexts.value.some((c) => c.workspace_id === props.workspaceId && c.role === 'admin')) {
+      await router.replace('/access')
       return
     }
     emit('saved')

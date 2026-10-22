@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { institutionContext } from '../../app/institution'
+
 import { PhTray } from '@phosphor-icons/vue'
 import { useListPageSize } from '../../lib/list-page-size'
 import PageHeading from '../../components/PageHeading.vue'
@@ -34,10 +36,10 @@ import {
 const closeDialog = ref(false)
 const route = useRoute(),
   router = useRouter(),
-  id = String(route.params.workspace),
-  view = String(route.params.view) as Role,
-  base = `/organization/${id}/${view}`,
-  section = computed(() => String(route.params.section || 'overview'))
+  id = institutionContext().workspace,
+  view = institutionContext().view as Role,
+  base = '',
+  section = computed(() => String(route.meta.section || 'overview'))
 const peopleLoading = ref(false),
   extraLoading = ref(false)
 const peopleOffset = ref(Math.max(0, Number(route.query.offset) || 0))
@@ -274,8 +276,8 @@ const command = useCommand<'organization'>(
       await removeDraft(draftKey)
     }
     await refreshContexts()
-    if (!contexts.value.some((c) => c.path === base)) {
-      await router.push('/workspaces')
+    if (!contexts.value.some((c) => c.workspace_id === id && c.role === view)) {
+      await router.push('/access')
       return
     }
     await load()
@@ -925,8 +927,8 @@ onMounted(async () => {
         </p>
       </template></PageState
     >
-    <RouterLink v-if="error" class="text-link" to="/workspaces">{{
-      l('Choose another workspace', 'اختيار مساحة عمل أخرى')
+    <RouterLink v-if="error" class="text-link" to="/access">{{
+      l('Review institution access', 'مراجعة الوصول إلى المؤسسة')
     }}</RouterLink>
   </div>
 </template>

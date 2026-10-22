@@ -1,5 +1,9 @@
 # Operations
 
+## Next-release cleanup upgrade
+
+Unreleased: before upgrading, back up the database and files with the matching application version. The forward migration permanently deletes Tasks data, attributable receipts and task events. It stops before deletion if multiple institutions exist, including archived institutions. Separate such deployments before retrying; do not delete an institution just to pass the guard. First-run setup is the only creation flow. Rollback after migration requires restoring the pre-upgrade database and application together. See [ADR 0026](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md).
+
 This is the operator entry point for builds, self-hosted deployment, configuration, secrets, backups, recovery and operational checks. Rafik is deployed as a separate instance on infrastructure controlled by each university.
 
 For Android maintainers, [release operations](android-release.md) includes signing-key backup with an encrypted archive and a local S20+ acceptance path using USB forwarding; no public domain or running emulator is required for that device check. Keep private signing backups outside this repository.
