@@ -88,3 +88,12 @@ jobs:
         if: ${{ !cancelled() && steps.api-ready.outcome == 'success' }}
       - run: npm run backend:stop
         if: always()
+  # Per-PR change notes (changes/*.md) must keep a format the release compile step accepts.
+  change-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - run: npm run changes:check

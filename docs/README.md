@@ -26,6 +26,8 @@ This page is the index for maintained Rafik documentation. The root [README](../
 - [Claude design-audit handoff](development/design-audit-handoff.md): copyable prompt, approved decisions, temporary PR scope and outstanding rendered review.
 - [Maintainer guide](development/maintainer-guide.md): repository map, profile/invitation workflows and shared pagination conventions.
 - [Current delivery ledger](development/ledger.md): current stage and recent implementation outcomes; not a phase-history archive.
+- [Working in parallel](development/coordination.md): draft-PR protocol, `npm run coord:check`, agent notes and per-PR change notes for contributors with separate agents.
+- [Shared decisions log](development/decisions.md): dated founder/reviewer decisions every contributor's agent must follow.
 - [Testing strategy](testing/README.md): test layers, focused commands, fixtures and evidence boundaries.
 - [Local coach walkthrough](testing/coach-walkthrough.md): account setup, programs/assignments, athlete recording, scheduled events/results, messages/attachments and optional participation status with synthetic data.
 - [Verification summary](verification/README.md): actual checks, dates, coverage and known limits.

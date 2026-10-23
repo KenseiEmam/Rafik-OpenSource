@@ -11,7 +11,7 @@ This is a staged university-first revamp. Read [the requirements](docs/requireme
 - Treat athlete health and injury information as sensitive. Define actor, context, resource, lifecycle, audit, retention, and export requirements before implementation.
 - Make API/database changes with forward migrations, update generated web types from the backend, and regenerate canonical content from its sources. Do not edit generated outputs directly.
 - Keep local preview identities, test mail, local credentials, and synthetic fixtures out of production configuration.
-- Update root `CHANGELOG.md` and `docs/development/ledger.md` for each stage. Update README, architecture, maintainer guide, runbook, and verification records when the corresponding setup, lifecycle, or evidence changes.
+- Describe each change in a `changes/<branch>.md` note (see `changes/README.md`); `npm run changes:compile` folds notes into root `CHANGELOG.md` and `docs/development/ledger.md`. Before starting and before pushing, run `npm run coord:check` and follow the [coordination guide](docs/development/coordination.md). Update README, architecture, maintainer guide, runbook, and verification records when the corresponding setup, lifecycle, or evidence changes.
 - Complete one approved stage at a time; report results and limitations, then wait for approval before starting another.
 
 ## Local setup
