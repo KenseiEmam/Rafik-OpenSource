@@ -185,10 +185,7 @@ export async function contexts(actor: Actor) {
                   kind: m.workspaces.kind,
                   name: m.workspaces.name,
                   role,
-                  path:
-                    m.workspaces.kind === "independent"
-                      ? "/coach"
-                      : `/organization/${m.workspace_id}/${role}`,
+                  path: "/dashboard",
                 },
               ]
             : [];
@@ -780,18 +777,4 @@ export async function acceptInvitationSignup(
       throw new ApiError(409, "account_exists");
     throw error;
   }
-}
-export async function requirePractice(actor: Actor | null) {
-  if (
-    !actor ||
-    !(await db.workspace_members.findFirst({
-      where: {
-        user_id: actor.id,
-        active: true,
-        workspaces: { kind: "independent", archived: false },
-        roles: { has: "trainer" },
-      },
-    }))
-  )
-    throw new ApiError(403, "coaching_not_enabled");
 }

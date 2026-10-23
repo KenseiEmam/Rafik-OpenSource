@@ -92,3 +92,7 @@ Backend `test:*` integration commands now use `apps/backend/scripts/prisma/isola
 Run `npm run frontend:inventory:check` for the maintained [view/component/route reference](../reference/frontend/README.md). The analyzer detects missing descriptions, orphan Vue files, missing rendered consumers, unknown navigation targets and generated-document drift. Review dynamic destinations and role/state-specific branches, not just the command result. It does not execute route guards or prove server authorization.
 
 The obsolete `core.e2e.ts` guest/standalone journeys were retired with those screens. Current institutional recording coverage lives in `programming.e2e.ts`; `consolidated-views.e2e.ts` covers the guest-route rejection and supported Resources/Nutrition entry. This audit does not claim fresh offline/concurrent-device acceptance from the removed historical spec.
+
+## Backend audit coverage
+
+The audit used a populated disposable migration and eleven API checks for auth/actor boundaries, private file recovery, retired endpoints, own export, institutional scheduling and progression. Older standalone browser fixtures need migration before whole-release acceptance. See [audit limits](../reference/backend/README.md).

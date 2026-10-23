@@ -1,13 +1,6 @@
 import { pageSize } from "./pagination.ts";
-import { ApiError, asActor, type Actor } from "./db.ts";
-import {
-  scoped,
-  uuid,
-  requirePractice,
-  type Tx,
-  type Role,
-  access,
-} from "./workspaces.ts";
+import { ApiError, type Actor } from "./db.ts";
+import { scoped, uuid, type Tx, type Role, access } from "./workspaces.ts";
 import { role } from "./programming.ts";
 import { pageOffset } from "./service-definitions.ts";
 export async function peoplePage(
@@ -240,30 +233,6 @@ export async function organizationRecipients(
         .filter((m) => m.active && m.roles.includes("trainee"))
         .map(map),
       next: page.next,
-    };
-  });
-}
-
-export async function independentRecipients(actor: Actor, q: URLSearchParams) {
-  await requirePractice(actor);
-  const offset = pageOffset(q.get("offset")),
-    search = "%" + (q.get("search") || "").slice(0, 100) + "%",
-    selected = (q.get("selected") || "").split(",").filter(Boolean);
-  if (selected.length > 50) throw new ApiError(400, "invalid_request");
-  selected.forEach(uuid);
-  return asActor(actor, async (tx) => {
-    const rows = await tx.$queryRaw<
-      any[]
-    >`SELECT c.id,p.display_name name,a.id assignment_id,a.revision assignment_revision,v.title current FROM public.coach_clients c JOIN public.profiles p ON p.id=c.client_id LEFT JOIN public.assignments a ON a.relationship_id=c.id AND a.state='active' LEFT JOIN public.plan_versions v ON v.id=a.version_id WHERE c.coach_id=${actor.id}::uuid AND c.state='active' AND p.display_name ILIKE ${search} ORDER BY p.display_name,c.id LIMIT 26 OFFSET ${offset}`;
-    const chosen = selected.length
-      ? await tx.$queryRaw<
-          any[]
-        >`SELECT c.id,p.display_name name,a.id assignment_id,a.revision assignment_revision,v.title current FROM public.coach_clients c JOIN public.profiles p ON p.id=c.client_id LEFT JOIN public.assignments a ON a.relationship_id=c.id AND a.state='active' LEFT JOIN public.plan_versions v ON v.id=a.version_id WHERE c.coach_id=${actor.id}::uuid AND c.state='active' AND c.id=ANY(${selected}::uuid[])`
-      : [];
-    return {
-      items: rows.slice(0, 25),
-      selected: chosen,
-      next: rows.length > 25 ? offset + 25 : null,
     };
   });
 }

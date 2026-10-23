@@ -119,8 +119,6 @@ try {
     for (const script of [
       "test:release",
       "test",
-      "test:services",
-      "test:teams",
       "test:organizations",
       "test:programming",
       "test:organization-services",

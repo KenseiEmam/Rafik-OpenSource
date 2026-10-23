@@ -1,5 +1,9 @@
 # Current delivery ledger
 
+## Backend audit — 23 October 2026
+
+Completed schema/route source inventory, explicit gateway boundaries, four standalone read removals, ten module renames, subject-only workout history/sequence exports and Prisma metadata corrections. The populated disposable retirement migration preserved historical business records and passed lifecycle SQL checks. Eleven isolated API tests passed, including file recovery/orphan grace, authorization, export, institutional calendar and progression. No preview reset, browser suite or native build was run. See [backend findings and remaining release work](../reference/backend/README.md).
+
 ## Fixed-time individual progression API — 23 October 2026
 
 Implemented a shared transactional sequence service and `POST /v1/workspaces/:id/workout-scheduling` for schedule/reschedule/skip. Existing session start/save links bound workouts and resolves completion once; corrections do not rewind or consume another position. Each mutation rechecks plan-specific staff scope before receipt replay and uses the institutional transaction lock plus assignment row lock. Active cannot-train status blocks new scheduling/starting without exposing injury details. Ending/replacing an assignment preserves results, cancels unstarted work and pauses in-progress work. No web controls, cron worker, day-only/group workout write or Android queue change is enabled. OpenAPI and paired draft landing API guidance describe this boundary. Final checks passed: two isolated API journeys, backend typecheck, two Swagger tests and documentation links. No browser/native build was needed; the harness cleaned its own fixtures.

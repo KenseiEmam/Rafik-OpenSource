@@ -1,3 +1,4 @@
+-- Historical team/account export, access and deletion compatibility; no supported team acquisition/billing product.
 begin;
 create function pg_temp.assert(ok boolean,label text) returns void language plpgsql as $$ begin if ok is distinct from true then raise exception 'FAIL: %',label; end if; raise notice 'PASS: %',label; end $$;
 create function pg_temp.reject(command text,expected text,label text) returns void language plpgsql as $$ begin begin execute command; raise exception 'accepted unexpectedly'; exception when others then if sqlerrm<>expected then raise; end if;end; perform pg_temp.assert(true,label);end $$;
@@ -18,7 +19,6 @@ set local role rafik_user; select set_config('rafik.claims','{"sub":"10000000-00
 select accept_team_invitation('r4-test-token-123456789012345678901234');
 select pg_temp.assert(team_role('b4000000-0000-4000-8000-000000000001')='coach','intended staff member accepts verified invitation');
 select pg_temp.reject($q$select invite_team_member('b4000000-0000-4000-8000-000000000003','b4000000-0000-4000-8000-000000000001','other@rafik.test','admin','r4-other-token-123456789012345678901234')$q$,'forbidden','coach cannot invite or escalate to admin');
-select pg_temp.reject($q$select simulate_business_event('b4000000-0000-4000-8000-000000000004','b4000000-0000-4000-8000-000000000001',1,'{}')$q$,'forbidden','team coach cannot simulate commercial state through null personal owner');
 select pg_temp.reject($q$select save_team_group('b4000000-0000-4000-8000-000000000005','b4000000-0000-4000-8000-000000000001','Group',0)$q$,'forbidden','coach cannot change group membership structure');
 set local role rafik_user; select set_config('rafik.claims','{"sub":"10000000-0000-4000-8000-000000000001","role":"rafik_user"}',true);
 select propose_team_client('b4000000-0000-4000-8000-000000000006','b4000000-0000-4000-8000-000000000001','40000000-0000-4000-8000-000000000001');
@@ -91,20 +91,10 @@ select pg_temp.assert(not exists(select 1 from sessions where id=current_setting
 select pg_temp.assert(not exists(select 1 from messages where relationship_id='40000000-0000-4000-8000-000000000001'),'handoff does not copy private messages');
 select pg_temp.reject($q$select account_deletion_ready()$q$,'reassign_clients_first','assigned team coach cannot delete account and strand enrollment');
 set local role rafik_user; select set_config('rafik.claims','{"sub":"10000000-0000-4000-8000-000000000001","role":"rafik_user"}',true);
-select simulate_business_event('b4000000-0000-4000-8000-000000000020','b4000000-0000-4000-8000-000000000001',3,jsonb_build_object('state','past_due','access_until',now()+interval '10 days','staff_limit',10,'client_limit',50));
-select simulate_business_event('b4000000-0000-4000-8000-000000000021','b4000000-0000-4000-8000-000000000001',2,jsonb_build_object('state','active','access_until',now()+interval '10 days','staff_limit',10,'client_limit',50));
-select pg_temp.assert((select state='past_due' and provider_sequence=3 from business_accounts where id='b4000000-0000-4000-8000-000000000001'),'out-of-order provider receipt cannot restore outdated access');
-select pg_temp.assert((select not applied from business_events where id='b4000000-0000-4000-8000-000000000021'),'stale provider receipt remains auditable');
-select pg_temp.reject($q$select share_team_plan('b4000000-0000-4000-8000-000000000022','b4000000-0000-4000-8000-000000000001','30000000-0000-4000-8000-000000000001')$q$,'commercial_restricted','past-due team cannot create new shared assets');
-select pg_temp.reject($q$select invite_team_member('b4000000-0000-4000-8000-000000000022','b4000000-0000-4000-8000-000000000001','other@rafik.test','coach','new-token-1234567890123456789012345')$q$,'commercial_restricted','past-due team cannot admit new staff');
-select pg_temp.assert(jsonb_array_length(team_workspace('b4000000-0000-4000-8000-000000000001')->'clients')=1,'past-due team retains roster and history access');
-select pg_temp.reject($q$select simulate_business_event('b4000000-0000-4000-8000-000000000020','b4000000-0000-4000-8000-000000000001',3,'{}')$q$,'conflict','provider event identity cannot be reused with changed payload');
-select simulate_business_event('b4000000-0000-4000-8000-000000000023','b4000000-0000-4000-8000-000000000001',4,jsonb_build_object('state','active','access_until',now()+interval '10 days','staff_limit',2,'client_limit',1));
-select pg_temp.reject($q$select invite_team_member('b4000000-0000-4000-8000-000000000022','b4000000-0000-4000-8000-000000000001','other@rafik.test','coach','new-token-1234567890123456789012345')$q$,'staff_limit','staff admission limit includes current owner and coach');
-reset role; update runtime_settings set local_simulation=false;
-set local role rafik_user; select set_config('rafik.claims','{"sub":"10000000-0000-4000-8000-000000000001","role":"rafik_user"}',true);
-select pg_temp.reject($q$select simulate_business_event('b4000000-0000-4000-8000-000000000024','b4000000-0000-4000-8000-000000000001',5,'{}')$q$,'simulation_disabled','server configuration independently disables local simulation');
-select pg_temp.assert(not has_function_privilege('rafik_user','public.apply_business_event(uuid,uuid,bigint,jsonb)','EXECUTE'),'browser identities cannot call provider operator boundary');
+reset role;
+select pg_temp.assert(to_regclass('public.runtime_settings') is null,'retired provider simulation settings are absent');
+select pg_temp.assert(to_regprocedure('public.simulate_business_event(uuid,uuid,bigint,jsonb)') is null,'retired simulation operation is absent');
+select pg_temp.assert(to_regprocedure('public.apply_business_event(uuid,uuid,bigint,jsonb)') is null,'retired provider mutation is absent');
 set local role rafik_user; select set_config('rafik.claims','{"sub":"10000000-0000-4000-8000-000000000002","role":"rafik_user"}',true);
 select create_support_case('b4000000-0000-4000-8000-000000000030','b4000000-0000-4000-8000-000000000001','Schedule question','Please clarify the new timetable'); select create_support_case('b4000000-0000-4000-8000-000000000031',null,'Private platform request','Account help');
 select pg_temp.assert((create_support_case('b4000000-0000-4000-8000-000000000030','b4000000-0000-4000-8000-000000000001','Schedule question','Please clarify the new timetable')).revision=1,'support creation retry creates one case');

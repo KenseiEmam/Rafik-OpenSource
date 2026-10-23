@@ -49,6 +49,15 @@ test("Swagger serves local assets, prefixed routes and the canonical contract wi
         r.json(),
       );
       assert.equal(spec.openapi, "3.1.0");
+      assert.deepEqual(spec.components.schemas.Context.properties.role.enum, [
+        "admin",
+        "trainer",
+        "trainee",
+      ]);
+      assert.match(
+        spec.components.schemas.Context.properties.path.description,
+        /dashboard/,
+      );
       assert.ok(spec.paths["/v1/mobile/auth/login"]);
     }
     assert.equal((await fetch(`${base}/v1/docs/assets/__proto__`)).status, 404);

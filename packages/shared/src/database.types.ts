@@ -829,12 +829,6 @@ export type Database = {
           created_at: string
         }
       }
-      runtime_settings: {
-        Row: {
-          id: boolean
-          local_simulation: boolean
-        }
-      }
       saved_foods: {
         Row: {
           id: string
@@ -1156,7 +1150,6 @@ export type Database = {
       share_resource: { Args: Record<string, unknown>; Returns: Json }
       share_team_plan: { Args: Record<string, unknown>; Returns: Json }
       share_team_resource: { Args: Record<string, unknown>; Returns: Json }
-      simulate_business_event: { Args: Record<string, unknown>; Returns: Json }
       start_session: { Args: Record<string, unknown>; Returns: Json }
       team_invitation: { Args: Record<string, unknown>; Returns: Json }
       team_role: { Args: Record<string, unknown>; Returns: Json }

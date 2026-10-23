@@ -53,9 +53,8 @@ Both new indexes require administrator or trainer membership; a trainer sees onl
 - `GET /v1/auth/setup-status`, `session`; `POST /v1/auth/setup` creates the first super admin and institution atomically on an empty instance; `POST /v1/auth/password-login`; `POST /v1/auth/logout`. Sessions are opaque HttpOnly, SameSite cookies backed by hashed tokens. Browser requests include credentials.
 - `POST /v1/auth/accept-invitation` accepts a pending seven-day, single-use institution invite, creates the account with a password and starts a session. No email is sent or verified. `POST /v1/auth/complete-password-setup` consumes an admin-issued one-time password setup token (24-hour expiry) and revokes existing sessions.
 - New passwords must be 8–128 characters and include an uppercase letter, lowercase letter, number, and punctuation or symbol. Password login accepts existing credentials so older passwords remain usable.
-- `POST /v1/commands/:name`: named, granted domain function with JSON arguments. The server registry controls identifiers and casts; values are bound. Operator-only commands are unavailable.
-- `GET /v1/queries/:table`: authorized row projection through RLS. Optional `column`/`value` equality filter, `offset`, `limit` (maximum 500). Internal operation/settings tables are not exposed. The browser helper fetches pages for complete authorized lists.
-- `GET /v1/conversations/:relationship?before=<sequence>`: newest 50 messages, exclusive older cursor. Render chronologically. `GET /v1/appointments/upcoming?coach=true` returns the next three authorized bookings in seven days.
+- `POST /v1/commands/:name`: one of 11 explicitly allowlisted compatibility commands with JSON arguments. SQL grants and current authority remain additional requirements. The server registry controls identifiers and casts; values are bound. Operator-only commands are unavailable.
+- `GET /v1/queries/:table`: one of 33 explicitly allowlisted historical export/reference projections through RLS. Optional `column`/`value` equality filter, `offset`, `limit` (maximum 500). Internal operation/settings tables are not exposed. The browser helper fetches pages for complete authorized lists.
 - `PUT`, `GET`, `DELETE /v1/files/:encodedPath`: immutable upload, authorized download, recoverable byte/metadata cleanup. JSON requests are capped at 1 MiB; private files at 10 MiB. Owner registration controls type, path and size.
 - Local-only `/v1/auth/local-preview`; `/health` checks database connectivity. These adapters cannot start in production configuration.
 
@@ -75,8 +74,7 @@ Training schedules use client-local calendar dates. Appointments use UTC instant
 
 ## Institution membership API (R7A2)
 
-- `GET /v1/contexts`: current authorized personal/independent/organization role destinations and separate operator grant.
-- `POST /v1/workspaces`: explicit creation, fixed kind/name and caller UUID.
+- `GET /v1/contexts`: current institution memberships and separate operator grant. IDs remain stable; the browser destination is `/dashboard`. Wire roles remain `admin`, `trainer` and `trainee`.
 - `GET /v1/workspaces/:id?view=admin|trainer|trainee`: current-role projection; no personal profile disclosure.
 - `POST /v1/workspaces/:id`: `invite`, `revoke-invite`, `member`, `assign-trainer`, `rename`, `close`; operation UUID, revision where applicable, current admin authority checked before receipt replay.
 - `GET /v1/organization-invitations/:token`: invitation preview including the intended account email, granted role and expiry. The email is an account identifier; it is not verified. Unauthenticated account creation uses `POST /v1/auth/accept-invitation`; a signed-in matching account uses `POST` on the invitation route.
@@ -131,7 +129,7 @@ See [ADR 0005](../decisions/ADR-0005-organization-and-independent-scopes.md). Th
 
 `GET /v1/workspaces/:id/programs?view=admin|trainer|trainee` supports `search`, `offset`, `program` or `version`; list pages contain 24 programs. `POST` supports explicit save/publish/archive commands with an operation UUID and draft revision. Publishing creates an immutable version and makes the program available in the institution library; assignment remains a separate action. `GET /catalog` is staff-only; exercise writes use the programs command boundary.
 
-`GET /delivery` returns authorized recipients/assignments. Sessions are included only when `history=true`; `before` is then a verified session UUID cursor, and history mode includes former trainees with retained history. `POST /delivery` atomically assigns a fixed version to 1–50 reviewed recipients with member and current-assignment revisions. Independent delivery APIs are retained for legacy data compatibility but have no supported standalone web screens; see [ADR 0021](../decisions/ADR-0021-organization-only-web-experience.md).
+`GET /delivery` returns authorized recipients/assignments. Sessions are included only when `history=true`; `before` is then a verified session UUID cursor, and history mode includes former trainees with retained history. `POST /delivery` atomically assigns a fixed version to 1–50 reviewed recipients with member and current-assignment revisions. New standalone authoring/delivery HTTP commands are blocked; historical data, owned export and exact supported replay remain; see [ADR 0021](../decisions/ADR-0021-organization-only-web-experience.md).
 
 `POST /sessions` starts/saves/reviews organization workouts; `/v1/organization-sessions/:id` and `/previous` supply authorized record/actual references. Publication/started snapshots and first completion time are retained. Current responsibility is checked before receipt replay. `PUT /v1/program-media/:id?workspace=:id` accepts at most 2 MiB PNG/JPEG/WebP; the authenticated GET rechecks publication/assignment/member access. `/v1/account/organizations` exports only the authenticated subject's organization records.
 
@@ -140,7 +138,7 @@ See [ADR 0005](../decisions/ADR-0005-organization-and-independent-scopes.md). Th
 - `GET /v1/workspaces/:id/services?view=&kind=templates|groups&search=&offset=&archived=`: 25-row catalog. POST explicit `template`/`group` commands, stable operation UUID and revision. Groups contain at most 100 active athlete memberships; administrators may also add active coaches. Trainers may add only assigned athletes to groups they own. Templates have 1–12 typed drills.
 - `POST /calendar-preview`: local timestamp, IANA zone, integer minutes/count/every; returns actual UTC intervals. `POST /calendar` supports create, one-occurrence reschedule, admin staff replacement, cancellation, attendance, result and finish. Creation is atomic for at most eight occurrences; selected recipients are fixed.
 - `GET /calendar?view=&from=&to=&zone=&offset=`: at most 31-day window, 50 rows. `id=` returns one authorized detail with latest 100 correction entries, explicitly labelled by the UI. Trainee projections hide other trainees.
-- `GET /analytics?view=&from=&to=&member=&search=` and `/v1/coach/analytics?from=&to=&client=&search=`: separate authorized reports, date window at most 366 days, 25 matching filter subjects. Workload remains organization-wide.
+- `GET /analytics?view=&from=&to=&member=&search=`: separate authorized reports, date window at most 366 days, 25 matching filter subjects. Workload remains organization-wide.
 - `GET /assessment-history?view=&member=&from=&to=&offset=`: 50 authorized results and subject name. Same-definition comparisons use immutable definition/template revision; absent/excused rows remain historical records but do not enter the performance line.
 
 All mutations validate current role/resource before exact receipt replay; revisions conflict explicitly. Date parameters are calendar dates in the viewer's profile timezone. No external scheduling/reminder provider is connected.
@@ -161,9 +159,9 @@ Local dispatch is CLI-only. No public generic event emission, provider send or o
 - `GET /v1/platform?section=organizations|users|support|audit&search=&offset=`: separate current platform grant; 25 operational rows and `next`. Every access is recorded. Audit defaults to writes; `includeReads=true` includes access events. No generic private-record access.
 - `POST /v1/platform`: `operation`, `action` (`organization_state`, `identity_state`, `support_reply`), `id`, `revision`, `reason` (10–500 characters), and `value` or `reply`. Payload identity/revision and grant checks govern replay. Confirmed refusal is editable; uncertain acknowledgment keeps the exact pending operation.
 - `GET /v1/workspaces/:id/people?view=&role=&state=&search=&offset=&selected=&self=`: 25 scoped memberships, full filtered `total`, `next`, separately resolved selected people and responsible trainer names. Name search is case-insensitive. `selected` contains at most 100 UUIDs. Trainer scope is current responsibility; `self=true` also resolves the trainer's own channel participation.
-- `GET /v1/workspaces/:id/recipients` and `GET /v1/coach/recipients`: bounded selected/available recipients with current assignment IDs/revisions/title. Independent selection max 50. Commands still validate each recipient at commit time. The institution route accepts `limit` (1–100; the web assignment page asks for the top 5 matches). With `view=admin&email=true`, `search` also matches account email and items include `email`. Coaches search names only and never receive member email. Each item's `plans` include `version_id`, `program_id` and `version_revision` so clients can mark athletes already on a program.
+- `GET /v1/workspaces/:id/recipients`: bounded selected/available recipients with current assignment IDs/revisions/title. Commands still validate each recipient at commit time. The institution route accepts `limit` (1–100; the web assignment page asks for the top 5 matches). With `view=admin&email=true`, `search` also matches account email and items include `email`. Coaches search names only and never receive member email. Each item's `plans` include `version_id`, `program_id` and `version_revision` so clients can mark athletes already on a program.
 - Workspace `summary=true` avoids downloading the roster; `invitationOffset` and `eventOffset` page 25 invitations/30 events. Modern web uses summary + people APIs.
-- Institution delivery `history=true` returns 50 sessions and a verified continuation cursor; member names and current assignment are limited to the viewed history/person. Analytics `workloadOffset`/`programOffset` page 25 breakdown rows without changing full-scope totals.
+- Institution delivery `history=true` returns 10 sessions and a verified continuation cursor; member names and current assignment are limited to the viewed history/person. Analytics `workloadOffset`/`programOffset` page 25 breakdown rows without changing full-scope totals.
 - Calendar detail `summary=true` avoids the initial correction log; `historyMember` plus `historyOffset` returns 25 revisions and `historyNext` for an authorized event participant. A trainee cannot select another trainee's history.
 
 Old open-client read shapes remain supported. Offset pages can shift during concurrent edits; exact writes use current revision checks and never trust displayed selection alone.
@@ -199,7 +197,7 @@ These endpoints are unauthenticated and contain no user or workspace data:
 
 `save_nutrition_guidance` accepts optional `p_meals` (default `[]`), up to 20 suggestions / 32 KiB. Each contains name, meal, positive quantity/basis (max 10000), unit, nutrient object and source. Existing participant/revision checks and immutable receipts apply to all fields; a changed payload with the same receipt is rejected. A suggestion is not consumption; trainee `save_meal` explicitly snapshots actual values.
 
-Independent and organization exercise authoring accept `media_ref` from the reviewed catalog or null. Existing `media_url` remains optional HTTPS. Publication and copied prescriptions preserve the chosen key. Public catalog access does not grant access to private exercises, client records or organizational data.
+Institution exercise authoring accepts `media_ref` from the reviewed catalog or null. Existing `media_url` remains optional HTTPS. Publication and copied prescriptions preserve the chosen key. Public catalog access does not grant access to private exercises, client records or organizational data.
 
 ### Expanded reference catalog and video assets (R15)
 
@@ -233,13 +231,9 @@ Current membership/role/responsibility checks precede receipt lookup, so revoked
 
 Institution message commands accept optional `asset_id`; the file must belong to the sender and that channel. `private_pair` on the channel makes participant changes and nonparticipant admin access unavailable.
 
-## Institution trainer tasks
+## Coaching follow-up
 
-`GET /v1/workspaces/:id/tasks?view=admin|trainer&state=open|completed|cancelled&search=&offset=0&today=YYYY-MM-DD` returns 24 scoped rows, next offset and open/overdue/completed counts. The date-only `today` aligns the due-date count with the caller's calendar day. Trainers see only tasks assigned to their membership; admins see the organization queue.
-
-`POST` accepts standard `operation`, `view`, `id` and `revision`. Admin `action: save` takes `title`, optional `description`, active trainer `assigned_to`, `priority: normal|high` and optional `due_date`. `action: state` takes `state: open|completed|cancelled`; cancellation/restoring cancelled tasks requires admin authority. Assignees can complete/reopen their work. Authorization is rechecked before replay.
-
-`GET /v1/workspaces/:id/follow-up?view=admin|trainer` derives scoped counts and the first eight oldest review/outcome rows and alphabetic unassigned-program trainees. It is read-only and does not infer no-shows or deduct sessions.
+`GET /v1/workspaces/:id/follow-up?view=admin|trainer` returns scoped review/outcome counts and unassigned-program athletes. It is read-only; Tasks is removed.
 
 ## Retired organization session packages
 
@@ -263,8 +257,12 @@ Administrator `invite` commands optionally accept `sports: string[]` (up to 100 
 
 People and service-catalog requests accept `limit=10` for main directories; existing picker requests retain 25. Nutrition and scheduled-event lists return 10 rows. Session `delivery?history=true` returns 10 records plus a scoped `total`; `offset` supports previous/next directory navigation, while `before` remains the compatibility cursor. Program/athlete-plan grids retain 24. API authorization and total-count filters use the same institution/coach scope as the records.
 
-## Optional list sizing and task lookup
+## Optional list sizing
 
-The web directory reads for People, services, programs, athlete plans, nutrition plans, session history and scheduled events accept `limit` as an integer from 1 to 100. Invalid or absent values retain their endpoint’s existing default; filtering and institution/role scope are unchanged. Task lists also accept bounded `limit`, expose the matching `total`, and accept an optional task `id`. An ID narrows the authorized set and ignores the list status filter so completed records can be opened; administrators retain institution scope and coaches retain only their assigned tasks. This is web API scope, not a new addition to the coach field OpenAPI subset.
+The web directory reads for People, services, programs, athlete plans, nutrition plans, session history and scheduled events accept `limit` as an integer from 1 to 100. Invalid or absent values retain their endpoint’s existing default; filtering and institution/role scope are unchanged. This is web API scope, not a new addition to the coach field OpenAPI subset.
 
 Session-history delivery reads accept optional case-insensitive athlete-name search via search, applied inside the existing authorized membership scope and to the matching total. Member-ID compatibility reads remain supported by the API; the main history UI uses name search.
+
+## Complete backend inventory
+
+See the [backend audit](backend/README.md), [schema catalog](backend/schema.md) and [route catalog](backend/routes.md) for every maintained table, field and registered route. Historical data retention is distinct from supported authoring. Generic commands do not expose new personal plans, teams, appointments or resource registration; owned historical resource finalization and cleanup remain available.

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Backend audit and cleanup
+
+- Catalogue 94 tables, 761 columns and 65 routes with reviewed purposes and drift checks.
+- Remove four unused standalone reads; explicitly allowlist 11 compatibility commands and 33 query projections.
+- Retire billing simulation through a forward migration while preserving historical records. Add missing own workout-history/sequence exports, correct Prisma metadata and rename ten internal modules by domain.
+
 ### Individual workout progression API
 
 - Add staff-authorized fixed-time individual scheduling, rescheduling and reasoned skips with exact command receipts. Scheduling binds a cycle position without advancing it; completion/skip advances once per assignment.

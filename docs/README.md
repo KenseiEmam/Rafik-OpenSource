@@ -79,3 +79,12 @@ This page is the index for maintained Rafik documentation. The root [README](../
 Historical phase records and superseded documents are linked from the [archive index](archive/README.md); they are not active product or release guidance.
 
 - [ADR 0026 — Single-institution routing and Tasks retirement](decisions/ADR-0026-single-institution-routing-and-task-retirement.md): upcoming-release route, migration and native compatibility decisions.
+
+## Backend audit reference
+
+- [Backend audit](reference/backend/README.md): findings and release follow-up.
+- [Schema catalog](reference/backend/schema.md): every table, field, type, purpose and relationship.
+- [Route catalog](reference/backend/routes.md): authority, callers and dependencies.
+- [Reusable backend audit prompt](reference/backend/audit-prompt.md): scope and removal criteria.
+
+- [ADR 0028 — Explicit backend compatibility](decisions/ADR-0028-explicit-backend-compatibility.md): allowlists, historical retention and simulator retirement.

@@ -1,6 +1,6 @@
 import { experienceReport } from "./experience-report.ts";
 import { ApiError, asActor, type Actor } from "./db.ts";
-import { scoped, requirePractice, uuid } from "./workspaces.ts";
+import { scoped, uuid } from "./workspaces.ts";
 import { role, recipient } from "./programming.ts";
 import { calendarDate, pageOffset } from "./service-definitions.ts";
 export async function analyticWindow(actor: Actor, q: URLSearchParams) {
@@ -109,49 +109,6 @@ export async function organizationAnalytics(
         workload.length > 25 ? pageOffset(q.get("workloadOffset")) + 25 : null,
       programNext:
         programs.length > 25 ? pageOffset(q.get("programOffset")) + 25 : null,
-      people,
-    };
-  });
-}
-export async function independentAnalytics(actor: Actor, q: URLSearchParams) {
-  await requirePractice(actor);
-  const window = await analyticWindow(actor, q);
-  return asActor(actor, async (tx) => {
-    const selected = q.get("client") ? uuid(q.get("client")) : null;
-    if (
-      selected &&
-      !(await tx.coach_clients.findFirst({
-        where: { id: selected, coach_id: actor.id },
-      }))
-    )
-      throw new ApiError(403, "forbidden");
-    const [summary] = await tx.$queryRaw<
-      any[]
-    >`WITH roster AS (SELECT * FROM public.coach_clients WHERE coach_id=${actor.id}::uuid AND (${selected}::uuid IS NULL OR id=${selected}::uuid)),done AS(SELECT s.* FROM public.sessions s JOIN roster c ON c.client_id=s.client_id WHERE s.coach_id=${actor.id}::uuid AND s.completed_at>=${window.start} AND s.completed_at<${window.end}) SELECT
-   (SELECT count(*)::int FROM roster WHERE state='active') AS active,
-   (SELECT count(*)::int FROM roster c WHERE state='active' AND NOT EXISTS(SELECT 1 FROM public.assignments a WHERE a.relationship_id=c.id AND a.state='active' AND a.start_date<=(now() AT TIME ZONE ${window.zone})::date AND (a.end_date IS NULL OR a.end_date>=(now() AT TIME ZONE ${window.zone})::date))) AS without_program,
-   (SELECT count(*)::int FROM done) AS completed,
-   (SELECT count(DISTINCT s.client_id)::int FROM done s JOIN roster c ON c.client_id=s.client_id WHERE c.state='active') AS participating,
-   (SELECT count(*)::int FROM done WHERE reviewed_at IS NULL) AS pending_review,
-   (SELECT count(*)::int FROM public.coaching_requests r JOIN roster c ON c.id=r.relationship_id WHERE NOT r.cancelled AND r.due_date>=${window.from}::date AND r.due_date<=${window.to}::date) AS requests,
-   (SELECT count(*)::int FROM public.coaching_requests r JOIN roster c ON c.id=r.relationship_id WHERE NOT r.cancelled AND r.submitted_at IS NOT NULL AND r.due_date>=${window.from}::date AND r.due_date<=${window.to}::date) AS submitted`;
-    const daily = await tx.$queryRaw<
-      any[]
-    >`SELECT (s.completed_at AT TIME ZONE ${window.zone})::date::text AS date,count(*)::int AS value FROM public.sessions s JOIN public.coach_clients c ON c.coach_id=s.coach_id AND c.client_id=s.client_id WHERE s.coach_id=${actor.id}::uuid AND (${selected}::uuid IS NULL OR c.id=${selected}::uuid) AND s.completed_at>=${window.start} AND s.completed_at<${window.end} GROUP BY 1 ORDER BY 1`;
-    const attendance = await tx.$queryRaw<
-      any[]
-    >`SELECT a.state AS label,count(*)::int AS value FROM public.appointments a JOIN public.coach_clients c ON c.id=a.relationship_id WHERE c.coach_id=${actor.id}::uuid AND (${selected}::uuid IS NULL OR c.id=${selected}::uuid) AND a.state<>'cancelled' AND a.starts_at>=${window.start} AND a.starts_at<${window.end} AND a.starts_at<=now() GROUP BY a.state`;
-    const search = "%" + (q.get("search") || "").slice(0, 100) + "%";
-    const people = await tx.$queryRaw<
-      { id: string; name: string }[]
-    >`SELECT c.id,p.display_name AS name FROM public.coach_clients c JOIN public.profiles p ON p.id=c.client_id WHERE c.coach_id=${actor.id}::uuid AND p.display_name ILIKE ${search} ORDER BY p.display_name,c.id LIMIT 25`;
-    return {
-      window,
-      summary,
-      daily,
-      attendance,
-      workload: [],
-      programs: [],
       people,
     };
   });

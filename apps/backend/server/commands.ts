@@ -8,33 +8,86 @@ type Command = {
   guest: boolean;
   many: boolean;
 };
+// Explicit HTTP compatibility surface. Database grants remain an independent boundary.
+export const supportedCommands = new Set([
+  "ensure_profile",
+  "update_profile",
+  "session_document",
+  "save_session",
+  "account_deletion_ready",
+  "delete_my_account",
+  "retire_resource",
+  "remove_resource_record",
+  "finish_resource",
+  "create_support_case",
+  "update_support_case",
+]);
+export const supportedQueries = new Set([
+  "profiles",
+  "exercises",
+  "plan_versions",
+  "sessions",
+  "plans",
+  "client_context",
+  "coach_clients",
+  "assignments",
+  "schedule_exceptions",
+  "coaching_forms",
+  "coaching_requests",
+  "measurements",
+  "messages",
+  "conversation_reads",
+  "nutrition_guidance",
+  "saved_foods",
+  "meal_entries",
+  "appointment_slots",
+  "appointments",
+  "resources",
+  "resource_shares",
+  "teams",
+  "team_members",
+  "team_clients",
+  "team_groups",
+  "team_group_members",
+  "team_plans",
+  "team_resource_shares",
+  "team_assignments",
+  "team_activity",
+  "business_accounts",
+  "business_events",
+  "support_cases",
+]);
 const commands = new Map<string, Command[]>();
 const tables = new Map<string, Set<string>>();
 const quote = (s: string) => '"' + s.replaceAll('"', '""') + '"';
 export async function loadContracts() {
+  commands.clear();
+  tables.clear();
   const list = await db.$queryRaw<
     Command[]
   >`SELECT p.proretset many,p.proname name,p.proargnames names,ARRAY(SELECT format_type(t,null) FROM unnest(p.proargtypes::oid[]) t) types,(p.pronargs-p.pronargdefaults)::int required,has_function_privilege('rafik_user',p.oid,'execute') "user",has_function_privilege('rafik_guest',p.oid,'execute') guest FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public' AND p.prokind='f' AND (has_function_privilege('rafik_user',p.oid,'execute') OR has_function_privilege('rafik_guest',p.oid,'execute'))`;
   for (const c of list) {
     c.names ||= [];
-    if (c.types.length === c.names.length)
+    if (supportedCommands.has(c.name) && c.types.length === c.names.length)
       commands.set(c.name, [...(commands.get(c.name) || []), c]);
   }
   const columns = await db.$queryRaw<
     { table_name: string; column_name: string }[]
   >`SELECT c.relname table_name,a.attname column_name FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace JOIN pg_attribute a ON a.attrelid=c.oid WHERE n.nspname='public' AND c.relkind='r' AND a.attnum>0 AND NOT a.attisdropped AND has_table_privilege('rafik_user',c.oid,'select')`;
   for (const c of columns) {
+    if (!supportedQueries.has(c.table_name)) continue;
     if (!tables.has(c.table_name)) tables.set(c.table_name, new Set());
     tables.get(c.table_name)!.add(c.column_name);
   }
-  for (const name of ["set_entries", "session_operations", "runtime_settings"])
-    tables.delete(name);
 }
 export async function command(
   actor: Actor | null,
   name: string,
   args: Record<string, unknown>,
 ) {
+  if (!supportedCommands.has(name))
+    throw new ApiError(403, "command_unavailable");
+  if (!actor) throw new ApiError(401, "unauthenticated");
   const keys = Object.keys(args);
   const c = commands
     .get(name)
@@ -96,33 +149,4 @@ export async function query(
     );
     return rows.map((r) => r.data);
   });
-}
-export async function messages(
-  actor: Actor | null,
-  id: string,
-  before: string | null,
-) {
-  if (!actor) throw new ApiError(401, "unauthenticated");
-  if (
-    !/^[a-f0-9-]{36}$/.test(id) ||
-    (before !== null && !/^\d{1,16}$/.test(before))
-  )
-    throw new ApiError(400, "invalid_query");
-  return asActor(actor, async (tx) =>
-    (
-      await tx.$queryRaw<
-        { data: unknown }[]
-      >`SELECT to_jsonb(m) data FROM public.messages m WHERE relationship_id=${id}::uuid AND (${before}::bigint IS NULL OR sequence<${before}::bigint) ORDER BY sequence DESC LIMIT 50`
-    ).map((r) => r.data),
-  );
-}
-export async function upcoming(actor: Actor | null, coach: boolean) {
-  if (!actor) throw new ApiError(401, "unauthenticated");
-  return asActor(actor, async (tx) =>
-    (
-      await tx.$queryRaw<
-        { data: unknown }[]
-      >`SELECT to_jsonb(a) data FROM public.appointments a JOIN public.coach_clients c ON c.id=a.relationship_id WHERE (CASE WHEN ${coach} THEN c.coach_id ELSE c.client_id END)=${actor.id}::uuid AND a.state='booked' AND a.starts_at>=now() AND a.starts_at<=now()+interval '7 days' ORDER BY a.starts_at,a.id LIMIT 3`
-    ).map((r) => r.data),
-  );
 }

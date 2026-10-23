@@ -118,6 +118,9 @@ try {
     ),
     "0",
   );
+  // Historical migration checks must finish on the latest schema before regenerating transport types.
+  const later = readdirSync(migrations).filter(entry=>entry>name && /^\d/.test(entry)).sort();
+  if(later.length) sql(later.map(entry=>readFileSync(resolve(migrations,entry,"migration.sql"),"utf8")).join("\n"));
   const env = {
     ...process.env,
     MIGRATION_DATABASE_URL: `postgresql://rafik_migrate:rafik-local-migrations-only@127.0.0.1:55332/${database}`,

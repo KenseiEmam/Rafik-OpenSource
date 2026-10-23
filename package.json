@@ -41,8 +41,6 @@
     "test:release": "npm run test:release --workspace @rafik/backend",
     "test:api": "npm run test:api --workspace @rafik/backend",
     "test:fresh": "npm run test:fresh --workspace @rafik/backend",
-    "test:services": "npm run test:services --workspace @rafik/backend",
-    "test:teams": "npm run test:teams --workspace @rafik/backend",
     "test:organizations": "npm run test:organizations --workspace @rafik/backend",
     "test:programming": "npm run test:programming --workspace @rafik/backend",
     "test:organization-services": "npm run test:organization-services --workspace @rafik/backend",
@@ -77,7 +75,10 @@
     "frontend:inventory": "node apps/frontend/scripts/frontend-inventory.mjs",
     "frontend:inventory:check": "node apps/frontend/scripts/frontend-inventory.mjs --check",
     "test:workout-foundation": "node apps/backend/scripts/prisma/verify-workout-foundation.mjs",
-    "test:workout-sequence": "node apps/backend/scripts/prisma/isolated-api.mjs tests/workout-sequence.test.ts"
+    "test:workout-sequence": "node apps/backend/scripts/prisma/isolated-api.mjs tests/workout-sequence.test.ts",
+    "backend:inventory": "node apps/backend/scripts/backend-inventory.mjs",
+    "backend:inventory:check": "node apps/backend/scripts/backend-inventory.mjs --check",
+    "backend:inventory:database": "node apps/backend/scripts/backend-inventory.mjs --refresh-database"
   },
   "overrides": {
     "tar": "7.5.22",

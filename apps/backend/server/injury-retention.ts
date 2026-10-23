@@ -48,8 +48,12 @@ export async function purgeExpiredInjuryRecords(workspaceIds: string[] = []) {
 
 export function startInjuryRetention(
   cleanup = purgeExpiredInjuryRecords,
-  schedule: (callback: () => void, delay: number) => ReturnType<typeof setTimeout> = setTimeout,
-  onFailure: () => void = () => console.error("Injury retention cleanup failed"),
+  schedule: (
+    callback: () => void,
+    delay: number,
+  ) => ReturnType<typeof setTimeout> = setTimeout,
+  onFailure: () => void = () =>
+    console.error("Injury retention cleanup failed"),
 ) {
   const run = async () => {
     let nextDelay = DAY;

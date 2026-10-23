@@ -1,5 +1,5 @@
 import { db, type Actor } from "./db.ts";
-// Subject access for a personal export, including former memberships; never another trainee's records.
+// Subject access for a personal export, including former memberships; never another athlete's records.
 export async function organizationAccountData(actor: Actor) {
   const memberships = await db.workspace_members.findMany({
     where: { user_id: actor.id, workspaces: { kind: "organization" } },
@@ -33,6 +33,21 @@ export async function organizationAccountData(actor: Actor) {
       db.assessment_result_history.findMany({
         where: { member_id: { in: ids } },
         orderBy: { recorded_at: "asc" },
+      }),
+    ]);
+  const [workoutHistory, workoutPositions, workoutRecurrences] =
+    await Promise.all([
+      db.organization_session_history.findMany({
+        where: { organization_sessions: { member_id: { in: ids } } },
+        orderBy: [{ created_at: "asc" }, { id: "asc" }],
+      }),
+      db.organization_workout_positions.findMany({
+        where: { organization_assignments: { member_id: { in: ids } } },
+        orderBy: [{ assignment_id: "asc" }, { position: "asc" }],
+      }),
+      db.organization_workout_recurrences.findMany({
+        where: { organization_assignments: { member_id: { in: ids } } },
+        orderBy: { id: "asc" },
       }),
     ]);
   const [messages, notificationPreferences, notifications] = await Promise.all([
@@ -86,6 +101,9 @@ export async function organizationAccountData(actor: Actor) {
   const workplaceFeedback =
     await db.$queryRaw`SELECT * FROM public.organization_workplace_feedback WHERE member_id=ANY(${ids}::uuid[])`;
   return {
+    workoutHistory,
+    workoutPositions,
+    workoutRecurrences,
     sessionFeedback,
     workplaceFeedback,
     assets,

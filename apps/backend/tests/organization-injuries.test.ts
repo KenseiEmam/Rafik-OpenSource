@@ -2,7 +2,7 @@ import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import { db } from "../server/db.ts";
-import { purgeExpiredInjuryRecords } from "../server/organization-injury-retention.ts";
+import { purgeExpiredInjuryRecords } from "../server/injury-retention.ts";
 import {
   organizationFixture,
   call,

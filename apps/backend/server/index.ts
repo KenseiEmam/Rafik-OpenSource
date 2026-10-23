@@ -1,50 +1,36 @@
 import type { ApiErrorBody } from "@rafik/shared/contracts";
-import { feedback, feedbackCommand } from "./organization-feedback.ts";
-import { followUp } from "./organization-follow-up.ts";
-import { injuries, injuryCommand } from "./organization-injuries.ts";
-import { startInjuryRetention } from "./organization-injury-retention.ts";
+import { feedback, feedbackCommand } from "./feedback.ts";
+import { followUp } from "./follow-up.ts";
+import { injuries, injuryCommand } from "./injuries.ts";
+import { startInjuryRetention } from "./injury-retention.ts";
 import {
   putOrganizationAsset,
   getOrganizationAsset,
   organizationAssets,
   assetCommand,
-} from "./organization-assets.ts";
-import { nutrition, nutritionCommand } from "./organization-nutrition.ts";
+} from "./assets.ts";
+import { nutrition, nutritionCommand } from "./nutrition.ts";
 import {
   organizationPeople,
   organizationMemberProfile,
   organizationRecipients,
-  independentRecipients,
 } from "./people.ts";
-import {
-  organizationSports,
-  organizationSportsCommand,
-} from "./organization-sports.ts";
+import { organizationSports, organizationSportsCommand } from "./sports.ts";
 import { platformRead, platformCommand } from "./platform.ts";
 import {
   notificationPreferences,
   notificationInbox,
   readNotification,
 } from "./notifications.ts";
-import {
-  communication,
-  communicationCommand,
-} from "./organization-communication.ts";
-import {
-  serviceCatalog,
-  serviceCatalogCommand,
-} from "./organization-catalog.ts";
+import { communication, communicationCommand } from "./communication.ts";
+import { serviceCatalog, serviceCatalogCommand } from "./service-catalog.ts";
 import {
   calendar,
   scheduledEvents,
   calendarPreview,
   calendarCommand,
-} from "./organization-calendar.ts";
-import {
-  organizationAnalytics,
-  independentAnalytics,
-  assessmentHistory,
-} from "./analytics.ts";
+} from "./calendar.ts";
+import { organizationAnalytics, assessmentHistory } from "./analytics.ts";
 import {
   createServer,
   type IncomingMessage,
@@ -55,20 +41,13 @@ import { athletePlans } from "./athlete-plans.ts";
 import { nutritionPlanIndex } from "./nutrition-plan-index.ts";
 import { db, ApiError, requireActor } from "./db.ts";
 import { identify, authRoute, mobileAuthRoute } from "./auth.ts";
-import {
-  command,
-  query,
-  loadContracts,
-  messages,
-  upcoming,
-} from "./commands.ts";
+import { command, query, loadContracts } from "./commands.ts";
 import { fileOperation } from "./files.ts";
 import {
   contexts,
   workspaceView,
   workspaceCommand,
   invitation,
-  requirePractice,
 } from "./workspaces.ts";
 import {
   programs,
@@ -408,14 +387,6 @@ const server = createServer(async (req, res) => {
       );
       return;
     }
-    if (path === "/v1/coach/recipients" && req.method === "GET") {
-      send(
-        res,
-        200,
-        await independentRecipients(requireActor(actor), url.searchParams),
-      );
-      return;
-    }
     const memberProfileMatch = path.match(
       /^\/v1\/workspaces\/([a-f0-9-]+)\/people\/([a-f0-9-]+)$/,
     );
@@ -464,22 +435,6 @@ const server = createServer(async (req, res) => {
       return;
     }
 
-    if (path.startsWith("/v1/conversations/") && req.method === "GET") {
-      send(
-        res,
-        200,
-        await messages(actor, path.slice(18), url.searchParams.get("before")),
-      );
-      return;
-    }
-    if (path === "/v1/appointments/upcoming" && req.method === "GET") {
-      send(
-        res,
-        200,
-        await upcoming(actor, url.searchParams.get("coach") === "true"),
-      );
-      return;
-    }
     const assetMatch = path.match(
       /^\/v1\/organization-assets\/([a-f0-9-]{36})$/,
     );
@@ -626,14 +581,6 @@ const server = createServer(async (req, res) => {
       return;
     }
 
-    if (path === "/v1/coach/analytics" && req.method === "GET") {
-      send(
-        res,
-        200,
-        await independentAnalytics(requireActor(actor), url.searchParams),
-      );
-      return;
-    }
     const injuryMatch = path.match(
       /^\/v1\/workspaces\/([a-f0-9-]{36})\/injuries$/,
     );
@@ -864,19 +811,6 @@ const server = createServer(async (req, res) => {
       return;
     }
     if (path.startsWith("/v1/commands/") && req.method === "POST") {
-      if (
-        [
-          "save_plan",
-          "deliver_plan",
-          "publish_plan",
-          "save_exercise",
-          "create_invitation",
-          "create_team",
-          "save_coaching_form",
-          "publish_availability",
-        ].includes(path.slice(13))
-      )
-        await requirePractice(actor);
       send(res, 200, await command(actor, path.slice(13), input));
       return;
     }

@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Rafik API — Coach Field App",
+    "title": "Rafik API â€” Coach Field App",
     "version": "0.1.0",
     "description": "Supported API surface for the coach-first Android field app. The complete backend route reference is in docs/reference/api.md. Instance URLs are university-operated; do not use a shared Rafik host."
   },
@@ -623,10 +623,12 @@
           },
           "role": {
             "type": "string",
-            "enum": ["administrator", "trainer", "athlete"]
+            "enum": ["admin", "trainer", "trainee"],
+            "description": "Stable wire roles: administrator, coach and athlete respectively."
           },
           "path": {
-            "type": "string"
+            "type": "string",
+            "description": "Browser destination /dashboard. Native clients use the stable workspace and member IDs."
           }
         }
       },

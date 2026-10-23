@@ -1,5 +1,16 @@
 # Verification record
 
+## Backend audit and retirement — 23 October 2026
+
+Passed a populated disposable migration check: historical business account/event JSON stayed identical, retired simulator functions/settings were absent, and historical access/support/account-lifecycle SQL assertions passed. The first fixture attempt used the wrong synthetic support reporter; correcting that fixture restored the intended authority check. No production or preview records were changed.
+
+The final isolated run passed 11 tests across `api.test.ts`, `backend-boundary.test.ts`, `maintenance.test.ts`, `organization-services.test.ts` and `workout-sequence.test.ts`: authentication/pooled actor isolation, historical private-byte recovery and orphan grace, removed entry points, own-only workout history/sequence export, stable context IDs, institutional calendar/assessments and individual progression. The harness cleaned only its own database/files. Backend/frontend TypeScript passed; after the final historical inverse-relation correction, Prisma generation and backend TypeScript passed again. Two final Swagger tests passed, including actual context role values. The first Swagger invocation encountered sandbox child-process EPERM; in-process test isolation ran both successfully.
+
+Source inventory checks passed for 94 tables, 761 columns, 65 route records, 11 commands and 33 query projections. Final documentation checks passed for 2,111 local links and 817 heading links across 71 maintained documents. The schema receipt contains definitions/grants, not athlete data. English/Arabic landing API guidance was updated together in draft PR #34; no landing build/rendered acceptance is claimed. That PR has a pre-existing merge conflict with newer landing main.
+
+Limits: source/catalog and focused API evidence do not establish penetration testing, production load, full browser CI, Android compatibility acceptance or complete beta.3 readiness. Old standalone browser fixtures and remaining worker/group/web/native workflows are explicitly tracked in the [backend audit](../reference/backend/README.md). No browser suite or native build was repeated.
+
+
 ## Fixed-time individual progression — 23 October 2026
 
 Passed the final isolated API run containing the new sequence journey and existing delegated-workout regression (two journeys). The sequence journey exercises concurrent competing binds, two independent assignments, unchanged receipt replay, staff-action denial for an athlete, early-start and generic-calendar bypass guards, bound start/actual save, exactly-once completion, actual correction without cursor changes, explicit skip/retry, cycle repetition, rescheduling without consumption, end-time pause/cancellation, generic cannot-train restriction and revoked replay access. The harness removed its own disposable database/API/file directory; preview data was not reset or migrated.

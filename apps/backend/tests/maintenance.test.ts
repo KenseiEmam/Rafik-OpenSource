@@ -1,3 +1,4 @@
+import { historicalResource } from "./historical-resource-fixture.ts";
 import { apiOrigin } from "./test-target.ts";
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
@@ -18,12 +19,11 @@ test("local recovery restores private bytes with metadata; orphan cleanup honors
     const user = await f.person(),
       id = randomUUID(),
       body = "Synthetic recovery test bytes";
-    const registered = await call(user, "/v1/commands/register_resource", {
-      p_id: id,
-      p_title: "Recovery test",
-      p_filename: "recovery.txt",
-      p_type: "text/plain",
-      p_bytes: Buffer.byteLength(body),
+    const registered = await historicalResource(user, {
+      id,
+      title: "Recovery test",
+      filename: "recovery.txt",
+      bytes: Buffer.byteLength(body),
     });
     assert.equal(registered.status, 200, JSON.stringify(registered));
     path = registered.data.object_path;

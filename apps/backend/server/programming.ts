@@ -9,7 +9,7 @@ import {
 } from "./workout-sequence.ts";
 import { pageSize } from "./pagination.ts";
 import { pageOffset } from "./service-definitions.ts";
-import { usableExerciseAsset } from "./organization-assets.ts";
+import { usableExerciseAsset } from "./assets.ts";
 import media from "../content/exercise-media.json" with { type: "json" };
 import videos from "../content/exercise-videos.json" with { type: "json" };
 import { isDeepStrictEqual } from "node:util";

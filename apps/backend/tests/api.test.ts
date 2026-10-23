@@ -1,3 +1,4 @@
+import { historicalResource } from "./historical-resource-fixture.ts";
 import { apiOrigin } from "./test-target.ts";
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
@@ -172,17 +173,12 @@ test("private file bytes survive upload retry, stay scoped, and become unavailab
     await call("/v1/commands/ensure_profile", {}, p.cookie);
   const id = randomUUID(),
     content = Buffer.from("Practice with steady repetitions.");
-  const r = await call(
-    "/v1/commands/register_resource",
-    {
-      p_id: id,
-      p_title: "Session guide",
-      p_filename: "guide.txt",
-      p_type: "text/plain",
-      p_bytes: content.length,
-    },
-    a.cookie,
-  );
+  const r = await historicalResource(a, {
+    id,
+    title: "Session guide",
+    filename: "guide.txt",
+    bytes: content.length,
+  });
   assert.equal(r.status, 200);
   const path = "/v1/files/" + encodeURIComponent(r.data.object_path);
   const upload = () =>
@@ -236,5 +232,42 @@ test("private file bytes survive upload retry, stay scoped, and become unavailab
     (await call("/v1/commands/remove_resource_record", { p_id: id }, a.cookie))
       .status,
     200,
+  );
+});
+
+test("retired standalone routes and new legacy creation commands are unavailable", async () => {
+  const actor = await person();
+  await call("/v1/commands/ensure_profile", {}, actor.cookie);
+  for (const path of [
+    "/v1/coach/recipients",
+    "/v1/coach/analytics",
+    "/v1/conversations/" + randomUUID(),
+    "/v1/appointments/upcoming",
+  ])
+    assert.equal((await call(path, undefined, actor.cookie)).status, 404, path);
+  for (const name of [
+    "register_resource",
+    "create_team",
+    "publish_availability",
+    "save_plan",
+    "deliver_plan",
+    "publish_plan",
+    "save_coaching_form",
+    "apply_business_event",
+  ])
+    assert.equal(
+      (await call("/v1/commands/" + name, {}, actor.cookie)).status,
+      403,
+      name,
+    );
+  assert.equal(
+    (
+      await call(
+        "/v1/queries/notification_preferences",
+        undefined,
+        actor.cookie,
+      )
+    ).status,
+    400,
   );
 });

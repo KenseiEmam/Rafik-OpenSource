@@ -160,3 +160,7 @@ The dashboard reads `/v1/workspaces/:id/follow-up`; it derives outstanding work 
 Administrators see institution-wide results. Coaches see their primary athletes for reviews, missed training and plan coverage, and events where they are designated staff for outcomes. Athletes cannot read this staff endpoint. Results refresh when the dashboard loads or its read is retried; they are not persisted task assignments, automatic notifications or a realtime queue. Plan coverage currently checks assignment state, not assignment date validity.
 
 The cleanup migration deletes the legacy Tasks table, attributable saved-command results and `trainer_task_*` audit events. It retains scheduled activities, attendance, workout records, reviews and unrelated institution audit history. The `workspace_events` audit table and `organization_events` schedule table serve different purposes; neither retains the retired task workflow. Existing Task rows are purged when the guarded upgrade migration runs, rather than modifying developer preview data during verification.
+
+## Backend compatibility boundary
+
+The generic gateway uses explicit command/query allowlists in addition to SQL grants and RLS. Historical data remains where own export, deletion, receipts or private-byte recovery depend on it. Native identity and queue contracts stay intact; context browser destinations use `/dashboard`. See the [complete backend inventory](../reference/backend/README.md).

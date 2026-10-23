@@ -18,9 +18,7 @@
     "content": "node scripts/content.mjs",
     "content:check": "node scripts/content.mjs --check",
     "test:fresh": "node scripts/prisma/fresh.mjs",
-    "test:services": "node scripts/verify-services.mjs",
     "support:local": "node scripts/support-local.mjs",
-    "test:teams": "node scripts/verify-teams.mjs",
     "test:docs": "node --test --test-isolation=none scripts/check-docs.test.mjs && node scripts/check-docs.mjs",
     "verify:release": "node scripts/verify-release.mjs",
     "test:release": "node --test scripts/release-guard.test.mjs",
@@ -59,7 +57,10 @@
     "test:injury-retention-scheduler": "node scripts/prisma/isolated-api.mjs tests/organization-injury-retention-scheduler.test.ts",
     "test:institution-cleanup": "node scripts/prisma/verify-institution-cleanup.mjs",
     "test:workout-foundation": "node scripts/prisma/verify-workout-foundation.mjs",
-    "test:workout-sequence": "node scripts/prisma/isolated-api.mjs tests/workout-sequence.test.ts"
+    "test:workout-sequence": "node scripts/prisma/isolated-api.mjs tests/workout-sequence.test.ts",
+    "inventory": "node scripts/backend-inventory.mjs",
+    "inventory:check": "node scripts/backend-inventory.mjs --check",
+    "inventory:database": "node scripts/backend-inventory.mjs --refresh-database"
   },
   "devDependencies": {
     "@types/node": "22.19.0",

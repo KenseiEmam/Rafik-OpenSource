@@ -88,7 +88,7 @@ Multiple message attachments use ordered `organization_message_assets` links, mi
 | `infrastructure/cloud/`       | Per-provider Terraform starters that prepare the existing Compose stack on one VM; not cloud-verified.                                   |
 | `docs/`                       | Current product, engineering and operational documentation. Raw verification receipts are separated under `docs/verification/receipts/`. |
 
-Sports and coaching specialties are served by `apps/backend/server/organization-sports.ts` from migration `202610191200_sports_and_specialties`. The case-insensitive unique name index exists only in SQL. Admins manage them in `SportsSettings.vue` (Institution settings) and link people in `MemberSports.vue` (People manage panel). `people.ts` returns member `sports` and the `sport` filter. Run `npm run test:organization-sports` against a disposable migrated database.
+Sports and coaching specialties are served by `apps/backend/server/sports.ts` from migration `202610191200_sports_and_specialties`. The case-insensitive unique name index exists only in SQL. Admins manage them in `SportsSettings.vue` (Institution settings) and link people in `MemberSports.vue` (People manage panel). `people.ts` returns member `sports` and the `sport` filter. Run `npm run test:organization-sports` against a disposable migrated database.
 
 **Coaching team ([ADR 0025](../decisions/ADR-0025-coaching-team.md)):**
 
@@ -193,3 +193,7 @@ The supported web entrypoint must reach every checked-in Vue component. `tests/v
 ## Frontend inventory and route audit
 
 The [frontend reference](../reference/frontend/README.md) inventories every local Vue file and route. Run `npm run frontend:inventory` after a route/component change, review the diff, and run `npm run frontend:inventory:check`. Update the script-side purpose/access metadata and reviewed dynamic navigation in the same PR. `DashboardNav.vue` is the single institutional navigation component for both sidebar and phone drawer; `section-path.ts` associates detail/edit routes with their parent sections. Do not restore per-page hidden navigation or guest acquisition/recording screens. Token, recovery, compatibility and DEV-only entries have explicit classifications in the reference.
+
+## Backend inventory maintenance
+
+Run `npm run backend:inventory` and `npm run backend:inventory:check` after route/schema changes. After migrations, use `npm run backend:inventory:database` with Docker to capture an owned disposable schema and generate matching types. Update reviewed metadata. Never restore a retired endpoint for an obsolete fixture. See [backend reference](../reference/backend/README.md).
