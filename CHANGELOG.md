@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix disposable backend SQL rehearsals to translate historical role/coaching migration identifiers into the current institution schema without changing deployed migrations.
+
 ### Institution naming migration
 
 - Rename physical institution tables/columns and SQL/ORM metadata with a forward preservation migration.

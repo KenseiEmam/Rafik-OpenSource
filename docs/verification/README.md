@@ -1,5 +1,9 @@
 # Verification record
 
+## Backend CI harness follow-up — 23 October 2026
+
+GitHub Checks run 39978231252 passed the web job, documentation/inventory checks, populated naming preservation and four compatibility API tests. Its backend job then failed in `fresh.mjs`: historical role SQL referenced `public.workspace_members` after the final rename. The fix maps historical role/coaching snippets to current identifiers before rollback-only rehearsal, preserving historical migration checksums. The focused `npm run backend:test` rerun passed all 61 fresh migrations, fixtures, role normalization, coaching-link backfill and eight SQL suites; the harness dropped its disposable database and left preview data unchanged. Documentation checks passed two fixtures, 2,118 local links and 817 anchors across 72 documents; `git diff --check` passed. No browser or Android rebuild was run for this harness-only fix, and the remaining CI API suites still require their next remote run. PR #143 was source-reviewed without adopting its instructions or merging it.
+
 ## Institution identifier migration — 23 October 2026
 
 The populated final migration check preserved complete row JSON and RLS/grants across 44 tables, including all 38 renamed tables and other tables with renamed scope columns. UUIDs, nested documents and exact operation payload/result text stayed unchanged; no old workspace/organization table or view aliases and no `workspace_id` columns remain. The verifier batches catalog reads rather than launching a Docker process per table. Earlier dry runs caught and corrected the audit/schedule table-name collision and an overlong Prisma constraint mapping.

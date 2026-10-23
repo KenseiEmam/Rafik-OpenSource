@@ -1,5 +1,9 @@
 # Current delivery ledger
 
+## Backend CI and contributor coordination review — 23 October 2026
+
+PR #142's backend job failed in the fresh-database harness while replaying historical role-normalization SQL against renamed tables. The harness now applies the existing identifier map to both historical role and coaching snippets; deployed migration files remain unchanged. Review of Sami's PR #143 supports GitHub-based coordination and per-PR change notes, but recommends a separate main-branch tooling merge after incomplete-read reporting, current watched paths, compiler recovery, and contributor/agent authorization guidance are corrected. It has not been merged into this release branch.
+
 ## Institution naming migration — 23 October 2026
 
 Founder approved replacing workspace/organization identifiers across schema, API and clients. Added the forward rename, canonical `/v1/institution` dispatch and one legacy transport adapter. Web/Android source now uses institution fields/routes; browser workout hydration and native credentials retain previous identity fields without changing durable payloads or owner tuple order. [ADR 0029](../decisions/ADR-0029-institution-identifiers.md) records the boundary and coordinated upgrade order. Preservation, focused API/native queue/identity and type checks passed; canonical fixture sources and inventories are updated. The final frozen-source Chromium first-run/People smoke passed with inspected English desktop and Arabic phone empty states; verification records the exact coverage and limits. This does not complete the remaining beta.3 scheduling/group/native-workout scope.

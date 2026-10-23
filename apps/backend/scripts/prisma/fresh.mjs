@@ -5,6 +5,16 @@ import { resolve } from "node:path";
 import { composeFile, dockerCompose, repositoryRoot } from "./docker.mjs";
 const root = resolve(import.meta.dirname, "../.."),
   name = "rafik_check_" + Date.now();
+// Rehearse historical SQL against the current disposable schema without editing
+// deployed migration sources or checksums. Include embedded constraint names.
+const institutionNames = JSON.parse(
+  readFileSync(resolve(root, "scripts/institution-names.json"), "utf8"),
+);
+const currentIdentifiers = (source) => {
+  for (const [before, after] of Object.entries(institutionNames))
+    source = source.replaceAll(before, after);
+  return source.replaceAll("workspace_id", "institution_id");
+};
 if (
   !readFileSync(composeFile, "utf8").startsWith(
     "name: ${RAFIK_INSTANCE_ID:-rafik-prisma-local}",
@@ -54,12 +64,14 @@ try {
     },
   );
   sql(name, readFileSync(resolve(root, "prisma/seed.sql"), "utf8"));
-  const roleMigration = readFileSync(
-    resolve(
-      root,
-      "prisma/migrations/202610171100_single_membership_roles/migration.sql",
+  const roleMigration = currentIdentifiers(
+    readFileSync(
+      resolve(
+        root,
+        "prisma/migrations/202610171100_single_membership_roles/migration.sql",
+      ),
+      "utf8",
     ),
-    "utf8",
   );
   sql(
     name,
@@ -84,12 +96,14 @@ ROLLBACK;`,
   );
   // Coaching links: the trigger mirrors seeded trainer_id rows, and the migration backfill
   // recreates primary links from trainer_id alone.
-  const coachingMigration = readFileSync(
-    resolve(
-      root,
-      "prisma/migrations/202610191300_coaching_links/migration.sql",
+  const coachingMigration = currentIdentifiers(
+    readFileSync(
+      resolve(
+        root,
+        "prisma/migrations/202610191300_coaching_links/migration.sql",
+      ),
+      "utf8",
     ),
-    "utf8",
   );
   const backfill = coachingMigration.match(
     /insert into public\.institution_coaching_links[\s\S]*?where m\.trainer_id is not null;/,
