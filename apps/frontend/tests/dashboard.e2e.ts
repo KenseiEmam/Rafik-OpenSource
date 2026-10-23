@@ -152,7 +152,7 @@ test('dashboard keeps navigation stable and analytics readable through filters, 
       el.scrollTop = 100
     })
     await page
-      .getByRole('navigation', { name: 'Workspace navigation' })
+      .getByRole('navigation', { name: 'Institution navigation' })
       .getByRole('link', { name: 'Appointments', exact: true })
       .click()
     await expect(page.getByRole('heading', { name: 'Appointments', exact: true })).toBeVisible()

@@ -8,7 +8,7 @@ import { language as l, errorMessage } from '../../lib/i18n'
 import { useCommand } from '../../lib/commands'
 import CommandStatus from '../../components/CommandStatus.vue'
 const props = defineProps<{
-    workspace: string
+    institution: string
     view: string
     event: string
     member: string
@@ -18,7 +18,7 @@ const props = defineProps<{
     writable: boolean
   }>(),
   emit = defineEmits<{ saved: [] }>(),
-  key = `session-note:${user.value!.id}:${props.workspace}:${props.event}:${props.member}`
+  key = `session-note:${user.value!.id}:${props.institution}:${props.event}:${props.member}`
 const text = ref(props.note),
   revision = ref(props.revision),
   ready = ref(false),
@@ -39,7 +39,7 @@ const command = useCommand<'note'>(
     editing.value = false
   },
   (_, args) =>
-    request(`/v1/workspaces/${props.workspace}/calendar`, {
+    request(`/v1/institution/calendar`, {
       method: 'POST',
       body: JSON.stringify(args),
     }),
@@ -79,7 +79,7 @@ async function reloadSaved() {
   try {
     const latest = await request<{
       people: { member_id: string; session_note: string; revision: number }[]
-    }>(`/v1/workspaces/${props.workspace}/calendar?view=${props.view}&id=${props.event}`)
+    }>(`/v1/institution/calendar?view=${props.view}&id=${props.event}`)
     const person = latest.people.find((p) => p.member_id === props.member)
     if (!person) throw Error('trainee_unavailable')
     ready.value = false

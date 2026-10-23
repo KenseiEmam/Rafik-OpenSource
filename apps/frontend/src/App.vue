@@ -19,7 +19,7 @@ import { localPreview } from './lib/backend'
 import { syncPending } from './lib/training'
 import { brandingLogoUrl, instanceBranding, loadBranding, syncAccentContrast } from './lib/branding'
 const route = useRoute()
-const currentContext = computed(() => contexts.value.find((c) => c.kind === 'organization'))
+const currentContext = computed(() => contexts.value.find((c) => c.kind === 'institution'))
 const messaging = computed(
   () =>
     /^\/messages(\/|$)/.test(route.path) ||
@@ -31,13 +31,13 @@ const product = computed(
   () =>
     user.value &&
     !['/', '/login', '/privacy', '/help', '/local-preview'].includes(route.path) &&
-    !route.path.startsWith('/organization-invite/'),
+    !route.path.startsWith('/invitation/'),
 )
 const dashboard = computed(
   () =>
     product.value &&
     !focused.value &&
-    currentContext.value?.kind === 'organization' &&
+    currentContext.value?.kind === 'institution' &&
     !['/access', '/platform'].includes(route.path),
 )
 const dashboardBase = computed(() => '')
@@ -80,7 +80,10 @@ onUnmounted(() => window.removeEventListener('online', online))
     :class="{ 'dashboard-frame': dashboard, 'conversation-frame': messaging }"
   >
     <a class="skip-link" href="#main">{{ language('Skip to content', 'انتقل إلى المحتوى') }}</a>
-    <header class="site-header" :class="{ compact: focused, 'workspace-header': user && !focused }">
+    <header
+      class="site-header"
+      :class="{ compact: focused, 'institution-header': user && !focused }"
+    >
       <div class="header-inner">
         <DialogRoot v-if="dashboard" v-model:open="menuOpen">
           <DialogTrigger
@@ -180,7 +183,7 @@ onUnmounted(() => window.removeEventListener('online', online))
     <aside
       v-if="dashboard"
       class="dashboard-sidebar"
-      :aria-label="language('Workspace sidebar', 'الشريط الجانبي لمساحة العمل')"
+      :aria-label="language('Institution sidebar', 'الشريط الجانبي لمساحة العمل')"
     >
       <DashboardNav :base="dashboardBase" :role="currentContext?.role || 'admin'" />
       <div class="dashboard-utilities">

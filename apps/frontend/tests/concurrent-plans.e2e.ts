@@ -24,13 +24,13 @@ test('coach adds a concurrent goal-specific plan, the athlete sees both, then pl
   const f = await teamFixture(),
     athleteContext = await browser.newContext(),
     athletePage = await athleteContext.newPage(),
-    workspace = randomUUID(),
-    endpoint = `/v1/workspaces/${workspace}`,
+    institution = randomUUID(),
+    endpoint = `/v1/institution`,
     today = new Date().toISOString().slice(0, 10)
   try {
-    await f.call(f.owner, '/v1/workspaces', {
-      id: workspace,
-      kind: 'organization',
+    await f.call(f.owner, '/v1/institutions', {
+      id: institution,
+      kind: 'institution',
       name: 'Madar concurrent plans',
     })
     for (const [person, roles] of [
@@ -46,7 +46,7 @@ test('coach adds a concurrent goal-specific plan, the athlete sees both, then pl
         roles,
         token,
       })
-      await f.call(person, `/v1/organization-invitations/${token}`, {})
+      await f.call(person, `/v1/invitations/${token}`, {})
     }
     let people = await f.call(f.owner, `${endpoint}?view=admin`)
     const coach = people.members.find((m: any) => m.user_id === f.coach.id)

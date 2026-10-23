@@ -51,7 +51,7 @@ async function enter(role: 'orgadmin' | 'orgtrainer' | 'orgtrainee' | 'operator'
       <p class="preview-context">
         {{
           language(
-            'Each institution owns its people, programs and training history. Choose an administrator, coach or athlete account to explore its workspace.',
+            'Each institution owns its people, programs and training history. Choose an administrator, coach or athlete account to explore its institution.',
             'لكل مؤسسة أفرادها وبرامجها وسجلها التدريبي. اختر حساب مسؤول أو مدرب أو رياضي لاستكشاف مساحة عمله.',
           )
         }}

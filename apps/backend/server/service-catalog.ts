@@ -9,7 +9,7 @@ import {
   type Tx,
   type Role,
   access,
-} from "./workspaces.ts";
+} from "./institution.ts";
 import { role, recipient } from "./programming.ts";
 import { definition, ids, pageOffset } from "./service-definitions.ts";
 import type { Prisma } from "./generated/prisma/client.ts";
@@ -28,7 +28,7 @@ export async function serviceCatalog(
       search = (q.get("search") || "").slice(0, 100),
       kind = q.get("kind");
     const where = {
-      workspace_id: id,
+      institution_id: id,
       ...(q.get("id") ? { id: uuid(q.get("id")) } : {}),
       ...(view === "trainer" ? { created_by: self.id } : {}),
       archived: q.get("archived") === "true",
@@ -54,15 +54,15 @@ export async function serviceCatalog(
       name: { contains: search, mode: "insensitive" as const },
     };
     const [items, total] = await Promise.all([
-      tx.organization_groups.findMany({
+      tx.institution_groups.findMany({
         where: filter,
         take,
         skip: page,
         orderBy: [{ name: "asc" }, { id: "asc" }],
         include: {
-          organization_group_members: {
+          institution_group_members: {
             include: {
-              workspace_members: {
+              institution_members: {
                 select: {
                   id: true,
                   name: true,
@@ -75,13 +75,13 @@ export async function serviceCatalog(
           },
         },
       }),
-      tx.organization_groups.count({ where: filter }),
+      tx.institution_groups.count({ where: filter }),
     ]);
     return {
       items: items.map((g) => ({
         ...g,
-        organization_group_members: undefined,
-        members: g.organization_group_members.map((x) => x.workspace_members),
+        institution_group_members: undefined,
+        members: g.institution_group_members.map((x) => x.institution_members),
       })),
       total,
       next: page + take < total ? page + take : null,
@@ -104,10 +104,10 @@ export async function serviceCatalogCommand(
   async function owned(tx: Tx, self: Self) {
     const item = isTemplate
       ? await tx.assessment_templates.findUnique({ where: { id: key } })
-      : await tx.organization_groups.findUnique({ where: { id: key } });
+      : await tx.institution_groups.findUnique({ where: { id: key } });
     if (
       item &&
-      (item.workspace_id !== id ||
+      (item.institution_id !== id ||
         (view !== "admin" && item.created_by !== self.id))
     )
       throw new ApiError(403, "forbidden");
@@ -138,18 +138,23 @@ export async function serviceCatalogCommand(
               data: { ...data, revision: { increment: 1 } },
             })
           : await tx.assessment_templates.create({
-              data: { ...data, id: key, workspace_id: id, created_by: self.id },
+              data: {
+                ...data,
+                id: key,
+                institution_id: id,
+                created_by: self.id,
+              },
             });
         await event(tx, actor, id, "assessment_template_updated", key);
         return result;
       }
       const members = ids(input.members, 100, 0);
       for (const memberId of members) {
-        const member = await tx.workspace_members.findUnique({
+        const member = await tx.institution_members.findUnique({
           where: { id: memberId },
         });
         if (
-          member?.workspace_id === id &&
+          member?.institution_id === id &&
           member.active &&
           member.roles.includes("trainer")
         ) {
@@ -160,19 +165,19 @@ export async function serviceCatalogCommand(
       }
       const data = { name: textValue(input.name), archived: input.archived };
       const result = old
-        ? await tx.organization_groups.update({
+        ? await tx.institution_groups.update({
             where: { id: key },
             data: { ...data, revision: { increment: 1 } },
           })
-        : await tx.organization_groups.create({
-            data: { ...data, id: key, workspace_id: id, created_by: self.id },
+        : await tx.institution_groups.create({
+            data: { ...data, id: key, institution_id: id, created_by: self.id },
           });
-      await tx.organization_group_members.deleteMany({
+      await tx.institution_group_members.deleteMany({
         where: { group_id: key },
       });
-      await tx.organization_group_members.createMany({
+      await tx.institution_group_members.createMany({
         data: members.map((member_id) => ({
-          workspace_id: id,
+          institution_id: id,
           group_id: key,
           member_id,
         })),

@@ -10,7 +10,7 @@ const base = apiOrigin,
   spaces: string[] = [];
 type Person = { id: string; email: string; cookie: string };
 after(async () => {
-  await db.workspaces.deleteMany({ where: { id: { in: spaces } } });
+  await db.institutions.deleteMany({ where: { id: { in: spaces } } });
   await db.users.deleteMany({ where: { id: { in: people } } });
   await db.$disconnect();
 });
@@ -34,7 +34,7 @@ async function person(name: string): Promise<Person> {
   return p;
 }
 async function call(p: Person, path: string, input?: unknown) {
-  if (path === "/v1/workspaces" && input)
+  if (path === "/v1/institutions" && input)
     return fixtureInstitution(p, input as Record<string, unknown>);
   const r = await fetch(base + path, {
     method: input === undefined ? "GET" : "POST",
@@ -56,7 +56,7 @@ async function institution(admin: Person, name: string) {
   const id = randomUUID();
   spaces.push(id);
   assert.equal(
-    (await call(admin, "/v1/workspaces", { id, kind: "organization", name }))
+    (await call(admin, "/v1/institutions", { id, kind: "organization", name }))
       .status,
     200,
   );
@@ -66,7 +66,7 @@ async function join(admin: Person, id: string, p: Person, role: string) {
   const token = randomBytes(32).toString("hex");
   const r = await call(
     admin,
-    "/v1/workspaces/" + id,
+    "/v1/institution",
     operation("invite", {
       id: randomUUID(),
       email: p.email,
@@ -75,13 +75,10 @@ async function join(admin: Person, id: string, p: Person, role: string) {
     }),
   );
   assert.equal(r.status, 200, JSON.stringify(r));
-  assert.equal(
-    (await call(p, "/v1/organization-invitations/" + token, {})).status,
-    200,
-  );
+  assert.equal((await call(p, "/v1/invitations/" + token, {})).status, 200);
 }
 async function member(admin: Person, id: string, p: Person) {
-  const r = await call(admin, `/v1/workspaces/${id}?view=admin`);
+  const r = await call(admin, `/v1/institution?view=admin`);
   return r.data.members.find((m: { user_id: string }) => m.user_id === p.id);
 }
 const sport = (id: string, name: string, kind = "sport") =>
@@ -101,7 +98,7 @@ test("delegated workout logging: coach attribution, athlete correction, history,
     outsider = await person("Delegated Outsider"),
     athlete = await person("Delegated Athlete"),
     id = await institution(admin, "Delegated logging institution"),
-    ws = `/v1/workspaces/${id}`;
+    ws = `/v1/institution`;
   for (const [p, role] of [
     [primary, "trainer"],
     [support, "trainer"],
@@ -255,7 +252,7 @@ test("delegated workout logging: coach attribution, athlete correction, history,
     (await call(primary, ws + "/sessions", save)).data,
     saved.data,
   );
-  const receipt = await db.workspace_operations.findUnique({
+  const receipt = await db.institution_operations.findUnique({
     where: { id: save.operation },
   });
   assert.equal(
@@ -303,7 +300,7 @@ test("delegated workout logging: coach attribution, athlete correction, history,
   assert.equal(corrected.status, 200, JSON.stringify(corrected));
   const history = await call(
     athlete,
-    `/v1/organization-sessions/${delegated.data.id}/history?view=trainee`,
+    `/v1/workouts/${delegated.data.id}/history?view=trainee`,
   );
   assert.equal(history.status, 200, JSON.stringify(history));
   assert.deepEqual(
@@ -320,7 +317,7 @@ test("delegated workout logging: coach attribution, athlete correction, history,
     (
       await call(
         support,
-        `/v1/organization-sessions/${delegated.data.id}/history?view=trainer`,
+        `/v1/workouts/${delegated.data.id}/history?view=trainer`,
       )
     ).status,
     403,
@@ -329,7 +326,7 @@ test("delegated workout logging: coach attribution, athlete correction, history,
     (
       await call(
         support,
-        `/v1/organization-sessions/${supported.data.id}/history?view=trainer`,
+        `/v1/workouts/${supported.data.id}/history?view=trainer`,
       )
     ).status,
     200,
@@ -338,7 +335,7 @@ test("delegated workout logging: coach attribution, athlete correction, history,
     (
       await call(
         outsider,
-        `/v1/organization-sessions/${delegated.data.id}/history?view=trainer`,
+        `/v1/workouts/${delegated.data.id}/history?view=trainer`,
       )
     ).status,
     403,

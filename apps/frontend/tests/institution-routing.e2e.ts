@@ -10,13 +10,13 @@ test('flat routes preserve legacy bookmarks, derive roles and retire Tasks', asy
   const f = await teamFixture(),
     id = randomUUID()
   try {
-    await f.call(f.owner, '/v1/workspaces', {
+    await f.call(f.owner, '/v1/institutions', {
       id,
-      kind: 'organization',
+      kind: 'institution',
       name: 'Routing institution',
     })
     const token = randomBytes(32).toString('hex')
-    await f.call(f.owner, `/v1/workspaces/${id}`, {
+    await f.call(f.owner, `/v1/institution`, {
       operation: randomUUID(),
       action: 'invite',
       id: randomUUID(),
@@ -24,7 +24,7 @@ test('flat routes preserve legacy bookmarks, derive roles and retire Tasks', asy
       roles: ['trainer'],
       token,
     })
-    await f.call(f.coach, `/v1/organization-invitations/${token}`, {})
+    await f.call(f.coach, `/v1/invitations/${token}`, {})
     await f.login(page, f.owner, '/dashboard')
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
     const draftKeys = [
@@ -93,7 +93,7 @@ test('flat routes preserve legacy bookmarks, derive roles and retire Tasks', asy
     await expect(page.getByRole('heading', { name: 'Institution access' })).toBeVisible()
     await page.getByRole('button', { name: 'Retry', exact: true }).click()
     await expect(page).toHaveURL(/\/dashboard$/)
-    for (const path of ['/workspaces', '/tasks', '/coach/forms', '/checkins', '/teams']) {
+    for (const path of ['/institutions', '/tasks', '/coach/forms', '/checkins', '/teams']) {
       await page.goto(path)
       await expect(page.getByRole('heading', { name: 'That page isn’t here.' })).toBeVisible()
     }

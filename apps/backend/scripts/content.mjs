@@ -52,10 +52,10 @@ const outputs = [
       readFileSync(resolve(root, "prisma/fixtures/history.sql"), "utf8") +
       readFileSync(resolve(root, "prisma/fixtures/coaching.sql"), "utf8") +
       readFileSync(resolve(root, "prisma/fixtures/business.sql"), "utf8") +
-      readFileSync(resolve(root, "prisma/fixtures/workspaces.sql"), "utf8") +
+      readFileSync(resolve(root, "prisma/fixtures/institutions.sql"), "utf8") +
       readFileSync(resolve(root, "prisma/fixtures/programming.sql"), "utf8") +
       readFileSync(
-        resolve(root, "prisma/fixtures/organization-services.sql"),
+        resolve(root, "prisma/fixtures/institution-services.sql"),
         "utf8",
       ) +
       readFileSync(resolve(root, "prisma/fixtures/communication.sql"), "utf8") +
@@ -98,10 +98,7 @@ const videos = readFileSync(
   resolve(root, "content/exercise-videos.json"),
   "utf8",
 );
-outputs.push([
-  resolve(web, "src/content/exercise-videos.json"),
-  videos,
-]);
+outputs.push([resolve(web, "src/content/exercise-videos.json"), videos]);
 const wger = JSON.parse(
   readFileSync(
     resolve(root, "content/upstream/wger/exercise-snapshot.json"),

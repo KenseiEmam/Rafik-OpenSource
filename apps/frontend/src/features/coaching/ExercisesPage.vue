@@ -125,7 +125,7 @@ const illustration = (e: Exercise) =>
     : media.items.find((item) =>
         e.media_ref
           ? item.id === e.media_ref
-          : !e.owner_id && !e.workspace_id && item.exerciseId === e.id,
+          : !e.owner_id && !e.institution_id && item.exerciseId === e.id,
       )
 const instructions = computed(() => {
   const e = selectedExercise.value
@@ -289,7 +289,7 @@ async function findResources(more = false) {
   const read = ++resourceRead
   try {
     const result = await request<{ items: UploadedAsset[]; next: number | null }>(
-      `/v1/workspaces/${context.workspace}/assets?` +
+      `/v1/institution/assets?` +
         new URLSearchParams({
           view: context.view,
           search: resourceSearch.value,
@@ -527,7 +527,7 @@ onMounted(async () => {
               }}<textarea v-model="editing.instructions" required rows="4" maxlength="2000" />
             </label>
             <ResourceUpload
-              :workspace="context.workspace"
+              :institution="context.institution"
               :view="context.view"
               purpose="exercise"
               @uploaded="uploaded"
@@ -732,7 +732,7 @@ onMounted(async () => {
           )
         }}
       </p>
-      <div v-else class="catalog-workspace" :class="{ 'show-detail': mobileDetail }">
+      <div v-else class="catalog-institution" :class="{ 'show-detail': mobileDetail }">
         <section
           class="catalog-list-pane"
           :aria-label="language('Exercise results', 'نتائج التمارين')"
@@ -914,7 +914,7 @@ onMounted(async () => {
 .catalog-summary p {
   margin: 0;
 }
-.catalog-workspace {
+.catalog-institution {
   display: grid;
   grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.4fr);
   height: min(720px, calc(100dvh - 385px));
@@ -1091,7 +1091,7 @@ onMounted(async () => {
     display: none;
   }
 
-  .catalog-workspace {
+  .catalog-institution {
     display: block;
     height: auto;
     min-height: 0;
@@ -1106,10 +1106,10 @@ onMounted(async () => {
     display: none;
     padding: 18px;
   }
-  .catalog-workspace.show-detail .catalog-list-pane {
+  .catalog-institution.show-detail .catalog-list-pane {
     display: none;
   }
-  .catalog-workspace.show-detail .catalog-detail {
+  .catalog-institution.show-detail .catalog-detail {
     display: block;
   }
   .catalog-back {

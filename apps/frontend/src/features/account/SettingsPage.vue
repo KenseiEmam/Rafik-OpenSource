@@ -60,7 +60,7 @@ async function exportData() {
     )
     download(
       {
-        organizations: await request('/v1/account/organizations'),
+        organizations: await request('/v1/account/institution'),
         exportedAt: new Date().toISOString(),
         profile: profile.value,
         sessions: records,

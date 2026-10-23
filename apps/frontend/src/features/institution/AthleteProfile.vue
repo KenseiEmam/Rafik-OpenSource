@@ -19,11 +19,11 @@ import type { Member, Sport } from './types'
  * are a convenience, never the permission boundary (the API refuses anything out of scope).
  */
 const route = useRoute(),
-  workspace = institutionContext().workspace,
+  institution = institutionContext().institution,
   view = institutionContext().view,
   memberId = String(route.params.member),
   base = '',
-  ws = `/v1/workspaces/${workspace}`
+  ws = `/v1/institution`
 // Sections report refusals inline, so these reads never raise global error toasts.
 const backPath = computed(() => {
   const target = String(route.query.returnTo || '')
@@ -127,7 +127,7 @@ async function load() {
   if (!alive) return
   const current = ++epoch
   await fill(overview, async () => {
-    const [workspaceView, people, list] = await Promise.all([
+    const [institutionView, people, list] = await Promise.all([
       get<{ self: { id: string } }>(`${ws}?view=${view}&summary=false`),
       get<{
         member: Member
@@ -138,7 +138,7 @@ async function load() {
     ])
     if (!alive || current !== epoch) throw new Error('Cancelled')
     analytics.value = people.analytics
-    self.value = workspaceView.self.id
+    self.value = institutionView.self.id
     names.value = people.names
     sports.value = list.items
     const found = people.member
@@ -640,7 +640,7 @@ onMounted(load)
           class="profile-tab-panel"
           ><section>
             <MemberManagement
-              :workspace-id="workspace"
+              :institution-id="institution"
               :member="member"
               :sports="sports"
               :names="names"

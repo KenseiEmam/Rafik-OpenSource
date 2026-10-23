@@ -52,14 +52,16 @@ export async function access(
   roles: Role[] = [],
   allowArchived = false,
 ) {
-  const member = await tx.workspace_members.findUnique({
-    where: { workspace_id_user_id: { workspace_id: id, user_id: actor.id } },
-    include: { workspaces: true },
+  const member = await tx.institution_members.findUnique({
+    where: {
+      institution_id_user_id: { institution_id: id, user_id: actor.id },
+    },
+    include: { institutions: true },
   });
   if (
     !member?.active ||
-    (member.workspaces.archived && !allowArchived) ||
-    member.workspaces.kind !== "organization" ||
+    (member.institutions.archived && !allowArchived) ||
+    member.institutions.kind !== "organization" ||
     (roles.length && !roles.includes(primaryRole(member.roles)!))
   )
     throw new ApiError(403, "workspace_unavailable");
@@ -73,9 +75,9 @@ export async function event(
   subject: string | null,
   detail: Prisma.InputJsonValue = {},
 ) {
-  await tx.workspace_events.create({
+  await tx.institution_audit_events.create({
     data: {
-      workspace_id: id,
+      institution_id: id,
       actor_id: actor.id,
       kind,
       subject_id: subject,
@@ -118,7 +120,7 @@ export async function mutation(
     roles,
     async (tx, member) => {
       await authorize?.(tx, member);
-      const existing = await tx.workspace_operations.findUnique({
+      const existing = await tx.institution_operations.findUnique({
         where: { id: operation },
       });
       // Canonical object ordering makes retries stable across serialization implementations.
@@ -135,7 +137,7 @@ export async function mutation(
       const payload = canonical(input) as Prisma.InputJsonValue;
       if (existing) {
         if (
-          existing.workspace_id !== id ||
+          existing.institution_id !== id ||
           existing.actor_id !== actor.id ||
           JSON.stringify(canonical(existing.payload)) !==
             JSON.stringify(payload)
@@ -143,15 +145,15 @@ export async function mutation(
           throw new ApiError(409, "operation_reused");
         return existing.result;
       }
-      if (member.workspaces.archived)
+      if (member.institutions.archived)
         throw new ApiError(403, "workspace_unavailable");
       const result = JSON.parse(
         JSON.stringify(await run(tx, member)),
       ) as Prisma.InputJsonValue;
-      await tx.workspace_operations.create({
+      await tx.institution_operations.create({
         data: {
           id: operation,
-          workspace_id: id,
+          institution_id: id,
           actor_id: actor.id,
           payload,
           result,
@@ -163,13 +165,13 @@ export async function mutation(
   );
 }
 export async function contexts(actor: Actor) {
-  const memberships = await db.workspace_members.findMany({
+  const memberships = await db.institution_members.findMany({
     where: {
       user_id: actor.id,
       active: true,
-      workspaces: { archived: false, kind: "organization" },
+      institutions: { archived: false, kind: "organization" },
     },
-    include: { workspaces: true },
+    include: { institutions: true },
     orderBy: { joined_at: "asc" },
   });
   return {
@@ -179,11 +181,11 @@ export async function contexts(actor: Actor) {
           return role
             ? [
                 {
-                  id: m.workspace_id + ":" + role,
-                  workspace_id: m.workspace_id,
+                  id: m.institution_id + ":" + role,
+                  institution_id: m.institution_id,
                   member_id: m.id,
-                  kind: m.workspaces.kind,
-                  name: m.workspaces.name,
+                  kind: m.institutions.kind,
+                  name: m.institutions.name,
                   role,
                   path: "/dashboard",
                 },
@@ -210,7 +212,7 @@ async function ownName(actor: Actor) {
       "Member",
   );
 }
-export async function workspaceView(
+export async function institutionView(
   actor: Actor,
   id: string,
   view: string,
@@ -228,8 +230,8 @@ export async function workspaceView(
     const members =
       query.get("summary") === "true"
         ? []
-        : await tx.workspace_members.findMany({
-            where: { workspace_id: id, ...filter },
+        : await tx.institution_members.findMany({
+            where: { institution_id: id, ...filter },
             include: {
               users: {
                 select: { email: true },
@@ -240,8 +242,8 @@ export async function workspaceView(
     const ids = new Set(members.map((m) => m.id));
     ids.add(self.id);
     if (self.trainer_id) ids.add(self.trainer_id);
-    const names = await tx.workspace_members.findMany({
-      where: { workspace_id: id, id: { in: [...ids] } },
+    const names = await tx.institution_members.findMany({
+      where: { institution_id: id, id: { in: [...ids] } },
       select: {
         id: true,
         name: true,
@@ -249,9 +251,9 @@ export async function workspaceView(
     });
     const invitations =
       view === "admin"
-        ? await tx.workspace_invitations.findMany({
+        ? await tx.institution_invitations.findMany({
             where: {
-              workspace_id: id,
+              institution_id: id,
               state: "pending",
               expires_at: { gt: new Date() },
             },
@@ -263,8 +265,8 @@ export async function workspaceView(
         : [];
     const events =
       view === "admin"
-        ? await tx.workspace_events.findMany({
-            where: { workspace_id: id },
+        ? await tx.institution_audit_events.findMany({
+            where: { institution_id: id },
             orderBy: [{ created_at: "desc" }, { id: "desc" }],
             take: 31,
             skip: pageOffset(query.get("eventOffset")),
@@ -272,9 +274,9 @@ export async function workspaceView(
         : [];
     return {
       summary: {
-        trainees: await tx.workspace_members.count({
+        trainees: await tx.institution_members.count({
           where: {
-            workspace_id: id,
+            institution_id: id,
             ...filter,
             active: true,
             roles: { has: "trainee" },
@@ -282,9 +284,9 @@ export async function workspaceView(
         }),
         trainers:
           view === "admin"
-            ? await tx.workspace_members.count({
+            ? await tx.institution_members.count({
                 where: {
-                  workspace_id: id,
+                  institution_id: id,
                   active: true,
                   roles: { has: "trainer" },
                 },
@@ -292,9 +294,9 @@ export async function workspaceView(
             : 0,
         unassigned:
           view === "admin"
-            ? await tx.workspace_members.count({
+            ? await tx.institution_members.count({
                 where: {
-                  workspace_id: id,
+                  institution_id: id,
                   active: true,
                   roles: { has: "trainee" },
                   trainer_id: null,
@@ -302,10 +304,10 @@ export async function workspaceView(
               })
             : 0,
       },
-      workspace: {
+      institution: {
         id,
-        name: self.workspaces.name,
-        revision: self.workspaces.revision,
+        name: self.institutions.name,
+        revision: self.institutions.revision,
       },
       self: { id: self.id, roles: self.roles },
       members: members.map(({ users, ...m }) => ({
@@ -330,7 +332,7 @@ export async function workspaceView(
 }
 async function invitationSports(
   tx: Tx,
-  workspace: string,
+  institution: string,
   roles: string[],
   value: unknown,
 ) {
@@ -343,9 +345,9 @@ async function invitationSports(
     (roles.includes("admin") && ids.length)
   )
     throw new ApiError(400, "invalid_request");
-  const found = await tx.organization_sports.findMany({
+  const found = await tx.institution_sports.findMany({
     where: {
-      workspace_id: workspace,
+      institution_id: institution,
       id: { in: ids },
       archived: false,
       ...(roles.includes("trainee") ? { kind: "sport" } : {}),
@@ -358,16 +360,16 @@ async function invitationSports(
 async function applyInvitationSports(
   tx: Tx,
   invite: {
-    workspace_id: string;
+    institution_id: string;
     roles: string[];
     sport_ids: string[];
     created_by?: string | null;
   },
   member: string,
 ) {
-  const sports = await tx.organization_sports.findMany({
+  const sports = await tx.institution_sports.findMany({
     where: {
-      workspace_id: invite.workspace_id,
+      institution_id: invite.institution_id,
       id: { in: invite.sport_ids },
       ...(invite.roles.includes("trainee") ? { kind: "sport" } : {}),
     },
@@ -375,29 +377,29 @@ async function applyInvitationSports(
   });
   if (sports.length !== invite.sport_ids.length)
     throw new ApiError(400, "sport_unavailable");
-  await tx.organization_member_sports.deleteMany({
-    where: { workspace_id: invite.workspace_id, member_id: member },
+  await tx.institution_member_sports.deleteMany({
+    where: { institution_id: invite.institution_id, member_id: member },
   });
   const inviter = invite.created_by
-    ? await tx.workspace_members.findFirst({
+    ? await tx.institution_members.findFirst({
         where: {
-          workspace_id: invite.workspace_id,
+          institution_id: invite.institution_id,
           user_id: invite.created_by,
         },
         select: { id: true },
       })
     : null;
   if (sports.length)
-    await tx.organization_member_sports.createMany({
+    await tx.institution_member_sports.createMany({
       data: sports.map((s) => ({
-        workspace_id: invite.workspace_id,
+        institution_id: invite.institution_id,
         member_id: member,
         sport_id: s.id,
         created_by: inviter?.id || member,
       })),
     });
 }
-export async function workspaceCommand(
+export async function institutionCommand(
   actor: Actor,
   id: string,
   input: Record<string, unknown>,
@@ -419,15 +421,15 @@ export async function workspaceCommand(
       )
         throw new ApiError(400, "invalid_request");
       if (
-        await tx.workspace_members.findFirst({
-          where: { workspace_id: id, active: true, users: { email } },
+        await tx.institution_members.findFirst({
+          where: { institution_id: id, active: true, users: { email } },
         })
       )
         throw new ApiError(409, "already_member");
       if (
-        await tx.workspace_invitations.findFirst({
+        await tx.institution_invitations.findFirst({
           where: {
-            workspace_id: id,
+            institution_id: id,
             email,
             state: "pending",
             expires_at: { gt: new Date() },
@@ -436,10 +438,10 @@ export async function workspaceCommand(
       )
         throw new ApiError(409, "invitation_pending");
       const sportIds = await invitationSports(tx, id, roles, input.sports);
-      const result = await tx.workspace_invitations.create({
+      const result = await tx.institution_invitations.create({
         data: {
           id: invite,
-          workspace_id: id,
+          institution_id: id,
           email,
           roles,
           sport_ids: sportIds,
@@ -454,8 +456,8 @@ export async function workspaceCommand(
       return { id: result.id };
     }
     if (action === "password-link") {
-      const member = await tx.workspace_members.findFirst({
-        where: { id: uuid(input.id), workspace_id: id, active: true },
+      const member = await tx.institution_members.findFirst({
+        where: { id: uuid(input.id), institution_id: id, active: true },
       });
       const token = textValue(input.token, 64);
       if (!member?.user_id || !/^[a-f0-9]{64}$/.test(token))
@@ -467,7 +469,7 @@ export async function workspaceCommand(
         data: {
           token_hash: hash(token),
           user_id: member.user_id,
-          workspace_id: id,
+          institution_id: id,
           created_by: actor.id,
           expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),
         },
@@ -476,11 +478,11 @@ export async function workspaceCommand(
       return { saved: true };
     }
     if (action === "revoke-invite") {
-      const invite = await tx.workspace_invitations.findFirst({
-        where: { id: uuid(input.id), workspace_id: id, state: "pending" },
+      const invite = await tx.institution_invitations.findFirst({
+        where: { id: uuid(input.id), institution_id: id, state: "pending" },
       });
       if (!invite) throw new ApiError(404, "invitation_unavailable");
-      await tx.workspace_invitations.update({
+      await tx.institution_invitations.update({
         where: { id: invite.id },
         data: { state: "revoked" },
       });
@@ -492,8 +494,8 @@ export async function workspaceCommand(
     if (action === "end-coach-link")
       return endSupportingCoach(tx, actor, id, self.id, input);
     if (action === "member" || action === "assign-trainer") {
-      const member = await tx.workspace_members.findFirst({
-        where: { id: uuid(input.id), workspace_id: id },
+      const member = await tx.institution_members.findFirst({
+        where: { id: uuid(input.id), institution_id: id },
       });
       if (!member) throw new ApiError(404, "member_unavailable");
       if (member.revision !== input.revision)
@@ -504,10 +506,10 @@ export async function workspaceCommand(
         const trainer =
           input.trainer === null
             ? null
-            : await tx.workspace_members.findFirst({
+            : await tx.institution_members.findFirst({
                 where: {
                   id: uuid(input.trainer),
-                  workspace_id: id,
+                  institution_id: id,
                   active: true,
                   roles: { has: "trainer" },
                 },
@@ -515,7 +517,7 @@ export async function workspaceCommand(
         if ((input.trainer !== null && !trainer) || trainer?.id === member.id)
           throw new ApiError(400, "invalid_trainer");
         await setPrimary(tx, id, member.id, trainer?.id || null, self.id);
-        const result = await tx.workspace_members.update({
+        const result = await tx.institution_members.update({
           where: { id: member.id },
           data: { trainer_id: trainer?.id || null, revision: { increment: 1 } },
         });
@@ -532,18 +534,18 @@ export async function workspaceCommand(
       if (
         member.roles.includes("admin") &&
         (!active || !roles.includes("admin")) &&
-        (await tx.workspace_members.count({
-          where: { workspace_id: id, active: true, roles: { has: "admin" } },
+        (await tx.institution_members.count({
+          where: { institution_id: id, active: true, roles: { has: "admin" } },
         })) <= 1
       )
         throw new ApiError(409, "last_admin");
       // Departure leaves visible unassigned duties, without transferring or deleting any trainee record.
       if (!active || !roles.includes("trainer"))
-        await tx.workspace_members.updateMany({
-          where: { workspace_id: id, trainer_id: member.id },
+        await tx.institution_members.updateMany({
+          where: { institution_id: id, trainer_id: member.id },
           data: { trainer_id: null, revision: { increment: 1 } },
         });
-      const result = await tx.workspace_members.update({
+      const result = await tx.institution_members.update({
         where: { id: member.id },
         data: {
           roles,
@@ -567,11 +569,11 @@ export async function workspaceCommand(
       return result;
     }
     if (action === "rename" || action === "close") {
-      if (self.workspaces.revision !== input.revision)
+      if (self.institutions.revision !== input.revision)
         throw new ApiError(409, "conflict");
-      if (action === "close" && input.confirm !== self.workspaces.name)
+      if (action === "close" && input.confirm !== self.institutions.name)
         throw new ApiError(400, "name_confirmation_required");
-      const result = await tx.workspaces.update({
+      const result = await tx.institutions.update({
         where: { id },
         data:
           action === "close"
@@ -597,20 +599,20 @@ export async function invitation(
 ) {
   if (!/^[a-f0-9]{64}$/.test(token))
     throw new ApiError(404, "invitation_unavailable");
-  const invite = await db.workspace_invitations.findUnique({
+  const invite = await db.institution_invitations.findUnique({
     where: { token_hash: hash(token) },
-    include: { workspaces: true },
+    include: { institutions: true },
   });
   if (
     !invite ||
-    invite.workspaces.archived ||
+    invite.institutions.archived ||
     invite.state === "revoked" ||
     (invite.state === "pending" && invite.expires_at < new Date())
   )
     throw new ApiError(404, "invitation_unavailable");
   if (!accept)
     return {
-      organization: invite.workspaces.name,
+      organization: invite.institutions.name,
       email: invite.email,
       roles: invite.roles,
       state: invite.state,
@@ -620,21 +622,21 @@ export async function invitation(
   const memberName = await ownName(actor);
   if (actor.email !== invite.email) throw new ApiError(403, "wrong_email");
   return db.$transaction(async (tx) => {
-    await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${invite.workspace_id},73))::text`;
-    const current = await tx.workspace_invitations.findUniqueOrThrow({
+    await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${invite.institution_id},73))::text`;
+    const current = await tx.institution_invitations.findUniqueOrThrow({
       where: { id: invite.id },
-      include: { workspaces: true },
+      include: { institutions: true },
     });
     if (
-      current.workspaces.archived ||
+      current.institutions.archived ||
       current.state === "revoked" ||
       (current.state === "pending" && current.expires_at < new Date())
     )
       throw new ApiError(404, "invitation_unavailable");
-    const prior = await tx.workspace_members.findUnique({
+    const prior = await tx.institution_members.findUnique({
       where: {
-        workspace_id_user_id: {
-          workspace_id: invite.workspace_id,
+        institution_id_user_id: {
+          institution_id: invite.institution_id,
           user_id: actor.id,
         },
       },
@@ -642,7 +644,7 @@ export async function invitation(
     if (current.state === "accepted") {
       if (!prior?.active) throw new ApiError(403, "workspace_unavailable");
       return {
-        workspace_id: invite.workspace_id,
+        institution_id: invite.institution_id,
         role: ["admin", "trainer", "trainee"].find((r) =>
           prior.roles.includes(r),
         ),
@@ -650,16 +652,16 @@ export async function invitation(
     }
     // An invitation is enrollment, never a silent edit to an already active member's roles.
     if (prior?.active) throw new ApiError(409, "already_member");
-    const joinedMember = await tx.workspace_members.upsert({
+    const joinedMember = await tx.institution_members.upsert({
       where: {
-        workspace_id_user_id: {
-          workspace_id: invite.workspace_id,
+        institution_id_user_id: {
+          institution_id: invite.institution_id,
           user_id: actor.id,
         },
       },
       create: {
         id: randomUUID(),
-        workspace_id: invite.workspace_id,
+        institution_id: invite.institution_id,
         user_id: actor.id,
         roles: invite.roles,
         name: memberName,
@@ -672,15 +674,15 @@ export async function invitation(
       },
     });
     await applyInvitationSports(tx, current, joinedMember.id);
-    await tx.workspace_invitations.update({
+    await tx.institution_invitations.update({
       where: { id: invite.id },
       data: { state: "accepted", accepted_by: actor.id },
     });
-    await event(tx, actor, invite.workspace_id, "member_joined", actor.id, {
+    await event(tx, actor, invite.institution_id, "member_joined", actor.id, {
       roles: invite.roles,
     });
     return {
-      workspace_id: invite.workspace_id,
+      institution_id: invite.institution_id,
       role: ["admin", "trainer", "trainee"].find((r) =>
         invite.roles.includes(r),
       ),
@@ -700,27 +702,27 @@ export async function acceptInvitationSignup(
     normalizedEmail = email.toLowerCase();
   try {
     return await db.$transaction(async (tx) => {
-      const preview = await tx.workspace_invitations.findUnique({
+      const preview = await tx.institution_invitations.findUnique({
         where: { token_hash: tokenHash },
-        include: { workspaces: true },
+        include: { institutions: true },
       });
       if (
         !preview ||
         preview.state !== "pending" ||
         preview.expires_at <= new Date() ||
-        preview.workspaces.archived
+        preview.institutions.archived
       )
         throw new ApiError(404, "invitation_unavailable");
-      await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${preview.workspace_id},73))::text`;
-      const current = await tx.workspace_invitations.findUnique({
+      await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${preview.institution_id},73))::text`;
+      const current = await tx.institution_invitations.findUnique({
         where: { id: preview.id },
-        include: { workspaces: true },
+        include: { institutions: true },
       });
       if (
         !current ||
         current.state !== "pending" ||
         current.expires_at <= new Date() ||
-        current.workspaces.archived
+        current.institutions.archived
       )
         throw new ApiError(404, "invitation_unavailable");
       if (current.email !== normalizedEmail)
@@ -743,17 +745,17 @@ export async function acceptInvitationSignup(
         },
         name,
       );
-      const joinedMember = await tx.workspace_members.create({
+      const joinedMember = await tx.institution_members.create({
         data: {
           id: randomUUID(),
-          workspace_id: current.workspace_id,
+          institution_id: current.institution_id,
           user_id: user.id,
           roles: current.roles,
           name,
         },
       });
       await applyInvitationSports(tx, current, joinedMember.id);
-      await tx.workspace_invitations.update({
+      await tx.institution_invitations.update({
         where: { id: current.id },
         data: { state: "accepted", accepted_by: user.id },
       });
@@ -762,10 +764,21 @@ export async function acceptInvitationSignup(
         email: user.email,
         user_metadata: { display_name: name },
       };
-      await event(tx, account, current.workspace_id, "member_joined", user.id, {
+      await event(
+        tx,
+        account,
+        current.institution_id,
+        "member_joined",
+        user.id,
+        {
+          roles: current.roles,
+        },
+      );
+      return {
+        user,
+        institution_id: current.institution_id,
         roles: current.roles,
-      });
-      return { user, workspace_id: current.workspace_id, roles: current.roles };
+      };
     });
   } catch (error) {
     if (

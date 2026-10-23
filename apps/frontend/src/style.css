@@ -584,7 +584,7 @@ td:first-child {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
-/* One shell for the public entry and both workspaces. */
+/* One shell for the public entry and both institutions. */
 .site-header {
   height: 88px;
   border-bottom: 1px solid var(--line);
@@ -2718,14 +2718,14 @@ h3 {
 }
 
 /* Daily coaching: task-focused extensions of the existing Rafik visual system. */
-.workspace-tabs {
+.institution-tabs {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
   border-bottom: 1px solid var(--line);
   margin-block: 1.5rem 2rem;
 }
-.workspace-tabs button {
+.institution-tabs button {
   padding: 1rem 0;
   border: 0;
   border-bottom: 2px solid transparent;
@@ -2734,26 +2734,26 @@ h3 {
   font: inherit;
   cursor: pointer;
 }
-.workspace-tabs .selected {
+.institution-tabs .selected {
   border-bottom-color: var(--accent);
   color: var(--ink);
 }
-.client-workspace {
+.client-institution {
   display: grid;
   grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
   gap: 2.5rem;
   align-items: start;
 }
-.workspace-facts {
+.institution-facts {
   display: flex;
   gap: 3rem;
   margin-block-end: 2rem;
 }
-.workspace-facts strong,
-.workspace-facts span {
+.institution-facts strong,
+.institution-facts span {
   display: block;
 }
-.workspace-facts strong {
+.institution-facts strong {
   font-size: 1.8rem;
   font-variant-numeric: tabular-nums;
 }
@@ -2780,7 +2780,7 @@ h3 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
 }
-.workspace-row,
+.institution-row,
 .library-row {
   display: flex;
   justify-content: space-between;
@@ -2790,7 +2790,7 @@ h3 {
   border-bottom: 1px solid var(--line);
   text-decoration: none;
 }
-.workspace-row p,
+.institution-row p,
 .schedule-row p {
   margin-block: 0.35rem 0;
 }
@@ -2856,7 +2856,7 @@ h3 {
 }
 
 @media (max-width: 760px) {
-  .client-workspace {
+  .client-institution {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
@@ -2874,10 +2874,10 @@ h3 {
   .field-pair {
     grid-template-columns: 1fr 1fr;
   }
-  .workspace-tabs {
+  .institution-tabs {
     gap: 1rem;
   }
-  .workspace-facts {
+  .institution-facts {
     gap: 1.5rem;
   }
   .per-set-target {
@@ -2887,10 +2887,10 @@ h3 {
   .schedule-actions {
     gap: 0.75rem;
   }
-  .workspace-row {
+  .institution-row {
     align-items: start;
   }
-  .workspace-row > span {
+  .institution-row > span {
     flex-shrink: 0;
   }
   .roster-tools {
@@ -3203,7 +3203,7 @@ h3 {
 .activity-row p {
   margin: 0.3rem 0 0;
 }
-.workspace-tabs a {
+.institution-tabs a {
   white-space: nowrap;
   padding: 0.75rem 1rem;
 }
@@ -3257,7 +3257,7 @@ h3 {
   font-size: 0.8rem;
 }
 
-/* Optional service tools share the established workspace layout and tokens. */
+/* Optional service tools share the established institution layout and tokens. */
 .more-page {
   max-width: 920px;
 }
@@ -3522,7 +3522,7 @@ select {
   border-color: var(--accent);
 }
 
-/* Conversations are a workspace: history scrolls, composing stays within reach. */
+/* Conversations are a institution: history scrolls, composing stays within reach. */
 #app:has(.messages-main) {
   height: 100dvh;
   min-height: 36rem;

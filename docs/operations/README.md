@@ -132,7 +132,7 @@ The API performs a retention pass at startup and daily after success; a failure 
 
 ```sql
 SELECT completed_at, now() - completed_at AS age, closed_count, purged_count
-FROM public.organization_injury_retention_checkpoint
+FROM public.institution_injury_retention_checkpoint
 WHERE singleton;
 ```
 
@@ -159,3 +159,7 @@ Local recovery and orphan cleanup share the API’s validated local database/pri
 ## Unreleased backend cleanup migration
 
 Normal forward migration removes unused runtime simulation settings and two billing simulator functions, preserving historical business accounts/events. Back up before upgrading. The audit migrated only owned disposable databases; it did not reset preview. See the [backend audit](../reference/backend/README.md).
+
+## Institution identifier upgrade
+
+Stop the existing backend and operator workers for the upgrade. Deploy the complete matching backend/web version, applying migration `202610231800_institution_identifiers`, before installing the forthcoming Android APK. Back up the database and private bytes first. The DDL renames existing records; it does not reset the installation. Published APK paths remain compatibility aliases for retained commands. Keep the same signing key, SQLCipher database, private files and installation URL. Do not run old application binaries against the renamed database. Roll back using the complete matching pre-upgrade database/application backup, not just an old container. See [ADR 0029](../decisions/ADR-0029-institution-identifiers.md).

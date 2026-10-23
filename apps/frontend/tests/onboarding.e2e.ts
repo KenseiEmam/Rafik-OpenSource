@@ -27,7 +27,7 @@ test.afterEach(() => {
     {
       cwd: resolve(import.meta.dirname, '../../backend'),
       input:
-        "DELETE FROM public.workspaces WHERE created_by IN (SELECT id FROM identity.users WHERE email IN ('legacy-setup@rafik.test','setup-admin@rafik.test','coach@rafik.test','athlete@rafik.test')); DELETE FROM identity.users WHERE email IN ('legacy-setup@rafik.test','setup-admin@rafik.test','coach@rafik.test','athlete@rafik.test');",
+        "DELETE FROM public.institutions WHERE created_by IN (SELECT id FROM identity.users WHERE email IN ('legacy-setup@rafik.test','setup-admin@rafik.test','coach@rafik.test','athlete@rafik.test')); DELETE FROM identity.users WHERE email IN ('legacy-setup@rafik.test','setup-admin@rafik.test','coach@rafik.test','athlete@rafik.test');",
       stdio: 'pipe',
     },
   )
@@ -131,8 +131,8 @@ test('first launch creates the super admin and an invited member can join withou
   await expect(page.getByRole('heading', { name: 'That page isn’t here.' })).toBeVisible()
   await page.goto('/dashboard')
   await expect(page).toHaveURL(/\/dashboard$/)
-  await expect(page.getByRole('combobox', { name: 'Workspace' })).toHaveCount(0)
-  await expect(page.locator('.workspace-nav')).toHaveCount(0)
+  await expect(page.getByRole('combobox', { name: 'Institution' })).toHaveCount(0)
+  await expect(page.locator('.institution-nav')).toHaveCount(0)
   await expect(page.locator('.organization-nav')).toBeHidden()
   await waitForDashboardData(page, 'admin')
   const roleDashboard = page.locator('.dashboard-navigation:visible').first()
@@ -167,7 +167,7 @@ test('first launch creates the super admin and an invited member can join withou
   await expect(invited).toHaveURL(/\/dashboard$/)
   await expect(invited.getByRole('heading', { name: 'Rafik Test University' })).toBeVisible()
   await waitForDashboardData(invited, 'trainer')
-  await expect(invited.locator('.workspace-nav')).toHaveCount(0)
+  await expect(invited.locator('.institution-nav')).toHaveCount(0)
   await expect(invited.locator('.institution-nav')).toBeHidden()
   const trainerNavigation = invited.locator('.dashboard-navigation:visible').first()
   if (!(await trainerNavigation.count()))

@@ -12,7 +12,7 @@ import MemberSports from './MemberSports.vue'
 import CoachingTeam from './CoachingTeam.vue'
 import type { Member, Role, Sport } from './types'
 const props = defineProps<{
-  workspaceId: string
+  institutionId: string
   member: Member
   sports: Sport[]
   names: { id: string; name: string }[]
@@ -45,21 +45,22 @@ const router = useRouter()
 let mounted = true
 onUnmounted(() => (mounted = false))
 const command = useCommand<'member'>(
-  'member-management:' + props.workspaceId + ':' + props.member.id,
+  'member-management:' + props.institutionId + ':' + props.member.id,
   async (_, __, args) => {
     if (!mounted) return
     if (args.action === 'password-link')
       passwordLink.value = location.origin + '/password-setup/' + args.token
     await refreshContexts()
     if (!mounted) return
-    if (!contexts.value.some((c) => c.workspace_id === props.workspaceId && c.role === 'admin')) {
+    if (
+      !contexts.value.some((c) => c.institution_id === props.institutionId && c.role === 'admin')
+    ) {
       await router.replace('/access')
       return
     }
     emit('saved')
   },
-  (_, args) =>
-    request('/v1/workspaces/' + props.workspaceId, { method: 'POST', body: JSON.stringify(args) }),
+  (_, args) => request('/v1/institution', { method: 'POST', body: JSON.stringify(args) }),
   {
     successMessage: (_, args) =>
       args.action === 'password-link'
@@ -165,7 +166,7 @@ function resetPassword() {
           "
         />
         <MemberPicker
-          :workspace="workspaceId"
+          :institution="institutionId"
           view="admin"
           role="trainer"
           single
@@ -193,7 +194,7 @@ function resetPassword() {
       >
         <CoachingTeam
           v-if="member.active && member.roles.includes('trainee')"
-          :workspace-id="workspaceId"
+          :institution-id="institutionId"
           :member="member"
           :sports="sports"
           :names="names"
@@ -207,7 +208,7 @@ function resetPassword() {
       >
         <MemberSports
           v-if="member.active && !member.roles.includes('admin')"
-          :workspace-id="workspaceId"
+          :institution-id="institutionId"
           :member="member"
           :sports="sports"
           @saved="emit('saved')"

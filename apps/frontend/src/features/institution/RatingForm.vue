@@ -8,7 +8,7 @@ import { language as l, errorMessage } from '../../lib/i18n'
 import { useCommand } from '../../lib/commands'
 import CommandStatus from '../../components/CommandStatus.vue'
 const props = defineProps<{
-    workspace: string
+    institution: string
     view: string
     source: string
     subject: string
@@ -18,7 +18,7 @@ const props = defineProps<{
     subtitle?: string
   }>(),
   emit = defineEmits<{ saved: [] }>()
-const key = `rating:${user.value!.id}:${props.workspace}:${props.source}:${props.subject}`,
+const key = `rating:${user.value!.id}:${props.institution}:${props.source}:${props.subject}`,
   score = ref<number | null>(props.score),
   revision = ref(props.revision),
   ready = ref(false),
@@ -39,7 +39,7 @@ const command = useCommand<'save'>(
     ready.value = true
   },
   (_, args) =>
-    request(`/v1/workspaces/${props.workspace}/feedback`, {
+    request(`/v1/institution/feedback`, {
       method: 'POST',
       body: JSON.stringify(args),
     }),

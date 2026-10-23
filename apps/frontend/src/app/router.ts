@@ -1,10 +1,10 @@
 import { nextTick } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { ready, user, contexts, refreshContexts } from './auth'
-const workspaceScroll = new Map<string, number>()
+const institutionScroll = new Map<string, number>()
 let cancelScrollRestore = () => {}
 // Returning routes load asynchronously: don't clamp a saved position to the loading skeleton.
-function restoreWorkspaceScroll(main: HTMLElement, top: number) {
+function restoreInstitutionScroll(main: HTMLElement, top: number) {
   cancelScrollRestore()
   if (!top) {
     main.scrollTop = 0
@@ -201,7 +201,7 @@ const router = createRouter({
       redirect: (to) => ({ path: '/workouts', query: to.query, hash: to.hash }),
     },
     {
-      path: '/organization/:workspace/:view/:legacy(.*)*',
+      path: '/organization/:institution/:view/:legacy(.*)*',
       component: () => import('../features/account/AccessPage.vue'),
       meta: { private: true, legacyInstitution: true },
     },
@@ -211,8 +211,16 @@ const router = createRouter({
       meta: { private: true },
     },
     {
-      path: '/organization-invite/:token',
+      path: '/invitation/:token',
       component: () => import('../features/institution/InvitationPage.vue'),
+    },
+    {
+      path: '/organization-invite/:token',
+      redirect: (to) => ({
+        path: `/invitation/${to.params.token}`,
+        query: to.query,
+        hash: to.hash,
+      }),
     },
     { path: '/', component: () => import('../features/account/EntryPage.vue') },
     { path: '/setup', component: () => import('../features/account/SetupPage.vue') },
@@ -261,7 +269,7 @@ const router = createRouter({
     if (main && window.matchMedia('(min-width: 1024px)').matches) {
       if (to.hash) document.getElementById(to.hash.slice(1))?.scrollIntoView({ block: 'start' })
       else if (to.path !== from.path)
-        restoreWorkspaceScroll(main, saved ? workspaceScroll.get(to.fullPath) || 0 : 0)
+        restoreInstitutionScroll(main, saved ? institutionScroll.get(to.fullPath) || 0 : 0)
       return false
     }
     if (saved) return saved
@@ -274,8 +282,9 @@ router.beforeEach(async (to, from) => {
   cancelScrollRestore()
   const main = document.querySelector<HTMLElement>('.dashboard-frame > main')
   if (main) {
-    workspaceScroll.set(from.fullPath, main.scrollTop)
-    if (workspaceScroll.size > 100) workspaceScroll.delete(workspaceScroll.keys().next().value!)
+    institutionScroll.set(from.fullPath, main.scrollTop)
+    if (institutionScroll.size > 100)
+      institutionScroll.delete(institutionScroll.keys().next().value!)
   }
   await ready()
   if (to.meta.private && !user.value) return { path: '/login', query: { next: to.fullPath } }
@@ -288,11 +297,11 @@ router.beforeEach(async (to, from) => {
     } catch {
       return { path: '/access', query: { reason: 'connection' } }
     }
-    const institution = contexts.value.find((c) => c.kind === 'organization')
+    const institution = contexts.value.find((c) => c.kind === 'institution')
     if (!institution) return '/access'
     if (to.meta.adminOnly && institution.role !== 'admin') return '/dashboard'
     if (to.meta.legacyInstitution) {
-      if (String(to.params.workspace) !== institution.workspace_id) return '/access'
+      if (String(to.params.institution) !== institution.institution_id) return '/access'
       const tail = Array.isArray(to.params.legacy)
         ? to.params.legacy.join('/')
         : String(to.params.legacy || '')

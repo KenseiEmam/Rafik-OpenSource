@@ -6,7 +6,7 @@ import { PhCheck, PhMagnifyingGlass, PhPlus } from '@phosphor-icons/vue'
 import type { Member } from './types'
 const props = withDefaults(
   defineProps<{
-    workspace: string
+    institution: string
     view: string
     modelValue: string[]
     role?: string
@@ -70,7 +70,7 @@ async function load() {
       selected: Member[]
       next: number | null
       total: number
-    }>(`/v1/workspaces/${props.workspace}/people?${q}`)
+    }>(`/v1/institution/people?${q}`)
     if (current !== generation) return
     items.value = data.items.slice(0, MATCHES)
     chosen.value = data.selected

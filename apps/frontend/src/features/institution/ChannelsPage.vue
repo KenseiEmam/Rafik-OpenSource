@@ -11,7 +11,7 @@ import ChannelThread from './ChannelThread.vue'
 import type { Member, Institution } from './types'
 const route = useRoute(),
   router = useRouter(),
-  workspace = institutionContext().workspace,
+  institution = institutionContext().institution,
   view = institutionContext().view,
   id = computed(() => String(route.params.channel || '')),
   base = '/messages'
@@ -29,7 +29,7 @@ async function refresh() {
 const items = ref<Channel[]>([]),
   people = ref<Member[]>([]),
   directPeople = ref<string[]>([]),
-  workspaceSelf = ref<Institution['self']>(),
+  institutionSelf = ref<Institution['self']>(),
   search = ref(String(route.query.search || '')),
   next = ref<number | null>(null),
   loading = ref(true),
@@ -39,7 +39,7 @@ const items = ref<Channel[]>([]),
   manage = ref(false)
 const contacts = computed(() =>
   people.value
-    .filter((person) => person.active && person.id !== workspaceSelf.value?.id)
+    .filter((person) => person.active && person.id !== institutionSelf.value?.id)
     .filter((person) => !directPeople.value.includes(person.id))
     .filter(
       (person) => !search.value || person.name.toLowerCase().includes(search.value.toLowerCase()),
@@ -55,7 +55,7 @@ async function load(append = false) {
       next: number | null
       directPeople: string[]
     }>(
-      `/v1/workspaces/${workspace}/communication?view=${view}&search=${encodeURIComponent(search.value)}&offset=${append ? next.value || 0 : 0}&manage=${manage.value}`,
+      `/v1/institution/communication?view=${view}&search=${encodeURIComponent(search.value)}&offset=${append ? next.value || 0 : 0}&manage=${manage.value}`,
     )
     items.value = append ? [...items.value, ...result.items] : result.items
     directPeople.value = result.directPeople
@@ -71,8 +71,8 @@ async function loadPeople() {
   peopleLoading.value = true
   peopleError.value = ''
   try {
-    const result = await request<Institution>(`/v1/workspaces/${workspace}?view=${view}`)
-    workspaceSelf.value = result.self
+    const result = await request<Institution>(`/v1/institution?view=${view}`)
+    institutionSelf.value = result.self
     people.value = result.members
   } catch (e) {
     peopleError.value = errorMessage(e)
@@ -82,12 +82,12 @@ async function loadPeople() {
   }
 }
 const join = useCommand<'join'>(
-  `channel-join:${workspace}:${view}`,
+  `channel-join:${institution}:${view}`,
   async (_, __, args) => {
     await router.push(base + '/' + args.id)
   },
   (_, args) =>
-    request(`/v1/workspaces/${workspace}/communication`, {
+    request(`/v1/institution/communication`, {
       method: 'POST',
       body: JSON.stringify(args),
     }),
@@ -96,12 +96,12 @@ const locked = computed(() => join.state.busy || !!join.state.pending)
 const joinConversation = (id: string) =>
   join.run('join', { id, view, action: 'join', operation: crypto.randomUUID() })
 const direct = useCommand<'direct'>(
-  `channel-direct:${workspace}:${view}`,
+  `channel-direct:${institution}:${view}`,
   async (_, result) => {
     await router.push(base + '/' + (result as { id: string }).id)
   },
   (_, args) =>
-    request(`/v1/workspaces/${workspace}/communication`, {
+    request(`/v1/institution/communication`, {
       method: 'POST',
       body: JSON.stringify(args),
     }),
@@ -111,8 +111,8 @@ const openDirect = (person: Member) =>
   direct.run('direct', {
     id: crypto.randomUUID(),
     title: person.name,
-    members: [workspaceSelf.value!.id, person.id],
-    managers: [workspaceSelf.value!.id],
+    members: [institutionSelf.value!.id, person.id],
+    managers: [institutionSelf.value!.id],
     action: 'create',
     view,
     operation: crypto.randomUUID(),
@@ -127,13 +127,13 @@ watch(
   { immediate: true },
 )
 const openGroup = useCommand<'open-group'>(
-  `channel-group:${workspace}:${view}`,
+  `channel-group:${institution}:${view}`,
   async (_, result) => {
     const channel = result as { id: string }
     await router.replace(base + '/' + channel.id)
   },
   (_, args) =>
-    request(`/v1/workspaces/${workspace}/communication`, {
+    request(`/v1/institution/communication`, {
       method: 'POST',
       body: JSON.stringify(args),
     }),
@@ -317,7 +317,7 @@ watch(
         :key="id"
         v-if="id"
         :id="id"
-        :workspace="workspace"
+        :institution="institution"
         :view="view"
         :base="base"
         @refresh="load()"

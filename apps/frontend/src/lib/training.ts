@@ -18,9 +18,9 @@ export async function startWorkout(
   owner: string,
   assignmentId?: string,
   scheduledDate?: string,
-  workspace?: string,
+  institution?: string,
 ) {
-  if (owner === 'guest' || !workspace) throw new Error('institution_required')
+  if (owner === 'guest' || !institution) throw new Error('institution_required')
   const existing = (await localSessions(owner)).find(
     (x) =>
       x.session.status === 'in_progress' &&
@@ -33,7 +33,7 @@ export async function startWorkout(
   const startKey = `start:${owner}:${assignmentId || versionId}:${day.id}:${scheduledDate || 'flexible'}`
   const id = (await getDraft<string>(startKey)) || crypto.randomUUID()
   await storeDraft(startKey, id)
-  const session = await request<Session>(`/v1/workspaces/${workspace}/sessions`, {
+  const session = await request<Session>(`/v1/institution/sessions`, {
     method: 'POST',
     body: JSON.stringify({
       operation: id,
@@ -59,13 +59,13 @@ export async function startWorkout(
   await event('session_started', session.id)
   return row
 }
-export async function loadWorkout(id: string, owner: string, workspace?: string) {
+export async function loadWorkout(id: string, owner: string, institution?: string) {
   const local = await getLocalSession(id)
   if (local && local.owner === owner) {
     if (local.pending || local.localRevision > local.syncedRevision || !navigator.onLine)
       return local
     try {
-      const remote = await readSession(id, workspace || local.session.workspace_id)
+      const remote = await readSession(id, institution || local.session.institution_id)
       if (remote?.client_id === owner)
         return editLocalSession(id, (current) => {
           // Another tab may have edited while this read was in flight.
@@ -82,7 +82,7 @@ export async function loadWorkout(id: string, owner: string, workspace?: string)
     return local
   }
   if (owner === 'guest') throw new Error('unauthenticated')
-  const session = await readSession(id, workspace)
+  const session = await readSession(id, institution)
   if (!session) throw new Error('forbidden')
   // Coach review reads server data separately; this is the client's editing store.
   if (session.client_id !== owner) throw new Error('forbidden')
@@ -134,8 +134,8 @@ export async function syncWorkout(id: string, owner: string) {
         })
       const op = row.pending!
       try {
-        const result = row.session.workspace_id
-          ? await request<Session>(`/v1/workspaces/${row.session.workspace_id}/sessions`, {
+        const result = row.session.institution_id
+          ? await request<Session>(`/v1/institution/sessions`, {
               method: 'POST',
               body: JSON.stringify({
                 operation: op.id,
@@ -191,7 +191,7 @@ export async function syncWorkout(id: string, owner: string) {
 export async function reloadServerSession(id: string, owner: string) {
   const previous = await getLocalSession(id)
   if (!previous || previous.owner !== owner) throw new Error('forbidden')
-  const remote = await readSession(id, previous.session.workspace_id)
+  const remote = await readSession(id, previous.session.institution_id)
   if (!remote) throw Error('session_missing')
   await storeDraft('conflict-backup:' + owner + ':' + id, previous)
   return putLocalSession({
@@ -207,8 +207,8 @@ export async function syncPending(owner: string) {
   for (const row of await localSessions(owner)) await syncWorkout(row.id, owner)
 }
 
-async function readSession(id: string, workspace?: string) {
-  return workspace
-    ? request<Session>(`/v1/organization-sessions/${id}`)
+async function readSession(id: string, institution?: string) {
+  return institution
+    ? request<Session>(`/v1/workouts/${id}`)
     : rpc<Session | null>('session_document', { p_id: id })
 }

@@ -37,7 +37,7 @@ export type Database = {
       assessment_result_history: {
         Row: {
           id: string
-          workspace_id: string
+          institution_id: string
           event_id: string
           member_id: string
           revision: number
@@ -48,7 +48,7 @@ export type Database = {
       }
       assessment_results: {
         Row: {
-          workspace_id: string
+          institution_id: string
           event_id: string
           member_id: string
           values: Json
@@ -61,7 +61,7 @@ export type Database = {
       assessment_templates: {
         Row: {
           id: string
-          workspace_id: string
+          institution_id: string
           created_by: string
           title: string
           definition: Json
@@ -200,6 +200,483 @@ export type Database = {
           updated_at: string
         }
       }
+      institution_assets: {
+        Row: {
+          id: string
+          institution_id: string
+          owner_id: string
+          purpose: string
+          channel_id: string | null
+          filename: string
+          media_type: string
+          bytes: number
+          digest: string
+          retired: boolean
+          created_at: string
+          revision: number
+        }
+      }
+      institution_assignments: {
+        Row: {
+          id: string
+          institution_id: string
+          member_id: string
+          version_id: string
+          created_by: string
+          start_date: string
+          end_date: string | null
+          schedule_mode: string
+          state: string
+          revision: number
+          created_at: string
+          goal: string | null
+          sport_id: string | null
+          sequence_cursor: number
+        }
+      }
+      institution_audit_events: {
+        Row: {
+          id: string
+          institution_id: string
+          actor_id: string | null
+          kind: string
+          subject_id: string | null
+          detail: Json
+          created_at: string
+        }
+      }
+      institution_channel_members: {
+        Row: {
+          channel_id: string
+          institution_id: string
+          member_id: string
+          manager: boolean
+        }
+      }
+      institution_channel_reads: {
+        Row: {
+          channel_id: string
+          institution_id: string
+          member_id: string
+          sequence: number
+        }
+      }
+      institution_channels: {
+        Row: {
+          id: string
+          institution_id: string
+          title: string
+          created_by: string
+          revision: number
+          archived: boolean
+          created_at: string
+          private_pair: boolean
+          private_pair_key: string | null
+          conversation_group_id: string | null
+        }
+      }
+      institution_coaching_links: {
+        Row: {
+          id: string
+          institution_id: string
+          athlete_member_id: string
+          coach_member_id: string
+          kind: string
+          sport_id: string | null
+          created_by: string
+          created_at: string
+          ended_by: string | null
+          ended_at: string | null
+          revision: number
+        }
+      }
+      institution_event_people: {
+        Row: {
+          institution_id: string
+          event_id: string
+          member_id: string
+          duty: string
+          attendance: string
+          revision: number
+          makeup_for: string | null
+          session_note: string
+          checked_in_at: string | null
+        }
+      }
+      institution_events: {
+        Row: {
+          id: string
+          institution_id: string
+          created_by: string
+          series_id: string
+          title: string
+          starts_at: string
+          ends_at: string
+          timezone: string
+          location: string
+          kind: string
+          definition: Json | null
+          template_id: string | null
+          template_revision: number | null
+          state: string
+          revision: number
+          created_at: string
+          training_date: string
+          workout_snapshot: Json | null
+        }
+      }
+      institution_exercises: {
+        Row: {
+          institution_id: string
+          id: string
+          data: Json
+          created_by: string
+          revision: number
+          active: boolean
+        }
+      }
+      institution_group_members: {
+        Row: {
+          institution_id: string
+          group_id: string
+          member_id: string
+        }
+      }
+      institution_groups: {
+        Row: {
+          id: string
+          institution_id: string
+          name: string
+          created_by: string
+          archived: boolean
+          revision: number
+        }
+      }
+      institution_injury_access_log: {
+        Row: {
+          id: string
+          institution_id: string
+          record_id: string
+          athlete_member_id: string
+          actor_id: string
+          action: string
+          created_at: string
+        }
+      }
+      institution_injury_history: {
+        Row: {
+          id: string
+          institution_id: string
+          record_id: string
+          revision: number
+          action: string
+          participation: string
+          effective_from: string
+          recorded_by: string | null
+          recorded_at: string
+        }
+      }
+      institution_injury_operations: {
+        Row: {
+          institution_id: string
+          operation_id: string
+          actor_id: string
+          request_hash: string
+          record_id: string
+          result_revision: number
+          created_at: string
+        }
+      }
+      institution_injury_permissions: {
+        Row: {
+          institution_id: string
+          athlete_member_id: string
+          age_group: string
+          guardian_authorized: boolean
+          guardian_verified_by: string | null
+          guardian_verified_at: string | null
+          athlete_assented_at: string | null
+          assent_policy_version: string | null
+          withdrawn_at: string | null
+          revision: number
+          configured_at: string
+          configured_by: string
+        }
+      }
+      institution_injury_records: {
+        Row: {
+          id: string
+          institution_id: string
+          athlete_member_id: string
+          participation: string
+          effective_from: string
+          state: string
+          revision: number
+          created_at: string
+          updated_at: string
+          closed_at: string | null
+        }
+      }
+      institution_injury_retention_checkpoint: {
+        Row: {
+          singleton: boolean
+          completed_at: string
+          closed_count: number
+          purged_count: number
+        }
+      }
+      institution_invitations: {
+        Row: {
+          id: string
+          institution_id: string
+          email: string
+          roles: string[]
+          token_hash: string
+          created_by: string | null
+          expires_at: string
+          state: string
+          accepted_by: string | null
+          created_at: string
+          sport_ids: string[]
+        }
+      }
+      institution_meal_history: {
+        Row: {
+          id: string
+          institution_id: string
+          meal_id: string
+          revision: number
+          document: Json
+          recorded_at: string
+        }
+      }
+      institution_meals: {
+        Row: {
+          id: string
+          institution_id: string
+          member_id: string
+          logged_on: string
+          food: Json
+          note: string
+          revision: number
+          removed: boolean
+          created_at: string
+          updated_at: string
+        }
+      }
+      institution_member_sports: {
+        Row: {
+          institution_id: string
+          member_id: string
+          sport_id: string
+          created_by: string
+          created_at: string
+        }
+      }
+      institution_members: {
+        Row: {
+          id: string
+          institution_id: string
+          user_id: string | null
+          roles: string[]
+          active: boolean
+          revision: number
+          trainer_id: string | null
+          joined_at: string
+          name: string
+        }
+      }
+      institution_message_assets: {
+        Row: {
+          message_id: string
+          institution_id: string
+          asset_id: string
+          position: number
+        }
+      }
+      institution_messages: {
+        Row: {
+          id: string
+          sequence: number
+          institution_id: string
+          channel_id: string
+          sender_id: string
+          body: string
+          created_at: string
+          asset_id: string | null
+        }
+      }
+      institution_nutrition_plans: {
+        Row: {
+          id: string
+          institution_id: string
+          member_id: string
+          author_id: string
+          revision: number
+          effective_on: string
+          expires_on: string | null
+          targets: Json
+          meals: Json
+          guidance: string
+          created_at: string
+        }
+      }
+      institution_nutrition_sharing: {
+        Row: {
+          institution_id: string
+          member_id: string
+          enabled: boolean
+          revision: number
+          updated_at: string
+        }
+      }
+      institution_operations: {
+        Row: {
+          id: string
+          institution_id: string
+          actor_id: string
+          payload: Json
+          result: Json
+          created_at: string
+        }
+      }
+      institution_programs: {
+        Row: {
+          id: string
+          institution_id: string
+          created_by: string
+          title: string
+          draft: Json
+          draft_version: number
+          archived: boolean
+          listed: boolean
+          updated_at: string
+          revision: number
+        }
+      }
+      institution_session_feedback: {
+        Row: {
+          id: string
+          institution_id: string
+          member_id: string
+          workout_id: string | null
+          event_id: string | null
+          score: number
+          revision: number
+          created_at: string
+          updated_at: string
+        }
+      }
+      institution_session_history: {
+        Row: {
+          id: string
+          institution_id: string
+          session_id: string
+          version: number
+          actor_member_id: string
+          action: string
+          entries: Json
+          note: string
+          completed: boolean
+          created_at: string
+        }
+      }
+      institution_sessions: {
+        Row: {
+          id: string
+          institution_id: string
+          member_id: string
+          assignment_id: string
+          day_id: string
+          local_date: string
+          document: Json
+          version: number
+          started_at: string
+          completed_at: string | null
+          recorded_mode: string
+          recorded_by: string | null
+          occurrence_id: string | null
+          source_snapshot: Json | null
+        }
+      }
+      institution_sports: {
+        Row: {
+          id: string
+          institution_id: string
+          name: string
+          kind: string
+          archived: boolean
+          revision: number
+          created_by: string
+          created_at: string
+        }
+      }
+      institution_versions: {
+        Row: {
+          id: string
+          institution_id: string
+          program_id: string
+          revision: number
+          title: string
+          prescription: Json
+          created_by: string
+          created_at: string
+        }
+      }
+      institution_workout_positions: {
+        Row: {
+          id: string
+          institution_id: string
+          assignment_id: string
+          position: number
+          cycle: number
+          day_id: string
+          occurrence_id: string
+          session_id: string | null
+          state: string
+          resolved_by: string | null
+          resolved_at: string | null
+          reason: string | null
+        }
+      }
+      institution_workout_recurrences: {
+        Row: {
+          id: string
+          institution_id: string
+          assignment_id: string
+          created_by: string
+          starts_on: string
+          ends_on: string
+          weekdays: number[]
+          timezone: string
+          local_time: string | null
+          duration_minutes: number | null
+          state: string
+          revision: number
+        }
+      }
+      institution_workplace_feedback: {
+        Row: {
+          institution_id: string
+          member_id: string
+          month: string
+          score: number
+          revision: number
+          created_at: string
+          updated_at: string
+        }
+      }
+      institutions: {
+        Row: {
+          id: string
+          kind: string
+          name: string
+          created_by: string | null
+          archived: boolean
+          revision: number
+          created_at: string
+        }
+      }
       invitations: {
         Row: {
           id: string
@@ -263,7 +740,7 @@ export type Database = {
         Row: {
           id: string
           user_id: string
-          workspace_id: string | null
+          institution_id: string | null
           category: string
           source_kind: string
           source_id: string
@@ -308,423 +785,6 @@ export type Database = {
           guidance: string
           created_at: string
           meals: Json
-        }
-      }
-      organization_assets: {
-        Row: {
-          id: string
-          workspace_id: string
-          owner_id: string
-          purpose: string
-          channel_id: string | null
-          filename: string
-          media_type: string
-          bytes: number
-          digest: string
-          retired: boolean
-          created_at: string
-          revision: number
-        }
-      }
-      organization_assignments: {
-        Row: {
-          id: string
-          workspace_id: string
-          member_id: string
-          version_id: string
-          created_by: string
-          start_date: string
-          end_date: string | null
-          schedule_mode: string
-          state: string
-          revision: number
-          created_at: string
-          goal: string | null
-          sport_id: string | null
-          sequence_cursor: number
-        }
-      }
-      organization_channel_members: {
-        Row: {
-          channel_id: string
-          workspace_id: string
-          member_id: string
-          manager: boolean
-        }
-      }
-      organization_channel_reads: {
-        Row: {
-          channel_id: string
-          workspace_id: string
-          member_id: string
-          sequence: number
-        }
-      }
-      organization_channels: {
-        Row: {
-          id: string
-          workspace_id: string
-          title: string
-          created_by: string
-          revision: number
-          archived: boolean
-          created_at: string
-          private_pair: boolean
-          private_pair_key: string | null
-          conversation_group_id: string | null
-        }
-      }
-      organization_coaching_links: {
-        Row: {
-          id: string
-          workspace_id: string
-          athlete_member_id: string
-          coach_member_id: string
-          kind: string
-          sport_id: string | null
-          created_by: string
-          created_at: string
-          ended_by: string | null
-          ended_at: string | null
-          revision: number
-        }
-      }
-      organization_event_people: {
-        Row: {
-          workspace_id: string
-          event_id: string
-          member_id: string
-          duty: string
-          attendance: string
-          revision: number
-          makeup_for: string | null
-          session_note: string
-          checked_in_at: string | null
-        }
-      }
-      organization_events: {
-        Row: {
-          id: string
-          workspace_id: string
-          created_by: string
-          series_id: string
-          title: string
-          starts_at: string
-          ends_at: string
-          timezone: string
-          location: string
-          kind: string
-          definition: Json | null
-          template_id: string | null
-          template_revision: number | null
-          state: string
-          revision: number
-          created_at: string
-          training_date: string
-          workout_snapshot: Json | null
-        }
-      }
-      organization_exercises: {
-        Row: {
-          workspace_id: string
-          id: string
-          data: Json
-          created_by: string
-          revision: number
-          active: boolean
-        }
-      }
-      organization_group_members: {
-        Row: {
-          workspace_id: string
-          group_id: string
-          member_id: string
-        }
-      }
-      organization_groups: {
-        Row: {
-          id: string
-          workspace_id: string
-          name: string
-          created_by: string
-          archived: boolean
-          revision: number
-        }
-      }
-      organization_injury_access_log: {
-        Row: {
-          id: string
-          workspace_id: string
-          record_id: string
-          athlete_member_id: string
-          actor_id: string
-          action: string
-          created_at: string
-        }
-      }
-      organization_injury_history: {
-        Row: {
-          id: string
-          workspace_id: string
-          record_id: string
-          revision: number
-          action: string
-          participation: string
-          effective_from: string
-          recorded_by: string | null
-          recorded_at: string
-        }
-      }
-      organization_injury_operations: {
-        Row: {
-          workspace_id: string
-          operation_id: string
-          actor_id: string
-          request_hash: string
-          record_id: string
-          result_revision: number
-          created_at: string
-        }
-      }
-      organization_injury_permissions: {
-        Row: {
-          workspace_id: string
-          athlete_member_id: string
-          age_group: string
-          guardian_authorized: boolean
-          guardian_verified_by: string | null
-          guardian_verified_at: string | null
-          athlete_assented_at: string | null
-          assent_policy_version: string | null
-          withdrawn_at: string | null
-          revision: number
-          configured_at: string
-          configured_by: string
-        }
-      }
-      organization_injury_records: {
-        Row: {
-          id: string
-          workspace_id: string
-          athlete_member_id: string
-          participation: string
-          effective_from: string
-          state: string
-          revision: number
-          created_at: string
-          updated_at: string
-          closed_at: string | null
-        }
-      }
-      organization_injury_retention_checkpoint: {
-        Row: {
-          singleton: boolean
-          completed_at: string
-          closed_count: number
-          purged_count: number
-        }
-      }
-      organization_meal_history: {
-        Row: {
-          id: string
-          workspace_id: string
-          meal_id: string
-          revision: number
-          document: Json
-          recorded_at: string
-        }
-      }
-      organization_meals: {
-        Row: {
-          id: string
-          workspace_id: string
-          member_id: string
-          logged_on: string
-          food: Json
-          note: string
-          revision: number
-          removed: boolean
-          created_at: string
-          updated_at: string
-        }
-      }
-      organization_member_sports: {
-        Row: {
-          workspace_id: string
-          member_id: string
-          sport_id: string
-          created_by: string
-          created_at: string
-        }
-      }
-      organization_message_assets: {
-        Row: {
-          message_id: string
-          workspace_id: string
-          asset_id: string
-          position: number
-        }
-      }
-      organization_messages: {
-        Row: {
-          id: string
-          sequence: number
-          workspace_id: string
-          channel_id: string
-          sender_id: string
-          body: string
-          created_at: string
-          asset_id: string | null
-        }
-      }
-      organization_nutrition_plans: {
-        Row: {
-          id: string
-          workspace_id: string
-          member_id: string
-          author_id: string
-          revision: number
-          effective_on: string
-          expires_on: string | null
-          targets: Json
-          meals: Json
-          guidance: string
-          created_at: string
-        }
-      }
-      organization_nutrition_sharing: {
-        Row: {
-          workspace_id: string
-          member_id: string
-          enabled: boolean
-          revision: number
-          updated_at: string
-        }
-      }
-      organization_programs: {
-        Row: {
-          id: string
-          workspace_id: string
-          created_by: string
-          title: string
-          draft: Json
-          draft_version: number
-          archived: boolean
-          listed: boolean
-          updated_at: string
-          revision: number
-        }
-      }
-      organization_session_feedback: {
-        Row: {
-          id: string
-          workspace_id: string
-          member_id: string
-          workout_id: string | null
-          event_id: string | null
-          score: number
-          revision: number
-          created_at: string
-          updated_at: string
-        }
-      }
-      organization_session_history: {
-        Row: {
-          id: string
-          workspace_id: string
-          session_id: string
-          version: number
-          actor_member_id: string
-          action: string
-          entries: Json
-          note: string
-          completed: boolean
-          created_at: string
-        }
-      }
-      organization_sessions: {
-        Row: {
-          id: string
-          workspace_id: string
-          member_id: string
-          assignment_id: string
-          day_id: string
-          local_date: string
-          document: Json
-          version: number
-          started_at: string
-          completed_at: string | null
-          recorded_mode: string
-          recorded_by: string | null
-          occurrence_id: string | null
-          source_snapshot: Json | null
-        }
-      }
-      organization_sports: {
-        Row: {
-          id: string
-          workspace_id: string
-          name: string
-          kind: string
-          archived: boolean
-          revision: number
-          created_by: string
-          created_at: string
-        }
-      }
-      organization_versions: {
-        Row: {
-          id: string
-          workspace_id: string
-          program_id: string
-          revision: number
-          title: string
-          prescription: Json
-          created_by: string
-          created_at: string
-        }
-      }
-      organization_workout_positions: {
-        Row: {
-          id: string
-          workspace_id: string
-          assignment_id: string
-          position: number
-          cycle: number
-          day_id: string
-          occurrence_id: string
-          session_id: string | null
-          state: string
-          resolved_by: string | null
-          resolved_at: string | null
-          reason: string | null
-        }
-      }
-      organization_workout_recurrences: {
-        Row: {
-          id: string
-          workspace_id: string
-          assignment_id: string
-          created_by: string
-          starts_on: string
-          ends_on: string
-          weekdays: number[]
-          timezone: string
-          local_time: string | null
-          duration_minutes: number | null
-          state: string
-          revision: number
-        }
-      }
-      organization_workplace_feedback: {
-        Row: {
-          workspace_id: string
-          member_id: string
-          month: string
-          score: number
-          revision: number
-          created_at: string
-          updated_at: string
         }
       }
       plan_deliveries: {
@@ -799,7 +859,7 @@ export type Database = {
       program_media: {
         Row: {
           id: string
-          workspace_id: string
+          institution_id: string
           created_by: string | null
           media_type: string
           bytes: number
@@ -1007,66 +1067,6 @@ export type Database = {
           id: string
           owner_id: string | null
           name: string
-          archived: boolean
-          revision: number
-          created_at: string
-        }
-      }
-      workspace_events: {
-        Row: {
-          id: string
-          workspace_id: string
-          actor_id: string | null
-          kind: string
-          subject_id: string | null
-          detail: Json
-          created_at: string
-        }
-      }
-      workspace_invitations: {
-        Row: {
-          id: string
-          workspace_id: string
-          email: string
-          roles: string[]
-          token_hash: string
-          created_by: string | null
-          expires_at: string
-          state: string
-          accepted_by: string | null
-          created_at: string
-          sport_ids: string[]
-        }
-      }
-      workspace_members: {
-        Row: {
-          id: string
-          workspace_id: string
-          user_id: string | null
-          roles: string[]
-          active: boolean
-          revision: number
-          trainer_id: string | null
-          joined_at: string
-          name: string
-        }
-      }
-      workspace_operations: {
-        Row: {
-          id: string
-          workspace_id: string
-          actor_id: string
-          payload: Json
-          result: Json
-          created_at: string
-        }
-      }
-      workspaces: {
-        Row: {
-          id: string
-          kind: string
-          name: string
-          created_by: string | null
           archived: boolean
           revision: number
           created_at: string

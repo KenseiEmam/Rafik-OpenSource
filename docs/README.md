@@ -88,3 +88,5 @@ Historical phase records and superseded documents are linked from the [archive i
 - [Reusable backend audit prompt](reference/backend/audit-prompt.md): scope and removal criteria.
 
 - [ADR 0028 — Explicit backend compatibility](decisions/ADR-0028-explicit-backend-compatibility.md): allowlists, historical retention and simulator retirement.
+
+- [ADR 0029 — Institution identifiers](decisions/ADR-0029-institution-identifiers.md): physical renames, canonical APIs and published-client upgrade compatibility.

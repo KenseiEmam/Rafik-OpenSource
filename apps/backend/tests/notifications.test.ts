@@ -22,9 +22,9 @@ test("notification intent, scoped inbox, preferences, quiet hours, retry and loc
       other = await f.person(),
       id = await f.create(admin),
       trainee = await f.join(admin, id, client, ["trainee"]),
-      self = await db.workspace_members.findUniqueOrThrow({
+      self = await db.institution_members.findUniqueOrThrow({
         where: {
-          workspace_id_user_id: { workspace_id: id, user_id: admin.id },
+          institution_id_user_id: { institution_id: id, user_id: admin.id },
         },
       }),
       channel = randomUUID();
@@ -51,7 +51,7 @@ test("notification intent, scoped inbox, preferences, quiet hours, retry and loc
     );
     await call(admin, `/v1/workspaces/${id}/communication`, send);
     let rows = await db.notification_events.findMany({
-      where: { user_id: client.id, workspace_id: id },
+      where: { user_id: client.id, institution_id: id },
     });
     assert.equal(rows.length, 1, "domain retry captures one intent");
     const notification = rows[0];
@@ -59,7 +59,7 @@ test("notification intent, scoped inbox, preferences, quiet hours, retry and loc
     await db.notification_events.createMany({
       data: Array.from({ length: 26 }, () => ({
         user_id: client.id,
-        workspace_id: null,
+        institution_id: null,
         category: "messages",
         source_kind: "message",
         source_id: randomUUID(),
@@ -244,7 +244,7 @@ test("retired independent notifications never publish unsupported browser target
       {} as any,
       {
         source_kind,
-        workspace_id: null,
+        institution_id: null,
         expires_at: new Date(Date.now() + 60_000),
       } as any,
     );

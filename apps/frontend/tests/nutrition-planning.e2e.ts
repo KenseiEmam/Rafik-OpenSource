@@ -181,7 +181,7 @@ test('nutrition helpers and exercise viewer remain usable in English/Arabic and 
         await expect(page.locator('.food-results button').first()).toBeVisible()
         await expect.poll(() => layoutIssues(page)).toEqual([])
         expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
-        await page.locator('.nutrition-workspace h1').scrollIntoViewIfNeeded()
+        await page.locator('.nutrition-institution h1').scrollIntoViewIfNeeded()
         await page.screenshot({
           path: `artifacts/r14-nutrition-${info.project.name}-${lang}-${theme}-${width}.png`,
           fullPage: true,

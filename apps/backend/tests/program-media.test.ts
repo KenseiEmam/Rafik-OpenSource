@@ -18,24 +18,24 @@ const png = Buffer.from(
 async function media(
   p: Person,
   id: string,
-  workspace?: string,
+  institution?: string,
   bytes = png,
   type = "image/png",
 ) {
   return fetch(
-    `${apiOrigin}/v1/program-media/${id}${workspace ? "?workspace=" + workspace : ""}`,
+    `${apiOrigin}/v1/program-media/${id}${institution ? "?institution=" + institution : ""}`,
     {
-      method: workspace ? "PUT" : "GET",
+      method: institution ? "PUT" : "GET",
       headers: {
         Cookie: p.cookie,
         "x-rafik-client": "web",
         "Content-Type": type,
       },
-      body: workspace ? bytes : undefined,
+      body: institution ? bytes : undefined,
     },
   );
 }
-test("private program imagery has immutable bytes, workspace publication and revoked audience checks", async () => {
+test("private program imagery has immutable bytes, institution publication and revoked audience checks", async () => {
   const f = await organizationFixture();
   try {
     const admin = await f.person(),
@@ -119,7 +119,7 @@ test("private program imagery has immutable bytes, workspace publication and rev
       200,
     );
     assert.equal((await media(client, image)).status, 403);
-    const exported = await call(client, "/v1/account/organizations");
+    const exported = await call(client, "/v1/account/institution");
     assert.equal(exported.status, 200);
     assert.equal(exported.data.memberships.length, 1);
     assert.equal(exported.data.sessions.length, 0);

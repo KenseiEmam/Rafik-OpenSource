@@ -47,11 +47,27 @@ export async function refreshSchemaSnapshot() {
     if (process.argv.includes("--verify-retirement")) {
       sql(
         migrations
-          .slice(0, -1)
+          .slice(
+            0,
+            migrations.findIndex(
+              ([name]) => name === "202610231600_retire_business_simulation",
+            ),
+          )
           .map(([, source]) => source)
           .join("\n"),
       );
-      sql(readFileSync(resolve(backendRoot, "prisma/seed.sql"), "utf8"));
+      let seed = readFileSync(resolve(backendRoot, "prisma/seed.sql"), "utf8");
+      const names = JSON.parse(
+        readFileSync(
+          resolve(backendRoot, "scripts/institution-names.json"),
+          "utf8",
+        ),
+      );
+      for (const [old, current] of Object.entries(names).sort(
+        (a, b) => b[1].length - a[1].length,
+      ))
+        seed = seed.replaceAll(current, old);
+      sql(seed.replaceAll("institution_id", "workspace_id"));
       sql(`INSERT INTO public.business_accounts(id,owner_id) VALUES('92000000-0000-4000-8000-000000000001','10000000-0000-4000-8000-000000000001') ON CONFLICT DO NOTHING;
     INSERT INTO public.business_events(id,account_id,sequence,payload,applied)
     SELECT '93000000-0000-4000-8000-000000000001',id,1,'{"synthetic":true}',false FROM public.business_accounts WHERE owner_id='10000000-0000-4000-8000-000000000001';`);
@@ -60,7 +76,12 @@ export async function refreshSchemaSnapshot() {
           `SELECT jsonb_build_object('accounts',(SELECT jsonb_agg(to_jsonb(a) ORDER BY id) FROM public.business_accounts a),'receipts',(SELECT jsonb_agg(to_jsonb(e) ORDER BY id) FROM public.business_events e));`,
         );
       const before = records();
-      sql(migrations.at(-1)[1]);
+      for (const [, source] of migrations.slice(
+        migrations.findIndex(
+          ([name]) => name === "202610231600_retire_business_simulation",
+        ),
+      ))
+        sql(source);
       if (records() !== before)
         throw Error("Retirement changed retained account history");
       sql(

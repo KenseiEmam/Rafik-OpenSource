@@ -5,7 +5,7 @@ import { language as l } from '../../lib/i18n'
 import { useCommand } from '../../lib/commands'
 import CommandStatus from '../../components/CommandStatus.vue'
 import type { Member, Sport } from './types'
-const props = defineProps<{ workspaceId: string; member: Member; sports: Sport[] }>()
+const props = defineProps<{ institutionId: string; member: Member; sports: Sport[] }>()
 const emit = defineEmits<{ saved: [] }>()
 const chosen = ref<string[]>([])
 watch(
@@ -24,10 +24,10 @@ const options = computed(() =>
   ),
 )
 const command = useCommand<'member-sports'>(
-  `organization-member-sports:${props.workspaceId}`,
+  `organization-member-sports:${props.institutionId}`,
   async () => emit('saved'),
   (_, args) =>
-    request(`/v1/workspaces/${props.workspaceId}/sports`, {
+    request(`/v1/institution/sports`, {
       method: 'POST',
       body: JSON.stringify(args),
     }),

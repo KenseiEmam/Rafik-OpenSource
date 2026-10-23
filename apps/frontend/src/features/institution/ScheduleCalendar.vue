@@ -16,7 +16,7 @@ import PageState from '../../components/PageState.vue'
 import type { CalendarEvent } from './service-types'
 const route = useRoute(),
   router = useRouter(),
-  id = institutionContext().workspace,
+  id = institutionContext().institution,
   view = institutionContext().view,
   base = '',
   zone = profile.value?.timezone || 'UTC'
@@ -97,7 +97,7 @@ async function load() {
     let cursor: number | null = 0
     while (cursor !== null) {
       const result: { items: CalendarEvent[]; next: number | null } = await request(
-        `/v1/workspaces/${id}/calendar?view=${view}&from=${start.value}&to=${end.value}&zone=${encodeURIComponent(zone)}&offset=${cursor}`,
+        `/v1/institution/calendar?view=${view}&from=${start.value}&to=${end.value}&zone=${encodeURIComponent(zone)}&offset=${cursor}`,
       )
       if (current !== generation) return
       collected.push(...result.items)

@@ -6,7 +6,7 @@ import { layoutIssues } from './layout-contract'
 async function fixture() {
   const f = await teamFixture(),
     id = randomUUID()
-  await f.call(f.owner, '/v1/workspaces', { id, kind: 'organization', name: 'Madar nutrition' })
+  await f.call(f.owner, '/v1/institutions', { id, kind: 'institution', name: 'Madar nutrition' })
   // A second athlete: drafts must stay scoped when staff switch between athletes.
   const second = await f.createPerson('R4 Second Athlete')
   for (const [person, roles] of [
@@ -15,7 +15,7 @@ async function fixture() {
     [second, ['trainee']],
   ] as const) {
     const token = randomBytes(32).toString('hex')
-    await f.call(f.owner, `/v1/workspaces/${id}`, {
+    await f.call(f.owner, `/v1/institution`, {
       operation: randomUUID(),
       action: 'invite',
       id: randomUUID(),
@@ -23,19 +23,19 @@ async function fixture() {
       roles,
       token,
     })
-    await f.call(person, `/v1/organization-invitations/${token}`, {})
+    await f.call(person, `/v1/invitations/${token}`, {})
   }
-  const people = await f.call(f.owner, `/v1/workspaces/${id}?view=admin`)
+  const people = await f.call(f.owner, `/v1/institution?view=admin`)
   const member = people.members.find((m: any) => m.user_id === f.client.id),
     staff = people.members.find((m: any) => m.user_id === f.coach.id)
-  await f.call(f.owner, `/v1/workspaces/${id}`, {
+  await f.call(f.owner, `/v1/institution`, {
     operation: randomUUID(),
     action: 'assign-trainer',
     id: member.id,
     revision: member.revision,
     trainer: staff.id,
   })
-  const endpoint = `/v1/workspaces/${id}/nutrition`,
+  const endpoint = `/v1/institution/nutrition`,
     base = `/organization/${id}`
   return { ...f, id, member, staff, endpoint, base }
 }
@@ -140,7 +140,7 @@ test('organization plan publication flows through trainee portions, consent, cor
       .getByRole('button', { name: 'Changes', exact: true })
       .click()
     await expect(client.locator('.org-sharing').last()).toContainText('Removed')
-    const exported = await f.call(f.client, '/v1/account/organizations')
+    const exported = await f.call(f.client, '/v1/account/institution')
     expect(exported.nutritionMeals[0].organization_meal_history).toHaveLength(3)
     await page.getByRole('button', { name: 'Plan history', exact: true }).click()
     await page.locator('.org-plan-history summary').click()

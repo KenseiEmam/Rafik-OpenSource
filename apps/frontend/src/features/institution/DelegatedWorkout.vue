@@ -39,10 +39,10 @@ type Version = {
 }
 const route = useRoute(),
   router = useRouter(),
-  workspace = institutionContext().workspace,
+  institution = institutionContext().institution,
   view = institutionContext().view,
   base = '',
-  ws = `/v1/workspaces/${workspace}`
+  ws = `/v1/institution`
 const sessionId = computed(() => String(route.params.session))
 const loading = ref(true),
   error = ref(''),
@@ -62,15 +62,11 @@ async function load() {
       )
       plan.value = page.items[0] as typeof plan.value
     } else {
-      session.value = await get<Delegated>(
-        `/v1/organization-sessions/${sessionId.value}?view=${view}`,
-      )
+      session.value = await get<Delegated>(`/v1/workouts/${sessionId.value}?view=${view}`)
       entries.value = session.value.entries.map((e) => ({ ...e }))
       note.value = session.value.note
       history.value = (
-        await get<{ items: Version[] }>(
-          `/v1/organization-sessions/${sessionId.value}/history?view=${view}`,
-        )
+        await get<{ items: Version[] }>(`/v1/workouts/${sessionId.value}/history?view=${view}`)
       ).items
     }
   } catch (e) {
@@ -86,14 +82,14 @@ const days = computed(
 // change, and a new instance must not adopt the still-saved start command as pending.
 const started = ref('')
 const starting = useCommand<'start'>(
-  `delegated-start:${workspace}`,
+  `delegated-start:${institution}`,
   async (_, result) => {
     started.value = (result as Session).id
   },
   (_, args) => request(`${ws}/sessions`, { method: 'POST', body: JSON.stringify(args) }),
 )
 const saving = useCommand<'save'>(
-  `delegated-save:${workspace}:${sessionId.value}`,
+  `delegated-save:${institution}:${sessionId.value}`,
   async () => {
     await load()
   },

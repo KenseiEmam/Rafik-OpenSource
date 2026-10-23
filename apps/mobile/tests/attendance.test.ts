@@ -46,7 +46,7 @@ function adapter(db: DatabaseSync): Database {
 const owner: Owner = {
   instance: 'https://a.example.edu/api',
   user: 'coach-a',
-  workspace: 'university-a',
+  institution: 'university-a',
 }
 const roster: FieldRoster = {
   event: {
@@ -182,14 +182,14 @@ test('on-disk restart preserves queued work and recovers a sending command as un
   }
 })
 
-test('account, institution URL and workspace isolation apply to reads, replay and discard', async () => {
+test('account, institution URL and institution isolation apply to reads, replay and discard', async () => {
   const { db, store } = await setup()
   try {
     await store.enqueue(owner, command())
     for (const other of [
       { ...owner, user: 'coach-b' },
       { ...owner, instance: 'https://b.example.edu/api' },
-      { ...owner, workspace: 'university-b' },
+      { ...owner, institution: 'university-b' },
     ]) {
       assert.equal(await store.snapshot(other, 'event-a'), null)
       assert.equal(await store.next(other), null)
@@ -202,8 +202,8 @@ test('account, institution URL and workspace isolation apply to reads, replay an
       assert.equal(sent, 0)
       await store.remove(other, 'event-a')
     }
-    assert.deepEqual(await store.workspaces(owner.instance, owner.user), [owner.workspace])
-    assert.deepEqual(await store.workspaces(owner.instance, 'coach-b'), [])
+    assert.deepEqual(await store.institutions(owner.instance, owner.user), [owner.institution])
+    assert.deepEqual(await store.institutions(owner.instance, 'coach-b'), [])
     assert.equal((await store.next(owner))?.payload.operation, 'operation-a')
   } finally {
     db.close()
@@ -519,7 +519,7 @@ test('lost completion acknowledgment retries the same command and evicts only it
       people: roster.people.map((p) => ({ ...p, attendance: 'absent' as const })),
     }
     await store.saveRoster(owner, event)
-    const other = { ...owner, workspace: 'other-university' }
+    const other = { ...owner, institution: 'other-university' }
     await store.saveRoster(other, event)
     await store.enqueue(owner, finishCommand())
     const requests: string[] = []

@@ -36,7 +36,7 @@ export async function teamFixture() {
   const people: Person[] = [],
     teamIds: string[] = []
   async function call(who: Person, path: string, args?: Record<string, unknown>) {
-    if (path === '/v1/workspaces' && args) {
+    if (path === '/v1/institutions' && args) {
       if (!/^rafik_browser_\d+$/.test(testDatabase))
         throw Error('Disposable browser database required')
       const id = String(args.id),
@@ -46,7 +46,7 @@ export async function teamFixture() {
         throw Error('Invalid fixture')
       const quote = (value: string) => "'" + value.replaceAll("'", "''") + "'"
       sql(
-        `BEGIN; INSERT INTO public.workspaces(id,kind,name,created_by) VALUES (${quote(id)},${quote(kind)},${quote(name)},${quote(who.id)}); INSERT INTO public.workspace_members(id,workspace_id,user_id,roles,name) VALUES ('${randomUUID()}',${quote(id)},${quote(who.id)},ARRAY['${kind === 'organization' ? 'admin' : 'trainer'}'],${quote(name)}); COMMIT;`,
+        `BEGIN; INSERT INTO public.institutions(id,kind,name,created_by) VALUES (${quote(id)},${quote(kind)},${quote(name)},${quote(who.id)}); INSERT INTO public.workspace_members(id,institution_id,user_id,roles,name) VALUES ('${randomUUID()}',${quote(id)},${quote(who.id)},ARRAY['${kind === 'institution' ? 'admin' : 'trainer'}'],${quote(name)}); COMMIT;`,
       )
       return { id, kind, name }
     }
@@ -80,18 +80,18 @@ export async function teamFixture() {
     for (const id of teamIds) sql(`delete from public.teams where id='${id}';`)
     for (const p of [...people].reverse()) {
       const media = sql(
-        `copy (select 'program',m.workspace_id,m.id from public.program_media m join public.workspaces w on w.id=m.workspace_id where w.created_by='${p.id}' union all select 'organization',a.workspace_id,a.id from public.organization_assets a join public.workspaces w on w.id=a.workspace_id where w.created_by='${p.id}') to stdout with csv;`,
+        `copy (select 'program',m.institution_id,m.id from public.program_media m join public.institutions w on w.id=m.institution_id where w.created_by='${p.id}' union all select 'organization',a.institution_id,a.id from public.organization_assets a join public.institutions w on w.id=a.institution_id where w.created_by='${p.id}') to stdout with csv;`,
       ).trim()
       for (const line of media ? media.split('\n') : []) {
-        const [kind, workspace, id] = line.split(',')
-        if (!/^[-a-f0-9]{36}$/.test(workspace || '') || !/^[-a-f0-9]{36}$/.test(id || ''))
+        const [kind, institution, id] = line.split(',')
+        if (!/^[-a-f0-9]{36}$/.test(institution || '') || !/^[-a-f0-9]{36}$/.test(id || ''))
           throw Error('Invalid media fixture')
         try {
           unlinkSync(
             resolve(
               root,
               testFiles,
-              createHash('sha256').update(`${kind}/${workspace}/${id}`).digest('hex'),
+              createHash('sha256').update(`${kind}/${institution}/${id}`).digest('hex'),
             ),
           )
         } catch (e) {
@@ -99,7 +99,7 @@ export async function teamFixture() {
         }
       }
       sql(
-        `delete from public.workspaces where created_by='${p.id}'; delete from identity.users where id='${p.id}';`,
+        `delete from public.institutions where created_by='${p.id}'; delete from identity.users where id='${p.id}';`,
       )
     }
   }
@@ -127,7 +127,7 @@ export async function teamFixture() {
       people.push(person)
       await rpc(person, 'ensure_profile', { p_name: name })
       if (name !== 'R4 Athlete')
-        await call(person, '/v1/workspaces', { id: randomUUID(), kind: 'independent', name })
+        await call(person, '/v1/institutions', { id: randomUUID(), kind: 'independent', name })
     }
     const [owner, coach, client] = people as [Person, Person, Person],
       plan = randomUUID()

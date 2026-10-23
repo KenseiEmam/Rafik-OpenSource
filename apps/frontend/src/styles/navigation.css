@@ -1,15 +1,15 @@
-/* Workspace owns navigation and daily-task layout. Public/recorder layout stays independent. */
-.workspace-header {
+/* Institution owns navigation and daily-task layout. Public/recorder layout stays independent. */
+.institution-header {
   height: 76px;
 }
-.workspace-header .header-inner {
+.institution-header .header-inner {
   gap: 24px;
 }
-.workspace-switch {
+.institution-switch {
   margin: 0;
   min-width: 0;
 }
-.workspace-switch select {
+.institution-switch select {
   width: auto;
   max-width: 300px;
   min-height: 44px;
@@ -18,23 +18,23 @@
   border-color: transparent;
   font-weight: 650;
 }
-.workspace-nav-wrap {
+.institution-nav-wrap {
   border-bottom: 1px solid var(--line);
   background: var(--page);
 }
-.workspace-nav {
+.institution-nav {
   display: flex;
   gap: 28px;
   align-items: center;
   min-height: 54px;
 }
-.workspace-nav a {
+.institution-nav a {
   padding: 16px 0;
   min-height: 48px;
   font-size: 0.85rem;
   border-bottom: 2px solid transparent;
 }
-.workspace-nav a.selected {
+.institution-nav a.selected {
   color: var(--accent);
   border-color: var(--accent);
   font-weight: 750;
@@ -113,7 +113,7 @@
   display: grid;
   gap: 24px;
 }
-.workspace-summary {
+.institution-summary {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
@@ -121,29 +121,29 @@
   border-block: 1px solid var(--line);
   padding: 20px 0;
 }
-.workspace-summary strong {
+.institution-summary strong {
   font-size: 2.2rem;
 }
-.workspace-summary a {
+.institution-summary a {
   flex-basis: 100%;
   color: var(--accent);
   padding-top: 10px;
 }
-.workspace-shortcut {
+.institution-shortcut {
   display: grid;
   gap: 12px;
   background: var(--tint);
   padding: 24px;
   border-radius: 12px;
 }
-.workspace-shortcut span {
+.institution-shortcut span {
   color: var(--accent);
 }
-.workspace-empty {
+.institution-empty {
   padding: 32px 0;
   max-width: 55ch;
 }
-.workspace-empty p {
+.institution-empty p {
   color: var(--muted);
 }
 .tool-shortcuts {
@@ -176,60 +176,60 @@
   margin-bottom: 6px;
 }
 @media (max-width: 760px) {
-  .workspace-header {
+  .institution-header {
     height: auto;
     min-height: 70px;
   }
-  .workspace-header .header-inner {
+  .institution-header .header-inner {
     gap: 8px;
     flex-wrap: wrap;
     padding-block: 10px;
   }
-  .workspace-header .brand img {
+  .institution-header .brand img {
     width: 24px;
     height: 24px;
   }
-  .workspace-header .brand > span {
+  .institution-header .brand > span {
     font-size: 1.4rem;
     min-width: 0;
   }
-  .workspace-header .brand {
+  .institution-header .brand {
     gap: 5px;
   }
-  .workspace-switch {
+  .institution-switch {
     flex: 1;
   }
-  .workspace-switch select {
+  .institution-switch select {
     max-width: 100%;
     padding-inline: 6px 20px;
     font-size: 0.75rem;
   }
-  .workspace-header .header-actions {
+  .institution-header .header-actions {
     gap: 3px;
   }
-  .workspace-header .language-button span,
-  .workspace-header .account-link > svg {
+  .institution-header .language-button span,
+  .institution-header .account-link > svg {
     display: none;
   }
-  .workspace-header .language-button {
+  .institution-header .language-button {
     width: 36px;
     min-height: 44px;
   }
-  .workspace-header .account-link {
+  .institution-header .account-link {
     min-height: 44px;
   }
-  .workspace-nav {
+  .institution-nav {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 8px;
   }
-  .workspace-nav a {
+  .institution-nav a {
     text-align: center;
     font-size: 0.78rem;
     padding-block: 14px;
     overflow-wrap: anywhere;
   }
-  .workspace-nav .workspace-secondary {
+  .institution-nav .institution-secondary {
     display: none;
   }
   .work-heading {
@@ -298,7 +298,7 @@
   gap: 10px;
   flex-wrap: wrap;
 }
-.workspace-switch select {
+.institution-switch select {
   border-color: var(--line);
   cursor: pointer;
   padding-inline-end: 28px;

@@ -3,14 +3,15 @@
     "/": "External/root dispatch.",
     "/setup": "One-time first-run setup.",
     "/access": "Guard/recovery entry.",
-    "/organization/:workspace/:view/:legacy(.*)*": "Authorized compatibility entry; wrong institution rejected, unsupported destinations remain 404.",
-    "/organization-invite/:token": "External invitation token; intentionally absent from nav.",
+    "/organization-invite/:token": "Compatibility bookmark redirects to the canonical invitation.",
     "/password-setup/:token": "External reset/setup token; intentionally absent from nav.",
     "/:pathMatch(.*)*": "Fallback; intentionally not linked.",
     "/workout/:id": "From athlete plan/history or authorized workout notification.",
     "/members/:member": "People row/profile action; staff authority.",
     "/record/:session": "Staff assignment/recording workflow.",
-    "/deliver/:id": "Published-program action; id is immutable version ID."
+    "/deliver/:id": "Published-program action; id is immutable version ID.",
+    "/organization/:institution/:view/:legacy(.*)*": "Authorized compatibility entry; wrong institution rejected, unsupported destinations remain 404.",
+    "/invitation/:token": "Canonical external invitation token; intentionally absent from nav."
   },
   "nonRoutes": [],
   "links": [

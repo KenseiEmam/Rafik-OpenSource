@@ -10,7 +10,7 @@ const base = apiOrigin,
   spaces: string[] = [];
 type Person = { id: string; email: string; cookie: string };
 after(async () => {
-  await db.workspaces.deleteMany({ where: { id: { in: spaces } } });
+  await db.institutions.deleteMany({ where: { id: { in: spaces } } });
   await db.users.deleteMany({ where: { id: { in: people } } });
   await db.$disconnect();
 });
@@ -34,7 +34,7 @@ async function person(name: string): Promise<Person> {
   return p;
 }
 async function call(p: Person, path: string, input?: unknown) {
-  if (path === "/v1/workspaces" && input)
+  if (path === "/v1/institutions" && input)
     return fixtureInstitution(p, input as Record<string, unknown>);
   const r = await fetch(base + path, {
     method: input === undefined ? "GET" : "POST",
@@ -56,7 +56,7 @@ async function institution(admin: Person, name: string) {
   const id = randomUUID();
   spaces.push(id);
   assert.equal(
-    (await call(admin, "/v1/workspaces", { id, kind: "organization", name }))
+    (await call(admin, "/v1/institutions", { id, kind: "organization", name }))
       .status,
     200,
   );
@@ -66,7 +66,7 @@ async function join(admin: Person, id: string, p: Person, role: string) {
   const token = randomBytes(32).toString("hex");
   const r = await call(
     admin,
-    "/v1/workspaces/" + id,
+    "/v1/institution",
     operation("invite", {
       id: randomUUID(),
       email: p.email,
@@ -75,13 +75,10 @@ async function join(admin: Person, id: string, p: Person, role: string) {
     }),
   );
   assert.equal(r.status, 200, JSON.stringify(r));
-  assert.equal(
-    (await call(p, "/v1/organization-invitations/" + token, {})).status,
-    200,
-  );
+  assert.equal((await call(p, "/v1/invitations/" + token, {})).status, 200);
 }
 async function member(admin: Person, id: string, p: Person) {
-  const r = await call(admin, `/v1/workspaces/${id}?view=admin`);
+  const r = await call(admin, `/v1/institution?view=admin`);
   return r.data.members.find((m: { user_id: string }) => m.user_id === p.id);
 }
 const sport = (id: string, name: string, kind = "sport") =>
@@ -102,7 +99,7 @@ test("primary and supporting coaches: scoped reads, primary-only sensitive data,
     athlete = await person("Team Athlete"),
     id = await institution(admin, "Coaching team institution"),
     other = await institution(admin, "Other team institution"),
-    ws = `/v1/workspaces/${id}`;
+    ws = `/v1/institution`;
   for (const [p, role] of [
     [primary, "trainer"],
     [support, "trainer"],
@@ -128,13 +125,8 @@ test("primary and supporting coaches: scoped reads, primary-only sensitive data,
     200,
   );
   assert.equal(
-    (
-      await call(
-        admin,
-        `/v1/workspaces/${other}/sports`,
-        sport(foreign, "Fencing"),
-      )
-    ).status,
+    (await call(admin, `/v1/institution/sports`, sport(foreign, "Fencing")))
+      .status,
     200,
   );
   let a = await member(admin, id, athlete);
@@ -359,7 +351,7 @@ test("primary and supporting coaches: scoped reads, primary-only sensitive data,
     ).status,
     200,
   );
-  const active = await db.organization_coaching_links.findMany({
+  const active = await db.institution_coaching_links.findMany({
     where: { athlete_member_id: a.id, ended_at: null },
   });
   assert.deepEqual(
@@ -393,14 +385,14 @@ test("primary and supporting coaches: scoped reads, primary-only sensitive data,
     200,
   );
   assert.equal(
-    await db.organization_coaching_links.count({
-      where: { workspace_id: id, coach_member_id: s.id, ended_at: null },
+    await db.institution_coaching_links.count({
+      where: { institution_id: id, coach_member_id: s.id, ended_at: null },
     }),
     0,
   );
   // trainer_id mirrors the active primary link for every athlete in the institution.
-  const athletes = await db.workspace_members.findMany({
-    where: { workspace_id: id, roles: { has: "trainee" } },
+  const athletes = await db.institution_members.findMany({
+    where: { institution_id: id, roles: { has: "trainee" } },
     include: {
       coaching_as_athlete: { where: { kind: "primary", ended_at: null } },
     },
@@ -410,9 +402,9 @@ test("primary and supporting coaches: scoped reads, primary-only sensitive data,
       m.trainer_id,
       m.coaching_as_athlete[0]?.coach_member_id || null,
     );
-  const events = await db.workspace_events.findMany({
+  const events = await db.institution_audit_events.findMany({
     where: {
-      workspace_id: id,
+      institution_id: id,
       kind: { in: ["coach_linked", "coach_link_ended"] },
     },
   });

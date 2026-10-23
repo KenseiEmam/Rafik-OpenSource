@@ -13,13 +13,13 @@ test('organization conversations preserve scope, compact layout, drafts and exac
     client = await clientContext.newPage(),
     id = randomUUID()
   try {
-    await f.call(f.owner, '/v1/workspaces', {
+    await f.call(f.owner, '/v1/institutions', {
       id,
-      kind: 'organization',
+      kind: 'institution',
       name: 'Madar communication test',
     })
     const token = randomBytes(32).toString('hex')
-    await f.call(f.owner, `/v1/workspaces/${id}`, {
+    await f.call(f.owner, `/v1/institution`, {
       operation: randomUUID(),
       action: 'invite',
       id: randomUUID(),
@@ -27,11 +27,11 @@ test('organization conversations preserve scope, compact layout, drafts and exac
       roles: ['trainee'],
       token,
     })
-    await f.call(f.client, `/v1/organization-invitations/${token}`, {})
+    await f.call(f.client, `/v1/invitations/${token}`, {})
     const base = `/messages`
     const initialList = page.waitForResponse(
       (response) =>
-        response.url().includes(`/v1/workspaces/${id}/communication`) &&
+        response.url().includes(`/v1/institution/communication`) &&
         response.request().method() === 'GET',
     )
     await f.login(page, f.owner, base)
@@ -76,7 +76,7 @@ test('organization conversations preserve scope, compact layout, drafts and exac
       'Let us review your first week together.',
     )
     let lost = false
-    await page.route(`**/v1/workspaces/${id}/communication`, async (r) => {
+    await page.route(`**/v1/institution/communication`, async (r) => {
       if (
         !lost &&
         r.request().method() === 'POST' &&

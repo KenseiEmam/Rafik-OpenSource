@@ -64,18 +64,18 @@ try {
   sql(
     name,
     `BEGIN;
-ALTER TABLE public.workspace_members DROP CONSTRAINT workspace_members_single_role_check;
-ALTER TABLE public.workspace_invitations DROP CONSTRAINT workspace_invitations_single_role_check;
-ALTER TABLE public.workspace_members ADD CONSTRAINT workspace_members_legacy_roles_check CHECK (cardinality(roles) BETWEEN 1 AND 3 AND roles <@ ARRAY['admin','trainer','trainee']::text[]);
-ALTER TABLE public.workspace_invitations ADD CONSTRAINT workspace_invitations_legacy_roles_check CHECK (cardinality(roles) BETWEEN 1 AND 3 AND roles <@ ARRAY['admin','trainer','trainee']::text[]);
-UPDATE public.workspace_members SET roles=ARRAY['trainer','trainee']::text[] WHERE id='13000000-0000-4000-8000-000000000003';
-INSERT INTO public.workspace_invitations(id,workspace_id,email,roles,token_hash,created_by,expires_at)
+ALTER TABLE public.institution_members DROP CONSTRAINT institution_members_single_role_check;
+ALTER TABLE public.institution_invitations DROP CONSTRAINT institution_invitations_single_role_check;
+ALTER TABLE public.institution_members ADD CONSTRAINT institution_members_legacy_roles_check CHECK (cardinality(roles) BETWEEN 1 AND 3 AND roles <@ ARRAY['admin','trainer','trainee']::text[]);
+ALTER TABLE public.institution_invitations ADD CONSTRAINT institution_invitations_legacy_roles_check CHECK (cardinality(roles) BETWEEN 1 AND 3 AND roles <@ ARRAY['admin','trainer','trainee']::text[]);
+UPDATE public.institution_members SET roles=ARRAY['trainer','trainee']::text[] WHERE id='13000000-0000-4000-8000-000000000003';
+INSERT INTO public.institution_invitations(id,institution_id,email,roles,token_hash,created_by,expires_at)
 VALUES ('15000000-0000-4000-8000-000000000001','12000000-0000-4000-8000-000000000001','legacy-multi@rafik.test',ARRAY['trainer','trainee']::text[],repeat('a',64),'11000000-0000-4000-8000-000000000001',now()+interval '1 day');
 ${roleMigration}
 DO $$ BEGIN
-  IF (SELECT roles FROM public.workspace_members WHERE id='13000000-0000-4000-8000-000000000003') IS DISTINCT FROM ARRAY['trainer']::text[] THEN RAISE EXCEPTION 'membership role normalization failed'; END IF;
-  IF (SELECT trainer_id FROM public.workspace_members WHERE id='13000000-0000-4000-8000-000000000003') IS NOT NULL THEN RAISE EXCEPTION 'trainer assignment was not cleared'; END IF;
-  IF (SELECT roles FROM public.workspace_invitations WHERE id='15000000-0000-4000-8000-000000000001') IS DISTINCT FROM ARRAY['trainer']::text[] THEN RAISE EXCEPTION 'invitation role normalization failed'; END IF;
+  IF (SELECT roles FROM public.institution_members WHERE id='13000000-0000-4000-8000-000000000003') IS DISTINCT FROM ARRAY['trainer']::text[] THEN RAISE EXCEPTION 'membership role normalization failed'; END IF;
+  IF (SELECT trainer_id FROM public.institution_members WHERE id='13000000-0000-4000-8000-000000000003') IS NOT NULL THEN RAISE EXCEPTION 'trainer assignment was not cleared'; END IF;
+  IF (SELECT roles FROM public.institution_invitations WHERE id='15000000-0000-4000-8000-000000000001') IS DISTINCT FROM ARRAY['trainer']::text[] THEN RAISE EXCEPTION 'invitation role normalization failed'; END IF;
 END $$;
 ROLLBACK;`,
   );
@@ -92,30 +92,30 @@ ROLLBACK;`,
     "utf8",
   );
   const backfill = coachingMigration.match(
-    /insert into public\.organization_coaching_links[\s\S]*?where m\.trainer_id is not null;/,
+    /insert into public\.institution_coaching_links[\s\S]*?where m\.trainer_id is not null;/,
   )?.[0];
   if (!backfill) throw Error("Coaching backfill statement not found");
   sql(
     name,
     `BEGIN;
 CREATE FUNCTION pg_temp.mirror_ok() RETURNS boolean LANGUAGE sql AS $$
-  SELECT NOT EXISTS(SELECT 1 FROM public.workspace_members m WHERE m.trainer_id IS NOT NULL AND NOT EXISTS(
-    SELECT 1 FROM public.organization_coaching_links l WHERE l.athlete_member_id=m.id AND l.coach_member_id=m.trainer_id AND l.kind='primary' AND l.ended_at IS NULL))
-  AND NOT EXISTS(SELECT 1 FROM public.organization_coaching_links l JOIN public.workspace_members m ON m.id=l.athlete_member_id
+  SELECT NOT EXISTS(SELECT 1 FROM public.institution_members m WHERE m.trainer_id IS NOT NULL AND NOT EXISTS(
+    SELECT 1 FROM public.institution_coaching_links l WHERE l.athlete_member_id=m.id AND l.coach_member_id=m.trainer_id AND l.kind='primary' AND l.ended_at IS NULL))
+  AND NOT EXISTS(SELECT 1 FROM public.institution_coaching_links l JOIN public.institution_members m ON m.id=l.athlete_member_id
     WHERE l.kind='primary' AND l.ended_at IS NULL AND m.trainer_id IS DISTINCT FROM l.coach_member_id) $$;
 DO $$ BEGIN
-  IF NOT EXISTS(SELECT 1 FROM public.workspace_members WHERE trainer_id IS NOT NULL) THEN RAISE EXCEPTION 'seed has no assigned athletes to check'; END IF;
+  IF NOT EXISTS(SELECT 1 FROM public.institution_members WHERE trainer_id IS NOT NULL) THEN RAISE EXCEPTION 'seed has no assigned athletes to check'; END IF;
   IF NOT pg_temp.mirror_ok() THEN RAISE EXCEPTION 'seeded primary links do not mirror trainer_id'; END IF;
 END $$;
-ALTER TABLE public.workspace_members DISABLE TRIGGER workspace_members_sync_coaching_links;
-DELETE FROM public.organization_coaching_links;
+ALTER TABLE public.institution_members DISABLE TRIGGER institution_members_sync_coaching_links;
+DELETE FROM public.institution_coaching_links;
 ${backfill}
-ALTER TABLE public.workspace_members ENABLE TRIGGER workspace_members_sync_coaching_links;
+ALTER TABLE public.institution_members ENABLE TRIGGER institution_members_sync_coaching_links;
 DO $$ BEGIN IF NOT pg_temp.mirror_ok() THEN RAISE EXCEPTION 'backfill did not recreate primary links'; END IF; END $$;
-UPDATE public.workspace_members SET active=false WHERE id IN (SELECT DISTINCT trainer_id FROM public.workspace_members WHERE trainer_id IS NOT NULL);
-UPDATE public.workspace_members SET trainer_id=NULL WHERE trainer_id IS NOT NULL;
+UPDATE public.institution_members SET active=false WHERE id IN (SELECT DISTINCT trainer_id FROM public.institution_members WHERE trainer_id IS NOT NULL);
+UPDATE public.institution_members SET trainer_id=NULL WHERE trainer_id IS NOT NULL;
 DO $$ BEGIN
-  IF EXISTS(SELECT 1 FROM public.organization_coaching_links WHERE ended_at IS NULL) THEN RAISE EXCEPTION 'deactivation or cleared trainer_id left active links'; END IF;
+  IF EXISTS(SELECT 1 FROM public.institution_coaching_links WHERE ended_at IS NULL) THEN RAISE EXCEPTION 'deactivation or cleared trainer_id left active links'; END IF;
   IF NOT pg_temp.mirror_ok() THEN RAISE EXCEPTION 'mirror diverged after clearing'; END IF;
 END $$;
 ROLLBACK;`,

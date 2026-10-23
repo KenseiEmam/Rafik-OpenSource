@@ -9,7 +9,7 @@ import {
   type Tx,
   type Role,
   access,
-} from "./workspaces.ts";
+} from "./institution.ts";
 import { role, recipient } from "./programming.ts";
 import {
   definition,
@@ -30,12 +30,12 @@ export async function eventAccess(
   view: Role,
   key: string,
 ) {
-  const item = await tx.organization_events.findUnique({
+  const item = await tx.institution_events.findUnique({
     where: { id: uuid(key) },
     include: {
-      organization_event_people: {
+      institution_event_people: {
         include: {
-          workspace_members: {
+          institution_members: {
             select: {
               id: true,
               name: true,
@@ -50,9 +50,9 @@ export async function eventAccess(
   });
   if (
     !item ||
-    item.workspace_id !== id ||
+    item.institution_id !== id ||
     (view !== "admin" &&
-      !item.organization_event_people.some(
+      !item.institution_event_people.some(
         (p) =>
           p.member_id === self.id &&
           p.duty === (view === "trainer" ? "staff" : "trainee"),
@@ -81,7 +81,7 @@ export async function scheduledEvents(
   const search = (q.get("search") || "").trim().slice(0, 100);
   return scoped(actor, id, [view], async (tx, self) => {
     const where = {
-      workspace_id: id,
+      institution_id: id,
       ...(kind !== "all" ? { kind } : {}),
       ...(state !== "all" ? { state } : {}),
       ...(search
@@ -89,14 +89,14 @@ export async function scheduledEvents(
         : {}),
       ...(view === "trainer"
         ? {
-            organization_event_people: {
+            institution_event_people: {
               some: { member_id: self.id, duty: "staff" },
             },
           }
         : {}),
     };
     const [items, total] = await Promise.all([
-      tx.organization_events.findMany({
+      tx.institution_events.findMany({
         where,
         skip: offset,
         take,
@@ -112,17 +112,17 @@ export async function scheduledEvents(
           location: true,
           _count: {
             select: {
-              organization_event_people: { where: { duty: "trainee" } },
+              institution_event_people: { where: { duty: "trainee" } },
             },
           },
         },
       }),
-      tx.organization_events.count({ where }),
+      tx.institution_events.count({ where }),
     ]);
     return {
       items: items.map(({ _count, ...item }) => ({
         ...item,
-        athlete_count: _count.organization_event_people,
+        athlete_count: _count.institution_event_people,
       })),
       total,
       next: offset + take < total ? offset + take : null,
@@ -135,7 +135,7 @@ export async function calendar(actor: Actor, id: string, q: URLSearchParams) {
   return scoped(actor, id, [view], async (tx, self) => {
     if (q.get("id")) {
       const item = await eventAccess(tx, id, self, view, q.get("id")!);
-      const people = item.organization_event_people.filter(
+      const people = item.institution_event_people.filter(
         (p) =>
           view !== "trainee" || p.duty === "staff" || p.member_id === self.id,
       );
@@ -158,9 +158,9 @@ export async function calendar(actor: Actor, id: string, q: URLSearchParams) {
         if (!["attendance", "results"].includes(kind))
           throw new ApiError(400, "invalid_request");
         if (kind === "attendance") {
-          const rows = await tx.workspace_events.findMany({
+          const rows = await tx.institution_audit_events.findMany({
             where: {
-              workspace_id: id,
+              institution_id: id,
               subject_id: item.id,
               kind: "attendance_recorded",
               detail: { path: ["member"], equals: historyMember },
@@ -175,9 +175,9 @@ export async function calendar(actor: Actor, id: string, q: URLSearchParams) {
               detail: true,
             },
           });
-          const actors = await tx.workspace_members.findMany({
+          const actors = await tx.institution_members.findMany({
             where: {
-              workspace_id: id,
+              institution_id: id,
               user_id: {
                 in: rows.flatMap((r) => (r.actor_id ? [r.actor_id] : [])),
               },
@@ -208,9 +208,9 @@ export async function calendar(actor: Actor, id: string, q: URLSearchParams) {
           skip: historyOffset,
           take: 26,
         });
-        const actors = await tx.workspace_members.findMany({
+        const actors = await tx.institution_members.findMany({
           where: {
-            workspace_id: id,
+            institution_id: id,
             id: { in: rows.map((r) => r.recorded_by) },
           },
           select: { id: true, name: true },
@@ -244,13 +244,13 @@ export async function calendar(actor: Actor, id: string, q: URLSearchParams) {
               take: historyMember ? 26 : 101,
             });
       return {
-        event: { ...item, organization_event_people: undefined },
+        event: { ...item, institution_event_people: undefined },
         people: people.map((p) => ({
           ...p,
-          workspace_members: undefined,
-          name: p.workspace_members.name,
-          active: p.workspace_members.active,
-          roles: p.workspace_members.roles,
+          institution_members: undefined,
+          name: p.institution_members.name,
+          active: p.institution_members.active,
+          roles: p.institution_members.roles,
         })),
         results: await tx.assessment_results.findMany({ where }),
         history: history.slice(0, historyMember ? 25 : 100),
@@ -269,12 +269,12 @@ export async function calendar(actor: Actor, id: string, q: URLSearchParams) {
       { start: Date; end: Date }[]
     >`SELECT ${from}::date::timestamp AT TIME ZONE ${zone} AS start,(${to}::date+1)::timestamp AT TIME ZONE ${zone} AS end`;
     const where = {
-      workspace_id: id,
+      institution_id: id,
       starts_at: { lt: bounds[0].end },
       ends_at: { gt: bounds[0].start },
       ...(view !== "admin"
         ? {
-            organization_event_people: {
+            institution_event_people: {
               some: {
                 member_id: self.id,
                 duty: view === "trainer" ? "staff" : "trainee",
@@ -285,32 +285,32 @@ export async function calendar(actor: Actor, id: string, q: URLSearchParams) {
     };
     const offset = pageOffset(q.get("offset"));
     const [items, total] = await Promise.all([
-      tx.organization_events.findMany({
+      tx.institution_events.findMany({
         where,
         orderBy: [{ starts_at: "asc" }, { id: "asc" }],
         skip: offset,
         take: 50,
         include: {
-          organization_event_people: {
+          institution_event_people: {
             select: {
               member_id: true,
               duty: true,
               attendance: true,
-              workspace_members: {
+              institution_members: {
                 select: { name: true, active: true, roles: true },
               },
             },
           },
         },
       }),
-      tx.organization_events.count({ where }),
+      tx.institution_events.count({ where }),
     ]);
     return {
       items: items.map((e) => ({
         ...e,
         definition: undefined,
-        organization_event_people: undefined,
-        people: e.organization_event_people
+        institution_event_people: undefined,
+        people: e.institution_event_people
           .filter(
             (p) =>
               view !== "trainee" ||
@@ -319,10 +319,10 @@ export async function calendar(actor: Actor, id: string, q: URLSearchParams) {
           )
           .map((p) => ({
             ...p,
-            workspace_members: undefined,
-            name: p.workspace_members.name,
-            active: p.workspace_members.active,
-            roles: p.workspace_members.roles,
+            institution_members: undefined,
+            name: p.institution_members.name,
+            active: p.institution_members.active,
+            roles: p.institution_members.roles,
           })),
       })),
       next: offset + 50 < total ? offset + 50 : null,
@@ -364,10 +364,10 @@ async function eventPeople(
     throw new ApiError(403, "forbidden");
   const members = [];
   for (const key of staff) {
-    const m = await tx.workspace_members.findUnique({ where: { id: key } });
+    const m = await tx.institution_members.findUnique({ where: { id: key } });
     if (
       !m ||
-      m.workspace_id !== id ||
+      m.institution_id !== id ||
       !m.active ||
       !m.roles.includes("trainer")
     )
@@ -399,7 +399,7 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
           const original = (
             await tx.$queryRaw<
               { state: string; attendance: string }[]
-            >`SELECT e.state,p.attendance FROM public.organization_events e JOIN public.organization_event_people p ON p.event_id=e.id WHERE e.workspace_id=${id}::uuid AND e.id=${makeup_for}::uuid AND p.member_id=${member}::uuid AND p.duty='trainee'`
+            >`SELECT e.state,p.attendance FROM public.institution_events e JOIN public.institution_event_people p ON p.event_id=e.id WHERE e.institution_id=${id}::uuid AND e.id=${makeup_for}::uuid AND p.member_id=${member}::uuid AND p.duty='trainee'`
           )[0];
           if (
             !original ||
@@ -408,10 +408,10 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
           )
             throw new ApiError(403, "makeup_unavailable");
         }
-      const existing = await tx.organization_events.findUnique({
+      const existing = await tx.institution_events.findUnique({
         where: { id: key },
       });
-      if (existing && existing.workspace_id !== id)
+      if (existing && existing.institution_id !== id)
         throw new ApiError(403, "forbidden");
     } else await eventAccess(tx, id, self, view, key);
   };
@@ -445,7 +445,7 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
           });
           if (
             !template ||
-            template.workspace_id !== id ||
+            template.institution_id !== id ||
             template.archived ||
             (view === "trainer" && template.created_by !== self.id)
           )
@@ -478,10 +478,10 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
           )
             throw new ApiError(400, "invalid_availability");
           await tx.$queryRaw`SELECT public.validate_calendar_collision(${members.map((m) => m.user_id).filter(Boolean)}::uuid[],${start},${end},NULL::uuid)::text`;
-          const item = await tx.organization_events.create({
+          const item = await tx.institution_events.create({
             data: {
               ...(i === 0 ? { id: key } : {}),
-              workspace_id: id,
+              institution_id: id,
               created_by: self.id,
               series_id: key,
               title,
@@ -499,16 +499,16 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
                 : {}),
             },
           });
-          await tx.organization_event_people.createMany({
+          await tx.institution_event_people.createMany({
             data: [
               ...staff.map((member_id) => ({
-                workspace_id: id,
+                institution_id: id,
                 event_id: item.id,
                 member_id,
                 duty: "staff",
               })),
               ...participants.map((member_id) => ({
-                workspace_id: id,
+                institution_id: id,
                 event_id: item.id,
                 member_id,
                 duty: "trainee",
@@ -525,8 +525,8 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
       }
       const item = await eventAccess(tx, id, self, view, key);
       // Bound individual work must retain sequence identity and explicit resolution.
-      const boundWorkout = await tx.organization_workout_positions.findFirst({
-        where: { workspace_id: id, occurrence_id: key },
+      const boundWorkout = await tx.institution_workout_positions.findFirst({
+        where: { institution_id: id, occurrence_id: key },
       });
       if (
         boundWorkout &&
@@ -552,16 +552,16 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
           start.getTime() > Date.now() + 366 * 86400000
         )
           throw new ApiError(400, "invalid_availability");
-        const inactive = item.organization_event_people.some(
+        const inactive = item.institution_event_people.some(
           (p) =>
-            !p.workspace_members.active ||
-            !p.workspace_members.roles.includes(
+            !p.institution_members.active ||
+            !p.institution_members.roles.includes(
               p.duty === "staff" ? "trainer" : "trainee",
             ),
         );
         if (inactive) throw new ApiError(400, "inactive_participant");
-        await tx.$queryRaw`SELECT public.validate_calendar_collision(${item.organization_event_people.map((p) => p.workspace_members.user_id).filter(Boolean)}::uuid[],${start},${end},${key}::uuid)::text`;
-        const changed = await tx.organization_events.update({
+        await tx.$queryRaw`SELECT public.validate_calendar_collision(${item.institution_event_people.map((p) => p.institution_members.user_id).filter(Boolean)}::uuid[],${start},${end},${key}::uuid)::text`;
+        const changed = await tx.institution_events.update({
           where: { id: key },
           data: {
             starts_at: start,
@@ -577,13 +577,13 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
         if (view !== "admin" || item.state !== "scheduled")
           throw new ApiError(403, "forbidden");
         const staff = ids(input.staff, 8),
-          trainees = item.organization_event_people.filter(
+          trainees = item.institution_event_people.filter(
             (p) => p.duty === "trainee",
           );
-        const members = await tx.workspace_members.findMany({
+        const members = await tx.institution_members.findMany({
           where: {
             id: { in: staff },
-            workspace_id: id,
+            institution_id: id,
             active: true,
             roles: { has: "trainer" },
           },
@@ -594,19 +594,19 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
         )
           throw new ApiError(400, "invalid_recipients");
         await tx.$queryRaw`SELECT public.validate_calendar_collision(${members.map((m) => m.user_id).filter(Boolean)}::uuid[],${item.starts_at},${item.ends_at},${key}::uuid)::text`;
-        await tx.organization_event_people.deleteMany({
+        await tx.institution_event_people.deleteMany({
           where: { event_id: key, duty: "staff" },
         });
-        await tx.organization_event_people.createMany({
+        await tx.institution_event_people.createMany({
           data: staff.map((member_id) => ({
-            workspace_id: id,
+            institution_id: id,
             event_id: key,
             member_id,
             duty: "staff",
           })),
         });
         await event(tx, actor, id, "calendar_staff_reassigned", key);
-        return tx.organization_events.update({
+        return tx.institution_events.update({
           where: { id: key },
           data: { revision: { increment: 1 } },
         });
@@ -619,9 +619,9 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
           throw new ApiError(400, "event_has_results");
         const targets =
           input.future_series === true
-            ? await tx.organization_events.findMany({
+            ? await tx.institution_events.findMany({
                 where: {
-                  workspace_id: id,
+                  institution_id: id,
                   series_id: item.series_id,
                   starts_at: { gte: item.starts_at },
                   state: "scheduled",
@@ -642,7 +642,7 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
           )
             throw new ApiError(400, "event_has_results");
         }
-        await tx.organization_events.updateMany({
+        await tx.institution_events.updateMany({
           where: { id: { in: targets.map((e) => e.id) } },
           data: { state: "cancelled", revision: { increment: 1 } },
         });
@@ -655,7 +655,7 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
         throw new ApiError(400, "event_not_started");
       if (action === "session-note") {
         const member = uuid(input.member),
-          person = item.organization_event_people.find(
+          person = item.institution_event_people.find(
             (p) => p.member_id === member && p.duty === "trainee",
           );
         if (!person) throw new ApiError(403, "trainee_unavailable");
@@ -663,7 +663,7 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
           throw new ApiError(409, "conflict");
         const note = typeof input.note === "string" ? input.note.trim() : "";
         if (note.length > 2000) throw new ApiError(400, "invalid_request");
-        const result = await tx.organization_event_people.update({
+        const result = await tx.institution_event_people.update({
           where: { event_id_member_id: { event_id: key, member_id: member } },
           data: { session_note: note, revision: { increment: 1 } },
         });
@@ -675,7 +675,7 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
       }
       if (action === "attendance") {
         const member = uuid(input.member),
-          person = item.organization_event_people.find(
+          person = item.institution_event_people.find(
             (p) => p.member_id === member && p.duty === "trainee",
           );
         if (
@@ -699,7 +699,7 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
               }))))
         )
           throw new ApiError(400, "results_required");
-        const result = await tx.organization_event_people.update({
+        const result = await tx.institution_event_people.update({
           where: { event_id_member_id: { event_id: key, member_id: member } },
           data: {
             attendance: String(input.attendance),
@@ -721,7 +721,7 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
         if (item.kind !== "assessment")
           throw new ApiError(400, "invalid_assessment");
         const member = uuid(input.member),
-          person = item.organization_event_people.find(
+          person = item.institution_event_people.find(
             (p) => p.member_id === member && p.duty === "trainee",
           );
         if (!person || person.attendance !== "present")
@@ -749,14 +749,14 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
           : await tx.assessment_results.create({
               data: {
                 ...data,
-                workspace_id: id,
+                institution_id: id,
                 event_id: key,
                 member_id: member,
               },
             });
         await tx.assessment_result_history.create({
           data: {
-            workspace_id: id,
+            institution_id: id,
             event_id: key,
             member_id: member,
             revision: result.revision,
@@ -771,7 +771,7 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
         return result;
       }
       if (action === "finish") {
-        const participants = item.organization_event_people.filter(
+        const participants = item.institution_event_people.filter(
           (p) => p.duty === "trainee",
         );
         if (participants.some((p) => p.attendance === "unmarked"))
@@ -789,7 +789,7 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
             )
               throw new ApiError(400, "results_required");
         await event(tx, actor, id, "calendar_completed", key);
-        return tx.organization_events.update({
+        return tx.institution_events.update({
           where: { id: key },
           data: { state: "completed", revision: { increment: 1 } },
         });

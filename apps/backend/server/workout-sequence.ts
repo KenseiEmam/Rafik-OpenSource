@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { ApiError, type Actor } from "./db.ts";
-import { event, textValue, uuid, type Tx } from "./workspaces.ts";
+import { event, textValue, uuid, type Tx } from "./institution.ts";
 import type { Prisma } from "./generated/prisma/client.ts";
 
 type Input = Record<string, unknown>;
@@ -8,13 +8,13 @@ const json = (value: unknown) => value as Prisma.InputJsonValue;
 
 export async function lockedAssignment(
   tx: Tx,
-  workspace: string,
+  institution: string,
   assignment: string,
 ) {
-  await tx.$queryRaw`SELECT id FROM public.organization_assignments WHERE workspace_id=${workspace}::uuid AND id=${assignment}::uuid FOR UPDATE`;
-  const item = await tx.organization_assignments.findFirst({
-    where: { id: assignment, workspace_id: workspace },
-    include: { organization_versions: true },
+  await tx.$queryRaw`SELECT id FROM public.institution_assignments WHERE institution_id=${institution}::uuid AND id=${assignment}::uuid FOR UPDATE`;
+  const item = await tx.institution_assignments.findFirst({
+    where: { id: assignment, institution_id: institution },
+    include: { institution_versions: true },
   });
   if (!item) throw new ApiError(404, "assignment_unavailable");
   return item;
@@ -54,13 +54,13 @@ function timedSlot(input: Input) {
 
 export async function assertTrainingAllowed(
   tx: Tx,
-  workspace: string,
+  institution: string,
   member: string,
   date: Date,
 ) {
-  const restriction = await tx.organization_injury_records.findFirst({
+  const restriction = await tx.institution_injury_records.findFirst({
     where: {
-      workspace_id: workspace,
+      institution_id: institution,
       athlete_member_id: member,
       state: "active",
       participation: "unavailable",
@@ -74,13 +74,13 @@ export async function assertTrainingAllowed(
 export async function scheduleIndividualWorkout(
   tx: Tx,
   actor: Actor,
-  workspace: string,
+  institution: string,
   self: string,
   input: Input,
 ) {
   const assignment = await lockedAssignment(
     tx,
-    workspace,
+    institution,
     uuid(input.assignment_id),
   );
   if (input.cursor !== assignment.sequence_cursor)
@@ -92,9 +92,9 @@ export async function scheduleIndividualWorkout(
     (assignment.end_date && slot.date > assignment.end_date)
   )
     throw new ApiError(409, "assignment_unavailable");
-  await assertTrainingAllowed(tx, workspace, assignment.member_id, slot.date);
+  await assertTrainingAllowed(tx, institution, assignment.member_id, slot.date);
   if (
-    await tx.organization_workout_positions.findFirst({
+    await tx.institution_workout_positions.findFirst({
       where: {
         assignment_id: assignment.id,
         state: { in: ["pending", "paused"] },
@@ -103,7 +103,7 @@ export async function scheduleIndividualWorkout(
   )
     throw new ApiError(409, "previous_workout_unresolved");
   if (
-    await tx.organization_sessions.findFirst({
+    await tx.institution_sessions.findFirst({
       where: {
         assignment_id: assignment.id,
         completed_at: null,
@@ -112,7 +112,7 @@ export async function scheduleIndividualWorkout(
     })
   )
     throw new ApiError(409, "legacy_workout_unresolved");
-  const plan = assignment.organization_versions.prescription as any;
+  const plan = assignment.institution_versions.prescription as any;
   const days = (plan.days || []).filter((day: any) => !day.restDay);
   if (!days.length) throw new ApiError(409, "no_workout_days");
   const cursor = assignment.sequence_cursor;
@@ -120,7 +120,7 @@ export async function scheduleIndividualWorkout(
   const day = days[cursor % days.length];
   // Preserve the shipped assignment/date/day replay identity until its explicit cutover.
   if (
-    await tx.organization_sessions.findUnique({
+    await tx.institution_sessions.findUnique({
       where: {
         assignment_id_local_date_day_id: {
           assignment_id: assignment.id,
@@ -131,16 +131,16 @@ export async function scheduleIndividualWorkout(
     })
   )
     throw new ApiError(409, "workout_already_recorded_for_date");
-  const athlete = await tx.workspace_members.findUniqueOrThrow({
+  const athlete = await tx.institution_members.findUniqueOrThrow({
     where: { id: assignment.member_id },
   });
   const staff = [
     ...new Set([self, athlete.trainer_id].filter(Boolean)),
   ] as string[];
-  const people = await tx.workspace_members.findMany({
+  const people = await tx.institution_members.findMany({
     where: {
       id: { in: [...staff, athlete.id] },
-      workspace_id: workspace,
+      institution_id: institution,
       active: true,
     },
     select: { id: true, user_id: true },
@@ -148,12 +148,12 @@ export async function scheduleIndividualWorkout(
   if (!people.some((x) => x.id === athlete.id))
     throw new ApiError(403, "trainee_unavailable");
   await tx.$queryRaw`SELECT public.validate_calendar_collision(${people.map((x) => x.user_id)}::uuid[],${slot.start},${slot.end},NULL::uuid)::text`;
-  const occurrence = await tx.organization_events.create({
+  const occurrence = await tx.institution_events.create({
     data: {
-      workspace_id: workspace,
+      institution_id: institution,
       created_by: self,
       series_id: randomUUID(),
-      title: assignment.organization_versions.title.slice(0, 100),
+      title: assignment.institution_versions.title.slice(0, 100),
       starts_at: slot.start,
       ends_at: slot.end,
       timezone: slot.timezone,
@@ -169,17 +169,17 @@ export async function scheduleIndividualWorkout(
       }),
     },
   });
-  await tx.organization_event_people.createMany({
+  await tx.institution_event_people.createMany({
     data: people.map((person) => ({
-      workspace_id: workspace,
+      institution_id: institution,
       event_id: occurrence.id,
       member_id: person.id,
       duty: person.id === athlete.id ? "trainee" : "staff",
     })),
   });
-  const position = await tx.organization_workout_positions.create({
+  const position = await tx.institution_workout_positions.create({
     data: {
-      workspace_id: workspace,
+      institution_id: institution,
       assignment_id: assignment.id,
       position: cursor,
       cycle: Math.floor(cursor / days.length),
@@ -187,7 +187,7 @@ export async function scheduleIndividualWorkout(
       occurrence_id: occurrence.id,
     },
   });
-  await event(tx, actor, workspace, "workout_scheduled", athlete.id, {
+  await event(tx, actor, institution, "workout_scheduled", athlete.id, {
     assignment: assignment.id,
     occurrence: occurrence.id,
     position: cursor,
@@ -198,16 +198,16 @@ export async function scheduleIndividualWorkout(
 export async function skipIndividualWorkout(
   tx: Tx,
   actor: Actor,
-  workspace: string,
+  institution: string,
   self: string,
   input: Input,
 ) {
   const assignment = await lockedAssignment(
     tx,
-    workspace,
+    institution,
     uuid(input.assignment_id),
   );
-  const position = await tx.organization_workout_positions.findFirst({
+  const position = await tx.institution_workout_positions.findFirst({
     where: {
       assignment_id: assignment.id,
       occurrence_id: uuid(input.occurrence_id),
@@ -219,13 +219,13 @@ export async function skipIndividualWorkout(
     position.position !== assignment.sequence_cursor
   )
     throw new ApiError(409, "sequence_conflict");
-  const occurrence = await tx.organization_events.findUniqueOrThrow({
+  const occurrence = await tx.institution_events.findUniqueOrThrow({
     where: { id: position.occurrence_id },
   });
   if (occurrence.revision !== input.revision)
     throw new ApiError(409, "conflict");
   const reason = textValue(input.reason, 2000);
-  await tx.organization_workout_positions.update({
+  await tx.institution_workout_positions.update({
     where: { id: position.id },
     data: {
       state: "skipped",
@@ -234,15 +234,15 @@ export async function skipIndividualWorkout(
       reason,
     },
   });
-  await tx.organization_assignments.update({
+  await tx.institution_assignments.update({
     where: { id: assignment.id },
     data: { sequence_cursor: { increment: 1 } },
   });
-  await tx.organization_events.update({
+  await tx.institution_events.update({
     where: { id: occurrence.id },
     data: { state: "completed", revision: { increment: 1 } },
   });
-  await event(tx, actor, workspace, "workout_skipped", assignment.member_id, {
+  await event(tx, actor, institution, "workout_skipped", assignment.member_id, {
     assignment: assignment.id,
     occurrence: occurrence.id,
     reason,
@@ -257,15 +257,15 @@ export async function skipIndividualWorkout(
 export async function rescheduleIndividualWorkout(
   tx: Tx,
   actor: Actor,
-  workspace: string,
+  institution: string,
   input: Input,
 ) {
   const assignment = await lockedAssignment(
     tx,
-    workspace,
+    institution,
     uuid(input.assignment_id),
   );
-  const position = await tx.organization_workout_positions.findFirst({
+  const position = await tx.institution_workout_positions.findFirst({
     where: {
       assignment_id: assignment.id,
       occurrence_id: uuid(input.occurrence_id),
@@ -274,10 +274,10 @@ export async function rescheduleIndividualWorkout(
   });
   if (!position || position.session_id || assignment.state !== "active")
     throw new ApiError(409, "workout_not_actionable");
-  const occurrence = await tx.organization_events.findUniqueOrThrow({
+  const occurrence = await tx.institution_events.findUniqueOrThrow({
     where: { id: position.occurrence_id },
     include: {
-      organization_event_people: { include: { workspace_members: true } },
+      institution_event_people: { include: { institution_members: true } },
     },
   });
   if (occurrence.revision !== input.revision)
@@ -288,9 +288,9 @@ export async function rescheduleIndividualWorkout(
     (assignment.end_date && slot.date > assignment.end_date)
   )
     throw new ApiError(409, "assignment_unavailable");
-  await assertTrainingAllowed(tx, workspace, assignment.member_id, slot.date);
+  await assertTrainingAllowed(tx, institution, assignment.member_id, slot.date);
   if (
-    await tx.organization_sessions.findUnique({
+    await tx.institution_sessions.findUnique({
       where: {
         assignment_id_local_date_day_id: {
           assignment_id: assignment.id,
@@ -301,11 +301,11 @@ export async function rescheduleIndividualWorkout(
     })
   )
     throw new ApiError(409, "workout_already_recorded_for_date");
-  const users = occurrence.organization_event_people
-    .map((p) => p.workspace_members.user_id)
+  const users = occurrence.institution_event_people
+    .map((p) => p.institution_members.user_id)
     .filter(Boolean);
   await tx.$queryRaw`SELECT public.validate_calendar_collision(${users}::uuid[],${slot.start},${slot.end},${occurrence.id}::uuid)::text`;
-  const result = await tx.organization_events.update({
+  const result = await tx.institution_events.update({
     where: { id: occurrence.id },
     data: {
       starts_at: slot.start,
@@ -317,7 +317,7 @@ export async function rescheduleIndividualWorkout(
   await event(
     tx,
     actor,
-    workspace,
+    institution,
     "workout_rescheduled",
     assignment.member_id,
     {
@@ -333,21 +333,21 @@ export async function rescheduleIndividualWorkout(
 /** Exact old commands remain valid for unlinked history; new bound records cannot bypass their position. */
 export async function workoutStartContext(
   tx: Tx,
-  workspace: string,
+  institution: string,
   assignmentId: string,
   occurrenceId: unknown,
 ) {
-  const assignment = await lockedAssignment(tx, workspace, assignmentId);
+  const assignment = await lockedAssignment(tx, institution, assignmentId);
   if (!occurrenceId) {
     if (
-      await tx.organization_workout_positions.findFirst({
+      await tx.institution_workout_positions.findFirst({
         where: { assignment_id: assignmentId },
       })
     )
       throw new ApiError(409, "workout_occurrence_required");
     return null;
   }
-  const position = await tx.organization_workout_positions.findFirst({
+  const position = await tx.institution_workout_positions.findFirst({
     where: { assignment_id: assignmentId, occurrence_id: uuid(occurrenceId) },
   });
   if (
@@ -356,7 +356,7 @@ export async function workoutStartContext(
     position.position !== assignment.sequence_cursor
   )
     throw new ApiError(409, "workout_not_actionable");
-  const occurrence = await tx.organization_events.findUniqueOrThrow({
+  const occurrence = await tx.institution_events.findUniqueOrThrow({
     where: { id: position.occurrence_id },
   });
   if (occurrence.state !== "scheduled")
@@ -365,7 +365,7 @@ export async function workoutStartContext(
     throw new ApiError(409, "workout_not_started_yet");
   await assertTrainingAllowed(
     tx,
-    workspace,
+    institution,
     assignment.member_id,
     occurrence.training_date,
   );
@@ -374,11 +374,11 @@ export async function workoutStartContext(
 
 export async function assertLinkedWorkoutWritable(
   tx: Tx,
-  workspace: string,
+  institution: string,
   session: string,
 ) {
-  const position = await tx.organization_workout_positions.findFirst({
-    where: { workspace_id: workspace, session_id: session },
+  const position = await tx.institution_workout_positions.findFirst({
+    where: { institution_id: institution, session_id: session },
   });
   if (position && !["pending", "completed"].includes(position.state))
     throw new ApiError(409, "workout_not_actionable");
@@ -387,21 +387,21 @@ export async function assertLinkedWorkoutWritable(
 export async function resolveCompletedWorkout(
   tx: Tx,
   actor: Actor,
-  workspace: string,
+  institution: string,
   self: string,
   session: string,
 ) {
-  const result = await tx.organization_sessions.findUniqueOrThrow({
+  const result = await tx.institution_sessions.findUniqueOrThrow({
     where: { id: session },
   });
   if (!result.occurrence_id || !result.completed_at) return;
   const assignment = await lockedAssignment(
     tx,
-    workspace,
+    institution,
     result.assignment_id,
   );
-  const position = await tx.organization_workout_positions.findFirst({
-    where: { workspace_id: workspace, session_id: session },
+  const position = await tx.institution_workout_positions.findFirst({
+    where: { institution_id: institution, session_id: session },
   });
   if (!position || position.state === "completed") return; // Later corrections never rewind or advance twice.
   if (
@@ -409,19 +409,19 @@ export async function resolveCompletedWorkout(
     position.position !== assignment.sequence_cursor
   )
     throw new ApiError(409, "sequence_conflict");
-  await tx.organization_workout_positions.update({
+  await tx.institution_workout_positions.update({
     where: { id: position.id },
     data: { state: "completed", resolved_at: new Date(), resolved_by: self },
   });
-  await tx.organization_assignments.update({
+  await tx.institution_assignments.update({
     where: { id: assignment.id },
     data: { sequence_cursor: { increment: 1 } },
   });
-  await tx.organization_events.update({
+  await tx.institution_events.update({
     where: { id: position.occurrence_id },
     data: { state: "completed", revision: { increment: 1 } },
   });
-  await event(tx, actor, workspace, "workout_resolved", result.member_id, {
+  await event(tx, actor, institution, "workout_resolved", result.member_id, {
     assignment: assignment.id,
     occurrence: position.occurrence_id,
     session,
@@ -431,40 +431,40 @@ export async function resolveCompletedWorkout(
 export async function stopAssignmentWork(
   tx: Tx,
   actor: Actor,
-  workspace: string,
+  institution: string,
   assignmentId: string,
 ) {
-  const assignment = await lockedAssignment(tx, workspace, assignmentId);
-  const positions = await tx.organization_workout_positions.findMany({
+  const assignment = await lockedAssignment(tx, institution, assignmentId);
+  const positions = await tx.institution_workout_positions.findMany({
     where: {
-      workspace_id: workspace,
+      institution_id: institution,
       assignment_id: assignmentId,
       state: "pending",
     },
   });
   for (const position of positions) {
     const paused = !!position.session_id;
-    await tx.organization_workout_positions.update({
+    await tx.institution_workout_positions.update({
       where: { id: position.id },
       data: { state: paused ? "paused" : "cancelled" },
     });
     if (!paused)
-      await tx.organization_events.update({
+      await tx.institution_events.update({
         where: { id: position.occurrence_id },
         data: { state: "cancelled", revision: { increment: 1 } },
       });
     await event(
       tx,
       actor,
-      workspace,
+      institution,
       paused ? "workout_paused" : "workout_cancelled",
       assignment.member_id,
       { assignment: assignmentId, occurrence: position.occurrence_id },
     );
   }
-  await tx.organization_workout_recurrences.updateMany({
+  await tx.institution_workout_recurrences.updateMany({
     where: {
-      workspace_id: workspace,
+      institution_id: institution,
       assignment_id: assignmentId,
       state: "active",
     },

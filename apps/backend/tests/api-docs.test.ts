@@ -59,6 +59,8 @@ test("Swagger serves local assets, prefixed routes and the canonical contract wi
         /dashboard/,
       );
       assert.ok(spec.paths["/v1/mobile/auth/login"]);
+      assert.ok(spec.paths["/v1/institution/calendar"]);
+      assert.ok(!spec.paths["/v1/workspaces/{workspace}/calendar"]);
     }
     assert.equal((await fetch(`${base}/v1/docs/assets/__proto__`)).status, 404);
     assert.equal(
@@ -119,14 +121,14 @@ test("Swagger config uses this instance, adds the native marker, omits cookies a
         JSON.stringify(interactive ? ["get", "post"] : []),
       );
       const request = configuration.requestInterceptor({
-        url: `${window.location.origin}${prefix}/v1/contexts`,
+        url: `${window.location.origin}${prefix}/v1/institution/context`,
         headers: {},
       });
       assert.equal(request.headers["X-Rafik-Client"], "android");
       assert.equal(request.credentials, "omit");
       assert.throws(() =>
         configuration!.requestInterceptor({
-          url: "https://elsewhere.example/v1/contexts",
+          url: "https://elsewhere.example/v1/institution/context",
           headers: {},
         }),
       );

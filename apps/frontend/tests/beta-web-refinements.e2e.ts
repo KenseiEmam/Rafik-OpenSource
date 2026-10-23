@@ -25,10 +25,10 @@ async function inspect(page: Page, name: string, info: { project: { name: string
   })
 }
 
-async function institution(f: Awaited<ReturnType<typeof teamFixture>>, name: string) {
-  const workspace = randomUUID(),
-    endpoint = `/v1/workspaces/${workspace}`
-  await f.call(f.owner, '/v1/workspaces', { id: workspace, kind: 'organization', name })
+async function institutionFixture(f: Awaited<ReturnType<typeof teamFixture>>, name: string) {
+  const institution = randomUUID(),
+    endpoint = `/v1/institution`
+  await f.call(f.owner, '/v1/institutions', { id: institution, kind: 'institution', name })
   const join = async (person: { email: string }, roles: string[]) => {
     const token = randomBytes(32).toString('hex')
     await f.call(f.owner, endpoint, {
@@ -39,9 +39,9 @@ async function institution(f: Awaited<ReturnType<typeof teamFixture>>, name: str
       roles,
       token,
     })
-    await f.call(person as never, `/v1/organization-invitations/${token}`, {})
+    await f.call(person as never, `/v1/invitations/${token}`, {})
   }
-  return { workspace, endpoint, join }
+  return { institution, endpoint, join }
 }
 
 test('coach browses later pages of athlete plans, nutrition plans and events, then reopens them', async ({
@@ -50,7 +50,7 @@ test('coach browses later pages of athlete plans, nutrition plans and events, th
   test.setTimeout(300000)
   const f = await teamFixture()
   try {
-    const { workspace, endpoint, join } = await institution(f, 'Madar browse acceptance')
+    const { institution, endpoint, join } = await institutionFixture(f, 'Madar browse acceptance')
     await join(f.coach, ['trainer'])
     const athletes = []
     for (let i = 1; i <= 26; i++) {
@@ -239,7 +239,7 @@ test('multiple message attachments survive reload, exact retry and recipient rev
     recipientContext = await browser.newContext(),
     recipient = await recipientContext.newPage()
   try {
-    const { workspace, endpoint, join } = await institution(f, 'Madar attachments')
+    const { institution, endpoint, join } = await institutionFixture(f, 'Madar attachments')
     await join(f.client, ['trainee'])
     await f.login(page, f.owner, `/messages`)
     await page.getByRole('button', { name: /R4 Athlete/ }).click()
@@ -319,12 +319,9 @@ test('multiple message attachments survive reload, exact retry and recipient rev
     const readable = async () => {
       let ok = 0
       for (const id of ids) {
-        const r = await recipient.request.get(
-          `http://127.0.0.1:55341/v1/organization-assets/${id}`,
-          {
-            headers: { 'x-rafik-client': 'web' },
-          },
-        )
+        const r = await recipient.request.get(`http://127.0.0.1:55341/v1/assets/${id}`, {
+          headers: { 'x-rafik-client': 'web' },
+        })
         if (r.ok()) ok++
       }
       return ok

@@ -10,7 +10,7 @@ Run `npm run test:workout-foundation` from the repository root with the local Do
 
 ## Next-release route conventions
 
-Use flat browser URLs and `app/institution.ts` for current institution/role. Keep `/settings` personal and `/institution-settings` administrative. Keep durable draft keys institution/role-scoped even though URLs are flat. Never infer authority from an old URL role. Tasks is removed; useful overview follow-up lives in `organization-follow-up.ts`. API `/v1/workspaces/:id` names and native scope identifiers remain compatible. See [ADR 0026](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md).
+Use flat browser URLs and `app/institution.ts` for current institution/role. Keep `/settings` personal and `/institution-settings` administrative. Keep durable draft keys institution/role-scoped even though URLs are flat. Never infer authority from an old URL role. Tasks is removed; useful overview follow-up lives in `organization-follow-up.ts`. API `/v1/institution` names and native scope identifiers remain compatible. See [ADR 0026](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md).
 
 The canonical application repository is [Rafik-Athlete-Managment/Rafik-OpenSource](https://github.com/Rafik-Athlete-Managment/Rafik-OpenSource). Clone/fetch and open application issues, PRs and releases there. The landing repository and existing GitHub Project remain under KenseiEmam until the founder directs otherwise.
 
@@ -69,7 +69,7 @@ Android native startup is consolidated in `apps/mobile/scripts/android.mjs`, cal
 
 Institution message composition lives in `apps/frontend/src/features/institution/ChannelThread.vue`. Its pending-attachment section uses `ResourceAsset.vue`; `ResourceUpload.vue` has an optional composer mode with photo/file icon pickers. Other upload consumers retain their existing labeled controls. Keep acknowledged-send cleanup ordered after draft writes, and preserve attachments on failed/uncertain sends.
 
-Multiple message attachments use ordered `organization_message_assets` links, migrated from legacy `asset_id` by `202610181200_message_attachments`. Keep communication command/read handling, byte-read authorization and account export aligned. The web composer restores both the current `attachments` draft array and old single-file drafts. Batch upload failures retain earlier successful selections and the uncertain upload ID for safe retry; message send remains one atomic operation.
+Multiple message attachments use ordered `institution_message_assets` links, migrated from legacy `asset_id` by `202610181200_message_attachments`. Keep communication command/read handling, byte-read authorization and account export aligned. The web composer restores both the current `attachments` draft array and old single-file drafts. Batch upload failures retain earlier successful selections and the uncertain upload ID for safe retry; message send remains one atomic operation.
 
 `apps/backend/server/api-docs.ts` serves the canonical OpenAPI file and local Swagger assets, including proxy-prefix handling and production reference-only behavior. Use `npm run test:api-docs --workspace @rafik/backend` for isolated HTTP/initializer checks without a database. Keep the [API guide](../reference/api.md) and bilingual landing explanations aligned when changing this workflow.
 
@@ -133,7 +133,7 @@ The signed-in shell and role-specific route handling are composed in `apps/front
 
 1. Update the Prisma schema and add a forward SQL migration. Do not reset or reseed a database to apply a migration.
 2. Preserve tenant and subject ownership constraints, transaction boundaries, revision checks, idempotent replay and authorization-before-replay behavior.
-3. Regenerate Prisma and shared database types using root workspace scripts. Keep API contracts in `packages/shared/` when both app workspaces consume them.
+3. Regenerate Prisma and shared database types using root workspace scripts. Keep API contracts in `packages/shared/` when both app institutions consume them.
 4. Add focused regression coverage for consequential failure or authorization paths. Never rely on sample-account pollution or fixtures from an earlier test.
 5. Update the architecture page for data/API/lifecycle changes and the runbook for operational changes.
 
@@ -197,3 +197,7 @@ The [frontend reference](../reference/frontend/README.md) inventories every loca
 ## Backend inventory maintenance
 
 Run `npm run backend:inventory` and `npm run backend:inventory:check` after route/schema changes. After migrations, use `npm run backend:inventory:database` with Docker to capture an owned disposable schema and generate matching types. Update reviewed metadata. Never restore a retired endpoint for an obsolete fixture. See [backend reference](../reference/backend/README.md).
+
+## Institution naming boundary
+
+Use `institution_id` and canonical `/v1/institution` routes in maintained code. `server/institution.ts` owns authority; `server/institution-compatibility.ts` alone translates retired API names. Preserve historical file paths, event/source keys, frozen JSON, receipt payloads/results and browser/native owner identities. See [ADR 0029](../decisions/ADR-0029-institution-identifiers.md).

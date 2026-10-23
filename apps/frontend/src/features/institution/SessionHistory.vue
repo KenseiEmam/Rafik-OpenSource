@@ -45,7 +45,7 @@ async function load() {
     offset: String(Math.max(0, Number(route.query.offset) || 0)),
   })
   try {
-    const result = await request<History>(`/v1/workspaces/${context.workspace}/delivery?${query}`)
+    const result = await request<History>(`/v1/institution/delivery?${query}`)
     if (disposed || current !== generation) return
     data.value = result
     acceptLimit()
@@ -172,7 +172,7 @@ const name = (id: string) =>
               class="session-row"
               :to="
                 context.view === 'trainee'
-                  ? '/workout/' + session.id + '?workspace=' + context.workspace
+                  ? '/workout/' + session.id + '?institution=' + context.institution
                   : context.base + '/review/' + session.id
               "
             >

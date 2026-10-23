@@ -5,7 +5,7 @@ import { language as l } from '../../lib/i18n'
 import { request } from '../../lib/backend'
 import { applyBranding, brandingLogoUrl, instanceBranding, loadBranding } from '../../lib/branding'
 
-const props = defineProps<{ workspaceId: string }>()
+const props = defineProps<{ institutionId: string }>()
 const name = ref('Rafik')
 const accent = ref('#285943')
 const backgroundLight = ref('#f8f8f3')
@@ -21,7 +21,7 @@ onMounted(async () => {
     await loadBranding()
     canManage.value = (
       await request<{ allowed: boolean }>(
-        `/v1/instance/branding/can-manage?workspace=${encodeURIComponent(props.workspaceId)}`,
+        `/v1/instance/branding/can-manage?institution=${encodeURIComponent(props.institutionId)}`,
       )
     ).allowed
     name.value = instanceBranding.value.name
@@ -62,21 +62,18 @@ async function save() {
   saving.value = true
   error.value = ''
   try {
-    const value = await request<typeof instanceBranding.value>(
-      `/v1/workspaces/${props.workspaceId}/branding`,
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          name: name.value,
-          accent: accent.value,
-          background_light: backgroundLight.value,
-          background_dark: backgroundDark.value,
-          logo: logo.value,
-        }),
-        feedback: 'success',
-        successMessage: l('Instance branding updated.', 'تم تحديث هوية التثبيت.'),
-      },
-    )
+    const value = await request<typeof instanceBranding.value>(`/v1/institution/branding`, {
+      method: 'POST',
+      body: JSON.stringify({
+        name: name.value,
+        accent: accent.value,
+        background_light: backgroundLight.value,
+        background_dark: backgroundDark.value,
+        logo: logo.value,
+      }),
+      feedback: 'success',
+      successMessage: l('Instance branding updated.', 'تم تحديث هوية التثبيت.'),
+    })
     applyBranding(value)
     logo.value = undefined
     if (value.logo_mime) logoPreview.value = brandingLogoUrl()

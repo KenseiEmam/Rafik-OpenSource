@@ -15,14 +15,14 @@ test('dedicated editors preserve drafts, acknowledge writes, return to lists and
   )
   test.setTimeout(360000)
   const f = await teamFixture(),
-    workspace = randomUUID(),
+    institution = randomUUID(),
     base = ``
   const output = resolve('../../artifacts/ui-audit/2026-10-21/rollout', info.project.name)
   mkdirSync(output, { recursive: true })
   try {
-    await f.call(f.owner, '/v1/workspaces', {
-      id: workspace,
-      kind: 'organization',
+    await f.call(f.owner, '/v1/institutions', {
+      id: institution,
+      kind: 'institution',
       name: 'Rafik design review · مراجعة التصميم',
     })
     for (const [person, role] of [
@@ -30,7 +30,7 @@ test('dedicated editors preserve drafts, acknowledge writes, return to lists and
       [f.client, 'trainee'],
     ] as const) {
       const token = randomBytes(32).toString('hex')
-      await f.call(f.owner, `/v1/workspaces/${workspace}`, {
+      await f.call(f.owner, `/v1/institution`, {
         operation: randomUUID(),
         action: 'invite',
         id: randomUUID(),
@@ -38,12 +38,12 @@ test('dedicated editors preserve drafts, acknowledge writes, return to lists and
         roles: [role],
         token,
       })
-      await f.call(person, `/v1/organization-invitations/${token}`, {})
+      await f.call(person, `/v1/invitations/${token}`, {})
     }
-    const people = await f.call(f.owner, `/v1/workspaces/${workspace}?view=admin`)
+    const people = await f.call(f.owner, `/v1/institution?view=admin`)
     const coach = people.members.find((m: any) => m.user_id === f.coach.id)
     const athlete = people.members.find((m: any) => m.user_id === f.client.id)
-    await f.call(f.owner, `/v1/workspaces/${workspace}`, {
+    await f.call(f.owner, `/v1/institution`, {
       operation: randomUUID(),
       action: 'assign-trainer',
       id: athlete.id,

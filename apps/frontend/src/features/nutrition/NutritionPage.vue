@@ -58,13 +58,14 @@ type Data = {
 }
 const route = useRoute(),
   router = useRouter(),
-  workspace = institutionContext().workspace,
+  institution = institutionContext().institution,
   view = institutionContext().view,
   trainee = view === 'trainee'
-const endpoint = `/v1/workspaces/${workspace}/nutrition`
-const workspaceName = computed(
+const endpoint = `/v1/institution/nutrition`
+const institutionName = computed(
   () =>
-    contexts.value.find((c) => c.workspace_id === workspace)?.name || l('Institution', 'المؤسسة'),
+    contexts.value.find((c) => c.institution_id === institution)?.name ||
+    l('Institution', 'المؤسسة'),
 )
 const selected = ref(String(route.query.member || '')),
   date = ref(localDate(profile.value?.timezone || 'UTC')),
@@ -105,7 +106,7 @@ const hasPlanDraft = ref(false),
   hasMealDraft = ref(false),
   includeRemoved = ref(false)
 const keyFor = (member = selected.value, day = date.value) =>
-  `organization-nutrition:${user.value!.id}:${workspace}:${view}:${member}:${day}`
+  `organization-nutrition:${user.value!.id}:${institution}:${view}:${member}:${day}`
 let disposed = false,
   generation = 0,
   draftGeneration = 0,
@@ -235,7 +236,7 @@ async function changeDate() {
   await load(true)
 }
 const command = useCommand<string>(
-  `organization-nutrition:${workspace}:${view}`,
+  `organization-nutrition:${institution}:${view}`,
   async (_name, _result, args) => {
     await draftWrite
     if (args.action === 'publish' || args.action === 'meal')
@@ -373,7 +374,7 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <section
-    class="container page org-nutrition nutrition-workspace"
+    class="container page org-nutrition nutrition-institution"
     :class="{ 'with-member': data?.member && !choosing }"
   >
     <RouterLink v-if="!trainee" class="back-link" :to="'/nutrition'">{{
@@ -426,7 +427,7 @@ onBeforeUnmount(() => {
           }}
         </p>
         <MemberPicker
-          :workspace="workspace"
+          :institution="institution"
           :view="view"
           role="trainee"
           :single="true"

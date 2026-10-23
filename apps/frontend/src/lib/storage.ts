@@ -1,5 +1,5 @@
 import { openDB, type DBSchema } from 'idb'
-import type { LocalSession } from './domain'
+import { restoreInstitution, type LocalSession } from './domain'
 interface RafikDB extends DBSchema {
   sessions: { key: string; value: LocalSession }
   drafts: { key: string; value: { key: string; value: unknown; savedAt: string } }
@@ -12,19 +12,21 @@ const db = openDB<RafikDB>('rafik-revamp', 1, {
     db.createObjectStore('events', { keyPath: 'id' })
   },
 })
-export const getLocalSession = async (id: string) => (await db).get('sessions', id)
+export const getLocalSession = async (id: string) =>
+  restoreInstitution(await (await db).get('sessions', id))
 export const putLocalSession = async (value: LocalSession) => {
   await (await db).put('sessions', value)
   return value
 }
 export async function localSessions(owner: string) {
   return (await (await db).getAll('sessions'))
+    .map((row) => restoreInstitution(row)!)
     .filter((s) => s.owner === owner)
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
 }
 export async function editLocalSession(id: string, fn: (row: LocalSession) => void) {
   const tx = (await db).transaction('sessions', 'readwrite')
-  const value = await tx.store.get(id)
+  const value = restoreInstitution(await tx.store.get(id))
   if (!value) throw new Error('session_missing')
   fn(value)
   value.updatedAt = new Date().toISOString()

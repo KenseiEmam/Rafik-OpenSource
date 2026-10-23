@@ -134,7 +134,7 @@
   gap: 0.75rem;
   flex-wrap: wrap;
 }
-/* The panel grows with its content (the workspace scrolls); it is never a fixed-height scroller. */
+/* The panel grows with its content (the institution scrolls); it is never a fixed-height scroller. */
 .org-nutrition-panel {
   min-height: 220px;
 }

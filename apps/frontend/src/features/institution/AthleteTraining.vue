@@ -81,7 +81,7 @@ async function load(append = false) {
   error.value = ''
   try {
     const result = await request<Training>(
-      `/v1/workspaces/${context.workspace}/delivery?view=${context.view}${context.view === 'trainee' || selected.value ? '&history=true' : ''}${append && data.value?.next ? '&before=' + data.value.next : ''}${selected.value ? '&member=' + selected.value : ''}`,
+      `/v1/institution/delivery?view=${context.view}${context.view === 'trainee' || selected.value ? '&history=true' : ''}${append && data.value?.next ? '&before=' + data.value.next : ''}${selected.value ? '&member=' + selected.value : ''}`,
     )
     if (seq !== generation) return
     if (append && data.value) result.sessions = [...data.value.sessions, ...result.sessions]
@@ -119,9 +119,9 @@ async function begin(day: PlanDay, a: Plan) {
       user.value!.id,
       a.id,
       today,
-      context.workspace,
+      context.institution,
     )
-    await router.push(`/workout/${s.id}?workspace=${context.workspace}`)
+    await router.push(`/workout/${s.id}?institution=${context.institution}`)
   } catch (e) {
     error.value = errorMessage(e)
   } finally {
@@ -133,7 +133,7 @@ onMounted(() => {
   // Sport names label plans for staff; athletes see the goal only.
   if (context.view !== 'trainee')
     void request<{ items: { id: string; name: string }[] }>(
-      `/v1/workspaces/${context.workspace}/sports?view=${context.view}`,
+      `/v1/institution/sports?view=${context.view}`,
     )
       .then((r) => (sports.value = r.items))
       .catch(() => {})
@@ -165,7 +165,7 @@ onMounted(() => {
         }}{{ selected ? ' · ' + name(selected) : '' }}
       </summary>
       <MemberPicker
-        :workspace="context.workspace!"
+        :institution="context.institution!"
         :view="context.view"
         single
         :model-value="selected ? [selected] : []"
@@ -340,7 +340,7 @@ onMounted(() => {
               class="organization-session-row"
               :to="
                 context.view === 'trainee'
-                  ? '/workout/' + s.id + '?workspace=' + context.workspace
+                  ? '/workout/' + s.id + '?institution=' + context.institution
                   : context.base + '/review/' + s.id
               "
               ><div>

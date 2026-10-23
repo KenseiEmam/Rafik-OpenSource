@@ -52,14 +52,14 @@ test('organization coach starts a private conversation with their assigned athle
   const f = await teamFixture(),
     id = randomUUID()
   try {
-    await f.call(f.owner, '/v1/workspaces', {
+    await f.call(f.owner, '/v1/institutions', {
       id,
-      kind: 'organization',
+      kind: 'institution',
       name: 'Scoped communication',
     })
     const join = async (who: typeof f.coach, roles: string[]) => {
       const token = randomBytes(32).toString('hex')
-      await f.call(f.owner, `/v1/workspaces/${id}`, {
+      await f.call(f.owner, `/v1/institution`, {
         operation: randomUUID(),
         action: 'invite',
         id: randomUUID(),
@@ -67,14 +67,14 @@ test('organization coach starts a private conversation with their assigned athle
         roles,
         token,
       })
-      await f.call(who, `/v1/organization-invitations/${token}`, {})
+      await f.call(who, `/v1/invitations/${token}`, {})
     }
     await join(f.coach, ['trainer'])
     await join(f.client, ['trainee'])
-    const org = await f.call(f.owner, `/v1/workspaces/${id}?view=admin`),
+    const org = await f.call(f.owner, `/v1/institution?view=admin`),
       coach = org.members.find((m: any) => m.user_id === f.coach.id),
       client = org.members.find((m: any) => m.user_id === f.client.id)
-    await f.call(f.owner, `/v1/workspaces/${id}`, {
+    await f.call(f.owner, `/v1/institution`, {
       operation: randomUUID(),
       action: 'assign-trainer',
       id: client.id,
@@ -113,9 +113,9 @@ test('large member selection searches the full roster and keeps reviewed choices
   const f = await teamFixture(),
     id = randomUUID()
   try {
-    await f.call(f.owner, '/v1/workspaces', {
+    await f.call(f.owner, '/v1/institutions', {
       id,
-      kind: 'organization',
+      kind: 'institution',
       name: 'Roster selection test',
     })
     const { execFileSync } = await import('node:child_process'),
@@ -143,7 +143,7 @@ test('large member selection searches the full roster and keeps reviewed choices
       ],
       {
         cwd: resolve(import.meta.dirname, '../../backend'),
-        input: `insert into public.workspace_members(id,workspace_id,name,roles) values ${people.map((p) => `('${p.id}','${id}','${p.name}',ARRAY['trainee'])`).join(',')};`,
+        input: `insert into public.workspace_members(id,institution_id,name,roles) values ${people.map((p) => `('${p.id}','${id}','${p.name}',ARRAY['trainee'])`).join(',')};`,
         stdio: 'pipe',
       },
     )

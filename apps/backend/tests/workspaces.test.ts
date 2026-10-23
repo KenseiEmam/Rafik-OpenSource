@@ -9,7 +9,7 @@ const base = apiOrigin,
   spaces: string[] = [];
 type Person = { id: string; email: string; cookie: string };
 after(async () => {
-  await db.workspaces.deleteMany({ where: { id: { in: spaces } } });
+  await db.institutions.deleteMany({ where: { id: { in: spaces } } });
   await db.users.deleteMany({ where: { id: { in: people } } });
   await db.$disconnect();
 });
@@ -35,7 +35,7 @@ async function person(): Promise<Person> {
   return p;
 }
 async function call(p: Person, path: string, input?: unknown) {
-  if (path === "/v1/workspaces" && input)
+  if (path === "/v1/institutions" && input)
     return fixtureInstitution(p, input as Record<string, unknown>);
   const r = await fetch(base + path, {
     method: input === undefined ? "GET" : "POST",
@@ -51,7 +51,11 @@ async function call(p: Person, path: string, input?: unknown) {
 async function create(p: Person, name = "Scope organization") {
   const id = randomUUID();
   spaces.push(id);
-  const r = await call(p, "/v1/workspaces", { id, kind: "organization", name });
+  const r = await call(p, "/v1/institutions", {
+    id,
+    kind: "organization",
+    name,
+  });
   assert.equal(r.status, 200);
   return id;
 }
@@ -68,16 +72,13 @@ async function join(admin: Person, id: string, p: Person, roles: string[]) {
       roles,
       token,
     });
-  const r = await call(admin, "/v1/workspaces/" + id, payload);
+  const r = await call(admin, "/v1/institution", payload);
   assert.equal(r.status, 200, JSON.stringify(r));
-  assert.equal(
-    (await call(p, "/v1/organization-invitations/" + token, {})).status,
-    200,
-  );
+  assert.equal((await call(p, "/v1/invitations/" + token, {})).status, 200);
   return payload;
 }
 const view = (p: Person, id: string, role = "admin") =>
-  call(p, `/v1/workspaces/${id}?view=${role}`);
+  call(p, `/v1/institution?view=${role}`);
 test("organization ownership, single-role contexts, cross-scope denial and stable trainer reassignment", async () => {
   const admin = await person(),
     trainer = await person(),
@@ -99,14 +100,8 @@ test("organization ownership, single-role contexts, cross-scope denial and stabl
     revision: member.revision,
     trainer: staff.id,
   });
-  assert.equal(
-    (await call(admin, "/v1/workspaces/" + id, assigned)).status,
-    200,
-  );
-  assert.equal(
-    (await call(admin, "/v1/workspaces/" + id, assigned)).status,
-    200,
-  );
+  assert.equal((await call(admin, "/v1/institution", assigned)).status, 200);
+  assert.equal((await call(admin, "/v1/institution", assigned)).status, 200);
   assert.equal((await view(trainer, id, "admin")).status, 403);
   assert.equal((await view(trainee, id, "trainer")).status, 403);
   assert.equal((await view(otherAdmin, id)).status, 403);
@@ -124,7 +119,7 @@ test("organization ownership, single-role contexts, cross-scope denial and stabl
     (
       await call(
         admin,
-        "/v1/workspaces/" + id,
+        "/v1/institution",
         operation("assign-trainer", {
           id: member.id,
           revision: 2,
@@ -138,7 +133,7 @@ test("organization ownership, single-role contexts, cross-scope denial and stabl
     (
       await call(
         admin,
-        "/v1/workspaces/" + id,
+        "/v1/institution",
         operation("assign-trainer", {
           id: member.id,
           revision: 2,
@@ -164,16 +159,20 @@ test("organization ownership, single-role contexts, cross-scope denial and stabl
     (await view(trainee, id, "trainee")).data.members[0].id,
     member.id,
   );
-  const context = (await call(trainer, "/v1/contexts")).data.contexts;
-  assert.equal(context.filter((c: any) => c.workspace_id === id).length, 1);
-  assert.equal(context.filter((c: any) => c.workspace_id === other).length, 1);
+  const context = (await call(trainer, "/v1/institution/context")).data
+    .contexts;
+  assert.equal(context.filter((c: any) => c.institution_id === id).length, 1);
+  assert.equal(
+    context.filter((c: any) => c.institution_id === other).length,
+    1,
+  );
   assert.equal(
     context.some((c: any) => c.kind === "personal"),
     false,
   );
   const multipleRoles = await call(
     admin,
-    "/v1/workspaces/" + id,
+    "/v1/institution",
     operation("invite", {
       id: randomUUID(),
       email: `multi-${randomUUID()}@rafik.test`,
@@ -184,7 +183,7 @@ test("organization ownership, single-role contexts, cross-scope denial and stabl
   assert.equal(multipleRoles.status, 400);
   assert.equal((await call(trainee, "/v1/commands/save_plan", {})).status, 403);
   assert.equal(
-    (await call(admin, "/v1/queries/workspace_members")).status,
+    (await call(admin, "/v1/queries/institution_members")).status,
     400,
   );
 });
@@ -200,23 +199,19 @@ test("token-scoped invitation preview, intended-account acceptance, last admin p
     roles: ["admin"],
     token,
   });
-  assert.equal((await call(a, "/v1/workspaces/" + id, invite)).status, 200);
-  const preview = await call(outsider, "/v1/organization-invitations/" + token);
+  assert.equal((await call(a, "/v1/institution", invite)).status, 200);
+  const preview = await call(outsider, "/v1/invitations/" + token);
   assert.equal(preview.status, 200);
   // Possession of the unguessable link pre-fills signup; accepting it still
   // requires the intended account. Email verification is not a product rule.
   assert.equal(preview.data.email, b.email);
   assert.equal(
-    (
-      await call(
-        outsider,
-        "/v1/organization-invitations/" + randomBytes(32).toString("hex"),
-      )
-    ).status,
+    (await call(outsider, "/v1/invitations/" + randomBytes(32).toString("hex")))
+      .status,
     404,
   );
   assert.equal(
-    (await call(outsider, "/v1/organization-invitations/" + token, {})).status,
+    (await call(outsider, "/v1/invitations/" + token, {})).status,
     403,
   );
   const self = (await view(a, id)).data.members[0];
@@ -224,7 +219,7 @@ test("token-scoped invitation preview, intended-account acceptance, last admin p
     (
       await call(
         a,
-        "/v1/workspaces/" + id,
+        "/v1/institution",
         operation("member", {
           id: self.id,
           revision: 1,
@@ -239,19 +234,13 @@ test("token-scoped invitation preview, intended-account acceptance, last admin p
     (await call(a, "/v1/commands/account_deletion_ready", {})).data.message,
     "last_admin",
   );
-  assert.equal(
-    (await call(b, "/v1/organization-invitations/" + token, {})).status,
-    200,
-  );
-  assert.equal(
-    (await call(b, "/v1/organization-invitations/" + token, {})).status,
-    200,
-  );
+  assert.equal((await call(b, "/v1/invitations/" + token, {})).status, 200);
+  assert.equal((await call(b, "/v1/invitations/" + token, {})).status, 200);
   assert.equal(
     (
       await call(
         b,
-        "/v1/workspaces/" + id,
+        "/v1/institution",
         operation("member", {
           id: self.id,
           revision: 1,
@@ -262,11 +251,11 @@ test("token-scoped invitation preview, intended-account acceptance, last admin p
     ).status,
     200,
   );
-  assert.equal((await call(a, "/v1/workspaces/" + id, invite)).status, 403);
+  assert.equal((await call(a, "/v1/institution", invite)).status, 403);
   assert.equal((await view(a, id)).status, 403);
   assert.equal(
-    (await call(a, "/v1/contexts")).data.contexts.some(
-      (c: any) => c.workspace_id === id,
+    (await call(a, "/v1/institution/context")).data.contexts.some(
+      (c: any) => c.institution_id === id,
     ),
     false,
   );
@@ -283,12 +272,12 @@ test("departure releases trainee responsibility; closure replay confirms once wi
     c = members.find((m: any) => m.user_id === trainee.id);
   await call(
     a,
-    "/v1/workspaces/" + id,
+    "/v1/institution",
     operation("assign-trainer", { id: c.id, revision: 1, trainer: t.id }),
   );
   await call(
     a,
-    "/v1/workspaces/" + id,
+    "/v1/institution",
     operation("member", {
       id: t.id,
       revision: 1,
@@ -305,12 +294,12 @@ test("departure releases trainee responsibility; closure replay confirms once wi
     confirm: "Scope organization",
     revision: 1,
   });
-  assert.equal((await call(a, "/v1/workspaces/" + id, close)).status, 200);
-  assert.equal((await call(a, "/v1/workspaces/" + id, close)).status, 200);
+  assert.equal((await call(a, "/v1/institution", close)).status, 200);
+  assert.equal((await call(a, "/v1/institution", close)).status, 200);
   assert.equal((await view(a, id)).status, 403);
   assert.equal(
-    await db.workspace_events.count({
-      where: { workspace_id: id, kind: "organization_closed" },
+    await db.institution_audit_events.count({
+      where: { institution_id: id, kind: "organization_closed" },
     }),
     1,
   );
@@ -331,7 +320,7 @@ test("deleting a departed person preserves their membership record without retai
     ).status,
     200,
   );
-  const retained = await db.workspace_members.findUniqueOrThrow({
+  const retained = await db.institution_members.findUniqueOrThrow({
     where: { id: member.id },
   });
   assert.equal(retained.user_id, null);
@@ -342,12 +331,15 @@ test("deleting a departed person preserves their membership record without retai
 test("legacy independent memberships stay hidden and two concurrent admins cannot both leave", async () => {
   const a = await person(),
     b = await person();
-  assert.equal((await call(a, "/v1/contexts")).data.contexts.length, 0);
+  assert.equal(
+    (await call(a, "/v1/institution/context")).data.contexts.length,
+    0,
+  );
   const practice = randomUUID();
   spaces.push(practice);
   assert.equal(
     (
-      await call(a, "/v1/workspaces", {
+      await call(a, "/v1/institutions", {
         id: practice,
         kind: "independent",
         name: "Own coaching",
@@ -356,7 +348,7 @@ test("legacy independent memberships stay hidden and two concurrent admins canno
     200,
   );
   assert.equal(
-    (await call(a, "/v1/contexts")).data.contexts.filter(
+    (await call(a, "/v1/institution/context")).data.contexts.filter(
       (c: any) => c.kind === "independent",
     ).length,
     0,
@@ -369,7 +361,7 @@ test("legacy independent memberships stay hidden and two concurrent admins canno
       const m = members.find((m: any) => m.user_id === p.id);
       return call(
         p,
-        "/v1/workspaces/" + id,
+        "/v1/institution",
         operation("member", {
           id: m.id,
           revision: 1,
@@ -381,8 +373,8 @@ test("legacy independent memberships stay hidden and two concurrent admins canno
   );
   assert.deepEqual(results.map((r) => r.status).sort(), [200, 409]);
   assert.equal(
-    await db.workspace_members.count({
-      where: { workspace_id: id, active: true, roles: { has: "admin" } },
+    await db.institution_members.count({
+      where: { institution_id: id, active: true, roles: { has: "admin" } },
     }),
     1,
   );
@@ -390,10 +382,7 @@ test("legacy independent memberships stay hidden and two concurrent admins canno
 
 test("runtime institution creation and Tasks endpoints are removed", async () => {
   const p = await person();
-  for (const path of [
-    "/v1/workspaces",
-    "/v1/workspaces/12000000-0000-4000-8000-000000000001/tasks",
-  ]) {
+  for (const path of ["/v1/institutions", "/v1/institution/tasks"]) {
     const response = await fetch(base + path, {
       method: "POST",
       headers: {

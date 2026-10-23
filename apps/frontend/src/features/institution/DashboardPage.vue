@@ -35,7 +35,7 @@ import {
 const closeDialog = ref(false)
 const route = useRoute(),
   router = useRouter(),
-  id = institutionContext().workspace,
+  id = institutionContext().institution,
   view = institutionContext().view as Role,
   base = '',
   section = computed(() => String(route.meta.section || 'overview'))
@@ -81,6 +81,7 @@ watch(roles, (current, previous) => {
       (id) => !sports.value.some((sport) => sport.id === id && sport.kind === 'specialty'),
     )
 })
+// Keep the historical draft key so unfinished invitations survive the naming upgrade.
 const draftKey = `organization-invite:${user.value!.id}:${id}:${view}`
 const roleName = (role: string) =>
   l(
@@ -95,9 +96,7 @@ const sportNames = (member: Member) =>
 async function loadSports() {
   if (view === 'trainee') return
   try {
-    sports.value = (
-      await request<{ items: Sport[] }>(`/v1/workspaces/${id}/sports?view=${view}`)
-    ).items
+    sports.value = (await request<{ items: Sport[] }>(`/v1/institution/sports?view=${view}`)).items
   } catch {
     // Sport labels are descriptive; the roster stays usable without them.
     sports.value = []
@@ -123,10 +122,10 @@ async function load() {
   error.value = ''
   try {
     const loaded = await request<Institution>(
-      `/v1/workspaces/${id}?view=${view}&summary=${view !== 'trainee'}`,
+      `/v1/institution?view=${view}&summary=${view !== 'trainee'}`,
     )
     data.value = loaded
-    newName.value = loaded.workspace.name
+    newName.value = loaded.institution.name
     if (section.value === 'people') await loadPeople()
   } catch (e) {
     data.value = undefined
@@ -141,7 +140,7 @@ async function loadExtra(kind: 'invitations' | 'events') {
   extraLoading.value = true
   try {
     const result = await request<Institution>(
-      `/v1/workspaces/${id}?view=${view}&summary=true&${kind === 'events' ? 'eventOffset' : 'invitationOffset'}=${kind === 'events' ? data.value.eventsNext : data.value.invitationsNext}`,
+      `/v1/institution?view=${view}&summary=true&${kind === 'events' ? 'eventOffset' : 'invitationOffset'}=${kind === 'events' ? data.value.eventsNext : data.value.invitationsNext}`,
     )
     if (kind === 'events') {
       data.value.events.push(...result.events)
@@ -182,7 +181,7 @@ async function loadPeople(offset = peopleOffset.value) {
       names: { id: string; name: string }[]
       next: number | null
       total: number
-    }>(`/v1/workspaces/${id}/people?${q}`)
+    }>(`/v1/institution/people?${q}`)
     if (current !== rosterGeneration || !data.value) return
     peopleOffset.value = offset
     data.value.names = Array.from(
@@ -268,20 +267,20 @@ const command = useCommand<'organization'>(
   `organization:${id}:${view}`,
   async (_, result, args) => {
     if (args.action === 'invite') {
-      inviteLink.value = location.origin + '/organization-invite/' + args.token
+      inviteLink.value = location.origin + '/invitation/' + args.token
       email.value = ''
       roles.value = ['trainee']
       inviteSports.value = []
       await removeDraft(draftKey)
     }
     await refreshContexts()
-    if (!contexts.value.some((c) => c.workspace_id === id && c.role === view)) {
+    if (!contexts.value.some((c) => c.institution_id === id && c.role === view)) {
       await router.push('/access')
       return
     }
     await load()
   },
-  (_, args) => request(`/v1/workspaces/${id}`, { method: 'POST', body: JSON.stringify(args) }),
+  (_, args) => request(`/v1/institution`, { method: 'POST', body: JSON.stringify(args) }),
 )
 const locked = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
 const run = (args: Record<string, unknown>) =>
@@ -346,7 +345,7 @@ onMounted(async () => {
                 ? l('Institution settings', 'إعدادات المؤسسة')
                 : section === 'activity'
                   ? l('Institution activity', 'نشاط المؤسسة')
-                  : data?.workspace.name || l('Institution', 'المؤسسة')
+                  : data?.institution.name || l('Institution', 'المؤسسة')
           }}
         </h1>
         <p v-if="section !== 'overview'">
@@ -396,7 +395,10 @@ onMounted(async () => {
           <form class="form-stack" @submit.prevent="invite">
             <h2>
               {{
-                l('Invite someone to ' + data.workspace.name, 'دعوة شخص إلى ' + data.workspace.name)
+                l(
+                  'Invite someone to ' + data.institution.name,
+                  'دعوة شخص إلى ' + data.institution.name,
+                )
               }}
             </h2>
             <p v-if="draftError" class="notice error" role="alert">{{ draftError }}</p>
@@ -823,7 +825,7 @@ onMounted(async () => {
               <form
                 class="settings-inline-form"
                 @submit.prevent="
-                  run({ action: 'rename', name: newName, revision: data.workspace.revision })
+                  run({ action: 'rename', name: newName, revision: data.institution.revision })
                 "
               >
                 <label
@@ -835,10 +837,10 @@ onMounted(async () => {
               </form>
             </section>
             <div class="panel institution-branding-column">
-              <BrandingSettings :workspace-id="id" />
+              <BrandingSettings :institution-id="id" />
             </div>
             <section class="panel institution-settings-wide">
-              <SportsSettings :workspace-id="id" @changed="loadSports" />
+              <SportsSettings :institution-id="id" @changed="loadSports" />
             </section>
             <section class="panel institution-danger-zone institution-settings-wide">
               <h2>{{ l('Close this institution', 'إغلاق هذه المؤسسة') }}</h2>
@@ -879,7 +881,7 @@ onMounted(async () => {
                         )
                       }}
                     </DialogDescription>
-                    <p class="institution-confirm-name" dir="auto">{{ data.workspace.name }}</p>
+                    <p class="institution-confirm-name" dir="auto">{{ data.institution.name }}</p>
                     <CommandStatus
                       v-if="command.state.error || command.state.pending"
                       :command="command"
@@ -890,7 +892,7 @@ onMounted(async () => {
                         run({
                           action: 'close',
                           confirm: closeName,
-                          revision: data.workspace.revision,
+                          revision: data.institution.revision,
                         })
                       "
                     >
@@ -899,7 +901,7 @@ onMounted(async () => {
                         }}<input v-model="closeName" :disabled="locked" /></label
                       ><button
                         class="button institution-danger-button"
-                        :disabled="locked || closeName !== data.workspace.name"
+                        :disabled="locked || closeName !== data.institution.name"
                       >
                         {{ l('Close institution', 'إغلاق المؤسسة') }}
                       </button>

@@ -20,7 +20,7 @@ type Result = AssessmentResult & {
   attendance: string
 }
 const route = useRoute(),
-  id = institutionContext().workspace,
+  id = institutionContext().institution,
   view = institutionContext().view,
   member = String(route.params.member || ''),
   base = ''
@@ -80,7 +80,7 @@ async function load(append = false) {
       next: number | null
       person: { name: string }
     }>(
-      `/v1/workspaces/${id}/assessment-history?view=${view}&member=${member}&from=${from.value}&to=${to.value}&offset=${append ? next.value || 0 : 0}`,
+      `/v1/institution/assessment-history?view=${view}&member=${member}&from=${from.value}&to=${to.value}&offset=${append ? next.value || 0 : 0}`,
     )
     name.value = result.person.name
     items.value = append ? [...items.value, ...result.items] : result.items

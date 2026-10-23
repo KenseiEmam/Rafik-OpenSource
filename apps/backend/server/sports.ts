@@ -6,7 +6,7 @@ import {
   uuid,
   textValue,
   type Tx,
-} from "./workspaces.ts";
+} from "./institution.ts";
 import { role } from "./programming.ts";
 import { ids } from "./service-definitions.ts";
 import { endLinksForRemovedSports } from "./coaching-links.ts";
@@ -15,7 +15,7 @@ const SPORT_LIMIT = 200;
 const KINDS = ["sport", "specialty"];
 
 /** Sports and specialties are institution metadata; they grant no capability by themselves. */
-export async function organizationSports(
+export async function institutionSports(
   actor: Actor,
   id: string,
   q: URLSearchParams,
@@ -23,8 +23,8 @@ export async function organizationSports(
   const view = role(q.get("view"));
   if (view === "trainee") throw new ApiError(403, "forbidden");
   return scoped(actor, id, [view], async (tx) => ({
-    items: await tx.organization_sports.findMany({
-      where: { workspace_id: id },
+    items: await tx.institution_sports.findMany({
+      where: { institution_id: id },
       // "sport" sorts after "specialty"; list sports first.
       orderBy: [
         { archived: "asc" },
@@ -45,7 +45,7 @@ export async function organizationSports(
 
 async function currentSports(tx: Tx, member: string) {
   return (
-    await tx.organization_member_sports.findMany({
+    await tx.institution_member_sports.findMany({
       where: { member_id: member },
       select: { sport_id: true },
     })
@@ -54,7 +54,7 @@ async function currentSports(tx: Tx, member: string) {
     .sort();
 }
 
-export async function organizationSportsCommand(
+export async function institutionSportsCommand(
   actor: Actor,
   id: string,
   input: Input,
@@ -70,17 +70,18 @@ export async function organizationSportsCommand(
         kind = String(input.kind);
       if (!KINDS.includes(kind) || typeof input.archived !== "boolean")
         throw new ApiError(400, "invalid_request");
-      const old = await tx.organization_sports.findUnique({
+      const old = await tx.institution_sports.findUnique({
         where: { id: key },
       });
-      if (old && old.workspace_id !== id) throw new ApiError(403, "forbidden");
+      if (old && old.institution_id !== id)
+        throw new ApiError(403, "forbidden");
       if ((old?.revision || 0) !== input.revision)
         throw new ApiError(409, "conflict");
       // Kind is fixed once created so existing athlete/coach links keep their meaning.
       if (old && old.kind !== kind) throw new ApiError(400, "kind_fixed");
-      const duplicate = await tx.organization_sports.findFirst({
+      const duplicate = await tx.institution_sports.findFirst({
         where: {
-          workspace_id: id,
+          institution_id: id,
           name: { equals: name, mode: "insensitive" },
           NOT: { id: key },
         },
@@ -88,12 +89,13 @@ export async function organizationSportsCommand(
       if (duplicate) throw new ApiError(409, "duplicate_sport");
       if (
         !old &&
-        (await tx.organization_sports.count({ where: { workspace_id: id } })) >=
-          SPORT_LIMIT
+        (await tx.institution_sports.count({
+          where: { institution_id: id },
+        })) >= SPORT_LIMIT
       )
         throw new ApiError(400, "sport_limit");
       const result = old
-        ? await tx.organization_sports.update({
+        ? await tx.institution_sports.update({
             where: { id: key },
             data: {
               name,
@@ -101,10 +103,10 @@ export async function organizationSportsCommand(
               revision: { increment: 1 },
             },
           })
-        : await tx.organization_sports.create({
+        : await tx.institution_sports.create({
             data: {
               id: key,
-              workspace_id: id,
+              institution_id: id,
               name,
               kind,
               archived: input.archived,
@@ -117,8 +119,8 @@ export async function organizationSportsCommand(
       });
       return result;
     }
-    const member = await tx.workspace_members.findFirst({
-      where: { id: uuid(input.member), workspace_id: id, active: true },
+    const member = await tx.institution_members.findFirst({
+      where: { id: uuid(input.member), institution_id: id, active: true },
     });
     if (!member || member.roles.includes("admin"))
       throw new ApiError(400, "invalid_member");
@@ -129,8 +131,8 @@ export async function organizationSportsCommand(
     if (current.join() !== previous.join()) throw new ApiError(409, "conflict");
     const added = next.filter((x) => !current.includes(x)),
       removed = current.filter((x) => !next.includes(x));
-    const sports = await tx.organization_sports.findMany({
-      where: { workspace_id: id, id: { in: added } },
+    const sports = await tx.institution_sports.findMany({
+      where: { institution_id: id, id: { in: added } },
     });
     if (
       sports.length !== added.length ||
@@ -141,13 +143,13 @@ export async function organizationSportsCommand(
       )
     )
       throw new ApiError(400, "invalid_sport");
-    await tx.organization_member_sports.deleteMany({
+    await tx.institution_member_sports.deleteMany({
       where: { member_id: member.id, sport_id: { in: removed } },
     });
     await endLinksForRemovedSports(tx, id, member.id, removed, self.id);
-    await tx.organization_member_sports.createMany({
+    await tx.institution_member_sports.createMany({
       data: added.map((sport_id) => ({
-        workspace_id: id,
+        institution_id: id,
         member_id: member.id,
         sport_id,
         created_by: self.id,

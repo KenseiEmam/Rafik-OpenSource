@@ -6,9 +6,9 @@ import { language as l, errorMessage } from '../../lib/i18n'
 import { useCommand } from '../../lib/commands'
 import CommandStatus from '../../components/CommandStatus.vue'
 import type { Sport } from './types'
-const props = defineProps<{ workspaceId: string }>()
+const props = defineProps<{ institutionId: string }>()
 const emit = defineEmits<{ changed: [] }>()
-const endpoint = `/v1/workspaces/${props.workspaceId}/sports`
+const endpoint = `/v1/institution/sports`
 const items = ref<Sport[]>([]),
   loading = ref(true),
   error = ref(''),
@@ -28,7 +28,7 @@ async function load() {
   }
 }
 const command = useCommand<'sports'>(
-  `organization-sports:${props.workspaceId}`,
+  `organization-sports:${props.institutionId}`,
   async (_, __, args) => {
     if (!args.revision) name.value = ''
     editing.value = ''

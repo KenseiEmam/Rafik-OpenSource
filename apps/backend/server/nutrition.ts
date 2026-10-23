@@ -6,7 +6,7 @@ import {
   uuid,
   access,
   type Tx,
-} from "./workspaces.ts";
+} from "./institution.ts";
 import { role, recipient } from "./programming.ts";
 import { calendarDate, pageOffset } from "./service-definitions.ts";
 import type { Prisma } from "./generated/prisma/client.ts";
@@ -15,7 +15,7 @@ type Self = Awaited<ReturnType<typeof access>>;
 const day = (s: string) => new Date(s + "T00:00:00Z");
 async function subject(
   tx: Tx,
-  workspace: string,
+  institution: string,
   self: Self,
   view: ReturnType<typeof role>,
   value: unknown,
@@ -23,7 +23,7 @@ async function subject(
 ) {
   const member = await recipient(
     tx,
-    workspace,
+    institution,
     self,
     view,
     view === "trainee" ? self.id : uuid(value),
@@ -38,7 +38,7 @@ async function subject(
 async function today(tx: Tx, member: string) {
   const [value] = await tx.$queryRaw<
     { day: string }[]
-  >`SELECT public.organization_member_today(${member}::uuid)::text AS day`;
+  >`SELECT public.institution_member_today(${member}::uuid)::text AS day`;
   return value.day;
 }
 async function validateFood(tx: Tx, foods: unknown) {
@@ -47,50 +47,50 @@ async function validateFood(tx: Tx, foods: unknown) {
 }
 export async function nutrition(
   actor: Actor,
-  workspace: string,
+  institution: string,
   q: URLSearchParams,
 ) {
   const view = role(q.get("view"));
-  return scoped(actor, workspace, [view], async (tx, self) => {
+  return scoped(actor, institution, [view], async (tx, self) => {
     if (view !== "trainee" && !q.get("member")) return { member: null };
-    const member = await subject(tx, workspace, self, view, q.get("member"));
+    const member = await subject(tx, institution, self, view, q.get("member"));
     const currentDay = await today(tx, member.id);
     const selectedDay = calendarDate(q.get("date") || currentDay);
-    const where = { workspace_id: workspace, member_id: member.id };
-    const sharing = await tx.organization_nutrition_sharing.findUnique({
+    const where = { institution_id: institution, member_id: member.id };
+    const sharing = await tx.institution_nutrition_sharing.findUnique({
       where: { member_id: member.id },
     });
     const canReadDiary = view === "trainee" || sharing?.enabled === true;
     let offset = pageOffset(q.get("offset"));
     if (q.get("plan")) {
-      const selected = await tx.organization_nutrition_plans.findFirst({
+      const selected = await tx.institution_nutrition_plans.findFirst({
         where: { ...where, id: uuid(q.get("plan")) },
       });
       if (!selected) throw new ApiError(404, "resource_unavailable");
-      const newer = await tx.organization_nutrition_plans.count({
+      const newer = await tx.institution_nutrition_plans.count({
         where: { ...where, revision: { gt: selected.revision } },
       });
       offset = Math.floor(newer / 10) * 10;
     }
     const [plans, total, latest, current, meals] = await Promise.all([
-      tx.organization_nutrition_plans.findMany({
+      tx.institution_nutrition_plans.findMany({
         where,
         orderBy: { revision: "desc" },
         skip: offset,
         take: 10,
       }),
-      tx.organization_nutrition_plans.count({ where }),
-      tx.organization_nutrition_plans.findFirst({
+      tx.institution_nutrition_plans.count({ where }),
+      tx.institution_nutrition_plans.findFirst({
         where,
         orderBy: { revision: "desc" },
         select: { revision: true },
       }),
-      tx.organization_nutrition_plans.findFirst({
+      tx.institution_nutrition_plans.findFirst({
         where: { ...where, effective_on: { lte: day(selectedDay) } },
         orderBy: [{ effective_on: "desc" }, { revision: "desc" }],
       }),
       canReadDiary
-        ? tx.organization_meals.findMany({
+        ? tx.institution_meals.findMany({
             where: { ...where, logged_on: day(selectedDay), removed: false },
             orderBy: [{ created_at: "asc" }, { id: "asc" }],
             take: 200,
@@ -100,16 +100,16 @@ export async function nutrition(
     const removedOffset = pageOffset(q.get("removedOffset"));
     const removed =
       canReadDiary && q.get("removed") === "true"
-        ? await tx.organization_meals.findMany({
+        ? await tx.institution_meals.findMany({
             where: { ...where, logged_on: day(selectedDay), removed: true },
             orderBy: [{ updated_at: "desc" }, { id: "asc" }],
             skip: removedOffset,
             take: 11,
           })
         : [];
-    const authors = await tx.workspace_members.findMany({
+    const authors = await tx.institution_members.findMany({
       where: {
-        workspace_id: workspace,
+        institution_id: institution,
         id: {
           in: [
             ...new Set(
@@ -123,17 +123,17 @@ export async function nutrition(
     let corrections: unknown[] = [];
     let correctionsNext: number | null = null;
     if (canReadDiary && q.get("meal")) {
-      const meal = await tx.organization_meals.findUnique({
+      const meal = await tx.institution_meals.findUnique({
         where: { id: uuid(q.get("meal")) },
       });
       if (
         !meal ||
         meal.member_id !== member.id ||
-        meal.workspace_id !== workspace
+        meal.institution_id !== institution
       )
         throw new ApiError(403, "forbidden");
       const historyOffset = pageOffset(q.get("historyOffset"));
-      const records = await tx.organization_meal_history.findMany({
+      const records = await tx.institution_meal_history.findMany({
         where: { meal_id: meal.id },
         orderBy: { revision: "desc" },
         skip: historyOffset,
@@ -176,7 +176,7 @@ export async function nutrition(
 }
 export async function nutritionCommand(
   actor: Actor,
-  workspace: string,
+  institution: string,
   input: Input,
 ) {
   const view = role(input.view),
@@ -187,42 +187,49 @@ export async function nutritionCommand(
   )
     throw new ApiError(403, "forbidden");
   async function authorize(tx: Tx, self: Self) {
-    const member = await subject(tx, workspace, self, view, input.member, true);
+    const member = await subject(
+      tx,
+      institution,
+      self,
+      view,
+      input.member,
+      true,
+    );
     if (action === "meal" || action === "remove") {
-      const old = await tx.organization_meals.findUnique({
+      const old = await tx.institution_meals.findUnique({
         where: { id: uuid(input.id) },
       });
       if (
         old &&
-        (old.workspace_id !== workspace || old.member_id !== member.id)
+        (old.institution_id !== institution || old.member_id !== member.id)
       )
         throw new ApiError(403, "forbidden");
     }
   }
   return mutation(
     actor,
-    workspace,
+    institution,
     [view],
     input,
     async (tx, self) => {
       const member = await subject(
         tx,
-        workspace,
+        institution,
         self,
         view,
         input.member,
         true,
       );
-      const where = { workspace_id: workspace, member_id: member.id };
+      const where = { institution_id: institution, member_id: member.id };
       if (action === "sharing") {
         if (typeof input.enabled !== "boolean")
           throw new ApiError(400, "invalid_request");
-        const old = await tx.organization_nutrition_sharing.findUnique({
+        const old = await tx.institution_nutrition_sharing.findUnique({
           where: { member_id: member.id },
         });
         if ((old?.revision || 0) !== input.revision)
           throw new ApiError(409, "conflict");
-        const result = await tx.organization_nutrition_sharing.upsert({
+        const result = await tx.institution_nutrition_sharing.upsert({
           where: { member_id: member.id },
           create: { ...where, enabled: input.enabled },
           update: {
@@ -234,7 +241,7 @@ export async function nutritionCommand(
         await event(
           tx,
           actor,
-          workspace,
+          institution,
           "nutrition_sharing_changed",
           member.id,
         );
@@ -256,7 +263,7 @@ export async function nutritionCommand(
           throw new ApiError(400, "invalid_date");
         if (typeof input.guidance !== "string" || input.guidance.length > 4000)
           throw new ApiError(400, "invalid_guidance");
-        const latest = await tx.organization_nutrition_plans.findFirst({
+        const latest = await tx.institution_nutrition_plans.findFirst({
           where,
           orderBy: { revision: "desc" },
         });
@@ -276,7 +283,7 @@ export async function nutritionCommand(
           !input.guidance.trim()
         )
           throw new ApiError(400, "invalid_guidance");
-        const result = await tx.organization_nutrition_plans.create({
+        const result = await tx.institution_nutrition_plans.create({
           data: {
             id: uuid(input.id),
             ...where,
@@ -292,14 +299,14 @@ export async function nutritionCommand(
         await event(
           tx,
           actor,
-          workspace,
+          institution,
           "nutrition_plan_published",
           member.id,
           { revision: result.revision },
         );
         return result;
       }
-      const old = await tx.organization_meals.findUnique({
+      const old = await tx.institution_meals.findUnique({
         where: { id: uuid(input.id) },
       });
       if ((old?.revision || 0) !== input.revision || old?.removed)
@@ -307,7 +314,7 @@ export async function nutritionCommand(
       if (action === "remove" && !old) throw new ApiError(404, "not_found");
       let result;
       if (action === "remove")
-        result = await tx.organization_meals.update({
+        result = await tx.institution_meals.update({
           where: { id: old!.id },
           data: {
             removed: true,
@@ -325,7 +332,7 @@ export async function nutritionCommand(
         await validateFood(tx, [input.food]);
         if (typeof input.note !== "string" || input.note.length > 2000)
           throw new ApiError(400, "invalid_request");
-        const count = await tx.organization_meals.count({
+        const count = await tx.institution_meals.count({
           where: {
             ...where,
             logged_on: day(date),
@@ -340,7 +347,7 @@ export async function nutritionCommand(
           note: input.note.trim(),
         };
         result = old
-          ? await tx.organization_meals.update({
+          ? await tx.institution_meals.update({
               where: { id: old.id },
               data: {
                 ...data,
@@ -348,13 +355,13 @@ export async function nutritionCommand(
                 updated_at: new Date(),
               },
             })
-          : await tx.organization_meals.create({
+          : await tx.institution_meals.create({
               data: { id: uuid(input.id), ...where, ...data },
             });
       }
-      await tx.organization_meal_history.create({
+      await tx.institution_meal_history.create({
         data: {
-          workspace_id: workspace,
+          institution_id: institution,
           meal_id: result.id,
           revision: result.revision,
           document: JSON.parse(JSON.stringify(result)),

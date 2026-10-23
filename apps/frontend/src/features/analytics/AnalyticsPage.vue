@@ -14,7 +14,7 @@ import TrainerDelivery from './TrainerDelivery.vue'
 import ExperienceReport, { type Experience } from './ExperienceReport.vue'
 import { TabsRoot, TabsList, TabsTrigger, TabsContent } from 'reka-ui'
 const route = useRoute(),
-  workspace = institutionContext().workspace,
+  institution = institutionContext().institution,
   view = institutionContext().view,
   base = ''
 const from = ref(addDays(localDate(profile.value?.timezone || 'UTC'), -27)),
@@ -72,7 +72,7 @@ async function load(part?: 'workload' | 'program') {
   error.value = ''
   try {
     const result = await request<Report>(
-      `${'/v1/workspaces/' + workspace + '/analytics'}?view=${view}&from=${from.value}&to=${to.value}&member=${selected.value}&search=${encodeURIComponent(search.value)}&workloadOffset=${part === 'workload' ? data.value?.workloadNext || 0 : 0}&programOffset=${part === 'program' ? data.value?.programNext || 0 : 0}`,
+      `${'/v1/institution' + '/analytics'}?view=${view}&from=${from.value}&to=${to.value}&member=${selected.value}&search=${encodeURIComponent(search.value)}&workloadOffset=${part === 'workload' ? data.value?.workloadNext || 0 : 0}&programOffset=${part === 'program' ? data.value?.programNext || 0 : 0}`,
     )
     if (current !== generation) return
     if (part && data.value) {
@@ -269,7 +269,7 @@ onMounted(() => load())
               l('Training activity', 'النشاط التدريبي')
             }}</TabsTrigger
             ><TabsTrigger value="delivery">{{
-              workspace
+              institution
                 ? l('Delivery & capacity', 'التدريب وقدرة الفريق')
                 : l('Follow-up', 'المتابعة')
             }}</TabsTrigger

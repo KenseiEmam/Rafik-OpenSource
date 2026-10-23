@@ -122,7 +122,7 @@ Every local Vue file is listed, including routed screens. Direct rendered consum
 - **Kind:** Reusable/domain component.
 - **Purpose:** Password input with an accessible show/hide action.
 - **Direct rendered consumers:** [features/account/LoginPage.vue](../../../apps/frontend/src/features/account/LoginPage.vue), [features/account/PasswordSetupPage.vue](../../../apps/frontend/src/features/account/PasswordSetupPage.vue), [features/account/SetupPage.vue](../../../apps/frontend/src/features/account/SetupPage.vue), [features/institution/InvitationPage.vue](../../../apps/frontend/src/features/institution/InvitationPage.vue)
-- **Views using it:** `/login`, `/organization-invite/:token`, `/password-setup/:token`, `/setup`
+- **Views using it:** `/invitation/:token`, `/login`, `/password-setup/:token`, `/setup`
 
 ## ResourceAsset
 
@@ -170,7 +170,7 @@ Every local Vue file is listed, including routed screens. Direct rendered consum
 - **Kind:** Screen or route dispatcher.
 - **Purpose:** Membership/connection recovery with explicit refresh and sign-out.
 - **Direct rendered consumers:** Router.
-- **Views using it:** `/access`, `/organization/:workspace/:view/:legacy(.*)*`
+- **Views using it:** `/access`, `/organization/:institution/:view/:legacy(.*)*`
 
 ## EntryPage
 
@@ -450,7 +450,7 @@ Every local Vue file is listed, including routed screens. Direct rendered consum
 - **Kind:** Screen or route dispatcher.
 - **Purpose:** Accept a seven-day institution invitation and create/sign into the invited account.
 - **Direct rendered consumers:** Router.
-- **Views using it:** `/organization-invite/:token`
+- **Views using it:** `/invitation/:token`
 
 ## MemberManagement
 

@@ -34,7 +34,7 @@ const referenced = () =>
         "-d",
         target.database,
         "-Atc",
-        "select object_path from public.resources union select 'program/'||workspace_id||'/'||id from public.program_media union select 'organization/'||workspace_id||'/'||id from public.organization_assets",
+        "select object_path from public.resources union select 'program/'||institution_id||'/'||id from public.program_media union select 'organization/'||institution_id||'/'||id from public.institution_assets",
       ],
       { encoding: "utf8" },
     )

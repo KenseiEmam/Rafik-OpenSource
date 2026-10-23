@@ -10,7 +10,7 @@ import MemberPicker from './MemberPicker.vue'
 import PageState from '../../components/PageState.vue'
 import type { Institution } from './types'
 const props = defineProps<{
-  workspace: string
+  institution: string
   view: string
   initialMembers?: string[]
   initialTitle?: string
@@ -22,7 +22,7 @@ const props = defineProps<{
   }
 }>()
 const emit = defineEmits<{ saved: [id: string]; close: [] }>()
-const key = `channel-editor:${user.value!.id}:${props.workspace}:${props.view}:${props.initial?.id || 'new'}:${[...(props.initialMembers || [])].sort().join(',')}`
+const key = `channel-editor:${user.value!.id}:${props.institution}:${props.view}:${props.initial?.id || 'new'}:${[...(props.initialMembers || [])].sort().join(',')}`
 const people = ref<Institution>(),
   loading = ref(true),
   error = ref(''),
@@ -52,7 +52,7 @@ const command = useCommand<'save'>(
     emit('saved', (result as { id: string }).id)
   },
   (_, args) =>
-    request(`/v1/workspaces/${props.workspace}/communication`, {
+    request(`/v1/institution/communication`, {
       method: 'POST',
       body: JSON.stringify(args),
     }),
@@ -63,9 +63,7 @@ async function load() {
   loading.value = true
   error.value = ''
   try {
-    people.value = await request(
-      `/v1/workspaces/${props.workspace}?view=${props.view}&summary=true`,
-    )
+    people.value = await request(`/v1/institution?view=${props.view}&summary=true`)
     if (!people.value!.members.some((m) => m.id === people.value!.self.id)) {
       const own = people.value!.self
       people.value!.members.unshift({
@@ -169,7 +167,7 @@ onMounted(async () => {
             }}
           </p>
           <MemberPicker
-            :workspace="workspace"
+            :institution="institution"
             :view="view"
             v-model="draft.members"
             include-self

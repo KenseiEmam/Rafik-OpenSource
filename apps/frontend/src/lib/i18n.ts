@@ -149,7 +149,7 @@ export function errorMessage(error: unknown): string {
       'تم تعليق تسجيل الدخول. تواصل مع دعم المنصة.',
     ],
     conversation_unavailable: [
-      'This conversation is unavailable in this workspace. Refresh your conversations or contact an institution administrator.',
+      'This conversation is unavailable in this institution. Refresh your conversations or contact an institution administrator.',
       'هذه المحادثة غير متاحة في مساحة العمل. حدّث المحادثات أو تواصل مع مسؤول المؤسسة.',
     ],
     notification_unavailable: [
@@ -187,7 +187,7 @@ export function errorMessage(error: unknown): string {
       'قالب التقييم غير متاح. اختر قالباً نشطاً في المؤسسة.',
     ],
     program_unavailable: [
-      'This program is no longer available in this workspace. Return to the program library.',
+      'This program is no longer available in this institution. Return to the program library.',
       'لم يعد البرنامج متاحاً في هذه المساحة. عُد إلى مكتبة البرامج.',
     ],
     feedback_unavailable: [
@@ -211,7 +211,7 @@ export function errorMessage(error: unknown): string {
       'لم يعد هذا الرياضي ضمن مسؤوليتك. حدّث قائمة الأشخاص قبل المتابعة.',
     ],
     invalid_program_cover: [
-      'Use a JPG, PNG or WebP image up to 2 MB from this workspace.',
+      'Use a JPG, PNG or WebP image up to 2 MB from this institution.',
       'استخدم صورة JPG أو PNG أو WebP حتى ٢ ميغابايت من هذه المساحة.',
     ],
     invalid_program_details: [
@@ -223,7 +223,7 @@ export function errorMessage(error: unknown): string {
       'اختر من ١ إلى ٥٠ شخصاً وراجع التعيين مجدداً.',
     ],
     assignment_unavailable: [
-      'This assignment is not active today. Refresh your training workspace.',
+      'This assignment is not active today. Refresh your training institution.',
       'هذا التعيين غير نشط اليوم. حدّث مساحة تدريبك.',
     ],
     not_scheduled_today: [
@@ -231,11 +231,11 @@ export function errorMessage(error: unknown): string {
       'هذه الحصة مجدولة ليوم آخر. افتح تدريب اليوم أو استأنف حصة بدأت سابقاً.',
     ],
     workspace_unavailable: [
-      'Your access to this institution or view is no longer available. Choose another workspace or contact an administrator.',
+      'Your access to this institution or view is no longer available. Choose another institution or contact an administrator.',
       'لم يعد الوصول إلى هذه المؤسسة أو هذا العرض متاحاً. اختر مساحة أخرى أو تواصل مع المسؤول.',
     ],
     coaching_not_enabled: [
-      'Set up your independent coaching workspace first.',
+      'Set up your independent coaching institution first.',
       'أعدّ مساحة التدريب المستقل أولاً.',
     ],
     last_admin: [
@@ -291,7 +291,7 @@ export function errorMessage(error: unknown): string {
       'هذا الشخص عضو نشط بالفعل. راجع عضويته الحالية.',
     ],
     practice_exists: [
-      'Your independent coaching workspace is already available in the workspace menu.',
+      'Your independent coaching institution is already available in the institution menu.',
       'مساحة تدريبك المستقل متاحة بالفعل في قائمة مساحات العمل.',
     ],
 

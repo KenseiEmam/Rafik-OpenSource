@@ -6,7 +6,7 @@ async function coach(page: import('@playwright/test').Page) {
   await page.getByRole('button', { name: /Laila Khoury/ }).click()
   await expect(page).toHaveURL(/\/coach$/)
 }
-test('coach manages a client workspace and restores an archived relationship', async ({
+test('coach manages a client institution and restores an archived relationship', async ({
   page,
 }, info) => {
   await coach(page)

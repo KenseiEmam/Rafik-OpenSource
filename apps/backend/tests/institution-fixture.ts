@@ -13,16 +13,16 @@ export async function fixtureInstitution(
   )
     throw Error("Institution fixtures require a disposable test database/API");
   const id = String(input.id),
-    kind = String(input.kind),
+    kind = input.kind === "institution" ? "organization" : String(input.kind),
     name = String(input.name);
   await db.$transaction(async (tx) => {
-    await tx.workspaces.create({
+    await tx.institutions.create({
       data: { id, kind, name, created_by: actor.id },
     });
-    await tx.workspace_members.create({
+    await tx.institution_members.create({
       data: {
         id: randomUUID(),
-        workspace_id: id,
+        institution_id: id,
         user_id: actor.id,
         roles: [kind === "organization" ? "admin" : "trainer"],
         name: "Fixture administrator",

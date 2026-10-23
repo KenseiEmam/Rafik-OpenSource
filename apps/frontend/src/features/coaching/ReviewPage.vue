@@ -32,7 +32,7 @@ async function load() {
   error.value = ''
   try {
     const result = await request<Session & { member_name: string }>(
-      `/v1/organization-sessions/${id}?view=${context.view}`,
+      `/v1/workouts/${id}?view=${context.view}`,
     )
     session.value = result
     person.value = { display_name: result.member_name }
@@ -54,7 +54,7 @@ const command = useCommand<'review'>(
     )
   },
   (_, args) =>
-    request(`/v1/workspaces/${context.workspace}/sessions`, {
+    request(`/v1/institution/sessions`, {
       method: 'POST',
       body: JSON.stringify(args),
     }),

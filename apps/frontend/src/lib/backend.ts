@@ -105,7 +105,7 @@ export const api = {
     return result.user
   },
   async acceptInvitation(input: { token: string; email: string; name: string; password: string }) {
-    const result = await request<{ user: ApiUser; workspace_id: string; role: string }>(
+    const result = await request<{ user: ApiUser; institution_id: string; role: string }>(
       '/v1/auth/accept-invitation',
       {
         method: 'POST',

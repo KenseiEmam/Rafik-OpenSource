@@ -1,3 +1,4 @@
+import { migrationSource } from "../backend-schema-snapshot.mjs";
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -33,21 +34,12 @@ let created = false;
 try {
   sql("rafik", `CREATE DATABASE ${database};`);
   created = true;
-  execFileSync(
-    process.execPath,
-    [
-      resolve(repositoryRoot, "node_modules/prisma/build/index.js"),
-      "migrate",
-      "deploy",
-    ],
-    {
-      cwd: backendRoot,
-      stdio: "pipe",
-      env: {
-        ...process.env,
-        MIGRATION_DATABASE_URL: `postgresql://rafik_migrate:rafik-local-migrations-only@127.0.0.1:55332/${database}`,
-      },
-    },
+  sql(
+    database,
+    migrationSource()
+      .filter(([name]) => name < "202610231800_institution_identifiers")
+      .map(([, source]) => source)
+      .join("\n"),
   );
   // Reconstruct only the retired table to test a real populated upgrade and rollback guard.
   sql(
@@ -121,6 +113,10 @@ try {
     ).trim(),
     "1",
   );
+  for (const [, source] of migrationSource().filter(
+    ([name]) => name >= "202610231800_institution_identifiers",
+  ))
+    sql(database, source);
   execFileSync(
     process.execPath,
     [

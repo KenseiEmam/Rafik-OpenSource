@@ -138,7 +138,7 @@ test("organization agenda and assessor-led results preserve each participant, co
       400,
     );
     // Move only this test-owned event into the past to exercise attendance/results without waiting a day.
-    await db.organization_events.update({
+    await db.institution_events.update({
       where: { id: event.id },
       data: {
         starts_at: new Date(Date.now() - 7200000),
@@ -300,7 +300,7 @@ test("organization agenda and assessor-led results preserve each participant, co
       ).status,
       403,
     );
-    const exported = await call(one, "/v1/account/organizations");
+    const exported = await call(one, "/v1/account/institution");
     assert.equal(exported.status, 200);
     assert.equal(exported.data.results.length, 1);
     assert.equal(exported.data.results[0].member_id, a.id);
@@ -334,7 +334,7 @@ test("organization agenda and assessor-led results preserve each participant, co
     );
     const replacement = await f.person(),
       replacementMember = await f.join(admin, id, replacement, ["trainer"]);
-    const current = await db.workspace_members.findUniqueOrThrow({
+    const current = await db.institution_members.findUniqueOrThrow({
       where: { id: a.id },
     });
     assert.equal(
@@ -504,8 +504,8 @@ test("calendar collisions are atomic across organizations; calendar preview reso
       JSON.stringify(results),
     );
     assert.equal(
-      await db.organization_events.count({
-        where: { workspace_id: { in: [id, id2] } },
+      await db.institution_events.count({
+        where: { institution_id: { in: [id, id2] } },
       }),
       1,
     );

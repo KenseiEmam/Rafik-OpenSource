@@ -14,9 +14,13 @@ test('organization program authoring, reviewed delivery, recording and feedback 
     client = await clientContext.newPage(),
     id = randomUUID()
   try {
-    await f.call(f.owner, '/v1/workspaces', { id, kind: 'organization', name: 'Madar performance' })
+    await f.call(f.owner, '/v1/institutions', {
+      id,
+      kind: 'institution',
+      name: 'Madar performance',
+    })
     const token = randomBytes(32).toString('hex')
-    await f.call(f.owner, `/v1/workspaces/${id}`, {
+    await f.call(f.owner, `/v1/institution`, {
       operation: randomUUID(),
       action: 'invite',
       id: randomUUID(),
@@ -24,7 +28,7 @@ test('organization program authoring, reviewed delivery, recording and feedback 
       roles: ['trainee'],
       token,
     })
-    await f.call(f.client, `/v1/organization-invitations/${token}`, {})
+    await f.call(f.client, `/v1/invitations/${token}`, {})
     const base = ``
     await f.login(page, f.owner, base + '/plans/new')
     await expect(page.locator('.editor-exercise')).toHaveCount(0)
@@ -78,7 +82,7 @@ test('organization program authoring, reviewed delivery, recording and feedback 
       fullPage: true,
     })
     let lost = false
-    await page.route(`**/v1/workspaces/${id}/delivery`, async (route) => {
+    await page.route(`**/v1/institution/delivery`, async (route) => {
       if (!lost && route.request().method() === 'POST') {
         lost = true
         await route.fetch()
@@ -101,7 +105,7 @@ test('organization program authoring, reviewed delivery, recording and feedback 
       .click()
     await expect(client.getByRole('spinbutton', { name: 'Set 1 load', exact: true })).toBeVisible()
     let offline = true
-    await client.route(`**/v1/workspaces/${id}/sessions`, async (r) => {
+    await client.route(`**/v1/institution/sessions`, async (r) => {
       if (offline && r.request().method() === 'POST') await r.abort('failed')
       else await r.continue()
     })

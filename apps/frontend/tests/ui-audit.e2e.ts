@@ -13,8 +13,8 @@ test('web design audit inventory', async ({ page }, info) => {
   test.skip(process.env.RAFIK_UI_AUDIT !== '1', 'Opt-in design audit')
   test.setTimeout(600000)
   const f = await teamFixture(),
-    workspace = randomUUID(),
-    endpoint = `/v1/workspaces/${workspace}`
+    institution = randomUUID(),
+    endpoint = `/v1/institution`
   const controlsOnly = process.env.RAFIK_UI_AUDIT_CONTROLS === '1'
   const output = resolve(
     '../../artifacts/ui-audit/2026-10-21',
@@ -104,8 +104,8 @@ test('web design audit inventory', async ({ page }, info) => {
         })
       observations.push({
         name,
-        path: path.replace(workspace, ':workspace'),
-        url: new URL(page.url()).pathname.replace(workspace, ':workspace'),
+        path: path.replace(institution, ':institution'),
+        url: new URL(page.url()).pathname.replace(institution, ':institution'),
         viewport: page.viewportSize(),
         ...structure,
         layout,
@@ -129,9 +129,9 @@ test('web design audit inventory', async ({ page }, info) => {
     await page.keyboard.press('Escape')
   }
   try {
-    await f.call(f.owner, '/v1/workspaces', {
-      id: workspace,
-      kind: 'organization',
+    await f.call(f.owner, '/v1/institutions', {
+      id: institution,
+      kind: 'institution',
       name: 'University Sports · جامعة الرياضة',
     })
     for (const [person, role] of [
@@ -147,7 +147,7 @@ test('web design audit inventory', async ({ page }, info) => {
         roles: [role],
         token,
       })
-      await f.call(person, '/v1/organization-invitations/' + token, {})
+      await f.call(person, '/v1/invitations/' + token, {})
     }
     let data = await f.call(f.owner, endpoint + '?view=admin')
     const coach = data.members.find((m: any) => m.user_id === f.coach.id),
@@ -300,7 +300,7 @@ test('web design audit inventory', async ({ page }, info) => {
           'ON_ERROR_STOP=1',
         ],
         {
-          input: `update public.organization_events set starts_at=now()-interval '2 hours', ends_at=now()-interval '1 hour' where id='${pastEvent}' and workspace_id='${workspace}';`,
+          input: `update public.organization_events set starts_at=now()-interval '2 hours', ends_at=now()-interval '1 hour' where id='${pastEvent}' and institution_id='${institution}';`,
           stdio: ['pipe', 'pipe', 'pipe'],
         },
       )
@@ -362,7 +362,7 @@ test('web design audit inventory', async ({ page }, info) => {
           'ON_ERROR_STOP=1',
         ],
         {
-          input: `update public.organization_events set starts_at=date_trunc('day',now())+interval '12 hours', ends_at=date_trunc('day',now())+interval '13 hours' where workspace_id='${workspace}' and title like 'Today card %';`,
+          input: `update public.organization_events set starts_at=date_trunc('day',now())+interval '12 hours', ends_at=date_trunc('day',now())+interval '13 hours' where institution_id='${institution}' and title like 'Today card %';`,
           stdio: ['pipe', 'pipe', 'pipe'],
         },
       )
@@ -587,7 +587,7 @@ test('web design audit inventory', async ({ page }, info) => {
       ['notifications', '/notifications'],
       ['help', '/help'],
       ['support', '/support'],
-      ['workspaces', '/workspaces'],
+      ['institutions', '/institutions'],
       ['not-found', '/audit-missing-page'],
     ])
       await capture('en-light-' + name, path)
@@ -670,9 +670,9 @@ test('web design audit bootstrap and branding', async ({ page, browser }, info) 
   await page.goto(base + '/institution-settings')
   await expect(page.getByLabel('Accent color', { exact: true })).toBeVisible()
   await capture(page, 'authorized-branding')
-  const workspace = base.split('/')[2],
+  const institution = base.split('/')[2],
     token = randomBytes(32).toString('hex')
-  const response = await page.request.post(testApi + '/v1/workspaces/' + workspace, {
+  const response = await page.request.post(testApi + '/v1/institution', {
     headers: { 'x-rafik-client': 'web', Origin: testWeb },
     data: {
       action: 'invite',

@@ -21,7 +21,7 @@ const email = ref(''),
   confirm = ref('')
 const error = ref(''),
   busy = ref(false)
-const path = '/v1/organization-invitations/' + route.params.token
+const path = '/v1/invitations/' + route.params.token
 onMounted(async () => {
   try {
     const invitation = await request<{
@@ -41,7 +41,7 @@ async function accept() {
   busy.value = true
   error.value = ''
   try {
-    const result = await request<{ workspace_id: string; role: string }>(path, {
+    const result = await request<{ institution_id: string; role: string }>(path, {
       method: 'POST',
       body: '{}',
     })

@@ -96,3 +96,15 @@ The obsolete `core.e2e.ts` guest/standalone journeys were retired with those scr
 ## Backend audit coverage
 
 The audit used a populated disposable migration and eleven API checks for auth/actor boundaries, private file recovery, retired endpoints, own export, institutional scheduling and progression. Older standalone browser fixtures need migration before whole-release acceptance. See [audit limits](../reference/backend/README.md).
+
+## Institution naming regressions
+
+From the repository root with local Docker running:
+
+```bash
+npm run test:institution-names
+npm run test:institution-api
+npm run mobile:acceptance
+```
+
+These use owned disposable databases/APIs. They cover populated identifier preservation, old/canonical transport and authorization, own export, scalar serialization, and the native bearer/SQLite command queue. They do not migrate/reset preview or establish physical APK upgrade acceptance. The focused browser command is `node apps/frontend/scripts/isolated-browser.mjs --empty-database institution-names.e2e.ts --project=chromium`; keep application/generated sources frozen during that run.

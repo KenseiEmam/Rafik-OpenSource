@@ -23,7 +23,7 @@ const route = useRoute(),
   editor = String(route.params.editor || ''),
   initialPath = route.path,
   forEvent = String(route.query.forEvent || ''),
-  id = institutionContext().workspace,
+  id = institutionContext().institution,
   view = institutionContext().view,
   base = '',
   templates = route.path.includes('/assessment-templates'),
@@ -79,9 +79,9 @@ async function load(page = 0) {
         next: number | null
         total: number
       }>(
-        `/v1/workspaces/${id}/services?view=${view}&kind=${kind}&search=${encodeURIComponent(search.value)}&archived=${archived.value}&limit=${recordLimit.value}&offset=${page}`,
+        `/v1/institution/services?view=${view}&kind=${kind}&search=${encodeURIComponent(search.value)}&archived=${archived.value}&limit=${recordLimit.value}&offset=${page}`,
       ),
-      request<Institution>(`/v1/workspaces/${id}?view=${view}&summary=true`),
+      request<Institution>(`/v1/institution?view=${view}&summary=true`),
     ])
     if (disposed || current !== generation) return
     items.value = result.items
@@ -111,8 +111,7 @@ const command = useCommand<'save'>(
     if (!disposed && route.path === initialPath && editor) returnToList.value = true
     else if (!disposed) await load()
   },
-  (_, args) =>
-    request(`/v1/workspaces/${id}/services`, { method: 'POST', body: JSON.stringify(args) }),
+  (_, args) => request(`/v1/institution/services`, { method: 'POST', body: JSON.stringify(args) }),
   {
     successMessage: (_, args) =>
       args.action === 'template'
@@ -205,7 +204,7 @@ async function initialize() {
   else {
     try {
       const result = await request<{ items: (TrainingGroup & AssessmentTemplate)[] }>(
-        `/v1/workspaces/${id}/services?view=${view}&kind=${kind}&id=${encodeURIComponent(editor)}&archived=${route.query.archived === '1'}`,
+        `/v1/institution/services?view=${view}&kind=${kind}&id=${encodeURIComponent(editor)}&archived=${route.query.archived === '1'}`,
       )
       if (disposed) return
       if (!result.items[0]) throw Error(l('This item is unavailable.', 'هذا العنصر غير متاح.'))
@@ -344,7 +343,7 @@ onMounted(initialize)
         >
         <MemberPicker
           v-else
-          :workspace="id"
+          :institution="id"
           :view="view"
           role="trainee"
           v-model="draft.members"
@@ -353,7 +352,7 @@ onMounted(initialize)
         />
         <MemberPicker
           v-if="!templates && view === 'admin'"
-          :workspace="id"
+          :institution="id"
           :view="view"
           role="trainer"
           v-model="draft.coaches"

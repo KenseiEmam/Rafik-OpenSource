@@ -54,7 +54,7 @@ else if (command === "seed") {
     {
       input:
         readFileSync(resolve(root, "prisma/seed.sql"), "utf8") +
-        "\nDELETE FROM public.workspaces WHERE id='12000000-0000-4000-8000-000000000002';",
+        "\nDELETE FROM public.institutions WHERE id='12000000-0000-4000-8000-000000000002';",
       stdio: ["pipe", "inherit", "inherit"],
     },
   );

@@ -9,13 +9,13 @@ test('one Resources screen and role-aware Nutrition resolve through the supporte
   const f = await teamFixture(),
     id = randomUUID()
   try {
-    await f.call(f.owner, '/v1/workspaces', {
+    await f.call(f.owner, '/v1/institutions', {
       id,
-      kind: 'organization',
+      kind: 'institution',
       name: 'Consolidated views',
     })
     const token = randomBytes(32).toString('hex')
-    await f.call(f.owner, `/v1/workspaces/${id}`, {
+    await f.call(f.owner, `/v1/institution`, {
       action: 'invite',
       operation: randomUUID(),
       id: randomUUID(),
@@ -23,10 +23,10 @@ test('one Resources screen and role-aware Nutrition resolve through the supporte
       roles: ['trainee'],
       token,
     })
-    await f.call(f.client, `/v1/organization-invitations/${token}`, {})
+    await f.call(f.client, `/v1/invitations/${token}`, {})
     const errors: string[] = []
     page.on('pageerror', (error) => errors.push(error.message))
-    const resources = page.waitForResponse((r) => r.url().includes(`/v1/workspaces/${id}/assets?`))
+    const resources = page.waitForResponse((r) => r.url().includes(`/v1/institution/assets?`))
     await f.login(page, f.owner, '/resources')
     expect((await resources).status()).toBe(200)
     await expect(page.locator('.institution-nav')).toHaveCount(0)
@@ -34,16 +34,14 @@ test('one Resources screen and role-aware Nutrition resolve through the supporte
     await expect(
       page.getByRole('heading', { name: 'No files in this view', exact: true }),
     ).toBeVisible()
-    const plans = page.waitForResponse((r) =>
-      r.url().includes(`/v1/workspaces/${id}/nutrition-plans?`),
-    )
+    const plans = page.waitForResponse((r) => r.url().includes(`/v1/institution/nutrition-plans?`))
     await page.goto('/nutrition')
     expect((await plans).status()).toBe(200)
     await expect(page.getByRole('heading', { name: 'Nutrition plans', exact: true })).toBeVisible()
     await expect(
       page.getByRole('heading', { name: 'No plans match this view.', exact: true }),
     ).toBeVisible()
-    const diary = page.waitForResponse((r) => r.url().includes(`/v1/workspaces/${id}/nutrition?`))
+    const diary = page.waitForResponse((r) => r.url().includes(`/v1/institution/nutrition?`))
     await f.login(page, f.client, '/nutrition')
     expect((await diary).status()).toBe(200)
     await expect(page.getByRole('heading', { name: 'Nutrition', exact: true })).toBeVisible()
@@ -62,7 +60,7 @@ test('workout recording requires institutional sign-in rather than a guest entry
   await page.goto(`/workout/${id}`)
   await expect(page).toHaveURL(new RegExp(`/login\\?next=/workout/${id}$`))
   await expect(
-    page.getByRole('heading', { name: 'Institution workspace', exact: true }),
+    page.getByRole('heading', { name: 'Institution institution', exact: true }),
   ).toBeVisible()
   await expect(page.getByRole('button', { name: 'Save to my account', exact: true })).toHaveCount(0)
 })

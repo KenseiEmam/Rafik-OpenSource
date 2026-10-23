@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 import { teamFixture } from './team-fixture'
 import { layoutIssues } from './layout-contract'
-test('daily workspace connects named attention, filters and complete mobile navigation', async ({
+test('daily institution connects named attention, filters and complete mobile navigation', async ({
   page,
 }, info) => {
   const f = await teamFixture()

@@ -33,17 +33,17 @@ import { AttendanceSync } from './sync'
 import { Button, displayDate, localDate, type Styles } from './ui'
 import { ScoreEditor } from './ScoreEditor'
 
-export function WorkspaceScreen({
+export function InstitutionScreen({
   client,
   store,
-  workspace,
+  institution,
   styles,
   closing,
   onPersisting,
 }: {
   client: NativeClient
   store: FieldStore
-  workspace: string
+  institution: string
   styles: Styles
   closing: boolean
   onPersisting: (busy: boolean) => void
@@ -52,7 +52,7 @@ export function WorkspaceScreen({
   const [owner] = useState<Owner>(() => ({
     instance: client.instance,
     user: client.user.id,
-    workspace,
+    institution,
   }))
   const runner = useRef<AttendanceSync | null>(null)
   const [events, setEvents] = useState<FieldEvent[]>([])
@@ -149,7 +149,7 @@ export function WorkspaceScreen({
     try {
       const query = new URLSearchParams({ ...window, view: 'trainer', offset: String(offset) })
       const result = await client.request<{ items: unknown[]; next: number | null }>(
-        `/workspaces/${workspace}/calendar?${query}`,
+        `/institution/calendar?${query}`,
       )
       const items = result.items.map(fieldEvent)
       if (!alive.current) return
@@ -246,7 +246,7 @@ export function WorkspaceScreen({
         return
       }
       const data = await client.request<unknown>(
-        `/workspaces/${workspace}/calendar?view=trainer&id=${id}&summary=true`,
+        `/institution/calendar?view=trainer&id=${id}&summary=true`,
       )
       if (!alive.current || selectedRef.current !== id) return
       const roster = fieldRoster(data, id)
@@ -396,7 +396,7 @@ export function WorkspaceScreen({
   const roster = snapshot?.roster || onlineRoster
   const pending = snapshot?.commands.filter((c) => c.state !== 'acknowledged') || []
   const paused = pending.some((c) => ['needs_attention', 'blocked'].includes(c.state))
-  const workspacePaused = !!queueHead && ['needs_attention', 'blocked'].includes(queueHead.state)
+  const institutionPaused = !!queueHead && ['needs_attention', 'blocked'].includes(queueHead.state)
   const finishing = pending.some((c) => c.payload.action === 'finish')
   const completionProblems = roster ? finishProblems(roster) : []
   const completed = roster?.event.state === 'completed'
@@ -420,7 +420,7 @@ export function WorkspaceScreen({
           {t(message)}
         </Text>
       ) : null}
-      {workspacePaused && queueHead.event_id !== selected ? (
+      {institutionPaused && queueHead.event_id !== selected ? (
         <View style={styles.card}>
           <Text style={styles.label}>{t('Saved attendance needs review')}</Text>
           <Text style={styles.hint}>
@@ -674,7 +674,7 @@ export function WorkspaceScreen({
                   closing ||
                   !snapshot ||
                   snapshot.roster.blocked ||
-                  workspacePaused ||
+                  institutionPaused ||
                   paused ||
                   finishing ||
                   !!queuedResult ||
@@ -713,7 +713,7 @@ export function WorkspaceScreen({
                     <EventHistory
                       key={`${roster.event.id}:${person.member_id}`}
                       client={client}
-                      workspace={workspace}
+                      institution={institution}
                       event={roster.event.id}
                       member={person.member_id}
                       name={person.name}
@@ -802,7 +802,7 @@ export function WorkspaceScreen({
                               busy ||
                               closing ||
                               snapshot.roster.blocked ||
-                              workspacePaused ||
+                              institutionPaused ||
                               paused ||
                               finishing ||
                               !!queuedResult ||
@@ -873,7 +873,7 @@ export function WorkspaceScreen({
                       saving ||
                       draftSaving ||
                       closing ||
-                      workspacePaused ||
+                      institutionPaused ||
                       snapshot.roster.blocked ||
                       !!pending.length ||
                       !!snapshot.drafts.length ||

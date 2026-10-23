@@ -201,16 +201,16 @@ test("organization publication, actuals, reassignment and exact replay preserve 
     );
     const previousEmpty = await call(
       client,
-      `/v1/organization-sessions/${sessionId}/previous`,
+      `/v1/workouts/${sessionId}/previous`,
     );
     assert.equal(previousEmpty.status, 200, JSON.stringify(previousEmpty));
     assert.deepEqual(previousEmpty.data, []);
     // A previous completed occurrence must supply actuals, never targets or another member's work.
     const historicalId = randomUUID();
-    await db.organization_sessions.create({
+    await db.institution_sessions.create({
       data: {
         id: historicalId,
-        workspace_id: id,
+        institution_id: id,
         member_id: trainee.id,
         assignment_id: assignment.id,
         day_id: session.day_id,
@@ -226,14 +226,11 @@ test("organization publication, actuals, reassignment and exact replay preserve 
         version: 2,
       },
     });
-    const previous = await call(
-      client,
-      `/v1/organization-sessions/${sessionId}/previous`,
-    );
+    const previous = await call(client, `/v1/workouts/${sessionId}/previous`);
     assert.equal(previous.status, 200, JSON.stringify(previous));
     assert.equal(previous.data.length, 1);
     assert.equal(previous.data[0].entries[0].reps, 8);
-    await db.organization_sessions.delete({ where: { id: historicalId } });
+    await db.institution_sessions.delete({ where: { id: historicalId } });
     const changed = draft();
     changed.days[0].exercises[0].reps = 15;
     r = await call(
@@ -248,11 +245,11 @@ test("organization publication, actuals, reassignment and exact replay preserve 
     );
     assert.equal(r.status, 200, JSON.stringify(r));
     assert.equal(
-      (await call(client, `/v1/organization-sessions/${sessionId}`)).data
-        .prescription.exercises[0].reps,
+      (await call(client, `/v1/workouts/${sessionId}`)).data.prescription
+        .exercises[0].reps,
       session.prescription.exercises[0].reps,
     );
-    const member = await db.workspace_members.findUniqueOrThrow({
+    const member = await db.institution_members.findUniqueOrThrow({
       where: { id: trainee.id },
     });
     assert.equal(
@@ -275,21 +272,12 @@ test("organization publication, actuals, reassignment and exact replay preserve 
       "replay rechecks recipient responsibility",
     );
     assert.equal(
-      (
-        await call(
-          trainer,
-          `/v1/organization-sessions/${sessionId}?view=trainer`,
-        )
-      ).status,
+      (await call(trainer, `/v1/workouts/${sessionId}?view=trainer`)).status,
       403,
     );
     assert.equal(
-      (
-        await call(
-          replacement,
-          `/v1/organization-sessions/${sessionId}?view=trainer`,
-        )
-      ).status,
+      (await call(replacement, `/v1/workouts/${sessionId}?view=trainer`))
+        .status,
       200,
     );
     r = await call(
@@ -319,7 +307,7 @@ test("organization publication, actuals, reassignment and exact replay preserve 
     assert.equal(r.data.completed_at, completed);
     assert.equal(r.data.reviewed_at, null);
     assert.equal(
-      await db.organization_sessions.count({ where: { workspace_id: id } }),
+      await db.institution_sessions.count({ where: { institution_id: id } }),
       1,
     );
   } finally {
@@ -365,7 +353,7 @@ test("bulk delivery is atomic; internal catalog never grants edit or personal ex
     );
     assert.equal(bad.status, 403);
     assert.equal(
-      await db.organization_assignments.count({ where: { workspace_id: id } }),
+      await db.institution_assignments.count({ where: { institution_id: id } }),
       0,
     );
     assert.equal(

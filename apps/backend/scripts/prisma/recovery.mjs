@@ -63,7 +63,7 @@ try {
   );
   const paths = sql(
     database,
-    "select object_path from public.resources where state='ready' union select 'program/'||workspace_id||'/'||id from public.program_media union select 'organization/'||workspace_id||'/'||id from public.organization_assets;",
+    "select object_path from public.resources where state='ready' union select 'program/'||institution_id||'/'||id from public.program_media union select 'organization/'||institution_id||'/'||id from public.institution_assets;",
   )
     .split("\n")
     .filter(Boolean);
@@ -71,7 +71,7 @@ try {
   const metadata = JSON.parse(
     sql(
       database,
-      "select coalesce(json_agg(x),'[]') from (select object_path path,bytes::int bytes,null::text digest from public.resources where state='ready' union all select 'program/'||workspace_id||'/'||id,bytes,digest from public.program_media union all select 'organization/'||workspace_id||'/'||id,bytes,digest from public.organization_assets) x;",
+      "select coalesce(json_agg(x),'[]') from (select object_path path,bytes::int bytes,null::text digest from public.resources where state='ready' union all select 'program/'||institution_id||'/'||id,bytes,digest from public.program_media union all select 'organization/'||institution_id||'/'||id,bytes,digest from public.institution_assets) x;",
     ),
   );
   for (const row of metadata) {
@@ -94,7 +94,7 @@ try {
       throw Error("Restored metadata references a missing private file");
   const counts = sql(
     database,
-    "select json_build_object('users',(select count(*) from identity.users),'workspaces',(select count(*) from public.workspaces),'sessions',(select count(*) from public.sessions)+(select count(*) from public.organization_sessions),'messages',(select count(*) from public.messages)+(select count(*) from public.organization_messages));",
+    "select json_build_object('users',(select count(*) from identity.users),'institutions',(select count(*) from public.institutions),'sessions',(select count(*) from public.sessions)+(select count(*) from public.institution_sessions),'messages',(select count(*) from public.messages)+(select count(*) from public.institution_messages));",
   );
   writeFileSync(
     resolve(out, "manifest.json"),

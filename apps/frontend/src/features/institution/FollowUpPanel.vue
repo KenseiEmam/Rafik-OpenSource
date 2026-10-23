@@ -25,9 +25,7 @@ async function load() {
   loading.value = true
   error.value = ''
   try {
-    const result = await request<Result>(
-      `/v1/workspaces/${context.workspace}/follow-up?view=${context.view}`,
-    )
+    const result = await request<Result>(`/v1/institution/follow-up?view=${context.view}`)
     if (!disposed) data.value = result
   } catch (e) {
     if (!disposed) error.value = errorMessage(e)

@@ -8,7 +8,7 @@ import CommandStatus from '../../components/CommandStatus.vue'
 import MemberPicker from './MemberPicker.vue'
 import type { Member, Sport } from './types'
 const props = defineProps<{
-  workspaceId: string
+  institutionId: string
   member: Member
   sports: Sport[]
   names: { id: string; name: string }[]
@@ -31,7 +31,7 @@ const choices = computed(() =>
   ),
 )
 const command = useCommand<'coaching'>(
-  `organization-coaching:${props.workspaceId}`,
+  `organization-coaching:${props.institutionId}`,
   async (_, __, args) => {
     if (args.action === 'link-coach') {
       coach.value = ''
@@ -39,8 +39,7 @@ const command = useCommand<'coaching'>(
     }
     emit('saved')
   },
-  (_, args) =>
-    request(`/v1/workspaces/${props.workspaceId}`, { method: 'POST', body: JSON.stringify(args) }),
+  (_, args) => request(`/v1/institution`, { method: 'POST', body: JSON.stringify(args) }),
   { successMessage: l('Coaching team updated.', 'تم تحديث فريق التدريب.') },
 )
 const locked = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
@@ -102,7 +101,7 @@ const remove = (link: { id: string; revision: number }) =>
         <MemberPicker
           v-if="sport"
           :sport="sport"
-          :workspace="workspaceId"
+          :institution="institutionId"
           view="admin"
           role="trainer"
           single

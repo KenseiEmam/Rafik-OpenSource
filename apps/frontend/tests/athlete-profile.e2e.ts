@@ -30,8 +30,8 @@ test('athlete profile shows each staff role only what it is allowed to see', asy
       browser.newContext(),
     ]),
     [primaryPage, supportPage, otherPage] = await Promise.all(contexts.map((c) => c.newPage())),
-    workspace = randomUUID(),
-    endpoint = `/v1/workspaces/${workspace}`,
+    institution = randomUUID(),
+    endpoint = `/v1/institution`,
     today = new Date().toISOString().slice(0, 10)
   const originalCall = f.call
   f.call = async (...args: Parameters<typeof f.call>) => {
@@ -42,9 +42,9 @@ test('athlete profile shows each staff role only what it is allowed to see', asy
     }
   }
   try {
-    await f.call(f.owner, '/v1/workspaces', {
-      id: workspace,
-      kind: 'organization',
+    await f.call(f.owner, '/v1/institutions', {
+      id: institution,
+      kind: 'institution',
       name: 'Madar profiles',
     })
     const support = await f.createPerson('Supporting Coach'),
@@ -64,7 +64,7 @@ test('athlete profile shows each staff role only what it is allowed to see', asy
         roles,
         token,
       })
-      await f.call(person, `/v1/organization-invitations/${token}`, {})
+      await f.call(person, `/v1/invitations/${token}`, {})
     }
     let people = await f.call(f.owner, `${endpoint}?view=admin`)
     const find = (p: { id: string }) => people.members.find((m: any) => m.user_id === p.id)
@@ -222,7 +222,7 @@ test('athlete profile shows each staff role only what it is allowed to see', asy
     await inspect(page, 'athlete-management', info)
 
     // Admin staff directory/profile and management are separate from the athlete role.
-    await page.goto('/organization/' + workspace + '/admin/people')
+    await page.goto('/organization/' + institution + '/admin/people')
     await expect(page.getByRole('tab', { name: 'Athletes', exact: true })).toHaveAttribute(
       'data-state',
       'active',
@@ -242,14 +242,14 @@ test('athlete profile shows each staff role only what it is allowed to see', asy
     await page.reload()
     await page.getByRole('tab', { name: 'Manage details', exact: true }).click()
     await inspect(page, 'staff-management-light', info)
-    await page.goto('/organization/' + workspace + '/admin/people?filter=admin')
+    await page.goto('/organization/' + institution + '/admin/people?filter=admin')
     await expect(page.getByRole('tab', { name: 'Administrators', exact: true })).toHaveAttribute(
       'data-state',
       'active',
     )
-    await page.goto('/organization/' + workspace + '/admin/members/' + supporting.id)
+    await page.goto('/organization/' + institution + '/admin/members/' + supporting.id)
     await expect(page.getByRole('link', { name: 'Message', exact: true })).toBeVisible()
-    await primaryPage.goto('/organization/' + workspace + '/trainer/members/' + supporting.id)
+    await primaryPage.goto('/organization/' + institution + '/trainer/members/' + supporting.id)
     await expect(
       primaryPage.getByRole('heading', { name: 'This profile is not available to you.' }),
     ).toBeVisible()
@@ -279,14 +279,14 @@ test('invites apply role-specific sports and the directory keeps role boundaries
 }, info) => {
   test.setTimeout(120000)
   const f = await teamFixture(),
-    workspace = randomUUID(),
-    endpoint = '/v1/workspaces/' + workspace,
+    institution = randomUUID(),
+    endpoint = '/v1/institution',
     football = randomUUID(),
     strength = randomUUID()
   try {
-    await f.call(f.owner, '/v1/workspaces', {
-      id: workspace,
-      kind: 'organization',
+    await f.call(f.owner, '/v1/institutions', {
+      id: institution,
+      kind: 'institution',
       name: 'Role directory',
     })
     for (const [id, name, kind] of [
@@ -313,7 +313,7 @@ test('invites apply role-specific sports and the directory keeps role boundaries
       sports: [football, strength],
       token,
     })
-    await f.call(f.coach, '/v1/organization-invitations/' + token, {})
+    await f.call(f.coach, '/v1/invitations/' + token, {})
     const roster = await f.call(f.owner, endpoint + '/people?view=admin&role=trainer')
     const coach = roster.items.find((m: any) => m.user_id === f.coach.id)
     expect(coach.sports.sort()).toEqual([football, strength].sort())
@@ -349,10 +349,10 @@ test('invites apply role-specific sports and the directory keeps role boundaries
       sports: [football],
       token: athleteToken,
     })
-    await f.call(f.client, '/v1/organization-invitations/' + athleteToken, {})
+    await f.call(f.client, '/v1/invitations/' + athleteToken, {})
     const athletes = await f.call(f.owner, endpoint + '/people?view=admin&role=trainee')
     expect(athletes.items[0].sports).toEqual([football])
-    await f.login(page, f.owner, '/organization/' + workspace + '/admin/people')
+    await f.login(page, f.owner, '/organization/' + institution + '/admin/people')
     await expect(page.getByRole('tab', { name: 'Athletes', exact: true })).toHaveAttribute(
       'data-state',
       'active',
@@ -364,7 +364,7 @@ test('invites apply role-specific sports and the directory keeps role boundaries
         "('" +
         randomUUID() +
         "','" +
-        workspace +
+        institution +
         "','Roster athlete " +
         String(i).padStart(2, '0') +
         "',ARRAY['trainee'])",
@@ -388,7 +388,7 @@ test('invites apply role-specific sports and the directory keeps role boundaries
       ],
       {
         input:
-          'INSERT INTO public.workspace_members(id,workspace_id,name,roles) VALUES ' +
+          'INSERT INTO public.workspace_members(id,institution_id,name,roles) VALUES ' +
           extraMembers +
           ';',
         encoding: 'utf8',
@@ -436,7 +436,7 @@ test('invites apply role-specific sports and the directory keeps role boundaries
     await expect(page.getByRole('link', { name: 'Message R4 Coach', exact: true })).toBeVisible()
     await page.getByRole('tab', { name: 'Administrators', exact: true }).click()
     await expect(page.getByRole('link', { name: 'Profile for R4 Coach' })).toHaveCount(0)
-    await page.goto('/organization/' + workspace + '/admin/settings')
+    await page.goto('/organization/' + institution + '/admin/settings')
     await page.getByRole('button', { name: 'Close institution', exact: true }).click()
     const closure = page.getByRole('dialog')
     await expect(closure).toBeVisible()
@@ -457,7 +457,7 @@ test('invites apply role-specific sports and the directory keeps role boundaries
       .getByRole('heading', { name: 'Institution settings', exact: true })
       .scrollIntoViewIfNeeded()
     await inspect(page, 'institution-settings', info)
-    await page.goto('/organization/' + workspace + '/admin/people')
+    await page.goto('/organization/' + institution + '/admin/people')
     await page.getByRole('tab', { name: 'Athletes', exact: true }).focus()
     await page.keyboard.press('Home')
     await page.keyboard.press('Enter')

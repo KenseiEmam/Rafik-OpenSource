@@ -17,11 +17,11 @@ import PageState from '../../components/PageState.vue'
 import type { EventDetail, EventPerson } from './service-types'
 import type { Institution } from './types'
 const route = useRoute(),
-  id = institutionContext().workspace,
+  id = institutionContext().institution,
   view = institutionContext().view,
   eid = String(route.params.id),
   base = '',
-  endpoint = `/v1/workspaces/${id}/calendar`,
+  endpoint = `/v1/institution/calendar`,
   scope = `event:${id}:${eid}:${view}`
 const data = ref<EventDetail>(),
   organization = ref<Institution>(),
@@ -144,9 +144,7 @@ async function load() {
       (Date.parse(data.value.event.ends_at) - Date.parse(data.value.event.starts_at)) / 60000
     newStaff.value = data.value.people.filter((p) => p.duty === 'staff').map((p) => p.member_id)
     if (view === 'admin')
-      organization.value = await request<Institution>(
-        `/v1/workspaces/${id}?view=admin&summary=true`,
-      )
+      organization.value = await request<Institution>(`/v1/institution?view=admin&summary=true`)
     newStaff.value = newStaff.value.filter((id) =>
       data.value!.people.some((p) => p.member_id === id && p.active && p.roles.includes('trainer')),
     )
@@ -215,7 +213,7 @@ const run = (args: Record<string, unknown>) =>
 async function previewTime() {
   previewError.value = ''
   try {
-    previewTimes.value = await request(`/v1/workspaces/${id}/calendar-preview`, {
+    previewTimes.value = await request(`/v1/institution/calendar-preview`, {
       method: 'POST',
       body: JSON.stringify({
         view,
@@ -418,7 +416,7 @@ onMounted(load)
           <fieldset :disabled="locked" class="form-fields">
             <h2>{{ l('Assign active coaches', 'تعيين مدربين نشطين') }}</h2>
             <MemberPicker
-              :workspace="id"
+              :institution="id"
               view="admin"
               role="trainer"
               :max="8"
@@ -573,7 +571,7 @@ onMounted(load)
             </div>
             <SessionNote
               :key="p.member_id + ':' + p.revision"
-              :workspace="id"
+              :institution="id"
               :view="view"
               :event="eid"
               :member="p.member_id"

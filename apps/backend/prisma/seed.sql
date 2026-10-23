@@ -61,11 +61,11 @@ insert into public.messages(id,relationship_id,sender_id,body,request_id) values
 ('75000000-0000-4000-8000-000000000001','40000000-0000-4000-8000-000000000001','10000000-0000-4000-8000-000000000001','How did this week feel? Your reflection is ready when you are. / كيف كان أسبوعك؟ نموذج المتابعة جاهز عندما تكون مستعداً.','73000000-0000-4000-8000-000000000001') on conflict(id) do nothing;
 -- Synthetic LOCAL runtime switch. Never apply fixture files to hosting.
 -- Synthetic local-only contexts. Independent coaching is explicitly activated.
-insert into public.workspaces(id,kind,name,created_by) values
+insert into public.institutions(id,kind,name,created_by) values
 ('10000000-0000-4000-8000-000000000001','independent','Laila Khoury','10000000-0000-4000-8000-000000000001'),
 ('10000000-0000-4000-8000-000000000004','independent','Nour Mahfouz','10000000-0000-4000-8000-000000000004') on conflict(id) do nothing;
-insert into public.workspace_members(id,workspace_id,user_id,roles)
-select gen_random_uuid(),id,created_by,array['trainer'] from public.workspaces where kind='independent' on conflict(workspace_id,user_id) do nothing;
+insert into public.institution_members(id,institution_id,user_id,roles)
+select gen_random_uuid(),id,created_by,array['trainer'] from public.institutions where kind='independent' on conflict(institution_id,user_id) do nothing;
 insert into identity.users(id,email,email_confirmed_at) values
 ('11000000-0000-4000-8000-000000000001','orgadmin@rafik.test',now()),
 ('11000000-0000-4000-8000-000000000002','orgtrainer@rafik.test',now()),
@@ -76,50 +76,50 @@ insert into public.profiles(id,display_name) values
 ('11000000-0000-4000-8000-000000000002','Kareem Nasser'),
 ('11000000-0000-4000-8000-000000000003','Sara Khalil'),
 ('11000000-0000-4000-8000-000000000004','Omar Saleh') on conflict(id) do nothing;
-insert into public.workspaces(id,kind,name,created_by) values
+insert into public.institutions(id,kind,name,created_by) values
 ('12000000-0000-4000-8000-000000000001','organization','Madar Training','11000000-0000-4000-8000-000000000001'),
 ('12000000-0000-4000-8000-000000000002','organization','Athar Academy','11000000-0000-4000-8000-000000000004') on conflict(id) do nothing;
-insert into public.workspace_members(id,workspace_id,user_id,roles) values
+insert into public.institution_members(id,institution_id,user_id,roles) values
 ('13000000-0000-4000-8000-000000000001','12000000-0000-4000-8000-000000000001','11000000-0000-4000-8000-000000000001',array['admin']),
 ('13000000-0000-4000-8000-000000000002','12000000-0000-4000-8000-000000000001','11000000-0000-4000-8000-000000000002',array['trainer']),
 ('13000000-0000-4000-8000-000000000003','12000000-0000-4000-8000-000000000001','11000000-0000-4000-8000-000000000003',array['trainee']),
 ('13000000-0000-4000-8000-000000000004','12000000-0000-4000-8000-000000000002','11000000-0000-4000-8000-000000000004',array['admin']) on conflict(id) do nothing;
-update public.workspace_members set trainer_id='13000000-0000-4000-8000-000000000002' where id='13000000-0000-4000-8000-000000000003' and trainer_id is null and revision=1;
+update public.institution_members set trainer_id='13000000-0000-4000-8000-000000000002' where id='13000000-0000-4000-8000-000000000003' and trainer_id is null and revision=1;
 
-update public.workspace_members m set name=p.display_name from public.profiles p where p.id=m.user_id and m.name='Former member';
+update public.institution_members m set name=p.display_name from public.profiles p where p.id=m.user_id and m.name='Former member';
 -- Curated local organization example; never seed hosting. Existing edits are preserved.
-insert into public.organization_programs(id,workspace_id,created_by,title,draft,listed)
+insert into public.institution_programs(id,institution_id,created_by,title,draft,listed)
 select '14000000-0000-4000-8000-000000000001','12000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000001','Build a steady foundation',
  jsonb_set(prescription||'{"schema":2,"cycleWeeks":1,"presentation":{"goal":"Build confidence with two full-body sessions each week.","level":"beginner"}}'::jsonb,'{days}',(select jsonb_agg(d.value||jsonb_build_object('week',1,'weekday',(d.n-1)*2) order by d.n) from jsonb_array_elements(prescription->'days') with ordinality d(value,n))),true
 from public.plan_versions where is_public order by published_at limit 1
 on conflict(id) do nothing;
-insert into public.organization_versions(id,workspace_id,program_id,revision,title,prescription,created_by)
-select '15000000-0000-4000-8000-000000000001',workspace_id,id,1,title,draft,created_by from public.organization_programs where id='14000000-0000-4000-8000-000000000001' on conflict(id) do nothing;
-insert into public.organization_assignments(id,workspace_id,member_id,version_id,created_by,start_date,schedule_mode)
+insert into public.institution_versions(id,institution_id,program_id,revision,title,prescription,created_by)
+select '15000000-0000-4000-8000-000000000001',institution_id,id,1,title,draft,created_by from public.institution_programs where id='14000000-0000-4000-8000-000000000001' on conflict(id) do nothing;
+insert into public.institution_assignments(id,institution_id,member_id,version_id,created_by,start_date,schedule_mode)
 select '16000000-0000-4000-8000-000000000001','12000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000003','15000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000001',current_date,'flexible'
-where not exists(select 1 from public.organization_assignments where workspace_id='12000000-0000-4000-8000-000000000001' and member_id='13000000-0000-4000-8000-000000000003' and state='active') on conflict(id) do nothing;
+where not exists(select 1 from public.institution_assignments where institution_id='12000000-0000-4000-8000-000000000001' and member_id='13000000-0000-4000-8000-000000000003' and state='active') on conflict(id) do nothing;
 -- Synthetic local-only organizational service examples. Never apply to hosting.
-insert into public.assessment_templates(id,workspace_id,created_by,title,definition) values
+insert into public.assessment_templates(id,institution_id,created_by,title,definition) values
 ('18000000-0000-4000-8000-000000000001','12000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000001','Movement baseline','[{"key":"18100000-0000-4000-8000-000000000001","name":"Controlled chair stands","kind":"number","unit":"reps","min":0,"max":100},{"key":"18100000-0000-4000-8000-000000000002","name":"Movement observation","kind":"text","unit":""}]') on conflict(id) do nothing;
-insert into public.organization_groups(id,workspace_id,created_by,name) values
+insert into public.institution_groups(id,institution_id,created_by,name) values
 ('19000000-0000-4000-8000-000000000001','12000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000001','Foundation group') on conflict(id) do nothing;
-insert into public.organization_group_members(workspace_id,group_id,member_id) values('12000000-0000-4000-8000-000000000001','19000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000003') on conflict do nothing;
-insert into public.organization_events(id,workspace_id,created_by,series_id,title,starts_at,ends_at,timezone,location,kind,definition,template_id,template_revision,state)
-select x.id::uuid,t.workspace_id,t.created_by,'17000000-0000-4000-8000-000000000001'::uuid,t.title,current_date+x.offset_days*interval '1 day'+interval '9 hours',current_date+x.offset_days*interval '1 day'+interval '10 hours','UTC','Madar studio','assessment',t.definition,t.id,1,'completed' from public.assessment_templates t cross join(values('17000000-0000-4000-8000-000000000001',-14),('17000000-0000-4000-8000-000000000002',-7)) x(id,offset_days) where t.id='18000000-0000-4000-8000-000000000001' on conflict(id) do nothing;
-insert into public.organization_events(id,workspace_id,created_by,series_id,title,starts_at,ends_at,timezone,location,kind) values
+insert into public.institution_group_members(institution_id,group_id,member_id) values('12000000-0000-4000-8000-000000000001','19000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000003') on conflict do nothing;
+insert into public.institution_events(id,institution_id,created_by,series_id,title,starts_at,ends_at,timezone,location,kind,definition,template_id,template_revision,state)
+select x.id::uuid,t.institution_id,t.created_by,'17000000-0000-4000-8000-000000000001'::uuid,t.title,current_date+x.offset_days*interval '1 day'+interval '9 hours',current_date+x.offset_days*interval '1 day'+interval '10 hours','UTC','Madar studio','assessment',t.definition,t.id,1,'completed' from public.assessment_templates t cross join(values('17000000-0000-4000-8000-000000000001',-14),('17000000-0000-4000-8000-000000000002',-7)) x(id,offset_days) where t.id='18000000-0000-4000-8000-000000000001' on conflict(id) do nothing;
+insert into public.institution_events(id,institution_id,created_by,series_id,title,starts_at,ends_at,timezone,location,kind) values
 ('17000000-0000-4000-8000-000000000003','12000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000001','17000000-0000-4000-8000-000000000003','Foundation technique session',current_date+interval '1 day 9 hours',current_date+interval '1 day 10 hours','UTC','Madar studio','training') on conflict(id) do nothing;
-insert into public.organization_event_people(workspace_id,event_id,member_id,duty,attendance)
-select e.workspace_id,e.id,x.member_id::uuid,x.duty,case when e.state='completed' and x.duty='trainee' then 'present' else 'unmarked' end from public.organization_events e cross join(values('13000000-0000-4000-8000-000000000002','staff'),('13000000-0000-4000-8000-000000000003','trainee')) x(member_id,duty) where e.id in('17000000-0000-4000-8000-000000000001','17000000-0000-4000-8000-000000000002','17000000-0000-4000-8000-000000000003') on conflict do nothing;
-insert into public.assessment_results(workspace_id,event_id,member_id,values,note,recorded_by,recorded_at)
-select e.workspace_id,e.id,'13000000-0000-4000-8000-000000000003',jsonb_build_object('18100000-0000-4000-8000-000000000001',case when e.id='17000000-0000-4000-8000-000000000001' then 10 else 12 end,'18100000-0000-4000-8000-000000000002','Controlled, comfortable movement.'),'Synthetic example for local review.','13000000-0000-4000-8000-000000000002',e.ends_at from public.organization_events e where e.id in('17000000-0000-4000-8000-000000000001','17000000-0000-4000-8000-000000000002') on conflict do nothing;
-insert into public.assessment_result_history(workspace_id,event_id,member_id,revision,document,recorded_by,recorded_at)
-select r.workspace_id,r.event_id,r.member_id,r.revision,jsonb_build_object('values',r.values,'note',r.note),r.recorded_by,r.recorded_at from public.assessment_results r where r.event_id in('17000000-0000-4000-8000-000000000001','17000000-0000-4000-8000-000000000002') on conflict do nothing;
+insert into public.institution_event_people(institution_id,event_id,member_id,duty,attendance)
+select e.institution_id,e.id,x.member_id::uuid,x.duty,case when e.state='completed' and x.duty='trainee' then 'present' else 'unmarked' end from public.institution_events e cross join(values('13000000-0000-4000-8000-000000000002','staff'),('13000000-0000-4000-8000-000000000003','trainee')) x(member_id,duty) where e.id in('17000000-0000-4000-8000-000000000001','17000000-0000-4000-8000-000000000002','17000000-0000-4000-8000-000000000003') on conflict do nothing;
+insert into public.assessment_results(institution_id,event_id,member_id,values,note,recorded_by,recorded_at)
+select e.institution_id,e.id,'13000000-0000-4000-8000-000000000003',jsonb_build_object('18100000-0000-4000-8000-000000000001',case when e.id='17000000-0000-4000-8000-000000000001' then 10 else 12 end,'18100000-0000-4000-8000-000000000002','Controlled, comfortable movement.'),'Synthetic example for local review.','13000000-0000-4000-8000-000000000002',e.ends_at from public.institution_events e where e.id in('17000000-0000-4000-8000-000000000001','17000000-0000-4000-8000-000000000002') on conflict do nothing;
+insert into public.assessment_result_history(institution_id,event_id,member_id,revision,document,recorded_by,recorded_at)
+select r.institution_id,r.event_id,r.member_id,r.revision,jsonb_build_object('values',r.values,'note',r.note),r.recorded_by,r.recorded_at from public.assessment_results r where r.event_id in('17000000-0000-4000-8000-000000000001','17000000-0000-4000-8000-000000000002') on conflict do nothing;
 -- Explicitly synthetic local conversation; no external messages are sent.
-INSERT INTO public.organization_channels(id,workspace_id,title,created_by)
+INSERT INTO public.institution_channels(id,institution_id,title,created_by)
 VALUES('1a000000-0000-4000-8000-000000000001','12000000-0000-4000-8000-000000000001','Foundation group · local example','13000000-0000-4000-8000-000000000001') ON CONFLICT DO NOTHING;
-INSERT INTO public.organization_channel_members(channel_id,workspace_id,member_id,manager)
-SELECT '1a000000-0000-4000-8000-000000000001','12000000-0000-4000-8000-000000000001',id,id<>'13000000-0000-4000-8000-000000000003'::uuid FROM public.workspace_members WHERE id IN('13000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000002','13000000-0000-4000-8000-000000000003') ON CONFLICT DO NOTHING;
-INSERT INTO public.organization_messages(id,workspace_id,channel_id,sender_id,body) VALUES
+INSERT INTO public.institution_channel_members(channel_id,institution_id,member_id,manager)
+SELECT '1a000000-0000-4000-8000-000000000001','12000000-0000-4000-8000-000000000001',id,id<>'13000000-0000-4000-8000-000000000003'::uuid FROM public.institution_members WHERE id IN('13000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000002','13000000-0000-4000-8000-000000000003') ON CONFLICT DO NOTHING;
+INSERT INTO public.institution_messages(id,institution_id,channel_id,sender_id,body) VALUES
 ('1b000000-0000-4000-8000-000000000001','12000000-0000-4000-8000-000000000001','1a000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000001','This is a synthetic conversation for local review. Everyone in the participant list can read these messages.'),
 ('1b000000-0000-4000-8000-000000000002','12000000-0000-4000-8000-000000000001','1a000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000002','For the next foundation session, we will review the movement examples together. Bring any questions here.'),
 ('1b000000-0000-4000-8000-000000000003','12000000-0000-4000-8000-000000000001','1a000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000003','سأراجع البرنامج وأضيف أسئلتي هنا. هذا مثال محلي للتجربة.') ON CONFLICT DO NOTHING;

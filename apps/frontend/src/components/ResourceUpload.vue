@@ -8,7 +8,7 @@ import { language as l, errorMessage } from '../lib/i18n'
 import { PhImage, PhPaperclip } from '@phosphor-icons/vue'
 export type UploadedAsset = { id: string; filename: string; media_type: string; bytes?: number }
 const props = defineProps<{
-  workspace: string
+  institution: string
   view: string
   purpose: 'exercise' | 'message'
   channel?: string
@@ -57,20 +57,20 @@ async function upload(event: Event) {
       )
         .map((b) => b.toString(16).padStart(2, '0'))
         .join('')
-      const key = `org-upload:${user.value!.id}:${props.workspace}:${props.purpose}:${props.channel || ''}:${digest}:${file.name}`
+      const key = `org-upload:${user.value!.id}:${props.institution}:${props.purpose}:${props.channel || ''}:${digest}:${file.name}`
       let id = await getDraft<string>(key)
       if (!id) {
         id = crypto.randomUUID()
         await storeDraft(key, id)
       }
       const query = new URLSearchParams({
-        workspace: props.workspace,
+        institution: props.institution,
         view: props.view,
         purpose: props.purpose,
         filename: file.name,
         ...(props.channel ? { channel: props.channel } : {}),
       })
-      const asset = await request<UploadedAsset>(`/v1/organization-assets/${id}?${query}`, {
+      const asset = await request<UploadedAsset>(`/v1/assets/${id}?${query}`, {
         method: 'PUT',
         body: file,
         headers: { 'Content-Type': file.type },

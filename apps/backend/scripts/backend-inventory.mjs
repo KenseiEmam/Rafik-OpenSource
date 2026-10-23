@@ -142,8 +142,24 @@ function tablesIn(source) {
   return unique(found);
 }
 const sqlBodies = new Map();
-for (const [, source] of migrationSource())
-  for (const m of source.matchAll(
+const identifierNames = JSON.parse(
+  readFileSync(resolve(backendRoot, "scripts/institution-names.json"), "utf8"),
+);
+const currentIdentifiers = (source) => {
+  for (const [old, current] of Object.entries(identifierNames).sort(
+    (a, b) => b[0].length - a[0].length,
+  ))
+    source = source.replaceAll(old, current);
+  return source
+    .replaceAll("workspace_id", "institution_id")
+    .replaceAll("organization_member_today", "institution_member_today")
+    .replaceAll(
+      "guard_organization_booking_conflict",
+      "guard_institution_booking_conflict",
+    );
+};
+for (const [, original] of migrationSource())
+  for (const m of currentIdentifiers(original).matchAll(
     /create\s+(?:or\s+replace\s+)?function\s+(?:public\.)?(\w+)[\s\S]*?\$\$([\s\S]*?)\$\$/gi,
   ))
     sqlBodies.set(m[1], m[2]);
@@ -233,18 +249,32 @@ for (const t of snapshot.tables)
     throw Error("SQL table missing from Prisma: " + t.schema + "." + t.name);
 // A current catalog must agree with every maintained physical scalar field.
 for (const table of snapshot.tables) {
-  const model=modelByTable.get(table.schema+"."+table.name);
-  const fields=new Map([...model.source.matchAll(/^\s+(\w+)\s+(\w+(?:\[\]|\?)?)/gm)].map(match=>[match[1],match[2]]));
+  const model = modelByTable.get(table.schema + "." + table.name);
+  const fields = new Map(
+    [...model.source.matchAll(/^\s+(\w+)\s+(\w+(?:\[\]|\?)?)/gm)].map(
+      (match) => [match[1], match[2]],
+    ),
+  );
   for (const column of table.columns) {
-    const type=fields.get(column.name);
-    if(!type || (!type.endsWith("[]") && type.endsWith("?")!==column.nullable))
-      throw Error("Prisma/catalog field mismatch: "+model.name+"."+column.name);
+    const type = fields.get(column.name);
+    if (
+      !type ||
+      (!type.endsWith("[]") && type.endsWith("?") !== column.nullable)
+    )
+      throw Error(
+        "Prisma/catalog field mismatch: " + model.name + "." + column.name,
+      );
   }
 }
-for(const [handler,prefix] of [["authRoute","/v1/auth/"],["mobileAuthRoute","/v1/mobile/auth/"]]) {
-  const imported=imports.get(index).get(handler),fn=functions.get(imported.file+"#"+imported.name);
-  for(const match of fn.node.getText().matchAll(/path === "([^" ]+)"/g))
-    if(!metadata.routes.some(route=>route.path===prefix+match[1]))throw Error("Unreviewed auth operation: "+prefix+match[1]);
+for (const [handler, prefix] of [
+  ["authRoute", "/v1/auth/"],
+  ["mobileAuthRoute", "/v1/mobile/auth/"],
+]) {
+  const imported = imports.get(index).get(handler),
+    fn = functions.get(imported.file + "#" + imported.name);
+  for (const match of fn.node.getText().matchAll(/path === "([^" ]+)"/g))
+    if (!metadata.routes.some((route) => route.path === prefix + match[1]))
+      throw Error("Unreviewed auth operation: " + prefix + match[1]);
 }
 const commandsSource = readFileSync(
   resolve(backendRoot, "server/commands.ts"),
@@ -275,7 +305,7 @@ const purposes = {
   template_revision:
     "Frozen assessment-template revision used by this occurrence.",
   id: "Stable record identity; singleton tables constrain this to the one installation row.",
-  workspace_id:
+  institution_id:
     "Institution scope key retained for compatibility; never a browser-selected tenant.",
   member_id:
     "Institution membership subject; distinct from global account identity.",
@@ -316,7 +346,8 @@ const purposes = {
   subject: "Support/notification subject.",
   detail:
     "Support details or attributed audit detail, depending on this table.",
-  definition: "Assessment definition, result types, units and bounds; occurrences keep their own snapshot.",
+  definition:
+    "Assessment definition, result types, units and bounds; occurrences keep their own snapshot.",
   prescription: "Immutable exercise/program prescription snapshot.",
   document:
     "Workout prescription, actual measurements, notes and recorded version.",
@@ -628,7 +659,7 @@ routesMd +=
   queries
     .map((q) => "- \`" + q + "\`: " + tableLink(tableByName.get(q)))
     .join("\n") +
-  "\n\n## Coverage limits\n\nTable touches are conservative source traces, not a query profiler. Dynamic SQL, triggers, cascade deletion and account lifecycle can touch more rows/tables than an individual static path shows; inspect each table's SQL guards above before removal. No route is deemed disposable solely because one literal client URL is absent. Unsupported methods/paths use the existing 404/405 handling; global OPTIONS is protocol handling, not another product route.\n";
+  "\n\n## Published-client compatibility\n\nCanonical scope is `/v1/institution/...`; its ID is resolved server-side. `/v1/institutions/:id` is internal dispatch only and rejected as a public URL. The dedicated compatibility adapter accepts published APK workspace/context and organization-prefixed record paths without redirects. Supplied IDs retain authorization checks and exact commands retain their payloads. These aliases are additional to the canonical route records, not another institution model. See ADR 0029 for the complete transition boundary.\n\n## Coverage limits\n\nTable touches are conservative source traces, not a query profiler. Dynamic SQL, triggers, cascade deletion and account lifecycle can touch more rows/tables than an individual static path shows; inspect each table's SQL guards above before removal. No route is deemed disposable solely because one literal client URL is absent. Unsupported methods/paths use the existing 404/405 handling; global OPTIONS is protocol handling, not another product route.\n";
 // Explicit counts guard review metadata; output is deterministic and contains no application data.
 mkdirSync(output, { recursive: true });
 for (const [name, source] of [

@@ -19,10 +19,10 @@ async function inspect(page: Page, name: string, info: { project: { name: string
 type Fixture = Awaited<ReturnType<typeof teamFixture>>
 /** Institution with a primary coach, an athlete and one assigned plan built from `days`. */
 async function institution(f: Fixture, name: string, adapt?: (plan: any) => void) {
-  const workspace = randomUUID(),
-    endpoint = `/v1/workspaces/${workspace}`,
+  const institution = randomUUID(),
+    endpoint = `/v1/institution`,
     today = new Date().toISOString().slice(0, 10)
-  await f.call(f.owner, '/v1/workspaces', { id: workspace, kind: 'organization', name })
+  await f.call(f.owner, '/v1/institutions', { id: institution, kind: 'institution', name })
   for (const [person, roles] of [
     [f.coach, ['trainer']],
     [f.client, ['trainee']],
@@ -36,7 +36,7 @@ async function institution(f: Fixture, name: string, adapt?: (plan: any) => void
       roles,
       token,
     })
-    await f.call(person, `/v1/organization-invitations/${token}`, {})
+    await f.call(person, `/v1/invitations/${token}`, {})
   }
   let people = await f.call(f.owner, `${endpoint}?view=admin`)
   const coach = people.members.find((m: any) => m.user_id === f.coach.id)
@@ -74,7 +74,7 @@ async function institution(f: Fixture, name: string, adapt?: (plan: any) => void
     schedule_mode: 'flexible',
     members: [{ id: athlete.id, revision: athlete.revision, replaces: null }],
   })
-  return { workspace, endpoint, athlete, plan, base: `` }
+  return { institution, endpoint, athlete, plan, base: `` }
 }
 
 test('coach records a session on the athlete’s behalf with attribution, exact retry and history', async ({
@@ -85,13 +85,13 @@ test('coach records a session on the athlete’s behalf with attribution, exact 
   const f = await teamFixture(),
     athleteContext = await browser.newContext(),
     athletePage = await athleteContext.newPage(),
-    workspace = randomUUID(),
-    endpoint = `/v1/workspaces/${workspace}`,
+    institution = randomUUID(),
+    endpoint = `/v1/institution`,
     today = new Date().toISOString().slice(0, 10)
   try {
-    await f.call(f.owner, '/v1/workspaces', {
-      id: workspace,
-      kind: 'organization',
+    await f.call(f.owner, '/v1/institutions', {
+      id: institution,
+      kind: 'institution',
       name: 'Madar delegated',
     })
     for (const [person, roles] of [
@@ -107,7 +107,7 @@ test('coach records a session on the athlete’s behalf with attribution, exact 
         roles,
         token,
       })
-      await f.call(person, `/v1/organization-invitations/${token}`, {})
+      await f.call(person, `/v1/invitations/${token}`, {})
     }
     let people = await f.call(f.owner, `${endpoint}?view=admin`)
     const coach = people.members.find((m: any) => m.user_id === f.coach.id)
@@ -180,7 +180,7 @@ test('coach records a session on the athlete’s behalf with attribution, exact 
     const sessionId = recordUrl.split('/').at(-1)
 
     // The athlete sees who recorded the session and can open it to correct it.
-    await f.login(athletePage, f.client, `/workout/${sessionId}?workspace=${workspace}`)
+    await f.login(athletePage, f.client, `/workout/${sessionId}?institution=${institution}`)
     await expect(
       athletePage.getByRole('note').filter({ hasText: 'Recorded by R4 Coach on your behalf.' }),
     ).toBeVisible()
@@ -243,7 +243,7 @@ test('coach-recorded timed and distance sets require actual seconds and metres',
       'saved as completed',
     )
     const id = page.url().split('/').at(-1)
-    const saved = await f.call(f.coach, `/v1/organization-sessions/${id}?view=trainer`)
+    const saved = await f.call(f.coach, `/v1/workouts/${id}?view=trainer`)
     const find = (key: string) =>
       saved.entries.find((e: any) => e.exercise_key === key && e.set_index === 0)
     expect(find(day.exercises[1].key)).toMatchObject({ seconds: 42, effort: 7, completed: true })

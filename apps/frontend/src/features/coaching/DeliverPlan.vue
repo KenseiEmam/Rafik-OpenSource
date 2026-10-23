@@ -223,7 +223,7 @@ async function loadRoster() {
       items: Recipient[]
       selected: Recipient[]
       next: number | null
-    }>(`/v1/workspaces/${context.workspace}/recipients` + '?' + q)
+    }>(`/v1/institution/recipients` + '?' + q)
     if (current !== rosterGeneration) return
     // Nothing is listed until someone types; selected athletes always resolve.
     pagePeople.value = query ? result.items.slice(0, MATCHES) : []
@@ -252,7 +252,7 @@ async function load() {
   try {
     version.value = (
       await request<{ version: PlanVersion }>(
-        `/v1/workspaces/${context.workspace}/programs?view=${context.view}&version=${versionId}`,
+        `/v1/institution/programs?view=${context.view}&version=${versionId}`,
       )
     ).version
     if (!version.value) throw Error('program_unavailable')
@@ -276,9 +276,9 @@ async function load() {
     } else if (route.query.member) selected.value = [String(route.query.member)]
     const preselected = !local && !!route.query.member
     sports.value = (
-      await request<{ items: Sport[] }>(
-        `/v1/workspaces/${context.workspace}/sports?view=${context.view}`,
-      ).catch(() => ({ items: [] as Sport[] }))
+      await request<{ items: Sport[] }>(`/v1/institution/sports?view=${context.view}`).catch(
+        () => ({ items: [] as Sport[] }),
+      )
     ).items.filter((s) => !s.archived)
     await loadRoster()
     if (preselected) selected.value.forEach(preferUpdate)
@@ -305,7 +305,7 @@ const command = useCommand<'deliver'>(
     await removeDraft(key)
   },
   (_, args) =>
-    request(`/v1/workspaces/${context.workspace}/delivery`, {
+    request(`/v1/institution/delivery`, {
       method: 'POST',
       body: JSON.stringify(args),
     }),
@@ -390,7 +390,7 @@ onMounted(load)
           </ul>
         </section>
         <RouterLink class="button" :to="context.base + '/training'">{{
-          l('Open training workspace', 'فتح مساحة التدريب')
+          l('Open training institution', 'فتح مساحة التدريب')
         }}</RouterLink>
       </section>
       <form v-else @submit.prevent="review ? deliver() : (review = true)">

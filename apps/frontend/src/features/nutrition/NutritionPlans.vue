@@ -24,7 +24,7 @@ import {
 } from 'reka-ui'
 const route = useRoute(),
   router = useRouter(),
-  workspace = institutionContext().workspace,
+  institution = institutionContext().institution,
   view = institutionContext().view,
   base = ''
 type Plan = {
@@ -73,7 +73,7 @@ async function load() {
     offset: String(page),
   })
   try {
-    const result = await request<Page>(`/v1/workspaces/${workspace}/nutrition-plans?${query}`)
+    const result = await request<Page>(`/v1/institution/nutrition-plans?${query}`)
     if (disposed || current !== generation) return
     data.value = result
     acceptLimit()
@@ -150,7 +150,7 @@ function create(ids: string[]) {
             }}
           </DialogDescription>
           <MemberPicker
-            :workspace="workspace"
+            :institution="institution"
             :view="view"
             role="trainee"
             single

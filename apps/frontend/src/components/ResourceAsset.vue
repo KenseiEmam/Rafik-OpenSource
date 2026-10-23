@@ -20,8 +20,7 @@ async function load() {
   loading.value = true
   try {
     const r = await fetch(
-      (import.meta.env.VITE_API_URL || 'http://127.0.0.1:55331') +
-        `/v1/organization-assets/${props.id}`,
+      (import.meta.env.VITE_API_URL || 'http://127.0.0.1:55331') + `/v1/assets/${props.id}`,
       { credentials: 'include', cache: 'no-store', signal: current.signal },
     )
     if (!r.ok) throw Error()

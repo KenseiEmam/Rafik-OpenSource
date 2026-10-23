@@ -22,12 +22,12 @@ test('admin builds a coaching team; a supporting coach sees training only until 
   const f = await teamFixture(),
     supportContext = await browser.newContext(),
     supportPage = await supportContext.newPage(),
-    workspace = randomUUID(),
-    endpoint = `/v1/workspaces/${workspace}`
+    institution = randomUUID(),
+    endpoint = `/v1/institution`
   try {
-    await f.call(f.owner, '/v1/workspaces', {
-      id: workspace,
-      kind: 'organization',
+    await f.call(f.owner, '/v1/institutions', {
+      id: institution,
+      kind: 'institution',
       name: 'Madar coaching team',
     })
     const support = await f.createPerson('Supporting Coach With A Long Name')
@@ -45,7 +45,7 @@ test('admin builds a coaching team; a supporting coach sees training only until 
         roles,
         token,
       })
-      await f.call(person, `/v1/organization-invitations/${token}`, {})
+      await f.call(person, `/v1/invitations/${token}`, {})
     }
     const people = await f.call(f.owner, `${endpoint}?view=admin`),
       athlete = people.members.find((m: any) => m.user_id === f.client.id),

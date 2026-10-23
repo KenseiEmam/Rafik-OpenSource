@@ -3,7 +3,7 @@
   "info": {
     "title": "Rafik API â€” Coach Field App",
     "version": "0.1.0",
-    "description": "Supported API surface for the coach-first Android field app. The complete backend route reference is in docs/reference/api.md. Instance URLs are university-operated; do not use a shared Rafik host."
+    "description": "Supported API surface for the coach-first Android field app. The complete backend route reference is in docs/reference/api.md. Instance URLs are university-operated; do not use a shared Rafik host. Canonical institution routes resolve the installation institution server-side. Published v1 workspace routes remain deprecated aliases for old Android commands; stable IDs and receipts are preserved."
   },
   "servers": [
     {
@@ -178,10 +178,10 @@
         }
       }
     },
-    "/v1/contexts": {
+    "/v1/institution/context": {
       "get": {
         "tags": ["Coach field work"],
-        "summary": "List the current account's authorized workspaces",
+        "summary": "List the current account's institution membership",
         "parameters": [
           {
             "$ref": "#/components/parameters/AndroidClient"
@@ -216,7 +216,7 @@
         }
       }
     },
-    "/v1/workspaces/{workspace}/calendar": {
+    "/v1/institution/calendar": {
       "parameters": [
         {
           "$ref": "#/components/parameters/AndroidClient"
@@ -388,7 +388,7 @@
         }
       }
     },
-    "/v1/workspaces/{workspace}/workout-scheduling": {
+    "/v1/institution/workout-scheduling": {
       "post": {
         "tags": ["Coach field work"],
         "summary": "Schedule, reschedule or explicitly skip an individual plan workout",
@@ -402,9 +402,6 @@
           }
         ],
         "parameters": [
-          {
-            "$ref": "#/components/parameters/Workspace"
-          },
           {
             "name": "X-Rafik-Client",
             "in": "header",
@@ -443,7 +440,7 @@
         }
       }
     },
-    "/v1/workspaces/{workspace}/sessions": {
+    "/v1/institution/sessions": {
       "post": {
         "tags": ["Coach field work"],
         "summary": "Start or save individual workout results",
@@ -457,9 +454,6 @@
           }
         ],
         "parameters": [
-          {
-            "$ref": "#/components/parameters/Workspace"
-          },
           {
             "name": "X-Rafik-Client",
             "in": "header",
@@ -521,15 +515,6 @@
         "schema": {
           "type": "string",
           "enum": ["android"]
-        }
-      },
-      "Workspace": {
-        "name": "workspace",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "string",
-          "format": "uuid"
         }
       }
     },
@@ -605,9 +590,9 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Composite workspace/role context ID; use workspace_id for API paths."
+            "description": "Composite institution/role context ID; use institution_id for API paths."
           },
-          "workspace_id": {
+          "institution_id": {
             "type": "string",
             "format": "uuid"
           },
@@ -616,7 +601,8 @@
             "format": "uuid"
           },
           "kind": {
-            "type": "string"
+            "type": "string",
+            "enum": ["institution"]
           },
           "name": {
             "type": "string"

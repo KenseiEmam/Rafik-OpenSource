@@ -6,7 +6,7 @@ Generated from maintained source and reviewed descriptions by `npm run frontend:
 
 - **Source:** [features/account/AccessPage.vue](../../../apps/frontend/src/features/account/AccessPage.vue)
 - **Folder:** `features/account`
-- **URL(s):** `/access`, `/organization/:workspace/:view/:legacy(.*)*`
+- **URL(s):** `/access`, `/organization/:institution/:view/:legacy(.*)*`
 - **Purpose:** Membership/connection recovery with explicit refresh and sign-out.
 - **Access:** Signed-in accounts; no institution membership is required to show recovery.
 - **Opens:** `/dashboard`, `/login`
@@ -61,7 +61,7 @@ Generated from maintained source and reviewed descriptions by `npm run frontend:
 - **Purpose:** Password sign-in with safe next-path handling and current-context redirect.
 - **Access:** Public; successful identity still needs current institution or operator authority.
 - **Opens:** `/access`, `/dashboard`
-- **Opened from views:** `/`, `/access`, `/organization/:workspace/:view/:legacy(.*)*`, `/setup`
+- **Opened from views:** `/`, `/access`, `/organization/:institution/:view/:legacy(.*)*`, `/setup`
 - **Embedded by:** Router.
 - **Shell entry:** [App.vue](../../../apps/frontend/src/App.vue)
 
@@ -231,7 +231,7 @@ Generated from maintained source and reviewed descriptions by `npm run frontend:
 - **Purpose:** Instance name, accent, theme backgrounds and logo editing with authorized capability check.
 - **Access:** Initial super admin only, inside administrator institution settings.
 - **Opens:** None; see entry/dynamic rules.
-- **Opened from views:** `/`, `/access`, `/analytics`, `/dashboard`, `/help`, `/local-preview`, `/login`, `/members/:member`, `/notifications`, `/organization-invite/:token`, `/organization/:workspace/:view/:legacy(.*)*`, `/password-setup/:token`, `/setup`, `/support`
+- **Opened from views:** `/`, `/access`, `/analytics`, `/dashboard`, `/help`, `/invitation/:token`, `/local-preview`, `/login`, `/members/:member`, `/notifications`, `/organization/:institution/:view/:legacy(.*)*`, `/password-setup/:token`, `/setup`, `/support`
 - **Embedded by:** `features/institution/DashboardPage.vue`
 - **Shell entry:** [App.vue](../../../apps/frontend/src/App.vue), [features/navigation/DashboardNav.vue](../../../apps/frontend/src/features/navigation/DashboardNav.vue)
 
@@ -279,7 +279,7 @@ Generated from maintained source and reviewed descriptions by `npm run frontend:
 - **Purpose:** Role dashboard and route-selected People, Activity and Institution settings sections, invitations and close-institution confirmation.
 - **Access:** Dashboard: all members. People: administrators and coaches with scoped roster. Activity/settings: administrator router gate; branding has a stricter initial-admin check.
 - **Opens:** `/access`, `/analytics`, `/members/:member`, `/messages/:channel?`, `/people`, `/review/:id`, `/schedule`, `/schedule/:id`, `/schedule/new`, `/training`, `/workouts`
-- **Opened from views:** `/`, `/access`, `/analytics`, `/help`, `/local-preview`, `/login`, `/members/:member`, `/notifications`, `/organization-invite/:token`, `/organization/:workspace/:view/:legacy(.*)*`, `/password-setup/:token`, `/setup`, `/support`
+- **Opened from views:** `/`, `/access`, `/analytics`, `/help`, `/invitation/:token`, `/local-preview`, `/login`, `/members/:member`, `/notifications`, `/organization/:institution/:view/:legacy(.*)*`, `/password-setup/:token`, `/setup`, `/support`
 - **Embedded by:** Router.
 - **Shell entry:** [App.vue](../../../apps/frontend/src/App.vue), [features/navigation/DashboardNav.vue](../../../apps/frontend/src/features/navigation/DashboardNav.vue)
 
@@ -347,7 +347,7 @@ Generated from maintained source and reviewed descriptions by `npm run frontend:
 
 - **Source:** [features/institution/InvitationPage.vue](../../../apps/frontend/src/features/institution/InvitationPage.vue)
 - **Folder:** `features/institution`
-- **URL(s):** `/organization-invite/:token`
+- **URL(s):** `/invitation/:token`
 - **Purpose:** Accept a seven-day institution invitation and create/sign into the invited account.
 - **Access:** Public single-use token entry; backend checks expiry, recipient identity and role before membership creation.
 - **Opens:** `/dashboard`
@@ -424,7 +424,7 @@ Generated from maintained source and reviewed descriptions by `npm run frontend:
 - **Purpose:** Institution sport and coaching-specialty taxonomy creation, editing and archival.
 - **Access:** Administrator settings only; linked historical metadata is retained by server lifecycle rules.
 - **Opens:** None; see entry/dynamic rules.
-- **Opened from views:** `/`, `/access`, `/analytics`, `/dashboard`, `/help`, `/local-preview`, `/login`, `/members/:member`, `/notifications`, `/organization-invite/:token`, `/organization/:workspace/:view/:legacy(.*)*`, `/password-setup/:token`, `/setup`, `/support`
+- **Opened from views:** `/`, `/access`, `/analytics`, `/dashboard`, `/help`, `/invitation/:token`, `/local-preview`, `/login`, `/members/:member`, `/notifications`, `/organization/:institution/:view/:legacy(.*)*`, `/password-setup/:token`, `/setup`, `/support`
 - **Embedded by:** `features/institution/DashboardPage.vue`
 - **Shell entry:** [App.vue](../../../apps/frontend/src/App.vue), [features/navigation/DashboardNav.vue](../../../apps/frontend/src/features/navigation/DashboardNav.vue)
 

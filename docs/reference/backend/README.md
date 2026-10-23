@@ -13,7 +13,7 @@ Reviewed 23 October 2026 for the unreleased beta.3 branch. This is a schema/sour
 
 ```mermaid
 flowchart LR
-  Institution[workspaces: one institution] --> Members[workspace_members]
+  Institution[institutions: one institution] --> Members[institution_members]
   Members --> Coaching[coaching links and sports]
   Institution --> Programs[programs and immutable versions]
   Programs --> Assignments[athlete assignments]
@@ -28,7 +28,7 @@ flowchart LR
   Historical[historical personal/team records] --> Privacy[own export, deletion and replay]
 ```
 
-The [schema catalog](schema.md) gives every physical foreign key, including cross-domain links omitted from this overview. `workspace_id` remains a durable institution boundary; it does not imply a chooser or multiple current institutions.
+The [schema catalog](schema.md) gives every physical foreign key, including cross-domain links omitted from this overview. `institution_id` remains a durable institution boundary; it does not imply a chooser or multiple current institutions.
 
 ## Findings and changes
 
@@ -53,7 +53,7 @@ The [schema catalog](schema.md) gives every physical foreign key, including cros
 | Teams and institution membership | Historical team enrollment/handoff data still participates in own export/deletion guards. No new standalone team acquisition endpoint remains. |
 | Personal pair messages and institution channels | Historical pair privacy is not equivalent to group visibility. Retaining export data does not retain a standalone conversation screen. |
 
-Current table names with `organization_`, legacy `client_id` payload fields and v1 `/workspaces` paths are compatibility identifiers. Cosmetic renaming is deferred until a scoped migration/API/queue transition is implemented; it is not a reason to drop a live foreign key or saved command.
+Canonical schema and APIs now follow [ADR 0029](../../decisions/ADR-0029-institution-identifiers.md). Legacy workspace/organization paths exist only at the published-client adapter. Frozen JSON, historical source keys, private byte paths and `client_id` payloads remain where identity or replay depends on them. No legacy database table/view aliases remain.
 
 ## Before beta.3 release
 
@@ -85,3 +85,7 @@ npm run backend:inventory:database
 That command creates a disposable database, applies all migrations, captures schema metadata and generates matching client/transport types; it drops only that database. It never resets/seeds preview data. The raw [catalog receipt](../../verification/receipts/backend-schema-catalog.json) contains schema definitions and grants, not account/athlete rows.
 
 Generated route touches are conservative, including known helper/SQL calls. Dynamic SQL, triggers and cascade lifecycle can have additional effects. Human review is still required when changing authority, names or retained data. Record actual checks and limits in [verification](../../verification/README.md).
+
+## Institution rename follow-up
+
+The founder approved physical naming cleanup after this initial audit. The forward rename covers 38 tables and scope columns across 44 tables; complete rows, nested documents, receipts and grants are preserved. Web and Android source use canonical APIs. Physical APK upgrade and wider beta.3 workflows remain release work; source/queue checks are not device acceptance. See ADR 0029 and verification.

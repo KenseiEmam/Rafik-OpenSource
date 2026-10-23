@@ -7,7 +7,7 @@ import { request } from '../../lib/backend'
 import { language as l, errorMessage, dateLabel } from '../../lib/i18n'
 import RatingForm from './RatingForm.vue'
 const context = programContext(useRoute()),
-  endpoint = `/v1/workspaces/${context.workspace}/feedback`
+  endpoint = `/v1/institution/feedback`
 type Item = {
   month?: string
   id: string
@@ -95,7 +95,7 @@ onUnmounted(() => generation++)
       <RatingForm
         v-if="context.view === 'trainer' && data.month"
         :key="data.month + ':' + (data.own?.revision || 0)"
-        :workspace="context.workspace"
+        :institution="context.institution"
         view="trainer"
         source="workplace"
         :subject="data.month"
@@ -121,7 +121,7 @@ onUnmounted(() => generation++)
         <RatingForm
           v-for="item in data.items"
           :key="item.source + item.id + ':' + item.revision"
-          :workspace="context.workspace"
+          :institution="context.institution"
           view="trainee"
           :source="item.source"
           :subject="item.id"

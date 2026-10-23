@@ -9,7 +9,7 @@ import { errorMessage, language as l } from '../../lib/i18n'
 import { localDate } from '../../lib/dates'
 
 const context = programContext(useRoute()),
-  endpoint = `/v1/workspaces/${context.workspace}/injuries`,
+  endpoint = `/v1/institution/injuries`,
   busy = ref(false),
   error = ref(''),
   loaded = ref(false),

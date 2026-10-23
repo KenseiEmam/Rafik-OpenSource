@@ -78,7 +78,9 @@
     "test:workout-sequence": "node apps/backend/scripts/prisma/isolated-api.mjs tests/workout-sequence.test.ts",
     "backend:inventory": "node apps/backend/scripts/backend-inventory.mjs",
     "backend:inventory:check": "node apps/backend/scripts/backend-inventory.mjs --check",
-    "backend:inventory:database": "node apps/backend/scripts/backend-inventory.mjs --refresh-database"
+    "backend:inventory:database": "node apps/backend/scripts/backend-inventory.mjs --refresh-database",
+    "test:institution-names": "node apps/backend/scripts/prisma/verify-institution-names.mjs",
+    "test:institution-api": "node apps/backend/scripts/prisma/isolated-api.mjs tests/institution-compatibility.test.ts tests/backend-boundary.test.ts tests/institution-transport.test.ts"
   },
   "overrides": {
     "tar": "7.5.22",

@@ -63,9 +63,7 @@ async function load() {
     offset: String(offset),
   })
   try {
-    const result = await request<AthletePlanPage>(
-      `/v1/workspaces/${context.workspace}/athlete-plans?${query}`,
-    )
+    const result = await request<AthletePlanPage>(`/v1/institution/athlete-plans?${query}`)
     if (disposed || current !== generation) return
     data.value = result
     acceptLimit()
@@ -101,7 +99,7 @@ async function loadDetail() {
   detailBusy.value = true
   try {
     const result = await request<AthletePlanPage>(
-      `/v1/workspaces/${context.workspace}/athlete-plans?view=${context.view}&assignment=${encodeURIComponent(String(route.query.assignment))}`,
+      `/v1/institution/athlete-plans?view=${context.view}&assignment=${encodeURIComponent(String(route.query.assignment))}`,
     )
     if (disposed || current !== detailGeneration) return
     detail.value = result.items[0]
@@ -131,12 +129,12 @@ watch(() => route.query.assignment, loadDetail)
 const planLabel = (plan: AthletePlanSummary) => [plan.goal, plan.sport].filter(Boolean).join(' · ')
 // Ending archives one plan; recorded sessions and the published version stay in history.
 const ending = useCommand<'end-plan'>(
-  `athlete-plan-end:${context.workspace}:${context.view}`,
+  `athlete-plan-end:${context.institution}:${context.view}`,
   async () => {
     await Promise.all([loadDetail(), load()])
   },
   (_, args) =>
-    request(`/v1/workspaces/${context.workspace}/delivery`, {
+    request(`/v1/institution/delivery`, {
       method: 'POST',
       body: JSON.stringify(args),
     }),

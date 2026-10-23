@@ -82,7 +82,7 @@ The preceding consolidation already removed 20 obsolete/duplicate Vue implementa
 
 ## Backend trace boundary
 
-Only the backend paths needed to explain access and generated navigation were inspected: [workspaces](../../../apps/backend/server/workspaces.ts), [people](../../../apps/backend/server/people.ts), [programming](../../../apps/backend/server/programming.ts), [athlete plans](../../../apps/backend/server/athlete-plans.ts), [nutrition index](../../../apps/backend/server/nutrition-plan-index.ts), [calendar](../../../apps/backend/server/calendar.ts), [assets](../../../apps/backend/server/assets.ts), [injuries](../../../apps/backend/server/injuries.ts) and [notifications](../../../apps/backend/server/notifications.ts). No general schema deletion or independent API retirement is implied. Supported Android endpoints and command payloads are unchanged.
+Only the backend paths needed to explain access and generated navigation were inspected: [workspaces](../../../apps/backend/server/institution.ts), [people](../../../apps/backend/server/people.ts), [programming](../../../apps/backend/server/programming.ts), [athlete plans](../../../apps/backend/server/athlete-plans.ts), [nutrition index](../../../apps/backend/server/nutrition-plan-index.ts), [calendar](../../../apps/backend/server/calendar.ts), [assets](../../../apps/backend/server/assets.ts), [injuries](../../../apps/backend/server/injuries.ts) and [notifications](../../../apps/backend/server/notifications.ts). No general schema deletion or independent API retirement is implied. Supported Android endpoints and command payloads are unchanged.
 
 ## Refresh and review
 

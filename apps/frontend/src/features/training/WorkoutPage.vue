@@ -129,10 +129,10 @@ async function load() {
   loading.value = true
   error.value = ''
   try {
-    row.value = await loadWorkout(id, owner.value, institutionContext().workspace)
+    row.value = await loadWorkout(id, owner.value, institutionContext().institution)
     if (
       row.value.owner !== owner.value ||
-      row.value.session.workspace_id !== institutionContext().workspace
+      row.value.session.institution_id !== institutionContext().institution
     ) {
       row.value = undefined
       throw new Error('forbidden')
@@ -314,7 +314,7 @@ async function getPrevious() {
   try {
     const results = await request<
       { exercise_id: string; prescription: PrescriptionExercise; entries: Entry[] }[]
-    >(`/v1/organization-sessions/${id}/previous`)
+    >(`/v1/workouts/${id}/previous`)
     previous.value = Object.fromEntries(
       results.map((r) => [
         r.exercise_id,
@@ -720,7 +720,7 @@ function correctSets() {
                 >
               </div>
             </div>
-            <RouterLink v-if="session.workspace_id" :to="'/feedback'" class="text-link">{{
+            <RouterLink v-if="session.institution_id" :to="'/feedback'" class="text-link">{{
               language('Rate your session (optional)', 'قيّم جلستك (اختياري)')
             }}</RouterLink>
             <RouterLink :to="returnPath" class="button secondary"

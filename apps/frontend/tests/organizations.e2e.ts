@@ -17,9 +17,9 @@ test('separate institution roles and reassigns responsibility with recoverable c
     // Institutions now come from first-run setup; create one directly for this journey.
     const id = randomUUID(),
       base = ``
-    await f.call(f.owner, '/v1/workspaces', {
+    await f.call(f.owner, '/v1/institutions', {
       id,
-      kind: 'organization',
+      kind: 'institution',
       name: 'Madar test organization',
     })
     await f.login(page, f.owner, base)
@@ -57,7 +57,7 @@ test('separate institution roles and reassigns responsibility with recoverable c
       .getByRole('checkbox', { name: /^R4 Coach/ })
       .check()
     let lost = false
-    await page.route('**/v1/workspaces/' + id, async (route) => {
+    await page.route('**/v1/institutions/' + id, async (route) => {
       if (
         !lost &&
         route.request().method() === 'POST' &&
@@ -84,7 +84,7 @@ test('separate institution roles and reassigns responsibility with recoverable c
     await expect(athleteCard).toContainText('Primary coach: R4 Coach')
     // The lost acknowledgement and retry produce exactly one active primary link.
     const roster = async () =>
-      (await f.call(f.owner, `/v1/workspaces/${id}/people?view=admin&role=trainee`)).items[0]
+      (await f.call(f.owner, `/v1/institution/people?view=admin&role=trainee`)).items[0]
     expect((await roster()).coaches.map((c: { kind: string }) => c.kind)).toEqual(['primary'])
     await staff.goto(`/people`)
     await expect(staff.getByRole('heading', { name: 'R4 Athlete', exact: true })).toBeVisible()
@@ -101,8 +101,8 @@ test('separate institution roles and reassigns responsibility with recoverable c
     expect((await roster()).coaches).toEqual([])
     expect((await roster()).trainer_id).toBeNull()
     await staff.reload()
-    // Revoked staff are returned to the workspace chooser; no athlete data remains on screen.
-    await expect(staff).toHaveURL(/\/workspaces/)
+    // Revoked staff are returned to the institution chooser; no athlete data remains on screen.
+    await expect(staff).toHaveURL(/\/institutions/)
     await expect(staff.getByRole('heading', { name: 'R4 Athlete', exact: true })).toHaveCount(0)
     await manage('Administrators', 'R4 Owner')
     await page.getByRole('checkbox', { name: 'Active membership', exact: true }).uncheck()

@@ -15,15 +15,15 @@ export async function refreshContexts() {
     platform.value = false
     return
   }
-  const data = await request<{ contexts: Context[]; platform: boolean }>('/v1/contexts')
+  const data = await request<{ contexts: Context[]; platform: boolean }>('/v1/institution/context')
   if (user.value?.id === id) {
-    if (data.contexts.filter((c) => c.kind === 'organization').length > 1) {
+    if (data.contexts.filter((c) => c.kind === 'institution').length > 1) {
       contexts.value = []
       platform.value = data.platform
       throw new Error('multiple_institutions_not_supported')
     }
     contexts.value = data.contexts
-      .filter((c) => c.kind === 'organization')
+      .filter((c) => c.kind === 'institution')
       .map((c) => ({ ...c, path: '/dashboard' }))
     platform.value = data.platform
   }

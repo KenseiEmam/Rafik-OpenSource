@@ -55,7 +55,7 @@ import { language, t } from '../../lib/i18n'
         }}
       </p>
     </section>
-    <section class="help-workspaces">
+    <section class="help-institutions">
       <h2>{{ language('Your institution dashboard', 'لوحة مؤسستك') }}</h2>
       <p>
         {{
@@ -221,13 +221,13 @@ import { language, t } from '../../lib/i18n'
 </template>
 
 <style scoped>
-.help-workspaces details {
+.help-institutions details {
   margin-top: 20px;
 }
-.help-workspaces summary {
+.help-institutions summary {
   font-weight: 600;
 }
-.help-workspaces details p {
+.help-institutions details p {
   margin-top: 16px;
 }
 </style>

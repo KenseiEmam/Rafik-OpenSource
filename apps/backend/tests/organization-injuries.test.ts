@@ -20,20 +20,20 @@ test("injury status is consent-gated, athlete-owned, limited for assigned coache
       athlete = await f.person(),
       stranger = await f.person(),
       foreignAdmin = await f.person(),
-      workspace = await f.create(admin),
+      institution = await f.create(admin),
       foreignWorkspace = await f.create(foreignAdmin),
-      coachMember = await f.join(admin, workspace, trainer, ["trainer"]),
-      replacementMember = await f.join(admin, workspace, replacement, [
+      coachMember = await f.join(admin, institution, trainer, ["trainer"]),
+      replacementMember = await f.join(admin, institution, replacement, [
         "trainer",
       ]),
-      athleteMember = await f.join(admin, workspace, athlete, ["trainee"]);
-    await f.join(admin, workspace, stranger, ["trainer"]);
+      athleteMember = await f.join(admin, institution, athlete, ["trainee"]);
+    await f.join(admin, institution, stranger, ["trainer"]);
     await f.join(foreignAdmin, foreignWorkspace, athlete, ["trainee"]);
     assert.equal(
       (
         await call(
           admin,
-          `/v1/workspaces/${workspace}`,
+          `/v1/workspaces/${institution}`,
           operation("assign-trainer", {
             id: athleteMember.id,
             revision: 1,
@@ -43,7 +43,7 @@ test("injury status is consent-gated, athlete-owned, limited for assigned coache
       ).status,
       200,
     );
-    const endpoint = `/v1/workspaces/${workspace}/injuries`;
+    const endpoint = `/v1/workspaces/${institution}/injuries`;
 
     // Admin can verify consent prerequisites, but receives no injury values.
     let r = await call(admin, endpoint + "?view=admin");
@@ -182,7 +182,7 @@ test("injury status is consent-gated, athlete-owned, limited for assigned coache
     assert.equal(exported.status, 200);
     assert.equal(exported.data.items[0].history.length, 2);
     assert.equal(
-      await db.organization_injury_access_log.count({
+      await db.institution_injury_access_log.count({
         where: {
           record_id: id,
           action: "athlete_export",
@@ -202,7 +202,7 @@ test("injury status is consent-gated, athlete-owned, limited for assigned coache
 
     await call(
       admin,
-      `/v1/workspaces/${workspace}`,
+      `/v1/workspaces/${institution}`,
       operation("assign-trainer", {
         id: athleteMember.id,
         revision: 2,
@@ -233,39 +233,39 @@ test("injury status is consent-gated, athlete-owned, limited for assigned coache
       "closed",
     );
 
-    const before = await db.organization_injury_history.count({
+    const before = await db.institution_injury_history.count({
       where: { record_id: id },
     });
-    await db.organization_injury_records.update({
+    await db.institution_injury_records.update({
       where: { id },
       data: { closed_at: new Date(Date.now() - 366 * 86400000) },
     });
-    const result = await purgeExpiredInjuryRecords([workspace]);
+    const result = await purgeExpiredInjuryRecords([institution]);
     assert.equal(result.expired, 1);
     assert.ok(before >= 3);
     assert.equal(
-      await db.organization_injury_records.count({ where: { id } }),
+      await db.institution_injury_records.count({ where: { id } }),
       0,
     );
     assert.equal(
-      await db.organization_injury_history.count({ where: { record_id: id } }),
+      await db.institution_injury_history.count({ where: { record_id: id } }),
       0,
     );
     assert.equal(
-      await db.organization_injury_access_log.count({
+      await db.institution_injury_access_log.count({
         where: { record_id: id },
       }),
       0,
     );
     assert.equal(
-      await db.organization_injury_operations.count({
+      await db.institution_injury_operations.count({
         where: { record_id: id },
       }),
       0,
     );
     const checkpoint = await db.$queryRaw<
       { completed_at: Date; closed_count: number; purged_count: number }[]
-    >`SELECT completed_at,closed_count,purged_count FROM public.organization_injury_retention_checkpoint WHERE singleton`;
+    >`SELECT completed_at,closed_count,purged_count FROM public.institution_injury_retention_checkpoint WHERE singleton`;
     assert.equal(checkpoint.length, 1);
     assert.ok(checkpoint[0].completed_at instanceof Date);
     assert.equal(checkpoint[0].purged_count, 1);

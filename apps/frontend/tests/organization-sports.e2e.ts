@@ -22,12 +22,12 @@ test('admin defines sports and specialties, links people, and the coach filter s
   const f = await teamFixture(),
     coachContext = await browser.newContext(),
     coachPage = await coachContext.newPage(),
-    workspace = randomUUID(),
-    endpoint = `/v1/workspaces/${workspace}`
+    institution = randomUUID(),
+    endpoint = `/v1/institution`
   try {
-    await f.call(f.owner, '/v1/workspaces', {
-      id: workspace,
-      kind: 'organization',
+    await f.call(f.owner, '/v1/institutions', {
+      id: institution,
+      kind: 'institution',
       name: 'Madar sports',
     })
     const other = await f.createPerson('Second Athlete With A Long Family Name')
@@ -45,7 +45,7 @@ test('admin defines sports and specialties, links people, and the coach filter s
         roles,
         token,
       })
-      await f.call(person, `/v1/organization-invitations/${token}`, {})
+      await f.call(person, `/v1/invitations/${token}`, {})
     }
     const people = await f.call(f.owner, `${endpoint}?view=admin`),
       athlete = people.members.find((m: any) => m.user_id === f.client.id),

@@ -1,5 +1,9 @@
 # Current delivery ledger
 
+## Institution naming migration — 23 October 2026
+
+Founder approved replacing workspace/organization identifiers across schema, API and clients. Added the forward rename, canonical `/v1/institution` dispatch and one legacy transport adapter. Web/Android source now uses institution fields/routes; browser workout hydration and native credentials retain previous identity fields without changing durable payloads or owner tuple order. [ADR 0029](../decisions/ADR-0029-institution-identifiers.md) records the boundary and coordinated upgrade order. Preservation, focused API/native queue/identity and type checks passed; canonical fixture sources and inventories are updated. The final frozen-source Chromium first-run/People smoke passed with inspected English desktop and Arabic phone empty states; verification records the exact coverage and limits. This does not complete the remaining beta.3 scheduling/group/native-workout scope.
+
 ## Backend audit — 23 October 2026
 
 Completed schema/route source inventory, explicit gateway boundaries, four standalone read removals, ten module renames, subject-only workout history/sequence exports and Prisma metadata corrections. The populated disposable retirement migration preserved historical business records and passed lifecycle SQL checks. Eleven isolated API tests passed, including file recovery/orphan grace, authorization, export, institutional calendar and progression. No preview reset, browser suite or native build was run. See [backend findings and remaining release work](../reference/backend/README.md).

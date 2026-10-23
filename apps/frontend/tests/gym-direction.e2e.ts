@@ -47,7 +47,7 @@ test('organization month calendar and support preserve staff navigation', async 
   const f = await teamFixture(),
     id = randomUUID()
   try {
-    await f.call(f.owner, '/v1/workspaces', { id, kind: 'organization', name: 'Madar gym review' })
+    await f.call(f.owner, '/v1/institutions', { id, kind: 'institution', name: 'Madar gym review' })
     await f.login(page, f.owner, `/calendar?from=2026-09-01`)
     await expect(page.getByLabel('Calendar view', { exact: true })).toHaveValue('month')
     await expect(page.locator('.month-day:not(:disabled)')).toHaveCount(30)

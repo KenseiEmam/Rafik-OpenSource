@@ -23,6 +23,20 @@ const sql = (input, target = database) =>
     ],
     { input, encoding: "utf8", stdio: "pipe" },
   ).trim();
+function historicalSeed() {
+  let source = readFileSync(resolve(backendRoot, "prisma/seed.sql"), "utf8");
+  const names = JSON.parse(
+    readFileSync(
+      resolve(backendRoot, "scripts/institution-names.json"),
+      "utf8",
+    ),
+  );
+  for (const [old, current] of Object.entries(names).sort(
+    (a, b) => b[1].length - a[1].length,
+  ))
+    source = source.replaceAll(current, old);
+  return source.replaceAll("institution_id", "workspace_id");
+}
 const preserved = () =>
   sql(`SELECT jsonb_build_object(
  'sessions',(SELECT jsonb_agg(to_jsonb(s)-'occurrence_id'-'source_snapshot' ORDER BY id) FROM organization_sessions s),
@@ -44,7 +58,7 @@ try {
       )
       .join("\n"),
   );
-  sql(readFileSync(resolve(backendRoot, "prisma/seed.sql"), "utf8"));
+  sql(historicalSeed());
   sql(`INSERT INTO organization_sessions(id,workspace_id,member_id,assignment_id,day_id,local_date,document,completed_at)
  VALUES ('19000000-0000-4000-8000-000000000001','12000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000003','16000000-0000-4000-8000-000000000001','historical-day',current_date,'{"prescription":{"id":"historical-day","exercises":[]},"entries":[],"note":"Preserve actuals"}',now());
  INSERT INTO organization_session_history(id,workspace_id,session_id,version,actor_member_id,action,entries,note,completed)
@@ -119,8 +133,17 @@ try {
     "0",
   );
   // Historical migration checks must finish on the latest schema before regenerating transport types.
-  const later = readdirSync(migrations).filter(entry=>entry>name && /^\d/.test(entry)).sort();
-  if(later.length) sql(later.map(entry=>readFileSync(resolve(migrations,entry,"migration.sql"),"utf8")).join("\n"));
+  const later = readdirSync(migrations)
+    .filter((entry) => entry > name && /^\d/.test(entry))
+    .sort();
+  if (later.length)
+    sql(
+      later
+        .map((entry) =>
+          readFileSync(resolve(migrations, entry, "migration.sql"), "utf8"),
+        )
+        .join("\n"),
+    );
   const env = {
     ...process.env,
     MIGRATION_DATABASE_URL: `postgresql://rafik_migrate:rafik-local-migrations-only@127.0.0.1:55332/${database}`,

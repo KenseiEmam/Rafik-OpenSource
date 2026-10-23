@@ -16,7 +16,7 @@ import PageState from '../../components/PageState.vue'
 import type { CalendarEvent } from './service-types'
 const route = useRoute(),
   router = useRouter()
-const workspace = institutionContext().workspace,
+const institution = institutionContext().institution,
   view = institutionContext().view
 const base = ''
 const zone = profile.value?.timezone || 'UTC'
@@ -76,7 +76,7 @@ async function load() {
     offset: String(page),
   })
   try {
-    const result = await request<Page>(`/v1/workspaces/${workspace}/scheduled-events?${query}`)
+    const result = await request<Page>(`/v1/institution/scheduled-events?${query}`)
     if (disposed || stamp !== generation) return
     data.value = result
     acceptLimit()

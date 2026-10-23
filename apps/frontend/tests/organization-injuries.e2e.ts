@@ -11,17 +11,17 @@ test('athlete consent, status correction, limited coach view and withdrawal', as
 }, info) => {
   test.setTimeout(120000)
   const f = await injuryFixture(),
-    workspace = randomUUID(),
+    institution = randomUUID(),
     coachPage = await browser.newPage()
   try {
-    f.workspaces.push(workspace)
-    await f.call(f.admin, '/v1/workspaces', {
-      id: workspace,
-      kind: 'organization',
+    f.institutions.push(institution)
+    await f.call(f.admin, '/v1/institutions', {
+      id: institution,
+      kind: 'institution',
       name: 'University injury workflow',
     })
-    const coach = await f.addMember(workspace, f.coach, 'trainer'),
-      athlete = await f.addMember(workspace, f.athlete, 'trainee')
+    const coach = await f.addMember(institution, f.coach, 'trainer'),
+      athlete = await f.addMember(institution, f.athlete, 'trainee')
     await f.assign(athlete.id, coach.id)
 
     await f.login(page, f.admin, `/injuries`)
@@ -60,7 +60,7 @@ test('athlete consent, status correction, limited coach view and withdrawal', as
         ],
       }),
     ])
-    expect(JSON.stringify(exported)).not.toContain(workspace)
+    expect(JSON.stringify(exported)).not.toContain(institution)
     expect(JSON.stringify(exported)).not.toContain(f.athlete.id)
 
     await f.login(coachPage, f.coach, `/injuries`)

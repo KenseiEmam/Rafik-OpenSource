@@ -14,7 +14,7 @@ select invite_team_member('b4000000-0000-4000-8000-000000000002','b4000000-0000-
 select pg_temp.assert((invite_team_member('b4000000-0000-4000-8000-000000000002','b4000000-0000-4000-8000-000000000001','coach2@rafik.test','coach','r4-test-token-123456789012345678901234')).id='b4000000-0000-4000-8000-000000000002','staff invitation is idempotent');
 set local role rafik_user; select set_config('rafik.claims','{"sub":"10000000-0000-4000-8000-000000000003","role":"rafik_user"}',true);
 select pg_temp.reject($q$select accept_team_invitation('r4-test-token-123456789012345678901234')$q$,'wrong_email','different verified email cannot accept invitation');
-select pg_temp.reject($q$select team_workspace('b4000000-0000-4000-8000-000000000001')$q$,'forbidden','nonmember cannot load workspace');
+select pg_temp.reject($q$select team_workspace('b4000000-0000-4000-8000-000000000001')$q$,'forbidden','nonmember cannot load institution');
 set local role rafik_user; select set_config('rafik.claims','{"sub":"10000000-0000-4000-8000-000000000004","role":"rafik_user"}',true);
 select accept_team_invitation('r4-test-token-123456789012345678901234');
 select pg_temp.assert(team_role('b4000000-0000-4000-8000-000000000001')='coach','intended staff member accepts verified invitation');
@@ -124,7 +124,7 @@ set local role rafik_user; select set_config('rafik.claims','{"sub":"10000000-00
 select archive_team_group('b4000000-0000-4000-8000-000000000005',1);
 select pg_temp.assert(exists(select 1 from team_assignments where id='b4000000-0000-4000-8000-000000000007'),'group archive retains completed bulk assignment receipt');
 select close_team('b4000000-0000-4000-8000-000000000001',1);select close_team('b4000000-0000-4000-8000-000000000001',1);
-select pg_temp.assert(team_role('b4000000-0000-4000-8000-000000000001') is null,'closing team revokes all workspace access and is retryable');
+select pg_temp.assert(team_role('b4000000-0000-4000-8000-000000000001') is null,'closing team revokes all institution access and is retryable');
 
 set local role rafik_user;
 select set_config('rafik.claims','{"sub":"10000000-0000-4000-8000-000000000001","role":"rafik_user"}',true);
@@ -135,7 +135,7 @@ select pg_temp.reject($q$select rename_team('b4000000-0000-4000-8000-00000000004
 select save_team_group('b4000000-0000-4000-8000-000000000041','b4000000-0000-4000-8000-000000000040','Old group',0);
 select archive_team_group('b4000000-0000-4000-8000-000000000041',1);
 select archive_team_group('b4000000-0000-4000-8000-000000000041',1);
-select pg_temp.assert(jsonb_array_length(team_workspace('b4000000-0000-4000-8000-000000000040')->'groups')=0,'archived group leaves workspace without deleting its audit receipts');
+select pg_temp.assert(jsonb_array_length(team_workspace('b4000000-0000-4000-8000-000000000040')->'groups')=0,'archived group leaves institution without deleting its audit receipts');
 select pg_temp.reject($q$select save_team_group('b4000000-0000-4000-8000-000000000041','b4000000-0000-4000-8000-000000000040','Resurrect group',2)$q$,'group_unavailable','archived group cannot be accidentally reactivated by stale editor');
 select invite_team_member('b4000000-0000-4000-8000-000000000042','b4000000-0000-4000-8000-000000000040','coach2@rafik.test','admin','lifecycle-invite-123456789012345678901234');
 select set_config('rafik.claims','{"sub":"10000000-0000-4000-8000-000000000004","role":"rafik_user"}',true);

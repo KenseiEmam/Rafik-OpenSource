@@ -46,7 +46,7 @@ async function load(page = offset.value, background = false) {
       next: number | null
       total: number
     }>(
-      `/v1/workspaces/${context.workspace}/programs?view=${context.view}&search=${encodeURIComponent(search.value)}&offset=${page}&limit=${recordLimit.value}`,
+      `/v1/institution/programs?view=${context.view}&search=${encodeURIComponent(search.value)}&offset=${page}&limit=${recordLimit.value}`,
     )
     if (sequence !== loadSequence) return
     plans.value = result.items
@@ -113,7 +113,7 @@ onUnmounted(() => {
       </p>
       <div v-if="filtered.length" class="plans-grid">
         <RouterLink
-          v-for="p in context.workspace ? filtered : filtered.slice(offset, offset + recordLimit)"
+          v-for="p in context.institution ? filtered : filtered.slice(offset, offset + recordLimit)"
           :key="p.id"
           :to="context.base + '/plans/' + p.id"
           class="plan-card panel"
@@ -156,7 +156,7 @@ onUnmounted(() => {
         <p>
           {{
             language(
-              'Programs appear here when your institution makes them available. Assigned training is in your Training workspace.',
+              'Programs appear here when your institution makes them available. Assigned training is in your Training institution.',
               'تظهر البرامج عندما تتيحها مؤسستك. التدريب المعيّن موجود في مساحة التدريب.',
             )
           }}

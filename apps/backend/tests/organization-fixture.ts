@@ -1,3 +1,4 @@
+import { institutionTransport } from "../server/institution-compatibility.ts";
 import { apiOrigin } from "./test-target.ts";
 import { fixtureInstitution } from "./institution-fixture.ts";
 import { randomUUID, randomBytes, createHash } from "node:crypto";
@@ -22,7 +23,7 @@ export const operation = <T extends object, A extends string>(
   ...args,
 });
 export async function call(p: Person, path: string, input?: unknown) {
-  if (path === "/v1/workspaces" && input)
+  if (path === "/v1/institutions" && input)
     return fixtureInstitution(p, input as Record<string, unknown>);
   const r = await fetch(apiOrigin + path, {
     method: input === undefined ? "GET" : "POST",
@@ -33,7 +34,10 @@ export async function call(p: Person, path: string, input?: unknown) {
     },
     body: input === undefined ? undefined : JSON.stringify(input),
   });
-  return { status: r.status, data: await r.json() };
+  return {
+    status: r.status,
+    data: institutionTransport(await r.json()) as any,
+  };
 }
 export async function organizationFixture() {
   const people: string[] = [],
@@ -69,7 +73,7 @@ export async function organizationFixture() {
     spaces.push(id);
     assert.equal(
       (
-        await call(p, "/v1/workspaces", {
+        await call(p, "/v1/institutions", {
           id,
           name: "Program organization",
           kind: "organization",
@@ -90,7 +94,7 @@ export async function organizationFixture() {
       (
         await call(
           admin,
-          "/v1/workspaces/" + id,
+          "/v1/workspaces/",
           operation("invite", {
             id: randomUUID(),
             email: p.email,
@@ -101,26 +105,23 @@ export async function organizationFixture() {
       ).status,
       200,
     );
-    assert.equal(
-      (await call(p, "/v1/organization-invitations/" + token, {})).status,
-      200,
-    );
-    return await db.workspace_members.findUniqueOrThrow({
-      where: { workspace_id_user_id: { workspace_id: id, user_id: p.id } },
+    assert.equal((await call(p, "/v1/invitations/" + token, {})).status, 200);
+    return await db.institution_members.findUniqueOrThrow({
+      where: { institution_id_user_id: { institution_id: id, user_id: p.id } },
     });
   };
   const cleanup = async () => {
     const media = await db.$queryRaw<
-      { id: string; workspace_id: string }[]
-    >`SELECT id,workspace_id FROM public.program_media WHERE workspace_id=ANY(${spaces}::uuid[])`;
+      { id: string; institution_id: string }[]
+    >`SELECT id,institution_id FROM public.program_media WHERE institution_id=ANY(${spaces}::uuid[])`;
     for (const m of media)
-      await removePrivate(`program/${m.workspace_id}/${m.id}`);
+      await removePrivate(`program/${m.institution_id}/${m.id}`);
     const assets = await db.$queryRaw<
-      { id: string; workspace_id: string }[]
-    >`SELECT id,workspace_id FROM public.organization_assets WHERE workspace_id=ANY(${spaces}::uuid[])`;
+      { id: string; institution_id: string }[]
+    >`SELECT id,institution_id FROM public.institution_assets WHERE institution_id=ANY(${spaces}::uuid[])`;
     for (const a of assets)
-      await removePrivate(`organization/${a.workspace_id}/${a.id}`);
-    await db.workspaces.deleteMany({ where: { id: { in: spaces } } });
+      await removePrivate(`organization/${a.institution_id}/${a.id}`);
+    await db.institutions.deleteMany({ where: { id: { in: spaces } } });
     await db.users.deleteMany({ where: { id: { in: people } } });
   };
   return { person, create, join, cleanup };

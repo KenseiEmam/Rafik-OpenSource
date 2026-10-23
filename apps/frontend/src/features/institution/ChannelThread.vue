@@ -10,7 +10,7 @@ import ResourceUpload, { type UploadedAsset } from '../../components/ResourceUpl
 import ResourceAsset from '../../components/ResourceAsset.vue'
 import ChannelEditor from './ChannelEditor.vue'
 import { PhImage, PhPaperclip, PhX } from '@phosphor-icons/vue'
-const props = defineProps<{ workspace: string; view: string; id: string; base: string }>(),
+const props = defineProps<{ institution: string; view: string; id: string; base: string }>(),
   emit = defineEmits<{ refresh: [] }>()
 type Message = {
   id: string
@@ -31,8 +31,8 @@ type Detail = {
   messages: Message[]
   more: boolean
 }
-const endpoint = `/v1/workspaces/${props.workspace}/communication`,
-  key = `org-message:${user.value!.id}:${props.workspace}:${props.view}:${props.id}`
+const endpoint = `/v1/institution/communication`,
+  key = `org-message:${user.value!.id}:${props.institution}:${props.view}:${props.id}`
 const data = ref<Detail>(),
   messages = ref<Message[]>([]),
   text = ref(''),
@@ -315,7 +315,7 @@ onUnmounted(() => {
     </div>
     <ChannelEditor
       v-if="editing && data"
-      :workspace="workspace"
+      :institution="institution"
       :view="view"
       :initial="{ ...data.channel, people: data.people }"
       @close="editing = false"
@@ -442,7 +442,7 @@ onUnmounted(() => {
         />
         <ResourceUpload
           :key="uploadVersion"
-          :workspace="workspace"
+          :institution="institution"
           :view="view"
           :channel="id"
           purpose="message"

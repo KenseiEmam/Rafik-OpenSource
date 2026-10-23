@@ -9,7 +9,7 @@ import { localDate, addDays } from '../../lib/dates'
 import { language as l, errorMessage, locale } from '../../lib/i18n'
 import type { CalendarEvent } from './service-types'
 const route = useRoute(),
-  id = institutionContext().workspace,
+  id = institutionContext().institution,
   view = institutionContext().view,
   base = '',
   zone = profile.value?.timezone || 'UTC',
@@ -27,7 +27,7 @@ const label = (date: string) =>
 onMounted(async () => {
   try {
     const result = await request<{ items: CalendarEvent[] }>(
-      `/v1/workspaces/${id}/calendar?view=${view}&from=${today}&to=${addDays(today, 7)}&zone=${encodeURIComponent(zone)}`,
+      `/v1/institution/calendar?view=${view}&from=${today}&to=${addDays(today, 7)}&zone=${encodeURIComponent(zone)}`,
     )
     events.value = result.items
       .filter((e) => e.state === 'scheduled' && Date.parse(e.ends_at) > Date.now())

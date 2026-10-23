@@ -4,11 +4,11 @@ import { randomUUID, randomBytes, createHash } from "node:crypto";
 import { db } from "../server/db.ts";
 import type { Prisma } from "../server/generated/prisma/client.ts";
 import { apiOrigin } from "./test-target.ts";
-const workspace = "12000000-0000-4000-8000-000000000001";
+const institution = "12000000-0000-4000-8000-000000000001";
 const coach = "13000000-0000-4000-8000-000000000002",
   athlete = "13000000-0000-4000-8000-000000000003";
 const assignment = "16000000-0000-4000-8000-000000000001";
-const base = apiOrigin + "/v1/workspaces/" + workspace;
+const base = apiOrigin + "/v1/institution";
 const operation = (action: string, fields: object = {}) => ({
   operation: randomUUID(),
   action,
@@ -54,14 +54,14 @@ test("individual sequence: concurrent binding, independent plans, exact resoluti
   const auth = await cookie("11000000-0000-4000-8000-000000000002");
   const athleteAuth = await cookie("11000000-0000-4000-8000-000000000003");
   const startDate = new Date(Date.now() - 14 * 86400000);
-  await db.organization_assignments.update({
+  await db.institution_assignments.update({
     where: { id: assignment },
     data: { start_date: startDate },
   });
-  const version = await db.organization_versions.findUniqueOrThrow({
+  const version = await db.institution_versions.findUniqueOrThrow({
     where: { id: "15000000-0000-4000-8000-000000000001" },
   });
-  const otherVersion = await db.organization_versions.create({
+  const otherVersion = await db.institution_versions.create({
     data: {
       ...version,
       prescription: version.prescription as Prisma.InputJsonValue,
@@ -69,10 +69,10 @@ test("individual sequence: concurrent binding, independent plans, exact resoluti
       revision: 2,
     },
   });
-  const other = await db.organization_assignments.create({
+  const other = await db.institution_assignments.create({
     data: {
       id: randomUUID(),
-      workspace_id: workspace,
+      institution_id: institution,
       member_id: athlete,
       version_id: otherVersion.id,
       created_by: coach,
@@ -101,7 +101,7 @@ test("individual sequence: concurrent binding, independent plans, exact resoluti
   const winningInput =
     first.status === 200
       ? firstInput
-      : await db.workspace_operations
+      : await db.institution_operations
           .findFirstOrThrow({
             where: {
               result: {
@@ -119,7 +119,7 @@ test("individual sequence: concurrent binding, independent plans, exact resoluti
   assert.equal(a.position.position, 0);
   assert.equal(
     (
-      await db.organization_assignments.findUniqueOrThrow({
+      await db.institution_assignments.findUniqueOrThrow({
         where: { id: assignment },
       })
     ).sequence_cursor,
@@ -209,7 +209,7 @@ test("individual sequence: concurrent binding, independent plans, exact resoluti
   assert.deepEqual((await call(auth, "/sessions", save)).data, saved.data);
   assert.equal(
     (
-      await db.organization_assignments.findUniqueOrThrow({
+      await db.institution_assignments.findUniqueOrThrow({
         where: { id: assignment },
       })
     ).sequence_cursor,
@@ -224,7 +224,7 @@ test("individual sequence: concurrent binding, independent plans, exact resoluti
   assert.equal(correction.status, 200, JSON.stringify(correction));
   assert.equal(
     (
-      await db.organization_assignments.findUniqueOrThrow({
+      await db.institution_assignments.findUniqueOrThrow({
         where: { id: assignment },
       })
     ).sequence_cursor,
@@ -296,7 +296,7 @@ test("individual sequence: concurrent binding, independent plans, exact resoluti
   assert.equal(reschedule.data.position.id, repeated.data.position.id);
   assert.equal(
     (
-      await db.organization_assignments.findUniqueOrThrow({
+      await db.institution_assignments.findUniqueOrThrow({
         where: { id: assignment },
       })
     ).sequence_cursor,
@@ -321,14 +321,14 @@ test("individual sequence: concurrent binding, independent plans, exact resoluti
   assert.equal(ended.status, 200, JSON.stringify(ended));
   assert.equal(
     (
-      await db.organization_workout_positions.findUniqueOrThrow({
+      await db.institution_workout_positions.findUniqueOrThrow({
         where: { id: repeated.data.position.id },
       })
     ).state,
     "paused",
   );
   assert.ok(
-    await db.organization_sessions.findUnique({
+    await db.institution_sessions.findUnique({
       where: { id: pausedStart.data.id },
     }),
     "in-progress data survives ending",
@@ -341,21 +341,21 @@ test("individual sequence: concurrent binding, independent plans, exact resoluti
   assert.equal(endOther.status, 200, JSON.stringify(endOther));
   assert.equal(
     (
-      await db.organization_events.findUniqueOrThrow({
+      await db.institution_events.findUniqueOrThrow({
         where: { id: independent.data.occurrence.id },
       })
     ).state,
     "cancelled",
   );
   // A current cannot-train flag blocks scheduling with a general explanation only.
-  await db.organization_assignments.update({
+  await db.institution_assignments.update({
     where: { id: other.id },
     data: { state: "active" },
   });
-  const restriction = await db.organization_injury_records.create({
+  const restriction = await db.institution_injury_records.create({
     data: {
       id: randomUUID(),
-      workspace_id: workspace,
+      institution_id: institution,
       athlete_member_id: athlete,
       participation: "unavailable",
       effective_from: startDate,
@@ -373,7 +373,7 @@ test("individual sequence: concurrent binding, independent plans, exact resoluti
   assert.equal(blocked.status, 409);
   assert.equal(blocked.data.message, "participation_unavailable");
   assert.ok(!JSON.stringify(blocked).includes(restriction.id));
-  await db.workspace_members.update({
+  await db.institution_members.update({
     where: { id: coach },
     data: { active: false },
   });

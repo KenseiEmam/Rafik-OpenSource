@@ -60,7 +60,9 @@
     "test:workout-sequence": "node scripts/prisma/isolated-api.mjs tests/workout-sequence.test.ts",
     "inventory": "node scripts/backend-inventory.mjs",
     "inventory:check": "node scripts/backend-inventory.mjs --check",
-    "inventory:database": "node scripts/backend-inventory.mjs --refresh-database"
+    "inventory:database": "node scripts/backend-inventory.mjs --refresh-database",
+    "test:institution-names": "node scripts/prisma/verify-institution-names.mjs",
+    "test:institution-api": "node scripts/prisma/isolated-api.mjs tests/institution-compatibility.test.ts tests/backend-boundary.test.ts tests/institution-transport.test.ts"
   },
   "devDependencies": {
     "@types/node": "22.19.0",

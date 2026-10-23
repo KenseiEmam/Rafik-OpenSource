@@ -32,7 +32,7 @@ async function login() {
   <div class="container auth-layout auth-centered">
     <section class="auth-intro">
       <PhBuildings :size="34" class="accent-icon" aria-hidden="true" />
-      <h1>{{ language('Institution workspace', 'مساحة المؤسسة') }}</h1>
+      <h1>{{ language('Institution sign-in', 'تسجيل الدخول إلى المؤسسة') }}</h1>
       <p>
         {{
           language(

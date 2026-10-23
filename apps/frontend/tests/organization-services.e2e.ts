@@ -17,9 +17,9 @@ test('organization staff schedule a group assessment, recover a result, correct 
     client = await clientContext.newPage(),
     id = randomUUID()
   try {
-    await f.call(f.owner, '/v1/workspaces', {
+    await f.call(f.owner, '/v1/institutions', {
       id,
-      kind: 'organization',
+      kind: 'institution',
       name: 'Madar service test',
     })
     for (const [person, roles] of [
@@ -27,7 +27,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
       [f.client, ['trainee']],
     ] as const) {
       const token = randomBytes(32).toString('hex')
-      await f.call(f.owner, `/v1/workspaces/${id}`, {
+      await f.call(f.owner, `/v1/institution`, {
         operation: randomUUID(),
         action: 'invite',
         id: randomUUID(),
@@ -35,11 +35,11 @@ test('organization staff schedule a group assessment, recover a result, correct 
         roles,
         token,
       })
-      await f.call(person, `/v1/organization-invitations/${token}`, {})
+      await f.call(person, `/v1/invitations/${token}`, {})
     }
     const secondClient = await f.createPerson('R4 Athlete Two'),
       secondClientToken = randomBytes(32).toString('hex')
-    await f.call(f.owner, `/v1/workspaces/${id}`, {
+    await f.call(f.owner, `/v1/institution`, {
       operation: randomUUID(),
       action: 'invite',
       id: randomUUID(),
@@ -47,11 +47,11 @@ test('organization staff schedule a group assessment, recover a result, correct 
       roles: ['trainee'],
       token: secondClientToken,
     })
-    await f.call(secondClient, `/v1/organization-invitations/${secondClientToken}`, {})
-    const people = await f.call(f.owner, `/v1/workspaces/${id}?view=admin`),
+    await f.call(secondClient, `/v1/invitations/${secondClientToken}`, {})
+    const people = await f.call(f.owner, `/v1/institution?view=admin`),
       trainee = people.members.find((m: any) => m.user_id === f.client.id),
       trainer = people.members.find((m: any) => m.user_id === f.coach.id)
-    await f.call(f.owner, `/v1/workspaces/${id}`, {
+    await f.call(f.owner, `/v1/institution`, {
       operation: randomUUID(),
       action: 'assign-trainer',
       id: trainee.id,
@@ -108,7 +108,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
     expect(await layoutIssues(page)).toEqual([])
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
     let lost = false
-    await page.route(`**/v1/workspaces/${id}/calendar`, async (r) => {
+    await page.route(`**/v1/institution/calendar`, async (r) => {
       if (!lost && r.request().method() === 'POST') {
         lost = true
         await r.fetch()
@@ -143,7 +143,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
       ],
       {
         cwd: resolve(import.meta.dirname, '../../backend'),
-        input: `update public.organization_events e set starts_at=now()-interval '2 hours',ends_at=now()-interval '1 hour' from public.workspaces w where e.workspace_id=w.id and e.id='${eid}' and w.id='${id}' and w.created_by='${f.owner.id}';`,
+        input: `update public.organization_events e set starts_at=now()-interval '2 hours',ends_at=now()-interval '1 hour' from public.institutions w where e.institution_id=w.id and e.id='${eid}' and w.id='${id}' and w.created_by='${f.owner.id}';`,
         stdio: ['pipe', 'pipe', 'pipe'],
       },
     )
@@ -179,8 +179,8 @@ test('organization staff schedule a group assessment, recover a result, correct 
       .click()
     await page.getByRole('spinbutton', { name: 'Chair stands (reps)', exact: true }).fill('14')
     let dropped = false
-    await page.unroute(`**/v1/workspaces/${id}/calendar`)
-    await page.route(`**/v1/workspaces/${id}/calendar`, async (r) => {
+    await page.unroute(`**/v1/institution/calendar`)
+    await page.route(`**/v1/institution/calendar`, async (r) => {
       if (!dropped && r.request().method() === 'POST') {
         dropped = true
         await r.fetch()
@@ -222,7 +222,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
     const calendarRequest = new Promise<void>((resolve) => {
       calendarStarted = resolve
     })
-    await page.route(`**/v1/workspaces/${id}/calendar?**`, async (r) => {
+    await page.route(`**/v1/institution/calendar?**`, async (r) => {
       const response = await r.fetch()
       calendarStarted()
       await pendingCalendar
@@ -233,16 +233,16 @@ test('organization staff schedule a group assessment, recover a result, correct 
     const navigation = page.getByRole('button', { name: 'Open navigation', exact: true })
     if (await navigation.isVisible()) await navigation.click()
     // Sidebar groups collapse to the current section; open Administration to reach Analytics.
-    const workspaceNav = page.getByRole('navigation', { name: 'Workspace navigation' })
-    const analyticsLink = workspaceNav.getByRole('link', { name: 'Analytics', exact: true })
+    const institutionNav = page.getByRole('navigation', { name: 'Institution navigation' })
+    const analyticsLink = institutionNav.getByRole('link', { name: 'Analytics', exact: true })
     if (!(await analyticsLink.isVisible()))
-      await workspaceNav.locator('summary').filter({ hasText: 'Administration' }).click()
+      await institutionNav.locator('summary').filter({ hasText: 'Administration' }).click()
     await analyticsLink.click()
     await expect(
       page.getByRole('heading', { name: 'Institution analytics', exact: true }),
     ).toBeVisible()
     const calendarResponse = page.waitForResponse((r) =>
-      r.url().includes(`/v1/workspaces/${id}/calendar?`),
+      r.url().includes(`/v1/institution/calendar?`),
     )
     releaseCalendar()
     await (await calendarResponse).finished()
@@ -253,7 +253,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
         ),
     )
     await expect(page).toHaveURL(base + '/analytics')
-    await page.unroute(`**/v1/workspaces/${id}/calendar?**`)
+    await page.unroute(`**/v1/institution/calendar?**`)
     await f.login(page, f.coach, `/analytics`)
     await expect(
       page.getByRole('heading', { name: 'Coaching analytics', exact: true }),

@@ -4,16 +4,16 @@ import { contexts } from '../../app/auth'
 import { request } from '../../lib/backend'
 import type { Exercise, Plan, PlanVersion } from '../../lib/domain'
 export function programContext(_route: RouteLocationNormalizedLoaded) {
-  const { workspace, view } = institutionContext(),
+  const { institution, view } = institutionContext(),
     base = '',
-    endpoint = `/v1/workspaces/${workspace}`
+    endpoint = `/v1/institution`
   const self = () =>
-    contexts.value.find((c) => c.workspace_id === workspace && c.role === view)?.member_id
+    contexts.value.find((c) => c.institution_id === institution && c.role === view)?.member_id
   return {
-    workspace,
+    institution,
     view,
     base,
-    key: `${workspace}:${view}`,
+    key: `${institution}:${view}`,
     catalog: () => request<Exercise[]>(`${endpoint}/catalog?view=${view}`),
     load: (id: string) =>
       request<{ program: Plan; editable: boolean; versions: PlanVersion[]; catalog: Exercise[] }>(
@@ -25,7 +25,8 @@ export function programContext(_route: RouteLocationNormalizedLoaded) {
         body: JSON.stringify({ ...args, action, view }),
       }),
     editableExercise: (e: Exercise) =>
-      !!e.workspace_id && ((view === 'admin' && e.scope !== 'private') || e.created_by === self()),
+      !!e.institution_id &&
+      ((view === 'admin' && e.scope !== 'private') || e.created_by === self()),
     exercise: (
       id: string,
       data: Record<string, unknown>,

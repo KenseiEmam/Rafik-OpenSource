@@ -272,20 +272,17 @@ test("organization nutrition respects subject, sharing, reassignment, replay and
       ).data.removed.length,
       0,
     );
-    const exported = (await call(client, "/v1/account/organizations")).data;
+    const exported = (await call(client, "/v1/account/institution")).data;
     assert.equal(exported.nutritionPlans.length, 1);
-    assert.equal(
-      exported.nutritionMeals[0].organization_meal_history.length,
-      3,
-    );
+    assert.equal(exported.nutritionMeals[0].institution_meal_history.length, 3);
     assert.equal(exported.nutritionMeals[0].removed, true);
     assert.equal(
-      (await call(outsider, "/v1/account/organizations")).data.nutritionMeals
+      (await call(outsider, "/v1/account/institution")).data.nutritionMeals
         .length,
       0,
     );
     assert.equal(
-      (await call(client, "/v1/queries/organization_meals")).status,
+      (await call(client, "/v1/queries/institution_meals")).status,
       400,
     );
     assert.equal(

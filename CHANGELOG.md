@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Institution naming migration
+
+- Rename physical institution tables/columns and SQL/ORM metadata with a forward preservation migration.
+- Add disposable preservation/API CI guards and keep generated fixture sources aligned.
+- Adopt canonical instance-resolved institution APIs across web and Android; isolate published-client aliases. Preserve owner keys, pending commands, documents, receipts and private-file paths.
+
 ### Backend audit and cleanup
 
 - Catalogue 94 tables, 761 columns and 65 routes with reviewed purposes and drift checks.

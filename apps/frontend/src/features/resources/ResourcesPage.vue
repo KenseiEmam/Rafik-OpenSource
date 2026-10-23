@@ -38,7 +38,7 @@ async function load(more = false) {
   error.value = ''
   try {
     const result = await request<{ items: Asset[]; next: number | null }>(
-      `/v1/workspaces/${context.workspace}/assets?` +
+      `/v1/institution/assets?` +
         new URLSearchParams({
           view: context.view,
           search: search.value,
@@ -60,7 +60,7 @@ const command = useCommand<'archive'>(
   `org-assets:${user.value!.id}:${context.key}`,
   () => load(),
   (_, args) =>
-    request(`/v1/workspaces/${context.workspace}/assets`, {
+    request(`/v1/institution/assets`, {
       method: 'POST',
       body: JSON.stringify(args),
     }),
@@ -176,7 +176,7 @@ onUnmounted(() => {
           {{ l('More files', 'المزيد من الملفات') }}
         </button>
         <ResourceUpload
-          :workspace="context.workspace"
+          :institution="context.institution"
           :view="context.view"
           purpose="exercise"
           @uploaded="uploaded"

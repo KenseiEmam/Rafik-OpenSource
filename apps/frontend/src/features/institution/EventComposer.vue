@@ -18,7 +18,7 @@ import type { Institution } from './types'
 import type { TrainingGroup, AssessmentTemplate, CalendarEvent } from './service-types'
 const route = useRoute(),
   router = useRouter(),
-  id = institutionContext().workspace,
+  id = institutionContext().institution,
   view = institutionContext().view,
   base = '',
   key = `event-composer:${user.value!.id}:${id}:${view}:${route.query.makeup || 'general'}`
@@ -76,7 +76,7 @@ if (templateChannel)
       return
     try {
       const page = await request<{ items: AssessmentTemplate[] }>(
-        `/v1/workspaces/${id}/services?view=${view}&kind=templates&id=${encodeURIComponent(message.template)}`,
+        `/v1/institution/services?view=${view}&kind=templates&id=${encodeURIComponent(message.template)}`,
       )
       if (disposed) return
       const created = page.items.find((item) => item.id === message.template)
@@ -116,9 +116,7 @@ async function catalogPage(kind: 'templates' | 'groups', append = false) {
     search: kind === 'templates' ? templateSearch.value : groupSearch.value,
     offset: String(append ? (kind === 'templates' ? templateNext.value : groupNext.value) || 0 : 0),
   })
-  const page = await request<{ items: any[]; next: number | null }>(
-    `/v1/workspaces/${id}/services?${q}`,
-  )
+  const page = await request<{ items: any[]; next: number | null }>(`/v1/institution/services?${q}`)
   if (kind === 'templates') {
     const selected = selectedTemplate.value
     templates.value = append
@@ -148,7 +146,7 @@ async function load() {
   loading.value = true
   loadError.value = ''
   try {
-    data.value = await request<Institution>(`/v1/workspaces/${id}?view=${view}&summary=true`)
+    data.value = await request<Institution>(`/v1/institution?view=${view}&summary=true`)
     await Promise.all([catalogPage('templates'), catalogPage('groups')])
     if (view === 'trainer') draft.value.staff = [data.value.self.id]
   } catch (e) {
@@ -164,8 +162,7 @@ const command = useCommand<'create'>(
     await removeDraft(key)
     if (!disposed) await router.push(base + '/schedule/' + (result as CalendarEvent[])[0]!.id)
   },
-  (_, args) =>
-    request(`/v1/workspaces/${id}/calendar`, { method: 'POST', body: JSON.stringify(args) }),
+  (_, args) => request(`/v1/institution/calendar`, { method: 'POST', body: JSON.stringify(args) }),
   { successMessage: l('Calendar event scheduled.', 'تمت جدولة الحدث في التقويم.') },
 )
 const locked = computed(() => command.state.busy || !!command.state.pending || !command.state.ready)
@@ -198,7 +195,7 @@ async function advance() {
     return
   }
   try {
-    times.value = await request(`/v1/workspaces/${id}/calendar-preview`, {
+    times.value = await request(`/v1/institution/calendar-preview`, {
       method: 'POST',
       body: JSON.stringify({ ...draft.value, view }),
     })
@@ -256,7 +253,7 @@ onMounted(async () => {
     try {
       if (stored.template && !templates.value.some((t) => t.id === stored.template)) {
         const page = await request<{ items: AssessmentTemplate[] }>(
-          `/v1/workspaces/${id}/services?view=${view}&kind=templates&id=${stored.template}`,
+          `/v1/institution/services?view=${view}&kind=templates&id=${stored.template}`,
         )
         templates.value.push(...page.items)
       }
@@ -430,7 +427,7 @@ onMounted(async () => {
           >
             <MemberPicker
               v-if="view === 'admin'"
-              :workspace="id"
+              :institution="id"
               :view="view"
               role="trainer"
               :max="8"
@@ -483,7 +480,7 @@ onMounted(async () => {
               >
             </details>
             <MemberPicker
-              :workspace="id"
+              :institution="id"
               :view="view"
               role="trainee"
               v-model="draft.participants"

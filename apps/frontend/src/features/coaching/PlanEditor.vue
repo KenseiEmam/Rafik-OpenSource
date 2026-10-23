@@ -277,8 +277,8 @@ async function uploadCoverFile(file?: File) {
     if (coverInput.value) coverInput.value.value = ''
     return
   }
-  const workspace = context.workspace
-  if (!workspace) return
+  const institution = context.institution
+  if (!institution) return
   uploading.value = true
   error.value = ''
   try {
@@ -290,7 +290,7 @@ async function uploadCoverFile(file?: File) {
     const prior = await getDraft<{ digest: string; id: string }>(key + ':cover-upload')
     const mediaId = prior?.digest === digest ? prior.id : crypto.randomUUID()
     await storeDraft(key + ':cover-upload', { digest, id: mediaId })
-    await request(`/v1/program-media/${mediaId}?workspace=${workspace}`, {
+    await request(`/v1/program-media/${mediaId}?institution=${institution}`, {
       method: 'PUT',
       body: file,
       headers: { 'Content-Type': file.type },
@@ -949,7 +949,7 @@ function removeDay() {
 <style>
 .editor-toolbar {
   position: sticky;
-  /* Below the sticky phone/tablet header; 0 where the workspace itself scrolls. */
+  /* Below the sticky phone/tablet header; 0 where the institution itself scrolls. */
   top: var(--dashboard-sticky-top, 0);
   z-index: 5;
   display: flex;
