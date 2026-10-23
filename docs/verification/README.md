@@ -1,5 +1,11 @@
 # Verification record
 
+## Campaign brand review — 23 October 2026
+
+Read the written round7 guide and PDF text; rendered/inspected PDF pages 5, 8, 10, 14, 18 and 22 and three supplied campaign examples. Inspected original marks and maintained web/launcher artwork; compared SHA-256 identities. The web default logo matches the supplied `rafik.png` byte-for-byte. Compared current web theme/font sources and native shared styles/layout/locale controls. Source hashes and findings are in the design system and UI audit.
+
+No browser or Android instance was started, no fonts/media were installed, no runtime styles or assets were replaced, and no native build was run. This review establishes source/identity findings, not all-screen visual, font-rendering or device acceptance. Temporary PDF extraction/render output is removed after review. Documentation checks passed: 1,063 local links and 48 anchors across 65 maintained documents. No unrelated runtime tests were run.
+
 ## Lifecycle approval and operation inventory — 22 October 2026
 
 Recorded founder approval of all three lifecycle policies. Source tracing covered direct RPC/table consumers, Support's default `useCommand` dispatcher, current assignment-backed session start/save authority and fixed-time calendar/participant relationships. The specification now lists the ten required generic operations and historical export/cleanup read dependencies. No deployed contract inventory, data backfill, native migration or runtime change has been executed; documentation checks are the applicable validation.

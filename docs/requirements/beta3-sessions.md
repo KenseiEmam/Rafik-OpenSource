@@ -105,6 +105,8 @@ The phone app cannot be treated as an unaffected client of this change. Its curr
 
 Proposed beta.3 scope:
 
+Follow the [campaign-aligned product design system](../DESIGN_SYSTEM.md#campaign-identity-alignment--adopted-23-october-2026) for new field screens. Native palette/font/logo gaps and rendered acceptance are tracked in the [UI audit](../known-issues/ui-ux-audit.md#campaign-and-native-brand-alignment--23-october-2026); do not copy social artboard dimensions into app controls.
+
 1. Show eligible individual and group training in the coach's field schedule; distinguish assessments and explain blocked/overdue work.
 2. Open the shared workout and participant prescription/results from the session, without confusing attendance with exercise completion.
 3. Keep existing attendance, assessment, history, recovery and completion behavior working.

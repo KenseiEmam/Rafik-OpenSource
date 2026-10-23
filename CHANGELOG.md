@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Brand alignment
+
+- Adopt campaign round7 identity into the existing product design system, keeping operational controls, accessibility and institution theming.
+- Record source provenance, web alignment and native palette/type/logo follow-up for beta.3; no runtime redesign or APK change in this audit.
+
 ### Beta.3 planning
 
 - Confirm correction/history and ended-assignment lifecycle policies; inventory the ten currently required generic command operations and historical export dependencies before API retirement.
