@@ -524,6 +524,16 @@ export async function calendarCommand(actor: Actor, id: string, input: Input) {
         return list;
       }
       const item = await eventAccess(tx, id, self, view, key);
+      // Bound individual work must retain sequence identity and explicit resolution.
+      const boundWorkout = await tx.organization_workout_positions.findFirst({
+        where: { workspace_id: id, occurrence_id: key },
+      });
+      if (
+        boundWorkout &&
+        ["reschedule", "cancel", "staff", "finish"].includes(action)
+      )
+        throw new ApiError(409, "use_workout_scheduling");
+
       if (
         action !== "result" &&
         action !== "attendance" &&

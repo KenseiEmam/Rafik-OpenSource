@@ -1,5 +1,21 @@
 # API conventions
 
+## Unreleased beta.3 individual workout scheduling
+
+`POST /v1/workspaces/:id/workout-scheduling` requires current administrator/trainer membership and authority for the assignment's athlete and sport. Every request includes `operation`, `view`, `action` and `assignment_id`. Native bearer requests use `X-Rafik-Client: android`; existing browser sessions use `web` and existing origin rules.
+
+| Action | Additional fields | Behavior |
+| --- | --- | --- |
+| `schedule-workout` | `cursor`, `starts_at`, `ends_at`, `timezone`; optional `location` | Bind the next non-rest cycle day; return occurrence and position without advancing. |
+| `reschedule-workout` | `occurrence_id`, `revision`, `starts_at`, `ends_at`, `timezone` | Move unstarted pending work; keep the same sequence identity. |
+| `skip-workout` | `occurrence_id`, `revision`, nonblank `reason` | Resolve pending/paused work and advance its assignment once. |
+
+Use offset-bearing timestamps, a valid IANA timezone and a duration no longer than eight hours. `cursor` is the assignment's current `sequence_cursor`; it starts at zero. A pending predecessor, unlinked unfinished historical workout, stale cursor/revision, collision or cannot-train status prevents binding. An explicit booking can use a rest day but does not override a participation restriction. Same assignment/date/day results retain their historical uniqueness. Exact retries return the original response only after current authority is checked. Errors use the existing `{message}` envelope.
+
+For `/v1/workspaces/:id/sessions`, a bound `start` supplies `occurrence_id` along with the existing `id`, `assignment_id`, `day_id`, `view` and `operation`. The booked time must have arrived. Save actual measurements with the existing `save` payload (`revision`, `entries`, `note`, `complete`); completion resolves its linked position atomically. Corrections preserve completed progression. Generic calendar finish/reschedule/cancel/staff commands return `use_workout_scheduling` for these occurrences. Attendance is separate from exercise completion.
+
+This is a fixed-time server slice. No new web scheduling controls, recurring worker, day-only/group workout writes or Android offline workout UI/queue upgrade is available yet. Existing unlinked workout history and v1 attendance/assessment receipts remain. See the canonical OpenAPI schemas for request fields.
+
 ## Next-release compatibility
 
 Unreleased: `POST /v1/workspaces` and Tasks endpoints are removed. Create the installation’s institution through first-run setup only. Existing scoped `/v1/workspaces/:id/...` services, native authentication and command replay retain their contracts. Browser URLs are independent of API scope names. See [ADR 0026](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md).

@@ -129,3 +129,5 @@ Work one approved stage at a time. Do not claim a feature, deployment, privacy c
 ### Workout migration check
 
 With the local Docker database running, run `npm run test:workout-foundation` from the repository root. It verifies the beta.3 additive migration in a disposable populated database and generates matching client/transport types. It does not modify preview records. See [testing](docs/testing/README.md#additive-workout-migration) and [upgrade guidance](docs/operations/README.md#additive-workout-foundation-upgrade).
+
+For the transactional scheduling and recording journey, run `npm run test:workout-sequence`; it uses the same disposable database/API isolation. The new web scheduling controls and Android workout capture remain pending.

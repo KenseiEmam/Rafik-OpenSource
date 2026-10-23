@@ -1,5 +1,9 @@
 # Current delivery ledger
 
+## Fixed-time individual progression API — 23 October 2026
+
+Implemented a shared transactional sequence service and `POST /v1/workspaces/:id/workout-scheduling` for schedule/reschedule/skip. Existing session start/save links bound workouts and resolves completion once; corrections do not rewind or consume another position. Each mutation rechecks plan-specific staff scope before receipt replay and uses the institutional transaction lock plus assignment row lock. Active cannot-train status blocks new scheduling/starting without exposing injury details. Ending/replacing an assignment preserves results, cancels unstarted work and pauses in-progress work. No web controls, cron worker, day-only/group workout write or Android queue change is enabled. OpenAPI and paired draft landing API guidance describe this boundary. Final checks passed: two isolated API journeys, backend typecheck, two Swagger tests and documentation links. No browser/native build was needed; the harness cleaned its own fixtures.
+
 ## Additive workout storage — 23 October 2026
 
 Founder authorized implementation. Migration `202610231200_workout_sequence_foundation` adds sequence/recurrence foundations, optional participant occurrence links, timed local dates and frozen source snapshots derived from historical workout documents. Historical workouts are not guessed into existing group events or turned into artificial timed appointments. Assignment and timestamp requirements stay intact until the coordinated API cutover. No worker or new recording API is enabled. Populated upgrade/preservation constraints, backend typecheck and the existing delegated-workout API journey passed; isolated fixtures were cleaned. See the beta.3 requirements for remaining work and verification for actual checks.

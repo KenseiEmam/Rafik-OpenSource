@@ -8,7 +8,7 @@ This page is the index for maintained Rafik documentation. The root [README](../
 - [Web UI/UX audit and rollout plan](known-issues/ui-ux-audit.md): categorized findings, root causes, coverage/evidence limits and prioritized implementation slices. Includes the round7 campaign/native alignment findings; Android rendered acceptance remains follow-up scope.
 
 - [Requirements and staged plan](requirements/README.md): goals, scope, constraints, acceptance criteria and current stage gates.
-- [Beta.3 sessions and backend consolidation](requirements/beta3-sessions.md): accepted individual/group rules, additive storage status, offline Android scope, backend route disposition and remaining migration/release acceptance.
+- [Beta.3 sessions and backend consolidation](requirements/beta3-sessions.md): accepted individual/group rules, implemented storage/fixed-time API status, pending offline Android scope and remaining migration/release acceptance.
 - [Stage 4 workflow audit](requirements/stage4-workflow-audit.md): current university workflow coverage and remaining review.
 - [Stage 7 mobile scope](requirements/stage7-mobile-scope.md): confirmed coach-first Android field tasks, offline boundary, API contract and acceptance evidence.
 - [Post-beta.1 release plan](requirements/release-plan-post-beta1.md): founder-ordered releases, with the sports/coaching foundation merged for beta.2 preparation and the later field-dashboard and sport-specific releases still planned.

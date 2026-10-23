@@ -1,12 +1,19 @@
 # Rafik web change history
 
-## Unreleased — beta.3 workout storage foundation
+## Unreleased
+
+### Individual workout progression API
+
+- Add staff-authorized fixed-time individual scheduling, rescheduling and reasoned skips with exact command receipts. Scheduling binds a cycle position without advancing it; completion/skip advances once per assignment.
+- Connect bound workout start/save to participant occurrences, prevent early starts and arbitrary-day bypass, and preserve corrections without rewinding progress.
+- Ending/replacing assignments cancels unstarted bound work, pauses started work and cancels recurrence rules without deleting results. Generic calendar actions cannot bypass workout resolution.
+- Document the unreleased commands in OpenAPI. Web controls, recurring/day-only scheduling, group workouts and Android queue upgrades remain pending.
+
+### Beta.3 workout storage foundation
 
 - Add assignment sequence cursors, bounded weekly recurrence storage and unique per-assignment positions with attributed resolution fields.
 - Add scoped occurrence/participant links, timed event local dates and historical workout source snapshots without changing existing documents, IDs or receipts.
 - Preserve required assignment/timestamp contracts. Day-only events, additional group workout writes, worker progression and new web/Android recording remain subsequent slices.
-
-## Unreleased
 
 ### Brand alignment
 

@@ -1,5 +1,9 @@
 # Testing
 
+## Individual sequence API
+
+`npm run test:workout-sequence` uses the isolated API harness. Coverage includes concurrent binding, independent assignments, unchanged exact retries, athlete denial of staff scheduling, bound-start requirements, completion/correction, explicit skip reasons, cycle repetition, rescheduling without consumption, cancellation/pause on assignment end, a generic participation restriction and revoked receipt access. The existing delegated-session regression covers unaffected unlinked coach logging/corrections. These are server checks; no browser/native acceptance or recurring-worker/DST claim follows.
+
 ## Additive workout migration
 
 `npm run test:workout-foundation` exercises a populated forward upgrade and source backfill, old-client inserts, private database grants and recurrence/position constraints in an owned disposable database. It generates client/transport types. This does not establish worker concurrency, API progression, Android queue upgrade or rendered UX acceptance; those require the later implementation slices.

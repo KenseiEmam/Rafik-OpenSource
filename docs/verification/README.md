@@ -1,12 +1,20 @@
 # Verification record
 
+## Fixed-time individual progression — 23 October 2026
+
+Passed the final isolated API run containing the new sequence journey and existing delegated-workout regression (two journeys). The sequence journey exercises concurrent competing binds, two independent assignments, unchanged receipt replay, staff-action denial for an athlete, early-start and generic-calendar bypass guards, bound start/actual save, exactly-once completion, actual correction without cursor changes, explicit skip/retry, cycle repetition, rescheduling without consumption, end-time pause/cancellation, generic cannot-train restriction and revoked replay access. The harness removed its own disposable database/API/file directory; preview data was not reset or migrated.
+
+Backend TypeScript passed. The two bundled Swagger tests passed with the updated canonical OpenAPI. Documentation checks passed: 1,067 local links and 50 anchors across 66 maintained documents. Paired English/Arabic landing API text was checked for matching command/identity terms and preserved front matter; no landing build or rendered acceptance is claimed.
+
+Limits: this verifies fixed-time server behavior under the existing institutional transaction lock, not a recurring worker under production load. No worker/day-only/group recording/native queue migration or web scheduling controls are implemented. No browser suite, Android build, native upgrade or physical-device check was run. Paused results remain preserved for explicit staff resolution; the current staff API offers a reasoned skip, while the broader recovery/recording UI remains pending.
+
 ## Additive workout storage — 23 October 2026
 
 Passed `npm run test:workout-foundation` against an owned disposable PostgreSQL database populated before the new migration. Compared complete existing workout documents, events, correction history, feedback, operation receipt payload/results and assessment results before/after. Verified source backfill without inferred event links, timezone-derived dates, zero initial cursors, old-format inserts, private table grants, bounded recurrence/time constraints, position uniqueness, invalid reassignment and required skip reasons. Generated the Prisma client and shared transport types. The temporary database was dropped in `finally`.
 
 Passed backend TypeScript and the isolated delegated-workout API regression (one journey: attribution, athlete correction, history, exact retry and revoked access). Prisma's partial-index relation inference required an explicit one-to-many assignment mapping and scoped unique keys; the maintained schema/client now validates. No preview database was migrated/reset, and no browser suite or native build was run.
 
-Limits: historical occurrence creation/backfill, day-only calendar shapes, assignment-free group workout writes, transactional cursor advancement, worker concurrency, scheduling/health restrictions and Android queue upgrades remain subsequent slices. Database foundations and an old-client insert check are not full beta.3 acceptance. Documentation links/anchors were checked after the final documentation edits.
+At the foundation checkpoint, historical occurrence creation/backfill, day-only calendar shapes, assignment-free group workout writes, transactional cursor advancement, worker concurrency, scheduling/health restrictions and Android queue upgrades were still subsequent work. The newer fixed-time verification above records current server coverage. Database foundations and an old-client insert check are not full beta.3 acceptance. Documentation links/anchors were checked after the final documentation edits.
 
 ## Campaign brand review — 23 October 2026
 

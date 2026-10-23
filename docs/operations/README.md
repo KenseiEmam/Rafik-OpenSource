@@ -1,8 +1,12 @@
 # Operations
 
+## Individual scheduling API rollout
+
+Unreleased beta.3: deploy the additive migration before the backend containing the sequence service. No new environment variable or cron job is required in this slice. No recurring scheduler is started. Fixed-time bookings use explicit offset-bearing timestamps and an IANA timezone. Existing unlinked recording and attendance/assessment receipts remain supported. Update web/native interfaces only through the coordinated later cutover; do not advertise offline workout capture from these server endpoints alone.
+
 ## Additive workout foundation upgrade
 
-Unreleased beta.3: apply normal forward migrations after a matching database/files/application backup. This migration freezes historical workout sources and derives existing event dates from their timezones. It does not infer sequence progress from old completion counts or attach same-day workouts to group attendance. Existing IDs, documents and receipts remain. Required timed-event and assignment-backed write shapes stay compatible with beta.2. New scheduling/recording features remain disabled pending the API cutover. Restore the matching backup/application for rollback; do not drop the new columns as a recovery procedure.
+Unreleased beta.3: apply normal forward migrations after a matching database/files/application backup. This migration freezes historical workout sources and derives existing event dates from their timezones. It does not infer sequence progress from old completion counts or attach same-day workouts to group attendance. Existing IDs, documents and receipts remain. Required timed-event and assignment-backed write shapes stay compatible with beta.2. The fixed-time individual API is described above; recurring/day-only/group and native workout features remain pending. Restore the matching backup/application for rollback; do not drop the new columns as a recovery procedure.
 
 From the repository root, with the local Docker database running, `npm run test:workout-foundation` verifies a populated upgrade in its own temporary database and deletes that database afterward. It does not migrate or seed your preview database.
 

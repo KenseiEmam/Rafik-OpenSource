@@ -1,6 +1,6 @@
 # Beta.3 — sessions, workouts and backend consolidation
 
-Date: 22 October 2026. **Status: product direction accepted; additive storage implementation authorized 23 October 2026.** Target release: Squire `1.0.0-beta.3`. Nothing in this document establishes implementation, migration success, Android acceptance or publication. Beta.2 remains the published version.
+Date: 22 October 2026. **Status: additive storage and fixed-time individual progression API implemented on the release branch; beta.3 acceptance pending.** Target release: Squire `1.0.0-beta.3`. Nothing in this document establishes implementation, migration success, Android acceptance or publication. Beta.2 remains the published version.
 
 The earlier [institution cleanup](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md) and [frontend audit](../reference/frontend/README.md) form the first part of this release. The founder has now included session/workout consolidation, its Android impact and a review of legacy backend routes. Keep release work and its paired landing PR unmerged until the release is complete.
 
@@ -70,6 +70,8 @@ If the additive event changes cannot preserve current query/receipt behavior cle
 - An explicit skip requires a staff actor and a reason; absence alone is not a skip. Recurrence cannot manufacture several replacements for the unresolved position. A blocked future slot links back to the original overdue work.
 
 ### Canonical API and old-client handling
+
+Implemented fixed-time slice: scoped staff commands use `/v1/workspaces/:id/workout-scheduling`; bound recording retains `/v1/workspaces/:id/sessions`. The canonical OpenAPI documents these commands. Day-only/group contracts, native capability discovery and gateway retirement below remain proposals for subsequent slices.
 
 Propose explicit session/participant/workout operations, with institution and role derived from authenticated membership. Route spelling and DTOs must be reviewed with the OpenAPI change before implementation; a prefix rename alone is not consolidation.
 
@@ -188,4 +190,10 @@ The founder authorized additive schema/migration implementation on 23 October. T
 
 ## Implemented additive slice — 23 October 2026
 
-Sequence cursors, bounded weekly recurrence storage, unique assignment positions, participant occurrence links, timed local dates and historical source snapshots are implemented. Existing assignment IDs and required timestamps remain. Historical workouts retain their document-derived sources without invented appointments; occurrence creation/backfill is deferred until day-only contracts are supported. Cursors start at zero without consuming historical work. Additional group records without assignments, transactional progression/resolution, worker scheduling, API capability discovery and native queue evolution remain unimplemented.
+Sequence cursors, bounded weekly recurrence storage, unique assignment positions, participant occurrence links, timed local dates and historical source snapshots are implemented. Existing assignment IDs and required timestamps remain. Historical workouts retain their document-derived sources without invented appointments; occurrence creation/backfill is deferred until day-only contracts are supported. Cursors start at zero without consuming historical work. This foundation did not yet implement assignment-free group records, transactional progression/resolution, worker scheduling, capability discovery or native queue evolution. The subsequent fixed-time slice below records current progression support.
+
+## Implemented fixed-time progression slice — 23 October 2026
+
+Staff can bind/reschedule a timed individual occurrence or explicitly skip one through the scoped API. Existing session commands start the linked workout and resolve completion transactionally once. Corrections preserve progression. Concurrent assignments are independent; the published non-rest cycle repeats. Current staff/plan authority is checked before receipt replay. Booking/start respects effective cannot-train status; ending/replacing plans cancels unstarted work and pauses started work.
+
+The web controls and recurring/day-only worker are not implemented. Additional group workouts, native offline workout capture/cache migration, capability discovery and historical occurrence backfill remain pending. No release/tag/APK is produced by this slice.

@@ -1,8 +1,18 @@
 # Rafik architecture
 
+## Individual sequence transaction service
+
+`server/workout-sequence.ts` owns fixed-time individual binding, start eligibility, completion resolution, skip, rescheduling and assignment shutdown. The programming command layer supplies existing plan-specific authority and exact operation receipts. Every request rechecks membership and primary/supporting-coach scope before replay. Institutional mutation locking and an assignment row lock serialize binding/resolution; the cursor changes in the same transaction as its resolution, event state, audit and receipt. Slot creation/rescheduling never advances the cursor. Non-rest days repeat in published array order.
+
+An unresolved position blocks only its assignment. Historical unlinked unfinished work must be resolved before binding. An old start without an occurrence cannot create arbitrary-day work once that assignment has sequence positions; acknowledged old receipts still replay unchanged after current authorization. Existing unlinked historical records retain their recording path. Completed actual-result corrections append existing history without changing progression. Paused/skipped/cancelled bound records reject new result writes; retained device work must remain available for recovery.
+
+New fixed-time bookings may use a calendar rest day, but an active effective cannot-train status blocks booking/start. The response is a general restriction, never the underlying injury record. Existing timestamp/date/day uniqueness remains authoritative. Generic calendar reschedule/cancel/staff/finish mutations reject bound individual occurrences: use the sequence command so event status cannot masquerade as workout resolution. Attendance remains independent. Ending/replacing assignments cancels unstarted bound work and recurrence rules and pauses started work without deleting documents/history.
+
+The recurring worker, day-only contracts, group additional recording, native queue upgrade and web scheduling controls remain separate slices.
+
 ## Beta.3 additive workout storage
 
-The additive migration extends existing assignments/events/workout records. Assignments have a zero-based sequence cursor; bounded weekly recurrence rules describe dates without consuming a position. Position rows identify assignment, cycle, day and occurrence, with one pending/paused position per assignment and attributed completion/skip fields. An assignment row lock serializes position validation. Transactional cursor advancement and permission checks belong to the forthcoming domain service; the schema alone does not implement progression.
+The additive migration extends existing assignments/events/workout records. Assignments have a zero-based sequence cursor; bounded weekly recurrence rules describe dates without consuming a position. Position rows identify assignment, cycle, day and occurrence, with one pending/paused position per assignment and attributed completion/skip fields. An assignment row lock serializes position validation. The fixed-time domain service above now implements transactional cursor advancement and permission checks; the schema alone does not establish worker behavior.
 
 Workout occurrence links reference the same institution and participant. Existing historical documents provide frozen source snapshots; original documents, history and receipt bodies remain unchanged. Existing workouts stay unlinked until a safe occurrence cutover can represent day-only work. Calendar dates are derived from real timestamps in the event timezone. Required timestamps and assignment IDs remain, so additional group workout writes and day-only events are not enabled yet. New tables are server-only; no grants expose them through the generic user gateway.
 

@@ -1,3 +1,12 @@
+import {
+  scheduleIndividualWorkout,
+  skipIndividualWorkout,
+  rescheduleIndividualWorkout,
+  workoutStartContext,
+  assertLinkedWorkoutWritable,
+  resolveCompletedWorkout,
+  stopAssignmentWork,
+} from "./workout-sequence.ts";
 import { pageSize } from "./pagination.ts";
 import { pageOffset } from "./service-definitions.ts";
 import { usableExerciseAsset } from "./organization-assets.ts";
@@ -877,6 +886,7 @@ export async function deliveryCommand(actor: Actor, id: string, input: Input) {
             old.revision !== target.revision
           )
             throw new ApiError(409, "conflict");
+          await stopAssignmentWork(tx, actor, id, old.id);
           await tx.organization_assignments.update({
             where: { id: old.id },
             data: { state: "archived", revision: { increment: 1 } },
@@ -976,6 +986,7 @@ async function endAssignment(
       const a = await check(tx, self);
       if (a.state !== "active" || a.revision !== input.revision)
         throw new ApiError(409, "conflict");
+      await stopAssignmentWork(tx, actor, id, a.id);
       const result = await tx.organization_assignments.update({
         where: { id: a.id },
         data: { state: "archived", revision: { increment: 1 } },
@@ -1160,12 +1171,20 @@ export async function sessionCommand(actor: Actor, id: string, input: Input) {
         if (existing) {
           if (
             existing.assignment_id !== assignment.id ||
-            existing.day_id !== input.day_id
+            existing.day_id !== input.day_id ||
+            (input.occurrence_id &&
+              existing.occurrence_id !== input.occurrence_id)
           )
             throw new ApiError(409, "operation_reused");
           return existing.document;
         }
-        const nowDate = date(today);
+        const linked = await workoutStartContext(
+          tx,
+          id,
+          assignment.id,
+          input.occurrence_id,
+        );
+        const nowDate = linked ? linked.occurrence.training_date : date(today);
         if (
           assignment.state !== "active" ||
           assignment.start_date > nowDate ||
@@ -1174,11 +1193,17 @@ export async function sessionCommand(actor: Actor, id: string, input: Input) {
           throw new ApiError(400, "assignment_unavailable");
         const plan = assignment.organization_versions.prescription as any,
           day = plan.days.find((d: any) => d.id === input.day_id);
-        if (!day || day.restDay) throw new ApiError(400, "invalid_day");
+        if (
+          !day ||
+          day.restDay ||
+          (linked && linked.position.day_id !== day.id)
+        )
+          throw new ApiError(400, "invalid_day");
         const delta = Math.floor(
           (nowDate.getTime() - assignment.start_date.getTime()) / 86400000,
         );
         if (
+          !linked &&
           assignment.schedule_mode === "cycle" &&
           delta % (7 * (plan.cycleWeeks || 1)) !==
             ((day.week || 1) - 1) * 7 + day.weekday
@@ -1207,8 +1232,9 @@ export async function sessionCommand(actor: Actor, id: string, input: Input) {
           assignment_id: assignment.id,
           version_id: assignment.version_id,
           day_id: day.id,
-          occurrence_key: `${assignment.id}:${today}:${day.id}`,
-          local_date: today,
+          occurrence_key: `${assignment.id}:${nowDate.toISOString().slice(0, 10)}:${day.id}`,
+          ...(linked ? { occurrence_id: linked.occurrence.id } : {}),
+          local_date: nowDate.toISOString().slice(0, 10),
           title: assignment.organization_versions.title,
           prescription: day,
           status: "in_progress",
@@ -1246,8 +1272,14 @@ export async function sessionCommand(actor: Actor, id: string, input: Input) {
             document: json(document),
             recorded_mode: delegated ? "delegated" : "self",
             recorded_by: delegated ? self.id : null,
+            occurrence_id: linked?.occurrence.id,
           },
         });
+        if (linked)
+          await tx.organization_workout_positions.update({
+            where: { id: linked.position.id },
+            data: { session_id: sessionId },
+          });
         await tx.organization_session_history.create({
           data: {
             id: randomUUID(),
@@ -1271,6 +1303,7 @@ export async function sessionCommand(actor: Actor, id: string, input: Input) {
       let document: any,
         completed = s.completed_at;
       if (action === "save") {
+        await assertLinkedWorkoutWritable(tx, id, sessionId);
         if (
           typeof input.complete !== "boolean" ||
           typeof input.note !== "string"
@@ -1325,6 +1358,8 @@ export async function sessionCommand(actor: Actor, id: string, input: Input) {
             completed: !!completed,
           },
         });
+      if (action === "save")
+        await resolveCompletedWorkout(tx, actor, id, self.id, sessionId);
       return document;
     },
     authorize,
@@ -1354,4 +1389,43 @@ export async function previousOrganizationPerformance(
   ) SELECT DISTINCT ON(exercise_id) exercise_id,completed_at,coalesce((SELECT original||jsonb_build_object('exerciseId',alt->>'exerciseId','info',alt->'info') FROM jsonb_array_elements(coalesce(original->'alternatives','[]')) alt WHERE alt->>'exerciseId'=exercise_id),original) AS prescription,entries
     FROM actual WHERE entries IS NOT NULL AND exercise_id=ANY(${wanted}::text[]) ORDER BY exercise_id,completed_at DESC,id DESC LIMIT 48`;
   });
+}
+
+/** Staff scheduling uses existing plan-specific authority and exact command receipts. */
+export async function workoutSchedulingCommand(
+  actor: Actor,
+  workspace: string,
+  input: Input,
+) {
+  const view = role(input.view);
+  if (view === "trainee") throw new ApiError(403, "forbidden");
+  if (
+    !["schedule-workout", "skip-workout", "reschedule-workout"].includes(
+      String(input.action),
+    )
+  )
+    throw new ApiError(400, "invalid_action");
+  const assignment = uuid(input.assignment_id);
+  const authorize = async (tx: Tx, self: Member) => {
+    const item = await tx.organization_assignments.findFirst({
+      where: { id: assignment, workspace_id: workspace },
+    });
+    if (!item) throw new ApiError(403, "assignment_unavailable");
+    await planAuthority(tx, workspace, self, view, item.member_id, [
+      item.sport_id,
+    ]);
+  };
+  return mutation(
+    actor,
+    workspace,
+    [view],
+    input,
+    (tx, self) =>
+      input.action === "schedule-workout"
+        ? scheduleIndividualWorkout(tx, actor, workspace, self.id, input)
+        : input.action === "skip-workout"
+          ? skipIndividualWorkout(tx, actor, workspace, self.id, input)
+          : rescheduleIndividualWorkout(tx, actor, workspace, input),
+    authorize,
+  );
 }

@@ -76,6 +76,7 @@ import {
   catalog,
   delivery,
   deliveryCommand,
+  workoutSchedulingCommand,
   organizationSession,
   organizationSessionHistory,
   sessionCommand,
@@ -737,7 +738,7 @@ const server = createServer(async (req, res) => {
       throw new ApiError(405, "method_not_allowed");
     }
     const programMatch = path.match(
-      /^\/v1\/workspaces\/([a-f0-9-]{36})\/(programs|catalog|delivery|sessions)$/,
+      /^\/v1\/workspaces\/([a-f0-9-]{36})\/(programs|catalog|delivery|sessions|workout-scheduling)$/,
     );
     if (programMatch) {
       const who = requireActor(actor),
@@ -774,7 +775,9 @@ const server = createServer(async (req, res) => {
             ? programCommand(who, id, input)
             : domain === "delivery"
               ? deliveryCommand(who, id, input)
-              : sessionCommand(who, id, input)),
+              : domain === "workout-scheduling"
+                ? workoutSchedulingCommand(who, id, input)
+                : sessionCommand(who, id, input)),
         );
         return;
       }

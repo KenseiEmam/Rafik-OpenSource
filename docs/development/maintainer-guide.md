@@ -1,5 +1,9 @@
 # Maintainer guide
 
+## Progression service workflow
+
+Run `npm run test:workout-sequence` from the root with local Docker available. It starts its own migrated/seeded database and API, exercises sequence concurrency and the full bind/start/save/skip/end journey, then removes only its own database/files. `workout-sequence.ts` is the transactional domain service; `programming.ts` supplies existing authority/receipts. Extend these shared paths rather than adding another worker or native write implementation. Keep exact receipt responses and native attendance commands unchanged.
+
 ## Workout migration development
 
 Run `npm run test:workout-foundation` from the repository root with the local Docker database available. The script creates a disposable database, applies prior migrations, adds synthetic historical records, runs the new migration and checks preservation/constraints. It generates the Prisma client from the maintained schema and shared transport types from the disposable database. Review generated diffs. It never resets preview data. The assignment cursor starts at zero: do not infer historical progression or enable the worker before the coordinated domain-service cutover.
