@@ -33,6 +33,10 @@ Beta.2 preparation follows merged PR #135. Keep application/shared versions and 
 
 ## Repository map
 
+### Parallel-work tooling
+
+`scripts/coordination/check.mjs` (`npm run coord:check`) and `.github/coordination.json` are shared with rafik-landing; keep both copies identical, and the check warns when they differ. The config lists each repository's shared areas, decisions file and change-note folder. `scripts/changes/compile.mjs` validates (`npm run changes:check`, also run in CI) and compiles (`npm run changes:compile`) the per-PR notes in `changes/`. `.github/pull_request_template.md` provides the sections the check reads. See the [coordination guide](./coordination.md).
+
 ### GitHub checks and dependency maintenance
 
 `.github/workflows/check.yml` runs on pull requests and main pushes, cancelling superseded runs. Web checks use the isolated, empty-database onboarding journey rather than the retired marketing sample. Backend setup fails fast; after API health succeeds, independent domain suites continue to report their own failures without hiding later results. The job still fails if any suite fails. Backend checks retain authorization and current institution workflows; package-entitlement tests are retired. Local browser runs clean their output; failed CI runs retain diagnostics for artifact upload while still removing disposable database/files and stopping their services.
@@ -142,7 +146,7 @@ For visual standardization, read the approved [design system](../DESIGN_SYSTEM.m
 - Run browser acceptance when rendered behavior changes; use the local isolation wrapper and do not reset or reseed the preserved preview.
 - Record the exact commands, result and limits in [verification](../verification/README.md). Persist sanitized receipts under `docs/verification/receipts/`; never store credentials, user messages or unreviewed screenshots there.
 - Remove only test reports/artifacts created by the current run. Preserve unrelated local data and ignored user artifacts.
-- Update root `CHANGELOG.md` and the [ledger](./ledger.md) for every change. Update the affected README and this guide when setup or file workflows change.
+- Add a change note in `changes/` for every change; `npm run changes:compile` folds notes into root `CHANGELOG.md` and the [ledger](./ledger.md) at release time. Run `npm run coord:check` before starting and before pushing ([coordination guide](./coordination.md)). Update the affected README and this guide when setup or file workflows change.
 
 ## Scope boundaries
 

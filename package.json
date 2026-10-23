@@ -71,6 +71,9 @@
     "content": "npm run content --workspace @rafik/backend",
     "content:check": "npm run content:check --workspace @rafik/backend",
     "docs:check": "npm run test:docs --workspace @rafik/backend",
+    "coord:check": "node scripts/coordination/check.mjs",
+    "changes:check": "node scripts/changes/compile.mjs --check",
+    "changes:compile": "node scripts/changes/compile.mjs",
     "verify:release": "npm run verify:release --workspace @rafik/backend",
     "mobile:acceptance": "node apps/mobile/scripts/acceptance.mjs",
     "mobile:release": "node apps/mobile/scripts/release.mjs"

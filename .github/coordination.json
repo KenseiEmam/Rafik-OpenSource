@@ -1,0 +1,98 @@
+{
+  "$comment": "Shared by Rafik-OpenSource and rafik-landing. Keep both copies identical; npm run coord:check warns when they differ.",
+  "noteTag": "[agent-note]",
+  "noteDays": 14,
+  "repositories": {
+    "Rafik-Athlete-Managment/Rafik-OpenSource": {
+      "sharedAreas": [
+        {
+          "name": "API contract",
+          "paths": ["apps/backend/openapi.json", "packages/shared/", "docs/reference/api.md"]
+        },
+        {
+          "name": "Database schema and seed",
+          "paths": ["apps/backend/prisma/"]
+        },
+        {
+          "name": "Design system and shared UI",
+          "paths": [
+            "docs/DESIGN_SYSTEM.md",
+            "apps/frontend/src/styles/",
+            "apps/frontend/src/style.css",
+            "apps/frontend/src/components/",
+            "apps/frontend/src/features/organizations/MemberPicker.vue"
+          ]
+        },
+        {
+          "name": "Routing and navigation",
+          "paths": [
+            "apps/frontend/src/app/",
+            "apps/frontend/src/features/organizations/OrganizationNav.vue",
+            "apps/frontend/src/features/workspace/"
+          ]
+        },
+        {
+          "name": "Agent rules and decisions",
+          "paths": [
+            "AGENTS.md",
+            "docs/development/decisions.md",
+            ".github/coordination.json",
+            "scripts/coordination/"
+          ]
+        },
+        {
+          "name": "Release, versions and CI",
+          "paths": [
+            "package.json",
+            "package-lock.json",
+            "apps/mobile/app.json",
+            ".github/workflows/"
+          ]
+        }
+      ],
+      "decisions": "docs/development/decisions.md",
+      "changes": "changes/"
+    },
+    "KenseiEmam/rafik-landing": {
+      "sharedAreas": [
+        {
+          "name": "Landing design and layout",
+          "paths": [
+            "app/assets/",
+            "app/components/",
+            "app/layouts/",
+            "app/app.vue",
+            "public/brand/"
+          ]
+        },
+        {
+          "name": "Landing pages",
+          "paths": ["app/pages/"]
+        },
+        {
+          "name": "Product docs (English/Arabic)",
+          "paths": ["content/"]
+        },
+        {
+          "name": "Translations",
+          "paths": ["i18n/"]
+        },
+        {
+          "name": "Contact and server",
+          "paths": ["server/", "nuxt.config.ts", ".env.example"]
+        },
+        {
+          "name": "Agent rules and decisions",
+          "paths": [
+            "AGENTS.md",
+            "docs/decisions.md",
+            ".github/coordination.json",
+            "scripts/coordination/"
+          ]
+        }
+      ],
+      "decisions": "docs/decisions.md",
+      "changes": null
+    }
+  }
+}
