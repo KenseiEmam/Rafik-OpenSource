@@ -1,4 +1,3 @@
-import { historicalResource } from "./historical-resource-fixture.ts";
 import { apiOrigin } from "./test-target.ts";
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
@@ -18,32 +17,28 @@ test("local recovery restores private bytes with metadata; orphan cleanup honors
   try {
     const user = await f.person(),
       id = randomUUID(),
-      body = "Synthetic recovery test bytes";
-    const registered = await historicalResource(user, {
-      id,
-      title: "Recovery test",
-      filename: "recovery.txt",
-      bytes: Buffer.byteLength(body),
-    });
-    assert.equal(registered.status, 200, JSON.stringify(registered));
-    path = registered.data.object_path;
+      body = "GIF89a Synthetic recovery test bytes";
+    const institution = await f.create(user);
     const uploaded = await fetch(
-      apiOrigin + "/v1/files/" + encodeURIComponent(path),
+      apiOrigin +
+        "/v1/assets/" +
+        id +
+        "?institution=" +
+        institution +
+        "&view=admin&purpose=exercise&filename=recovery.gif",
       {
         method: "PUT",
         headers: {
           Cookie: user.cookie,
           "x-rafik-client": "web",
-          "Content-Type": "text/plain",
+          "Content-Type": "image/gif",
+          "x-filename": "recovery.txt",
         },
         body,
       },
     );
-    assert.equal(uploaded.status, 200);
-    assert.equal(
-      (await call(user, "/v1/commands/finish_resource", { p_id: id })).status,
-      200,
-    );
+    assert.equal(uploaded.status, 200, await uploaded.text());
+    path = `organization/${institution}/${id}`;
     const hash = (value: string) =>
         createHash("sha256").update(value).digest("hex"),
       location = (value: string) =>

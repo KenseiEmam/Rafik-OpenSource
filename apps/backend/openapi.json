@@ -3,7 +3,7 @@
   "info": {
     "title": "Rafik API â€” Coach Field App",
     "version": "0.1.0",
-    "description": "Supported API surface for the coach-first Android field app. The complete backend route reference is in docs/reference/api.md. Instance URLs are university-operated; do not use a shared Rafik host. Canonical institution routes resolve the installation institution server-side. Published v1 workspace routes remain deprecated aliases for old Android commands; stable IDs and receipts are preserved."
+    "description": "Supported API surface for the coach-first Android field app. The complete backend route reference is in docs/reference/api.md. Instance URLs are university-operated; do not use a shared Rafik host. Canonical institution routes resolve the installation institution server-side. Beta.3 removes workspace/organization aliases and generic command/query/file gateways. Upgrade the backend, web and Android together; beta.2 clients are unsupported. Current institution IDs, exact receipts and queued institutional command payloads remain stable."
   },
   "servers": [
     {
@@ -32,7 +32,9 @@
   "paths": {
     "/v1/mobile/auth/login": {
       "post": {
-        "tags": ["Mobile authentication"],
+        "tags": [
+          "Mobile authentication"
+        ],
         "security": [],
         "summary": "Sign in to one institution on this device",
         "parameters": [
@@ -72,7 +74,9 @@
     },
     "/v1/mobile/auth/session": {
       "get": {
-        "tags": ["Mobile authentication"],
+        "tags": [
+          "Mobile authentication"
+        ],
         "summary": "Validate the current device session",
         "parameters": [
           {
@@ -86,7 +90,9 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["user"],
+                  "required": [
+                    "user"
+                  ],
                   "properties": {
                     "user": {
                       "$ref": "#/components/schemas/User"
@@ -104,7 +110,9 @@
     },
     "/v1/mobile/auth/refresh": {
       "post": {
-        "tags": ["Mobile authentication"],
+        "tags": [
+          "Mobile authentication"
+        ],
         "security": [],
         "summary": "Rotate the current refresh token",
         "parameters": [
@@ -118,7 +126,9 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["refresh_token"],
+                "required": [
+                  "refresh_token"
+                ],
                 "properties": {
                   "refresh_token": {
                     "$ref": "#/components/schemas/Token"
@@ -147,7 +157,9 @@
     },
     "/v1/mobile/auth/logout": {
       "post": {
-        "tags": ["Mobile authentication"],
+        "tags": [
+          "Mobile authentication"
+        ],
         "summary": "Revoke the presented device session",
         "parameters": [
           {
@@ -180,7 +192,9 @@
     },
     "/v1/institution/context": {
       "get": {
-        "tags": ["Coach field work"],
+        "tags": [
+          "Coach field work"
+        ],
         "summary": "List the current account's institution membership",
         "parameters": [
           {
@@ -194,7 +208,9 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["contexts"],
+                  "required": [
+                    "contexts"
+                  ],
                   "properties": {
                     "contexts": {
                       "type": "array",
@@ -226,7 +242,9 @@
         }
       ],
       "get": {
-        "tags": ["Coach field work"],
+        "tags": [
+          "Coach field work"
+        ],
         "summary": "Read a bounded schedule or one authorized event",
         "description": "Send view=trainer and a bounded from/to calendar-date window, or supply id to read one event detail before field work. The server checks current assignment and membership. For online-only correction history, send id, historyOnly=true, historyMember, historyKind (attendance or results) and historyOffset. Each read rechecks event authority; the selected athlete must be an event participant. History returns up to 25 items and next offset; it includes the original entry and later corrections, with recorded actor, timestamp and submitted values.",
         "parameters": [
@@ -236,7 +254,9 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["trainer"]
+              "enum": [
+                "trainer"
+              ]
             }
           },
           {
@@ -301,7 +321,10 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": ["attendance", "results"],
+              "enum": [
+                "attendance",
+                "results"
+              ],
               "default": "results"
             }
           },
@@ -349,7 +372,9 @@
         }
       },
       "post": {
-        "tags": ["Coach field work"],
+        "tags": [
+          "Coach field work"
+        ],
         "summary": "Record attendance, assessment results, or finish an event",
         "description": "Every write uses an operation UUID and the current event/participant revision. Queue dependent commands in order. Retry an uncertain result with the exact same operation and payload. Authorization and revisions are rechecked by the server.",
         "requestBody": {
@@ -390,7 +415,9 @@
     },
     "/v1/institution/workout-scheduling": {
       "post": {
-        "tags": ["Coach field work"],
+        "tags": [
+          "Coach field work"
+        ],
         "summary": "Schedule, reschedule or explicitly skip an individual plan workout",
         "description": "Unreleased beta.3 server slice. Fixed-time individual scheduling only. Binds the next non-rest day from the immutable plan cycle without advancing its cursor. One unresolved workout blocks that assignment only. Skip requires a staff reason; completion advances through the existing session save command. Uses exact operation receipts and rechecks current plan authority before replay. No recurring worker, day-only records, group workout capture or new Android UI is enabled.",
         "security": [
@@ -407,7 +434,10 @@
             "in": "header",
             "required": true,
             "schema": {
-              "enum": ["web", "android"]
+              "enum": [
+                "web",
+                "android"
+              ]
             }
           }
         ],
@@ -442,7 +472,9 @@
     },
     "/v1/institution/sessions": {
       "post": {
-        "tags": ["Coach field work"],
+        "tags": [
+          "Coach field work"
+        ],
         "summary": "Start or save individual workout results",
         "description": "Current athlete self-recording and authorized delegated coach recording. A sequence-bound start supplies its occurrence ID and must wait until the booked time. Save actual reps/load/time/distance/effort with the current workout version as revision. Completed bound work resolves its assignment position atomically once; subsequent corrections preserve progression. Generic attendance does not complete a workout. Administrators do not record results. New Android offline workout capture is not implemented by this contract.",
         "security": [
@@ -459,7 +491,10 @@
             "in": "header",
             "required": true,
             "schema": {
-              "enum": ["web", "android"]
+              "enum": [
+                "web",
+                "android"
+              ]
             }
           }
         ],
@@ -514,7 +549,9 @@
         "required": true,
         "schema": {
           "type": "string",
-          "enum": ["android"]
+          "enum": [
+            "android"
+          ]
         }
       }
     },
@@ -535,11 +572,17 @@
             "format": "email"
           }
         },
-        "required": ["id", "email"]
+        "required": [
+          "id",
+          "email"
+        ]
       },
       "LoginRequest": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": [
+          "email",
+          "password"
+        ],
         "properties": {
           "email": {
             "type": "string",
@@ -586,7 +629,12 @@
       },
       "Context": {
         "type": "object",
-        "required": ["id", "kind", "name", "role"],
+        "required": [
+          "id",
+          "kind",
+          "name",
+          "role"
+        ],
         "properties": {
           "id": {
             "type": "string",
@@ -602,14 +650,20 @@
           },
           "kind": {
             "type": "string",
-            "enum": ["institution"]
+            "enum": [
+              "institution"
+            ]
           },
           "name": {
             "type": "string"
           },
           "role": {
             "type": "string",
-            "enum": ["admin", "trainer", "trainee"],
+            "enum": [
+              "admin",
+              "trainer",
+              "trainee"
+            ],
             "description": "Stable wire roles: administrator, coach and athlete respectively."
           },
           "path": {
@@ -627,7 +681,11 @@
               },
               {
                 "type": "object",
-                "required": ["member", "revision", "attendance"],
+                "required": [
+                  "member",
+                  "revision",
+                  "attendance"
+                ],
                 "properties": {
                   "action": {
                     "const": "attendance"
@@ -642,7 +700,12 @@
                   },
                   "attendance": {
                     "type": "string",
-                    "enum": ["unmarked", "present", "absent", "excused"]
+                    "enum": [
+                      "unmarked",
+                      "present",
+                      "absent",
+                      "excused"
+                    ]
                   }
                 }
               }
@@ -655,7 +718,11 @@
               },
               {
                 "type": "object",
-                "required": ["member", "revision", "values"],
+                "required": [
+                  "member",
+                  "revision",
+                  "values"
+                ],
                 "properties": {
                   "action": {
                     "const": "result"
@@ -687,7 +754,9 @@
               },
               {
                 "type": "object",
-                "required": ["revision"],
+                "required": [
+                  "revision"
+                ],
                 "properties": {
                   "action": {
                     "const": "finish"
@@ -704,7 +773,12 @@
       },
       "FieldCommandBase": {
         "type": "object",
-        "required": ["operation", "action", "view", "id"],
+        "required": [
+          "operation",
+          "action",
+          "view",
+          "id"
+        ],
         "properties": {
           "operation": {
             "type": "string",
@@ -713,11 +787,17 @@
           },
           "action": {
             "type": "string",
-            "enum": ["attendance", "result", "finish"]
+            "enum": [
+              "attendance",
+              "result",
+              "finish"
+            ]
           },
           "view": {
             "type": "string",
-            "enum": ["trainer"]
+            "enum": [
+              "trainer"
+            ]
           },
           "id": {
             "type": "string",
@@ -728,7 +808,9 @@
       },
       "ApiError": {
         "type": "object",
-        "required": ["message"],
+        "required": [
+          "message"
+        ],
         "properties": {
           "message": {
             "type": "string"
@@ -763,21 +845,37 @@
                 "format": "date-time"
               },
               "recorded_by": {
-                "type": ["string", "null"]
+                "type": [
+                  "string",
+                  "null"
+                ]
               },
               "recorded_name": {
-                "type": ["string", "null"]
+                "type": [
+                  "string",
+                  "null"
+                ]
               },
               "kind": {
                 "const": "attendance"
               },
               "previous_attendance": {
                 "type": "string",
-                "enum": ["unmarked", "present", "absent", "excused"]
+                "enum": [
+                  "unmarked",
+                  "present",
+                  "absent",
+                  "excused"
+                ]
               },
               "attendance": {
                 "type": "string",
-                "enum": ["unmarked", "present", "absent", "excused"]
+                "enum": [
+                  "unmarked",
+                  "present",
+                  "absent",
+                  "excused"
+                ]
               }
             }
           },
@@ -808,10 +906,16 @@
                 "format": "date-time"
               },
               "recorded_by": {
-                "type": ["string", "null"]
+                "type": [
+                  "string",
+                  "null"
+                ]
               },
               "recorded_name": {
-                "type": ["string", "null"]
+                "type": [
+                  "string",
+                  "null"
+                ]
               },
               "kind": {
                 "const": "results"
@@ -823,7 +927,10 @@
               "values": {
                 "type": "object",
                 "additionalProperties": {
-                  "type": ["string", "number"]
+                  "type": [
+                    "string",
+                    "number"
+                  ]
                 }
               },
               "note": {
@@ -835,7 +942,10 @@
       },
       "FieldHistoryPage": {
         "type": "object",
-        "required": ["items", "next"],
+        "required": [
+          "items",
+          "next"
+        ],
         "properties": {
           "items": {
             "type": "array",
@@ -845,7 +955,10 @@
             }
           },
           "next": {
-            "type": ["integer", "null"],
+            "type": [
+              "integer",
+              "null"
+            ],
             "minimum": 0
           }
         },
@@ -874,7 +987,10 @@
                 "const": "schedule-workout"
               },
               "view": {
-                "enum": ["admin", "trainer"]
+                "enum": [
+                  "admin",
+                  "trainer"
+                ]
               },
               "assignment_id": {
                 "type": "string",
@@ -926,7 +1042,10 @@
                 "const": "reschedule-workout"
               },
               "view": {
-                "enum": ["admin", "trainer"]
+                "enum": [
+                  "admin",
+                  "trainer"
+                ]
               },
               "assignment_id": {
                 "type": "string",
@@ -976,7 +1095,10 @@
                 "const": "skip-workout"
               },
               "view": {
-                "enum": ["admin", "trainer"]
+                "enum": [
+                  "admin",
+                  "trainer"
+                ]
               },
               "assignment_id": {
                 "type": "string",
@@ -1022,7 +1144,10 @@
                 "format": "uuid"
               },
               "view": {
-                "enum": ["trainer", "trainee"]
+                "enum": [
+                  "trainer",
+                  "trainee"
+                ]
               },
               "action": {
                 "const": "start"
@@ -1063,7 +1188,10 @@
                 "format": "uuid"
               },
               "view": {
-                "enum": ["trainer", "trainee"]
+                "enum": [
+                  "trainer",
+                  "trainee"
+                ]
               },
               "action": {
                 "const": "save"
@@ -1110,22 +1238,37 @@
                       "maximum": 1000
                     },
                     "unit": {
-                      "enum": ["kg", "lb"]
+                      "enum": [
+                        "kg",
+                        "lb"
+                      ]
                     },
                     "completed": {
                       "type": "boolean"
                     },
                     "exercise_id": {
-                      "type": ["string", "null"]
+                      "type": [
+                        "string",
+                        "null"
+                      ]
                     },
                     "seconds": {
-                      "type": ["integer", "null"]
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
                     },
                     "metres": {
-                      "type": ["number", "null"]
+                      "type": [
+                        "number",
+                        "null"
+                      ]
                     },
                     "effort": {
-                      "type": ["number", "null"]
+                      "type": [
+                        "number",
+                        "null"
+                      ]
                     }
                   }
                 }

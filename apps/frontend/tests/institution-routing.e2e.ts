@@ -1,13 +1,11 @@
 import { test, expect } from '@playwright/test'
 import { randomUUID, randomBytes } from 'node:crypto'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { layoutIssues } from './layout-contract'
 
-test('flat routes preserve legacy bookmarks, derive roles and retire Tasks', async ({
-  page,
-}, info) => {
+test('flat routes derive roles and reject retired bookmarks and Tasks', async ({ page }, info) => {
   test.setTimeout(120000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     id = randomUUID()
   try {
     await f.call(f.owner, '/v1/institutions', {
@@ -74,30 +72,28 @@ test('flat routes preserve legacy bookmarks, derive roles and retire Tasks', asy
     await expect(page.locator('.dashboard-navigation a[href="/institution-settings"]')).toHaveCount(
       1,
     )
-    await page.goto(`/organization/${id}/trainer/people?search=R4&limit=25`)
-    await expect(page).toHaveURL(/\/people\?search=R4&limit=25$/)
-    await expect(page.getByRole('heading', { name: 'People', exact: true })).toBeVisible()
-    await page.goto(`/organization/${id}/admin/settings`)
-    await expect(page).toHaveURL(/\/institution-settings$/)
-    await expect(
-      page.getByRole('heading', { name: 'Institution settings', exact: true }),
-    ).toBeVisible()
-    await page.goto(`/organization/${id}/admin/calendar?view=month`)
-    await expect(page).toHaveURL(/\/schedule\?view=month$/)
-    await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-    await page.goto(`/organization/${id}/admin/tasks/new`)
-    await expect(page).toHaveURL(/\/tasks\/new$/)
-    await expect(page.getByRole('heading', { name: 'That page isn’t here.' })).toBeVisible()
-    await page.goto(`/organization/${randomUUID()}/admin/people`)
-    await expect(page).toHaveURL(/\/access$/)
-    await expect(page.getByRole('heading', { name: 'Institution access' })).toBeVisible()
-    await page.getByRole('button', { name: 'Retry', exact: true }).click()
-    await expect(page).toHaveURL(/\/dashboard$/)
-    for (const path of ['/institutions', '/tasks', '/coach/forms', '/checkins', '/teams']) {
+    for (const path of [
+      '/people?search=R4&limit=25',
+      '/institution-settings',
+      '/schedule?view=month',
+    ]) {
+      await page.goto(path)
+      await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+    }
+    for (const path of [
+      `/organization/${id}/admin/people`,
+      '/calendar',
+      '/session-history',
+      '/institutions',
+      '/tasks',
+      '/coach/forms',
+      '/checkins',
+      '/teams',
+    ]) {
       await page.goto(path)
       await expect(page.getByRole('heading', { name: 'That page isn’t here.' })).toBeVisible()
     }
-    await f.login(page, f.coach, `/organization/${id}/admin/schedule`)
+    await f.login(page, f.coach, '/schedule')
     await expect(page).toHaveURL(/\/schedule$/)
     await expect(page.locator('.dashboard-navigation a[href="/institution-settings"]')).toHaveCount(
       0,

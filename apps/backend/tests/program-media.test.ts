@@ -91,14 +91,14 @@ test("private program imagery has immutable bytes, institution publication and r
         draft,
         revision: null,
       });
-    let r = await call(admin, `/v1/workspaces/${id}/programs`, publish);
+    let r = await call(admin, `/v1/institution/programs`, publish);
     assert.equal(r.status, 200, JSON.stringify(r));
-    const foreign = await call(outsider, `/v1/workspaces/${other}/programs`, {
+    const foreign = await call(outsider, `/v1/institution/programs`, {
       ...publish,
       operation: randomUUID(),
       id: randomUUID(),
     });
-    assert.equal(foreign.status, 400);
+    assert.equal(foreign.status, 403);
     const downloaded = await media(client, image);
     assert.equal(downloaded.status, 200);
     assert.ok(Buffer.from(await downloaded.arrayBuffer()).equals(png));
@@ -107,7 +107,7 @@ test("private program imagery has immutable bytes, institution publication and r
       (
         await call(
           admin,
-          `/v1/workspaces/${id}`,
+          `/v1/institution`,
           operation("member", {
             id: member.id,
             revision: 1,

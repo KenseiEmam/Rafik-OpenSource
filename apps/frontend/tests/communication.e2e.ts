@@ -1,14 +1,14 @@
 import { test, expect } from '@playwright/test'
 import { randomUUID, randomBytes } from 'node:crypto'
 import AxeBuilder from '@axe-core/playwright'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { layoutIssues } from './layout-contract'
 test('organization conversations preserve scope, compact layout, drafts and exact send recovery; notification links reach the right context', async ({
   page,
   browser,
 }, info) => {
   test.setTimeout(120000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     clientContext = await browser.newContext(),
     client = await clientContext.newPage(),
     id = randomUUID()

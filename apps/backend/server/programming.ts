@@ -60,8 +60,7 @@ const date = (v: unknown) => {
 };
 export async function catalog(tx: Tx, id: string, self: Member) {
   const [shared, own] = await Promise.all([
-    tx.exercises.findMany({
-      where: { owner_id: null },
+    tx.reference_exercises.findMany({
       orderBy: { name: "asc" },
     }),
     tx.institution_exercises.findMany({

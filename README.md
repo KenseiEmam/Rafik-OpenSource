@@ -1,5 +1,7 @@
 # Rafik
 
+**Breaking beta.3 cleanup:** retired personal/team/business tables and API aliases are removed. Deploy matching backend/web/Android versions together after a complete backup; see [ADR 0030](docs/decisions/ADR-0030-retire-standalone-storage-and-apis.md). This branch remains unreleased.
+
 **Upcoming release:** one institution per installation; Tasks is retired. Browser navigation uses `/dashboard`, `/people`, `/plans`, `/schedule` and `/workouts`. Account settings remain `/settings`; administration uses `/institution-settings`. See [upgrade precautions](docs/operations/README.md#next-release-cleanup-upgrade).
 
 Repository: [`Rafik-Athlete-Managment/Rafik-OpenSource`](https://github.com/Rafik-Athlete-Managment/Rafik-OpenSource).

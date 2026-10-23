@@ -36,7 +36,7 @@ test("program drafts may be empty while publication validates a complete prescri
       };
     const saved = await call(
       admin,
-      `/v1/workspaces/${id}/programs`,
+      `/v1/institution/programs`,
       operation("save", {
         view: "admin",
         id: program,
@@ -50,7 +50,7 @@ test("program drafts may be empty while publication validates a complete prescri
     await f.join(admin, id, athlete, ["trainee"]);
     const published = await call(
       admin,
-      `/v1/workspaces/${id}/programs`,
+      `/v1/institution/programs`,
       operation("publish", {
         view: "admin",
         id: program,
@@ -61,8 +61,7 @@ test("program drafts may be empty while publication validates a complete prescri
     );
     assert.equal(published.status, 400);
     assert.equal(
-      (await call(athlete, `/v1/workspaces/${id}/programs?view=trainee`)).data
-        .total,
+      (await call(athlete, `/v1/institution/programs?view=trainee`)).data.total,
       0,
     );
   } finally {
@@ -88,7 +87,7 @@ test("organization publication, actuals, reassignment and exact replay preserve 
       trainer: staff.id,
     });
     assert.equal(
-      (await call(admin, `/v1/workspaces/${id}`, assignStaff)).status,
+      (await call(admin, `/v1/institution`, assignStaff)).status,
       200,
     );
     const pid = randomUUID(),
@@ -99,18 +98,18 @@ test("organization publication, actuals, reassignment and exact replay preserve 
         draft: draft(),
         revision: null,
       });
-    let r = await call(trainer, `/v1/workspaces/${id}/programs`, publish);
+    let r = await call(trainer, `/v1/institution/programs`, publish);
     assert.equal(r.status, 200, JSON.stringify(r));
     const version = r.data.version;
     assert.deepEqual(
-      (await call(trainer, `/v1/workspaces/${id}/programs`, publish)).data,
+      (await call(trainer, `/v1/institution/programs`, publish)).data,
       r.data,
     );
     assert.equal(
       (
         await call(
           foreign,
-          `/v1/workspaces/${id}/programs?view=admin&program=${pid}`,
+          `/v1/institution/programs?view=admin&program=${pid}`,
         )
       ).status,
       403,
@@ -120,7 +119,7 @@ test("organization publication, actuals, reassignment and exact replay preserve 
     // authoring catalog; unpublished drafts remain covered by the prior test.
     const library = await call(
       client,
-      `/v1/workspaces/${id}/programs?view=trainee&program=${pid}`,
+      `/v1/institution/programs?view=trainee&program=${pid}`,
     );
     assert.equal(library.status, 200, JSON.stringify(library));
     assert.equal(library.data.editable, false);
@@ -130,7 +129,7 @@ test("organization publication, actuals, reassignment and exact replay preserve 
       (
         await call(
           client,
-          `/v1/workspaces/${id}/programs`,
+          `/v1/institution/programs`,
           operation("save", {
             view: "trainee",
             id: pid,
@@ -142,9 +141,8 @@ test("organization publication, actuals, reassignment and exact replay preserve 
       ).status,
       403,
     );
-    let roster = (
-      await call(trainer, `/v1/workspaces/${id}/delivery?view=trainer`)
-    ).data;
+    let roster = (await call(trainer, `/v1/institution/delivery?view=trainer`))
+      .data;
     const assign = operation("assign", {
       view: "trainer",
       version_id: version.id,
@@ -157,7 +155,7 @@ test("organization publication, actuals, reassignment and exact replay preserve 
         assignment_revision: null,
       })),
     });
-    r = await call(trainer, `/v1/workspaces/${id}/delivery`, assign);
+    r = await call(trainer, `/v1/institution/delivery`, assign);
     assert.equal(r.status, 200, JSON.stringify(r));
     const assignment = r.data[0];
     const sessionId = randomUUID(),
@@ -167,7 +165,7 @@ test("organization publication, actuals, reassignment and exact replay preserve 
         assignment_id: assignment.id,
         day_id: version.prescription.days[0].id,
       });
-    r = await call(client, `/v1/workspaces/${id}/sessions`, start);
+    r = await call(client, `/v1/institution/sessions`, start);
     assert.equal(r.status, 200, JSON.stringify(r));
     const session = r.data;
     const entries = session.entries.map((e: any, i: number) => ({
@@ -183,16 +181,16 @@ test("organization publication, actuals, reassignment and exact replay preserve 
       note: "First session",
       complete: true,
     });
-    r = await call(client, `/v1/workspaces/${id}/sessions`, save);
+    r = await call(client, `/v1/institution/sessions`, save);
     assert.equal(r.status, 200, JSON.stringify(r));
     const completed = r.data.completed_at;
     assert.deepEqual(
-      (await call(client, `/v1/workspaces/${id}/sessions`, save)).data,
+      (await call(client, `/v1/institution/sessions`, save)).data,
       r.data,
     );
     assert.equal(
       (
-        await call(client, `/v1/workspaces/${other}/sessions`, {
+        await call(foreign, `/v1/institution/sessions`, {
           ...save,
           operation: randomUUID(),
         })
@@ -235,7 +233,7 @@ test("organization publication, actuals, reassignment and exact replay preserve 
     changed.days[0].exercises[0].reps = 15;
     r = await call(
       trainer,
-      `/v1/workspaces/${id}/programs`,
+      `/v1/institution/programs`,
       operation("publish", {
         ...publish,
         operation: randomUUID(),
@@ -256,7 +254,7 @@ test("organization publication, actuals, reassignment and exact replay preserve 
       (
         await call(
           admin,
-          `/v1/workspaces/${id}`,
+          `/v1/institution`,
           operation("assign-trainer", {
             id: member.id,
             revision: member.revision,
@@ -267,7 +265,7 @@ test("organization publication, actuals, reassignment and exact replay preserve 
       200,
     );
     assert.equal(
-      (await call(trainer, `/v1/workspaces/${id}/delivery`, assign)).status,
+      (await call(trainer, `/v1/institution/delivery`, assign)).status,
       403,
       "replay rechecks recipient responsibility",
     );
@@ -282,7 +280,7 @@ test("organization publication, actuals, reassignment and exact replay preserve 
     );
     r = await call(
       replacement,
-      `/v1/workspaces/${id}/sessions`,
+      `/v1/institution/sessions`,
       operation("review", {
         view: "trainer",
         id: sessionId,
@@ -293,7 +291,7 @@ test("organization publication, actuals, reassignment and exact replay preserve 
     assert.equal(r.status, 200, JSON.stringify(r));
     r = await call(
       client,
-      `/v1/workspaces/${id}/sessions`,
+      `/v1/institution/sessions`,
       operation("save", {
         view: "trainee",
         id: sessionId,
@@ -333,7 +331,7 @@ test("bulk delivery is atomic; internal catalog never grants edit or personal ex
       draft: draft(),
       revision: null,
     });
-    const published = await call(admin, `/v1/workspaces/${id}/programs`, p);
+    const published = await call(admin, `/v1/institution/programs`, p);
     assert.equal(published.status, 200, JSON.stringify(published));
     assert.equal(published.data.plan.listed, true);
     const recipients = [trainee, outsider].map((m) => ({
@@ -342,7 +340,7 @@ test("bulk delivery is atomic; internal catalog never grants edit or personal ex
     }));
     const bad = await call(
       admin,
-      `/v1/workspaces/${id}/delivery`,
+      `/v1/institution/delivery`,
       operation("assign", {
         view: "admin",
         version_id: published.data.version.id,
@@ -360,18 +358,18 @@ test("bulk delivery is atomic; internal catalog never grants edit or personal ex
       (
         await call(
           client,
-          `/v1/workspaces/${id}/programs?view=trainee&program=${p.id}`,
+          `/v1/institution/programs?view=trainee&program=${p.id}`,
         )
       ).status,
       200,
     );
     assert.equal(
-      (await call(client, `/v1/workspaces/${id}/catalog?view=trainee`)).status,
+      (await call(client, `/v1/institution/catalog?view=trainee`)).status,
       403,
     );
     assert.equal(
       (
-        await call(trainer, `/v1/workspaces/${id}/programs`, {
+        await call(trainer, `/v1/institution/programs`, {
           ...p,
           operation: randomUUID(),
           view: "trainer",
@@ -380,10 +378,7 @@ test("bulk delivery is atomic; internal catalog never grants edit or personal ex
       ).status,
       403,
     );
-    const catalog = await call(
-      trainer,
-      `/v1/workspaces/${id}/catalog?view=trainer`,
-    );
+    const catalog = await call(trainer, `/v1/institution/catalog?view=trainer`);
     assert.equal(catalog.status, 200);
     assert.ok(catalog.data.every((x: any) => !x.owner_id));
     assert.ok(
@@ -407,7 +402,7 @@ test("bulk delivery is atomic; internal catalog never grants edit or personal ex
     const customId = `org-${randomUUID()}`;
     const custom = await call(
       trainer,
-      `/v1/workspaces/${id}/catalog`,
+      `/v1/institution/catalog`,
       operation("exercise", {
         view: "trainer",
         id: customId,
@@ -440,7 +435,7 @@ test("bulk delivery is atomic; internal catalog never grants edit or personal ex
     );
     const invalidFacet = await call(
       trainer,
-      `/v1/workspaces/${id}/catalog`,
+      `/v1/institution/catalog`,
       operation("exercise", {
         view: "trainer",
         id: `org-${randomUUID()}`,
@@ -458,7 +453,7 @@ test("bulk delivery is atomic; internal catalog never grants edit or personal ex
     licensedDraft.days[0].exercises[0].exerciseId = "dataset-0001";
     const licensedProgram = await call(
       admin,
-      `/v1/workspaces/${id}/programs`,
+      `/v1/institution/programs`,
       operation("publish", {
         view: "admin",
         id: randomUUID(),
@@ -477,7 +472,7 @@ test("bulk delivery is atomic; internal catalog never grants edit or personal ex
     invalid.days[0].exercises[0].sets = 50;
     assert.equal(
       (
-        await call(admin, `/v1/workspaces/${id}/programs`, {
+        await call(admin, `/v1/institution/programs`, {
           ...p,
           id: randomUUID(),
           operation: randomUUID(),

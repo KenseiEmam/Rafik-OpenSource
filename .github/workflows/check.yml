@@ -44,6 +44,7 @@ jobs:
       - run: npm run seed:local
       - run: npm run docs:check
       - run: npm run backend:inventory:check
+      - run: npm run test:retired-domains
       - run: npm run test:institution-names
       - run: npm run test:institution-api
       - run: npm run backend:test

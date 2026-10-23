@@ -28,27 +28,30 @@ const sql = (input: string) =>
     { cwd: root, input, encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] },
   )
 type Person = { id: string; email: string; session: { cookie: string } }
-export async function teamFixture() {
+export async function institutionFixture() {
   if (
     !readFileSync(composeFile, 'utf8').startsWith('name: ${RAFIK_INSTANCE_ID:-rafik-prisma-local}')
   )
     throw Error('Local fixture guard failed')
+  if (!/^rafik_browser_\d+$/.test(testDatabase)) throw Error('Disposable browser database required')
   const people: Person[] = [],
-    teamIds: string[] = []
+    institutions: string[] = []
   async function call(who: Person, path: string, args?: Record<string, unknown>) {
     if (path === '/v1/institutions' && args) {
-      if (!/^rafik_browser_\d+$/.test(testDatabase))
-        throw Error('Disposable browser database required')
       const id = String(args.id),
-        kind = String(args.kind),
         name = String(args.name)
-      if (!/^[-a-f0-9]{36}$/.test(id) || !['organization', 'independent'].includes(kind))
-        throw Error('Invalid fixture')
+      if (!/^[-a-f0-9]{36}$/.test(id)) throw Error('Invalid fixture ID')
       const quote = (value: string) => "'" + value.replaceAll("'", "''") + "'"
+      if (!institutions.length)
+        sql(
+          "DELETE FROM public.institutions WHERE id IN('12000000-0000-4000-8000-000000000001','12000000-0000-4000-8000-000000000002');",
+        )
+      if (institutions.length) throw Error('One institution per browser fixture')
       sql(
-        `BEGIN; INSERT INTO public.institutions(id,kind,name,created_by) VALUES (${quote(id)},${quote(kind)},${quote(name)},${quote(who.id)}); INSERT INTO public.workspace_members(id,institution_id,user_id,roles,name) VALUES ('${randomUUID()}',${quote(id)},${quote(who.id)},ARRAY['${kind === 'institution' ? 'admin' : 'trainer'}'],${quote(name)}); COMMIT;`,
+        `BEGIN; INSERT INTO public.institutions(id,kind,name,created_by) VALUES (${quote(id)},'organization',${quote(name)},${quote(who.id)}); INSERT INTO public.institution_members(id,institution_id,user_id,roles,name) VALUES ('${randomUUID()}',${quote(id)},${quote(who.id)},ARRAY['admin'],${quote(name)}); COMMIT;`,
       )
-      return { id, kind, name }
+      institutions.push(id)
+      return { id, kind: 'institution', name }
     }
     const response = await fetch(url + path, {
       method: args ? 'POST' : 'GET',
@@ -66,21 +69,10 @@ export async function teamFixture() {
     if (!response.ok) throw Error(data.message)
     return data
   }
-  const rpc = (who: Person, name: string, args: Record<string, unknown>) =>
-    call(who, '/v1/commands/' + name, args)
-  const rows = (who: Person, table: string, column?: string, value?: string) =>
-    call(
-      who,
-      '/v1/queries/' +
-        table +
-        (column ? '?column=' + column + '&value=' + encodeURIComponent(value || '') : ''),
-    )
   async function cleanup() {
-    if (teamIds.some((id) => !/^[-a-f0-9]{36}$/.test(id))) throw Error('Invalid fixture ID')
-    for (const id of teamIds) sql(`delete from public.teams where id='${id}';`)
     for (const p of [...people].reverse()) {
       const media = sql(
-        `copy (select 'program',m.institution_id,m.id from public.program_media m join public.institutions w on w.id=m.institution_id where w.created_by='${p.id}' union all select 'organization',a.institution_id,a.id from public.organization_assets a join public.institutions w on w.id=a.institution_id where w.created_by='${p.id}') to stdout with csv;`,
+        `copy (select 'program',m.institution_id,m.id from public.program_media m join public.institutions w on w.id=m.institution_id where w.created_by='${p.id}' union all select 'organization',a.institution_id,a.id from public.institution_assets a join public.institutions w on w.id=a.institution_id where w.created_by='${p.id}') to stdout with csv;`,
       ).trim()
       for (const line of media ? media.split('\n') : []) {
         const [kind, institution, id] = line.split(',')
@@ -112,7 +104,7 @@ export async function teamFixture() {
     )
     const person = { id, email, session: { cookie } }
     people.push(person)
-    await rpc(person, 'ensure_profile', { p_name: name })
+    await call(person, '/v1/account/profile', { p_name: name })
     return person
   }
   try {
@@ -125,26 +117,9 @@ export async function teamFixture() {
       )
       const person = { id, email, session: { cookie } }
       people.push(person)
-      await rpc(person, 'ensure_profile', { p_name: name })
-      if (name !== 'R4 Athlete')
-        await call(person, '/v1/institutions', { id: randomUUID(), kind: 'independent', name })
+      await call(person, '/v1/account/profile', { p_name: name })
     }
-    const [owner, coach, client] = people as [Person, Person, Person],
-      plan = randomUUID()
-    const draft = JSON.parse(
-      readFileSync(resolve(root, 'content/starter.json'), 'utf8'),
-    ).prescription
-    await rpc(owner, 'save_plan', { p_id: plan, p_title: 'R4 shared training', p_draft: draft })
-    const version = await rpc(owner, 'publish_plan', { p_id: plan, p_expected_version: 1 })
-    const token = randomUUID() + randomUUID()
-    await rpc(owner, 'create_invitation', {
-      p_email: client.email,
-      p_version_id: version.id,
-      p_token: token,
-      p_request_id: randomUUID(),
-    })
-    const assignmentId = await rpc(client, 'accept_invitation', { p_token: token })
-    const assignment = (await rows(client, 'assignments', 'id', assignmentId))[0]
+    const [owner, coach, client] = people as [Person, Person, Person]
     async function login(page: Page, who: Person, path: string) {
       await page.context().addCookies([
         {
@@ -163,13 +138,8 @@ export async function teamFixture() {
       client,
       createPerson,
       call,
-      rpc,
-      rows,
       login,
       cleanup,
-      teamIds,
-      assignment,
-      version,
     }
   } catch (e) {
     await cleanup()

@@ -44,56 +44,7 @@ export async function refreshSchemaSnapshot() {
     sql(`CREATE DATABASE ${database};`, "rafik");
     created = true;
     const migrations = migrationSource();
-    if (process.argv.includes("--verify-retirement")) {
-      sql(
-        migrations
-          .slice(
-            0,
-            migrations.findIndex(
-              ([name]) => name === "202610231600_retire_business_simulation",
-            ),
-          )
-          .map(([, source]) => source)
-          .join("\n"),
-      );
-      let seed = readFileSync(resolve(backendRoot, "prisma/seed.sql"), "utf8");
-      const names = JSON.parse(
-        readFileSync(
-          resolve(backendRoot, "scripts/institution-names.json"),
-          "utf8",
-        ),
-      );
-      for (const [old, current] of Object.entries(names).sort(
-        (a, b) => b[1].length - a[1].length,
-      ))
-        seed = seed.replaceAll(current, old);
-      sql(seed.replaceAll("institution_id", "workspace_id"));
-      sql(`INSERT INTO public.business_accounts(id,owner_id) VALUES('92000000-0000-4000-8000-000000000001','10000000-0000-4000-8000-000000000001') ON CONFLICT DO NOTHING;
-    INSERT INTO public.business_events(id,account_id,sequence,payload,applied)
-    SELECT '93000000-0000-4000-8000-000000000001',id,1,'{"synthetic":true}',false FROM public.business_accounts WHERE owner_id='10000000-0000-4000-8000-000000000001';`);
-      const records = () =>
-        sql(
-          `SELECT jsonb_build_object('accounts',(SELECT jsonb_agg(to_jsonb(a) ORDER BY id) FROM public.business_accounts a),'receipts',(SELECT jsonb_agg(to_jsonb(e) ORDER BY id) FROM public.business_events e));`,
-        );
-      const before = records();
-      for (const [, source] of migrations.slice(
-        migrations.findIndex(
-          ([name]) => name === "202610231600_retire_business_simulation",
-        ),
-      ))
-        sql(source);
-      if (records() !== before)
-        throw Error("Retirement changed retained account history");
-      sql(
-        readFileSync(
-          resolve(backendRoot, "tests/sql/legacy_team_lifecycle.sql"),
-          "utf8",
-        ),
-      );
-      console.log(
-        "Populated simulator retirement preserved account/provider history; historical access, support and account lifecycle assertions passed.",
-      );
-    } else sql(migrations.map(([, source]) => source).join("\n"));
+    sql(migrations.map(([, source]) => source).join("\n"));
     const data = JSON.parse(
       sql(`SELECT jsonb_build_object('tables',(SELECT jsonb_agg(item ORDER BY item->>'schema',item->>'name') FROM (
  SELECT jsonb_build_object('schema',n.nspname,'name',c.relname,
@@ -146,4 +97,9 @@ export async function refreshSchemaSnapshot() {
     if (created) sql(`DROP DATABASE ${database} WITH (FORCE);`, "rafik");
   }
 }
-if (process.argv.includes("--refresh-database")) await refreshSchemaSnapshot();
+if (
+  process.argv[1] &&
+  resolve(process.argv[1]) === resolve(import.meta.filename) &&
+  process.argv.includes("--refresh-database")
+)
+  await refreshSchemaSnapshot();

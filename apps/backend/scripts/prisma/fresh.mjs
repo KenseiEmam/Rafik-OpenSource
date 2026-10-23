@@ -137,19 +137,9 @@ ROLLBACK;`,
   console.log(
     "Coaching links mirror seeded trainer_id, backfill recreates primaries and departures end links (rolled back).",
   );
-  for (const suite of [
-    "core",
-    "daily_coaching",
-    "ongoing_coaching",
-    "service_delivery",
-    "legacy_team_lifecycle",
-    "exercise_choices",
-    "daily_workspace",
-    "exercise_catalog",
-  ])
-    sql(name, readFileSync(resolve(root, `tests/sql/${suite}.sql`), "utf8"));
+  sql(name, readFileSync(resolve(root, "tests/sql/institution.sql"), "utf8"));
   console.log(
-    "Fresh Prisma migrations, fixtures and eight SQL suites pass. Preview database unchanged.",
+    "Fresh Prisma migrations, fixtures and institution SQL assertions pass. Preview database unchanged.",
   );
 } finally {
   if (created) sql("rafik", `drop database ${name} with (force);`);

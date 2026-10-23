@@ -1,14 +1,14 @@
 import { randomUUID } from 'node:crypto'
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { layoutIssues } from './layout-contract'
 test('separate institution roles and reassigns responsibility with recoverable commands', async ({
   page,
   browser,
 }, info) => {
   test.setTimeout(90000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     staffContext = await browser.newContext(),
     clientContext = await browser.newContext(),
     staff = await staffContext.newPage(),

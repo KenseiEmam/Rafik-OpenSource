@@ -32,3 +32,6 @@ ADR 0004 (gym-first timing), ADR 0014 (session packages) and ADR 0016 (former Su
 - [0026 — Single-institution routing and Tasks retirement](ADR-0026-single-institution-routing-and-task-retirement.md)
 
 - [0027 — Additive workout storage before API cutover](ADR-0027-additive-workout-storage.md)
+
+- [0029 — Institution identifiers](ADR-0029-institution-identifiers.md)
+- [0030 — Retire standalone storage and APIs](ADR-0030-retire-standalone-storage-and-apis.md)

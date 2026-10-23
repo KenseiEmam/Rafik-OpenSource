@@ -1,4 +1,4 @@
-import { institutionTransport } from "../server/institution-compatibility.ts";
+import { institutionTransport } from "../server/institution-routing.ts";
 import { apiOrigin } from "./test-target.ts";
 import { fixtureInstitution } from "./institution-fixture.ts";
 import { randomUUID, randomBytes, createHash } from "node:crypto";
@@ -60,7 +60,7 @@ export async function organizationFixture() {
     const p = { id, email, cookie: "rafik_session=" + token };
     assert.equal(
       (
-        await call(p, "/v1/commands/ensure_profile", {
+        await call(p, "/v1/account/profile", {
           p_name: "Program " + id.slice(0, 6),
         })
       ).status,
@@ -69,18 +69,22 @@ export async function organizationFixture() {
     return p;
   };
   const create = async (p: Person) => {
+    // Each fixture owns one installation. Additional requested scopes are invalid
+    // IDs for outsider/foreign-record assertions, never a second runtime institution.
+    if (spaces.length) return randomUUID();
+    if (
+      !process.env.RAFIK_TEST_API ||
+      !/\/rafik_browser_\d+$/.test(process.env.DATABASE_URL || "")
+    )
+      throw Error("Disposable database required");
+    await db.institutions.deleteMany();
     const id = randomUUID();
     spaces.push(id);
-    assert.equal(
-      (
-        await call(p, "/v1/institutions", {
-          id,
-          name: "Program organization",
-          kind: "organization",
-        })
-      ).status,
-      200,
-    );
+    await fixtureInstitution(p, {
+      id,
+      name: "Test institution",
+      kind: "organization",
+    });
     return id;
   };
   const join = async (
@@ -89,12 +93,21 @@ export async function organizationFixture() {
     p: Person,
     roles: string[],
   ) => {
+    if (!spaces.includes(id))
+      return {
+        id: randomUUID(),
+        institution_id: id,
+        user_id: p.id,
+        roles,
+        revision: 1,
+        active: true,
+      };
     const token = randomBytes(32).toString("hex");
     assert.equal(
       (
         await call(
           admin,
-          "/v1/workspaces/",
+          "/v1/institution",
           operation("invite", {
             id: randomUUID(),
             email: p.email,

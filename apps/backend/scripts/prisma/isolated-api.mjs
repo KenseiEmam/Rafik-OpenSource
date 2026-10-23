@@ -85,11 +85,16 @@ try {
     files.some((f) => !/^tests\/[a-z0-9-]+\.test\.ts$/.test(f))
   )
     throw Error("Pass explicit backend test files");
-  execFileSync(
-    process.execPath,
-    [tsx, "--test", "--test-concurrency=1", ...files],
-    { cwd: backendRoot, env, stdio: "inherit" },
-  );
+  try {
+    execFileSync(
+      process.execPath,
+      [tsx, "--test", "--test-concurrency=1", ...files],
+      { cwd: backendRoot, env, stdio: "inherit" },
+    );
+  } catch (error) {
+    console.error(logs);
+    throw error;
+  }
 } finally {
   if (server && server.exitCode === null) {
     server.kill("SIGTERM");

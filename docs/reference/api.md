@@ -16,9 +16,9 @@ For `/v1/institution/sessions`, a bound `start` supplies `occurrence_id` along w
 
 This is a fixed-time server slice. No new web scheduling controls, recurring worker, day-only/group workout writes or Android offline workout UI/queue upgrade is available yet. Existing unlinked workout history and v1 attendance/assessment receipts remain. See the canonical OpenAPI schemas for request fields.
 
-## Next-release compatibility
+## Breaking beta.3 API boundary
 
-Unreleased: additional-institution creation and Tasks endpoints are removed. Create the installation’s institution through first-run setup only. Existing scoped `/v1/institution/...` services, native authentication and command replay retain their contracts. Browser URLs are independent of API scope names. See [ADR 0026](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md).
+Unreleased: additional-institution creation and Tasks endpoints are removed. Create the installation’s institution through first-run setup only. Only canonical `/v1/institution/...` services remain; published workspace/context and organization-prefixed aliases are removed. Generic `/v1/commands`, `/v1/queries` and `/v1/files` gateways are removed. Native institutional operation payloads/receipts remain unchanged, but beta.2 clients require the matching Android upgrade. Browser URLs are independent of API scope names. See [ADR 0026](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md).
 
 The browser calls the Node API at `/v1`; `apps/frontend/src/lib/backend.ts` is the sole transport adapter. `packages/shared/src/database.types.ts` is generated from the backend schema by root `npm run backend:types`; domain JSON interfaces remain in feature modules. The API uses Prisma with the restricted PostgreSQL application role. Database constraints and explicit transaction functions remain authoritative.
 
@@ -26,7 +26,7 @@ The browser calls the Node API at `/v1`; `apps/frontend/src/lib/backend.ts` is t
 
 The supported coach calendar detail also accepts `historyOnly=true`, required `historyMember=<event athlete UUID>`, `historyKind=attendance|results` (default results) and `historyOffset` (0–100000), alongside `id` and `view=trainer`. Returns `{items,next}` with up to 25 entries, ordered newest timestamp/ID first. Attendance entries project the previous/new marks from event audit; result entries include revision, values and note. Both include recorded time and institution member attribution where available. The original entry is included, not only later corrections. Event staffing and participant visibility are rechecked on every page; athletes cannot read another participant. These reads require the updated backend and do not change write/retry semantics.
 
-`apps/backend/openapi.json` is the versioned OpenAPI 3.1 contract for the supported coach field API: native authentication, role contexts, bounded calendar reads, and attendance/result/event-finish commands. An updated backend exports it at `GET /v1/openapi.json` and serves Swagger UI at `/v1/docs`, without requiring authentication. This is a maintained supported subset, not an inventory of every legacy or web-only API; this document remains the broader route reference.
+`apps/backend/openapi.json` is the versioned OpenAPI 3.1 contract for the supported coach field API: native authentication, role contexts, bounded calendar reads, and attendance/result/event-finish commands. An updated backend exports it at `GET /v1/openapi.json` and serves Swagger UI at `/v1/docs`, without requiring authentication. This is a maintained supported subset, not an inventory of every web-only API; this document remains the broader route reference.
 
 ### Open Swagger locally
 
@@ -53,9 +53,6 @@ Both new indexes require administrator or trainer membership; a trainer sees onl
 - `GET /v1/auth/setup-status`, `session`; `POST /v1/auth/setup` creates the first super admin and institution atomically on an empty instance; `POST /v1/auth/password-login`; `POST /v1/auth/logout`. Sessions are opaque HttpOnly, SameSite cookies backed by hashed tokens. Browser requests include credentials.
 - `POST /v1/auth/accept-invitation` accepts a pending seven-day, single-use institution invite, creates the account with a password and starts a session. No email is sent or verified. `POST /v1/auth/complete-password-setup` consumes an admin-issued one-time password setup token (24-hour expiry) and revokes existing sessions.
 - New passwords must be 8–128 characters and include an uppercase letter, lowercase letter, number, and punctuation or symbol. Password login accepts existing credentials so older passwords remain usable.
-- `POST /v1/commands/:name`: one of 11 explicitly allowlisted compatibility commands with JSON arguments. SQL grants and current authority remain additional requirements. The server registry controls identifiers and casts; values are bound. Operator-only commands are unavailable.
-- `GET /v1/queries/:table`: one of 33 explicitly allowlisted historical export/reference projections through RLS. Optional `column`/`value` equality filter, `offset`, `limit` (maximum 500). Internal operation/settings tables are not exposed. The browser helper fetches pages for complete authorized lists.
-- `PUT`, `GET`, `DELETE /v1/files/:encodedPath`: immutable upload, authorized download, recoverable byte/metadata cleanup. JSON requests are capped at 1 MiB; private files at 10 MiB. Owner registration controls type, path and size.
 - Local-only `/v1/auth/local-preview`; `/health` checks database connectivity. These adapters cannot start in production configuration.
 
 Mutation requests require `X-Rafik-Client: web` and an allowed origin. SQL actor settings are local to each transaction, never caller-supplied credentials. Direct table writes and operator actions are not browser APIs. The local operator script has a separate guarded database path.
@@ -225,7 +222,7 @@ Current membership/role/responsibility checks precede receipt lookup, so revoked
 
 ## Institution assets
 
-`PUT /v1/assets/:id?workspace=:uuid&view=admin|trainer|trainee&purpose=exercise|message&filename=:name[&channel=:uuid]` uploads raw bytes with an allowed Content-Type, maximum 25 MB. Message purpose requires current channel participation; exercise purpose requires a staff role. The ID, owner, digest, MIME, purpose, name and channel are immutable. An identical retry succeeds; conflicting reuse returns 409.
+`PUT /v1/assets/:id?institution=:uuid&view=admin|trainer|trainee&purpose=exercise|message&filename=:name[&channel=:uuid]` uploads raw bytes with an allowed Content-Type, maximum 25 MB. Message purpose requires current channel participation; exercise purpose requires a staff role. The ID, owner, digest, MIME, purpose, name and channel are immutable. An identical retry succeeds; conflicting reuse returns 409.
 
 `GET /v1/assets/:id` rechecks membership and exact purpose/reference permissions. MP4 accepts a single byte range. `GET /v1/institution/assets?view=admin|trainer&search=&offset=0&archived=false` returns 24 authorized exercise assets plus `next`; message files are excluded. `POST` to the same collection accepts the standard operation ID, `action: archive`, asset `id`, `revision`, `view` and boolean `retired`. Archive affects new selections, not existing published reads.
 
@@ -270,3 +267,19 @@ See the [backend audit](backend/README.md), [schema catalog](backend/schema.md) 
 ## Published-client aliases
 
 Canonical scope is `/v1/institution`, with `/v1/institution/context` for discovery. Old `/v1/workspaces/:id/...` and `/v1/contexts` accept published-client requests through an explicit adapter, preserve supplied-ID checks, and return old envelope names. Old organization-prefixed record paths alias assets, workouts and invitations; `/v1/account/organizations` aliases own institution export. No SQL table/view aliases remain. Opaque documents and command payloads are not recursively renamed. New web/Android source requires the canonical API; update the backend before the APK. See [ADR 0029](../decisions/ADR-0029-institution-identifiers.md).
+
+## Explicit account and Support endpoints
+
+All require the signed-in account and normal origin/client-header rules. There is no generic SQL/table transport.
+
+| Endpoint | Behavior |
+| --- | --- |
+| `POST /v1/account/profile` | Initialize own profile with optional `p_name`, `p_locale`, `p_timezone`; existing profile values are preserved. |
+| `PUT /v1/account/profile` | Update own `p_name`, `p_locale`, `p_units`, `p_timezone` with existing validation. |
+| `GET /v1/account/export` | Own profile, support reports and subject-scoped institution export; no removed personal/team/business arrays. Browser download also includes that owner's local drafts. |
+| `GET /v1/account/deletion` | Last-admin preflight. |
+| `POST /v1/account/deletion` | `{confirmation:"DELETE"}`; rechecks under institution locks and preserves institution-owned history. |
+| `GET /v1/support?offset=0` | Own support reports, 100 per page, ordered by update time and ID. |
+| `POST /v1/support` | `{action:"create_support_case",args:{p_id,p_subject,p_detail}}` or `{action:"update_support_case",args:{p_id,p_revision,p_state}}`. Keep the same ID/payload on uncertain retry. Reporter cannot set operator replies. |
+
+The old `/v1/account/institution` remains a current subject-only institutional projection, not a legacy alias. See ADR 0030 for the destructive migration and complete client upgrade policy.

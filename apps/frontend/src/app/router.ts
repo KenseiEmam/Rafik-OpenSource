@@ -187,25 +187,6 @@ const router = createRouter({
       },
     })),
     {
-      path: '/calendar/:rest(.*)*',
-      redirect: (to) => ({
-        path:
-          '/schedule/' +
-          (Array.isArray(to.params.rest) ? to.params.rest.join('/') : to.params.rest || ''),
-        query: to.query,
-        hash: to.hash,
-      }),
-    },
-    {
-      path: '/session-history',
-      redirect: (to) => ({ path: '/workouts', query: to.query, hash: to.hash }),
-    },
-    {
-      path: '/organization/:institution/:view/:legacy(.*)*',
-      component: () => import('../features/account/AccessPage.vue'),
-      meta: { private: true, legacyInstitution: true },
-    },
-    {
       path: '/access',
       component: () => import('../features/account/AccessPage.vue'),
       meta: { private: true },
@@ -214,14 +195,7 @@ const router = createRouter({
       path: '/invitation/:token',
       component: () => import('../features/institution/InvitationPage.vue'),
     },
-    {
-      path: '/organization-invite/:token',
-      redirect: (to) => ({
-        path: `/invitation/${to.params.token}`,
-        query: to.query,
-        hash: to.hash,
-      }),
-    },
+
     { path: '/', component: () => import('../features/account/EntryPage.vue') },
     { path: '/setup', component: () => import('../features/account/SetupPage.vue') },
     {
@@ -259,8 +233,6 @@ const router = createRouter({
       : []),
     { path: '/help', component: () => import('../features/account/HelpPage.vue') },
     { path: '/privacy', component: () => import('../features/public/PrivacyPage.vue') },
-    { path: '/privacy-policy', redirect: '/privacy' },
-    { path: '/privacy_policy', redirect: '/privacy' },
     { path: '/:pathMatch(.*)*', component: () => import('../features/public/NotFound.vue') },
   ],
   async scrollBehavior(to, from, saved) {
@@ -289,7 +261,7 @@ router.beforeEach(async (to, from) => {
   await ready()
   if (to.meta.private && !user.value) return { path: '/login', query: { next: to.fullPath } }
   if (!user.value) return
-  const institutionRoute = to.meta.institution || to.meta.legacyInstitution
+  const institutionRoute = to.meta.institution
   if (institutionRoute) {
     // Do not reuse stale membership after a failed authorization read.
     try {
@@ -300,22 +272,6 @@ router.beforeEach(async (to, from) => {
     const institution = contexts.value.find((c) => c.kind === 'institution')
     if (!institution) return '/access'
     if (to.meta.adminOnly && institution.role !== 'admin') return '/dashboard'
-    if (to.meta.legacyInstitution) {
-      if (String(to.params.institution) !== institution.institution_id) return '/access'
-      const tail = Array.isArray(to.params.legacy)
-        ? to.params.legacy.join('/')
-        : String(to.params.legacy || '')
-      const canonical = tail
-        .replace(/^calendar(?=\/|$)/, 'schedule')
-        .replace(/^session-history(?=\/|$)/, 'workouts')
-      const path =
-        canonical === 'settings'
-          ? '/institution-settings'
-          : canonical
-            ? '/' + canonical
-            : '/dashboard'
-      return { path, query: to.query, hash: to.hash, replace: true }
-    }
   }
 })
 export const safeNext = (value: unknown, fallback = '/dashboard') =>

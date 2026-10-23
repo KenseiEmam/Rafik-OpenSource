@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { randomUUID, randomBytes } from 'node:crypto'
 import AxeBuilder from '@axe-core/playwright'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { layoutIssues } from './layout-contract'
 test('organization program authoring, reviewed delivery, recording and feedback stay in one scope', async ({
   page,
@@ -9,7 +9,7 @@ test('organization program authoring, reviewed delivery, recording and feedback 
 }, info) => {
   // Two publications/assignments plus offline/reload/review; individual expectations remain bounded.
   test.setTimeout(150000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     clientContext = await browser.newContext(),
     client = await clientContext.newPage(),
     id = randomUUID()

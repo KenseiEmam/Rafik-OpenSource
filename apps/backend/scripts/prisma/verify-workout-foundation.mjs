@@ -24,7 +24,10 @@ const sql = (input, target = database) =>
     { input, encoding: "utf8", stdio: "pipe" },
   ).trim();
 function historicalSeed() {
-  let source = readFileSync(resolve(backendRoot, "prisma/seed.sql"), "utf8");
+  let source = readFileSync(
+    resolve(backendRoot, "prisma/seed.sql"),
+    "utf8",
+  ).replaceAll("reference_exercises", "exercises");
   const names = JSON.parse(
     readFileSync(
       resolve(backendRoot, "scripts/institution-names.json"),

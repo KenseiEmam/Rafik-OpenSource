@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 import { randomUUID } from 'node:crypto'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { layoutIssues } from './layout-contract'
 
 test('gym entry has dark default, unchanged logo and usable bilingual layouts', async ({
@@ -44,7 +44,7 @@ test('gym entry has dark default, unchanged logo and usable bilingual layouts', 
 test('organization month calendar and support preserve staff navigation', async ({
   page,
 }, info) => {
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     id = randomUUID()
   try {
     await f.call(f.owner, '/v1/institutions', { id, kind: 'institution', name: 'Madar gym review' })

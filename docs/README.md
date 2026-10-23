@@ -30,6 +30,8 @@ This page is the index for maintained Rafik documentation. The root [README](../
 - [Route registry and maps](reference/frontend/navigation.md): routes, redirects, navigation relationships, Mermaid maps and source evidence.
 - [Reusable frontend audit prompt](development/frontend-audit-prompt.md): improved instructions for subsequent contributor audits.
 
+- [Breaking legacy retirement](decisions/ADR-0030-retire-standalone-storage-and-apis.md): approved table/route removal, current replacements and coordinated client upgrade.
+
 ## Development and quality
 
 - [Development setup and workflows](development/README.md): prerequisites, local setup, common change workflows and troubleshooting.

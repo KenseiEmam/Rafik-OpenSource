@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test'
 import { randomUUID, randomBytes } from 'node:crypto'
 import AxeBuilder from '@axe-core/playwright'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { layoutIssues } from './layout-contract'
 
 async function inspect(page: Page, name: string, info: { project: { name: string } }) {
@@ -19,7 +19,7 @@ test('admin builds a coaching team; a supporting coach sees training only until 
   browser,
 }, info) => {
   test.setTimeout(180000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     supportContext = await browser.newContext(),
     supportPage = await supportContext.newPage(),
     institution = randomUUID(),

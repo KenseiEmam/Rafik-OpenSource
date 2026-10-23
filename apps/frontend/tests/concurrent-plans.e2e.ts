@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { randomUUID, randomBytes } from 'node:crypto'
 import AxeBuilder from '@axe-core/playwright'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { layoutIssues } from './layout-contract'
 
 async function inspect(page: Page, name: string, info: { project: { name: string } }) {
@@ -21,7 +21,7 @@ test('coach adds a concurrent goal-specific plan, the athlete sees both, then pl
   browser,
 }, info) => {
   test.setTimeout(180000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     athleteContext = await browser.newContext(),
     athletePage = await athleteContext.newPage(),
     institution = randomUUID(),

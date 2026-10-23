@@ -31,7 +31,7 @@
     "seed:local": "node scripts/prisma/local.mjs seed",
     "test:api": "node scripts/prisma/isolated-api.mjs tests/api.test.ts",
     "test:api-docs": "tsx --test tests/api-docs.test.ts",
-    "test:organizations": "node scripts/prisma/isolated-api.mjs tests/workspaces.test.ts",
+    "test:organizations": "node scripts/prisma/isolated-api.mjs tests/institution-access.test.ts",
     "test:programming": "node scripts/prisma/isolated-api.mjs tests/programming.test.ts tests/program-media.test.ts",
     "test:organization-services": "node scripts/prisma/isolated-api.mjs tests/organization-services.test.ts",
     "test:communication": "node scripts/prisma/isolated-api.mjs tests/communication.test.ts tests/notifications.test.ts",
@@ -62,7 +62,8 @@
     "inventory:check": "node scripts/backend-inventory.mjs --check",
     "inventory:database": "node scripts/backend-inventory.mjs --refresh-database",
     "test:institution-names": "node scripts/prisma/verify-institution-names.mjs",
-    "test:institution-api": "node scripts/prisma/isolated-api.mjs tests/institution-compatibility.test.ts tests/backend-boundary.test.ts tests/institution-transport.test.ts"
+    "test:institution-api": "node scripts/prisma/isolated-api.mjs tests/retired-domains.test.ts tests/backend-boundary.test.ts tests/institution-transport.test.ts",
+    "test:retired-domains": "node scripts/prisma/verify-retired-domains.mjs"
   },
   "devDependencies": {
     "@types/node": "22.19.0",

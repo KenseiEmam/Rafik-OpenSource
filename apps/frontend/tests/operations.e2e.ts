@@ -2,12 +2,12 @@ import { test, expect } from '@playwright/test'
 import { randomUUID, randomBytes } from 'node:crypto'
 import { resolve } from 'node:path'
 import AxeBuilder from '@axe-core/playwright'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { layoutIssues } from './layout-contract'
 test('platform operator has a separate audited account workflow and private deep links return through sign-in', async ({
   page,
 }, info) => {
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     restoreReason = `Restore isolated account ${randomUUID()}`
   try {
     await page.goto('/notifications?event=' + randomUUID())
@@ -49,7 +49,7 @@ test('platform operator has a separate audited account workflow and private deep
 test('organization coach starts a private conversation with their assigned athlete from People and stays a participant', async ({
   page,
 }) => {
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     id = randomUUID()
   try {
     await f.call(f.owner, '/v1/institutions', {
@@ -110,7 +110,7 @@ test('organization coach starts a private conversation with their assigned athle
 test('large member selection searches the full roster and keeps reviewed choices across pages and reload', async ({
   page,
 }, info) => {
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     id = randomUUID()
   try {
     await f.call(f.owner, '/v1/institutions', {
@@ -143,7 +143,7 @@ test('large member selection searches the full roster and keeps reviewed choices
       ],
       {
         cwd: resolve(import.meta.dirname, '../../backend'),
-        input: `insert into public.workspace_members(id,institution_id,name,roles) values ${people.map((p) => `('${p.id}','${id}','${p.name}',ARRAY['trainee'])`).join(',')};`,
+        input: `insert into public.institution_members(id,institution_id,name,roles) values ${people.map((p) => `('${p.id}','${id}','${p.name}',ARRAY['trainee'])`).join(',')};`,
         stdio: 'pipe',
       },
     )

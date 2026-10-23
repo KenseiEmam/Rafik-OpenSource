@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test'
 import { randomUUID, randomBytes } from 'node:crypto'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 
 test('one Resources screen and role-aware Nutrition resolve through the supported routes', async ({
   page,
 }) => {
   test.setTimeout(120000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     id = randomUUID()
   try {
     await f.call(f.owner, '/v1/institutions', {

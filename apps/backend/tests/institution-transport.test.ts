@@ -1,6 +1,6 @@
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
-import { institutionTransport } from "../server/institution-compatibility.ts";
+import { institutionTransport } from "../server/institution-routing.ts";
 import { db } from "../server/db.ts";
 after(() => db.$disconnect());
 test("institution transport preserves scalar serializers and opaque durable documents", () => {
@@ -22,6 +22,4 @@ test("institution transport preserves scalar serializers and opaque durable docu
     at: "2026-10-23T12:00:00.000Z",
     document: { workspace_id: "frozen-id" },
   });
-  const legacy = JSON.parse(JSON.stringify(institutionTransport(result, true)));
-  assert.deepEqual(legacy, JSON.parse(JSON.stringify(source)));
 });

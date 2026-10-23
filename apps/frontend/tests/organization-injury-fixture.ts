@@ -55,7 +55,7 @@ export async function injuryFixture() {
       `insert into identity.users(id,email,email_confirmed_at) values('${id}','${email}',now()); insert into identity.sessions(token_hash,user_id,expires_at) values('${createHash('sha256').update(cookie).digest('hex')}','${id}',now()+interval '1 hour');`,
     )
     const current = people.at(-1)!
-    await call(current, '/v1/commands/ensure_profile', { p_name: name })
+    await call(current, '/v1/account/profile', { p_name: name })
     return current
   }
   async function addMember(
@@ -67,7 +67,7 @@ export async function injuryFixture() {
     if (!/^[a-f0-9-]{36}$/.test(institution) || !/^[a-f0-9-]{36}$/.test(current.id))
       throw new Error('Invalid fixture membership ID')
     sql(
-      `insert into public.workspace_members(id,institution_id,user_id,roles,name) values('${id}','${institution}','${current.id}',array['${role}']::text[],'${role === 'trainee' ? 'Injury Athlete' : role === 'trainer' ? 'Injury Coach' : 'Injury Admin'}');`,
+      `insert into public.institution_members(id,institution_id,user_id,roles,name) values('${id}','${institution}','${current.id}',array['${role}']::text[],'${role === 'trainee' ? 'Injury Athlete' : role === 'trainer' ? 'Injury Coach' : 'Injury Admin'}');`,
     )
     return { id, user_id: current.id, revision: 1 }
   }
@@ -75,7 +75,7 @@ export async function injuryFixture() {
     if (!/^[a-f0-9-]{36}$/.test(athleteMember) || !/^[a-f0-9-]{36}$/.test(coachMember))
       throw new Error('Invalid fixture assignment ID')
     sql(
-      `update public.workspace_members set trainer_id='${coachMember}' where id='${athleteMember}';`,
+      `update public.institution_members set trainer_id='${coachMember}' where id='${athleteMember}';`,
     )
   }
   async function cleanup() {

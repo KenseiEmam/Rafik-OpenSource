@@ -1,4 +1,4 @@
-import { api, rpc, request } from './backend'
+import { api, request } from './backend'
 import { clone, type Session, type LocalSession, type PlanDay } from './domain'
 import {
   editLocalSession,
@@ -134,28 +134,20 @@ export async function syncWorkout(id: string, owner: string) {
         })
       const op = row.pending!
       try {
-        const result = row.session.institution_id
-          ? await request<Session>(`/v1/institution/sessions`, {
-              method: 'POST',
-              body: JSON.stringify({
-                operation: op.id,
-                action: 'save',
-                view: 'trainee',
-                id,
-                revision: op.expectedVersion,
-                entries: op.entries,
-                note: op.note,
-                complete: op.complete,
-              }),
-            })
-          : await rpc<Session>('save_session', {
-              p_id: id,
-              p_expected_version: op.expectedVersion,
-              p_operation_id: op.id,
-              p_entries: op.entries,
-              p_note: op.note,
-              p_complete: op.complete,
-            })
+        if (!row.session.institution_id) throw new Error('retired_workout')
+        const result = await request<Session>(`/v1/institution/sessions`, {
+          method: 'POST',
+          body: JSON.stringify({
+            operation: op.id,
+            action: 'save',
+            view: 'trainee',
+            id,
+            revision: op.expectedVersion,
+            entries: op.entries,
+            note: op.note,
+            complete: op.complete,
+          }),
+        })
         row = await editLocalSession(id, (r) => {
           if (r.pending?.id !== op.id) return
           r.session.version = result.version
@@ -208,7 +200,6 @@ export async function syncPending(owner: string) {
 }
 
 async function readSession(id: string, institution?: string) {
-  return institution
-    ? request<Session>(`/v1/workouts/${id}`)
-    : rpc<Session | null>('session_document', { p_id: id })
+  if (!institution) throw new Error('retired_workout')
+  return request<Session>(`/v1/workouts/${id}`)
 }

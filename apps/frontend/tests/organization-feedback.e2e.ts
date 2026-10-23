@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process'
 import { resolve } from 'node:path'
 import { readFileSync } from 'node:fs'
 import AxeBuilder from '@axe-core/playwright'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { testDatabase } from './local-config'
 import { layoutIssues } from './layout-contract'
 test('optional session and workplace feedback recover and appear as separate source-labelled charts', async ({
@@ -12,7 +12,7 @@ test('optional session and workplace feedback recover and appear as separate sou
   browser,
 }, info) => {
   test.setTimeout(180000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     institution = randomUUID(),
     trainerContext = await browser.newContext(),
     trainer = await trainerContext.newPage(),
@@ -84,7 +84,7 @@ test('optional session and workplace feedback recover and appear as separate sou
       ],
       {
         cwd: resolve(import.meta.dirname, '../../backend'),
-        input: `update public.organization_events set starts_at=now()-interval '2 hours',ends_at=now()-interval '1 hour' where id='${id}' and institution_id='${institution}';`,
+        input: `update public.institution_events set starts_at=now()-interval '2 hours',ends_at=now()-interval '1 hour' where id='${id}' and institution_id='${institution}';`,
         stdio: ['pipe', 'pipe', 'pipe'],
       },
     )
@@ -104,8 +104,8 @@ test('optional session and workplace feedback recover and appear as separate sou
       view: 'trainer',
       revision: 1,
     })
-    const base = `/organization/${institution}`
-    await f.login(client, f.client, base + '/trainee/calendar/' + id)
+    const base = ''
+    await f.login(client, f.client, base + '/schedule/' + id)
     await client.getByRole('link', { name: 'Rate your session (optional)', exact: true }).click()
     await expect(client.locator('input[type=radio]:checked')).toHaveCount(0)
     await client.getByRole('radio', { name: '4 Satisfied', exact: true }).check()
@@ -310,7 +310,7 @@ test('optional session and workplace feedback recover and appear as separate sou
 
 test('a completed institution workout links to the athlete feedback form', async ({ page }) => {
   test.setTimeout(120000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     institution = randomUUID(),
     endpoint = `/v1/institution`,
     today = new Date().toISOString().slice(0, 10)

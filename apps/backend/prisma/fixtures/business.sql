@@ -1,1 +1,0 @@
--- Synthetic LOCAL runtime switch. Never apply fixture files to hosting.

@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Breaking retirement
+
+- Remove 37 retired personal/team/business/file-store tables and exclusive SQL functions through a forward migration; preserve current institution data, histories and receipts.
+- Remove generic commands/queries/files, published-client aliases and old browser redirects. Replace current profile, support and account lifecycle dependencies with explicit endpoints.
+- Require coordinated backend/web/Android upgrade for beta.3; published beta.2 clients are unsupported. Keep the signing key and encrypted institutional queue identities.
+
+
 - Fix disposable backend SQL rehearsals to translate historical role/coaching migration identifiers into the current institution schema without changing deployed migrations.
 
 ### Institution naming migration

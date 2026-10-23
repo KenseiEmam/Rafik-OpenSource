@@ -120,6 +120,10 @@ export function errorMessage(error: unknown): string {
         ? String(error.message)
         : String(error)
   const teamErrors: Record<string, [string, string]> = {
+    retired_workout: [
+      'This draft belongs to the retired personal workout system. Export it from Settings for reference; it cannot sync to an institution workout.',
+      'تنتمي هذه المسودة إلى نظام التمارين الشخصي المتوقف. يمكنك تصديرها من الإعدادات للرجوع إليها؛ ولا يمكن مزامنتها مع تمرين المؤسسة.',
+    ],
     invalid_credentials: [
       'The email or password is incorrect.',
       'البريد الإلكتروني أو كلمة المرور غير صحيحة.',

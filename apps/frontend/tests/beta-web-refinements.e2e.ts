@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { randomUUID, randomBytes } from 'node:crypto'
 import AxeBuilder from '@axe-core/playwright'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { layoutIssues } from './layout-contract'
 
 const image = readFileSync(
@@ -25,7 +25,7 @@ async function inspect(page: Page, name: string, info: { project: { name: string
   })
 }
 
-async function institutionFixture(f: Awaited<ReturnType<typeof teamFixture>>, name: string) {
+async function prepareInstitution(f: Awaited<ReturnType<typeof institutionFixture>>, name: string) {
   const institution = randomUUID(),
     endpoint = `/v1/institution`
   await f.call(f.owner, '/v1/institutions', { id: institution, kind: 'institution', name })
@@ -48,9 +48,9 @@ test('coach browses later pages of athlete plans, nutrition plans and events, th
   page,
 }, info) => {
   test.setTimeout(300000)
-  const f = await teamFixture()
+  const f = await institutionFixture()
   try {
-    const { institution, endpoint, join } = await institutionFixture(f, 'Madar browse acceptance')
+    const { institution, endpoint, join } = await prepareInstitution(f, 'Madar browse acceptance')
     await join(f.coach, ['trainer'])
     const athletes = []
     for (let i = 1; i <= 26; i++) {
@@ -235,11 +235,11 @@ test('multiple message attachments survive reload, exact retry and recipient rev
   browser,
 }, info) => {
   test.setTimeout(180000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     recipientContext = await browser.newContext(),
     recipient = await recipientContext.newPage()
   try {
-    const { institution, endpoint, join } = await institutionFixture(f, 'Madar attachments')
+    const { institution, endpoint, join } = await prepareInstitution(f, 'Madar attachments')
     await join(f.client, ['trainee'])
     await f.login(page, f.owner, `/messages`)
     await page.getByRole('button', { name: /R4 Athlete/ }).click()

@@ -33,7 +33,7 @@ test("injury status is consent-gated, athlete-owned, limited for assigned coache
       (
         await call(
           admin,
-          `/v1/workspaces/${institution}`,
+          `/v1/institution`,
           operation("assign-trainer", {
             id: athleteMember.id,
             revision: 1,
@@ -43,7 +43,7 @@ test("injury status is consent-gated, athlete-owned, limited for assigned coache
       ).status,
       200,
     );
-    const endpoint = `/v1/workspaces/${institution}/injuries`;
+    const endpoint = `/v1/institution/injuries`;
 
     // Admin can verify consent prerequisites, but receives no injury values.
     let r = await call(admin, endpoint + "?view=admin");
@@ -136,14 +136,10 @@ test("injury status is consent-gated, athlete-owned, limited for assigned coache
     assert.equal("participation" in r.data.members[0], false);
     assert.equal("records" in r.data, false);
     assert.equal(
-      (
-        await call(
-          athlete,
-          `/v1/workspaces/${foreignWorkspace}/injuries?view=trainee`,
-        )
-      ).data.items.length,
-      0,
-      "the same identity cannot carry injury data between organizations",
+      (await call(foreignAdmin, `/v1/institution/injuries?view=trainee`))
+        .status,
+      403,
+      "a nonmember cannot read injury records",
     );
     assert.equal(
       (
@@ -202,7 +198,7 @@ test("injury status is consent-gated, athlete-owned, limited for assigned coache
 
     await call(
       admin,
-      `/v1/workspaces/${institution}`,
+      `/v1/institution`,
       operation("assign-trainer", {
         id: athleteMember.id,
         revision: 2,

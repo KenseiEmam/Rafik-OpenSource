@@ -12,8 +12,7 @@ flowchart LR
  Auth --> Domain[Institution domain services]
  Domain --> Records[Scoped records and history]
  Domain --> Receipts[Exact operation receipts]
- HTTP --> Gateway[Small explicit legacy allowlist]
- Gateway --> RLS[Historical SQL/RLS and own export]
+ HTTP --> Account[Explicit profile, support and own-account lifecycle]
  HTTP --> Bytes[Authorized byte adapters]
 ```
 
@@ -296,7 +295,7 @@ Timed roster/attendance/assessment records and correction history.
 - Authority: Current signed-in institution membership; handler enforces its role/subject scope.
 - Apps/workflow: Web institution workflows; Android calendar attendance/assessment (calendar only).
 - Handler: [calendar](../../../apps/backend/server/calendar.ts), [calendarCommand](../../../apps/backend/server/calendar.ts).
-- Source-derived table touches (including known called helpers/SQL functions): [public.appointments](schema.md#publicappointments), [public.assessment_result_history](schema.md#publicassessment_result_history), [public.assessment_results](schema.md#publicassessment_results), [public.assessment_templates](schema.md#publicassessment_templates), [public.coach_clients](schema.md#publiccoach_clients), [public.institution_audit_events](schema.md#publicinstitution_audit_events), [public.institution_coaching_links](schema.md#publicinstitution_coaching_links), [public.institution_event_people](schema.md#publicinstitution_event_people), [public.institution_events](schema.md#publicinstitution_events), [public.institution_members](schema.md#publicinstitution_members), [public.institution_operations](schema.md#publicinstitution_operations), [public.institution_workout_positions](schema.md#publicinstitution_workout_positions), [public.profiles](schema.md#publicprofiles).
+- Source-derived table touches (including known called helpers/SQL functions): [public.assessment_result_history](schema.md#publicassessment_result_history), [public.assessment_results](schema.md#publicassessment_results), [public.assessment_templates](schema.md#publicassessment_templates), [public.institution_audit_events](schema.md#publicinstitution_audit_events), [public.institution_coaching_links](schema.md#publicinstitution_coaching_links), [public.institution_event_people](schema.md#publicinstitution_event_people), [public.institution_events](schema.md#publicinstitution_events), [public.institution_members](schema.md#publicinstitution_members), [public.institution_operations](schema.md#publicinstitution_operations), [public.institution_workout_positions](schema.md#publicinstitution_workout_positions), [public.profiles](schema.md#publicprofiles).
 
 ### POST /v1/institution/calendar-preview
 
@@ -332,7 +331,7 @@ Institution drafts, immutable publication and library.
 - Authority: Current signed-in institution membership; handler enforces its role/subject scope.
 - Apps/workflow: Web program/athlete recording; future Android workout capture.
 - Handler: [programs](../../../apps/backend/server/programming.ts), [programCommand](../../../apps/backend/server/programming.ts).
-- Source-derived table touches (including known called helpers/SQL functions): [public.exercises](schema.md#publicexercises), [public.institution_assets](schema.md#publicinstitution_assets), [public.institution_audit_events](schema.md#publicinstitution_audit_events), [public.institution_exercises](schema.md#publicinstitution_exercises), [public.institution_members](schema.md#publicinstitution_members), [public.institution_operations](schema.md#publicinstitution_operations), [public.institution_programs](schema.md#publicinstitution_programs), [public.institution_versions](schema.md#publicinstitution_versions), [public.program_media](schema.md#publicprogram_media).
+- Source-derived table touches (including known called helpers/SQL functions): [public.institution_assets](schema.md#publicinstitution_assets), [public.institution_audit_events](schema.md#publicinstitution_audit_events), [public.institution_exercises](schema.md#publicinstitution_exercises), [public.institution_members](schema.md#publicinstitution_members), [public.institution_operations](schema.md#publicinstitution_operations), [public.institution_programs](schema.md#publicinstitution_programs), [public.institution_versions](schema.md#publicinstitution_versions), [public.program_media](schema.md#publicprogram_media), [public.reference_exercises](schema.md#publicreference_exercises).
 
 ### GET / POST /v1/institution/catalog
 
@@ -341,7 +340,7 @@ Institution exercise catalog and edits.
 - Authority: Current signed-in institution membership; handler enforces its role/subject scope.
 - Apps/workflow: Web program/athlete recording; future Android workout capture.
 - Handler: [catalog](../../../apps/backend/server/programming.ts), [programCommand](../../../apps/backend/server/programming.ts).
-- Source-derived table touches (including known called helpers/SQL functions): [public.exercises](schema.md#publicexercises), [public.institution_assets](schema.md#publicinstitution_assets), [public.institution_audit_events](schema.md#publicinstitution_audit_events), [public.institution_exercises](schema.md#publicinstitution_exercises), [public.institution_members](schema.md#publicinstitution_members), [public.institution_operations](schema.md#publicinstitution_operations), [public.institution_programs](schema.md#publicinstitution_programs), [public.institution_versions](schema.md#publicinstitution_versions), [public.program_media](schema.md#publicprogram_media).
+- Source-derived table touches (including known called helpers/SQL functions): [public.institution_assets](schema.md#publicinstitution_assets), [public.institution_audit_events](schema.md#publicinstitution_audit_events), [public.institution_exercises](schema.md#publicinstitution_exercises), [public.institution_members](schema.md#publicinstitution_members), [public.institution_operations](schema.md#publicinstitution_operations), [public.institution_programs](schema.md#publicinstitution_programs), [public.institution_versions](schema.md#publicinstitution_versions), [public.program_media](schema.md#publicprogram_media), [public.reference_exercises](schema.md#publicreference_exercises).
 
 ### GET / POST /v1/institution/delivery
 
@@ -368,7 +367,7 @@ Fixed-time sequence binding/reschedule/skip; no worker or new UI yet.
 - Authority: Current signed-in institution membership; handler enforces its role/subject scope.
 - Apps/workflow: Web program/athlete recording; future Android workout capture.
 - Handler: [workoutSchedulingCommand](../../../apps/backend/server/programming.ts).
-- Source-derived table touches (including known called helpers/SQL functions): [public.appointments](schema.md#publicappointments), [public.coach_clients](schema.md#publiccoach_clients), [public.institution_assignments](schema.md#publicinstitution_assignments), [public.institution_audit_events](schema.md#publicinstitution_audit_events), [public.institution_coaching_links](schema.md#publicinstitution_coaching_links), [public.institution_event_people](schema.md#publicinstitution_event_people), [public.institution_events](schema.md#publicinstitution_events), [public.institution_injury_records](schema.md#publicinstitution_injury_records), [public.institution_members](schema.md#publicinstitution_members), [public.institution_operations](schema.md#publicinstitution_operations), [public.institution_sessions](schema.md#publicinstitution_sessions), [public.institution_workout_positions](schema.md#publicinstitution_workout_positions), [public.profiles](schema.md#publicprofiles).
+- Source-derived table touches (including known called helpers/SQL functions): [public.institution_assignments](schema.md#publicinstitution_assignments), [public.institution_audit_events](schema.md#publicinstitution_audit_events), [public.institution_coaching_links](schema.md#publicinstitution_coaching_links), [public.institution_event_people](schema.md#publicinstitution_event_people), [public.institution_events](schema.md#publicinstitution_events), [public.institution_injury_records](schema.md#publicinstitution_injury_records), [public.institution_members](schema.md#publicinstitution_members), [public.institution_operations](schema.md#publicinstitution_operations), [public.institution_sessions](schema.md#publicinstitution_sessions), [public.institution_workout_positions](schema.md#publicinstitution_workout_positions), [public.profiles](schema.md#publicprofiles).
 
 ### GET /v1/workouts/{id}/previous
 
@@ -413,34 +412,7 @@ Private institution program artwork.
 - Authority: Current signed-in institution membership; handler enforces its role/subject scope.
 - Apps/workflow: Web program create/preview.
 - Handler: [getProgramMedia](../../../apps/backend/server/program-media.ts), [putProgramMedia](../../../apps/backend/server/program-media.ts).
-- Source-derived table touches (including known called helpers/SQL functions): [public.institution_assignments](schema.md#publicinstitution_assignments), [public.institution_coaching_links](schema.md#publicinstitution_coaching_links), [public.institution_members](schema.md#publicinstitution_members), [public.institution_programs](schema.md#publicinstitution_programs), [public.institution_versions](schema.md#publicinstitution_versions), [public.institutions](schema.md#publicinstitutions), [public.plan_versions](schema.md#publicplan_versions), [public.program_media](schema.md#publicprogram_media).
-
-### GET / PUT / DELETE /v1/files/{owner}/{file}
-
-Historical private byte reads, pending upload recovery and retired-byte cleanup.
-
-- Authority: Owner/retained private RLS; no new resource registration.
-- Apps/workflow: Account cleanup and historical recovery only.
-- Handler: [fileOperation](../../../apps/backend/server/files.ts).
-- Source-derived table touches (including known called helpers/SQL functions): [file_store.objects](schema.md#file_storeobjects), [public.resources](schema.md#publicresources).
-
-### GET /v1/queries/{table}
-
-Explicit allowlisted own historical export/reference projections.
-
-- Authority: Authenticated RLS; public reference exceptions only.
-- Apps/workflow: Web account export/support/reference compatibility.
-- Handler: [query](../../../apps/backend/server/commands.ts).
-- Source-derived table touches (including known called helpers/SQL functions): [public.appointment_slots](schema.md#publicappointment_slots), [public.appointments](schema.md#publicappointments), [public.assignments](schema.md#publicassignments), [public.business_accounts](schema.md#publicbusiness_accounts), [public.business_events](schema.md#publicbusiness_events), [public.client_context](schema.md#publicclient_context), [public.coach_clients](schema.md#publiccoach_clients), [public.coaching_forms](schema.md#publiccoaching_forms), [public.coaching_requests](schema.md#publiccoaching_requests), [public.conversation_reads](schema.md#publicconversation_reads), [public.exercises](schema.md#publicexercises), [public.meal_entries](schema.md#publicmeal_entries), [public.measurements](schema.md#publicmeasurements), [public.messages](schema.md#publicmessages), [public.nutrition_guidance](schema.md#publicnutrition_guidance), [public.plan_versions](schema.md#publicplan_versions), [public.plans](schema.md#publicplans), [public.profiles](schema.md#publicprofiles), [public.resource_shares](schema.md#publicresource_shares), [public.resources](schema.md#publicresources), [public.saved_foods](schema.md#publicsaved_foods), [public.schedule_exceptions](schema.md#publicschedule_exceptions), [public.sessions](schema.md#publicsessions), [public.support_cases](schema.md#publicsupport_cases), [public.team_activity](schema.md#publicteam_activity), [public.team_assignments](schema.md#publicteam_assignments), [public.team_clients](schema.md#publicteam_clients), [public.team_group_members](schema.md#publicteam_group_members), [public.team_groups](schema.md#publicteam_groups), [public.team_members](schema.md#publicteam_members), [public.team_plans](schema.md#publicteam_plans), [public.team_resource_shares](schema.md#publicteam_resource_shares), [public.teams](schema.md#publicteams).
-
-### POST /v1/commands/{name}
-
-Explicit allowlisted profile/support/lifecycle and historical replay commands.
-
-- Authority: Authenticated actor plus SQL grants/RLS; no automatic publication from grants.
-- Apps/workflow: Web auth/settings/support/recovery.
-- Handler: [command](../../../apps/backend/server/commands.ts).
-- Source-derived table touches (including known called helpers/SQL functions): [file_store.objects](schema.md#file_storeobjects), [identity.sessions](schema.md#identitysessions), [identity.users](schema.md#identityusers), [public.appointment_slots](schema.md#publicappointment_slots), [public.appointments](schema.md#publicappointments), [public.coach_clients](schema.md#publiccoach_clients), [public.institution_members](schema.md#publicinstitution_members), [public.institutions](schema.md#publicinstitutions), [public.profiles](schema.md#publicprofiles), [public.resources](schema.md#publicresources), [public.session_operations](schema.md#publicsession_operations), [public.sessions](schema.md#publicsessions), [public.set_entries](schema.md#publicset_entries), [public.support_cases](schema.md#publicsupport_cases), [public.team_clients](schema.md#publicteam_clients), [public.team_members](schema.md#publicteam_members), [public.teams](schema.md#publicteams).
+- Source-derived table touches (including known called helpers/SQL functions): [public.institution_assignments](schema.md#publicinstitution_assignments), [public.institution_coaching_links](schema.md#publicinstitution_coaching_links), [public.institution_members](schema.md#publicinstitution_members), [public.institution_programs](schema.md#publicinstitution_programs), [public.institution_versions](schema.md#publicinstitution_versions), [public.institutions](schema.md#publicinstitutions), [public.program_media](schema.md#publicprogram_media).
 
 ### GET /v1/account/institution
 
@@ -604,64 +576,42 @@ Bundled canonical contract/viewer assets; production reference-only.
 - Handler: [serveApiDocs](../../../apps/backend/server/api-docs.ts).
 - Source-derived table touches (including known called helpers/SQL functions): Static reference/byte content; no direct table dependency found.
 
-## Explicit compatibility commands
+### POST / PUT /v1/account/profile
 
-| Command | Purpose / table boundary |
-| --- | --- |
-| `ensure_profile` | [public.profiles](schema.md#publicprofiles) |
-| `update_profile` | [public.profiles](schema.md#publicprofiles) |
-| `session_document` | [identity.sessions](schema.md#identitysessions), [public.sessions](schema.md#publicsessions), [public.set_entries](schema.md#publicset_entries) |
-| `save_session` | [identity.sessions](schema.md#identitysessions), [public.session_operations](schema.md#publicsession_operations), [public.sessions](schema.md#publicsessions), [public.set_entries](schema.md#publicset_entries) |
-| `account_deletion_ready` | [public.institution_members](schema.md#publicinstitution_members), [public.institutions](schema.md#publicinstitutions), [public.team_clients](schema.md#publicteam_clients), [public.teams](schema.md#publicteams) |
-| `delete_my_account` | [identity.users](schema.md#identityusers), [public.appointment_slots](schema.md#publicappointment_slots), [public.appointments](schema.md#publicappointments), [public.coach_clients](schema.md#publiccoach_clients), [public.institution_members](schema.md#publicinstitution_members), [public.institutions](schema.md#publicinstitutions), [public.profiles](schema.md#publicprofiles), [public.resources](schema.md#publicresources), [public.team_clients](schema.md#publicteam_clients), [public.team_members](schema.md#publicteam_members), [public.teams](schema.md#publicteams) |
-| `retire_resource` | [public.resources](schema.md#publicresources) |
-| `remove_resource_record` | [file_store.objects](schema.md#file_storeobjects), [public.resources](schema.md#publicresources) |
-| `finish_resource` | [file_store.objects](schema.md#file_storeobjects), [public.resources](schema.md#publicresources) |
-| `create_support_case` | [public.support_cases](schema.md#publicsupport_cases), [public.team_clients](schema.md#publicteam_clients), [public.team_members](schema.md#publicteam_members), [public.teams](schema.md#publicteams) |
-| `update_support_case` | [public.support_cases](schema.md#publicsupport_cases), [public.team_members](schema.md#publicteam_members), [public.teams](schema.md#publicteams) |
+Initialize or edit own profile.
 
-`finish_resource` only finalizes a previously registered owned historical upload; `register_resource` is not exposed. `save_session` saves an existing owned historical workout; it does not restore legacy workout acquisition. Account lifecycle functions retain their subject-scoped SQL dependencies and failure checks.
+- Authority: Authenticated own account.
+- Apps/workflow: Web account settings and support.
+- Handler: [accountProfile](../../../apps/backend/server/account.ts).
+- Source-derived table touches (including known called helpers/SQL functions): [public.profiles](schema.md#publicprofiles).
 
-## Explicit compatibility query projections
+### GET /v1/account/export
 
-- `profiles`: [public.profiles](schema.md#publicprofiles)
-- `exercises`: [public.exercises](schema.md#publicexercises)
-- `plan_versions`: [public.plan_versions](schema.md#publicplan_versions)
-- `sessions`: [public.sessions](schema.md#publicsessions)
-- `plans`: [public.plans](schema.md#publicplans)
-- `client_context`: [public.client_context](schema.md#publicclient_context)
-- `coach_clients`: [public.coach_clients](schema.md#publiccoach_clients)
-- `assignments`: [public.assignments](schema.md#publicassignments)
-- `schedule_exceptions`: [public.schedule_exceptions](schema.md#publicschedule_exceptions)
-- `coaching_forms`: [public.coaching_forms](schema.md#publiccoaching_forms)
-- `coaching_requests`: [public.coaching_requests](schema.md#publiccoaching_requests)
-- `measurements`: [public.measurements](schema.md#publicmeasurements)
-- `messages`: [public.messages](schema.md#publicmessages)
-- `conversation_reads`: [public.conversation_reads](schema.md#publicconversation_reads)
-- `nutrition_guidance`: [public.nutrition_guidance](schema.md#publicnutrition_guidance)
-- `saved_foods`: [public.saved_foods](schema.md#publicsaved_foods)
-- `meal_entries`: [public.meal_entries](schema.md#publicmeal_entries)
-- `appointment_slots`: [public.appointment_slots](schema.md#publicappointment_slots)
-- `appointments`: [public.appointments](schema.md#publicappointments)
-- `resources`: [public.resources](schema.md#publicresources)
-- `resource_shares`: [public.resource_shares](schema.md#publicresource_shares)
-- `teams`: [public.teams](schema.md#publicteams)
-- `team_members`: [public.team_members](schema.md#publicteam_members)
-- `team_clients`: [public.team_clients](schema.md#publicteam_clients)
-- `team_groups`: [public.team_groups](schema.md#publicteam_groups)
-- `team_group_members`: [public.team_group_members](schema.md#publicteam_group_members)
-- `team_plans`: [public.team_plans](schema.md#publicteam_plans)
-- `team_resource_shares`: [public.team_resource_shares](schema.md#publicteam_resource_shares)
-- `team_assignments`: [public.team_assignments](schema.md#publicteam_assignments)
-- `team_activity`: [public.team_activity](schema.md#publicteam_activity)
-- `business_accounts`: [public.business_accounts](schema.md#publicbusiness_accounts)
-- `business_events`: [public.business_events](schema.md#publicbusiness_events)
-- `support_cases`: [public.support_cases](schema.md#publicsupport_cases)
+Complete current own-account export.
 
-## Published-client compatibility
+- Authority: Authenticated own account.
+- Apps/workflow: Web account settings and support.
+- Handler: [accountExport](../../../apps/backend/server/account.ts).
+- Source-derived table touches (including known called helpers/SQL functions): [public.assessment_result_history](schema.md#publicassessment_result_history), [public.assessment_results](schema.md#publicassessment_results), [public.institution_assets](schema.md#publicinstitution_assets), [public.institution_assignments](schema.md#publicinstitution_assignments), [public.institution_event_people](schema.md#publicinstitution_event_people), [public.institution_meals](schema.md#publicinstitution_meals), [public.institution_members](schema.md#publicinstitution_members), [public.institution_messages](schema.md#publicinstitution_messages), [public.institution_nutrition_plans](schema.md#publicinstitution_nutrition_plans), [public.institution_nutrition_sharing](schema.md#publicinstitution_nutrition_sharing), [public.institution_session_feedback](schema.md#publicinstitution_session_feedback), [public.institution_session_history](schema.md#publicinstitution_session_history), [public.institution_sessions](schema.md#publicinstitution_sessions), [public.institution_workout_positions](schema.md#publicinstitution_workout_positions), [public.institution_workout_recurrences](schema.md#publicinstitution_workout_recurrences), [public.institution_workplace_feedback](schema.md#publicinstitution_workplace_feedback), [public.notification_events](schema.md#publicnotification_events), [public.notification_preferences](schema.md#publicnotification_preferences), [public.profiles](schema.md#publicprofiles), [public.support_cases](schema.md#publicsupport_cases).
 
-Canonical scope is `/v1/institution/...`; its ID is resolved server-side. `/v1/institutions/:id` is internal dispatch only and rejected as a public URL. The dedicated compatibility adapter accepts published APK workspace/context and organization-prefixed record paths without redirects. Supplied IDs retain authorization checks and exact commands retain their payloads. These aliases are additional to the canonical route records, not another institution model. See ADR 0029 for the complete transition boundary.
+### GET / POST /v1/account/deletion
 
-## Coverage limits
+Last-admin guarded own-account deletion.
 
-Table touches are conservative source traces, not a query profiler. Dynamic SQL, triggers, cascade deletion and account lifecycle can touch more rows/tables than an individual static path shows; inspect each table's SQL guards above before removal. No route is deemed disposable solely because one literal client URL is absent. Unsupported methods/paths use the existing 404/405 handling; global OPTIONS is protocol handling, not another product route.
+- Authority: Authenticated own account.
+- Apps/workflow: Web account settings and support.
+- Handler: [accountDeletion](../../../apps/backend/server/account.ts).
+- Source-derived table touches (including known called helpers/SQL functions): [identity.users](schema.md#identityusers), [public.institution_members](schema.md#publicinstitution_members), [public.institutions](schema.md#publicinstitutions).
+
+### GET / POST /v1/support
+
+Own paginated support reports and exact create/update retries.
+
+- Authority: Authenticated own account.
+- Apps/workflow: Web account settings and support.
+- Handler: [supportCases](../../../apps/backend/server/support.ts), [supportCommand](../../../apps/backend/server/support.ts).
+- Source-derived table touches (including known called helpers/SQL functions): [public.support_cases](schema.md#publicsupport_cases).
+
+## Retired surfaces
+
+Generic commands/queries, standalone file transport, workspace/context and organization-prefixed aliases are removed. Use explicit account/support and institution endpoints. Published beta.2 clients require replacement for beta.3; no legacy route fallback is provided. Historical migration sources remain immutable.

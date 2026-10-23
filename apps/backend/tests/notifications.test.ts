@@ -30,7 +30,7 @@ test("notification intent, scoped inbox, preferences, quiet hours, retry and loc
       channel = randomUUID();
     await call(
       admin,
-      `/v1/workspaces/${id}/communication`,
+      `/v1/institution/communication`,
       operation("create", {
         id: channel,
         view: "admin",
@@ -46,10 +46,10 @@ test("notification intent, scoped inbox, preferences, quiet hours, retry and loc
       body: "Private assessment detail must never enter an email preview.",
     });
     assert.equal(
-      (await call(admin, `/v1/workspaces/${id}/communication`, send)).status,
+      (await call(admin, `/v1/institution/communication`, send)).status,
       200,
     );
-    await call(admin, `/v1/workspaces/${id}/communication`, send);
+    await call(admin, `/v1/institution/communication`, send);
     let rows = await db.notification_events.findMany({
       where: { user_id: client.id, institution_id: id },
     });
@@ -150,7 +150,7 @@ test("notification intent, scoped inbox, preferences, quiet hours, retry and loc
       message: randomUUID(),
       body: "A quiet-hours update",
     };
-    await call(admin, `/v1/workspaces/${id}/communication`, second);
+    await call(admin, `/v1/institution/communication`, second);
     await dispatchNotifications();
     const quiet = await db.notification_events.findFirstOrThrow({
       where: { source_id: second.message },
@@ -202,10 +202,10 @@ test("notification intent, scoped inbox, preferences, quiet hours, retry and loc
       message: randomUUID(),
       body: "An update before removal",
     };
-    await call(admin, `/v1/workspaces/${id}/communication`, third);
+    await call(admin, `/v1/institution/communication`, third);
     await call(
       admin,
-      `/v1/workspaces/${id}`,
+      `/v1/institution`,
       operation("member", {
         id: trainee.id,
         revision: 1,

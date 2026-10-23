@@ -1,5 +1,10 @@
 # Current delivery ledger
 
+## Breaking retirement — 23 October 2026
+
+Founder approved removing all retired routes/storage before customer adoption, explicitly including business and standalone assignments. Added ADR 0030, forward deletion, current account/support services, canonical-only web/API routing, reference exercise separation, and current-only file recovery/orphan metadata. The populated retirement verifier preserved complete snapshots of 44 current tables and exact receipts. Focused API checks exposed and corrected legacy calendar collision SQL, profile/catalog RLS dependencies and void-result handling. Final populated retirement, institutional API cases, 44 frontend units and native HTTP/SQLite replay checks passed. The Chromium production-preview journey passed setup, profile/support persistence, canonical navigation and rejected old browser routes; English desktop and Arabic phone dark screenshots were inspected. Paired landing API/deployment guidance is pushed to its draft PR. No preview reset, release merge or APK build was performed; wider beta.3 features and physical upgrade acceptance remain separate work.
+
+
 ## Backend CI and contributor coordination review — 23 October 2026
 
 PR #142's backend job failed in the fresh-database harness while replaying historical role-normalization SQL against renamed tables. The harness now applies the existing identifier map to both historical role and coaching snippets; deployed migration files remain unchanged. Review of Sami's PR #143 supports GitHub-based coordination and per-PR change notes, but recommends a separate main-branch tooling merge after incomplete-read reporting, current watched paths, compiler recovery, and contributor/agent authorization guidance are corrected. It has not been merged into this release branch.

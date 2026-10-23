@@ -4,7 +4,7 @@ import { randomUUID, randomBytes } from 'node:crypto'
 import { execFileSync } from 'node:child_process'
 import { resolve } from 'node:path'
 import AxeBuilder from '@axe-core/playwright'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { layoutIssues } from './layout-contract'
 
 test('organization staff schedule a group assessment, recover a result, correct it and inspect real analytics', async ({
@@ -12,7 +12,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
   browser,
 }, info) => {
   test.setTimeout(120000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     clientContext = await browser.newContext(),
     client = await clientContext.newPage(),
     id = randomUUID()
@@ -143,7 +143,7 @@ test('organization staff schedule a group assessment, recover a result, correct 
       ],
       {
         cwd: resolve(import.meta.dirname, '../../backend'),
-        input: `update public.organization_events e set starts_at=now()-interval '2 hours',ends_at=now()-interval '1 hour' from public.institutions w where e.institution_id=w.id and e.id='${eid}' and w.id='${id}' and w.created_by='${f.owner.id}';`,
+        input: `update public.institution_events e set starts_at=now()-interval '2 hours',ends_at=now()-interval '1 hour' from public.institutions w where e.institution_id=w.id and e.id='${eid}' and w.id='${id}' and w.created_by='${f.owner.id}';`,
         stdio: ['pipe', 'pipe', 'pipe'],
       },
     )

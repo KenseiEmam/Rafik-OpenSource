@@ -4,7 +4,7 @@ import { resolve } from 'node:path'
 import { randomUUID, randomBytes } from 'node:crypto'
 import { execFileSync } from 'node:child_process'
 import AxeBuilder from '@axe-core/playwright'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { layoutIssues } from './layout-contract'
 import { testApi, testWeb, testDatabase } from './local-config'
 
@@ -12,7 +12,7 @@ import { testApi, testWeb, testDatabase } from './local-config'
 test('web design audit inventory', async ({ page }, info) => {
   test.skip(process.env.RAFIK_UI_AUDIT !== '1', 'Opt-in design audit')
   test.setTimeout(600000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     institution = randomUUID(),
     endpoint = `/v1/institution`
   const controlsOnly = process.env.RAFIK_UI_AUDIT_CONTROLS === '1'
@@ -300,7 +300,7 @@ test('web design audit inventory', async ({ page }, info) => {
           'ON_ERROR_STOP=1',
         ],
         {
-          input: `update public.organization_events set starts_at=now()-interval '2 hours', ends_at=now()-interval '1 hour' where id='${pastEvent}' and institution_id='${institution}';`,
+          input: `update public.institution_events set starts_at=now()-interval '2 hours', ends_at=now()-interval '1 hour' where id='${pastEvent}' and institution_id='${institution}';`,
           stdio: ['pipe', 'pipe', 'pipe'],
         },
       )
@@ -362,7 +362,7 @@ test('web design audit inventory', async ({ page }, info) => {
           'ON_ERROR_STOP=1',
         ],
         {
-          input: `update public.organization_events set starts_at=date_trunc('day',now())+interval '12 hours', ends_at=date_trunc('day',now())+interval '13 hours' where institution_id='${institution}' and title like 'Today card %';`,
+          input: `update public.institution_events set starts_at=date_trunc('day',now())+interval '12 hours', ends_at=date_trunc('day',now())+interval '13 hours' where institution_id='${institution}' and title like 'Today card %';`,
           stdio: ['pipe', 'pipe', 'pipe'],
         },
       )

@@ -276,24 +276,8 @@ for (const [handler, prefix] of [
     if (!metadata.routes.some((route) => route.path === prefix + match[1]))
       throw Error("Unreviewed auth operation: " + prefix + match[1]);
 }
-const commandsSource = readFileSync(
-  resolve(backendRoot, "server/commands.ts"),
-  "utf8",
-);
-const setValues = (name) =>
-  [
-    ...(commandsSource
-      .match(
-        new RegExp(
-          "export const " + name + " = new Set\\(\\[([\\s\\S]*?)\\]\\)",
-        ),
-      )?.[1]
-      .matchAll(/"([^" ]+)"/g) || []),
-  ].map((m) => m[1]);
-const commands = setValues("supportedCommands"),
-  queries = setValues("supportedQueries");
-if (!commands.length || !queries.length)
-  throw Error("Cannot inspect gateway allowlists");
+const commands = [],
+  queries = [];
 const purposes = {
   accepted_by: "Account that consumed the invitation.",
   answers: "Historical form response values.",
@@ -623,7 +607,7 @@ for (const t of snapshot.tables) {
 let routesMd =
   "# Backend route reference\n\nGenerated from reviewed registrations in `server/index.ts`, authentication/doc dispatchers, handler call graphs and schema metadata. Methods listed are implemented routes, not proposed URLs. The canonical OpenAPI remains the supported field/API contract subset. Dynamic request URLs can be assembled in shared client helpers; the consumer description is reviewed, while literal matches are only source evidence.\n\n";
 routesMd +=
-  "## Route and data-flow map\n\n```mermaid\nflowchart LR\n Web[Web dashboard] --> HTTP[Explicit HTTP routes]\n Android[Android field app] --> HTTP\n HTTP --> Auth[Identity and current authority]\n Auth --> Domain[Institution domain services]\n Domain --> Records[Scoped records and history]\n Domain --> Receipts[Exact operation receipts]\n HTTP --> Gateway[Small explicit legacy allowlist]\n Gateway --> RLS[Historical SQL/RLS and own export]\n HTTP --> Bytes[Authorized byte adapters]\n```\n\n## Registered routes\n\n";
+  "## Route and data-flow map\n\n```mermaid\nflowchart LR\n Web[Web dashboard] --> HTTP[Explicit HTTP routes]\n Android[Android field app] --> HTTP\n HTTP --> Auth[Identity and current authority]\n Auth --> Domain[Institution domain services]\n Domain --> Records[Scoped records and history]\n Domain --> Receipts[Exact operation receipts]\n HTTP --> Account[Explicit profile, support and own-account lifecycle]\n HTTP --> Bytes[Authorized byte adapters]\n```\n\n## Registered routes\n\n";
 for (const route of metadata.routes) {
   let tables = [];
   for (const handler of route.handlers) {
@@ -651,15 +635,7 @@ for (const route of metadata.routes) {
   }.\n- Source-derived table touches (including known called helpers/SQL functions): ${tables.map(tableLink).join(", ") || "Static reference/byte content; no direct table dependency found"}.\n\n`;
 }
 routesMd +=
-  "## Explicit compatibility commands\n\n| Command | Purpose / table boundary |\n| --- | --- |\n";
-for (const name of commands)
-  routesMd += `| \`${name}\` | ${sqlTables(name).map(tableLink).join(", ") || "SQL ownership/lifecycle helper; inspect the migration implementation before changing it"} |\n`;
-routesMd +=
-  "\n`finish_resource` only finalizes a previously registered owned historical upload; `register_resource` is not exposed. `save_session` saves an existing owned historical workout; it does not restore legacy workout acquisition. Account lifecycle functions retain their subject-scoped SQL dependencies and failure checks.\n\n## Explicit compatibility query projections\n\n" +
-  queries
-    .map((q) => "- \`" + q + "\`: " + tableLink(tableByName.get(q)))
-    .join("\n") +
-  "\n\n## Published-client compatibility\n\nCanonical scope is `/v1/institution/...`; its ID is resolved server-side. `/v1/institutions/:id` is internal dispatch only and rejected as a public URL. The dedicated compatibility adapter accepts published APK workspace/context and organization-prefixed record paths without redirects. Supplied IDs retain authorization checks and exact commands retain their payloads. These aliases are additional to the canonical route records, not another institution model. See ADR 0029 for the complete transition boundary.\n\n## Coverage limits\n\nTable touches are conservative source traces, not a query profiler. Dynamic SQL, triggers, cascade deletion and account lifecycle can touch more rows/tables than an individual static path shows; inspect each table's SQL guards above before removal. No route is deemed disposable solely because one literal client URL is absent. Unsupported methods/paths use the existing 404/405 handling; global OPTIONS is protocol handling, not another product route.\n";
+  "## Retired surfaces\n\nGeneric commands/queries, standalone file transport, workspace/context and organization-prefixed aliases are removed. Use explicit account/support and institution endpoints. Published beta.2 clients require replacement for beta.3; no legacy route fallback is provided. Historical migration sources remain immutable.\n";
 // Explicit counts guard review metadata; output is deterministic and contains no application data.
 mkdirSync(output, { recursive: true });
 for (const [name, source] of [

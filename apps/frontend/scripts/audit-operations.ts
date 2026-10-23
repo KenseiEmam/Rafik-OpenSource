@@ -2,7 +2,7 @@ import { chromium, webkit } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { layoutIssues } from '../tests/layout-contract.ts'
-const org = '/organization/12000000-0000-4000-8000-000000000001'
+const org = ''
 const results: any[] = [],
   errors: object[] = []
 mkdirSync('artifacts/operations-audit', { recursive: true })
@@ -16,8 +16,8 @@ for (const engine of [chromium, webkit]) {
         [
           '/people',
           '/training',
-          '/calendar/new',
-          '/calendar/new#people',
+          '/schedule/new',
+          '/schedule/new#people',
           '/groups#new',
           '/analytics',
           '/messages#new',

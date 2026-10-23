@@ -2,7 +2,7 @@
 insert into public.institution_programs(id,institution_id,created_by,title,draft,listed)
 select '14000000-0000-4000-8000-000000000001','12000000-0000-4000-8000-000000000001','13000000-0000-4000-8000-000000000001','Build a steady foundation',
  jsonb_set(prescription||'{"schema":2,"cycleWeeks":1,"presentation":{"goal":"Build confidence with two full-body sessions each week.","level":"beginner"}}'::jsonb,'{days}',(select jsonb_agg(d.value||jsonb_build_object('week',1,'weekday',(d.n-1)*2) order by d.n) from jsonb_array_elements(prescription->'days') with ordinality d(value,n))),true
-from public.plan_versions where is_public order by published_at limit 1
+from (select __SAMPLE_PRESCRIPTION__ as prescription) source
 on conflict(id) do nothing;
 insert into public.institution_versions(id,institution_id,program_id,revision,title,prescription,created_by)
 select '15000000-0000-4000-8000-000000000001',institution_id,id,1,title,draft,created_by from public.institution_programs where id='14000000-0000-4000-8000-000000000001' on conflict(id) do nothing;

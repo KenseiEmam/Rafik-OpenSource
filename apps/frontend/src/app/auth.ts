@@ -1,5 +1,5 @@
 import { shallowRef, ref } from 'vue'
-import { api, configured, rpc, request, type ApiUser } from '../lib/backend'
+import { api, configured, request, type ApiUser } from '../lib/backend'
 import type { Profile } from '../lib/domain'
 import type { Context } from '../features/institution/types'
 import { removeRetiredTaskDrafts } from '../lib/storage'
@@ -37,10 +37,13 @@ export async function refreshProfile() {
     return
   }
   const id = user.value.id
-  const p = await rpc<Profile>('ensure_profile', {
-    p_name: user.value.user_metadata?.display_name || null,
-    p_locale: locale.value,
-    p_timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+  const p = await request<Profile>('/v1/account/profile', {
+    method: 'POST',
+    body: JSON.stringify({
+      p_name: user.value.user_metadata?.display_name || null,
+      p_locale: locale.value,
+      p_timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+    }),
   })
   if (user.value?.id === id) {
     // Storage can be unavailable in restricted browsers; never block sign-in on cleanup.

@@ -42,7 +42,10 @@ try {
       .map(([, source]) => source)
       .join("\n"),
   );
-  let seed = readFileSync(resolve(backendRoot, "prisma/seed.sql"), "utf8");
+  let seed = readFileSync(
+    resolve(backendRoot, "prisma/seed.sql"),
+    "utf8",
+  ).replaceAll("reference_exercises", "exercises");
   for (const [previous, current] of Object.entries(names).sort(
     (a, b) => b[1].length - a[1].length,
   ))
@@ -85,7 +88,7 @@ try {
   );
   sql(
     migrations
-      .slice(boundary)
+      .slice(boundary, boundary + 1)
       .map(([, source]) => source)
       .join("\n"),
   );

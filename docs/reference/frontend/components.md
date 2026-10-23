@@ -170,7 +170,7 @@ Every local Vue file is listed, including routed screens. Direct rendered consum
 - **Kind:** Screen or route dispatcher.
 - **Purpose:** Membership/connection recovery with explicit refresh and sign-out.
 - **Direct rendered consumers:** Router.
-- **Views using it:** `/access`, `/organization/:institution/:view/:legacy(.*)*`
+- **Views using it:** `/access`
 
 ## EntryPage
 

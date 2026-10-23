@@ -1,15 +1,5 @@
 {
   "models": {
-    "buckets": {
-      "purpose": "Historical private-file bucket configuration and upload limits.",
-      "domain": "Files and media",
-      "disposition": "retain-history"
-    },
-    "objects": {
-      "purpose": "Historical private-file metadata linked to byte storage; MIME and ownership-aware RLS remain necessary for recovery/deletion.",
-      "domain": "Files and media",
-      "disposition": "retain-history"
-    },
     "password_setup_tokens": {
       "purpose": "Hashed, expiring one-time password setup tokens issued by administrators.",
       "domain": "Identity and access",
@@ -35,138 +25,13 @@
       "domain": "Identity and access",
       "disposition": "retain-current"
     },
-    "appointment_slots": {
-      "purpose": "Historical standalone coach availability, retained for account export and dependency-safe deletion.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "appointments": {
-      "purpose": "Historical standalone booking and attendance records, not current institutional scheduling.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "assignments": {
-      "purpose": "Historical personal coaching assignments; source links are required by old workout history/replay.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "business_accounts": {
-      "purpose": "Historical commercial account state retained for own-account export/deletion; no current billing product.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "business_events": {
-      "purpose": "Historical provider receipt payloads retained for export; provider mutation and simulation are retired.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "client_context": {
-      "purpose": "Historical relationship goals/constraints retained for own-account export.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "coach_clients": {
-      "purpose": "Historical personal coaching relationships and privacy boundaries for owned records.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "coaching_forms": {
-      "purpose": "Historical coach-authored forms referenced by exported requests.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "coaching_requests": {
-      "purpose": "Historical form requests, answers and correction state retained for account export.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "conversation_reads": {
-      "purpose": "Historical direct-conversation read cursors retained for export.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "exercises": {
-      "purpose": "Canonical/reference exercise metadata and historical personal exercise ownership.",
-      "domain": "Reference library",
-      "disposition": "retain-reference"
-    },
-    "invitations": {
-      "purpose": "Historical personal assignment/invitation records referenced by retained SQL lifecycle code; no new HTTP invitation flow.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "meal_entries": {
-      "purpose": "Historical personal food-consumption entries retained for own-account export.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "measurements": {
-      "purpose": "Historical athlete measurements retained for own-account export.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "messages": {
-      "purpose": "Historical private pair messages and linked workout/resource references; no standalone thread endpoint.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "nutrition_guidance": {
-      "purpose": "Historical personal nutrition suggestions retained separately from actual consumption.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "plan_versions": {
-      "purpose": "Immutable personal/reference program versions required by historical workouts and reference fixtures.",
-      "domain": "Reference library",
-      "disposition": "retain-reference"
-    },
-    "plans": {
-      "purpose": "Historical personal program drafts and ownership referenced by exported versions.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
     "profiles": {
       "purpose": "Own account display name, locale, measurement units and timezone; identity bridge for historical subject data.",
       "domain": "Identity and access",
       "disposition": "retain-current"
     },
-    "resource_shares": {
-      "purpose": "Historical per-relationship resource permissions needed by byte reads/export/deletion.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "resources": {
-      "purpose": "Historical personal file ownership, pending/ready/retired state and byte path; only recovery and cleanup remain exposed.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
     "instance_branding": {
       "purpose": "One installation branding configuration: name, colors, logo metadata and revision.",
-      "domain": "Institution and operations",
-      "disposition": "retain-current"
-    },
-    "saved_foods": {
-      "purpose": "Historical user-created food references retained for account export.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "schedule_exceptions": {
-      "purpose": "Historical personal assignment calendar exceptions retained for export.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "session_operations": {
-      "purpose": "Exact historical workout write receipts; prevents uncertain retries from applying twice.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "public_sessions": {
-      "purpose": "Historical personal workout prescriptions/actuals and immutable source links; private read/replay/export remain supported.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "set_entries": {
-      "purpose": "Historical per-exercise/set actual measurements belonging to personal workouts.",
       "domain": "Institution and operations",
       "disposition": "retain-current"
     },
@@ -174,56 +39,6 @@
       "purpose": "Locally owned support reports and replies; legacy team scope is retained only for existing cases.",
       "domain": "Institution and operations",
       "disposition": "retain-current"
-    },
-    "team_activity": {
-      "purpose": "Historical team activity/audit records retained for export and lifecycle checks.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "team_assignments": {
-      "purpose": "Historical team plan deliveries retained for export.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "team_clients": {
-      "purpose": "Historical team enrollment and assigned-coach ownership retained for export/deletion checks.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "team_group_members": {
-      "purpose": "Historical team group roster links retained for export.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "team_groups": {
-      "purpose": "Historical team group definitions retained for export.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "team_invitations": {
-      "purpose": "Historical team invitations referenced by lifecycle/account cleanup; no current team acquisition API.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "team_members": {
-      "purpose": "Historical team roles used by existing record access/deletion rules.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "team_plans": {
-      "purpose": "Historical team-shared plan links retained with immutable versions.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "team_resource_shares": {
-      "purpose": "Historical team byte-sharing permissions retained for private file access/deletion.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
-    },
-    "teams": {
-      "purpose": "Historical gym/team identity, distinct from the supported installation institution.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
     },
     "platform_grants": {
       "purpose": "Explicit operator authority; institution administration does not imply this grant.",
@@ -279,11 +94,6 @@
       "purpose": "Immutable published institution program snapshots referenced by assignments and history.",
       "domain": "Training and scheduling",
       "disposition": "retain-current"
-    },
-    "plan_deliveries": {
-      "purpose": "Historical personal-plan delivery receipts retained for lifecycle/reconciliation; no new standalone delivery endpoint.",
-      "domain": "Historical compatibility",
-      "disposition": "retain-history"
     },
     "program_media": {
       "purpose": "Institution program artwork metadata and private-byte identity.",
@@ -469,6 +279,11 @@
       "purpose": "Bounded weekly individual schedule rules; the recurring worker remains pending.",
       "domain": "Training and scheduling",
       "disposition": "retain-current"
+    },
+    "reference_exercises": {
+      "purpose": "Canonical shared exercise reference metadata; institution-authored exercises are separate.",
+      "domain": "Reference library",
+      "disposition": "retain-reference"
     }
   },
   "routes": [
@@ -869,33 +684,6 @@
       "clients": "Web program create/preview"
     },
     {
-      "anchor": "/v1/files/",
-      "path": "/v1/files/{owner}/{file}",
-      "methods": ["GET", "PUT", "DELETE"],
-      "handlers": ["fileOperation"],
-      "purpose": "Historical private byte reads, pending upload recovery and retired-byte cleanup",
-      "access": "Owner/retained private RLS; no new resource registration",
-      "clients": "Account cleanup and historical recovery only"
-    },
-    {
-      "anchor": "/v1/queries/",
-      "path": "/v1/queries/{table}",
-      "methods": ["GET"],
-      "handlers": ["query"],
-      "purpose": "Explicit allowlisted own historical export/reference projections",
-      "access": "Authenticated RLS; public reference exceptions only",
-      "clients": "Web account export/support/reference compatibility"
-    },
-    {
-      "anchor": "/v1/commands/",
-      "path": "/v1/commands/{name}",
-      "methods": ["POST"],
-      "handlers": ["command"],
-      "purpose": "Explicit allowlisted profile/support/lifecycle and historical replay commands",
-      "access": "Authenticated actor plus SQL grants/RLS; no automatic publication from grants",
-      "clients": "Web auth/settings/support/recovery"
-    },
-    {
       "anchor": "/v1/account/institution",
       "path": "/v1/account/institution",
       "methods": ["GET"],
@@ -905,7 +693,7 @@
       "clients": "Web account export"
     },
     {
-      "anchor": "/v1/contexts",
+      "anchor": "/v1/institution/context",
       "path": "/v1/institution/context",
       "methods": ["GET"],
       "handlers": ["contexts"],
@@ -1056,6 +844,42 @@
       "purpose": "Bundled canonical contract/viewer assets; production reference-only",
       "access": "Public reference; no account or athlete rows",
       "clients": "Operator/developer API reference"
+    },
+    {
+      "anchor": "/v1/account/profile",
+      "path": "/v1/account/profile",
+      "methods": ["POST", "PUT"],
+      "handlers": ["accountProfile"],
+      "purpose": "Initialize or edit own profile",
+      "access": "Authenticated own account",
+      "clients": "Web account settings and support"
+    },
+    {
+      "anchor": "/v1/account/export",
+      "path": "/v1/account/export",
+      "methods": ["GET"],
+      "handlers": ["accountExport"],
+      "purpose": "Complete current own-account export",
+      "access": "Authenticated own account",
+      "clients": "Web account settings and support"
+    },
+    {
+      "anchor": "/v1/account/deletion",
+      "path": "/v1/account/deletion",
+      "methods": ["GET", "POST"],
+      "handlers": ["accountDeletion"],
+      "purpose": "Last-admin guarded own-account deletion",
+      "access": "Authenticated own account",
+      "clients": "Web account settings and support"
+    },
+    {
+      "anchor": "/v1/support",
+      "path": "/v1/support",
+      "methods": ["GET", "POST"],
+      "handlers": ["supportCases", "supportCommand"],
+      "purpose": "Own paginated support reports and exact create/update retries",
+      "access": "Authenticated own account",
+      "clients": "Web account settings and support"
     }
   ]
 }

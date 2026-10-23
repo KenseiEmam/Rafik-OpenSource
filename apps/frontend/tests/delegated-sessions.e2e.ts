@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { randomUUID, randomBytes } from 'node:crypto'
 import AxeBuilder from '@axe-core/playwright'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { layoutIssues } from './layout-contract'
 
 async function inspect(page: Page, name: string, info: { project: { name: string } }) {
@@ -16,7 +16,7 @@ async function inspect(page: Page, name: string, info: { project: { name: string
   })
 }
 
-type Fixture = Awaited<ReturnType<typeof teamFixture>>
+type Fixture = Awaited<ReturnType<typeof institutionFixture>>
 /** Institution with a primary coach, an athlete and one assigned plan built from `days`. */
 async function institution(f: Fixture, name: string, adapt?: (plan: any) => void) {
   const institution = randomUUID(),
@@ -82,7 +82,7 @@ test('coach records a session on the athlete’s behalf with attribution, exact 
   browser,
 }, info) => {
   test.setTimeout(180000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     athleteContext = await browser.newContext(),
     athletePage = await athleteContext.newPage(),
     institution = randomUUID(),
@@ -206,7 +206,7 @@ test('coach-recorded timed and distance sets require actual seconds and metres',
   page,
 }) => {
   test.setTimeout(180000)
-  const f = await teamFixture()
+  const f = await institutionFixture()
   try {
     const { athlete, plan, base } = await institution(f, 'Madar measured', (p) => {
       // A conditioning day: one timed hold and one distance run alongside strength work.
@@ -257,7 +257,7 @@ test('a delayed start acknowledgment keeps the write but never pulls the coach b
   page,
 }) => {
   test.setTimeout(180000)
-  const f = await teamFixture()
+  const f = await institutionFixture()
   try {
     const { endpoint, athlete, plan, base } = await institution(f, 'Madar delayed')
     let release!: () => void

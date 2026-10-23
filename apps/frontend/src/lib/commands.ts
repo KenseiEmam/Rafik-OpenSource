@@ -1,21 +1,18 @@
 import { onMounted, shallowReactive } from 'vue'
 import { user } from '../app/auth'
-import { rpc } from './backend'
-import type { Database } from '@rafik/shared/database.types'
 import { getDraft, storeDraft, removeDraft } from './storage'
 import { errorMessage } from './i18n'
 import { commandRejected } from './command-errors'
 import { notifyErrorOnce, notifySuccess } from './feedback'
 // A remounted screen must wait for the original dispatch before offering replay.
 const activeCommands = new Map<string, Promise<void>>()
-type Name = keyof Database['public']['Functions']
+type Name = string
 type Pending<N extends string> = { name: N; args: Record<string, unknown> }
 // One explicit user command, persisted before dispatch. This is not a background queue.
 export function useCommand<N extends string = Name>(
   scope: string,
   after: (name: N, result: unknown, args: Record<string, unknown>) => Promise<void>,
-  dispatch: (name: N, args: Record<string, unknown>) => Promise<unknown> = (name, args) =>
-    rpc(name as Name, args, { feedback: 'none' }),
+  dispatch: (name: N, args: Record<string, unknown>) => Promise<unknown>,
   options: {
     successToast?: boolean
     successMessage?: string | ((name: N, args: Record<string, unknown>) => string | false)

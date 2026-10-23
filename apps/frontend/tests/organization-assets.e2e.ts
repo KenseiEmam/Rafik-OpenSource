@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { randomUUID } from 'node:crypto'
 import AxeBuilder from '@axe-core/playwright'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { layoutIssues } from './layout-contract'
 const png = readFileSync(
   resolve(
@@ -15,7 +15,7 @@ test('organization author uploads, categorizes, filters, reuses and archives an 
   page,
 }, info) => {
   test.setTimeout(90000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     institution = randomUUID(),
     base = ``
   try {

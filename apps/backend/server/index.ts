@@ -1,7 +1,4 @@
-import {
-  institutionRoute,
-  responseTransport,
-} from "./institution-compatibility.ts";
+import { institutionRoute, responseTransport } from "./institution-routing.ts";
 import type { ApiErrorBody } from "@rafik/shared/contracts";
 import { feedback, feedbackCommand } from "./feedback.ts";
 import { followUp } from "./follow-up.ts";
@@ -45,8 +42,8 @@ import { athletePlans } from "./athlete-plans.ts";
 import { nutritionPlanIndex } from "./nutrition-plan-index.ts";
 import { db, ApiError, requireActor } from "./db.ts";
 import { identify, authRoute, mobileAuthRoute } from "./auth.ts";
-import { command, query, loadContracts } from "./commands.ts";
-import { fileOperation } from "./files.ts";
+import { accountProfile, accountExport, accountDeletion } from "./account.ts";
+import { supportCases, supportCommand } from "./support.ts";
 import {
   contexts,
   institutionView,
@@ -120,7 +117,6 @@ async function body(req: IncomingMessage, limit: number) {
   }
   return Buffer.concat(chunks);
 }
-await loadContracts();
 const server = createServer(async (req, res) => {
   try {
     const origin = req.headers.origin;
@@ -536,31 +532,8 @@ const server = createServer(async (req, res) => {
         return;
       }
     }
-    if (path.startsWith("/v1/files/")) {
-      const result = await fileOperation(
-        requireActor(actor),
-        req.method || "",
-        decodeURIComponent(path.slice(10)),
-        await body(req, 10485760),
-        String(req.headers["content-type"] || ""),
-      );
-      if ("bytes" in result) {
-        res.writeHead(200, {
-          "Content-Type": result.type,
-          "Cache-Control": "no-store",
-          "X-Content-Type-Options": "nosniff",
-          "Content-Disposition": "attachment",
-        });
-        res.end(result.bytes);
-      } else send(res, 200, result);
-      return;
-    }
-    if (path.startsWith("/v1/queries/") && req.method === "GET") {
-      send(res, 200, await query(actor, path.slice(12), url.searchParams));
-      return;
-    }
     let input: Record<string, unknown> = {};
-    if (req.method === "POST") {
+    if (req.method === "POST" || req.method === "PUT") {
       try {
         input = JSON.parse((await body(req, 1048576)).toString() || "{}");
       } catch (e) {
@@ -569,6 +542,40 @@ const server = createServer(async (req, res) => {
       }
       if (!input || Array.isArray(input) || typeof input !== "object")
         throw new ApiError(400, "invalid_request");
+    }
+    if (path === "/v1/account/profile" && req.method === "POST") {
+      send(res, 200, await accountProfile(requireActor(actor), input));
+      return;
+    }
+    if (path === "/v1/account/profile" && req.method === "PUT") {
+      send(res, 200, await accountProfile(requireActor(actor), input, true));
+      return;
+    }
+    if (path === "/v1/account/export" && req.method === "GET") {
+      send(res, 200, await accountExport(requireActor(actor)));
+      return;
+    }
+    if (
+      path === "/v1/account/deletion" &&
+      ["GET", "POST"].includes(req.method || "")
+    ) {
+      send(
+        res,
+        200,
+        await accountDeletion(requireActor(actor), input, req.method === "GET"),
+      );
+      return;
+    }
+    if (path === "/v1/support" && ["GET", "POST"].includes(req.method || "")) {
+      const who = requireActor(actor);
+      send(
+        res,
+        200,
+        req.method === "GET"
+          ? await supportCases(who, url.searchParams)
+          : await supportCommand(who, input),
+      );
+      return;
     }
     if (path === "/v1/account/institution" && req.method === "GET") {
       send(res, 200, await institutionAccountData(requireActor(actor)));
@@ -588,7 +595,7 @@ const server = createServer(async (req, res) => {
       );
       return;
     }
-    if (path === "/v1/contexts" && req.method === "GET") {
+    if (path === "/v1/institution/context" && req.method === "GET") {
       send(res, 200, await contexts(requireActor(actor)));
       return;
     }
@@ -828,10 +835,6 @@ const server = createServer(async (req, res) => {
         200,
         await assetCommand(requireActor(actor), assetList[1], input),
       );
-      return;
-    }
-    if (path.startsWith("/v1/commands/") && req.method === "POST") {
-      send(res, 200, await command(actor, path.slice(13), input));
       return;
     }
     throw new ApiError(404, "not_found");

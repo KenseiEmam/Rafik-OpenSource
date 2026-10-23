@@ -161,6 +161,6 @@ Administrators see institution-wide results. Coaches see their primary athletes 
 
 The cleanup migration deletes the legacy Tasks table, attributable saved-command results and `trainer_task_*` audit events. It retains scheduled activities, attendance, workout records, reviews and unrelated institution audit history. The `institution_audit_events` audit table and `institution_events` schedule table serve different purposes; neither retains the retired task workflow. Existing Task rows are purged when the guarded upgrade migration runs, rather than modifying developer preview data during verification.
 
-## Backend compatibility boundary
+## Explicit backend boundary
 
-The generic gateway uses explicit command/query allowlists in addition to SQL grants and RLS. Historical data remains where own export, deletion, receipts or private-byte recovery depend on it. Native identity and queue contracts stay intact; context browser destinations use `/dashboard`. See the [complete backend inventory](../reference/backend/README.md).
+The breaking beta.3 migration removes personal/team/business storage and generic command/query/file gateways. Explicit own profile/support/account lifecycle services replace their current dependencies. Current institution records, histories and exact receipts remain. Canonical `/v1/institution` paths are the only supported scope routes; published beta.2 clients require a coordinated upgrade. The response normalizer may read old field names in preserved institutional receipt envelopes; it does not expose old routes or rewrite stored documents. See [ADR 0030](../decisions/ADR-0030-retire-standalone-storage-and-apis.md) and the [complete backend reference](../reference/backend/README.md).

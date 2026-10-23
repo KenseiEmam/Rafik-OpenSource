@@ -3,7 +3,7 @@ import { randomUUID, randomBytes } from 'node:crypto'
 import { mkdirSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import AxeBuilder from '@axe-core/playwright'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { layoutIssues } from './layout-contract'
 
 test('dedicated editors preserve drafts, acknowledge writes, return to lists and size records', async ({
@@ -14,7 +14,7 @@ test('dedicated editors preserve drafts, acknowledge writes, return to lists and
     'Reuse the passing Chromium editor journey; this batch adds WebKit and the final layout matrix',
   )
   test.setTimeout(360000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     institution = randomUUID(),
     base = ``
   const output = resolve('../../artifacts/ui-audit/2026-10-21/rollout', info.project.name)

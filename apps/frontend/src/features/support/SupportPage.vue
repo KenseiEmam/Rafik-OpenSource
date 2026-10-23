@@ -3,7 +3,7 @@ import PageHeading from '../../components/PageHeading.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { getDraft, storeDraft } from '../../lib/storage'
 import { user } from '../../app/auth'
-import { rows, rpc } from '../../lib/backend'
+import { request } from '../../lib/backend'
 import { language as l, errorMessage, dateLabel } from '../../lib/i18n'
 import type { Database } from '@rafik/shared/database.types'
 import { useCommand } from '../../lib/commands'
@@ -23,7 +23,13 @@ async function load() {
   loading.value = true
   error.value = ''
   try {
-    cases.value = await rows<Case>('support_cases')
+    const collected: Case[] = []
+    for (let offset = 0; ; offset += 100) {
+      const page = await request<Case[]>('/v1/support?offset=' + offset)
+      collected.push(...page)
+      if (page.length < 100) break
+    }
+    cases.value = collected
     cases.value.sort((a, b) => b.updated_at.localeCompare(a.updated_at))
   } catch (e) {
     error.value = errorMessage(e)
@@ -31,14 +37,23 @@ async function load() {
     loading.value = false
   }
 }
-const command = useCommand('support', async (kind, result) => {
-  if (kind === 'create_support_case') {
-    selected.value = (result as Case).id
-    subject.value = ''
-    detail.value = ''
-  }
-  await load()
-})
+const command = useCommand(
+  'support',
+  async (kind, result) => {
+    if (kind === 'create_support_case') {
+      selected.value = (result as Case).id
+      subject.value = ''
+      detail.value = ''
+    }
+    await load()
+  },
+  (action, args) =>
+    request('/v1/support', {
+      method: 'POST',
+      body: JSON.stringify({ action, args }),
+      feedback: 'none',
+    }),
+)
 const locked = computed(
   () => command.state.busy || !!command.state.pending || !command.state.ready || !draftReady.value,
 )
@@ -139,7 +154,6 @@ onMounted(async () => {
                   p_id: current.id,
                   p_revision: current.revision,
                   p_state: current.state === 'open' ? 'resolved' : 'open',
-                  p_reply: null,
                 })
               "
             >
@@ -156,7 +170,6 @@ onMounted(async () => {
           @submit.prevent="
             command.run('create_support_case', {
               p_id: uuid(),
-              p_team: null,
               p_subject: subject,
               p_detail: detail,
             })

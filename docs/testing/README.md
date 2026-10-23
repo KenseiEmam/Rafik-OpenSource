@@ -10,7 +10,7 @@
 
 ## Next-release cleanup checks
 
-Use the isolated browser wrapper for `tests/institution-routing.e2e.ts`. It covers flat routes, legacy bookmarks, server-derived roles and Tasks retirement. Privileged fixture setup replaces the removed runtime creation endpoint and must use a disposable test database. Keep multi-institution security fixtures distinct from supported deployment behavior.
+Use the isolated browser wrapper for `tests/institution-routing.e2e.ts`. It covers flat routes, rejection of retired bookmarks, server-derived roles and Tasks retirement. Privileged fixture setup replaces the removed runtime creation endpoint and must use a disposable test database. Current fixtures create one installation; outsider and invalid record IDs test authorization without restoring an institution chooser.
 
 ## Opt-in web design audit
 
@@ -108,3 +108,7 @@ npm run mobile:acceptance
 ```
 
 These use owned disposable databases/APIs. They cover populated identifier preservation, old/canonical transport and authorization, own export, scalar serialization, and the native bearer/SQLite command queue. They do not migrate/reset preview or establish physical APK upgrade acceptance. The focused browser command is `node apps/frontend/scripts/isolated-browser.mjs --empty-database institution-names.e2e.ts --project=chromium`; keep application/generated sources frozen during that run.
+
+## Retired-domain boundary
+
+`npm run test:retired-domains` migrates a populated disposable database and compares complete current institution snapshots/receipts. `npm run test:institution-api` covers removed gateways/aliases and explicit account/support privacy and replay. `npm run backend:test` uses current institution SQL assertions, not retired personal/team suites. Recovery checks upload current institution assets. Neither command resets preview data. Published beta.2 clients require the matching beta.3 upgrade; historical multi-institution browser journeys are not current acceptance.

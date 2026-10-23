@@ -4,6 +4,8 @@ Date: 2026-10-23
 
 Status: Accepted by the founder for beta.3; keep the release branch unmerged.
 
+**Superseded in part:** [ADR 0030](ADR-0030-retire-standalone-storage-and-apis.md) removes published-client aliases and retired personal storage. Naming, current data preservation and durable institutional identity rules still apply.
+
 ## Context
 
 One institution per installation makes workspace/organization terminology misleading. The founder approved a coordinated physical schema, API, web and Android cleanup before customer adoption. This supersedes ADR 0026's naming-preservation choice, while retaining its data/privacy requirements.

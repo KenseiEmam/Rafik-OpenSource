@@ -29,7 +29,7 @@ async function person(name: string): Promise<Person> {
     },
   });
   const p = { id, email, cookie: "rafik_session=" + token };
-  await call(p, "/v1/commands/ensure_profile", { p_name: name });
+  await call(p, "/v1/account/profile", { p_name: name });
   return p;
 }
 async function call(p: Person, path: string, input?: unknown) {

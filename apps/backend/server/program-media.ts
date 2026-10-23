@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { db, asActor, ApiError, type Actor } from "./db.ts";
+import { db, ApiError, type Actor } from "./db.ts";
 import { uuid } from "./institution.ts";
 import { readPrivate, writePrivate } from "./private-bytes.ts";
 type Media = {
@@ -89,39 +89,26 @@ export async function getProgramMedia(actor: Actor, id: string) {
     where: { id: media.institution_id },
   });
   if (institution.archived) throw new ApiError(403, "workspace_unavailable");
-  if (institution.kind === "independent") {
-    if (institution.created_by !== actor.id) {
-      const allowed = await asActor(
-        actor,
-        (tx) =>
-          tx.$queryRaw<
-            unknown[]
-          >`SELECT id FROM public.plan_versions WHERE prescription->'presentation'->>'cover'=${id} LIMIT 1`,
-      );
-      if (!allowed.length) throw new ApiError(403, "forbidden");
-    }
-  } else {
-    await db.$transaction(async (tx) => {
-      await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${institution.id},73))::text`;
-      const m = await tx.institution_members.findUnique({
-        where: {
-          institution_id_user_id: {
-            institution_id: institution.id,
-            user_id: actor.id,
-          },
+  await db.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${institution.id},73))::text`;
+    const m = await tx.institution_members.findUnique({
+      where: {
+        institution_id_user_id: {
+          institution_id: institution.id,
+          user_id: actor.id,
         },
-      });
-      if (!m?.active) throw new ApiError(403, "workspace_unavailable");
-      if (
-        m.roles.includes("admin") ||
-        (media.created_by === actor.id && m.roles.includes("trainer"))
-      )
-        return;
-      const allowed = await tx.$queryRaw<
-        unknown[]
-      >`SELECT v.id FROM public.institution_versions v JOIN public.institution_programs p ON p.id=v.program_id WHERE v.institution_id=${institution.id}::uuid AND v.prescription->'presentation'->>'cover'=${id} AND (p.listed AND NOT p.archived OR EXISTS(SELECT 1 FROM public.institution_assignments a JOIN public.institution_members trainee ON trainee.id=a.member_id WHERE a.version_id=v.id AND (trainee.id=${m.id}::uuid OR (trainee.trainer_id=${m.id}::uuid OR EXISTS(SELECT 1 FROM public.institution_coaching_links l WHERE l.athlete_member_id=trainee.id AND l.coach_member_id=${m.id}::uuid AND l.ended_at IS NULL AND l.sport_id=a.sport_id)) AND ${m.roles.includes("trainer")}))) LIMIT 1`;
-      if (!allowed.length) throw new ApiError(403, "forbidden");
+      },
     });
-  }
+    if (!m?.active) throw new ApiError(403, "workspace_unavailable");
+    if (
+      m.roles.includes("admin") ||
+      (media.created_by === actor.id && m.roles.includes("trainer"))
+    )
+      return;
+    const allowed = await tx.$queryRaw<
+      unknown[]
+    >`SELECT v.id FROM public.institution_versions v JOIN public.institution_programs p ON p.id=v.program_id WHERE v.institution_id=${institution.id}::uuid AND v.prescription->'presentation'->>'cover'=${id} AND (p.listed AND NOT p.archived OR EXISTS(SELECT 1 FROM public.institution_assignments a JOIN public.institution_members trainee ON trainee.id=a.member_id WHERE a.version_id=v.id AND (trainee.id=${m.id}::uuid OR (trainee.trainer_id=${m.id}::uuid OR EXISTS(SELECT 1 FROM public.institution_coaching_links l WHERE l.athlete_member_id=trainee.id AND l.coach_member_id=${m.id}::uuid AND l.ended_at IS NULL AND l.sport_id=a.sport_id)) AND ${m.roles.includes("trainer")}))) LIMIT 1`;
+    if (!allowed.length) throw new ApiError(403, "forbidden");
+  });
   return { bytes: await readPrivate(path(media)), type: media.media_type };
 }
