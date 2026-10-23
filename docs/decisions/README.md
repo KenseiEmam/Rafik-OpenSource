@@ -30,3 +30,5 @@ These numbered records explain consequential design and dependency choices, incl
 ADR 0004 (gym-first timing), ADR 0014 (session packages) and ADR 0016 (former Supabase runtime) are superseded. Their records are retained under [archived decisions](../archive/decisions/README.md) for provenance and are not current guidance. Gaps in numbering are intentional; do not renumber accepted decisions. New decisions use `ADR-NNNN-short-title.md`, a date, context, options, decision and trade-offs. Link the current implementation or superseding decision where relevant.
 
 - [0026 — Single-institution routing and Tasks retirement](ADR-0026-single-institution-routing-and-task-retirement.md)
+
+- [0027 — Additive workout storage before API cutover](ADR-0027-additive-workout-storage.md)

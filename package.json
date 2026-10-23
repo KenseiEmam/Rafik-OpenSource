@@ -75,7 +75,8 @@
     "mobile:release": "node apps/mobile/scripts/release.mjs",
     "test:institution-cleanup": "npm run test:institution-cleanup --workspace @rafik/backend",
     "frontend:inventory": "node apps/frontend/scripts/frontend-inventory.mjs",
-    "frontend:inventory:check": "node apps/frontend/scripts/frontend-inventory.mjs --check"
+    "frontend:inventory:check": "node apps/frontend/scripts/frontend-inventory.mjs --check",
+    "test:workout-foundation": "node apps/backend/scripts/prisma/verify-workout-foundation.mjs"
   },
   "overrides": {
     "tar": "7.5.22",

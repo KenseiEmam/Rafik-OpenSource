@@ -970,6 +970,8 @@ model workspace_members {
   @@index([user_id, active], map: "workspace_members_user")
   @@index([workspace_id, active, name, id], map: "workspace_members_name_page")
   @@schema("public")
+  organization_workout_positions organization_workout_positions[]
+  organization_workout_recurrences organization_workout_recurrences[]
 }
 
 model workspace_operations {
@@ -1048,6 +1050,9 @@ model organization_assignments {
   @@unique([workspace_id, member_id, version_id], map: "organization_one_active_version", where: raw("(state = 'active'::text)"))
   @@index([workspace_id, member_id], map: "organization_assignments_active_member", where: raw("(state = 'active'::text)"))
   @@schema("public")
+  sequence_cursor Int @default(0)
+  organization_workout_positions organization_workout_positions[]
+  organization_workout_recurrences organization_workout_recurrences[]
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -1112,6 +1117,12 @@ model organization_sessions {
   @@unique([workspace_id, member_id, id], map: "organization_session_subject")
   @@index([workspace_id, member_id, started_at(sort: Desc), id], map: "organization_history")
   @@schema("public")
+  occurrence_id String? @db.Uuid
+  source_snapshot Json?
+  organization_event_people organization_event_people? @relation(fields: [workspace_id, member_id, occurrence_id], references: [workspace_id, member_id, event_id], onDelete: NoAction, onUpdate: NoAction, map: "organization_workout_participant")
+  organization_workout_positions organization_workout_positions?
+  @@unique([workspace_id, member_id, occurrence_id], map: "organization_workout_scoped_participant")
+  @@unique([occurrence_id, member_id], map: "organization_workout_occurrence_subject", where: raw("(occurrence_id IS NOT NULL)"))
 }
 
 model organization_versions {
@@ -1238,6 +1249,7 @@ model organization_event_people {
   @@unique([workspace_id, member_id, event_id], map: "organization_event_subject")
   @@index([workspace_id, member_id, event_id], map: "organization_person_agenda")
   @@schema("public")
+  organization_sessions organization_sessions?
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -1269,6 +1281,9 @@ model organization_events {
   @@index([workspace_id, starts_at, id], map: "organization_event_agenda")
   @@index([workspace_id, series_id, starts_at], map: "organization_event_series")
   @@schema("public")
+  training_date DateTime @default(dbgenerated("CURRENT_DATE")) @db.Date
+  workout_snapshot Json?
+  organization_workout_positions organization_workout_positions?
 }
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
@@ -1771,5 +1786,50 @@ model organization_injury_retention_checkpoint {
   closed_count Int
   purged_count Int
 
+  @@schema("public")
+}
+
+model organization_workout_positions {
+  id                       String                   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  workspace_id             String                   @db.Uuid
+  assignment_id            String                   @unique(map: "organization_workout_one_unresolved", where: raw("(state = ANY (ARRAY['pending'::text, 'paused'::text]))")) @db.Uuid
+  position                 Int
+  cycle                    Int
+  day_id                   String
+  occurrence_id            String                   @unique @db.Uuid
+  session_id               String?                  @unique @db.Uuid
+  state                    String                   @default("pending")
+  resolved_by              String?                  @db.Uuid
+  resolved_at              DateTime?                @db.Timestamptz(6)
+  reason                   String?
+  organization_assignments organization_assignments @relation(fields: [workspace_id, assignment_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+  organization_events      organization_events      @relation(fields: [workspace_id, occurrence_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+  workspace_members        workspace_members?       @relation(fields: [workspace_id, resolved_by], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+  organization_sessions    organization_sessions?   @relation(fields: [workspace_id, session_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([assignment_id, position])
+  @@schema("public")
+  @@unique([workspace_id, occurrence_id])
+  @@unique([workspace_id, session_id])
+}
+
+model organization_workout_recurrences {
+  id                       String                   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  workspace_id             String                   @db.Uuid
+  assignment_id            String                   @db.Uuid
+  created_by               String                   @db.Uuid
+  starts_on                DateTime                 @db.Date
+  ends_on                  DateTime                 @db.Date
+  weekdays                 Int[]                    @db.SmallInt
+  timezone                 String
+  local_time               DateTime?                @db.Time(6)
+  duration_minutes         Int?
+  state                    String                   @default("active")
+  revision                 Int                      @default(1)
+  organization_assignments organization_assignments @relation(fields: [workspace_id, assignment_id], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction, map: "organization_workout_recurrence_workspace_id_assignment_id_fkey")
+  workspace_members        workspace_members        @relation(fields: [workspace_id, created_by], references: [workspace_id, id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([workspace_id, id])
+  @@index([workspace_id, assignment_id], map: "organization_workout_recurrence_assignment")
   @@schema("public")
 }

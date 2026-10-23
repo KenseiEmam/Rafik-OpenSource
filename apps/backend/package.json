@@ -57,7 +57,8 @@
     "test:delegated-sessions": "node scripts/prisma/isolated-api.mjs tests/delegated-sessions.test.ts",
     "test:organization-injuries": "node scripts/prisma/isolated-api.mjs tests/organization-injuries.test.ts",
     "test:injury-retention-scheduler": "node scripts/prisma/isolated-api.mjs tests/organization-injury-retention-scheduler.test.ts",
-    "test:institution-cleanup": "node scripts/prisma/verify-institution-cleanup.mjs"
+    "test:institution-cleanup": "node scripts/prisma/verify-institution-cleanup.mjs",
+    "test:workout-foundation": "node scripts/prisma/verify-workout-foundation.mjs"
   },
   "devDependencies": {
     "@types/node": "22.19.0",

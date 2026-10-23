@@ -125,3 +125,7 @@ Web interface standardization is approved and underway. See the [design system](
 - [Verification record and limitations](docs/verification/README.md)
 
 Work one approved stage at a time. Do not claim a feature, deployment, privacy compliance, or offline reliability until the corresponding acceptance evidence exists. Keep university legal/privacy requirements for confirmation by each institution; this project does not claim jurisdiction-specific compliance.
+
+### Workout migration check
+
+With the local Docker database running, run `npm run test:workout-foundation` from the repository root. It verifies the beta.3 additive migration in a disposable populated database and generates matching client/transport types. It does not modify preview records. See [testing](docs/testing/README.md#additive-workout-migration) and [upgrade guidance](docs/operations/README.md#additive-workout-foundation-upgrade).

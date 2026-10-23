@@ -1,5 +1,11 @@
 # Rafik web change history
 
+## Unreleased — beta.3 workout storage foundation
+
+- Add assignment sequence cursors, bounded weekly recurrence storage and unique per-assignment positions with attributed resolution fields.
+- Add scoped occurrence/participant links, timed event local dates and historical workout source snapshots without changing existing documents, IDs or receipts.
+- Preserve required assignment/timestamp contracts. Day-only events, additional group workout writes, worker progression and new web/Android recording remain subsequent slices.
+
 ## Unreleased
 
 ### Brand alignment

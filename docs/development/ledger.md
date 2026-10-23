@@ -1,5 +1,9 @@
 # Current delivery ledger
 
+## Additive workout storage — 23 October 2026
+
+Founder authorized implementation. Migration `202610231200_workout_sequence_foundation` adds sequence/recurrence foundations, optional participant occurrence links, timed local dates and frozen source snapshots derived from historical workout documents. Historical workouts are not guessed into existing group events or turned into artificial timed appointments. Assignment and timestamp requirements stay intact until the coordinated API cutover. No worker or new recording API is enabled. Populated upgrade/preservation constraints, backend typecheck and the existing delegated-workout API journey passed; isolated fixtures were cleaned. See the beta.3 requirements for remaining work and verification for actual checks.
+
 ## Next-release institution cleanup — 22 October 2026
 
 Founder-approved scope on `codex/single-institution-cleanup`; keep unmerged until the release is complete. Tasks code/data and workspace creation/chooser are retired. Flat routes preserve scoped draft/command keys and Android API compatibility. See [ADR 0026](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md). Verification is recorded separately; workout scheduling is not implemented in this slice. Paired English/Arabic documentation is held in [landing PR #34](https://github.com/KenseiEmam/rafik-landing/pull/34). Focused migration/API/unit/routing checks passed; broader release acceptance is still separate. CI now checks the cleanup migration instead of the removed Tasks suite; isolated API tests retain canonical reference fixtures and own their temporary file directory.

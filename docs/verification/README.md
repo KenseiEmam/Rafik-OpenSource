@@ -1,5 +1,13 @@
 # Verification record
 
+## Additive workout storage — 23 October 2026
+
+Passed `npm run test:workout-foundation` against an owned disposable PostgreSQL database populated before the new migration. Compared complete existing workout documents, events, correction history, feedback, operation receipt payload/results and assessment results before/after. Verified source backfill without inferred event links, timezone-derived dates, zero initial cursors, old-format inserts, private table grants, bounded recurrence/time constraints, position uniqueness, invalid reassignment and required skip reasons. Generated the Prisma client and shared transport types. The temporary database was dropped in `finally`.
+
+Passed backend TypeScript and the isolated delegated-workout API regression (one journey: attribution, athlete correction, history, exact retry and revoked access). Prisma's partial-index relation inference required an explicit one-to-many assignment mapping and scoped unique keys; the maintained schema/client now validates. No preview database was migrated/reset, and no browser suite or native build was run.
+
+Limits: historical occurrence creation/backfill, day-only calendar shapes, assignment-free group workout writes, transactional cursor advancement, worker concurrency, scheduling/health restrictions and Android queue upgrades remain subsequent slices. Database foundations and an old-client insert check are not full beta.3 acceptance. Documentation links/anchors were checked after the final documentation edits.
+
 ## Campaign brand review — 23 October 2026
 
 Read the written round7 guide and PDF text; rendered/inspected PDF pages 5, 8, 10, 14, 18 and 22 and three supplied campaign examples. Inspected original marks and maintained web/launcher artwork; compared SHA-256 identities. The web default logo matches the supplied `rafik.png` byte-for-byte. Compared current web theme/font sources and native shared styles/layout/locale controls. Source hashes and findings are in the design system and UI audit.

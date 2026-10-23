@@ -1,5 +1,11 @@
 # Rafik architecture
 
+## Beta.3 additive workout storage
+
+The additive migration extends existing assignments/events/workout records. Assignments have a zero-based sequence cursor; bounded weekly recurrence rules describe dates without consuming a position. Position rows identify assignment, cycle, day and occurrence, with one pending/paused position per assignment and attributed completion/skip fields. An assignment row lock serializes position validation. Transactional cursor advancement and permission checks belong to the forthcoming domain service; the schema alone does not implement progression.
+
+Workout occurrence links reference the same institution and participant. Existing historical documents provide frozen source snapshots; original documents, history and receipt bodies remain unchanged. Existing workouts stay unlinked until a safe occurrence cutover can represent day-only work. Calendar dates are derived from real timestamps in the event timezone. Required timestamps and assignment IDs remain, so additional group workout writes and day-only events are not enabled yet. New tables are server-only; no grants expose them through the generic user gateway.
+
 ## Next-release institution routing
 
 Each installation serves one institution. Browser routes resolve membership rather than accepting an institution or role from the URL. Institution records and supported v1 API scope identifiers remain; Tasks and additional-institution creation are removed. [ADR 0026](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md) records compatibility, migration and draft boundaries.

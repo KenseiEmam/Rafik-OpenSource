@@ -341,6 +341,7 @@ export type Database = {
           created_at: string
           goal: string | null
           sport_id: string | null
+          sequence_cursor: number
         }
       }
       organization_channel_members: {
@@ -419,6 +420,8 @@ export type Database = {
           state: string
           revision: number
           created_at: string
+          training_date: string
+          workout_snapshot: Json | null
         }
       }
       organization_exercises: {
@@ -653,6 +656,8 @@ export type Database = {
           completed_at: string | null
           recorded_mode: string
           recorded_by: string | null
+          occurrence_id: string | null
+          source_snapshot: Json | null
         }
       }
       organization_sports: {
@@ -677,6 +682,38 @@ export type Database = {
           prescription: Json
           created_by: string
           created_at: string
+        }
+      }
+      organization_workout_positions: {
+        Row: {
+          id: string
+          workspace_id: string
+          assignment_id: string
+          position: number
+          cycle: number
+          day_id: string
+          occurrence_id: string
+          session_id: string | null
+          state: string
+          resolved_by: string | null
+          resolved_at: string | null
+          reason: string | null
+        }
+      }
+      organization_workout_recurrences: {
+        Row: {
+          id: string
+          workspace_id: string
+          assignment_id: string
+          created_by: string
+          starts_on: string
+          ends_on: string
+          weekdays: number[]
+          timezone: string
+          local_time: string | null
+          duration_minutes: number | null
+          state: string
+          revision: number
         }
       }
       organization_workplace_feedback: {

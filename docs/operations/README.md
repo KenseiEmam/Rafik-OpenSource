@@ -1,5 +1,11 @@
 # Operations
 
+## Additive workout foundation upgrade
+
+Unreleased beta.3: apply normal forward migrations after a matching database/files/application backup. This migration freezes historical workout sources and derives existing event dates from their timezones. It does not infer sequence progress from old completion counts or attach same-day workouts to group attendance. Existing IDs, documents and receipts remain. Required timed-event and assignment-backed write shapes stay compatible with beta.2. New scheduling/recording features remain disabled pending the API cutover. Restore the matching backup/application for rollback; do not drop the new columns as a recovery procedure.
+
+From the repository root, with the local Docker database running, `npm run test:workout-foundation` verifies a populated upgrade in its own temporary database and deletes that database afterward. It does not migrate or seed your preview database.
+
 ## Next-release cleanup upgrade
 
 Unreleased: before upgrading, back up the database and files with the matching application version. The forward migration permanently deletes Tasks data, attributable receipts and task events. It stops before deletion if multiple institutions exist, including archived institutions. Separate such deployments before retrying; do not delete an institution just to pass the guard. First-run setup is the only creation flow. Rollback after migration requires restoring the pre-upgrade database and application together. See [ADR 0026](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md).

@@ -1,5 +1,9 @@
 # Testing
 
+## Additive workout migration
+
+`npm run test:workout-foundation` exercises a populated forward upgrade and source backfill, old-client inserts, private database grants and recurrence/position constraints in an owned disposable database. It generates client/transport types. This does not establish worker concurrency, API progression, Android queue upgrade or rendered UX acceptance; those require the later implementation slices.
+
 ## Next-release cleanup checks
 
 Use the isolated browser wrapper for `tests/institution-routing.e2e.ts`. It covers flat routes, legacy bookmarks, server-derived roles and Tasks retirement. Privileged fixture setup replaces the removed runtime creation endpoint and must use a disposable test database. Keep multi-institution security fixtures distinct from supported deployment behavior.

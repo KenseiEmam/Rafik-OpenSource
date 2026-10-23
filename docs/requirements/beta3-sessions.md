@@ -1,6 +1,6 @@
 # Beta.3 — sessions, workouts and backend consolidation
 
-Date: 22 October 2026. **Status: accepted product direction; technical proposal awaiting review.** Target release: Squire `1.0.0-beta.3`. Nothing in this document establishes implementation, migration success, Android acceptance or publication. Beta.2 remains the published version.
+Date: 22 October 2026. **Status: product direction accepted; additive storage implementation authorized 23 October 2026.** Target release: Squire `1.0.0-beta.3`. Nothing in this document establishes implementation, migration success, Android acceptance or publication. Beta.2 remains the published version.
 
 The earlier [institution cleanup](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md) and [frontend audit](../reference/frontend/README.md) form the first part of this release. The founder has now included session/workout consolidation, its Android impact and a review of legacy backend routes. Keep release work and its paired landing PR unmerged until the release is complete.
 
@@ -46,7 +46,7 @@ Exact table names and whether existing event/session tables are extended are pro
 
 ## Technical review proposal
 
-Reviewed 22 October 2026 against the current event/workout schema, session command handler, native queue/store and SQL gateway. The following is a concrete implementation recommendation, not implemented or yet approved architecture.
+Reviewed 22 October 2026 against the current event/workout schema, session command handler, native queue/store and SQL gateway. The founder authorized the additive schema/migration slice on 23 October. The storage foundation is implemented on the release branch; API, worker, occurrence backfill and native cutover remain subsequent work.
 
 ### Storage and source identity
 
@@ -184,4 +184,8 @@ Before retiring `/v1/queries`, implement an equivalent own-account export projec
 5. Update web calendar/list/dashboard/record/review workflows and Android capture/queue migration.
 6. Remove verified obsolete backend operations, complete focused acceptance and paired documentation, then prepare beta.3.
 
-No runtime changes, new migrations or Android builds are authorized by this planning document alone. The founder's accepted product rules above remain the baseline; proposed technical choices still need review before implementation.
+The founder authorized additive schema/migration implementation on 23 October. This authorization does not establish completion of API, worker, web or Android cutover. Preserve the accepted product rules and compatibility boundaries throughout subsequent slices.
+
+## Implemented additive slice — 23 October 2026
+
+Sequence cursors, bounded weekly recurrence storage, unique assignment positions, participant occurrence links, timed local dates and historical source snapshots are implemented. Existing assignment IDs and required timestamps remain. Historical workouts retain their document-derived sources without invented appointments; occurrence creation/backfill is deferred until day-only contracts are supported. Cursors start at zero without consuming historical work. Additional group records without assignments, transactional progression/resolution, worker scheduling, API capability discovery and native queue evolution remain unimplemented.
