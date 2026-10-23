@@ -92,7 +92,7 @@
         }
       ],
       "decisions": "docs/decisions.md",
-      "changes": "changes/"
+      "changes": null
     }
   }
 }

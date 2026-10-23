@@ -212,13 +212,14 @@ for (const repo of Object.keys(config.repositories).filter((r) => r !== here)) {
     warnings.push(`${repo} has no ${SELF} on its default branch yet.`)
   }
 }
-const fragmentDir = settings.changes || 'changes/'
-const hasFragment = changed.some(
-  (f) => f.startsWith(fragmentDir) && f.endsWith('.md') && !f.endsWith('README.md'),
-)
-if (changed.length && branch !== defaultBranch && !hasFragment)
+// Repositories with per-PR change notes (settings.changes) expect one note per branch.
+const fragmentDir = settings.changes
+const hasFragment =
+  fragmentDir &&
+  changed.some((f) => f.startsWith(fragmentDir) && f.endsWith('.md') && !f.endsWith('README.md'))
+if (fragmentDir && changed.length && branch !== defaultBranch && !hasFragment)
   warnings.push(
-    `No change fragment yet: add ${fragmentDir}<short-name>.md (see ${fragmentDir}README.md).`,
+    `No change note yet: add ${fragmentDir}<short-name>.md (see ${fragmentDir}README.md).`,
   )
 
 // Open PRs that touch the same files as each other, whoever owns them.
