@@ -55,8 +55,14 @@ async function institution(admin: Person, name: string) {
   const id = randomUUID();
   spaces.push(id);
   assert.equal(
-    (await call(admin, "/v1/institutions", { id, kind: "organization", name }))
-      .status,
+    (
+      await call(admin, "/v1/institutions", {
+        id,
+        kind: "organization",
+        name,
+        sole: true,
+      })
+    ).status,
     200,
   );
   return id;
@@ -185,7 +191,6 @@ test("member sport links respect role kind, archive state, stated previous set, 
     athlete = await person("Links Athlete"),
     otherAthlete = await person("Links Other Athlete"),
     id = await institution(admin, "Links institution"),
-    other = await institution(admin, "Other institution"),
     endpoint = `/v1/institution/sports`;
   for (const [p, role] of [
     [coach, "trainer"],
@@ -207,11 +212,7 @@ test("member sport links respect role kind, archive state, stated previous set, 
       (await call(admin, endpoint, sport(key, name, kind))).status,
       200,
     );
-  assert.equal(
-    (await call(admin, `/v1/institution/sports`, sport(foreign, "Fencing")))
-      .status,
-    200,
-  );
+  // One institution per installation: a sport ID it does not own stands in for another institution's.
   const athleteMember = await member(admin, id, athlete),
     coachMember = await member(admin, id, coach),
     otherAthleteMember = await member(admin, id, otherAthlete),

@@ -115,11 +115,13 @@ test("platform grant, audited operational lifecycle, exact replay and identity r
       401,
       "old cookie stays revoked",
     );
-    const support = await call(admin, "/v1/commands/create_support_case", {
-      p_id: randomUUID(),
-      p_team: null,
-      p_subject: "Local operator case",
-      p_detail: "Please inspect this local test case.",
+    const support = await call(admin, "/v1/support", {
+      action: "create_support_case",
+      args: {
+        p_id: randomUUID(),
+        p_subject: "Local operator case",
+        p_detail: "Please inspect this local test case.",
+      },
     });
     assert.equal(support.status, 200, JSON.stringify(support));
     r = await call(operator, "/v1/platform?section=support");

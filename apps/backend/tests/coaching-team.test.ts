@@ -56,8 +56,14 @@ async function institution(admin: Person, name: string) {
   const id = randomUUID();
   spaces.push(id);
   assert.equal(
-    (await call(admin, "/v1/institutions", { id, kind: "organization", name }))
-      .status,
+    (
+      await call(admin, "/v1/institutions", {
+        id,
+        kind: "organization",
+        name,
+        sole: true,
+      })
+    ).status,
     200,
   );
   return id;
@@ -98,7 +104,6 @@ test("primary and supporting coaches: scoped reads, primary-only sensitive data,
     outsider = await person("Team Outsider"),
     athlete = await person("Team Athlete"),
     id = await institution(admin, "Coaching team institution"),
-    other = await institution(admin, "Other team institution"),
     ws = `/v1/institution`;
   for (const [p, role] of [
     [primary, "trainer"],
@@ -124,11 +129,7 @@ test("primary and supporting coaches: scoped reads, primary-only sensitive data,
     ).status,
     200,
   );
-  assert.equal(
-    (await call(admin, `/v1/institution/sports`, sport(foreign, "Fencing")))
-      .status,
-    200,
-  );
+  // One institution per installation: a sport ID it does not own stands in for another institution's.
   let a = await member(admin, id, athlete);
   const p = await member(admin, id, primary),
     s = await member(admin, id, support),

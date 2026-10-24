@@ -56,8 +56,14 @@ async function institution(admin: Person, name: string) {
   const id = randomUUID();
   spaces.push(id);
   assert.equal(
-    (await call(admin, "/v1/institutions", { id, kind: "organization", name }))
-      .status,
+    (
+      await call(admin, "/v1/institutions", {
+        id,
+        kind: "organization",
+        name,
+        sole: true,
+      })
+    ).status,
     200,
   );
   return id;

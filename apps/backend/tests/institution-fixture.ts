@@ -16,6 +16,9 @@ export async function fixtureInstitution(
     kind = input.kind === "institution" ? "organization" : String(input.kind),
     name = String(input.name);
   await db.$transaction(async (tx) => {
+    // The singular /v1/institution route resolves only while exactly one
+    // institution exists, so `sole` replaces any earlier fixture or seed row.
+    if (input.sole) await tx.institutions.deleteMany();
     await tx.institutions.create({
       data: { id, kind, name, created_by: actor.id },
     });
