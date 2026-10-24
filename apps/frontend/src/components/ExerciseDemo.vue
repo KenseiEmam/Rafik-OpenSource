@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import OrganizationAsset from './OrganizationAsset.vue'
+import ResourceAsset from './ResourceAsset.vue'
 import ExerciseVideo from './ExerciseVideo.vue'
 import { videoForExercise } from '../lib/exercise-media'
 import credits from '../content/exercise-credits.json'
@@ -15,7 +15,7 @@ const props = defineProps<{
 const sourceRef = computed(
   () =>
     props.exercise?.source_ref ||
-    (!props.exercise?.owner_id && !props.exercise?.workspace_id ? props.exercise?.id : undefined),
+    (!props.exercise?.owner_id && !props.exercise?.institution_id ? props.exercise?.id : undefined),
 )
 const credit = computed(() => credits[sourceRef.value as keyof typeof credits])
 const motion = computed(() => videoForExercise(props.exercise))
@@ -25,7 +25,7 @@ const pack = computed(() => {
   return media.items.find((item) =>
     e.media_ref
       ? item.id === e.media_ref
-      : !e.owner_id && !e.workspace_id && item.exerciseId === e.id,
+      : !e.owner_id && !e.institution_id && item.exerciseId === e.id,
   )
 })
 const failedFrames = ref<string[]>([])
@@ -40,7 +40,7 @@ const name = computed(() =>
 )
 </script>
 <template>
-  <OrganizationAsset
+  <ResourceAsset
     v-if="exercise?.media_asset"
     :id="exercise.media_asset"
     :name="name"

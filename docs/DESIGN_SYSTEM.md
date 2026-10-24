@@ -8,6 +8,36 @@ Rafik should feel like one university sports workspace: calm, legible, practical
 
 Visual work must preserve API contracts, routes, permissions, one-role memberships, exact commands, revision checks, recoverable drafts, immutable program versions and offline/acknowledgment distinctions. Do not move business rules into reusable form controls. No new component library, font family or global store is required.
 
+## Campaign identity alignment — adopted 23 October 2026
+
+The founder supplied `rafik-campaign-round7.zip` (brand guidelines v1.0, approved 22 October) and directed future product design to align with it. The campaign explicitly leaves application controls under this document. This section is the product translation of that identity; social export geometry and publishing instructions do not become application requirements.
+
+### Shared identity
+
+- Name: **Rafik / رفيق**. Use sentence case, plain task-specific language, athletes/coaches/institution, and accurate saved-on-device versus synced-to-institution wording. The campaign's British English “programme” does not require renaming API fields, routes or existing localization keys.
+- Keep the supplied original logo artwork, its existing outline, proportions and full opacity. Never mirror, recolor, redraw or add another decorative box/outline/shadow. Use a dark mark on a light surface and the supplied light mark on a dark surface. Preserve institution-owned branding; do not replace an institution logo with campaign artwork.
+- Shared default product accent: Rafik green `#285943`. Light page: ivory `#f8f8f3`; product dark page: `#171e1a`. Campaign forest `#10291f` is a related identity color, not an instruction to replace the product's accepted dark canvas. Keep instance-configurable colors and accessible derived foregrounds.
+- Supporting campaign references: ink `#18392b`, moss `#5d6c5a`, sage `#6f8a5c`, line `#d7ded2`, mist `#edf4e9`, lime `#c7dc9d`, fern grey `#b7c9b9`, pine `#17382a`. These are identity references, not a second runtime token system. Sage is unsuitable for ordinary small text on ivory; check actual text/surface contrast. Semantic errors/warnings and truthful chart categories retain their distinct meanings.
+- English uses locally loaded Manrope; Arabic uses locally loaded Noto Sans Arabic with real supplied weights. Product web 400/600 Arabic is valid; campaign 400/700 does not mandate synthetic bold or advertising-size typography. Arabic tracking stays zero; URLs, emails, identifiers and mixed-language names retain appropriate direction isolation.
+- Prefer warm matte surfaces, restrained green emphasis, deliberate whitespace and rounded controls. No new decorative glassmorphism, glossy/multicolor gradients, glows, noise, emoji decoration, invented dashboards or generated athlete imagery. Use the existing Phosphor SVG family for interface icons. Functional overlays retain necessary scrims, contrast, focus and opaque fallbacks.
+
+### Product-specific requirements remain
+
+Keep the operational type scale, 44–48px touch targets, real status badges, accessible focus/validation, pagination, disclosure and reduced-motion behavior defined below. Campaign 1080px artboards, 28px image frames, logo minimums, separate-language social posts, headline weights and “one accent per artboard” do not override adaptive product layout or semantic controls. A product page can contain bilingual user-entered names and warning/error states. Published screenshots must depict the actual product, never a repaint of these guidelines.
+
+For beta.3 Android work, align the default palette to the product identity above, bundle the real Latin/Arabic fonts with licenses and use the original surface-appropriate logo if a logo is shown. Keep device accessibility settings, tested logical-start Android RTL treatment, offline recovery and user-selected themes. Do not copy web CSS direction assumptions into native text alignment. Verify actual phone/tablet rendering before calling the native application aligned; the source gaps and acceptance checklist are in the [audit](known-issues/ui-ux-audit.md#campaign-and-native-brand-alignment--23-october-2026).
+
+### Source and reconciliation
+
+| Source            | Identity / limit                                                                                                                                                                                                                                           |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Supplied archive  | `rafik-campaign-round7.zip`, SHA-256 `563dded3168ac510758e9f9fc038bbebd815a9e920433382bbb7032a9d05ff06`                                                                                                                                                    |
+| Visual source     | `round7/Rafik-Brand-Guidelines-v1.0.pdf`, 26 pages; SHA-256 `d86b31debd23e89265a3295984a1c2de3e19933d904259e95c7ad917600e3fbb`. PDF takes precedence over its campaign companion.                                                                          |
+| Written companion | `round7/BRAND-GUIDELINES-FOR-AGENTS.md`, SHA-256 `3f94639414e9e1222cfca0d14498fcaf50c5c5e7917a72e34538c3bafc8efcb9`                                                                                                                                        |
+| Existing app logo | `public/brand/rafik.png` is byte-identical to the handoff's `assets/rafik.png`; SHA-256 `d7544e73ec55d0233362d19dc180a3f8f1bf93bbfb92fdeba27519739c2d2c9d`. Larger dark and light marks in the handoff are approved variants, not newly generated artwork. |
+
+The source bundle's old `KenseiEmam/Rafik-OpenSource` owner and release/capture references are historical. Use the canonical Rafik-Athlete-Managment repository and the actual reviewed/published revision. Future beta.3 capabilities must not be presented as already released. The campaign's photography credits point into a separate round6 folder that is absent from this handoff; inspected example photos are not imported as product assets or assumed to have a complete redistributable provenance record. Keep campaign strategy/materials in their owning project; this repository maintains product rules and the source fingerprint above.
+
 ## Existing foundation
 
 | Area            | Current source of truth                                         | Keep                                                                               |
@@ -44,7 +74,7 @@ The original default accent is `#285943`; default page colors are `#f8f8f3` and 
 
 Shared success, warning, information and danger-action colors now live in `styles/design-system.css` (`--success`, `--success-bg`, `--warning`, `--warning-bg`, `--info`, `--info-bg`, `--danger-action`, `--on-danger`). Wider consumer migration and customized-palette validation remain follow-up work. Success can use the green family; warning uses restrained amber, information a muted blue, danger a readable red. Meaning must also appear as text or an icon.
 
-Use ordinary opaque surfaces for most content. Use a subtle gradient only for a small header, selected emphasis or onboarding highlight. Glass treatment is optional for floating shell elements/overlays, with an opaque fallback and verified contrast. Never blur a form, table, athlete record or primary reading surface.
+Use ordinary opaque surfaces for most content. Use a subtle gradient only for a small header, selected emphasis or onboarding highlight. Prefer opaque floating shell elements/overlays. Existing functional translucency needs an opaque fallback and verified contrast; do not introduce decorative glass treatment. Never blur a form, table, athlete record or primary reading surface.
 
 ## Typography
 
@@ -220,7 +250,7 @@ The Schedule list uses the same unboxed search/filter/pagination toolbar and 44p
 
 Groups and assessment templates follow the shared search/pagination toolbar with their archive checkbox visible inline. Use contextual labels (Search groups/Search templates), not a generic library label.
 
-People keeps role tabs above its search/membership/sport toolbar; pagination aligns beside those controls. Shared pagination has zero external block margin so it cannot sit above search fields in Programs or other lists. Tasks need no additional visual polish in this handoff; the founder may remove the feature later.
+People keeps role tabs above its search/membership/sport toolbar; pagination aligns beside those controls. Shared pagination has zero external block margin so it cannot sit above search fields in Programs or other lists. Tasks is retired in the upcoming release; its historical audit evidence is retained.
 
 Assessment templates use an adaptive card grid because each item has a short title and drill count; place the edit action consistently at the bottom. Use 24 records by default and the shared grid-size options. Groups remain rows because membership details need horizontal room. Cards stack naturally on phones.
 

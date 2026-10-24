@@ -1,6 +1,49 @@
 # Current delivery ledger
 
+## Breaking retirement — 23 October 2026
+
+Founder approved removing all retired routes/storage before customer adoption, explicitly including business and standalone assignments. Added ADR 0030, forward deletion, current account/support services, canonical-only web/API routing, reference exercise separation, and current-only file recovery/orphan metadata. The populated retirement verifier preserved complete snapshots of 44 current tables and exact receipts. Focused API checks exposed and corrected legacy calendar collision SQL, profile/catalog RLS dependencies and void-result handling. Final populated retirement, institutional API cases, 44 frontend units and native HTTP/SQLite replay checks passed. The Chromium production-preview journey passed setup, profile/support persistence, canonical navigation and rejected old browser routes; English desktop and Arabic phone dark screenshots were inspected. Paired landing API/deployment guidance is pushed to its draft PR. No preview reset, release merge or APK build was performed; wider beta.3 features and physical upgrade acceptance remain separate work.
+
+
+## Backend CI and contributor coordination review — 23 October 2026
+
+PR #142's backend job failed in the fresh-database harness while replaying historical role-normalization SQL against renamed tables. The harness now applies the existing identifier map to both historical role and coaching snippets; deployed migration files remain unchanged. Review of Sami's PR #143 supports GitHub-based coordination and per-PR change notes, but recommends a separate main-branch tooling merge after incomplete-read reporting, current watched paths, compiler recovery, and contributor/agent authorization guidance are corrected. It has not been merged into this release branch.
+
+## Institution naming migration — 23 October 2026
+
+Founder approved replacing workspace/organization identifiers across schema, API and clients. Added the forward rename, canonical `/v1/institution` dispatch and one legacy transport adapter. Web/Android source now uses institution fields/routes; browser workout hydration and native credentials retain previous identity fields without changing durable payloads or owner tuple order. [ADR 0029](../decisions/ADR-0029-institution-identifiers.md) records the boundary and coordinated upgrade order. Preservation, focused API/native queue/identity and type checks passed; canonical fixture sources and inventories are updated. The final frozen-source Chromium first-run/People smoke passed with inspected English desktop and Arabic phone empty states; verification records the exact coverage and limits. This does not complete the remaining beta.3 scheduling/group/native-workout scope.
+
+## Backend audit — 23 October 2026
+
+Completed schema/route source inventory, explicit gateway boundaries, four standalone read removals, ten module renames, subject-only workout history/sequence exports and Prisma metadata corrections. The populated disposable retirement migration preserved historical business records and passed lifecycle SQL checks. Eleven isolated API tests passed, including file recovery/orphan grace, authorization, export, institutional calendar and progression. No preview reset, browser suite or native build was run. See [backend findings and remaining release work](../reference/backend/README.md).
+
+## Fixed-time individual progression API — 23 October 2026
+
+Implemented a shared transactional sequence service and `POST /v1/workspaces/:id/workout-scheduling` for schedule/reschedule/skip. Existing session start/save links bound workouts and resolves completion once; corrections do not rewind or consume another position. Each mutation rechecks plan-specific staff scope before receipt replay and uses the institutional transaction lock plus assignment row lock. Active cannot-train status blocks new scheduling/starting without exposing injury details. Ending/replacing an assignment preserves results, cancels unstarted work and pauses in-progress work. No web controls, cron worker, day-only/group workout write or Android queue change is enabled. OpenAPI and paired draft landing API guidance describe this boundary. Final checks passed: two isolated API journeys, backend typecheck, two Swagger tests and documentation links. No browser/native build was needed; the harness cleaned its own fixtures.
+
+## Additive workout storage — 23 October 2026
+
+Founder authorized implementation. Migration `202610231200_workout_sequence_foundation` adds sequence/recurrence foundations, optional participant occurrence links, timed local dates and frozen source snapshots derived from historical workout documents. Historical workouts are not guessed into existing group events or turned into artificial timed appointments. Assignment and timestamp requirements stay intact until the coordinated API cutover. No worker or new recording API is enabled. Populated upgrade/preservation constraints, backend typecheck and the existing delegated-workout API journey passed; isolated fixtures were cleaned. See the beta.3 requirements for remaining work and verification for actual checks.
+
+## Next-release institution cleanup — 22 October 2026
+
+Founder-approved scope on `codex/single-institution-cleanup`; keep unmerged until the release is complete. Tasks code/data and workspace creation/chooser are retired. Flat routes preserve scoped draft/command keys and Android API compatibility. See [ADR 0026](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md). Verification is recorded separately; workout scheduling is not implemented in this slice. Paired English/Arabic documentation is held in [landing PR #34](https://github.com/KenseiEmam/rafik-landing/pull/34). Focused migration/API/unit/routing checks passed; broader release acceptance is still separate. CI now checks the cleanup migration instead of the removed Tasks suite; isolated API tests retain canonical reference fixtures and own their temporary file directory.
+
+Follow-up: removed Tasks tombstone and omitted standalone/workspace routes; renamed frontend folders to `institution`/`navigation` and institution components. Recovery and cleanup now share a validated local database/file target instead of mixing isolated bytes with preview metadata. Focused verification is recorded in the verification summary.
+
 **Status, 20 October 2026:** Stage 4 prototype and Stage 5 branding/support implementations are complete; first-user and pre-production gates remain in the backlog. The founder confirmed branding persists after restarting local frontend/backend services. Database backup/restore persistence remains unverified. Stage 6 optional cloud templates are implemented; provider apply, validation, cost review and recovery rehearsal remain deferred user-testing items and do not block Stage 7. The Stage 7 coach-first Android beta.1 is accepted and published. Native bearer authentication, schedule/roster attendance, a scoped local command queue and an OpenAPI export are implemented locally. Assessment entry and event completion are implemented locally; online correction history, explicit recovery sharing and English/Arabic UI are implemented; isolated API and focused emulator checks pass; the founder reports the S20+ phone walkthrough passed; broader native coverage remains follow-up work, not a beta.1 blocker. The [stage plan](../requirements/README.md) is authoritative; detailed R-phase chronology is preserved in the [archive](../archive/implementation-ledger-history-2026-10-17.md).
+
+## View consolidation follow-up — 22 October 2026
+
+Removed 18 unreachable legacy Vue files and the two superseded Resources/Nutrition implementations. Supported UI uses plain feature names, with resources and nutrition routes restored after the earlier omission. Shared commands now live outside retired Teams/Ongoing folders. Historical account-resource deletion remains a scoped cleanup helper, not a second Resources screen. A view-graph unit guard checks for unreachable Vue files and required feature routes. Focused checks passed: 33 unit tests, two Chromium workflow tests, final typecheck/build and documentation links. No native rebuild or full design audit was repeated.
+
+## Complete frontend source inventory — 22 October 2026
+
+Founder requested a full view/component/navigation audit and removal of code outside current institutional value. Added a reusable improved prompt and a maintained frontend reference: 86 Vue files, 46 routed/embedded screen files and 49 route records. The source analyzer checks coverage, actual template consumers, router registration, known entries/targets and catalog drift. Removed hidden duplicate SectionNav and obsolete guest/independent creation/adoption UI, fixed history/clients links and detail-route highlighting, and suppressed independent notification destinations. Historical account data, exact pending sync and supported Android/API contracts remain. The old guest/standalone core browser spec was removed rather than treated as current acceptance. Checks passed: 44 frontend units, three focused Chromium journeys, two final notification API regressions, both typechecks, production compilation, inventory drift and documentation links. Landing PR #34 carries paired upcoming guidance and contributor-reference links. Verification and limits are recorded separately; this is not a whole-product rendered design or security audit.
+
+## Beta.3 training scope — 22 October 2026
+
+Founder confirmed the earlier cleanup plus session/workout consolidation as beta.3, including phone changes and a legacy backend review. Individual assignments progress independently; overdue unresolved work blocks only its assignment. Group events use shared workouts with per-person attendance/results and count as additional training; group plans are deferred. Offline individual/group coach workout recording is accepted. The [beta.3 specification](../requirements/beta3-sessions.md) records the proposed lifecycle, route-family disposition, additive migration and old native queue compatibility policy. This turn changes planning only; no route retirement, schema migration or new Android workflow has been implemented.
 
 ## Current state
 
@@ -132,3 +175,15 @@ Groups and assessment templates now use the shared aligned toolbar too, with con
 People search/membership/sport and pagination now share a lower-aligned toolbar under role tabs. Removed inherited pagination block margins responsible for Programs misalignment. Founder deferred additional Tasks polish.
 
 Assessment templates now use the founder-requested responsive card grid with title, drill count and aligned edit action; groups retain rows. Template grids use the shared 24-record grid default.
+
+## Beta.3 technical review — 22 October 2026
+
+Reviewed the actual assignment-required workout relation, fixed-time event fields, session command handler, SQL privilege-discovered gateway and native serialized calendar queue. Expanded the beta.3 specification with a preferred additive event/participant model, explicit progression identity, proposed repeat/correction/end policies, a receipt-compatible old-client adapter and versioned offline command/cache migration. These technical recommendations need review before runtime implementation; accepted product scope and offline capture remain unchanged. No database, application code, release version or native build changed.
+
+Founder clarification, 22 October: cycle repetition is accepted. After the last resolved workout, return to the first while the assignment remains active and within its dates; no automatic increase in load/difficulty. Founder subsequently approved correction and end/replacement policies as well.
+
+Beta.3 operation inventory: traced current direct RPC callers and Support's implicit shared-command dispatch, identifying ten required generic operations plus the account export/resource-cleanup table reads. Recorded concrete additive migration, backfill/reconciliation, native DTO cutover and route-retirement prerequisites in the beta.3 specification. No runtime route, data or schema was changed by this inventory. The three lifecycle policies are now accepted; storage/API mechanics remain technical proposals to implement against the recorded checks.
+
+## Campaign brand alignment — 23 October 2026
+
+Reviewed the founder's round7 brand ZIP and representative PDF/example renders. Integrated shared identity, product-specific exceptions, source hashes and stale-source reconciliation into the existing design system; updated AGENTS for future work. Web broadly matches the identity; native source differs in palette/typeface and needs surface-appropriate logo treatment. Added a scoped beta.3 native acceptance checklist without changing runtime code, APKs or institution themes. Supplied photography is reference-only because the cited round6 credits are absent; campaign strategy/assets stay in their owning project.

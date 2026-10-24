@@ -17,9 +17,6 @@
 .dashboard-sidebar {
   display: none;
 }
-.dashboard-frame .institution-nav {
-  display: none;
-}
 .dashboard-frame .container {
   width: 100%;
   max-width: 1500px;
@@ -51,7 +48,7 @@
 .dashboard-frame .daily-aside {
   gap: 18px;
 }
-.dashboard-frame .workspace-shortcut {
+.dashboard-frame .institution-shortcut {
   padding: 18px;
 }
 .dashboard-frame .section-title {
@@ -175,7 +172,7 @@
   .dashboard-frame > main:has(.organization-messages.is-creating) {
     overflow: auto;
   }
-  /* The paginated directory scrolls with the workspace; no nested list scroller. */
+  /* The paginated directory scrolls with the institution; no nested list scroller. */
   .dashboard-frame .organization-people aside {
     max-height: calc(100dvh - 180px);
     overflow-y: auto;

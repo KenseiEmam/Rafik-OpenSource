@@ -1,13 +1,15 @@
+import { apiOrigin } from "./test-target.ts";
+import { fixtureInstitution } from "./institution-fixture.ts";
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID, randomBytes, createHash } from "node:crypto";
 import { db } from "../server/db.ts";
-const base = "http://127.0.0.1:55331",
+const base = apiOrigin,
   people: string[] = [],
   spaces: string[] = [];
 type Person = { id: string; email: string; cookie: string };
 after(async () => {
-  await db.workspaces.deleteMany({ where: { id: { in: spaces } } });
+  await db.institutions.deleteMany({ where: { id: { in: spaces } } });
   await db.users.deleteMany({ where: { id: { in: people } } });
   await db.$disconnect();
 });
@@ -27,10 +29,12 @@ async function person(name: string): Promise<Person> {
     },
   });
   const p = { id, email, cookie: "rafik_session=" + token };
-  await call(p, "/v1/commands/ensure_profile", { p_name: name });
+  await call(p, "/v1/account/profile", { p_name: name });
   return p;
 }
 async function call(p: Person, path: string, input?: unknown) {
+  if (path === "/v1/institutions" && input)
+    return fixtureInstitution(p, input as Record<string, unknown>);
   const r = await fetch(base + path, {
     method: input === undefined ? "GET" : "POST",
     headers: {
@@ -51,8 +55,14 @@ async function institution(admin: Person, name: string) {
   const id = randomUUID();
   spaces.push(id);
   assert.equal(
-    (await call(admin, "/v1/workspaces", { id, kind: "organization", name }))
-      .status,
+    (
+      await call(admin, "/v1/institutions", {
+        id,
+        kind: "organization",
+        name,
+        sole: true,
+      })
+    ).status,
     200,
   );
   return id;
@@ -61,7 +71,7 @@ async function join(admin: Person, id: string, p: Person, role: string) {
   const token = randomBytes(32).toString("hex");
   const r = await call(
     admin,
-    "/v1/workspaces/" + id,
+    "/v1/institution",
     operation("invite", {
       id: randomUUID(),
       email: p.email,
@@ -70,13 +80,10 @@ async function join(admin: Person, id: string, p: Person, role: string) {
     }),
   );
   assert.equal(r.status, 200, JSON.stringify(r));
-  assert.equal(
-    (await call(p, "/v1/organization-invitations/" + token, {})).status,
-    200,
-  );
+  assert.equal((await call(p, "/v1/invitations/" + token, {})).status, 200);
 }
 async function member(admin: Person, id: string, p: Person) {
-  const r = await call(admin, `/v1/workspaces/${id}?view=admin`);
+  const r = await call(admin, `/v1/institution?view=admin`);
   return r.data.members.find((m: { user_id: string }) => m.user_id === p.id);
 }
 const sport = (id: string, name: string, kind = "sport", revision = 0) =>
@@ -94,7 +101,7 @@ test("admins define sports and specialties separately from roles, with revision,
     coach = await person("Sports Coach"),
     athlete = await person("Sports Athlete"),
     id = await institution(admin, "Sports institution"),
-    endpoint = `/v1/workspaces/${id}/sports`;
+    endpoint = `/v1/institution/sports`;
   await join(admin, id, coach, "trainer");
   await join(admin, id, athlete, "trainee");
   const football = randomUUID(),
@@ -171,8 +178,8 @@ test("admins define sports and specialties separately from roles, with revision,
       ["Strength & conditioning", "specialty"],
     ],
   );
-  const events = await db.workspace_events.count({
-    where: { workspace_id: id, kind: "sport_updated" },
+  const events = await db.institution_audit_events.count({
+    where: { institution_id: id, kind: "sport_updated" },
   });
   assert.equal(events, 3);
 });
@@ -184,8 +191,7 @@ test("member sport links respect role kind, archive state, stated previous set, 
     athlete = await person("Links Athlete"),
     otherAthlete = await person("Links Other Athlete"),
     id = await institution(admin, "Links institution"),
-    other = await institution(admin, "Other institution"),
-    endpoint = `/v1/workspaces/${id}/sports`;
+    endpoint = `/v1/institution/sports`;
   for (const [p, role] of [
     [coach, "trainer"],
     [otherCoach, "trainer"],
@@ -206,16 +212,7 @@ test("member sport links respect role kind, archive state, stated previous set, 
       (await call(admin, endpoint, sport(key, name, kind))).status,
       200,
     );
-  assert.equal(
-    (
-      await call(
-        admin,
-        `/v1/workspaces/${other}/sports`,
-        sport(foreign, "Fencing"),
-      )
-    ).status,
-    200,
-  );
+  // One institution per installation: a sport ID it does not own stands in for another institution's.
   const athleteMember = await member(admin, id, athlete),
     coachMember = await member(admin, id, coach),
     otherAthleteMember = await member(admin, id, otherAthlete),
@@ -291,7 +288,7 @@ test("member sport links respect role kind, archive state, stated previous set, 
   );
   // People: sport filter applies inside the existing role scope.
   const people = (p: Person, view: string, query: string) =>
-    call(p, `/v1/workspaces/${id}/people?view=${view}&${query}`);
+    call(p, `/v1/institution/people?view=${view}&${query}`);
   const rowers = await people(admin, "admin", `sport=${rowing}`);
   assert.deepEqual(
     rowers.data.items.map((m: { name: string }) => m.name).sort(),
@@ -306,7 +303,7 @@ test("member sport links respect role kind, archive state, stated previous set, 
     (
       await call(
         admin,
-        "/v1/workspaces/" + id,
+        "/v1/institution",
         operation("assign-trainer", {
           id: athleteMember.id,
           revision: athleteMember.revision,
@@ -336,7 +333,7 @@ test("member sport links respect role kind, archive state, stated previous set, 
     403,
   );
   assert.equal(
-    await db.organization_member_sports.count({
+    await db.institution_member_sports.count({
       where: { member_id: athleteMember.id },
     }),
     2,

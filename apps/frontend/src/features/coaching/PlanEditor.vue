@@ -4,7 +4,6 @@ import ExerciseDemo from '../../components/ExerciseDemo.vue'
 import ExercisePicker from '../../components/ExercisePicker.vue'
 import ProgramCover from './ProgramCover.vue'
 import { request } from '../../lib/backend'
-import OrganizationNav from '../organizations/OrganizationNav.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
@@ -21,8 +20,8 @@ import {
 import { user, contexts } from '../../app/auth'
 import { duplicateSession, duplicateWeek } from './program-structure'
 import { programContext } from './program-context'
-import { useCommand } from '../teams/commands'
-import CommandStatus from '../teams/CommandStatus.vue'
+import { useCommand } from '../../lib/commands'
+import CommandStatus from '../../components/CommandStatus.vue'
 import { clone, type Plan, type PlanVersion, type Prescription } from '../../lib/domain'
 import { getDraft, storeDraft, removeDraft } from '../../lib/storage'
 import { language, locale, t, errorMessage } from '../../lib/i18n'
@@ -68,8 +67,7 @@ const form = ref<HTMLFormElement>()
 const coverInput = ref<HTMLInputElement>()
 const coverDrag = ref(false)
 let initialized = false
-const keyFor = (id: string) =>
-  context.workspace ? `plan:${user.value!.id}:${context.key}:${id}` : `plan:${user.value!.id}:${id}`
+const keyFor = (id: string) => `plan:${user.value!.id}:${context.key}:${id}`
 const key =
   keyFor(String(route.params.id)) +
   (route.query.source ? `:source:${route.query.source}:member:${route.query.member || ''}` : '')
@@ -279,9 +277,8 @@ async function uploadCoverFile(file?: File) {
     if (coverInput.value) coverInput.value.value = ''
     return
   }
-  const workspace =
-    context.workspace || contexts.value.find((c) => c.kind === 'independent')?.workspace_id
-  if (!workspace) return
+  const institution = context.institution
+  if (!institution) return
   uploading.value = true
   error.value = ''
   try {
@@ -293,7 +290,7 @@ async function uploadCoverFile(file?: File) {
     const prior = await getDraft<{ digest: string; id: string }>(key + ':cover-upload')
     const mediaId = prior?.digest === digest ? prior.id : crypto.randomUUID()
     await storeDraft(key + ':cover-upload', { digest, id: mediaId })
-    await request(`/v1/program-media/${mediaId}?workspace=${workspace}`, {
+    await request(`/v1/program-media/${mediaId}?institution=${institution}`, {
       method: 'PUT',
       body: file,
       headers: { 'Content-Type': file.type },
@@ -433,7 +430,6 @@ function removeDay() {
 }
 </script>
 <template>
-  <OrganizationNav v-if="context.workspace" />
   <div class="container page editor-page">
     <RouterLink class="back-link" :to="context.base + '/plans'"
       ><PhArrowLeft :size="18" aria-hidden="true" class="directional" />{{
@@ -953,7 +949,7 @@ function removeDay() {
 <style>
 .editor-toolbar {
   position: sticky;
-  /* Below the sticky phone/tablet header; 0 where the workspace itself scrolls. */
+  /* Below the sticky phone/tablet header; 0 where the institution itself scrolls. */
   top: var(--dashboard-sticky-top, 0);
   z-index: 5;
   display: flex;

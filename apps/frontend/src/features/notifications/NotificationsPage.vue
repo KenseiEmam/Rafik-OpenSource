@@ -32,9 +32,7 @@ const title = (item: Notice) =>
       ? l('An upcoming event', 'موعد قادم')
       : item.category === 'calendar'
         ? l('A calendar update', 'تحديث في التقويم')
-        : item.category === 'checkins'
-          ? l('A check-in is due', 'متابعة مستحقة')
-          : l('Feedback or results are ready', 'الملاحظات أو النتائج جاهزة')
+        : l('Feedback or results are ready', 'الملاحظات أو النتائج جاهزة')
 const stamp = (value: string) =>
   new Intl.DateTimeFormat(locale.value === 'ar' ? 'ar-AE' : 'en-GB', {
     dateStyle: 'medium',
@@ -88,8 +86,8 @@ onMounted(() => load())
         <p>
           {{
             l(
-              'Relevant updates across your workspaces, with each context kept clear.',
-              'تحديثات مهمة من مساحات عملك مع توضيح سياق كل تحديث.',
+              'Updates from your institution, with links to the work that needs your attention.',
+              'تحديثات من مؤسستك مع روابط إلى العمل الذي يحتاج إلى انتباهك.',
             )
           }}
         </p>
@@ -131,8 +129,8 @@ onMounted(() => load())
               )
             }}
           </p>
-          <RouterLink to="/workspaces" class="text-link">{{
-            l('Open your workspaces', 'فتح مساحات عملك')
+          <RouterLink to="/dashboard" class="text-link">{{
+            l('Open dashboard', 'فتح لوحة التحكم')
           }}</RouterLink>
         </section>
         <article

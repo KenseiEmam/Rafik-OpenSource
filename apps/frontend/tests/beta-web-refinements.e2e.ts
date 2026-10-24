@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { randomUUID, randomBytes } from 'node:crypto'
 import AxeBuilder from '@axe-core/playwright'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { layoutIssues } from './layout-contract'
 
 const image = readFileSync(
@@ -25,10 +25,10 @@ async function inspect(page: Page, name: string, info: { project: { name: string
   })
 }
 
-async function institution(f: Awaited<ReturnType<typeof teamFixture>>, name: string) {
-  const workspace = randomUUID(),
-    endpoint = `/v1/workspaces/${workspace}`
-  await f.call(f.owner, '/v1/workspaces', { id: workspace, kind: 'organization', name })
+async function prepareInstitution(f: Awaited<ReturnType<typeof institutionFixture>>, name: string) {
+  const institution = randomUUID(),
+    endpoint = `/v1/institution`
+  await f.call(f.owner, '/v1/institutions', { id: institution, kind: 'institution', name })
   const join = async (person: { email: string }, roles: string[]) => {
     const token = randomBytes(32).toString('hex')
     await f.call(f.owner, endpoint, {
@@ -39,18 +39,18 @@ async function institution(f: Awaited<ReturnType<typeof teamFixture>>, name: str
       roles,
       token,
     })
-    await f.call(person as never, `/v1/organization-invitations/${token}`, {})
+    await f.call(person as never, `/v1/invitations/${token}`, {})
   }
-  return { workspace, endpoint, join }
+  return { institution, endpoint, join }
 }
 
 test('coach browses later pages of athlete plans, nutrition plans and events, then reopens them', async ({
   page,
 }, info) => {
   test.setTimeout(300000)
-  const f = await teamFixture()
+  const f = await institutionFixture()
   try {
-    const { workspace, endpoint, join } = await institution(f, 'Madar browse acceptance')
+    const { institution, endpoint, join } = await prepareInstitution(f, 'Madar browse acceptance')
     await join(f.coach, ['trainer'])
     const athletes = []
     for (let i = 1; i <= 26; i++) {
@@ -113,7 +113,7 @@ test('coach browses later pages of athlete plans, nutrition plans and events, th
         guidance: 'Regular meals around training',
         meals: [],
       })
-      await f.call(f.coach, endpoint + '/calendar', {
+      await f.call(f.coach, endpoint + '/schedule', {
         operation: randomUUID(),
         action: 'create',
         id: randomUUID(),
@@ -129,7 +129,7 @@ test('coach browses later pages of athlete plans, nutrition plans and events, th
         every: 7,
       })
     }
-    const base = `/organization/${workspace}/trainer`
+    const base = ``
 
     // Athlete plans: a record from the later page stays selected through reload and close.
     await f.login(page, f.coach, base + '/training')
@@ -235,13 +235,13 @@ test('multiple message attachments survive reload, exact retry and recipient rev
   browser,
 }, info) => {
   test.setTimeout(180000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     recipientContext = await browser.newContext(),
     recipient = await recipientContext.newPage()
   try {
-    const { workspace, endpoint, join } = await institution(f, 'Madar attachments')
+    const { institution, endpoint, join } = await prepareInstitution(f, 'Madar attachments')
     await join(f.client, ['trainee'])
-    await f.login(page, f.owner, `/organization/${workspace}/admin/messages`)
+    await f.login(page, f.owner, `/messages`)
     await page.getByRole('button', { name: /R4 Athlete/ }).click()
     await expect(page).toHaveURL(/\/messages\/[a-f0-9-]{36}$/)
     const channel = page.url().split('/').at(-1)!
@@ -294,7 +294,7 @@ test('multiple message attachments survive reload, exact retry and recipient rev
     expect(sends).toBe(2)
     await inspect(page, 'attachments-sent', info)
 
-    await f.login(recipient, f.client, `/organization/${workspace}/trainee/messages/${channel}`)
+    await f.login(recipient, f.client, `/messages/${channel}`)
     const bubble = recipient.locator('.message-bubble')
     await expect(bubble).toHaveCount(1)
     await expect(bubble.locator('.organization-asset')).toHaveCount(2)
@@ -319,12 +319,9 @@ test('multiple message attachments survive reload, exact retry and recipient rev
     const readable = async () => {
       let ok = 0
       for (const id of ids) {
-        const r = await recipient.request.get(
-          `http://127.0.0.1:55341/v1/organization-assets/${id}`,
-          {
-            headers: { 'x-rafik-client': 'web' },
-          },
-        )
+        const r = await recipient.request.get(`http://127.0.0.1:55341/v1/assets/${id}`, {
+          headers: { 'x-rafik-client': 'web' },
+        })
         if (r.ok()) ok++
       }
       return ok

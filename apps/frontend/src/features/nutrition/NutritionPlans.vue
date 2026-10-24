@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { institutionContext } from '../../app/institution'
+
 import { PhTray } from '@phosphor-icons/vue'
 import AthleteSearch from '../../components/AthleteSearch.vue'
 import { useListPageSize } from '../../lib/list-page-size'
@@ -8,8 +10,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { request } from '../../lib/backend'
 import { language as l, errorMessage, locale } from '../../lib/i18n'
 import { formatDate } from '../../lib/dates'
-import OrganizationNav from '../organizations/OrganizationNav.vue'
-import MemberPicker from '../organizations/MemberPicker.vue'
+import MemberPicker from '../institution/MemberPicker.vue'
 import ListPagination from '../../components/ListPagination.vue'
 import PageState from '../../components/PageState.vue'
 import {
@@ -23,9 +24,9 @@ import {
 } from 'reka-ui'
 const route = useRoute(),
   router = useRouter(),
-  workspace = String(route.params.workspace),
-  view = String(route.params.view),
-  base = `/organization/${workspace}/${view}`
+  institution = institutionContext().institution,
+  view = institutionContext().view,
+  base = ''
 type Plan = {
   id: string
   member_id: string
@@ -72,7 +73,7 @@ async function load() {
     offset: String(page),
   })
   try {
-    const result = await request<Page>(`/v1/workspaces/${workspace}/nutrition-plans?${query}`)
+    const result = await request<Page>(`/v1/institution/nutrition-plans?${query}`)
     if (disposed || current !== generation) return
     data.value = result
     acceptLimit()
@@ -114,7 +115,6 @@ function create(ids: string[]) {
 }
 </script>
 <template>
-  <OrganizationNav />
   <div class="container page nutrition-plans-page">
     <PageHeading class="work-heading">
       <div>
@@ -150,7 +150,7 @@ function create(ids: string[]) {
             }}
           </DialogDescription>
           <MemberPicker
-            :workspace="workspace"
+            :institution="institution"
             :view="view"
             role="trainee"
             single

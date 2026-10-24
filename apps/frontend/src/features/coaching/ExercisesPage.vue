@@ -5,7 +5,7 @@ import PageHeading from '../../components/PageHeading.vue'
 import ListPagination from '../../components/ListPagination.vue'
 import { request } from '../../lib/backend'
 import MultiChoice from '../../components/MultiChoice.vue'
-import OrganizationUpload, { type UploadedAsset } from '../../components/OrganizationUpload.vue'
+import ResourceUpload, { type UploadedAsset } from '../../components/ResourceUpload.vue'
 import ExerciseDemo from '../../components/ExerciseDemo.vue'
 import { exerciseVideos, videoForExercise, exerciseAssetUrl } from '../../lib/exercise-media'
 import media from '../../content/exercise-media.json'
@@ -21,13 +21,12 @@ import {
   equipmentCategories,
   equipmentLabel,
 } from '../../lib/exercise-catalog'
-import OrganizationNav from '../organizations/OrganizationNav.vue'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { PhArrowLeft, PhArrowRight, PhBarbell } from '@phosphor-icons/vue'
 import { user } from '../../app/auth'
 import { useRoute, useRouter } from 'vue-router'
-import { useCommand } from '../teams/commands'
-import CommandStatus from '../teams/CommandStatus.vue'
+import { useCommand } from '../../lib/commands'
+import CommandStatus from '../../components/CommandStatus.vue'
 import { programContext } from './program-context'
 const route = useRoute(),
   router = useRouter(),
@@ -126,7 +125,7 @@ const illustration = (e: Exercise) =>
     : media.items.find((item) =>
         e.media_ref
           ? item.id === e.media_ref
-          : !e.owner_id && !e.workspace_id && item.exerciseId === e.id,
+          : !e.owner_id && !e.institution_id && item.exerciseId === e.id,
       )
 const instructions = computed(() => {
   const e = selectedExercise.value
@@ -188,12 +187,12 @@ async function load() {
   }
 }
 function create() {
-  if (!editor && context.workspace) {
+  if (!editor) {
     void router.push(listPath + '/new')
     return
   }
   editing.value = {
-    id: (context.workspace ? 'org-' : 'custom-') + crypto.randomUUID(),
+    id: 'org-' + crypto.randomUUID(),
     name: '',
     name_ar: '',
     equipment: '',
@@ -217,7 +216,7 @@ function create() {
   restored.value = false
 }
 function edit(e: Exercise) {
-  if (!editor && context.workspace) {
+  if (!editor) {
     void router.push(listPath + '/' + encodeURIComponent(e.id))
     return
   }
@@ -290,7 +289,7 @@ async function findResources(more = false) {
   const read = ++resourceRead
   try {
     const result = await request<{ items: UploadedAsset[]; next: number | null }>(
-      `/v1/workspaces/${context.workspace}/assets?` +
+      `/v1/institution/assets?` +
         new URLSearchParams({
           view: context.view,
           search: resourceSearch.value,
@@ -323,14 +322,12 @@ const busy = computed(
 async function save() {
   if (!editing.value) return
   const e = editing.value
-  if (context.workspace) {
-    e.body_part = e.body_parts?.[0] || ''
-    e.equipment = (e.equipment_items || []).join(', ')
-    e.equipment_ar = (e.equipment_items || [])
-      .map((value) => equipmentArabic[value] || value)
-      .join('، ')
-    e.target_muscle = e.muscles?.[0] || ''
-  }
+  e.body_part = e.body_parts?.[0] || ''
+  e.equipment = (e.equipment_items || []).join(', ')
+  e.equipment_ar = (e.equipment_items || [])
+    .map((value) => equipmentArabic[value] || value)
+    .join('، ')
+  e.target_muscle = e.muscles?.[0] || ''
   message.value = ''
   error.value = ''
   const data = {
@@ -347,15 +344,11 @@ async function save() {
     kind: e.kind || 'strength',
     media_url: e.media_url?.trim() || '',
     media_ref: e.media_ref || null,
-    ...(context.workspace
-      ? {
-          scope: e.scope,
-          body_parts: e.body_parts,
-          muscles: e.muscles,
-          equipment_items: e.equipment_items,
-          media_asset: e.media_asset || null,
-        }
-      : {}),
+    scope: e.scope,
+    body_parts: e.body_parts,
+    muscles: e.muscles,
+    equipment_items: e.equipment_items,
+    media_asset: e.media_asset || null,
   }
   await command.run('save', {
     operation: crypto.randomUUID(),
@@ -384,14 +377,10 @@ onMounted(async () => {
       if (item) edit(item)
       else error.value = language('This exercise cannot be edited.', 'لا يمكن تعديل هذا التمرين.')
     }
-  } else if (!context.workspace && draft) {
-    editing.value = draft
-    restored.value = true
   }
 })
 </script>
 <template>
-  <OrganizationNav v-if="context.workspace" />
   <div
     class="container page exercise-page"
     :class="{ 'mobile-detail': mobileDetail, 'filters-open': filtersOpen }"
@@ -481,10 +470,6 @@ onMounted(async () => {
                   <option value="distance">{{ language('Distance', 'مسافة') }}</option>
                 </select></label
               >
-              <label v-if="!context.workspace"
-                >{{ language('Equipment', 'المعدات')
-                }}<input v-model="editing.equipment" maxlength="100"
-              /></label>
               <label
                 >{{ language('Movement category', 'فئة الحركة')
                 }}<select v-model="editing.movement">
@@ -501,7 +486,7 @@ onMounted(async () => {
                 </select></label
               >
             </div>
-            <template v-if="context.workspace">
+            <template>
               <label v-if="context.view === 'admin'"
                 >{{ language('Available to', 'متاح لـ')
                 }}<select v-model="editing.scope">
@@ -537,39 +522,18 @@ onMounted(async () => {
                 :options="multiOptions(equipmentArabic, equipmentLabel)"
               />
             </template>
-            <label v-else
-              >{{ language('Body area', 'منطقة الجسم')
-              }}<select v-model="editing.body_part">
-                <option value="">{{ language('Not categorized', 'غير مصنّف') }}</option>
-                <option v-for="(_, area) in areas" :key="area" :value="area">
-                  {{ categoryLabel(area) }}
-                </option>
-              </select></label
-            >
             <label
               >{{ language('Instructions', 'التعليمات')
-              }}<textarea
-                v-model="editing.instructions"
-                required
-                rows="4"
-                maxlength="2000"
-              /></label
-            ><label v-if="!context.workspace"
-              >{{ language('Demonstration link (optional, HTTPS)', 'رابط الشرح (اختياري، HTTPS)')
-              }}<input v-model="editing.media_url" type="url" pattern="https://.*" maxlength="500"
-            /></label>
-            <OrganizationUpload
-              v-if="context.workspace"
-              :workspace="context.workspace"
+              }}<textarea v-model="editing.instructions" required rows="4" maxlength="2000" />
+            </label>
+            <ResourceUpload
+              :institution="context.institution"
               :view="context.view"
               purpose="exercise"
               @uploaded="uploaded"
               @busy="uploading = $event"
             />
-            <details
-              v-if="context.workspace"
-              @toggle="($event.target as HTMLDetailsElement).open && findResources()"
-            >
+            <details @toggle="($event.target as HTMLDetailsElement).open && findResources()">
               <summary>{{ language('Choose an uploaded file', 'اختر ملفاً مرفوعاً') }}</summary>
               <label
                 >{{ language('Search uploaded files', 'البحث في الملفات المرفوعة')
@@ -768,7 +732,7 @@ onMounted(async () => {
           )
         }}
       </p>
-      <div v-else class="catalog-workspace" :class="{ 'show-detail': mobileDetail }">
+      <div v-else class="catalog-institution" :class="{ 'show-detail': mobileDetail }">
         <section
           class="catalog-list-pane"
           :aria-label="language('Exercise results', 'نتائج التمارين')"
@@ -950,7 +914,7 @@ onMounted(async () => {
 .catalog-summary p {
   margin: 0;
 }
-.catalog-workspace {
+.catalog-institution {
   display: grid;
   grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.4fr);
   height: min(720px, calc(100dvh - 385px));
@@ -1127,7 +1091,7 @@ onMounted(async () => {
     display: none;
   }
 
-  .catalog-workspace {
+  .catalog-institution {
     display: block;
     height: auto;
     min-height: 0;
@@ -1142,10 +1106,10 @@ onMounted(async () => {
     display: none;
     padding: 18px;
   }
-  .catalog-workspace.show-detail .catalog-list-pane {
+  .catalog-institution.show-detail .catalog-list-pane {
     display: none;
   }
-  .catalog-workspace.show-detail .catalog-detail {
+  .catalog-institution.show-detail .catalog-detail {
     display: block;
   }
   .catalog-back {

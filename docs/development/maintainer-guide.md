@@ -1,5 +1,17 @@
 # Maintainer guide
 
+## Progression service workflow
+
+Run `npm run test:workout-sequence` from the root with local Docker available. It starts its own migrated/seeded database and API, exercises sequence concurrency and the full bind/start/save/skip/end journey, then removes only its own database/files. `workout-sequence.ts` is the transactional domain service; `programming.ts` supplies existing authority/receipts. Extend these shared paths rather than adding another worker or native write implementation. Keep exact receipt responses and native attendance commands unchanged.
+
+## Workout migration development
+
+Run `npm run test:workout-foundation` from the repository root with the local Docker database available. The script creates a disposable database, applies prior migrations, adds synthetic historical records, runs the new migration and checks preservation/constraints. It generates the Prisma client from the maintained schema and shared transport types from the disposable database. Review generated diffs. It never resets preview data. The assignment cursor starts at zero: do not infer historical progression or enable the worker before the coordinated domain-service cutover.
+
+## Next-release route conventions
+
+Use flat browser URLs and `app/institution.ts` for current institution/role. Keep `/settings` personal and `/institution-settings` administrative. Keep durable draft keys institution/role-scoped even though URLs are flat. Never infer authority from an old URL role. Tasks is removed; useful overview follow-up lives in `organization-follow-up.ts`. API `/v1/institution` names and native scope identifiers remain compatible. See [ADR 0026](../decisions/ADR-0026-single-institution-routing-and-task-retirement.md).
+
 The canonical application repository is [Rafik-Athlete-Managment/Rafik-OpenSource](https://github.com/Rafik-Athlete-Managment/Rafik-OpenSource). Clone/fetch and open application issues, PRs and releases there. The landing repository and existing GitHub Project remain under KenseiEmam until the founder directs otherwise.
 
 Member management lives in `MemberManagement.vue`: keep identity first, coaching next, and sports/account recovery at the bottom. Institution settings use two responsive columns for general settings and branding. The closure dialog is a confirmation step; server revision and exact-name checks remain authoritative. Development file watching excludes generated test artifacts so browser traces cannot trigger reloads or locked-file crashes.
@@ -14,11 +26,11 @@ Keep the [build-path guidance](../operations/android-release.md#choose-the-right
 
 Android Metro startup must explicitly target the installed native build: the mobile workspace uses `expo start --dev-client`. Do not switch the shared start script to Expo Go; SQLCipher requires the native build. See the [Android guide](android.md).
 
-`WorkspaceScreen.tsx` opens saved event packages locally and refreshes the startup schedule with a separate busy state; **Refresh roster** explicitly downloads newer data. Keep schedule responses from replacing open event feedback. `access.ts` preserves a saved workspace selection but falls back from a removed empty workspace. Refresh retained workspace IDs after the access read so downloads completed during that read are included in revocation blocking. Mobile transport is in `apps/mobile/src/field/request.ts`. `NativeClient` notifies its current runtime after successful authenticated responses; `SignedIn` rechecks previously failed access in the background, without unmounting roster/draft UI. Do not clear access warnings merely because a queue is empty or a timer fired. Test transport and callback behavior with `npm run test:request --workspace @rafik/mobile`; native rendering remains a separate check. The [release guide](../operations/android-release.md) includes encrypted signing backup and USB-only physical-phone acceptance.
+`InstitutionScreen.tsx` opens saved event packages locally and refreshes the startup schedule with a separate busy state; **Refresh roster** explicitly downloads newer data. Keep schedule responses from replacing open event feedback. `access.ts` preserves a saved workspace selection but falls back from a removed empty workspace. Refresh retained workspace IDs after the access read so downloads completed during that read are included in revocation blocking. Mobile transport is in `apps/mobile/src/field/request.ts`. `NativeClient` notifies its current runtime after successful authenticated responses; `SignedIn` rechecks previously failed access in the background, without unmounting roster/draft UI. Do not clear access warnings merely because a queue is empty or a timer fired. Test transport and callback behavior with `npm run test:request --workspace @rafik/mobile`; native rendering remains a separate check. The [release guide](../operations/android-release.md) includes encrypted signing backup and USB-only physical-phone acceptance.
 
 Documentation checks are maintained in `apps/backend/scripts/check-docs.mjs` with `documentation-links.mjs` and two fixture-based regression cases. Root `npm run docs:check` includes infrastructure guides and relative heading links. Keep the [release checklist](../operations/release-checklist.md) as the beta decision/operator checklist, requirements as scope and verification as dated evidence. Do not treat unchecked per-installation items as missing implementations, or a founder-accepted backlog item as a passed technical test.
 
-People uses `OrganizationPage.vue` for role tabs and the shared profile route for detail tabs. `MemberManagement.vue` owns administrator edits, with per-member durable command keys. `people.ts` owns scoped profile reads and labelled staff activity; never expose staff analytics by trusting a frontend tab. Invitation sports require migration `202610210100_invitation_sports` and Prisma/type regeneration. Keep sport choices in invitation drafts; switching to administrator clears them.
+People uses `DashboardPage.vue` for role tabs and the shared profile route for detail tabs. `MemberManagement.vue` owns administrator edits, with per-member durable command keys. `people.ts` owns scoped profile reads and labelled staff activity; never expose staff analytics by trusting a frontend tab. Invitation sports require migration `202610210100_invitation_sports` and Prisma/type regeneration. Keep sport choices in invitation drafts; switching to administrator clears them.
 
 Beta.2 preparation follows merged PR #135. Keep application/shared versions and the root lockfile aligned, use Android versionCode `1000002` with the existing signing key, and build only from the clean final approved release commit. Follow the [beta.2 upgrade and publication checklist](../operations/README.md#beta2-upgrade-and-release-preparation). Track the application and landing PRs in the [Rafik project](https://github.com/users/KenseiEmam/projects/3); do not mark publication complete from a green feature PR alone.
 
@@ -51,17 +63,17 @@ Android `EventHistory.tsx` uses calendar `historyOnly` reads and the shared `Fie
 
 `Language.tsx` owns persisted device locale; `translations.ts` includes English-key mappings for old persisted errors. `LanguageControl.tsx` changes language without remounting field editors. `ui.tsx` sets locale direction and Android paragraph-start alignment. Keep English/Arabic labels and dynamic validation paired; preserve LTR URL/email controls and Arabic numeral normalization. Do not apply browser CSS alignment assumptions to React Native Android.
 
-`ScheduledEvents.vue` serves staff `/events`, linked from navigation, Calendar and Session history. `scheduledEvents` in `organization-calendar.ts` returns 24 rows with full totals and optional title/kind/state filters; preserve designated-staff authorization. The existing calendar endpoint and mobile OpenAPI contract are unchanged. Android completion/start-time presentation lives in `WorkspaceScreen.tsx` and semantic completed-card styles in `ui.tsx`; preserve timer cleanup, read-only completed state and server acknowledgement boundaries.
+`ScheduledEvents.vue` serves staff `/events`, linked from navigation, Calendar and Session history. `scheduledEvents` in `calendar.ts` returns 24 rows with full totals and optional title/kind/state filters; preserve designated-staff authorization. The existing calendar endpoint and mobile OpenAPI contract are unchanged. Android completion/start-time presentation lives in `InstitutionScreen.tsx` and semantic completed-card styles in `ui.tsx`; preserve timer cleanup, read-only completed state and server acknowledgement boundaries.
 
-Staff `/training` dispatches through `TrainingRoute.vue` to `AthletePlans.vue`; athlete training retains `OrganizationTraining.vue`. `/session-history` uses `SessionHistory.vue` and the existing delivery history API. `NutritionRoute.vue` shows `NutritionPlans.vue` until a subject is selected, then keys the existing editor by subject/version. Keep list pagination, optional subject filters, stale-response guards and server authorization together. New server reads live in `athlete-plans.ts` and `nutrition-plan-index.ts`; no schema migration is needed. Restart the API when adding these routes.
+Staff `/training` dispatches through `TrainingRoute.vue` to `AthletePlans.vue`; athlete training retains `AthleteTraining.vue`. `/session-history` uses `SessionHistory.vue` and the existing delivery history API. `NutritionRoute.vue` shows `NutritionPlans.vue` until a subject is selected, then keys the existing editor by subject/version. Keep list pagination, optional subject filters, stale-response guards and server authorization together. New server reads live in `athlete-plans.ts` and `nutrition-plan-index.ts`; no schema migration is needed. Restart the API when adding these routes.
 
 Assessment-template links in `EventComposer.vue` open `ServiceCatalog.vue` in a new tab. Preserve saved drafts, the account/institution/event-scoped return message, authorized re-fetch and manual refresh fallback. Do not overwrite an event draft when refreshing templates.
 
 Android native startup is consolidated in `apps/mobile/scripts/android.mjs`, called by both root `mobile:android` and the mobile workspace's `android` script. Its Windows Gradle configuration is maintained in `apps/mobile/scripts/android-build.gradle` and applied to generated Android output on startup. Keep Ninja preflight, per-checkout temporary CMake staging, object-path hashing and compilation/Gradle worker limits documented in the [Android guide](android.md#windows-laptop-startup-and-rebuilds). Do not edit generated native files as the lasting fix.
 
-Institution message composition lives in `apps/frontend/src/features/organizations/ChannelThread.vue`. Its pending-attachment section uses `OrganizationAsset.vue`; `OrganizationUpload.vue` has an optional composer mode with photo/file icon pickers. Other upload consumers retain their existing labeled controls. Keep acknowledged-send cleanup ordered after draft writes, and preserve attachments on failed/uncertain sends.
+Institution message composition lives in `apps/frontend/src/features/institution/ChannelThread.vue`. Its pending-attachment section uses `ResourceAsset.vue`; `ResourceUpload.vue` has an optional composer mode with photo/file icon pickers. Other upload consumers retain their existing labeled controls. Keep acknowledged-send cleanup ordered after draft writes, and preserve attachments on failed/uncertain sends.
 
-Multiple message attachments use ordered `organization_message_assets` links, migrated from legacy `asset_id` by `202610181200_message_attachments`. Keep communication command/read handling, byte-read authorization and account export aligned. The web composer restores both the current `attachments` draft array and old single-file drafts. Batch upload failures retain earlier successful selections and the uncertain upload ID for safe retry; message send remains one atomic operation.
+Multiple message attachments use ordered `institution_message_assets` links, migrated from legacy `asset_id` by `202610181200_message_attachments`. Keep communication command/read handling, byte-read authorization and account export aligned. The web composer restores both the current `attachments` draft array and old single-file drafts. Batch upload failures retain earlier successful selections and the uncertain upload ID for safe retry; message send remains one atomic operation.
 
 `apps/backend/server/api-docs.ts` serves the canonical OpenAPI file and local Swagger assets, including proxy-prefix handling and production reference-only behavior. Use `npm run test:api-docs --workspace @rafik/backend` for isolated HTTP/initializer checks without a database. Keep the [API guide](../reference/api.md) and bilingual landing explanations aligned when changing this workflow.
 
@@ -80,7 +92,7 @@ Multiple message attachments use ordered `organization_message_assets` links, mi
 | `infrastructure/cloud/`       | Per-provider Terraform starters that prepare the existing Compose stack on one VM; not cloud-verified.                                   |
 | `docs/`                       | Current product, engineering and operational documentation. Raw verification receipts are separated under `docs/verification/receipts/`. |
 
-Sports and coaching specialties are served by `apps/backend/server/organization-sports.ts` from migration `202610191200_sports_and_specialties`. The case-insensitive unique name index exists only in SQL. Admins manage them in `SportsSettings.vue` (Institution settings) and link people in `MemberSports.vue` (People manage panel). `people.ts` returns member `sports` and the `sport` filter. Run `npm run test:organization-sports` against a disposable migrated database.
+Sports and coaching specialties are served by `apps/backend/server/sports.ts` from migration `202610191200_sports_and_specialties`. The case-insensitive unique name index exists only in SQL. Admins manage them in `SportsSettings.vue` (Institution settings) and link people in `MemberSports.vue` (People manage panel). `people.ts` returns member `sports` and the `sport` filter. Run `npm run test:organization-sports` against a disposable migrated database.
 
 **Coaching team ([ADR 0025](../decisions/ADR-0025-coaching-team.md)):**
 
@@ -92,7 +104,7 @@ Sports and coaching specialties are served by `apps/backend/server/organization-
   - `planAuthority()` enforces sport-labelled writes for supporting coaches.
   - `assignmentScope()` and `sessionScope()` narrow their reads. Apply them to any new plan or session read.
   - Migration `202610191400_concurrent_plans` replaced the one-active-plan index with one active plan per version.
-  - In the web app, `DeliverPlan.vue` offers add or replace per athlete; `OrganizationTraining.vue` lists every active plan; `AthletePlans.vue` can end a plan and links back to "Adapt this program".
+  - In the web app, `DeliverPlan.vue` offers add or replace per athlete; `AthleteTraining.vue` lists every active plan; `AthletePlans.vue` can end a plan and links back to "Adapt this program".
   - Run `npm run test:concurrent-plans`.
 - **Delegated logging (1e):** delegated start and save checks are in `sessionCommand` (`delegate()`); history reads are in `organizationSessionHistory()`; migration `202610191500_delegated_sessions`.
   - Coaches record on `DelegatedWorkout.vue` (`/record/new?assignment=…`, then `/record/:session`). Athletes see a banner on `WorkoutPage.vue`.
@@ -103,7 +115,7 @@ Sports and coaching specialties are served by `apps/backend/server/organization-
 - **Athlete profile (1d):** `AthleteProfile.vue` composes existing reads with `feedback: 'none'`, and each section shows its own refused or error state. Its section visibility is a convenience only, so never add a profile-only endpoint that widens access. Entry points: the **Profile** link on People cards and **Athlete profile** in the athlete-plan detail.
 - **Tests:** `npm run test:coaching-team` covers the access matrix and lifecycle. `npm run test:fresh` checks the trigger, the backfill and the mirror in a rolled-back transaction.
 
-Instance branding is managed by `apps/frontend/src/features/organizations/BrandingSettings.vue`, applied in `apps/frontend/src/App.vue`, and served by `apps/backend/server/instance-branding.ts`. The initial setup claims the single-instance branding owner; the forward migration is `apps/backend/prisma/migrations/202610171500_instance_branding/`. Keep the raster signature/size checks, super-admin scope, public image response headers and database backup behavior aligned when changing it. The supported palette is accent plus light/dark page backgrounds; surfaces derive from those colors and text/accent contrast is adjusted in `apps/frontend/src/lib/branding.ts`.
+Instance branding is managed by `apps/frontend/src/features/institution/BrandingSettings.vue`, applied in `apps/frontend/src/App.vue`, and served by `apps/backend/server/instance-branding.ts`. The initial setup claims the single-instance branding owner; the forward migration is `apps/backend/prisma/migrations/202610171500_instance_branding/`. Keep the raster signature/size checks, super-admin scope, public image response headers and database backup behavior aligned when changing it. The supported palette is accent plus light/dark page backgrounds; surfaces derive from those colors and text/accent contrast is adjusted in `apps/frontend/src/lib/branding.ts`.
 
 Generated frontend sample/catalog files are outputs of backend content sources. Edit the canonical source, run its generator, and verify the generated output; do not hand-edit generated files.
 
@@ -119,13 +131,13 @@ Messaging changes must keep direct conversations unique for an institution and p
 
 For visual changes, preserve the accepted design identity and inspect the rendered task states the change affects. Cover relevant empty, populated and error states, keyboard access, English/Arabic, themes and phone/desktop layouts. Reuse recent evidence for unaffected browsers; run full browser suites serially only when the changed behavior warrants them.
 
-The signed-in shell and role-specific route handling are composed in `apps/frontend/src/App.vue` and `apps/frontend/src/app/router.ts`; collapsible role navigation is in `apps/frontend/src/features/workspace/DashboardNav.vue`. Each institutional membership has one role and one matching dashboard. Institution member administration lives in the organization People view and remains server-authorized. The forward migration that normalizes legacy role arrays is in `apps/backend/prisma/migrations/202610171100_single_membership_roles/`.
+The signed-in shell and role-specific route handling are composed in `apps/frontend/src/App.vue` and `apps/frontend/src/app/router.ts`; collapsible role navigation is in `apps/frontend/src/features/navigation/DashboardNav.vue`. Each institutional membership has one role and one matching dashboard. Institution member administration lives in the organization People view and remains server-authorized. The forward migration that normalizes legacy role arrays is in `apps/backend/prisma/migrations/202610171100_single_membership_roles/`.
 
 ## Change data or API behavior
 
 1. Update the Prisma schema and add a forward SQL migration. Do not reset or reseed a database to apply a migration.
 2. Preserve tenant and subject ownership constraints, transaction boundaries, revision checks, idempotent replay and authorization-before-replay behavior.
-3. Regenerate Prisma and shared database types using root workspace scripts. Keep API contracts in `packages/shared/` when both app workspaces consume them.
+3. Regenerate Prisma and shared database types using root workspace scripts. Keep API contracts in `packages/shared/` when both app institutions consume them.
 4. Add focused regression coverage for consequential failure or authorization paths. Never rely on sample-account pollution or fixtures from an earlier test.
 5. Update the architecture page for data/API/lifecycle changes and the runbook for operational changes.
 
@@ -168,8 +180,32 @@ Use the approved [design system](../DESIGN_SYSTEM.md). `src/styles/design-system
 
 Use `PageHeading.vue` for operational page titles, `SectionHeader.vue` for grouped section copy, `EmptyState.vue` for list emptiness and `FileDropzone.vue` for standalone uploads. Reka tab lists use the shared `ui-tabs` skin. Keep existing field and upload validation in their owners. Main directory page-size state uses `useListPageSize`; call `acceptLimit` only after installing the matching response, and retain `limit` in filter navigation.
 
-Entity editors use `/:editor` (`new` or an existing ID) beneath templates, groups, tasks and exercises. The main router remounts on path changes. Keep draft keys record-scoped through `loadEditorDraft`; do not restore one entity’s work into another. Save navigation waits for command settlement and checks the original mounted route. The command helper tracks active dispatches by account and scope so a remount cannot offer replay before the original finishes.
+Entity editors use `/:editor` (`new` or an existing ID) beneath templates, groups and exercises. The main router remounts on path changes. Keep draft keys record-scoped through `loadEditorDraft`; do not restore one entity’s work into another. Save navigation waits for command settlement and checks the original mounted route. The command helper tracks active dispatches by account and scope so a remount cannot offer replay before the original finishes.
 
 ### Android launcher assets
 
 Density-specific launcher PNGs are maintained under `apps/mobile/assets/android-icons/` and installed by `apps/mobile/scripts/android.mjs` during preparation. Keep app.json’s icon reference and those assets together. Generated native resources alone are not durable source.
+
+The single-institution migration regression lives in `apps/backend/scripts/prisma/verify-institution-cleanup.mjs`. Backend integration scripts use `scripts/prisma/isolated-api.mjs`; legacy scope fixtures use privileged test setup rather than the removed institution creation API. Demo seeding removes the historical second institution; isolated security fixtures retain their own multi-scope data.
+
+Local recovery/orphan cleanup resolve the same database and file directory through `scripts/prisma/local-storage-target.mjs`. Test database/file stamps must match; malformed or mixed preview/test targets fail before reading or deleting files. Operator defaults remain the local `rafik` database and `.local/files`.
+
+Frontend naming is consistent across feature folders: supported components use plain names: ResourcesPage, NutritionPage, ResourceAsset and ResourceUpload; obsolete standalone variants are removed. Navigation styles use `styles/navigation.css`; nutrition styles use `institution-nutrition.css`. Lowercase wire/schema/storage identifiers retain their compatible names.
+
+The supported web entrypoint must reach every checked-in Vue component. `tests/view-consolidation.test.ts` guards that tree and the required Resources/Nutrition routes. Legacy account-data export/deletion remains for stored-data compatibility; it does not expose a legacy view.
+
+## Frontend inventory and route audit
+
+The [frontend reference](../reference/frontend/README.md) inventories every local Vue file and route. Run `npm run frontend:inventory` after a route/component change, review the diff, and run `npm run frontend:inventory:check`. Update the script-side purpose/access metadata and reviewed dynamic navigation in the same PR. `DashboardNav.vue` is the single institutional navigation component for both sidebar and phone drawer; `section-path.ts` associates detail/edit routes with their parent sections. Do not restore per-page hidden navigation or guest acquisition/recording screens. Token, recovery, compatibility and DEV-only entries have explicit classifications in the reference.
+
+## Backend inventory maintenance
+
+Run `npm run backend:inventory` and `npm run backend:inventory:check` after route/schema changes. After migrations, use `npm run backend:inventory:database` with Docker to capture an owned disposable schema and generate matching types. Update reviewed metadata. Never restore a retired endpoint for an obsolete fixture. See [backend reference](../reference/backend/README.md).
+
+## Institution naming boundary
+
+Use `institution_id` and canonical `/v1/institution` routes in maintained code. `server/institution.ts` owns authority; `server/institution-compatibility.ts` alone translates retired API names. Preserve historical file paths, event/source keys, frozen JSON, receipt payloads/results and browser/native owner identities. See [ADR 0029](../decisions/ADR-0029-institution-identifiers.md).
+
+## Breaking retirement in beta.3
+
+Use explicit `/v1/account/profile`, `/v1/account/export`, `/v1/account/deletion` and `/v1/support` services. Generic command/query/file gateways and published workspace/organization aliases are removed. Reference exercise metadata is `reference_exercises`; custom exercises and athlete assignments remain institutional. Current fixtures seed institution examples directly, with no personal plans/teams/business simulation. Run `npm run test:retired-domains` for populated deletion/preservation and `npm run test:institution-api` for canonical lifecycle/removed-route checks. Historical migration files stay immutable; see ADR 0030 and the coordinated upgrade warning in operations.

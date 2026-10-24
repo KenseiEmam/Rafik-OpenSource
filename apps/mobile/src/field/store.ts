@@ -76,7 +76,7 @@ export class FieldStore {
     })
   }
 
-  workspaces(instance: string, user: string): Promise<string[]> {
+  institutions(instance: string, user: string): Promise<string[]> {
     return this.serial(async () => {
       const rows = await this.db.getAllAsync<{ owner: string }>(
         "SELECT DISTINCT owner FROM attendance_events WHERE json_extract(owner,'$[0]')=? AND json_extract(owner,'$[1]')=?",

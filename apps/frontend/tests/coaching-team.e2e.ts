@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test'
 import { randomUUID, randomBytes } from 'node:crypto'
 import AxeBuilder from '@axe-core/playwright'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { layoutIssues } from './layout-contract'
 
 async function inspect(page: Page, name: string, info: { project: { name: string } }) {
@@ -19,15 +19,15 @@ test('admin builds a coaching team; a supporting coach sees training only until 
   browser,
 }, info) => {
   test.setTimeout(180000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     supportContext = await browser.newContext(),
     supportPage = await supportContext.newPage(),
-    workspace = randomUUID(),
-    endpoint = `/v1/workspaces/${workspace}`
+    institution = randomUUID(),
+    endpoint = `/v1/institution`
   try {
-    await f.call(f.owner, '/v1/workspaces', {
-      id: workspace,
-      kind: 'organization',
+    await f.call(f.owner, '/v1/institutions', {
+      id: institution,
+      kind: 'institution',
       name: 'Madar coaching team',
     })
     const support = await f.createPerson('Supporting Coach With A Long Name')
@@ -45,7 +45,7 @@ test('admin builds a coaching team; a supporting coach sees training only until 
         roles,
         token,
       })
-      await f.call(person, `/v1/organization-invitations/${token}`, {})
+      await f.call(person, `/v1/invitations/${token}`, {})
     }
     const people = await f.call(f.owner, `${endpoint}?view=admin`),
       athlete = people.members.find((m: any) => m.user_id === f.client.id),
@@ -79,7 +79,7 @@ test('admin builds a coaching team; a supporting coach sees training only until 
       trainer: primary.id,
     })
 
-    const base = `/organization/${workspace}/admin`
+    const base = ``
     await f.login(page, f.owner, base + '/people')
     // Management lives on the profile's Manage tab; the directory icon opens it directly.
     await page.getByRole('link', { name: 'Manage R4 Athlete', exact: true }).click()
@@ -103,7 +103,7 @@ test('admin builds a coaching team; a supporting coach sees training only until 
     await inspect(page, 'admin-team', info)
 
     // The supporting coach sees the athlete, flagged as training-only, without nutrition.
-    await f.login(supportPage, support, `/organization/${workspace}/trainer/people`)
+    await f.login(supportPage, support, `/people`)
     const supportCard = supportPage
       .locator('.organization-person')
       .filter({ has: supportPage.getByRole('heading', { name: 'R4 Athlete', exact: true }) })

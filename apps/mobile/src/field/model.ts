@@ -19,9 +19,9 @@ export type {
   FieldResult,
   FieldCommand,
 }
-export type Owner = { instance: string; user: string; workspace: string }
+export type Owner = { instance: string; user: string; institution: string }
 export const ownerKey = (owner: Owner) =>
-  JSON.stringify([owner.instance, owner.user, owner.workspace])
+  JSON.stringify([owner.instance, owner.user, owner.institution])
 export type CommandState =
   'queued' | 'sending' | 'uncertain' | 'acknowledged' | 'needs_attention' | 'blocked'
 export type Command = {

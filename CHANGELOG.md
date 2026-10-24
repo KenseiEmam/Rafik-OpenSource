@@ -2,6 +2,79 @@
 
 ## Unreleased
 
+### Breaking retirement
+
+- Remove 37 retired personal/team/business/file-store tables and exclusive SQL functions through a forward migration; preserve current institution data, histories and receipts.
+- Remove generic commands/queries/files, published-client aliases and old browser redirects. Replace current profile, support and account lifecycle dependencies with explicit endpoints.
+- Require coordinated backend/web/Android upgrade for beta.3; published beta.2 clients are unsupported. Keep the signing key and encrypted institutional queue identities.
+
+
+- Fix disposable backend SQL rehearsals to translate historical role/coaching migration identifiers into the current institution schema without changing deployed migrations.
+
+### Institution naming migration
+
+- Rename physical institution tables/columns and SQL/ORM metadata with a forward preservation migration.
+- Add disposable preservation/API CI guards and keep generated fixture sources aligned.
+- Adopt canonical instance-resolved institution APIs across web and Android; isolate published-client aliases. Preserve owner keys, pending commands, documents, receipts and private-file paths.
+
+### Backend audit and cleanup
+
+- Catalogue 94 tables, 761 columns and 65 routes with reviewed purposes and drift checks.
+- Remove four unused standalone reads; explicitly allowlist 11 compatibility commands and 33 query projections.
+- Retire billing simulation through a forward migration while preserving historical records. Add missing own workout-history/sequence exports, correct Prisma metadata and rename ten internal modules by domain.
+
+### Individual workout progression API
+
+- Add staff-authorized fixed-time individual scheduling, rescheduling and reasoned skips with exact command receipts. Scheduling binds a cycle position without advancing it; completion/skip advances once per assignment.
+- Connect bound workout start/save to participant occurrences, prevent early starts and arbitrary-day bypass, and preserve corrections without rewinding progress.
+- Ending/replacing assignments cancels unstarted bound work, pauses started work and cancels recurrence rules without deleting results. Generic calendar actions cannot bypass workout resolution.
+- Document the unreleased commands in OpenAPI. Web controls, recurring/day-only scheduling, group workouts and Android queue upgrades remain pending.
+
+### Beta.3 workout storage foundation
+
+- Add assignment sequence cursors, bounded weekly recurrence storage and unique per-assignment positions with attributed resolution fields.
+- Add scoped occurrence/participant links, timed event local dates and historical workout source snapshots without changing existing documents, IDs or receipts.
+- Preserve required assignment/timestamp contracts. Day-only events, additional group workout writes, worker progression and new web/Android recording remain subsequent slices.
+
+### Brand alignment
+
+- Adopt campaign round7 identity into the existing product design system, keeping operational controls, accessibility and institution theming.
+- Record source provenance, web alignment and native palette/type/logo follow-up for beta.3; no runtime redesign or APK change in this audit.
+
+### Beta.3 planning
+
+- Confirm correction/history and ended-assignment lifecycle policies; inventory the ten currently required generic command operations and historical export dependencies before API retirement.
+
+- Confirm repeating the published workout cycle while its assignment remains active; no automatic prescription progression.
+
+- Add a concrete technical review of event/participant storage, cycle/correction policies, explicit API allowlists and native queue migration; recommendations remain pending approval.
+
+- Record accepted individual session progression, bounded weekly scheduling and group additional-training rules.
+- Include offline individual/group workout recording in Android scope; propose cache/queue migration, coordinated API retirement and historical-data reconciliation before implementation.
+
+### Frontend source audit
+
+- Document all local Vue components, routed/embedded views, access boundaries and incoming/outgoing navigation with Mermaid maps and a repeatable inventory check.
+- Remove duplicated hidden per-page navigation, broken history/clients links and guest recorder/adoption UI; require institutional sign-in and owner scope for recording.
+- Highlight profile and delegated recording navigation consistently; suppress notifications into retired independent screens without deleting historical source data.
+- Retire the obsolete guest/standalone browser spec; keep focused institutional recorder coverage and document remaining acceptance limits.
+
+### Institution cleanup
+
+- Consolidate supported screens under plain feature names; remove 20 obsolete/duplicate Vue implementations and restore Resources/Nutrition routing.
+- Move shared commands out of retired feature folders; remove independent review/analytics/program API fallbacks.
+- Add a frontend view-graph guard against orphaned Vue files and missing supported routes.
+
+- Remove retired-feature routes outright; use the normal missing-page state, with no Tasks retirement page or workspace-chooser redirect.
+- Rename frontend institution/navigation folders, all institution-specific UI components/types, and associated styles; preserve database, asset and Android API compatibility identifiers.
+- Fix local recovery and orphan cleanup to use the API’s validated database/file target, including isolated tests.
+
+- Retire Tasks, its API and data through a guarded forward migration.
+- Remove workspace selection and additional-institution creation; retain institution permissions and native API compatibility.
+- Introduce flat role-derived browser routes, authorized legacy redirects and separate account/institution settings.
+
+### Previously recorded changes
+
 - Updated application repository, release, issue/PR and cloud-template links to Rafik-Athlete-Managment/Rafik-OpenSource following the GitHub organization transfer. Landing remains under KenseiEmam.
 
 - Rebuilt and verified the signed beta.2 Android bundle with the existing update key and new launcher artwork; publication-ready English/Arabic landing release and installation guidance accompanies it.

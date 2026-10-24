@@ -1,5 +1,17 @@
 # Testing
 
+## Individual sequence API
+
+`npm run test:workout-sequence` uses the isolated API harness. Coverage includes concurrent binding, independent assignments, unchanged exact retries, athlete denial of staff scheduling, bound-start requirements, completion/correction, explicit skip reasons, cycle repetition, rescheduling without consumption, cancellation/pause on assignment end, a generic participation restriction and revoked receipt access. The existing delegated-session regression covers unaffected unlinked coach logging/corrections. These are server checks; no browser/native acceptance or recurring-worker/DST claim follows.
+
+## Additive workout migration
+
+`npm run test:workout-foundation` exercises a populated forward upgrade and source backfill, old-client inserts, private database grants and recurrence/position constraints in an owned disposable database. It generates client/transport types. This does not establish worker concurrency, API progression, Android queue upgrade or rendered UX acceptance; those require the later implementation slices.
+
+## Next-release cleanup checks
+
+Use the isolated browser wrapper for `tests/institution-routing.e2e.ts`. It covers flat routes, rejection of retired bookmarks, server-derived roles and Tasks retirement. Privileged fixture setup replaces the removed runtime creation endpoint and must use a disposable test database. Current fixtures create one installation; outsider and invalid record IDs test authorization without restoring an institution chooser.
+
 ## Opt-in web design audit
 
 From the repository root, with Node 24 (or 22.16+) and the local Docker database running:
@@ -72,3 +84,31 @@ From the repository root, set `RAFIK_UI_AUDIT=1` and run `npm run test:e2e --wor
 ### Remaining web standardization checks
 
 `ui-standardization.e2e.ts` checks dedicated template/group/task/exercise routes, record drafts, acknowledgement/uncertain retry, upload and page-size persistence. The opt-in audit collector’s `RAFIK_UI_AUDIT_ROLLOUT=1` mode adds populated task, attendance and private-conversation fixtures to representative planning/nutrition/reporting layouts. With that variable, the Chromium functional journey is skipped to reuse its recorded passing evidence; WebKit adds the missing engine coverage. Run the wrapper serially and inspect screenshots. `command-navigation.test.ts` covers active-command remount/replay and legacy draft isolation. None of these checks resets preview data or establishes Android/device acceptance.
+
+Backend `test:*` integration commands now use `apps/backend/scripts/prisma/isolated-api.mjs`: a fresh migrated database and API on port 55343, with cleanup on completion. Do not point fixture setup at preview. `npm run test:institution-cleanup` checks migration stop/deletion/preservation and regenerates shared database types from its disposable database.
+
+## Frontend inventory coverage
+
+Run `npm run frontend:inventory:check` for the maintained [view/component/route reference](../reference/frontend/README.md). The analyzer detects missing descriptions, orphan Vue files, missing rendered consumers, unknown navigation targets and generated-document drift. Review dynamic destinations and role/state-specific branches, not just the command result. It does not execute route guards or prove server authorization.
+
+The obsolete `core.e2e.ts` guest/standalone journeys were retired with those screens. Current institutional recording coverage lives in `programming.e2e.ts`; `consolidated-views.e2e.ts` covers the guest-route rejection and supported Resources/Nutrition entry. This audit does not claim fresh offline/concurrent-device acceptance from the removed historical spec.
+
+## Backend audit coverage
+
+The audit used a populated disposable migration and eleven API checks for auth/actor boundaries, private file recovery, retired endpoints, own export, institutional scheduling and progression. Older standalone browser fixtures need migration before whole-release acceptance. See [audit limits](../reference/backend/README.md).
+
+## Institution naming regressions
+
+From the repository root with local Docker running:
+
+```bash
+npm run test:institution-names
+npm run test:institution-api
+npm run mobile:acceptance
+```
+
+These use owned disposable databases/APIs. They cover populated identifier preservation, old/canonical transport and authorization, own export, scalar serialization, and the native bearer/SQLite command queue. They do not migrate/reset preview or establish physical APK upgrade acceptance. The focused browser command is `node apps/frontend/scripts/isolated-browser.mjs --empty-database institution-names.e2e.ts --project=chromium`; keep application/generated sources frozen during that run.
+
+## Retired-domain boundary
+
+`npm run test:retired-domains` migrates a populated disposable database and compares complete current institution snapshots/receipts. `npm run test:institution-api` covers removed gateways/aliases and explicit account/support privacy and replay. `npm run backend:test` uses current institution SQL assertions, not retired personal/team suites. Recovery checks upload current institution assets. Neither command resets preview data. Published beta.2 clients require the matching beta.3 upgrade; historical multi-institution browser journeys are not current acceptance.

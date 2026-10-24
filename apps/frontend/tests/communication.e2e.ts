@@ -1,25 +1,25 @@
 import { test, expect } from '@playwright/test'
 import { randomUUID, randomBytes } from 'node:crypto'
 import AxeBuilder from '@axe-core/playwright'
-import { teamFixture } from './team-fixture'
+import { institutionFixture } from './institution-fixture'
 import { layoutIssues } from './layout-contract'
 test('organization conversations preserve scope, compact layout, drafts and exact send recovery; notification links reach the right context', async ({
   page,
   browser,
 }, info) => {
   test.setTimeout(120000)
-  const f = await teamFixture(),
+  const f = await institutionFixture(),
     clientContext = await browser.newContext(),
     client = await clientContext.newPage(),
     id = randomUUID()
   try {
-    await f.call(f.owner, '/v1/workspaces', {
+    await f.call(f.owner, '/v1/institutions', {
       id,
-      kind: 'organization',
+      kind: 'institution',
       name: 'Madar communication test',
     })
     const token = randomBytes(32).toString('hex')
-    await f.call(f.owner, `/v1/workspaces/${id}`, {
+    await f.call(f.owner, `/v1/institution`, {
       operation: randomUUID(),
       action: 'invite',
       id: randomUUID(),
@@ -27,11 +27,11 @@ test('organization conversations preserve scope, compact layout, drafts and exac
       roles: ['trainee'],
       token,
     })
-    await f.call(f.client, `/v1/organization-invitations/${token}`, {})
-    const base = `/organization/${id}/admin/messages`
+    await f.call(f.client, `/v1/invitations/${token}`, {})
+    const base = `/messages`
     const initialList = page.waitForResponse(
       (response) =>
-        response.url().includes(`/v1/workspaces/${id}/communication`) &&
+        response.url().includes(`/v1/institution/communication`) &&
         response.request().method() === 'GET',
     )
     await f.login(page, f.owner, base)
@@ -76,7 +76,7 @@ test('organization conversations preserve scope, compact layout, drafts and exac
       'Let us review your first week together.',
     )
     let lost = false
-    await page.route(`**/v1/workspaces/${id}/communication`, async (r) => {
+    await page.route(`**/v1/institution/communication`, async (r) => {
       if (
         !lost &&
         r.request().method() === 'POST' &&
@@ -115,7 +115,7 @@ test('organization conversations preserve scope, compact layout, drafts and exac
     ).toBeVisible()
     await client.getByRole('button', { name: 'Back to updates', exact: true }).click()
     await client.getByRole('button', { name: 'New conversation updates', exact: false }).click()
-    await expect(client).toHaveURL(`/organization/${id}/trainee/messages/${channel}`)
+    await expect(client).toHaveURL(`/messages/${channel}`)
     await expect(
       client
         .locator('.message-bubble')
@@ -139,7 +139,7 @@ test('organization conversations preserve scope, compact layout, drafts and exac
       path: info.outputPath('organization-conversation.png'),
       fullPage: true,
     })
-    await client.goto(`/organization/${id}/trainee/messages`)
+    await client.goto(`/messages`)
     await expect(client.getByRole('link', { name: /R4 Athlete/ })).toBeVisible()
     for (const size of [
       { width: 320, height: 568 },

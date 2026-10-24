@@ -1,14 +1,16 @@
+import { apiOrigin } from "./test-target.ts";
+import { fixtureInstitution } from "./institution-fixture.ts";
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID, randomBytes, createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { db } from "../server/db.ts";
-const base = "http://127.0.0.1:55331",
+const base = apiOrigin,
   people: string[] = [],
   spaces: string[] = [];
 type Person = { id: string; email: string; cookie: string };
 after(async () => {
-  await db.workspaces.deleteMany({ where: { id: { in: spaces } } });
+  await db.institutions.deleteMany({ where: { id: { in: spaces } } });
   await db.users.deleteMany({ where: { id: { in: people } } });
   await db.$disconnect();
 });
@@ -28,10 +30,12 @@ async function person(name: string): Promise<Person> {
     },
   });
   const p = { id, email, cookie: "rafik_session=" + token };
-  await call(p, "/v1/commands/ensure_profile", { p_name: name });
+  await call(p, "/v1/account/profile", { p_name: name });
   return p;
 }
 async function call(p: Person, path: string, input?: unknown) {
+  if (path === "/v1/institutions" && input)
+    return fixtureInstitution(p, input as Record<string, unknown>);
   const r = await fetch(base + path, {
     method: input === undefined ? "GET" : "POST",
     headers: {
@@ -52,8 +56,14 @@ async function institution(admin: Person, name: string) {
   const id = randomUUID();
   spaces.push(id);
   assert.equal(
-    (await call(admin, "/v1/workspaces", { id, kind: "organization", name }))
-      .status,
+    (
+      await call(admin, "/v1/institutions", {
+        id,
+        kind: "organization",
+        name,
+        sole: true,
+      })
+    ).status,
     200,
   );
   return id;
@@ -62,7 +72,7 @@ async function join(admin: Person, id: string, p: Person, role: string) {
   const token = randomBytes(32).toString("hex");
   const r = await call(
     admin,
-    "/v1/workspaces/" + id,
+    "/v1/institution",
     operation("invite", {
       id: randomUUID(),
       email: p.email,
@@ -71,13 +81,10 @@ async function join(admin: Person, id: string, p: Person, role: string) {
     }),
   );
   assert.equal(r.status, 200, JSON.stringify(r));
-  assert.equal(
-    (await call(p, "/v1/organization-invitations/" + token, {})).status,
-    200,
-  );
+  assert.equal((await call(p, "/v1/invitations/" + token, {})).status, 200);
 }
 async function member(admin: Person, id: string, p: Person) {
-  const r = await call(admin, `/v1/workspaces/${id}?view=admin`);
+  const r = await call(admin, `/v1/institution?view=admin`);
   return r.data.members.find((m: { user_id: string }) => m.user_id === p.id);
 }
 const sport = (id: string, name: string, kind = "sport") =>
@@ -96,7 +103,7 @@ test("concurrent goal-specific plans: add, replace, end, overlap warnings and sp
     support = await person("Plans Support"),
     athlete = await person("Plans Athlete"),
     id = await institution(admin, "Concurrent plans institution"),
-    ws = `/v1/workspaces/${id}`;
+    ws = `/v1/institution`;
   for (const [p, role] of [
     [primary, "trainer"],
     [support, "trainer"],
@@ -262,12 +269,12 @@ test("concurrent goal-specific plans: add, replace, end, overlap warnings and sp
   );
   const active = async () =>
     (
-      await db.organization_assignments.findMany({
+      await db.institution_assignments.findMany({
         where: { member_id: a.id, state: "active" },
-        include: { organization_versions: true },
+        include: { institution_versions: true },
       })
     )
-      .map((x) => x.organization_versions.title)
+      .map((x) => x.institution_versions.title)
       .sort();
   assert.deepEqual(await active(), [
     "Agility block",
@@ -278,7 +285,7 @@ test("concurrent goal-specific plans: add, replace, end, overlap warnings and sp
   // Reads: the supporting coach sees only football-labelled plans.
   const titles = (r: { data: { assignments?: any[]; items?: any[] } }) =>
     (r.data.assignments || r.data.items || [])
-      .map((x: any) => (x.version || x.organization_versions).title)
+      .map((x: any) => (x.version || x.institution_versions).title)
       .sort();
   assert.deepEqual(
     titles(await call(support, `${ws}/delivery?view=trainer&member=${a.id}`)),
@@ -352,30 +359,18 @@ test("concurrent goal-specific plans: add, replace, end, overlap warnings and sp
     [footballSession],
   );
   assert.equal(
-    (
-      await call(
-        support,
-        `/v1/organization-sessions/${footballSession}?view=trainer`,
-      )
-    ).status,
+    (await call(support, `/v1/workouts/${footballSession}?view=trainer`))
+      .status,
     200,
   );
   assert.equal(
-    (
-      await call(
-        support,
-        `/v1/organization-sessions/${strengthSession}?view=trainer`,
-      )
-    ).status,
+    (await call(support, `/v1/workouts/${strengthSession}?view=trainer`))
+      .status,
     403,
   );
   assert.equal(
-    (
-      await call(
-        primary,
-        `/v1/organization-sessions/${strengthSession}?view=trainer`,
-      )
-    ).status,
+    (await call(primary, `/v1/workouts/${strengthSession}?view=trainer`))
+      .status,
     200,
   );
 
@@ -433,8 +428,8 @@ test("concurrent goal-specific plans: add, replace, end, overlap warnings and sp
   );
   assert.equal((await end(support, first.data[0])).status, 200);
   assert.deepEqual(await active(), ["Agility block", "Swim block"]);
-  const ended = await db.workspace_events.count({
-    where: { workspace_id: id, kind: "assignment_ended" },
+  const ended = await db.institution_audit_events.count({
+    where: { institution_id: id, kind: "assignment_ended" },
   });
   assert.equal(ended, 1);
 
@@ -481,7 +476,7 @@ test("concurrent goal-specific plans: add, replace, end, overlap warnings and sp
     );
     assert.equal(r.status, 200, JSON.stringify(r));
     const event = r.data[0];
-    await db.organization_events.update({
+    await db.institution_events.update({
       where: { id: event.id },
       data: {
         starts_at: new Date(Date.now() - 7200000),

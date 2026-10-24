@@ -55,8 +55,8 @@ import { language, t } from '../../lib/i18n'
         }}
       </p>
     </section>
-    <section class="help-workspaces">
-      <h2>{{ language('Start in the right workspace', 'ابدأ في مساحة العمل المناسبة') }}</h2>
+    <section class="help-institutions">
+      <h2>{{ language('Your institution dashboard', 'لوحة مؤسستك') }}</h2>
       <p>
         {{
           language(
@@ -65,8 +65,8 @@ import { language, t } from '../../lib/i18n'
           )
         }}
       </p>
-      <RouterLink class="text-link" to="/workspaces">{{
-        language('Choose your workspace', 'اختر مساحة عملك')
+      <RouterLink class="text-link" to="/dashboard">{{
+        language('Open your dashboard', 'افتح لوحة التحكم')
       }}</RouterLink>
       <details>
         <summary>{{ language('I administer an institution', 'أنا مسؤول مؤسسة') }}</summary>
@@ -94,17 +94,6 @@ import { language, t } from '../../lib/i18n'
             language(
               'Your coach dashboard opens to your assigned work. Athlete plans and Nutrition plans show current published assignments without choosing an athlete first. Use status filters for expired or replaced plans. Session history lists recorded workouts across your authorized athletes, with an optional athlete filter. Calendar includes events where you are designated staff. Analytics follows your current responsibility, and conversations show their participants.',
               'تعرض خطط الرياضيين البرامج المسندة السارية مباشرة، ويعرض سجل الحصص التدريبات المسجلة لكل الرياضيين المصرّح لك بالاطلاع عليهم، دون الحاجة لاختيار رياضي أولاً. استخدم البحث والمرشحات الاختيارية لعرض الخطط القادمة أو المنتهية. تعرض خطط التغذية الخطط المنشورة دون كشف يوميات الطعام. يعرض التقويم المواعيد المسندة إليك، وتخص التحليلات مسؤوليتك الحالية. افتح الحصة لمراجعتها وتقديم ملاحظاتك.',
-            )
-          }}
-        </p>
-      </details>
-      <details>
-        <summary>{{ language('I coach independently', 'أنا مدرب مستقل') }}</summary>
-        <p>
-          {{
-            language(
-              'Today brings together sessions and check-ins awaiting review. Plans is where you prepare and publish training; Athletes is where you invite people and manage each relationship. Appointments, Resources and other tools have their own navigation links. Independent coach teams do not merge your private athlete records.',
-              'يجمع اليوم الحصص والمتابعات بانتظار المراجعة. جهّز التدريب وانشره في الخطط، وادعُ الرياضيين وأدر كل علاقة في الرياضيين. تتوفر الجدولة والملفات والأدوات الاختيارية في قائمة التنقل. لا تدمج فرق المدربين المستقلين سجلات رياضييك الخاصة.',
             )
           }}
         </p>
@@ -186,7 +175,7 @@ import { language, t } from '../../lib/i18n'
       <p>
         {{
           language(
-            'A conversation lists the people who can read its history and send messages. Institution administrators join visibly. The notification bell keeps updates from different workspaces separate. In this local preview, optional email is intercepted for testing; no real email or push is sent.',
+            'A conversation lists the people who can read its history and send messages. Institution administrators join visibly. The notification bell keeps updates grouped by their source. In this local preview, optional email is intercepted for testing; no real email or push is sent.',
             'توضح المحادثة من يستطيع قراءة سجلها وإرسال الرسائل، ويظهر انضمام مسؤول المؤسسة. يفصل جرس الإشعارات تحديثات مساحات العمل. في هذه المعاينة المحلية تُعترض الرسائل الاختيارية للاختبار ولا يُرسل بريد أو إشعار دفع فعلي.',
           )
         }}
@@ -232,13 +221,13 @@ import { language, t } from '../../lib/i18n'
 </template>
 
 <style scoped>
-.help-workspaces details {
+.help-institutions details {
   margin-top: 20px;
 }
-.help-workspaces summary {
+.help-institutions summary {
   font-weight: 600;
 }
-.help-workspaces details p {
+.help-institutions details p {
   margin-top: 16px;
 }
 </style>

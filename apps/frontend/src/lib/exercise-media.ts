@@ -17,7 +17,7 @@ export function videoForExercise(e?: Omit<Exercise, 'kind'> & { kind?: string })
   if (!e || e.media_url) return undefined
   return e.media_ref
     ? byId.get(e.media_ref)
-    : !e.owner_id && !e.workspace_id
+    : !e.owner_id && !e.institution_id
       ? byExercise.get(e.id)
       : undefined
 }

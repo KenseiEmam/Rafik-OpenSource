@@ -13,7 +13,7 @@ const email = ref(''),
   password = ref(''),
   busy = ref(false),
   error = ref('')
-const next = computed(() => safeNext(route.query.next, '/workspaces'))
+const next = computed(() => safeNext(route.query.next, '/access'))
 async function login() {
   busy.value = true
   error.value = ''
@@ -32,7 +32,7 @@ async function login() {
   <div class="container auth-layout auth-centered">
     <section class="auth-intro">
       <PhBuildings :size="34" class="accent-icon" aria-hidden="true" />
-      <h1>{{ language('Institution workspace', 'مساحة المؤسسة') }}</h1>
+      <h1>{{ language('Institution sign-in', 'تسجيل الدخول إلى المؤسسة') }}</h1>
       <p>
         {{
           language(

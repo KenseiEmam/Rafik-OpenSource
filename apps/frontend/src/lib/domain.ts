@@ -16,7 +16,7 @@ export interface Exercise {
   instructions: string
   instructions_ar: string
   movement: string
-  workspace_id?: string
+  institution_id?: string
   created_by?: string
   owner_id?: string | null
   active?: boolean
@@ -138,7 +138,7 @@ export interface Entry {
   effort?: number | null
 }
 export interface Session {
-  workspace_id?: string
+  institution_id?: string
   member_id?: string
   id: string
   client_id: string
@@ -202,4 +202,14 @@ export interface ScheduledDay {
   day: PlanDay
   state: string
   session_id: string | null
+}
+
+/** Hydrate old local metadata without changing owner IDs or exact pending operation payloads. */
+export function restoreInstitution(row: LocalSession | undefined) {
+  if (row) {
+    const previous = row.session as Session & { workspace_id?: string }
+    if (!previous.institution_id && previous.workspace_id)
+      previous.institution_id = previous.workspace_id
+  }
+  return row
 }

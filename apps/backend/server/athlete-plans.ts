@@ -1,6 +1,6 @@
 import { pageSize } from "./pagination.ts";
 import { ApiError, asActor, type Actor } from "./db.ts";
-import { scoped, uuid } from "./workspaces.ts";
+import { scoped, uuid } from "./institution.ts";
 import {
   role,
   recipient,
@@ -13,7 +13,7 @@ import { pageOffset } from "./service-definitions.ts";
 /** Staff assignment index. Dates classify assignments without rewriting their lifecycle. */
 export async function athletePlans(
   actor: Actor,
-  workspace: string,
+  institution: string,
   query: URLSearchParams,
 ) {
   const view = role(query.get("view"));
@@ -34,9 +34,9 @@ export async function athletePlans(
       select: { timezone: true },
     }),
   );
-  return scoped(actor, workspace, [view], async (tx, self) => {
+  return scoped(actor, institution, [view], async (tx, self) => {
     if (member)
-      await recipient(tx, workspace, self, view, member, false, "training");
+      await recipient(tx, institution, self, view, member, false, "training");
 
     const zone = profile?.timezone || "UTC";
     const today = new Intl.DateTimeFormat("en-CA", {
@@ -47,7 +47,7 @@ export async function athletePlans(
     }).format(new Date());
     const day = new Date(today + "T00:00:00Z");
     const peopleScope = {
-      workspace_id: workspace,
+      institution_id: institution,
       ...(view === "trainer" ? coachedBy(self.id) : {}),
       ...(member ? { id: member } : {}),
     };
@@ -61,7 +61,7 @@ export async function athletePlans(
               ...(status === "expired"
                 ? { end_date: { lt: day } }
                 : {
-                    workspace_members_organization_assignments_workspace_id_member_idToworkspace_members:
+                    institution_members_institution_assignments_institution_id_member_idToinstitution_members:
                       { ...peopleScope, active: true },
                     start_date:
                       status === "upcoming" ? { gt: day } : { lte: day },
@@ -69,14 +69,14 @@ export async function athletePlans(
                   }),
             };
     const scope = {
-      workspace_id: workspace,
-      workspace_members_organization_assignments_workspace_id_member_idToworkspace_members:
+      institution_id: institution,
+      institution_members_institution_assignments_institution_id_member_idToinstitution_members:
         peopleScope,
       // Supporting coaches see only plans labelled with their linked sport.
       ...(view === "trainer"
         ? assignmentScope(
             self.id,
-            await supportingLinks(tx, workspace, self.id),
+            await supportingLinks(tx, institution, self.id),
           )
         : {}),
     };
@@ -91,7 +91,7 @@ export async function athletePlans(
                   {
                     OR: [
                       {
-                        organization_versions: {
+                        institution_versions: {
                           title: {
                             contains: search,
                             mode: "insensitive" as const,
@@ -99,7 +99,7 @@ export async function athletePlans(
                         },
                       },
                       {
-                        workspace_members_organization_assignments_workspace_id_member_idToworkspace_members:
+                        institution_members_institution_assignments_institution_id_member_idToinstitution_members:
                           {
                             name: {
                               contains: search,
@@ -114,13 +114,13 @@ export async function athletePlans(
             : {}),
         };
     const [rows, total] = await Promise.all([
-      tx.organization_assignments.findMany({
+      tx.institution_assignments.findMany({
         where,
         skip: assignment ? 0 : offset,
         take: assignment ? 1 : take,
         orderBy: [{ created_at: "desc" }, { id: "asc" }],
         include: {
-          organization_versions: {
+          institution_versions: {
             select: {
               id: true,
               title: true,
@@ -129,12 +129,12 @@ export async function athletePlans(
               ...(assignment ? { prescription: true } : {}),
             },
           },
-          workspace_members_organization_assignments_workspace_id_member_idToworkspace_members:
+          institution_members_institution_assignments_institution_id_member_idToinstitution_members:
             { select: { id: true, name: true, active: true } },
-          organization_sports: { select: { name: true } },
+          institution_sports: { select: { name: true } },
         },
       }),
-      tx.organization_assignments.count({ where }),
+      tx.institution_assignments.count({ where }),
     ]);
     if (assignment && !rows.length)
       throw new ApiError(404, "program_unavailable");
@@ -145,7 +145,7 @@ export async function athletePlans(
       next: !assignment && offset + take < total ? offset + take : null,
       items: rows.map((row) => {
         const person =
-          row.workspace_members_organization_assignments_workspace_id_member_idToworkspace_members;
+          row.institution_members_institution_assignments_institution_id_member_idToinstitution_members;
         const derived =
           row.state !== "active"
             ? "ended"
@@ -165,9 +165,9 @@ export async function athletePlans(
           status: derived,
           schedule_mode: row.schedule_mode,
           goal: row.goal,
-          sport: row.organization_sports?.name || null,
+          sport: row.institution_sports?.name || null,
           revision: row.revision,
-          version: row.organization_versions,
+          version: row.institution_versions,
         };
       }),
     };

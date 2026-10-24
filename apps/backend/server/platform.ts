@@ -1,5 +1,5 @@
 import { db, ApiError, type Actor } from "./db.ts";
-import { uuid, textValue, type Tx } from "./workspaces.ts";
+import { uuid, textValue, type Tx } from "./institution.ts";
 import { pageOffset } from "./service-definitions.ts";
 import { createHash } from "node:crypto";
 async function operator(tx: Tx, actor: Actor) {
@@ -16,7 +16,7 @@ export async function platformRead(actor: Actor, q: URLSearchParams) {
       search = (q.get("search") || "").slice(0, 100);
     let rows: unknown[];
     if (section === "organizations")
-      rows = await tx.workspaces.findMany({
+      rows = await tx.institutions.findMany({
         where: {
           kind: "organization",
           name: { contains: search, mode: "insensitive" },
@@ -27,7 +27,7 @@ export async function platformRead(actor: Actor, q: URLSearchParams) {
           archived: true,
           revision: true,
           created_at: true,
-          _count: { select: { workspace_members: true } },
+          _count: { select: { institution_members: true } },
         },
         orderBy: [{ name: "asc" }, { id: "asc" }],
         take: 26,
@@ -130,18 +130,18 @@ export async function platformCommand(
       if (typeof input.value !== "boolean")
         throw new ApiError(400, "invalid_request");
       await tx.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${id},73))::text`;
-      const w = await tx.workspaces.findUnique({ where: { id } });
+      const w = await tx.institutions.findUnique({ where: { id } });
       if (!w || w.kind !== "organization")
         throw new ApiError(404, "workspace_unavailable");
       if (w.revision !== input.revision) throw new ApiError(409, "conflict");
       if (
         !input.value &&
-        !(await tx.workspace_members.count({
-          where: { workspace_id: id, active: true, roles: { has: "admin" } },
+        !(await tx.institution_members.count({
+          where: { institution_id: id, active: true, roles: { has: "admin" } },
         }))
       )
         throw new ApiError(400, "last_admin");
-      result = await tx.workspaces.update({
+      result = await tx.institutions.update({
         where: { id },
         data: { archived: input.value, revision: { increment: 1 } },
       });

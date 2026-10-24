@@ -31,9 +31,9 @@ const arabic: Record<string, string> = {
     'لا يملك هذا الحساب صلاحية مدرب حالياً. يبقى العمل المحفوظ محظور الإرسال للمراجعة.',
   'Signing out…': 'جارٍ تسجيل الخروج…',
   'Sign out': 'تسجيل الخروج',
-  'Saved workspace': 'مساحة عمل محفوظة',
+  'Saved institution': 'مساحة عمل محفوظة',
   'Checking coach access': 'جارٍ التحقق من صلاحية المدرب',
-  'No coach workspace': 'لا توجد مساحة عمل للمدرب',
+  'No coach institution': 'لا توجد مساحة عمل للمدرب',
   'Refresh access': 'تحديث الصلاحيات',
   'Event completed and confirmed by your institution. The device copy was removed.':
     'اكتمل الموعد وأكدته مؤسستك. أُزيلت نسخة الجهاز.',
